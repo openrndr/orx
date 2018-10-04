@@ -1,0 +1,3 @@
+rootProject.name = 'orx'
+
+include 'orx-kdtree'
