@@ -12,10 +12,14 @@ class JumpFlood : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/jumpflood
 }
 
 class PixelDistance : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/pixel-distance.frag")))
+class ContourPoints : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/contour-points.frag")))
+class Threshold : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/threshold.frag")))
 
 val encodePoints by lazy { EncodePoints() }
 val jumpFlood by lazy { JumpFlood() }
 val pixelDistance by lazy { PixelDistance() }
+val contourPoints by lazy { ContourPoints() }
+val threshold by lazy { Threshold() }
 
 /** [points] is square and power of 2 */
 fun jumpFlood(points: ColorBuffer, coordinates: List<ColorBuffer>) {
