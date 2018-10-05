@@ -5,29 +5,29 @@ import org.openrndr.filter.filterShaderFromUrl
 import org.openrndr.math.Matrix44
 import org.openrndr.resourceUrl
 
-class EncodePoints:  Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/encode-points.frag")))
-class JumpFlood: Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/jumpflood.frag"))) {
+class EncodePoints : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/encode-points.frag")))
+class JumpFlood : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/jumpflood.frag"))) {
     var maxSteps: Int by parameters
     var step: Int by parameters
 }
 
+class PixelDistance : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/pixel-distance.frag")))
+
 val encodePoints by lazy { EncodePoints() }
 val jumpFlood by lazy { JumpFlood() }
+val pixelDistance by lazy { PixelDistance() }
 
 /** [points] is square and power of 2 */
-fun jumpFlood(points:ColorBuffer, coordinates:List<ColorBuffer>) {
+fun jumpFlood(points: ColorBuffer, coordinates: List<ColorBuffer>) {
     encodePoints.apply(points, coordinates[0])
     val exp = Math.ceil(Math.log(points.width.toDouble()) / Math.log(2.0)).toInt()
     for (i in 0 until exp) {
         jumpFlood.step = i
         jumpFlood.apply(coordinates[i % 2], coordinates[(i + 1) % 2])
-
     }
-
 }
 
-fun jumpFlood(drawer: Drawer, points:ColorBuffer): ColorBuffer {
-
+fun jumpFlood(drawer: Drawer, points: ColorBuffer): ColorBuffer {
     val dimension = Math.max(points.width, points.height)
     val exp = Math.ceil(Math.log(dimension.toDouble()) / Math.log(2.0)).toInt()
     val squareDim = Math.pow(2.0, exp.toDouble()).toInt()
@@ -47,6 +47,7 @@ fun jumpFlood(drawer: Drawer, points:ColorBuffer): ColorBuffer {
         drawer.image(points)
     }
 
+
     jumpFlood(rt.colorBuffer(0), coordinates)
 
 //    encodePoints.apply(rt.colorBuffer(0), coordinates[0])
@@ -62,13 +63,16 @@ fun jumpFlood(drawer: Drawer, points:ColorBuffer): ColorBuffer {
         colorBuffer(type = ColorType.FLOAT32)
     }
 
+    pixelDistance.apply(coordinates[exp % 2], coordinates[exp % 2])
+
     drawer.isolatedWithTarget(final) {
         drawer.ortho(final)
         drawer.view = Matrix44.IDENTITY
         drawer.model = Matrix44.IDENTITY
-        drawer.image(coordinates[exp%2])
-
+        drawer.image(coordinates[exp % 2])
     }
+
+    coordinates.forEach { it.destroy() }
 
     rt.colorBuffer(0).destroy()
     rt.detachColorBuffers()

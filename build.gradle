@@ -4,7 +4,7 @@ plugins {
 
 allprojects {
     group 'org.openrndr.extra'
-    version '0.0.2-1'
+    version '0.0.5'
 }
 
 repositories {
@@ -24,7 +24,7 @@ subprojects {
         mavenLocal()
         mavenCentral()
         maven {
-            url="https://dl.bintray.com/openrndr/openrndr"
+            url = "https://dl.bintray.com/openrndr/openrndr"
         }
     }
 
