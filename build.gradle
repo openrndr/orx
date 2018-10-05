@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'org.openrndr.extra'
-version '0.0.2'
+version '0.0.2-1'
 
 repositories {
     mavenCentral()
@@ -17,9 +17,10 @@ ext {
 
 subprojects {
     group 'org.openrndr.extra'
-    version '0.0.2'
+    version '0.0.2-1'
 
     apply plugin: 'kotlin'
+    apply plugin: 'maven'
     repositories {
         mavenLocal()
         mavenCentral()
