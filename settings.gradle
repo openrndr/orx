@@ -1,3 +1,4 @@
 rootProject.name = 'orx'
 
-include 'orx-kdtree'
+include 'orx-jumpflood',
+    'orx-kdtree'
