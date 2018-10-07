@@ -13,7 +13,12 @@ class JumpFlood : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/jumpflood
 
 class PixelDistance : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/pixel-distance.frag")))
 class ContourPoints : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/contour-points.frag")))
-class Threshold : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/threshold.frag")))
+class Threshold : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/threshold.frag"))) {
+    var threshold by parameters
+    init {
+        threshold = 0.5
+    }
+}
 
 val encodePoints by lazy { EncodePoints() }
 val jumpFlood by lazy { JumpFlood() }
@@ -21,69 +26,75 @@ val pixelDistance by lazy { PixelDistance() }
 val contourPoints by lazy { ContourPoints() }
 val threshold by lazy { Threshold() }
 
-/** [points] is square and power of 2 */
-fun jumpFlood(points: ColorBuffer, coordinates: List<ColorBuffer>) {
-    encodePoints.apply(points, coordinates[0])
-    val exp = Math.ceil(Math.log(points.width.toDouble()) / Math.log(2.0)).toInt()
-    for (i in 0 until exp) {
-        jumpFlood.step = i
-        jumpFlood.apply(coordinates[i % 2], coordinates[(i + 1) % 2])
-    }
-}
 
-fun jumpFlood(drawer: Drawer, points: ColorBuffer): ColorBuffer {
-    val dimension = Math.max(points.width, points.height)
-    val exp = Math.ceil(Math.log(dimension.toDouble()) / Math.log(2.0)).toInt()
-    val squareDim = Math.pow(2.0, exp.toDouble()).toInt()
+class JumpFlooder(val width: Int, val height: Int) {
+    private val dimension = Math.max(width, height)
+    private val exp = Math.ceil(Math.log(dimension.toDouble()) / Math.log(2.0)).toInt()
+    private val squareDim = Math.pow(2.0, exp.toDouble()).toInt()
 
-    val rt = renderTarget(squareDim, squareDim) {
-        colorBuffer()
-    }
+    private val coordinates =
+            listOf(colorBuffer(squareDim, squareDim, format = ColorFormat.RG, type = ColorType.FLOAT32),
+                    colorBuffer(squareDim, squareDim, format = ColorFormat.RG, type = ColorType.FLOAT32))
 
-    val coordinates =
-            listOf(colorBuffer(squareDim, squareDim, type = ColorType.FLOAT32),
-                    colorBuffer(squareDim, squareDim, type = ColorType.FLOAT32))
-
-    drawer.isolatedWithTarget(rt) {
-        drawer.ortho(rt)
-        drawer.view = Matrix44.IDENTITY
-        drawer.model = Matrix44.IDENTITY
-        drawer.image(points)
-    }
-
-
-    jumpFlood(rt.colorBuffer(0), coordinates)
-
-//    encodePoints.apply(rt.colorBuffer(0), coordinates[0])
-//
-//
-//    for (i in 0 until exp) {
-//        jumpFlood.step = i
-//        jumpFlood.apply(coordinates[i % 2], coordinates[(i + 1) % 2])
-//
-//    }
-
-    val final = renderTarget(points.width, points.height) {
+    private val final = renderTarget(width, height) {
         colorBuffer(type = ColorType.FLOAT32)
     }
 
-    pixelDistance.apply(coordinates[exp % 2], coordinates[exp % 2])
+    val result: ColorBuffer get() = final.colorBuffer(0)
 
-    drawer.isolatedWithTarget(final) {
-        drawer.ortho(final)
-        drawer.view = Matrix44.IDENTITY
-        drawer.model = Matrix44.IDENTITY
-        drawer.image(coordinates[exp % 2])
+    private val square = renderTarget(squareDim, squareDim) {
+        colorBuffer()
     }
 
-    coordinates.forEach { it.destroy() }
+    fun jumpFlood(drawer: Drawer, input: ColorBuffer) {
+        if (input.width != width || input.height != height) {
+            throw IllegalArgumentException("dimensions mismatch")
+        }
 
-    rt.colorBuffer(0).destroy()
-    rt.detachColorBuffers()
-    rt.destroy()
+        drawer.isolatedWithTarget(square) {
+            drawer.ortho(square)
+            drawer.view = Matrix44.IDENTITY
+            drawer.model = Matrix44.IDENTITY
+            drawer.image(input)
+        }
+        encodePoints.apply(square.colorBuffer(0), coordinates[0])
+        val exp = Math.ceil(Math.log(input.width.toDouble()) / Math.log(2.0)).toInt()
+        for (i in 0 until exp) {
+            jumpFlood.step = i
+            jumpFlood.apply(coordinates[i % 2], coordinates[(i + 1) % 2])
+        }
 
-    val fcb = final.colorBuffer(0)
-    final.detachColorBuffers()
-    final.destroy()
-    return fcb
+        pixelDistance.apply(coordinates[exp % 2], coordinates[exp % 2])
+        drawer.isolatedWithTarget(final) {
+            drawer.ortho(final)
+            drawer.view = Matrix44.IDENTITY
+            drawer.model = Matrix44.IDENTITY
+            drawer.image(coordinates[exp % 2])
+        }
+    }
+
+    fun destroy(destroyFinal: Boolean = true) {
+        coordinates.forEach { it.destroy() }
+
+        square.colorBuffer(0).destroy()
+        square.detachColorBuffers()
+        square.destroy()
+
+        if (destroyFinal) {
+            final.colorBuffer(0).destroy()
+        }
+        final.detachColorBuffers()
+
+        final.destroy()
+
+    }
+
+}
+
+fun jumpFlood(drawer: Drawer, points: ColorBuffer): ColorBuffer {
+    val jumpFlooder = JumpFlooder(points.width, points.height)
+    jumpFlooder.jumpFlood(drawer, points)
+    val result = jumpFlooder.result
+    jumpFlooder.destroy(false)
+    return result
 }
