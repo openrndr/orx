@@ -58,7 +58,7 @@ class JumpFlooder(val width: Int, val height: Int) {
             drawer.image(input)
         }
         encodePoints.apply(square.colorBuffer(0), coordinates[0])
-        val exp = Math.ceil(Math.log(input.width.toDouble()) / Math.log(2.0)).toInt()
+
         for (i in 0 until exp) {
             jumpFlood.step = i
             jumpFlood.apply(coordinates[i % 2], coordinates[(i + 1) % 2])
