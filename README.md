@@ -19,6 +19,6 @@ repositories {
 Add dependency:
 ```
 dependencies {
-    compile 'com.github.openrndr:orx:v0.0.7'
+    compile 'com.github.openrndr.orx:<orx-artifact>:v0.0.7'
 }
 ```

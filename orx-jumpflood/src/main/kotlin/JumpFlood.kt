@@ -3,6 +3,7 @@ package org.openrndr.extra.jumpfill
 import org.openrndr.draw.*
 import org.openrndr.filter.filterShaderFromUrl
 import org.openrndr.math.Matrix44
+import org.openrndr.math.Vector2
 import org.openrndr.resourceUrl
 
 class EncodePoints : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/encode-points.frag")))
@@ -15,6 +16,7 @@ class PixelDistance : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/pixel
 class ContourPoints : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/contour-points.frag")))
 class Threshold : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/threshold.frag"))) {
     var threshold by parameters
+
     init {
         threshold = 0.5
     }
@@ -46,7 +48,25 @@ class JumpFlooder(val width: Int, val height: Int) {
         colorBuffer()
     }
 
-    fun jumpFlood(drawer: Drawer, input: ColorBuffer) {
+    private var contourUsed = false
+    private val thresholded by lazy { colorBuffer(width, height) }
+    private val edges by lazy { colorBuffer(width, height) }
+
+    fun distanceToContour(drawer: Drawer, input: ColorBuffer, thresholdValue: Double = 0.5): ColorBuffer {
+        threshold.threshold = thresholdValue
+        threshold.apply(input, thresholded)
+        contourPoints.apply(thresholded, edges)
+        contourUsed = true
+        return jumpFlood(drawer, edges)
+    }
+
+    fun directions(xRange: IntProgression = 0 until width, yRange: IntProgression = 0 until height): Array<List<Vector2>> {
+        result.shadow.download()
+        return result.shadow.mapIndexed(xRange, yRange) { _, _, r, g, _, _ -> Vector2(r, g) }
+    }
+
+
+    fun jumpFlood(drawer: Drawer, input: ColorBuffer): ColorBuffer {
         if (input.width != width || input.height != height) {
             throw IllegalArgumentException("dimensions mismatch")
         }
@@ -71,6 +91,7 @@ class JumpFlooder(val width: Int, val height: Int) {
             drawer.model = Matrix44.IDENTITY
             drawer.image(coordinates[exp % 2])
         }
+        return result
     }
 
     fun destroy(destroyFinal: Boolean = true) {
@@ -86,6 +107,11 @@ class JumpFlooder(val width: Int, val height: Int) {
         final.detachColorBuffers()
 
         final.destroy()
+
+        if (contourUsed) {
+            edges.destroy()
+            thresholded.destroy()
+        }
 
     }
 
