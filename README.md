@@ -4,6 +4,7 @@ A growing library of assorted data structures, algorithms and utilities.
 
 - orx-kdtree, a kd-tree implementation for fast nearest point searches
 - orx-jumpflood, a filter/shader based implementation of the jump flood algorithm for finding fast approximate (directional) distance fields
+- orx-integral-image, a CPU-based implementation for integral images (summed area tables)
 
 ## Usage
 

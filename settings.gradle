@@ -1,4 +1,5 @@
 rootProject.name = 'orx'
 
 include 'orx-jumpflood',
-    'orx-kdtree'
+    'orx-kdtree',
+    'orx-integral-image'

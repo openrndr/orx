@@ -1,5 +1,6 @@
 package org.openrndr.extra.jumpfill
 
+import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.filter.filterShaderFromUrl
 import org.openrndr.math.Matrix44
@@ -72,6 +73,7 @@ class JumpFlooder(val width: Int, val height: Int) {
         }
 
         drawer.isolatedWithTarget(square) {
+            drawer.background(ColorRGBa.BLACK)
             drawer.ortho(square)
             drawer.view = Matrix44.IDENTITY
             drawer.model = Matrix44.IDENTITY
@@ -86,6 +88,7 @@ class JumpFlooder(val width: Int, val height: Int) {
 
         pixelDistance.apply(coordinates[exp % 2], coordinates[exp % 2])
         drawer.isolatedWithTarget(final) {
+            drawer.background(ColorRGBa.BLACK)
             drawer.ortho(final)
             drawer.view = Matrix44.IDENTITY
             drawer.model = Matrix44.IDENTITY
