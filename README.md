@@ -8,6 +8,8 @@ A growing library of assorted data structures, algorithms and utilities.
 
 ## Usage
 
+ORX is build against OPENRNDR 0.3.28, make sure you use this version in your project.
+
 Easiest way to add ORX to your project is through the use of Jitpack
 
 Add repository:
@@ -20,6 +22,6 @@ repositories {
 Add dependency:
 ```
 dependencies {
-    compile 'com.github.openrndr.orx:<orx-artifact>:v0.0.7'
+    compile 'com.github.openrndr.orx:<orx-artifact>:v0.0.8'
 }
 ```
