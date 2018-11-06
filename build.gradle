@@ -4,7 +4,7 @@ plugins {
 
 allprojects {
     group 'org.openrndr.extra'
-    version '0.0.8'
+    version '0.0.9'
 }
 
 repositories {
@@ -14,7 +14,6 @@ repositories {
 ext {
     openrndrVersion = "0.3.28"
 }
-
 
 subprojects {
 
@@ -31,7 +30,7 @@ subprojects {
     dependencies {
         compile "org.openrndr:openrndr-core:$openrndrVersion"
         compile "org.openrndr:openrndr-filter:$openrndrVersion"
-        compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '0.27.0'
+        compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '1.0.0'
     }
 
 }
