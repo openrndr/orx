@@ -1,3 +1,5 @@
+package org.openrndr.extra.noclear
+
 import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
