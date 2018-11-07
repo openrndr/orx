@@ -4,15 +4,17 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 
 /**
- * Layer representation
+ * A single layer representation
  */
 class Layer internal constructor() {
-
     var drawFunc: () -> Unit = {}
     val children: MutableList<Layer> = mutableListOf()
     var blendFilter: Pair<Filter, Filter.() -> Unit>? = null
     val postFilters: MutableList<Pair<Filter, Filter.() -> Unit>> = mutableListOf()
 
+    /**
+     * draw the layer
+     */
     fun draw(drawer: Drawer) {
         val rt = RenderTarget.active
         val layerTarget = renderTarget(rt.width, rt.height) {
@@ -70,14 +72,23 @@ fun Layer.layer(function: Layer.() -> Unit) {
     children.add(Layer().apply { function() })
 }
 
+/**
+ * set the draw contents of the layer
+ */
 fun Layer.draw(function: () -> Unit) {
     drawFunc = function
 }
 
+/**
+ * add a post-processing filter to the layer
+ */
 fun <F : Filter> Layer.post(filter: F, configure: F.() -> Unit = {}) {
     postFilters.add(Pair(filter as Filter, configure as Filter.() -> Unit))
 }
 
+/**
+ * add a blend filter to the layer
+ */
 fun <F : Filter> Layer.blend(filter: F, configure: F.() -> Unit = {}) {
     blendFilter = Pair(filter as Filter, configure as Filter.() -> Unit)
 }
@@ -90,5 +101,3 @@ fun compose(function: Layer.() -> Unit): Layer {
     root.function()
     return root
 }
-
-

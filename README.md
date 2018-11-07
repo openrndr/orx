@@ -2,6 +2,7 @@
 
 A growing library of assorted data structures, algorithms and utilities.
 
+- [`orx-compositor`](orx-compositor/README.md), a simple toolkit to make composite (layered) images
 - [`orx-integral-image`](orx-integral-image/README.md), a CPU-based implementation for integral images (summed area tables)
 - `orx-jumpflood`, a filter/shader based implementation of the jump flood algorithm for finding fast approximate (directional) distance fields
 - `orx-kdtree`, a kd-tree implementation for fast nearest point searches
