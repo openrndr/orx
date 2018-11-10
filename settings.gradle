@@ -1,8 +1,11 @@
 rootProject.name = 'orx'
 
 include 'orx-compositor',
+        'orx-filter-extension',
         'orx-integral-image',
         'orx-jumpflood',
         'orx-kdtree',
         'orx-no-clear'
+
+
 
