@@ -5,6 +5,7 @@ include 'orx-compositor',
         'orx-integral-image',
         'orx-jumpflood',
         'orx-kdtree',
+        'orx-mesh-generators',
         'orx-no-clear'
 
 
