@@ -1,5 +1,7 @@
 # ORX (OPENRNDR EXTRA)
 
+[![](https://jitpack.io/v/openrndr/orx.svg)](https://jitpack.io/#openrndr/orx)
+
 A growing library of assorted data structures, algorithms and utilities.
 
 - [`orx-compositor`](orx-compositor/README.md), a simple toolkit to make composite (layered) images
