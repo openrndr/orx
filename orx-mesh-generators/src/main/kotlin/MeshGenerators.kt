@@ -38,57 +38,100 @@ fun meshVertexBuffer(size: Int): VertexBuffer {
     }, size)
 }
 
+@Deprecated("binary compatibility only")
+fun extrudeShape(shape: Shape, front: Double, back: Double, distanceTolerance: Double = 0.5, writer: VertexWriter) {
+    extrudeShape(shape, front, back, distanceTolerance = distanceTolerance, flipNormals = false, writer = writer)
+}
+
 /**
- * extrudes a [shape] by triangulating it and creating sides and cap geometry
+ * extrudes a [shape] by triangulating it and creating side- and cap geometry
  * @sample sample
  */
-fun extrudeShape(shape: Shape, front: Double, back: Double, distanceTolerance: Double = 0.5, writer: VertexWriter) {
+fun extrudeShape(shape: Shape,
+                 front: Double,
+                 back: Double,
+                 frontScale: Double = 1.0,
+                 backScale: Double = 1.0,
+                 frontCap: Boolean = true,
+                 backCap: Boolean = true,
+                 distanceTolerance: Double = 0.5,
+                 flipNormals: Boolean = false, writer: VertexWriter) {
     val baseTriangles = triangulate(shape, distanceTolerance)
     val depth = back - front
-    val normal = Vector3(0.0, 0.0, depth).normalized
-    val negativeNormal = normal * -1.0
+    val flip = if (flipNormals) 1.0 else -1.0
 
-    baseTriangles.forEach {
-        writer(it.vector3(z = front), normal, Vector2.ZERO)
-    }
-    baseTriangles.forEach {
-        writer(it.vector3(z = back), negativeNormal, Vector2.ZERO)
+    run {
+        val normal = Vector3(0.0, 0.0, depth).normalized * flip
+        val negativeNormal = normal * -1.0
+
+        if (frontCap) {
+            baseTriangles.forEach {
+                writer((it*frontScale).vector3(z = front), normal, Vector2.ZERO)
+            }
+        }
+        if (backCap) {
+            baseTriangles.forEach {
+                writer((it*backScale).vector3(z = back), negativeNormal, Vector2.ZERO)
+            }
+        }
     }
 
     shape.contours.forEach {
         val points = it.adaptivePositions(distanceTolerance)
 
+
+
         val normals = (0 until points.size).map {
-            (points[mod(it+1, points.size)]-points[mod(it-1, points.size)]).safeNormalized
+            (points[mod(it + 1, points.size)] - points[mod(it - 1, points.size)]).safeNormalized * -flip
         }
 
         val forward = Vector3(0.0, 0.0, depth)
         val base = Vector3(0.0, 0.0, front)
 
         (points zip normals).zipWithNext().forEach { (left, right) ->
-            val lnormal = left.second.perpendicular.vector3()
-            val rnormal = right.second.perpendicular.vector3()
 
-            writer(left.first.vector3() + base, lnormal, Vector2.ZERO)
-            writer(right.first.vector3() + base, rnormal, Vector2.ZERO)
-            writer(right.first.vector3() + base + forward, rnormal, Vector2.ZERO)
+            val frontRight = (right.first * frontScale).xy0 + base
+            val frontLeft = (left.first * frontScale).xy0 + base
 
-            writer(right.first.vector3() + base + forward, rnormal, Vector2.ZERO)
-            writer(left.first.vector3() + base + forward, lnormal, Vector2.ZERO)
-            writer(left.first.vector3() + base, lnormal, Vector2.ZERO)
+            val backRight =(right.first * backScale).xy0 + base + forward
+            val backLeft = (left.first * backScale).xy0 + base + forward
+
+
+            val lnormal = (frontLeft - backLeft).normalized.cross(left.second.xy0)
+            val rnormal = (frontRight - backRight).normalized.cross(right.second.xy0)
+
+            writer(frontLeft, lnormal, Vector2.ZERO)
+            writer(frontRight, rnormal, Vector2.ZERO)
+            writer(backRight, rnormal, Vector2.ZERO)
+
+            writer(backRight, rnormal, Vector2.ZERO)
+            writer(backLeft, lnormal, Vector2.ZERO)
+            writer(frontLeft, lnormal, Vector2.ZERO)
         }
+    }
+}
+
+fun extrudeShapes(shapes: List<Shape>,
+                  front: Double,
+                  back: Double,
+                  frontScale: Double = 1.0,
+                  backScale: Double = 1.0,
+                  frontCap: Boolean = true,
+                  backCap: Boolean = true,
+                  distanceTolerance: Double = 0.5,
+                  flipNormals: Boolean = false, writer: VertexWriter ) {
+    shapes.forEach {
+        extrudeShape(it, front, back, frontScale, backScale, frontCap , backCap , distanceTolerance, flipNormals, writer)
     }
 }
 
 private val Vector2.safeNormalized: Vector2
     get() {
-
         return if (length > 0.0001) {
             normalized
         } else {
             Vector2.ZERO
         }
-
     }
 
 /**
