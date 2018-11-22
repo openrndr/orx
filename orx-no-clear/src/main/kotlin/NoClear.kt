@@ -15,20 +15,22 @@ class NoClear : Extension {
 
 
     override fun beforeDraw(drawer: Drawer, program: Program) {
-        if (renderTarget == null || renderTarget?.width != program.width || renderTarget?.height != program.height) {
-            renderTarget?.let {
-                it.colorBuffer(0).destroy()
-                it.detachColorBuffers()
-                it.destroy()
-            }
-            renderTarget = renderTarget(program.width, program.height) {
-                colorBuffer()
-                depthBuffer()
-            }
+        if (program.width > 0 && program.height > 0) {    // only if the window is not minimised
+            if (renderTarget == null || renderTarget?.width != program.width || renderTarget?.height != program.height) {
+                renderTarget?.let {
+                    it.colorBuffer(0).destroy()
+                    it.detachColorBuffers()
+                    it.destroy()
+                }
+                renderTarget = renderTarget(program.width, program.height) {
+                    colorBuffer()
+                    depthBuffer()
+                }
 
-            renderTarget?.let {
-                drawer.withTarget(it) {
-                    background(program.backgroundColor ?: ColorRGBa.TRANSPARENT)
+                renderTarget?.let {
+                    drawer.withTarget(it) {
+                        background(program.backgroundColor ?: ColorRGBa.TRANSPARENT)
+                    }
                 }
             }
         }
