@@ -1,4 +1,4 @@
-package modeling
+package org.openrndr.extra.objloader
 
 import org.openrndr.draw.VertexBuffer
 import org.openrndr.draw.vertexBuffer
@@ -39,6 +39,21 @@ fun bounds(triangles: List<Triangle>): Box {
         }
     }
     return Box(Vector3(minX, minY, minZ), maxX - minX, maxY - minY, maxZ - minZ)
+}
+
+fun List<Triangle>.vertexBuffer():VertexBuffer {
+    val vertexBuffer = vertexBuffer(objVertexFormat, size*3)
+    vertexBuffer.put {
+        this@vertexBuffer.forEach {
+            for (i in 0 until it.positions.size) {
+                write(it.positions[i])
+                write(it.normals[i])
+                write(Vector2.ZERO)
+            }
+        }
+    }
+    vertexBuffer.shadow.destroy()
+    return vertexBuffer
 }
 
 fun loadOBJ(fileOrUrl: String): Map<String, List<Triangle>> {
