@@ -3,7 +3,7 @@ package org.openrndr.extras.meshgenerators
 import org.openrndr.draw.VertexBuffer
 import org.openrndr.math.Vector3
 
-fun boxMesh(width: Double = 1.0, height: Double = 1.0, depth: Double,
+fun boxMesh(width: Double = 1.0, height: Double = 1.0, depth: Double = 1.0,
             widthSegments: Int = 1, heightSegments: Int = 1, depthSegments: Int = 1,
             invert: Boolean = false): VertexBuffer {
     val vb = meshVertexBuffer(widthSegments * heightSegments * 6 * 2 +
