@@ -5,17 +5,48 @@ OPENRNDR does not support natively.
 
 #### Usage
 
-```
-class NoClearProgram: Program() {
-
-    override fun setup() {
+```kotlin
+fun main() = application {
+    configure {
+        title = "NoClearProgram"
+    }
+    program {
         backgroundColor = ColorRGBa.PINK
         extend(NoClear())
-    }
-
-    override fun draw() {
-        drawer.circle(Math.cos(seconds) * width / 2.0 + width / 2.0, Math.sin(seconds * 0.24) * height / 2.0 + height / 2.0, 20.0)
+        extend {
+            drawer.circle(Math.cos(seconds) * width / 2.0 + width / 2.0, Math.sin(seconds * 0.24) * height / 2.0 + height / 2.0, 20.0)
+        }
     }
 }
-
 ```
+
+#### Usage with a Lambda Expression Parameter 
+Optionally, the static backdrop may be initialised by passing a custom code block to the `NoClear()` function.
+
+- Example 1. Customising the backdrop with an image
+```kotlin
+val img = loadImage("file:data\\myImage.png")
+val bgImage = {
+        drawer.image(img, 0.0, 0.0, width * 1.0, height * 1.0)
+    }
+extend(NoClear(bgImage))
+```
+
+- Example 2. Customising the backdrop with a checker-board pattern
+```kotlin
+val bgBoard = {
+    val xw = width / 8.0
+    val yh = height / 8.0
+    drawer.fill = ColorRGBa.RED
+    (0..7).forEach { row ->
+        (0..7).forEach { col ->
+            if ((row + col) % 2 == 0) {
+                drawer.rectangle(row * xw, col * yh, xw, yh)
+            }
+        }
+    }
+}
+extend(NoClear(bgBoard))
+```
+
+NB! any submitted _lambda expression_ must be valid within the `renderTarget` context.

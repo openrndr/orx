@@ -9,10 +9,9 @@ import org.openrndr.draw.isolated
 import org.openrndr.draw.renderTarget
 import org.openrndr.math.Matrix44
 
-class NoClear : Extension {
+class NoClear(val block: (() -> Unit)? = null): Extension {
     override var enabled: Boolean = true
     private var renderTarget: RenderTarget? = null
-
 
     override fun beforeDraw(drawer: Drawer, program: Program) {
         if (program.width > 0 && program.height > 0) {    // only if the window is not minimised
@@ -30,6 +29,7 @@ class NoClear : Extension {
                 renderTarget?.let {
                     drawer.withTarget(it) {
                         background(program.backgroundColor ?: ColorRGBa.TRANSPARENT)
+                        block?.invoke()
                     }
                 }
             }
