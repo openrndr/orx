@@ -13,6 +13,10 @@ class NoClear : Extension {
     override var enabled: Boolean = true
     private var renderTarget: RenderTarget? = null
 
+    /**
+     * code-block to draw an optional custom backdrop
+     */
+    var backdrop: (() -> Unit)? = null
 
     override fun beforeDraw(drawer: Drawer, program: Program) {
         if (program.width > 0 && program.height > 0) {    // only if the window is not minimised
@@ -30,6 +34,7 @@ class NoClear : Extension {
                 renderTarget?.let {
                     drawer.withTarget(it) {
                         background(program.backgroundColor ?: ColorRGBa.TRANSPARENT)
+                        backdrop?.invoke() // draw custom backdrop
                     }
                 }
             }
