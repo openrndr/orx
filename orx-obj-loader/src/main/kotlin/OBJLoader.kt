@@ -10,9 +10,11 @@ import java.io.File
 import java.net.MalformedURLException
 import java.net.URL
 
-class Triangle(val positions: Array<Vector3>, val normals: Array<Vector3>) {
+class Triangle(val positions: Array<Vector3> = emptyArray(),
+               val normals: Array<Vector3> = emptyArray(),
+               val textureCoords: Array<Vector2> = emptyArray()) {
     fun transform(t: Matrix44): Triangle {
-        return Triangle(positions.map { (t * it.xyz1).div }.toTypedArray(), normals)
+        return Triangle(positions.map { (t * it.xyz1).div }.toTypedArray(), normals, textureCoords)
     }
 }
 
@@ -92,8 +94,18 @@ fun loadOBJasVertexBuffer(lines: List<String>): VertexBuffer {
             it.value.forEach {
                 for (i in 0 until it.positions.size) {
                     write(it.positions[i])
-                    write(it.normals[i])
-                    write(Vector2.ZERO)
+                    if (it.normals.size > 0) {
+                        write(it.normals[i])
+                    } else {
+                        val d0 = it.positions[2] - it.positions[0]
+                        val d1 = it.positions[1] - it.positions[0]
+                        write(d0.normalized.cross(d1.normalized).normalized)
+                    }
+                    if (it.textureCoords.size > 0) {
+                        write(it.textureCoords[i])
+                    } else {
+                        write(Vector2.ZERO)
+                    }
                 }
             }
         }
@@ -110,6 +122,7 @@ fun loadOBJ(lines: List<String>): Map<String, List<Triangle>> {
     val meshes = mutableMapOf<String, List<Triangle>>()
     val positions = mutableListOf<Vector3>()
     val normals = mutableListOf<Vector3>()
+    val textureCoords = mutableListOf<Vector2>()
     var activeMesh = mutableListOf<Triangle>()
 
     lines.forEach { line ->
@@ -122,6 +135,7 @@ fun loadOBJ(lines: List<String>): Map<String, List<Triangle>> {
                         positions += Vector3(tokens[1].toDouble(), tokens[2].toDouble(), tokens[3].toDouble())
                     }
                     "vn" -> normals += Vector3(tokens[1].toDouble(), tokens[2].toDouble(), tokens[3].toDouble())
+                    "vt" -> textureCoords += Vector2(tokens[1].toDouble(), tokens[2].toDouble())
                     "g" -> {
                         activeMesh = mutableListOf()
                         meshes[tokens[1]] = activeMesh
@@ -132,17 +146,35 @@ fun loadOBJ(lines: List<String>): Map<String, List<Triangle>> {
                         }
 
                         if (indices.size == 3) {
-                            val ps = arrayOf(
+
+                            val attributes = indices[0].size
+
+                            val ps = if (attributes >= 1) arrayOf(
                                     indices[0][0]?.let { positions[it - 1] } ?: Vector3.ZERO,
                                     indices[1][0]?.let { positions[it - 1] } ?: Vector3.ZERO,
                                     indices[2][0]?.let { positions[it - 1] } ?: Vector3.ZERO)
+                            else
+                                emptyArray()
 
-                            val ns = arrayOf(
+                            val tcs = if (attributes >= 2) arrayOf(
+                                    indices[0][1]?.let { textureCoords[it - 1] } ?: Vector2.ZERO,
+                                    indices[1][1]?.let { textureCoords[it - 1] } ?: Vector2.ZERO,
+                                    indices[2][1]?.let { textureCoords[it - 1] } ?: Vector2.ZERO)
+                            else
+                                emptyArray()
+
+
+                            val ns = if (attributes >= 3) arrayOf(
                                     indices[0][2]?.let { normals[it - 1] } ?: Vector3.ZERO,
                                     indices[1][2]?.let { normals[it - 1] } ?: Vector3.ZERO,
                                     indices[2][2]?.let { normals[it - 1] } ?: Vector3.ZERO)
+                            else
+                                emptyArray()
 
-                            activeMesh.add(Triangle(ps, ns))
+                            activeMesh.add(Triangle(ps, ns, tcs))
+                            if(meshes.isEmpty()) {
+                                meshes["no-name"] = activeMesh
+                            }
                         } else {
                             TODO("implement non triangular surfaces ${indices.size}")
                         }
