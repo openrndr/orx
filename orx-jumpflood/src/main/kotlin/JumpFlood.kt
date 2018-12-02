@@ -36,8 +36,8 @@ class JumpFlooder(val width: Int, val height: Int) {
     private val squareDim = Math.pow(2.0, exp.toDouble()).toInt()
 
     private val coordinates =
-            listOf(colorBuffer(squareDim, squareDim, format = ColorFormat.RG, type = ColorType.FLOAT32),
-                    colorBuffer(squareDim, squareDim, format = ColorFormat.RG, type = ColorType.FLOAT32))
+            listOf(colorBuffer(squareDim, squareDim, format = ColorFormat.RGB, type = ColorType.FLOAT32),
+                    colorBuffer(squareDim, squareDim, format = ColorFormat.RGB, type = ColorType.FLOAT32))
 
     private val final = renderTarget(width, height) {
         colorBuffer(type = ColorType.FLOAT32)
@@ -86,7 +86,7 @@ class JumpFlooder(val width: Int, val height: Int) {
             jumpFlood.apply(coordinates[i % 2], coordinates[(i + 1) % 2])
         }
 
-        pixelDistance.apply(coordinates[exp % 2], coordinates[exp % 2])
+        pixelDistance.apply( arrayOf(coordinates[exp % 2], thresholded), coordinates[exp % 2])
         drawer.isolatedWithTarget(final) {
             drawer.background(ColorRGBa.BLACK)
             drawer.ortho(final)
