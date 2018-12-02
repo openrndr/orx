@@ -14,7 +14,7 @@ fun planeMesh(center: Vector3,
     val vertexCount = (widthSegments * heightSegments) * 6
     val vb = meshVertexBuffer(vertexCount)
     vb.put {
-        generatePlane(center, forward, right, up,
+        generatePlane(center, right, forward, up,
                 width, height, widthSegments, heightSegments, bufferWriter(this))
     }
     return vb
@@ -26,10 +26,22 @@ fun planeMesh(center: Vector3,
 fun groundPlaneMesh(width: Double = 1.0,
                     height: Double = 1.0,
                     widthSegments: Int = 1,
-                    heightSegments: Int): VertexBuffer {
+                    heightSegments: Int = 1): VertexBuffer {
     return planeMesh(Vector3.ZERO, Vector3.UNIT_X, Vector3.UNIT_Z, Vector3.UNIT_Y,
             width, height, widthSegments, heightSegments)
 }
+
+/**
+ * generates a finite plane with its center at (0,0,0) and spanning the xy-plane
+ */
+fun wallPlaneMesh(width: Double = 1.0,
+                    height: Double = 1.0,
+                    widthSegments: Int = 1,
+                    heightSegments: Int = 1): VertexBuffer {
+    return planeMesh(Vector3.ZERO, Vector3.UNIT_X, Vector3.UNIT_Y, Vector3.UNIT_Z,
+            width, height, widthSegments, heightSegments)
+}
+
 
 fun generatePlane(center: Vector3,
                   right: Vector3,
