@@ -4,12 +4,14 @@
 
 A growing library of assorted data structures, algorithms and utilities.
 
+- [`orx-camera`](orx-camera/README.md), 3d camera and controls
 - [`orx-compositor`](orx-compositor/README.md), a simple toolkit to make composite (layered) images
 - [`orx-filter-extension`](orx-filter-extension/README.md), Program extension method that provides Filter based `extend()`
 - [`orx-integral-image`](orx-integral-image/README.md), a CPU-based implementation for integral images (summed area tables)
 - `orx-jumpflood`, a filter/shader based implementation of the jump flood algorithm for finding fast approximate (directional) distance fields
 - `orx-kdtree`, a kd-tree implementation for fast nearest point searches
 - [`orx-mesh-generators`](orx-mesh-generators/README.md), triangular mesh generators
+- [`orx-noise`](orx-noise/README.md), library for random number generation and noise
 - [`orx-no-clear`](orx-no-clear/README.md), a simple extension that provides drawing without clearing the background
 - [`orx-obj-loader`](orx-obj-loader/README.md), simple Wavefront .obj mesh loader
 
