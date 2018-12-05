@@ -16,7 +16,7 @@ A growing library of assorted data structures, algorithms and utilities.
 - [`orx-obj-loader`](orx-obj-loader/README.md), simple Wavefront .obj mesh loader
 
 ## Usage
-ORX 0.0.15 is built against OPENRNDR 0.3.30, make sure you use this version in your project. Because OPENRNDR's API is pre 1.0 it tends to change from time to time.
+ORX 0.0.16 is built against OPENRNDR 0.3.30, make sure you use this version in your project. Because OPENRNDR's API is pre 1.0 it tends to change from time to time.
 
 The easiest way to add ORX to your project is through the use of Jitpack. [Jitpack](http://jitpack.io) is a service that pulls Gradle based libraries from Github, builds them and serves the jar files.
 
@@ -30,13 +30,13 @@ repositories {
 You can then add any of the ORX artefacts to your `dependencies {}`:
 ```
 dependencies {
-    compile 'com.github.openrndr.orx:<orx-artifact>:v0.0.15'
+    compile 'com.github.openrndr.orx:<orx-artifact>:v0.0.16'
 }
 ```
 
 For example if you want to use the `orx-no-clear` artifact one would use:
 ```
 dependencies {
-    compile 'com.github.openrndr.orx:orx-no-clear:v0.0.15'
+    compile 'com.github.openrndr.orx:orx-no-clear:v0.0.16'
 }
 ```
