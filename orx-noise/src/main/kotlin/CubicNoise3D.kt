@@ -3,7 +3,7 @@ package org.openrndr.extra.noise
 
 private const val CUBIC_3D_BOUNDING = 1 / (1.5 * 1.5 * 1.5).toFloat()
 
-private fun cubic(seed: Int, x: Double, y: Double, z: Double): Double {
+fun cubic(seed: Int, x: Double, y: Double, z: Double): Double {
     val x1 = x.fastFloor()
     val y1 = y.fastFloor()
     val z1 = z.fastFloor()

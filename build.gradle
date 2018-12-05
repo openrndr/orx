@@ -4,7 +4,7 @@ plugins {
 
 allprojects {
     group 'org.openrndr.extra'
-    version '0.0.15'
+    version '0.0.16'
 }
 
 repositories {
@@ -20,6 +20,7 @@ subprojects {
 
     apply plugin: 'kotlin'
     apply plugin: 'maven'
+    apply plugin: 'maven-publish'
     repositories {
         mavenLocal()
         mavenCentral()
@@ -34,6 +35,23 @@ subprojects {
         compile "org.openrndr:openrndr-shape:$openrndrVersion"
         compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '1.0.1'
     }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+
+                artifact sourceJar
+            }
+        }
+    }
+
+    task sourceJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.kotlin
+    }
+
+
 
 }
 
