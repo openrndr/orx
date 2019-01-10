@@ -2,7 +2,7 @@ package org.openrndr.extra.jumpfill
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
-import org.openrndr.filter.filterShaderFromUrl
+
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.resourceUrl
