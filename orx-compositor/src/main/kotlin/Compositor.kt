@@ -2,6 +2,7 @@ package org.openrndr.extra.compositor
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
+import org.openrndr.math.Matrix44
 
 /**
  * A single layer representation
@@ -46,6 +47,9 @@ class Layer internal constructor() {
         val lblend = blendFilter
         if (lblend == null) {
             drawer.isolatedWithTarget(rt) {
+                drawer.ortho(rt)
+                drawer.view = Matrix44.IDENTITY
+                drawer.model = Matrix44.IDENTITY
                 drawer.image(layerPost, layerPost.bounds, drawer.bounds)
             }
         } else {
