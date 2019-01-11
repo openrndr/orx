@@ -9,7 +9,7 @@ fun planeMesh(center: Vector3,
               forward: Vector3,
               up: Vector3 = forward.cross(right).normalized,
               width: Double = 1.0, height: Double = 1.0,
-              widthSegments: Int = 1, heightSegments: Int = 2): VertexBuffer {
+              widthSegments: Int = 1, heightSegments: Int = 1): VertexBuffer {
 
     val vertexCount = (widthSegments * heightSegments) * 6
     val vb = meshVertexBuffer(vertexCount)
@@ -72,13 +72,13 @@ fun generatePlane(center: Vector3,
             val c10 = corner + forwardStep * v.toDouble() + rightStep * (u + 1).toDouble()
             val c11 = corner + forwardStep * (v + 1).toDouble() + rightStep * (u + 1).toDouble()
 
-            writer(c00, up, uv00)
+            writer(c11, up, uv00)
             writer(c10, up, uv10)
-            writer(c11, up, uv11)
+            writer(c00, up, uv11)
 
-            writer(c11, up, uv11)
+            writer(c00, up, uv11)
             writer(c01, up, uv01)
-            writer(c00, up, uv00)
+            writer(c11, up, uv00)
         }
     }
 }

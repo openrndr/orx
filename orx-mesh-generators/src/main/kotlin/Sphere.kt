@@ -33,17 +33,17 @@ fun generateSphere(sides: Int, segments: Int, radius: Double = 1.0, invert: Bool
                     writer(st11.cartesian, st11.cartesian.normalized * inverter, Vector2(st11.phi / phiMax, st11.theta / thetaMax))
                 }
                 segments - 1 -> {
-                    writer(st00.cartesian, st00.cartesian.normalized * inverter, Vector2(st00.phi / phiMax, st00.theta / thetaMax))
-                    writer(st10.cartesian, st10.cartesian.normalized * inverter, Vector2(st10.phi / phiMax, st10.theta / thetaMax))
                     writer(st11.cartesian, st11.cartesian.normalized * inverter, Vector2(st11.phi / phiMax, st11.theta / thetaMax))
+                    writer(st10.cartesian, st10.cartesian.normalized * inverter, Vector2(st10.phi / phiMax, st10.theta / thetaMax))
+                    writer(st00.cartesian, st00.cartesian.normalized * inverter, Vector2(st00.phi / phiMax, st00.theta / thetaMax))
                 }
                 else -> {
                     writer(st00.cartesian, st00.cartesian.normalized * inverter, Vector2(st00.phi / phiMax, st00.theta / thetaMax))
-                    writer(st10.cartesian, st10.cartesian.normalized * inverter, Vector2(st10.phi / phiMax, st10.theta / thetaMax))
+                    writer(st01.cartesian, st01.cartesian.normalized * inverter, Vector2(st01.phi / phiMax, st01.theta / thetaMax))
                     writer(st11.cartesian, st11.cartesian.normalized * inverter, Vector2(st11.phi / phiMax, st11.theta / thetaMax))
 
                     writer(st11.cartesian, st11.cartesian.normalized * inverter, Vector2(st11.phi / phiMax, st11.theta / thetaMax))
-                    writer(st01.cartesian, st01.cartesian.normalized * inverter, Vector2(st01.phi / phiMax, st01.theta / thetaMax))
+                    writer(st10.cartesian, st10.cartesian.normalized * inverter, Vector2(st10.phi / phiMax, st10.theta / thetaMax))
                     writer(st00.cartesian, st00.cartesian.normalized * inverter, Vector2(st00.phi / phiMax, st00.theta / thetaMax))
                 }
             }

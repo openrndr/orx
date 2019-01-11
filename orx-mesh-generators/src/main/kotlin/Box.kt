@@ -26,13 +26,13 @@ fun generateBox(width: Double = 1.0, height: Double = 1.0, depth: Double = 1.0,
     // +x -- ZY
     generatePlane(Vector3(width / 2.0 * sign, 0.0, 0.0),
             Vector3.UNIT_Z, Vector3.UNIT_Y, Vector3.UNIT_X,
-            depth, height,
+            -depth, -height,
             depthSegments, heightSegments, writer)
 
     // -x -- ZY
     generatePlane(Vector3(-width / 2.0 * sign, 0.0, 0.0),
             Vector3.UNIT_Z, Vector3.UNIT_Y, -Vector3.UNIT_X,
-            depth, height,
+            -depth, height,
             depthSegments, heightSegments, writer)
 
     // +y -- XZ
@@ -44,13 +44,13 @@ fun generateBox(width: Double = 1.0, height: Double = 1.0, depth: Double = 1.0,
     // -y -- XZ
     generatePlane(Vector3(0.0, -height / 2.0 * sign, 0.0),
             Vector3.UNIT_X, Vector3.UNIT_Z, -Vector3.UNIT_Y,
-            width, depth,
+            width, -depth,
             widthSegments, depthSegments, writer)
 
     // +z -- XY
     generatePlane(Vector3(0.0, 0.0, depth / 2.0 * sign),
             Vector3.UNIT_X, Vector3.UNIT_Y, Vector3.UNIT_Z,
-            width, height,
+            -width, height,
             widthSegments, heightSegments, writer)
 
     // -z -- XY
