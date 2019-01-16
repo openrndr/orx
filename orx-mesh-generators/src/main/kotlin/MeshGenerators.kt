@@ -65,7 +65,7 @@ fun extrudeShape(shape: Shape,
         val negativeNormal = normal * -1.0
 
         if (frontCap) {
-            baseTriangles.forEach {
+            baseTriangles.reversed().forEach {
                 writer((it*frontScale).vector3(z = front), normal, Vector2.ZERO)
             }
         }
@@ -79,23 +79,18 @@ fun extrudeShape(shape: Shape,
     shape.contours.forEach {
         val points = it.adaptivePositions(distanceTolerance)
 
-
-
         val normals = (0 until points.size).map {
             (points[mod(it + 1, points.size)] - points[mod(it - 1, points.size)]).safeNormalized * -flip
         }
-
         val forward = Vector3(0.0, 0.0, depth)
         val base = Vector3(0.0, 0.0, front)
 
         (points zip normals).zipWithNext().forEach { (left, right) ->
-
             val frontRight = (right.first * frontScale).xy0 + base
             val frontLeft = (left.first * frontScale).xy0 + base
 
             val backRight =(right.first * backScale).xy0 + base + forward
             val backLeft = (left.first * backScale).xy0 + base + forward
-
 
             val lnormal = (frontLeft - backLeft).normalized.cross(left.second.xy0)
             val rnormal = (frontRight - backRight).normalized.cross(right.second.xy0)
