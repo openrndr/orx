@@ -25,7 +25,7 @@ class Layer internal constructor() {
 
         drawer.isolatedWithTarget(layerTarget) {
             drawer.background(ColorRGBa.TRANSPARENT)
-            children.reversed().forEach {
+            children.forEach {
                 it.draw(drawer)
             }
             drawFunc()
