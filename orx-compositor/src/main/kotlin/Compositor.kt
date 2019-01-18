@@ -25,10 +25,11 @@ class Layer internal constructor() {
 
         drawer.isolatedWithTarget(layerTarget) {
             drawer.background(ColorRGBa.TRANSPARENT)
+            drawFunc()
             children.forEach {
                 it.draw(drawer)
             }
-            drawFunc()
+
         }
 
         val (tmpTargets, layerPost) = postFilters.let { filters ->
