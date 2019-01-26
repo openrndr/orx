@@ -86,6 +86,34 @@ class OrbitalControls(val orbitalCamera: OrbitalCamera) {
         if (keyEvent.key == KEY_ARROW_DOWN) {
             orbitalCamera.pan(0.0, -1.0, 0.0)
         }
+
+        if (keyEvent.name == "q") {
+            orbitalCamera.pan(0.0, -1.0, 0.0)
+        }
+        if (keyEvent.name == "e") {
+            orbitalCamera.pan(0.0, 1.0, 0.0)
+        }
+        if (keyEvent.name == "w") {
+            orbitalCamera.pan(0.0, 0.0, -1.0)
+        }
+        if (keyEvent.name == "s") {
+            orbitalCamera.pan(0.0, 0.0, 1.0)
+        }
+        if (keyEvent.name == "a") {
+            orbitalCamera.pan(-1.0, 0.0, 0.0)
+        }
+        if (keyEvent.name == "d") {
+            orbitalCamera.pan(1.0, 0.0, 0.0)
+        }
+
+        if (keyEvent.key == KEY_PAGE_UP) {
+            orbitalCamera.zoom(1.0)
+        }
+
+        if (keyEvent.key == KEY_PAGE_DOWN) {
+            orbitalCamera.zoom(-1.0)
+        }
+
     }
 
     fun setup(program: Program) {

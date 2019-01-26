@@ -13,7 +13,8 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.lookAt as lookAt_
 
-class OrbitalCamera(eye: Vector3, lookAt: Vector3) {
+class OrbitalCamera(eye: Vector3, lookAt: Vector3, var fov:Double) {
+
 
     // current position in spherical coordinates
     var spherical = Spherical.fromVector(eye)
@@ -25,8 +26,19 @@ class OrbitalCamera(eye: Vector3, lookAt: Vector3) {
     private var lookAtEnd = lookAt.copy()
     private var dirty: Boolean = true
 
+    var fovEnd = fov
+
     var dampingFactor = 0.05
     var zoomSpeed = 1.0
+
+    fun setView(lookAt: Vector3, spherical: Spherical, fov:Double) {
+        this.lookAt = lookAt
+        this.lookAtEnd = lookAt
+        this.spherical = spherical
+        this.sphericalEnd = spherical
+        this.fov = fov
+        this.fovEnd= fov
+    }
 
     fun rotate(rotX: Double, rotY: Double) {
         sphericalEnd += Spherical(0.0, rotX, rotY)
@@ -56,7 +68,7 @@ class OrbitalCamera(eye: Vector3, lookAt: Vector3) {
         dolly(sphericalEnd.radius / zoomScale - sphericalEnd.radius)
     }
 
-    private fun dolly(distance: Double) {
+    fun dolly(distance: Double) {
         sphericalEnd += Spherical(distance, 0.0, 0.0)
         dirty = true
     }
@@ -80,6 +92,10 @@ class OrbitalCamera(eye: Vector3, lookAt: Vector3) {
         dirty = true
     }
 
+    fun zoom(degrees: Double) {
+        fovEnd += degrees
+    }
+
     fun update(timeDelta: Double) {
         if (!dirty) return
         dirty = false
@@ -87,17 +103,20 @@ class OrbitalCamera(eye: Vector3, lookAt: Vector3) {
         val dampingFactor = dampingFactor * timeDelta / 0.0060
         val sphericalDelta = sphericalEnd - spherical
         val lookAtDelta = lookAtEnd - lookAt
-
+        val fovDelta = fovEnd - fov
         if (
                 Math.abs(sphericalEnd.radius) > EPSILON ||
                 Math.abs(sphericalEnd.theta) > EPSILON ||
                 Math.abs(sphericalEnd.phi) > EPSILON ||
                 Math.abs(lookAtDelta.x) > EPSILON ||
                 Math.abs(lookAtDelta.y) > EPSILON ||
-                Math.abs(lookAtDelta.z) > EPSILON
+                Math.abs(lookAtDelta.z) > EPSILON ||
+                Math.abs(fovDelta) > EPSILON
         ) {
 
+            fov += (fovDelta * dampingFactor)
             spherical += (sphericalDelta * dampingFactor)
+            spherical = spherical.makeSafe()
             lookAt += (lookAtDelta * dampingFactor)
             dirty = true
 

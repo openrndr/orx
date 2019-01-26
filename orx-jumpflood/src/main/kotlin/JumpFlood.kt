@@ -49,8 +49,8 @@ class JumpFlooder(val width: Int, val height: Int) {
     }
 
     private var contourUsed = false
-    private val thresholded by lazy { colorBuffer(width, height) }
-    private val edges by lazy { colorBuffer(width, height) }
+    val thresholded by lazy { colorBuffer(width, height) }
+    val edges by lazy { colorBuffer(width, height) }
 
     fun distanceToContour(drawer: Drawer, input: ColorBuffer, thresholdValue: Double = 0.5): ColorBuffer {
         threshold.threshold = thresholdValue
@@ -85,7 +85,7 @@ class JumpFlooder(val width: Int, val height: Int) {
             jumpFlood.apply(coordinates[i % 2], coordinates[(i + 1) % 2])
         }
 
-        pixelDistance.apply( arrayOf(coordinates[exp % 2], thresholded), coordinates[exp % 2])
+        pixelDistance.apply(arrayOf(coordinates[exp % 2], thresholded), coordinates[exp % 2])
         drawer.isolatedWithTarget(final) {
             drawer.background(ColorRGBa.BLACK)
             drawer.ortho(final)

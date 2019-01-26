@@ -8,11 +8,11 @@ import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector3
 
 @Suppress("unused")
-class Debug3D(eye: Vector3 = Vector3(0.0, 0.0, 10.0), lookAt: Vector3 = Vector3.ZERO, private val fov: Double = 90.0) : Extension {
+class Debug3D(eye: Vector3 = Vector3(0.0, 0.0, 10.0), lookAt: Vector3 = Vector3.ZERO, fov:Double = 90.0) : Extension {
 
     override var enabled: Boolean = true
     var showGrid = false
-    val orbitalCamera = OrbitalCamera(eye, lookAt)
+    val orbitalCamera = OrbitalCamera(eye, lookAt, 90.0)
     private val orbitalControls = OrbitalControls(orbitalCamera)
     private var lastSeconds: Double = -1.0
 
@@ -39,7 +39,7 @@ class Debug3D(eye: Vector3 = Vector3(0.0, 0.0, 10.0), lookAt: Vector3 = Vector3.
         orbitalCamera.update(delta)
 
         drawer.background(ColorRGBa.BLACK)
-        drawer.perspective(fov, program.window.size.x / program.window.size.y, 0.1, 1000.0)
+        drawer.perspective(orbitalCamera.fov, program.window.size.x / program.window.size.y, 0.1, 1000.0)
         drawer.view = orbitalCamera.viewMatrix()
 
         if (showGrid) {
