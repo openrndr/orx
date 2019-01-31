@@ -131,6 +131,12 @@ fun GeneratorBuffer.extrudeShape(shape: Shape, length: Double, scale: Double = 1
     extrudeShape(shape, -length / 2.0, length / 2.0, scale, scale, true, true, distanceTolerance, false, this::write)
 }
 
+fun GeneratorBuffer.extrudeShapes(shapes: List<Shape>, length: Double, scale: Double = 1.0, distanceTolerance: Double = 0.5) {
+    extrudeShapes(shapes, -length / 2.0, length / 2.0, scale, scale, true, true, distanceTolerance, false, this::write)
+}
+
+
+
 fun meshGenerator(builder: GeneratorBuffer.() -> Unit): VertexBuffer {
     val gb = GeneratorBuffer()
     gb.builder()
