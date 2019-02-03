@@ -27,7 +27,7 @@ repositories {
 }
 ```
 
-You can then add any of the ORX artefacts to your `dependencies {}`:
+You can then add any of the ORX artifacts to your `dependencies {}`:
 ```
 dependencies {
     compile 'com.github.openrndr.orx:<orx-artifact>:v0.0.19'
