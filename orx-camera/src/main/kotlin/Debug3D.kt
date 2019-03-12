@@ -8,12 +8,12 @@ import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector3
 
 @Suppress("unused")
-class Debug3D(eye: Vector3 = Vector3(0.0, 0.0, 10.0), lookAt: Vector3 = Vector3.ZERO, fov:Double = 90.0) : Extension {
+class Debug3D(eye: Vector3 = Vector3(0.0, 0.0, 10.0), lookAt: Vector3 = Vector3.ZERO, fov:Double = 90.0, userInteraction:Boolean = true) : Extension {
 
     override var enabled: Boolean = true
     var showGrid = false
     val orbitalCamera = OrbitalCamera(eye, lookAt, 90.0)
-    private val orbitalControls = OrbitalControls(orbitalCamera)
+    private val orbitalControls = OrbitalControls(orbitalCamera, userInteraction)
     private var lastSeconds: Double = -1.0
 
     private val grid = vertexBuffer(
