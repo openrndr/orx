@@ -4,7 +4,8 @@ import org.openrndr.*
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 
-class OrbitalControls(val orbitalCamera: OrbitalCamera) {
+class OrbitalControls(val orbitalCamera: OrbitalCamera, val userInteraction: Boolean = true) {
+
     enum class STATE {
         NONE,
         ROTATE,
@@ -18,7 +19,6 @@ class OrbitalControls(val orbitalCamera: OrbitalCamera) {
     private lateinit var lastMousePosition: Vector2
 
     private fun mouseScrolled(event: MouseEvent) {
-
         if (Math.abs(event.rotation.x) > 0.1) return
 
         when {
@@ -118,11 +118,12 @@ class OrbitalControls(val orbitalCamera: OrbitalCamera) {
 
     fun setup(program: Program) {
         this.program = program
-        program.mouse.moved.listen { mouseMoved(it) }
-        program.mouse.buttonDown.listen { mouseButtonDown(it) }
-        program.mouse.buttonUp.listen { state = STATE.NONE }
-        program.mouse.scrolled.listen { mouseScrolled(it) }
-        program.keyboard.keyDown.listen { keyPressed(it) }
-        program.keyboard.keyRepeat.listen{ keyPressed(it) }
+        if(userInteraction)
+            program.mouse.moved.listen { mouseMoved(it) }
+            program.mouse.buttonDown.listen { mouseButtonDown(it) }
+            program.mouse.buttonUp.listen { state = STATE.NONE }
+            program.mouse.scrolled.listen { mouseScrolled(it) }
+            program.keyboard.keyDown.listen { keyPressed(it) }
+            program.keyboard.keyRepeat.listen{ keyPressed(it) }
     }
 }
