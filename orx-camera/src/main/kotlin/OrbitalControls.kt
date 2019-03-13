@@ -4,7 +4,7 @@ import org.openrndr.*
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 
-class OrbitalControls(val orbitalCamera: OrbitalCamera, val userInteraction: Boolean) {
+class OrbitalControls(val orbitalCamera: OrbitalCamera, val userInteraction: Boolean = true) {
 
     enum class STATE {
         NONE,
