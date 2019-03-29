@@ -2,6 +2,7 @@ rootProject.name = 'orx'
 
 include 'orx-camera',
         'orx-compositor',
+        'orx-file-watcher',
         'orx-filter-extension',
         'orx-integral-image',
         'orx-jumpflood',
@@ -10,6 +11,7 @@ include 'orx-camera',
         'orx-no-clear',
         'orx-noise',
         'orx-obj-loader'
+
 
 
 
