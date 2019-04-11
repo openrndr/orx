@@ -4,7 +4,7 @@ plugins {
 
 allprojects {
     group 'org.openrndr.extra'
-    version '0.0.22'
+    version '0.0.23'
 }
 
 repositories {
@@ -40,7 +40,6 @@ subprojects {
         publications {
             mavenJava(MavenPublication) {
                 from components.java
-
                 artifact sourceJar
             }
         }
@@ -50,9 +49,6 @@ subprojects {
         classifier = 'sources'
         from sourceSets.main.kotlin
     }
-
-
-
 }
 
 dependencies {
