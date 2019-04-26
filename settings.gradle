@@ -9,10 +9,7 @@ include 'orx-camera',
         'orx-jumpflood',
         'orx-kdtree',
         'orx-mesh-generators',
+        'orx-midi',
         'orx-no-clear',
         'orx-noise',
         'orx-obj-loader'
-
-
-
-

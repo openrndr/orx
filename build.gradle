@@ -4,7 +4,7 @@ plugins {
 
 allprojects {
     group 'org.openrndr.extra'
-    version '0.0.23'
+    version '0.0.24'
 }
 
 repositories {
@@ -13,7 +13,7 @@ repositories {
 }
 
 ext {
-    openrndrVersion = "0.3.33-rc1"
+    openrndrVersion = "0.3.33-rc2"
 }
 
 subprojects {
