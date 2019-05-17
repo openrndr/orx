@@ -145,29 +145,31 @@ fun loadOBJ(lines: List<String>): Map<String, List<Triangle>> {
                             it.map { it.toIntOrNull() }
                         }
 
-                        if (indices.size == 3) {
+                        for (i in 0 until indices.size-2) {
 
                             val attributes = indices[0].size
+                            val o = i*2
+                            val s = indices.size
 
                             val ps = if (attributes >= 1) arrayOf(
-                                    indices[0][0]?.let { positions[it - 1] } ?: Vector3.ZERO,
-                                    indices[1][0]?.let { positions[it - 1] } ?: Vector3.ZERO,
-                                    indices[2][0]?.let { positions[it - 1] } ?: Vector3.ZERO)
+                                    indices[(0+o)%s][0]?.let { positions[it - 1] } ?: Vector3.ZERO,
+                                    indices[(1+o)%s][0]?.let { positions[it - 1] } ?: Vector3.ZERO,
+                                    indices[(2+o)%s][0]?.let { positions[it - 1] } ?: Vector3.ZERO)
                             else
                                 emptyArray()
 
                             val tcs = if (attributes >= 2) arrayOf(
-                                    indices[0][1]?.let { textureCoords[it - 1] } ?: Vector2.ZERO,
-                                    indices[1][1]?.let { textureCoords[it - 1] } ?: Vector2.ZERO,
-                                    indices[2][1]?.let { textureCoords[it - 1] } ?: Vector2.ZERO)
+                                    indices[(0+o)%s][1]?.let { textureCoords[it - 1] } ?: Vector2.ZERO,
+                                    indices[(1+o)%s][1]?.let { textureCoords[it - 1] } ?: Vector2.ZERO,
+                                    indices[(2+o)%s][1]?.let { textureCoords[it - 1] } ?: Vector2.ZERO)
                             else
                                 emptyArray()
 
 
                             val ns = if (attributes >= 3) arrayOf(
-                                    indices[0][2]?.let { normals[it - 1] } ?: Vector3.ZERO,
-                                    indices[1][2]?.let { normals[it - 1] } ?: Vector3.ZERO,
-                                    indices[2][2]?.let { normals[it - 1] } ?: Vector3.ZERO)
+                                    indices[(0+o)%s][2]?.let { normals[it - 1] } ?: Vector3.ZERO,
+                                    indices[(1+o)%s][2]?.let { normals[it - 1] } ?: Vector3.ZERO,
+                                    indices[(2+o)%s][2]?.let { normals[it - 1] } ?: Vector3.ZERO)
                             else
                                 emptyArray()
 
@@ -175,8 +177,6 @@ fun loadOBJ(lines: List<String>): Map<String, List<Triangle>> {
                             if(meshes.isEmpty()) {
                                 meshes["no-name"] = activeMesh
                             }
-                        } else {
-                            TODO("implement non triangular surfaces ${indices.size}")
                         }
                     }
                 }
