@@ -4,9 +4,9 @@ import java.io.InputStream
 import java.io.Reader
 import javax.script.ScriptEngineManager
 
-class LoadException(message: String? = null, cause: Throwable? = null) : RuntimeException(message, cause)
+internal class LoadException(message: String? = null, cause: Throwable? = null) : RuntimeException(message, cause)
 
-class KtsObjectLoader(classLoader: ClassLoader? = Thread.currentThread().contextClassLoader) {
+internal class KtsObjectLoader(classLoader: ClassLoader? = Thread.currentThread().contextClassLoader) {
 
     val engine = ScriptEngineManager(classLoader).getEngineByExtension("kts")
 
@@ -17,10 +17,8 @@ class KtsObjectLoader(classLoader: ClassLoader? = Thread.currentThread().context
     }
 
     inline fun <R> safeEval(noinline evaluation: () -> R?) = try {
-        println(evaluation)
         evaluation()
     } catch (e: Exception) {
-        e.printStackTrace()
         throw LoadException("Cannot load script", e)
     }
 

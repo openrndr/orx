@@ -6,25 +6,29 @@ import org.openrndr.draw.Session
 import org.operndr.extras.filewatcher.watchFile
 import java.io.File
 
-class Olive<P:Program>():Extension {
+class Olive<P : Program> : Extension {
     override var enabled: Boolean = true
     var session: Session? = null
 
     var script = "src/main/kotlin/live.kts"
 
     override fun setup(program: Program) {
+        System.setProperty("idea.io.use.fallback", "true")
+
         val f = File(script)
-
-
 
         if (!f.exists()) {
             f.parentFile.mkdirs()
+            var className = program.javaClass.name
+            if (className.contains("$"))
+                className = "Program"
+
             f.writeText("""
                 @file:Suppress("UNUSED_LAMBDA_EXPRESSION")
                 import org.openrndr.Program
                 import org.openrndr.draw.*
 
-                { program: ${program.javaClass.name} ->
+                { program: $className ->
                     program.apply {
                         extend {
 
@@ -37,9 +41,7 @@ class Olive<P:Program>():Extension {
         program.watchFile(File(script)) {
             try {
 
-                val script =it.readText()
-
-                println(script)
+                val script = it.readText()
                 val func = KtsObjectLoader().load<P.() -> Unit>(script)
 
                 program.extensions.clear()
