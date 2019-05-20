@@ -13,4 +13,5 @@ include 'orx-camera',
         'orx-midi',
         'orx-no-clear',
         'orx-noise',
-        'orx-obj-loader'
+        'orx-obj-loader',
+        'orx-olive'
