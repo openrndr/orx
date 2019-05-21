@@ -67,8 +67,12 @@ class Layer internal constructor() {
                 }
 
                 if (postBufferCache.isEmpty()) {
-                    postBufferCache += colorBuffer(rt.width, rt.height)
-                    postBufferCache += colorBuffer(rt.width, rt.height)
+                    postBufferCache += colorBuffer(rt.width, rt.height).apply {
+                        Session.active.untrack(this)
+                    }
+                    postBufferCache += colorBuffer(rt.width, rt.height).apply {
+                        Session.active.untrack(this)
+                    }
                 }
             }
 
