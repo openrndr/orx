@@ -13,7 +13,7 @@ repositories {
 }
 
 ext {
-    openrndrVersion = "0.4.0-SNAPSHOT"
+    openrndrVersion = "0.3.34-rc2"
 }
 
 subprojects {
