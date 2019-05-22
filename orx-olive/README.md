@@ -40,7 +40,7 @@ import org.openrndr.Program
 import org.openrndr.application
 
 class PersistentProgram: Program() {
-    lateinit var camera;
+    lateinit var camera: FFMPEGVideoPlayer
 }
 
 fun main() = application{
