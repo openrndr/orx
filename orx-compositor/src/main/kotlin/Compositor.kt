@@ -28,6 +28,7 @@ class Layer internal constructor() {
     var blendFilter: Pair<Filter, Filter.() -> Unit>? = null
     val postFilters: MutableList<Pair<Filter, Filter.() -> Unit>> = mutableListOf()
 
+    var clearColor: ColorRGBa? = ColorRGBa.TRANSPARENT
     private var layerTarget:RenderTarget? = null
 
     /**
@@ -43,11 +44,18 @@ class Layer internal constructor() {
                 colorBuffer()
                 depthBuffer()
             }
+            layerTarget?.let {
+                drawer.withTarget(it) {
+                    drawer.background(ColorRGBa.TRANSPARENT)
+                }
+            }
         }
 
         layerTarget?.let { target ->
             drawer.isolatedWithTarget(target) {
-                drawer.background(ColorRGBa.TRANSPARENT)
+                clearColor?.let {
+                    drawer.background(it)
+                }
                 drawFunc()
                 children.forEach {
                     it.draw(drawer)
