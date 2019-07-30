@@ -1,5 +1,6 @@
 package org.openrndr.extras.meshgenerators
 
+import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.rotateY
@@ -19,8 +20,8 @@ fun generateCap(sides: Int, radius: Double, enveloppe: List<Vector2> = listOf(Ve
     val baseNormals = normals2D.map { Vector3(it.x, it.y, 0.0) }
 
     for (side in 0 until sides) {
-        val r0 = rotateY(360.0 / sides * side)
-        val r1 = rotateY(360.0 / sides * (side + 1))
+        val r0 = Matrix44.rotateY(360.0 / sides * side)
+        val r1 = Matrix44.rotateY(360.0 / sides * (side + 1))
 
         val v0 = basePositions.map { (r0 * it.xyz0).xyz }
         val v1 = basePositions.map { (r1 * it.xyz0).xyz }
@@ -62,16 +63,12 @@ fun generateRevolve(sides: Int, length: Double, enveloppe: List<Vector2> = listO
 
     val extended = listOf(normals2D[0]) + normals2D + normals2D[normals2D.size-1]
 
-//    extended.zipW
-
-    println(normals2D.joinToString(", "))
-
     val basePositions = cleanEnveloppe.map { Vector3(it.x, it.y, 0.0) }
     val baseNormals = normals2D.map { Vector3(it.x, it.y, 0.0) }
 
     for (side in 0 until sides) {
-        val r0 = rotateY(360.0 / sides * side)
-        val r1 = rotateY(360.0 / sides * (side + 1))
+        val r0 = Matrix44.rotateY(360.0 / sides * side)
+        val r1 = Matrix44.rotateY(360.0 / sides * (side + 1))
 
         val v0 = basePositions.map { (r0 * it.xyz0).xyz }
         val v1 = basePositions.map { (r1 * it.xyz0).xyz }

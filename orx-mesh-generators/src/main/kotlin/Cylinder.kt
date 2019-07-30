@@ -1,6 +1,7 @@
 package org.openrndr.extras.meshgenerators
 
 import org.openrndr.draw.VertexBuffer
+import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.mix
@@ -56,8 +57,8 @@ fun generateTaperedCylinder(sides: Int, segments: Int, radiusStart: Double, radi
             val v1 = (side + 1.0) / sides
 
 
-            val n0 = (rotateZ(side * ddeg) * baseNormal.xyz0).xyz.normalized * invertFactor
-            val n1 = (rotateZ((side+1) * ddeg) * baseNormal.xyz0).xyz.normalized * invertFactor
+            val n0 = (Matrix44.rotateZ(side * ddeg) * baseNormal.xyz0).xyz.normalized * invertFactor
+            val n1 = (Matrix44.rotateZ((side+1) * ddeg) * baseNormal.xyz0).xyz.normalized * invertFactor
 
 
             if (!invert) {
