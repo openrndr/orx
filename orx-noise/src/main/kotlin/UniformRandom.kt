@@ -62,6 +62,15 @@ fun Vector3.Companion.uniformRing(innerRadius: Double = 0.0,
 }
 
 fun Vector3.Companion.uniforms(count: Int,
+                               min: Double = -1.0,
+                               max: Double = 1.0,
+                               random: Random = Random.Default): List<Vector3> =
+        List(count) {
+            Vector3.uniform(min, max, random)
+        }
+
+
+fun Vector3.Companion.uniforms(count: Int,
                                min: Vector3 = -ONE,
                                max: Vector3 = ONE,
                                random: Random = Random.Default): List<Vector3> =
