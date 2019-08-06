@@ -12,5 +12,5 @@ void main() {
     vec2 centroidPixelPosition = texture(tex0, v_texCoord0).xy;
     vec2 pixelDistance = (centroidPixelPosition - pixelPosition) * size * vec2(1.0, -1.0);
     float threshold = texture(tex1, v_texCoord0).r;
-    o_color = vec4(length(pixelDistance), threshold, 0.0, 1.0);
+    o_color = vec4(pixelDistance, threshold, 1.0);
 }
