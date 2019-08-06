@@ -26,7 +26,7 @@ class Threshold : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/threshold
 private val encodePoints by lazy { EncodePoints() }
 private val jumpFlood by lazy { JumpFlood() }
 private val pixelDistance by lazy { PixelDistance() }
-private val pixelDirection by lazy { PixelDistance() }
+private val pixelDirection by lazy { PixelDirection() }
 private val contourPoints by lazy { ContourPoints() }
 private val threshold by lazy { Threshold() }
 
