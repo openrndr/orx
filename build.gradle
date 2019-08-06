@@ -1,28 +1,67 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
+    }
+}
+
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.3.31'
+    // plugin dependencies, load without applying them
+    id 'nebula.kotlin' version '1.3.41' apply false
+    id 'com.jfrog.artifactory' version '4.6.2' apply false
+
+    id 'nebula.contacts' version '4.1.1' apply false
+    id 'nebula.info' version '4.0.2' apply false
+    id 'nebula.dependency-lock' version '6.1.2' apply false
+    id 'nebula.facet' version '5.1.2' apply false
+    id 'nebula.maven-apache-license' version '9.0.2' apply false
+
+    id 'nebula.maven-publish' version '9.0.2' apply false
+    id 'nebula.release' version '8.0.3' apply false
+    id 'nebula.nebula-bintray' version '4.0.2' apply false
+    id 'nebula.source-jar' version '9.0.2' apply false
 }
 
-allprojects {
-    group 'org.openrndr.extra'
-    version '0.0.30'
-}
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-}
+//allprojects {
+//    group 'org.openrndr.extra'
+//    version '0.0.30'
+//}
+//
+//repositories {
+//    mavenLocal()
+//    mavenCentral()
+//}
 
-ext {
+project.ext {
     openrndrVersion = "0.3.35-rc1"
 }
 
-subprojects {
+allprojects {
 
-    apply plugin: 'kotlin'
-    apply plugin: 'maven'
-    apply plugin: 'maven-publish'
+
+    apply plugin: 'idea'
+    apply plugin: 'java'
+    apply plugin: 'nebula.kotlin'
+    apply plugin: 'nebula.contacts'
+    apply plugin: 'nebula.info'
+    apply plugin: 'nebula.dependency-lock'
+    apply plugin: 'nebula.facet'
+    apply plugin: 'nebula.maven-apache-license'
+    apply plugin: 'nebula.release'
+    apply plugin: 'nebula.maven-publish'
+
+    // selectively apply only the bintray plugin, snapshots are not published
+    // nebula-bintray needs to happened after nebula-release since version isn't lazy in the bintray extension
+    apply plugin: 'nebula.nebula-bintray-publishing'
+    apply plugin: 'nebula.source-jar'
+
+    group 'org.openrndr.extra'
+
     repositories {
-        mavenLocal()
         mavenCentral()
         maven {
             url = "https://dl.bintray.com/openrndr/openrndr"
@@ -36,35 +75,25 @@ subprojects {
         compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '1.3.0-RC'
     }
 
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                from components.java
-                artifact sourceJar
-            }
+    contacts {
+        'edwin@openrndr.org' {
+            moniker 'Edwin Jakobs'
+            github 'edwinRNDR'
         }
     }
 
-    task sourceJar(type: Jar) {
-        classifier = 'sources'
-        from sourceSets.main.kotlin
+    bintray {
+        pkg {
+            userOrg = 'openrndr'
+            repo = 'openrndr'
+            name = 'orx'
+            desc = project.description
+            licenses = ['BSD-2-Clause']
+            vcsUrl = 'https://github.com/openrndr/openrndr.git'
+            websiteUrl = 'https://www.openrndr.org'
+            issueTrackerUrl = 'https://github.com/openrndr/openrndr/issues'
+            labels = ['creative-coding', 'realtime-rendering', 'opengl']
+        }
     }
 
-    compileKotlin {
-        kotlinOptions.jvmTarget = "1.8"
-    }
-    compileTestKotlin {
-        kotlinOptions.jvmTarget = "1.8"
-    }
-}
-
-dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-}
-
-compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
-}
-compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
 }
