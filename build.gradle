@@ -38,6 +38,7 @@ plugins {
 
 project.ext {
     openrndrVersion = "0.3.35-rc1"
+    libfreenectVersion = "0.5.7-1.5.1"
 }
 
 allprojects {
