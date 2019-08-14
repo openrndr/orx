@@ -34,6 +34,6 @@ void main() {
         }
     }
 
-    o_color = vec4(bestCoord, found, 1.0);
+    o_color = vec4(bestCoord, bestColor.r, 1.0);
 
 }

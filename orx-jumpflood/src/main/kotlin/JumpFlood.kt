@@ -5,6 +5,9 @@ import org.openrndr.draw.*
 import org.openrndr.filter.blend.passthrough
 import org.openrndr.math.Matrix44
 import org.openrndr.resourceUrl
+import kotlin.math.ceil
+import kotlin.math.max
+import kotlin.math.pow
 
 class EncodePoints : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/encode-points.frag")))
 class JumpFlood : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/jumpflood.frag"))) {
@@ -30,37 +33,25 @@ private val pixelDirection by lazy { PixelDirection() }
 private val contourPoints by lazy { ContourPoints() }
 private val threshold by lazy { Threshold() }
 
-class JumpFlooder(val width: Int, val height: Int) {
-    private val dimension = Math.max(width, height)
-    private val exp = Math.ceil(Math.log(dimension.toDouble()) / Math.log(2.0)).toInt()
-    private val squareDim = Math.pow(2.0, exp.toDouble()).toInt()
+class JumpFlooder(val width: Int, val height: Int, format:ColorFormat = ColorFormat.RGB, type:ColorType = ColorType.FLOAT32) {
+
+    private val dimension = max(width, height)
+    private val exp = ceil(Math.log(dimension.toDouble()) / Math.log(2.0)).toInt()
+    private val squareDim = 2.0.pow(exp.toDouble()).toInt()
 
     private val coordinates =
-            listOf(colorBuffer(squareDim, squareDim, format = ColorFormat.RGB, type = ColorType.FLOAT32),
-                    colorBuffer(squareDim, squareDim, format = ColorFormat.RGB, type = ColorType.FLOAT32))
+            listOf(colorBuffer(squareDim, squareDim, format = format, type = type),
+                    colorBuffer(squareDim, squareDim, format = format, type = type))
 
     private val final = renderTarget(width, height) {
-        colorBuffer(type = ColorType.FLOAT32)
+        colorBuffer(format = format, type = type)
     }
 
     val encoded: ColorBuffer get() = final.colorBuffer(0)
 
     private val square = renderTarget(squareDim, squareDim) {
-        colorBuffer()
+        colorBuffer(format = format, type = type)
     }
-
-//    fun distanceToContour(drawer: Drawer, input: ColorBuffer, thresholdValue: Double = 0.5): ColorBuffer {
-//        threshold.threshold = thresholdValue
-//        threshold.apply(input, thresholded)
-//        contourPoints.apply(thresholded, edges)
-//        contourUsed = true
-//        return jumpFlood(drawer, edges)
-//    }
-
-//    fun directions(xRange: IntProgression = 0 until width, yRange: IntProgression = 0 until height): Array<List<Vector2>> {
-//        result.shadow.download()
-//        return result.shadow.mapIndexed(xRange, yRange) { _, _, r, g, _, _ -> Vector2(r, g) }
-//    }
 
     fun jumpFlood(drawer: Drawer, input: ColorBuffer): ColorBuffer {
         if (input.width != width || input.height != height) {
@@ -140,4 +131,3 @@ fun directionFieldFromBitmap(drawer: Drawer, bitmap: ColorBuffer,
                              jumpFlooder: JumpFlooder? = null,
                              result: ColorBuffer? = null
 ): ColorBuffer = encodeDecodeBitmap(drawer, contourPoints, pixelDirection, bitmap, jumpFlooder, result)
-
