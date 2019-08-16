@@ -179,6 +179,7 @@ private class KinectsV1Manager(val depthCameraInitializationDelay: Long) : Kinec
                     set(value) {
                         if (atomicEnabled.get() == value) {
                             logger.warn { "Current state requested - doing nothing, Kinect1 device: $num, enabled=$value" }
+                            return
                         }
                         if (!inProgress.getAndSet(true)) {
                             if (value) {
