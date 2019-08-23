@@ -1,0 +1,13 @@
+def os = org.gradle.internal.os.OperatingSystem.current()
+def openrndrOs
+if      (os.windows) { openrndrOs = "windows" }
+else if (os.macOsX)  { openrndrOs = "macos" }
+else if (os.linux)   { openrndrOs = "linux-x64" }
+
+dependencies {
+    compile project(":orx-kinect-v1")
+    runtime project(":orx-kinect-v1-natives-$openrndrOs")
+    runtime "org.openrndr:openrndr-gl3:$openrndrVersion"
+    runtime "org.openrndr:openrndr-gl3-natives-$openrndrOs:$openrndrVersion"
+    runtime "ch.qos.logback:logback-classic:1.2.3"
+}
