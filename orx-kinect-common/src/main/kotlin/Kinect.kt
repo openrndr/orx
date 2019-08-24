@@ -17,9 +17,10 @@ interface Kinects<CTX> {
     /**
      * Starts kinect device of a given number.
      *
-     * @param num the kinect device index.
-     * @throws KinectException if device of such a number does not exist,
-     *          better to count them first.
+     * @param num the kinect device index (starts with 0). If no value specified,
+     *          it will default to 0.
+     * @throws KinectException if device of such a number does not exist
+     *          (better to count them first), or it was already started.
      * @see countDevices
      */
     fun startDevice(num: Int = 0): KinectDevice<CTX>
@@ -34,15 +35,17 @@ interface Kinects<CTX> {
 /**
  * Represents specific device.
  *
- * @param <CTX> data needed to make low level kinect support calls.
+ * @param CTX type of data needed to make low level kinect support calls (e.g. freenect contexts).
  */
 interface KinectDevice<CTX> : Extension {
+
     val depthCamera: KinectDepthCamera
 
     /**
      * Executes low level Kinect commands in the kinect thread in the context of this device.
      */
     fun <T> execute(commands: (CTX) -> T): T
+
 }
 
 interface KinectCamera {
@@ -51,6 +54,19 @@ interface KinectCamera {
     val height: Int
     var mirror: Boolean
     val currentFrame: ColorBuffer
+    /**
+     * Returns the latest frame, but only once. Useful for the scenarios
+     * where each new frame triggers extra computation. Therefore the same
+     * expensive operation might happen only once, especially when the refresh
+     * rate of the target screen is higher than kinect's 30 fps.
+     * <p>
+     * Example usage:
+     * <pre>
+     * kinect.depthCamera.getLatestFrame()?.let { frame ->
+     *     grayscaleFilter.apply(frame, grayscaleBuffer)
+     * }
+     * </pre>
+     */
     fun getLatestFrame(): ColorBuffer?
 }
 

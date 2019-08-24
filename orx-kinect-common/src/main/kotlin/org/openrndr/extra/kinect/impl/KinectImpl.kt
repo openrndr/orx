@@ -1,7 +1,10 @@
-package org.openrndr.extra.kinect
+package org.openrndr.extra.kinect.impl
 
 import org.openrndr.Program
 import org.openrndr.draw.*
+import org.openrndr.extra.kinect.KinectDepthCamera
+import org.openrndr.extra.kinect.KinectDevice
+import org.openrndr.extra.kinect.Kinects
 import org.openrndr.math.Vector2
 import org.openrndr.resourceUrl
 import java.nio.ByteBuffer
@@ -9,8 +12,11 @@ import java.util.concurrent.atomic.AtomicReference
 import java.util.function.Supplier
 import kotlin.concurrent.thread
 
+class DefaultKinects<CTX>(
+        private val program: Program,
+        private val manager: KinectsManager<CTX>
+) : Kinects<CTX> {
 
-class DefaultKinects<CTX>(private val manager: KinectsManager<CTX>) : Kinects<CTX> {
     init {
         manager.initialize()
         // as we don't have explicit shutdown mechanism in OPENRNDR
@@ -31,10 +37,12 @@ class DefaultKinects<CTX>(private val manager: KinectsManager<CTX>) : Kinects<CT
     }
 
     override fun startDevice(num: Int): KinectDevice<CTX> {
-        return manager.startDevice(num)
+        val device = manager.startDevice(num)
+        program.extend(device)
+        return device
     }
 
-    override fun execute(commands: (CTX) -> Any): Any {
+    override fun <T> execute(commands: (CTX) -> T): T {
         return manager.execute(commands)
     }
 
@@ -44,7 +52,7 @@ interface KinectsManager<CTX> {
     fun initialize()
     fun countDevices(): Int
     fun startDevice(num: Int): KinectDevice<CTX>
-    fun execute(commands: (CTX) -> Any): Any
+    fun <T> execute(commands: (CTX) -> T): T
     fun shutdown()
 }
 
@@ -53,7 +61,7 @@ interface KinectFeatureEnabler {
 }
 
 interface KinectCommandsExecutor<CTX> {
-    fun execute(commands: (CTX) -> Any): Any
+    fun <T> execute(commands: (CTX) -> T): T
 }
 
 class DefaultKinectDevice<CTX>(
@@ -64,7 +72,8 @@ class DefaultKinectDevice<CTX>(
     override fun beforeDraw(drawer: Drawer, program: Program) {
         depthCamera.update()
     }
-    override fun execute(commands: (CTX) -> Any): Any {
+
+    override fun <T> execute(commands: (CTX) -> T): T {
         return commandsExecutor.execute(commands)
     }
 }
@@ -128,7 +137,10 @@ class DefaultKinectDepthCamera(
 }
 
 private class KinectRawDataToDepthMapper :
-        Filter(filterShaderFromUrl(resourceUrl("kinect-raw-to-depth.frag", Kinects::class.java))) {
+        Filter(filterShaderFromUrl(
+                resourceUrl("kinect-raw-to-depth.frag",
+                DefaultKinects::class.java))
+        ) {
     var depthScale: Double by parameters
     var mirror: Boolean by parameters
     var resolution: Vector2 by parameters
