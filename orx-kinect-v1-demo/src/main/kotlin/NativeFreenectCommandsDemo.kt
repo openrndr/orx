@@ -4,6 +4,7 @@ import org.bytedeco.libfreenect.global.freenect
 import org.bytedeco.libfreenect.global.freenect.*
 import org.openrndr.application
 import org.openrndr.extra.kinect.v1.getKinectsV1
+import java.lang.RuntimeException
 
 /**
  * Even though this library is abstracting freenect access, it is still
@@ -14,6 +15,9 @@ import org.openrndr.extra.kinect.v1.getKinectsV1
 fun main() = application {
     program {
         val kinects = getKinectsV1(this)
+        // the same as calling kinects.countDevices(), here to show that any value might be returned from execute
+        val num = kinects.execute { ctx -> freenect_num_devices(ctx.fnCtx) }
+        if (num == 0) { throw RuntimeException("no kinect detected") }
         kinects.execute { ctx ->
             freenect_set_log_level(ctx.fnCtx, freenect.FREENECT_LOG_FLOOD) // lots of logs
         }
