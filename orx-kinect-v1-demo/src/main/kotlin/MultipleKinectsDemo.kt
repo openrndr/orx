@@ -23,5 +23,11 @@ fun main() = application {
             drawer.image(depthCamera1.currentFrame)
             drawer.image(depthCamera2.currentFrame, depthCamera1.width.toDouble(), 0.0)
         }
+        keyboard.keyDown.listen { keyEvent ->
+            if (keyEvent.name == "1") {depthCamera1.enabled = !depthCamera1.enabled }
+            if (keyEvent.name == "2") {depthCamera2.enabled = !depthCamera2.enabled }
+            if (keyEvent.name == "q") {depthCamera1.mirror = !depthCamera1.mirror }
+            if (keyEvent.name == "w") {depthCamera2.mirror = !depthCamera2.mirror }
+        }
     }
 }
