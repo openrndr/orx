@@ -15,8 +15,11 @@ include 'orx-camera',
         'orx-noise',
         'orx-obj-loader',
         'orx-olive',
+        'orx-shader-phrases',
+        'orx-shader-phrases-processor',
         'orx-kinect-common',
         'orx-kinect-v1',
         'orx-kinect-v1-natives-linux-x64',
-        'orx-kinect-v1-natives-macos'
-        'orx-kinect-v1-natives-windows'
+        'orx-kinect-v1-natives-macos',
+        'orx-kinect-v1-natives-windows',
+        'orx-kinect-v1-demo'
