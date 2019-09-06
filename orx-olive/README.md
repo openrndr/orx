@@ -30,6 +30,12 @@ fun main() = application {
 The extension will create a template script for you in `src/main/kotlin/live.kts`. You can
 edit this to see how the program updates automatically.
 
+## Shade style errors
+
+Recent versions of `orx-olive` automatically set the `org.openrndr.ignoreShadeStyleErrors` property which
+makes OPENRNDR ignore errors in the shade style and return the default shader. To get this behaviour in 
+older versions add `-Dorg.openrndr.ignoreShadeStyleErrors=true` to the JVM arguments.
+
 ## Persistent Data
 
 Sometimes you want to keep parts of your application persistent. In the following example

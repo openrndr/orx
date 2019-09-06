@@ -14,6 +14,7 @@ class Olive<P : Program> : Extension {
 
     override fun setup(program: Program) {
         System.setProperty("idea.io.use.fallback", "true")
+        System.setProperty("org.openrndr.ignoreShadeStyleErrors", "true")
 
         val f = File(script)
 
