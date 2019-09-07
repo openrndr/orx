@@ -3,8 +3,18 @@ package org.openrndr.extra.olive
 import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.draw.Session
+import org.openrndr.events.Event
 import org.operndr.extras.filewatcher.watchFile
 import java.io.File
+
+
+fun <T> Event<T>.saveListeners(store: MutableMap<Event<*>, List<(Any) -> Unit>>) {
+    store[this] = listeners.map { it } as List<(Any) -> Unit>
+}
+
+fun <T> Event<T>.restoreListeners(store: Map<Event<*>, List<(Any) -> Unit>>) {
+    listeners.retainAll(store[this]?: emptyList<T>())
+}
 
 class Olive<P : Program> : Extension {
     override var enabled: Boolean = true
@@ -15,6 +25,28 @@ class Olive<P : Program> : Extension {
     override fun setup(program: Program) {
         System.setProperty("idea.io.use.fallback", "true")
         System.setProperty("org.openrndr.ignoreShadeStyleErrors", "true")
+
+        val store = mutableMapOf<Event<*>,List<(Any)->Unit>>()
+
+        val originalExtensions = program.extensions.map { it }
+
+        val trackedListeners = listOf<Event<*>>(program.mouse.buttonDown,
+                program.mouse.buttonUp,
+                program.mouse.clicked,
+                program.mouse.dragged,
+                program.mouse.moved,
+                program.mouse.scrolled,
+                program.keyboard.keyUp,
+                program.keyboard.keyDown,
+                program.keyboard.keyRepeat,
+                program.window.drop,
+                program.window.focused,
+                program.window.minimized,
+                program.window.moved,
+                program.window.sized,
+                program.window.unfocused)
+
+        trackedListeners.forEach { it.saveListeners(store) }
 
         val f = File(script)
 
@@ -46,22 +78,9 @@ class Olive<P : Program> : Extension {
                 val func = KtsObjectLoader().load<P.() -> Unit>(script)
 
                 program.extensions.clear()
+                program.extensions.addAll(originalExtensions)
 
-                program.keyboard.keyDown.listeners.clear()
-                program.keyboard.keyUp.listeners.clear()
-                program.keyboard.character.listeners.clear()
-                program.keyboard.keyRepeat.listeners.clear()
-                program.mouse.clicked.listeners.clear()
-                program.mouse.buttonDown.listeners.clear()
-                program.mouse.dragged.listeners.clear()
-                program.mouse.buttonUp.listeners.clear()
-                program.mouse.moved.listeners.clear()
-                program.window.drop.listeners.clear()
-                program.window.focused.listeners.clear()
-                program.window.minimized.listeners.clear()
-                program.window.unfocused.listeners.clear()
-                program.window.restored.listeners.clear()
-                program.window.sized.listeners.clear()
+                trackedListeners.forEach { it.restoreListeners(store) }
                 session?.end()
 
                 session = Session()
