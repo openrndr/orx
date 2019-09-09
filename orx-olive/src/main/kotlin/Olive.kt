@@ -21,16 +21,12 @@ class Olive<P : Program> : Extension {
     override var enabled: Boolean = true
     var session: Session? = null
 
-
-
-    var running = false
-
     internal var scriptChange: (String)->Unit = {}
 
     var script = "src/main/kotlin/live.kts"
         set(value) {
-            scriptChange(value)
             field = value
+            scriptChange(value)
         }
 
     override fun setup(program: Program) {
