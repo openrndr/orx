@@ -1,10 +1,10 @@
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should equal`
+import org.openrndr.extra.gradientdescent.gradient
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 object TestGradient : Spek({
-
     describe("a simple 1d function") {
         fun parabola(x: DoubleArray): Double {
             return x[0] * x[0]
