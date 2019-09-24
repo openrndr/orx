@@ -21,6 +21,8 @@
 // THE SOFTWARE.
 //
 
+package org.openrndr.extra.gradientdescent
+
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -66,6 +68,7 @@ fun gradient(x: DoubleArray, objective: (parameters: DoubleArray) -> Double): Do
             k++
         }
     }
+    //println("gradient at (${x.contentToString()}) -> (${grad.contentToString()}) ")
     return grad
 }
 
@@ -105,8 +108,10 @@ fun minimize(_x0: DoubleArray, endOnLineSearch: Boolean = true, tol: Double = 1e
     while (iteration < maxIterations) {
         require(g0.all { it == it && it != Double.POSITIVE_INFINITY && it != Double.NEGATIVE_INFINITY })
         val pstep = dot(H1, g0)
+        require(pstep.all { it == it }) { "pstep contains NaNs"}
+        require(pstep.all { it != Double.POSITIVE_INFINITY && it != Double.NEGATIVE_INFINITY }) { "pstep contains infs"  }
         val step = neg(pstep)
-        require(step.all { it == it && it != Double.POSITIVE_INFINITY && it != Double.NEGATIVE_INFINITY })
+
         val nstep = norm2(step)
         require(nstep == nstep)
         if (nstep < tol) {
@@ -121,6 +126,8 @@ fun minimize(_x0: DoubleArray, endOnLineSearch: Boolean = true, tol: Double = 1e
             s = mul(step, t)
             x1 = add(x0, s)
             f1 = f(x1)
+
+            require(f1 == f1) { "f1 is NaN"}
             if (!(f1 - f0 >= 0.1 * t * df0)) {
                 break
             }
@@ -134,8 +141,12 @@ fun minimize(_x0: DoubleArray, endOnLineSearch: Boolean = true, tol: Double = 1e
         }
         if (iteration >= maxIterations) break
         val g1 = grad(x1)
+        require(g1.all { it == it })
         val y = sub(g1, g0)
         val ys = dot(y, s)
+        if (ys==0.0) {
+            break
+        }
         val Hy = dot(H1, y)
         H1 = sub(
                 add(
@@ -158,5 +169,6 @@ fun minimize(_x0: DoubleArray, endOnLineSearch: Boolean = true, tol: Double = 1e
         g0 = g1
         iteration++
     }
+
     return MinimizationResult(x0, f0, g0, H1, iteration)
 }
