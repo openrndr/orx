@@ -96,7 +96,7 @@ fun dot(x: Array<DoubleArray>, y: DoubleArray): DoubleArray = DoubleArray(x.size
 class MinimizationResult(val solution: DoubleArray, val value: Double, val gradient: DoubleArray,
                          val inverseHessian: Array<DoubleArray>, val iterations: Int)
 
-fun minimize(_x0: DoubleArray, endOnLineSearch: Boolean = true, tol: Double = 1e-8, maxIterations: Int = 1000, f: (DoubleArray) -> Double): MinimizationResult {
+fun minimize(_x0: DoubleArray, endOnLineSearch: Boolean = false, tol: Double = 1e-8, maxIterations: Int = 1000, f: (DoubleArray) -> Double): MinimizationResult {
     val grad = { a: DoubleArray -> gradient(a, f) }
     var x0 = _x0.copyOf()
     var g0 = grad(x0)
@@ -108,8 +108,8 @@ fun minimize(_x0: DoubleArray, endOnLineSearch: Boolean = true, tol: Double = 1e
     while (iteration < maxIterations) {
         require(g0.all { it == it && it != Double.POSITIVE_INFINITY && it != Double.NEGATIVE_INFINITY })
         val pstep = dot(H1, g0)
-        require(pstep.all { it == it }) { "pstep contains NaNs"}
-        require(pstep.all { it != Double.POSITIVE_INFINITY && it != Double.NEGATIVE_INFINITY }) { "pstep contains infs"  }
+        require(pstep.all { it == it }) { "pstep contains NaNs" }
+        require(pstep.all { it != Double.POSITIVE_INFINITY && it != Double.NEGATIVE_INFINITY }) { "pstep contains infs" }
         val step = neg(pstep)
 
         val nstep = norm2(step)
@@ -127,7 +127,7 @@ fun minimize(_x0: DoubleArray, endOnLineSearch: Boolean = true, tol: Double = 1e
             x1 = add(x0, s)
             f1 = f(x1)
 
-            require(f1 == f1) { "f1 is NaN"}
+            require(f1 == f1) { "f1 is NaN" }
             if (!(f1 - f0 >= 0.1 * t * df0)) {
                 break
             }
@@ -144,7 +144,7 @@ fun minimize(_x0: DoubleArray, endOnLineSearch: Boolean = true, tol: Double = 1e
         require(g1.all { it == it })
         val y = sub(g1, g0)
         val ys = dot(y, s)
-        if (ys==0.0) {
+        if (ys == 0.0) {
             break
         }
         val Hy = dot(H1, y)
@@ -171,4 +171,13 @@ fun minimize(_x0: DoubleArray, endOnLineSearch: Boolean = true, tol: Double = 1e
     }
 
     return MinimizationResult(x0, f0, g0, H1, iteration)
+}
+
+fun <T : Any> minimizeModel(model: T, endOnLineSearch: Boolean = false, tol: Double = 1e-8, maxIterations: Int = 1000, function: (T) -> Double) {
+    val doubles = modelToArray(model)
+    val solution = minimize(doubles, endOnLineSearch, tol, maxIterations) {
+        arrayToModel(it, model)
+        function(model)
+    }
+    arrayToModel(solution.solution, model)
 }
