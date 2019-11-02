@@ -11,6 +11,14 @@ fun <T : Any> modelToArray(model: T): DoubleArray {
     val doubles = mutableListOf<Double>()
     model::class.java.declaredFields.forEach {
         when {
+            it.type == DoubleArray::class.java -> {
+                it.isAccessible = true
+                val da = it.get(model) as DoubleArray
+                for (d in da) {
+                    doubles.add(d)
+                }
+            }
+
             it.type == Double::class.java -> {
                 it.isAccessible = true
                 doubles.add(it.getDouble(model))
@@ -48,6 +56,15 @@ fun <T : Any> arrayToModel(data: DoubleArray, model: T) {
     var index = 0
     model::class.java.declaredFields.forEach {
         when {
+            it.type == DoubleArray::class.java -> {
+                it.isAccessible = true
+                //it.setDouble(model, data[index])
+                val da = it.get(model) as DoubleArray
+                for (i in 0 until da.size) {
+                    da[i] = data[index]
+                    index++
+                }
+            }
             it.type == Double::class.java -> {
                 it.isAccessible = true
                 it.setDouble(model, data[index])

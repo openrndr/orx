@@ -35,6 +35,7 @@ fun max(a: Double, b: Double, c: Double, d: Double, e: Double, f: Double, g: Dou
     return max(max(max(max(max(max(max(a, b), c), d), e), f), g), h)
 }
 
+
 fun gradient(x: DoubleArray, objective: (parameters: DoubleArray) -> Double): DoubleArray {
     var k = 0
     val tempX = x.copyOf()
@@ -83,6 +84,7 @@ private fun add(x: Array<DoubleArray>, y: Array<DoubleArray>) = Array(x.size) { 
 private fun sub(x: Array<DoubleArray>, y: Array<DoubleArray>) = Array(x.size) { sub(x[it], y[it]) }
 private fun mul(x: Array<DoubleArray>, y: Double) = Array(x.size) { mul(x[it], y) }
 private fun mul(x: DoubleArray, y: Double) = DoubleArray(x.size) { x[it] * y }
+private fun mul(x: DoubleArray, y: DoubleArray) = DoubleArray(x.size) { x[it] * y[it] }
 private fun div(x: Array<DoubleArray>, y: Double) = Array(x.size) { div(x[it], y) }
 private fun div(x: DoubleArray, y: Double) = DoubleArray(x.size) { x[it] / y }
 private fun norm2(x: DoubleArray): Double {
@@ -96,7 +98,9 @@ fun dot(x: Array<DoubleArray>, y: DoubleArray): DoubleArray = DoubleArray(x.size
 class MinimizationResult(val solution: DoubleArray, val value: Double, val gradient: DoubleArray,
                          val inverseHessian: Array<DoubleArray>, val iterations: Int)
 
-fun minimize(_x0: DoubleArray, endOnLineSearch: Boolean = false, tol: Double = 1e-8, maxIterations: Int = 1000, f: (DoubleArray) -> Double): MinimizationResult {
+fun minimize(_x0: DoubleArray,
+             weights: DoubleArray = DoubleArray(_x0.size) { 1.0 },
+             endOnLineSearch: Boolean = false, tol: Double = 1e-8, maxIterations: Int = 1000, f: (DoubleArray) -> Double): MinimizationResult {
     val grad = { a: DoubleArray -> gradient(a, f) }
     var x0 = _x0.copyOf()
     var g0 = grad(x0)
@@ -175,7 +179,8 @@ fun minimize(_x0: DoubleArray, endOnLineSearch: Boolean = false, tol: Double = 1
 
 fun <T : Any> minimizeModel(model: T, endOnLineSearch: Boolean = false, tol: Double = 1e-8, maxIterations: Int = 1000, function: (T) -> Double) {
     val doubles = modelToArray(model)
-    val solution = minimize(doubles, endOnLineSearch, tol, maxIterations) {
+    val weights = DoubleArray(doubles.size) { 1.0 }
+    val solution = minimize(doubles, weights, endOnLineSearch, tol, maxIterations) {
         arrayToModel(it, model)
         function(model)
     }
