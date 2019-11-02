@@ -115,7 +115,7 @@ private fun encodeDecodeBitmap(drawer: Drawer, preprocess: Filter, decoder: Filt
 
 /**
  * Creates a color buffer containing the coordinates of the nearest centroids
- * @param bitmap a ColorBuffer with centroids in white
+ * @param bitmap a ColorBuffer with centroids in red (> 0)
  */
 fun centroidsFromBitmap(drawer: Drawer, bitmap: ColorBuffer,
                         jumpFlooder: JumpFlooder? = null,
