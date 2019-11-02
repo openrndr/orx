@@ -1,16 +1,17 @@
 # ORX (OPENRNDR EXTRA)
 
-[![](https://jitpack.io/v/openrndr/orx.svg)](https://jitpack.io/#openrndr/orx)
+[ ![Download](https://api.bintray.com/packages/openrndr/openrndr/orx/images/download.svg?version=0.3.35) ](https://bintray.com/openrndr/openrndr/orx/0.3.35/link)
 
 A growing library of assorted data structures, algorithms and utilities.
 
 - [`orx-camera`](orx-camera/README.md), 3d camera and controls
 - [`orx-compositor`](orx-compositor/README.md), a simple toolkit to make composite (layered) images
 - [`orx-easing`](orx-easing/README.md), a collection of easing functions.
+- [`orx-gradient-descent`](orx-gradient-descent/README.md), a gradient descent based minimizer
 - [`orx-file-watcher`](orx-file-watcher/README.md), `Program` extension method that allows monitoring and hot loading from files.
 - [`orx-filter-extension`](orx-filter-extension/README.md), `Program` extension method that provides Filter based `extend()`
 - [`orx-integral-image`](orx-integral-image/README.md), CPU-based and GPU-based implementation for integral images (summed area tables)
-- [`orx-interval-tree`](orx-interval-tree/README.md), datastructure for accelerating point-in-interval queries.
+- [`orx-interval-tree`](orx-interval-tree/README.md), data structure for accelerating point-in-interval queries.
 - `orx-jumpflood`, a filter/shader based implementation of the jump flood algorithm for finding fast approximate (directional) distance fields
 - `orx-kdtree`, a kd-tree implementation for fast nearest point searches
 - [`orx-kinect-v1`](orx-kinect-v1/README.md), utilities to use Kinect V1 RGB-D sensors in OPENRNDR programs. 
@@ -19,29 +20,5 @@ A growing library of assorted data structures, algorithms and utilities.
 - [`orx-noise`](orx-noise/README.md), library for random number generation and noise
 - [`orx-no-clear`](orx-no-clear/README.md), a simple extension that provides drawing without clearing the background
 - [`orx-obj-loader`](orx-obj-loader/README.md), simple Wavefront .obj mesh loader
+- [`orx-olive`](orx-olive/README.md), extensions that turns OPENRNDR in to a live coding environment 
 
-## Usage
-ORX 0.0.32 is built against OPENRNDR 0.3.35, make sure you use this version in your project. Because OPENRNDR's API is pre 1.0 it tends to change from time to time.
-
-The easiest way to add ORX to your project is through the use of Jitpack. [Jitpack](http://jitpack.io) is a service that pulls Gradle based libraries from Github, builds them and serves the jar files.
-
-To setup Jitpack support in your project all you have to do is add the Jitpack repository to your `repositories {}`. It is advised to have the jitpack repository as the last entry.
-```
-repositories {
-    maven { url 'https://jitpack.io' }
-}
-```
-
-You can then add any of the ORX artifacts to your `dependencies {}`:
-```
-dependencies {
-    compile 'com.github.openrndr.orx:<orx-artifact>:v0.0.32'
-}
-```
-
-For example if you want to use the `orx-no-clear` artifact one would use:
-```
-dependencies {
-    compile 'com.github.openrndr.orx:orx-no-clear:v0.0.32'
-}
-```
