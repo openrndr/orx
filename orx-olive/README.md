@@ -36,8 +36,33 @@ Recent versions of `orx-olive` automatically set the `org.openrndr.ignoreShadeSt
 makes OPENRNDR ignore errors in the shade style and return the default shader. To get this behaviour in 
 older versions add `-Dorg.openrndr.ignoreShadeStyleErrors=true` to the JVM arguments.
 
-## Persistent Data
+## Reloadable State
 
+Along with the extension comes a mechanism that allows state to be reloaded from a store on script reload.
+This functionality is offered by the `Reloadable` class.
+
+An example `live.kts` in which the reloadable state is used:
+```kotlin
+@file:Suppress("UNUSED_LAMBDA_EXPRESSION")
+import org.openrndr.color.ColorRGBa
+import org.openrndr.draw.*
+
+{ program: PersistentProgram ->
+    program.apply {
+        val a = object : Reloadable() {
+            var x : Double = 0.0
+        } 
+        a.reload()
+
+        extend {
+            // do something with a.x here
+        }
+    }
+}
+```
+Keep in mind that `Reloadable` should only be used for singleton classes.
+
+## Persistent Data
 Sometimes you want to keep parts of your application persistent. In the following example
 we show how you can prepare the host program to contain a persistent camera device.
 
@@ -61,7 +86,7 @@ fun main() = application{
 }
 ```
 
-The live script `src/main/PersistentCamera.kt` then looks like this:
+The live script `src/main/PersistentCamera.kts` then looks like this:
 
 ```kotlin
 @file:Suppress("UNUSED_LAMBDA_EXPRESSION")

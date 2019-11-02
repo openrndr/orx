@@ -8,7 +8,7 @@ internal class LoadException(message: String? = null, cause: Throwable? = null) 
 
 internal class KtsObjectLoader(classLoader: ClassLoader? = Thread.currentThread().contextClassLoader) {
 
-    val engine = ScriptEngineManager(classLoader).getEngineByExtension("kts")
+    private val engine = ScriptEngineManager(classLoader).getEngineByExtension("kts")
 
     init {
         if (engine == null) {

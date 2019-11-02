@@ -5,15 +5,16 @@ import org.openrndr.Program
 import org.openrndr.draw.Session
 import org.openrndr.events.Event
 import org.operndr.extras.filewatcher.stop
+import org.operndr.extras.filewatcher.triggerChange
 import org.operndr.extras.filewatcher.watchFile
 import java.io.File
 
-fun <T> Event<T>.saveListeners(store: MutableMap<Event<*>, List<(Any) -> Unit>>) {
+private fun <T> Event<T>.saveListeners(store: MutableMap<Event<*>, List<(Any) -> Unit>>) {
     @Suppress("UNCHECKED_CAST")
     store[this] = listeners.map { it } as List<(Any) -> Unit>
 }
 
-fun <T> Event<T>.restoreListeners(store: Map<Event<*>, List<(Any) -> Unit>>) {
+private fun <T> Event<T>.restoreListeners(store: Map<Event<*>, List<(Any) -> Unit>>) {
     listeners.retainAll(store[this] ?: emptyList<T>())
 }
 
@@ -29,16 +30,21 @@ class Olive<P : Program> : Extension {
             scriptChange(value)
         }
 
+    /**
+     * reloads the active script
+     */
+    fun reload() {
+        watcher?.triggerChange()
+    }
+
+    private var watcher: (() -> Unit)? = null
+
     override fun setup(program: Program) {
         System.setProperty("idea.io.use.fallback", "true")
         System.setProperty("org.openrndr.ignoreShadeStyleErrors", "true")
 
-        var watcher: (() -> Unit)? = null
-
         val store = mutableMapOf<Event<*>, List<(Any) -> Unit>>()
-
         val originalExtensions = program.extensions.map { it }
-
         val trackedListeners = listOf<Event<*>>(program.mouse.buttonDown,
                 program.mouse.buttonUp,
                 program.mouse.clicked,
