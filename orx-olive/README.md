@@ -60,6 +60,8 @@ import org.openrndr.draw.*
     }
 }
 ```
+The Reloadable store can be cleared using the `clearReloadables` function 
+
 Keep in mind that `Reloadable` should only be used for singleton classes.
 
 ## Persistent Data

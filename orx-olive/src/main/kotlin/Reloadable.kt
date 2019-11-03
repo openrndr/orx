@@ -8,6 +8,13 @@ import kotlin.reflect.jvm.jvmName
 private val store = mutableMapOf<String, Any>()
 
 /**
+ * Clear reloadable values
+ */
+fun clearReloadables() {
+    store.clear()
+}
+
+/**
  * A class with which persistent state can be reloaded from inside Olive scripts.
  */
 open class Reloadable {
