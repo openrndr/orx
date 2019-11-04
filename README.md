@@ -22,3 +22,10 @@ A growing library of assorted data structures, algorithms and utilities.
 - [`orx-obj-loader`](orx-obj-loader/README.md), simple Wavefront .obj mesh loader
 - [`orx-olive`](orx-olive/README.md), extensions that turns OPENRNDR in to a live coding environment 
 
+# Developer notes
+
+## Create and use local builds of the library
+
+run `./gradlew publishToLocalMaven -Prelease.version=0.4.0-SNAPSHOT` (or import in IntelliJ IDEA and edit the run configuration)
+
+In an [`openrndr-template`](https://github.com/openrndr/openrndr-template) based project set `orxUseSnapshot = true` in order to use the snapshot build.
