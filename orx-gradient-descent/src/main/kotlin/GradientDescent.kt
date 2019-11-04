@@ -28,13 +28,12 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sqrt
 
-fun ten(a: DoubleArray, b: DoubleArray): Array<DoubleArray> = Array(a.size) { mul(b, a[it]) }
-fun max(a: Double, b: Double, c: Double): Double = max(max(a, b), c)
+private fun ten(a: DoubleArray, b: DoubleArray): Array<DoubleArray> = Array(a.size) { mul(b, a[it]) }
+private fun max(a: Double, b: Double, c: Double): Double = max(max(a, b), c)
 
-fun max(a: Double, b: Double, c: Double, d: Double, e: Double, f: Double, g: Double, h: Double): Double {
+private fun max(a: Double, b: Double, c: Double, d: Double, e: Double, f: Double, g: Double, h: Double): Double {
     return max(max(max(max(max(max(max(a, b), c), d), e), f), g), h)
 }
-
 
 fun gradient(x: DoubleArray, objective: (parameters: DoubleArray) -> Double): DoubleArray {
     var k = 0
@@ -69,7 +68,6 @@ fun gradient(x: DoubleArray, objective: (parameters: DoubleArray) -> Double): Do
             k++
         }
     }
-    //println("gradient at (${x.contentToString()}) -> (${grad.contentToString()}) ")
     return grad
 }
 
