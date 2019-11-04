@@ -1,5 +1,5 @@
+package org.openrndr.extra.gradientdescent
 import org.amshove.kluent.`should be equal to`
-import org.openrndr.extra.gradientdescent.dot
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 

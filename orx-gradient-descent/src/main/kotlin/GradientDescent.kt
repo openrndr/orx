@@ -89,9 +89,9 @@ private fun norm2(x: DoubleArray): Double {
     return sqrt(x.sumByDouble { it * it })
 }
 
-private fun dot(x: DoubleArray, y: DoubleArray): Double = (x.mapIndexed { index, it -> it * y[index] }).sum()
+internal fun dot(x: DoubleArray, y: DoubleArray): Double = (x.mapIndexed { index, it -> it * y[index] }).sum()
 
-private fun dot(x: Array<DoubleArray>, y: DoubleArray): DoubleArray = DoubleArray(x.size) { dot(x[it], y) }
+internal fun dot(x: Array<DoubleArray>, y: DoubleArray): DoubleArray = DoubleArray(x.size) { dot(x[it], y) }
 
 class MinimizationResult(val solution: DoubleArray, val value: Double, val gradient: DoubleArray,
                          val inverseHessian: Array<DoubleArray>, val iterations: Int)
