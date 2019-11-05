@@ -4,6 +4,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Filter
 import org.openrndr.draw.filterShaderFromUrl
 import org.openrndr.math.Vector2
+import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
 import org.openrndr.resourceUrl
 
@@ -182,6 +183,59 @@ class ValueNoise : Filter(filterShaderFromUrl(resourceUrl("/org/openrndr/extra/n
         decay = Vector4.ONE / 2.0
         octaves = 4
         bias = Vector4.ZERO
+        premultipliedAlpha = true
+    }
+}
+
+/**
+ * Filter that produces 3D Simplex Noise
+ */
+class SimplexNoise3D : Filter(filterShaderFromUrl(resourceUrl("/org/openrndr/extra/noise/shaders/gl3/simplex-noise-3d.frag"))) {
+    var seed: Vector3 by parameters
+
+    /**
+     * base noise scale, default is Vector3(1.0, 1.0, 1.0)
+     */
+    var scale: Vector3 by parameters
+
+    /**
+     * lacunarity is the amount by which scale is modulated per octave, default is Vector3(2.0, 2.0, 2.0)
+     */
+    var lacunarity: Vector3 by parameters
+
+    /**
+     * gain is the base intensity per channel, default is Vector2(1.0, 1.0, 1.0, 1.0)
+     */
+    var gain: Vector4 by parameters
+
+    /**
+     * decay is the amount by which gain is modulated per octave, default is Vector4(0.5, 0.5, 0.5, 0.5)
+     */
+    var decay: Vector4 by parameters
+
+    /**
+     * the number of octaves of noise to generate, default is 4
+     */
+    var octaves: Int by parameters
+
+    /**
+     * the value to add to the resulting noise
+     */
+    var bias: Vector4 by parameters
+
+    /**
+     * should the output colors be multiplied by the alpha channel, default is true
+     */
+    var premultipliedAlpha: Boolean by parameters
+
+    init {
+        seed = Vector3.ZERO
+        scale = Vector3.ONE
+        lacunarity = Vector3(2.0, 2.0, 2.0)
+        gain = Vector4.ONE / 2.0
+        decay = Vector4.ONE / 2.0
+        octaves = 4
+        bias = Vector4.ONE / 2.0
         premultipliedAlpha = true
     }
 }
