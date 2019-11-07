@@ -6,15 +6,18 @@ import com.illposed.osc.messageselector.OSCPatternAddressMessageSelector
 import com.illposed.osc.transport.udp.OSCPort
 import com.illposed.osc.transport.udp.OSCPortIn
 import com.illposed.osc.transport.udp.OSCPortOut
+import mu.KotlinLogging
 import java.net.InetAddress
 import java.net.PortUnreachableException
 
 private typealias OSCListener = Pair<OSCPatternAddressMessageSelector, OSCMessageListener>
 
+private val logger = KotlinLogging.logger {}
+
 class OSC (
-        address: InetAddress = InetAddress.getLocalHost(),
-        portIn: Int = OSCPort.DEFAULT_SC_OSC_PORT,
-        portOut: Int = portIn
+        val address: InetAddress = InetAddress.getLocalHost(),
+        val portIn: Int = OSCPort.DEFAULT_SC_OSC_PORT,
+        val portOut: Int = portIn
 ) {
     private val receiver: OSCPortIn = OSCPortIn(portIn)
     private val sender: OSCPortOut = OSCPortOut(address, portOut)
@@ -29,10 +32,9 @@ class OSC (
             sender.send(msg)
         } catch (ex: Exception) {
             when(ex) {
-                is PortUnreachableException -> System.err.println("Error: Could not connect to OUT port")
-                is IllegalStateException -> System.err.println("Error: Couldn't send message to channel: $channel")
+                is PortUnreachableException -> logger.error(ex) { "Error: Could not connect to OUT port" }
+                is IllegalStateException -> logger.error(ex) { "Error: Couldn't send message to channel: $channel" }
             }
-            // ex.printStackTrace() - Would rather keep this behind a debug flag
         }
     }
 
@@ -64,6 +66,6 @@ class OSC (
 
         receiver.startListening()
 
-        if (receiver.isListening) println("OSC is listening..")
+        if (receiver.isListening) logger.info("OSC is listening on port: $portIn")
     }
 }
