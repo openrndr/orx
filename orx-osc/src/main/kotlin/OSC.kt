@@ -30,11 +30,10 @@ class OSC (
 
         try {
             sender.send(msg)
-        } catch (ex: Exception) {
-            when(ex) {
-                is PortUnreachableException -> logger.error(ex) { "Error: Could not connect to OUT port" }
-                is IllegalStateException -> logger.error(ex) { "Error: Couldn't send message to channel: $channel" }
-            }
+        } catch (ex: PortUnreachableException) {
+            logger.error(ex) { "Error: Could not connect to OUT port" }
+        } catch (ex: IllegalStateException) {
+            logger.error(ex) { "Error: Couldn't send message to channel: $channel" }
         }
     }
 
