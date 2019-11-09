@@ -20,7 +20,8 @@ A growing library of assorted data structures, algorithms and utilities.
 - [`orx-noise`](orx-noise/README.md), library for random number generation and noise
 - [`orx-no-clear`](orx-no-clear/README.md), a simple extension that provides drawing without clearing the background
 - [`orx-obj-loader`](orx-obj-loader/README.md), simple Wavefront .obj mesh loader
-- [`orx-olive`](orx-olive/README.md), extensions that turns OPENRNDR in to a live coding environment 
+- [`orx-olive`](orx-olive/README.md), extensions that turns OPENRNDR in to a live coding environment
+- [`orx-osc`](orx-osc/README.md), open sound control interface 
 
 # Developer notes
 
