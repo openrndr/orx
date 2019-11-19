@@ -7,9 +7,13 @@ data class MidiDeviceName(val name: String, val vendor: String)
 class MidiDeviceCapabilities {
     var receive: Boolean = false
     var transmit: Boolean = false
+
+    override fun toString(): String {
+        return "MidiDeviceCapabilities(receive=$receive, transmit=$transmit)"
+    }
 }
 
-class MidiDeviceDescription(val name: String, val vendor: String, val receive: Boolean, val transmit: Boolean) {
+data class MidiDeviceDescription(val name: String, val vendor: String, val receive: Boolean, val transmit: Boolean) {
     companion object {
         fun list(): List<MidiDeviceDescription> {
             val caps = mutableMapOf<MidiDeviceName, MidiDeviceCapabilities>()
@@ -34,6 +38,14 @@ class MidiDeviceDescription(val name: String, val vendor: String, val receive: B
             }
         }
     }
+
+    fun open() : MidiTransceiver {
+        require(receive && transmit) {
+            "device should be a receiver and transmitter"
+        }
+
+        return MidiTransceiver.fromDeviceVendor(name, vendor)
+    }
 }
 
 class MidiTransceiver(val receiverDevice: MidiDevice, val transmitterDevicer: MidiDevice) {
@@ -52,11 +64,9 @@ class MidiTransceiver(val receiverDevice: MidiDevice, val transmitterDevicer: Mi
                             if (device.maxTransmitters != 0 && device.maxReceivers == 0) {
                                 transmitterDevice = device
                             }
-
                             if (device.maxReceivers != 0 && device.maxTransmitters == 0) {
                                 receiverDevice = device
                             }
-
                         }
                     }
                 } catch (e: MidiUnavailableException) {
@@ -71,8 +81,6 @@ class MidiTransceiver(val receiverDevice: MidiDevice, val transmitterDevicer: Mi
             } else {
                 throw IllegalArgumentException("midi device not found ${name}:${vendor} ${receiverDevice} ${transmitterDevice}")
             }
-
-
         }
     }
 
@@ -95,9 +103,7 @@ class MidiTransceiver(val receiverDevice: MidiDevice, val transmitterDevicer: Mi
                     ShortMessage.CONTROL_CHANGE -> controlChanged.trigger(MidiEvent.controlChange(channel,cmd[1].toInt() and 0xff, cmd[2].toInt() and 0xff))
                 }
             }
-
             override fun close() {
-
             }
         }
     }
@@ -116,7 +122,6 @@ class MidiTransceiver(val receiverDevice: MidiDevice, val transmitterDevicer: Mi
         } catch (e: InvalidMidiDataException) {
             //
         }
-
     }
 
     fun noteOn(channel: Int, key: Int, velocity: Int) {
@@ -141,11 +146,9 @@ fun main() {
     MidiDeviceDescription.list().forEach {
         println("> ${it.name}, ${it.vendor} r:${it.receive} t:${it.transmit}")
     }
-
     val dev = MidiTransceiver.fromDeviceVendor("BCR2000 [hw:2,0,0]", "ALSA (http://www.alsa-project.org)")
     dev.controlChanged.listen {
         println("${it.channel} ${it.control} ${it.value}")
     }
-
 //    dev.destroy()
 }
