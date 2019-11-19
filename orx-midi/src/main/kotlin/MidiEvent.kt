@@ -6,7 +6,6 @@ enum class MidiEventType {
     CONTROL_CHANGED
 }
 
-
 class MidiEvent(val eventType: MidiEventType) {
     var origin = Origin.DEVICE
     var control: Int = 0
@@ -43,5 +42,9 @@ class MidiEvent(val eventType: MidiEventType) {
             midiEvent.value = value
             return midiEvent
         }
+    }
+
+    override fun toString(): String {
+        return "MidiEvent(eventType=$eventType, origin=$origin, control=$control, note=$note, channel=$channel, value=$value, velocity=$velocity)"
     }
 }
