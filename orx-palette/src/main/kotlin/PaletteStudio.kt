@@ -2,6 +2,7 @@ package org.openrndr.extra.palette
 
 import mu.KotlinLogging
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonParseException
 import org.openrndr.Extension
 import org.openrndr.Keyboard
 import org.openrndr.Program
@@ -11,7 +12,6 @@ import org.openrndr.color.ColorRGBa.Companion.BLACK
 import org.openrndr.color.ColorRGBa.Companion.GREEN
 import org.openrndr.color.ColorRGBa.Companion.PINK
 import org.openrndr.color.ColorRGBa.Companion.RED
-import org.openrndr.color.ColorRGBa.Companion.WHITE
 import org.openrndr.color.ColorRGBa.Companion.YELLOW
 import org.openrndr.resourceUrl
 import java.io.File
@@ -21,13 +21,11 @@ import kotlin.math.min
 
 internal val logger = KotlinLogging.logger {}
 
-internal typealias Colors = List<ColorRGBa>
-
-data class Palette(
+class Palette(
         val background: ColorRGBa,
         val foreground: ColorRGBa,
-        val colors: Colors,
-        val colors2: Colors
+        val colors: List<ColorRGBa>,
+        val colors2: List<ColorRGBa>
 )
 
 internal val defaultPalette: Palette = Palette(
@@ -45,8 +43,12 @@ class PaletteStudio(
         collection: Collections = Collections.ONE,
         val colorCountConstraint: Int = 0
 ) : Extension {
-    var palettes: MutableList<MutableList<ColorRGBa>> = mutableListOf()
+    var palettes: MutableList<List<ColorRGBa>> = mutableListOf()
     var palette: Palette = defaultPalette
+
+
+    var randomPaletteKey = 'l'
+    var randomizeKey = 'k'
 
     private var paletteIndex: Int = 0
 
@@ -59,24 +61,27 @@ class PaletteStudio(
     }
 
     private val collectionsResource = mapOf(
-        Collections.ONE to getCollPath("1"),
-        Collections.TWO to getCollPath("2"),
-        Collections.THREE to getCollPath("3")
+            Collections.ONE to getCollPath("1"),
+            Collections.TWO to getCollPath("2"),
+            Collections.THREE to getCollPath("3")
     )
 
-    var background: ColorRGBa = defaultPalette.background
+    val background: ColorRGBa
         get() {
             return palette.background
         }
-    var foreground: ColorRGBa = defaultPalette.foreground
+
+    val foreground: ColorRGBa
         get() {
             return palette.foreground
         }
-    var colors: Colors = defaultPalette.colors
+
+    val colors: List<ColorRGBa>
         get() {
             return palette.colors
         }
-    var colors2: Colors = defaultPalette.colors2
+
+    val colors2: List<ColorRGBa>
         get() {
             return palette.colors2
         }
@@ -88,8 +93,7 @@ class PaletteStudio(
     }
 
     private fun loadCollection(newCollection: Collections) {
-        val collectionPath: URL = collectionsResource[newCollection]!!
-
+        val collectionPath: URL = collectionsResource.getValue(newCollection)
         palettes = mutableListOf()
 
         loadFromURL(collectionPath)
@@ -106,58 +110,51 @@ class PaletteStudio(
 
             val clipData = gson.fromJson(
                     contents, Array<Array<String>>::class.java
-            ).toList()
+            )
 
             for (p in clipData) {
-                val palette = mutableListOf<ColorRGBa>()
-
-                for (colorStr in p.toList()) {
-                    val colorInt = fromHex(colorStr)
-
-                    palette.add(colorInt)
-                }
-
+                val palette = p.map { fromHex(it) }
                 palettes.add(palette)
             }
-        } catch (ex: Exception) {
-            logger.error(ex) { "Error: Could not load palettes" }
-            logger.info { "Only JSON files with Array<Array<String>> structure can be loaded using this method" }
+        } catch (ex: JsonParseException) {
+            error("Only JSON files with Array<Array<String>> structure can be loaded using this method")
         }
     }
 
     private fun loadFromURL(url: URL): Unit = load(url.readText())
 
-    private fun createPalette(colors: MutableList<ColorRGBa>) : Palette {
-        when(sortBy) {
+    private fun createPalette(colors: List<ColorRGBa>): Palette {
+        val sortedColors = when (sortBy) {
             SortBy.DARKEST -> {
                 val darkest = Comparator<ColorRGBa> { c1: ColorRGBa, c2: ColorRGBa -> (getLuminance(c1) - getLuminance(c2)).toInt() }
-                colors.sortWith(darkest)
+                colors.sortedWith(darkest)
             }
             SortBy.BRIGHTEST -> {
                 val brightest = Comparator<ColorRGBa> { c1: ColorRGBa, c2: ColorRGBa -> (getLuminance(c2) - getLuminance(c1)).toInt() }
-                colors.sortWith(brightest)
+                colors.sortedWith(brightest)
             }
-            SortBy.NO_SORTING -> {}
+            SortBy.NO_SORTING -> {
+                colors
+            }
         }
 
-        val background = colors.first()
-
-        val foreground = colors
-                .takeLast(colors.size - 1)
+        val background = sortedColors.first()
+        val foreground = sortedColors
+                .takeLast(sortedColors.size - 1)
                 .map { getContrast(background, it) to it }
                 .maxBy { it.first }!!
                 .second
 
-        var constraint =  colors.size
-        var constraint2 = colors.size
+        var constraint = sortedColors.size
+        var constraint2 = sortedColors.size
 
-        if (colorCountConstraint > 0 && colorCountConstraint < colors.size) {
+        if (colorCountConstraint > 0 && colorCountConstraint < sortedColors.size) {
             constraint = colorCountConstraint
             constraint2 = colorCountConstraint + 1
         }
 
-        val colors1 = colors.slice(0 until constraint)
-        val colors2 = colors.slice(1 until constraint2)
+        val colors1 = sortedColors.slice(0 until constraint)
+        val colors2 = sortedColors.slice(1 until constraint2)
 
         return Palette(background, foreground, colors1, colors2)
     }
@@ -183,12 +180,17 @@ class PaletteStudio(
     }
 
     fun randomize() {
-        palette = createPalette(Random.pick(palette.colors, count = palette.colors.size))
+        palette = Palette(
+                background,
+                foreground,
+                Random.pick(colors, count = colors.size),
+                Random.pick(colors2, count = colors2.size)
+        )
     }
 
     fun randomPalette() {
         val comparison = palette.colors.toMutableList()
-        val colors= Random.pick(palettes, comparison) as MutableList<ColorRGBa>
+        val colors = Random.pick(palettes, comparison) as MutableList<ColorRGBa>
 
         paletteIndex = palettes.indexOf(colors)
         palette = createPalette(colors)
@@ -200,11 +202,13 @@ class PaletteStudio(
 
     private fun registerKeybindings(keyboard: Keyboard) {
         keyboard.keyDown.listen {
-            if (it.name == "l") {
-                randomPalette()
-            }
-            if (it.name == "k") {
-                randomize()
+            if (it.propagationCancelled) {
+                if (it.name == "$randomPaletteKey") {
+                    randomPalette()
+                }
+                if (it.name == "$randomizeKey") {
+                    randomize()
+                }
             }
         }
     }
