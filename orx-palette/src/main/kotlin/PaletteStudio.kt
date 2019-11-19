@@ -202,7 +202,7 @@ class PaletteStudio(
 
     private fun registerKeybindings(keyboard: Keyboard) {
         keyboard.keyDown.listen {
-            if (it.propagationCancelled) {
+            if (!it.propagationCancelled) {
                 if (it.name == "$randomPaletteKey") {
                     randomPalette()
                 }
