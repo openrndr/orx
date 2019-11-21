@@ -22,6 +22,7 @@ A growing library of assorted data structures, algorithms and utilities.
 - [`orx-obj-loader`](orx-obj-loader/README.md), simple Wavefront .obj mesh loader
 - [`orx-olive`](orx-olive/README.md), extensions that turns OPENRNDR in to a live coding environment
 - [`orx-osc`](orx-osc/README.md), open sound control interface 
+- [`orx-palette`](orx-palette/README.md), manage color palettes 
 
 # Developer notes
 
