@@ -1,21 +1,15 @@
 package org.openrndr.extras.camera
 
-import org.openrndr.*
-import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.DrawPrimitive
+import org.openrndr.Extension
+import org.openrndr.Program
 import org.openrndr.draw.Drawer
-import org.openrndr.draw.isolated
-import org.openrndr.draw.vertexBuffer
-import org.openrndr.draw.vertexFormat
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Spherical
-import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
+import kotlin.math.abs
 import org.openrndr.math.transforms.lookAt as lookAt_
 
-class OrbitalCamera(eye: Vector3, lookAt: Vector3, var fov:Double) {
-
-
+class OrbitalCamera(eye: Vector3, lookAt: Vector3, var fov: Double, var near: Double = 0.1, var far: Double = 1000.0) : Extension {
     // current position in spherical coordinates
     var spherical = Spherical.fromVector(eye)
         private set
@@ -25,6 +19,7 @@ class OrbitalCamera(eye: Vector3, lookAt: Vector3, var fov:Double) {
     private var sphericalEnd = Spherical.fromVector(eye)
     private var lookAtEnd = lookAt.copy()
     private var dirty: Boolean = true
+    private var lastSeconds: Double = -1.0
 
     var fovEnd = fov
 
@@ -105,13 +100,13 @@ class OrbitalCamera(eye: Vector3, lookAt: Vector3, var fov:Double) {
         val lookAtDelta = lookAtEnd - lookAt
         val fovDelta = fovEnd - fov
         if (
-                Math.abs(sphericalEnd.radius) > EPSILON ||
-                Math.abs(sphericalEnd.theta) > EPSILON ||
-                Math.abs(sphericalEnd.phi) > EPSILON ||
-                Math.abs(lookAtDelta.x) > EPSILON ||
-                Math.abs(lookAtDelta.y) > EPSILON ||
-                Math.abs(lookAtDelta.z) > EPSILON ||
-                Math.abs(fovDelta) > EPSILON
+                abs(sphericalEnd.radius) > EPSILON ||
+                abs(sphericalEnd.theta) > EPSILON ||
+                abs(sphericalEnd.phi) > EPSILON ||
+                abs(lookAtDelta.x) > EPSILON ||
+                abs(lookAtDelta.y) > EPSILON ||
+                abs(lookAtDelta.z) > EPSILON ||
+                abs(fovDelta) > EPSILON
         ) {
 
             fov += (fovDelta * dampingFactor)
@@ -133,6 +128,26 @@ class OrbitalCamera(eye: Vector3, lookAt: Vector3, var fov:Double) {
 
     companion object {
         private const val EPSILON = 0.000001
+    }
+
+    // EXTENSION
+    override var enabled: Boolean = true
+
+    override fun beforeDraw(drawer: Drawer, program: Program) {
+        if (lastSeconds == -1.0) lastSeconds = program.seconds
+
+        val delta = program.seconds - lastSeconds
+        lastSeconds = program.seconds
+
+        update(delta)
+
+        drawer.perspective(fov, program.window.size.x / program.window.size.y, near, far)
+        drawer.view = viewMatrix()
+    }
+
+    override fun afterDraw(drawer: Drawer, program: Program) {
+        drawer.view = Matrix44.IDENTITY
+        drawer.ortho()
     }
 }
 
