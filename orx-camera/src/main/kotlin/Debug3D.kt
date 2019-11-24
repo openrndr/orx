@@ -1,6 +1,7 @@
 package org.openrndr.extras.camera
 
 import org.openrndr.Extension
+import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.math.Vector3
@@ -29,6 +30,10 @@ class Debug3D(val size: Int = 10, val divisions: Int = 10) : Extension {
                 k += step
             }
         }
+    }
+
+    override fun beforeDraw(drawer: Drawer, program: Program) {
+        draw(drawer)
     }
 
     fun draw(drawer: Drawer) {

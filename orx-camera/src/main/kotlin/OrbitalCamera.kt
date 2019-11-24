@@ -2,6 +2,7 @@ package org.openrndr.extras.camera
 
 import org.openrndr.Extension
 import org.openrndr.Program
+import org.openrndr.draw.DepthTestPass
 import org.openrndr.draw.Drawer
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Spherical
@@ -9,15 +10,17 @@ import org.openrndr.math.Vector3
 import kotlin.math.abs
 import org.openrndr.math.transforms.lookAt as lookAt_
 
-class OrbitalCamera(eye: Vector3, lookAt: Vector3, var fov: Double, var near: Double = 0.1, var far: Double = 1000.0) : Extension {
+class OrbitalCamera(eye: Vector3 = Vector3.ZERO, lookAt: Vector3 = Vector3.UNIT_Z, var fov: Double = 90.0, var near: Double = 0.1, var far: Double = 1000.0) : Extension {
     // current position in spherical coordinates
     var spherical = Spherical.fromVector(eye)
         private set
     var lookAt = lookAt
         private set
 
+    var depthTest = true
+
     private var sphericalEnd = Spherical.fromVector(eye)
-    private var lookAtEnd = lookAt.copy()
+    private var lookAtEnd = lookAt
     private var dirty: Boolean = true
     private var lastSeconds: Double = -1.0
 
@@ -26,13 +29,13 @@ class OrbitalCamera(eye: Vector3, lookAt: Vector3, var fov: Double, var near: Do
     var dampingFactor = 0.05
     var zoomSpeed = 1.0
 
-    fun setView(lookAt: Vector3, spherical: Spherical, fov:Double) {
+    fun setView(lookAt: Vector3, spherical: Spherical, fov: Double) {
         this.lookAt = lookAt
         this.lookAtEnd = lookAt
         this.spherical = spherical
         this.sphericalEnd = spherical
         this.fov = fov
-        this.fovEnd= fov
+        this.fovEnd = fov
     }
 
     fun rotate(rotX: Double, rotY: Double) {
@@ -77,18 +80,24 @@ class OrbitalCamera(eye: Vector3, lookAt: Vector3, var fov: Double, var near: Do
         dirty = true
     }
 
-    fun panTo(target : Vector3) {
+    fun panTo(target: Vector3) {
         lookAtEnd = target
         dirty = true
     }
 
     fun dollyTo(distance: Double) {
-        sphericalEnd = sphericalEnd.copy(radius = distance )
+        sphericalEnd = sphericalEnd.copy(radius = distance)
         dirty = true
     }
 
     fun zoom(degrees: Double) {
         fovEnd += degrees
+        dirty = true
+    }
+
+    fun zoomTo(degrees: Double) {
+        fovEnd = degrees
+        dirty = true
     }
 
     fun update(timeDelta: Double) {
@@ -143,6 +152,11 @@ class OrbitalCamera(eye: Vector3, lookAt: Vector3, var fov: Double, var near: Do
 
         drawer.perspective(fov, program.window.size.x / program.window.size.y, near, far)
         drawer.view = viewMatrix()
+
+        if (depthTest) {
+            drawer.drawStyle.depthWrite = true
+            drawer.drawStyle.depthTestPass = DepthTestPass.LESS_OR_EQUAL
+        }
     }
 
     override fun afterDraw(drawer: Drawer, program: Program) {

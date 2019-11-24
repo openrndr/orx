@@ -7,7 +7,7 @@ import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.tan
 
-class OrbitalControls(val orbitalCamera: OrbitalCamera, val userInteraction: Boolean = true, val keySpeed: Double = 1.0) : Extension {
+class OrbitalControls(val orbitalCamera: OrbitalCamera , val userInteraction: Boolean = true, val keySpeed: Double = 1.0) : Extension {
     enum class STATE {
         NONE,
         ROTATE,
