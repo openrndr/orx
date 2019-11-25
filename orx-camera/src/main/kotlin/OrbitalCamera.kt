@@ -39,7 +39,7 @@ class OrbitalCamera(eye: Vector3 = Vector3.ZERO, lookAt: Vector3 = Vector3.UNIT_
     }
 
     fun rotate(rotX: Double, rotY: Double) {
-        sphericalEnd += Spherical(0.0, rotX, rotY)
+        sphericalEnd += Spherical(rotX, rotY, 0.0)
         sphericalEnd = sphericalEnd.makeSafe()
         dirty = true
     }
@@ -67,7 +67,7 @@ class OrbitalCamera(eye: Vector3 = Vector3.ZERO, lookAt: Vector3 = Vector3.UNIT_
     }
 
     fun dolly(distance: Double) {
-        sphericalEnd += Spherical(distance, 0.0, 0.0)
+        sphericalEnd += Spherical(0.0, 0.0, distance)
         dirty = true
     }
 

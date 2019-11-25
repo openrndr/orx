@@ -40,15 +40,15 @@ class OrbitalControls(val orbitalCamera: OrbitalCamera , val userInteraction: Bo
             val offset = Vector3.fromSpherical(orbitalCamera.spherical) - orbitalCamera.lookAt
 
             // half of the fov is center to top of screen
-            val targetDistance = offset.length * tan((fov / 2) * PI / 180)
+            val targetDistance = offset.length * tan((Math.toRadians((fov) / 2) ) )
             val panX = (2 * delta.x * targetDistance / program.window.size.x)
             val panY = (2 * delta.y * targetDistance / program.window.size.y)
 
             orbitalCamera.pan(panX, -panY, 0.0)
 
         } else {
-            val rotX = 2 * PI * delta.x / program.window.size.x
-            val rotY = 2 * PI * delta.y / program.window.size.y
+            val rotX = 360.0 * delta.x / program.window.size.x
+            val rotY = 360.0 * delta.y / program.window.size.y
             orbitalCamera.rotate(rotX, rotY)
         }
 
