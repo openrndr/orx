@@ -7,7 +7,7 @@ import org.openrndr.draw.*
 import org.openrndr.math.Vector3
 
 @Suppress("unused")
-class Debug3D(val size: Int = 10, val divisions: Int = 10) : Extension {
+class GridHelper(val size: Int = 10, val divisions: Int = 10) : Extension {
     override var enabled: Boolean = true
     private val step = size / divisions.toDouble()
 
