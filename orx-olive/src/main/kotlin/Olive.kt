@@ -18,7 +18,7 @@ private fun <T> Event<T>.restoreListeners(store: Map<Event<*>, List<(Any) -> Uni
     listeners.retainAll(store[this] ?: emptyList<T>())
 }
 
-class Olive<P : Program> : Extension {
+class Olive<P : Program>(val resources: Resources? = null) : Extension {
     override var enabled: Boolean = true
     var session: Session? = null
 
@@ -110,5 +110,26 @@ class Olive<P : Program> : Extension {
         }
         setupScript(script)
         scriptChange = ::setupScript
+
+        if (resources != null) {
+            val srcPath = "src/main/resources"
+            var src = File(srcPath)
+
+            resources.watch(src) { file ->
+                val dest = "build/resources/main"
+                val filePath = file.path.split(Regex(srcPath), 2).getOrNull(1)
+
+                val destFile = File("$dest/${filePath}").absoluteFile
+
+                program.watchFile(file) {
+                    if (resources[file]!! && filePath != null) {
+                        file.copyTo(destFile, overwrite = true)
+                        reload()
+                    } else {
+                        resources[file] = true
+                    }
+                }
+            }
+        }
     }
 }
