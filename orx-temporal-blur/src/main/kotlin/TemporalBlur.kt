@@ -1,3 +1,5 @@
+package org.openrndr.extra.temporalblur
+
 import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
@@ -7,6 +9,7 @@ import org.openrndr.filter.blend.add
 import org.openrndr.filter.color.delinearize
 import org.openrndr.filter.color.linearize
 import org.openrndr.math.Matrix44
+import org.openrndr.math.Matrix55
 import org.openrndr.math.Vector2
 import org.openrndr.math.transforms.translate
 
@@ -27,6 +30,7 @@ class TemporalBlur : Extension {
      * number of samples to take, more is slower
      */
     var samples = 30
+
     /**
      * duration in frames, shouldn't be 1.0 or larger when using Animatables
      */
@@ -121,20 +125,22 @@ class TemporalBlur : Extension {
                 drawer.background(ColorRGBa.BLACK)
             }
         }
+        val oldClock = program.clock
+        val oldClockValue = oldClock()
 
         for (i in samples - 1 downTo 1) {
             image?.bind()
 
             drawer.background(ColorRGBa.BLACK)
-
-            val oldClock = program.clock
-            program.clock = { oldClock() - (i * duration) / (fps * samples) }
+            program.clock = { oldClockValue - (i * duration) / (fps * samples) }
 
             // I guess we need something better here.
             val fsf = Program::class.java.getDeclaredField("frameSeconds")
             fsf.isAccessible = true
             fsf.setDouble(program, program.clock())
 
+            drawer.drawStyle.blendMode = BlendMode.OVER
+            drawer.drawStyle.colorMatrix = Matrix55.IDENTITY
             drawer.isolated {
                 val offset = Vector2.uniformRing(0.0, jitter)
                 drawer.projection = Matrix44.translate(offset.x * (1.0 / program.width), offset.y * (1.0 / program.height), 0.0) * drawer.projection
@@ -181,6 +187,8 @@ class TemporalBlur : Extension {
             drawer.view = Matrix44.IDENTITY
 
             drawer.isolatedWithTarget(result!!) {
+                drawer.drawStyle.blendMode = BlendMode.OVER
+
                 drawer.background(ColorRGBa.BLACK)
                 drawer.drawStyle.colorMatrix = tint(ColorRGBa.WHITE.shade(1.0 / samples))
                 drawer.image(accumulator!!.colorBuffer(0))
@@ -188,6 +196,11 @@ class TemporalBlur : Extension {
             if (delinearizeOutput) {
                 delinearize.apply(result!!.colorBuffer(0), result!!.colorBuffer(0))
             }
+            drawer.drawStyle.blendMode = BlendMode.OVER
+            drawer.drawStyle.colorMatrix = Matrix55.IDENTITY
+            drawer.drawStyle.depthTestPass = DepthTestPass.ALWAYS
+
+            drawer.background(ColorRGBa.BLACK)
             drawer.image(result!!.colorBuffer(0))
         }
     }

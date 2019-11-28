@@ -23,7 +23,7 @@ A growing library of assorted data structures, algorithms and utilities.
 - [`orx-olive`](orx-olive/README.md), extensions that turns OPENRNDR in to a live coding environment
 - [`orx-osc`](orx-osc/README.md), open sound control interface 
 - [`orx-palette`](orx-palette/README.md), manage color palettes 
-
+- [`orx-temporal-blur`](orx-temporal-blur/README.md), temporal (motion) blur for video production.
 # Developer notes
 
 ## Create and use local builds of the library
