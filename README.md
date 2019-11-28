@@ -1,6 +1,6 @@
 # ORX (OPENRNDR EXTRA)
 
-[ ![Download](https://api.bintray.com/packages/openrndr/openrndr/orx/images/download.svg?version=0.3.35) ](https://bintray.com/openrndr/openrndr/orx/0.3.35/link)
+ [ ![Download](https://api.bintray.com/packages/openrndr/openrndr/orx/images/download.svg) ](https://bintray.com/openrndr/openrndr/orx/_latestVersion)
 
 A growing library of assorted data structures, algorithms and utilities.
 
