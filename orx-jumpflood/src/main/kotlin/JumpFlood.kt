@@ -4,6 +4,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.filter.blend.passthrough
 import org.openrndr.math.Matrix44
+import org.openrndr.math.Vector2
 import org.openrndr.resourceUrl
 import kotlin.math.ceil
 import kotlin.math.max
@@ -15,8 +16,12 @@ class JumpFlood : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/jumpflood
     var step: Int by parameters
 }
 
-class PixelDirection : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/pixel-direction.frag")))
-class PixelDistance : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/pixel-distance.frag")))
+class PixelDirection : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/pixel-direction.frag"))) {
+    var originalSize: Vector2 by parameters
+}
+class PixelDistance : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/pixel-distance.frag"))) {
+    var originalSize: Vector2 by parameters
+}
 class ContourPoints : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/contour-points.frag")))
 class Threshold : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/threshold.frag"))) {
     var threshold by parameters
@@ -37,7 +42,7 @@ class JumpFlooder(val width: Int, val height: Int, format:ColorFormat = ColorFor
 
     private val dimension = max(width, height)
     private val exp = ceil(Math.log(dimension.toDouble()) / Math.log(2.0)).toInt()
-    private val squareDim = 2.0.pow(exp.toDouble()).toInt()
+    val squareDim = 2.0.pow(exp.toDouble()).toInt()
 
     private val coordinates =
             listOf(colorBuffer(squareDim, squareDim, format = format, type = type),
@@ -105,6 +110,7 @@ private fun encodeDecodeBitmap(drawer: Drawer, preprocess: Filter, decoder: Filt
 
     val encoded = _jumpFlooder.jumpFlood(drawer, _result)
 
+    decoder.parameters["originalSize"] = Vector2(_jumpFlooder.squareDim.toDouble(), _jumpFlooder.squareDim.toDouble())
     decoder.apply(arrayOf(encoded, bitmap), _result)
     if (jumpFlooder == null) {
         _jumpFlooder.destroy()
