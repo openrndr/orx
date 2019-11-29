@@ -12,7 +12,7 @@ A growing library of assorted data structures, algorithms and utilities.
 - [`orx-filter-extension`](orx-filter-extension/README.md), `Program` extension method that provides Filter based `extend()`
 - [`orx-integral-image`](orx-integral-image/README.md), CPU-based and GPU-based implementation for integral images (summed area tables)
 - [`orx-interval-tree`](orx-interval-tree/README.md), data structure for accelerating point-in-interval queries.
-- `orx-jumpflood`, a filter/shader based implementation of the jump flood algorithm for finding fast approximate (directional) distance fields
+- [`orx-jumpflood`](orx-jumpflood/README.md), a filter/shader based implementation of the jump flood algorithm for finding fast approximate (directional) distance fields
 - `orx-kdtree`, a kd-tree implementation for fast nearest point searches
 - [`orx-kinect-v1`](orx-kinect-v1/README.md), utilities to use Kinect V1 RGB-D sensors in OPENRNDR programs. 
 - [`orx-mesh-generators`](orx-mesh-generators/README.md), triangular mesh generators
