@@ -9,11 +9,13 @@ import com.illposed.osc.transport.udp.OSCPortOut
 import mu.KotlinLogging
 import java.net.InetAddress
 import java.net.PortUnreachableException
+import kotlin.reflect.KMutableProperty0
 
 private typealias OSCListener = Pair<OSCPatternAddressMessageSelector, OSCMessageListener>
 
 private val logger = KotlinLogging.logger {}
 
+@Suppress("unused")
 class OSC (
         val address: InetAddress = InetAddress.getLocalHost(),
         val portIn: Int = OSCPort.DEFAULT_SC_OSC_PORT,
@@ -50,6 +52,19 @@ class OSC (
 
         if (!receiver.isListening) this.startListening()
     }
+
+    infix fun String.bind(prop: KMutableProperty0<Double>) {
+        val channel = this
+
+        listen(channel) {
+            when (val message = it.first()) {
+                is Double -> prop.set(message)
+                is Float -> prop.set(message.toDouble())
+            }
+        }
+    }
+
+    fun listen(function: OSC.() -> Unit) = function()
 
     // Cannot be called inside a listener's callback
     fun removeListener(channel: String?) {
