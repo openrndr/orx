@@ -1,4 +1,3 @@
 dependencies {
-    compile project(":orx-noise")
     compile project(":orx-fx")
 }

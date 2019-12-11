@@ -2,7 +2,9 @@ package org.openrndr.extra.jumpfill
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
-import org.openrndr.filter.blend.passthrough
+import org.openrndr.extra.fx.blend.Passthrough
+
+
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.resourceUrl
@@ -37,6 +39,7 @@ private val pixelDistance by lazy { PixelDistance() }
 private val pixelDirection by lazy { PixelDirection() }
 private val contourPoints by lazy { ContourPoints() }
 private val threshold by lazy { Threshold() }
+private val passthrough by lazy { Passthrough() }
 
 class JumpFlooder(val width: Int, val height: Int, format:ColorFormat = ColorFormat.RGB, type:ColorType = ColorType.FLOAT32) {
 

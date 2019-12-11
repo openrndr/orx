@@ -2,7 +2,7 @@ package org.openrndr.poissonfill
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
-import org.openrndr.filter.blend.passthrough
+import org.openrndr.extra.fx.blend.Passthrough
 import org.openrndr.math.IntVector2
 import org.openrndr.resourceUrl
 import kotlin.math.ceil
@@ -39,6 +39,7 @@ internal class Convolution(filterUrl: String = "/shaders/gl3/poisson/filter.frag
     }
 }
 
+private val passthrough by lazy { Passthrough() }
 internal class ConvolutionPyramid(width: Int, height: Int,
                          private val padding: Int = 0, cutOff: Int = 10000,
                          private val downscale: Downscale = Downscale(),

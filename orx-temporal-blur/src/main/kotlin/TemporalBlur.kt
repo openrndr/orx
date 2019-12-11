@@ -5,13 +5,15 @@ import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.extra.noise.uniformRing
-import org.openrndr.filter.blend.add
+import org.openrndr.extra.fx.blend.Add
 import org.openrndr.filter.color.delinearize
 import org.openrndr.filter.color.linearize
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Matrix55
 import org.openrndr.math.Vector2
 import org.openrndr.math.transforms.translate
+
+private val add by lazy { Add() }
 
 /**
  * Temporal blur extension.

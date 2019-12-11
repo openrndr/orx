@@ -37,8 +37,8 @@ plugins {
 //}
 
 project.ext {
-    openrndrVersion = "0.3.36"
-    kotlinVersion = "1.3.50"
+    openrndrVersion = "0.3.37"
+    kotlinVersion = "1.3.61"
     spekVersion = "2.0.6"
     libfreenectVersion = "0.5.7-1.5.2"
     gsonVersion = "2.8.6"
@@ -81,7 +81,7 @@ allprojects {
         compile "org.openrndr:openrndr-core:$openrndrVersion"
         compile "org.openrndr:openrndr-filter:$openrndrVersion"
         compile "org.openrndr:openrndr-shape:$openrndrVersion"
-        compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '1.3.0-RC2'
+        compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '1.3.2'
         testImplementation "org.spekframework.spek2:spek-dsl-jvm:$spekVersion"
         testImplementation "org.amshove.kluent:kluent:1.53"
         testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlinVersion"

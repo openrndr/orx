@@ -1,7 +1,8 @@
 package org.openrndr.poissonfill
 
 import org.openrndr.draw.*
-import org.openrndr.filter.blend.subtract
+import org.openrndr.extra.fx.blend.Passthrough
+import org.openrndr.extra.fx.blend.Subtract
 import org.openrndr.resourceUrl
 
 internal class BlendBoundary : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/poisson/blend-boundary.frag")))
@@ -18,6 +19,9 @@ internal class Clamp : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/pois
     var minValue: Double by parameters
     var maxValue: Double by parameters
 }
+
+private val passthrough by lazy { Passthrough() }
+private val subtract by lazy { Subtract() }
 
 class PoissonBlender(width: Int, height: Int, type: ColorType = ColorType.FLOAT32) {
     private val pyramid = ConvolutionPyramid(width, height, 0, type = type)
