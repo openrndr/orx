@@ -46,7 +46,6 @@ class PaletteStudio(
     var palettes: MutableList<List<ColorRGBa>> = mutableListOf()
     var palette: Palette = defaultPalette
 
-
     var randomPaletteKey = 'l'
     var randomizeKey = 'k'
 
@@ -91,6 +90,8 @@ class PaletteStudio(
             loadCollection(collection)
         }
     }
+
+    private var onChangeListener = {}
 
     private fun loadCollection(newCollection: Collections) {
         val collectionPath: URL = collectionsResource.getValue(newCollection)
@@ -159,6 +160,17 @@ class PaletteStudio(
         return Palette(background, foreground, colors1, colors2)
     }
 
+    fun onChange(fn: () -> Unit) {
+        onChangeListener = fn
+    }
+
+    fun add(newPalette: List<ColorRGBa>) {
+        palette = createPalette(newPalette)
+
+        palettes.add(newPalette)
+        paletteIndex = palettes.lastIndex
+    }
+
     fun loadExternal(filePath: String) {
         palettes = mutableListOf()
 
@@ -205,9 +217,11 @@ class PaletteStudio(
             if (!it.propagationCancelled) {
                 if (it.name == "$randomPaletteKey") {
                     randomPalette()
+                    onChangeListener()
                 }
                 if (it.name == "$randomizeKey") {
                     randomize()
+                    onChangeListener()
                 }
             }
         }
