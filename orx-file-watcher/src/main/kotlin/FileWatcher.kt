@@ -19,6 +19,8 @@ class FileWatcher(private val program: Program, val file: File, private val onCh
                 SensitivityWatchEventModifier.HIGH
         )
     }
+    val watchers = mutableListOf<() -> Unit>()
+
     init {
         watchThread
         watching.getOrPut(path) {
@@ -34,11 +36,12 @@ class FileWatcher(private val program: Program, val file: File, private val onCh
     internal fun triggerChange() {
         program.launch {
             onChange(file)
+            watchers.forEach { it() }
         }
     }
 }
 
-private val watchers = mutableMapOf< ()->Any, FileWatcher>()
+private val watchers = mutableMapOf<() -> Any, FileWatcher>()
 
 fun <T> watchFile(program: Program, file: File, transducer: (File) -> T): () -> T {
     var result = transducer(file)
@@ -55,25 +58,40 @@ fun <T> watchFile(program: Program, file: File, transducer: (File) -> T): () -> 
     }
 
     @Suppress("UNCHECKED_CAST")
-    watchers[function as ()->Any] = watcher
+    watchers[function as () -> Any] = watcher
     return function
 }
 
 /**
  * Stops the watcher
  */
-fun <T> (()->T).stop() {
+fun <T> (() -> T).stop() {
     @Suppress("UNCHECKED_CAST")
-    watchers[this as ()->Any]?.stop()
+    watchers[this as () -> Any]?.stop()
 
 }
 
 /**
  * Triggers reload
  */
-fun <T> (()->T).triggerChange() {
+fun <T> (() -> T).triggerChange() {
     @Suppress("UNCHECKED_CAST")
-    watchers[this as ()->Any]?.triggerChange()
+    watchers[this as () -> Any]?.triggerChange()
+}
+
+
+/**
+ * add watcher to file watcher
+ */
+fun <T, R> (() -> T).watch(transducer: (T) -> R):()->R {
+
+    var result = transducer(this())
+
+    watchers[this as () -> Any?]!!.watchers.add {
+        result = transducer(this())
+    }
+
+    return { result }
 }
 
 
@@ -109,6 +127,7 @@ fun main() {
     val a = watchFile(Program(), File("README.md")) {
         it.readText()
     }
+
 
     a.stop()
     a.triggerChange()
