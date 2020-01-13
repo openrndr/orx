@@ -43,12 +43,11 @@ fun extrudeShape(shape: Shape, front: Double, back: Double, distanceTolerance: D
     extrudeShape(shape, front, back, distanceTolerance = distanceTolerance, flipNormals = false, writer = writer)
 }
 
+
 /**
- * extrudes a [shape] by triangulating it and creating side- and cap geometry
- * @sample sample
+ * extrudes a [shape] from its triangulations
  */
-fun extrudeShape(shape: Shape,
-                 front: Double,
+fun extrudeShape(baseTriangles: List<Vector2>, contours: List<List<Vector2>>, front: Double,
                  back: Double,
                  frontScale: Double = 1.0,
                  backScale: Double = 1.0,
@@ -56,7 +55,7 @@ fun extrudeShape(shape: Shape,
                  backCap: Boolean = true,
                  distanceTolerance: Double = 0.5,
                  flipNormals: Boolean = false, writer: VertexWriter) {
-    val baseTriangles = triangulate(shape, distanceTolerance)
+
     val depth = back - front
     val flip = if (flipNormals) 1.0 else -1.0
 
@@ -66,18 +65,18 @@ fun extrudeShape(shape: Shape,
 
         if (frontCap) {
             baseTriangles.reversed().forEach {
-                writer((it*frontScale).vector3(z = front), normal, Vector2.ZERO)
+                writer((it * frontScale).vector3(z = front), normal, Vector2.ZERO)
             }
         }
         if (backCap) {
             baseTriangles.forEach {
-                writer((it*backScale).vector3(z = back), negativeNormal, Vector2.ZERO)
+                writer((it * backScale).vector3(z = back), negativeNormal, Vector2.ZERO)
             }
         }
     }
 
-    shape.contours.forEach {
-        val points = it.adaptivePositions(distanceTolerance)
+    contours.forEach {
+        val points = it
 
         val normals = (0 until points.size).map {
             (points[mod(it + 1, points.size)] - points[mod(it - 1, points.size)]).safeNormalized * -flip
@@ -89,7 +88,7 @@ fun extrudeShape(shape: Shape,
             val frontRight = (right.first * frontScale).xy0 + base
             val frontLeft = (left.first * frontScale).xy0 + base
 
-            val backRight =(right.first * backScale).xy0 + base + forward
+            val backRight = (right.first * backScale).xy0 + base + forward
             val backLeft = (left.first * backScale).xy0 + base + forward
 
             val lnormal = (frontLeft - backLeft).normalized.cross(left.second.xy0)
@@ -106,6 +105,26 @@ fun extrudeShape(shape: Shape,
     }
 }
 
+
+/**
+ * extrudes a [shape] by triangulating it and creating side- and cap geometry
+ */
+fun extrudeShape(shape: Shape,
+                 front: Double,
+                 back: Double,
+                 frontScale: Double = 1.0,
+                 backScale: Double = 1.0,
+                 frontCap: Boolean = true,
+                 backCap: Boolean = true,
+                 distanceTolerance: Double = 0.5,
+                 flipNormals: Boolean = false, writer: VertexWriter) {
+    val baseTriangles = triangulate(shape, distanceTolerance)
+    val points = shape.contours.map { it.adaptivePositions(distanceTolerance) }
+
+    extrudeShape(baseTriangles, points, front, back, frontScale, backScale, frontCap, backCap, distanceTolerance,
+            flipNormals, writer)
+}
+
 fun extrudeShapes(shapes: List<Shape>,
                   front: Double,
                   back: Double,
@@ -114,9 +133,9 @@ fun extrudeShapes(shapes: List<Shape>,
                   frontCap: Boolean = true,
                   backCap: Boolean = true,
                   distanceTolerance: Double = 0.5,
-                  flipNormals: Boolean = false, writer: VertexWriter ) {
+                  flipNormals: Boolean = false, writer: VertexWriter) {
     shapes.forEach {
-        extrudeShape(it, front, back, frontScale, backScale, frontCap , backCap , distanceTolerance, flipNormals, writer)
+        extrudeShape(it, front, back, frontScale, backScale, frontCap, backCap, distanceTolerance, flipNormals, writer)
     }
 }
 
