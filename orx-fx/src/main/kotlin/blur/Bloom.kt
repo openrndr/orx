@@ -51,16 +51,17 @@ class Bloom(blur: Filter = ApproximateGaussianBlur()) : Filter(Shader.createFrom
             lastDownsampleRate = downsampleRate
 
             for (downsample in 0 until downsamples * 2 step 2) {
-                val bufferA = colorBuffer(dest.width, dest.height, 1.0 / (downsample + downsampleRate), target[0].format, ColorType.FLOAT16)
-                val bufferB = colorBuffer(dest.width, dest.height, 1.0 / (downsample + downsampleRate), target[0].format, ColorType.FLOAT16)
-
+                val div = downsample + downsampleRate
+                val bufferA = colorBuffer(dest.width/div, dest.height/div, 1.0, target[0].format, ColorType.FLOAT16)
+                val bufferB = colorBuffer(dest.width/div, dest.height/div, 1.0, target[0].format, ColorType.FLOAT16)
                 samplers.add(Pair(bufferA, bufferB))
             }
         }
 
-        for ((bufferA) in samplers) {
+        for ((bufferA, _) in samplers) {
             blur.apply(src, bufferA)
         }
+
 
         for ((index, buffers) in samplers.asReversed().withIndex()) {
             val (bufferCurrA) = buffers

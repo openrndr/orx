@@ -13,8 +13,7 @@ uniform float gain;
 
 out vec4 o_color;
 void main() {
-    vec2 s = textureSize(tex0, 0).xy;
-    s = vec2(1.0/s.x, 1.0/s.y);
+    vec2 s = 1.0 / textureSize(tex0, 0).xy;
     int w = window;
 
     vec4 sum = vec4(0.0);
