@@ -1,8 +1,6 @@
 package org.openrndr.extras.meshgenerators
 
 import org.openrndr.draw.VertexBuffer
-import org.openrndr.draw.vertexBuffer
-import org.openrndr.draw.vertexFormat
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
@@ -123,11 +121,11 @@ fun GeneratorBuffer.cap(sides: Int, radius: Double, enveloppe: List<Vector2>) {
     generateCap(sides, radius, enveloppe, this::write)
 }
 
-fun GeneratorBuffer.revolve(sides:Int, length:Double, enveloppe: List<Vector2>) {
+fun GeneratorBuffer.revolve(sides: Int, length: Double, enveloppe: List<Vector2>) {
     generateRevolve(sides, length, enveloppe, this::write)
 }
 
-fun GeneratorBuffer.extrudeShape( baseTriangles:List<Vector2>, contours:List<List<Vector2>>, length: Double, scale: Double = 1.0, distanceTolerance: Double = 0.5) {
+fun GeneratorBuffer.extrudeShape(baseTriangles: List<Vector2>, contours: List<List<Vector2>>, length: Double, scale: Double = 1.0, distanceTolerance: Double = 0.5) {
     extrudeShape(baseTriangles, contours, -length / 2.0, length / 2.0, scale, scale, true, true, distanceTolerance, false, this::write)
 }
 
@@ -140,16 +138,11 @@ fun GeneratorBuffer.extrudeShapes(shapes: List<Shape>, length: Double, scale: Do
 }
 
 
-
-fun meshGenerator(builder: GeneratorBuffer.() -> Unit): VertexBuffer {
+fun meshGenerator(vertexBuffer: VertexBuffer? = null, builder: GeneratorBuffer.() -> Unit): VertexBuffer {
     val gb = GeneratorBuffer()
     gb.builder()
 
-    val vb = vertexBuffer(vertexFormat {
-        position(3)
-        normal(3)
-        textureCoordinate(2)
-    }, gb.data.size)
+    val vb = vertexBuffer ?: meshVertexBuffer(gb.data.size)
 
     val bb = gb.toByteBuffer()
     bb.rewind()
