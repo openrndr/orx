@@ -1,9 +1,6 @@
 package org.openrndr.extra.fx.blur
 
-import org.openrndr.draw.ColorBuffer
-import org.openrndr.draw.Filter
-import org.openrndr.draw.Shader
-import org.openrndr.draw.colorBuffer
+import org.openrndr.draw.*
 import org.openrndr.extra.fx.filterFragmentCode
 
 import org.openrndr.math.Vector2
@@ -13,6 +10,8 @@ import org.openrndr.math.Vector2
  */
 class BoxBlur : Filter(Shader.createFromCode(Filter.filterVertexCode,
         filterFragmentCode("blur/box-blur.frag"))) {
+
+    data class ColorBufferDescription(val width: Int, val height: Int, val contentScale: Double, val format: ColorFormat, val type: ColorType)
 
     /**
      * The sample window, default is 5
@@ -29,7 +28,7 @@ class BoxBlur : Filter(Shader.createFromCode(Filter.filterVertexCode,
      */
     var gain: Double by parameters
 
-    private var intermediate: ColorBuffer? = null
+    private var intermediateCache = mutableMapOf<ApproximateGaussianBlur.ColorBufferDescription, ColorBuffer>()
 
     init {
         window = 5
@@ -38,17 +37,12 @@ class BoxBlur : Filter(Shader.createFromCode(Filter.filterVertexCode,
     }
 
     override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
-        intermediate?.let {
-            if (it.width != target[0].width || it.height != target[0].height) {
-                intermediate = null
-            }
+        val intermediateDescription = ApproximateGaussianBlur.ColorBufferDescription(target[0].width, target[0].height, target[0].contentScale, target[0].format, target[0].type)
+        val intermediate = intermediateCache.getOrPut(intermediateDescription) {
+            colorBuffer(target[0].width, target[0].height, target[0].contentScale, target[0].format, target[0].type)
         }
 
-        if (intermediate == null) {
-            intermediate = colorBuffer(target[0].width, target[0].height, target[0].contentScale, target[0].format, target[0].type)
-        }
-
-        intermediate?.let {
+        intermediate.let {
             parameters["blurDirection"] = Vector2(1.0, 0.0)
             super.apply(source, arrayOf(it))
 

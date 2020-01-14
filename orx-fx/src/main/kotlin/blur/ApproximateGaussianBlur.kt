@@ -11,7 +11,7 @@ import org.openrndr.math.Vector2
 class ApproximateGaussianBlur : Filter(Shader.createFromCode(Filter.filterVertexCode,
         filterFragmentCode("blur/approximate-gaussian-blur.frag"))) {
 
-    data class ColorBufferDescription(val width:Int, val height:Int, val contentScale:Double, val format:ColorFormat, val type:ColorType)
+    data class ColorBufferDescription(val width: Int, val height: Int, val contentScale: Double, val format: ColorFormat, val type: ColorType)
 
 
     /**
@@ -51,7 +51,7 @@ class ApproximateGaussianBlur : Filter(Shader.createFromCode(Filter.filterVertex
             colorBuffer(target[0].width, target[0].height, target[0].contentScale, target[0].format, target[0].type)
         }
 
-        intermediate?.let {
+        intermediate.let {
             parameters["blurDirection"] = Vector2(1.0, 0.0)
             super.apply(source, arrayOf(it))
 
