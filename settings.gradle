@@ -7,6 +7,7 @@ include 'orx-camera',
         'orx-filter-extension',
         'orx-fx',
         'orx-gradient-descent',
+        'orx-gui',
         'orx-integral-image',
         'orx-interval-tree',
         'orx-jumpflood',
@@ -30,3 +31,4 @@ include 'orx-camera',
         'orx-kinect-v1-natives-macos',
         'orx-kinect-v1-natives-windows',
         'orx-kinect-v1-demo'
+

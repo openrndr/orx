@@ -1,0 +1,4 @@
+dependencies {
+    compile "org.openrndr.panel:openrndr-panel:0.3.19"
+    compile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: '1.3.61'
+}
