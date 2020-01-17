@@ -98,8 +98,7 @@ class Olive<P : Program>(val resources: Resources? = null) : Extension {
                     trackedListeners.forEach { l -> l.restoreListeners(store) }
                     session?.end()
 
-                    session = Session()
-                    session?.start()
+                    session = Session.root.fork()
 
                     @Suppress("UNCHECKED_CAST")
                     func(program as P)
