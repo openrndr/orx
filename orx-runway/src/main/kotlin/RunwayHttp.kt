@@ -2,10 +2,9 @@ package org.openrndr.extra.runway
 
 import com.google.gson.Gson
 import org.openrndr.draw.ColorBuffer
-import org.openrndr.draw.FileFormat
+import org.openrndr.draw.ImageFileFormat
 import java.io.ByteArrayInputStream
 import java.io.File
-import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
 import java.net.URL
@@ -15,7 +14,7 @@ import java.util.*
 /**
  * Construct a base64 representation of an encoded image
  */
-fun ColorBuffer.toData(format: FileFormat = FileFormat.JPG): String {
+fun ColorBuffer.toData(format: ImageFileFormat = ImageFileFormat.JPG): String {
     val tempFile = File.createTempFile("orx-runway", null)
     saveToFile(tempFile, format, async = false)
     val ref = File(tempFile.absolutePath)
