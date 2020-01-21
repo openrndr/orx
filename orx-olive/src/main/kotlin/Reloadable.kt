@@ -5,6 +5,7 @@ import kotlin.reflect.KProperty1
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.jvm.jvmName
 
+
 private val store = mutableMapOf<String, Any>()
 
 /**
@@ -18,12 +19,20 @@ fun clearReloadables() {
  * A class with which persistent state can be reloaded from inside Olive scripts.
  */
 open class Reloadable {
+
+
+    // -- since kotlin 1.3.61 the scripting host prepends class names with the host id
+    private fun normalizeClassName(name: String): String {
+        return name.replace(Regex("ScriptingHost[0-9a-f]+_"), "")
+    }
+
     /**
      * reload property values from store
      */
     @Suppress("UNCHECKED_CAST")
     fun reload() {
-        val existing = store[this::class.jvmName]
+        val className = normalizeClassName(this::class.jvmName)
+        val existing = store[className]
         if (existing != null) {
             for (p in this::class.declaredMemberProperties) {
                 val e = existing::class.declaredMemberProperties.find { it.name == p.name }
@@ -38,7 +47,9 @@ open class Reloadable {
                     }
                 }
             }
+        } else {
+            println("no existing store found for $className")
         }
-        store[this::class.jvmName] = this
+        store[normalizeClassName(this::class.jvmName)] = this
     }
 }
