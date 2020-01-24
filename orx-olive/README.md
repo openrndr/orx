@@ -60,7 +60,35 @@ import org.openrndr.draw.*
     }
 }
 ```
-The Reloadable store can be cleared using the `clearReloadables` function 
+
+The Reloadable store can be cleared using the `clearReloadables` function. 
+
+### Reloadable GPU resources
+
+To store GPU resources or objects that use GPU resources (a.o. `ColorBuffer`, `VertexBuffer`, `Shader`, `BufferTexture`)  in a `Reloadable` object one uses OPENRNDR's 
+`persistent {}` builder function.
+
+```!kotlin
+@file:Suppress("UNUSED_LAMBDA_EXPRESSION")
+import org.openrndr.color.ColorRGBa
+import org.openrndr.draw.*
+
+{ program: PersistentProgram ->
+    program.apply {
+        val a = object : Reloadable() {
+            var image = persistent { loadImage("data/images/pm5544.png" ) }
+        }
+        a.reload()
+
+        extend {
+            drawer.image(a.image)
+        }
+    }
+}
+```
+
+
+
 
 Keep in mind that `Reloadable` should only be used for singleton classes.
 
