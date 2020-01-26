@@ -27,16 +27,12 @@ class AxisHelper(var size: Int = 80) : Extension {
 
     fun draw(drawer: Drawer) {
         val viewMatrix = drawer.view
-        val projMatrix = drawer.projection
         val x = drawer.width - (size + 5.0)
         val y = 5.0
 
         drawer.isolatedWithTarget(fbo) {
-            drawer.view = Matrix44.IDENTITY
-            drawer.model = Matrix44.IDENTITY
-            drawer.drawStyle.depthTestPass = DepthTestPass.ALWAYS
-
-            drawer.ortho(0.0, side, 0.0, side, -1.0, 1.0)
+            drawer.defaults()
+            drawer.ortho(fbo)
 
             drawer.background(ColorRGBa.TRANSPARENT)
             drawer.stroke = null
@@ -60,17 +56,11 @@ class AxisHelper(var size: Int = 80) : Extension {
             drawer.lineSegment(Vector3.ZERO, Vector3.UNIT_Z * axisLength)
         }
 
-        drawer.view = Matrix44.IDENTITY
-        drawer.model = Matrix44.IDENTITY
-        drawer.ortho()
-
         drawer.isolated {
-            val cb = fbo.colorBuffer(0)
-            drawer.image(cb, x, y, side, side)
-        }
+            drawer.defaults()
 
-        drawer.view = viewMatrix
-        drawer.projection = projMatrix
+            drawer.image(fbo.colorBuffer(0), x, y, side, side)
+        }
     }
 }
 
