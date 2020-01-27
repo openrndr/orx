@@ -37,7 +37,7 @@ plugins {
 //}
 
 project.ext {
-    openrndrVersion = "0.3.38-rc.5"
+    openrndrVersion = "0.3.38"
     kotlinVersion = "1.3.61"
     spekVersion = "2.0.9"
     libfreenectVersion = "0.5.7-1.5.2"
