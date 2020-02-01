@@ -1,20 +1,16 @@
 @file:ShaderPhrases(exports = ["hash22","hash21","valueNoise21"])
 package org.openrndr.extra.noise.phrases
 
-import org.openrndr.extra.shaderphrases.annotations.ShaderPhrase
 import org.openrndr.extra.shaderphrases.annotations.ShaderPhrases
 
-@ShaderPhrase(exports = ["hash22"])
 val phraseHash22 = """vec2 hash22(vec2 p) {
     float n = sin(dot(p, vec2(41, 289)));
     return fract(vec2(262144, 32768)*n);
 }    
 """
 
-@ShaderPhrase(exports = ["hash21"])
 val phraseHash21 = "float hash21(vec2 p) { return fract(1e4 * sin(17.0 * p.x + p.y * 0.1) * (0.1 + abs(sin(p.y * 13.0 + p.x)))); }"
 
-@ShaderPhrase(exports = ["valueNoise21"], imports = ["hash21"])
 val phraseValueNoise21 = """
     
 float noise(vec2 x) {

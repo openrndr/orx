@@ -1,33 +1,58 @@
 package org.openrndr.extra.shaderphrases
 
+import org.openrndr.draw.codeFromURL
 import org.openrndr.extra.shaderphrases.annotations.ShaderPhrases
 
-fun preprocessShader(shader: String): String {
-    val lines = shader.split("\n")
-    val processed = lines.map {
-        if (it.startsWith("import ")) {
+/**
+ * Preprocess shader source.
+ * Looks for "#pragma import" statements and injects found phrases.
+ * @param source GLSL source code encoded as string
+ * @return GLSL source code with injected shader phrases
+ */
+fun preprocessShader(source: String): String {
+    val lines = source.split("\n")
+    val processed = lines.mapIndexed { index, it ->
+        if (it.startsWith("#pragma import")) {
             val tokens = it.split(" ")
-            val full = tokens[1]
+            val full = tokens[2]
             val fullTokens = full.split(".")
-            val fieldName = fullTokens.last().replace(";","").trim()
+            val fieldName = fullTokens.last().replace(";", "").trim()
             val packageClassTokens = fullTokens.dropLast(1)
             val packageClass = packageClassTokens.joinToString(".")
 
-            val c = Class.forName(packageClass)
-            if (c.annotations.any { it.annotationClass == ShaderPhrases::class }) {
-                if (fieldName == "*") {
-                    c.declaredFields.filter { it.type.name =="java.lang.String" }.map {
-                        it.get(null)
-                    }.joinToString("\n")
+            try {
+                val c = Class.forName(packageClass)
+                if (c.annotations.any { it.annotationClass == ShaderPhrases::class }) {
+                    if (fieldName == "*") {
+                        c.declaredFields.filter { it.type.name == "java.lang.String" }.map {
+                            "/* imported from $packageClass.$it */\n ${it.get(null)}"
+                        }.joinToString("\n")
+                    } else {
+                        try {
+                            c.getDeclaredField(fieldName).get(null)
+                        } catch (e: NoSuchFieldException) {
+                            error("field \"$fieldName\" not found in \"#pragma import $packageClass.$fieldName\" on line ${index + 1}")
+                        }
+                    }
                 } else {
-                    c.getDeclaredField(fieldName).get(null)
+                    throw IllegalArgumentException("class $packageClass has no ShaderPhrases annotation")
                 }
-            } else {
-                throw IllegalArgumentException("class $packageClass has no ShaderPhrases annotation")
+            } catch (e: ClassNotFoundException) {
+                error("class \"$packageClass\" not found in \"#pragma import $packageClass\" on line ${index + 1}")
             }
         } else {
             it
         }
     }
     return processed.joinToString("\n")
+}
+
+/**
+ * Preprocess shader source from url
+ * Looks for "#pragma import" statements and injects found phrases.
+ * @param url url pointing to GLSL shader source
+ * @return GLSL source code with injected shader phrases
+ */
+fun preprocessShaderFromUrl(url: String): String {
+    return preprocessShader(codeFromURL(url))
 }
