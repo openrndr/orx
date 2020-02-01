@@ -89,15 +89,13 @@ class Olive<P : Program>(val resources: Resources? = null) : Extension {
 
             watcher = program.watchFile(File(script)) {
                 try {
-                    val script = it.readText()
-                    val func = KtsObjectLoader().load<P.() -> Unit>(script)
+                    val func = loadFromScript<P.()->Unit>(it)
 
                     program.extensions.clear()
                     program.extensions.addAll(originalExtensions)
 
                     trackedListeners.forEach { l -> l.restoreListeners(store) }
                     session?.end()
-
                     session = Session.root.fork()
 
                     @Suppress("UNCHECKED_CAST")
