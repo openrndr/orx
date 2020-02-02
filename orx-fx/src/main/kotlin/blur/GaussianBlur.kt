@@ -1,9 +1,9 @@
 package org.openrndr.extra.fx.blur
 
-import jdk.jfr.Description
 import org.openrndr.draw.Filter
 import org.openrndr.draw.Shader
 import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
 

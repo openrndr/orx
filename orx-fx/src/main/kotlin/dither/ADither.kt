@@ -3,20 +3,16 @@ package org.openrndr.extra.fx.dither
 import org.openrndr.draw.Filter
 import org.openrndr.draw.Shader
 import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.extra.parameters.Description
+import org.openrndr.extra.parameters.IntParameter
 
+@Description("ADither")
+class ADither: Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("dither/a-dither.frag"))) {
+    @IntParameter("pattern index", 0, 3)
+    var pattern: Int by parameters
 
-class ADither: Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("dither/a-dither.frag"))) {
-    var pattern: Int
-        set(value) {
-            parameters["pattern"] = value
-        }
-        get() = parameters["pattern"] as Int
-
-    var levels: Int
-        set(value) {
-            parameters["levels"] = value;
-        }
-        get() = parameters["levels"] as Int
+    @IntParameter("levels", 1, 64)
+    var levels: Int by parameters
 
     init {
         levels = 4
