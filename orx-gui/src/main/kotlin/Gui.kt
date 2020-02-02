@@ -62,7 +62,7 @@ class GUI : Extension {
                             h3 { obj.title() ?: "untitled" }
 
                             for (parameter in parameters) {
-                                addSlider(obj, parameter)
+                                addControl(obj, parameter)
                             }
                         }
                     }
@@ -75,7 +75,7 @@ class GUI : Extension {
         program.extend(panel)
     }
 
-    private fun Div.addSlider(obj: Any, parameter: Parameter) {
+    private fun Div.addControl(obj: Any, parameter: Parameter) {
 
         when(val type = parameter.parameterType) {
             ParameterType.Int -> {
@@ -122,6 +122,18 @@ class GUI : Extension {
                     events.valueChanged.subscribe {
                         value = it.newValue
                         (parameter.property as KMutableProperty1<Any, Boolean>).set(obj, value > 0.5)
+                        onChangeListener?.invoke(parameter.property.name, it.newValue)
+                    }
+                }
+            }
+
+            ParameterType.Text -> {
+                textfield {
+                    label = parameter.label
+                    value = (parameter.property as KMutableProperty1<Any, String>).get(obj)
+                    events.valueChanged.subscribe {
+                        value = it.newValue
+                        (parameter.property as KMutableProperty1<Any, String>).set(obj, value)
                         onChangeListener?.invoke(parameter.property.name, it.newValue)
                     }
                 }
