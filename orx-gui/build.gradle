@@ -1,0 +1,4 @@
+dependencies {
+    compile project(":orx-parameters")
+    compile "org.openrndr.panel:openrndr-panel:$panelVersion"
+}

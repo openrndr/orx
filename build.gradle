@@ -38,6 +38,7 @@ plugins {
 
 project.ext {
     openrndrVersion = "0.3.38"
+    panelVersion = "0.3.20"
     kotlinVersion = "1.3.61"
     spekVersion = "2.0.9"
     libfreenectVersion = "0.5.7-1.5.2"

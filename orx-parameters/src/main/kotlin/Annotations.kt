@@ -1,5 +1,6 @@
 package org.openrndr.extra.parameters
 
+import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty1
 import kotlin.reflect.KVisibility
 import kotlin.reflect.full.declaredMemberProperties
@@ -7,7 +8,7 @@ import kotlin.reflect.full.findAnnotation
 
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class Description(val description: String)
+annotation class Description(val title: String, val description: String = "")
 
 /**
  * DoubleParameter annotation for a double precision Filter parameter
@@ -41,6 +42,37 @@ annotation class IntParameter(val label: String, val low: Int, val high: Int, va
 @Retention(AnnotationRetention.RUNTIME)
 annotation class BooleanParameter(val label: String, val order: Int = Integer.MAX_VALUE)
 
+
+/**
+ * ButtonParameter annotation for an integer Filter parameter
+ * @property label a short description of the parameter
+ * @property order hint for where to place the parameter in user interfaces
+ */
+@Target(AnnotationTarget.PROPERTY)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ButtonParameter(val label: String, val order: Int = Integer.MAX_VALUE)
+
+enum class ParameterType(val annotation: KClass<out Annotation>) {
+    Double(DoubleParameter::class),
+    Int(IntParameter::class),
+    Boolean(BooleanParameter::class),
+    Button(ButtonParameter::class)
+    ;
+
+    companion object {
+        fun forParameterAnnotationClass(annotation: Annotation) : ParameterType {
+            return when(annotation) {
+                is DoubleParameter -> Double
+                is IntParameter -> Int
+                is BooleanParameter -> Boolean
+                is ButtonParameter -> Button
+                else -> error("no type for $annotation")
+            }
+        }
+    }
+}
+
+
 /**
  * Parameter summary class. This is used by [listParameters] as a way to report parameters in
  * a unified form.
@@ -53,6 +85,7 @@ annotation class BooleanParameter(val label: String, val order: Int = Integer.MA
  * @property order a hint for where in the ui this parameter is placed, lower value means higher priority
  */
 class Parameter(
+        val parameterType: ParameterType,
         val property: KMutableProperty1<out Any, Any?>,
         val label: String,
         val doubleRange: ClosedRange<Double>?,
@@ -69,34 +102,49 @@ fun Any.listParameters(): List<Parameter> {
                 it.visibility == KVisibility.PUBLIC &&
                 (it.findAnnotation<BooleanParameter>() != null ||
                         it.findAnnotation<IntParameter>() != null ||
-                        it.findAnnotation<DoubleParameter>() != null)
+                        it.findAnnotation<DoubleParameter>() != null ||
+                        it.findAnnotation<ButtonParameter>() != null)
     }.map {
-        val annotations = listOf(it.findAnnotation<BooleanParameter>(), it.findAnnotation<IntParameter>(), it.findAnnotation<DoubleParameter>()).filterNotNull()
+        val annotations = listOf(it.findAnnotation<BooleanParameter>(), it.findAnnotation<IntParameter>(), it.findAnnotation<DoubleParameter>(), it.findAnnotation<ButtonParameter>()).filterNotNull()
         var intRange: IntRange? = null
         var doubleRange: ClosedRange<Double>? = null
         var order: Int = Integer.MAX_VALUE
         var label: String = ""
         var precision: Int? = null
+        var type : ParameterType? = null
 
         annotations.forEach {
-            when(it) {
+            type = ParameterType.forParameterAnnotationClass(it)
+            when (it) {
                 is BooleanParameter -> {
                     label = it.label
                     order = it.order
                 }
                 is DoubleParameter -> {
                     label = it.label
-                    doubleRange = it.low .. it.high
+                    doubleRange = it.low..it.high
                     precision = it.precision
                     order = it.order
                 }
                 is IntParameter -> {
                     label = it.label
-                    intRange = it.low .. it.high
+                    intRange = it.low..it.high
+                    order = it.order
+                }
+                is ButtonParameter -> {
+                    label = it.label
                     order = it.order
                 }
             }
         }
-        Parameter(it as KMutableProperty1<out Any, Any?>, label, doubleRange, intRange, precision, order)
+        Parameter(type?:error("no type"), it as KMutableProperty1<out Any, Any?>, label, doubleRange, intRange, precision, order)
     }.sortedBy { it.order }
+}
+
+fun Any.title() = this::class.findAnnotation<Description>()?.let {
+    it.title
+}
+
+fun Any.description() = this::class.findAnnotation<Description>()?.let {
+    it.description
 }
