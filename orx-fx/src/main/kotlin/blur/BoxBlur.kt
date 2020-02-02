@@ -2,12 +2,16 @@ package org.openrndr.extra.fx.blur
 
 import org.openrndr.draw.*
 import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.extra.parameters.Description
+import org.openrndr.extra.parameters.DoubleParameter
+import org.openrndr.extra.parameters.IntParameter
 
 import org.openrndr.math.Vector2
 
 /**
  * BoxBlur implemented as a separable filter
  */
+@Description("Box-blur")
 class BoxBlur : Filter(Shader.createFromCode(Filter.filterVertexCode,
         filterFragmentCode("blur/box-blur.frag"))) {
 
@@ -16,16 +20,19 @@ class BoxBlur : Filter(Shader.createFromCode(Filter.filterVertexCode,
     /**
      * The sample window, default is 5
      */
+    @IntParameter("window size", 1, 25)
     var window: Int by parameters
 
     /**
      * Spread multiplier, default is 1.0
      */
+    @DoubleParameter("kernel spread", 1.0, 4.0)
     var spread: Double by parameters
 
     /**
      * Post-blur gain, default is 1.0
      */
+    @DoubleParameter("gain", 0.0, 4.0)
     var gain: Double by parameters
 
     private var intermediateCache = mutableMapOf<ApproximateGaussianBlur.ColorBufferDescription, ColorBuffer>()

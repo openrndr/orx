@@ -3,8 +3,11 @@ package org.openrndr.extra.fx.blur
 import org.openrndr.draw.*
 import org.openrndr.extra.fx.blend.Add
 import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.extra.parameters.Description
+import org.openrndr.extra.parameters.DoubleParameter
+import org.openrndr.extra.parameters.IntParameter
 
-
+@Description("Bloom")
 class Bloom(blur: Filter = ApproximateGaussianBlur()) : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("blur/bloom.frag"))) {
     /**
      * the blur filter to use for the bloom, default is Approximate Gaussian Blur
@@ -14,21 +17,25 @@ class Bloom(blur: Filter = ApproximateGaussianBlur()) : Filter(Shader.createFrom
     /**
      * number of downsampled textures to use, default value is 2
      */
+    @IntParameter("blur iterations", 1, 8)
     var downsamples: Int = 2
 
     /**
      * rate of downsampling, f.ex: 4 -> 4x, 8x, 16x.., default value is 2
      */
+    @IntParameter("downsamping rate", 1, 4)
     var downsampleRate: Int = 2
 
     /**
      * blending amount between original image and blurred, default value is 0.5
      */
+    @DoubleParameter("blend factor", 0.0, 1.0)
     var blendFactor: Double by parameters
 
     /**
      * brightness of the resulting image, default value is 0.5
      */
+    @DoubleParameter("brightness", 0.0, 1.0)
     var brightness: Double by parameters
 
     init {
@@ -61,7 +68,6 @@ class Bloom(blur: Filter = ApproximateGaussianBlur()) : Filter(Shader.createFrom
         for ((bufferA, _) in samplers) {
             blur.apply(src, bufferA)
         }
-
 
         for ((index, buffers) in samplers.asReversed().withIndex()) {
             val (bufferCurrA) = buffers
