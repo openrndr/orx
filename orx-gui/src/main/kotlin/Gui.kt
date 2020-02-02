@@ -82,7 +82,7 @@ class GUI : Extension {
                 slider {
                     label = parameter.label
                     range = Range(parameter.intRange!!.start.toDouble(), parameter.intRange!!.endInclusive.toDouble())
-                    precision = parameter.precision!!
+                    precision = 0
                     value = (parameter.property as KMutableProperty1<Any, Int>).get(obj).toDouble()
                     events.valueChanged.subscribe {
                         (parameter.property as KMutableProperty1<Any, Int>).set(obj, value.toInt())
@@ -107,7 +107,7 @@ class GUI : Extension {
                 button {
                     label = parameter.label
                     events.clicked.subscribe {
-                        parameter.property.call()
+                        parameter.property.call(obj)
                         onChangeListener?.invoke(parameter.property.name, null)
                     }
                 }
