@@ -7,7 +7,8 @@ Currently orx-parameters supplies the following annotations:
 
  - `DoubleParameter`
  - `IntParameter`
- - `DoubleParameter`
+ - `BooleanParameter`
+ - `TextParameter`
 
 ## Annotation application
 

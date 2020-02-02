@@ -11,7 +11,7 @@ import kotlin.reflect.full.findAnnotation
 annotation class Description(val title: String, val description: String = "")
 
 /**
- * DoubleParameter annotation for a double precision Filter parameter
+ * DoubleParameter annotation for a double precision parameter
  * @property label a short description of the parameter
  * @property low the lowest value this parameter should be assigned
  * @property high the highest value this parameter should be assigned
@@ -23,7 +23,7 @@ annotation class Description(val title: String, val description: String = "")
 annotation class DoubleParameter(val label: String, val low: Double, val high: Double, val precision: Int = 3, val order: Int = Integer.MAX_VALUE)
 
 /**
- * IntParameter annotation for an integer Filter parameter
+ * IntParameter annotation for an integer parameter
  * @property label a short description of the parameter
  * @property low the lowest value this parameter should be assigned
  * @property high the highest value this parameter should be assigned
@@ -34,7 +34,7 @@ annotation class DoubleParameter(val label: String, val low: Double, val high: D
 annotation class IntParameter(val label: String, val low: Int, val high: Int, val order: Int = Integer.MAX_VALUE)
 
 /**
- * BooleanParameter annotation for an integer Filter parameter
+ * BooleanParameter annotation for a boolean parameter
  * @property label a short description of the parameter
  * @property order hint for where to place the parameter in user interfaces
  */
@@ -42,9 +42,18 @@ annotation class IntParameter(val label: String, val low: Int, val high: Int, va
 @Retention(AnnotationRetention.RUNTIME)
 annotation class BooleanParameter(val label: String, val order: Int = Integer.MAX_VALUE)
 
+/**
+ * Text annotation for a text parameter
+ * @property label a short description of the parameter
+ * @property order hint for where to place the parameter in user interfaces
+ */
+@Target(AnnotationTarget.PROPERTY)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class TextParameter(val label: String, val order: Int = Integer.MAX_VALUE)
+
 
 /**
- * ButtonParameter annotation for an integer Filter parameter
+ * ButtonParameter annotation for button parameter
  * @property label a short description of the parameter
  * @property order hint for where to place the parameter in user interfaces
  */
@@ -56,16 +65,18 @@ enum class ParameterType(val annotation: KClass<out Annotation>) {
     Double(DoubleParameter::class),
     Int(IntParameter::class),
     Boolean(BooleanParameter::class),
-    Button(ButtonParameter::class)
+    Button(ButtonParameter::class),
+    Text(TextParameter::class)
     ;
 
     companion object {
-        fun forParameterAnnotationClass(annotation: Annotation) : ParameterType {
-            return when(annotation) {
+        fun forParameterAnnotationClass(annotation: Annotation): ParameterType {
+            return when (annotation) {
                 is DoubleParameter -> Double
                 is IntParameter -> Int
                 is BooleanParameter -> Boolean
                 is ButtonParameter -> Button
+                is TextParameter -> Text
                 else -> error("no type for $annotation")
             }
         }
@@ -103,15 +114,20 @@ fun Any.listParameters(): List<Parameter> {
                 (it.findAnnotation<BooleanParameter>() != null ||
                         it.findAnnotation<IntParameter>() != null ||
                         it.findAnnotation<DoubleParameter>() != null ||
-                        it.findAnnotation<ButtonParameter>() != null)
+                        it.findAnnotation<ButtonParameter>() != null) ||
+                it.findAnnotation<TextParameter>() != null
     }.map {
-        val annotations = listOf(it.findAnnotation<BooleanParameter>(), it.findAnnotation<IntParameter>(), it.findAnnotation<DoubleParameter>(), it.findAnnotation<ButtonParameter>()).filterNotNull()
+        val annotations = listOfNotNull(it.findAnnotation<BooleanParameter>(),
+                it.findAnnotation<IntParameter>(),
+                it.findAnnotation<DoubleParameter>(),
+                it.findAnnotation<ButtonParameter>(),
+                it.findAnnotation<TextParameter>())
         var intRange: IntRange? = null
         var doubleRange: ClosedRange<Double>? = null
         var order: Int = Integer.MAX_VALUE
-        var label: String = ""
+        var label = ""
         var precision: Int? = null
-        var type : ParameterType? = null
+        var type: ParameterType? = null
 
         annotations.forEach {
             type = ParameterType.forParameterAnnotationClass(it)
@@ -135,16 +151,17 @@ fun Any.listParameters(): List<Parameter> {
                     label = it.label
                     order = it.order
                 }
+                is TextParameter -> {
+                    label = it.label
+                    order = it.order
+                }
             }
         }
-        Parameter(type?:error("no type"), it as KMutableProperty1<out Any, Any?>, label, doubleRange, intRange, precision, order)
+        Parameter(type
+                ?: error("no type"), it as KMutableProperty1<out Any, Any?>, label, doubleRange, intRange, precision, order)
     }.sortedBy { it.order }
 }
 
-fun Any.title() = this::class.findAnnotation<Description>()?.let {
-    it.title
-}
+fun Any.title() = this::class.findAnnotation<Description>()?.title
 
-fun Any.description() = this::class.findAnnotation<Description>()?.let {
-    it.description
-}
+fun Any.description() = this::class.findAnnotation<Description>()?.description

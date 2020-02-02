@@ -16,13 +16,16 @@ val a = object {
 
     @ButtonParameter("a button parameter", order = 3)
     var f = {}
+
+    @TextParameter("a text parameter", order = 4)
+    var t = "test"
 }
 
 object TestAnnotations : Spek({
     describe("an annotated object") {
         it("has listable parameters") {
             val list = a.listParameters()
-            list.size `should be equal to` 4
+            list.size `should be equal to` 5
             list[0].property.name `should be equal to` "d"
             list[0].parameterType `should be equal to` ParameterType.Double
             list[0].label `should be equal to` "a double scalar"
@@ -47,6 +50,9 @@ object TestAnnotations : Spek({
 
             list[3].parameterType `should be equal to` ParameterType.Button
             list[3].property.name `should be equal to` "f"
+
+            list[4].parameterType `should be equal to` ParameterType.Text
+            list[4].property.name `should be equal to` "t"
         }
     }
 })
