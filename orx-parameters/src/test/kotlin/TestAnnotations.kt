@@ -1,5 +1,6 @@
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.shouldBeInRange
+import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.parameters.*
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -19,13 +20,18 @@ val a = object {
 
     @TextParameter("a text parameter", order = 4)
     var t = "test"
+
+    @ColorParameter("a color parameter", order = 5)
+    var c = ColorRGBa.WHITE
+
 }
 
 object TestAnnotations : Spek({
     describe("an annotated object") {
         it("has listable parameters") {
             val list = a.listParameters()
-            list.size `should be equal to` 5
+            list.size `should be equal to` 6
+
             list[0].property.name `should be equal to` "d"
             list[0].parameterType `should be equal to` ParameterType.Double
             list[0].label `should be equal to` "a double scalar"
@@ -50,9 +56,15 @@ object TestAnnotations : Spek({
 
             list[3].parameterType `should be equal to` ParameterType.Button
             list[3].property.name `should be equal to` "f"
+            list[3].label `should be equal to` "a button parameter"
 
             list[4].parameterType `should be equal to` ParameterType.Text
             list[4].property.name `should be equal to` "t"
+            list[4].label `should be equal to` "a text parameter"
+
+            list[5].parameterType `should be equal to` ParameterType.Color
+            list[5].property.name `should be equal to` "c"
+            list[5].label `should be equal to` "a color parameter"
         }
     }
 })

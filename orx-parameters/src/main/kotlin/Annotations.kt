@@ -6,6 +6,14 @@ import kotlin.reflect.KVisibility
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.findAnnotation
 
+/*  In case you are here to add an extra annotation type:
+    1. Add an annotation class
+    2. Add an entry to ParameterType
+    3. Add extra fields (if any) to Parameter
+    4. Add handling annotation code to listParameters
+    5. Add a test in TestAnnotations.kt
+ */
+
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class Description(val title: String, val description: String = "")
@@ -43,7 +51,7 @@ annotation class IntParameter(val label: String, val low: Int, val high: Int, va
 annotation class BooleanParameter(val label: String, val order: Int = Integer.MAX_VALUE)
 
 /**
- * Text annotation for a text parameter
+ * TextParameter annotation for a text parameter
  * @property label a short description of the parameter
  * @property order hint for where to place the parameter in user interfaces
  */
@@ -51,6 +59,14 @@ annotation class BooleanParameter(val label: String, val order: Int = Integer.MA
 @Retention(AnnotationRetention.RUNTIME)
 annotation class TextParameter(val label: String, val order: Int = Integer.MAX_VALUE)
 
+/**
+ * ColorParameter annotation for a ColorRGBa parameter
+ * @property label a short description of the parameter
+ * @property order hint for where to place the parameter in user interfaces
+ */
+@Target(AnnotationTarget.PROPERTY)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ColorParameter(val label: String, val order: Int = Integer.MAX_VALUE)
 
 /**
  * ButtonParameter annotation for button parameter
@@ -61,25 +77,20 @@ annotation class TextParameter(val label: String, val order: Int = Integer.MAX_V
 @Retention(AnnotationRetention.RUNTIME)
 annotation class ButtonParameter(val label: String, val order: Int = Integer.MAX_VALUE)
 
-enum class ParameterType(val annotation: KClass<out Annotation>) {
+enum class ParameterType(val annotationClass: KClass<out Annotation>) {
     Double(DoubleParameter::class),
     Int(IntParameter::class),
     Boolean(BooleanParameter::class),
     Button(ButtonParameter::class),
-    Text(TextParameter::class)
+    Text(TextParameter::class),
+    Color(ColorParameter::class)
     ;
 
     companion object {
-        fun forParameterAnnotationClass(annotation: Annotation): ParameterType {
-            return when (annotation) {
-                is DoubleParameter -> Double
-                is IntParameter -> Int
-                is BooleanParameter -> Boolean
-                is ButtonParameter -> Button
-                is TextParameter -> Text
-                else -> error("no type for $annotation")
-            }
-        }
+        fun forParameterAnnotationClass(annotation: Annotation): ParameterType =
+                values().find { it.annotationClass == annotation.annotationClass } ?: error("no type for $annotation")
+
+        val parameterAnnotationClasses get() = values().map { it.annotationClass }
     }
 }
 
@@ -111,17 +122,9 @@ fun Any.listParameters(): List<Parameter> {
     return this::class.declaredMemberProperties.filter {
         !it.isConst &&
                 it.visibility == KVisibility.PUBLIC &&
-                (it.findAnnotation<BooleanParameter>() != null ||
-                        it.findAnnotation<IntParameter>() != null ||
-                        it.findAnnotation<DoubleParameter>() != null ||
-                        it.findAnnotation<ButtonParameter>() != null) ||
-                it.findAnnotation<TextParameter>() != null
+                it.annotations.map { it.annotationClass }.intersect(ParameterType.parameterAnnotationClasses).isNotEmpty()
     }.map {
-        val annotations = listOfNotNull(it.findAnnotation<BooleanParameter>(),
-                it.findAnnotation<IntParameter>(),
-                it.findAnnotation<DoubleParameter>(),
-                it.findAnnotation<ButtonParameter>(),
-                it.findAnnotation<TextParameter>())
+        val annotations = it.annotations.filter { it.annotationClass in ParameterType.parameterAnnotationClasses }
         var intRange: IntRange? = null
         var doubleRange: ClosedRange<Double>? = null
         var order: Int = Integer.MAX_VALUE
@@ -152,6 +155,10 @@ fun Any.listParameters(): List<Parameter> {
                     order = it.order
                 }
                 is TextParameter -> {
+                    label = it.label
+                    order = it.order
+                }
+                is ColorParameter -> {
                     label = it.label
                     order = it.order
                 }
