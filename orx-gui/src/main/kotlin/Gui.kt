@@ -39,6 +39,10 @@ class GUI : Extension {
                 this.marginRight = 2.px
                 this.height = 100.percent
                 this.background = Color.RGBa(ColorRGBa.GRAY.copy(a = 0.2))
+
+                descendant(has type "colorpicker-button") {
+                    this.width = 175.px
+                }
             }
 
             styleSheet(has type "dropdown-button") {
@@ -77,7 +81,7 @@ class GUI : Extension {
 
     private fun Div.addControl(obj: Any, parameter: Parameter) {
 
-        when(val type = parameter.parameterType) {
+        when(parameter.parameterType) {
             ParameterType.Int -> {
                 slider {
                     label = parameter.label
@@ -135,6 +139,17 @@ class GUI : Extension {
                         value = it.newValue
                         (parameter.property as KMutableProperty1<Any, String>).set(obj, value)
                         onChangeListener?.invoke(parameter.property.name, it.newValue)
+                    }
+                }
+            }
+
+            ParameterType.Color -> {
+                colorpickerButton {
+                    label = parameter.label
+                    color = (parameter.property as KMutableProperty1<Any, ColorRGBa>).get(obj)
+                    events.valueChanged.subscribe {
+                        (parameter.property as KMutableProperty1<Any, ColorRGBa>).set(obj, it.color)
+                        onChangeListener?.invoke(parameter.property.name, it.color)
                     }
                 }
             }
