@@ -37,7 +37,7 @@ plugins {
 //}
 
 project.ext {
-    openrndrVersion = "0.3.38"
+    openrndrVersion = "0.3.39-rc.1"
     panelVersion = "0.3.20"
     kotlinVersion = "1.3.61"
     spekVersion = "2.0.9"
