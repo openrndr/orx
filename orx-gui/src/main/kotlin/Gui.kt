@@ -1,6 +1,7 @@
 package org.openrndr.extra.gui
 
 import org.openrndr.Extension
+import org.openrndr.KEY_F11
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.parameters.*
@@ -22,6 +23,14 @@ class GUI : Extension {
     }
 
     override fun setup(program: Program) {
+
+        program.keyboard.keyDown.listen {
+            if (it.key == KEY_F11) {
+                enabled = !enabled
+                panel.enabled = enabled
+            }
+        }
+
         panel = program.controlManager {
             styleSheet(has class_ "container") {
                 this.display = Display.FLEX
@@ -80,39 +89,39 @@ class GUI : Extension {
     }
 
     private fun Div.addControl(obj: Any, parameter: Parameter) {
-
         when(parameter.parameterType) {
             ParameterType.Int -> {
                 slider {
                     label = parameter.label
-                    range = Range(parameter.intRange!!.start.toDouble(), parameter.intRange!!.endInclusive.toDouble())
+                    range = Range(parameter.intRange!!.first.toDouble(), parameter.intRange!!.last.toDouble())
                     precision = 0
                     value = (parameter.property as KMutableProperty1<Any, Int>).get(obj).toDouble()
                     events.valueChanged.subscribe {
                         (parameter.property as KMutableProperty1<Any, Int>).set(obj, value.toInt())
-                        onChangeListener?.invoke(parameter.property.name, it.newValue)
+                        onChangeListener?.invoke(parameter.property!!.name, it.newValue)
                     }
                 }
             }
             ParameterType.Double -> {
                 slider {
                     label = parameter.label
-                    range = Range(parameter.doubleRange!!.start, parameter.doubleRange!!.endInclusive.toDouble())
+                    range = Range(parameter.doubleRange!!.start, parameter.doubleRange!!.endInclusive)
                     precision = parameter.precision!!
                     value = (parameter.property as KMutableProperty1<Any, Double>).get(obj)
                     events.valueChanged.subscribe {
                         (parameter.property as KMutableProperty1<Any, Double>).set(obj, value)
-                        onChangeListener?.invoke(parameter.property.name, it.newValue)
+                        onChangeListener?.invoke(parameter.property!!.name, it.newValue)
                     }
                 }
             }
 
-            ParameterType.Button -> {
+            ParameterType.Action -> {
                 button {
                     label = parameter.label
                     events.clicked.subscribe {
-                        parameter.property.call(obj)
-                        onChangeListener?.invoke(parameter.property.name, null)
+                        /* the `obj` we pass in here is the receiver */
+                        parameter.function!!.call(obj)
+                        onChangeListener?.invoke(parameter.function!!.name, null)
                     }
                 }
             }
@@ -126,7 +135,7 @@ class GUI : Extension {
                     events.valueChanged.subscribe {
                         value = it.newValue
                         (parameter.property as KMutableProperty1<Any, Boolean>).set(obj, value > 0.5)
-                        onChangeListener?.invoke(parameter.property.name, it.newValue)
+                        onChangeListener?.invoke(parameter.property!!.name, it.newValue)
                     }
                 }
             }
@@ -138,7 +147,7 @@ class GUI : Extension {
                     events.valueChanged.subscribe {
                         value = it.newValue
                         (parameter.property as KMutableProperty1<Any, String>).set(obj, value)
-                        onChangeListener?.invoke(parameter.property.name, it.newValue)
+                        onChangeListener?.invoke(parameter.property!!.name, it.newValue)
                     }
                 }
             }
@@ -149,21 +158,21 @@ class GUI : Extension {
                     color = (parameter.property as KMutableProperty1<Any, ColorRGBa>).get(obj)
                     events.valueChanged.subscribe {
                         (parameter.property as KMutableProperty1<Any, ColorRGBa>).set(obj, it.color)
-                        onChangeListener?.invoke(parameter.property.name, it.color)
+                        onChangeListener?.invoke(parameter.property!!.name, it.color)
                     }
                 }
             }
         }
     }
 
-    val trackedParams = mutableMapOf<Any, List<Parameter>>()
+    private val trackedParams = mutableMapOf<Any, List<Parameter>>()
 
     /**
      * Add an object to the GUI
      */
     fun add(objectWithParameters: Any) {
         val parameters = objectWithParameters.listParameters()
-        if (parameters.size > 0) {
+        if (parameters.isNotEmpty()) {
             trackedParams[objectWithParameters] = parameters
         }
     }

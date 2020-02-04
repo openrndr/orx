@@ -15,6 +15,8 @@ Preparation: make sure `orx-gui` is in the `orxFeatures` of your project (if you
 The essence of `orx-gui` lies in the provided a `GUI` extension, which can be used in your program using the `extend {}` function. 
 The `GUI` class has an `add()` function that allows any annotated object to be passed in.
 
+The visibility of the side bar can be toggled by pressing the F11 key on your keyboard.
+
 ### UIs for parameter objects
 
 A simple UI can be created by creating an annotated `object`.

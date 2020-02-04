@@ -3,12 +3,17 @@
 A collection of annotations and tools that are used to turn Kotlin properties into introspectable parameters. Parameters 
 are highly suitable for automatically generating user interfaces, but note that this is _not_ what `orx-parameters` does.
 
+For an example (and a highly usable implementation) of generating interfaces from the annotations you are encouraged to check out [`orx-gui`](../orx-gui/README.md). 
+
 Currently orx-parameters supplies the following annotations:
 
- - `DoubleParameter`
- - `IntParameter`
- - `BooleanParameter`
- - `TextParameter`
+ - `DoubleParameter` for `Double` properties
+ - `IntParameter` for `Int` properties
+ - `BooleanParameter` for `Boolean` properties
+ - `TextParameter` for `String` properties
+ - `ColorParameter` for `ColorRGBa` properties
+
+Additionally there is an `ActionParameter` that can be used to annotate functions without arguments.
 
 ## Annotation application
 
@@ -24,6 +29,12 @@ val foo = object {
 
     @BooleanParameter("a boolean parameter", order = 2)
     var b = false
+
+    @ActionParameter("a simple action", order = 3)
+    fun actionFunction() {
+        // -- 
+    }
+
 }
 ````
 

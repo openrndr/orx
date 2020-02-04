@@ -1,8 +1,10 @@
 package org.openrndr.extra.parameters
 
+import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty1
 import kotlin.reflect.KVisibility
+import kotlin.reflect.full.declaredMemberFunctions
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.findAnnotation
 
@@ -69,19 +71,19 @@ annotation class TextParameter(val label: String, val order: Int = Integer.MAX_V
 annotation class ColorParameter(val label: String, val order: Int = Integer.MAX_VALUE)
 
 /**
- * ButtonParameter annotation for button parameter
+ * ActionParameter annotation for functions without arguments
  * @property label a short description of the parameter
  * @property order hint for where to place the parameter in user interfaces
  */
-@Target(AnnotationTarget.PROPERTY)
+@Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class ButtonParameter(val label: String, val order: Int = Integer.MAX_VALUE)
+annotation class ActionParameter(val label: String, val order: Int = Integer.MAX_VALUE)
 
 enum class ParameterType(val annotationClass: KClass<out Annotation>) {
     Double(DoubleParameter::class),
     Int(IntParameter::class),
     Boolean(BooleanParameter::class),
-    Button(ButtonParameter::class),
+    Action(ActionParameter::class),
     Text(TextParameter::class),
     Color(ColorParameter::class)
     ;
@@ -94,12 +96,12 @@ enum class ParameterType(val annotationClass: KClass<out Annotation>) {
     }
 }
 
-
 /**
  * Parameter summary class. This is used by [listParameters] as a way to report parameters in
  * a unified form.
- * @property property the property that received any of the parameter annotations
+ * @property property a property that received any of the parameter annotations
  * [BooleanParameter], [IntParameter], or [DoubleParameter]
+ * @property function a function that received the [ActionParameter]
  * @property label a label that describes the property
  * @property doubleRange a floating point based range in case [DoubleParameter] is used
  * @property intRange an integer range in case [IntParameter] is used
@@ -108,7 +110,8 @@ enum class ParameterType(val annotationClass: KClass<out Annotation>) {
  */
 class Parameter(
         val parameterType: ParameterType,
-        val property: KMutableProperty1<out Any, Any?>,
+        val property: KMutableProperty1<out Any, Any?>?,
+        val function: KCallable<Unit>?,
         val label: String,
         val doubleRange: ClosedRange<Double>?,
         val intRange: IntRange?,
@@ -119,7 +122,7 @@ class Parameter(
  * List all parameters, (public var properties with a parameter annotation)
  */
 fun Any.listParameters(): List<Parameter> {
-    return this::class.declaredMemberProperties.filter {
+    return (this::class.declaredMemberProperties.filter {
         !it.isConst &&
                 it.visibility == KVisibility.PUBLIC &&
                 it.annotations.map { it.annotationClass }.intersect(ParameterType.parameterAnnotationClasses).isNotEmpty()
@@ -150,10 +153,6 @@ fun Any.listParameters(): List<Parameter> {
                     intRange = it.low..it.high
                     order = it.order
                 }
-                is ButtonParameter -> {
-                    label = it.label
-                    order = it.order
-                }
                 is TextParameter -> {
                     label = it.label
                     order = it.order
@@ -164,9 +163,34 @@ fun Any.listParameters(): List<Parameter> {
                 }
             }
         }
-        Parameter(type
-                ?: error("no type"), it as KMutableProperty1<out Any, Any?>, label, doubleRange, intRange, precision, order)
-    }.sortedBy { it.order }
+        Parameter(
+                parameterType = type ?: error("no type"),
+                property = it as KMutableProperty1<out Any, Any?>,
+                function = null,
+                label = label,
+                doubleRange = doubleRange,
+                intRange = intRange,
+                precision = precision,
+                order = order
+        )
+    } + this::class.declaredMemberFunctions.filter {
+        it.findAnnotation<ActionParameter>() != null
+    }.map {
+        val annotation = it.findAnnotation<ActionParameter>()!!
+        val label = annotation.label
+        val order = annotation.order
+        val type = ParameterType.Action
+        Parameter(
+                type,
+                property = null,
+                function = it as KCallable<Unit>,
+                label = label,
+                doubleRange = null,
+                intRange = null,
+                precision = null,
+                order = order
+        )
+    }).sortedBy { it.order }
 }
 
 fun Any.title() = this::class.findAnnotation<Description>()?.title
