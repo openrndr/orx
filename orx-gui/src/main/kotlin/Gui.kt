@@ -39,6 +39,10 @@ class GUI : Extension {
                 this.height = 100.percent
             }
 
+            styleSheet(has class_ "collapsed") {
+                this.display = Display.NONE
+            }
+
             styleSheet(has class_ "sidebar") {
                 this.width = 200.px
                 this.paddingBottom = 20.px
@@ -48,8 +52,21 @@ class GUI : Extension {
                 this.marginRight = 2.px
                 this.height = 100.percent
                 this.background = Color.RGBa(ColorRGBa.GRAY.copy(a = 0.2))
+                this.overflow = Overflow.Scroll
 
                 descendant(has type "colorpicker-button") {
+                    this.width = 175.px
+                }
+
+                descendant(has type "slider") {
+                    this.width = 175.px
+                }
+
+                descendant(has type "button") {
+                    this.width = 175.px
+                }
+
+                descendant(has type "textfield") {
                     this.width = 175.px
                 }
             }
@@ -72,10 +89,19 @@ class GUI : Extension {
                     div("sidebar") {
                         id = "sidebar"
                         for ((obj, parameters) in trackedParams) {
-                            h3 { obj.title() ?: "untitled" }
-
-                            for (parameter in parameters) {
-                                addControl(obj, parameter)
+                            val header = h3 { obj.title() ?: "untitled" }
+                            val collapsible = div {
+                                for (parameter in parameters) {
+                                    addControl(obj, parameter)
+                                }
+                            }
+                            header.mouse.pressed.subscribe {
+                                val c = ElementClass("collapsed")
+                                if (c in collapsible.classes) {
+                                    collapsible.classes.remove(c)
+                                } else {
+                                    collapsible.classes.add(c)
+                                }
                             }
                         }
                     }
