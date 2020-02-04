@@ -5,6 +5,7 @@ import org.openrndr.KEY_F11
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.parameters.*
+import org.openrndr.internal.Driver
 import org.openrndr.panel.ControlManager
 import org.openrndr.panel.controlManager
 import org.openrndr.panel.elements.*
@@ -12,6 +13,9 @@ import org.openrndr.panel.style.*
 import kotlin.reflect.KMutableProperty1
 
 private data class LabeledObject(val label: String, val obj: Any)
+private class CollapseState(var collapsed:Boolean = false)
+
+private val persistentCollapseStates = mutableMapOf<Long, MutableMap<String, CollapseState>>()
 
 @Suppress("unused", "UNCHECKED_CAST")
 class GUI : Extension {
@@ -90,7 +94,7 @@ class GUI : Extension {
                     id = "container"
                     div("sidebar") {
                         id = "sidebar"
-                        for (( labeledObject, parameters) in trackedParams) {
+                        for ((labeledObject, parameters) in trackedParams) {
                             val (label, obj) = labeledObject
 
                             val header = h3 { label }
@@ -99,12 +103,21 @@ class GUI : Extension {
                                     addControl(obj, parameter)
                                 }
                             }
+                            val collapseClass = ElementClass("collapsed")
+
+                            /* this is guaranteed to be in the dictionary after insertion through add() */
+                            val collapseState = persistentCollapseStates[Driver.instance.contextID]!![label]!!
+                            if (collapseState.collapsed) {
+                                collapsible.classes.add(collapseClass)
+                            }
+
                             header.mouse.pressed.subscribe {
-                                val c = ElementClass("collapsed")
-                                if (c in collapsible.classes) {
-                                    collapsible.classes.remove(c)
+                                if (collapseClass in collapsible.classes) {
+                                    collapseState.collapsed = false
+                                    collapsible.classes.remove(collapseClass)
                                 } else {
-                                    collapsible.classes.add(c)
+                                    collapseState.collapsed = true
+                                    collapsible.classes.add(collapseClass)
                                 }
                             }
                         }
@@ -198,6 +211,18 @@ class GUI : Extension {
     private val trackedParams = mutableMapOf<LabeledObject, List<Parameter>>()
 
     /**
+     * Recursively find a unique label
+     * @param label to find an alternate for in case it already exist
+     */
+    private fun resolveUniqueLabel(label: String) : String {
+        return trackedParams.keys.find { it.label == label }?.let { lo ->
+            resolveUniqueLabel(Regex("(.*) / ([0-9]+)").matchEntire(lo.label)?.let {
+                "${it.groupValues[1]} / ${1 + it.groupValues[2].toInt()}"
+            } ?: "$label / 2")
+        } ?: label
+    }
+
+    /**
      * Add an object to the GUI
      * @param objectWithParameters an object of a class that annotated parameters
      * @param label an optional label that overrides the label supplied in a [Description] annotation
@@ -205,8 +230,16 @@ class GUI : Extension {
      */
     fun <T : Any> add(objectWithParameters: T, label: String? = objectWithParameters.title()): T {
         val parameters = objectWithParameters.listParameters()
+        val uniqueLabel = resolveUniqueLabel(label ?: "No name")
+
         if (parameters.isNotEmpty()) {
-            trackedParams[LabeledObject(label ?: "No name", objectWithParameters)] = parameters
+            val collapseStates = persistentCollapseStates.getOrPut(Driver.instance.contextID) {
+                mutableMapOf()
+            }
+            collapseStates.getOrPut(uniqueLabel) {
+                CollapseState()
+            }
+            trackedParams[LabeledObject(uniqueLabel, objectWithParameters)] = parameters
         }
         return objectWithParameters
     }
