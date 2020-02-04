@@ -11,6 +11,8 @@ import org.openrndr.panel.elements.*
 import org.openrndr.panel.style.*
 import kotlin.reflect.KMutableProperty1
 
+private data class LabeledObject(val label: String, val obj: Any)
+
 @Suppress("unused", "UNCHECKED_CAST")
 class GUI : Extension {
     private var onChangeListener: ((name: String, value: Any?) -> Unit)? = null
@@ -88,8 +90,10 @@ class GUI : Extension {
                     id = "container"
                     div("sidebar") {
                         id = "sidebar"
-                        for ((obj, parameters) in trackedParams) {
-                            val header = h3 { obj.title() ?: "untitled" }
+                        for (( labeledObject, parameters) in trackedParams) {
+                            val (label, obj) = labeledObject
+
+                            val header = h3 { label }
                             val collapsible = div {
                                 for (parameter in parameters) {
                                     addControl(obj, parameter)
@@ -115,7 +119,7 @@ class GUI : Extension {
     }
 
     private fun Div.addControl(obj: Any, parameter: Parameter) {
-        when(parameter.parameterType) {
+        when (parameter.parameterType) {
             ParameterType.Int -> {
                 slider {
                     label = parameter.label
@@ -191,15 +195,29 @@ class GUI : Extension {
         }
     }
 
-    private val trackedParams = mutableMapOf<Any, List<Parameter>>()
+    private val trackedParams = mutableMapOf<LabeledObject, List<Parameter>>()
 
     /**
      * Add an object to the GUI
+     * @param objectWithParameters an object of a class that annotated parameters
+     * @param label an optional label that overrides the label supplied in a [Description] annotation
+     * @return pass-through of [objectWithParameters]
      */
-    fun add(objectWithParameters: Any) {
+    fun <T : Any> add(objectWithParameters: T, label: String? = objectWithParameters.title()): T {
         val parameters = objectWithParameters.listParameters()
         if (parameters.isNotEmpty()) {
-            trackedParams[objectWithParameters] = parameters
+            trackedParams[LabeledObject(label ?: "No name", objectWithParameters)] = parameters
         }
+        return objectWithParameters
+    }
+
+    /**
+     * Add an object to the GUI using a builder.
+     * @param label an optional label that overrides the label supplied in a [Description] annotation
+     * @return the built object
+     */
+    fun <T : Any> add(label: String? = null, builder: () -> T): T {
+        val t = builder()
+        return add(t, label ?: t.title())
     }
 }
