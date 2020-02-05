@@ -13,9 +13,24 @@ import org.openrndr.panel.style.*
 import kotlin.reflect.KMutableProperty1
 
 private data class LabeledObject(val label: String, val obj: Any)
-private class CollapseState(var collapsed:Boolean = false)
+private class CompartmentState(var collapsed: Boolean = false, val parameterValues: MutableMap<String, Any> = mutableMapOf())
 
-private val persistentCollapseStates = mutableMapOf<Long, MutableMap<String, CollapseState>>()
+private val persistentCompartmentStates = mutableMapOf<Long, MutableMap<String, CompartmentState>>()
+
+private fun <T : Any> getPersistedOrDefault(compartmentLabel: String, property: KMutableProperty1<Any, T>, obj: Any): T? {
+    val state = persistentCompartmentStates[Driver.instance.contextID]!![compartmentLabel]
+    if (state == null) {
+        return property.get(obj)
+    } else {
+        return state.parameterValues[property.name] as? T?
+    }
+}
+
+private fun <T : Any> setAndPersist(compartmentLabel: String, property: KMutableProperty1<Any, T>, obj: Any, value: T) {
+    property.set(obj, value)
+    val state = persistentCompartmentStates[Driver.instance.contextID]!![compartmentLabel]!!
+    state.parameterValues[property.name] = value
+}
 
 @Suppress("unused", "UNCHECKED_CAST")
 class GUI : Extension {
@@ -49,6 +64,10 @@ class GUI : Extension {
                 this.display = Display.NONE
             }
 
+            styleSheet(has class_ "compartment") {
+                this.paddingBottom = 20.px
+            }
+
             styleSheet(has class_ "sidebar") {
                 this.width = 200.px
                 this.paddingBottom = 20.px
@@ -57,7 +76,7 @@ class GUI : Extension {
                 this.paddingRight = 10.px
                 this.marginRight = 2.px
                 this.height = 100.percent
-                this.background = Color.RGBa(ColorRGBa.GRAY.copy(a = 0.2))
+                this.background = Color.RGBa(ColorRGBa.GRAY.copy(a = 0.99))
                 this.overflow = Overflow.Scroll
 
                 descendant(has type "colorpicker-button") {
@@ -98,15 +117,15 @@ class GUI : Extension {
                             val (label, obj) = labeledObject
 
                             val header = h3 { label }
-                            val collapsible = div {
+                            val collapsible = div("compartment") {
                                 for (parameter in parameters) {
-                                    addControl(obj, parameter)
+                                    addControl(labeledObject, parameter)
                                 }
                             }
                             val collapseClass = ElementClass("collapsed")
 
                             /* this is guaranteed to be in the dictionary after insertion through add() */
-                            val collapseState = persistentCollapseStates[Driver.instance.contextID]!![label]!!
+                            val collapseState = persistentCompartmentStates[Driver.instance.contextID]!![label]!!
                             if (collapseState.collapsed) {
                                 collapsible.classes.add(collapseClass)
                             }
@@ -131,17 +150,22 @@ class GUI : Extension {
         program.extend(panel)
     }
 
-    private fun Div.addControl(obj: Any, parameter: Parameter) {
+    private fun Div.addControl(compartment: LabeledObject, parameter: Parameter) {
+        val obj = compartment.obj
+
         when (parameter.parameterType) {
             ParameterType.Int -> {
                 slider {
                     label = parameter.label
                     range = Range(parameter.intRange!!.first.toDouble(), parameter.intRange!!.last.toDouble())
                     precision = 0
-                    value = (parameter.property as KMutableProperty1<Any, Int>).get(obj).toDouble()
                     events.valueChanged.subscribe {
+                        setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Int>, obj, it.newValue.toInt())
                         (parameter.property as KMutableProperty1<Any, Int>).set(obj, value.toInt())
                         onChangeListener?.invoke(parameter.property!!.name, it.newValue)
+                    }
+                    getPersistedOrDefault(compartment.label, parameter.property as KMutableProperty1<Any, Int>, obj)?.let {
+                        value = it.toDouble()
                     }
                 }
             }
@@ -150,10 +174,12 @@ class GUI : Extension {
                     label = parameter.label
                     range = Range(parameter.doubleRange!!.start, parameter.doubleRange!!.endInclusive)
                     precision = parameter.precision!!
-                    value = (parameter.property as KMutableProperty1<Any, Double>).get(obj)
                     events.valueChanged.subscribe {
-                        (parameter.property as KMutableProperty1<Any, Double>).set(obj, value)
+                        setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Double>, obj, it.newValue)
                         onChangeListener?.invoke(parameter.property!!.name, it.newValue)
+                    }
+                    getPersistedOrDefault(compartment.label, parameter.property as KMutableProperty1<Any, Double>, obj)?.let {
+                        value = it
                     }
                 }
             }
@@ -174,23 +200,24 @@ class GUI : Extension {
                     label = parameter.label
                     range = Range(0.0, 1.0)
                     precision = 0
-                    value = if ((parameter.property as KMutableProperty1<Any, Boolean>).get(obj)) 1.0 else 0.0
                     events.valueChanged.subscribe {
                         value = it.newValue
                         (parameter.property as KMutableProperty1<Any, Boolean>).set(obj, value > 0.5)
                         onChangeListener?.invoke(parameter.property!!.name, it.newValue)
                     }
+                    value = if ((parameter.property as KMutableProperty1<Any, Boolean>).get(obj)) 1.0 else 0.0
                 }
             }
 
             ParameterType.Text -> {
                 textfield {
                     label = parameter.label
-                    value = (parameter.property as KMutableProperty1<Any, String>).get(obj)
                     events.valueChanged.subscribe {
-                        value = it.newValue
-                        (parameter.property as KMutableProperty1<Any, String>).set(obj, value)
+                        setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, String>, obj, it.newValue)
                         onChangeListener?.invoke(parameter.property!!.name, it.newValue)
+                    }
+                    getPersistedOrDefault(compartment.label, parameter.property as KMutableProperty1<Any, String>, obj)?.let {
+                        value = it
                     }
                 }
             }
@@ -198,10 +225,12 @@ class GUI : Extension {
             ParameterType.Color -> {
                 colorpickerButton {
                     label = parameter.label
-                    color = (parameter.property as KMutableProperty1<Any, ColorRGBa>).get(obj)
                     events.valueChanged.subscribe {
-                        (parameter.property as KMutableProperty1<Any, ColorRGBa>).set(obj, it.color)
+                        setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, ColorRGBa>, obj, it.color)
                         onChangeListener?.invoke(parameter.property!!.name, it.color)
+                    }
+                    getPersistedOrDefault(compartment.label, parameter.property as KMutableProperty1<Any, ColorRGBa>, obj)?.let {
+                        color = it
                     }
                 }
             }
@@ -214,7 +243,7 @@ class GUI : Extension {
      * Recursively find a unique label
      * @param label to find an alternate for in case it already exist
      */
-    private fun resolveUniqueLabel(label: String) : String {
+    private fun resolveUniqueLabel(label: String): String {
         return trackedParams.keys.find { it.label == label }?.let { lo ->
             resolveUniqueLabel(Regex("(.*) / ([0-9]+)").matchEntire(lo.label)?.let {
                 "${it.groupValues[1]} / ${1 + it.groupValues[2].toInt()}"
@@ -233,11 +262,11 @@ class GUI : Extension {
         val uniqueLabel = resolveUniqueLabel(label ?: "No name")
 
         if (parameters.isNotEmpty()) {
-            val collapseStates = persistentCollapseStates.getOrPut(Driver.instance.contextID) {
+            val collapseStates = persistentCompartmentStates.getOrPut(Driver.instance.contextID) {
                 mutableMapOf()
             }
             collapseStates.getOrPut(uniqueLabel) {
-                CollapseState()
+                CompartmentState()
             }
             trackedParams[LabeledObject(uniqueLabel, objectWithParameters)] = parameters
         }
