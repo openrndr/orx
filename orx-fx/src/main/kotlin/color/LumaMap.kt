@@ -9,11 +9,8 @@ import org.openrndr.extra.parameters.ColorParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 
-@Description("Luma threshold ")
-class LumaThreshold : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("color/luma-threshold.frag"))) {
-    @DoubleParameter("threshold value", 0.0, 1.0)
-    var threshold: Double by parameters
-
+@Description("Luma map ")
+class LumaMap : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("color/luma-map.frag"))) {
     @ColorParameter("foreground color")
     var foreground: ColorRGBa by parameters
 
@@ -27,7 +24,6 @@ class LumaThreshold : Filter(Shader.createFromCode(Filter.filterVertexCode, filt
     var foregroundOpacity: Double by parameters
 
     init {
-        threshold = 0.5
         foreground = ColorRGBa.WHITE
         background = ColorRGBa.BLACK
         foregroundOpacity = 1.0

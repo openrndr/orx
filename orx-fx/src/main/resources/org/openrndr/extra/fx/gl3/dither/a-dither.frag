@@ -27,29 +27,25 @@ float mask4(int levels, float l, int x, int y, int c) {
     return floor(levels * l + mask)/levels;
 }
 
-
-
-
-
 out vec4 o_color;
 void main() {
     vec4 c = texture(tex0, v_texCoord0);
-
+    if (c.a > 0.0) {
+        c.rgb/=c.a;
+    }
     ivec2 ic = ivec2(v_texCoord0 * textureSize(tex0, 0));
 
-    vec3 rgb = vec3(1.0, 0.0, 1.0);
+    vec4 rgba = vec4(0.0);
     if (pattern == 0) {
-        rgb = vec3(mask1(levels, c.r, ic.x, ic.y, 0), mask1(levels, c.g, ic.x, ic.y, 1), mask1(levels, c.b, ic.x, ic.y, 2));
+        rgba = vec4(mask1(levels, c.r, ic.x, ic.y, 0), mask1(levels, c.g, ic.x, ic.y, 1), mask1(levels, c.b, ic.x, ic.y, 2), mask1(levels, c.a, ic.x, ic.y, 3));
     } else if (pattern == 1) {
-        rgb = vec3(mask2(levels, c.r, ic.x, ic.y, 0), mask2(levels, c.g, ic.x, ic.y, 1), mask2(levels, c.b, ic.x, ic.y, 2));
+        rgba = vec4(mask2(levels, c.r, ic.x, ic.y, 0), mask2(levels, c.g, ic.x, ic.y, 1), mask2(levels, c.b, ic.x, ic.y, 2), mask2(levels, c.a, ic.x, ic.y, 3));
     } else if (pattern == 2) {
-      rgb = vec3(mask3(levels, c.r, ic.x, ic.y, 0), mask3(levels, c.g, ic.x, ic.y, 1), mask3(levels, c.b, ic.x, ic.y, 2));
+        rgba = vec4(mask3(levels, c.r, ic.x, ic.y, 0), mask3(levels, c.g, ic.x, ic.y, 1), mask3(levels, c.b, ic.x, ic.y, 2), mask3(levels, c.a, ic.x, ic.y, 3));
     } else {
-      rgb = vec3(mask4(levels, c.r, ic.x, ic.y, 0), mask4(levels, c.g, ic.x, ic.y, 1), mask4(levels, c.b, ic.x, ic.y, 2));
+        rgba = vec4(mask4(levels, c.r, ic.x, ic.y, 0), mask4(levels, c.g, ic.x, ic.y, 1), mask4(levels, c.b, ic.x, ic.y, 2), mask4(levels, c.a, ic.x, ic.y, 3));
     }
 
-
-
-    o_color.rgb = rgb;
-    o_color.a = 1.0;
+    rgba.rgb *= rgba.a;
+    o_color = rgba;
 }
