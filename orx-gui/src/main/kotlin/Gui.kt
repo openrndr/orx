@@ -18,14 +18,35 @@ import org.openrndr.panel.style.*
 import java.io.File
 import kotlin.reflect.KMutableProperty1
 
+/** Dear contributor, just in case you are here looking to add a new parameter type.
+There is a 6-step incantation to add a new parameter type
+0) Add your parameter type to orx-parameters, follow the instructions provided there.
+
+1) Setup a control style, very likely analogous to the styles already in place.
+2) Add control creation code.
+3) Add value serialization code, may need to update ParameterValue too.
+4) Add value deserialization code.
+5) Add value randomization code.
+6) Add control update code.
+
+You can use your editor's search functionality to jump to "1)", "2)".
+ */
 private data class LabeledObject(val label: String, val obj: Any)
+
 private class CompartmentState(var collapsed: Boolean = false, val parameterValues: MutableMap<String, Any> = mutableMapOf())
+private class SidebarState(var hidden: Boolean = false, var collapsed: Boolean = false, var scrollTop: Double = 0.0)
 private class TrackedObjectBinding(
         val parameters: List<Parameter>,
         val parameterControls: MutableMap<Parameter, Element> = mutableMapOf()
 )
 
 private val persistentCompartmentStates = mutableMapOf<Long, MutableMap<String, CompartmentState>>()
+private val persistentSidebarStates = mutableMapOf<Long, SidebarState>()
+
+private fun sidebarState(): SidebarState = persistentSidebarStates.getOrPut(Driver.instance.contextID) {
+    SidebarState()
+}
+
 
 private fun <T : Any> getPersistedOrDefault(compartmentLabel: String, property: KMutableProperty1<Any, T>, obj: Any): T? {
     val state = persistentCompartmentStates[Driver.instance.contextID]!![compartmentLabel]
@@ -60,6 +81,7 @@ class GUI : Extension {
             if (it.key == KEY_F11) {
                 enabled = !enabled
                 panel.enabled = enabled
+                sidebarState().hidden = !enabled
             }
         }
 
@@ -98,6 +120,7 @@ class GUI : Extension {
                 this.background = Color.RGBa(ColorRGBa.GRAY.copy(a = 0.99))
                 this.overflow = Overflow.Scroll
 
+                /* 1) setup control style */
                 descendant(has type "colorpicker-button") {
                     this.width = 175.px
                 }
@@ -123,7 +146,7 @@ class GUI : Extension {
             layout {
                 div("container") {
                     id = "container"
-                    div("toolbar") {
+                    val header = div("toolbar") {
                         button {
                             label = "Randomize"
                             clicked {
@@ -148,8 +171,9 @@ class GUI : Extension {
                         }
                     }
 
-                    div("sidebar") {
+                    val sidebar = div("sidebar") {
                         id = "sidebar"
+                        scrollTop = sidebarState().scrollTop
                         for ((labeledObject, binding) in trackedObjects) {
                             val (label, _) = labeledObject
 
@@ -169,21 +193,52 @@ class GUI : Extension {
                             }
 
                             header.mouse.pressed.subscribe {
+                                it.cancelPropagation()
+                            }
+                            header.mouse.clicked.subscribe {
                                 if (collapseClass in collapsible.classes) {
-                                    collapseState.collapsed = false
                                     collapsible.classes.remove(collapseClass)
+                                    collapseState.collapsed = false
                                 } else {
-                                    collapseState.collapsed = true
                                     collapsible.classes.add(collapseClass)
+                                    collapseState.collapsed = true
                                 }
                             }
                         }
                     }
+                    header.mouse.pressed.subscribe {
+                        it.cancelPropagation()
+                    }
+
+                    header.mouse.clicked.subscribe {
+                        val collapsed = ElementClass("collapsed")
+                        if (collapsed in sidebar.classes) {
+                            sidebar.classes.remove(collapsed)
+                            sidebarState().collapsed = false
+                        } else {
+                            sidebar.classes.add(collapsed)
+                            sidebarState().collapsed = true
+                        }
+                        it.cancelPropagation()
+                    }
+                    sidebar.mouse.scrolled.subscribe {
+                        sidebarState().scrollTop = sidebar.scrollTop
+                    }
+                    if (sidebarState().collapsed) {
+                        sidebar.classes.add(ElementClass("collapsed"))
+                    }
+                    sidebar.scrollTop = sidebarState().scrollTop
                 }
             }
         }
 
-        panel.enabled = enabled
+        if (sidebarState().hidden) {
+            enabled = false
+            panel.enabled = false
+        } else {
+            enabled = true
+            panel.enabled = true
+        }
 
         program.extend(panel)
     }
@@ -192,6 +247,8 @@ class GUI : Extension {
         val obj = compartment.obj
 
         return when (parameter.parameterType) {
+
+            /* 2) control creation. create control, set label, set range, setup event-handler, load values */
             ParameterType.Int -> {
                 slider {
                     label = parameter.label
@@ -221,7 +278,6 @@ class GUI : Extension {
                     }
                 }
             }
-
             ParameterType.Action -> {
                 button {
                     label = parameter.label
@@ -232,7 +288,6 @@ class GUI : Extension {
                     }
                 }
             }
-
             ParameterType.Boolean -> {
                 slider {
                     label = parameter.label
@@ -246,7 +301,6 @@ class GUI : Extension {
                     value = if ((parameter.property as KMutableProperty1<Any, Boolean>).get(obj)) 1.0 else 0.0
                 }
             }
-
             ParameterType.Text -> {
                 textfield {
                     label = parameter.label
@@ -259,7 +313,6 @@ class GUI : Extension {
                     }
                 }
             }
-
             ParameterType.Color -> {
                 colorpickerButton {
                     label = parameter.label
@@ -310,6 +363,7 @@ class GUI : Extension {
                 trackedObjects.entries.associate { (lo, b) ->
                     Pair(lo.label, b.parameterControls.keys.associate { k ->
                         Pair(k.property?.name ?: k.function?.name ?: error("no name"), when (k.parameterType) {
+                            /* 3) setup serializers */
                             ParameterType.Double -> ParameterValue(doubleValue = k.property.qget(lo.obj) as Double)
                             ParameterType.Int -> ParameterValue(intValue = k.property.qget(lo.obj) as Int)
                             ParameterType.Action -> ParameterValue()
@@ -337,6 +391,7 @@ class GUI : Extension {
                 ps.forEach { (parameterName, parameterValue) ->
                     binding.parameters.find { it.property?.name == parameterName }?.let { parameter ->
                         when (parameter.parameterType) {
+                            /* 4) Set up deserializers */
                             ParameterType.Double -> parameterValue.doubleValue?.let {
                                 parameter.property.qset(lo.obj, it)
                             }
@@ -365,6 +420,7 @@ class GUI : Extension {
 
     private fun updateControl(labeledObject: LabeledObject, parameter: Parameter, control: Element) {
         when (parameter.parameterType) {
+            /* 5) Update control from property value */
             ParameterType.Double -> {
                 (control as Slider).value = (parameter.property as KMutableProperty1<Any, Double>).get(labeledObject.obj)
             }
@@ -391,6 +447,7 @@ class GUI : Extension {
             // -- only randomize visible parameters
             for (parameter in binding.parameterControls.keys) {
                 when (parameter.parameterType) {
+                    /* 6) Set up value randomizers */
                     ParameterType.Double -> {
                         val min = parameter.doubleRange!!.start
                         val max = parameter.doubleRange!!.endInclusive
