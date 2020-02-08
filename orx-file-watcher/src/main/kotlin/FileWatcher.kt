@@ -1,6 +1,10 @@
 package org.operndr.extras.filewatcher
 
 import com.sun.nio.file.SensitivityWatchEventModifier
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.openrndr.Program
 import org.openrndr.launch
 import java.io.File
@@ -101,6 +105,7 @@ fun <T> Program.watchFile(file: File, transducer: (File) -> T): () -> T = watchF
 private val watching = mutableMapOf<Path, MutableList<FileWatcher>>()
 private val pathKeys = mutableMapOf<Path, WatchKey>()
 private val keyPaths = mutableMapOf<WatchKey, Path>()
+private val waiting = mutableMapOf<Path, Job>()
 
 private val watchService by lazy {
     FileSystems.getDefault().newWatchService()
@@ -114,8 +119,16 @@ private val watchThread by lazy {
             key.pollEvents().forEach {
                 val contextPath = it.context() as Path
                 val fullPath = path?.resolve(contextPath)
-                watching[fullPath]?.forEach { w ->
-                    w.triggerChange()
+
+                fullPath?.let {
+                    waiting[fullPath]?.cancel()
+
+                    waiting[fullPath] = GlobalScope.launch {
+                        delay(100)
+                        watching[fullPath]?.forEach { w ->
+                            w.triggerChange()
+                        }
+                    }
                 }
             }
             key.reset()
