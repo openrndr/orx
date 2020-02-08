@@ -32,7 +32,8 @@ private fun <T : Any> getPersistedOrDefault(compartmentLabel: String, property: 
     if (state == null) {
         return property.get(obj)
     } else {
-        return state.parameterValues[property.name] as? T?
+        @Suppress("UNCHECKED_CAST")
+        return (state.parameterValues[property.name] as? T?) ?: return property.get(obj)
     }
 }
 
@@ -71,7 +72,7 @@ class GUI : Extension {
             }
 
             styleSheet(has class_ "toolbar") {
-                this.height = 30.px
+                this.height = 50.px
                 this.width = 100.percent
                 this.display = Display.FLEX
                 this.flexDirection = FlexDirection.Row
@@ -150,7 +151,7 @@ class GUI : Extension {
                     div("sidebar") {
                         id = "sidebar"
                         for ((labeledObject, binding) in trackedObjects) {
-                            val (label, obj) = labeledObject
+                            val (label, _) = labeledObject
 
                             val header = h3 { label }
                             val collapsible = div("compartment") {
@@ -322,18 +323,19 @@ class GUI : Extension {
     }
 
     private fun loadParameters(file: File) {
-        fun <T> KMutableProperty1<out Any, Any?>?.qset(obj: Any, value:T) {
+        fun <T> KMutableProperty1<out Any, Any?>?.qset(obj: Any, value: T) {
             return (this as KMutableProperty1<Any, T>).set(obj, value)
         }
+
         val json = file.readText()
         val tt = object : TypeToken<Map<String, Map<String, ParameterValue>>>() {}
         val labeledValues: Map<String, Map<String, ParameterValue>> = Gson().fromJson(json, tt.type)
 
-        labeledValues.forEach { label, ps ->
+        labeledValues.forEach { (label, ps) ->
             trackedObjects.keys.find { it.label == label }?.let { lo ->
                 val binding = trackedObjects[lo]!!
                 ps.forEach { (parameterName, parameterValue) ->
-                    binding.parameters.find { it.property?.name == parameterName}?.let { parameter ->
+                    binding.parameters.find { it.property?.name == parameterName }?.let { parameter ->
                         when (parameter.parameterType) {
                             ParameterType.Double -> parameterValue.doubleValue?.let {
                                 parameter.property.qset(lo.obj, it)
@@ -407,7 +409,7 @@ class GUI : Extension {
                         (parameter.property as KMutableProperty1<Any, ColorRGBa>).set(labeledObject.obj, c)
                     }
                     else -> {
-                        // do nothing
+                        // intentionally do nothing
                     }
                 }
             }
