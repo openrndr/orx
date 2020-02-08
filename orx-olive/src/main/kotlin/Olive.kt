@@ -98,7 +98,7 @@ class Olive<P : Program>(val resources: Resources? = null) : Extension {
                 try {
                     val futureFunc = GlobalScope.async {
                         val start = System.currentTimeMillis()
-                        val f = loadFromScript<P.() -> Unit>(it)
+                        val f = loadFromScriptKSH<P.() -> Unit>(it)
                         val end = System.currentTimeMillis()
                         logger.info { "loading script took ${end - start}ms" }
                         f
