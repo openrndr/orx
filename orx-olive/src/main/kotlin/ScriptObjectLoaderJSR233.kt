@@ -1,5 +1,6 @@
 package org.openrndr.extra.olive
 
+import mu.KotlinLogging
 import java.io.File
 import java.io.InputStream
 import java.io.Reader
@@ -7,10 +8,18 @@ import java.net.MalformedURLException
 import java.net.URL
 import javax.script.ScriptEngineManager
 
+private val logger = KotlinLogging.logger {}
+
 class LoadException(message: String? = null, cause: Throwable? = null) : RuntimeException(message, cause)
 
 class ScriptObjectLoader(classLoader: ClassLoader? = Thread.currentThread().contextClassLoader) {
-    val engine = ScriptEngineManager(classLoader).getEngineByExtension("kts")
+    val engine = run {
+        val start = System.currentTimeMillis()
+        val engine = ScriptEngineManager(classLoader).getEngineByExtension("kts")
+        val end = System.currentTimeMillis()
+        logger.info { "creating scripting engine took ${end-start}ms" }
+        engine
+    }
 
     init {
         require(engine != null) { "could not create scripting engine" }
@@ -33,6 +42,7 @@ class ScriptObjectLoader(classLoader: ClassLoader? = Thread.currentThread().cont
 
     inline fun <reified T> loadAll(vararg inputStream: InputStream): List<T> = inputStream.map(::load)
 }
+
 
 /**
  * Load an object from script.

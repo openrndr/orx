@@ -1,13 +1,20 @@
 package org.openrndr.extra.olive
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import mu.KotlinLogging
 import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.draw.Session
 import org.openrndr.events.Event
+import org.openrndr.launch
 import org.operndr.extras.filewatcher.stop
 import org.operndr.extras.filewatcher.triggerChange
 import org.operndr.extras.filewatcher.watchFile
 import java.io.File
+
+private val logger = KotlinLogging.logger {}
+
 
 private fun <T> Event<T>.saveListeners(store: MutableMap<Event<*>, List<(Any) -> Unit>>) {
     @Suppress("UNCHECKED_CAST")
@@ -89,17 +96,30 @@ class Olive<P : Program>(val resources: Resources? = null) : Extension {
 
             watcher = program.watchFile(File(script)) {
                 try {
-                    val func = loadFromScript<P.()->Unit>(it)
+                    val futureFunc = GlobalScope.async {
+                        val start = System.currentTimeMillis()
+                        val f = loadFromScript<P.() -> Unit>(it)
+                        val end = System.currentTimeMillis()
+                        logger.info { "loading script took ${end - start}ms" }
+                        f
+                    }
 
-                    program.extensions.clear()
-                    program.extensions.addAll(originalExtensions)
+                    program.launch {
+                        val func =  futureFunc.await()
+                        program.extensions.clear()
+                        program.extensions.addAll(originalExtensions)
 
-                    trackedListeners.forEach { l -> l.restoreListeners(store) }
-                    session?.end()
-                    session = Session.root.fork()
+                        trackedListeners.forEach { l -> l.restoreListeners(store) }
+                        session?.end()
+                        session = Session.root.fork()
 
-                    @Suppress("UNCHECKED_CAST")
-                    func(program as P)
+                        @Suppress("UNCHECKED_CAST")
+                        func(program as P)
+
+                        Unit
+                    }
+                    Unit
+
                 } catch (e: Throwable) {
                     e.printStackTrace()
                 }
