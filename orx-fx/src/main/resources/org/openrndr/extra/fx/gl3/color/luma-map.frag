@@ -6,7 +6,6 @@ uniform vec4 foreground;
 uniform vec4 background;
 uniform float foregroundOpacity;
 uniform float backgroundOpacity;
-uniform float threshold;
 
 out vec4 o_color;
 void main() {
@@ -14,5 +13,5 @@ void main() {
     vec4 fgc = foreground * foregroundOpacity;
     vec4 bgc = background * backgroundOpacity;
     float luma = dot( (c.a> 0.0? c.rgb/c.a : vec3(0.0)), vec3(1.0/3.0));
-    o_color = mix(bgc, fgc, step(threshold, luma )) * c.a;
+    o_color = mix(bgc, fgc, luma) * c.a;
 }

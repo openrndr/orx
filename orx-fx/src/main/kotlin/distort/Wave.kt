@@ -1,7 +1,6 @@
 package org.openrndr.extra.fx.distort
 
-import org.openrndr.draw.Filter
-import org.openrndr.draw.Shader
+import org.openrndr.draw.*
 import org.openrndr.extra.fx.filterFragmentCode
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
@@ -22,6 +21,15 @@ class HorizontalWave : Filter(Shader.createFromCode(filterVertexCode, filterFrag
         amplitude = 0.1
         phase = 0.0
     }
+
+    var bicubicFiltering = true
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+        if (bicubicFiltering && source.isNotEmpty()) {
+            source[0].generateMipmaps()
+            source[0].filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
+        }
+        super.apply(source, target)
+    }
 }
 
 @Description("Vertical wave")
@@ -39,6 +47,14 @@ class VerticalWave : Filter(Shader.createFromCode(filterVertexCode, filterFragme
         frequency = 1.0
         amplitude = 0.1
         phase = 0.0
+    }
+    var bicubicFiltering = true
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+        if (bicubicFiltering && source.isNotEmpty()) {
+            source[0].generateMipmaps()
+            source[0].filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
+        }
+        super.apply(source, target)
     }
 
 }

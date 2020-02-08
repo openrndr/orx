@@ -6,7 +6,7 @@ import org.openrndr.extra.fx.filterFragmentCode
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 
-@Description("Horizontal wave")
+@Description("Block repeat")
 class BlockRepeat : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("distort/block-repeat.frag"))) {
     @DoubleParameter("block width", 0.0, 1.0, order = 0)
     var blockWidth: Double by parameters
