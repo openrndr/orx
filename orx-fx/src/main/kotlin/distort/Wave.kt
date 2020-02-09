@@ -4,6 +4,7 @@ import org.openrndr.draw.*
 import org.openrndr.extra.fx.filterFragmentCode
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
+import org.openrndr.extra.parameters.IntParameter
 
 @Description("Horizontal wave")
 class HorizontalWave : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("distort/horizontal-wave.frag"))) {
@@ -16,10 +17,15 @@ class HorizontalWave : Filter(Shader.createFromCode(filterVertexCode, filterFrag
     @DoubleParameter("phase", -0.5, 0.5)
     var phase: Double by parameters
 
+    @IntParameter("segments", 0, 256)
+    var segments: Int by parameters
+
+
     init {
         frequency = 1.0
         amplitude = 0.1
         phase = 0.0
+        segments = 0
     }
 
     var bicubicFiltering = true
@@ -43,10 +49,15 @@ class VerticalWave : Filter(Shader.createFromCode(filterVertexCode, filterFragme
     @DoubleParameter("phase", -0.5, 0.5)
     var phase: Double by parameters
 
+    @IntParameter("segments", 0, 256)
+    var segments: Int by parameters
+
+
     init {
         frequency = 1.0
         amplitude = 0.1
         phase = 0.0
+        segments = 0
     }
     var bicubicFiltering = true
     override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
