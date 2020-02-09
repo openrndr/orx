@@ -9,6 +9,6 @@ void main() {
     vec4 a = texture(tex0, v_texCoord0);
     vec4 b = texture(tex1, v_texCoord0);
 
-    o_color.rgb = b.rgb;
-    o_color.a = max(b.a - a.a, 0.0);
+    vec3 nb = b.a == 0.0 ? vec3(0.0): b.rgb / b.a;
+    o_color = vec4(nb, 1.0) * max(b.a - a.a, 0.0);
 }

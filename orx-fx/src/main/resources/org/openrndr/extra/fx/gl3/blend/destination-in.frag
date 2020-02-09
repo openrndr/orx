@@ -10,6 +10,6 @@ void main() {
     vec4 a = texture(tex0, v_texCoord0);
     vec4 b = texture(tex1, v_texCoord0);
 
-    o_color.rgb = a.rgb;
-    o_color.a = b.a;
+    vec3 na = a.a == 0.0 ? vec3(0.0): a.rgb / a.a;
+    o_color = vec4(na, 1.0) * b.a * a.a;
 }

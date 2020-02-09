@@ -11,5 +11,5 @@ void main() {
     float alpha = min(1,max(0, b.a));
 
     o_color = a * (1.0-alpha) + b;
-    o_color.a = 1.0;
+    o_color.a = clamp(o_color.a, 0.0, 1.0);
 }
