@@ -70,7 +70,7 @@ All distortion effects are opacity preserving
  
 ### Dither
  - `ADither` - a selection of dithering effects
- - `CMYKHalftone - a configurable CMYK halftoning effect
+ - `CMYKHalftone` - a configurable CMYK halftoning effect
  
  ### Edges
   - `LumaSobel` - A Sobel-kernel based luminosity edge detector
