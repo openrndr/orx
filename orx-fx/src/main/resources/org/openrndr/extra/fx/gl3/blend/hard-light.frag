@@ -3,7 +3,7 @@
 in vec2 v_texCoord0;
 uniform sampler2D tex0;
 uniform sampler2D tex1;
-
+uniform bool clip;
 out vec4 o_color;
 void main() {
     vec4 a = texture(tex0, v_texCoord0);
@@ -17,6 +17,10 @@ void main() {
         nb.g <= 0.5? 2*na.g * nb.g : 1.0 - 2.0*(1.0 - na.g)*(1.0 - nb.g),
         nb.b <= 0.5? 2*na.b * nb.b : 1.0 - 2.0*(1.0 - na.b)*(1.0 - nb.b)
         );
-    o_color = vec4(na * (1.0 - b.a) + b.a * m, 1.0) * a.a;
 
+    if (clip) {
+        o_color = vec4(na * (1.0 - b.a) + b.a * m, 1.0) * a.a;
+    } else {
+        o_color = (1.0-a.a) * b + a.a * b.a * vec4(m, 1.0) + (1.0-b.a) * a;
+    }
 }

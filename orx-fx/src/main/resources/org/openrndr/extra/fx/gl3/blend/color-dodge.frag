@@ -3,6 +3,7 @@
 in vec2 v_texCoord0;
 uniform sampler2D tex0;
 uniform sampler2D tex1;
+uniform bool clip;
 
 float dodge(float base, float blend) {
 	return (blend==1.0)?blend:min(base/(1.0-blend),1.0);
@@ -22,5 +23,9 @@ void main() {
         dodge(na.b, nb.b)
         );
 
-    o_color = vec4(na * (1.0 - b.a) + b.a * m, 1.0) * a.a;
+    if (clip) {
+        o_color = vec4(na * (1.0 - b.a) + b.a * m, 1.0) * a.a;
+    } else {
+        o_color = (1.0-a.a) * b + a.a * b.a * vec4(m, 1.0) + (1.0-b.a) * a;
+    }
 }

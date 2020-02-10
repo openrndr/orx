@@ -3,10 +3,12 @@
 in vec2 v_texCoord0;
 uniform sampler2D tex0;
 uniform sampler2D tex1;
+uniform bool clip;
 
 float blendColorBurn(float base, float blend) {
 	return (blend==0.0) ? blend : max((1.0 - ((1.0 - base) / blend)), 0.0);
 }
+
 
 out vec4 o_color;
 void main() {
@@ -22,5 +24,9 @@ void main() {
         blendColorBurn(na.b, nb.b)
         );
 
-    o_color = vec4(na * (1.0 - b.a) + b.a * m, 1.0) * a.a;
+    if (clip) {
+        o_color = vec4(na * (1.0 - b.a) + b.a * m, 1.0) * a.a;
+    } else {
+        o_color = (1.0-a.a) * b + a.a * b.a * vec4(m, 1.0) + (1.0-b.a) * a;
+    }
 }
