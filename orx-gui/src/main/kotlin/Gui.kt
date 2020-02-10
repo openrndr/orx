@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.openrndr.Extension
 import org.openrndr.KEY_F11
+import org.openrndr.KeyModifier
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.dialogs.openFileDialog
@@ -33,7 +34,7 @@ You can use your editor's search functionality to jump to "1)", "2)".
  */
 private data class LabeledObject(val label: String, val obj: Any)
 
-private class CompartmentState(var collapsed: Boolean = false, val parameterValues: MutableMap<String, Any> = mutableMapOf())
+private class CompartmentState(var collapsed: Boolean = true, val parameterValues: MutableMap<String, Any> = mutableMapOf())
 private class SidebarState(var hidden: Boolean = false, var collapsed: Boolean = false, var scrollTop: Double = 0.0)
 private class TrackedObjectBinding(
         val parameters: List<Parameter>,
@@ -171,6 +172,7 @@ class GUI : Extension {
                         }
                     }
 
+                    val collapsibles = mutableSetOf<Div>()
                     val sidebar = div("sidebar") {
                         id = "sidebar"
                         scrollTop = sidebarState().scrollTop
@@ -184,6 +186,7 @@ class GUI : Extension {
                                     binding.parameterControls[parameter] = element
                                 }
                             }
+                            collapsibles.add(collapsible)
                             val collapseClass = ElementClass("collapsed")
 
                             /* this is guaranteed to be in the dictionary after insertion through add() */
@@ -196,12 +199,26 @@ class GUI : Extension {
                                 it.cancelPropagation()
                             }
                             header.mouse.clicked.subscribe {
-                                if (collapseClass in collapsible.classes) {
+
+                                if (KeyModifier.CTRL in it.modifiers) {
                                     collapsible.classes.remove(collapseClass)
+                                    persistentCompartmentStates[Driver.instance.contextID]!!.forEach {
+                                        it.value.collapsed = true
+                                    }
                                     collapseState.collapsed = false
+
+                                    (collapsibles - collapsible).forEach {
+                                        it.classes.add(collapseClass)
+                                    }
                                 } else {
-                                    collapsible.classes.add(collapseClass)
-                                    collapseState.collapsed = true
+
+                                    if (collapseClass in collapsible.classes) {
+                                        collapsible.classes.remove(collapseClass)
+                                        collapseState.collapsed = false
+                                    } else {
+                                        collapsible.classes.add(collapseClass)
+                                        collapseState.collapsed = true
+                                    }
                                 }
                             }
                         }
