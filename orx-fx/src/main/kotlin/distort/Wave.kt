@@ -8,16 +8,16 @@ import org.openrndr.extra.parameters.IntParameter
 
 @Description("Horizontal wave")
 class HorizontalWave : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("distort/horizontal-wave.frag"))) {
-    @DoubleParameter("frequency", 0.0, 64.0)
+    @DoubleParameter("frequency", 0.0, 64.0, order = 1)
     var frequency: Double by parameters
 
-    @DoubleParameter("amplitude", 0.0, 1.0)
+    @DoubleParameter("amplitude", 0.0, 1.0, order = 0)
     var amplitude: Double by parameters
 
-    @DoubleParameter("phase", -0.5, 0.5)
+    @DoubleParameter("phase", -0.5, 0.5, order = 2)
     var phase: Double by parameters
 
-    @IntParameter("segments", 0, 256)
+    @IntParameter("segments", 0, 256, order = 3)
     var segments: Int by parameters
 
 
@@ -40,16 +40,16 @@ class HorizontalWave : Filter(Shader.createFromCode(filterVertexCode, filterFrag
 
 @Description("Vertical wave")
 class VerticalWave : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("distort/vertical-wave.frag"))) {
-    @DoubleParameter("frequency", 0.0, 64.0)
+    @DoubleParameter("frequency", 0.0, 64.0, order = 1)
     var frequency: Double by parameters
 
-    @DoubleParameter("amplitude", 0.0, 1.0)
+    @DoubleParameter("amplitude", 0.0, 1.0, order = 0)
     var amplitude: Double by parameters
 
-    @DoubleParameter("phase", -0.5, 0.5)
+    @DoubleParameter("phase", -0.5, 0.5, order = 2)
     var phase: Double by parameters
 
-    @IntParameter("segments", 0, 256)
+    @IntParameter("segments", 0, 256, order = 3)
     var segments: Int by parameters
 
 
