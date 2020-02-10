@@ -1,13 +1,13 @@
-# orx-object-fit
+# orx-image-fit
 
 Fits images in frames with two options, contain and cover. Similar to CSS object-fit (https://www.w3schools.com/css/css3_object-fit.asp)
 
 ## usage
 
-`objectFit(img: ColorBuffer, x: Double, y: Double, w: Double, h: Double, fitMethod, horizontalPosition:Double, verticalPosition:Double)`
+`imageFit(img: ColorBuffer, x: Double, y: Double, w: Double, h: Double, fitMethod, horizontalPosition:Double, verticalPosition:Double)`
 
 
-objectFitType
+fitMethod
  - `contain`
  - `cover`
  

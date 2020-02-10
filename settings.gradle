@@ -29,4 +29,4 @@ include 'orx-camera',
         'orx-kinect-v1-natives-macos',
         'orx-kinect-v1-natives-windows',
         'orx-kinect-v1-demo',
-        'orx-object-fit'
+        'orx-image-fit'
