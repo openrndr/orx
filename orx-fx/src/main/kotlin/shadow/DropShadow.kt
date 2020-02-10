@@ -2,16 +2,18 @@ package org.openrndr.extra.fx.shadow
 
 
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.*
+import org.openrndr.draw.ColorBuffer
+import org.openrndr.draw.Filter
+import org.openrndr.draw.Shader
+import org.openrndr.draw.colorBuffer
 import org.openrndr.extra.fx.filterFragmentCode
 import org.openrndr.extra.parameters.ColorParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
 import org.openrndr.math.Vector2
-import org.openrndr.resourceUrl
 
-private class Blend: Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("shadow/dropshadow-blend.frag"))) {
+private class Blend : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("shadow/dropshadow-blend.frag"))) {
     var shift: Vector2 by parameters
 }
 
@@ -24,7 +26,12 @@ class DropShadow : Filter(Shader.createFromCode(filterVertexCode, filterFragment
     @DoubleParameter("gain", 0.0, 4.0)
     var gain: Double by parameters
 
-    var shift: Vector2 = Vector2.ZERO
+    @DoubleParameter("x shift", -1.0, 1.0)
+    var xShift: Double = 0.0
+
+    @DoubleParameter("y shift", -1.0, 1.0)
+    var yShift: Double = 0.0
+
     @ColorParameter("color")
     var color: ColorRGBa by parameters
 
@@ -64,7 +71,7 @@ class DropShadow : Filter(Shader.createFromCode(filterVertexCode, filterFragment
             parameters["blurDirection"] = Vector2(0.0, 1.0)
             super.apply(arrayOf(it), arrayOf(intermediate2!!))
 
-            b.shift = shift / Vector2(target[0].width * 1.0, target[0].height * 1.0)
+            b.shift = (Vector2(xShift,yShift)) / Vector2(target[0].width * 1.0, target[0].height * 1.0)
             b.apply(arrayOf(intermediate2!!, source[0]), target)
         }
     }
