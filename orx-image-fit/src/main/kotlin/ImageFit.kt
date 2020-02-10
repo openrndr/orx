@@ -11,7 +11,16 @@ enum class FitMethod {
     Contain
 }
 
-fun Drawer.imageFit(img: ColorBuffer, x: Double = 0.0, y: Double = 0.0, w: Double, h: Double, fitMethod:FitMethod = FitMethod.Cover, horizontalPosition:Double = 0.0, verticalPosition:Double = 0.0) {
+fun Drawer.imageFit(
+        img: ColorBuffer,
+        x: Double = 0.0,
+        y: Double = 0.0,
+        width: Double = img.width.toDouble(),
+        height: Double = img.height.toDouble(),
+        fitMethod: FitMethod = FitMethod.Cover,
+        horizontalPosition: Double = 0.0,
+        verticalPosition: Double = 0.0
+) {
     val sourceWidth = img.width.toDouble()
     val sourceHeight = img.height.toDouble()
 
@@ -26,23 +35,23 @@ fun Drawer.imageFit(img: ColorBuffer, x: Double = 0.0, y: Double = 0.0, w: Doubl
 
     when (fitMethod) {
         FitMethod.Contain -> {
-            targetWidth = w
-            targetHeight = h
+            targetWidth = width
+            targetHeight = height
 
-            if (w <= targetWidth) {
-                targetWidth = w
-                targetHeight = (sourceHeight / sourceWidth) * w
+            if (width <= targetWidth) {
+                targetWidth = width
+                targetHeight = (sourceHeight / sourceWidth) * width
             }
 
-            if (h <= targetHeight) {
-                targetHeight = h
-                targetWidth = (sourceWidth / sourceHeight) * h
+            if (height <= targetHeight) {
+                targetHeight = height
+                targetWidth = (sourceWidth / sourceHeight) * height
             }
 
             val left = x
-            val right = x + w - targetWidth
+            val right = x + width - targetWidth
             val top = y
-            val bottom = y + h - targetHeight
+            val bottom = y + height - targetHeight
 
             targetX = map(-1.0, 1.0, left, right, horizontalPosition)
             targetY = map(-1.0, 1.0, top, bottom, verticalPosition)
@@ -57,12 +66,12 @@ fun Drawer.imageFit(img: ColorBuffer, x: Double = 0.0, y: Double = 0.0, w: Doubl
 
             if (sourceWidth <= targetWidth) {
                 targetWidth = sourceWidth
-                targetHeight = (h / w) * sourceWidth
+                targetHeight = (height / width) * sourceWidth
             }
 
             if (sourceHeight <= targetHeight) {
                 targetHeight = sourceHeight
-                targetWidth = (w / h) * sourceHeight
+                targetWidth = (width / height) * sourceHeight
             }
 
             val left = 0.0
@@ -74,7 +83,7 @@ fun Drawer.imageFit(img: ColorBuffer, x: Double = 0.0, y: Double = 0.0, w: Doubl
             targetY = map(-1.0, 1.0, top, bottom, verticalPosition)
 
             source = Rectangle(targetX, targetY, targetWidth, targetHeight)
-            target = Rectangle(x, y, w, h)
+            target = Rectangle(x, y, width, height)
         }
     }
 
