@@ -48,7 +48,6 @@ private fun sidebarState(): SidebarState = persistentSidebarStates.getOrPut(Driv
     SidebarState()
 }
 
-
 private fun <T : Any> getPersistedOrDefault(compartmentLabel: String, property: KMutableProperty1<Any, T>, obj: Any): T? {
     val state = persistentCompartmentStates[Driver.instance.contextID]!![compartmentLabel]
     if (state == null) {
@@ -278,6 +277,7 @@ class GUI : Extension {
                     }
                     getPersistedOrDefault(compartment.label, parameter.property as KMutableProperty1<Any, Int>, obj)?.let {
                         value = it.toDouble()
+                        setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Int>, obj, it)
                     }
                 }
             }
@@ -292,6 +292,9 @@ class GUI : Extension {
                     }
                     getPersistedOrDefault(compartment.label, parameter.property as KMutableProperty1<Any, Double>, obj)?.let {
                         value = it
+                        /*  this is generally not needed, but when the persisted value is equal to the slider default
+                            it will not emit the newly set value */
+                        setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Double>, obj, it)
                     }
                 }
             }
@@ -399,8 +402,8 @@ class GUI : Extension {
         }
 
         val json = file.readText()
-        val tt = object : TypeToken<Map<String, Map<String, ParameterValue>>>() {}
-        val labeledValues: Map<String, Map<String, ParameterValue>> = Gson().fromJson(json, tt.type)
+        val typeToken = object : TypeToken<Map<String, Map<String, ParameterValue>>>() {}
+        val labeledValues: Map<String, Map<String, ParameterValue>> = Gson().fromJson(json, typeToken.type)
 
         labeledValues.forEach { (label, ps) ->
             trackedObjects.keys.find { it.label == label }?.let { lo ->
