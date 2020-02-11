@@ -30,7 +30,7 @@ fun main() = application {
     program {
         val image = loadImage("data/images/pm5544.png")
         extend {
-            drawer.imageFit(10.0, 10.0, width - 20.0, height - 20.0)
+            drawer.imageFit(image, 10.0, 10.0, width - 20.0, height - 20.0)
         }
     }
 }
