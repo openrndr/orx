@@ -1,7 +1,11 @@
 package org.openrndr.extra.compositor
 
+import org.openrndr.Extension
+import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
+import org.openrndr.extra.parameters.BooleanParameter
+import org.openrndr.extra.parameters.Description
 import org.openrndr.math.Matrix44
 
 
@@ -22,12 +26,15 @@ fun RenderTarget.deepDestroy() {
 /**
  * A single layer representation
  */
+@Description("Layer")
 class Layer internal constructor() {
     var drawFunc: () -> Unit = {}
     val children: MutableList<Layer> = mutableListOf()
     var blendFilter: Pair<Filter, Filter.() -> Unit>? = null
     val postFilters: MutableList<Pair<Filter, Filter.() -> Unit>> = mutableListOf()
 
+    @BooleanParameter("enabled")
+    var enabled = true
     var clearColor: ColorRGBa? = ColorRGBa.TRANSPARENT
     private var layerTarget:RenderTarget? = null
 
@@ -35,6 +42,11 @@ class Layer internal constructor() {
      * draw the layer
      */
     fun draw(drawer: Drawer) {
+
+        if (!enabled) {
+            return
+        }
+
         val rt = RenderTarget.active
 
         val llt = layerTarget
@@ -115,8 +127,10 @@ class Layer internal constructor() {
 /**
  * create a layer within the composition
  */
-fun Layer.layer(function: Layer.() -> Unit) {
-    children.add(Layer().apply { function() })
+fun Layer.layer(function: Layer.() -> Unit) : Layer {
+    val layer = Layer().apply { function() }
+    children.add(layer)
+    return layer
 }
 
 /**
@@ -129,15 +143,17 @@ fun Layer.draw(function: () -> Unit) {
 /**
  * add a post-processing filter to the layer
  */
-fun <F : Filter> Layer.post(filter: F, configure: F.() -> Unit = {}) {
+fun <F : Filter> Layer.post(filter: F, configure: F.() -> Unit = {}) : F {
     postFilters.add(Pair(filter as Filter, configure as Filter.() -> Unit))
+    return filter
 }
 
 /**
  * add a blend filter to the layer
  */
-fun <F : Filter> Layer.blend(filter: F, configure: F.() -> Unit = {}) {
+fun <F : Filter> Layer.blend(filter: F, configure: F.() -> Unit = {}) : F {
     blendFilter = Pair(filter as Filter, configure as Filter.() -> Unit)
+    return filter
 }
 
 /**
@@ -147,4 +163,16 @@ fun compose(function: Layer.() -> Unit): Layer {
     val root = Layer()
     root.function()
     return root
+}
+
+class Compositor: Extension {
+    override var enabled: Boolean = true
+    var composite = Layer()
+
+    override fun afterDraw(drawer: Drawer, program: Program) {
+        drawer.isolated {
+            drawer.defaults()
+            composite.draw(drawer)
+        }
+    }
 }
