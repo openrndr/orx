@@ -9,6 +9,7 @@ import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.dialogs.openFileDialog
 import org.openrndr.dialogs.saveFileDialog
+import org.openrndr.draw.Drawer
 import org.openrndr.extra.parameters.*
 import org.openrndr.internal.Driver
 import org.openrndr.panel.ControlManager
@@ -34,7 +35,7 @@ You can use your editor's search functionality to jump to "1)", "2)".
  */
 private data class LabeledObject(val label: String, val obj: Any)
 
-private class CompartmentState(var collapsed: Boolean = true, val parameterValues: MutableMap<String, Any> = mutableMapOf())
+private class CompartmentState(var collapsed: Boolean, val parameterValues: MutableMap<String, Any> = mutableMapOf())
 private class SidebarState(var hidden: Boolean = false, var collapsed: Boolean = false, var scrollTop: Double = 0.0)
 private class TrackedObjectBinding(
         val parameters: List<Parameter>,
@@ -68,6 +69,9 @@ private fun <T : Any> setAndPersist(compartmentLabel: String, property: KMutable
 class GUI : Extension {
     private var onChangeListener: ((name: String, value: Any?) -> Unit)? = null
     override var enabled = true
+
+    var compartmentsCollapsedByDefault = true
+    var doubleBind = false
 
     private lateinit var panel: ControlManager
 
@@ -134,6 +138,10 @@ class GUI : Extension {
                 }
 
                 descendant(has type "textfield") {
+                    this.width = 175.px
+                }
+
+                descendant(has type "toggle") {
                     this.width = 175.px
                 }
             }
@@ -309,16 +317,14 @@ class GUI : Extension {
                 }
             }
             ParameterType.Boolean -> {
-                slider {
+                toggle {
                     label = parameter.label
-                    range = Range(0.0, 1.0)
-                    precision = 0
                     events.valueChanged.subscribe {
                         value = it.newValue
-                        (parameter.property as KMutableProperty1<Any, Boolean>).set(obj, value > 0.5)
+                        (parameter.property as KMutableProperty1<Any, Boolean>).set(obj, it.newValue)
                         onChangeListener?.invoke(parameter.property!!.name, it.newValue)
                     }
-                    value = if ((parameter.property as KMutableProperty1<Any, Boolean>).get(obj)) 1.0 else 0.0
+                    value = (parameter.property as KMutableProperty1<Any, Boolean>).get(obj)
                 }
             }
             ParameterType.Text -> {
@@ -454,7 +460,7 @@ class GUI : Extension {
                 (control as ColorpickerButton).color = (parameter.property as KMutableProperty1<Any, ColorRGBa>).get(labeledObject.obj)
             }
             ParameterType.Boolean -> {
-                (control as Slider).value = if ((parameter.property as KMutableProperty1<Any, Boolean>).get(labeledObject.obj)) 1.0 else 0.0
+                (control as Toggle).value = (parameter.property as KMutableProperty1<Any, Boolean>).get(labeledObject.obj)
             }
             ParameterType.Action -> {
                 // intentionally do nothing
@@ -522,7 +528,7 @@ class GUI : Extension {
                 mutableMapOf()
             }
             collapseStates.getOrPut(uniqueLabel) {
-                CompartmentState()
+                CompartmentState(compartmentsCollapsedByDefault)
             }
             trackedObjects[LabeledObject(uniqueLabel, objectWithParameters)] = TrackedObjectBinding(parameters)
         }
@@ -537,5 +543,11 @@ class GUI : Extension {
     fun <T : Any> add(label: String? = null, builder: () -> T): T {
         val t = builder()
         return add(t, label ?: t.title())
+    }
+
+    override fun afterDraw(drawer: Drawer, program: Program) {
+        if (doubleBind) {
+            updateControls()
+        }
     }
 }
