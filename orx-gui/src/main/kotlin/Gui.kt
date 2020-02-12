@@ -551,3 +551,9 @@ class GUI : Extension {
         }
     }
 }
+
+@JvmName("addToGui")
+fun <T : Any> T.addTo(gui: GUI): T {
+    gui.add(this)
+    return this
+}
