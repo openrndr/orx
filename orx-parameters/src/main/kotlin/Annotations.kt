@@ -7,6 +7,7 @@ import kotlin.reflect.KVisibility
 import kotlin.reflect.full.declaredMemberFunctions
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.findAnnotation
+import kotlin.reflect.full.memberProperties
 
 /*  In case you are here to add an extra annotation type:
     1. Add an annotation class
@@ -122,7 +123,7 @@ class Parameter(
  * List all parameters, (public var properties with a parameter annotation)
  */
 fun Any.listParameters(): List<Parameter> {
-    return (this::class.declaredMemberProperties.filter {
+    return (this::class.memberProperties.filter {
         !it.isConst &&
                 it.visibility == KVisibility.PUBLIC &&
                 it.annotations.map { it.annotationClass }.intersect(ParameterType.parameterAnnotationClasses).isNotEmpty()
