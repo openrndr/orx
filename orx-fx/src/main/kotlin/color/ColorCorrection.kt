@@ -19,10 +19,18 @@ class ColorCorrection : Filter(Shader.createFromCode(filterVertexCode, filterFra
     @DoubleParameter("hue shift", -180.0, 180.0, order = 3)
     var hueShift: Double by parameters
 
+    @DoubleParameter("gamma", 0.0, 5.0, order = 4)
+    var gamma: Double by parameters
+
+    @DoubleParameter("opacity", 0.0, 1.0, order = 5)
+    var opacity: Double by parameters
+
     init {
         contrast = 0.0
         brightness = 0.0
         saturation = 0.0
         hueShift = 0.0
+        gamma = 1.0
+        opacity = 1.0
     }
 }

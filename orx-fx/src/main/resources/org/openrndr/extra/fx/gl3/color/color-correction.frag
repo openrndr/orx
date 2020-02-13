@@ -6,6 +6,8 @@ uniform float brightness;
 uniform float saturation;
 uniform float contrast;
 uniform float hueShift;
+uniform float gamma;
+uniform float opacity;
 
 uniform sampler2D tex0;
 in vec2 v_texCoord0;
@@ -56,7 +58,8 @@ vec3 shiftHue(in vec3 col, in float Shift) {
 void main() {
     vec4 color = texture(tex0, v_texCoord0);
     vec4 nc = (color.a == 0.0) ? vec4(0.0) : vec4(color.rgb / color.a, color.a);
+    nc.rgb = pow(nc.rgb, vec3(gamma));
     nc.rgb = shiftHue(nc.rgb, (hueShift/360.0));
     vec4 cc = brightnessMatrix(brightness) * contrastMatrix((contrast + 1)) * saturationMatrix(saturation + 1) * nc;
-    o_color = vec4(cc.rgb, 1.0) * color.a;
+    o_color = vec4(cc.rgb, 1.0) * color.a * opacity;
 }
