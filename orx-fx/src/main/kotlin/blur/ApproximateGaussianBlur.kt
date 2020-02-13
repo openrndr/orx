@@ -44,6 +44,7 @@ class ApproximateGaussianBlur : Filter(Shader.createFromCode(Filter.filterVertex
     private var intermediateCache = mutableMapOf<ColorBufferDescription, ColorBuffer>()
 
 
+
     init {
         window = 5
         spread = 1.0
