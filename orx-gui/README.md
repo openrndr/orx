@@ -117,3 +117,7 @@ import org.openrndr.extra.parameters.DoubleParameter
     }
 }
 ```
+
+## Credits
+
+`orx-gui` is based on a proof-of-concept by [Ricardo Matias](https://github.com/ricardomatias/)
