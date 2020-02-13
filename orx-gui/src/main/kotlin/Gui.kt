@@ -321,10 +321,13 @@ class GUI : Extension {
                     label = parameter.label
                     events.valueChanged.subscribe {
                         value = it.newValue
-                        (parameter.property as KMutableProperty1<Any, Boolean>).set(obj, it.newValue)
+                        setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Boolean>, obj, it.newValue)
                         onChangeListener?.invoke(parameter.property!!.name, it.newValue)
                     }
-                    value = (parameter.property as KMutableProperty1<Any, Boolean>).get(obj)
+                    getPersistedOrDefault(compartment.label, parameter.property as KMutableProperty1<Any, Boolean>, obj)?.let {
+                        value = it
+                        setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Boolean>, obj, it)
+                    }
                 }
             }
             ParameterType.Text -> {
