@@ -468,7 +468,7 @@ class GUI : Extension {
         }
     }
 
-    fun randomize() {
+    fun randomize(strength:Double = 0.05) {
         for ((labeledObject, binding) in trackedObjects) {
             // -- only randomize visible parameters
             for (parameter in binding.parameterControls.keys) {
@@ -477,19 +477,31 @@ class GUI : Extension {
                     ParameterType.Double -> {
                         val min = parameter.doubleRange!!.start
                         val max = parameter.doubleRange!!.endInclusive
-                        (parameter.property as KMutableProperty1<Any, Double>).set(labeledObject.obj, Math.random() * (max - min) + min)
+                        val currentValue = (parameter.property as KMutableProperty1<Any, Double>).get(labeledObject.obj)
+                        val randomValue = Math.random() * (max - min) + min
+                        val newValue = (1.0 - strength)  * currentValue + randomValue * strength
+                        (parameter.property as KMutableProperty1<Any, Double>).set(labeledObject.obj, newValue)
                     }
                     ParameterType.Int -> {
                         val min = parameter.intRange!!.first
                         val max = parameter.intRange!!.last
-                        (parameter.property as KMutableProperty1<Any, Int>).set(labeledObject.obj, (Math.random() * (max - min) + min).toInt())
+                        val currentValue = (parameter.property as KMutableProperty1<Any, Int>).get(labeledObject.obj)
+                        val randomValue = Math.random() * (max - min) + min
+                        val newValue = ((1.0 - strength)  * currentValue + randomValue * strength).toInt()
+                        (parameter.property as KMutableProperty1<Any, Int>).set(labeledObject.obj, newValue)
                     }
                     ParameterType.Boolean -> {
-                        (parameter.property as KMutableProperty1<Any, Boolean>).set(labeledObject.obj, (Math.random() < 0.5))
+                        //I am not sure about randomizing boolean values here
+                        //(parameter.property as KMutableProperty1<Any, Boolean>).set(labeledObject.obj, (Math.random() < 0.5))
                     }
                     ParameterType.Color -> {
-                        val c = ColorRGBa(Math.random(), Math.random(), Math.random())
-                        (parameter.property as KMutableProperty1<Any, ColorRGBa>).set(labeledObject.obj, c)
+                        val currentValue = (parameter.property as KMutableProperty1<Any, ColorRGBa>).get(labeledObject.obj)
+                        val randomValue = ColorRGBa(Math.random(), Math.random(), Math.random(), currentValue.a)
+                        val newValue = ColorRGBa((1.0 - strength)  * currentValue.r + randomValue.r * strength,
+                                (1.0 - strength)  * currentValue.g + randomValue.g * strength,
+                                (1.0 - strength)  * currentValue.b + randomValue.b * strength)
+
+                        (parameter.property as KMutableProperty1<Any, ColorRGBa>).set(labeledObject.obj, newValue)
                     }
                     else -> {
                         // intentionally do nothing
