@@ -395,7 +395,7 @@ class GUI : Extension {
                             ParameterType.Action -> ParameterValue()
                             ParameterType.Color -> ParameterValue(colorValue = k.property.qget(lo.obj) as ColorRGBa)
                             ParameterType.Text -> ParameterValue(textValue = k.property.qget(lo.obj) as String)
-                            ParameterType.Boolean -> ParameterValue(booleanValue = k.property.qget(lo.obj as Boolean))
+                            ParameterType.Boolean -> ParameterValue(booleanValue = k.property.qget(lo.obj) as Boolean)
                         })
                     })
                 }
