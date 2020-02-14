@@ -97,8 +97,20 @@ class GUI : Extension {
                 this.height = 100.percent
             }
 
+            styleSheet(has class_ "collapse-border") {
+                this.display = Display.FLEX
+                this.flexDirection = FlexDirection.Column
+                this.height = 5.px
+                this.width = 100.percent
+                this.background = Color.RGBa(ColorRGBa.GRAY.shade(0.9))
+
+                and(has state "hover") {
+                    this.background = Color.RGBa(ColorRGBa.GRAY.shade(1.1))
+                }
+            }
+
             styleSheet(has class_ "toolbar") {
-                this.height = 50.px
+                this.height = 42.px
                 this.width = 100.percent
                 this.display = Display.FLEX
                 this.flexDirection = FlexDirection.Row
@@ -123,6 +135,7 @@ class GUI : Extension {
                 this.height = 100.percent
                 this.background = Color.RGBa(ColorRGBa.GRAY.copy(a = 0.99))
                 this.overflow = Overflow.Scroll
+
 
                 /* 1) setup control style */
                 descendant(has type "colorpicker-button") {
@@ -178,6 +191,9 @@ class GUI : Extension {
                             }
                         }
                     }
+                    val collapseBorder = div("collapse-border") {
+
+                    }
 
                     val collapsibles = mutableSetOf<Div>()
                     val sidebar = div("sidebar") {
@@ -230,11 +246,11 @@ class GUI : Extension {
                             }
                         }
                     }
-                    header.mouse.pressed.subscribe {
+                    collapseBorder.mouse.pressed.subscribe {
                         it.cancelPropagation()
                     }
 
-                    header.mouse.clicked.subscribe {
+                    collapseBorder.mouse.clicked.subscribe {
                         val collapsed = ElementClass("collapsed")
                         if (collapsed in sidebar.classes) {
                             sidebar.classes.remove(collapsed)

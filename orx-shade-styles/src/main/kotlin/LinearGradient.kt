@@ -8,7 +8,7 @@ import org.openrndr.math.Vector2
 fun linearGradient(color0: ColorRGBa, color1: ColorRGBa, offset : Vector2 = Vector2.ZERO, rotation:Double = 0.0) : ShadeStyle {
     return shadeStyle {
         fragmentTransform = """
-            vec2 coord = (c_boundsPosition.xy - vec2(0.5) + offset);
+            vec2 coord = (c_boundsPosition.xy - vec2(0.5) + p_offset);
             float cr = cos(p_rotation);
             float sr = sin(p_rotation);
             mat2 rm = mat2(cr, -sr, sr, cr);
@@ -30,7 +30,7 @@ fun linearGradient(color0: ColorRGBa, color1: ColorRGBa, offset : Vector2 = Vect
     }
 }
 
-fun radialGradient(color0: ColorRGBa, color1: ColorRGBa, offset: Vector2 = Vector2.ZERO, rotation:Double = 0.0) : ShadeStyle {
+fun radialGradient(color0: ColorRGBa, color1: ColorRGBa, offset: Vector2 = Vector2.ZERO, rotation:Double = 0.0, length: Double = 1.0) : ShadeStyle {
     return shadeStyle {
         fragmentTransform = """
             vec2 coord = (c_boundsPosition.xy - vec2(0.5) + p_offset/2.0) * 2.0;
@@ -38,7 +38,7 @@ fun radialGradient(color0: ColorRGBa, color1: ColorRGBa, offset: Vector2 = Vecto
             float cr = cos(p_rotation);
             float sr = sin(p_rotation);
             mat2 rm = mat2(cr, -sr, sr, cr);
-            float f =  clamp(length(rm * coord), 0.0, 1.0);            
+            float f =  clamp(p_length * length(rm * coord), 0.0, 1.0);            
                         
             vec4 gradient = p_color0 * (1.0-f) + p_color1 * f;
             
@@ -52,7 +52,8 @@ fun radialGradient(color0: ColorRGBa, color1: ColorRGBa, offset: Vector2 = Vecto
         parameter("offset", offset)
         parameter("color0", color0.alphaMultiplied)
         parameter("color1", color1.alphaMultiplied)
-        parameter("rotation", Math.toRadians(rotation) )
+        parameter("rotation", Math.toRadians(rotation))
+        parameter("length", length)
     }
 }
 
