@@ -25,11 +25,18 @@ private fun <T> Event<T>.restoreListeners(store: Map<Event<*>, List<(Any) -> Uni
     listeners.retainAll(store[this] ?: emptyList<T>())
 }
 
+enum class OliveScriptHost {
+    JSR223,
+    JSR223_REUSE,
+    KOTLIN_SCRIPT
+}
+
 class Olive<P : Program>(val resources: Resources? = null) : Extension {
     override var enabled: Boolean = true
     var session: Session? = null
+    var scriptHost = OliveScriptHost.JSR223_REUSE
 
-    internal var scriptChange: (String)->Unit = {}
+    internal var scriptChange: (String) -> Unit = {}
 
     var script = "src/main/kotlin/live.kts"
         set(value) {
@@ -70,7 +77,7 @@ class Olive<P : Program>(val resources: Resources? = null) : Extension {
 
         trackedListeners.forEach { it.saveListeners(store) }
 
-        fun setupScript(scriptFile:String) {
+        fun setupScript(scriptFile: String) {
             watcher?.stop()
             val f = File(scriptFile)
             if (!f.exists()) {
@@ -94,18 +101,27 @@ class Olive<P : Program>(val resources: Resources? = null) : Extension {
             """.trimIndent())
             }
 
+            val jsr233ObjectLoader = if (scriptHost == OliveScriptHost.JSR223_REUSE) ScriptObjectLoader() else null
+
             watcher = program.watchFile(File(script)) {
                 try {
+                    logger.info("change detected, reloading script")
                     val futureFunc = GlobalScope.async {
                         val start = System.currentTimeMillis()
-                        val f = loadFromScriptKSH<P.() -> Unit>(it)
+
+                        val loadedFunction = when (scriptHost) {
+                            OliveScriptHost.JSR223_REUSE -> loadFromScript(it, jsr233ObjectLoader!!)
+                            OliveScriptHost.JSR223 -> loadFromScript(it)
+                            OliveScriptHost.KOTLIN_SCRIPT -> loadFromScriptKSH<P.() -> Unit>(it)
+                        }
+
                         val end = System.currentTimeMillis()
                         logger.info { "loading script took ${end - start}ms" }
-                        f
+                        loadedFunction
                     }
 
                     program.launch {
-                        val func =  futureFunc.await()
+                        val func = futureFunc.await()
                         program.extensions.clear()
                         program.extensions.addAll(originalExtensions)
 
