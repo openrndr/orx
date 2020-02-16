@@ -50,6 +50,6 @@ vec3 crosshatch(vec3 texColor, float t1, float t2, float t3, float t4) {
 
 void main() {
     vec4 color = texture(tex0, v_texCoord0);
-    o_color.rgb = crosshatch(color.rgb, t1, t2, t3, t4);
-    o_color.a = color.a;
+    vec3 demultiplied = color.a == 0.0 ? vec3(0.0) : color.rgb/color.a;
+    o_color = vec4(crosshatch(demultiplied, t1, t2, t3, t4), 1.0) * color.a;
 }
