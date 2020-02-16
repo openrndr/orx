@@ -399,7 +399,7 @@ class GUI : Extension {
                                  var textValue: String? = null)
 
 
-    private fun saveParameters(file: File) {
+    fun saveParameters(file: File) {
         fun <T> KMutableProperty1<out Any, Any?>?.qget(obj: Any): T {
             return (this as KMutableProperty1<Any, T>).get(obj)
         }
@@ -421,7 +421,7 @@ class GUI : Extension {
         file.writeText(Gson().toJson(toSave))
     }
 
-    private fun loadParameters(file: File) {
+    fun loadParameters(file: File) {
         fun <T> KMutableProperty1<out Any, Any?>?.qset(obj: Any, value: T) {
             return (this as KMutableProperty1<Any, T>).set(obj, value)
         }
@@ -584,7 +584,7 @@ class GUI : Extension {
 }
 
 @JvmName("addToGui")
-fun <T : Any> T.addTo(gui: GUI): T {
-    gui.add(this)
+fun <T : Any> T.addTo(gui: GUI, label:String? = this.title()): T {
+    gui.add(this, label)
     return this
 }
