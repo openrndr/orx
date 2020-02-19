@@ -2,6 +2,7 @@ package org.openrndr.extra.fx.blur
 
 import org.openrndr.draw.*
 import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.extra.fx.ColorBufferDescription
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
@@ -14,9 +15,6 @@ import org.openrndr.math.Vector2
 @Description("Approximate Gaussian blur")
 class ApproximateGaussianBlur : Filter(Shader.createFromCode(Filter.filterVertexCode,
         filterFragmentCode("blur/approximate-gaussian-blur.frag"))) {
-
-    data class ColorBufferDescription(val width: Int, val height: Int, val contentScale: Double, val format: ColorFormat, val type: ColorType)
-
     /**
      * blur sample window, default value is 5
      */
@@ -42,8 +40,6 @@ class ApproximateGaussianBlur : Filter(Shader.createFromCode(Filter.filterVertex
     var gain: Double by parameters
 
     private var intermediateCache = mutableMapOf<ColorBufferDescription, ColorBuffer>()
-
-
 
     init {
         window = 5
