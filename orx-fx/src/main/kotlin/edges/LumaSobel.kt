@@ -8,7 +8,7 @@ import org.openrndr.extra.parameters.ColorParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 
-@Description("Luma threshold ")
+@Description("Luma Sobel")
 class LumaSobel : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("edges/luma-sobel.frag"))) {
 
     @ColorParameter("background color")

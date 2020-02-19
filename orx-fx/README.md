@@ -48,6 +48,8 @@ Most blur effects are opacity preserving
  - `BoxBlur`, a simple but fast box blur
  - `GaussianBlur`, a slow but precise Gaussian blur
  - `HashBlur`, a noisy blur effect
+ - `ZoomBlur`, a directional blur with a zooming effect
+
 
 ### Color
  - `ChromaticAberration`, a chromatic aberration effect based on RGB color separation
@@ -57,6 +59,7 @@ Most blur effects are opacity preserving
  - `LumaMap`, maps luminosity to two colors
  - `LumaOpacity`, maps luminosity to opacity but retains source color
  - `LumaThreshold`, applies a treshold on the input luminosity and maps to two colors
+ - `Sepia`, applies a reddish-brown monochrome tint that imitates an old photograph
  - `SubtractConstant`, subtract a constant color from the source color
 
 ### Distortion
@@ -74,6 +77,7 @@ All distortion effects are opacity preserving
  
  ### Edges
   - `LumaSobel` - A Sobel-kernel based luminosity edge detector
+  - `EdgesWork` - An edges filter doubling as erosion
   
  ### Grain
   - `FilmGrain` - adds film-like grain to the source input

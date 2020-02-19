@@ -35,7 +35,7 @@ class BoxBlur : Filter(Shader.createFromCode(Filter.filterVertexCode,
     @DoubleParameter("gain", 0.0, 4.0)
     var gain: Double by parameters
 
-    private var intermediateCache = mutableMapOf<ApproximateGaussianBlur.ColorBufferDescription, ColorBuffer>()
+    private var intermediateCache = mutableMapOf<ColorBufferDescription, ColorBuffer>()
 
     init {
         window = 5
@@ -44,7 +44,7 @@ class BoxBlur : Filter(Shader.createFromCode(Filter.filterVertexCode,
     }
 
     override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
-        val intermediateDescription = ApproximateGaussianBlur.ColorBufferDescription(target[0].width, target[0].height, target[0].contentScale, target[0].format, target[0].type)
+        val intermediateDescription = ColorBufferDescription(target[0].width, target[0].height, target[0].contentScale, target[0].format, target[0].type)
         val intermediate = intermediateCache.getOrPut(intermediateDescription) {
             colorBuffer(target[0].width, target[0].height, target[0].contentScale, target[0].format, target[0].type)
         }
