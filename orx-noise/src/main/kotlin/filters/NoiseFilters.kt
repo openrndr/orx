@@ -3,6 +3,7 @@ package org.openrndr.extra.noise.filters
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Filter
 import org.openrndr.draw.filterShaderFromUrl
+import org.openrndr.extra.parameters.*
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
@@ -25,11 +26,13 @@ class HashNoise : Filter(filterShaderFromUrl(resourceUrl("/org/openrndr/extra/no
     /**
      * is the noise monochrome, default is true
      */
+    @BooleanParameter("Monochrome")
     var monochrome: Boolean by parameters
 
     /**
      * noise seed, feed it with time to animate
      */
+    @DoubleParameter("Seed", 0.0, 10000.0)
     var seed: Double by parameters
 
     init {
@@ -48,18 +51,20 @@ class SpeckleNoise : Filter(filterShaderFromUrl(resourceUrl("/org/openrndr/extra
     /**
      * The color of the generated speckles
      */
+    @ColorParameter("Color")
     var color: ColorRGBa by parameters
 
     /**
      * Density of the speckles, default is 0.1, min, 0.0, max is 1.0
      */
-
+    @DoubleParameter("Density", 0.0, 1.0)
     var density: Double by parameters
 
 
     /**
      * Noisiness of the generated speckles, default is 0.0, min is 0.0, max is 1.0
      */
+    @DoubleParameter("Noise", 0.0, 1.0)
     var noise: Double by parameters
 
     /**
@@ -70,6 +75,7 @@ class SpeckleNoise : Filter(filterShaderFromUrl(resourceUrl("/org/openrndr/extra
     /**
      * noise seed, feed it with time to animate
      */
+    @DoubleParameter("Seed", 0.0, 10000.0)
     var seed: Double by parameters
 
     init {
@@ -110,6 +116,7 @@ class CellNoise : Filter(filterShaderFromUrl(resourceUrl("/org/openrndr/extra/no
     /**
      * the number of octaves of noise to generate, default is 4
      */
+    @IntParameter("Octaves", 1, 8)
     var octaves: Int by parameters
 
     /**
@@ -138,6 +145,7 @@ class CellNoise : Filter(filterShaderFromUrl(resourceUrl("/org/openrndr/extra/no
  * Filter that produces value noise
  */
 class ValueNoise : Filter(filterShaderFromUrl(resourceUrl("/org/openrndr/extra/noise/shaders/gl3/value-noise.frag"))) {
+    @DoubleParameter("Seed", 0.0, 10000.0)
     var seed: Vector2 by parameters
 
     /**
@@ -163,6 +171,7 @@ class ValueNoise : Filter(filterShaderFromUrl(resourceUrl("/org/openrndr/extra/n
     /**
      * the number of octaves of noise to generate, default is 4
      */
+    @IntParameter("Octaves", 1, 8)
     var octaves: Int by parameters
 
     /**
@@ -190,6 +199,7 @@ class ValueNoise : Filter(filterShaderFromUrl(resourceUrl("/org/openrndr/extra/n
 /**
  * Filter that produces 3D Simplex Noise
  */
+@Description("Simplex Noise")
 class SimplexNoise3D : Filter(filterShaderFromUrl(resourceUrl("/org/openrndr/extra/noise/shaders/gl3/simplex-noise-3d.frag"))) {
     var seed: Vector3 by parameters
 
@@ -216,6 +226,7 @@ class SimplexNoise3D : Filter(filterShaderFromUrl(resourceUrl("/org/openrndr/ext
     /**
      * the number of octaves of noise to generate, default is 4
      */
+    @IntParameter("Octaves", 1, 8)
     var octaves: Int by parameters
 
     /**
@@ -226,6 +237,7 @@ class SimplexNoise3D : Filter(filterShaderFromUrl(resourceUrl("/org/openrndr/ext
     /**
      * should the output colors be multiplied by the alpha channel, default is true
      */
+    @BooleanParameter("Premultiplied alpha")
     var premultipliedAlpha: Boolean by parameters
 
     init {
@@ -237,5 +249,23 @@ class SimplexNoise3D : Filter(filterShaderFromUrl(resourceUrl("/org/openrndr/ext
         octaves = 4
         bias = Vector4.ONE / 2.0
         premultipliedAlpha = true
+    }
+}
+
+
+/**
+ * Filter for Worley Noise
+ */
+@Description("Worley Noise")
+class WorleyNoise : Filter(filterShaderFromUrl(resourceUrl("/org/openrndr/extra/noise/shaders/gl3/worley-noise.frag"))) {
+    @DoubleParameter("Scale", 0.1, 200.0)
+    var scale: Double by parameters
+
+    @BooleanParameter("Premultiplied alpha")
+    var premultipliedAlpha: Boolean by parameters
+
+    init {
+        premultipliedAlpha = true
+        scale = 5.0
     }
 }

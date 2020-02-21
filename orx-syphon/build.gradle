@@ -1,7 +1,6 @@
 dependencies {
     compile "org.openrndr:openrndr-core:$openrndrVersion"
     compile "org.openrndr:openrndr-gl3:$openrndrVersion"
+    compile "org.lwjgl:lwjgl-opengl:3.2.3"
     compile "org.openrndr:openrndr-gl3-natives-macos:$openrndrVersion"
-    implementation project(":orx-shader-phrases")
-    implementation project(":orx-gui")
 }
