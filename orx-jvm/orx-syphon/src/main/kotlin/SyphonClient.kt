@@ -1,11 +1,11 @@
-package org.openrndr.extra.syphon
+package jsyphon
 
 
 
 import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.draw.*
-import org.openrndr.extra.syphon.jsyphon.JSyphonClient
+
 
 import org.openrndr.internal.gl3.ColorBufferGL3
 import org.openrndr.internal.gl3.TextureStorageModeGL

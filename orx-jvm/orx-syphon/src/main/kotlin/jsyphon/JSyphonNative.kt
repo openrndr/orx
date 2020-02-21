@@ -1,4 +1,4 @@
-package org.openrndr.extra.syphon.jsyphon
+package jsyphon
 
 import org.openrndr.platform.Platform
 import org.openrndr.platform.PlatformType

@@ -1,4 +1,4 @@
-package org.openrndr.extra.syphon.jsyphon
+        package jsyphon
 
 import java.io.File
 import java.util.*

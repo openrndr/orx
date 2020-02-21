@@ -1,4 +1,4 @@
-package org.openrndr.extra.syphon.jsyphon
+package jsyphon
 class NSSize (var x: Int, var y: Int)
 class NSPoint(var x: Int, var y: Int)
 

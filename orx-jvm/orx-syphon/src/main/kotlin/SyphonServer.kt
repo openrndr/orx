@@ -1,4 +1,4 @@
-package org.openrndr.extra.syphon
+package jsyphon
 
 
 
@@ -7,7 +7,7 @@ import org.openrndr.Program
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.RenderTarget
 import org.openrndr.draw.renderTarget
-import org.openrndr.extra.syphon.jsyphon.JSyphonServer
+
 import org.openrndr.internal.gl3.ColorBufferGL3
 
 

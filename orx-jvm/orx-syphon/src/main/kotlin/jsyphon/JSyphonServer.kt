@@ -1,4 +1,4 @@
-package org.openrndr.extra.syphon.jsyphon
+package jsyphon
 /*
 JSyphonServer.java - 
 Copyright 2011 -Skye Book (sbook) & Anton Marini (vade)

@@ -1,4 +1,4 @@
-package org.openrndr.extra.syphon.jsyphon
+package jsyphon
 
 class JSyphonImage(private val name: Int, private val width: Int, private val height: Int) {
     fun textureName(): Int {
