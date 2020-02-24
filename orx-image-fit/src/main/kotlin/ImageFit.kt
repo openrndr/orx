@@ -17,9 +17,9 @@ fun Drawer.imageFit(
         y: Double = 0.0,
         width: Double = img.width.toDouble(),
         height: Double = img.height.toDouble(),
-        fitMethod: FitMethod = FitMethod.Cover,
         horizontalPosition: Double = 0.0,
-        verticalPosition: Double = 0.0
+        verticalPosition: Double = 0.0,
+        fitMethod: FitMethod = FitMethod.Cover
 ) {
     val sourceWidth = img.width.toDouble()
     val sourceHeight = img.height.toDouble()
