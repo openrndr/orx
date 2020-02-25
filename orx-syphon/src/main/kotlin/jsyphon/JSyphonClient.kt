@@ -3,7 +3,7 @@ package jsyphon
 import java.io.File
 import java.util.*
 
-class JSyphonClient  // public API
+class JSyphonClient
 {
     private var ptr: Long = 0
 
@@ -52,11 +52,5 @@ class JSyphonClient  // public API
     external fun newFrameDataForContext(ptr: Long = this.ptr): HashMap<String, Any>
 
     @JvmOverloads
-    external fun stop(ptr: Long = this.ptr) //	public JSyphonImage newFrameImageForContext() {
-    //	  HashMap<String, Object> dict = newFrameDataForContext();
-    //	  Long name = (Long)dict.get("name");
-    //	  Double width = (Double)dict.get("width");
-    //	  Double height = (Double)dict.get("height");
-    //	  return new JSyphonImage(name.intValue(), width.intValue(), height.intValue());
-    //	}
+    external fun stop(ptr: Long = this.ptr)
 }
