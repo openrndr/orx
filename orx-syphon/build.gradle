@@ -1,4 +1,5 @@
 dependencies {
+    compile project(":orx-camera")
     compile "org.openrndr:openrndr-core:$openrndrVersion"
     compile "org.openrndr:openrndr-gl3:$openrndrVersion"
     compile "org.lwjgl:lwjgl-opengl:3.2.3"
