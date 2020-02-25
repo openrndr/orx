@@ -32,7 +32,7 @@ class SyphonServer(private val name: String = "OPENRNDR", var target: RenderTarg
         drawer.image(target?.colorBuffer(0)!!)
         val glBuffer = target?.colorBuffer(0) as ColorBufferGL3
 
-        println(glBuffer.multisample)
+        println(glBuffer.target)
 
         // Send to Syphon
         server.publishFrameTexture(
