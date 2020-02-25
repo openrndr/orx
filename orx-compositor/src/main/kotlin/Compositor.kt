@@ -8,11 +8,10 @@ import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.math.Matrix44
 
-
 private val postBufferCache = mutableListOf<ColorBuffer>()
 
 fun RenderTarget.deepDestroy() {
-    val cbcopy = colorBuffers.map { it}
+    val cbcopy = colorBuffers.map { it }
     val dbcopy = depthBuffer
     detachDepthBuffer()
     detachColorBuffers()
@@ -27,7 +26,7 @@ fun RenderTarget.deepDestroy() {
  * A single layer representation
  */
 @Description("Layer")
-class Layer internal constructor() {
+open class Layer internal constructor() {
     var drawFunc: () -> Unit = {}
     val children: MutableList<Layer> = mutableListOf()
     var blendFilter: Pair<Filter, Filter.() -> Unit>? = null
@@ -36,23 +35,23 @@ class Layer internal constructor() {
     @BooleanParameter("enabled")
     var enabled = true
     var clearColor: ColorRGBa? = ColorRGBa.TRANSPARENT
-    private var layerTarget:RenderTarget? = null
+    private var layerTarget: RenderTarget? = null
 
     /**
      * draw the layer
      */
-    fun draw(drawer: Drawer) {
-
+    fun drawLayer(drawer: Drawer) {
         if (!enabled) {
             return
         }
 
-        val rt = RenderTarget.active
+        val activeRenderTarget = RenderTarget.active
 
-        val llt = layerTarget
-        if (llt == null || (llt.width != rt.width || llt.height != rt.height)) {
+
+        val localLayerTarget = layerTarget
+        if (localLayerTarget == null || (localLayerTarget.width != activeRenderTarget.width || localLayerTarget.height != activeRenderTarget.height)) {
             layerTarget?.deepDestroy()
-            layerTarget = renderTarget(rt.width, rt.height) {
+            layerTarget = renderTarget(activeRenderTarget.width, activeRenderTarget.height) {
                 colorBuffer()
                 depthBuffer()
             }
@@ -70,13 +69,13 @@ class Layer internal constructor() {
                 }
                 drawFunc()
                 children.forEach {
-                    it.draw(drawer)
+                    it.drawLayer(drawer)
                 }
             }
 
             if (postFilters.size > 0) {
                 val sizeMismatch = if (postBufferCache.isNotEmpty()) {
-                    postBufferCache[0].width != rt.width || postBufferCache[0].height != rt.height
+                    postBufferCache[0].width != activeRenderTarget.width || postBufferCache[0].height != activeRenderTarget.height
                 } else {
                     false
                 }
@@ -87,10 +86,10 @@ class Layer internal constructor() {
                 }
 
                 if (postBufferCache.isEmpty()) {
-                    postBufferCache += colorBuffer(rt.width, rt.height).apply {
+                    postBufferCache += colorBuffer(activeRenderTarget.width, activeRenderTarget.height).apply {
                         Session.active.untrack(this)
                     }
-                    postBufferCache += colorBuffer(rt.width, rt.height).apply {
+                    postBufferCache += colorBuffer(activeRenderTarget.width, activeRenderTarget.height).apply {
                         Session.active.untrack(this)
                     }
                 }
@@ -107,18 +106,17 @@ class Layer internal constructor() {
                 result
             }
 
-            val lblend = blendFilter
-            if (lblend == null) {
-                drawer.isolatedWithTarget(rt) {
-                    //drawer.ortho(rt)
+            val localBlendFilter = blendFilter
+            if (localBlendFilter == null) {
+                drawer.isolatedWithTarget(activeRenderTarget) {
                     drawer.ortho()
                     drawer.view = Matrix44.IDENTITY
                     drawer.model = Matrix44.IDENTITY
                     drawer.image(layerPost, layerPost.bounds, drawer.bounds)
                 }
             } else {
-                lblend.first.apply(lblend.second)
-                lblend.first.apply(arrayOf(rt.colorBuffer(0), layerPost), rt.colorBuffer(0))
+                localBlendFilter.first.apply(localBlendFilter.second)
+                localBlendFilter.first.apply(arrayOf(activeRenderTarget.colorBuffer(0), layerPost), activeRenderTarget.colorBuffer(0))
             }
         }
     }
@@ -127,7 +125,7 @@ class Layer internal constructor() {
 /**
  * create a layer within the composition
  */
-fun Layer.layer(function: Layer.() -> Unit) : Layer {
+fun Layer.layer(function: Layer.() -> Unit): Layer {
     val layer = Layer().apply { function() }
     children.add(layer)
     return layer
@@ -143,7 +141,8 @@ fun Layer.draw(function: () -> Unit) {
 /**
  * add a post-processing filter to the layer
  */
-fun <F : Filter> Layer.post(filter: F, configure: F.() -> Unit = {}) : F {
+fun <F : Filter> Layer.post(filter: F, configure: F.() -> Unit = {}): F {
+    @Suppress("UNCHECKED_CAST")
     postFilters.add(Pair(filter as Filter, configure as Filter.() -> Unit))
     return filter
 }
@@ -151,28 +150,35 @@ fun <F : Filter> Layer.post(filter: F, configure: F.() -> Unit = {}) : F {
 /**
  * add a blend filter to the layer
  */
-fun <F : Filter> Layer.blend(filter: F, configure: F.() -> Unit = {}) : F {
+fun <F : Filter> Layer.blend(filter: F, configure: F.() -> Unit = {}): F {
+    @Suppress("UNCHECKED_CAST")
     blendFilter = Pair(filter as Filter, configure as Filter.() -> Unit)
     return filter
+}
+
+class Composite: Layer() {
+    fun draw(drawer:Drawer) {
+        drawLayer(drawer)
+    }
 }
 
 /**
  * create a layered composition
  */
-fun compose(function: Layer.() -> Unit): Layer {
-    val root = Layer()
+fun compose(function: Layer.() -> Unit): Composite {
+    val root = Composite()
     root.function()
     return root
 }
 
-class Compositor: Extension {
+class Compositor : Extension {
     override var enabled: Boolean = true
-    var composite = Layer()
+    var composite = Composite()
 
     override fun afterDraw(drawer: Drawer, program: Program) {
         drawer.isolated {
             drawer.defaults()
-            composite.draw(drawer)
+            composite.drawLayer(drawer)
         }
     }
 }
