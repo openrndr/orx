@@ -1,6 +1,5 @@
 import jsyphon.JSyphonClient
-import jsyphon.JSyphonServer
-import org.lwjgl.opengl.GL33C
+import org.lwjgl.opengl.GL33C.GL_TEXTURE_RECTANGLE
 import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.draw.*
@@ -14,19 +13,25 @@ class SyphonClient: Extension {
     var buffer: ColorBuffer = colorBuffer(10, 10)
 
     override fun setup(program: Program) {
-        var buffer = colorBuffer(program.width, program.height)
+        buffer = colorBuffer(program.width, program.height)
         client.init()
     }
 
     override fun beforeDraw(drawer: Drawer, program: Program) {
         if (client.hasNewFrame()) {
             val img = client.newFrameImageForContext()
+            val name = img.textureName()
             val w = img.textureWidth()
             val h = img.textureHeight()
 
-            val rectBuffer = ColorBufferGL3(GL33C.GL_TEXTURE_RECTANGLE, img.textureName(), w, h,
-                    1.0, ColorFormat.RGBa, ColorType.UINT8, 0, BufferMultisample.Disabled, Session.root)
+            /**
+             * GL_TEXTURE_RECTANGLE is necessary
+             */
+            val rectBuffer = ColorBufferGL3(GL_TEXTURE_RECTANGLE, name, w, h, 1.0, ColorFormat.RGBa, ColorType.UINT8, 0, BufferMultisample.Disabled, Session.root)
 
+            /**
+             * Only create a new buffer if it's size changed
+             */
             if (buffer.height != h || buffer.width != w) {
                 buffer  = colorBuffer(w, h)
             }
