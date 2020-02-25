@@ -1,7 +1,4 @@
 package jsyphon
-
-import java.io.File
-
 /*
 JSyphonServer.java - 
 Copyright 2011 -Skye Book (sbook) & Anton Marini (vade)
@@ -33,11 +30,7 @@ class JSyphonServer  // Public API
 {
     private var ptr: Long = 0
 
-    companion object {
-        init {
-            System.load(File("orx-syphon/src/main/kotlin/jsyphon/libJSyphon.jnilib").absolutePath)
-        }
-    }
+    val native = JSyphonNative.check()
 
     fun initWithName(name: String) {
         ptr = initWithName(name, null)

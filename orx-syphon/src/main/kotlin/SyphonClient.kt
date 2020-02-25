@@ -1,8 +1,12 @@
+package org.openrndr.extra.syphon
+
+
 import jsyphon.JSyphonClient
 import org.lwjgl.opengl.GL33C.GL_TEXTURE_RECTANGLE
 import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.draw.*
+
 import org.openrndr.internal.gl3.ColorBufferGL3
 
 

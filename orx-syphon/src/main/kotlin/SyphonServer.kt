@@ -1,3 +1,5 @@
+package org.openrndr.extra.syphon
+
 
 import jsyphon.JSyphonServer
 import org.openrndr.Extension

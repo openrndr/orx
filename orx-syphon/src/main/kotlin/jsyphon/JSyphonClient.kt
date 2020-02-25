@@ -7,11 +7,7 @@ class JSyphonClient
 {
     private var ptr: Long = 0
 
-    companion object {
-        init {
-            System.load(File("orx-syphon/src/main/kotlin/jsyphon/libJSyphon.jnilib").absolutePath)
-        }
-    }
+    val native = JSyphonNative.check()
 
     fun init() {
         ptr = init(null)
