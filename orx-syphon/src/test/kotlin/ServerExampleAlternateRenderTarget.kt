@@ -16,6 +16,7 @@ fun main() = application {
             colorBuffer()
         }
 
+        // You can give the server a different name
         extend(SyphonServer("Test", rt))
 
         extend {
