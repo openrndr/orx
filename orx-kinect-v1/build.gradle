@@ -1,5 +1,5 @@
 dependencies {
-    compile project(":orx-kinect-common")
-    compile "io.github.microutils:kotlin-logging:1.7.2"
-    compile "org.bytedeco:libfreenect:$libfreenectVersion"
+    api project(":orx-kinect-common")
+    implementation "io.github.microutils:kotlin-logging:1.7.2"
+    api "org.bytedeco:libfreenect:$libfreenectVersion"
 }

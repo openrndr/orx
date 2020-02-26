@@ -120,4 +120,15 @@ internal class ConvolutionPyramid(width: Int, height: Int,
         passthrough.padding = 0
         return result
     }
+
+    fun destroy() {
+        result.destroy()
+        (levelsIn+levelsOut).forEach {
+            it.colorBuffers.forEach { it.destroy() }
+            it.detachColorBuffers()
+            it.destroy()
+        }
+    }
+
+
 }

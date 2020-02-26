@@ -6,7 +6,7 @@ Live coding extension for OPENRNDR
 
 make sure that you add the following to your list of dependencies (next to orx-olive)
 ```
-compile "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.3.31"
+implementation "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.3.31"
 ```
 
 Then a simple live setup can created as follows:

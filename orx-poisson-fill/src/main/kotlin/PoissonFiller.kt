@@ -6,7 +6,7 @@ import org.openrndr.resourceUrl
 internal class FillBoundary : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/poisson/fill-boundary.frag")))
 internal class FillCombine : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/poisson/fill-combine.frag")))
 
-class PoissonFiller(width: Int, height: Int, type: ColorType = ColorType.FLOAT32) {
+class PoissonFiller(val width: Int, val height: Int, type: ColorType = ColorType.FLOAT32) {
     private val pyramid = ConvolutionPyramid(width, height, 0, type = type)
     private val preproc = colorBuffer(width, height, type = type)
     private val combined = colorBuffer(width, height, type = type)
@@ -28,5 +28,37 @@ class PoissonFiller(width: Int, height: Int, type: ColorType = ColorType.FLOAT32
         val result = pyramid.process(preproc)
         fillCombine.apply(arrayOf(result, input), arrayOf(combined))
         return combined
+    }
+
+    fun destroy() {
+        preproc.destroy()
+        combined.destroy()
+
+    }
+
+}
+
+class PoissonFill : Filter() {
+    private var filler: PoissonFiller? = null
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+
+        if (target.isNotEmpty()) {
+
+            filler?.let {
+                if (it.width != target[0].width || it.height != target[0].height) {
+                    it.destroy()
+                    filler = null
+                }
+            }
+
+            if (filler == null) {
+                filler = PoissonFiller(target[0].width, target[0].height)
+            }
+
+            filler?.let {
+                val result = it.process(source[0])
+                result.copyTo(target[0])
+            }
+        }
     }
 }

@@ -5,7 +5,6 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
         classpath "com.netflix.nebula:nebula-kotlin-plugin:1.3.61"
         classpath "com.netflix.nebula:nebula-publishing-plugin:17.0.5"
         classpath "com.netflix.nebula:nebula-release-plugin:14.1.0"
@@ -13,17 +12,7 @@ buildscript {
     }
 }
 
-
-
-//allprojects {
-//    group 'org.openrndr.extra'
-//    version '0.0.30'
-//}
-//
-//repositories {
-//    mavenLocal()
-//    mavenCentral()
-//}
+apply plugin: 'org.jetbrains.dokka'
 
 project.ext {
     openrndrVersion = "0.3.39"
@@ -34,6 +23,15 @@ project.ext {
     gsonVersion = "2.8.6"
 }
 
+dokka {
+    moduleName = "$rootProject.name"
+    outputDirectory = "$buildDir/docs"
+    outputFormat = "html"
+    includes = ['Module.md']
+    sourceDirs = files(subprojects.collect { p -> new File(p.projectDir, "/src/main/kotlin") })
+  }
+
+
 allprojects {
     apply plugin: 'idea'
     apply plugin: 'java'
@@ -43,16 +41,9 @@ allprojects {
     apply plugin: 'nebula.release'
     apply plugin: 'nebula.maven-publish'
 
-    apply plugin: 'nebula.nebula-bintray-publishing'
     apply plugin: 'nebula.source-jar'
     apply plugin: 'nebula.javadoc-jar'
     apply plugin: 'nebula.nebula-bintray-publishing'
-
-
-    // selectively apply only the bintray plugin, snapshots are not published
-    // nebula-bintray needs to happened after nebula-release since version isn't lazy in the bintray extension
-    apply plugin: 'nebula.nebula-bintray-publishing'
-    apply plugin: 'nebula.source-jar'
 
     group 'org.openrndr.extra'
 
@@ -82,6 +73,17 @@ allprojects {
         runtimeOnly "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
     }
 
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+
+    javadoc {
+        options.addBooleanOption 'Xdoclint:none', true
+    }
+
     contacts {
         'edwin@openrndr.org' {
             moniker 'Edwin Jakobs'
@@ -98,10 +100,10 @@ allprojects {
         gppSign = false
         syncToMavenCentral = false
         licenses = ['BSD-2-Clause']
-        vcsUrl = 'https://github.com/openrndr/openrndr-panel.git'
+        vcsUrl = 'https://github.com/openrndr/orx.git'
         websiteUrl = 'https://www.openrndr.org'
-        issueTrackerUrl = 'https://github.com/openrndr/openrndr-panel/issues'
-        labels = ['creative-coding', 'realtime-rendering', 'opengl', 'gui']
+        issueTrackerUrl = 'https://github.com/openrndr/orx/issues'
+        labels = ['creative-coding', 'realtime-rendering', 'opengl']
     }
 
 
