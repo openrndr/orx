@@ -10,7 +10,7 @@ import org.openrndr.draw.*
 import org.openrndr.internal.gl3.ColorBufferGL3
 
 
-class SyphonClient: Extension {
+class SyphonClient(private val appName: String? = null, private val serverName: String? = null): Extension {
     override var enabled = true
 
     private val client = JSyphonClient()
@@ -18,7 +18,12 @@ class SyphonClient: Extension {
 
     override fun setup(program: Program) {
         buffer = colorBuffer(program.width, program.height)
+
         client.init()
+
+        // Choosing a different server
+        if (appName != null) client.setApplicationName(appName)
+        if (serverName != null) client.setServerName(serverName)
     }
 
     override fun beforeDraw(drawer: Drawer, program: Program) {
@@ -42,6 +47,10 @@ class SyphonClient: Extension {
 
             rectBuffer.copyTo(buffer)
         }
+    }
+
+    override fun shutdown(program: Program) {
+        client.stop()
     }
 }
 
