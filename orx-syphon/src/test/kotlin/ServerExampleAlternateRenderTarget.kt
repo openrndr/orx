@@ -28,8 +28,9 @@ fun main() = application {
                 drawer.background(ColorRGBa(sin(seconds), cos(seconds / 2.0), 0.5, 1.0))
             }
 
-            drawer.background(ColorRGBa.GRAY)
-            drawer.circle(width/2.0, height/2.0, sin(seconds) * width / 2.0)
+            drawer.background(ColorRGBa.PINK)
+            drawer.fill = ColorRGBa.WHITE
+            drawer.circle(drawer.bounds.center, abs(cos(seconds)) * height * 0.5)
             drawer.image(rt.colorBuffer(0))
         }
     }

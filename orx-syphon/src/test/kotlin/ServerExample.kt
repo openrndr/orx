@@ -1,7 +1,7 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.syphon.SyphonServer
-import kotlin.math.sin
+import kotlin.math.*
 
 
 fun main() = application {
@@ -14,8 +14,9 @@ fun main() = application {
         extend(SyphonServer("Test"))
 
         extend {
-            drawer.background(ColorRGBa.RED)
-            drawer.circle(width/2.0, height/2.0, sin(seconds) * width / 2.0)
+            drawer.background(ColorRGBa.PINK)
+            drawer.fill = ColorRGBa.WHITE
+            drawer.circle(drawer.bounds.center, abs(cos(seconds)) * height * 0.5)
         }
     }
 }
