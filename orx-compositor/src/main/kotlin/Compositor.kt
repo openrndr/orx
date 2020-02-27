@@ -31,6 +31,7 @@ open class Layer internal constructor() {
     val children: MutableList<Layer> = mutableListOf()
     var blendFilter: Pair<Filter, Filter.() -> Unit>? = null
     val postFilters: MutableList<Pair<Filter, Filter.() -> Unit>> = mutableListOf()
+    var colorType = ColorType.UINT8
 
     @BooleanParameter("enabled")
     var enabled = true
@@ -52,7 +53,7 @@ open class Layer internal constructor() {
         if (localLayerTarget == null || (localLayerTarget.width != activeRenderTarget.width || localLayerTarget.height != activeRenderTarget.height)) {
             layerTarget?.deepDestroy()
             layerTarget = renderTarget(activeRenderTarget.width, activeRenderTarget.height) {
-                colorBuffer()
+                colorBuffer(type = colorType)
                 depthBuffer()
             }
             layerTarget?.let {
@@ -86,12 +87,8 @@ open class Layer internal constructor() {
                 }
 
                 if (postBufferCache.isEmpty()) {
-                    postBufferCache += colorBuffer(activeRenderTarget.width, activeRenderTarget.height).apply {
-                        Session.active.untrack(this)
-                    }
-                    postBufferCache += colorBuffer(activeRenderTarget.width, activeRenderTarget.height).apply {
-                        Session.active.untrack(this)
-                    }
+                    postBufferCache += colorBuffer(activeRenderTarget.width, activeRenderTarget.height, type = colorType)
+                    postBufferCache += colorBuffer(activeRenderTarget.width, activeRenderTarget.height, type = colorType)
                 }
             }
 
