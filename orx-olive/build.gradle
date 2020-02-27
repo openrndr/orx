@@ -10,6 +10,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:$kotlinVersion"
     implementation "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion"
     implementation "org.jetbrains.kotlin:kotlin-compiler:$kotlinVersion"
+    runtime "org.jetbrains.kotlin:kotlin-script-runtime:$kotlinVersion"
 //    compile "org.jetbrains.kotlin:kotlin-script-util:$kotlinVersion"
 //    compile "org.jetbrains.kotlin:kotlin-main-kts:$kotlinVersion"
  //   compile "org.jetbrains.kotlin:kotlin-scripting-dependencies:$kotlinVersion"
