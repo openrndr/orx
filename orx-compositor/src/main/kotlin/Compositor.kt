@@ -32,6 +32,7 @@ open class Layer internal constructor() {
     var blendFilter: Pair<Filter, Filter.() -> Unit>? = null
     val postFilters: MutableList<Pair<Filter, Filter.() -> Unit>> = mutableListOf()
     var colorType = ColorType.UINT8
+    var accumulation: ColorBuffer? = null
 
     @BooleanParameter("enabled")
     var enabled = true
@@ -48,6 +49,11 @@ open class Layer internal constructor() {
 
         val activeRenderTarget = RenderTarget.active
 
+        accumulation = if (activeRenderTarget !is ProgramRenderTarget) {
+            activeRenderTarget.colorBuffer(0)
+        } else {
+          null
+        }
 
         val localLayerTarget = layerTarget
         if (localLayerTarget == null || (localLayerTarget.width != activeRenderTarget.width || localLayerTarget.height != activeRenderTarget.height)) {
