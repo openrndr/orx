@@ -18,6 +18,7 @@ import org.openrndr.panel.elements.*
 import org.openrndr.panel.style.*
 
 import java.io.File
+import kotlin.math.roundToInt
 import kotlin.reflect.KMutableProperty1
 
 /** Dear contributor, just in case you are here looking to add a new parameter type.
@@ -506,7 +507,7 @@ class GUI : Extension {
                         val max = parameter.intRange!!.last
                         val currentValue = (parameter.property as KMutableProperty1<Any, Int>).get(labeledObject.obj)
                         val randomValue = Math.random() * (max - min) + min
-                        val newValue = ((1.0 - strength)  * currentValue + randomValue * strength).toInt()
+                        val newValue = ((1.0 - strength)  * currentValue + randomValue * strength).roundToInt()
                         (parameter.property as KMutableProperty1<Any, Int>).set(labeledObject.obj, newValue)
                     }
                     ParameterType.Boolean -> {
