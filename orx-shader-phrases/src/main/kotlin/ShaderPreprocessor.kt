@@ -21,13 +21,20 @@ fun preprocessShader(source: String): String {
             val packageClass = packageClassTokens.joinToString(".")
 
             try {
+                /*  Note that JVM-style reflection is used here because of short-comings in the Kotlin reflection
+                library (as of 1.3.61), most notably reflection support for file facades is missing. */
                 val c = Class.forName(packageClass)
                 if (c.annotations.any { it.annotationClass == ShaderPhrases::class }) {
                     if (fieldName == "*") {
+                        c.declaredMethods.filter { it.returnType.name == "java.lang.String" }.map {
+                            "/* imported from $packageClass.$it */\n${it.invoke(null)}\n"
+                        }.joinToString("\n") +
+
                         c.declaredFields.filter { it.type.name == "java.lang.String" }.map {
-                            "/* imported from $packageClass.$it */\n ${it.get(null)}"
+                            "/* imported from $packageClass.$it */\n${it.get(null)}\n"
                         }.joinToString("\n")
                     } else {
+                        // TODO add method based phrase resolver like in the wildcard case above.
                         try {
                             c.getDeclaredField(fieldName).get(null)
                         } catch (e: NoSuchFieldException) {
