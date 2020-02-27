@@ -3,6 +3,8 @@ package org.openrndr.poissonfill
 import org.openrndr.draw.*
 import org.openrndr.extra.fx.blend.Passthrough
 import org.openrndr.extra.fx.blend.Subtract
+import org.openrndr.filter.color.delinearize
+import org.openrndr.filter.color.linearize
 import org.openrndr.resourceUrl
 
 internal class BlendBoundary : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/poisson/blend-boundary.frag")))
@@ -23,7 +25,7 @@ internal class Clamp : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/pois
 private val passthrough by lazy { Passthrough() }
 private val subtract by lazy { Subtract() }
 
-class PoissonBlender(width: Int, height: Int, type: ColorType = ColorType.FLOAT32) {
+class PoissonBlender(val width: Int, val height: Int, type: ColorType = ColorType.FLOAT32) {
     private val pyramid = ConvolutionPyramid(width, height, 0, type = type)
     private val preprocess = colorBuffer(width, height, type = type)
     private val combined = colorBuffer(width, height, type = type)
@@ -37,7 +39,6 @@ class PoissonBlender(width: Int, height: Int, type: ColorType = ColorType.FLOAT3
     private val h2 = 0.0269546f
     private val g = floatArrayOf(0.0311849f, 0.7752854f, 0.0311849f)
 
-    private val clamp = Clamp()
 
     init {
         pyramid.h1 = h1
@@ -48,12 +49,69 @@ class PoissonBlender(width: Int, height: Int, type: ColorType = ColorType.FLOAT3
     fun process(target: ColorBuffer, source: ColorBuffer, mask: ColorBuffer,
                 softMask: ColorBuffer = mask, softMaskGain: Double = 1.0): ColorBuffer {
         subtract.apply(arrayOf(target, source), difference)
-        clamp.minValue = -0.50
-        clamp.maxValue = 0.50
         fillBoundary.apply(arrayOf(difference, mask), preprocess)
         val result = pyramid.process(preprocess)
         fillCombine.softMaskGain = softMaskGain
         fillCombine.apply(arrayOf(result, target, source, mask, softMask), arrayOf(combined))
         return combined
+    }
+
+    fun destroy() {
+        pyramid.destroy()
+        preprocess.destroy()
+        combined.destroy()
+        difference.destroy()
+    }
+
+}
+
+class PoissonBlend: Filter() {
+    private var blender: PoissonBlender? = null
+
+    val alphaToBitmap = AlphaToBitmap()
+    var mask: ColorBuffer? = null
+
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+        if (target.isNotEmpty()) {
+
+            mask?.let {
+                if (it.width != target[0].width || it.height != target[0].height) {
+                    it.destroy()
+                    mask = null
+                }
+            }
+
+            if (mask == null) {
+                mask = colorBuffer(target[0].width, target[0].height)
+            }
+
+            blender?.let {
+                if (it.width != target[0].width || it.height != target[0].height) {
+                    it.destroy()
+                    blender = null
+                }
+            }
+
+            if (blender == null) {
+                blender = PoissonBlender(target[0].width, target[0].height)
+            }
+
+            mask?.let {
+                alphaToBitmap.apply(source[1], it)
+            }
+
+
+            blender?.let {
+
+                linearize.apply(source[0], source[0])
+                linearize.apply(source[1], source[1])
+
+                val result = it.process(source[0], source[1], mask ?: error("no mask"))
+                result.copyTo(target[0])
+
+                delinearize.apply(target[0], target[0])
+            }
+
+        }
     }
 }

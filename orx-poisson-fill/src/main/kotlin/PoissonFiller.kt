@@ -33,11 +33,12 @@ class PoissonFiller(val width: Int, val height: Int, type: ColorType = ColorType
     fun destroy() {
         preproc.destroy()
         combined.destroy()
-
     }
-
 }
 
+/**
+ * Poison filling as a filter
+ */
 class PoissonFill : Filter() {
     private var filler: PoissonFiller? = null
     override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {

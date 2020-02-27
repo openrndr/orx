@@ -41,5 +41,6 @@ void main(){
 
         o_output.rgb = mix(targetColor.rgb, blend, mask*max(0.0,min(1.0, softMask * softMaskGain)));
         o_output.a = 1.0;
+
     }
 }

@@ -12,9 +12,7 @@ out vec4 o_output;
 /** Composite the initial image and the filled image in the regions where the initial image is black. */
 void main(){
 
-    vec4 inputColor = textureLod(tex1, v_texCoord0, 0.0).rgba;
-    //float mask = float(all(equal(inputColor, vec3(0.0))));
-    //float mask = inputColor.a == 1.0? 0.0 : 1.0;
+    vec4 inputColor = textureLod(tex1, v_texCoord0, 0.0);
     float mask = 1.0 - inputColor.a;
 
     vec4 fillColor = textureLod(tex0, v_texCoord0, 0.0);
