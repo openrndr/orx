@@ -2,17 +2,13 @@ dependencies {
     implementation project(":orx-file-watcher")
 
     // -- JSR 223, old style script loader
-    implementation "org.jetbrains.kotlin:kotlin-scripting-jsr223:$kotlinVersion"
+    api "org.jetbrains.kotlin:kotlin-scripting-jsr223:$kotlinVersion"
 
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
-    implementation "org.jetbrains.kotlin:kotlin-scripting-jvm-host-embeddable:$kotlinVersion"
-    implementation "org.jetbrains.kotlin:kotlin-scripting-common:$kotlinVersion"
-    implementation "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:$kotlinVersion"
-    implementation "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion"
-    implementation "org.jetbrains.kotlin:kotlin-compiler:$kotlinVersion"
-    runtime "org.jetbrains.kotlin:kotlin-script-runtime:$kotlinVersion"
-//    compile "org.jetbrains.kotlin:kotlin-script-util:$kotlinVersion"
-//    compile "org.jetbrains.kotlin:kotlin-main-kts:$kotlinVersion"
- //   compile "org.jetbrains.kotlin:kotlin-scripting-dependencies:$kotlinVersion"
-
+    api "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    api "org.jetbrains.kotlin:kotlin-scripting-jvm-host-embeddable:$kotlinVersion"
+    api "org.jetbrains.kotlin:kotlin-scripting-common:$kotlinVersion"
+    api "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:$kotlinVersion"
+    api "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion"
+    api "org.jetbrains.kotlin:kotlin-compiler:$kotlinVersion"
+    api "org.jetbrains.kotlin:kotlin-script-runtime:$kotlinVersion"
 }
