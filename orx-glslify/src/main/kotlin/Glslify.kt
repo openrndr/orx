@@ -1,10 +1,11 @@
 package org.openrndr.extra.glslify
 
-import khttp.responses.Response
 import mu.KotlinLogging
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.InputStream
+import java.net.URL
+import javax.net.ssl.HttpsURLConnection
 
 const val BASE_URL = "https://registry.npmjs.org"
 const val GLSLIFY_PATH = "src/main/resources/glslify"
@@ -35,9 +36,9 @@ fun glslify(module: String, renameFunctionTo: String? = null): String {
         try {
             moduleDir.mkdirs()
 
-            val response: Response = khttp.get(packageUrl, stream = true)
-
-            val tarStream: InputStream = ByteArrayInputStream(response.content)
+            val url = URL(packageUrl)
+            val con = url.openConnection()
+            val tarStream: InputStream = ByteArrayInputStream(con.getInputStream().readBytes())
 
             extractGzipStream(tarStream, moduleDir)
 
@@ -46,6 +47,7 @@ fun glslify(module: String, renameFunctionTo: String? = null): String {
             File("$moduleDir/package").deleteRecursively()
 
             logger.trace("[glslify] $moduleName downloaded")
+            (con as HttpsURLConnection).disconnect()
         } catch (ex: Exception) {
             logger.error(ex) { "[glslify]: There was an error getting $moduleName" }
 

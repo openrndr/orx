@@ -36,5 +36,4 @@ include 'orx-camera',
         'orx-kinect-v1-natives-macos',
         'orx-kinect-v1-natives-windows',
         'orx-kinect-v1-demo'
-include 'orx-glslify'
 

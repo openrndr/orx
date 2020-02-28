@@ -2,7 +2,8 @@ package org.openrndr.extra.glslify
 
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
-import khttp.responses.Response
+import java.net.URL
+import javax.net.ssl.HttpsURLConnection
 
 
 internal data class NPMPackageDist(
@@ -25,20 +26,17 @@ internal data class NPMResponse(
 )
 
 internal fun getPackageUrl(module: String): String? {
-    val url = "$BASE_URL/$module"
+    val moduleUrl = "$BASE_URL/$module"
 
-    val response : Response = khttp.get(
-            url = url,
-            headers = mapOf(
-                    "Accept" to "application/vnd.npm.install-v1+json; q=1.0, application/json; q=0.8"
-            )
-    )
+    val url = URL(moduleUrl)
 
+    val con = url.openConnection() as HttpsURLConnection
+    con.setRequestProperty("Accept", "application/vnd.npm.install-v1+json; q=1.0, application/json; q=0.8")
+
+    val json = String(con.inputStream.readAllBytes())
     val gson = GsonBuilder().create()
 
-    val npmResponse = gson.fromJson(
-            response.text, NPMResponse::class.java
-    )
+    val npmResponse = gson.fromJson(json, NPMResponse::class.java)
 
     if (npmResponse.error != null) {
         return null
