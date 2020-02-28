@@ -33,7 +33,7 @@ internal fun getPackageUrl(module: String): String? {
     val con = url.openConnection() as HttpsURLConnection
     con.setRequestProperty("Accept", "application/vnd.npm.install-v1+json; q=1.0, application/json; q=0.8")
 
-    val json = String(con.inputStream.readAllBytes())
+    val json = String(con.inputStream.readBytes())
     val gson = GsonBuilder().create()
 
     val npmResponse = gson.fromJson(json, NPMResponse::class.java)
