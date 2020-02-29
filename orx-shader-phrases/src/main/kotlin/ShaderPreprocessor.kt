@@ -34,11 +34,18 @@ fun preprocessShader(source: String): String {
                             "/* imported from $packageClass.$it */\n${it.get(null)}\n"
                         }.joinToString("\n")
                     } else {
-                        // TODO add method based phrase resolver like in the wildcard case above.
+                        var result:String? = null
                         try {
-                            c.getDeclaredField(fieldName).get(null)
-                        } catch (e: NoSuchFieldException) {
-                            error("field \"$fieldName\" not found in \"#pragma import $packageClass.$fieldName\" on line ${index + 1}")
+                            val methodName = "get${fieldName.take(1).toUpperCase() + fieldName.drop(1)}"
+                            result = c.getMethod(methodName).invoke(null) as String
+                            result
+                        } catch (e: NoSuchMethodException) {
+                            try {
+                                result = c.getDeclaredField(fieldName).get(null) as String
+                                result
+                            } catch (e: NoSuchFieldException) {
+                                error("field \"$fieldName\" not found in \"#pragma import $packageClass.$fieldName\" on line ${index + 1}")
+                            }
                         }
                     }
                 } else {
