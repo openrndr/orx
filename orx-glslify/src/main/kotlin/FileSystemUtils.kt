@@ -5,6 +5,7 @@ import org.rauschig.jarchivelib.ArchiverFactory
 import java.io.File
 import java.io.InputStream
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.Paths
 
 internal fun extractGzipStream(tarStream: InputStream, dest: File) {
@@ -13,8 +14,7 @@ internal fun extractGzipStream(tarStream: InputStream, dest: File) {
     archiver.extract(tarStream, dest)
 }
 
-internal fun moveFilesUp(moduleDir: File) {
-    val modulePath = Paths.get(moduleDir.path)
+internal fun moveFilesUp(modulePath: Path) {
     val packageFolder = modulePath.resolve("package")
 
     val packageFiles = Files.list(packageFolder).filter {
@@ -28,14 +28,14 @@ internal fun moveFilesUp(moduleDir: File) {
     }
 }
 
-internal fun parseModule(module: String): Pair<String, String> {
+internal fun parseModule(module: String): Pair<String, Path> {
     val path = Paths.get(module)
     val pathLen = path.nameCount
     val moduleName = path.subpath(0, 1).toString()
-    var shaderPath = "index"
+    var shaderPath = Paths.get("index")
 
     if (pathLen > 1) {
-        shaderPath = path.subpath(1, pathLen).toString()
+        shaderPath = path.subpath(1, pathLen)
     }
 
     return Pair(moduleName, shaderPath)
