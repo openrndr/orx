@@ -70,6 +70,7 @@ All distortion effects are opacity preserving
  - `StackRepeat` - repeats the source input in a stack fashion
  - `HorizontalWave` - applies a horizontal wave effect on the source input
  - `VerticalWave` - applies a vertical wave effect on the source input
+ - `PerspectivePlane` - applies a planar perspective distortion on the source input
  
 ### Dither
  - `ADither` - a selection of dithering effects
