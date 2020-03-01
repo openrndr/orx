@@ -4,9 +4,6 @@ Easily use glslify compatible shaders found on [npm](https://www.npmjs.com/searc
 
 ### Caveats
 
-Some glslify shaders have their own imports. When this happens we print a message to the console,
-so you can proceed to import them. These need to be imported in the shader file on top of the main import.
-
 There's also a mapping functionality that glslify provides that we don't support. This can be easily solved
 by doing as the following example (based on `glsl-raytrace` package):
 
@@ -14,25 +11,10 @@ by doing as the following example (based on `glsl-raytrace` package):
 const int steps = 50;
 vec2 map(vec3 p);
 
-#pragma import shaders.RayMarching.*
+#pragma glslify: raytrace = require(glsl-raytrace)
 ```
 
 ## Example
-
-Shader Phrases file:
-```kotlin
-@file:JvmName("Checkers")
-@file:ShaderPhrases
-
-package shaders
-
-import org.openrndr.extra.glslify.glslify
-import org.openrndr.extra.shaderphrases.annotations.ShaderPhrases
-
-val periodic by lazy { glslify("glsl-noise/classic/3d", "perlin") }
-val checker by lazy { glslify("glsl-checker") }
-val easings by lazy { glslify("glsl-easings/cubic-in-out", "easing")}
-```
 
 Shader file:
 
@@ -46,7 +28,9 @@ uniform float uTime;
 
 out vec4 o_color;
 
-#pragma import shaders.Checkers.*
+#pragma glslify: checker = require(glsl-checker)
+#pragma glslify: perlin = require(glsl-noise/classic/3d)
+#pragma glslify: easing = require(glsl-easings/cubic-in-out)
 
 void main() {
     vec2 uv = v_texCoord0;
@@ -58,4 +42,16 @@ void main() {
 
     o_color = vec4(col, 1.0);
 }
+```
+
+Then preprocess it with either: 
+
+```kotlin
+preprocessGlslifyFromUrl(resourceUrl("/shaders/ray-marching.glsl"))
+```
+
+or
+
+```kotlin
+preprocessGlslify("""version #330 ...""")
 ```
