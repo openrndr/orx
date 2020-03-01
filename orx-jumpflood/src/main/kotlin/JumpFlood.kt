@@ -49,19 +49,19 @@ class Threshold : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/threshold
     }
 }
 
-private val encodePoints by lazy { EncodePoints() }
-private val jumpFlood by lazy { JumpFlood() }
-private val pixelDistance by lazy { PixelDistance() }
-private val pixelDirection by lazy { PixelDirection() }
-private val contourPoints by lazy { ContourPoints() }
-private val threshold by lazy { Threshold() }
-private val passthrough by lazy { Passthrough() }
+private val encodePoints by lazy { persistent { EncodePoints() } }
+private val pixelDistance by lazy {  persistent { PixelDistance()  } }
+private val pixelDirection by lazy { persistent { PixelDirection() } }
+private val contourPoints by lazy { persistent { ContourPoints() } }
+private val threshold by lazy {  persistent { Threshold() } }
+private val passthrough by lazy { persistent { Passthrough() } }
 
 class JumpFlooder(val width: Int, val height: Int, format: ColorFormat = ColorFormat.RGB, type: ColorType = ColorType.FLOAT32) {
 
     private val dimension = max(width, height)
     private val exp = ceil(Math.log(dimension.toDouble()) / Math.log(2.0)).toInt()
     val squareDim = 2.0.pow(exp.toDouble()).toInt()
+    val jumpFlood = JumpFlood()
 
     private val coordinates =
             listOf(colorBuffer(squareDim, squareDim, format = format, type = type),
