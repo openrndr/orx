@@ -93,8 +93,8 @@ open class Layer internal constructor() {
                 }
 
                 if (postBufferCache.isEmpty()) {
-                    postBufferCache += colorBuffer(activeRenderTarget.width, activeRenderTarget.height, type = colorType)
-                    postBufferCache += colorBuffer(activeRenderTarget.width, activeRenderTarget.height, type = colorType)
+                    postBufferCache += persistent { colorBuffer(activeRenderTarget.width, activeRenderTarget.height, type = colorType) }
+                    postBufferCache += persistent { colorBuffer(activeRenderTarget.width, activeRenderTarget.height, type = colorType) }
                 }
             }
 
