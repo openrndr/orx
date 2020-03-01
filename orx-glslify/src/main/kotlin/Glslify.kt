@@ -1,8 +1,8 @@
 package org.openrndr.extra.glslify
 
 import mu.KotlinLogging
+import org.openrndr.draw.codeFromURL
 import java.io.ByteArrayInputStream
-import java.io.File
 import java.io.InputStream
 import java.net.URL
 import java.nio.file.Files
@@ -12,28 +12,48 @@ import javax.net.ssl.HttpsURLConnection
 import kotlin.streams.toList
 
 internal const val BASE_URL = "https://registry.npmjs.org"
-internal const val GLSLIFY_PATH = "src/main/resources/glslify"
-internal const val IMPORT_PATT = """#pragma\sglslify:\s*(.*)\s=\s*require\('?([\w\-\\/]+).*'?\)$"""
+internal const val IMPORT_PATT = """#pragma\sglslify:\s([\w]+).*\s=\s*require\('?([\w\-\\/]+).*'?\)$"""
 internal const val EXPORT_PATT = """#pragma\sglslify:\s*export\(([\w\-]+)\)"""
+internal const val PRAGMA_IDENTIFIER = "#pragma glslify"
 
 internal val shaderExtensions = arrayOf("glsl", "frag")
 
-private data class GlslifyImport(
-        val functionName: String,
-        val pkgName: String,
-        var exists: Boolean
-)
+internal val logger = KotlinLogging.logger {}
 
-private val logger = KotlinLogging.logger {}
+private var importTree = mutableSetOf<String>()
 
-fun glslify(module: String, renameFunctionTo: String? = null): String {
-    val (moduleName: String, shaderPath: Path) = parseModule(module)
-    val moduleDir = Paths.get("$GLSLIFY_PATH/$moduleName")
-
-    return glslifyImport(moduleName, moduleDir, shaderPath, renameFunctionTo)
+fun preprocessGlslifyFromUrl(url: String, glslifyPath: String = "src/main/resources/glslify"): String {
+    return preprocessGlslify(codeFromURL(url), glslifyPath)
 }
 
-private fun glslifyImport(moduleName: String, moduleDir: Path, shaderPath: Path, renameFunctionTo: String? = null): String {
+
+fun preprocessGlslify(source: String, glslifyPath: String = "src/main/resources/glslify"): String {
+    importTree = mutableSetOf()
+
+    return source.split("\n").map { line ->
+        if (line.startsWith(PRAGMA_IDENTIFIER)) {
+            Regex(IMPORT_PATT).find(line)?.let {
+                if (it.groupValues.size > 1) {
+                    val functionName = it.groupValues[1]
+                    val module = it.groupValues[2]
+
+                    val (moduleName, shaderPath) = parseModule(module)
+                    val importPath = Paths.get(glslifyPath).resolve(moduleName)
+
+                    if (importTree.contains(moduleName)) return@map ""
+
+                    importTree.add(moduleName)
+
+                    return@map glslifyImport(moduleName, importPath, shaderPath, functionName, glslifyPath)
+                }
+            }
+        }
+
+        line
+    }.joinToString("\n").trimMargin()
+}
+
+private fun glslifyImport(moduleName: String, moduleDir: Path, shaderPath: Path, renameFunctionTo: String? = null, glslifyPath: String): String {
     if (!Files.exists(moduleDir)) {
         fetchModule(moduleName, moduleDir)
     } else {
@@ -47,51 +67,44 @@ private fun glslifyImport(moduleName: String, moduleDir: Path, shaderPath: Path,
             moduleDir.resolve("$shaderPath.$it")
         }.first { Files.exists(it) }
     } catch (ex: NoSuchElementException) {
-        logger.trace("[glslify] $moduleName: $shaderPath doesn't lead to any shader file")
-
-        return ""
+        throw error("[glslify] $moduleName: $shaderPath doesn't lead to any shader file")
     }
 
-    val imports = mutableListOf<GlslifyImport>()
     var exportName: String? = null
 
-    var shader = Files.lines(shaderFile).filter { line ->
-        line.contains("#pragma").let { isPragma ->
-            if (isPragma) {
-                Regex(IMPORT_PATT).find(line)?.let {
-                    if (it.groupValues.size > 1) {
-                        val importPath = Paths.get(GLSLIFY_PATH).resolve(it.groupValues[2])
+    var shader = Files.lines(shaderFile).map { line ->
+        if (line.startsWith(PRAGMA_IDENTIFIER)) {
+            Regex(IMPORT_PATT).find(line)?.let {
+                val functionName = it.groupValues[1]
+                val module = it.groupValues[2]
 
-                        imports.add(GlslifyImport(it.groupValues[1], it.groupValues[2], Files.exists(importPath)))
-                    }
-                }
+                val (innerModuleName, innerShaderPath) = parseModule(module)
+                val importPath = Paths.get(glslifyPath).resolve(moduleName)
 
-                Regex(EXPORT_PATT).find(line)?.let {
-                    if (it.groupValues.size > 1) {
-                        exportName = it.groupValues[1]
-                    }
-                }
+                if (importTree.contains(innerModuleName)) return@map ""
+
+                importTree.add(innerModuleName)
+
+                return@map glslifyImport(innerModuleName, importPath, innerShaderPath, functionName, glslifyPath)
             }
 
-            !isPragma // we want to exclude any #pragma statements
+            Regex(EXPORT_PATT).find(line)?.let {
+                if (it.groupValues.size > 1) {
+                    exportName = it.groupValues[1]
+                }
+
+                return@map ""
+            }
         }
+
+        line
     }.toList().joinToString("\n")
-
-    val missingImports = imports.filter { !it.exists }
-
-    if (missingImports.isNotEmpty()) {
-        missingImports.forEach {
-            logger.info("Missing package: ${it.pkgName} - Import name: ${it.functionName}")
-        }
-
-        throw error("[glslify] Please declare the missing imports")
-    }
 
     if (renameFunctionTo != null && exportName != null) {
         shader = shader.replace( exportName!!, renameFunctionTo)
     }
 
-    return shader
+    return shader.trimMargin()
 }
 
 internal fun fetchModule(moduleName: String, moduleDir: Path) {
