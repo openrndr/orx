@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.openrndr.Extension
 import org.openrndr.KEY_F11
+import org.openrndr.KEY_LEFT_SHIFT
 import org.openrndr.KeyModifier
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
@@ -76,6 +77,10 @@ class GUI : Extension {
 
     private lateinit var panel: ControlManager
 
+    // Randomize button
+    private var shiftDown = false
+    private var randomizeButton: Button? = null // FIXME should this be null or is there a better way?
+
     fun onChange(listener: (name: String, value: Any?) -> Unit) {
         onChangeListener = listener
     }
@@ -87,6 +92,18 @@ class GUI : Extension {
                 enabled = !enabled
                 panel.enabled = enabled
                 sidebarState().hidden = !enabled
+            }
+
+            if (it.key == KEY_LEFT_SHIFT) {
+                shiftDown = true
+                randomizeButton!!.classes.add(ElementClass("randomize-strong"))
+            }
+        }
+
+        program.keyboard.keyUp.listen {
+            if (it.key == KEY_LEFT_SHIFT) {
+                shiftDown = false
+                randomizeButton!!.classes.remove(ElementClass("randomize-strong"))
             }
         }
 
@@ -160,6 +177,15 @@ class GUI : Extension {
                 }
             }
 
+            styleSheet(has class_ "randomize-strong") {
+                color = Color.RGBa(ColorRGBa.PINK)
+
+                and(has state "hover") {
+                    color = Color.RGBa(ColorRGBa.BLACK)
+                    background = Color.RGBa(ColorRGBa.PINK)
+                }
+            }
+
             styleSheet(has type "dropdown-button") {
                 this.width = 175.px
             }
@@ -169,10 +195,10 @@ class GUI : Extension {
                 div("container") {
                     id = "container"
                     val header = div("toolbar") {
-                        button {
+                        randomizeButton = button {
                             label = "Randomize"
                             clicked {
-                                randomize()
+                                randomize(strength = if (shiftDown) .75 else .05)
                             }
                         }
                         button {
