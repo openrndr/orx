@@ -26,10 +26,10 @@ class DropShadow : Filter(Shader.createFromCode(filterVertexCode, filterFragment
     @DoubleParameter("gain", 0.0, 4.0)
     var gain: Double by parameters
 
-    @DoubleParameter("x shift", -1.0, 1.0)
+    @DoubleParameter("x shift", -30.0, 30.0)
     var xShift: Double = 0.0
 
-    @DoubleParameter("y shift", -1.0, 1.0)
+    @DoubleParameter("y shift", -30.0, 30.0)
     var yShift: Double = 0.0
 
     @ColorParameter("color")
