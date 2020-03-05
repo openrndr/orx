@@ -17,6 +17,11 @@ class BigBiGANQuery(@SerializedName("input_image") val inputImage: String)
 
 class BigBiGANResult(@SerializedName("output_image") val outputImage: String)
 
+// -- DensePose
+class DensePoseQuery(@SerializedName("input") val input: String)
+
+class DensePoseResult(@SerializedName("output") val output: String)
+
 // -- SPADE-COCO
 class SpadeCocoRequest(val semantic_map: String)
 
