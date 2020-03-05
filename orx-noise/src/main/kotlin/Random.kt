@@ -88,16 +88,16 @@ object Random {
         val picked = mutableListOf<T>()
 
         while(picked.size < count) {
+            if (list.isEmpty()) {
+                list = coll.toMutableList()
+            }
+
             var index = int0(list.size)
             var newElem = list.elementAt(index)
 
             while(compareAgainst.contains(newElem)) {
                 index = int0(list.size)
                 newElem = list.elementAt(index)
-            }
-
-            if (list.isEmpty()) {
-                list = coll.toMutableList()
             }
 
             picked.add(list[index])
