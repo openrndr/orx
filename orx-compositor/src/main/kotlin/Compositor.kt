@@ -4,6 +4,10 @@ import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
+import org.openrndr.extra.fx.blend.DestinationIn
+import org.openrndr.extra.fx.blend.DestinationOut
+import org.openrndr.extra.fx.blend.SourceIn
+import org.openrndr.extra.fx.blend.SourceOut
 import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.math.Matrix44
@@ -27,6 +31,9 @@ fun RenderTarget.deepDestroy() {
  */
 @Description("Layer")
 open class Layer internal constructor() {
+    var sourceOut = SourceOut()
+    var destinationIn = SourceIn()
+    var maskLayer: Layer? = null
     var drawFunc: () -> Unit = {}
     val children: MutableList<Layer> = mutableListOf()
     var blendFilter: Pair<Filter, Filter.() -> Unit>? = null
@@ -36,6 +43,8 @@ open class Layer internal constructor() {
 
     @BooleanParameter("enabled")
     var enabled = true
+    @BooleanParameter("Invert mask")
+    var invertMask = false
     var clearColor: ColorRGBa? = ColorRGBa.TRANSPARENT
     private var layerTarget: RenderTarget? = null
 
@@ -55,21 +64,27 @@ open class Layer internal constructor() {
           null
         }
 
-        val localLayerTarget = layerTarget
-        if (localLayerTarget == null || (localLayerTarget.width != activeRenderTarget.width || localLayerTarget.height != activeRenderTarget.height)) {
-            layerTarget?.deepDestroy()
-            layerTarget = renderTarget(activeRenderTarget.width, activeRenderTarget.height) {
-                colorBuffer(type = colorType)
-                depthBuffer()
-            }
-            layerTarget?.let {
-                drawer.withTarget(it) {
-                    drawer.background(ColorRGBa.TRANSPARENT)
-                }
-            }
+        if (shouldCreateLayerTarget(activeRenderTarget)) {
+            createLayerTarget(activeRenderTarget, drawer)
         }
 
         layerTarget?.let { target ->
+            maskLayer?.let {
+                if (it.shouldCreateLayerTarget(activeRenderTarget)) {
+                    it.createLayerTarget(activeRenderTarget, drawer)
+                }
+
+                it.layerTarget?.let { maskRt ->
+                    drawer.isolatedWithTarget(maskRt) {
+                        clearColor?.let {
+                            drawer.background(it)
+                        }
+
+                        it.drawFunc()
+                    }
+                }
+            }
+
             drawer.isolatedWithTarget(target) {
                 clearColor?.let {
                     drawer.background(it)
@@ -109,6 +124,12 @@ open class Layer internal constructor() {
                 result
             }
 
+            maskLayer?.let {
+                val maskFilter = if (invertMask) sourceOut else destinationIn
+
+                maskFilter.apply(arrayOf(it.layerTarget!!.colorBuffer(0), layerPost), layerPost)
+            }
+
             val localBlendFilter = blendFilter
             if (localBlendFilter == null) {
                 drawer.isolatedWithTarget(activeRenderTarget) {
@@ -120,6 +141,23 @@ open class Layer internal constructor() {
             } else {
                 localBlendFilter.first.apply(localBlendFilter.second)
                 localBlendFilter.first.apply(arrayOf(activeRenderTarget.colorBuffer(0), layerPost), activeRenderTarget.colorBuffer(0))
+            }
+        }
+    }
+
+    private fun shouldCreateLayerTarget(activeRenderTarget: RenderTarget): Boolean {
+        return layerTarget == null || (layerTarget?.width != activeRenderTarget.width || layerTarget?.height != activeRenderTarget.height)
+    }
+
+    private fun createLayerTarget(activeRenderTarget: RenderTarget, drawer: Drawer) {
+        layerTarget?.deepDestroy()
+        layerTarget = renderTarget(activeRenderTarget.width, activeRenderTarget.height) {
+            colorBuffer(type = colorType)
+            depthBuffer()
+        }
+        layerTarget?.let {
+            drawer.withTarget(it) {
+                drawer.background(ColorRGBa.TRANSPARENT)
             }
         }
     }
@@ -139,6 +177,15 @@ fun Layer.layer(function: Layer.() -> Unit): Layer {
  */
 fun Layer.draw(function: () -> Unit) {
     drawFunc = function
+}
+
+/**
+ * the drawing acts as a mask on the layer
+ */
+fun Layer.mask(function: () -> Unit) {
+    maskLayer = Layer().apply {
+        this.drawFunc = function
+    }
 }
 
 /**

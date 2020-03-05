@@ -5,40 +5,50 @@ A simple toolkit to make composite images.
 ##### Usage
 
 ```kotlin
-import org.openrndr.Configuration
-import org.openrndr.Program
 import org.openrndr.application
-import org.openrndr.color.ColorRGBa
+import org.openrndr.draw.loadImage
 import org.openrndr.extra.compositor.*
-import org.openrndr.filter.blend.add
-import org.openrndr.filter.blur.ApproximateGaussianBlur
+import org.openrndr.extra.fx.blend.Add
+import org.openrndr.extra.fx.edges.EdgesWork
+import org.openrndr.extra.gui.GUI
+import org.openrndr.math.Vector2
 
-class Compositor001 : Program() {
 
-    override fun setup() {
-        val drawing = compose {
-            draw {
-                drawer.fill = ColorRGBa.PINK
-                drawer.circle(width / 2.0, height / 2.0, 10.0)
-            }
-
-            layer {
-                draw {
-                    drawer.circle(width / 2.0, height / 2.0, 100.0)
-                }
-                post(ApproximateGaussianBlur()) {
-                    window = 10
-                    sigma = Math.cos(seconds * 10.0) * 10.0 + 10.0
-                }
-                blend(add)
-            }
+fun main() {
+    application {
+        configure {
+            width = 768
+            height = 768
         }
+        program {
+            val gui = GUI()
 
-        extend {
-            drawing.draw(drawer)
+            val w2 = width / 2.0
+            val h2 = height / 2.0
+
+            val c = compose {
+                draw {
+                    drawer.fill = ColorRGBa.PINK
+                    drawer.circle(width / 2.0, height / 2.0, 10.0)
+                }
+    
+                layer {
+                    blend(Add())
+
+                    draw {
+                        drawer.circle(width / 2.0, height / 2.0, 100.0)
+                    }
+                    post(ApproximateGaussianBlur()) {
+                        window = 10
+                        sigma = Math.cos(seconds * 10.0) * 10.0 + 10.0
+                    }
+                }
+            }
+            extend(gui)
+            extend {
+                c.draw(drawer)
+            }
         }
     }
 }
-
-fun main(args: Array<String>) = application(Compositor001(), Configuration())
 ```
