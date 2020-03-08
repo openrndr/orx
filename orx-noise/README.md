@@ -67,6 +67,11 @@ val v2 = simplexHermite(seed, x, y)
 val v3 = simplexLinear(seed, x, y, z)
 val v4 = simplexQuintic(seed, x, y, z)
 val v5 = simplexHermite(seed, x, y ,z)
+
+// -- 4d
+val v6 = simplexLinear(seed, x, y, z, w)
+val v7 = simplexQuintic(seed, x, y, z, w)
+val v8 = simplexHermite(seed, x, y, z, w)
 ```
 
 ### Cubic noise

@@ -202,6 +202,10 @@ object Random {
     fun simplex(x: Double, y: Double, z: Double): Double {
         return simplex(stringToInt(seed), x, y, z)
     }
+    
+    fun simplex(x: Double, y: Double, z: Double, w: Double): Double {
+        return simplex(stringToInt(seed), x, y, z, w)
+    }
 
     fun fbm(x: Double, y: Double, noiseFun: (Int, Double, Double) -> Double, type: Fractal = Fractal.FBM,
             octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5): Double {
