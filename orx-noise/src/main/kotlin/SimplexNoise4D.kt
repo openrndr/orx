@@ -1,5 +1,4 @@
-import org.openrndr.extra.noise.fastFloor
-import org.openrndr.extra.noise.gradCoord4D
+package org.openrndr.extra.noise
 
 private val SIMPLEX_4D = byteArrayOf(
     0, 1, 2, 3, 0, 1, 3, 2, 0, 0, 0, 0, 0, 2, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 0,
