@@ -31,7 +31,7 @@ fun preprocessGlslify(source: String, glslifyPath: String = "src/main/resources/
     importTree = mutableSetOf()
 
     return source.split("\n").map { line ->
-        if (line.startsWith(PRAGMA_IDENTIFIER)) {
+        if (line.trimStart().startsWith(PRAGMA_IDENTIFIER)) {
             Regex(IMPORT_PATT).find(line)?.let {
                 if (it.groupValues.size > 1) {
                     val functionName = it.groupValues[1]
