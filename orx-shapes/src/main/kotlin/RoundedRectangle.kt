@@ -1,3 +1,5 @@
+package org.openrndr.extra.shapes
+
 import org.openrndr.draw.Drawer
 import org.openrndr.math.Vector2
 import org.openrndr.shape.contour
