@@ -20,7 +20,7 @@ object TestGlslify : Spek({
 
         describe("should download shader with just the module's name") {
             val shader = """#version 330
-#pragma glslify: luma = require(glsl-luma)
+    #pragma glslify: luma = require(glsl-luma)
 """
             val processed = preprocessGlslify(shader, glslifyPath = glslifyPath)
 
