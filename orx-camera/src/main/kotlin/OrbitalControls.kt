@@ -7,7 +7,7 @@ import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.tan
 
-class OrbitalControls(val orbitalCamera: OrbitalCamera , val userInteraction: Boolean = true, val keySpeed: Double = 1.0) : Extension {
+class OrbitalControls(val orbitalCamera: OrbitalCamera, val userInteraction: Boolean = true, val keySpeed: Double = 1.0) : Extension {
     enum class STATE {
         NONE,
         ROTATE,
@@ -21,98 +21,105 @@ class OrbitalControls(val orbitalCamera: OrbitalCamera , val userInteraction: Bo
     private lateinit var lastMousePosition: Vector2
 
     private fun mouseScrolled(event: MouseEvent) {
-        if (abs(event.rotation.x) > 0.1) return
+        if (!event.propagationCancelled) {
+            if (abs(event.rotation.x) > 0.1) return
 
-        when {
-            event.rotation.y > 0 -> orbitalCamera.dollyIn()
-            event.rotation.y < 0 -> orbitalCamera.dollyOut()
+            when {
+                event.rotation.y > 0 -> orbitalCamera.dollyIn()
+                event.rotation.y < 0 -> orbitalCamera.dollyOut()
+            }
         }
     }
 
     private fun mouseMoved(event: MouseEvent) {
 
-        if (state == STATE.NONE) return
-        val delta = lastMousePosition - event.position
-        lastMousePosition = event.position
+        if (!event.propagationCancelled) {
+            if (state == STATE.NONE) return
+            val delta = lastMousePosition - event.position
+            lastMousePosition = event.position
 
-        if (state == STATE.PAN) {
+            if (state == STATE.PAN) {
 
-            val offset = Vector3.fromSpherical(orbitalCamera.spherical) - orbitalCamera.lookAt
+                val offset = Vector3.fromSpherical(orbitalCamera.spherical) - orbitalCamera.lookAt
 
-            // half of the fov is center to top of screen
-            val targetDistance = offset.length * tan((Math.toRadians((fov) / 2) ) )
-            val panX = (2 * delta.x * targetDistance / program.window.size.x)
-            val panY = (2 * delta.y * targetDistance / program.window.size.y)
+                // half of the fov is center to top of screen
+                val targetDistance = offset.length * tan((Math.toRadians((fov) / 2)))
+                val panX = (2 * delta.x * targetDistance / program.window.size.x)
+                val panY = (2 * delta.y * targetDistance / program.window.size.y)
 
-            orbitalCamera.pan(panX, -panY, 0.0)
+                orbitalCamera.pan(panX, -panY, 0.0)
 
-        } else {
-            val rotX = 360.0 * delta.x / program.window.size.x
-            val rotY = 360.0 * delta.y / program.window.size.y
-            orbitalCamera.rotate(rotX, rotY)
+            } else {
+                val rotX = 360.0 * delta.x / program.window.size.x
+                val rotY = 360.0 * delta.y / program.window.size.y
+                orbitalCamera.rotate(rotX, rotY)
+            }
         }
-
     }
 
     private fun mouseButtonDown(event: MouseEvent) {
-        val previousState = state
+        if (!event.propagationCancelled) {
+            val previousState = state
 
-        when (event.button) {
-            MouseButton.LEFT -> {
-                state = STATE.ROTATE
+            when (event.button) {
+                MouseButton.LEFT -> {
+                    state = STATE.ROTATE
+                }
+                MouseButton.RIGHT -> {
+                    state = STATE.PAN
+                }
+                MouseButton.CENTER -> {
+                }
+                MouseButton.NONE -> {
+                }
             }
-            MouseButton.RIGHT -> {
-                state = STATE.PAN
-            }
-            MouseButton.CENTER -> {
-            }
-            MouseButton.NONE -> {
-            }
-        }
 
-        if (previousState == STATE.NONE) {
-            lastMousePosition = event.position
+            if (previousState == STATE.NONE) {
+                lastMousePosition = event.position
+            }
         }
     }
 
     fun keyPressed(keyEvent: KeyEvent) {
-        if (keyEvent.key == KEY_ARROW_RIGHT) {
-            orbitalCamera.pan(keySpeed, 0.0, 0.0)
-        }
-        if (keyEvent.key == KEY_ARROW_LEFT) {
-            orbitalCamera.pan(-keySpeed, 0.0, 0.0)
-        }
-        if (keyEvent.key == KEY_ARROW_UP) {
-            orbitalCamera.pan(0.0, keySpeed, 0.0)
-        }
-        if (keyEvent.key == KEY_ARROW_DOWN) {
-            orbitalCamera.pan(0.0, -keySpeed, 0.0)
-        }
+        if (!keyEvent.propagationCancelled) {
+            if (keyEvent.key == KEY_ARROW_RIGHT) {
+                orbitalCamera.pan(keySpeed, 0.0, 0.0)
+            }
+            if (keyEvent.key == KEY_ARROW_LEFT) {
+                orbitalCamera.pan(-keySpeed, 0.0, 0.0)
+            }
+            if (keyEvent.key == KEY_ARROW_UP) {
+                orbitalCamera.pan(0.0, keySpeed, 0.0)
+            }
+            if (keyEvent.key == KEY_ARROW_DOWN) {
+                orbitalCamera.pan(0.0, -keySpeed, 0.0)
+            }
 
-        if (keyEvent.name == "q") {
-            orbitalCamera.pan(0.0, -keySpeed, 0.0)
-        }
-        if (keyEvent.name == "e") {
-            orbitalCamera.pan(0.0, keySpeed, 0.0)
-        }
-        if (keyEvent.name == "w") {
-            orbitalCamera.pan(0.0, 0.0, -keySpeed)
-        }
-        if (keyEvent.name == "s") {
-            orbitalCamera.pan(0.0, 0.0, keySpeed)
-        }
-        if (keyEvent.name == "a") {
-            orbitalCamera.pan(-keySpeed, 0.0, 0.0)
-        }
-        if (keyEvent.name == "d") {
-            orbitalCamera.pan(keySpeed, 0.0, 0.0)
-        }
+            if (keyEvent.name == "q") {
+                orbitalCamera.pan(0.0, -keySpeed, 0.0)
+            }
+            if (keyEvent.name == "e") {
+                orbitalCamera.pan(0.0, keySpeed, 0.0)
+            }
+            if (keyEvent.name == "w") {
+                orbitalCamera.pan(0.0, 0.0, -keySpeed)
+            }
+            if (keyEvent.name == "s") {
+                orbitalCamera.pan(0.0, 0.0, keySpeed)
+            }
+            if (keyEvent.name == "a") {
+                orbitalCamera.pan(-keySpeed, 0.0, 0.0)
+            }
+            if (keyEvent.name == "d") {
+                orbitalCamera.pan(keySpeed, 0.0, 0.0)
+            }
 
-        if (keyEvent.key == KEY_PAGE_UP) {
-            orbitalCamera.zoom(keySpeed)
-        }
-        if (keyEvent.key == KEY_PAGE_DOWN) {
-            orbitalCamera.zoom(-keySpeed)
+            if (keyEvent.key == KEY_PAGE_UP) {
+                orbitalCamera.zoom(keySpeed)
+            }
+            if (keyEvent.key == KEY_PAGE_DOWN) {
+                orbitalCamera.zoom(-keySpeed)
+            }
         }
     }
 
@@ -128,7 +135,7 @@ class OrbitalControls(val orbitalCamera: OrbitalCamera , val userInteraction: Bo
             program.mouse.buttonUp.listen { state = STATE.NONE }
             program.mouse.scrolled.listen { mouseScrolled(it) }
             program.keyboard.keyDown.listen { keyPressed(it) }
-            program.keyboard.keyRepeat.listen{ keyPressed(it) }
+            program.keyboard.keyRepeat.listen { keyPressed(it) }
         }
     }
 }
