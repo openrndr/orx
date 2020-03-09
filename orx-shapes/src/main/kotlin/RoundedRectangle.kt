@@ -1,3 +1,4 @@
+import org.openrndr.draw.Drawer
 import org.openrndr.math.Vector2
 import org.openrndr.shape.contour
 import kotlin.math.min
@@ -34,3 +35,12 @@ class RoundedRectangle(val corner: Vector2, val width: Double, val height: Doubl
             close()
         }
 }
+
+fun Drawer.roundedRectangle(x: Double, y: Double, width: Double, height: Double, radius: Double) =
+        contour(RoundedRectangle(x, y, width, height, radius).contour)
+
+fun Drawer.roundedRectangle(position: Vector2, width: Double, height: Double, radius: Double) =
+        contour(RoundedRectangle(position, width, height, radius).contour)
+
+fun Drawer.roundedRectangle(roundedRectangle: RoundedRectangle) =
+        contour(roundedRectangle.contour)
