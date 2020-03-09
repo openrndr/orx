@@ -4,8 +4,6 @@ import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
-import org.openrndr.extra.fx.blend.DestinationIn
-import org.openrndr.extra.fx.blend.DestinationOut
 import org.openrndr.extra.fx.blend.SourceIn
 import org.openrndr.extra.fx.blend.SourceOut
 import org.openrndr.extra.parameters.BooleanParameter
