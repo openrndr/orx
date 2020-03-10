@@ -9,6 +9,8 @@ import org.openrndr.math.Vector3
 import java.io.File
 import java.net.MalformedURLException
 import java.net.URL
+import kotlin.math.max
+import kotlin.math.min
 
 class Triangle(val positions: Array<Vector3> = emptyArray(),
                val normals: Array<Vector3> = emptyArray(),
@@ -31,23 +33,23 @@ fun bounds(triangles: List<Triangle>): Box {
 
     triangles.forEach {
         it.positions.forEach {
-            minX = Math.min(minX, it.x)
-            minY = Math.min(minY, it.y)
-            minZ = Math.min(minZ, it.z)
+            minX = min(minX, it.x)
+            minY = min(minY, it.y)
+            minZ = min(minZ, it.z)
 
-            maxX = Math.max(maxX, it.x)
-            maxY = Math.max(maxY, it.y)
-            maxZ = Math.max(maxZ, it.z)
+            maxX = max(maxX, it.x)
+            maxY = max(maxY, it.y)
+            maxZ = max(maxZ, it.z)
         }
     }
     return Box(Vector3(minX, minY, minZ), maxX - minX, maxY - minY, maxZ - minZ)
 }
 
-fun List<Triangle>.vertexBuffer():VertexBuffer {
-    val vertexBuffer = vertexBuffer(objVertexFormat, size*3)
+fun List<Triangle>.vertexBuffer(): VertexBuffer {
+    val vertexBuffer = vertexBuffer(objVertexFormat, size * 3)
     vertexBuffer.put {
         this@vertexBuffer.forEach {
-            for (i in 0 until it.positions.size) {
+            for (i in it.positions.indices) {
                 write(it.positions[i])
                 write(it.normals[i])
                 write(Vector2.ZERO)
@@ -92,16 +94,16 @@ fun loadOBJasVertexBuffer(lines: List<String>): VertexBuffer {
     vertexBuffer.put {
         objects.entries.forEach {
             it.value.forEach {
-                for (i in 0 until it.positions.size) {
+                for (i in it.positions.indices) {
                     write(it.positions[i])
-                    if (it.normals.size > 0) {
+                    if (it.normals.isNotEmpty()) {
                         write(it.normals[i])
                     } else {
                         val d0 = it.positions[2] - it.positions[0]
                         val d1 = it.positions[1] - it.positions[0]
                         write(d0.normalized.cross(d1.normalized).normalized)
                     }
-                    if (it.textureCoords.size > 0) {
+                    if (it.textureCoords.isNotEmpty()) {
                         write(it.textureCoords[i])
                     } else {
                         write(Vector2.ZERO)
@@ -145,36 +147,36 @@ fun loadOBJ(lines: List<String>): Map<String, List<Triangle>> {
                             it.map { it.toIntOrNull() }
                         }
 
-                        for (i in 0 until indices.size-2) {
+                        for (i in 0 until indices.size - 2) {
 
                             val attributes = indices[0].size
-                            val o = i*2
+                            val o = i * 2
                             val s = indices.size
 
                             val ps = if (attributes >= 1) arrayOf(
-                                    indices[(0+o)%s][0]?.let { positions[it - 1] } ?: Vector3.ZERO,
-                                    indices[(1+o)%s][0]?.let { positions[it - 1] } ?: Vector3.ZERO,
-                                    indices[(2+o)%s][0]?.let { positions[it - 1] } ?: Vector3.ZERO)
+                                    indices[(0 + o) % s][0]?.let { positions[it - 1] } ?: Vector3.ZERO,
+                                    indices[(1 + o) % s][0]?.let { positions[it - 1] } ?: Vector3.ZERO,
+                                    indices[(2 + o) % s][0]?.let { positions[it - 1] } ?: Vector3.ZERO)
                             else
                                 emptyArray()
 
                             val tcs = if (attributes >= 2) arrayOf(
-                                    indices[(0+o)%s][1]?.let { textureCoords[it - 1] } ?: Vector2.ZERO,
-                                    indices[(1+o)%s][1]?.let { textureCoords[it - 1] } ?: Vector2.ZERO,
-                                    indices[(2+o)%s][1]?.let { textureCoords[it - 1] } ?: Vector2.ZERO)
+                                    indices[(0 + o) % s][1]?.let { textureCoords[it - 1] } ?: Vector2.ZERO,
+                                    indices[(1 + o) % s][1]?.let { textureCoords[it - 1] } ?: Vector2.ZERO,
+                                    indices[(2 + o) % s][1]?.let { textureCoords[it - 1] } ?: Vector2.ZERO)
                             else
                                 emptyArray()
 
 
                             val ns = if (attributes >= 3) arrayOf(
-                                    indices[(0+o)%s][2]?.let { normals[it - 1] } ?: Vector3.ZERO,
-                                    indices[(1+o)%s][2]?.let { normals[it - 1] } ?: Vector3.ZERO,
-                                    indices[(2+o)%s][2]?.let { normals[it - 1] } ?: Vector3.ZERO)
+                                    indices[(0 + o) % s][2]?.let { normals[it - 1] } ?: Vector3.ZERO,
+                                    indices[(1 + o) % s][2]?.let { normals[it - 1] } ?: Vector3.ZERO,
+                                    indices[(2 + o) % s][2]?.let { normals[it - 1] } ?: Vector3.ZERO)
                             else
                                 emptyArray()
 
                             activeMesh.add(Triangle(ps, ns, tcs))
-                            if(meshes.isEmpty()) {
+                            if (meshes.isEmpty()) {
                                 meshes["no-name"] = activeMesh
                             }
                         }
