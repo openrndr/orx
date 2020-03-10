@@ -140,7 +140,7 @@ fun loadOBJ(lines: List<String>): Map<String, List<Triangle>> {
                     "vt" -> textureCoords += Vector2(tokens[1].toDouble(), tokens[2].toDouble())
                     "g" -> {
                         activeMesh = mutableListOf()
-                        meshes[tokens[1]] = activeMesh
+                        meshes[tokens.getOrNull(1)?:"no-name-${meshes.size}"] = activeMesh
                     }
                     "f" -> {
                         val indices = tokens.subList(1, tokens.size).map { it.split("/") }.map {
