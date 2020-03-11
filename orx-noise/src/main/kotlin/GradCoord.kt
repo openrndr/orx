@@ -3,18 +3,15 @@ package org.openrndr.extra.noise
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 
-
-
 private const val X_PRIME = 1619
 private const val Y_PRIME = 31337
 private const val Z_PRIME = 6971
 private const val W_PRIME = 1013
 
-
-private val GRAD_2D = arrayOf(Vector2(-1.0, -1.0), Vector2(1.0, -1.0), Vector2(-1.0, 1.0),
+private val GRAD_2D = arrayOf(
+        Vector2(-1.0, -1.0), Vector2(1.0, -1.0), Vector2(-1.0, 1.0),
         Vector2(1.0, 1.0), Vector2(0.0, -1.0), Vector2(-1.0, 0.0),
         Vector2(0.0, 1.0), Vector2(1.0, 0.0))
-
 
 private val GRAD_3D = arrayOf(
         Vector3(1.0, 1.0, 0.0), Vector3(-1.0, 1.0, 0.0), Vector3(1.0, -1.0, 0.0), Vector3(-1.0, -1.0, 0.0),
@@ -48,7 +45,6 @@ fun gradCoord3D(seed: Int, x: Int, y: Int, z: Int, xd: Double, yd: Double, zd: D
 
     return xd * g.x + yd * g.y + zd * g.z
 }
-
 
 fun gradCoord4D(seed: Int, x: Int, y: Int, z: Int, w: Int, xd: Double, yd: Double, zd: Double, wd: Double): Double {
     var hash = seed
@@ -124,6 +120,12 @@ fun hash4D(seed: Int, x: Int, y: Int, z: Int, w: Int): Int {
 }
 
 
+fun valCoord1D(seed: Int, x: Int): Double {
+    var n = seed
+    n = n xor X_PRIME * x
+    return n * n * n * 60493 / 2147483648.0
+}
+
 fun valCoord2D(seed: Int, x: Int, y: Int): Double {
     var n = seed
     n = n xor X_PRIME * x
@@ -140,7 +142,6 @@ fun valCoord3D(seed: Int, x: Int, y: Int, z: Int): Double {
 
     return n * n * n * 60493 / 2147483648.0
 }
-
 
 private fun valCoord4D(seed: Int, x: Int, y: Int, z: Int, w: Int): Double {
     var n = seed

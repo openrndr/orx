@@ -87,7 +87,7 @@ object Random {
         var list = coll.toMutableList()
         val picked = mutableListOf<T>()
 
-        while(picked.size < count) {
+        while (picked.size < count) {
             if (list.isEmpty()) {
                 list = coll.toMutableList()
             }
@@ -95,7 +95,7 @@ object Random {
             var index = int0(list.size)
             var newElem = list.elementAt(index)
 
-            while(compareAgainst.contains(newElem)) {
+            while (compareAgainst.contains(newElem)) {
                 index = int0(list.size)
                 newElem = list.elementAt(index)
             }
@@ -202,7 +202,7 @@ object Random {
     fun simplex(x: Double, y: Double, z: Double): Double {
         return simplex(stringToInt(seed), x, y, z)
     }
-    
+
     fun simplex(x: Double, y: Double, z: Double, w: Double): Double {
         return simplex(stringToInt(seed), x, y, z, w)
     }
@@ -238,14 +238,14 @@ object Random {
     }
 
     fun ring2d(innerRadius: Double = 0.0, outerRadius: Double = 1.0, count: Int = 1): Any {
-        return when(count) {
+        return when (count) {
             1 -> Vector2.uniformRing(innerRadius, outerRadius, rnd)
             else -> Vector2.uniformsRing(count, innerRadius, outerRadius, rnd)
         }
     }
 
     fun ring3d(innerRadius: Double = 0.0, outerRadius: Double = 1.0, count: Int = 1): Any {
-        return when(count) {
+        return when (count) {
             1 -> Vector3.uniformRing(innerRadius, outerRadius, rnd)
             else -> Vector3.uniformsRing(count, innerRadius, outerRadius, rnd)
         }

@@ -36,7 +36,7 @@ inline fun fbm(seed: Int, x: Double, y: Double, crossinline noise: (Int, Double,
 }
 
 inline fun billow(seed: Int, x: Double, y: Double, z: Double, crossinline noise: (Int, Double, Double, Double) -> Double,
-                  octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5) : Double {
+                  octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5): Double {
     var sum = Math.abs(noise(seed, x, y, z) * 2.0 - 1.0)
     var amp = 1.0
 
@@ -54,7 +54,7 @@ inline fun billow(seed: Int, x: Double, y: Double, z: Double, crossinline noise:
 }
 
 inline fun billow(seed: Int, x: Double, y: Double, crossinline noise: (Int, Double, Double) -> Double,
-                  octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5) : Double {
+                  octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5): Double {
     var sum = Math.abs(noise(seed, x, y) * 2.0 - 1.0)
     var amp = 1.0
 

@@ -1,10 +1,11 @@
 package org.openrndr.extra.noise
 
+fun perlin(seed: Int, x: Double, y: Double) = perlin(seed, x, y, ::linear)
 fun perlinLinear(seed: Int, x: Double, y: Double) = perlin(seed, x, y, ::linear)
 fun perlinQuintic(seed: Int, x: Double, y: Double) = perlin(seed, x, y, ::quintic)
 fun perlinHermite(seed: Int, x: Double, y: Double) = perlin(seed, x, y, ::hermite)
 
-private fun perlin(seed: Int, x: Double, y: Double, interpolator: (Double) -> Double): Double {
+inline fun perlin(seed: Int, x: Double, y: Double, crossinline interpolator: (Double) -> Double): Double {
     val x0 = x.fastFloor()
     val y0 = y.fastFloor()
     val x1 = x0 + 1
@@ -12,7 +13,6 @@ private fun perlin(seed: Int, x: Double, y: Double, interpolator: (Double) -> Do
 
     val xs = interpolator(x - x0)
     val ys = interpolator(y - y0)
-
 
     val xd0 = x - x0
     val yd0 = y - y0

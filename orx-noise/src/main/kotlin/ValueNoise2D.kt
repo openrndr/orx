@@ -1,9 +1,8 @@
 package org.openrndr.extra.noise
 
-fun valueLinear(seed: Int, x:Double, y:Double) = value(seed, x, y, ::linear)
-fun valueQuintic(seed: Int, x:Double, y:Double) = value(seed, x, y, ::quintic)
-fun valueHermite(seed: Int, x:Double, y:Double) = value(seed, x, y, ::hermite)
-
+fun valueLinear(seed: Int, x: Double, y: Double) = value(seed, x, y, ::linear)
+fun valueQuintic(seed: Int, x: Double, y: Double) = value(seed, x, y, ::quintic)
+fun valueHermite(seed: Int, x: Double, y: Double) = value(seed, x, y, ::hermite)
 
 inline fun value(seed: Int, x: Double, y: Double, crossinline interpolation: (Double) -> Double = ::linear): Double {
     val x0 = x.fastFloor()

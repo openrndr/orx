@@ -5,6 +5,10 @@ import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
 import kotlin.random.Random
 
+fun random(min: Double = -1.0, max: Double = 1.0, random: Random = Random.Default): Double {
+    return (random.nextDouble() * (max - min)) + min
+}
+
 fun Double.Companion.uniform(min: Double = -1.0, max: Double = 1.0, random: Random = Random.Default): Double {
     return (random.nextDouble() * (max - min)) + min
 }
