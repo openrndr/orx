@@ -4,7 +4,7 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
 
-inline fun gradient(
+inline fun gradient1D(
         crossinline noise: (seed: Int, x: Double) -> Double,
         seed: Int,
         x: Double,
@@ -15,7 +15,7 @@ inline fun gradient(
     return (xp - xn) / (2.0 * epsilon)
 }
 
-inline fun gradient(
+inline fun gradient2D(
         crossinline noise: (seed: Int, x: Double, y: Double) -> Double,
         seed: Int,
         x: Double,
@@ -29,7 +29,7 @@ inline fun gradient(
     return Vector2((xp - xn) / (2.0 * epsilon), (yp - yn) / (2.0 * epsilon))
 }
 
-inline fun gradient(
+inline fun gradient3D(
         crossinline noise: (seed: Int, x: Double, y: Double, z: Double) -> Double,
         seed: Int,
         x: Double,
@@ -46,7 +46,7 @@ inline fun gradient(
     return Vector3((xp - xn) / (2.0 * epsilon), (yp - yn) / (2.0 * epsilon), (zp - zn) / (2.0 * epsilon))
 }
 
-inline fun gradient(
+inline fun gradient4D(
         crossinline noise: (seed: Int, x: Double, y: Double, z: Double, w: Double) -> Double,
         seed: Int,
         x: Double,
