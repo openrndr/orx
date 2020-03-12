@@ -1,6 +1,10 @@
 package org.openrndr.extra.noise
 
 
+private const val F3 = (1.0 / 3.0).toFloat()
+private const val G3 = (1.0 / 6.0).toFloat()
+private const val G33 = G3 * 3 - 1
+
 fun simplex(seed: Int, x: Double, y: Double, z: Double): Double {
 
     val t = (x + y + z) / 3.0
@@ -46,13 +50,13 @@ fun simplex(seed: Int, x: Double, y: Double, z: Double): Double {
     val x2 = x0 - i2 + 1.0 / 3.0
     val y2 = y0 - j2 + 1.0 / 3.0
     val z2 = z0 - k2 + 1.0 / 3.0
-    val x3 = x0 + ((1.0 / 6.0) * 3.0 - 1.0)
-    val y3 = y0 + ((1.0 / 6.0) * 3.0 - 1.0)
-    val z3 = z0 + ((1.0 / 6.0) * 3.0 - 1.0)
+    val x3 = x0 + G33
+    val y3 = y0 + G33
+    val z3 = z0 + G33
 
     val n0: Double
     run {
-        var t = 0.6 * x0 * x0 - y0 * y0 - z0 * z0
+        var t = 0.6 - x0 * x0 - y0 * y0 - z0 * z0
         if (t < 0) {
             n0 = 0.0
         } else {
@@ -62,7 +66,7 @@ fun simplex(seed: Int, x: Double, y: Double, z: Double): Double {
     }
     val n1: Double
     run {
-        var t = 0.6 * x1 * x1 - y1 * y1 - z1 * z1
+        var t = 0.6 - x1 * x1 - y1 * y1 - z1 * z1
         if (t < 0) {
             n1 = 0.0
         } else {
@@ -72,7 +76,7 @@ fun simplex(seed: Int, x: Double, y: Double, z: Double): Double {
     }
     val n2: Double
     run {
-        var t = 0.6 * x2 * x2 - y2 * y2 - z2 * z2
+        var t = 0.6 - x2 * x2 - y2 * y2 - z2 * z2
         if (t < 0) {
             n2 = 0.0
         } else {
