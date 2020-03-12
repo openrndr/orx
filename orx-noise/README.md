@@ -32,57 +32,69 @@ These are a mostly straight port from FastNoise-Java but have a slightly differe
 
 ### Perlin noise
 ```
+// -- 1d
+val v0 = perlinLinear(seed, x)
+val v1 = perlinQuintic(seed, x)
+val v2 = perlinHermite(seed, x)
+
 // -- 2d
-val v0 = perlinLinear(seed, x, y)
-val v1 = perlinQuintic(seed, x, y)
-val v2 = perlinHermite(seed, x, y)
+val v3 = perlinLinear(seed, x, y)
+val v4 = perlinQuintic(seed, x, y)
+val v5 = perlinHermite(seed, x, y)
 
 // -- 3d
-val v3 = perlinLinear(seed, x, y, z)
-val v4 = perlinQuintic(seed, x, y, z)
-val v5 = perlinHermite(seed, x, y, z)
+val v6 = perlinLinear(seed, x, y, z)
+val v7 = perlinQuintic(seed, x, y, z)
+val v8 = perlinHermite(seed, x, y, z)
 ```
 
 ### Value noise
 ```
+// -- 1d
+val v0 = valueLinear(seed, x)
+val v1 = valueQuintic(seed, x)
+val v2 = valueHermite(seed, x)
+
 // -- 2d
-val v0 = valueLinear(seed, x, y)
-val v1 = valueQuintic(seed, x, y)
-val v2 = valueHermite(seed, x, y)
+val v2 = valueLinear(seed, x, y)
+val v3 = valueQuintic(seed, x, y)
+val v4 = valueHermite(seed, x, y)
 
 // -- 3d
-val v3 = valueLinear(seed, x, y, z)
-val v4 = valueQuintic(seed, x, y, z)
-val v5 = valueHermite(seed, x, y ,z)
+val v5 = valueLinear(seed, x, y, z)
+val v6 = valueQuintic(seed, x, y, z)
+val v7 = valueHermite(seed, x, y ,z)
 ```
 
 ### Simplex noise
 ```
+// -- 1d
+val v0 = simplex(seed, x)
+
 // -- 2d
-val v0 = simplexLinear(seed, x, y)
-val v1 = simplexQuintic(seed, x, y)
-val v2 = simplexHermite(seed, x, y)
+val v1 = simplex(seed, x, y)
 
 // -- 3d
-val v3 = simplexLinear(seed, x, y, z)
-val v4 = simplexQuintic(seed, x, y, z)
-val v5 = simplexHermite(seed, x, y ,z)
+val v2 = simplex(seed, x, y, z)
 
 // -- 4d
-val v6 = simplexLinear(seed, x, y, z, w)
-val v7 = simplexQuintic(seed, x, y, z, w)
-val v8 = simplexHermite(seed, x, y, z, w)
+val v3 = simplex(seed, x, y, z, w)
 ```
 
 ### Cubic noise
 ```
+// -- 1d
+val v0 = cubic(seed, x, y)
+val v1 = cubicQuintic(seed, x, y)
+val v2 = cubicHermite(seed, x, y)
+
 // -- 2d
-val v0 = cubicLinear(seed, x, y)
+val v0 = cubic(seed, x, y)
 val v1 = cubicQuintic(seed, x, y)
 val v2 = cubicHermite(seed, x, y)
 
 // -- 3d
-val v3 = cubicLinear(seed, x, y, z)
+val v3 = cubic(seed, x, y, z)
 val v4 = cubicQuintic(seed, x, y, z)
 val v5 = cubicHermite(seed, x, y ,z)
 ```
@@ -94,22 +106,36 @@ The library provides 3 functions with which fractal noise can be composed.
 #### Fractal brownian motion (FBM)
 
 ```
-val v0 = fbm(seed, x, y, ::perlinLinear, octaves, lacunarity, gain)
-val v1 = fbm(seed, x, y, ::simplexLinear, octaves, lacunarity, gain)
-val v2 = fbm(seed, x, y, ::valueLinear, octaves, lacunarity, gain)
+// 1d
+val v0 = fbm(seed, x, ::perlinLinear, octaves, lacunarity, gain)
+val v1 = fbm(seed, x, ::simplexLinear, octaves, lacunarity, gain)
+val v2 = fbm(seed, x, ::valueLinear, octaves, lacunarity, gain)
 
-val v3 = fbm(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
-val v4 = fbm(seed, x, y, z, ::simplexLinear, octaves, lacunarity, gain)
-val v5 = fbm(seed, x, y, z, ::valueLinear, octaves, lacunarity, gain)
+// 2d
+val v3 = fbm(seed, x, y, ::perlinLinear, octaves, lacunarity, gain)
+val v4 = fbm(seed, x, y, ::simplexLinear, octaves, lacunarity, gain)
+val v5 = fbm(seed, x, y, ::valueLinear, octaves, lacunarity, gain)
+
+// 3d
+val v6 = fbm(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
+val v7 = fbm(seed, x, y, z, ::simplexLinear, octaves, lacunarity, gain)
+val v8 = fbm(seed, x, y, z, ::valueLinear, octaves, lacunarity, gain)
 ```
 
 #### Rigid
 
 ```
-val v0 = rigid(seed, x, y, ::perlinLinear, octaves, lacunarity, gain)
-val v1 = rigid(seed, x, y, ::simplexLinear, octaves, lacunarity, gain)
-val v2 = rigid(seed, x, y, ::valueLinear, octaves, lacunarity, gain)
+// 1d
+val v0 = rigid(seed, x, ::perlinLinear, octaves, lacunarity, gain)
+val v1 = rigid(seed, x, ::simplexLinear, octaves, lacunarity, gain)
+val v2 = rigid(seed, x, ::valueLinear, octaves, lacunarity, gain)
 
+// 2d
+val v2 = rigid(seed, x, y, ::perlinLinear, octaves, lacunarity, gain)
+val v3 = rigid(seed, x, y, ::simplexLinear, octaves, lacunarity, gain)
+val v4 = rigid(seed, x, y, ::valueLinear, octaves, lacunarity, gain)
+
+// 3d
 val v3 = rigid(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 val v4 = rigid(seed, x, y, z, ::simplexLinear, octaves, lacunarity, gain)
 val v5 = rigid(seed, x, y, z, ::valueLinear, octaves, lacunarity, gain)
@@ -118,11 +144,18 @@ val v5 = rigid(seed, x, y, z, ::valueLinear, octaves, lacunarity, gain)
 #### Billow
 
 ```
-val v0 = billow(seed, x, y, ::perlinLinear, octaves, lacunarity, gain)
-val v1 = billow(seed, x, y, ::perlinLinear, octaves, lacunarity, gain)
-val v2 = billow(seed, x, y, ::perlinLinear, octaves, lacunarity, gain)
+// 1d
+val v0 = billow(seed, x, ::perlinLinear, octaves, lacunarity, gain)
+val v1 = billow(seed, x, ::perlinLinear, octaves, lacunarity, gain)
+val v2 = billow(seed, x, ::perlinLinear, octaves, lacunarity, gain)
 
-val v3 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
-val v4 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
-val v5 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
+// 2d
+val v3 = billow(seed, x, y, ::perlinLinear, octaves, lacunarity, gain)
+val v4 = billow(seed, x, y, ::perlinLinear, octaves, lacunarity, gain)
+val v5 = billow(seed, x, y, ::perlinLinear, octaves, lacunarity, gain)
+
+// 3d
+val v6 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
+val v7 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
+val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 ```

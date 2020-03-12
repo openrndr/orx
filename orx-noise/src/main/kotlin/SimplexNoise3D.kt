@@ -1,10 +1,7 @@
 package org.openrndr.extra.noise
 
-fun simplexLinear(seed: Int, x: Double, y: Double, z: Double) = simplex(seed, x, y, z, ::linear)
-fun simplexQuintic(seed: Int, x: Double, y: Double, z: Double) = simplex(seed, x, y, z, ::quintic)
-fun simplexHermite(seed: Int, x: Double, y: Double, z: Double) = simplex(seed, x, y, z, ::hermite)
 
-fun simplex(seed: Int, x: Double, y: Double, z: Double, interpolator: (Double) -> Double = ::linear): Double {
+fun simplex(seed: Int, x: Double, y: Double, z: Double): Double {
 
     val t = (x + y + z) / 3.0
     val i = (x + t).fastFloor()
@@ -12,9 +9,9 @@ fun simplex(seed: Int, x: Double, y: Double, z: Double, interpolator: (Double) -
     val k = (z + t).fastFloor()
 
     val t2 = (i + j + k) / 6.0
-    val x0 = interpolator(x - (i - t2))
-    val y0 = interpolator(y - (j - t2))
-    val z0 = interpolator(z - (k - t2))
+    val x0 = x - (i - t2)
+    val y0 = y - (j - t2)
+    val z0 = z - (k - t2)
 
     val i1: Int
     val j1: Int

@@ -14,11 +14,8 @@ private val SIMPLEX_4D = byteArrayOf(
 private const val F4 = ((2.23606797 - 1.0) / 4.0)
 private const val G4 = ((5.0 - 2.23606797) / 20.0)
 
-fun simplexLinear(seed: Int, x: Double, y: Double, z: Double, w: Double) = simplex(seed, x, y, z, w, ::linear)
-fun simplexQuintic(seed: Int, x: Double, y: Double, z: Double, w: Double) = simplex(seed, x, y, z, w, ::quintic)
-fun simplexHermite(seed: Int, x: Double, y: Double, z: Double, w: Double) = simplex(seed, x, y, z, w, ::hermite)
 
-fun simplex(seed: Int, x: Double, y: Double, z: Double, w: Double, interpolator: (Double) -> Double = ::linear): Double {
+fun simplex(seed: Int, x: Double, y: Double, z: Double, w: Double): Double {
 
     var t = (x + y + z + w) * F4
     val i = (x + t).fastFloor()
@@ -27,10 +24,10 @@ fun simplex(seed: Int, x: Double, y: Double, z: Double, w: Double, interpolator:
     val l = (w + t).fastFloor()
 
     val t2 = (i + j + k + l) * G4
-    val x0 = interpolator(x - (i - t2))
-    val y0 = interpolator(y - (j - t2))
-    val z0 = interpolator(z - (k - t2))
-    val w0 = interpolator(w - (l - t2))
+    val x0 = x - (i - t2)
+    val y0 = y - (j - t2)
+    val z0 = z - (k - t2)
+    val w0 = w - (l - t2)
 
     var c = if (x0 > y0) 32 else 0
     c += if (x0 > z0) 16 else 0
