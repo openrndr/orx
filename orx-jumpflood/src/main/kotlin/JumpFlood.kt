@@ -13,6 +13,15 @@ import kotlin.math.max
 import kotlin.math.pow
 
 class EncodePoints : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/encode-points.frag")))
+
+class EncodeSubpixel : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/encode-subpixel.frag"))) {
+    var threshold by parameters
+    init {
+        threshold = 0.5
+    }
+
+}
+
 class JumpFlood : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/jumpflood.frag"))) {
     var maxSteps: Int by parameters
     var step: Int by parameters
@@ -49,6 +58,15 @@ class Threshold : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/threshold
     }
 }
 
+class AlphaThreshold : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/alpha-threshold.frag"))) {
+    var threshold: Double by parameters
+
+    init {
+        threshold = 0.5
+    }
+}
+
+
 private val encodePoints by lazy { persistent { EncodePoints() } }
 private val pixelDistance by lazy {  persistent { PixelDistance()  } }
 private val pixelDirection by lazy { persistent { PixelDirection() } }
@@ -56,7 +74,8 @@ private val contourPoints by lazy { persistent { ContourPoints() } }
 private val threshold by lazy {  persistent { Threshold() } }
 private val passthrough by lazy { persistent { Passthrough() } }
 
-class JumpFlooder(val width: Int, val height: Int, format: ColorFormat = ColorFormat.RGB, type: ColorType = ColorType.FLOAT32) {
+class JumpFlooder(val width: Int, val height: Int, format: ColorFormat = ColorFormat.RGB, type: ColorType = ColorType.FLOAT32,
+                  val encodePoints: Filter = EncodePoints()) {
 
     private val dimension = max(width, height)
     private val exp = ceil(Math.log(dimension.toDouble()) / Math.log(2.0)).toInt()
@@ -70,8 +89,8 @@ class JumpFlooder(val width: Int, val height: Int, format: ColorFormat = ColorFo
 
     val final = colorBuffer(squareDim, squareDim, format = format, type = type)
 
-    private val square = colorBuffer(squareDim, squareDim, format = format, type = type).apply {
-        fill(ColorRGBa.BLACK)
+    private val square = colorBuffer(squareDim, squareDim, format = ColorFormat.RGBa, type = type).apply {
+        fill(ColorRGBa.BLACK.opacify(0.0))
     }
 
 
@@ -83,6 +102,7 @@ class JumpFlooder(val width: Int, val height: Int, format: ColorFormat = ColorFo
         input.copyTo(square)
         encodePoints.apply(square, coordinates[0])
 
+        jumpFlood.maxSteps = exp
         for (i in 0 until exp) {
             jumpFlood.step = i
             jumpFlood.apply(coordinates[i % 2], coordinates[(i + 1) % 2])
