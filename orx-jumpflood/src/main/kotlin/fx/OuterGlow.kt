@@ -1,7 +1,10 @@
-package org.openrndr.extra.jumpfill
+package org.openrndr.extra.jumpfill.fx
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
+import org.openrndr.extra.jumpfill.EncodeSubpixel
+import org.openrndr.extra.jumpfill.JumpFlooder
+import org.openrndr.extra.jumpfill.PixelDirection
 import org.openrndr.extra.parameters.ColorParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
@@ -50,7 +53,7 @@ class OuterGlow : Filter() {
 
     private var jumpFlooder: JumpFlooder? = null
     private val decodeFilter = PixelDirection()
-    private val glowFilter = OuterGlowFilter()
+    private val glowFilter = org.openrndr.extra.jumpfill.fx.OuterGlowFilter()
 
     private var distance: ColorBuffer? = null
 

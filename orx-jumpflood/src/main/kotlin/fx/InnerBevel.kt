@@ -1,6 +1,9 @@
-package org.openrndr.extra.jumpfill
+package org.openrndr.extra.jumpfill.fx
 
 import org.openrndr.draw.*
+import org.openrndr.extra.jumpfill.EncodeSubpixel
+import org.openrndr.extra.jumpfill.JumpFlooder
+import org.openrndr.extra.jumpfill.PixelDirection
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.math.Vector2
