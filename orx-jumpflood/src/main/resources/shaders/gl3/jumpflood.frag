@@ -8,9 +8,9 @@ uniform int step;
 out vec4 o_color;
 void main() {
 
-    float stepwidth = 1.0 / pow(2.0, step+1);
+    float stepwidth = 1.0 / pow(2.0, min(maxSteps, step+1));
 
-    float bestDistance = 9999.0;
+    float bestDistance = 999999.0;
     vec2 bestCoord = vec2(-1.0);
     vec2 bestColor = vec2(-1.0);
 
