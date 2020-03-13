@@ -125,6 +125,7 @@ class Parameter(
 fun Any.listParameters(): List<Parameter> {
     return (this::class.memberProperties.filter {
         !it.isConst &&
+                it is KMutableProperty1<*, *> &&
                 it.visibility == KVisibility.PUBLIC &&
                 it.annotations.map { it.annotationClass }.intersect(ParameterType.parameterAnnotationClasses).isNotEmpty()
     }.map {
