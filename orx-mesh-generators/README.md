@@ -9,6 +9,14 @@ val sphere = sphereMesh(32, 32, 4.0)
 val unitSphere = sphereMesh()
 val cube = boxMesh()
 val box = boxMesh(2.0, 4.0, 2.0)
+
+...
+
+drawer.vertexBuffer(sphere, DrawPrimitive.TRIANGLES)
+drawer.vertexBuffer(unitSphere, DrawPrimitive.TRIANGLES)
+drawer.vertexBuffer(cube, DrawPrimitive.TRIANGLES)
+drawer.vertexBuffer(box, DrawPrimitive.TRIANGLES)
+
 ```
 
 ## API
