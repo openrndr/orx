@@ -1,5 +1,6 @@
 package org.openrndr.extra.parameters
 
+import org.openrndr.math.Vector2
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty1
@@ -71,6 +72,25 @@ annotation class TextParameter(val label: String, val order: Int = Integer.MAX_V
 @Retention(AnnotationRetention.RUNTIME)
 annotation class ColorParameter(val label: String, val order: Int = Integer.MAX_VALUE)
 
+
+/**
+ * Vector2 annotation for a vector 2 parameter
+ * @property label a short description of the parameter
+ * @property order hint for where to place the parameter in user interfaces
+ */
+@Target(AnnotationTarget.PROPERTY)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class Vector2Parameter(
+        val label: String,
+        val minX: Double = -1.0,
+        val minY: Double = -1.0,
+        val maxX: Double = 1.0,
+        val maxY: Double = 1.0,
+        val order: Int = Integer.MAX_VALUE
+)
+
+
+
 /**
  * ActionParameter annotation for functions without arguments
  * @property label a short description of the parameter
@@ -86,7 +106,8 @@ enum class ParameterType(val annotationClass: KClass<out Annotation>) {
     Boolean(BooleanParameter::class),
     Action(ActionParameter::class),
     Text(TextParameter::class),
-    Color(ColorParameter::class)
+    Color(ColorParameter::class),
+    Vector2(Vector2Parameter::class)
     ;
 
     companion object {
@@ -115,6 +136,7 @@ class Parameter(
         val function: KCallable<Unit>?,
         val label: String,
         val doubleRange: ClosedRange<Double>?,
+        val vectorRange: Pair<Vector2, Vector2>?,
         val intRange: IntRange?,
         val precision: Int?,
         val order: Int)
@@ -136,6 +158,7 @@ fun Any.listParameters(): List<Parameter> {
         var label = ""
         var precision: Int? = null
         var type: ParameterType? = null
+        var vectorRange = Pair(Vector2(-1.0, -1.0), Vector2(1.0, 1.0))
 
         annotations.forEach {
             type = ParameterType.forParameterAnnotationClass(it)
@@ -163,6 +186,11 @@ fun Any.listParameters(): List<Parameter> {
                     label = it.label
                     order = it.order
                 }
+                is Vector2Parameter -> {
+                    label = it.label
+                    order = it.order
+                    vectorRange = Pair(Vector2(it.minX, it.minY), Vector2(it.maxX, it.maxY))
+                }
             }
         }
         Parameter(
@@ -171,6 +199,7 @@ fun Any.listParameters(): List<Parameter> {
                 function = null,
                 label = label,
                 doubleRange = doubleRange,
+                vectorRange = vectorRange,
                 intRange = intRange,
                 precision = precision,
                 order = order
@@ -189,6 +218,7 @@ fun Any.listParameters(): List<Parameter> {
                 label = label,
                 doubleRange = null,
                 intRange = null,
+                vectorRange = null,
                 precision = null,
                 order = order
         )

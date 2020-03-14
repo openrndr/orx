@@ -13,6 +13,7 @@ import org.openrndr.dialogs.saveFileDialog
 import org.openrndr.draw.Drawer
 import org.openrndr.extra.parameters.*
 import org.openrndr.internal.Driver
+import org.openrndr.math.Vector2
 import org.openrndr.panel.ControlManager
 import org.openrndr.panel.controlManager
 import org.openrndr.panel.elements.*
@@ -174,6 +175,11 @@ class GUI : Extension {
 
                 descendant(has type "toggle") {
                     this.width = 175.px
+                }
+
+                descendant(has type "vector2") {
+                    this.width = 175.px
+                    this.height = 175.px
                 }
             }
 
@@ -406,6 +412,25 @@ class GUI : Extension {
                     }
                 }
             }
+
+            ParameterType.Vector2 -> {
+                vector2 {
+                    minX = parameter.vectorRange!!.first.x
+                    minY = parameter.vectorRange!!.first.y
+                    maxX = parameter.vectorRange!!.second.x
+                    maxY = parameter.vectorRange!!.second.y
+
+                    events.valueChanged.subscribe {
+                        setAndPersist(
+                                compartment.label,
+                                parameter.property as KMutableProperty1<Any, Vector2>,
+                                obj,
+                                it.newValue
+                        )
+                        onChangeListener?.invoke(parameter.property!!.name, it.newValue)
+                    }
+                }
+            }
         }
     }
 
@@ -423,6 +448,7 @@ class GUI : Extension {
                                  var intValue: Int? = null,
                                  var booleanValue: Boolean? = null,
                                  var colorValue: ColorRGBa? = null,
+                                 var vectorValue: Vector2? = null,
                                  var textValue: String? = null)
 
 
@@ -442,6 +468,7 @@ class GUI : Extension {
                             ParameterType.Color -> ParameterValue(colorValue = k.property.qget(lo.obj) as ColorRGBa)
                             ParameterType.Text -> ParameterValue(textValue = k.property.qget(lo.obj) as String)
                             ParameterType.Boolean -> ParameterValue(booleanValue = k.property.qget(lo.obj) as Boolean)
+                            ParameterType.Vector2 -> ParameterValue(vectorValue = k.property.qget(lo.obj) as Vector2)
                         })
                     })
                 }
@@ -476,6 +503,9 @@ class GUI : Extension {
                             ParameterType.Color -> parameterValue.colorValue?.let {
                                 parameter.property.qset(lo.obj, it)
                             }
+                            ParameterType.Vector2 -> parameterValue.vectorValue?.let {
+                                parameter.property.qset(lo.obj, it)
+                            }
                             ParameterType.Boolean -> parameterValue.booleanValue?.let {
                                 parameter.property.qset(lo.obj, it)
                             }
@@ -505,6 +535,11 @@ class GUI : Extension {
             ParameterType.Color -> {
                 (control as ColorpickerButton).color = (parameter.property as KMutableProperty1<Any, ColorRGBa>).get(labeledObject.obj)
             }
+
+//            ParameterType.Vector2 -> {
+//                (control as Vector2Control).value = (parameter.property as KMutableProperty1<Any, Vector2>).get(labeledObject.obj)
+//            }
+
             ParameterType.Boolean -> {
                 (control as Toggle).value = (parameter.property as KMutableProperty1<Any, Boolean>).get(labeledObject.obj)
             }
