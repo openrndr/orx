@@ -63,9 +63,9 @@ fun generatePlane(center: Vector3,
         for (u in 0 until widthSegments) {
 
             val uv00 = Vector2(u + 0.0, v + 0.0) * step
-            val uv01 = Vector2(u + 0.0, v + 0.1) * step
+            val uv01 = Vector2(u + 0.0, v + 1.0) * step
             val uv10 = Vector2(u + 1.0, v + 0.0) * step
-            val uv11 = Vector2(u + 1.0, v + 0.1) * step
+            val uv11 = Vector2(u + 1.0, v + 1.0) * step
 
             val c00 = corner + forwardStep * v.toDouble() + rightStep * u.toDouble()
             val c01 = corner + forwardStep * (v + 1).toDouble() + rightStep * u.toDouble()
