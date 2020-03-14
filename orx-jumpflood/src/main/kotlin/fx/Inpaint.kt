@@ -1,45 +1,38 @@
 package org.openrndr.extra.jumpfill.fx
 
-import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.extra.jumpfill.EncodeSubpixel
 import org.openrndr.extra.jumpfill.JumpFlooder
 import org.openrndr.extra.jumpfill.PixelDirection
-import org.openrndr.extra.parameters.ColorParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.math.Vector2
 import org.openrndr.resourceUrl
 
-private class InnerGlowFilter : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/fx/inner-glow.frag"))) {
-    var angle: Double by parameters
-    var width: Double by parameters
+private class InpaintFilter : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/fx/inpaint.frag"))) {
 
     var noise: Double by parameters
-    var color: ColorRGBa by parameters
-
-    var shape: Double by parameters
     var imageOpacity: Double by parameters
-
+    var opacity : Double by parameters
+    var shape : Double by parameters
+    var width: Double by parameters
     init {
-        angle = 0.0
-        width = 5.0
         noise = 0.0
-        shape = 1.0
         imageOpacity = 1.0
+        opacity = 1.0
+        shape = 0.0
+        width = 0.5
     }
 }
 
-@Description("Inner glow")
-class InnerGlow : Filter() {
-    @DoubleParameter("width", 0.0, 50.0)
-    var width = 5.0
+@Description("Inpaint")
+class Inpaint : Filter() {
+    @DoubleParameter("width", 0.0, 1.0)
+    var width = 0.5
 
     @DoubleParameter("noise", 0.0, 1.0)
     var noise = 0.1
 
-    @DoubleParameter("shape", 0.0, 10.0)
-    var shape = 1.0
 
     @DoubleParameter("opacity", 0.0, 1.0)
     var opacity = 1.0
@@ -47,13 +40,13 @@ class InnerGlow : Filter() {
     @DoubleParameter("image opacity", 0.0, 1.0)
     var imageOpacity = 1.0
 
+    @DoubleParameter("shape", 0.0, 10.0)
+    var shape = 0.0
 
-    @ColorParameter("color")
-    var color = ColorRGBa.WHITE
 
     private var jumpFlooder: JumpFlooder? = null
     private val decodeFilter = PixelDirection()
-    private val glowFilter = InnerGlowFilter()
+    private val inpaintFilter = InpaintFilter()
 
     private var distance: ColorBuffer? = null
 
@@ -69,11 +62,11 @@ class InnerGlow : Filter() {
         decodeFilter.distanceScale = 1.0
         decodeFilter.apply(result, result)
         result.copyTo(distance!!)
-        glowFilter.color = color.opacify(opacity)
-        glowFilter.width = width
-        glowFilter.noise = noise
-        glowFilter.shape = shape
-        glowFilter.imageOpacity = imageOpacity
-        glowFilter.apply(arrayOf(source[0], distance!!), target[0])
+        inpaintFilter.noise = noise
+        inpaintFilter.imageOpacity = imageOpacity
+        inpaintFilter.opacity = opacity
+        inpaintFilter.shape = shape
+        inpaintFilter.width = width
+        inpaintFilter.apply(arrayOf(source[0], distance!!), target[0])
     }
 }

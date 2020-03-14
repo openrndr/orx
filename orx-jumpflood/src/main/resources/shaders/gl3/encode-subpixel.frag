@@ -19,7 +19,7 @@ void main() {
     float ref = step(threshold, texture(tex0, v_texCoord0).a);
 
 
-    vec2 o = stepSize/2.0;
+    vec2 o = vec2(0.0); //stepSize/2.0;
     float t00 = texture(tex0, v_texCoord0 + o +  vec2(0.0, 0.0)).a;
     float t10 = texture(tex0, v_texCoord0 + o + vec2(stepSize.x, 0.0)).a;
     float t01 = texture(tex0, v_texCoord0 + o + vec2(0.0, stepSize.y)).a;
@@ -117,7 +117,7 @@ void main() {
 
     //float contour = (mask == 14 || mask == 11 || mask == 7 || mask == 13) ? 1.0 : 0.0;
     if (contour > 0.0) {
-        o_color = vec4(v_texCoord0 + offset*stepSize , ref, 1.0);
+        o_color = vec4(v_texCoord0 /*+ offset*stepSize*/ , ref, 1.0);
     } else {
         o_color = vec4(-1.0, -1.0, 0.0, 1.0);
     }
