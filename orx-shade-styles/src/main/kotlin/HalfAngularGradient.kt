@@ -3,9 +3,11 @@ package org.openrndr.extra.shadestyles
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ShadeStyle
 import org.openrndr.extra.parameters.ColorParameter
+import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.math.Vector2
 
+@Description("Half-angular gradient")
 class HalfAngularGradient(color0: ColorRGBa, color1: ColorRGBa, offset: Vector2 = Vector2.ZERO, rotation: Double = 0.0) : ShadeStyle() {
     @ColorParameter("start color", order = 0)
     var color0: ColorRGBa by Parameter()
