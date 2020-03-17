@@ -11,27 +11,27 @@ enum class FitMethod {
     Contain
 }
 
-fun Drawer.imageFit(
-        img: ColorBuffer,
-        x: Double = 0.0,
-        y: Double = 0.0,
-        width: Double = img.width.toDouble(),
-        height: Double = img.height.toDouble(),
+fun fitRectangle(
+        src: Rectangle,
+        dest: Rectangle,
         horizontalPosition: Double = 0.0,
         verticalPosition: Double = 0.0,
         fitMethod: FitMethod = FitMethod.Cover
-) {
-    val sourceWidth = img.width.toDouble()
-    val sourceHeight = img.height.toDouble()
+): Pair<Rectangle, Rectangle> {
+    val sourceWidth = src.width
+    val sourceHeight = src.height
 
-    var targetX = x
-    var targetY = y
-
+    var targetX: Double
+    var targetY: Double
     var targetWidth: Double
     var targetHeight: Double
 
     val source: Rectangle
     val target: Rectangle
+
+    val (x, y) = dest.corner
+    val width = dest.width
+    val height = dest.height
 
     when (fitMethod) {
         FitMethod.Contain -> {
@@ -86,6 +86,27 @@ fun Drawer.imageFit(
             target = Rectangle(x, y, width, height)
         }
     }
+
+    return Pair(source, target)
+}
+
+fun Drawer.imageFit(
+        img: ColorBuffer,
+        x: Double = 0.0,
+        y: Double = 0.0,
+        width: Double = img.width.toDouble(),
+        height: Double = img.height.toDouble(),
+        horizontalPosition: Double = 0.0,
+        verticalPosition: Double = 0.0,
+        fitMethod: FitMethod = FitMethod.Cover
+) {
+    val (source, target) = fitRectangle(
+            img.bounds,
+            Rectangle(x, y, width, height),
+            horizontalPosition,
+            verticalPosition,
+            fitMethod
+    )
 
     image(img, source, target)
 }
