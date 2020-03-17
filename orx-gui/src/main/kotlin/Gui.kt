@@ -177,7 +177,7 @@ class GUI : Extension {
                     this.width = 175.px
                 }
 
-                descendant(has type "vector2") {
+                descendant(has type "planar-pad") {
                     this.width = 175.px
                     this.height = 175.px
                 }
