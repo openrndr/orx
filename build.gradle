@@ -16,7 +16,7 @@ apply plugin: 'org.jetbrains.dokka'
 
 project.ext {
     openrndrVersion = "0.3.40-rc.4"
-    panelVersion = "0.3.21"
+    panelVersion = "0.4.0-SNAPSHOT"
     kotlinVersion = "1.3.70"
     spekVersion = "2.0.9"
     libfreenectVersion = "0.5.7-1.5.2"
@@ -49,6 +49,7 @@ allprojects {
 
     repositories {
         mavenCentral()
+        mavenLocal()
         jcenter()
         maven {
             url = "https://dl.bintray.com/openrndr/openrndr"
