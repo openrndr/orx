@@ -6,7 +6,6 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty1
 import kotlin.reflect.KVisibility
 import kotlin.reflect.full.declaredMemberFunctions
-import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.memberProperties
 
@@ -80,7 +79,7 @@ annotation class ColorParameter(val label: String, val order: Int = Integer.MAX_
  */
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class Vector2Parameter(
+annotation class XYParameter(
         val label: String,
         val minX: Double = -1.0,
         val minY: Double = -1.0,
@@ -109,7 +108,7 @@ enum class ParameterType(val annotationClass: KClass<out Annotation>) {
     Action(ActionParameter::class),
     Text(TextParameter::class),
     Color(ColorParameter::class),
-    Vector2(Vector2Parameter::class)
+    XY(XYParameter::class)
     ;
 
     companion object {
@@ -130,7 +129,7 @@ enum class ParameterType(val annotationClass: KClass<out Annotation>) {
  * @property doubleRange a floating point based range in case [DoubleParameter] is used
  * @property intRange an integer range in case [IntParameter] is used
  * @property precision a precision hint in case a [DoubleParameter] annotation is used
- * @property keyboardIncrement how much change the keyboard makes in case a [Vector2Parameter] annotation is used
+ * @property keyboardIncrement how much change the keyboard makes in case a [XYParameter] annotation is used
  * @property order a hint for where in the ui this parameter is placed, lower value means higher priority
  */
 class Parameter(
@@ -191,7 +190,7 @@ fun Any.listParameters(): List<Parameter> {
                     label = it.label
                     order = it.order
                 }
-                is Vector2Parameter -> {
+                is XYParameter -> {
                     label = it.label
                     order = it.order
                     vectorRange = Pair(Vector2(it.minX, it.minY), Vector2(it.maxX, it.maxY))

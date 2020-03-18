@@ -177,7 +177,7 @@ class GUI : Extension {
                     this.width = 175.px
                 }
 
-                descendant(has type "planar-pad") {
+                descendant(has type "xy-pad") {
                     this.width = 175.px
                     this.height = 175.px
                 }
@@ -413,7 +413,7 @@ class GUI : Extension {
                 }
             }
 
-            ParameterType.Vector2 -> {
+            ParameterType.XY -> {
                 xyPad {
                     minX = parameter.vectorRange!!.first.x
                     minY = parameter.vectorRange!!.first.y
@@ -471,7 +471,7 @@ class GUI : Extension {
                             ParameterType.Color -> ParameterValue(colorValue = k.property.qget(lo.obj) as ColorRGBa)
                             ParameterType.Text -> ParameterValue(textValue = k.property.qget(lo.obj) as String)
                             ParameterType.Boolean -> ParameterValue(booleanValue = k.property.qget(lo.obj) as Boolean)
-                            ParameterType.Vector2 -> ParameterValue(vectorValue = k.property.qget(lo.obj) as Vector2)
+                            ParameterType.XY -> ParameterValue(vectorValue = k.property.qget(lo.obj) as Vector2)
                         })
                     })
                 }
@@ -506,7 +506,7 @@ class GUI : Extension {
                             ParameterType.Color -> parameterValue.colorValue?.let {
                                 parameter.property.qset(lo.obj, it)
                             }
-                            ParameterType.Vector2 -> parameterValue.vectorValue?.let {
+                            ParameterType.XY -> parameterValue.vectorValue?.let {
                                 parameter.property.qset(lo.obj, it)
                             }
                             ParameterType.Boolean -> parameterValue.booleanValue?.let {
