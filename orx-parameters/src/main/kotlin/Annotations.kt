@@ -87,6 +87,7 @@ annotation class XYParameter(
         val maxY: Double = 1.0,
         val precision: Int = 1,
         val keyboardIncrement: Double = 10.0,
+        val showAngle: Boolean = false,
         val order: Int = Integer.MAX_VALUE
 )
 
@@ -142,6 +143,7 @@ class Parameter(
         val intRange: IntRange?,
         val precision: Int?,
         val keyboardIncrement: Double?,
+        val showAngle: Boolean?,
         val order: Int)
 
 /**
@@ -163,6 +165,7 @@ fun Any.listParameters(): List<Parameter> {
         var type: ParameterType? = null
         var vectorRange = Pair(Vector2(-1.0, -1.0), Vector2(1.0, 1.0))
         var keyboardIncrement: Double? = null
+        var showAngle: Boolean? = null
 
         annotations.forEach {
             type = ParameterType.forParameterAnnotationClass(it)
@@ -196,6 +199,7 @@ fun Any.listParameters(): List<Parameter> {
                     vectorRange = Pair(Vector2(it.minX, it.minY), Vector2(it.maxX, it.maxY))
                     keyboardIncrement = it.keyboardIncrement
                     precision = it.precision
+                    showAngle = it.showAngle
                 }
             }
         }
@@ -209,6 +213,7 @@ fun Any.listParameters(): List<Parameter> {
                 intRange = intRange,
                 precision = precision,
                 keyboardIncrement = keyboardIncrement,
+                showAngle = showAngle,
                 order = order
         )
     } + this::class.declaredMemberFunctions.filter {
@@ -228,6 +233,7 @@ fun Any.listParameters(): List<Parameter> {
                 vectorRange = null,
                 precision = null,
                 keyboardIncrement = null,
+                showAngle = false,
                 order = order
         )
     }).sortedBy { it.order }
