@@ -419,6 +419,9 @@ class GUI : Extension {
                     minY = parameter.vectorRange!!.first.y
                     maxX = parameter.vectorRange!!.second.x
                     maxY = parameter.vectorRange!!.second.y
+                    keyboardIncrement = parameter.keyboardIncrement!!
+                    precision = parameter.precision!!
+
 
                     events.valueChanged.subscribe {
                         setAndPersist(

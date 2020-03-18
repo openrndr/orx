@@ -86,6 +86,8 @@ annotation class Vector2Parameter(
         val minY: Double = -1.0,
         val maxX: Double = 1.0,
         val maxY: Double = 1.0,
+        val precision: Int = 1,
+        val keyboardIncrement: Double = 10.0,
         val order: Int = Integer.MAX_VALUE
 )
 
@@ -128,6 +130,7 @@ enum class ParameterType(val annotationClass: KClass<out Annotation>) {
  * @property doubleRange a floating point based range in case [DoubleParameter] is used
  * @property intRange an integer range in case [IntParameter] is used
  * @property precision a precision hint in case a [DoubleParameter] annotation is used
+ * @property keyboardIncrement how much change the keyboard makes in case a [Vector2Parameter] annotation is used
  * @property order a hint for where in the ui this parameter is placed, lower value means higher priority
  */
 class Parameter(
@@ -139,6 +142,7 @@ class Parameter(
         val vectorRange: Pair<Vector2, Vector2>?,
         val intRange: IntRange?,
         val precision: Int?,
+        val keyboardIncrement: Double?,
         val order: Int)
 
 /**
@@ -159,6 +163,7 @@ fun Any.listParameters(): List<Parameter> {
         var precision: Int? = null
         var type: ParameterType? = null
         var vectorRange = Pair(Vector2(-1.0, -1.0), Vector2(1.0, 1.0))
+        var keyboardIncrement: Double? = null
 
         annotations.forEach {
             type = ParameterType.forParameterAnnotationClass(it)
@@ -190,6 +195,8 @@ fun Any.listParameters(): List<Parameter> {
                     label = it.label
                     order = it.order
                     vectorRange = Pair(Vector2(it.minX, it.minY), Vector2(it.maxX, it.maxY))
+                    keyboardIncrement = it.keyboardIncrement
+                    precision = it.precision
                 }
             }
         }
@@ -202,6 +209,7 @@ fun Any.listParameters(): List<Parameter> {
                 vectorRange = vectorRange,
                 intRange = intRange,
                 precision = precision,
+                keyboardIncrement = keyboardIncrement,
                 order = order
         )
     } + this::class.declaredMemberFunctions.filter {
@@ -220,6 +228,7 @@ fun Any.listParameters(): List<Parameter> {
                 intRange = null,
                 vectorRange = null,
                 precision = null,
+                keyboardIncrement = null,
                 order = order
         )
     }).sortedBy { it.order }
