@@ -414,7 +414,7 @@ class GUI : Extension {
             }
 
             ParameterType.Vector2 -> {
-                planarPad {
+                xyPad {
                     minX = parameter.vectorRange!!.first.x
                     minY = parameter.vectorRange!!.first.y
                     maxX = parameter.vectorRange!!.second.x
