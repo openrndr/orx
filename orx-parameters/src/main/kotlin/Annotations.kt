@@ -1,11 +1,11 @@
 package org.openrndr.extra.parameters
 
+import org.openrndr.math.Vector2
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty1
 import kotlin.reflect.KVisibility
 import kotlin.reflect.full.declaredMemberFunctions
-import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.memberProperties
 
@@ -71,6 +71,28 @@ annotation class TextParameter(val label: String, val order: Int = Integer.MAX_V
 @Retention(AnnotationRetention.RUNTIME)
 annotation class ColorParameter(val label: String, val order: Int = Integer.MAX_VALUE)
 
+
+/**
+ * Vector2 annotation for a vector 2 parameter
+ * @property label a short description of the parameter
+ * @property order hint for where to place the parameter in user interfaces
+ */
+@Target(AnnotationTarget.PROPERTY)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class XYParameter(
+        val label: String,
+        val minX: Double = -1.0,
+        val maxX: Double = 1.0,
+        val minY: Double = -1.0,
+        val maxY: Double = 1.0,
+        val precision: Int = 1,
+        val showVector: Boolean = false,
+        val invertY: Boolean = true,
+        val order: Int = Integer.MAX_VALUE
+)
+
+
+
 /**
  * ActionParameter annotation for functions without arguments
  * @property label a short description of the parameter
@@ -86,7 +108,8 @@ enum class ParameterType(val annotationClass: KClass<out Annotation>) {
     Boolean(BooleanParameter::class),
     Action(ActionParameter::class),
     Text(TextParameter::class),
-    Color(ColorParameter::class)
+    Color(ColorParameter::class),
+    XY(XYParameter::class)
     ;
 
     companion object {
@@ -107,6 +130,7 @@ enum class ParameterType(val annotationClass: KClass<out Annotation>) {
  * @property doubleRange a floating point based range in case [DoubleParameter] is used
  * @property intRange an integer range in case [IntParameter] is used
  * @property precision a precision hint in case a [DoubleParameter] annotation is used
+ * @property invertY should the y-axis of [XYParameter] be inverted?
  * @property order a hint for where in the ui this parameter is placed, lower value means higher priority
  */
 class Parameter(
@@ -115,8 +139,11 @@ class Parameter(
         val function: KCallable<Unit>?,
         val label: String,
         val doubleRange: ClosedRange<Double>?,
+        val vectorRange: Pair<Vector2, Vector2>?,
         val intRange: IntRange?,
         val precision: Int?,
+        val invertY: Boolean?,
+        val showVector: Boolean?,
         val order: Int)
 
 /**
@@ -136,6 +163,9 @@ fun Any.listParameters(): List<Parameter> {
         var label = ""
         var precision: Int? = null
         var type: ParameterType? = null
+        var vectorRange = Pair(Vector2(-1.0, -1.0), Vector2(1.0, 1.0))
+        var invertY: Boolean? = null
+        var showVector: Boolean? = null
 
         annotations.forEach {
             type = ParameterType.forParameterAnnotationClass(it)
@@ -163,6 +193,14 @@ fun Any.listParameters(): List<Parameter> {
                     label = it.label
                     order = it.order
                 }
+                is XYParameter -> {
+                    label = it.label
+                    order = it.order
+                    vectorRange = Pair(Vector2(it.minX, it.minY), Vector2(it.maxX, it.maxY))
+                    precision = it.precision
+                    invertY = it.invertY
+                    showVector = it.showVector
+                }
             }
         }
         Parameter(
@@ -171,8 +209,11 @@ fun Any.listParameters(): List<Parameter> {
                 function = null,
                 label = label,
                 doubleRange = doubleRange,
+                vectorRange = vectorRange,
                 intRange = intRange,
                 precision = precision,
+                showVector = showVector,
+                invertY = invertY,
                 order = order
         )
     } + this::class.declaredMemberFunctions.filter {
@@ -189,7 +230,10 @@ fun Any.listParameters(): List<Parameter> {
                 label = label,
                 doubleRange = null,
                 intRange = null,
+                vectorRange = null,
                 precision = null,
+                showVector = null,
+                invertY = null,
                 order = order
         )
     }).sortedBy { it.order }
