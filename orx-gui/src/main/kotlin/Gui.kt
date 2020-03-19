@@ -419,9 +419,9 @@ class GUI : Extension {
                     minY = parameter.vectorRange!!.first.y
                     maxX = parameter.vectorRange!!.second.x
                     maxY = parameter.vectorRange!!.second.y
-                    keyboardIncrement = parameter.keyboardIncrement!!
                     precision = parameter.precision!!
-                    showAngle = parameter.showAngle!!
+                    showVector = parameter.showVector!!
+                    invertY = parameter.invertY!!
 
                     events.valueChanged.subscribe {
                         setAndPersist(
@@ -539,9 +539,9 @@ class GUI : Extension {
                 (control as ColorpickerButton).color = (parameter.property as KMutableProperty1<Any, ColorRGBa>).get(labeledObject.obj)
             }
 
-//            ParameterType.Vector2 -> {
-//                (control as Vector2Control).value = (parameter.property as KMutableProperty1<Any, Vector2>).get(labeledObject.obj)
-//            }
+            ParameterType.XY -> {
+                (control as XYPad).value = (parameter.property as KMutableProperty1<Any, Vector2>).get(labeledObject.obj)
+            }
 
             ParameterType.Boolean -> {
                 (control as Toggle).value = (parameter.property as KMutableProperty1<Any, Boolean>).get(labeledObject.obj)
