@@ -165,4 +165,31 @@ class OrbitalCamera(eye: Vector3 = Vector3.ZERO, lookAt: Vector3 = Vector3.UNIT_
     }
 }
 
+/**
+ * Temporarily enables this camera, calls function to draw using
+ * that camera, then disables it by popping the last matrix changes.
+ * It makes it easy to combine perspective and orthographic projections
+ * in the same program.
+ * @param function the function that is called in the isolation
+ */
+fun OrbitalCamera.isolated(drawer: Drawer, function: Drawer.() -> Unit) {
+    drawer.pushTransforms()
+    drawer.pushStyle()
 
+    applyTo(drawer)
+    function(drawer)
+
+    drawer.popStyle()
+    drawer.popTransforms()
+}
+
+/**
+ * Enables the perspective camera. Use this faster method instead of .isolated()
+ * if you don't need to revert back to the orthographic projection.
+ */
+fun OrbitalCamera.applyTo(drawer: Drawer) {
+    drawer.perspective(fov, drawer.width.toDouble() / drawer.height, near, far)
+    drawer.view = viewMatrix()
+    drawer.drawStyle.depthWrite = true
+    drawer.drawStyle.depthTestPass = DepthTestPass.LESS_OR_EQUAL
+}
