@@ -6,7 +6,6 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty1
 import kotlin.reflect.KVisibility
 import kotlin.reflect.full.declaredMemberFunctions
-import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.memberProperties
 
@@ -80,12 +79,15 @@ annotation class ColorParameter(val label: String, val order: Int = Integer.MAX_
  */
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class Vector2Parameter(
+annotation class XYParameter(
         val label: String,
         val minX: Double = -1.0,
         val minY: Double = -1.0,
         val maxX: Double = 1.0,
         val maxY: Double = 1.0,
+        val precision: Int = 1,
+        val keyboardIncrement: Double = 10.0,
+        val showAngle: Boolean = false,
         val order: Int = Integer.MAX_VALUE
 )
 
@@ -107,7 +109,7 @@ enum class ParameterType(val annotationClass: KClass<out Annotation>) {
     Action(ActionParameter::class),
     Text(TextParameter::class),
     Color(ColorParameter::class),
-    Vector2(Vector2Parameter::class)
+    XY(XYParameter::class)
     ;
 
     companion object {
@@ -128,6 +130,7 @@ enum class ParameterType(val annotationClass: KClass<out Annotation>) {
  * @property doubleRange a floating point based range in case [DoubleParameter] is used
  * @property intRange an integer range in case [IntParameter] is used
  * @property precision a precision hint in case a [DoubleParameter] annotation is used
+ * @property keyboardIncrement how much change the keyboard makes in case a [XYParameter] annotation is used
  * @property order a hint for where in the ui this parameter is placed, lower value means higher priority
  */
 class Parameter(
@@ -139,6 +142,8 @@ class Parameter(
         val vectorRange: Pair<Vector2, Vector2>?,
         val intRange: IntRange?,
         val precision: Int?,
+        val keyboardIncrement: Double?,
+        val showAngle: Boolean?,
         val order: Int)
 
 /**
@@ -159,6 +164,8 @@ fun Any.listParameters(): List<Parameter> {
         var precision: Int? = null
         var type: ParameterType? = null
         var vectorRange = Pair(Vector2(-1.0, -1.0), Vector2(1.0, 1.0))
+        var keyboardIncrement: Double? = null
+        var showAngle: Boolean? = null
 
         annotations.forEach {
             type = ParameterType.forParameterAnnotationClass(it)
@@ -186,10 +193,13 @@ fun Any.listParameters(): List<Parameter> {
                     label = it.label
                     order = it.order
                 }
-                is Vector2Parameter -> {
+                is XYParameter -> {
                     label = it.label
                     order = it.order
                     vectorRange = Pair(Vector2(it.minX, it.minY), Vector2(it.maxX, it.maxY))
+                    keyboardIncrement = it.keyboardIncrement
+                    precision = it.precision
+                    showAngle = it.showAngle
                 }
             }
         }
@@ -202,6 +212,8 @@ fun Any.listParameters(): List<Parameter> {
                 vectorRange = vectorRange,
                 intRange = intRange,
                 precision = precision,
+                keyboardIncrement = keyboardIncrement,
+                showAngle = showAngle,
                 order = order
         )
     } + this::class.declaredMemberFunctions.filter {
@@ -220,6 +232,8 @@ fun Any.listParameters(): List<Parameter> {
                 intRange = null,
                 vectorRange = null,
                 precision = null,
+                keyboardIncrement = null,
+                showAngle = false,
                 order = order
         )
     }).sortedBy { it.order }
