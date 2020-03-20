@@ -10,36 +10,33 @@ import org.openrndr.math.transforms.transform
 
 @Description("Perspective plane")
 class PerspectivePlane : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("distort/perspective-plane.frag"))) {
-
-//    @DoubleParameter("camera x", -1.0, 1.0, order = 0)
-    var cameraX : Double = 0.0
-//    @DoubleParameter("camera y", -1.0, 1.0, order = 1)
-    var cameraY : Double = 0.0
-//    @DoubleParameter("camera z", -1.0, 1.0, order = 2)
-    var cameraZ : Double = 1.0
+    //    @DoubleParameter("camera x", -1.0, 1.0, order = 0)
+    var cameraX: Double = 0.0
+    //    @DoubleParameter("camera y", -1.0, 1.0, order = 1)
+    var cameraY: Double = 0.0
+    //    @DoubleParameter("camera z", -1.0, 1.0, order = 2)
+    var cameraZ: Double = 1.0
 
 
     @DoubleParameter("plane x", -1.0, 1.0, order = 3)
-    var planeX : Double = 0.0
+    var planeX: Double = 0.0
     @DoubleParameter("plane y", -1.0, 1.0, order = 4)
-    var planeY : Double = 0.0
+    var planeY: Double = 0.0
     @DoubleParameter("plane z", -1.0, 1.0, order = 5)
-    var planeZ : Double = 0.5
+    var planeZ: Double = 0.5
 
     @DoubleParameter("plane yaw", -180.0, 180.0, order = 6)
-    var planeYaw : Double = 0.0
+    var planeYaw: Double = 0.0
     @DoubleParameter("plane pitch", -180.0, 180.0, order = 7)
-    var planePitch : Double = 0.0
+    var planePitch: Double = 0.0
     @DoubleParameter("plane roll", -180.0, 180.0, order = 8)
-    var planeRoll : Double = 0.0
+    var planeRoll: Double = 0.0
 
 
     @BooleanParameter("tile input")
     var tile: Boolean by parameters
 
-    var seconds:Double by parameters
     init {
-        seconds = 0.0
         tile = false
     }
 
