@@ -106,6 +106,13 @@ class MidiTransceiver(val receiverDevice: MidiDevice, val transmitterDevicer: Mi
             override fun close() {
             }
         }
+
+        // shut down midi if user calls `exitProcess(0)`
+        Runtime.getRuntime().addShutdownHook(object : Thread() {
+            override fun run() {
+                destroy()
+            }
+        })
     }
 
     val controlChanged = Event<MidiEvent>("midi-transceiver::controller-changed").signature(MidiEvent::class.java)
