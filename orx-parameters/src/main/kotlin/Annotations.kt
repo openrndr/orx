@@ -85,13 +85,11 @@ annotation class XYParameter(
         val maxX: Double = 1.0,
         val minY: Double = -1.0,
         val maxY: Double = 1.0,
-        val precision: Int = 1,
+        val precision: Int = 2,
         val showVector: Boolean = false,
         val invertY: Boolean = true,
         val order: Int = Integer.MAX_VALUE
 )
-
-
 
 /**
  * ActionParameter annotation for functions without arguments

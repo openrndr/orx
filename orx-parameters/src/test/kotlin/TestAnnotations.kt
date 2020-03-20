@@ -1,9 +1,9 @@
 import org.amshove.kluent.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.parameters.*
+import org.openrndr.math.Vector2
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
-import java.lang.IllegalArgumentException
 
 val a = object {
     @DoubleParameter("a double scalar", 0.0, 1.0, order = 0)
@@ -26,13 +26,15 @@ val a = object {
     @ColorParameter("a color parameter", order = 5)
     var c = ColorRGBa.WHITE
 
+    @XYParameter("an XY parameter", order = 6)
+    var xy = Vector2.ZERO
 }
 
 object TestAnnotations : Spek({
     describe("an annotated object") {
         it("has listable parameters") {
             val list = a.listParameters()
-            list.size `should be equal to` 6
+            list.size `should be equal to` 7
 
             list[0].property?.name `should be equal to` "d"
             list[0].parameterType `should be equal to` ParameterType.Double
@@ -79,6 +81,10 @@ object TestAnnotations : Spek({
             list[5].parameterType `should be equal to` ParameterType.Color
             list[5].property?.name `should be equal to` "c"
             list[5].label `should be equal to` "a color parameter"
+
+            list[6].parameterType `should be equal to` ParameterType.XY
+            list[6].property?.name `should be equal to` "xy"
+            list[6].label `should be equal to` "an XY parameter"
         }
     }
 })
