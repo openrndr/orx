@@ -6,7 +6,6 @@ uniform sampler2D tex0;
 in vec2 v_texCoord0;
 uniform vec3 cameraPosition;
 uniform vec3 planePosition;
-uniform float seconds;
 uniform mat4 planeMatrix;
 uniform bool tile;
 uniform vec2 targetSize;
@@ -22,25 +21,25 @@ void main() {
     vPlaneUp *= m;
     vPlaneRight *= m;
 
-    vec3 vPlaneNormal = normalize(cross(vPlaneRight,vPlaneUp));
-    float fPlaneDeltaNormalDistance = dot(vPlanePos,vPlaneNormal) - dot(vPlaneNormal,vCamPos);
+    vec3 vPlaneNormal = normalize(cross(vPlaneRight, vPlaneUp));
+    float fPlaneDeltaNormalDistance = dot(vPlanePos, vPlaneNormal) - dot(vPlaneNormal, vCamPos);
     vec4 color = vec4(0.);
     for (int m = 0; m < 2; m++) {
         for (int n = 0; n < 2; n++) {
             vec2 s = (v_texCoord0 - vec2(0.5)) * 2.0;
             s*= vec2(1.0, targetSize.y / targetSize.x);
             vec3 vRayDir = normalize(vec3(s, -1.0));
-            float t = fPlaneDeltaNormalDistance / dot(vPlaneNormal,vRayDir);
-            vec3 hitPos = vCamPos + vRayDir*t;
+            float t = fPlaneDeltaNormalDistance / dot(vPlaneNormal, vRayDir);
+            vec3 hitPos = vCamPos + vRayDir * t;
             vec3 delta = hitPos - vPlanePos;
-            vec2 bary = vec2(dot(delta, vPlaneRight),dot(delta, vPlaneUp));
+            vec2 bary = vec2(dot(delta, vPlaneRight), dot(delta, vPlaneUp));
 
-            bary /= vec2(1.0, targetSize.y/targetSize.x);
+            bary /= vec2(1.0, targetSize.y / targetSize.x);
             bary += vec2(0.5);
-            if ( (tile || (bary.x >= 0.0 && bary.x <= 1.0 && bary.y >=0.0 && bary.y <= 1.0)) && t > 0.0) {
+            if ((tile || (bary.x >= 0.0 && bary.x <= 1.0 && bary.y >=0.0 && bary.y <= 1.0)) && t > 0.0) {
                 color += texture(tex0, bary);
             }
         }
     }
-    o_color = color*0.25;
+    o_color = color * 0.25;
 }
