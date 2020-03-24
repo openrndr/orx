@@ -37,6 +37,7 @@ private fun pickLength(leftLength: Double, rightLength: Double, s0: Segment, s1:
 fun ShapeContour.chamferCorners(
         leftLength: Double,
         rightLength: Double = leftLength,
+        clip: Boolean = true,
         angleThreshold: Double = 180.0,
         chamfer: ContourBuilder.(p1: Vector2, p2: Vector2, p3: Vector2) -> Unit
 ) = contour {
@@ -49,7 +50,7 @@ fun ShapeContour.chamferCorners(
     // Prelude
     if ((this@chamferCorners).closed && sourceSegments[sourceSegments.size - 2].linear && sourceSegments.first().linear) {
         val length = pickLength(leftLength, rightLength, sourceSegments.last(), sourceSegments.first())
-        if (length <= sourceSegments[0].length / 2) {
+        if (clip || length <= sourceSegments[0].length / 2) {
             moveTo(sourceSegments[0].linearPosition(length))
         } else {
             moveTo(sourceSegments[0].position(0.0))
@@ -65,7 +66,7 @@ fun ShapeContour.chamferCorners(
             curveTo(s0.control[0], s0.control[1], s0.end)
         } else if (s0.linear) {
             val length = pickLength(leftLength, rightLength, s0, s1)
-            if (s0.linear && s1.linear && length <= s0.length / 2 && length <= s1.length / 2) {
+            if (s0.linear && s1.linear && (clip || (length <= s0.length / 2 && length <= s1.length / 2))) {
                 val p0 = s0.linearPosition(s0.length - length)
                 val p1 = s1.linearPosition(length)
                 lineTo(p0)
@@ -83,7 +84,7 @@ fun ShapeContour.chamferCorners(
         val last = sourceSegments.last()
         when {
             last.linear -> {
-                if (length <= last.length / 2) {
+                if (clip || length <= last.length / 2) {
                     lineTo(last.linearPosition(length))
                 } else {
                     lineTo(last.end)
@@ -100,12 +101,12 @@ fun ShapeContour.chamferCorners(
 }
 
 fun ShapeContour.bevelCorners(length: Double, angleThreshold: Double = 180.0): ShapeContour =
-        chamferCorners(length, length, angleThreshold) { _, _, p3 ->
+        chamferCorners(length, length, angleThreshold = angleThreshold) { _, _, p3 ->
             lineTo(p3)
         }
 
 fun ShapeContour.roundCorners(length: Double, angleThreshold: Double = 180.0): ShapeContour =
-        chamferCorners(length, length, angleThreshold) { _, p2, p3 ->
+        chamferCorners(length, length, angleThreshold = angleThreshold) { _, p2, p3 ->
             curveTo(p2, p3)
         }
 
@@ -113,7 +114,7 @@ fun ShapeContour.arcCorners(leftLength: Double, rightLength: Double = leftLength
                             leftScale: Double = 1.0, rightScale: Double = leftScale,
                             leftLargeArc : Boolean = false, rightLargeArc : Boolean = leftLargeArc,
                             angleThreshold: Double = 180.0): ShapeContour =
-        chamferCorners(abs(leftLength), abs(rightLength), angleThreshold) { p1, p2, p3 ->
+        chamferCorners(abs(leftLength), abs(rightLength), angleThreshold = angleThreshold) { p1, p2, p3 ->
             val dx = abs(p3.x - p2.x)
             val dy = abs(p3.y - p2.y)
             val radius = sqrt(dx * dx + dy * dy)
