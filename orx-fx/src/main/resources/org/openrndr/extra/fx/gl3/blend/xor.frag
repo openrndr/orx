@@ -6,19 +6,11 @@ uniform sampler2D tex1;
 
 out vec4 o_color;
 void main() {
-    vec4 a = texture(tex0, v_texCoord0);
-    vec4 b = texture(tex1, v_texCoord0);
-    vec4 color = vec4(0.0);
+    vec4 src = texture(tex0, v_texCoord0);
+    vec4 dest = texture(tex1, v_texCoord0);
 
-    vec3 na = a.a == 0.0 ? vec3(0.0) : a.rgb/a.a;
-    vec3 nb = b.a == 0.0 ? vec3(0.0) : b.rgb/b.a;
-    if (a.a > b.a) {
-        color = vec4(na, 1.0) * (b.a == 0.0? a.a : (1.0-b.a));
-    }
+    float lsrc = src.a * (1.0 - dest.a);
+    float ldest = dest.a * (1.0 - src.a);
 
-    if (b.a > a.a) {
-        color = vec4(nb, 1.0) * (a.a == 0.0? b.a : (1.0-a.a));
-    }
-
-    o_color = color;
+    o_color = src * lsrc + dest * ldest;
 }
