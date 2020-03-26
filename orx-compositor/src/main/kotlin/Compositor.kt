@@ -4,6 +4,7 @@ import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
+import org.openrndr.extra.fx.blend.DestinationOut
 import org.openrndr.extra.fx.blend.SourceIn
 import org.openrndr.extra.fx.blend.SourceOut
 import org.openrndr.extra.parameters.BooleanParameter
@@ -29,8 +30,9 @@ fun RenderTarget.deepDestroy() {
  */
 @Description("Layer")
 open class Layer internal constructor() {
+    var copyLayers: List<Layer> = listOf()
     var sourceOut = SourceOut()
-    var destinationIn = SourceIn()
+    var sourceIn = SourceIn()
     var maskLayer: Layer? = null
     var drawFunc: () -> Unit = {}
     val children: MutableList<Layer> = mutableListOf()
@@ -45,6 +47,11 @@ open class Layer internal constructor() {
     var invertMask = false
     var clearColor: ColorRGBa? = ColorRGBa.TRANSPARENT
     private var layerTarget: RenderTarget? = null
+
+    val result: ColorBuffer?
+    get() {
+        return layerTarget?.colorBuffer(0)
+    }
 
     /**
      * draw the layer
@@ -67,6 +74,20 @@ open class Layer internal constructor() {
         }
 
         layerTarget?.let { target ->
+            if (copyLayers.isNotEmpty()) {
+                copyLayers.forEach {
+                    drawer.isolatedWithTarget(target) {
+                        clearColor?.let {
+                            drawer.background(it)
+                        }
+
+                        it.layerTarget?.let { copyTarget ->
+                            drawer.image(copyTarget.colorBuffer(0))
+                        }
+                    }
+                }
+            }
+
             maskLayer?.let {
                 if (it.shouldCreateLayerTarget(activeRenderTarget)) {
                     it.createLayerTarget(activeRenderTarget, drawer)
@@ -74,18 +95,23 @@ open class Layer internal constructor() {
 
                 it.layerTarget?.let { maskRt ->
                     drawer.isolatedWithTarget(maskRt) {
-                        clearColor?.let {
-                            drawer.background(it)
+                        if (copyLayers.isEmpty()) {
+                            clearColor?.let { color ->
+                                drawer.background(color)
+                            }
                         }
-
+                        drawer.fill = ColorRGBa.WHITE
+                        drawer.stroke = ColorRGBa.WHITE
                         it.drawFunc()
                     }
                 }
             }
 
             drawer.isolatedWithTarget(target) {
-                clearColor?.let {
-                    drawer.background(it)
+                if (copyLayers.isEmpty()) {
+                    clearColor?.let {
+                        drawer.background(it)
+                    }
                 }
                 drawFunc()
                 children.forEach {
@@ -123,9 +149,9 @@ open class Layer internal constructor() {
             }
 
             maskLayer?.let {
-                val maskFilter = if (invertMask) sourceOut else destinationIn
+                val maskFilter = if (invertMask) sourceOut else sourceIn
 
-                maskFilter.apply(arrayOf(it.layerTarget!!.colorBuffer(0), layerPost), layerPost)
+                maskFilter.apply(arrayOf(layerPost, it.layerTarget!!.colorBuffer(0)), layerPost)
             }
 
             val localBlendFilter = blendFilter
@@ -140,6 +166,8 @@ open class Layer internal constructor() {
                 localBlendFilter.first.apply(localBlendFilter.second)
                 localBlendFilter.first.apply(arrayOf(activeRenderTarget.colorBuffer(0), layerPost), activeRenderTarget.colorBuffer(0))
             }
+
+            accumulation?.copyTo(target.colorBuffer(0))
         }
     }
 
@@ -175,6 +203,13 @@ fun Layer.layer(function: Layer.() -> Unit): Layer {
  */
 fun Layer.draw(function: () -> Unit) {
     drawFunc = function
+}
+
+/**
+ * use the layer as a base
+ */
+fun Layer.use(vararg layer: Layer) {
+    copyLayers = layer.toList()
 }
 
 /**

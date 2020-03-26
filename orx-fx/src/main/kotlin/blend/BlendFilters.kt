@@ -89,8 +89,10 @@ class Screen : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragm
 
 class SourceIn : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/source-in.frag")))
 class SourceOut : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/source-out.frag")))
+class SourceAtop : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/source-atop.frag")))
 class DestinationIn : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/destination-in.frag")))
 class DestinationOut : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/destination-out.frag")))
+class DestinationAtop : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/destination-atop.frag")))
 class Xor : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/xor.frag")))
 
 class MultiplyContrast : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/multiply-contrast.frag")))
