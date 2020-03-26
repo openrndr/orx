@@ -63,6 +63,12 @@ fun Element.envelopeEditor(vararg classes: String, init: EnvelopeEditor.() -> Un
 
 fun Element.sequenceEditor(vararg classes: String, init: SequenceEditor.() -> Unit) = initElement(classes, SequenceEditor().apply {}, init)
 
+fun Element.slidersVector2(vararg classes: String, init: SlidersVector2.() -> Unit) = initElement(classes, SlidersVector2().apply {}, init)
+fun Element.slidersVector3(vararg classes: String, init: SlidersVector3.() -> Unit) = initElement(classes, SlidersVector3().apply {}, init)
+fun Element.slidersVector4(vararg classes: String, init: SlidersVector4.() -> Unit) = initElement(classes, SlidersVector4().apply {}, init)
+
+
+
 
 fun Element.textfield(vararg classes: String, init: Textfield.() -> Unit) = initElement(classes, Textfield(), init)
 

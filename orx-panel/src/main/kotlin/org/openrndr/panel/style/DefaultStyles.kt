@@ -110,6 +110,42 @@ fun defaultStyles(
                 color = controlActiveColor
             }
         },
+        styleSheet(has type "sliders-vector2") {
+            height = 60.px
+            width = 100.percent
+            marginTop = 5.px
+            marginBottom = 15.px
+            marginLeft = 5.px
+            marginRight = 5.px
+            color = controlTextColor
+            and(has state "active") {
+                color = controlActiveColor
+            }
+        },
+        styleSheet(has type "sliders-vector3") {
+            height = 60.px
+            width = 100.percent
+            marginTop = 5.px
+            marginBottom = 15.px
+            marginLeft = 5.px
+            marginRight = 5.px
+            color = controlTextColor
+            and(has state "active") {
+                color = controlActiveColor
+            }
+        },
+        styleSheet(has type "sliders-vector4") {
+            height = 60.px
+            width = 100.percent
+            marginTop = 5.px
+            marginBottom = 15.px
+            marginLeft = 5.px
+            marginRight = 5.px
+            color = controlTextColor
+            and(has state "active") {
+                color = controlActiveColor
+            }
+        },
 
         styleSheet(has type "colorpicker") {
             height = 80.px

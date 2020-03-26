@@ -115,6 +115,36 @@ annotation class XYParameter(
         val order: Int = Integer.MAX_VALUE
 )
 
+@Target(AnnotationTarget.PROPERTY)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class Vector2Parameter(
+        val label: String,
+        val min: Double = -1.0,
+        val max: Double = 1.0,
+        val precision: Int = 2,
+        val order: Int = Integer.MAX_VALUE
+)
+
+@Target(AnnotationTarget.PROPERTY)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class Vector3Parameter(
+        val label: String,
+        val min: Double = -1.0,
+        val max: Double = 1.0,
+        val precision: Int = 2,
+        val order: Int = Integer.MAX_VALUE
+)
+
+@Target(AnnotationTarget.PROPERTY)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class Vector4Parameter(
+        val label: String,
+        val min: Double = -1.0,
+        val max: Double = 1.0,
+        val precision: Int = 2,
+        val order: Int = Integer.MAX_VALUE
+)
+
 /**
  * ActionParameter annotation for functions without arguments
  * @property label a short description of the parameter
@@ -134,7 +164,10 @@ enum class ParameterType(val annotationClass: KClass<out Annotation>) {
     Text(TextParameter::class),
     Color(ColorParameter::class),
     XY(XYParameter::class),
-    DoubleList(DoubleListParameter::class)
+    DoubleList(DoubleListParameter::class),
+    Vector2(Vector2Parameter::class),
+    Vector3(Vector3Parameter::class),
+    Vector4(Vector4Parameter::class)
     ;
 
     companion object {
@@ -236,7 +269,24 @@ fun Any.listParameters(): List<Parameter> {
                     doubleRange = it.low..it.high
                     precision = it.precision
                     sizeRange = it.minimumListLength..it.maximumListLength
-
+                }
+                is Vector2Parameter -> {
+                    label = it.label
+                    order = it.order
+                    doubleRange = it.min..it.max
+                    precision = it.precision
+                }
+                is Vector3Parameter -> {
+                    label = it.label
+                    order = it.order
+                    doubleRange = it.min..it.max
+                    precision = it.precision
+                }
+                is Vector4Parameter -> {
+                    label = it.label
+                    order = it.order
+                    doubleRange = it.min..it.max
+                    precision = it.precision
                 }
             }
         }

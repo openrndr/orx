@@ -9,8 +9,6 @@ import org.openrndr.draw.isolated
 import org.openrndr.events.Event
 import org.openrndr.math.Vector2
 import org.openrndr.math.map
-import org.openrndr.panel.style.Color
-import org.openrndr.panel.style.color
 import org.openrndr.panel.style.effectiveColor
 import org.openrndr.panel.tools.Tooltip
 import org.openrndr.shape.Rectangle
@@ -20,21 +18,17 @@ import kotlin.math.abs
 import kotlin.math.round
 import kotlin.math.roundToInt
 
-class SequenceEditor : Element(ElementType("sequence-editor")) {
+class SequenceEditor : SequenceEditorBase("sequence-editor") {
+    var value
+        get() = baseValue
+        set(value) {
+            baseValue = value
+        }
 
-    var value = mutableListOf(0.0)
-    var label = "sequence"
-    var precision = 2
-    var maximumSequenceLength = 16
-    var minimumSequenceLength = 1
-    var range: ClosedRange<Double> = -1.0..1.0
+    public override var maximumSequenceLength = 16
+    public override var minimumSequenceLength = 1
 
-    private var selectedIndex: Int? = null
-    private var tooltip: Tooltip? = null
-
-    private val footerHeight = 20.0
-
-    class ValueChangedEvent(val source: SequenceEditor,
+    class ValueChangedEvent(val source: SequenceEditorBase,
                             val oldValue: List<Double>,
                             val newValue: List<Double>)
 
@@ -43,6 +37,37 @@ class SequenceEditor : Element(ElementType("sequence-editor")) {
     }
 
     val events = Events()
+
+    init {
+        baseEvents.valueChanged.listen {
+            events.valueChanged.trigger(ValueChangedEvent(this, it.oldValue, it.newValue))
+        }
+    }
+}
+
+open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(ElementType(type)) {
+
+    internal var baseValue = mutableListOf(0.0)
+    var label = "sequence"
+    var precision = 2
+    internal open var maximumSequenceLength = 16
+    internal open var minimumSequenceLength = 1
+    var range: ClosedRange<Double> = -1.0..1.0
+
+    private var selectedIndex: Int? = null
+    private var tooltip: Tooltip? = null
+
+    private val footerHeight = 20.0
+
+    internal class ValueChangedEvent(val source: SequenceEditorBase,
+                                     val oldValue: List<Double>,
+                                     val newValue: List<Double>)
+
+    internal class Events {
+        val valueChanged = Event<ValueChangedEvent>("sequence-editor-base-value-changed")
+    }
+
+    internal val baseEvents = Events()
 
     init {
         fun query(position: Vector2): Vector2 {
@@ -56,8 +81,8 @@ class SequenceEditor : Element(ElementType("sequence-editor")) {
             requestRedraw()
         }
         mouse.pressed.listen {
-            if (value.isNotEmpty()) {
-                val dx = (layout.screenWidth / (value.size + 1))
+            if (baseValue.isNotEmpty()) {
+                val dx = (layout.screenWidth / (baseValue.size + 1))
                 val index = (it.position.x - layout.screenX) / dx
 
                 val d = index - round(index)
@@ -68,20 +93,20 @@ class SequenceEditor : Element(ElementType("sequence-editor")) {
                     selectedIndex = if (KeyModifier.CTRL !in it.modifiers) {
                         round(index).toInt()
                     } else {
-                        if (value.size > minimumSequenceLength) {
-                            val oldValue = value.map { it }
-                            value.removeAt(round(index).toInt() - 1)
-                            events.valueChanged.trigger(ValueChangedEvent(this, oldValue, value))
+                        if (baseValue.size > minimumSequenceLength) {
+                            val oldValue = baseValue.map { it }
+                            baseValue.removeAt(round(index).toInt() - 1)
+                            baseEvents.valueChanged.trigger(ValueChangedEvent(this, oldValue, baseValue))
                         }
                         null
                     }
                 } else {
                     if (KeyModifier.CTRL !in it.modifiers) {
-                        if (value.size < maximumSequenceLength) {
+                        if (baseValue.size < maximumSequenceLength) {
                             val q = query(it.position)
-                            val oldValue = value.map { it }
-                            value.add(index.toInt(), q.y.map(-1.0, 1.0, range.start, range.endInclusive))
-                            events.valueChanged.trigger(ValueChangedEvent(this, oldValue, value))
+                            val oldValue = baseValue.map { it }
+                            baseValue.add(index.toInt(), q.y.map(-1.0, 1.0, range.start, range.endInclusive))
+                            baseEvents.valueChanged.trigger(ValueChangedEvent(this, oldValue, baseValue))
                         }
                     }
                 }
@@ -108,8 +133,8 @@ class SequenceEditor : Element(ElementType("sequence-editor")) {
                 requestRedraw()
             }
 
-            if (value.isNotEmpty()) {
-                val dx = (layout.screenWidth / (value.size + 1))
+            if (baseValue.isNotEmpty()) {
+                val dx = (layout.screenWidth / (baseValue.size + 1))
                 val index = (it.position.x - layout.screenX) / dx
                 val d = index - round(index)
                 val dp = d * dx
@@ -118,9 +143,9 @@ class SequenceEditor : Element(ElementType("sequence-editor")) {
                 if (dpa < 10.0) {
                     hoverJob = GlobalScope.launch {
                         val readIndex = index.roundToInt() - 1
-                        if (readIndex >= 0 && readIndex < value.size) {
-                            val value = String.format("%.0${precision}f", value[readIndex])
-                            tooltip = Tooltip(this@SequenceEditor, it.position - Vector2(layout.screenX, layout.screenY), "$value")
+                        if (readIndex >= 0 && readIndex < baseValue.size) {
+                            val value = String.format("%.0${precision}f", baseValue[readIndex])
+                            tooltip = Tooltip(this@SequenceEditorBase, it.position - Vector2(layout.screenX, layout.screenY), "$value")
                             requestRedraw()
                         }
                     }
@@ -131,10 +156,10 @@ class SequenceEditor : Element(ElementType("sequence-editor")) {
             val q = query(it.position)
             selectedIndex?.let { index ->
                 val writeIndex = index - 1
-                if (writeIndex >= 0 && writeIndex < value.size) {
-                    val oldValue = value.map { it }
-                    value[writeIndex] = q.y.coerceIn(-1.0, 1.0).map(-1.0, 1.0, range.start, range.endInclusive)
-                    events.valueChanged.trigger(ValueChangedEvent(this, oldValue, value))
+                if (writeIndex >= 0 && writeIndex < baseValue.size) {
+                    val oldValue = baseValue.map { it }
+                    baseValue[writeIndex] = q.y.coerceIn(-1.0, 1.0).map(-1.0, 1.0, range.start, range.endInclusive)
+                    baseEvents.valueChanged.trigger(ValueChangedEvent(this, oldValue, baseValue))
                 }
                 requestRedraw()
             }
@@ -154,9 +179,9 @@ class SequenceEditor : Element(ElementType("sequence-editor")) {
         drawer.strokeWeight = 7.0
         drawer.fill = computedStyle.effectiveColor
 
-        for (i in value.indices) {
-            val dx = layout.screenWidth / (value.size + 1)
-            val height = -value[i].map(range.start, range.endInclusive, -1.0, 1.0).coerceIn(-1.0, 1.0) * controlArea.height / 2.0
+        for (i in baseValue.indices) {
+            val dx = layout.screenWidth / (baseValue.size + 1)
+            val height = -baseValue[i].map(range.start, range.endInclusive, -1.0, 1.0).coerceIn(-1.0, 1.0) * controlArea.height / 2.0
 
             val x = dx * (i + 1)
             drawer.lineCap = LineCap.ROUND

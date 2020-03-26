@@ -2,6 +2,8 @@ import org.amshove.kluent.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.parameters.*
 import org.openrndr.math.Vector2
+import org.openrndr.math.Vector3
+import org.openrndr.math.Vector4
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -31,13 +33,24 @@ val a = object {
 
     @DoubleListParameter("a double list parameter", order = 7)
     var dl = mutableListOf<Double>()
+
+    @Vector2Parameter("a vector 2 parameter", order = 8)
+    var v2 = Vector2.ZERO
+
+    @Vector3Parameter("a vector 3 parameter", order = 9)
+    var v3 = Vector3.ZERO
+
+    @Vector4Parameter("a vector 4 parameter", order = 10)
+    var v4 = Vector4.ZERO
+
+
 }
 
 object TestAnnotations : Spek({
     describe("an annotated object") {
         it("has listable parameters") {
             val list = a.listParameters()
-            list.size `should be equal to` 8
+            list.size `should be equal to` 11
 
             list[0].property?.name `should be equal to` "d"
             list[0].parameterType `should be equal to` ParameterType.Double
@@ -92,6 +105,18 @@ object TestAnnotations : Spek({
             list[7].parameterType `should be equal to` ParameterType.DoubleList
             list[7].property?.name `should be equal to` "dl"
             list[7].label `should be equal to` "a double list parameter"
+
+            list[8].parameterType `should be equal to` ParameterType.Vector2
+            list[8].property?.name `should be equal to` "v2"
+            list[8].label `should be equal to` "a vector 2 parameter"
+
+            list[9].parameterType `should be equal to` ParameterType.Vector3
+            list[9].property?.name `should be equal to` "v3"
+            list[9].label `should be equal to` "a vector 3 parameter"
+
+            list[10].parameterType `should be equal to` ParameterType.Vector4
+            list[10].property?.name `should be equal to` "v4"
+            list[10].label `should be equal to` "a vector 4 parameter"
         }
     }
 })

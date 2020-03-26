@@ -14,6 +14,8 @@ import org.openrndr.draw.Drawer
 import org.openrndr.extra.parameters.*
 import org.openrndr.internal.Driver
 import org.openrndr.math.Vector2
+import org.openrndr.math.Vector3
+import org.openrndr.math.Vector4
 import org.openrndr.panel.ControlManager
 import org.openrndr.panel.controlManager
 import org.openrndr.panel.elements.*
@@ -185,6 +187,19 @@ class GUI : Extension {
                     this.width = 175.px
                     this.height = 100.px
                 }
+                descendant(has type "sliders-vector2") {
+                    this.width = 175.px
+                    this.height = 100.px
+                }
+                descendant(has type "sliders-vector3") {
+                    this.width = 175.px
+                    this.height = 100.px
+                }
+                descendant(has type "sliders-vector4") {
+                    this.width = 175.px
+                    this.height = 100.px
+                }
+
                 //</editor-fold>
             }
 
@@ -468,6 +483,82 @@ class GUI : Extension {
                 }
             }
 
+            ParameterType.Vector2 -> {
+                slidersVector2 {
+                    range = parameter.doubleRange!!
+                    label = parameter.label
+                    precision = parameter.precision!!
+
+                    events.valueChanged.listen {
+                        setAndPersist(
+                                compartment.label,
+                                parameter.property as KMutableProperty1<Any, Vector2>,
+                                obj,
+                                it.newValue)
+
+                        onChangeListener?.invoke(parameter.property!!.name, it.newValue)
+                    }
+                    getPersistedOrDefault(
+                            compartment.label,
+                            parameter.property as KMutableProperty1<Any, Vector2>,
+                            obj
+                    )?.let {
+                        value = it
+                    }
+                }
+            }
+
+            ParameterType.Vector3 -> {
+                slidersVector3 {
+                    range = parameter.doubleRange!!
+                    label = parameter.label
+                    precision = parameter.precision!!
+
+                    events.valueChanged.listen {
+                        setAndPersist(
+                                compartment.label,
+                                parameter.property as KMutableProperty1<Any, Vector3>,
+                                obj,
+                                it.newValue)
+
+                        onChangeListener?.invoke(parameter.property!!.name, it.newValue)
+                    }
+                    getPersistedOrDefault(
+                            compartment.label,
+                            parameter.property as KMutableProperty1<Any, Vector3>,
+                            obj
+                    )?.let {
+                        value = it
+                    }
+                }
+            }
+
+            ParameterType.Vector4 -> {
+                slidersVector4 {
+                    range = parameter.doubleRange!!
+                    label = parameter.label
+                    precision = parameter.precision!!
+
+                    events.valueChanged.listen {
+                        setAndPersist(
+                                compartment.label,
+                                parameter.property as KMutableProperty1<Any, Vector4>,
+                                obj,
+                                it.newValue)
+
+                        onChangeListener?.invoke(parameter.property!!.name, it.newValue)
+                    }
+                    getPersistedOrDefault(
+                            compartment.label,
+                            parameter.property as KMutableProperty1<Any, Vector4>,
+                            obj
+                    )?.let {
+                        value = it
+                    }
+                }
+            }
+
+
         }
     }
     //</editor-fold>
@@ -486,7 +577,9 @@ class GUI : Extension {
                                  var intValue: Int? = null,
                                  var booleanValue: Boolean? = null,
                                  var colorValue: ColorRGBa? = null,
-                                 var vectorValue: Vector2? = null,
+                                 var vector2Value: Vector2? = null,
+                                 var vector3Value: Vector3? = null,
+                                 var vector4Value: Vector4? = null,
                                  var doubleListValue: MutableList<Double>? = null,
                                  var textValue: String? = null)
 
@@ -507,8 +600,11 @@ class GUI : Extension {
                             ParameterType.Color -> ParameterValue(colorValue = k.property.qget(lo.obj) as ColorRGBa)
                             ParameterType.Text -> ParameterValue(textValue = k.property.qget(lo.obj) as String)
                             ParameterType.Boolean -> ParameterValue(booleanValue = k.property.qget(lo.obj) as Boolean)
-                            ParameterType.XY -> ParameterValue(vectorValue = k.property.qget(lo.obj) as Vector2)
+                            ParameterType.XY -> ParameterValue(vector2Value = k.property.qget(lo.obj) as Vector2)
                             ParameterType.DoubleList -> ParameterValue(doubleListValue = k.property.qget(lo.obj) as MutableList<Double>)
+                            ParameterType.Vector2 -> ParameterValue(vector2Value = k.property.qget(lo.obj) as Vector2)
+                            ParameterType.Vector3 -> ParameterValue(vector3Value = k.property.qget(lo.obj) as Vector3)
+                            ParameterType.Vector4 -> ParameterValue(vector4Value = k.property.qget(lo.obj) as Vector4)
                         })
                     })
                 }
@@ -543,13 +639,22 @@ class GUI : Extension {
                             ParameterType.Color -> parameterValue.colorValue?.let {
                                 parameter.property.qset(lo.obj, it)
                             }
-                            ParameterType.XY -> parameterValue.vectorValue?.let {
+                            ParameterType.XY -> parameterValue.vector2Value?.let {
                                 parameter.property.qset(lo.obj, it)
                             }
                             ParameterType.DoubleList -> parameterValue.doubleListValue?.let {
                                 parameter.property.qset(lo.obj, it)
                             }
                             ParameterType.Boolean -> parameterValue.booleanValue?.let {
+                                parameter.property.qset(lo.obj, it)
+                            }
+                            ParameterType.Vector2 -> parameterValue.vector2Value?.let {
+                                parameter.property.qset(lo.obj, it)
+                            }
+                            ParameterType.Vector3 -> parameterValue.vector3Value?.let {
+                                parameter.property.qset(lo.obj, it)
+                            }
+                            ParameterType.Vector4 -> parameterValue.vector4Value?.let {
                                 parameter.property.qset(lo.obj, it)
                             }
                             ParameterType.Action -> {
@@ -587,13 +692,22 @@ class GUI : Extension {
             ParameterType.Boolean -> {
                 (control as Toggle).value = (parameter.property as KMutableProperty1<Any, Boolean>).get(labeledObject.obj)
             }
+            ParameterType.Vector2 -> {
+                (control as SlidersVector2).value = (parameter.property as KMutableProperty1<Any, Vector2>).get(labeledObject.obj)
+            }
+            ParameterType.Vector3 -> {
+                (control as SlidersVector3).value = (parameter.property as KMutableProperty1<Any, Vector3>).get(labeledObject.obj)
+            }
+            ParameterType.Vector4 -> {
+                (control as SlidersVector4).value = (parameter.property as KMutableProperty1<Any, Vector4>).get(labeledObject.obj)
+            }
             ParameterType.Action -> {
                 // intentionally do nothing
             }
         }
     }
 
-    fun randomize(strength:Double = 0.05) {
+    fun randomize(strength: Double = 0.05) {
         for ((labeledObject, binding) in trackedObjects) {
             // -- only randomize visible parameters
             for (parameter in binding.parameterControls.keys) {
@@ -604,7 +718,7 @@ class GUI : Extension {
                         val max = parameter.doubleRange!!.endInclusive
                         val currentValue = (parameter.property as KMutableProperty1<Any, Double>).get(labeledObject.obj)
                         val randomValue = Math.random() * (max - min) + min
-                        val newValue = (1.0 - strength)  * currentValue + randomValue * strength
+                        val newValue = (1.0 - strength) * currentValue + randomValue * strength
                         (parameter.property as KMutableProperty1<Any, Double>).set(labeledObject.obj, newValue)
                     }
                     ParameterType.Int -> {
@@ -612,7 +726,7 @@ class GUI : Extension {
                         val max = parameter.intRange!!.last
                         val currentValue = (parameter.property as KMutableProperty1<Any, Int>).get(labeledObject.obj)
                         val randomValue = Math.random() * (max - min) + min
-                        val newValue = ((1.0 - strength)  * currentValue + randomValue * strength).roundToInt()
+                        val newValue = ((1.0 - strength) * currentValue + randomValue * strength).roundToInt()
                         (parameter.property as KMutableProperty1<Any, Int>).set(labeledObject.obj, newValue)
                     }
                     ParameterType.Boolean -> {
@@ -622,9 +736,9 @@ class GUI : Extension {
                     ParameterType.Color -> {
                         val currentValue = (parameter.property as KMutableProperty1<Any, ColorRGBa>).get(labeledObject.obj)
                         val randomValue = ColorRGBa(Math.random(), Math.random(), Math.random(), currentValue.a)
-                        val newValue = ColorRGBa((1.0 - strength)  * currentValue.r + randomValue.r * strength,
-                                (1.0 - strength)  * currentValue.g + randomValue.g * strength,
-                                (1.0 - strength)  * currentValue.b + randomValue.b * strength)
+                        val newValue = ColorRGBa((1.0 - strength) * currentValue.r + randomValue.r * strength,
+                                (1.0 - strength) * currentValue.g + randomValue.g * strength,
+                                (1.0 - strength) * currentValue.b + randomValue.b * strength)
 
                         (parameter.property as KMutableProperty1<Any, ColorRGBa>).set(labeledObject.obj, newValue)
                     }
@@ -636,7 +750,6 @@ class GUI : Extension {
         }
         updateControls()
     }
-
 
     /**
      * Recursively find a unique label
@@ -690,7 +803,7 @@ class GUI : Extension {
 }
 
 @JvmName("addToGui")
-fun <T : Any> T.addTo(gui: GUI, label:String? = this.title()): T {
+fun <T : Any> T.addTo(gui: GUI, label: String? = this.title()): T {
     gui.add(this, label)
     return this
 }
