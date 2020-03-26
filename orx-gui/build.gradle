@@ -1,6 +1,6 @@
 dependencies {
     api project(":orx-parameters")
-    api "org.openrndr.panel:openrndr-panel:$panelVersion"
+    api project(":orx-panel")
     implementation "org.openrndr:openrndr-dialogs:$openrndrVersion"
     implementation "com.google.code.gson:gson:$gsonVersion"
 }
