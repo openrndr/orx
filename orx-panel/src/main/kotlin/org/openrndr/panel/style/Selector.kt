@@ -15,6 +15,7 @@ class CompoundSelector {
     companion object {
         val DUMMY = CompoundSelector()
     }
+
     var previous: Pair<Combinator, CompoundSelector>?
     var selectors: MutableList<Selector>
 
@@ -84,6 +85,14 @@ class TypeSelector(val type: ElementType) : Selector() {
     }
 }
 
+class TypesSelector(vararg types: ElementType) : Selector() {
+    private val typeSet = types.toSet()
+    override fun accept(element: Element): Boolean = element.type in typeSet
+    override fun toString(): String {
+        return "TypesSelector(types=$typeSet)"
+    }
+}
+
 class PseudoClassSelector(val c: ElementPseudoClass) : Selector() {
     override fun accept(element: Element): Boolean = c in element.pseudoClasses
     override fun toString(): String {
@@ -93,7 +102,7 @@ class PseudoClassSelector(val c: ElementPseudoClass) : Selector() {
 }
 
 object has {
-    operator fun invoke (vararg selectors:CompoundSelector) : CompoundSelector {
+    operator fun invoke(vararg selectors: CompoundSelector): CompoundSelector {
         val active = CompoundSelector()
         selectors.forEach {
             active.selectors.addAll(it.selectors)
@@ -101,26 +110,33 @@ object has {
         return active
     }
 
-    infix fun state(q:String):CompoundSelector {
+    infix fun state(q: String): CompoundSelector {
         val active = CompoundSelector()
         active.selectors.add(PseudoClassSelector(ElementPseudoClass((q))))
         return active
     }
 
-    infix fun class_(q:String): CompoundSelector {
+    infix fun class_(q: String): CompoundSelector {
         val active = CompoundSelector()
         active.selectors.add(ClassSelector(ElementClass(q)))
         return active
     }
 
-    infix fun type(q:String):CompoundSelector {
+    infix fun type(q: String): CompoundSelector {
         val active = CompoundSelector()
         active.selectors.add(TypeSelector(ElementType(q)))
         return active
     }
+
+    infix fun type(qs: Iterable<String>): CompoundSelector {
+        val active = CompoundSelector()
+        val aqs = qs.map { ElementType(it) }.toList().toTypedArray()
+        active.selectors.add(TypesSelector(*aqs))
+        return active
+    }
 }
 
-infix fun CompoundSelector.and(other:CompoundSelector):CompoundSelector {
+infix fun CompoundSelector.and(other: CompoundSelector): CompoundSelector {
     val c = CompoundSelector()
     c.previous = previous
     c.selectors.addAll(selectors)

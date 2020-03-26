@@ -183,23 +183,15 @@ class GUI : Extension {
                     this.height = 175.px
                 }
 
-                descendant(has type "sequence-editor") {
+                descendant(has type listOf(
+                        "sequence-editor",
+                        "sliders-vector2",
+                        "sliders-vector3",
+                        "sliders-vector4"
+                )) {
                     this.width = 175.px
                     this.height = 100.px
                 }
-                descendant(has type "sliders-vector2") {
-                    this.width = 175.px
-                    this.height = 100.px
-                }
-                descendant(has type "sliders-vector3") {
-                    this.width = 175.px
-                    this.height = 100.px
-                }
-                descendant(has type "sliders-vector4") {
-                    this.width = 175.px
-                    this.height = 100.px
-                }
-
                 //</editor-fold>
             }
 

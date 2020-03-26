@@ -98,43 +98,12 @@ fun defaultStyles(
             marginRight = 5.px
         },
 
-        styleSheet(has type "sequence-editor") {
-            height = 60.px
-            width = 100.percent
-            marginTop = 5.px
-            marginBottom = 15.px
-            marginLeft = 5.px
-            marginRight = 5.px
-            color = controlTextColor
-            and(has state "active") {
-                color = controlActiveColor
-            }
-        },
-        styleSheet(has type "sliders-vector2") {
-            height = 60.px
-            width = 100.percent
-            marginTop = 5.px
-            marginBottom = 15.px
-            marginLeft = 5.px
-            marginRight = 5.px
-            color = controlTextColor
-            and(has state "active") {
-                color = controlActiveColor
-            }
-        },
-        styleSheet(has type "sliders-vector3") {
-            height = 60.px
-            width = 100.percent
-            marginTop = 5.px
-            marginBottom = 15.px
-            marginLeft = 5.px
-            marginRight = 5.px
-            color = controlTextColor
-            and(has state "active") {
-                color = controlActiveColor
-            }
-        },
-        styleSheet(has type "sliders-vector4") {
+        styleSheet(has type listOf(
+                "sequence-editor",
+                "sliders-vector2",
+                "sliders-vector3",
+                "sliders-vector4"
+        )) {
             height = 60.px
             width = 100.percent
             marginTop = 5.px
@@ -155,8 +124,6 @@ fun defaultStyles(
             marginLeft = 5.px
             marginRight = 5.px
         },
-
-
 
         styleSheet(has type "xy-pad") {
             display = Display.BLOCK

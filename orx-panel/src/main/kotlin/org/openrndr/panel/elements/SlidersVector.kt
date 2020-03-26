@@ -5,7 +5,6 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
 
-
 class SlidersVector2 : SequenceEditorBase("sliders-vector2") {
     var value : Vector2
         get() {
