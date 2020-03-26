@@ -32,8 +32,10 @@ Blend filters take two inputs ("source" and "destination"), they are intended to
 #### Porter-Duff blends
  - `SourceIn`, Porter-Duff source-in blend, intersect source and destination opacity and keep source colors
  - `SourceOut`, Porter-Duff source-out blend, subtract destination from source opacity and keep source colors
+ - `SourceAtop`, Porter-Duff source-atop blend, uses destination opacity, layers source on top and keeps both colors
  - `DestinationIn`, Porter-Duff destination-in blend, intersect source and destination opacity and keep source colors
  - `DestinationOut`, Porter-Duff destination-out blend, subtract destination from source opacity and keep destination colors
+ - `DestinationAtop`, Porter-Duff destination-atop blend, uses source opacity, layers destination on top and keeps both colors
  - `Xor`, Porter-Duff xor blend, picks colors from input with highest opacity or none with opacities are equal
 
 #### Various blends
