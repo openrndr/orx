@@ -259,7 +259,7 @@ class GUI : Extension {
                             header.mouse.pressed.subscribe {
                                 it.cancelPropagation()
                             }
-                            {
+                            header.mouse.clicked.subscribe {
 
                                 if (KeyModifier.CTRL in it.modifiers) {
                                     collapsible.classes.remove(collapseClass)
@@ -284,7 +284,7 @@ class GUI : Extension {
                             }
                         }
                     }
-                    {
+                    collapseBorder.mouse.pressed.subscribe {
                         it.cancelPropagation()
                     }
 
@@ -299,7 +299,7 @@ class GUI : Extension {
                         }
                         it.cancelPropagation()
                     }
-                    {
+                    sidebar.mouse.scrolled.subscribe {
                         sidebarState().scrollTop = sidebar.scrollTop
                     }
                     if (sidebarState().collapsed) {
@@ -333,7 +333,7 @@ class GUI : Extension {
                     label = parameter.label
                     range = Range(parameter.intRange!!.first.toDouble(), parameter.intRange!!.last.toDouble())
                     precision = 0
-                    {
+                    events.valueChanged.subscribe {
                         setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Int>, obj, it.newValue.toInt())
                         (parameter.property as KMutableProperty1<Any, Int>).set(obj, value.toInt())
                         onChangeListener?.invoke(parameter.property!!.name, it.newValue)
@@ -349,7 +349,7 @@ class GUI : Extension {
                     label = parameter.label
                     range = Range(parameter.doubleRange!!.start, parameter.doubleRange!!.endInclusive)
                     precision = parameter.precision!!
-                    {
+                    events.valueChanged.subscribe {
                         setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Double>, obj, it.newValue)
                         onChangeListener?.invoke(parameter.property!!.name, it.newValue)
                     }
@@ -364,7 +364,7 @@ class GUI : Extension {
             ParameterType.Action -> {
                 button {
                     label = parameter.label
-                    {
+                    events.clicked.subscribe {
                         /* the `obj` we pass in here is the receiver */
                         parameter.function!!.call(obj)
                         onChangeListener?.invoke(parameter.function!!.name, null)
@@ -374,7 +374,7 @@ class GUI : Extension {
             ParameterType.Boolean -> {
                 toggle {
                     label = parameter.label
-                    {
+                    events.valueChanged.subscribe {
                         value = it.newValue
                         setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Boolean>, obj, it.newValue)
                         onChangeListener?.invoke(parameter.property!!.name, it.newValue)
@@ -388,7 +388,7 @@ class GUI : Extension {
             ParameterType.Text -> {
                 textfield {
                     label = parameter.label
-                    {
+                    events.valueChanged.subscribe {
                         setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, String>, obj, it.newValue)
                         onChangeListener?.invoke(parameter.property!!.name, it.newValue)
                     }
@@ -400,7 +400,7 @@ class GUI : Extension {
             ParameterType.Color -> {
                 colorpickerButton {
                     label = parameter.label
-                    {
+                    events.valueChanged.subscribe {
                         setAndPersist(
                                 compartment.label,
                                 parameter.property as KMutableProperty1<Any, ColorRGBa>,
@@ -429,7 +429,7 @@ class GUI : Extension {
                     showVector = parameter.showVector!!
                     invertY = parameter.invertY!!
 
-                    {
+                    events.valueChanged.subscribe {
                         setAndPersist(
                                 compartment.label,
                                 parameter.property as KMutableProperty1<Any, Vector2>,
