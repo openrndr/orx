@@ -28,20 +28,23 @@ val a = object {
 
     @XYParameter("an XY parameter", order = 6)
     var xy = Vector2.ZERO
+
+    @DoubleListParameter("a double list parameter", order = 7)
+    var dl = mutableListOf<Double>()
 }
 
 object TestAnnotations : Spek({
     describe("an annotated object") {
         it("has listable parameters") {
             val list = a.listParameters()
-            list.size `should be equal to` 7
+            list.size `should be equal to` 8
 
             list[0].property?.name `should be equal to` "d"
             list[0].parameterType `should be equal to` ParameterType.Double
             list[0].label `should be equal to` "a double scalar"
             list[0].doubleRange?.let {
-                it.start shouldBeInRange 0.0 .. 0.0001
-                it.endInclusive shouldBeInRange 0.999 .. 1.001
+                it.start shouldBeInRange 0.0..0.0001
+                it.endInclusive shouldBeInRange 0.999..1.001
             }
             list[0].precision `should be equal to` 3
 
@@ -68,7 +71,7 @@ object TestAnnotations : Spek({
             invoking {
                 try {
                     list[3].function?.call(a)
-                } catch(e: java.lang.reflect.InvocationTargetException) {
+                } catch (e: java.lang.reflect.InvocationTargetException) {
                     /* this unpacks the exception that is wrapped in the ITExc */
                     throw(e.targetException)
                 }
@@ -85,6 +88,10 @@ object TestAnnotations : Spek({
             list[6].parameterType `should be equal to` ParameterType.XY
             list[6].property?.name `should be equal to` "xy"
             list[6].label `should be equal to` "an XY parameter"
+
+            list[7].parameterType `should be equal to` ParameterType.DoubleList
+            list[7].property?.name `should be equal to` "dl"
+            list[7].label `should be equal to` "a double list parameter"
         }
     }
 })

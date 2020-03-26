@@ -17,6 +17,7 @@ import kotlin.reflect.full.memberProperties
     5. Add a test in TestAnnotations.kt
  */
 
+//<editor-fold desc="1. Add an annotation class" defaultstate="collapsed">
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class Description(val title: String, val description: String = "")
@@ -32,6 +33,29 @@ annotation class Description(val title: String, val description: String = "")
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class DoubleParameter(val label: String, val low: Double, val high: Double, val precision: Int = 3, val order: Int = Integer.MAX_VALUE)
+
+
+/**
+ * DoubleListParameter annotation for a double precision parameter
+ * @property label a short description of the parameter
+ * @property low the lowest value this parameter should be assigned
+ * @property high the highest value this parameter should be assigned
+ * @property minimumListLength the minimum amount of entries the annotated list should contain
+ * @property maximumListLength the maximum amount of entries the annotated list should contain
+ * @property precision a hint for precision in user interfaces
+ * @property order hint for where to place the parameter in user interfaces
+ */
+@Target(AnnotationTarget.PROPERTY)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class DoubleListParameter(
+        val label: String,
+        val low: Double = -1.0,
+        val high: Double = 1.0,
+        val minimumListLength: Int = 1,
+        val maximumListLength: Int = 16,
+        val precision: Int = 3,
+        val order: Int = Integer.MAX_VALUE
+)
 
 /**
  * IntParameter annotation for an integer parameter
@@ -100,6 +124,8 @@ annotation class XYParameter(
 @Retention(AnnotationRetention.RUNTIME)
 annotation class ActionParameter(val label: String, val order: Int = Integer.MAX_VALUE)
 
+//</editor-fold>
+//<editor-fold desc="2. Add an entry to ParameterType" id="add-parameter-type" defaultstate="collapsed">
 enum class ParameterType(val annotationClass: KClass<out Annotation>) {
     Double(DoubleParameter::class),
     Int(IntParameter::class),
@@ -107,7 +133,8 @@ enum class ParameterType(val annotationClass: KClass<out Annotation>) {
     Action(ActionParameter::class),
     Text(TextParameter::class),
     Color(ColorParameter::class),
-    XY(XYParameter::class)
+    XY(XYParameter::class),
+    DoubleList(DoubleListParameter::class)
     ;
 
     companion object {
@@ -117,7 +144,8 @@ enum class ParameterType(val annotationClass: KClass<out Annotation>) {
         val parameterAnnotationClasses get() = values().map { it.annotationClass }
     }
 }
-
+//</editor-fold>
+//<editor-fold desc="3. Add extra fields (if any) to Parameter" defaultstate="collapsed">
 /**
  * Parameter summary class. This is used by [listParameters] as a way to report parameters in
  * a unified form.
@@ -138,25 +166,28 @@ class Parameter(
         val label: String,
         val doubleRange: ClosedRange<Double>?,
         val vectorRange: Pair<Vector2, Vector2>?,
+        val sizeRange: ClosedRange<Int>?,
         val intRange: IntRange?,
         val precision: Int?,
         val invertY: Boolean?,
         val showVector: Boolean?,
         val order: Int)
-
+//</editor-fold>
+//<editor-fold desc="4. Add handling annotation code to listParameters" defaultstate="collapsed">
 /**
  * List all parameters, (public var properties with a parameter annotation)
  */
 fun Any.listParameters(): List<Parameter> {
-    return (this::class.memberProperties.filter {
-        !it.isConst &&
-                it is KMutableProperty1<*, *> &&
-                it.visibility == KVisibility.PUBLIC &&
-                it.annotations.map { it.annotationClass }.intersect(ParameterType.parameterAnnotationClasses).isNotEmpty()
-    }.map {
-        val annotations = it.annotations.filter { it.annotationClass in ParameterType.parameterAnnotationClasses }
+    return (this::class.memberProperties.filter { property ->
+        !property.isConst &&
+                property is KMutableProperty1<*, *> &&
+                property.visibility == KVisibility.PUBLIC &&
+                property.annotations.map { it.annotationClass }.intersect(ParameterType.parameterAnnotationClasses).isNotEmpty()
+    }.map { property ->
+        val annotations = property.annotations.filter { it.annotationClass in ParameterType.parameterAnnotationClasses }
         var intRange: IntRange? = null
         var doubleRange: ClosedRange<Double>? = null
+        var sizeRange: ClosedRange<Int>? = null
         var order: Int = Integer.MAX_VALUE
         var label = ""
         var precision: Int? = null
@@ -199,15 +230,24 @@ fun Any.listParameters(): List<Parameter> {
                     invertY = it.invertY
                     showVector = it.showVector
                 }
+                is DoubleListParameter -> {
+                    label = it.label
+                    order = it.order
+                    doubleRange = it.low..it.high
+                    precision = it.precision
+                    sizeRange = it.minimumListLength..it.maximumListLength
+
+                }
             }
         }
         Parameter(
                 parameterType = type ?: error("no type"),
-                property = it as KMutableProperty1<out Any, Any?>,
+                property = property as KMutableProperty1<out Any, Any?>,
                 function = null,
                 label = label,
                 doubleRange = doubleRange,
                 vectorRange = vectorRange,
+                sizeRange = sizeRange,
                 intRange = intRange,
                 precision = precision,
                 showVector = showVector,
@@ -228,6 +268,7 @@ fun Any.listParameters(): List<Parameter> {
                 label = label,
                 doubleRange = null,
                 intRange = null,
+                sizeRange = null,
                 vectorRange = null,
                 precision = null,
                 showVector = null,
@@ -236,6 +277,7 @@ fun Any.listParameters(): List<Parameter> {
         )
     }).sortedBy { it.order }
 }
+//</editor-fold>
 
 fun Any.title() = this::class.findAnnotation<Description>()?.title
 
