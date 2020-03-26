@@ -155,8 +155,7 @@ class GUI : Extension {
                 this.background = Color.RGBa(ColorRGBa.GRAY.copy(a = 0.99))
                 this.overflow = Overflow.Scroll
 
-
-                /* 1) setup control style */
+                //<editor-fold desc="1) setup control style">
                 descendant(has type "colorpicker-button") {
                     this.width = 175.px
                 }
@@ -181,6 +180,12 @@ class GUI : Extension {
                     this.width = 175.px
                     this.height = 175.px
                 }
+
+                descendant(has type "sequence-editor") {
+                    this.width = 175.px
+                    this.height = 100.px
+                }
+                //</editor-fold>
             }
 
             styleSheet(has class_ "randomize-strong") {
@@ -254,7 +259,7 @@ class GUI : Extension {
                             header.mouse.pressed.subscribe {
                                 it.cancelPropagation()
                             }
-                            header.mouse.clicked.subscribe {
+                            {
 
                                 if (KeyModifier.CTRL in it.modifiers) {
                                     collapsible.classes.remove(collapseClass)
@@ -279,7 +284,7 @@ class GUI : Extension {
                             }
                         }
                     }
-                    collapseBorder.mouse.pressed.subscribe {
+                    {
                         it.cancelPropagation()
                     }
 
@@ -294,7 +299,7 @@ class GUI : Extension {
                         }
                         it.cancelPropagation()
                     }
-                    sidebar.mouse.scrolled.subscribe {
+                    {
                         sidebarState().scrollTop = sidebar.scrollTop
                     }
                     if (sidebarState().collapsed) {
@@ -316,18 +321,19 @@ class GUI : Extension {
         program.extend(panel)
     }
 
+    /* 2) control creation. create control, set label, set range, setup event-handler, load values */
+    //<editor-fold desc="2) Control creation">
     private fun Div.addControl(compartment: LabeledObject, parameter: Parameter): Element {
         val obj = compartment.obj
 
         return when (parameter.parameterType) {
 
-            /* 2) control creation. create control, set label, set range, setup event-handler, load values */
             ParameterType.Int -> {
                 slider {
                     label = parameter.label
                     range = Range(parameter.intRange!!.first.toDouble(), parameter.intRange!!.last.toDouble())
                     precision = 0
-                    events.valueChanged.subscribe {
+                    {
                         setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Int>, obj, it.newValue.toInt())
                         (parameter.property as KMutableProperty1<Any, Int>).set(obj, value.toInt())
                         onChangeListener?.invoke(parameter.property!!.name, it.newValue)
@@ -343,7 +349,7 @@ class GUI : Extension {
                     label = parameter.label
                     range = Range(parameter.doubleRange!!.start, parameter.doubleRange!!.endInclusive)
                     precision = parameter.precision!!
-                    events.valueChanged.subscribe {
+                    {
                         setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Double>, obj, it.newValue)
                         onChangeListener?.invoke(parameter.property!!.name, it.newValue)
                     }
@@ -358,7 +364,7 @@ class GUI : Extension {
             ParameterType.Action -> {
                 button {
                     label = parameter.label
-                    events.clicked.subscribe {
+                    {
                         /* the `obj` we pass in here is the receiver */
                         parameter.function!!.call(obj)
                         onChangeListener?.invoke(parameter.function!!.name, null)
@@ -368,7 +374,7 @@ class GUI : Extension {
             ParameterType.Boolean -> {
                 toggle {
                     label = parameter.label
-                    events.valueChanged.subscribe {
+                    {
                         value = it.newValue
                         setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Boolean>, obj, it.newValue)
                         onChangeListener?.invoke(parameter.property!!.name, it.newValue)
@@ -382,7 +388,7 @@ class GUI : Extension {
             ParameterType.Text -> {
                 textfield {
                     label = parameter.label
-                    events.valueChanged.subscribe {
+                    {
                         setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, String>, obj, it.newValue)
                         onChangeListener?.invoke(parameter.property!!.name, it.newValue)
                     }
@@ -394,7 +400,7 @@ class GUI : Extension {
             ParameterType.Color -> {
                 colorpickerButton {
                     label = parameter.label
-                    events.valueChanged.subscribe {
+                    {
                         setAndPersist(
                                 compartment.label,
                                 parameter.property as KMutableProperty1<Any, ColorRGBa>,
@@ -423,7 +429,7 @@ class GUI : Extension {
                     showVector = parameter.showVector!!
                     invertY = parameter.invertY!!
 
-                    events.valueChanged.subscribe {
+                    {
                         setAndPersist(
                                 compartment.label,
                                 parameter.property as KMutableProperty1<Any, Vector2>,
@@ -434,8 +440,37 @@ class GUI : Extension {
                     }
                 }
             }
+
+            ParameterType.DoubleList -> {
+                sequenceEditor {
+                    range = parameter.doubleRange!!
+                    label = parameter.label
+                    minimumSequenceLength = parameter.sizeRange!!.start
+                    maximumSequenceLength = parameter.sizeRange!!.endInclusive
+                    precision = parameter.precision!!
+
+                    events.valueChanged.listen {
+                        setAndPersist(
+                                compartment.label,
+                                parameter.property as KMutableProperty1<Any, MutableList<Double>>,
+                                obj,
+                                it.newValue.toMutableList()
+                        )
+                        onChangeListener?.invoke(parameter.property!!.name, it.newValue)
+                    }
+                    getPersistedOrDefault(
+                            compartment.label,
+                            parameter.property as KMutableProperty1<Any, MutableList<Double>>,
+                            obj
+                    )?.let {
+                        value = it
+                    }
+                }
+            }
+
         }
     }
+    //</editor-fold>
 
     private val trackedObjects = mutableMapOf<LabeledObject, TrackedObjectBinding>()
 
@@ -452,6 +487,7 @@ class GUI : Extension {
                                  var booleanValue: Boolean? = null,
                                  var colorValue: ColorRGBa? = null,
                                  var vectorValue: Vector2? = null,
+                                 var doubleListValue: MutableList<Double>? = null,
                                  var textValue: String? = null)
 
 
@@ -472,6 +508,7 @@ class GUI : Extension {
                             ParameterType.Text -> ParameterValue(textValue = k.property.qget(lo.obj) as String)
                             ParameterType.Boolean -> ParameterValue(booleanValue = k.property.qget(lo.obj) as Boolean)
                             ParameterType.XY -> ParameterValue(vectorValue = k.property.qget(lo.obj) as Vector2)
+                            ParameterType.DoubleList -> ParameterValue(doubleListValue = k.property.qget(lo.obj) as MutableList<Double>)
                         })
                     })
                 }
@@ -509,6 +546,9 @@ class GUI : Extension {
                             ParameterType.XY -> parameterValue.vectorValue?.let {
                                 parameter.property.qset(lo.obj, it)
                             }
+                            ParameterType.DoubleList -> parameterValue.doubleListValue?.let {
+                                parameter.property.qset(lo.obj, it)
+                            }
                             ParameterType.Boolean -> parameterValue.booleanValue?.let {
                                 parameter.property.qset(lo.obj, it)
                             }
@@ -538,11 +578,12 @@ class GUI : Extension {
             ParameterType.Color -> {
                 (control as ColorpickerButton).color = (parameter.property as KMutableProperty1<Any, ColorRGBa>).get(labeledObject.obj)
             }
-
             ParameterType.XY -> {
                 (control as XYPad).value = (parameter.property as KMutableProperty1<Any, Vector2>).get(labeledObject.obj)
             }
-
+            ParameterType.DoubleList -> {
+                (control as SequenceEditor).value = (parameter.property as KMutableProperty1<Any, MutableList<Double>>).get(labeledObject.obj)
+            }
             ParameterType.Boolean -> {
                 (control as Toggle).value = (parameter.property as KMutableProperty1<Any, Boolean>).get(labeledObject.obj)
             }

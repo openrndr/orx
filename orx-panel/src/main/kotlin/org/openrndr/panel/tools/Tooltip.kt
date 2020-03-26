@@ -37,7 +37,8 @@ class Tooltip(val parent: Element, val position: Vector2, val message: String) {
 
             drawer.translate(position)
             drawer.translate(10.0, 0.0)
-            drawer.stroke = null
+            drawer.strokeWeight = 0.5
+            drawer.stroke = ColorRGBa.WHITE.opacify(0.25)
             drawer.fill = ColorRGBa.GRAY
             drawer.rectangle(0.0, 0.0, maxX + 20.0, maxY)
             drawer.fill = ColorRGBa.BLACK

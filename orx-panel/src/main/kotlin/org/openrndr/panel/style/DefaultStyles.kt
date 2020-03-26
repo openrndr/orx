@@ -105,6 +105,10 @@ fun defaultStyles(
             marginBottom = 15.px
             marginLeft = 5.px
             marginRight = 5.px
+            color = controlTextColor
+            and(has state "active") {
+                color = controlActiveColor
+            }
         },
 
         styleSheet(has type "colorpicker") {
@@ -115,6 +119,8 @@ fun defaultStyles(
             marginLeft = 5.px
             marginRight = 5.px
         },
+
+
 
         styleSheet(has type "xy-pad") {
             display = Display.BLOCK
