@@ -66,6 +66,15 @@ fun generateDodecahedron(radius: Double = 1.0, writer: VertexWriter) {
     // billboarding pentagons?
     // unwrap?
     val uv = Vector2(0.0)
+
+    // Shorter version
+    //    indices.chunked(3).forEach { triplet ->
+    //        val tri = triplet.map { idx ->
+    //            Vector3(vertices[idx * 3],
+    //                    vertices[idx * 3 + 1],
+    //                    vertices[idx * 3 + 2]) * radius
+    //        }
+
     val ii = indices.iterator()
     while (ii.hasNext()) {
         val tri = List(3) {

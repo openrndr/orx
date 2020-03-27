@@ -83,6 +83,7 @@ fun main() {
 
     time {
         for (i in 0 until 10000) {
+            @Suppress("UNUSED_VARIABLE")
             val results = items.filter { it.start <= 0.05 && it.end > 0.05 }
         }
     }

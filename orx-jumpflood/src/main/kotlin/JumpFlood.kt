@@ -120,7 +120,8 @@ class JumpFlooder(val width: Int, val height: Int, format: ColorFormat = ColorFo
     }
 }
 
-private fun encodeDecodeBitmap(drawer: Drawer, preprocess: Filter, decoder: Filter, bitmap: ColorBuffer,
+private fun encodeDecodeBitmap(@Suppress("UNUSED_PARAMETER") drawer: Drawer,
+                               preprocess: Filter, decoder: Filter, bitmap: ColorBuffer,
                                jumpFlooder: JumpFlooder? = null,
                                result: ColorBuffer? = null
 ): ColorBuffer {

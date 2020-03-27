@@ -55,20 +55,15 @@ class IntegralImage(val width: Int, val height: Int, val integral: LongArray) {
     }
 
     private fun sum(left: Int, top: Int, right: Int, bottom: Int): Long {
-        var left = left
-        var top = top
-        var right = right
-        var bottom = bottom
-        top = clip(top, 0, height - 1)
-        bottom = clip(bottom, 0, height - 1)
+        val topClipped = clip(top, 0, height - 1)
+        val bottomClipped = clip(bottom, 0, height - 1)
+        val leftClipped = clip(left, 0, width - 1)
+        val rightClipped = clip(right, 0, width - 1)
 
-        left = clip(left, 0, width - 1)
-        right = clip(right, 0, width - 1)
-
-        val a = integral[left + top * width]
-        val b = integral[right + top * width]
-        val c = integral[right + bottom * width]
-        val d = integral[left + bottom * width]
+        val a = integral[leftClipped + topClipped * width]
+        val b = integral[rightClipped + topClipped * width]
+        val c = integral[rightClipped + bottomClipped * width]
+        val d = integral[leftClipped + bottomClipped * width]
 
         return a + c - b - d
     }

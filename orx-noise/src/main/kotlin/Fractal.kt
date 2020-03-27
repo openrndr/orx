@@ -1,3 +1,5 @@
+@file:Suppress("NAME_SHADOWING")
+
 package org.openrndr.extra.noise
 
 import kotlin.math.abs

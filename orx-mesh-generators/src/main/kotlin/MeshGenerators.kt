@@ -155,7 +155,11 @@ private fun sample() {
     val shape = Circle(100.0, 100.0, 200.0).shape
     val vbo = meshVertexBuffer(400)
 
+    @Suppress("UNUSED_VARIABLE")
     val vertexCount = vbo.put {
-        extrudeShape(shape, 0.0, 10.0, 0.05, bufferWriter(this))
+        extrudeShape(shape, 0.0, 10.0,
+                distanceTolerance = 0.05,
+                flipNormals = false,
+                writer = bufferWriter(this))
     }
 }

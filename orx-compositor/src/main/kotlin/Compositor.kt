@@ -4,7 +4,6 @@ import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
-import org.openrndr.extra.fx.blend.DestinationOut
 import org.openrndr.extra.fx.blend.SourceIn
 import org.openrndr.extra.fx.blend.SourceOut
 import org.openrndr.extra.parameters.BooleanParameter
@@ -140,10 +139,10 @@ open class Layer internal constructor() {
             val layerPost = postFilters.let { filters ->
                 val targets = postBufferCache
                 val result = filters.foldIndexed(target.colorBuffer(0)) { i, source, filter ->
-                    val target = targets[i % targets.size]
+                    val targetByIndex = targets[i % targets.size]
                     filter.first.apply(filter.second)
-                    filter.first.apply(source, target)
-                    target
+                    filter.first.apply(source, targetByIndex)
+                    targetByIndex
                 }
                 result
             }

@@ -61,7 +61,7 @@ fun generateRevolve(sides: Int, length: Double, enveloppe: List<Vector2> = listO
 
     }
 
-    val extended = listOf(normals2D[0]) + normals2D + normals2D[normals2D.size-1]
+//    val extended = listOf(normals2D[0]) + normals2D + normals2D[normals2D.size-1]
 
     val basePositions = cleanEnveloppe.map { Vector3(it.x, it.y, 0.0) }
     val baseNormals = normals2D.map { Vector3(it.x, it.y, 0.0) }

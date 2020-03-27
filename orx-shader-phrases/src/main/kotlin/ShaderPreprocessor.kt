@@ -34,6 +34,7 @@ fun preprocessShader(source: String): String {
                             "/* imported from $packageClass.$it */\n${it.get(null)}\n"
                         }.joinToString("\n")
                     } else {
+                        @Suppress("VARIABLE_WITH_REDUNDANT_INITIALIZER")
                         var result:String? = null
                         try {
                             val methodName = "get${fieldName.take(1).toUpperCase() + fieldName.drop(1)}"

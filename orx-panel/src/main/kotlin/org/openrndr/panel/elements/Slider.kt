@@ -163,9 +163,7 @@ class Slider : Element(ElementType("slider")) {
 
             if (it.key == KEY_ENTER) {
                 val number = NumberFormat.getInstance().parse(keyboardInput).toDouble()
-                if (number != null) {
-                    interactiveValue = number.coerceIn(range.min, range.max)
-                }
+                interactiveValue = number.coerceIn(range.min, range.max)
                 keyboardInput = ""
                 draw.dirty = true
                 it.cancelPropagation()

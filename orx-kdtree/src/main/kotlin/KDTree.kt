@@ -277,7 +277,7 @@ fun <T> remove(toRemove: KDTreeNode<T>, mapper: (T, Int) -> Double): KDTreeNode<
     } else {
         val stack = Stack<KDTreeNode<T>>()
 
-        var branch = 0
+        var branch: Int
 
         if (toRemove.children[0] != null) {
             stack.push(toRemove.children[0])

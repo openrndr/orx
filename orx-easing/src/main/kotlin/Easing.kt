@@ -6,7 +6,9 @@ fun easeLinear(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0) = c
 
 // -- constant
 
+@Suppress("UNUSED_PARAMETER")
 fun easeZero(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0) = b
+@Suppress("UNUSED_PARAMETER")
 fun easeOne(t: Double, b: Double = 0.0, c: Double = 1.0, d : Double = 1.0) = b + c
 
 // -- back

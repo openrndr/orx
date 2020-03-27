@@ -18,6 +18,7 @@ import java.io.File
 import java.net.URL
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.system.measureNanoTime
 
 internal val logger = KotlinLogging.logger {}
 
@@ -201,9 +202,8 @@ class PaletteStudio(
     }
 
     fun randomPalette() {
-        val comparison = palette.colors.toMutableList()
+        val comparison = mutableListOf(palette.colors)
         val colors = Random.pick(palettes, comparison) as MutableList<ColorRGBa>
-
         paletteIndex = palettes.indexOf(colors)
         palette = createPalette(colors)
     }

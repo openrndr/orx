@@ -48,7 +48,7 @@ data class MidiDeviceDescription(val name: String, val vendor: String, val recei
     }
 }
 
-class MidiTransceiver(val receiverDevice: MidiDevice, val transmitterDevicer: MidiDevice) {
+class MidiTransceiver(val receiverDevice: MidiDevice, val transmitterDevice: MidiDevice) {
     companion object {
         fun fromDeviceVendor(name: String, vendor: String): MidiTransceiver {
             val infos = MidiSystem.getMidiDeviceInfo()
@@ -85,7 +85,7 @@ class MidiTransceiver(val receiverDevice: MidiDevice, val transmitterDevicer: Mi
     }
 
     private val receiver = receiverDevice.receiver
-    private val transmitter = transmitterDevicer.transmitter
+    private val transmitter = transmitterDevice.transmitter
 
     init {
         transmitter.receiver = object : MidiDeviceReceiver {
@@ -122,10 +122,8 @@ class MidiTransceiver(val receiverDevice: MidiDevice, val transmitterDevicer: Mi
     fun controlChange(channel: Int, control: Int, value: Int) {
         try {
             val msg = ShortMessage(ShortMessage.CONTROL_CHANGE, channel, control, value)
-            if (receiverDevice != null) {
-                val tc = receiverDevice!!.microsecondPosition
-                receiver.send(msg, tc)
-            }
+            val tc = receiverDevice.microsecondPosition
+            receiver.send(msg, tc)
         } catch (e: InvalidMidiDataException) {
             //
         }
@@ -134,10 +132,8 @@ class MidiTransceiver(val receiverDevice: MidiDevice, val transmitterDevicer: Mi
     fun noteOn(channel: Int, key: Int, velocity: Int) {
         try {
             val msg = ShortMessage(ShortMessage.NOTE_ON, channel, key, velocity)
-            if (receiverDevice != null) {
-                val tc = receiverDevice!!.microsecondPosition
-                receiver.send(msg, tc)
-            }
+            val tc = receiverDevice.microsecondPosition
+            receiver.send(msg, tc)
         } catch (e: InvalidMidiDataException) {
             //
         }
@@ -145,7 +141,7 @@ class MidiTransceiver(val receiverDevice: MidiDevice, val transmitterDevicer: Mi
 
     fun destroy() {
         receiverDevice.close()
-        transmitterDevicer.close()
+        transmitterDevice.close()
     }
 }
 

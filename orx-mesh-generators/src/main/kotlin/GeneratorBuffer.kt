@@ -163,7 +163,7 @@ fun GeneratorBuffer.group(builder: GeneratorBuffer.() -> Unit) {
 }
 
 fun main(args: Array<String>) {
-    val gb = generator {
+    generator {
         box(20.0, 20.0, 20.0)
         group {
             box(40.0, 40.0, 40.0)

@@ -311,6 +311,7 @@ fun Any.listParameters(): List<Parameter> {
         val label = annotation.label
         val order = annotation.order
         val type = ParameterType.Action
+        @Suppress("UNCHECKED_CAST")
         Parameter(
                 type,
                 property = null,

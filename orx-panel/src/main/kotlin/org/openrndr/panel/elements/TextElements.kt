@@ -81,7 +81,7 @@ abstract class TextElement(et: ElementType) : Element(et) {
 }
 
 fun TextElement.bind(property: KMutableProperty0<String>) {
-    var currentValue: Double? = null
+    //var currentValue: Double? = null
 
 
     if (root() as? Body == null) {

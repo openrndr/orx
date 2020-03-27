@@ -97,7 +97,7 @@ class MinimizationResult(val solution: DoubleArray, val value: Double, val gradi
                          val inverseHessian: Array<DoubleArray>, val iterations: Int)
 
 fun minimize(_x0: DoubleArray,
-             weights: DoubleArray = DoubleArray(_x0.size) { 1.0 },
+             @Suppress("UNUSED_PARAMETER") weights: DoubleArray = DoubleArray(_x0.size) { 1.0 },
              endOnLineSearch: Boolean = false, tol: Double = 1e-8, maxIterations: Int = 1000, f: (DoubleArray) -> Double): MinimizationResult {
     val grad = { a: DoubleArray -> gradient(a, f) }
     var x0 = _x0.copyOf()
