@@ -1,8 +1,8 @@
 package org.openrndr.extra.fx.antialias
 
 import org.openrndr.draw.Filter
-import org.openrndr.draw.Shader
-import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.draw.filterShaderFromUrl
+import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 
@@ -10,7 +10,7 @@ import org.openrndr.extra.parameters.DoubleParameter
  * FXAA approximate antialiasing filter. Only works on LDR inputs
  */
 @Description("FXAA")
-class FXAA : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("antialias/fxaa.frag"))) {
+class FXAA : Filter(filterShaderFromUrl(filterFragmentUrl("antialias/fxaa.frag"))) {
     /**
      * luma threshold, default value is 0.5
      */

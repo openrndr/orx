@@ -1,7 +1,7 @@
 package org.openrndr.extra.fx.distort
 
 import org.openrndr.draw.*
-import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
@@ -9,7 +9,7 @@ import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
 
 @Description("Perspective plane")
-class PerspectivePlane : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("distort/perspective-plane.frag"))) {
+class PerspectivePlane : Filter(filterShaderFromUrl(filterFragmentUrl("distort/perspective-plane.frag"))) {
     //    @DoubleParameter("camera x", -1.0, 1.0, order = 0)
     var cameraX: Double = 0.0
     //    @DoubleParameter("camera y", -1.0, 1.0, order = 1)

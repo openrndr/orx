@@ -1,15 +1,14 @@
 package org.openrndr.extra.fx.blur
 
 import org.openrndr.draw.Filter
-import org.openrndr.draw.Shader
-import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.draw.filterShaderFromUrl
+import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
 
 @Description("Hash blur")
-class HashBlur : Filter(Shader.createFromCode(Filter.filterVertexCode,
-        filterFragmentCode("blur/hash-blur.frag"))) {
+class HashBlur : Filter(filterShaderFromUrl(filterFragmentUrl("blur/hash-blur.frag"))) {
     /**
      * Blur radius in pixels, default is 5.0
      */

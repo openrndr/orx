@@ -1,12 +1,12 @@
 package org.openrndr.extra.fx.distort
 
 import org.openrndr.draw.*
-import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 
 @Description("Fisheye")
-class Fisheye : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("distort/fisheye.frag"))) {
+class Fisheye : Filter(filterShaderFromUrl(filterFragmentUrl("distort/fisheye.frag"))) {
     @DoubleParameter("strength", -1.0, 1.0, order = 0)
     var strength: Double by parameters
 

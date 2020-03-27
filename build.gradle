@@ -15,7 +15,7 @@ buildscript {
 apply plugin: 'org.jetbrains.dokka'
 
 project.ext {
-    openrndrVersion = "0.3.40-rc.5"
+    openrndrVersion = "0.3.40"
     kotlinVersion = "1.3.70"
     spekVersion = "2.0.10"
     libfreenectVersion = "0.5.7-1.5.2"

@@ -1,8 +1,9 @@
 package org.openrndr.extra.fx.blur
 
 import org.openrndr.draw.Filter
-import org.openrndr.draw.Shader
-import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.draw.filterShaderFromUrl
+import org.openrndr.extra.fx.filterFragmentUrl
+
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
@@ -11,8 +12,7 @@ import org.openrndr.extra.parameters.IntParameter
  * Exact Gaussian blur, implemented as a single pass filter
  */
 @Description("Gaussian blur")
-class GaussianBlur : Filter(Shader.createFromCode(Filter.filterVertexCode,
-        filterFragmentCode("blur/gaussian-blur.frag"))) {
+class GaussianBlur : Filter(filterShaderFromUrl(filterFragmentUrl("blur/gaussian-blur.frag"))) {
 
     /**
      * The sample window, default value is 5

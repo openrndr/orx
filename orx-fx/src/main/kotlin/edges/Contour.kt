@@ -2,17 +2,14 @@ package org.openrndr.extra.vfx
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Filter
-import org.openrndr.draw.Shader
 import org.openrndr.draw.filterShaderFromUrl
-import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.ColorParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
-import org.openrndr.extra.parameters.IntParameter
-import org.openrndr.resourceUrl
 
 @Description("Contour")
-class Contour : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("edges/contour.frag"))) {
+class Contour : Filter(filterShaderFromUrl(filterFragmentUrl("edges/contour.frag"))) {
     @DoubleParameter("levels", 1.0, 16.0)
     var levels: Double by parameters
 

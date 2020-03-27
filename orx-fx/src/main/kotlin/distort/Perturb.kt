@@ -1,7 +1,7 @@
 package org.openrndr.extra.fx.distort
 
 import org.openrndr.draw.*
-import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
@@ -9,7 +9,7 @@ import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
 
 @Description("Perturb")
-class Perturb : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("distort/perturb.frag"))) {
+class Perturb : Filter(filterShaderFromUrl(filterFragmentUrl("distort/perturb.frag"))) {
     var seed: Vector3 by parameters
 
     /**

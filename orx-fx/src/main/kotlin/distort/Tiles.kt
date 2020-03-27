@@ -1,13 +1,13 @@
 package org.openrndr.extra.fx.distort
 
 import org.openrndr.draw.*
-import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
 
 @Description("Tiles")
-class Tiles : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("distort/tiles.frag"))) {
+class Tiles : Filter(filterShaderFromUrl(filterFragmentUrl("distort/tiles.frag"))) {
 
     @DoubleParameter("rotation", -180.0, 180.0, order = 2)
     var rotation: Double by parameters

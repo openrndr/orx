@@ -2,10 +2,10 @@ package org.openrndr.extra.fx.color
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Filter
-import org.openrndr.draw.Shader
-import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.draw.filterShaderFromUrl
+import org.openrndr.extra.fx.filterFragmentUrl
 
-class SubtractConstant : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("color/subtract-constant.frag"))) {
+class SubtractConstant : Filter(filterShaderFromUrl(filterFragmentUrl("color/subtract-constant.frag"))) {
     var constant: ColorRGBa by parameters
 
     init {

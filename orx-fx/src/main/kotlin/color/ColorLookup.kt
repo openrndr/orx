@@ -1,9 +1,9 @@
 package org.openrndr.extra.fx.color
 
 import org.openrndr.draw.*
-import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.extra.fx.filterFragmentUrl
 
-class ColorLookup(lookup: ColorBuffer) : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("color/color-lookup.frag"))) {
+class ColorLookup(lookup: ColorBuffer) : Filter(filterShaderFromUrl(filterFragmentUrl("color/color-lookup.frag"))) {
     /** a color look-up texture */
     var lookup: ColorBuffer by parameters
 

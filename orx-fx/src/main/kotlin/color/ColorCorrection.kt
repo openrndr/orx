@@ -1,12 +1,12 @@
 package org.openrndr.extra.fx.color
 
 import org.openrndr.draw.*
-import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 
 @Description("Color correction")
-class ColorCorrection : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("color/color-correction.frag"))) {
+class ColorCorrection : Filter(filterShaderFromUrl(filterFragmentUrl("color/color-correction.frag"))) {
     @DoubleParameter("brightness", -1.0, 1.0, order = 0)
     var brightness: Double by parameters
 
