@@ -1,14 +1,14 @@
 package org.openrndr.extra.fx.edges
 
 import org.openrndr.draw.*
-import org.openrndr.extra.fx.filterFragmentCode
 import org.openrndr.extra.fx.ColorBufferDescription
+import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.IntParameter
 import org.openrndr.math.Vector2
 
 
-internal class EdgesWork1 : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("edges/edges-work-1.frag"))) {
+internal class EdgesWork1 : Filter(filterShaderFromUrl(filterFragmentUrl("edges/edges-work-1.frag"))) {
     var delta: Vector2 by parameters
 
     init {
@@ -17,7 +17,7 @@ internal class EdgesWork1 : Filter(Shader.createFromCode(filterVertexCode, filte
 }
 
 @Description("Edges Work")
-open class EdgesWork : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("edges/edges-work-2.frag"))) {
+open class EdgesWork : Filter(filterShaderFromUrl(filterFragmentUrl("edges/edges-work-2.frag"))) {
     /**
      * radius, default value is 1.0
      */

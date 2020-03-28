@@ -2,14 +2,14 @@ package org.openrndr.extra.fx.edges
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Filter
-import org.openrndr.draw.Shader
-import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.draw.filterShaderFromUrl
+import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.ColorParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 
 @Description("Luma Sobel")
-class LumaSobel : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("edges/luma-sobel.frag"))) {
+class LumaSobel : Filter(filterShaderFromUrl(filterFragmentUrl("edges/luma-sobel.frag"))) {
 
     @ColorParameter("background color")
     var backgroundColor: ColorRGBa by parameters

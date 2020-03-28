@@ -2,23 +2,20 @@ package org.openrndr.extra.fx.shadow
 
 
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.ColorBuffer
-import org.openrndr.draw.Filter
-import org.openrndr.draw.Shader
-import org.openrndr.draw.colorBuffer
-import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.draw.*
+import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.ColorParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
 import org.openrndr.math.Vector2
 
-private class Blend : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("shadow/dropshadow-blend.frag"))) {
+private class Blend : Filter(filterShaderFromUrl(filterFragmentUrl("shadow/dropshadow-blend.frag"))) {
     var shift: Vector2 by parameters
 }
 
 @Description("Drop shadow")
-class DropShadow : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("shadow/dropshadow-blur.frag"))) {
+class DropShadow : Filter(filterShaderFromUrl(filterFragmentUrl("shadow/dropshadow-blur.frag"))) {
 
     @IntParameter("blur window", 1, 25)
     var window: Int by parameters

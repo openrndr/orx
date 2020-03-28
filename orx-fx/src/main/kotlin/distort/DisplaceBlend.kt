@@ -1,14 +1,13 @@
 package org.openrndr.extra.fx.distort
 
 import org.openrndr.draw.*
-import org.openrndr.extra.fx.filterFragmentCode
-import org.openrndr.extra.parameters.BooleanParameter
+import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.math.Vector3
 
 @Description("Perturb")
-class DisplaceBlend : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("distort/displace-blend.frag"))) {
+class DisplaceBlend : Filter(filterShaderFromUrl(filterFragmentUrl("distort/displace-blend.frag"))) {
     var seed: Vector3 by parameters
 
     @DoubleParameter("offset", -1.0, 1.0)

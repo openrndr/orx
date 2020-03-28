@@ -2,7 +2,7 @@ package org.openrndr.extra.fx.blur
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
-import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
@@ -10,11 +10,11 @@ import org.openrndr.extra.parameters.IntParameter
 import org.openrndr.filter.color.delinearize
 import org.openrndr.filter.color.linearize
 
-class BloomDownscale : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("blur/bloom-downscale.frag"))) {
+class BloomDownscale : Filter(filterShaderFromUrl(filterFragmentUrl("blur/bloom-downscale.frag"))) {
 
 }
 
-class BloomUpscale : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("blur/bloom-upscale.frag"))) {
+class BloomUpscale : Filter(filterShaderFromUrl(filterFragmentUrl("blur/bloom-upscale.frag"))) {
     var gain:Double by parameters
     var shape:Double by parameters
     var seed:Double by parameters
@@ -26,7 +26,7 @@ class BloomUpscale : Filter(Shader.createFromCode(filterVertexCode, filterFragme
     }
 }
 
-class BloomCombine: Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("blur/bloom-combine.frag"))) {
+class BloomCombine: Filter(filterShaderFromUrl(filterFragmentUrl("blur/bloom-combine.frag"))) {
     var gain: Double by parameters
     var bias: ColorRGBa by parameters
 
@@ -37,7 +37,7 @@ class BloomCombine: Filter(Shader.createFromCode(filterVertexCode, filterFragmen
 }
 
 @Description("MipBloom")
-open class MipBloom<T:Filter>(val blur:T) : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("blur/bloom-combine.frag"))) {
+open class MipBloom<T:Filter>(val blur:T) : Filter(filterShaderFromUrl(filterFragmentUrl("blur/bloom-combine.frag"))) {
     var passes = 6
 
     @DoubleParameter("shape", 0.0, 4.0)

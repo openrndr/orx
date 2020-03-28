@@ -1,13 +1,13 @@
 package org.openrndr.extra.fx.distort
 
 import org.openrndr.draw.*
-import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
 
 @Description("Stack repeat")
-class StackRepeat : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("distort/stack-repeat.frag"))) {
+class StackRepeat : Filter(filterShaderFromUrl(filterFragmentUrl("distort/stack-repeat.frag"))) {
     @DoubleParameter("zoom", -1.0, 1.0, order = 0)
     var zoom: Double by parameters
 

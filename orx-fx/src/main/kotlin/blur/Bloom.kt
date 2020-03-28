@@ -2,13 +2,13 @@ package org.openrndr.extra.fx.blur
 
 import org.openrndr.draw.*
 import org.openrndr.extra.fx.blend.Add
-import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
 
 @Description("Bloom")
-class Bloom(blur: Filter = ApproximateGaussianBlur()) : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("blur/bloom.frag"))) {
+class Bloom(blur: Filter = ApproximateGaussianBlur()) : Filter(filterShaderFromUrl(filterFragmentUrl("blur/bloom.frag"))) {
     /**
      * the blur filter to use for the bloom, default is Approximate Gaussian Blur
      */

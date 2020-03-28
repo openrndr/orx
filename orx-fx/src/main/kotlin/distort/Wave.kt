@@ -1,13 +1,13 @@
 package org.openrndr.extra.fx.distort
 
 import org.openrndr.draw.*
-import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
 
 @Description("Horizontal wave")
-class HorizontalWave : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("distort/horizontal-wave.frag"))) {
+class HorizontalWave : Filter(filterShaderFromUrl(filterFragmentUrl("distort/horizontal-wave.frag"))) {
     @DoubleParameter("frequency", 0.0, 64.0, order = 1)
     var frequency: Double by parameters
 
@@ -39,7 +39,7 @@ class HorizontalWave : Filter(Shader.createFromCode(filterVertexCode, filterFrag
 }
 
 @Description("Vertical wave")
-class VerticalWave : Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("distort/vertical-wave.frag"))) {
+class VerticalWave : Filter(filterShaderFromUrl(filterFragmentUrl("distort/vertical-wave.frag"))) {
     @DoubleParameter("frequency", 0.0, 64.0, order = 1)
     var frequency: Double by parameters
 

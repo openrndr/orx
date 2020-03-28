@@ -1,16 +1,13 @@
 package org.openrndr.extra.fx.blur
 
-import org.openrndr.draw.ColorBuffer
-import org.openrndr.draw.Filter
-import org.openrndr.draw.Shader
-import org.openrndr.draw.colorBuffer
-import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.draw.*
+import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.math.Vector2
 
 @Description("Zoom Blur")
-class ZoomBlur : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blur/zoom-blur.frag"))) {
+class ZoomBlur : Filter(filterShaderFromUrl(filterFragmentUrl("blur/zoom-blur.frag"))) {
     var center: Vector2 by parameters
 
     @DoubleParameter("strength", 0.0, 1.0)

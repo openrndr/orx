@@ -1,14 +1,14 @@
 package org.openrndr.extra.fx.dither
 
 import org.openrndr.draw.Filter
-import org.openrndr.draw.Shader
-import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.draw.filterShaderFromUrl
+import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 
 
 @Description("Crosshatch")
-class Crosshatch: Filter(Shader.createFromCode(filterVertexCode, filterFragmentCode("dither/crosshatch.frag"))) {
+class Crosshatch: Filter(filterShaderFromUrl(filterFragmentUrl("dither/crosshatch.frag"))) {
     @DoubleParameter("threshold 1", 0.0, 1.0)
     var t1: Double by parameters
 

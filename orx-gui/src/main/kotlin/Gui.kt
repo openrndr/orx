@@ -8,8 +8,10 @@ import org.openrndr.KEY_LEFT_SHIFT
 import org.openrndr.KeyModifier
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
+import org.openrndr.dialogs.getDefaultPathForContext
 import org.openrndr.dialogs.openFileDialog
 import org.openrndr.dialogs.saveFileDialog
+import org.openrndr.dialogs.setDefaultPathForContext
 import org.openrndr.draw.Drawer
 import org.openrndr.extra.parameters.*
 import org.openrndr.internal.Driver
@@ -222,7 +224,7 @@ class GUI : Extension {
                         button {
                             label = "Load"
                             clicked {
-                                openFileDialog(supportedExtensions = listOf("json")) {
+                                openFileDialog(supportedExtensions = listOf("json"), contextID = "gui.parameters") {
                                     loadParameters(it)
                                 }
                             }
@@ -230,7 +232,24 @@ class GUI : Extension {
                         button {
                             label = "Save"
                             clicked {
-                                saveFileDialog(supportedExtensions = listOf("json")) {
+                                val defaultPath = getDefaultPathForContext(contextID ="gui.parameters")
+
+                                if (defaultPath == null) {
+                                    val local = File(".")
+                                    val data = File(local, "data")
+                                    if (data.exists() && data.isDirectory) {
+                                        val parameters = File(data, "parameters")
+                                        if (!parameters.exists()) {
+                                            if (parameters.mkdirs()) {
+                                                setDefaultPathForContext(contextID = "gui.parameters", file = parameters)
+                                            }
+                                        } else {
+                                            setDefaultPathForContext(contextID = "gui.parameters", file = parameters)
+                                        }
+                                    }
+                                }
+
+                                saveFileDialog(suggestedFilename = "parameters.json", contextID = "gui.parameters", supportedExtensions = listOf("json")) {
                                     saveParameters(it)
                                 }
                             }

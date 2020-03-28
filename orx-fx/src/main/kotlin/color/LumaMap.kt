@@ -2,15 +2,14 @@ package org.openrndr.extra.fx.color
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Filter
-import org.openrndr.draw.Shader
-import org.openrndr.extra.fx.filterFragmentCode
-import org.openrndr.extra.parameters.BooleanParameter
+import org.openrndr.draw.filterShaderFromUrl
+import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.ColorParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 
 @Description("Luma map ")
-class LumaMap : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("color/luma-map.frag"))) {
+class LumaMap : Filter(filterShaderFromUrl(filterFragmentUrl("color/luma-map.frag"))) {
     @ColorParameter("foreground color")
     var foreground: ColorRGBa by parameters
 

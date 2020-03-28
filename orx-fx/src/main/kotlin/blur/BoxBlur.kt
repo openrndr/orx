@@ -1,7 +1,7 @@
 package org.openrndr.extra.fx.blur
 
 import org.openrndr.draw.*
-import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
@@ -12,8 +12,7 @@ import org.openrndr.math.Vector2
  * BoxBlur implemented as a separable filter
  */
 @Description("Box-blur")
-class BoxBlur : Filter(Shader.createFromCode(Filter.filterVertexCode,
-        filterFragmentCode("blur/box-blur.frag"))) {
+class BoxBlur : Filter(filterShaderFromUrl(filterFragmentUrl("blur/box-blur.frag"))) {
 
     data class ColorBufferDescription(val width: Int, val height: Int, val contentScale: Double, val format: ColorFormat, val type: ColorType)
 

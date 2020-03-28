@@ -1,14 +1,12 @@
 package org.openrndr.extra.fx.blur
 
 import org.openrndr.draw.*
-import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
-import org.openrndr.extra.parameters.IntParameter
 
 @Description("Frame blur")
-class FrameBlur : Filter(Shader.createFromCode(Filter.filterVertexCode,
-        filterFragmentCode("blur/frame-blur.frag"))) {
+class FrameBlur : Filter(filterShaderFromUrl(filterFragmentUrl("blur/frame-blur.frag"))) {
 
     @DoubleParameter("blend", 0.0, 1.0)
     var blend: Double by parameters

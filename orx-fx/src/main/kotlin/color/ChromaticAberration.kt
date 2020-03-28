@@ -1,14 +1,14 @@
 package org.openrndr.extra.fx.color
 
 import org.openrndr.draw.*
-import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.math.Vector2
 import org.openrndr.resourceUrl
 
 @Description("Chromatic Aberration")
-class ChromaticAberration : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("color/chromatic-aberration.frag"))){
+class ChromaticAberration : Filter(filterShaderFromUrl(filterFragmentUrl("color/chromatic-aberration.frag"))){
     /**
      * aberration factor, default value is 8.0
      */

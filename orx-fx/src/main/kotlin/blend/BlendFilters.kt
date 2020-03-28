@@ -1,11 +1,11 @@
 package org.openrndr.extra.fx.blend
 
 import org.openrndr.draw.Filter
-import org.openrndr.draw.Shader
-import org.openrndr.extra.fx.filterFragmentCode
+import org.openrndr.draw.filterShaderFromUrl
+import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.BooleanParameter
 
-class ColorBurn : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/color-burn.frag"))) {
+class ColorBurn : Filter(filterShaderFromUrl(filterFragmentUrl("blend/color-burn.frag"))) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 
@@ -14,7 +14,7 @@ class ColorBurn : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFr
     }
 }
 
-class ColorDodge : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/color-dodge.frag"))) {
+class ColorDodge : Filter(filterShaderFromUrl(filterFragmentUrl("blend/color-dodge.frag"))) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 
@@ -23,7 +23,7 @@ class ColorDodge : Filter(Shader.createFromCode(Filter.filterVertexCode, filterF
     }
 }
 
-class Darken : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/darken.frag"))) {
+class Darken : Filter(filterShaderFromUrl(filterFragmentUrl("blend/darken.frag"))) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 
@@ -32,7 +32,7 @@ class Darken : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragm
     }
 }
 
-class HardLight : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/hard-light.frag"))) {
+class HardLight : Filter(filterShaderFromUrl(filterFragmentUrl("blend/hard-light.frag"))) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 
@@ -41,7 +41,7 @@ class HardLight : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFr
     }
 }
 
-class Lighten : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/lighten.frag"))) {
+class Lighten : Filter(filterShaderFromUrl(filterFragmentUrl("blend/lighten.frag"))) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 
@@ -50,7 +50,7 @@ class Lighten : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFrag
     }
 }
 
-class Multiply : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/multiply.frag"))) {
+class Multiply : Filter(filterShaderFromUrl(filterFragmentUrl("blend/multiply.frag"))) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 
@@ -59,7 +59,7 @@ class Multiply : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFra
     }
 }
 
-class Normal : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/normal.frag"))) {
+class Normal : Filter(filterShaderFromUrl(filterFragmentUrl("blend/normal.frag"))) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 
@@ -68,7 +68,7 @@ class Normal : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragm
     }
 }
 
-class Overlay : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/overlay.frag"))) {
+class Overlay : Filter(filterShaderFromUrl(filterFragmentUrl("blend/overlay.frag"))) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 
@@ -77,7 +77,7 @@ class Overlay : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFrag
     }
 }
 
-class Screen : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/screen.frag"))) {
+class Screen : Filter(filterShaderFromUrl(filterFragmentUrl("blend/screen.frag"))) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 
@@ -87,18 +87,18 @@ class Screen : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragm
 }
 
 
-class SourceIn : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/source-in.frag")))
-class SourceOut : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/source-out.frag")))
-class SourceAtop : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/source-atop.frag")))
-class DestinationIn : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/destination-in.frag")))
-class DestinationOut : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/destination-out.frag")))
-class DestinationAtop : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/destination-atop.frag")))
-class Xor : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/xor.frag")))
+class SourceIn : Filter(filterShaderFromUrl(filterFragmentUrl("blend/source-in.frag")))
+class SourceOut : Filter(filterShaderFromUrl(filterFragmentUrl("blend/source-out.frag")))
+class SourceAtop : Filter(filterShaderFromUrl(filterFragmentUrl("blend/source-atop.frag")))
+class DestinationIn : Filter(filterShaderFromUrl(filterFragmentUrl("blend/destination-in.frag")))
+class DestinationOut : Filter(filterShaderFromUrl(filterFragmentUrl("blend/destination-out.frag")))
+class DestinationAtop : Filter(filterShaderFromUrl(filterFragmentUrl("blend/destination-atop.frag")))
+class Xor : Filter(filterShaderFromUrl(filterFragmentUrl("blend/xor.frag")))
 
-class MultiplyContrast : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/multiply-contrast.frag")))
+class MultiplyContrast : Filter(filterShaderFromUrl(filterFragmentUrl("blend/multiply-contrast.frag")))
 
-class Passthrough : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/passthrough.frag")))
-class Add : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/add.frag"))) {
+class Passthrough : Filter(filterShaderFromUrl(filterFragmentUrl("blend/passthrough.frag")))
+class Add : Filter(filterShaderFromUrl(filterFragmentUrl("blend/add.frag"))) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 
@@ -106,7 +106,7 @@ class Add : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragment
         clip = false
     }
 }
-class Subtract : Filter(Shader.createFromCode(Filter.filterVertexCode, filterFragmentCode("blend/subtract.frag"))) {
+class Subtract : Filter(filterShaderFromUrl(filterFragmentUrl("blend/subtract.frag"))) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 
