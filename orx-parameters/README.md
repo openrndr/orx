@@ -5,13 +5,17 @@ are highly suitable for automatically generating user interfaces, but note that 
 
 For an example (and a highly usable implementation) of generating interfaces from the annotations you are encouraged to check out [`orx-gui`](../orx-gui/README.md). 
 
-Currently orx-parameters supplies the following annotations:
+Currently orx-parameters facilitates the following annotations:
 
  - `DoubleParameter` for `Double` properties
  - `IntParameter` for `Int` properties
  - `BooleanParameter` for `Boolean` properties
  - `TextParameter` for `String` properties
  - `ColorParameter` for `ColorRGBa` properties
+ - `XYParameter` for `Vector2` properties
+ - `Vector2Parameter`  for `Vector2` properties
+ - `Vector3Parameter` for `Vector3` properties
+ - `Vector4Parameter` for `Vector4` properties
 
 Additionally there is an `ActionParameter` that can be used to annotate functions without arguments.
 
@@ -29,12 +33,23 @@ val foo = object {
 
     @BooleanParameter("a boolean parameter", order = 2)
     var b = false
+    
+    @XYParameter("an XY parameter", order = 3)
+    var xy = Vector2.ZERO
 
-    @ActionParameter("a simple action", order = 3)
+    @XYParameter("a Vector2 parameter", order = 4)
+    var v2 = Vector2.ZERO
+
+    @XYParameter("a Vector3 parameter", order = 5)
+    var v3 = Vector3.ZERO
+
+    @XYParameter("a Vector4 parameter", order = 6)
+    var v4 = Vector4.ZERO
+
+    @ActionParameter("a simple action", order = 7)
     fun actionFunction() {
         // -- 
     }
-
 }
 ````
 
