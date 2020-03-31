@@ -13,7 +13,7 @@ fun generateCap(sides: Int, radius: Double, enveloppe: List<Vector2> = listOf(Ve
 
     val normals2D = enveloppe.zipWithNext().map {
         val d = it.second - it.first
-        d.normalized.perpendicular
+        d.normalized.perpendicular()
     }
 
     val basePositions = cleanEnveloppe.map { Vector3(it.x, it.y, 0.0) }
@@ -57,7 +57,7 @@ fun generateRevolve(sides: Int, length: Double, enveloppe: List<Vector2> = listO
 
     val normals2D = enveloppe.zipWithNext().map {
         val d = it.second - it.first
-        d.normalized.perpendicular * Vector2(1.0, -1.0)
+        d.normalized.perpendicular() * Vector2(1.0, -1.0)
 
     }
 

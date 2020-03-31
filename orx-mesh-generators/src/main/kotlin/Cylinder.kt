@@ -28,7 +28,7 @@ fun generateTaperedCylinder(sides: Int, segments: Int, radiusStart: Double, radi
 
     val dr = radiusEnd - radiusStart
 
-    val baseNormal = Vector2(length, dr).normalized.perpendicular.let { Vector3(x=it.y, y=0.0, z=it.x)}
+    val baseNormal = Vector2(length, dr).normalized.perpendicular().let { Vector3(x=it.y, y=0.0, z=it.x)}
     //val baseNormal = Vector3(1.0, 0.0, 0.0)
 
     for (segment in 0 until segments) {

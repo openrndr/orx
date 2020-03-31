@@ -17,7 +17,7 @@ fun regularPolygon(sides: Int, center: Vector2 = Vector2.ZERO, radius: Double = 
         }
         close()
     }
-    return c.reversed
+    return c
 }
 
 fun regularPolygonRounded(sides: Int, roundFactor: Double = 0.5, center: Vector2 = Vector2.ZERO, radius: Double = 100.0, phase: Double = 0.0): ShapeContour {
@@ -55,7 +55,7 @@ fun regularPolygonRounded(sides: Int, roundFactor: Double = 0.5, center: Vector2
         }
         close()
     }
-    return c.reversed
+    return c
 }
 
 fun regularPolygonBeveled(sides: Int, bevelFactor: Double = 0.5, center: Vector2 = Vector2.ZERO, radius: Double = 100.0, phase: Double = 0.0): ShapeContour {
@@ -93,5 +93,5 @@ fun regularPolygonBeveled(sides: Int, bevelFactor: Double = 0.5, center: Vector2
         }
         close()
     }
-    return c.reversed
+    return c
 }

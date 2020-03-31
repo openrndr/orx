@@ -49,6 +49,7 @@ object TestChamferCorners : Spek({
             cc.position(0.5) `should be near` c.position(0.5)
             cc.position(1.0) `should be near` c.position(1.0)
             cc.closed `should be equal to` c.closed
+            c.winding `should be equal to` cc.winding
         }
     }
 
@@ -121,6 +122,8 @@ object TestChamferCorners : Spek({
 
         val cc = c.roundCorners(1.0)
 
+        c.winding `should be equal to` cc.winding
+
         c.closed `should be equal to` cc.closed
 
         val ccc = cc.roundCorners(1.0)
@@ -129,14 +132,14 @@ object TestChamferCorners : Spek({
 
         cc.segments.size `should be equal to` 6
 
-        cc.segments.forEach {
-            println(it)
-        }
+//        cc.segments.forEach {
+//            println(it)
+//        }
 
-        println("---")
-        ccc.segments.forEach {
-            println(it)
-        }
+//        println("---")
+//        ccc.segments.forEach {
+//            println(it)
+//        }
         it("should have 6 sides") {
             ccc.segments.size `should be equal to` cc.segments.size
         }
