@@ -48,8 +48,8 @@ class Matcher {
                 Combinator.LATER_SIBLING -> if (result == MatchingResult.RESTART_FROM_CLOSEST_DESCENDANT) {
                     return result
                 }
-                Combinator.DESCENDANT -> TODO()
-                null -> TODO()
+                //Combinator.DESCENDANT -> TODO()
+                //null -> TODO()
             }
         }
     }
