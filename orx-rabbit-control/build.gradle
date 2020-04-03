@@ -1,0 +1,9 @@
+dependencies {
+    api project(":orx-parameters")
+
+    implementation "org.openrndr:openrndr-core:$openrndrVersion"
+    implementation "org.openrndr:openrndr-gl3:$openrndrVersion"
+    implementation "org.lwjgl:lwjgl-opengl:3.2.3"
+    implementation "org.openrndr:openrndr-gl3-natives-macos:$openrndrVersion"
+    implementation "io.github.rabbitcontrol:rcp:0.3.0"
+}
