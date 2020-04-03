@@ -68,8 +68,6 @@ fun main() = application {
 ```
 
 ### Syphon Client
-
-#### Receiving frames from the default (or the only available) server
 ```kotlin
 fun main() = application {
     configure {
@@ -79,28 +77,6 @@ fun main() = application {
 
     program {
         val syphonClient = SyphonClient()
-
-        extend(syphonClient)
-        extend {
-            drawer.background(ColorRGBa.BLACK)
-            drawer.image(syphonClient.buffer)
-        }
-    }
-}
-```
-
-#### Receiving frames from a specific server
-```kotlin
-fun main() = application {
-    configure {
-        // The maximum resolution supported by the free
-        // version of AESyphon
-        width = 1024
-        height = 768
-    }
-
-    program {
-        val syphonClient = SyphonClient("Adobe After Effects", "Live Preview")
 
         extend(syphonClient)
         extend {
