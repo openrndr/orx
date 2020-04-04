@@ -24,6 +24,9 @@ data class Range(val min: Double, val max: Double) {
 }
 
 class Slider : Element(ElementType("slider")) {
+
+    override val handlesKeyboardFocus = true
+
     var label = ""
     var precision = 3
     var value: Double

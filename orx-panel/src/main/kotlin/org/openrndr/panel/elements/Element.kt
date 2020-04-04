@@ -10,7 +10,9 @@ import org.openrndr.math.Vector2
 import org.openrndr.panel.collections.ObservableCopyOnWriteArrayList
 import org.openrndr.panel.collections.ObservableHashSet
 import org.openrndr.panel.style.CompoundSelector
+import org.openrndr.panel.style.Display
 import org.openrndr.panel.style.StyleSheet
+import org.openrndr.panel.style.display
 import org.openrndr.shape.Rectangle
 
 import java.util.*
@@ -27,6 +29,7 @@ open class Element(val type: ElementType) {
 
     var scrollTop = 0.0
     open val handlesDoubleClick = false
+    open val handlesKeyboardFocus = false
 
     open val widthHint: Double?
         get() {
@@ -223,8 +226,33 @@ open class Element(val type: ElementType) {
                 else -> p.children[index + 1]
             }
         }
-
     }
+
+    fun findNext(premise: (Element) -> Boolean) : Element? {
+        return parent?.let { p ->
+            val index = p.children.indexOf(this)
+            val siblingCount = p.children.size
+            for (i in index + 1 until siblingCount) {
+                if (premise(p.children[i])) {
+                    return p.children[i]
+                }
+            }
+            return null
+        }
+    }
+
+    fun findPrevious(premise: (Element) -> Boolean) : Element? {
+        return parent?.let { p ->
+            val index = p.children.indexOf(this)
+            for (i in index-1 downTo 0) {
+                if (premise(p.children[i])) {
+                    return p.children[i]
+                }
+            }
+            return null
+        }
+    }
+
 
     fun move(steps: Int) {
         parent?.let { p ->
@@ -283,7 +311,34 @@ fun Element.enable() {
 
 fun Element.isDisabled(): Boolean = disabled in pseudoClasses
 
+fun Element.findAll(predicate: (Element) -> Boolean) : List<Element> {
+    val results = mutableListOf<Element>()
+    visit {
+        if (predicate(this)) {
+            results.add(this)
+        }
+    }
+    return results
+}
+
+fun Element.findAllVisible(predicate: (Element) -> Boolean) : List<Element> {
+    val results = mutableListOf<Element>()
+    visitVisible {
+        if (predicate(this)) {
+            results.add(this)
+        }
+    }
+    return results
+}
+
 fun Element.visit(function: Element.() -> Unit) {
     this.function()
     children.forEach { it.visit(function) }
+}
+
+fun Element.visitVisible(function: Element.() -> Unit) {
+    if (this.computedStyle.display != Display.NONE) {
+        this.function()
+        children.forEach { it.visitVisible(function) }
+    }
 }

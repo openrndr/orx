@@ -12,6 +12,7 @@ import kotlin.math.round
 
 class Button : Element(ElementType("button")) {
 
+    override val handlesKeyboardFocus = true
     var label: String = "OK"
 
     class ButtonEvent(val source: Button)

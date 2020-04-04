@@ -6,6 +6,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
+import org.openrndr.math.mod_
 import org.openrndr.panel.elements.*
 import org.openrndr.panel.layout.Layouter
 import org.openrndr.panel.style.*
@@ -95,7 +96,11 @@ class ControlManager : Extension {
 
     val dropInput = DropInput()
 
+
+
+
     inner class KeyboardInput {
+        private var lastTarget: Element? = null
         var target: Element? = null
             set(value) {
                 if (value != field) {
@@ -104,6 +109,9 @@ class ControlManager : Extension {
                     value?.keyboard?.focusGained?.trigger(FocusEvent())
                     field = value
                     field?.pseudoClasses?.add(ElementPseudoClass("active"))
+                    value?.let {
+                        lastTarget = it
+                    }
                 }
             }
 
@@ -117,6 +125,26 @@ class ControlManager : Extension {
                     current = current.parent
                 }
                 checkForManualRedraw()
+            }
+
+            if (!event.propagationCancelled) {
+                if (event.key == KEY_TAB) {
+                    val focusableControls = body?.findAllVisible { it.handlesKeyboardFocus } ?: emptyList()
+
+                    val index = target?.let { focusableControls.indexOf(it) } ?: lastTarget?.let { focusableControls.indexOf(it) } ?: -1
+                    if (focusableControls.isNotEmpty()) {
+
+                        target = if (target != null) {
+                            if (KeyModifier.SHIFT in event.modifiers) {
+                                focusableControls[(index - 1).mod_(focusableControls.size)]
+                            } else {
+                                focusableControls[(index + 1).mod_(focusableControls.size)]
+                            }
+                        } else {
+                            lastTarget ?: focusableControls[0]
+                        }
+                    }
+                }
             }
         }
 
@@ -209,7 +237,6 @@ class ControlManager : Extension {
                 if (element.computedStyle.display != Display.NONE) {
                     element.children.forEach { traverse(it, depth + 1) }
                 }
-
 
                 if (!event.propagationCancelled && event.position in element.screenArea && element.computedStyle.display != Display.NONE) {
                     candidates.add(Pair(element, depth))
