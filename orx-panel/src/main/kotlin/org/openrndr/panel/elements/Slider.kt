@@ -162,9 +162,13 @@ class Slider : Element(ElementType("slider")) {
             }
 
             if (it.key == KEY_ENTER) {
-                val number = NumberFormat.getInstance().parse(keyboardInput).toDouble()
-                if (number != null) {
-                    interactiveValue = number.coerceIn(range.min, range.max)
+                try {
+                    val number = NumberFormat.getInstance().parse(keyboardInput).toDouble()
+                    if (number != null) {
+                        interactiveValue = number.coerceIn(range.min, range.max)
+                    }
+                } catch (e : ParseException) {
+                    // -- silently (but safely) ignore the exception
                 }
                 keyboardInput = ""
                 draw.dirty = true
