@@ -1,7 +1,8 @@
 package org.openrndr.extra.noise
 
-private const val G2 = 1.0 / 4.0
-private const val F2 = 1.0 / 2.0
+private const val SQRT3 = 1.7320508075688772935274463415059
+private const val F2 = 0.5 * (SQRT3 - 1.0)
+private const val G2 = (3.0 - SQRT3) / 6.0
 
 fun simplex(seed: Int, x: Double, y: Double): Double {
     var t = (x + y) * F2
@@ -9,11 +10,8 @@ fun simplex(seed: Int, x: Double, y: Double): Double {
     val j = (y + t).fastFloor()
 
     t = ((i + j) * G2)
-    val X0 = i - t
-    val Y0 = j - t
-
-    val x0 = x - X0
-    val y0 = y - Y0
+    val x0 = x - (i - t)
+    val y0 = y - (j - t)
 
     val i1: Int
     val j1: Int
@@ -27,8 +25,8 @@ fun simplex(seed: Int, x: Double, y: Double): Double {
 
     val x1 = (x0 - i1 + G2)
     val y1 = (y0 - j1 + G2)
-    val x2 = (x0 - 1 + F2)
-    val y2 = (y0 - 1 + F2)
+    val x2 = (x0 - 1 + 2 * G2)
+    val y2 = (y0 - 1 + 2 * G2)
 
     val n0: Double
     val n1: Double
