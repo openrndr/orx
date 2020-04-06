@@ -57,7 +57,7 @@ fun generatePlane(center: Vector3,
 
     val corner = center - forward.normalized *  (height*0.5) - right.normalized * (width * 0.5)
 
-    val step = Vector2(1.0 / width, 1.0 / height)
+    val step = Vector2(1.0 / widthSegments, 1.0 / heightSegments)
 
     for (v in 0 until heightSegments) {
         for (u in 0 until widthSegments) {

@@ -20,16 +20,26 @@ project.ext {
     spekVersion = "2.0.10"
     libfreenectVersion = "0.5.7-1.5.2"
     gsonVersion = "2.8.6"
-}
 
+}
+switch (org.gradle.internal.os.OperatingSystem.current()) {
+    case org.gradle.internal.os.OperatingSystem.WINDOWS:
+        project.ext.openrndrOS = "windows"
+        break
+    case org.gradle.internal.os.OperatingSystem.LINUX:
+        project.ext.openrndrOS = "linux-x64"
+        break
+    case org.gradle.internal.os.OperatingSystem.MAC_OS:
+        project.ext.openrndrOS = "macos"
+        break
+}
 dokka {
     moduleName = "$rootProject.name"
     outputDirectory = "$buildDir/docs"
     outputFormat = "html"
     includes = ['Module.md']
     sourceDirs = files(subprojects.collect { p -> new File(p.projectDir, "/src/main/kotlin") })
-  }
-
+}
 
 allprojects {
     apply plugin: 'idea'
@@ -72,12 +82,10 @@ allprojects {
         runtimeOnly "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
     }
 
-
     java {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-
 
     javadoc {
         options.addBooleanOption 'Xdoclint:none', true
