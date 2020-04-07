@@ -1,0 +1,74 @@
+{
+  // this is breaking with proper json but.. gson accepts comments and they are invaluable
+  // in the parameters block you can add custom values, which can be used in expressions
+  "parameters": {
+    "smallRadius": 5.0,
+    "repetitionCount": 10,
+    "width": 640.0,
+    "height": 480.0,
+    // you can have expressions inside parameters too, they are evaluated once, on load
+    "resolvedOnLoad" : "width * 2.0"
+  },
+  // in the prototypes you can set up key prototypes
+  "prototypes": {
+    "red": {
+      "r": 1.0,
+      "g": 0.0,
+      "b": 0.0
+    },
+    "blue": {
+      "r": 0.0,
+      "g": 0.0,
+      "b": 1.0
+    },
+    "center": {
+      // prototypes can have expressions too, they are evaluated as late as possible
+      // thus, they are evaluated more than once
+      "x": "width / 2",
+      "y": "height / 2"
+    },
+    "small": {
+      "radius": "smallRadius"
+    },
+    "large": {
+      "radius": "smallRadius * 10.0"
+    }
+  },
+  "keys": [
+    {
+      "time": 0.0,
+      "easing": "cubic-in-out",
+      "x": 3.0,
+      "y": 4.0,
+      "z": 9.0,
+      "r": 0.0,
+      "g": 1.0,
+      "b": 0.0,
+      "radius": 50,
+      "foo" : 0.0
+    },
+    {
+      "time": 2.0,
+      "easing": "cubic-in-out",
+      // here we apply the prototypes in cascading fashion from left to right
+      "prototypes": "red center small"
+    },
+    {
+      "time": 3.0,
+      "repeat": {
+        "count": "repetitionCount",
+        "keys": [
+          {
+            "time": "(rep * 2.0) + 3.0",
+            "prototypes": "blue large",
+            "easing": "cubic-in-out"
+          },
+          {
+            "time": "t + 1.0",
+            "prototypes": "red small"
+          }
+        ]
+      }
+    }
+  ]
+}
