@@ -3,10 +3,7 @@ import com.google.zxing.qrcode.QRCodeWriter
 import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.ColorBuffer
-import org.openrndr.draw.Drawer
-import org.openrndr.draw.colorBuffer
-import org.openrndr.draw.isolated
+import org.openrndr.draw.*
 import org.openrndr.extra.compositor.*
 import org.openrndr.extra.fx.blend.Darken
 import org.openrndr.extra.parameters.Parameter
@@ -220,12 +217,14 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
 
     private fun getQRCodeImage(barcodeText: String): ColorBuffer {
         val qrCodeWriter = QRCodeWriter()
-        val bitMatrix = qrCodeWriter.encode(barcodeText, BarcodeFormat.QR_CODE, 500, 500)
-        val cb = colorBuffer(500, 500)
+        val bitMatrix = qrCodeWriter.encode(barcodeText, BarcodeFormat.QR_CODE, 30, 30)
+        val cb = colorBuffer(bitMatrix.width, bitMatrix.height)
+        cb.filterMag = MagnifyingFilter.NEAREST
         val shad = cb.shadow
 
-        for (y in 0 until cb.height) {
-            for (x in 0 until cb.width) {
+
+        for (y in 0 until bitMatrix.width) {
+            for (x in 0 until bitMatrix.height) {
                 shad[x, y] = if (bitMatrix[x, y]) ColorRGBa.BLACK else ColorRGBa.WHITE
             }
         }
