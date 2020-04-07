@@ -3,7 +3,6 @@ import com.google.zxing.client.j2se.MatrixToImageWriter
 import com.google.zxing.qrcode.QRCodeWriter
 import org.openrndr.Extension
 import org.openrndr.Program
-import org.openrndr.animatable.Animatable
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ColorBufferProxy
 import org.openrndr.draw.Drawer
@@ -13,7 +12,6 @@ import org.openrndr.extra.fx.blend.Darken
 import org.openrndr.extra.parameters.Parameter
 import org.openrndr.extra.parameters.ParameterType
 import org.openrndr.extra.parameters.listParameters
-import org.openrndr.extra.parameters.title
 import org.openrndr.extras.imageFit.FitMethod
 import org.openrndr.extras.imageFit.imageFit
 import org.openrndr.internal.colorBufferLoader
@@ -21,7 +19,6 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
 import org.openrndr.math.mix
-import org.openrndr.shape.Composition
 import org.rabbitcontrol.rcp.RCPServer
 import org.rabbitcontrol.rcp.model.interfaces.IParameter
 import org.rabbitcontrol.rcp.model.parameter.*
@@ -73,8 +70,9 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
         socket.connect(InetSocketAddress("google.com", 80))
         val ip = socket.localAddress.toString().replace("/", "")
 
-        val barcodeText = "https://rabbitcontrol.github.io/client/#$ip:$port"
-        qrCodeImageProxy = getQRCodeImageProxy(barcodeText)
+        val clientUrlWithHash = "https://rabbitcontrol.github.io/client/#$ip:$port"
+        qrCodeImageProxy = getQRCodeImageProxy(barcodeText = clientUrlWithHash)
+        println("RabbitControl Web Client: $clientUrlWithHash")
 
         /**
          * Update the object when it has been updated in RabbitControl
@@ -228,9 +226,9 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
     }
 
     // FIXME is it possible to avoid the file entirely?
-    private fun getQRCodeImageProxy(text: String): ColorBufferProxy {
+    private fun getQRCodeImageProxy(barcodeText: String): ColorBufferProxy {
         val qrCodeWriter = QRCodeWriter()
-        val bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, 500, 500)
+        val bitMatrix = qrCodeWriter.encode(barcodeText, BarcodeFormat.QR_CODE, 500, 500)
         qrImagePath = FileSystems.getDefault().getPath("./qr.JPG")
         MatrixToImageWriter.writeToPath(bitMatrix, "JPG", qrImagePath)
         return colorBufferLoader.loadFromUrl(qrImagePath!!.toUri().toURL().toString())
