@@ -1,0 +1,20 @@
+sourceSets {
+    demo {
+        java {
+            srcDirs = ["src/demo/kotlin"]
+            compileClasspath += main.getCompileClasspath()
+            runtimeClasspath += main.getRuntimeClasspath()
+        }
+    }
+}
+
+dependencies {
+    implementation project(":orx-shader-phrases")
+    implementation project(":orx-parameters")
+
+    demoImplementation(project(":orx-camera"))
+    demoImplementation("org.openrndr:openrndr-core:$openrndrVersion")
+    demoRuntimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
+    demoRuntimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
+    demoImplementation(sourceSets.getByName("main").output)
+}
