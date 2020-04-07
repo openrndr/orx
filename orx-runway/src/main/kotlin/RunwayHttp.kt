@@ -5,10 +5,7 @@ import org.openrndr.draw.ColorBuffer
 import org.openrndr.draw.ImageFileFormat
 import java.io.ByteArrayInputStream
 import java.io.File
-import java.net.HttpURLConnection
-import java.net.SocketTimeoutException
-import java.net.URL
-import java.net.UnknownHostException
+import java.net.*
 import java.util.*
 
 /**
@@ -48,7 +45,7 @@ inline fun <Q, reified R> runwayQuery(target: String, query: Q): R {
         val queryJson = Gson().toJson(query)
         val connection = URL(target).openConnection() as HttpURLConnection
         //with(connection) {
-            connection.doOutput = true
+        connection.doOutput = true
         connection.connectTimeout = 1_000
         connection.readTimeout = 200_000
         connection.requestMethod = "POST"
@@ -67,8 +64,11 @@ inline fun <Q, reified R> runwayQuery(target: String, query: Q): R {
         connection.disconnect()
         return Gson().fromJson(responseJson, R::class.java)
     } catch (e: SocketTimeoutException) {
-        error("RunwayML connection timed out. Check if Runway and model are running.")
+        error("RunwayML connection timed out '$target'. Check if Runway and model are running.")
+    } catch (e: ConnectException) {
+        error("RunwayML connection refused '$target'. Check if Runway and model are running.")
     } catch (e: UnknownHostException) {
-        error("Runway host not found. Check if Runway and model are running.")
+        error("Runway host not found '$target'. Check if Runway and model are running.")
     }
+
 }
