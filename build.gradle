@@ -20,8 +20,9 @@ project.ext {
     spekVersion = "2.0.10"
     libfreenectVersion = "0.5.7-1.5.2"
     gsonVersion = "2.8.6"
-
+    antlrVersion = "4.8-1"
 }
+
 switch (org.gradle.internal.os.OperatingSystem.current()) {
     case org.gradle.internal.os.OperatingSystem.WINDOWS:
         project.ext.openrndrOS = "windows"
@@ -33,6 +34,7 @@ switch (org.gradle.internal.os.OperatingSystem.current()) {
         project.ext.openrndrOS = "macos"
         break
 }
+
 dokka {
     moduleName = "$rootProject.name"
     outputDirectory = "$buildDir/docs"
