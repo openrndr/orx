@@ -1,9 +1,27 @@
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
+sourceSets {
+    demo {
+        java {
+            srcDirs = ["src/demo/kotlin"]
+            compileClasspath += main.getCompileClasspath()
+            runtimeClasspath += main.getRuntimeClasspath()
+        }
+    }
+}
+
 dependencies {
     api project(":orx-parameters")
+    api project(":orx-compositor")
+    api project(":orx-image-fit")
 
-    implementation "org.openrndr:openrndr-core:$openrndrVersion"
-    implementation "org.openrndr:openrndr-gl3:$openrndrVersion"
-    implementation "org.lwjgl:lwjgl-opengl:3.2.3"
-    implementation "org.openrndr:openrndr-gl3-natives-macos:$openrndrVersion"
     implementation "io.github.rabbitcontrol:rcp:0.3.0"
+    implementation "com.google.zxing:core:3.3.0"
+    implementation "com.google.zxing:javase:3.3.0"
+
+    demoRuntimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
+    demoRuntimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
+    demoImplementation(sourceSets.getByName("main").output)
 }

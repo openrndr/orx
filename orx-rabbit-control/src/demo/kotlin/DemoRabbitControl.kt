@@ -9,13 +9,13 @@ import org.openrndr.math.Vector4
 
 fun main() = application {
     configure {
-        width = 400
-        height = 400
+        width = 800
+        height = 800
     }
 
     program {
         val rabbit = RabbitControlServer()
-        val font= loadFont("orx-rabbit-control/src/test/resources/fonts/Roboto-Regular.ttf", 20.0)
+        val font= loadFont("orx-rabbit-control/src/demo/resources/fonts/Roboto-Regular.ttf", 20.0)
         val settings = object {
             @TextParameter("A string")
             var s: String = "Hello"

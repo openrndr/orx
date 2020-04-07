@@ -1,30 +1,78 @@
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.client.j2se.MatrixToImageWriter
+import com.google.zxing.qrcode.QRCodeWriter
 import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
+import org.openrndr.draw.ColorBufferProxy
+import org.openrndr.draw.Drawer
+import org.openrndr.draw.isolated
+import org.openrndr.extra.compositor.*
+import org.openrndr.extra.fx.blend.Darken
 import org.openrndr.extra.parameters.Parameter
 import org.openrndr.extra.parameters.ParameterType
 import org.openrndr.extra.parameters.listParameters
-import org.openrndr.extra.parameters.title
+import org.openrndr.extras.imageFit.FitMethod
+import org.openrndr.extras.imageFit.imageFit
+import org.openrndr.internal.colorBufferLoader
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
+import org.openrndr.math.mix
 import org.rabbitcontrol.rcp.RCPServer
 import org.rabbitcontrol.rcp.model.interfaces.IParameter
 import org.rabbitcontrol.rcp.model.parameter.*
 import org.rabbitcontrol.rcp.transport.websocket.server.WebsocketServerTransporterNetty
 import java.awt.Color
+import java.io.File
+import java.net.InetSocketAddress
+import java.net.Socket
+import java.nio.file.FileSystems
+import java.nio.file.Path
 import kotlin.reflect.KMutableProperty1
 
 
-class RabbitControlServer : Extension {
+class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true, port: Int = 10000) : Extension {
     private val rabbitServer = RCPServer()
     private val transporter = WebsocketServerTransporterNetty()
 
     private var parameterMap = mutableMapOf<IParameter, Pair<Any, Parameter>>()
 
+    private var qrCodeImageProxy: ColorBufferProxy? = null
+    private var qrImagePath: Path? = null
+    private var qrOverlayComposition: Composite? = null
+
+
+    /**
+     * Animate the opacity to make it look smooooth
+     */
+    private var currentOpacity = 0.0
+
+    private var targetOpacity: Double = 0.0
+        get() = if (shouldShowQR) 0.8 else 0.0
+
+    private var shouldShowQR = false
+        get() = (rabbitServer.connectionCount == 0 && showQRUntilClientConnects) || showQRCode
+
+
+    /**
+     * Used to manually show and hide the QR code and override the default
+     * behaviour of (only) showing the code when no clients are connected
+     */
+    var showQRCode = false
+
     init {
         rabbitServer.addTransporter(transporter)
-        transporter.bind(10000)
+        transporter.bind(port)
+
+        // FIXME please help me find a better way to get the local address
+        val socket = Socket()
+        socket.connect(InetSocketAddress("google.com", 80))
+        val ip = socket.localAddress.toString().replace("/", "")
+
+        val clientUrlWithHash = "https://rabbitcontrol.github.io/client/#$ip:$port"
+        qrCodeImageProxy = getQRCodeImageProxy(barcodeText = clientUrlWithHash)
+        println("RabbitControl Web Client: $clientUrlWithHash")
 
         /**
          * Update the object when it has been updated in RabbitControl
@@ -70,7 +118,38 @@ class RabbitControlServer : Extension {
     }
 
 
-    fun add(objectWithParameters: Any, label: String? = objectWithParameters.title()) {
+    override fun setup(program: Program) {
+        /**
+         * Creating the Composite for the overlay needs to happen in setup(),
+         * as we need access to [Program.drawer]
+         */
+        qrOverlayComposition = compose {
+            layer {
+                draw {
+                    program.drawer.isolated {
+                        fill = ColorRGBa.WHITE.opacify(currentOpacity)
+                        stroke = null
+                        rectangle(0.0,0.0, width.toDouble(), height.toDouble())
+                    }
+                }
+
+                layer {
+                    blend(Darken()) {
+                        clip = true
+                    }
+
+                    draw {
+                        qrCodeImageProxy!!.colorBuffer?.let {
+                            program.drawer.imageFit(it, program.width / 4.0,program.height / 4.0, program.width * .5, program.height * .5, 0.0,0.0, FitMethod.Contain)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    fun add(objectWithParameters: Any) {
         val parameters = objectWithParameters.listParameters()
 
         parameters.forEach {
@@ -142,6 +221,26 @@ class RabbitControlServer : Extension {
 
     override fun shutdown(program: Program) {
         transporter.dispose()
+        // Delete the temporary file
+        File(qrImagePath!!.toUri()).delete()
+    }
+
+    // FIXME is it possible to avoid the file entirely?
+    private fun getQRCodeImageProxy(barcodeText: String): ColorBufferProxy {
+        val qrCodeWriter = QRCodeWriter()
+        val bitMatrix = qrCodeWriter.encode(barcodeText, BarcodeFormat.QR_CODE, 500, 500)
+        qrImagePath = FileSystems.getDefault().getPath("./qr.JPG")
+        MatrixToImageWriter.writeToPath(bitMatrix, "JPG", qrImagePath)
+        return colorBufferLoader.loadFromUrl(qrImagePath!!.toUri().toURL().toString())
+    }
+
+    override fun afterDraw(drawer: Drawer, program: Program) {
+        currentOpacity = mix(targetOpacity, currentOpacity, 0.8)
+
+        // Don't draw if it isn't necessary
+        if (currentOpacity > 0.0) {
+            qrOverlayComposition?.draw(drawer)
+        }
     }
 }
 
