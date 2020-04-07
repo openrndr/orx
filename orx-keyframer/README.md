@@ -2,8 +2,6 @@
 
 A highly reusable keyframer.
 
-This POC relies on JSON files, but that's not a hard dependency, it can be replaced with any deserializer scheme.
-
 What this allows you to do:
 
 1. Create a keyframed animation in a json file.
