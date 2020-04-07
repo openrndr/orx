@@ -45,3 +45,5 @@ dependencies {
     demoRuntimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
     demoImplementation(sourceSets.getByName("main").output)
 }
+
+tasks.getByName("compileKotlin").dependsOn("generateGrammarSource")
