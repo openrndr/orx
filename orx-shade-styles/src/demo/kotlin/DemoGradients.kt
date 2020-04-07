@@ -10,9 +10,9 @@ fun main() {
     application {
         program {
             extend {
-                val x = mouse.position.x.map(
+                val rot = mouse.position.x.map(
                         0.0, width.toDouble(),
-                        -1.0, 1.0)
+                        -180.0, 180.0)
                 val expo = mouse.position.y.map(
                         0.0, height.toDouble(),
                         0.1, 10.0)
@@ -23,7 +23,7 @@ fun main() {
                             linearGradient(
                                     ColorRGBa.BLACK,
                                     ColorRGBa.PINK,
-                                    rotation = x * 180,
+                                    rotation = rot,
                                     exponent = expo
                             )
                         }
@@ -31,7 +31,7 @@ fun main() {
                             radialGradient(
                                     ColorRGBa.BLACK,
                                     ColorRGBa.PINK,
-                                    length = 1.1 + x,
+                                    rotation = rot,
                                     exponent = expo
                             )
                         }
@@ -39,7 +39,7 @@ fun main() {
                             angularGradient(
                                     ColorRGBa.BLACK,
                                     ColorRGBa.PINK,
-                                    rotation = x * 180,
+                                    rotation = rot,
                                     exponent = expo
                             )
                         }
@@ -47,7 +47,7 @@ fun main() {
                             halfAngularGradient(
                                     ColorRGBa.BLACK,
                                     ColorRGBa.PINK,
-                                    rotation = x * 180,
+                                    rotation = rot,
                                     exponent = expo
                             )
                         }
