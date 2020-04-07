@@ -72,6 +72,44 @@ extend {
     drawer.circle(animation.position, animation.radius)
 }
 ```
+## Easing
+
+All the easing functions of orx-easing are available 
+
+ - linear
+ - back-in
+ - back-out
+ - back-in-out
+ - bounce-in
+ - bounce-out
+ - bounce-in-out
+ - circ-in
+ - circ-out
+ - circ-in-out
+ - cubic-in
+ - cubic-out
+ - cubic-in-out
+ - elastic-in
+ - elastic-out
+ - elastic-in-out
+ - expo-in
+ - expo-out
+ - expo-in-out
+ - quad-in
+ - quad-out
+ - quad-in-out
+ - quart-in
+ - quart-out
+ - quart-in-out
+ - quint-in
+ - quint-out
+ - quint-in-out
+ - sine-in
+ - sine-out
+ - sine-in-out
+ - one
+ - zero
+
 
 ## Advanced features
 

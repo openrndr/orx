@@ -288,9 +288,24 @@ open class Keyframer {
                     null -> Easing.Linear.function
                     is String -> when (easingCandidate) {
                         "linear" -> Easing.Linear.function
+                        "back-in" -> Easing.BackIn.function
+                        "back-out" -> Easing.BackOut.function
+                        "back-in-out" -> Easing.BackInOut.function
+                        "bounce-in" -> Easing.BounceIn.function
+                        "bounce-out" -> Easing.BounceOut.function
+                        "bounce-in-out" -> Easing.BackInOut.function
+                        "circ-in" -> Easing.CircIn.function
+                        "circ-out" -> Easing.CircOut.function
+                        "circ-in-out" -> Easing.CircInOut.function
                         "cubic-in" -> Easing.CubicIn.function
                         "cubic-out" -> Easing.CubicOut.function
                         "cubic-in-out" -> Easing.CubicInOut.function
+                        "elastic-in" -> Easing.ElasticIn.function
+                        "elastic-out" -> Easing.ElasticInOut.function
+                        "elastic-in-out" -> Easing.ElasticOut.function
+                        "expo-in" -> Easing.ExpoIn.function
+                        "expo-out" -> Easing.ExpoOut.function
+                        "expo-in-out" -> Easing.ExpoInOut.function
                         "quad-in" -> Easing.QuadIn.function
                         "quad-out" -> Easing.QuadOut.function
                         "quad-in-out" -> Easing.QuadInOut.function
@@ -300,9 +315,9 @@ open class Keyframer {
                         "quint-in" -> Easing.QuintIn.function
                         "quint-out" -> Easing.QuintOut.function
                         "quint-in-out" -> Easing.QuintInOut.function
-                        "expo-in" -> Easing.ExpoIn.function
-                        "expo-out" -> Easing.ExpoOut.function
-                        "expo-in-out" -> Easing.ExpoInOut.function
+                        "sine-in" -> Easing.SineIn.function
+                        "sine-out" -> Easing.SineOut.function
+                        "sine-in-out" -> Easing.SineInOut.function
                         "one" -> Easing.One.function
                         "zero" -> Easing.Zero.function
                         else -> error("unknown easing name '$easingCandidate'")
