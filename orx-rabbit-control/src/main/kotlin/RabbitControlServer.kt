@@ -1,11 +1,11 @@
 import com.google.zxing.BarcodeFormat
-import com.google.zxing.client.j2se.MatrixToImageWriter
 import com.google.zxing.qrcode.QRCodeWriter
 import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.ColorBufferProxy
+import org.openrndr.draw.ColorBuffer
 import org.openrndr.draw.Drawer
+import org.openrndr.draw.colorBuffer
 import org.openrndr.draw.isolated
 import org.openrndr.extra.compositor.*
 import org.openrndr.extra.fx.blend.Darken
@@ -14,7 +14,6 @@ import org.openrndr.extra.parameters.ParameterType
 import org.openrndr.extra.parameters.listParameters
 import org.openrndr.extras.imageFit.FitMethod
 import org.openrndr.extras.imageFit.imageFit
-import org.openrndr.internal.colorBufferLoader
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
@@ -24,11 +23,8 @@ import org.rabbitcontrol.rcp.model.interfaces.IParameter
 import org.rabbitcontrol.rcp.model.parameter.*
 import org.rabbitcontrol.rcp.transport.websocket.server.WebsocketServerTransporterNetty
 import java.awt.Color
-import java.io.File
 import java.net.InetSocketAddress
 import java.net.Socket
-import java.nio.file.FileSystems
-import java.nio.file.Path
 import kotlin.reflect.KMutableProperty1
 
 
@@ -38,8 +34,7 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
 
     private var parameterMap = mutableMapOf<IParameter, Pair<Any, Parameter>>()
 
-    private var qrCodeImageProxy: ColorBufferProxy? = null
-    private var qrImagePath: Path? = null
+    private var qrCodeImage: ColorBuffer? = null
     private var qrOverlayComposition: Composite? = null
 
 
@@ -71,7 +66,7 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
         val ip = socket.localAddress.toString().replace("/", "")
 
         val clientUrlWithHash = "https://rabbitcontrol.github.io/client/#$ip:$port"
-        qrCodeImageProxy = getQRCodeImageProxy(barcodeText = clientUrlWithHash)
+        qrCodeImage = getQRCodeImage(barcodeText = clientUrlWithHash)
         println("RabbitControl Web Client: $clientUrlWithHash")
 
         /**
@@ -139,7 +134,7 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
                     }
 
                     draw {
-                        qrCodeImageProxy!!.colorBuffer?.let {
+                        qrCodeImage?.let {
                             program.drawer.imageFit(it, program.width / 4.0,program.height / 4.0, program.width * .5, program.height * .5, 0.0,0.0, FitMethod.Contain)
                         }
                     }
@@ -221,17 +216,22 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
 
     override fun shutdown(program: Program) {
         transporter.dispose()
-        // Delete the temporary file
-        File(qrImagePath!!.toUri()).delete()
     }
 
-    // FIXME is it possible to avoid the file entirely?
-    private fun getQRCodeImageProxy(barcodeText: String): ColorBufferProxy {
+    private fun getQRCodeImage(barcodeText: String): ColorBuffer {
         val qrCodeWriter = QRCodeWriter()
         val bitMatrix = qrCodeWriter.encode(barcodeText, BarcodeFormat.QR_CODE, 500, 500)
-        qrImagePath = FileSystems.getDefault().getPath("./qr.JPG")
-        MatrixToImageWriter.writeToPath(bitMatrix, "JPG", qrImagePath)
-        return colorBufferLoader.loadFromUrl(qrImagePath!!.toUri().toURL().toString())
+        val cb = colorBuffer(500, 500)
+        val shad = cb.shadow
+
+        for (y in 0 until cb.height) {
+            for (x in 0 until cb.width) {
+                shad[x, y] = if (bitMatrix[x, y]) ColorRGBa.BLACK else ColorRGBa.WHITE
+            }
+        }
+
+        shad.upload()
+        return cb
     }
 
     override fun afterDraw(drawer: Drawer, program: Program) {
