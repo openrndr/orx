@@ -34,7 +34,7 @@ class AngularGradient(
         this.exponent = exponent
 
         fragmentTransform = """
-            vec2 coord = (c_boundsPosition.xy - vec2(0.5) + p_offset/2.0) * 2.0;
+            vec2 coord = (c_boundsPosition.xy - 0.5 + p_offset/2.0) * 2.0;
             
             float cr = cos(radians(p_rotation));
             float sr = sin(radians(p_rotation));

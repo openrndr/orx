@@ -33,11 +33,13 @@ class LinearGradient(
         this.exponent = exponent
 
         fragmentTransform = """
-            vec2 coord = (c_boundsPosition.xy - vec2(0.5) + p_offset);
+            vec2 coord = (c_boundsPosition.xy - 0.5 + p_offset);
+            
             float cr = cos(radians(p_rotation));
             float sr = sin(radians(p_rotation));
             mat2 rm = mat2(cr, -sr, sr, cr);
-            float f = clamp((rm * coord).y + 0.5, 0.0, 1.0);            
+            vec2 rc = rm * coord;
+            float f = clamp(rc.y + 0.5, 0.0, 1.0);            
                 
             vec4 color0 = p_color0;
             color0.rgb *= color0.a;
