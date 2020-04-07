@@ -6,6 +6,10 @@
 <img src="https://rabbitcontrol.github.io/carrot-sketch-c-trans.png" width="50px"> 
 </a>
 
+For examples, check out the [demo](./src/demo/kotlin) folder.
+
+
+
 ### Using the web client
 
 Go to [rabbitcontrol.github.io/client](https://rabbitcontrol.github.io/client/) and enter your IP-address and port. 
