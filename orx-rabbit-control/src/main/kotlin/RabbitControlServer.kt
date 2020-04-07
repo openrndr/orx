@@ -20,6 +20,7 @@ import org.openrndr.internal.colorBufferLoader
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
+import org.openrndr.math.mix
 import org.openrndr.shape.Composition
 import org.rabbitcontrol.rcp.RCPServer
 import org.rabbitcontrol.rcp.model.interfaces.IParameter
@@ -43,7 +44,19 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
     private var qrCodeImageProxy: ColorBufferProxy? = null
     private var qrImagePath: Path? = null
     private var qrOverlayComposition: Composite? = null
-//    private var animation: Animatable? = null
+
+
+    /**
+     * Animate the opacity to make it look smooooth
+     */
+    private var currentOpacity = 0.0
+
+    private var targetOpacity: Double = 0.0
+        get() = if (shouldShowQR) 0.8 else 0.0
+
+    private var shouldShowQR = false
+        get() = (rabbitServer.connectionCount == 0 && showQRUntilClientConnects) || showQRCode
+
 
     /**
      * Used to manually show and hide the QR code and override the default
@@ -109,15 +122,6 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
 
     override fun setup(program: Program) {
         /**
-         * Animate the opacity to make it look smooooth,
-         * (coming soon)
-         */
-//        animation = object : Animatable() {
-//            var opacity = 0.8
-//        }
-
-
-        /**
          * Creating the Composite for the overlay needs to happen in setup(),
          * as we need access to [Program.drawer]
          */
@@ -125,7 +129,7 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
             layer {
                 draw {
                     program.drawer.isolated {
-                        fill = ColorRGBa.WHITE.opacify(.8)
+                        fill = ColorRGBa.WHITE.opacify(currentOpacity)
                         stroke = null
                         rectangle(0.0,0.0, width.toDouble(), height.toDouble())
                     }
@@ -233,7 +237,10 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
     }
 
     override fun afterDraw(drawer: Drawer, program: Program) {
-        if ((rabbitServer.connectionCount == 0 && showQRUntilClientConnects) || showQRCode) {
+        currentOpacity = mix(targetOpacity, currentOpacity, 0.8)
+
+        // Don't draw if it isn't necessary
+        if (currentOpacity > 0.0) {
             qrOverlayComposition?.draw(drawer)
         }
     }
