@@ -9,8 +9,8 @@ import org.openrndr.math.Vector4
 
 fun main() = application {
     configure {
-        width = 400
-        height = 400
+        width = 800
+        height = 800
     }
 
     program {
