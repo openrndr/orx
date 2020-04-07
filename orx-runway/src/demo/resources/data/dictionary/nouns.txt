@@ -1,0 +1,14 @@
+man
+woman
+child
+boy
+girl
+house
+flower
+chair
+table
+car
+ground
+garden
+airplane
+school

@@ -1,0 +1,14 @@
+car
+fish
+flower
+eagle
+garbage
+computer
+beautiful
+ugly
+random
+man
+woman
+child
+missing
+magic
