@@ -1,6 +1,21 @@
+sourceSets {
+    demo {
+        java {
+            srcDirs = ["src/demo/kotlin"]
+            compileClasspath += main.getCompileClasspath()
+            runtimeClasspath += main.getRuntimeClasspath()
+        }
+    }
+}
+
 dependencies {
     api project(":orx-parameters")
     api project(":orx-panel")
     implementation "org.openrndr:openrndr-dialogs:$openrndrVersion"
     implementation "com.google.code.gson:gson:$gsonVersion"
+
+    demoImplementation("org.openrndr:openrndr-core:$openrndrVersion")
+    demoRuntimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
+    demoRuntimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
+    demoImplementation(sourceSets.getByName("main").output)
 }
