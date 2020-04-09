@@ -197,7 +197,7 @@ fun defaultStyles(
             marginBottom = 5.px
             fontSize = controlFontSize.px
 
-            and(has state "selected") {
+            and(has state "active") {
                 display = Display.BLOCK
                 background = controlActiveColor
             }
