@@ -34,7 +34,7 @@ fun preprocessShader(source: String): String {
                             "/* imported from $packageClass.$it */\n${it.get(null)}\n"
                         }.joinToString("\n")
                     } else {
-                        var result:String? = null
+                        var result:String?
                         try {
                             val methodName = "get${fieldName.take(1).toUpperCase() + fieldName.drop(1)}"
                             result = c.getMethod(methodName).invoke(null) as String

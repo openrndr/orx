@@ -91,7 +91,7 @@ fun <T, R> (() -> T).watch(transducer: (T) -> R):()->R {
 
     var result = transducer(this())
 
-    watchers[this as () -> Any?]!!.watchers.add {
+    watchers[this]!!.watchers.add {
         result = transducer(this())
     }
 

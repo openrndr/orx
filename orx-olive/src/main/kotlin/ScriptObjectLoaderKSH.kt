@@ -19,6 +19,7 @@ internal fun evalScriptWithConfiguration(
     return host.eval(script.toScriptSource(), compilationConfiguration, null)
 }
 
+@Suppress("UNCHECKED_CAST")
 fun <T> loadFromScriptKSH(
         script: File,
         host: BasicScriptingHost = BasicJvmScriptingHost(),

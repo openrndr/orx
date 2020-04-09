@@ -8,17 +8,17 @@ inline fun fbm(seed: Int, x: Double, y: Double, z: Double, w: Double, crossinlin
     var sum = noise(seed, x, y, z, w)
     var amp = 1.0
 
-    var x = x
-    var y = y
-    var z = z
-    var w = w
+    var lx = x
+    var ly = y
+    var lz = z
+    var lw = w
     for (i in 1 until octaves) {
-        x *= lacunarity
-        y *= lacunarity
-        z *= lacunarity
-        w *= lacunarity
+        lx *= lacunarity
+        ly *= lacunarity
+        lz *= lacunarity
+        lw *= lacunarity
         amp *= gain
-        sum += noise(seed + i, x, y, z, w) * amp
+        sum += noise(seed + i, lx, ly, lz, lw) * amp
     }
     return sum
 }
@@ -28,15 +28,15 @@ inline fun fbm(seed: Int, x: Double, y: Double, z: Double, crossinline noise: (I
     var sum = noise(seed, x, y, z)
     var amp = 1.0
 
-    var x = x
-    var y = y
-    var z = z
+    var lx = x
+    var ly = y
+    var lz = z
     for (i in 1 until octaves) {
-        x *= lacunarity
-        y *= lacunarity
-        z *= lacunarity
+        lx *= lacunarity
+        ly *= lacunarity
+        lz *= lacunarity
         amp *= gain
-        sum += noise(seed + i, x, y, z) * amp
+        sum += noise(seed + i, lx, ly, lz) * amp
     }
     return sum
 }
@@ -46,13 +46,13 @@ inline fun fbm(seed: Int, x: Double, y: Double, crossinline noise: (Int, Double,
     var sum = noise(seed, x, y)
     var amp = 1.0
 
-    var x = x
-    var y = y
+    var lx = x
+    var ly = y
     for (i in 1 until octaves) {
-        x *= lacunarity
-        y *= lacunarity
+        lx *= lacunarity
+        ly *= lacunarity
         amp *= gain
-        sum += noise(seed + i, x, y) * amp
+        sum += noise(seed + i, lx, ly) * amp
     }
     return sum
 }
@@ -62,11 +62,11 @@ inline fun fbm(seed: Int, x: Double, crossinline noise: (Int, Double) -> Double,
     var sum = noise(seed, x)
     var amp = 1.0
 
-    var x = x
+    var lx = x
     for (i in 1 until octaves) {
-        x *= lacunarity
+        lx *= lacunarity
         amp *= gain
-        sum += noise(seed + i, x) * amp
+        sum += noise(seed + i, lx) * amp
     }
     return sum
 }

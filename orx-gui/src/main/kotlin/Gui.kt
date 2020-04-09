@@ -214,7 +214,7 @@ class GUI : Extension {
             layout {
                 div("container") {
                     id = "container"
-                    val header = div("toolbar") {
+                    @Suppress("UNUSED_VARIABLE") val header = div("toolbar") {
                         randomizeButton = button {
                             label = "Randomize"
                             clicked {
@@ -266,7 +266,7 @@ class GUI : Extension {
                         for ((labeledObject, binding) in trackedObjects) {
                             val (label, _) = labeledObject
 
-                            val header = h3 { label }
+                            val h3Header = h3 { label }
                             val collapsible = div("compartment") {
                                 for (parameter in binding.parameters) {
                                     val element = addControl(labeledObject, parameter)
@@ -282,10 +282,10 @@ class GUI : Extension {
                                 collapsible.classes.add(collapseClass)
                             }
 
-                            header.mouse.pressed.listen {
+                            h3Header.mouse.pressed.listen {
                                 it.cancelPropagation()
                             }
-                            header.mouse.clicked.listen {
+                            h3Header.mouse.clicked.listen {
 
                                 if (KeyModifier.CTRL in it.modifiers) {
                                     collapsible.classes.remove(collapseClass)

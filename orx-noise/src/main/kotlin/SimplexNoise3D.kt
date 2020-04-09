@@ -56,43 +56,43 @@ fun simplex(seed: Int, x: Double, y: Double, z: Double): Double {
 
     val n0: Double
     run {
-        var t = 0.6 - x0 * x0 - y0 * y0 - z0 * z0
-        if (t < 0) {
+        var lt = 0.6 - x0 * x0 - y0 * y0 - z0 * z0
+        if (lt < 0) {
             n0 = 0.0
         } else {
-            t *= t
-            n0 = t * t * gradCoord3D(seed, i, j, k, x0, y0, z0)
+            lt *= lt
+            n0 = lt * lt * gradCoord3D(seed, i, j, k, x0, y0, z0)
         }
     }
     val n1: Double
     run {
-        var t = 0.6 - x1 * x1 - y1 * y1 - z1 * z1
-        if (t < 0) {
+        var lt = 0.6 - x1 * x1 - y1 * y1 - z1 * z1
+        if (lt < 0) {
             n1 = 0.0
         } else {
-            t *= t
-            n1 = t * t * gradCoord3D(seed, i + i1, j + j1, k + k1, x1, y1, z1)
+            lt *= lt
+            n1 = lt * lt * gradCoord3D(seed, i + i1, j + j1, k + k1, x1, y1, z1)
         }
     }
     val n2: Double
     run {
-        var t = 0.6 - x2 * x2 - y2 * y2 - z2 * z2
-        if (t < 0) {
+        var lt = 0.6 - x2 * x2 - y2 * y2 - z2 * z2
+        if (lt < 0) {
             n2 = 0.0
         } else {
-            t *= t
-            n2 = t * t * gradCoord3D(seed, i + i2, j + j2, k + k2, x2, y2, z2)
+            lt *= lt
+            n2 = lt * lt * gradCoord3D(seed, i + i2, j + j2, k + k2, x2, y2, z2)
         }
     }
 
     val n3: Double
     run {
-        var t = 0.6 - x3 * x3 - y3 * y3 - z3 * z3
-        if (t < 0)
+        var lt = 0.6 - x3 * x3 - y3 * y3 - z3 * z3
+        if (lt < 0)
             n3 = 0.0
         else {
-            t *= t
-            n3 = t * t * gradCoord3D(seed, i + 1, j + 1, k + 1, x3, y3, z3)
+            lt *= lt
+            n3 = lt * lt * gradCoord3D(seed, i + 1, j + 1, k + 1, x3, y3, z3)
         }
     }
     return 32 * (n0 + n1 + n2 + n3)
