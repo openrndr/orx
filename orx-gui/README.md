@@ -24,25 +24,55 @@ A simple UI can be created by creating an annotated `object`.
 ```kotlin
 import org.openrndr.application
 import org.openrndr.extra.gui.GUI
-import org.openrndr.extra.parameters.Description
-import org.openrndr.extra.parameters.DoubleParameter
+import org.openrndr.extra.parameters.*
 
 fun main() = application {
     program {
         // -- this @Description annotation is optional
         val parameters = @Description("parameters") object {
-            @DoubleParameter("x value", 0.0, 640.0)
-            var x = 0.5
+            @DoubleParameter("radius", 20.0, 200.0, precision = 2, order = 0)
+            var radius = 50.0
 
-            @DoubleParameter("y value", 0.0, 480.0)
-            var y = 0.5
+            @TextParameter("A string", order = 1)
+            var s = "Hello"
+
+            @BooleanParameter("A bool", order = 2)
+            var b = true
+
+            @IntParameter("An int", 0, 127, order = 3)
+            var i = 64
+
+            @ColorParameter("A fill color", order = 4)
+            var fill = ColorRGBa.PINK
+
+            @XYParameter("Position", minX = 0.0, maxX = width * 1.0,
+                                     minY = 0.0, maxY = height * 1.0, order = 5)
+            var pos = Vector2.ZERO 
+
+            @Vector2Parameter("A Vector2", order = 6)
+            var v2 = Vector2(200.0, 200.0)
+
+            @Vector3Parameter("A Vector3")
+            var v3 = Vector3(200.0, 200.0, 200.0, order = 7)
+
+            @Vector4Parameter("A Vector4")
+            var v4 = Vector4(200.0, 200.0, 200.0, 200.0, order = 8)
+
+            @DoubleListParameter("Mixer", order = 9)
+            var mixer = MutableList(5) { 0.5 }
+
+            @ActionParameter("Action test", order = 10)
+            fun clicked() {
+                println("GUI says hi!")
+            }
         }
 
         extend(GUI()) {
             add(parameters)
         }
         extend {
-            drawer.circle(parameters.x, parameters.y, 200.0)
+            drawer.fill = parameters.fill
+            drawer.circle(parameters.pos, parameters.radius)
         }
     }
 }
