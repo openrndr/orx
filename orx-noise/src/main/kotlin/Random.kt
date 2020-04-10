@@ -71,8 +71,8 @@ object Random {
         return rnd.nextInt(min, max)
     }
 
-    fun bool(): Boolean {
-        return rnd.nextBoolean()
+    fun bool(probability: Double = 0.5): Boolean {
+        return rnd.nextDouble(1.0) < probability
     }
 
     fun <T> pick(coll: Collection<T>): T {
