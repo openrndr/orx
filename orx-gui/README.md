@@ -24,25 +24,45 @@ A simple UI can be created by creating an annotated `object`.
 ```kotlin
 import org.openrndr.application
 import org.openrndr.extra.gui.GUI
-import org.openrndr.extra.parameters.Description
-import org.openrndr.extra.parameters.DoubleParameter
+import org.openrndr.extra.parameters.*
 
 fun main() = application {
     program {
         // -- this @Description annotation is optional
         val parameters = @Description("parameters") object {
-            @DoubleParameter("x value", 0.0, 640.0)
-            var x = 0.5
+            @DoubleParameter("radius", 20.0, 200.0)
+            var radius = 50.0
 
-            @DoubleParameter("y value", 0.0, 480.0)
-            var y = 0.5
+            @TextParameter("A string")
+            var s: String = "Hello"
+
+            @BooleanParameter("A bool")
+            var b: Boolean = true
+
+            @ColorParameter("A fill color")
+            var fill = ColorRGBa.PINK
+
+            @Vector2Parameter("Position")
+            var pos = Vector2(200.0, 200.0)
+
+            @Vector3Parameter("A vector3")
+            var v3 = Vector3(200.0, 200.0, 200.0)
+
+            @Vector4Parameter("A vector4")
+            var v4 = Vector4(200.0, 200.0, 200.0, 200.0)
+
+            @ActionParameter("Action test")
+            fun clicked() {
+                println("GUI says hi!")
+            }
         }
 
         extend(GUI()) {
             add(parameters)
         }
         extend {
-            drawer.circle(parameters.x, parameters.y, 200.0)
+            drawer.fill = parameters.fill
+            drawer.circle(parameters.pos, parameters.radius)
         }
     }
 }
