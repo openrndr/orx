@@ -3,6 +3,7 @@ package org.openrndr.extras.meshgenerators
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
+import org.openrndr.math.YPolarity
 import org.openrndr.math.transforms.rotateY
 
 fun generateCap(sides: Int, radius: Double, enveloppe: List<Vector2> = listOf(Vector2(0.0, 0.0), Vector2(1.0, 0.0)), writer: VertexWriter) {
@@ -13,7 +14,7 @@ fun generateCap(sides: Int, radius: Double, enveloppe: List<Vector2> = listOf(Ve
 
     val normals2D = enveloppe.zipWithNext().map {
         val d = it.second - it.first
-        d.normalized.perpendicular()
+        d.normalized.perpendicular(YPolarity.CCW_POSITIVE_Y)
     }
 
     val basePositions = cleanEnveloppe.map { Vector3(it.x, it.y, 0.0) }

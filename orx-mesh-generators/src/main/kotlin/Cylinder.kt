@@ -24,7 +24,7 @@ fun generateTaperedCylinder(sides: Int, segments: Int, radiusStart: Double, radi
     val dphi = (Math.PI * 2) / sides
     val ddeg = (360.0) / sides
 
-    val invertFactor = if (invert) -1.0 else 1.0
+    val invertFactor = if (invert) 1.0 else -1.0
 
     val dr = radiusEnd - radiusStart
 
@@ -61,7 +61,7 @@ fun generateTaperedCylinder(sides: Int, segments: Int, radiusStart: Double, radi
             val n1 = (Matrix44.rotateZ((side+1) * ddeg) * baseNormal.xyz0).xyz.normalized * invertFactor
 
 
-            if (!invert) {
+            if (invert) {
                 vertexWriter(Vector3(x00, y00, z0), n0, Vector2(u0, v0))
                 vertexWriter(Vector3(x10, y10, z0), n1, Vector2(u0, v1))
                 vertexWriter(Vector3(x11, y11, z1), n1, Vector2(u1, v1))
