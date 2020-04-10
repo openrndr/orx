@@ -30,28 +30,38 @@ fun main() = application {
     program {
         // -- this @Description annotation is optional
         val parameters = @Description("parameters") object {
-            @DoubleParameter("radius", 20.0, 200.0)
+            @DoubleParameter("radius", 20.0, 200.0, precision = 2, order = 0)
             var radius = 50.0
 
-            @TextParameter("A string")
-            var s: String = "Hello"
+            @TextParameter("A string", order = 1)
+            var s = "Hello"
 
-            @BooleanParameter("A bool")
-            var b: Boolean = true
+            @BooleanParameter("A bool", order = 2)
+            var b = true
 
-            @ColorParameter("A fill color")
+            @IntParameter("An int", 0, 127, order = 3)
+            var i = 64
+
+            @ColorParameter("A fill color", order = 4)
             var fill = ColorRGBa.PINK
 
-            @Vector2Parameter("Position")
-            var pos = Vector2(200.0, 200.0)
+            @XYParameter("Position", minX = 0.0, maxX = width * 1.0,
+                                     minY = 0.0, maxY = height * 1.0, order = 5)
+            var pos = Vector2.ZERO 
 
-            @Vector3Parameter("A vector3")
-            var v3 = Vector3(200.0, 200.0, 200.0)
+            @Vector2Parameter("A Vector2", order = 6)
+            var v2 = Vector2(200.0, 200.0)
 
-            @Vector4Parameter("A vector4")
-            var v4 = Vector4(200.0, 200.0, 200.0, 200.0)
+            @Vector3Parameter("A Vector3")
+            var v3 = Vector3(200.0, 200.0, 200.0, order = 7)
 
-            @ActionParameter("Action test")
+            @Vector4Parameter("A Vector4")
+            var v4 = Vector4(200.0, 200.0, 200.0, 200.0, order = 8)
+
+            @DoubleListParameter("Mixer", order = 9)
+            var mixer = MutableList(5) { 0.5 }
+
+            @ActionParameter("Action test", order = 10)
             fun clicked() {
                 println("GUI says hi!")
             }
