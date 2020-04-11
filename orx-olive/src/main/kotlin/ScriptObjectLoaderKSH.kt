@@ -30,6 +30,20 @@ fun <T> loadFromScriptKSH(
             }
 
         }
-): T = (evalScriptWithConfiguration(script.readText(), host, body).valueOrThrow().returnValue as ResultValue.Value).value as T
+): T = loadFromScriptKSH(script.readText(), host, body)
+
+@Suppress("UNCHECKED_CAST")
+fun <T> loadFromScriptKSH(
+        script: String,
+        host: BasicScriptingHost = BasicJvmScriptingHost(),
+        body: ScriptCompilationConfiguration.Builder.() -> Unit = {
+
+            jvm {
+                dependenciesFromCurrentContext(wholeClasspath = true)
+            }
+
+        }
+): T = (evalScriptWithConfiguration(script, host, body).valueOrThrow().returnValue as ResultValue.Value).value as T
+
 
 

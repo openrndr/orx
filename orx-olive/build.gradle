@@ -2,13 +2,8 @@ dependencies {
     implementation project(":orx-file-watcher")
 
     // -- JSR 223, old style script loader
-    api "org.jetbrains.kotlin:kotlin-scripting-jsr223:$kotlinVersion"
-
-    api "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
-    api "org.jetbrains.kotlin:kotlin-scripting-jvm-host-embeddable:$kotlinVersion"
-    api "org.jetbrains.kotlin:kotlin-scripting-common:$kotlinVersion"
-    api "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:$kotlinVersion"
-    api "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion"
-    api "org.jetbrains.kotlin:kotlin-compiler:$kotlinVersion"
-    api "org.jetbrains.kotlin:kotlin-script-runtime:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-scripting-jvm:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-scripting-jvm-host:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-scripting-jsr223:$kotlinVersion"
 }
