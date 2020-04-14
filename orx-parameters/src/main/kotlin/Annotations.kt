@@ -23,6 +23,16 @@ import kotlin.reflect.full.memberProperties
 annotation class Description(val title: String, val description: String = "")
 
 /**
+ * OptionParameter annotation for a double precision parameter
+ * @property label a short description of the parameter
+ * @property order hint for where to place the parameter in user interfaces
+ */
+
+@Target(AnnotationTarget.PROPERTY)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class OptionParameter(val label: String, val order: Int = Integer.MAX_VALUE)
+
+/**
  * DoubleParameter annotation for a double precision parameter
  * @property label a short description of the parameter
  * @property low the lowest value this parameter should be assigned
@@ -167,7 +177,8 @@ enum class ParameterType(val annotationClass: KClass<out Annotation>) {
     DoubleList(DoubleListParameter::class),
     Vector2(Vector2Parameter::class),
     Vector3(Vector3Parameter::class),
-    Vector4(Vector4Parameter::class)
+    Vector4(Vector4Parameter::class),
+    Option(OptionParameter::class)
     ;
 
     companion object {
@@ -204,6 +215,7 @@ class Parameter(
         val precision: Int?,
         val invertY: Boolean?,
         val showVector: Boolean?,
+//        val optionEnum: Enum<*>,
         val order: Int)
 //</editor-fold>
 //<editor-fold desc="4. Add handling annotation code to listParameters" defaultstate="collapsed">
@@ -287,6 +299,10 @@ fun Any.listParameters(): List<Parameter> {
                     order = it.order
                     doubleRange = it.min..it.max
                     precision = it.precision
+                }
+                is OptionParameter -> {
+                    label = it.label
+                    order = it.order
                 }
             }
         }

@@ -1,10 +1,7 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.gui.GUI
-import org.openrndr.extra.parameters.ColorParameter
-import org.openrndr.extra.parameters.Description
-import org.openrndr.extra.parameters.DoubleParameter
-import org.openrndr.extra.parameters.Vector2Parameter
+import org.openrndr.extra.parameters.*
 import org.openrndr.math.Vector2
 
 /**
@@ -23,7 +20,11 @@ fun main() = application {
             @ColorParameter("color")
             var color = ColorRGBa.PINK
 
+            @DoubleListParameter("a double list")
+            var adl = MutableList(2) { 0.0 }
+
         }
+
         gui.add(settings)
         extend(gui)
         extend {

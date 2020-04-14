@@ -232,7 +232,7 @@ class GUI : Extension {
                         button {
                             label = "Save"
                             clicked {
-                                val defaultPath = getDefaultPathForContext(contextID ="gui.parameters")
+                                val defaultPath = getDefaultPathForContext(contextID = "gui.parameters")
 
                                 if (defaultPath == null) {
                                     val local = File(".")
@@ -285,9 +285,9 @@ class GUI : Extension {
                             h3Header.mouse.pressed.listen {
                                 it.cancelPropagation()
                             }
-                            h3Header.mouse.clicked.listen {
+                            h3Header.mouse.clicked.listen { me ->
 
-                                if (KeyModifier.CTRL in it.modifiers) {
+                                if (KeyModifier.CTRL in me.modifiers) {
                                     collapsible.classes.remove(collapseClass)
                                     persistentCompartmentStates[Driver.instance.contextID]!!.forEach {
                                         it.value.collapsed = true
@@ -568,8 +568,41 @@ class GUI : Extension {
                     }
                 }
             }
-
-
+            ParameterType.Option -> {
+                println("yo option")
+                dropdownButton {
+                    val enumProperty = parameter.property as KMutableProperty1<Any, Enum<*>>
+                    val value = enumProperty.get(obj)
+                    // -- this is dirty, but it is the only way to get the constants for arbitrary enums
+                    // -- (that I know of, at least)
+                    @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN") val jEnum = value as java.lang.Enum<*>
+                    // -- we don't use the property syntax here because that leads to compilation errors
+                    @Suppress("UsePropertyAccessSyntax") val constants = jEnum.getDeclaringClass().getEnumConstants()
+                    constants.forEach {
+                        println("hey $it")
+                        item {
+                            label = it.name
+                            data = it
+                        }
+                    }
+                    events.valueChanged.listen {
+                        setAndPersist(
+                                compartment.label,
+                                parameter.property as KMutableProperty1<Any, Enum<*>>,
+                                obj,
+                                it.value.data as? Enum<*> ?: error("no data")
+                        )
+                    }
+                    getPersistedOrDefault(
+                            compartment.label,
+                            parameter.property as KMutableProperty1<Any, Enum<*>>,
+                            obj
+                    )?.let { enum ->
+                        (this@dropdownButton).value = items().find { item -> item.data == enum }
+                                ?: error("no matching item found")
+                    }
+                }
+            }
         }
     }
     //</editor-fold>
@@ -592,7 +625,10 @@ class GUI : Extension {
                                  var vector3Value: Vector3? = null,
                                  var vector4Value: Vector4? = null,
                                  var doubleListValue: MutableList<Double>? = null,
-                                 var textValue: String? = null)
+                                 var textValue: String? = null,
+                                 var optionValue: String? = null
+
+    )
 
 
     fun saveParameters(file: File) {
@@ -616,6 +652,7 @@ class GUI : Extension {
                             ParameterType.Vector2 -> ParameterValue(vector2Value = k.property.qget(lo.obj) as Vector2)
                             ParameterType.Vector3 -> ParameterValue(vector3Value = k.property.qget(lo.obj) as Vector3)
                             ParameterType.Vector4 -> ParameterValue(vector4Value = k.property.qget(lo.obj) as Vector4)
+                            ParameterType.Option -> ParameterValue(optionValue = (k.property.qget(lo.obj) as Enum<*>).name)
                         })
                     })
                 }
@@ -623,8 +660,16 @@ class GUI : Extension {
     }
 
     fun loadParameters(file: File) {
-        fun <T> KMutableProperty1<out Any, Any?>?.qset(obj: Any, value: T) {
-            return (this as KMutableProperty1<Any, T>).set(obj, value)
+        fun <T> KMutableProperty1<out Any, Any?>?.qset(obj: Any, value: T) =
+                (this as KMutableProperty1<Any, T>).set(obj, value)
+
+        fun KMutableProperty1<out Any, Any?>?.enumSet(obj: Any, value: String) {
+            val v = (this as KMutableProperty1<Any, Enum<*>>).get(obj)
+
+            @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN", "UsePropertyAccessSyntax")
+            val enumValue = (v as java.lang.Enum<*>).getDeclaringClass().getEnumConstants().find { it.name == value }
+                    ?: error("cannot map value $value to enum")
+            (this as KMutableProperty1<Any, Enum<*>>).set(obj, enumValue)
         }
 
         val json = file.readText()
@@ -667,6 +712,9 @@ class GUI : Extension {
                             }
                             ParameterType.Vector4 -> parameterValue.vector4Value?.let {
                                 parameter.property.qset(lo.obj, it)
+                            }
+                            ParameterType.Option -> parameterValue.optionValue?.let {
+                                parameter.property.enumSet(lo.obj, it)
                             }
                             ParameterType.Action -> {
                                 // intentionally do nothing
@@ -711,6 +759,10 @@ class GUI : Extension {
             }
             ParameterType.Vector4 -> {
                 (control as SlidersVector4).value = (parameter.property as KMutableProperty1<Any, Vector4>).get(labeledObject.obj)
+            }
+            ParameterType.Option -> {
+                val ddb = control as DropdownButton
+                ddb.value = ddb.items().find { item -> item.data == (parameter.property as KMutableProperty1<Any, Enum<*>>).get(labeledObject.obj) } ?: error("could not find item")
             }
             ParameterType.Action -> {
                 // intentionally do nothing

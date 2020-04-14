@@ -43,6 +43,8 @@ val a = object {
     @Vector4Parameter("a vector 4 parameter", order = 10)
     var v4 = Vector4.ZERO
 
+    @OptionParameter("an option parameter", order = 11)
+    var o = ParameterType.Option
 
 }
 
@@ -50,7 +52,7 @@ object TestAnnotations : Spek({
     describe("an annotated object") {
         it("has listable parameters") {
             val list = a.listParameters()
-            list.size `should be equal to` 11
+            list.size `should be equal to` 12
 
             list[0].property?.name `should be equal to` "d"
             list[0].parameterType `should be equal to` ParameterType.Double
@@ -117,6 +119,11 @@ object TestAnnotations : Spek({
             list[10].parameterType `should be equal to` ParameterType.Vector4
             list[10].property?.name `should be equal to` "v4"
             list[10].label `should be equal to` "a vector 4 parameter"
+
+            list[11].parameterType `should be equal to` ParameterType.Option
+            list[11].property?.name `should be equal to` "o"
+            list[11].label `should be equal to` "an option parameter"
+
         }
     }
 })
