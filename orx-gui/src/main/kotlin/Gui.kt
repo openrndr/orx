@@ -579,7 +579,6 @@ class GUI : Extension {
                     // -- we don't use the property syntax here because that leads to compilation errors
                     @Suppress("UsePropertyAccessSyntax") val constants = jEnum.getDeclaringClass().getEnumConstants()
                     constants.forEach {
-                        println("hey $it")
                         item {
                             label = it.name
                             data = it
