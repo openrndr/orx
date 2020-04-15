@@ -22,6 +22,7 @@ import org.openrndr.panel.ControlManager
 import org.openrndr.panel.controlManager
 import org.openrndr.panel.elements.*
 import org.openrndr.panel.style.*
+import org.openrndr.panel.styleSheet
 
 import java.io.File
 import kotlin.math.roundToInt
@@ -95,7 +96,12 @@ class GUI : Extension {
         program.keyboard.keyDown.listen {
             if (it.key == KEY_F11) {
                 enabled = !enabled
-                panel.enabled = enabled
+                val collapsed = ElementClass("collapsed")
+                if(enabled) {
+                    panel.body!!.classes.remove(collapsed)
+                } else {
+                    panel.body!!.classes.add(collapsed)
+                }
                 sidebarState().hidden = !enabled
             }
 
