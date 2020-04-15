@@ -26,6 +26,13 @@ import org.openrndr.application
 import org.openrndr.extra.gui.GUI
 import org.openrndr.extra.parameters.*
 
+enum class Option {
+    Option1,
+    Option2,
+    Option3
+}
+
+
 fun main() = application {
     program {
         // -- this @Description annotation is optional
@@ -65,6 +72,9 @@ fun main() = application {
             fun clicked() {
                 println("GUI says hi!")
             }
+            
+            @OptionParameter("An option", order = 11)
+            var option = Option.Option1
         }
 
         extend(GUI()) {

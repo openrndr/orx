@@ -16,11 +16,11 @@ Add `orx-timer` to the `orxFeatures` set in your build.gradle.kts
 
 A simple example looks like this:
 
-```$kotlin
+```kotlin
 fun main() = application {
     program {
         repeat(2.0) {
-            println("hello there )
+            println("hello there")
         }
         extend {
 

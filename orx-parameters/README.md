@@ -16,6 +16,8 @@ Currently orx-parameters facilitates the following annotations:
  - `Vector2Parameter`  for `Vector2` properties
  - `Vector3Parameter` for `Vector3` properties
  - `Vector4Parameter` for `Vector4` properties
+ - `DoubleListParameter` for `List<Double>` properties
+ - `OptionParameter` for `Enum` properties
 
 Additionally there is an `ActionParameter` that can be used to annotate functions without arguments.
 
@@ -23,7 +25,7 @@ Additionally there is an `ActionParameter` that can be used to annotate function
 
 Annotations can be applied to a properties inside a class or object class.
 
-````kotlin
+```kotlin
 val foo = object {
     @DoubleParameter("a double scalar", 0.0, 1.0, order = 0)
     var d = 1.0
@@ -37,21 +39,26 @@ val foo = object {
     @XYParameter("an XY parameter", order = 3)
     var xy = Vector2.ZERO
 
-    @XYParameter("a Vector2 parameter", order = 4)
+    @Vector2Parameter("a Vector2 parameter", order = 4)
     var v2 = Vector2.ZERO
 
-    @XYParameter("a Vector3 parameter", order = 5)
+    @Vector3Parameter("a Vector3 parameter", order = 5)
     var v3 = Vector3.ZERO
 
-    @XYParameter("a Vector4 parameter", order = 6)
+    @Vector4Parameter("a Vector4 parameter", order = 6)
     var v4 = Vector4.ZERO
 
     @ActionParameter("a simple action", order = 7)
     fun actionFunction() {
         // -- 
     }
+    @DoublieListParameter("a double-list parameter", order = 8)
+    var dl = mutableListOf(0.0, 0.0, 0.0)
+
+    @OptionParameter("an option parameter", order = 9)
+    var option = SomeEnum.SomeValue
 }
-````
+```
 
 ## Querying parameters
 
