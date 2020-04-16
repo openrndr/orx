@@ -575,10 +575,10 @@ class GUI : Extension {
                 }
             }
             ParameterType.Option -> {
-                println("yo option")
                 dropdownButton {
                     val enumProperty = parameter.property as KMutableProperty1<Any, Enum<*>>
                     val value = enumProperty.get(obj)
+                    label = parameter.label
                     // -- this is dirty, but it is the only way to get the constants for arbitrary enums
                     // -- (that I know of, at least)
                     @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN") val jEnum = value as java.lang.Enum<*>
