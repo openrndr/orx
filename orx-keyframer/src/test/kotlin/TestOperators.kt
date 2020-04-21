@@ -32,4 +32,8 @@ object TestOperators : Spek({
         val result = evaluateExpression("4 + 2 * 3")
         result?.shouldBeNear(10.0, 10E-6)
     }
+    describe("unary minus") {
+        val result = evaluateExpression("-4.0")
+        result?.shouldBeNear(-4.0, 10E-6)
+    }
 })

@@ -5,10 +5,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker
 import org.antlr.v4.runtime.tree.TerminalNode
 import org.openrndr.extra.keyframer.antlr.*
 import org.openrndr.extra.noise.uniform
-import org.openrndr.math.map
-import org.openrndr.math.mix
-import org.openrndr.math.mod
-import org.openrndr.math.smoothstep
+import org.openrndr.math.*
 import java.util.*
 import kotlin.math.*
 
@@ -20,12 +17,12 @@ typealias Function4 = (Double, Double, Double, Double) -> Double
 typealias Function5 = (Double, Double, Double, Double, Double) -> Double
 
 class FunctionExtensions(
-    val functions0: Map<String, Function0> = emptyMap(),
-    val functions1: Map<String, Function1> = emptyMap(),
-    val functions2: Map<String, Function2> = emptyMap(),
-    val functions3: Map<String, Function3> = emptyMap(),
-    val functions4: Map<String, Function4> = emptyMap(),
-    val functions5: Map<String, Function5> = emptyMap()
+        val functions0: Map<String, Function0> = emptyMap(),
+        val functions1: Map<String, Function1> = emptyMap(),
+        val functions2: Map<String, Function2> = emptyMap(),
+        val functions3: Map<String, Function3> = emptyMap(),
+        val functions4: Map<String, Function4> = emptyMap(),
+        val functions5: Map<String, Function5> = emptyMap()
 ) {
     companion object {
         val EMPTY = FunctionExtensions()
@@ -43,7 +40,7 @@ internal enum class IDType {
 }
 
 internal class ExpressionListener(val functions: FunctionExtensions = FunctionExtensions.EMPTY) :
-    KeyLangParserBaseListener() {
+        KeyLangParserBaseListener() {
     val doubleStack = Stack<Double>()
     val functionStack = Stack<(DoubleArray) -> Double>()
     val variables = mutableMapOf<String, Double>()
@@ -68,7 +65,8 @@ internal class ExpressionListener(val functions: FunctionExtensions = FunctionEx
     }
 
     override fun exitMinusExpression(ctx: KeyLangParser.MinusExpressionContext) {
-        super.exitMinusExpression(ctx)
+        val op = doubleStack.pop()
+        doubleStack.push(-op)
     }
 
     override fun exitBinaryOperation1(ctx: KeyLangParser.BinaryOperation1Context) {
@@ -252,95 +250,97 @@ internal class ExpressionListener(val functions: FunctionExtensions = FunctionEx
             @Suppress("DIVISION_BY_ZERO")
             when (val idType = idTypeStack.pop()) {
                 IDType.VARIABLE -> doubleStack.push(
-                    when (val name = node.text) {
-                        "PI" -> PI
-                        else -> variables[name] ?: errorValue("unresolved variable: '${name}'", 0.0 / 0.0)
-                    }
+                        when (val name = node.text) {
+                            "PI" -> PI
+                            else -> variables[name] ?: errorValue("unresolved variable: '${name}'", 0.0 / 0.0)
+                        }
                 )
 
                 IDType.FUNCTION0 -> {
                     val function: (DoubleArray) -> Double =
-                        when (val candidate = node.text) {
-                            "random" -> { _ -> Double.uniform(0.0, 1.0) }
-                            else -> functions.functions0[candidate]?.let { { _:DoubleArray -> it.invoke() } }
-                                ?: errorValue(
-                                    "unresolved function: '${candidate}()'"
-                                ) { _ -> error("this is the error function") }
-                        }
+                            when (val candidate = node.text) {
+                                "random" -> { _ -> Double.uniform(0.0, 1.0) }
+                                else -> functions.functions0[candidate]?.let { { _: DoubleArray -> it.invoke() } }
+                                        ?: errorValue(
+                                                "unresolved function: '${candidate}()'"
+                                        ) { _ -> error("this is the error function") }
+                            }
                     functionStack.push(function)
                 }
 
                 IDType.FUNCTION1 -> {
                     val function: (DoubleArray) -> Double =
-                        when (val candidate = node.text) {
-                            "sqrt" -> { x -> sqrt(x[0]) }
-                            "radians" -> { x -> Math.toRadians(x[0]) }
-                            "degrees" -> { x -> Math.toDegrees(x[0]) }
-                            "cos" -> { x -> cos(x[0]) }
-                            "sin" -> { x -> sin(x[0]) }
-                            "tan" -> { x -> tan(x[0]) }
-                            "atan" -> { x -> atan(x[0]) }
-                            "acos" -> { x -> acos(x[0]) }
-                            "asin" -> { x -> asin(x[0]) }
-                            "exp" -> { x -> exp(x[0]) }
-                            "abs" -> { x -> abs(x[0]) }
-                            "floor" -> { x -> floor(x[0]) }
-                            "ceil" -> { x -> ceil(x[0]) }
-                            "saturate" -> { x -> x[0].coerceIn(0.0, 1.0) }
-                            else -> functions.functions1[candidate]?.let { { x:DoubleArray -> it.invoke(x[0]) } }
-                                ?: errorValue(
-                                    "unresolved function: '${candidate}(x0)'"
-                                ) { _ -> error("this is the error function") }
-                        }
+                            when (val candidate = node.text) {
+                                "sqrt" -> { x -> sqrt(x[0]) }
+                                "radians" -> { x -> Math.toRadians(x[0]) }
+                                "degrees" -> { x -> Math.toDegrees(x[0]) }
+                                "cos" -> { x -> cos(x[0]) }
+                                "sin" -> { x -> sin(x[0]) }
+                                "tan" -> { x -> tan(x[0]) }
+                                "atan" -> { x -> atan(x[0]) }
+                                "acos" -> { x -> acos(x[0]) }
+                                "asin" -> { x -> asin(x[0]) }
+                                "exp" -> { x -> exp(x[0]) }
+                                "abs" -> { x -> abs(x[0]) }
+                                "floor" -> { x -> floor(x[0]) }
+                                "ceil" -> { x -> ceil(x[0]) }
+                                "saturate" -> { x -> x[0].coerceIn(0.0, 1.0) }
+                                else -> functions.functions1[candidate]?.let { { x: DoubleArray -> it.invoke(x[0]) } }
+                                        ?: errorValue(
+                                                "unresolved function: '${candidate}(x0)'"
+                                        ) { _ -> error("this is the error function") }
+                            }
                     functionStack.push(function)
                 }
                 IDType.FUNCTION2 -> {
                     val function: (DoubleArray) -> Double =
-                        when (val candidate = node.text) {
-                            "max" -> { x -> max(x[0], x[1]) }
-                            "min" -> { x -> min(x[0], x[1]) }
-                            "pow" -> { x -> x[0].pow(x[1]) }
-                            "atan2" -> { x -> atan2(x[0], x[1]) }
-                            "random" -> { x -> Double.uniform(x[0], x[1]) }
-                            else -> functions.functions2[candidate]?.let { { x:DoubleArray -> it.invoke(x[0], x[1]) } }
-                                ?: errorValue(
-                                    "unresolved function: '${candidate}(x0, x1)'"
-                                ) { _ -> error("this is the error function") }
-                        }
+                            when (val candidate = node.text) {
+                                "max" -> { x -> max(x[0], x[1]) }
+                                "min" -> { x -> min(x[0], x[1]) }
+                                "pow" -> { x -> x[0].pow(x[1]) }
+                                "atan2" -> { x -> atan2(x[0], x[1]) }
+                                "random" -> { x -> Double.uniform(x[0], x[1]) }
+                                "length" -> { x -> Vector2(x[0], x[1]).length }
+                                else -> functions.functions2[candidate]?.let { { x: DoubleArray -> it.invoke(x[0], x[1]) } }
+                                        ?: errorValue(
+                                                "unresolved function: '${candidate}(x0, x1)'"
+                                        ) { _ -> error("this is the error function") }
+                            }
                     functionStack.push(function)
                 }
                 IDType.FUNCTION3 -> {
                     val function: (DoubleArray) -> Double =
-                        when (val candidate = node.text) {
-                            "mix" -> { x -> mix(x[0], x[1], x[2]) }
-                            "smoothstep" -> { x -> smoothstep(x[0], x[1], x[2]) }
-                            else -> functions.functions3[candidate]?.let { { x:DoubleArray -> it.invoke(x[0], x[1], x[2]) } }
-                                ?: errorValue(
-                                    "unresolved function: '${candidate}(x0, x1, x2)'"
-                                ) { _ -> error("this is the error function") }
-                        }
+                            when (val candidate = node.text) {
+                                "mix" -> { x -> mix(x[0], x[1], x[2]) }
+                                "smoothstep" -> { x -> smoothstep(x[0], x[1], x[2]) }
+                                "length" -> { x -> Vector3(x[0], x[1], x[2]).length }
+                                else -> functions.functions3[candidate]?.let { { x: DoubleArray -> it.invoke(x[0], x[1], x[2]) } }
+                                        ?: errorValue(
+                                                "unresolved function: '${candidate}(x0, x1, x2)'"
+                                        ) { _ -> error("this is the error function") }
+                            }
                     functionStack.push(function)
                 }
                 IDType.FUNCTION4 -> {
                     val function: (DoubleArray) -> Double =
-                        when (val candidate = node.text) {
-                            else -> functions.functions4[candidate]?.let { { x:DoubleArray -> it.invoke(x[0], x[1], x[2], x[3]) } }
-                                ?: errorValue(
-                                    "unresolved function: '${candidate}(x0, x1, x2, x3)'"
-                                ) { _ -> error("this is the error function") }
-                        }
+                            when (val candidate = node.text) {
+                                else -> functions.functions4[candidate]?.let { { x: DoubleArray -> it.invoke(x[0], x[1], x[2], x[3]) } }
+                                        ?: errorValue(
+                                                "unresolved function: '${candidate}(x0, x1, x2, x3)'"
+                                        ) { _ -> error("this is the error function") }
+                            }
                     functionStack.push(function)
                 }
 
                 IDType.FUNCTION5 -> {
                     val function: (DoubleArray) -> Double =
-                        when (val candidate = node.text) {
-                            "map" -> { x -> map(x[0], x[1], x[2], x[3], x[4]) }
-                            else -> functions.functions5[candidate]?.let { { x:DoubleArray -> it.invoke(x[0], x[1], x[2], x[3], x[4]) } }
-                                ?: errorValue(
-                                    "unresolved function: '${candidate}(x0, x1, x2, x3, x4)'"
-                                ) { _ -> error("this is the error function") }
-                        }
+                            when (val candidate = node.text) {
+                                "map" -> { x -> map(x[0], x[1], x[2], x[3], x[4]) }
+                                else -> functions.functions5[candidate]?.let { { x: DoubleArray -> it.invoke(x[0], x[1], x[2], x[3], x[4]) } }
+                                        ?: errorValue(
+                                                "unresolved function: '${candidate}(x0, x1, x2, x3, x4)'"
+                                        ) { _ -> error("this is the error function") }
+                            }
                     functionStack.push(function)
                 }
                 else -> error("unsupported id-type $idType")
@@ -352,9 +352,9 @@ internal class ExpressionListener(val functions: FunctionExtensions = FunctionEx
 class ExpressionException(message: String) : RuntimeException(message)
 
 fun evaluateExpression(
-    input: String,
-    variables: Map<String, Double> = emptyMap(),
-    functions: FunctionExtensions = FunctionExtensions.EMPTY
+        input: String,
+        variables: Map<String, Double> = emptyMap(),
+        functions: FunctionExtensions = FunctionExtensions.EMPTY
 ): Double? {
     val lexer = KeyLangLexer(CharStreams.fromString(input))
 //
@@ -375,12 +375,12 @@ fun evaluateExpression(
     parser.removeErrorListeners()
     parser.addErrorListener(object : BaseErrorListener() {
         override fun syntaxError(
-            recognizer: Recognizer<*, *>?,
-            offendingSymbol: Any?,
-            line: Int,
-            charPositionInLine: Int,
-            msg: String?,
-            e: RecognitionException?
+                recognizer: Recognizer<*, *>?,
+                offendingSymbol: Any?,
+                line: Int,
+                charPositionInLine: Int,
+                msg: String?,
+                e: RecognitionException?
         ) {
             throw ExpressionException("parser error in expression: '$input'; [line: $line, character: $charPositionInLine ${offendingSymbol?.let { ", near: $it" } ?: ""} ]")
         }
