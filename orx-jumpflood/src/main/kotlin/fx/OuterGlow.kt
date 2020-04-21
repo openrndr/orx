@@ -47,13 +47,12 @@ class OuterGlow : Filter() {
     @DoubleParameter("image opacity", 0.0, 1.0)
     var imageOpacity = 1.0
 
-
     @ColorParameter("color")
     var color = ColorRGBa.WHITE
 
     private var jumpFlooder: JumpFlooder? = null
     private val decodeFilter = PixelDirection()
-    private val glowFilter = org.openrndr.extra.jumpfill.fx.OuterGlowFilter()
+    private val glowFilter = OuterGlowFilter()
 
     private var distance: ColorBuffer? = null
 

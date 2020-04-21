@@ -42,10 +42,12 @@ class PixelDistance : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/pixel
     var distanceScale: Double by parameters
     var originalSize: Vector2 by parameters
     var signedBit: Boolean by parameters
+    var signedDistance: Boolean by parameters
     init {
         distanceScale = 1.0
         originalSize = Vector2(512.0, 512.0)
         signedBit = true
+        signedDistance = false
     }
 }
 
@@ -120,7 +122,7 @@ class JumpFlooder(val width: Int, val height: Int, format: ColorFormat = ColorFo
     }
 }
 
-private fun encodeDecodeBitmap(drawer: Drawer, preprocess: Filter, decoder: Filter, bitmap: ColorBuffer,
+private fun encodeDecodeBitmap(preprocess: Filter, decoder: Filter, bitmap: ColorBuffer,
                                jumpFlooder: JumpFlooder? = null,
                                result: ColorBuffer? = null
 ): ColorBuffer {
@@ -136,7 +138,6 @@ private fun encodeDecodeBitmap(drawer: Drawer, preprocess: Filter, decoder: Filt
     if (jumpFlooder == null) {
         _jumpFlooder.destroy()
     }
-
     return _result
 }
 
@@ -144,19 +145,17 @@ private fun encodeDecodeBitmap(drawer: Drawer, preprocess: Filter, decoder: Filt
  * Creates a color buffer containing the coordinates of the nearest centroids
  * @param bitmap a ColorBuffer with centroids in red (> 0)
  */
-fun centroidsFromBitmap(drawer: Drawer, bitmap: ColorBuffer,
+fun centroidsFromBitmap(bitmap: ColorBuffer,
                         jumpFlooder: JumpFlooder? = null,
                         result: ColorBuffer? = null
-): ColorBuffer = encodeDecodeBitmap(drawer, passthrough, passthrough, bitmap, jumpFlooder, result)
+): ColorBuffer = encodeDecodeBitmap(passthrough, passthrough, bitmap, jumpFlooder, result)
 
-fun distanceFieldFromBitmap(drawer: Drawer, bitmap: ColorBuffer,
+fun distanceFieldFromBitmap(bitmap: ColorBuffer,
                             jumpFlooder: JumpFlooder? = null,
                             result: ColorBuffer? = null
-): ColorBuffer = encodeDecodeBitmap(drawer, contourPoints, pixelDistance, bitmap, jumpFlooder, result)
+): ColorBuffer = encodeDecodeBitmap(contourPoints, pixelDistance, bitmap, jumpFlooder, result)
 
-fun directionFieldFromBitmap(drawer: Drawer, bitmap: ColorBuffer,
+fun directionFieldFromBitmap(bitmap: ColorBuffer,
                              jumpFlooder: JumpFlooder? = null,
                              result: ColorBuffer? = null
-): ColorBuffer = encodeDecodeBitmap(drawer, contourPoints, pixelDirection, bitmap, jumpFlooder, result)
-
-
+): ColorBuffer = encodeDecodeBitmap(contourPoints, pixelDirection, bitmap, jumpFlooder, result)

@@ -13,9 +13,10 @@ private class InpaintFilter : Filter(filterShaderFromUrl(resourceUrl("/shaders/g
 
     var noise: Double by parameters
     var imageOpacity: Double by parameters
-    var opacity : Double by parameters
-    var shape : Double by parameters
+    var opacity: Double by parameters
+    var shape: Double by parameters
     var width: Double by parameters
+
     init {
         noise = 0.0
         imageOpacity = 1.0
@@ -33,7 +34,6 @@ class Inpaint : Filter() {
     @DoubleParameter("noise", 0.0, 1.0)
     var noise = 0.1
 
-
     @DoubleParameter("opacity", 0.0, 1.0)
     var opacity = 1.0
 
@@ -42,7 +42,6 @@ class Inpaint : Filter() {
 
     @DoubleParameter("shape", 0.0, 10.0)
     var shape = 0.0
-
 
     private var jumpFlooder: JumpFlooder? = null
     private val decodeFilter = PixelDirection()

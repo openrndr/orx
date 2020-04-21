@@ -24,6 +24,8 @@ class DistanceField : Filter() {
 
     private val decodeFilter = PixelDistance()
 
+    var signedDistance = false
+
     override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
         if (thresholded == null) {
             thresholded = colorBuffer(target[0].width, target[0].height, format = ColorFormat.R)
@@ -38,10 +40,11 @@ class DistanceField : Filter() {
         thresholdFilter.apply(source[0], thresholded!!)
         contourFilter.apply(thresholded!!, contoured!!)
         val result = jumpFlooder!!.jumpFlood(contoured!!)
+        decodeFilter.signedDistance = signedDistance
         decodeFilter.originalSize = Vector2(target[0].width * 1.0, target[0].height * 1.0)
         decodeFilter.distanceScale = distanceScale
         decodeFilter.signedBit = false
-        decodeFilter.apply(result, result)
+        decodeFilter.apply(arrayOf(result, thresholded!!), arrayOf(result))
         result.copyTo(target[0])
     }
 }
