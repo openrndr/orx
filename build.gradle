@@ -129,30 +129,30 @@ allprojects {
 
 }
 
-task collectScreenshots(dependsOn: 'classes') {
+
+task collectScreenshots {
     doFirst {
-        for (sub in project.subprojects) {
-            if (sub.sourceSets.hasProperty("demo")) {
-                def set = sub.sourceSets.demo
-                def ucl = new URLClassLoader(set.runtimeClasspath.collect { it.toURI().toURL() } as URL[])
-                for (x in set.output) {
-                    if (x.exists()) {
-                        for (y in x.listFiles()) {
-                            def name = y.name
-                            if (!name.contains('$') && name.contains(".class")) {
-                                def klass = ucl.loadClass(y.name.replace(".class", ""))
-                                try {
-                                    def mainMethod = klass.getMethod("main")
-                                    javaexec {
-                                        classpath set.runtimeClasspath
-                                        def className = y.name.replace(".class", "")
-                                        main = className
-                                        jvmArgs += "-DtakeScreenshot=true"
-                                        jvmArgs += "-DscreenshotPath=${sub.name}/images/${className}.png"
-                                    }
-                                } catch (e) {
-                                    // skip?
+        def demoProjects = project.subprojects.findAll { it.sourceSets.hasProperty("demo") }
+        for (sub in demoProjects) {
+            def set = sub.sourceSets.demo
+            def ucl = new URLClassLoader(set.runtimeClasspath.collect { it.toURI().toURL() } as URL[])
+            for (x in set.output) {
+                if (x.exists()) {
+                    for (y in x.listFiles()) {
+                        def name = y.name
+                        if (!name.contains('$') && name.contains(".class")) {
+                            def klass = ucl.loadClass(y.name.replace(".class", ""))
+                            try {
+                                def mainMethod = klass.getMethod("main")
+                                javaexec {
+                                    classpath set.runtimeClasspath
+                                    def className = y.name.replace(".class", "")
+                                    main = className
+                                    jvmArgs += "-DtakeScreenshot=true"
+                                    jvmArgs += "-DscreenshotPath=${sub.name}/images/${className}.png"
                                 }
+                            } catch (e) {
+                                // skip?
                             }
                         }
                     }
@@ -160,4 +160,7 @@ task collectScreenshots(dependsOn: 'classes') {
             }
         }
     }
+}
+collectScreenshots.dependsOn {
+    project.subprojects.findAll { it.sourceSets.hasProperty("demo") }.collect { it.tasks.demoClasses }
 }
