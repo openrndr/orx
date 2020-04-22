@@ -1,5 +1,6 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
+import org.openrndr.extensions.SingleScreenshot
 
 import org.openrndr.extra.shadestyles.radialGradient
 import kotlin.math.cos
@@ -7,6 +8,11 @@ import kotlin.math.cos
 fun main() {
     application {
         program {
+            if (System.getProperty("takeScreenshot") == "true") {
+                extend(SingleScreenshot()) {
+                    this.outputFile = System.getProperty("screenshotPath")
+                }
+            }
             extend {
                 drawer.shadeStyle = radialGradient(
                         ColorRGBa.PINK,

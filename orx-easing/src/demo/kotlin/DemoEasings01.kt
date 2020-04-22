@@ -1,11 +1,11 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
+import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extras.easing.*
 import org.openrndr.math.Vector2
 
 fun main() {
     application {
-
         configure {
             width = 1280
             height = 1080
@@ -19,14 +19,17 @@ fun main() {
                     points.add(Vector2(i*10.0, y))
                 }
                 drawer.lineStrip(points)
-
                 drawer.stroke = ColorRGBa.GRAY
                 drawer.lineSegment(0.0, 40.0, 400.0, 40.0)
-
-
                 drawer.lineSegment(0.0, 20.0, 400.0, 20.0)
-
             }
+
+            if (System.getProperty("takeScreenshot") == "true") {
+                extend(SingleScreenshot()) {
+                    this.outputFile = System.getProperty("screenshotPath")
+                }
+            }
+
             extend {
                 drawer.stroke = ColorRGBa.WHITE
 
@@ -62,9 +65,7 @@ fun main() {
                         ::easeBounceIn,
                         ::easeBounceOut,
                         ::easeBounceInOut
-
                 )
-
                 var i = 0
                 for (f in functions) {
                     drawEasing(f)
@@ -78,5 +79,4 @@ fun main() {
             }
         }
     }
-
 }

@@ -1,6 +1,7 @@
 import org.openrndr.application
 import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.shadeStyle
+import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extras.camera.Orbital
 import org.openrndr.extras.meshgenerators.*
 import org.openrndr.math.Vector2
@@ -11,7 +12,14 @@ import org.openrndr.shape.Circle
 fun main() {
     application {
         program {
-            extend(Orbital())
+            if (System.getProperty("takeScreenshot") == "true") {
+                extend(SingleScreenshot()) {
+                    this.outputFile = System.getProperty("screenshotPath")
+                }
+            }
+            extend(Orbital()) {
+                this.eye = Vector3(0.0, 30.0, 50.0)
+            }
             val m = meshGenerator {
 
                 grid(5,5, 5) { u, v, w ->

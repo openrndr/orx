@@ -6,6 +6,7 @@ import org.openrndr.draw.ColorType
 
 import org.openrndr.draw.isolatedWithTarget
 import org.openrndr.draw.renderTarget
+import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.jumpfill.fx.StraightSkeleton
 import org.openrndr.extra.noise.simplex
 
@@ -22,6 +23,12 @@ fun main() {
                 colorBuffer()
             }
             val field = input.colorBuffer(0).createEquivalent(type = ColorType.FLOAT32)
+
+            if (System.getProperty("takeScreenshot") == "true") {
+                extend(SingleScreenshot()) {
+                    this.outputFile = System.getProperty("screenshotPath")
+                }
+            }
             extend {
                 drawer.isolatedWithTarget(input) {
                     // -- draw something interesting

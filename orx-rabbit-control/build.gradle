@@ -21,6 +21,7 @@ dependencies {
     implementation "com.google.zxing:core:3.4.0"
     implementation "com.google.zxing:javase:3.4.0"
 
+    demoImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
     demoRuntimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
     demoRuntimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
     demoImplementation(sourceSets.getByName("main").output)

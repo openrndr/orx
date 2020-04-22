@@ -1,4 +1,5 @@
 import org.openrndr.application
+import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.keyframer.Keyframer
 import org.openrndr.panel.controlManager
 import org.openrndr.panel.elements.Range
@@ -29,8 +30,12 @@ fun main() = application {
                 }
             }
         }
+        if (System.getProperty("takeScreenshot") == "true") {
+            extend(SingleScreenshot()) {
+                this.outputFile = System.getProperty("screenshotPath")
+            }
+        }
         extend(cm)
-
         class Animation: Keyframer() {
             val position by Vector2Channel(arrayOf("x", "y"))
         }

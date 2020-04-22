@@ -29,3 +29,7 @@ Using the `Easing` enumeration
 ```kotlin
 val et = Easing.QuadIn.function(t, 0.0, 1.0, 1.0)
 ```
+
+## Demos
+[DemoEasings01Kt](src/demo/kotlin/DemoEasings01.kt)
+![Screenshot](images/DemoEasings01Kt.png)

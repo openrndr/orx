@@ -3,8 +3,10 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.colorBuffer
 import org.openrndr.draw.shadeStyle
+import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extras.camera.Orbital
 import org.openrndr.extras.meshgenerators.boxMesh
+import org.openrndr.math.Vector3
 
 fun main() {
     application {
@@ -18,8 +20,14 @@ fun main() {
                 }
             }
             s.upload()
-
-            extend(Orbital())
+            if (System.getProperty("takeScreenshot") == "true") {
+                extend(SingleScreenshot()) {
+                    this.outputFile = System.getProperty("screenshotPath")
+                }
+            }
+            extend(Orbital()) {
+                eye = Vector3(1.0, 1.0, 1.0)
+            }
             extend {
                 drawer.background(ColorRGBa.PINK)
                 drawer.shadeStyle = shadeStyle {

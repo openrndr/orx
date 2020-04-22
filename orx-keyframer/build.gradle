@@ -39,8 +39,10 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
 
     demoImplementation(project(":orx-camera"))
+
     demoImplementation(project(":orx-panel"))
     demoImplementation("org.openrndr:openrndr-core:$openrndrVersion")
+    demoImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
     demoRuntimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
     demoRuntimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
     demoImplementation(sourceSets.getByName("main").output)

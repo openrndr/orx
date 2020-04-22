@@ -1,6 +1,7 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.loadFont
+import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.parameters.*
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
@@ -48,7 +49,11 @@ fun main() = application {
         }
 
         rabbit.add(settings)
-
+        if (System.getProperty("takeScreenshot") == "true") {
+            extend(SingleScreenshot()) {
+                this.outputFile = System.getProperty("screenshotPath")
+            }
+        }
         extend(rabbit)
         extend {
             drawer.background(if (settings.b) ColorRGBa.BLUE else ColorRGBa.BLACK)

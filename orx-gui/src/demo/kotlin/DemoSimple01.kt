@@ -1,5 +1,6 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
+import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.gui.GUI
 import org.openrndr.extra.parameters.*
 import org.openrndr.math.Vector2
@@ -22,10 +23,13 @@ fun main() = application {
 
             @DoubleListParameter("a double list")
             var adl = MutableList(2) { 0.0 }
-
         }
-
         gui.add(settings)
+        if (System.getProperty("takeScreenshot") == "true") {
+            extend(SingleScreenshot()) {
+                this.outputFile = System.getProperty("screenshotPath")
+            }
+        }
         extend(gui)
         extend {
             drawer.fill = settings.color

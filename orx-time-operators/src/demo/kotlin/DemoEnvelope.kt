@@ -1,6 +1,7 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.isolated
+import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.timeoperators.Envelope
 import org.openrndr.extra.timeoperators.TimeOperators
 
@@ -10,6 +11,11 @@ fun main() {
             val size = Envelope(50.0, 400.0, 0.5, 0.5)
             val rotation = Envelope(easingFactor = 0.4)
 
+            if (System.getProperty("takeScreenshot") == "true") {
+                extend(SingleScreenshot()) {
+                    this.outputFile = System.getProperty("screenshotPath")
+                }
+            }
             extend(TimeOperators()) {
                 track(size, rotation)
             }

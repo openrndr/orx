@@ -1,6 +1,7 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.colorBuffer
+import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.noise.gradientPerturbFractal
 import org.openrndr.extra.noise.simplex
 import org.openrndr.math.Vector3
@@ -11,6 +12,11 @@ fun main() {
         program {
             val cb = colorBuffer(width, height)
             val shad = cb.shadow
+            if (System.getProperty("takeScreenshot") == "true") {
+                extend(SingleScreenshot()) {
+                    this.outputFile = System.getProperty("screenshotPath")
+                }
+            }
             extend {
                 for (y in 0 until height) {
                     for (x in 0 until width) {

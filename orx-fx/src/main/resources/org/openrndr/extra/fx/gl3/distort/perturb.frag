@@ -15,6 +15,9 @@ uniform sampler2D tex0;
 uniform int xSegments;
 uniform int ySegments;
 
+uniform bool outputUV;
+uniform vec2 offset;
+
 // varyings
 in vec2 v_texCoord0;
 
@@ -143,7 +146,7 @@ void main() {
     vec3 xseed = vec3(seed.xy, seed.z+cos(phase*3.1415926535));
     vec3 yseed = vec3(seed.yx, seed.z+sin(phase*3.1415926535));
 
-    vec3 uv = vec3(v_texCoord0, 1.0) * 2.0 - 1.0;
+    vec3 uv = vec3(v_texCoord0 + offset, 1.0) * 2.0 - 1.0;
     vec3 px = ((segment(uv, xSegments, ySegments) + xseed) * scale);
     vec3 py = ((segment(uv, xSegments, ySegments) + yseed + vec3(100.37, 40.51, 9.43)) * scale);
 
@@ -157,14 +160,17 @@ void main() {
 
     vec2 distCoord = v_texCoord0 + vec2(tx, ty);
 
-    if (distCoord.x >= 0.0 && distCoord.y >= 0.0 && distCoord.x < 1.0 && distCoord.y < 1.0) {
-
-        if (xSegments == 0 && ySegments == 0) {
-            o_output = texture(tex0, distCoord);
+    if (!outputUV) {
+        if (distCoord.x >= 0.0 && distCoord.y >= 0.0 && distCoord.x < 1.0 && distCoord.y < 1.0) {
+            if (xSegments == 0 && ySegments == 0) {
+                o_output = texture(tex0, distCoord);
+            } else {
+                o_output = textureLod(tex0, distCoord, 0.0);
+            }
         } else {
-            o_output = textureLod(tex0, distCoord, 0.0);
+            o_output = vec4(0.0);
         }
     } else {
-        o_output = vec4(0.0);
+        o_output = vec4(distCoord, 0.0, 1.0);
     }
 }
