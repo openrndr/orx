@@ -1,14 +1,13 @@
 package org.openrndr.extra.noise
 
-import org.openrndr.extra.noise.*
-import org.openrndr.extra.noise.fbm as orxFbm
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
 import kotlin.math.ln
 import kotlin.math.max
-import kotlin.math.sqrt
 import kotlin.math.pow
+import kotlin.math.sqrt
+import org.openrndr.extra.noise.fbm as orxFbm
 import kotlin.random.Random as DefaultRandom
 
 
@@ -165,6 +164,16 @@ object Random {
         }
     }
 
+    fun perlin(position: Vector2, type: Noise = Noise.LINEAR): Double {
+        val sd = stringToInt(seed)
+
+        return when (type) {
+            Noise.LINEAR -> perlinLinear(sd, position)
+            Noise.QUINTIC -> perlinQuintic(sd, position)
+            Noise.HERMIT -> perlinHermite(sd, position)
+        }
+    }
+
     fun perlin(x: Double, y: Double, z: Double, type: Noise = Noise.LINEAR): Double {
         val sd = stringToInt(seed)
 
@@ -172,6 +181,16 @@ object Random {
             Noise.LINEAR -> perlinLinear(sd, x, y, z)
             Noise.QUINTIC -> perlinQuintic(sd, x, y, z)
             Noise.HERMIT -> perlinHermite(sd, x, y, z)
+        }
+    }
+
+    fun perlin(position: Vector3, type: Noise = Noise.LINEAR): Double {
+        val sd = stringToInt(seed)
+
+        return when (type) {
+            Noise.LINEAR -> perlinLinear(sd, position)
+            Noise.QUINTIC -> perlinQuintic(sd, position)
+            Noise.HERMIT -> perlinHermite(sd, position)
         }
     }
 
@@ -185,6 +204,16 @@ object Random {
         }
     }
 
+    fun value(position: Vector2, type: Noise = Noise.LINEAR): Double {
+        val sd = stringToInt(seed)
+
+        return when (type) {
+            Noise.LINEAR -> valueLinear(sd, position)
+            Noise.QUINTIC -> valueQuintic(sd, position)
+            Noise.HERMIT -> valueHermite(sd, position)
+        }
+    }
+
     fun value(x: Double, y: Double, z: Double, type: Noise = Noise.LINEAR): Double {
         val sd = stringToInt(seed)
 
@@ -195,16 +224,38 @@ object Random {
         }
     }
 
+    fun value(position: Vector3, type: Noise = Noise.LINEAR): Double {
+        val sd = stringToInt(seed)
+
+        return when (type) {
+            Noise.LINEAR -> valueLinear(sd, position)
+            Noise.QUINTIC -> valueQuintic(sd, position)
+            Noise.HERMIT -> valueHermite(sd, position)
+        }
+    }
+
     fun simplex(x: Double, y: Double): Double {
         return simplex(stringToInt(seed), x, y)
+    }
+
+    fun simplex(position: Vector2): Double {
+        return simplex(stringToInt(seed), position)
     }
 
     fun simplex(x: Double, y: Double, z: Double): Double {
         return simplex(stringToInt(seed), x, y, z)
     }
 
+    fun simplex(position: Vector3): Double {
+        return simplex(stringToInt(seed), position)
+    }
+
     fun simplex(x: Double, y: Double, z: Double, w: Double): Double {
         return simplex(stringToInt(seed), x, y, z, w)
+    }
+
+    fun simplex(position: Vector4): Double {
+        return simplex(stringToInt(seed), position)
     }
 
     fun fbm(x: Double, y: Double, noiseFun: (Int, Double, Double) -> Double, type: Fractal = Fractal.FBM,
@@ -215,6 +266,18 @@ object Random {
             Fractal.FBM -> orxFbm(s, x, y, noiseFun, octaves, lacunarity, gain)
             Fractal.RIGID -> rigid(s, x, y, noiseFun, octaves, lacunarity, gain)
             Fractal.BILLOW -> billow(s, x, y, noiseFun, octaves, lacunarity, gain)
+        }
+    }
+
+    fun fbm(position: Vector2, noiseFun: (Int, Double, Double) -> Double,
+            type: Fractal = Fractal.FBM,
+            octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5): Double {
+        val s = stringToInt(seed)
+
+        return when (type) {
+            Fractal.FBM -> orxFbm(s, position, noiseFun, octaves, lacunarity, gain)
+            Fractal.RIGID -> rigid(s, position, noiseFun, octaves, lacunarity, gain)
+            Fractal.BILLOW -> billow(s, position, noiseFun, octaves, lacunarity, gain)
         }
     }
 
@@ -229,12 +292,32 @@ object Random {
         }
     }
 
+    fun fbm(position: Vector3, noiseFun: (Int, Double, Double, Double) -> Double,
+            type: Fractal = Fractal.FBM, octaves: Int = 8,
+            lacunarity: Double = 0.5, gain: Double = 0.5): Double {
+        val s = stringToInt(seed)
+
+        return when (type) {
+            Fractal.FBM -> orxFbm(s, position, noiseFun, octaves, lacunarity, gain)
+            Fractal.RIGID -> rigid(s, position, noiseFun, octaves, lacunarity, gain)
+            Fractal.BILLOW -> billow(s, position, noiseFun, octaves, lacunarity, gain)
+        }
+    }
+
     fun cubic(x: Double, y: Double): Double {
         return cubic(stringToInt(seed), x, y)
     }
 
+    fun cubic(position: Vector2): Double {
+        return cubic(stringToInt(seed), position)
+    }
+
     fun cubic(x: Double, y: Double, z: Double): Double {
         return cubic(stringToInt(seed), x, y, z)
+    }
+
+    fun cubic(position: Vector3):Double {
+        return cubic(stringToInt(seed), position)
     }
 
     fun ring2d(innerRadius: Double = 0.0, outerRadius: Double = 1.0, count: Int = 1): Any {

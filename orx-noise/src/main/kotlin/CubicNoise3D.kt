@@ -1,11 +1,18 @@
 package org.openrndr.extra.noise
 
+import org.openrndr.math.Vector3
+
 private const val CUBIC_3D_BOUNDING = 1 / (1.5 * 1.5 * 1.5).toFloat()
 
 fun cubic(seed: Int, x: Double, y: Double, z: Double) = cubic(seed, x, y, z, ::linear)
 fun cubicLinear(seed: Int, x: Double, y: Double, z: Double) = cubic(seed, x, y, z, ::linear)
 fun cubicQuintic(seed: Int, x: Double, y: Double, z: Double) = cubic(seed, x, y, z, ::quintic)
 fun cubicHermite(seed: Int, x: Double, y: Double, z: Double) = perlin(seed, x, y, z, ::hermite)
+
+fun cubic(seed: Int, position: Vector3) = cubic(seed, position.x, position.y, position.z, ::linear)
+fun cubicLinear(seed: Int, position: Vector3) = cubic(seed, position.x, position.y, position.z, ::linear)
+fun cubicQuintic(seed: Int, position: Vector3) = cubic(seed, position.x, position.y, position.z, ::quintic)
+fun cubicHermite(seed: Int, position: Vector3) = perlin(seed, position.x, position.y, position.z, ::hermite)
 
 fun cubic(seed: Int, x: Double, y: Double, z: Double, interpolator: (Double) -> Double): Double {
     val x1 = x.fastFloor()

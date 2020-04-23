@@ -1,9 +1,12 @@
 package org.openrndr.extra.noise
 
+import org.openrndr.math.Vector3
 
 private const val F3 = (1.0 / 3.0).toFloat()
 private const val G3 = (1.0 / 6.0).toFloat()
 private const val G33 = G3 * 3 - 1
+
+fun simplex(seed: Int, position: Vector3): Double = simplex(seed, position.x, position.y, position.z)
 
 fun simplex(seed: Int, x: Double, y: Double, z: Double): Double {
 

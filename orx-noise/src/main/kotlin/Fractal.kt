@@ -1,7 +1,13 @@
 package org.openrndr.extra.noise
 
+import org.openrndr.math.Vector2
+import org.openrndr.math.Vector3
+import org.openrndr.math.Vector4
 import kotlin.math.abs
 
+inline fun fbm(seed: Int, position: Vector4, crossinline noise: (Int, Double, Double, Double, Double) -> Double,
+               octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5) =
+        fbm(seed, position.x, position.y, position.z, position.w, noise, octaves, lacunarity, gain)
 
 inline fun fbm(seed: Int, x: Double, y: Double, z: Double, w: Double, crossinline noise: (Int, Double, Double, Double, Double) -> Double,
                octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5): Double {
@@ -23,6 +29,10 @@ inline fun fbm(seed: Int, x: Double, y: Double, z: Double, w: Double, crossinlin
     return sum
 }
 
+inline fun fbm(seed: Int, position: Vector3, crossinline noise: (Int, Double, Double, Double) -> Double,
+               octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5) =
+        fbm(seed, position.x, position.y, position.z, noise, octaves, lacunarity, gain)
+
 inline fun fbm(seed: Int, x: Double, y: Double, z: Double, crossinline noise: (Int, Double, Double, Double) -> Double,
                octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5): Double {
     var sum = noise(seed, x, y, z)
@@ -40,6 +50,10 @@ inline fun fbm(seed: Int, x: Double, y: Double, z: Double, crossinline noise: (I
     }
     return sum
 }
+
+inline fun fbm(seed: Int, position: Vector2, crossinline noise: (Int, Double, Double) -> Double,
+               octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5) =
+        fbm(seed, position.x, position.y, noise, octaves, lacunarity, gain)
 
 inline fun fbm(seed: Int, x: Double, y: Double, crossinline noise: (Int, Double, Double) -> Double,
                octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5): Double {
@@ -95,7 +109,9 @@ inline fun fbmFunc4D(crossinline noise: (Int, Double, Double, Double, Double) ->
     }
 }
 
-
+inline fun billow(seed: Int, position: Vector4, crossinline noise: (Int, Double, Double, Double, Double) -> Double,
+                  octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5) = billow(seed, position.x, position.y,
+        position.z, position.w, noise, octaves, lacunarity, gain)
 
 inline fun billow(seed: Int, x: Double, y: Double, z: Double, w: Double, crossinline noise: (Int, Double, Double, Double, Double) -> Double,
                   octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5): Double {
@@ -117,6 +133,10 @@ inline fun billow(seed: Int, x: Double, y: Double, z: Double, w: Double, crossin
     return sum
 }
 
+inline fun billow(seed: Int, position: Vector3, crossinline noise: (Int, Double, Double, Double) -> Double,
+                  octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5) =
+        billow(seed, position.x, position.y, position.z, noise, octaves, lacunarity, gain)
+
 inline fun billow(seed: Int, x: Double, y: Double, z: Double, crossinline noise: (Int, Double, Double, Double) -> Double,
                   octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5): Double {
     var sum = Math.abs(noise(seed, x, y, z) * 2.0 - 1.0)
@@ -134,6 +154,10 @@ inline fun billow(seed: Int, x: Double, y: Double, z: Double, crossinline noise:
     }
     return sum
 }
+
+inline fun billow(seed: Int, position: Vector2, crossinline noise: (Int, Double, Double) -> Double,
+                  octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5) =
+        billow(seed, position.x, position.y, noise, octaves, lacunarity, gain)
 
 inline fun billow(seed: Int, x: Double, y: Double, crossinline noise: (Int, Double, Double) -> Double,
                   octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5): Double {
@@ -189,6 +213,10 @@ inline fun billowFunc4D(crossinline noise: (Int, Double, Double, Double, Double)
     }
 }
 
+inline fun rigid(seed: Int, position: Vector4, crossinline noise: (Int, Double, Double, Double, Double) -> Double,
+                 octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5) =
+        rigid(seed, position.x, position.y, position.z, position.w, noise, octaves, lacunarity, gain)
+
 inline fun rigid(seed: Int, x: Double, y: Double, z: Double, w: Double, crossinline noise: (Int, Double, Double, Double, Double) -> Double,
                  octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5): Double {
     var sum = 1.0 - Math.abs(noise(seed, x, y, z, w))
@@ -209,6 +237,10 @@ inline fun rigid(seed: Int, x: Double, y: Double, z: Double, w: Double, crossinl
     return sum
 }
 
+inline fun rigid(seed: Int, position: Vector3, crossinline noise: (Int, Double, Double, Double) -> Double,
+                 octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5) =
+        rigid(seed, position.x, position.y, position.z, noise, octaves, lacunarity, gain)
+
 inline fun rigid(seed: Int, x: Double, y: Double, z: Double, crossinline noise: (Int, Double, Double, Double) -> Double,
                  octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5): Double {
     var sum = 1.0 - Math.abs(noise(seed, x, y, z))
@@ -226,6 +258,10 @@ inline fun rigid(seed: Int, x: Double, y: Double, z: Double, crossinline noise: 
     }
     return sum
 }
+
+inline fun rigid(seed: Int, position: Vector2, crossinline noise: (Int, Double, Double) -> Double,
+                 octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5) =
+        rigid(seed, position.x, position.y, noise, octaves, lacunarity, gain)
 
 inline fun rigid(seed: Int, x: Double, y: Double, crossinline noise: (Int, Double, Double) -> Double,
                  octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5): Double {

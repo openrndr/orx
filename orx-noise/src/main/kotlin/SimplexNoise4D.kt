@@ -1,5 +1,7 @@
 package org.openrndr.extra.noise
 
+import org.openrndr.math.Vector4
+
 private val SIMPLEX_4D = byteArrayOf(
         0, 1, 2, 3, 0, 1, 3, 2, 0, 0, 0, 0, 0, 2, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 0,
         0, 2, 1, 3, 0, 0, 0, 0, 0, 3, 1, 2, 0, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 2, 0,
@@ -14,6 +16,8 @@ private val SIMPLEX_4D = byteArrayOf(
 private const val F4 = ((2.23606797 - 1.0) / 4.0)
 private const val G4 = ((5.0 - 2.23606797) / 20.0)
 
+fun simplex(seed: Int, position: Vector4) =
+        simplex(seed, position.x, position.y, position.z, position.w)
 
 fun simplex(seed: Int, x: Double, y: Double, z: Double, w: Double): Double {
 

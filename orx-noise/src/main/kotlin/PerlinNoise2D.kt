@@ -1,9 +1,16 @@
 package org.openrndr.extra.noise
 
+import org.openrndr.math.Vector2
+
 fun perlin(seed: Int, x: Double, y: Double) = perlin(seed, x, y, ::linear)
 fun perlinLinear(seed: Int, x: Double, y: Double) = perlin(seed, x, y, ::linear)
 fun perlinQuintic(seed: Int, x: Double, y: Double) = perlin(seed, x, y, ::quintic)
 fun perlinHermite(seed: Int, x: Double, y: Double) = perlin(seed, x, y, ::hermite)
+
+fun perlin(seed: Int, position: Vector2) = perlin(seed, position.x, position.y, ::linear)
+fun perlinLinear(seed: Int, position: Vector2) = perlin(seed, position.x, position.y, ::linear)
+fun perlinQuintic(seed: Int, position: Vector2) = perlin(seed, position.x, position.y, ::quintic)
+fun perlinHermite(seed: Int, position: Vector2) = perlin(seed, position.x, position.y, ::hermite)
 
 inline fun perlin(seed: Int, x: Double, y: Double, crossinline interpolator: (Double) -> Double): Double {
     val x0 = x.fastFloor()
