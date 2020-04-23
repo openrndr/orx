@@ -1,8 +1,12 @@
 package org.openrndr.extra.noise
 
+import org.openrndr.math.Vector2
+
 private const val SQRT3 = 1.7320508075688772935274463415059
 private const val F2 = 0.5 * (SQRT3 - 1.0)
 private const val G2 = (3.0 - SQRT3) / 6.0
+
+fun simplex(seed: Int, position: Vector2): Double = simplex(seed, position.x, position.y)
 
 fun simplex(seed: Int, x: Double, y: Double): Double {
     var t = (x + y) * F2

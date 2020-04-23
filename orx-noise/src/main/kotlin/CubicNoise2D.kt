@@ -1,10 +1,19 @@
 package org.openrndr.extra.noise
 
+import org.openrndr.math.Vector2
+
+fun cubic(seed: Int, x: Double, y: Double) = cubic(seed, x, y, ::linear)
 fun cubicLinear(seed: Int, x: Double, y: Double) = cubic(seed, x, y, ::linear)
 fun cubicQuintic(seed: Int, x: Double, y: Double) = cubic(seed, x, y, ::quintic)
 fun cubicHermite(seed: Int, x: Double, y: Double) = cubic(seed, x, y, ::hermite)
 
+fun cubic(seed: Int, position: Vector2) = cubic(seed, position.x, position.y, ::linear)
+fun cubicLinear(seed: Int, position: Vector2) = cubic(seed, position.x, position.y, ::linear)
+fun cubicQuintic(seed: Int, position: Vector2) = cubic(seed, position.x, position.y, ::quintic)
+fun cubicHermite(seed: Int, position: Vector2) = cubic(seed, position.x, position.y, ::hermite)
+
 private const val CUBIC_2D_BOUNDING = 1 / (1.5 * 1.5).toFloat()
+
 fun cubic(seed: Int, x: Double, y: Double, interpolator: (Double) -> Double = ::linear): Double {
     val x1 = x.fastFloor()
     val y1 = y.fastFloor()
