@@ -42,11 +42,12 @@ object TestGlslify : Spek({
         describe("should import everything in order + write naming") {
             val url = resourceUrl("/a.glsl")
             val processed = preprocessGlslifyFromUrl(url, glslifyPath = glslifyPath)
-
+            println(processed)
             processed shouldContainAll listOf(
                 "float add(float a, float b)",
                 "float multiply(float a, float b)",
                 "float equation(float a, float b)",
+                "float subtract(float a, float b)",
                 "float luminance(vec3 color)",
                 "void main()"
             )
@@ -80,6 +81,19 @@ float luma(vec3 color) {
 float luma(vec4 color) {
   return dot(color.rgb, vec3(0.299, 0.587, 0.114));
 }"""
+        }
+
+        describe("should import multiple from same package") {
+            val shader = """#version 330
+#pragma glslify: snoise = require(glsl-noise/simplex/2d)
+#pragma glslify: cnoise = require(glsl-noise/classic/2d)
+"""
+            val processed = preprocessGlslify(shader, glslifyPath = glslifyPath)
+
+            processed shouldContainAll listOf(
+                    "float snoise(vec2 v)",
+                    "float cnoise(vec2 P)"
+            )
         }
     }
 })

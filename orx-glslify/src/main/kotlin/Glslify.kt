@@ -13,6 +13,7 @@ import kotlin.streams.toList
 
 internal const val BASE_URL = "https://registry.npmjs.org"
 internal const val IMPORT_PATT = """#pragma\sglslify:\s([\w]+).*\s=\s*require\('?([\w\-\\/]+).*'?\)$"""
+internal const val IMPORT_RELATIVE_PATT = """#pragma\sglslify:\s([\w]+).*\s=\s*require\('?(\./[\w\-\\/]+).*'?\)$"""
 internal const val EXPORT_PATT = """#pragma\sglslify:\s*export\(([\w\-]+)\)"""
 internal const val PRAGMA_IDENTIFIER = "#pragma glslify"
 
@@ -26,85 +27,131 @@ fun preprocessGlslifyFromUrl(url: String, glslifyPath: String = "src/main/resour
     return preprocessGlslify(codeFromURL(url), glslifyPath)
 }
 
+data class GlslifyModule(
+        val requirePath: String,
+        val functionName: String,
+        val lineNumber: Int
+) {
+    private var shaderFile: MutableList<String> = mutableListOf()
+
+    lateinit var moduleName: String
+    lateinit var shaderFilePath: Path
+
+    var exportName: String? = null
+
+    private val dependencies = mutableListOf<GlslifyModule>()
+
+    fun import(glslifyPath: String): String {
+        val parsed = parseModule(requirePath)
+
+        moduleName = parsed.first
+        shaderFilePath = parsed.second
+
+        val importPath = Paths.get(glslifyPath).resolve(moduleName)
+
+        shaderFile = glslifyImport(moduleName, importPath, shaderFilePath)
+
+        dependencies.asReversed().map {
+            shaderFile[it.lineNumber] = it.import(glslifyPath)
+        }
+
+        var shader = shaderFile.joinToString("\n")
+
+        if (exportName != null) {
+            shader = shader.replace(exportName!!, functionName)
+        }
+
+        return shader.trimMargin()
+    }
+
+    private fun glslifyImport(moduleName: String, moduleDir: Path, shaderPath: Path): MutableList<String> {
+        if (!Files.exists(moduleDir)) {
+            fetchModule(moduleName, moduleDir)
+        } else {
+            logger.trace("[glslify] $moduleName already exists.. Skipping download")
+        }
+
+        val shaderFile: Path
+
+        try {
+            shaderFile = shaderExtensions.map {
+                moduleDir.resolve("$shaderPath.$it")
+            }.first { Files.exists(it) }
+        } catch (ex: NoSuchElementException) {
+            throw error("[glslify] $moduleName: $shaderPath doesn't lead to any shader file")
+        }
+
+        return Files.lines(shaderFile).toList().mapIndexed { dependencyLineNumber, line ->
+            if (line.startsWith(PRAGMA_IDENTIFIER)) {
+                Regex(IMPORT_PATT).find(line)?.let {
+                    val functionName = it.groupValues[1]
+                    val dependencyRequirePath = it.groupValues[2]
+
+                    if (importTree.contains(dependencyRequirePath)) return@mapIndexed ""
+
+                    importTree.add(dependencyRequirePath)
+
+                    dependencies.add(GlslifyModule(dependencyRequirePath, functionName, dependencyLineNumber))
+                }
+
+                Regex(IMPORT_RELATIVE_PATT).find(line)?.let {
+                    val functionName = it.groupValues[1]
+                    val dependencyRequirePath = it.groupValues[2]
+
+                    if (importTree.contains(dependencyRequirePath)) return@mapIndexed ""
+
+                    importTree.add(dependencyRequirePath)
+
+                    val dependency = moduleDir.fileName.resolve(Paths.get(dependencyRequirePath).normalize()).toString()
+
+                    dependencies.add(GlslifyModule(dependency, functionName, dependencyLineNumber))
+                }
+
+                Regex(EXPORT_PATT).find(line)?.let {
+                    if (it.groupValues.size > 1) {
+                        exportName = it.groupValues[1]
+                    }
+
+                    return@mapIndexed ""
+                }
+            }
+
+            line
+        }.toMutableList()
+    }
+}
+
+internal val stack = mutableListOf<GlslifyModule>()
 
 fun preprocessGlslify(source: String, glslifyPath: String = "src/main/resources/glslify"): String {
     importTree = mutableSetOf()
 
-    return source.split("\n").map { line ->
+    stack.clear()
+
+    val mainShader = source.split("\n").mapIndexed { lineNumber, line ->
         if (line.trimStart().startsWith(PRAGMA_IDENTIFIER)) {
             Regex(IMPORT_PATT).find(line)?.let {
                 if (it.groupValues.size > 1) {
                     val functionName = it.groupValues[1]
-                    val module = it.groupValues[2]
+                    val requirePath = it.groupValues[2]
 
-                    val (moduleName, shaderPath) = parseModule(module)
-                    val importPath = Paths.get(glslifyPath).resolve(moduleName)
+                    if (importTree.contains(requirePath)) return@mapIndexed ""
 
-                    if (importTree.contains(moduleName)) return@map ""
+                    importTree.add(requirePath)
 
-                    importTree.add(moduleName)
-
-                    return@map glslifyImport(moduleName, importPath, shaderPath, functionName, glslifyPath)
+                    stack.add(GlslifyModule(requirePath, functionName, lineNumber))
                 }
             }
         }
 
         line
-    }.joinToString("\n").trimMargin()
-}
+    }.toMutableList()
 
-private fun glslifyImport(moduleName: String, moduleDir: Path, shaderPath: Path, renameFunctionTo: String? = null, glslifyPath: String): String {
-    if (!Files.exists(moduleDir)) {
-        fetchModule(moduleName, moduleDir)
-    } else {
-        logger.trace("[glslify] $moduleName already exists.. Skipping download")
+    stack.asReversed().forEach {
+        mainShader[it.lineNumber] = it.import(glslifyPath)
     }
 
-    val shaderFile: Path
-
-    try {
-        shaderFile = shaderExtensions.map {
-            moduleDir.resolve("$shaderPath.$it")
-        }.first { Files.exists(it) }
-    } catch (ex: NoSuchElementException) {
-        throw error("[glslify] $moduleName: $shaderPath doesn't lead to any shader file")
-    }
-
-    var exportName: String? = null
-
-    var shader = Files.lines(shaderFile).map { line ->
-        if (line.startsWith(PRAGMA_IDENTIFIER)) {
-            Regex(IMPORT_PATT).find(line)?.let {
-                val functionName = it.groupValues[1]
-                val module = it.groupValues[2]
-
-                val (innerModuleName, innerShaderPath) = parseModule(module)
-                val importPath = Paths.get(glslifyPath).resolve(moduleName)
-
-                if (importTree.contains(innerModuleName)) return@map ""
-
-                importTree.add(innerModuleName)
-
-                return@map glslifyImport(innerModuleName, importPath, innerShaderPath, functionName, glslifyPath)
-            }
-
-            Regex(EXPORT_PATT).find(line)?.let {
-                if (it.groupValues.size > 1) {
-                    exportName = it.groupValues[1]
-                }
-
-                return@map ""
-            }
-        }
-
-        line
-    }.toList().joinToString("\n")
-
-    if (renameFunctionTo != null && exportName != null) {
-        shader = shader.replace( exportName!!, renameFunctionTo)
-    }
-
-    return shader.trimMargin()
+    return mainShader.joinToString("\n").trimMargin()
 }
 
 internal fun fetchModule(moduleName: String, moduleDir: Path) {
