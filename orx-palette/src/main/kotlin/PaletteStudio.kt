@@ -13,6 +13,7 @@ import org.openrndr.color.ColorRGBa.Companion.GREEN
 import org.openrndr.color.ColorRGBa.Companion.PINK
 import org.openrndr.color.ColorRGBa.Companion.RED
 import org.openrndr.color.ColorRGBa.Companion.YELLOW
+import org.openrndr.color.ColorRGBa.Companion.fromHex
 import org.openrndr.resourceUrl
 import java.io.File
 import java.net.URL
