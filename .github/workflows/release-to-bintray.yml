@@ -13,4 +13,7 @@ jobs:
         with:
           java-version: 8
       - name: Build and release to Bintray
+        env:
+          BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
+          BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
         run: ./gradlew -Prelease.useLastTag=true candidate publishNebulaPublicationToBintrayRepository --info
