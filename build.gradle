@@ -155,6 +155,7 @@ task collectScreenshots {
                                     main = className
                                     jvmArgs += "-DtakeScreenshot=true"
                                     jvmArgs += "-DscreenshotPath=${sub.name}/images/${className}.png"
+                                    jvmArgs += "-Dorg.openrndr.exceptions=JVM"
                                     executable = "./build-tools/xvfb-java.sh"
                                 }
                             } catch (e) {
