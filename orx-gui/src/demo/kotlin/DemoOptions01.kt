@@ -3,24 +3,24 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.gui.GUI
 import org.openrndr.extra.parameters.*
-import org.openrndr.math.Vector2
 
 /**
- * A simple demonstration of a GUI for drawing a single circle
+ * A simple demonstration of a GUI with a drop down menu
  */
 
-enum class SomeOptions {
-    Default,
-    DoNothing,
-    Smile
+enum class BackgroundColors {
+    Pink,
+    Black,
+    Yellow
 }
 
 fun main() = application {
     program {
         val gui = GUI()
+        gui.compartmentsCollapsedByDefault = false
         val settings = @Description("Settings") object {
-            @OptionParameter("action")
-            var option = SomeOptions.Default
+            @OptionParameter("Background color")
+            var option = BackgroundColors.Pink
         }
 
         gui.add(settings)
@@ -32,9 +32,9 @@ fun main() = application {
         extend(gui)
         extend {
             when(settings.option) {
-                SomeOptions.Default -> drawer.background(ColorRGBa.PINK)
-                SomeOptions.DoNothing -> drawer.background(ColorRGBa.BLACK)
-                SomeOptions.Smile -> drawer.background(ColorRGBa.YELLOW)
+                BackgroundColors.Pink -> drawer.background(ColorRGBa.PINK)
+                BackgroundColors.Black -> drawer.background(ColorRGBa.BLACK)
+                BackgroundColors.Yellow -> drawer.background(ColorRGBa.YELLOW)
             }
         }
     }
