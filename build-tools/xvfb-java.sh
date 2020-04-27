@@ -1,2 +1,2 @@
 #/bin/bash
-xvfb-run -e /dev/stdout -a java "$@"
+xvfb-run -e /dev/stdout java "$@"
