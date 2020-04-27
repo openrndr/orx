@@ -19,7 +19,7 @@ jobs:
         run: ./gradlew -Prelease.useLastTag=true candidate publishToMavenLocal --info
       - name: Zip and publish to Bintray
         run: |
-          cd ~/.m2
+          cd ~/.m2/repository
           zip release.zip org/openrndr/extra/*/${RELEASE_VERSION}/*
           curl -u ${{ secrets.BINTRAY_USER }}:${{ secrets.BINTRAY_KEY }} -X PUT https://api.bintray.com/content/openrndr/openrndr/ \
             -H "X-Bintray-Package:orx" \
