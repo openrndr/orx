@@ -27,6 +27,6 @@ jobs:
           git config --global user.name "OPENRNDR Actions"
           git reset HEAD -- .
           git checkout --orphan media
-          git add [a-z-]/images/*.png
+          git add [a-z-]*/images/*.png
           git commit -m "auto generated media"
           git push -f origin media
