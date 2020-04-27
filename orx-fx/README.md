@@ -100,6 +100,6 @@ All distortion effects are opacity preserving
 [DemoFluidDistort01Kt](src/demo/kotlin/DemoFluidDistort01Kt.kt
 ![DemoFluidDistort01Kt](https://github.com/openrndr/orx/blob/media/orx-fx/images/DemoFluidDistort01Kt.png
 <!-- __demos__ -->
-# Demos
+## Demos
 [DemoFluidDistort01Kt](src/demo/kotlin/DemoFluidDistort01Kt.kt)
 ![DemoFluidDistort01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoFluidDistort01Kt.png)

@@ -148,7 +148,7 @@ Supported functions in expressions:
 [DemoSimpleRepetitions01Kt](src/demo/kotlin/DemoSimpleRepetitions01Kt.kt
 ![DemoSimpleRepetitions01Kt](https://github.com/openrndr/orx/blob/media/orx-keyframer/images/DemoSimpleRepetitions01Kt.png
 <!-- __demos__ -->
-# Demos
+## Demos
 [DemoFull01Kt](src/demo/kotlin/DemoFull01Kt.kt)
 ![DemoFull01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-keyframer/images/DemoFull01Kt.png)
 [DemoScrub01Kt](src/demo/kotlin/DemoScrub01Kt.kt)

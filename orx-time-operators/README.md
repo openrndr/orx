@@ -47,7 +47,7 @@ drawer.circle(0.0, 0.0, size.sine(freq, phase))
 [DemoLFOKt](src/demo/kotlin/DemoLFOKt.kt
 ![DemoLFOKt](https://github.com/openrndr/orx/blob/media/orx-time-operators/images/DemoLFOKt.png
 <!-- __demos__ -->
-# Demos
+## Demos
 [DemoEnvelopeKt](src/demo/kotlin/DemoEnvelopeKt.kt)
 ![DemoEnvelopeKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-time-operators/images/DemoEnvelopeKt.png)
 [DemoLFOKt](src/demo/kotlin/DemoLFOKt.kt)

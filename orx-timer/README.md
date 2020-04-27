@@ -46,7 +46,7 @@ Note that drawing inside the `repeat` action has no effect. Have a look at the d
 [DemoTimeOut01Kt](src/demo/kotlin/DemoTimeOut01Kt.kt
 ![DemoTimeOut01Kt](https://github.com/openrndr/orx/blob/media/orx-timer/images/DemoTimeOut01Kt.png
 <!-- __demos__ -->
-# Demos
+## Demos
 [DemoRepeat01Kt](src/demo/kotlin/DemoRepeat01Kt.kt)
 ![DemoRepeat01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-timer/images/DemoRepeat01Kt.png)
 [DemoRepeat02Kt](src/demo/kotlin/DemoRepeat02Kt.kt)
