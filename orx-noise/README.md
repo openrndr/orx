@@ -159,3 +159,19 @@ val v6 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 val v7 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 ```
+<!-- __demos__ >
+# Demos
+[DemoGradientPerturb2DKt](src/demo/kotlin/DemoGradientPerturb2DKt.kt
+![DemoGradientPerturb2DKt](https://github.com/openrndr/orx/blob/media/orx-noise/images/DemoGradientPerturb2DKt.png
+[DemoGradientPerturb3DKt](src/demo/kotlin/DemoGradientPerturb3DKt.kt
+![DemoGradientPerturb3DKt](https://github.com/openrndr/orx/blob/media/orx-noise/images/DemoGradientPerturb3DKt.png
+[DemoPoissonDiskSamplingKt](src/demo/kotlin/DemoPoissonDiskSamplingKt.kt
+![DemoPoissonDiskSamplingKt](https://github.com/openrndr/orx/blob/media/orx-noise/images/DemoPoissonDiskSamplingKt.png
+<!-- __demos__ -->
+# Demos
+[DemoGradientPerturb2DKt](src/demo/kotlin/DemoGradientPerturb2DKt.kt)
+![DemoGradientPerturb2DKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoGradientPerturb2DKt.png)
+[DemoGradientPerturb3DKt](src/demo/kotlin/DemoGradientPerturb3DKt.kt)
+![DemoGradientPerturb3DKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoGradientPerturb3DKt.png)
+[DemoPoissonDiskSamplingKt](src/demo/kotlin/DemoPoissonDiskSamplingKt.kt)
+![DemoPoissonDiskSamplingKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoPoissonDiskSamplingKt.png)

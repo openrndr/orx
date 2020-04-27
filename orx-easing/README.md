@@ -30,6 +30,7 @@ Using the `Easing` enumeration
 val et = Easing.QuadIn.function(t, 0.0, 1.0, 1.0)
 ```
 
-## Demos
-[DemoEasings01Kt](src/demo/kotlin/DemoEasings01.kt)
-![Screenshot](images/DemoEasings01Kt.png)
+<!-- __demos__ -->
+# Demos
+[DemoEasings01Kt](src/demo/kotlin/DemoEasings01Kt.kt)
+![DemoEasings01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-easing/images/DemoEasings01Kt.png)

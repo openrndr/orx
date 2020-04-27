@@ -128,25 +128,26 @@ allprojects {
 
 }
 
-
 task collectScreenshots {
     doFirst {
         def demoProjects = project.subprojects.findAll { it.sourceSets.hasProperty("demo") }
-
         for (sub in demoProjects) {
             if (sub.name == "orx-rabbit-control")
                 continue
             if (sub.name == "orx-runway")
                 continue
-
             def set = sub.sourceSets.demo
             def ucl = new URLClassLoader(set.runtimeClasspath.collect { it.toURI().toURL() } as URL[])
+
+            def runDemos = []
+
             for (x in set.output) {
                 if (x.exists()) {
                     for (y in x.listFiles()) {
                         def name = y.name
                         if (!name.contains('$') && name.contains(".class")) {
-                            def klass = ucl.loadClass(y.name.replace(".class", ""))
+                            def klassName = y.name.replace(".class", "")
+                            def klass = ucl.loadClass(klassName)
                             try {
                                 def mainMethod = klass.getMethod("main")
                                 javaexec {
@@ -158,12 +159,30 @@ task collectScreenshots {
                                     jvmArgs += "-Dorg.openrndr.exceptions=JVM"
                                     executable = "./build-tools/xvfb-java.sh"
                                 }
+                                runDemos.add(klassName)
                             } catch (e) {
                                 // skip?
                             }
                         }
                     }
                 }
+            }
+            runDemos = runDemos.sort()
+            def readme = sub.file("README.md")
+            if (readme.exists()) {
+                def lines = readme.readLines()
+                def screenshotsLine = lines.findIndexOf { it == "<!-- __demos__ -->" }
+                if (screenshotsLine != -1) {
+                    lines = lines.subList(0, screenshotsLine)
+                }
+                lines.add("<!-- __demos__ -->")
+                lines.add("## Demos")
+                for (demo in runDemos) {
+                    lines.add("[${demo}](src/demo/kotlin/${demo}.kt)")
+                    lines.add("![${demo}](https://raw.githubusercontent.com/openrndr/orx/media/${sub.name}/images/${demo}.png)")
+                }
+                readme.delete()
+                readme.write(lines.join("\n"))
             }
         }
     }

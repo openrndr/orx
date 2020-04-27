@@ -161,3 +161,15 @@ import org.openrndr.extra.parameters.DoubleParameter
 ## Credits
 
 `orx-gui` is based on a proof-of-concept by [Ricardo Matias](https://github.com/ricardomatias/)
+<!-- __demos__ >
+# Demos
+[DemoOptions01Kt](src/demo/kotlin/DemoOptions01Kt.kt
+![DemoOptions01Kt](https://github.com/openrndr/orx/blob/media/orx-gui/images/DemoOptions01Kt.png
+[DemoSimple01Kt](src/demo/kotlin/DemoSimple01Kt.kt
+![DemoSimple01Kt](https://github.com/openrndr/orx/blob/media/orx-gui/images/DemoSimple01Kt.png
+<!-- __demos__ -->
+# Demos
+[DemoOptions01Kt](src/demo/kotlin/DemoOptions01Kt.kt)
+![DemoOptions01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-gui/images/DemoOptions01Kt.png)
+[DemoSimple01Kt](src/demo/kotlin/DemoSimple01Kt.kt)
+![DemoSimple01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-gui/images/DemoSimple01Kt.png)

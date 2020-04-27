@@ -43,3 +43,31 @@ fun boxMesh(
     depthSegments: Int = 1,
     invert: Boolean = false): VertexBuffer
 ```
+<!-- __demos__ >
+# Demos
+[DemoBoxKt](src/demo/kotlin/DemoBoxKt.kt
+![DemoBoxKt](https://github.com/openrndr/orx/blob/media/orx-mesh-generators/images/DemoBoxKt.png
+[DemoComplex01Kt](src/demo/kotlin/DemoComplex01Kt.kt
+![DemoComplex01Kt](https://github.com/openrndr/orx/blob/media/orx-mesh-generators/images/DemoComplex01Kt.png
+[DemoComplex02Kt](src/demo/kotlin/DemoComplex02Kt.kt
+![DemoComplex02Kt](https://github.com/openrndr/orx/blob/media/orx-mesh-generators/images/DemoComplex02Kt.png
+[DemoComplex03Kt](src/demo/kotlin/DemoComplex03Kt.kt
+![DemoComplex03Kt](https://github.com/openrndr/orx/blob/media/orx-mesh-generators/images/DemoComplex03Kt.png
+[DemoComplex04Kt](src/demo/kotlin/DemoComplex04Kt.kt
+![DemoComplex04Kt](https://github.com/openrndr/orx/blob/media/orx-mesh-generators/images/DemoComplex04Kt.png
+[DemoComplex05Kt](src/demo/kotlin/DemoComplex05Kt.kt
+![DemoComplex05Kt](https://github.com/openrndr/orx/blob/media/orx-mesh-generators/images/DemoComplex05Kt.png
+<!-- __demos__ -->
+# Demos
+[DemoBoxKt](src/demo/kotlin/DemoBoxKt.kt)
+![DemoBoxKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoBoxKt.png)
+[DemoComplex01Kt](src/demo/kotlin/DemoComplex01Kt.kt)
+![DemoComplex01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex01Kt.png)
+[DemoComplex02Kt](src/demo/kotlin/DemoComplex02Kt.kt)
+![DemoComplex02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex02Kt.png)
+[DemoComplex03Kt](src/demo/kotlin/DemoComplex03Kt.kt)
+![DemoComplex03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex03Kt.png)
+[DemoComplex04Kt](src/demo/kotlin/DemoComplex04Kt.kt)
+![DemoComplex04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex04Kt.png)
+[DemoComplex05Kt](src/demo/kotlin/DemoComplex05Kt.kt)
+![DemoComplex05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex05Kt.png)
