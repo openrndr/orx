@@ -9,11 +9,22 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
+      - name: Get the version
+        id: get_version
+        run: export RELEASE_VERSION=${GITHUB_REF/refs\/tags\/v/}
       - uses: actions/setup-java@v1
         with:
           java-version: 8
-      - name: Build and release to Bintray
-        env:
-          BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
-          BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
-        run: ./gradlew -Prelease.useLastTag=true candidate publishNebulaPublicationToBintrayRepository --info
+      - name: Build and publish to local maven
+        run: ./gradlew -Prelease.useLastTag=true candidate publishToMavenLocal --info
+      - name: Zip and publish to Bintray
+        run: |
+          cd ~/.m2
+          zip release.zip org/openrndr/extra/*/${RELEASE_VERSION}/*
+          curl -u ${{ secrets.BINTRAY_USER }}:${{ secrets.BINTRAY_KEY }} -X PUT https://api.bintray.com/content/openrndr/openrndr/ \
+            -H "X-Bintray-Package:orx" \
+            -H "X-Bintray-Version:${RELEASE_VERSION}" \
+            -H "X-Bintray-Publish:1" \
+            -H "X-Bintray-Override:1" \
+            -H "X-Bintray-Explode:1" \
+            -T release.zip
