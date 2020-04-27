@@ -24,8 +24,12 @@ jobs:
         run: |
           git config --global user.email "actions@openrndr.org"
           git config --global user.name "OPENRNDR Actions"
+          git reset HEAD -- .
+          git add [a-z-]*/README.md
+          git commit -m "add demos to README.md"
+          git push origin master
           git checkout --orphan media
           git reset HEAD -- .
           git add [a-z-]*/images/*.png
-          git commit -m "auto generated media"
+          git commit -m "add auto-generated media"
           git push -f origin media
