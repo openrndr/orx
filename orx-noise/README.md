@@ -169,9 +169,17 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 ![DemoPoissonDiskSamplingKt](https://github.com/openrndr/orx/blob/media/orx-noise/images/DemoPoissonDiskSamplingKt.png
 <!-- __demos__ -->
 ## Demos
-[DemoGradientPerturb2DKt](src/demo/kotlin/DemoGradientPerturb2DKt.kt)
+### DemoGradientPerturb2D
+[source code](src/demo/kotlin/DemoGradientPerturb2D.kt)
+
 ![DemoGradientPerturb2DKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoGradientPerturb2DKt.png)
-[DemoGradientPerturb3DKt](src/demo/kotlin/DemoGradientPerturb3DKt.kt)
+
+### DemoGradientPerturb3D
+[source code](src/demo/kotlin/DemoGradientPerturb3D.kt)
+
 ![DemoGradientPerturb3DKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoGradientPerturb3DKt.png)
-[DemoPoissonDiskSamplingKt](src/demo/kotlin/DemoPoissonDiskSamplingKt.kt)
+
+### DemoPoissonDiskSampling
+[source code](src/demo/kotlin/DemoPoissonDiskSampling.kt)
+
 ![DemoPoissonDiskSamplingKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoPoissonDiskSamplingKt.png)

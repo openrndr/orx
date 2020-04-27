@@ -155,5 +155,7 @@ fun main() = application {
 ```
 <!-- __demos__ -->
 ## Demos
-[DemoSkeleton01Kt](src/demo/kotlin/DemoSkeleton01Kt.kt)
+### DemoSkeleton01
+[source code](src/demo/kotlin/DemoSkeleton01.kt)
+
 ![DemoSkeleton01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoSkeleton01Kt.png)
