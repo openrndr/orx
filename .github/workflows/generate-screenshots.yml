@@ -19,7 +19,7 @@ jobs:
           export GALLIUM_DRIVER=swr
           xvfb-run glxinfo
       - name: Collect screenshots
-        run: ./gradlew collectScreenshots
+        run: xvfb-run ./gradlew collectScreenshots
       - name: Prepare media branch
         run: |
           git config --global user.email "actions@openrndr.org"

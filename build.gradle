@@ -118,14 +118,11 @@ allprojects {
         labels = ['creative-coding', 'realtime-rendering', 'opengl']
     }
 
-
     test {
         useJUnitPlatform {
             includeEngines 'spek2'
         }
     }
-
-
 }
 
 task collectScreenshots {
@@ -157,7 +154,6 @@ task collectScreenshots {
                                     jvmArgs += "-DtakeScreenshot=true"
                                     jvmArgs += "-DscreenshotPath=${sub.name}/images/${className}.png"
                                     jvmArgs += "-Dorg.openrndr.exceptions=JVM"
-                                    executable = "./build-tools/xvfb-java.sh"
                                 }
                                 runDemos.add(klassName)
                             } catch (e) {
@@ -178,8 +174,11 @@ task collectScreenshots {
                 lines.add("<!-- __demos__ -->")
                 lines.add("## Demos")
                 for (demo in runDemos) {
-                    lines.add("[${demo}](src/demo/kotlin/${demo}.kt)")
+                    lines.add("### ${demo[0..-3]}")
+                    lines.add("[source code](src/demo/kotlin/${demo[0..-3]}.kt)")
+                    lines.add("")
                     lines.add("![${demo}](https://raw.githubusercontent.com/openrndr/orx/media/${sub.name}/images/${demo}.png)")
+                    lines.add("")
                 }
                 readme.delete()
                 readme.write(lines.join("\n"))
