@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-bionic
+    runs-on: ubuntu-18.04
     steps:
       - uses: openrndr/setup-opengl@v1
       - uses: actions/checkout@v2
