@@ -8,8 +8,6 @@ import org.openrndr.extra.fx.distort.FluidDistort
 import org.openrndr.extra.jumpfill.ShapeSDF
 import org.openrndr.extra.jumpfill.draw.SDFStrokeFill
 import org.openrndr.extra.jumpfill.ops.*
-import org.openrndr.ffmpeg.ScreenRecorder
-import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
 import org.openrndr.svg.loadSVG
 

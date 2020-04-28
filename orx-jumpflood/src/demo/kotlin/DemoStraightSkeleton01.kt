@@ -1,5 +1,3 @@
-package sketches
-
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ColorType
@@ -17,18 +15,18 @@ fun main() {
             height = 720
         }
         program {
-            val straightSkeleton = StraightSkeleton()
-
-            val input = renderTarget(width, height) {
-                colorBuffer()
-            }
-            val field = input.colorBuffer(0).createEquivalent(type = ColorType.FLOAT32)
-
             if (System.getProperty("takeScreenshot") == "true") {
                 extend(SingleScreenshot()) {
                     this.outputFile = System.getProperty("screenshotPath")
                 }
             }
+
+            val straightSkeleton = StraightSkeleton()
+            val input = renderTarget(width, height) {
+                colorBuffer()
+            }
+            val field = input.colorBuffer(0).createEquivalent(type = ColorType.FLOAT32)
+
             extend {
                 drawer.isolatedWithTarget(input) {
                     // -- draw something interesting
