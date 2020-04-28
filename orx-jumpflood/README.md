@@ -164,3 +164,8 @@ fun main() = application {
 [source code](src/demo/kotlin/DemoSkeleton01.kt)
 
 ![DemoSkeleton01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoSkeleton01Kt.png)
+
+### DemoStraightSkeleton01
+[source code](src/demo/kotlin/DemoStraightSkeleton01.kt)
+
+![DemoStraightSkeleton01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoStraightSkeleton01Kt.png)
