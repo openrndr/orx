@@ -14,10 +14,10 @@ class ShapeSDF : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/shape-sdf.
     private var segmentCount = 0
 
     @BooleanParameter("use UV map")
-    var useUV:Boolean by parameters
+    var useUV: Boolean by parameters
 
     @BooleanParameter("rectify distance")
-    var rectify:Boolean by parameters
+    var rectify: Boolean by parameters
 
 
     init {
@@ -53,7 +53,7 @@ class ShapeSDF : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/shape-sdf.
         for (v in from) {
             fromWriter.write(v)
         }
-        fromShadow.upload(0, from.size*4*4)
+        fromShadow.upload(0, from.size * 4 * 4)
 
         val toShadow = toBuffer.shadow
         val toWriter = toShadow.writer()
@@ -61,7 +61,7 @@ class ShapeSDF : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/shape-sdf.
         for (v in to) {
             toWriter.write(v)
         }
-        toShadow.upload(0, to.size*4*4)
+        toShadow.upload(0, to.size * 4 * 4)
 
         segmentCount = from.size
     }
@@ -73,6 +73,8 @@ class ShapeSDF : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/shape-sdf.
         parameters["fromBuffer"] = fromBuffer
         parameters["toBuffer"] = toBuffer
         parameters["segmentCount"] = segmentCount
-        super.apply(source, target)
+        // -- bit of an hack
+        val effectiveSource = if (source.isNotEmpty()) source else target
+        super.apply(effectiveSource, target)
     }
 }
