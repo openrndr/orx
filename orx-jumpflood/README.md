@@ -170,6 +170,16 @@ fun main() = application {
 
 ![DemoShapeSDF03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF03Kt.png)
 
+### DemoShapeSDF04
+[source code](src/demo/kotlin/DemoShapeSDF04.kt)
+
+![DemoShapeSDF04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF04Kt.png)
+
+### DemoShapeSDF05
+[source code](src/demo/kotlin/DemoShapeSDF05.kt)
+
+![DemoShapeSDF05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF05Kt.png)
+
 ### DemoSkeleton01
 [source code](src/demo/kotlin/DemoSkeleton01.kt)
 
