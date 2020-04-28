@@ -1,5 +1,5 @@
 #version 330
-#extension GL_ARB_derivative_control : enable
+
 in vec2 v_texCoord0;
 uniform float iTime;
 out vec4 o_color;
@@ -73,7 +73,7 @@ void main() {
         vec2 o = 0.5 / textureSize(tex0, 0);
         uv = texture(tex0, v_texCoord0 + o).xy;
         if (rectify) {
-            fixDistance = (fwidthFine(uv))*vec2(1280.0, 720.0);
+            fixDistance = (fwidth(uv))*vec2(1280.0, 720.0);
         }
     }
 
