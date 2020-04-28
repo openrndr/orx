@@ -84,3 +84,19 @@ class SDFOnion : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/ops/sdf-on
         super.apply(source, target)
     }
 }
+
+class SDFBlend : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/ops/sdf-blend.frag"))) {
+    var factor: Double by parameters
+
+    init {
+        factor = 0.5
+    }
+
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+        require(target[0].type == ColorType.FLOAT16 || target[0].type == ColorType.FLOAT32) {
+            "needs a floating point target"
+        }
+        super.apply(source, target)
+    }
+
+}
