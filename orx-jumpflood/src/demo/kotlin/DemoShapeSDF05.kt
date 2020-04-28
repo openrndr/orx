@@ -54,9 +54,6 @@ fun main() {
                 }
             }
 
-            extend(ScreenRecorder()) {
-                frameRate = 60
-            }
             extend(gui)
             extend {
                 drawer.background(ColorRGBa.PINK)
