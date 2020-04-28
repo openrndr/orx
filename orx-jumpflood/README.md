@@ -155,6 +155,16 @@ fun main() = application {
 ```
 <!-- __demos__ -->
 ## Demos
+### DemoShapeSDF01
+[source code](src/demo/kotlin/DemoShapeSDF01.kt)
+
+![DemoShapeSDF01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF01Kt.png)
+
+### DemoShapeSDF02
+[source code](src/demo/kotlin/DemoShapeSDF02.kt)
+
+![DemoShapeSDF02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF02Kt.png)
+
 ### DemoShapeSDF03
 [source code](src/demo/kotlin/DemoShapeSDF03.kt)
 
