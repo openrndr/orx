@@ -7,6 +7,7 @@ import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.draw.Session
 import org.openrndr.events.Event
+import org.openrndr.exceptions.stackRootClassName
 import org.openrndr.launch
 import org.operndr.extras.filewatcher.stop
 import org.operndr.extras.filewatcher.triggerChange
@@ -42,7 +43,7 @@ class Olive<P : Program>(val resources: Resources? = null) : Extension {
 
     internal var scriptChange: (String) -> Unit = {}
 
-    var script = "src/main/kotlin/live.kts"
+    var script = "src/main/kotlin/${stackRootClassName().split(".").last()}.kts"
         set(value) {
             field = value
             scriptChange(value)
