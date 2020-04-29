@@ -31,10 +31,14 @@ enum class OliveScriptHost {
     KOTLIN_SCRIPT
 }
 
+data class ScriptLoadedEvent(val scriptFile: String)
+
 class Olive<P : Program>(val resources: Resources? = null) : Extension {
     override var enabled: Boolean = true
     var session: Session? = null
     var scriptHost = OliveScriptHost.JSR223_REUSE
+
+    val scriptLoaded = Event<ScriptLoadedEvent>()
 
     internal var scriptChange: (String) -> Unit = {}
 
@@ -131,7 +135,7 @@ class Olive<P : Program>(val resources: Resources? = null) : Extension {
 
                         @Suppress("UNCHECKED_CAST")
                         func(program as P)
-
+                        scriptLoaded.trigger(ScriptLoadedEvent(scriptFile))
                         Unit
                     }
                     Unit
