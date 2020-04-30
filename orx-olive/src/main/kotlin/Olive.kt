@@ -8,6 +8,7 @@ import org.openrndr.Program
 import org.openrndr.draw.Session
 import org.openrndr.events.Event
 import org.openrndr.exceptions.stackRootClassName
+import org.openrndr.extra.kotlinparser.extractProgram
 import org.openrndr.launch
 import org.operndr.extras.filewatcher.stop
 import org.operndr.extras.filewatcher.triggerChange
@@ -34,7 +35,7 @@ enum class OliveScriptHost {
 
 data class ScriptLoadedEvent(val scriptFile: String)
 
-class Olive<P : Program>(val resources: Resources? = null) : Extension {
+class Olive<P : Program>(val resources: Resources? = null, private var scriptless: Boolean = false) : Extension {
     override var enabled: Boolean = true
     var session: Session? = null
     var scriptHost = OliveScriptHost.JSR223_REUSE
@@ -43,10 +44,12 @@ class Olive<P : Program>(val resources: Resources? = null) : Extension {
 
     internal var scriptChange: (String) -> Unit = {}
 
-    var script = "src/main/kotlin/${stackRootClassName().split(".").last()}.kts"
+    var script = if (!scriptless) "src/main/kotlin/${stackRootClassName().split(".").last()}.kts"
+        else "src/main/kotlin/${stackRootClassName().split(".").last()}.kt"
         set(value) {
             field = value
             scriptChange(value)
+            scriptless = value.endsWith(".kt")
         }
 
     /**
@@ -111,13 +114,21 @@ class Olive<P : Program>(val resources: Resources? = null) : Extension {
             watcher = program.watchFile(File(script)) {
                 try {
                     logger.info("change detected, reloading script")
+
+                    val scriptContents = if (!scriptless) {
+                        it.readText()
+                    } else {
+                        val source = it.readText()
+                        val programSource = extractProgram(source)
+                        generateScript(programSource)
+                    }
+
                     val futureFunc = GlobalScope.async {
                         val start = System.currentTimeMillis()
-
                         val loadedFunction = when (scriptHost) {
-                            OliveScriptHost.JSR223_REUSE -> loadFromScript(it, jsr233ObjectLoader!!)
-                            OliveScriptHost.JSR223 -> loadFromScript(it)
-                            OliveScriptHost.KOTLIN_SCRIPT -> loadFromScriptKSH<P.() -> Unit>(it)
+                            OliveScriptHost.JSR223_REUSE -> loadFromScriptContents(scriptContents, jsr233ObjectLoader!!)
+                            OliveScriptHost.JSR223 -> loadFromScriptContents(scriptContents)
+                            OliveScriptHost.KOTLIN_SCRIPT -> loadFromScriptContentsKSH<P.() -> Unit>(scriptContents)
                         }
 
                         val end = System.currentTimeMillis()
@@ -140,7 +151,6 @@ class Olive<P : Program>(val resources: Resources? = null) : Extension {
                         Unit
                     }
                     Unit
-
                 } catch (e: Throwable) {
                     e.printStackTrace()
                 }
@@ -170,4 +180,11 @@ class Olive<P : Program>(val resources: Resources? = null) : Extension {
             }
         }
     }
+
+    fun program(f: Program.() -> Unit) {
+        require(script.endsWith(".kt")) {
+            """program bodies are only allowed in 'scriptless' mode"""
+        }
+    }
+
 }

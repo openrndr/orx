@@ -10,11 +10,13 @@ sourceSets {
 
 dependencies {
     implementation project(":orx-file-watcher")
-
+    implementation project(":orx-kotlin-parser")
+    
     implementation "org.jetbrains.kotlin:kotlin-scripting-jvm:$kotlinVersion"
     implementation "org.jetbrains.kotlin:kotlin-scripting-jvm-host:$kotlinVersion"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
     implementation "org.jetbrains.kotlin:kotlin-scripting-jsr223:$kotlinVersion"
+
 
     demoImplementation(project(":orx-camera"))
     demoImplementation("org.openrndr:openrndr-core:$openrndrVersion")

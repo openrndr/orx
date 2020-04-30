@@ -67,3 +67,10 @@ inline fun <reified T : Any> loadFromScript(fileOrUrl: String, loader: ScriptObj
  */
 inline fun <reified T : Any> loadFromScript(file: File, loader: ScriptObjectLoader = ScriptObjectLoader()): T =
         loader.load(file.readText())
+
+
+/**
+ * Load an object from script file
+ */
+inline fun <reified T : Any> loadFromScriptContents(contents:String, loader: ScriptObjectLoader = ScriptObjectLoader()): T =
+        loader.load(contents)

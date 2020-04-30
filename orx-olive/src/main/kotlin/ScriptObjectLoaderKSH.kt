@@ -30,10 +30,10 @@ fun <T> loadFromScriptKSH(
             }
 
         }
-): T = loadFromScriptKSH(script.readText(), host, body)
+): T = loadFromScriptContentsKSH(script.readText(), host, body)
 
 @Suppress("UNCHECKED_CAST")
-fun <T> loadFromScriptKSH(
+fun <T> loadFromScriptContentsKSH(
         script: String,
         host: BasicScriptingHost = BasicJvmScriptingHost(),
         body: ScriptCompilationConfiguration.Builder.() -> Unit = {
