@@ -12,6 +12,7 @@ float random(vec3 scale, float seed) {
 
 // Implementation by Evan Wallace (glfx.js)
 void main() {
+    vec4 center = texture(tex0, v_texCoord0);
     vec2 color = vec2(0.0);
     vec2 total = vec2(0.0);
 
@@ -33,5 +34,5 @@ void main() {
         }
     }
 
-    o_color = vec4(color / total, 0.0, 1.0);
+    o_color = vec4(color / total, 0.0, 1.0) * center.a;
 }
