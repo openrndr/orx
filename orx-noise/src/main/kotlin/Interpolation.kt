@@ -16,7 +16,3 @@ fun cubic(a: Double, b: Double, c: Double, d: Double, t: Double): Double {
 fun linear(x: Double): Double {
     return x
 }
-
-fun lerp(left: Double, right: Double, x: Double): Double {
-    return left * (1.0 - x) + right * x
-}

@@ -1,6 +1,7 @@
 package org.openrndr.extra.noise
 
 import org.openrndr.math.Vector2
+import org.openrndr.math.mix
 
 fun perlin(seed: Int, x: Double, y: Double) = perlin(seed, x, y, ::linear)
 fun perlinLinear(seed: Int, x: Double, y: Double) = perlin(seed, x, y, ::linear)
@@ -26,8 +27,8 @@ inline fun perlin(seed: Int, x: Double, y: Double, crossinline interpolator: (Do
     val xd1 = xd0 - 1
     val yd1 = yd0 - 1
 
-    val xf0 = lerp(gradCoord2D(seed, x0, y0, xd0, yd0), gradCoord2D(seed, x1, y0, xd1, yd0), xs)
-    val xf1 = lerp(gradCoord2D(seed, x0, y1, xd0, yd1), gradCoord2D(seed, x1, y1, xd1, yd1), xs)
+    val xf0 = mix(gradCoord2D(seed, x0, y0, xd0, yd0), gradCoord2D(seed, x1, y0, xd1, yd0), xs)
+    val xf1 = mix(gradCoord2D(seed, x0, y1, xd0, yd1), gradCoord2D(seed, x1, y1, xd1, yd1), xs)
 
-    return lerp(xf0, xf1, ys)
+    return mix(xf0, xf1, ys)
 }
