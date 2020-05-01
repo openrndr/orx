@@ -78,6 +78,8 @@ class GUI : Extension {
     private var onChangeListener: ((name: String, value: Any?) -> Unit)? = null
     override var enabled = true
 
+    private var visible = true
+
     var compartmentsCollapsedByDefault = true
     var doubleBind = false
 
@@ -91,18 +93,20 @@ class GUI : Extension {
         onChangeListener = listener
     }
 
-    override fun setup(program: Program) {
+    val collapsed = ElementClass("collapsed")
 
+    override fun setup(program: Program) {
         program.keyboard.keyDown.listen {
             if (it.key == KEY_F11) {
-                enabled = !enabled
-                val collapsed = ElementClass("collapsed")
-                if(enabled) {
+                println("f11 pressed")
+                visible = !visible
+
+                if(visible) {
                     panel.body!!.classes.remove(collapsed)
                 } else {
                     panel.body!!.classes.add(collapsed)
                 }
-                sidebarState().hidden = !enabled
+                sidebarState().hidden = !visible
             }
 
             if (it.key == KEY_LEFT_SHIFT) {
@@ -342,12 +346,11 @@ class GUI : Extension {
             }
         }
 
-        if (sidebarState().hidden) {
-            enabled = false
-            panel.enabled = false
+        visible = !sidebarState().hidden
+        if(visible) {
+            panel.body!!.classes.remove(collapsed)
         } else {
-            enabled = true
-            panel.enabled = true
+            panel.body!!.classes.add(collapsed)
         }
 
         program.extend(panel)
@@ -496,6 +499,7 @@ class GUI : Extension {
                             obj
                     )?.let {
                         value = it
+                        setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, MutableList<Double>>, obj, it)
                     }
                 }
             }
@@ -521,6 +525,7 @@ class GUI : Extension {
                             obj
                     )?.let {
                         value = it
+                        setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Vector2>, obj, it)
                     }
                 }
             }
@@ -546,6 +551,7 @@ class GUI : Extension {
                             obj
                     )?.let {
                         value = it
+                        setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Vector3>, obj, it)
                     }
                 }
             }
@@ -571,6 +577,7 @@ class GUI : Extension {
                             obj
                     )?.let {
                         value = it
+                        setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Vector4>, obj, it)
                     }
                 }
             }
@@ -605,6 +612,7 @@ class GUI : Extension {
                     )?.let { enum ->
                         (this@dropdownButton).value = items().find { item -> item.data == enum }
                                 ?: error("no matching item found")
+                        setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Enum<*>>, obj, enum)
                     }
                 }
             }

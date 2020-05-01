@@ -13,6 +13,7 @@ class SlidersVector2 : SequenceEditorBase("sliders-vector2") {
         set(value) {
             baseValue[0] = value.x
             baseValue[1] = value.y
+            requestRedraw()
         }
 
     class ValueChangedEvent(val source: SequenceEditorBase,
@@ -48,6 +49,7 @@ class SlidersVector3 : SequenceEditorBase("sliders-vector3") {
         baseValue[0] = value.x
         baseValue[1] = value.y
         baseValue[2] = value.z
+        requestRedraw()
     }
 
     class ValueChangedEvent(val source: SequenceEditorBase,
@@ -83,6 +85,7 @@ class SlidersVector4 : SequenceEditorBase("sliders-vector4") {
             baseValue[1] = value.y
             baseValue[2] = value.z
             baseValue[3] = value.w
+            requestRedraw()
         }
 
     class ValueChangedEvent(val source: SequenceEditorBase,
