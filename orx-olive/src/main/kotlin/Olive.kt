@@ -54,9 +54,6 @@ class Olive<P : Program>(val resources: Resources? = null, private var scriptMod
         else -> "src/main/kotlin/${stackRootClassName().split(".").last()}.kt"
     }
         set(value) {
-//            require(scriptMode == ScriptMode.KOTLIN_SCRIPT) {
-//                "can only change the script in KOTLIN_SCRIPT mode"
-//            }
             field = value
             scriptChange(value)
         }
@@ -124,7 +121,7 @@ class Olive<P : Program>(val resources: Resources? = null, private var scriptMod
                 try {
                     logger.info("change detected, reloading script")
 
-                    val scriptContents = when(scriptMode) {
+                    val scriptContents = when (scriptMode) {
                         ScriptMode.KOTLIN_SCRIPT -> it.readText()
                         ScriptMode.OLIVE_PROGRAM -> {
                             val source = it.readText()
@@ -148,6 +145,9 @@ class Olive<P : Program>(val resources: Resources? = null, private var scriptMod
 
                     program.launch {
                         val func = futureFunc.await()
+                        program.extensions.forEach {extension ->
+                            extension.shutdown(program)
+                        }
                         program.extensions.clear()
                         program.extensions.addAll(originalExtensions)
 
@@ -190,6 +190,4 @@ class Olive<P : Program>(val resources: Resources? = null, private var scriptMod
             }
         }
     }
-
-
 }
