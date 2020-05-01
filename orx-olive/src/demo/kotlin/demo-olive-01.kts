@@ -6,7 +6,7 @@ import org.openrndr.draw.*
 { program: Program ->
     program.apply {
         extend {
-            drawer.background(ColorRGBa.GRAY)
+            drawer.clear(ColorRGBa.GRAY)
             drawer.fill = ColorRGBa.PINK
             drawer.circle(width/2.0, height/2.0 ,200.0)
         }

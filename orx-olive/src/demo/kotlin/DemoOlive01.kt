@@ -13,7 +13,6 @@ fun main() = application {
 
         extend(Olive<Program>()) {
             script = "orx-olive/src/demo/kotlin/demo-olive-01.kts"
-
             // -- this block is for automation purposes only
             if (System.getProperty("takeScreenshot") == "true") {
                 scriptLoaded.listen {

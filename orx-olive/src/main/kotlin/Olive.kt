@@ -35,7 +35,12 @@ enum class OliveScriptHost {
 
 data class ScriptLoadedEvent(val scriptFile: String)
 
-class Olive<P : Program>(val resources: Resources? = null, private var scriptless: Boolean = false) : Extension {
+enum class ScriptMode {
+    KOTLIN_SCRIPT,
+    OLIVE_PROGRAM
+}
+
+class Olive<P : Program>(val resources: Resources? = null, private var scriptMode: ScriptMode = ScriptMode.KOTLIN_SCRIPT) : Extension {
     override var enabled: Boolean = true
     var session: Session? = null
     var scriptHost = OliveScriptHost.JSR223_REUSE
@@ -44,12 +49,16 @@ class Olive<P : Program>(val resources: Resources? = null, private var scriptles
 
     internal var scriptChange: (String) -> Unit = {}
 
-    var script = if (!scriptless) "src/main/kotlin/${stackRootClassName().split(".").last()}.kts"
-        else "src/main/kotlin/${stackRootClassName().split(".").last()}.kt"
+    var script = when (scriptMode) {
+        ScriptMode.KOTLIN_SCRIPT -> "src/main/kotlin/${stackRootClassName().split(".").last()}.kts"
+        else -> "src/main/kotlin/${stackRootClassName().split(".").last()}.kt"
+    }
         set(value) {
+//            require(scriptMode == ScriptMode.KOTLIN_SCRIPT) {
+//                "can only change the script in KOTLIN_SCRIPT mode"
+//            }
             field = value
             scriptChange(value)
-            scriptless = value.endsWith(".kt")
         }
 
     /**
@@ -115,12 +124,13 @@ class Olive<P : Program>(val resources: Resources? = null, private var scriptles
                 try {
                     logger.info("change detected, reloading script")
 
-                    val scriptContents = if (!scriptless) {
-                        it.readText()
-                    } else {
-                        val source = it.readText()
-                        val programSource = extractProgram(source)
-                        generateScript(programSource)
+                    val scriptContents = when(scriptMode) {
+                        ScriptMode.KOTLIN_SCRIPT -> it.readText()
+                        ScriptMode.OLIVE_PROGRAM -> {
+                            val source = it.readText()
+                            val programSource = extractProgram(source, programIdentifier = "oliveProgram")
+                            generateScript<OliveProgram>(programSource)
+                        }
                     }
 
                     val futureFunc = GlobalScope.async {
@@ -181,10 +191,5 @@ class Olive<P : Program>(val resources: Resources? = null, private var scriptles
         }
     }
 
-    fun program(f: Program.() -> Unit) {
-        require(script.endsWith(".kt")) {
-            """program bodies are only allowed in 'scriptless' mode"""
-        }
-    }
 
 }

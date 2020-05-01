@@ -28,6 +28,7 @@ class ScriptObjectLoader(classLoader: ClassLoader? = Thread.currentThread().cont
     fun <R> safeEval(evaluation: () -> R?) = try {
         evaluation()
     } catch (e: Exception) {
+        e.printStackTrace()
         throw LoadException("Cannot load script", e)
     }
 
