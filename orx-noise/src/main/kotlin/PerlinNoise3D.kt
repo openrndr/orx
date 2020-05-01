@@ -1,6 +1,7 @@
 package org.openrndr.extra.noise
 
 import org.openrndr.math.Vector3
+import org.openrndr.math.mix
 
 fun perlinLinear(seed: Int, x: Double, y: Double, z: Double) = perlin(seed, x, y, z, ::linear)
 fun perlinQuintic(seed: Int, x: Double, y: Double, z: Double) = perlin(seed, x, y, z, ::quintic)
@@ -29,13 +30,13 @@ inline fun perlin(seed: Int, x: Double, y: Double, z: Double, crossinline interp
     val yd1 = yd0 - 1
     val zd1 = zd0 - 1
 
-    val xf00 = lerp(gradCoord3D(seed, x0, y0, z0, xd0, yd0, zd0), gradCoord3D(seed, x1, y0, z0, xd1, yd0, zd0), xs)
-    val xf10 = lerp(gradCoord3D(seed, x0, y1, z0, xd0, yd1, zd0), gradCoord3D(seed, x1, y1, z0, xd1, yd1, zd0), xs)
-    val xf01 = lerp(gradCoord3D(seed, x0, y0, z1, xd0, yd0, zd1), gradCoord3D(seed, x1, y0, z1, xd1, yd0, zd1), xs)
-    val xf11 = lerp(gradCoord3D(seed, x0, y1, z1, xd0, yd1, zd1), gradCoord3D(seed, x1, y1, z1, xd1, yd1, zd1), xs)
+    val xf00 = mix(gradCoord3D(seed, x0, y0, z0, xd0, yd0, zd0), gradCoord3D(seed, x1, y0, z0, xd1, yd0, zd0), xs)
+    val xf10 = mix(gradCoord3D(seed, x0, y1, z0, xd0, yd1, zd0), gradCoord3D(seed, x1, y1, z0, xd1, yd1, zd0), xs)
+    val xf01 = mix(gradCoord3D(seed, x0, y0, z1, xd0, yd0, zd1), gradCoord3D(seed, x1, y0, z1, xd1, yd0, zd1), xs)
+    val xf11 = mix(gradCoord3D(seed, x0, y1, z1, xd0, yd1, zd1), gradCoord3D(seed, x1, y1, z1, xd1, yd1, zd1), xs)
 
-    val yf0 = lerp(xf00, xf10, ys)
-    val yf1 = lerp(xf01, xf11, ys)
+    val yf0 = mix(xf00, xf10, ys)
+    val yf1 = mix(xf01, xf11, ys)
 
-    return lerp(yf0, yf1, zs)
+    return mix(yf0, yf1, zs)
 }

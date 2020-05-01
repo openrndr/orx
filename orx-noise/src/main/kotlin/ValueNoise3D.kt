@@ -1,6 +1,7 @@
 package org.openrndr.extra.noise
 
 import org.openrndr.math.Vector3
+import org.openrndr.math.mix
 
 fun valueLinear(seed: Int, x: Double, y: Double, z: Double) = value(seed, x, y, z, ::linear)
 fun valueQuintic(seed: Int, x: Double, y: Double, z: Double) = value(seed, x, y, z, ::quintic)
@@ -28,13 +29,13 @@ inline fun value(seed: Int, x: Double, y: Double, z: Double, crossinline interpo
     val zs = interpolation(z - z0)
 
 
-    val xf00 = lerp(valCoord3D(seed, x0, y0, z0), valCoord3D(seed, x1, y0, z0), xs)
-    val xf10 = lerp(valCoord3D(seed, x0, y1, z0), valCoord3D(seed, x1, y1, z0), xs)
-    val xf01 = lerp(valCoord3D(seed, x0, y0, z1), valCoord3D(seed, x1, y0, z1), xs)
-    val xf11 = lerp(valCoord3D(seed, x0, y1, z1), valCoord3D(seed, x1, y1, z1), xs)
+    val xf00 = mix(valCoord3D(seed, x0, y0, z0), valCoord3D(seed, x1, y0, z0), xs)
+    val xf10 = mix(valCoord3D(seed, x0, y1, z0), valCoord3D(seed, x1, y1, z0), xs)
+    val xf01 = mix(valCoord3D(seed, x0, y0, z1), valCoord3D(seed, x1, y0, z1), xs)
+    val xf11 = mix(valCoord3D(seed, x0, y1, z1), valCoord3D(seed, x1, y1, z1), xs)
 
-    val yf0 = lerp(xf00, xf10, ys)
-    val yf1 = lerp(xf01, xf11, ys)
+    val yf0 = mix(xf00, xf10, ys)
+    val yf1 = mix(xf01, xf11, ys)
 
-    return lerp(yf0, yf1, zs)
+    return mix(yf0, yf1, zs)
 }
