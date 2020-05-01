@@ -15,6 +15,5 @@ ${programSource.imports}
         }
 }
 """
-    println(script)
     return script
 }
