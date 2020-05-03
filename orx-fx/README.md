@@ -105,3 +105,8 @@ All distortion effects are opacity preserving
 [source code](src/demo/kotlin/DemoFluidDistort01.kt)
 
 ![DemoFluidDistort01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoFluidDistort01Kt.png)
+
+### DemoLaserBlur01
+[source code](src/demo/kotlin/DemoLaserBlur01.kt)
+
+![DemoLaserBlur01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoLaserBlur01Kt.png)
