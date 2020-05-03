@@ -18,6 +18,13 @@ fun ParserRuleContext.verbatimText(marginLeft: Int = 0, marginRight: Int = 0): S
     return start.inputStream.getText(interval)
 }
 
+class PackageExtractor() : KotlinParserBaseListener() {
+    var result: String? = null
+    override fun enterPackageHeader(ctx: KotlinParser.PackageHeaderContext) {
+        result = ctx.verbatimText()
+    }
+}
+
 class ImportsExtractor(val ruleNames: List<String>) : KotlinParserBaseListener() {
     var result: String? = null
 
@@ -30,6 +37,7 @@ class LambdaExtractor(val ruleNames: List<String>, val lambdaName: String) : Kot
     fun RuleContext.named(): String {
         return ruleNames[this.ruleIndex]
     }
+
     var result: String? = null
     override fun enterAnnotatedLambda(ctx: KotlinParser.AnnotatedLambdaContext?) {
         val puec = ctx!!.parent!!.parent!!.parent!! as KotlinParser.PostfixUnaryExpressionContext
@@ -42,7 +50,7 @@ class LambdaExtractor(val ruleNames: List<String>, val lambdaName: String) : Kot
     }
 }
 
-class ProgramSource(val imports: String, val programLambda: String)
+class ProgramSource(val packageName: String?, val imports: String, val programLambda: String)
 
 fun extractProgram(source: String, programIdentifier: String = "program"): ProgramSource {
     val parser = KotlinParser(CommonTokenStream(KotlinLexer(CharStreams.fromString(source))))
@@ -50,10 +58,14 @@ fun extractProgram(source: String, programIdentifier: String = "program"): Progr
 //    val rules = parser.ruleNames.toList()
 //    val pt = TreeUtils.toPrettyTree(root, rules)
     val ruleNames = parser.ruleNames.toList()
+
+    val packageExtractor = PackageExtractor()
+    ParseTreeWalker.DEFAULT.walk(packageExtractor, root)
+
     val importsExtractor = ImportsExtractor(ruleNames)
     ParseTreeWalker.DEFAULT.walk(importsExtractor, root)
 
     val lambdaExtractor = LambdaExtractor(ruleNames, programIdentifier)
     ParseTreeWalker.DEFAULT.walk(lambdaExtractor, root)
-    return ProgramSource(importsExtractor.result!!, lambdaExtractor.result!!)
+    return ProgramSource(packageExtractor.result, importsExtractor.result?:"", lambdaExtractor.result?:"")
 }

@@ -20,7 +20,7 @@ fun stackRootClassName(thread: Thread = Thread.currentThread(), sanitize: Boolea
 }
 
 fun ApplicationBuilder.oliveProgram(init: OliveProgram.() -> Unit): OliveProgram {
-    val rootClassName = stackRootClassName(sanitize = true)
+    val rootClassName = stackRootClassName(sanitize = true).split(".").last()
 
     var sourceLocation = "src/main/kotlin/$rootClassName.kt"
     val candidateFile = File(sourceLocation)
