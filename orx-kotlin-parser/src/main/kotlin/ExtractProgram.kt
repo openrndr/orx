@@ -9,9 +9,12 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker
 import org.openrndr.extra.kotlin.antlr.KotlinLexer
 import org.openrndr.extra.kotlin.antlr.KotlinParser
 import org.openrndr.extra.kotlin.antlr.KotlinParserBaseListener
-import java.io.File
 
 fun ParserRuleContext.verbatimText(marginLeft: Int = 0, marginRight: Int = 0): String {
+    if (start == null || stop == null) {
+        return ""
+    }
+
     val startIndex = start.startIndex + marginLeft
     val stopIndex = stop.stopIndex - marginRight
     val interval = Interval(startIndex, stopIndex)
@@ -67,5 +70,5 @@ fun extractProgram(source: String, programIdentifier: String = "program"): Progr
 
     val lambdaExtractor = LambdaExtractor(ruleNames, programIdentifier)
     ParseTreeWalker.DEFAULT.walk(lambdaExtractor, root)
-    return ProgramSource(packageExtractor.result, importsExtractor.result?:"", lambdaExtractor.result?:"")
+    return ProgramSource(packageExtractor.result, importsExtractor.result ?: "", lambdaExtractor.result ?: "")
 }
