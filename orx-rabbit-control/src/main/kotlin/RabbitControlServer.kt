@@ -1,5 +1,10 @@
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
+import io.ktor.http.content.resources
+import io.ktor.http.content.static
+import io.ktor.routing.routing
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
 import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
@@ -25,7 +30,7 @@ import java.net.Socket
 import kotlin.reflect.KMutableProperty1
 
 
-class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true, port: Int = 10000) : Extension {
+class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true, rcpPort: Int = 10000, staticFilesPort: Int = 8080) : Extension {
     private val rabbitServer = RCPServer()
     private val transporter = WebsocketServerTransporterNetty()
 
@@ -40,10 +45,10 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
      */
     private var currentOpacity = 0.0
 
-    private var targetOpacity: Double = 0.0
+    private val targetOpacity: Double
         get() = if (shouldShowQR) 0.8 else 0.0
 
-    private var shouldShowQR = false
+    private val shouldShowQR
         get() = (rabbitServer.connectionCount == 0 && showQRUntilClientConnects) || showQRCode
 
 
@@ -55,14 +60,27 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
 
     init {
         rabbitServer.addTransporter(transporter)
-        transporter.bind(port)
+        transporter.bind(rcpPort)
 
-        // FIXME please help me find a better way to get the local address
+        /**
+         * Start KTOR to serve the static files of the RabbitControl client
+         */
+        val server = embeddedServer(Netty, port = staticFilesPort) {
+            routing {
+                static("/rabbit-client") {
+                    resources("rabbit-client")
+                }
+            }
+        }
+        server.start()
+
+        /**
+         * Print the address
+         */
         val socket = Socket()
         socket.connect(InetSocketAddress("google.com", 80))
         val ip = socket.localAddress.toString().replace("/", "")
-
-        val clientUrlWithHash = "https://rabbitcontrol.github.io/client/#$ip:$port"
+        val clientUrlWithHash = "http://$ip:8080/rabbit-client/index.html/#$ip:$rcpPort"
         qrCodeImage = getQRCodeImage(barcodeText = clientUrlWithHash)
         println("RabbitControl Web Client: $clientUrlWithHash")
 
