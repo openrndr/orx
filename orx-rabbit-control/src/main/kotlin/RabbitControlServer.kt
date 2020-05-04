@@ -45,10 +45,10 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
      */
     private var currentOpacity = 0.0
 
-    private var targetOpacity: Double = 0.0
+    private val targetOpacity: Double
         get() = if (shouldShowQR) 0.8 else 0.0
 
-    private var shouldShowQR = false
+    private val shouldShowQR
         get() = (rabbitServer.connectionCount == 0 && showQRUntilClientConnects) || showQRCode
 
 
