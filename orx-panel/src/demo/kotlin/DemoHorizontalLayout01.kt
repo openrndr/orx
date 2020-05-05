@@ -9,6 +9,7 @@ import org.openrndr.panel.elements.div
 import org.openrndr.panel.elements.h1
 import org.openrndr.panel.elements.requestRedraw
 import org.openrndr.panel.style.*
+import kotlin.random.Random
 
 fun main() = application {
     program {
@@ -66,7 +67,6 @@ fun main() = application {
                             // the header text with the button's label
                             events.clicked.listen {
                                 header.replaceText(it.source.label)
-                                header.requestRedraw()
                             }
                         }
                     }
