@@ -5,10 +5,8 @@ import org.openrndr.draw.ColorType
 import org.openrndr.draw.Filter
 import org.openrndr.draw.filterShaderFromUrl
 import org.openrndr.extra.fx.filterFragmentUrl
-import org.openrndr.extra.noise.simplex
 import org.openrndr.extra.parameters.*
 import org.openrndr.math.Vector2
-import java.lang.Math.pow
 
 private class LaserBlurPass : Filter(filterShaderFromUrl(filterFragmentUrl("blur/laser-blur.frag"))) {
     var radius: Double by parameters

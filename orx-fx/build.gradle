@@ -11,6 +11,7 @@ sourceSets {
 dependencies {
     api project(":orx-parameters")
     implementation project(":orx-noise")
+    demoImplementation("org.openrndr:openrndr-ffmpeg:$openrndrVersion")
     demoImplementation("org.openrndr:openrndr-core:$openrndrVersion")
     demoImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
     demoImplementation(project(":orx-gui"))
