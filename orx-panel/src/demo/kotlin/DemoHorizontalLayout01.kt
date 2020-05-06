@@ -7,7 +7,6 @@ import org.openrndr.panel.controlManager
 import org.openrndr.panel.elements.button
 import org.openrndr.panel.elements.div
 import org.openrndr.panel.elements.h1
-import org.openrndr.panel.elements.requestRedraw
 import org.openrndr.panel.style.*
 
 fun main() = application {
@@ -45,31 +44,30 @@ fun main() = application {
                             "twist", "swim", "roll", "fly", "dance")
                             .forEachIndexed { i, word ->
 
-                        // A fun way of generating a set of colors
-                        // of similar brightness:
-                        // Grab a point on the surface of a sphere
-                        // and treat its coordinates as an rgb color.
-                        val pos = Vector3.fromSpherical(
-                                Spherical(i * 19.0, i * 17.0, 0.4))
-                        val rgb = ColorRGBa.fromVector(pos + 0.4)
+                                // A fun way of generating a set of colors
+                                // of similar brightness:
+                                // Grab a point on the surface of a sphere
+                                // and treat its coordinates as an rgb color.
+                                val pos = Vector3.fromSpherical(
+                                        Spherical(i * 19.0, i * 17.0, 0.4))
+                                val rgb = ColorRGBa.fromVector(pos + 0.4)
 
-                        button {
-                            label = word
-                            style = styleSheet {
-                                // Use Color.RGBa() to convert a ColorRGBa
-                                // color (the standard color datatype)
-                                // into "CSS" format:
-                                background = Color.RGBa(rgb)
-                            }
+                                button {
+                                    label = word
+                                    style = styleSheet {
+                                        // Use Color.RGBa() to convert a ColorRGBa
+                                        // color (the standard color datatype)
+                                        // into "CSS" format:
+                                        background = Color.RGBa(rgb)
+                                    }
 
-                            // When the button is clicked replace
-                            // the header text with the button's label
-                            events.clicked.listen {
-                                header.replaceText(it.source.label)
-                                header.requestRedraw()
+                                    // When the button is clicked replace
+                                    // the header text with the button's label
+                                    events.clicked.listen {
+                                        header.replaceText(it.source.label)
+                                    }
+                                }
                             }
-                        }
-                    }
                 }
             }
         }
