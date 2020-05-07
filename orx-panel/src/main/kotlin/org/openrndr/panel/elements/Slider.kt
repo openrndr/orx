@@ -254,3 +254,26 @@ fun Slider.bind(property: KMutableProperty0<Double>) {
         }
     }
 }
+
+@JvmName("bindInt")
+fun Slider.bind(property: KMutableProperty0<Int>) {
+    var currentValue: Int? = null
+
+    events.valueChanged.listen {
+        currentValue = it.newValue.toInt()
+        property.set(it.newValue.toInt())
+    }
+    if (root() as? Body == null) {
+        throw RuntimeException("no body")
+    }
+    (root() as? Body)?.controlManager?.program?.launch {
+        while (true) {
+            if (property.get()!= currentValue) {
+                val lcur = property.get()
+                currentValue = lcur
+                value = lcur.toDouble()
+            }
+            yield()
+        }
+    }
+}
