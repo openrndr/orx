@@ -1,9 +1,13 @@
 package org.openrndr.panel.elements
 
+import kotlinx.coroutines.yield
+import org.openrndr.color.ColorRGBa
 import org.openrndr.events.Event
+import org.openrndr.launch
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
+import kotlin.reflect.KMutableProperty0
 
 class SlidersVector2 : SequenceEditorBase("sliders-vector2") {
     var value : Vector2
@@ -39,6 +43,31 @@ class SlidersVector2 : SequenceEditorBase("sliders-vector2") {
     }
 }
 
+fun SlidersVector2.bind(property: KMutableProperty0<Vector2>) {
+    var currentValue: Vector2? = null
+
+    events.valueChanged.listen {
+        currentValue = value
+        property.set(it.newValue)
+    }
+    if (root() as? Body == null) {
+        throw RuntimeException("no body")
+    }
+    fun update() {
+        if (property.get() != currentValue) {
+            val lcur = property.get()
+            currentValue = lcur
+            value = lcur
+        }
+    }
+    update()
+    (root() as? Body)?.controlManager?.program?.launch {
+        while (!disposed) {
+            update()
+            yield()
+        }
+    }
+}
 
 class SlidersVector3 : SequenceEditorBase("sliders-vector3") {
     var value : Vector3
@@ -71,6 +100,32 @@ class SlidersVector3 : SequenceEditorBase("sliders-vector3") {
                     Vector3(it.oldValue[0], it.oldValue[1], it.oldValue[2]),
                     Vector3(it.newValue[0], it.newValue[1], it.newValue[2]))
             )
+        }
+    }
+}
+
+fun SlidersVector3.bind(property: KMutableProperty0<Vector3>) {
+    var currentValue: Vector3? = null
+
+    events.valueChanged.listen {
+        currentValue = value
+        property.set(it.newValue)
+    }
+    if (root() as? Body == null) {
+        throw RuntimeException("no body")
+    }
+    fun update() {
+        if (property.get() != currentValue) {
+            val lcur = property.get()
+            currentValue = lcur
+            value = lcur
+        }
+    }
+    update()
+    (root() as? Body)?.controlManager?.program?.launch {
+        while (!disposed) {
+            update()
+            yield()
         }
     }
 }
@@ -111,3 +166,28 @@ class SlidersVector4 : SequenceEditorBase("sliders-vector4") {
     }
 }
 
+fun SlidersVector4.bind(property: KMutableProperty0<Vector4>) {
+    var currentValue: Vector4? = null
+
+    events.valueChanged.listen {
+        currentValue = value
+        property.set(it.newValue)
+    }
+    if (root() as? Body == null) {
+        throw RuntimeException("no body")
+    }
+    fun update() {
+        if (property.get() != currentValue) {
+            val lcur = property.get()
+            currentValue = lcur
+            value = lcur
+        }
+    }
+    update()
+    (root() as? Body)?.controlManager?.program?.launch {
+        while (!disposed) {
+            update()
+            yield()
+        }
+    }
+}

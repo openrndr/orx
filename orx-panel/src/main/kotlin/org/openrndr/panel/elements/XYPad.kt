@@ -230,18 +230,21 @@ fun XYPad.bind(property: KMutableProperty0<Vector2>) {
     if (root() as? Body == null) {
         throw RuntimeException("no body")
     }
+    fun update() {
+        if (property.get() != currentValue) {
+            val lcur = property.get()
+            currentValue = lcur
+            value = lcur
+        }
+    }
+    update()
     (root() as? Body)?.controlManager?.program?.launch {
         while (true) {
-            if (property.get() != currentValue) {
-                val lcur = property.get()
-                currentValue = lcur
-                value = lcur
-            }
+            update()
             yield()
         }
     }
 }
-
 
 fun Double.round(decimals: Int): Double {
     var multiplier = 1.0

@@ -25,6 +25,14 @@ val disabled = ElementPseudoClass("disabled")
 
 class FocusEvent
 
+interface DisposableElement {
+    var disposed : Boolean
+
+    fun dispose() {
+        disposed = true
+    }
+}
+
 open class Element(val type: ElementType) {
 
     var scrollTop = 0.0

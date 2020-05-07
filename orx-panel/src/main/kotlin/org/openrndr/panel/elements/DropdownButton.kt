@@ -32,7 +32,8 @@ class Item : Element(ElementType("item")) {
     }
 }
 
-class DropdownButton : Element(ElementType("dropdown-button")) {
+class DropdownButton : Element(ElementType("dropdown-button")), DisposableElement {
+    override var disposed = false
 
     var label: String = "OK"
     var value: Item? = null
@@ -268,7 +269,7 @@ fun <E : Enum<E>> DropdownButton.bind(property: KMutableProperty0<E>, map: Map<E
     draw.dirty = true
 
     (root() as? Body)?.controlManager?.program?.launch {
-        while (true) {
+        while (!disposed) {
             val cval = property.get()
             if (cval != currentValue) {
                 currentValue = cval

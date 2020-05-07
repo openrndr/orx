@@ -86,13 +86,18 @@ fun TextElement.bind(property: KMutableProperty0<String>) {
     if (root() as? Body == null) {
         throw RuntimeException("no body")
     }
+    var lastText = ""
+    fun update() {
+        if (property.get() != lastText) {
+            replaceText(property.get())
+            lastText = property.get()
+        }
+    }
+
     (root() as? Body)?.controlManager?.program?.launch {
-        var lastText = ""
+        update()
         while (true) {
-            if (property.get() != lastText) {
-                replaceText(property.get())
-                lastText = property.get()
-            }
+            update()
             yield()
         }
     }

@@ -12,7 +12,9 @@ import org.openrndr.events.Event
 import org.openrndr.launch
 import kotlin.reflect.KMutableProperty0
 
-class Toggle : Element(ElementType("toggle")) {
+class Toggle : Element(ElementType("toggle")), DisposableElement {
+    override var disposed = false
+
     var label = ""
     var value = false
 
@@ -106,7 +108,7 @@ fun Toggle.bind(property: KMutableProperty0<Boolean>) {
     }
 
     (root() as Body).controlManager.program.launch {
-        while (true) {
+        while (!disposed) {
             val cval = property.get()
             if (cval != currentValue) {
                 currentValue = cval

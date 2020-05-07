@@ -23,7 +23,8 @@ data class Range(val min: Double, val max: Double) {
     val span: Double get() = max - min
 }
 
-class Slider : Element(ElementType("slider")) {
+class Slider : Element(ElementType("slider")), DisposableElement {
+    override var disposed = false
 
     override val handlesKeyboardFocus = true
 
@@ -243,13 +244,19 @@ fun Slider.bind(property: KMutableProperty0<Double>) {
     if (root() as? Body == null) {
         throw RuntimeException("no body")
     }
+
+    fun update() {
+        if (property.get() != currentValue) {
+            val lcur = property.get()
+            currentValue = lcur
+            value = lcur
+        }
+    }
+    update()
+
     (root() as? Body)?.controlManager?.program?.launch {
-        while (true) {
-            if (property.get() != currentValue) {
-                val lcur = property.get()
-                currentValue = lcur
-                value = lcur
-            }
+        while (!disposed) {
+            update()
             yield()
         }
     }
@@ -258,7 +265,6 @@ fun Slider.bind(property: KMutableProperty0<Double>) {
 @JvmName("bindInt")
 fun Slider.bind(property: KMutableProperty0<Int>) {
     var currentValue: Int? = null
-
     events.valueChanged.listen {
         currentValue = it.newValue.toInt()
         property.set(it.newValue.toInt())
@@ -266,13 +272,17 @@ fun Slider.bind(property: KMutableProperty0<Int>) {
     if (root() as? Body == null) {
         throw RuntimeException("no body")
     }
+    fun update() {
+        if (property.get() != currentValue) {
+            val lcur = property.get()
+            currentValue = lcur
+            value = lcur.toDouble()
+        }
+    }
+    update()
     (root() as? Body)?.controlManager?.program?.launch {
-        while (true) {
-            if (property.get()!= currentValue) {
-                val lcur = property.get()
-                currentValue = lcur
-                value = lcur.toDouble()
-            }
+        while (!disposed) {
+            update()
             yield()
         }
     }

@@ -142,14 +142,17 @@ fun Textfield.bind(property: KMutableProperty0<String>) {
         currentValue = it.newValue
         property.set(it.newValue)
     }
-
+    fun update() {
+        val cval = property.get()
+        if (cval != currentValue) {
+            currentValue = cval
+            value = cval
+        }
+    }
+    update()
     (root() as Body).controlManager.program.launch {
         while (true) {
-            val cval = property.get()
-            if (cval != currentValue) {
-                currentValue = cval
-                value = cval
-            }
+            update()
             yield()
         }
     }

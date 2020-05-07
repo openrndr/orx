@@ -45,7 +45,8 @@ class SequenceEditor : SequenceEditorBase("sequence-editor") {
     }
 }
 
-open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(ElementType(type)) {
+open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(ElementType(type)), DisposableElement {
+    override var disposed = false
 
     internal var baseValue = mutableListOf(0.0)
     var label = "sequence"

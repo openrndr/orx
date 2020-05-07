@@ -1,22 +1,26 @@
 package org.openrndr.panel.elements
 
+import kotlinx.coroutines.yield
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.LineCap
 import org.openrndr.events.Event
+import org.openrndr.launch
 import org.openrndr.panel.style.*
 import org.openrndr.text.Writer
+import kotlin.reflect.KMutableProperty0
 
-class ColorpickerButton : Element(ElementType("colorpicker-button")) {
+class ColorpickerButton : Element(ElementType("colorpicker-button")), DisposableElement {
+    override var disposed: Boolean = false
 
     var label: String = "OK"
     var color: ColorRGBa = ColorRGBa(0.5, 0.5, 0.5)
-            set(value)  {
-                if (value != field) {
-                    field = value
-                    events.valueChanged.trigger(ColorChangedEvent(this, value))
-                }
+        set(value) {
+            if (value != field) {
+                field = value
+                events.valueChanged.trigger(ColorChangedEvent(this, value))
             }
+        }
 
     class ColorChangedEvent(val source: ColorpickerButton, val color: ColorRGBa)
 
@@ -79,7 +83,7 @@ class ColorpickerButton : Element(ElementType("colorpicker-button")) {
         }
     }
 
-    class SlideOut(val x: Double, val y: Double, val width: Double, val height: Double, color:ColorRGBa, parent: Element) : Element(ElementType("slide-out")) {
+    class SlideOut(val x: Double, val y: Double, val width: Double, val height: Double, color: ColorRGBa, parent: Element) : Element(ElementType("slide-out")) {
 
         init {
             style = StyleSheet(CompoundSelector.DUMMY).apply {
@@ -116,6 +120,33 @@ class ColorpickerButton : Element(ElementType("colorpicker-button")) {
 
         fun dispose() {
             parent?.remove(this)
+        }
+    }
+}
+
+fun ColorpickerButton.bind(property: KMutableProperty0<ColorRGBa>) {
+    var currentValue: ColorRGBa? = null
+
+    events.valueChanged.listen {
+        currentValue = color
+        property.set(it.color)
+    }
+    if (root() as? Body == null) {
+        throw RuntimeException("no body")
+    }
+
+    fun update() {
+        if (property.get() != currentValue) {
+            val lcur = property.get()
+            currentValue = lcur
+            color = lcur
+        }
+    }
+    update()
+    (root() as? Body)?.controlManager?.program?.launch {
+        while (!disposed) {
+            update()
+            yield()
         }
     }
 }
