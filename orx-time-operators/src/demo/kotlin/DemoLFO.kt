@@ -2,7 +2,6 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.isolated
 import org.openrndr.extensions.SingleScreenshot
-import org.openrndr.extra.timeoperators.Envelope
 import org.openrndr.extra.timeoperators.LFO
 import org.openrndr.extra.timeoperators.LFOWave
 import org.openrndr.extra.timeoperators.TimeOperators
@@ -11,7 +10,7 @@ fun main() {
     application {
         program {
             val size = LFO()
-            val rotation = LFO(LFOWave.SINE)
+            val rotation = LFO(LFOWave.Sine)
             if (System.getProperty("takeScreenshot") == "true") {
                 extend(SingleScreenshot()) {
                     this.outputFile = System.getProperty("screenshotPath")

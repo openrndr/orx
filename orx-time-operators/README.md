@@ -27,7 +27,7 @@ drawer.circle(0.0, 0.0, size.value)
 ### LFO
 
 ```kotlin
-val size = LFO(LFOWave.SINE) // default LFOWave.SAW
+val size = LFO(LFOWave.Sine) // default LFOWave.Saw
 
 val freq = 0.5
 val phase = 0.5
