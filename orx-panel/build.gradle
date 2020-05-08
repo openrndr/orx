@@ -10,6 +10,8 @@ sourceSets {
 
 dependencies {
     demoImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
+    demoImplementation("org.openrndr:openrndr-dialogs:$openrndrVersion")
+    demoImplementation("com.google.code.gson:gson:$gsonVersion")
     demoRuntimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
     demoRuntimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
     demoImplementation(sourceSets.getByName("main").output)
