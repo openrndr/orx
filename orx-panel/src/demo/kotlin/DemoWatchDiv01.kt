@@ -2,6 +2,7 @@ import com.google.gson.Gson
 import org.openrndr.application
 import org.openrndr.dialogs.openFileDialog
 import org.openrndr.dialogs.saveFileDialog
+import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.panel.controlManager
 import org.openrndr.panel.elements.*
 import org.openrndr.panel.style.*
@@ -40,6 +41,12 @@ fun main() = application {
     }
 
     program {
+        // -- this block is for automation purposes only
+        if (System.getProperty("takeScreenshot") == "true") {
+            extend(SingleScreenshot()) {
+                this.outputFile = System.getProperty("screenshotPath")
+            }
+        }
         val programState = ProgramState()
         val cm = controlManager {
             layout {
