@@ -26,7 +26,7 @@ val disabled = ElementPseudoClass("disabled")
 class FocusEvent
 
 interface DisposableElement {
-    var disposed : Boolean
+    var disposed: Boolean
 
     fun dispose() {
         disposed = true
@@ -40,6 +40,12 @@ open class Element(val type: ElementType) {
     open val handlesKeyboardFocus = false
 
     open val widthHint: Double?
+        get() {
+            return null
+        }
+
+
+    open val heightHint: Double?
         get() {
             return null
         }
@@ -236,7 +242,7 @@ open class Element(val type: ElementType) {
         }
     }
 
-    fun findNext(premise: (Element) -> Boolean) : Element? {
+    fun findNext(premise: (Element) -> Boolean): Element? {
         return parent?.let { p ->
             val index = p.children.indexOf(this)
             val siblingCount = p.children.size
@@ -249,10 +255,10 @@ open class Element(val type: ElementType) {
         }
     }
 
-    fun findPrevious(premise: (Element) -> Boolean) : Element? {
+    fun findPrevious(premise: (Element) -> Boolean): Element? {
         return parent?.let { p ->
             val index = p.children.indexOf(this)
-            for (i in index-1 downTo 0) {
+            for (i in index - 1 downTo 0) {
                 if (premise(p.children[i])) {
                     return p.children[i]
                 }
@@ -319,7 +325,7 @@ fun Element.enable() {
 
 fun Element.isDisabled(): Boolean = disabled in pseudoClasses
 
-fun Element.findAll(predicate: (Element) -> Boolean) : List<Element> {
+fun Element.findAll(predicate: (Element) -> Boolean): List<Element> {
     val results = mutableListOf<Element>()
     visit {
         if (predicate(this)) {
@@ -329,7 +335,7 @@ fun Element.findAll(predicate: (Element) -> Boolean) : List<Element> {
     return results
 }
 
-fun Element.findAllVisible(predicate: (Element) -> Boolean) : List<Element> {
+fun Element.findAllVisible(predicate: (Element) -> Boolean): List<Element> {
     val results = mutableListOf<Element>()
     visitVisible {
         if (predicate(this)) {

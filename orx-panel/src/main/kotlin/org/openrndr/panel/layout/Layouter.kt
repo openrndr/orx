@@ -14,7 +14,8 @@ class Layouter {
     val blockLike = setOf(Display.BLOCK, Display.FLEX)
     val manualPosition = setOf(Position.FIXED, Position.ABSOLUTE)
 
-    fun positionChildren(element: Element): Rectangle {
+    fun positionChildren(element: Element, knownWidth:Double? = null): Rectangle {
+
         return element.computedStyle.let { cs ->
             var y = element.layout.screenY - element.scrollTop + element.computedStyle.effectivePaddingTop
 
@@ -26,22 +27,23 @@ class Layouter {
                             var x = element.layout.screenX + element.computedStyle.effectivePaddingLeft
 
                             val totalWidth = element.children.filter { it.computedStyle.display in blockLike && it.computedStyle.position !in manualPosition }.map { width(it) }.sum()
-                            val remainder = (element.layout.screenWidth - totalWidth)
+                            val remainder = (knownWidth?: element.layout.screenWidth) - totalWidth
                             val totalGrow = element.children.filter { it.computedStyle.display in blockLike && it.computedStyle.position !in manualPosition }.map { (it.computedStyle.flexGrow as FlexGrow.Ratio).value }.sum()
 
-                            element.children.filter { it.computedStyle.display in blockLike && it.computedStyle.position !in manualPosition }.forEach {
-
-                                val elementGrow = (it.computedStyle.flexGrow as FlexGrow.Ratio).value
+                            element.children.filter { it.computedStyle.display in blockLike && it.computedStyle.position !in manualPosition }.forEach { child ->
+                                val elementGrow = (child.computedStyle.flexGrow as FlexGrow.Ratio).value
                                 val growWidth = if (totalGrow > 0) (elementGrow / totalGrow) * remainder else 0.0
 
-                                it.layout.screenY = y + ((it.computedStyle.marginTop as? LinearDimension.PX)?.value
+                                child.layout.screenY = y + ((child.computedStyle.marginTop as? LinearDimension.PX)?.value
                                         ?: 0.0)
-                                it.layout.screenX = x + ((it.computedStyle.marginLeft as? LinearDimension.PX)?.value
+                                child.layout.screenX = x + ((child.computedStyle.marginLeft as? LinearDimension.PX)?.value
                                         ?: 0.0)
 
-                                it.layout.growWidth = growWidth
-                                x += width(it) + growWidth
-                                maxHeight = max(height(it), maxHeight)
+                                child.layout.growWidth = growWidth
+
+                                val effectiveWidth = width(child) + growWidth
+                                x += effectiveWidth
+                                maxHeight = max(height(child, effectiveWidth), maxHeight)
                             }
                             Rectangle(Vector2(x, y), x - element.layout.screenX, maxHeight)
                         }
@@ -53,25 +55,26 @@ class Layouter {
                             val verticalPadding = element.computedStyle.effectivePaddingTop + element.computedStyle.effectivePaddingBottom
                             val totalHeight = element.children
                                     .filter { it.computedStyle.display in blockLike && it.computedStyle.position !in manualPosition }
-                                    .sumByDouble { height(it) }
+                                    .sumByDouble { height(it, width(it)) }
                             val remainder = ((element.layout.screenHeight - verticalPadding) - totalHeight)
                             val totalGrow = element.children
                                     .filter { it.computedStyle.display in blockLike && it.computedStyle.position !in manualPosition }
                                     .sumByDouble { (it.computedStyle.flexGrow as FlexGrow.Ratio).value }
 
-                            element.children.filter { it.computedStyle.display in blockLike && it.computedStyle.position !in manualPosition }.forEach {
-                                val elementGrow = (it.computedStyle.flexGrow as FlexGrow.Ratio).value
+                            element.children.filter { it.computedStyle.display in blockLike && it.computedStyle.position !in manualPosition }.forEach { child ->
+                                val elementGrow = (child.computedStyle.flexGrow as FlexGrow.Ratio).value
                                 val growHeight = if (totalGrow > 0) (elementGrow / totalGrow) * remainder else 0.0
 
-                                it.layout.screenY = ly + ((it.computedStyle.marginTop as? LinearDimension.PX)?.value
+                                child.layout.screenY = ly + ((child.computedStyle.marginTop as? LinearDimension.PX)?.value
                                         ?: 0.0)
-                                it.layout.screenX = lx + ((it.computedStyle.marginLeft as? LinearDimension.PX)?.value
+                                child.layout.screenX = lx + ((child.computedStyle.marginLeft as? LinearDimension.PX)?.value
                                         ?: 0.0)
 
-                                it.layout.growHeight = growHeight
-                                ly += height(it) + growHeight
-                                maxWidth = max(height(it), maxWidth)
+                                child.layout.growHeight = growHeight
 
+                                val effectHeight = height(child) + growHeight
+                                ly += effectHeight
+                                maxWidth = max(width(child), maxWidth)
                             }
 
                             Rectangle(Vector2(lx, ly), maxWidth, ly - element.layout.screenY)
@@ -86,8 +89,9 @@ class Layouter {
                         if (it.computedStyle.display in blockLike && it.computedStyle.position !in manualPosition) {
                             it.layout.screenY = y + ((it.computedStyle.marginTop as? LinearDimension.PX)?.value ?: 0.0)
                             it.layout.screenX = x + ((it.computedStyle.marginLeft as? LinearDimension.PX)?.value ?: 0.0)
-                            maxWidth = max(0.0, width(it))
-                            y += height(it)
+                            val effectiveWidth =  width(it)
+                            maxWidth = max(effectiveWidth, maxWidth)
+                            y += height(it, effectiveWidth)
                         } else if (it.computedStyle.position == Position.ABSOLUTE) {
                             it.layout.screenX = element.layout.screenX + ((it.computedStyle.left as? LinearDimension.PX)?.value
                                     ?: 0.0)
@@ -176,7 +180,7 @@ class Layouter {
     fun paddingLeft(element: Element?) = padding(element, StyleSheet::paddingLeft)
     fun paddingRight(element: Element?) = padding(element, StyleSheet::paddingRight)
 
-    fun height(element: Element, includeMargins: Boolean = true): Double {
+    fun height(element: Element, width: Double? = null, includeMargins: Boolean = true): Double {
         if (element.computedStyle.display == Display.NONE) {
             return 0.0
         }
@@ -186,8 +190,8 @@ class Layouter {
         }
 
         return element.computedStyle.let {
-            it.height.let {
-                when (it) {
+            it.height.let { ld ->
+                when (val it = ld) {
                     is LinearDimension.PX -> it.value
                     is LinearDimension.Percent -> {
                         val parentHeight = element.parent?.layout?.screenHeight ?: 0.0
@@ -198,7 +202,12 @@ class Layouter {
                     }
                     is LinearDimension.Auto -> {
                         val padding = paddingTop(element) + paddingBottom(element)
-                        positionChildren(element).height + padding
+                        (element.heightHint ?: positionChildren(element, width).height) + padding
+                    }
+                    is LinearDimension.Calculate -> {
+                        val context = CalculateContext(width, null)
+                        it.function(context)
+
                     }
                     else -> throw RuntimeException("not supported")
                 }
@@ -207,11 +216,10 @@ class Layouter {
         }
     }
 
-    fun width(element: Element, includeMargins: Boolean = true): Double = element.computedStyle.let {
+    fun width(element: Element, height: Double? = null, includeMargins: Boolean = true): Double = element.computedStyle.let {
         if (element.computedStyle.display == Display.NONE) {
             return 0.0
         }
-
         val result =
                 it.width.let {
                     when (it) {
@@ -223,17 +231,30 @@ class Layouter {
                             val effectiveWidth = (parentWidth - parentPadding) * (it.value / 100.0) - margins
                             effectiveWidth
                         }
+//                        is LinearDimension.Calculate -> {
+//                            val context = CalculateContext(null, height)
+//                            it.function(context)
+//
+//                        }
                         is LinearDimension.Auto -> (element.widthHint ?: positionChildren(element).width) +
                                 paddingRight(element) + paddingLeft(element)
                         else -> throw RuntimeException("not supported")
                     }
                 } + if (includeMargins) marginLeft(element) + marginRight(element) else 0.0
+
+            // TODO: find out why this hack is needed, I added this because somewhere in the layout process
+            // this information is lost
+            element.layout.screenWidth = result - if (includeMargins) marginLeft(element) + marginRight(element) else 0.0
         result
     }
 
     fun layout(element: Element) {
         element.computedStyle.also { cs ->
             cs.display.let { if (it == Display.NONE) return }
+            element.layout.screenWidth = width(element, includeMargins = false)
+            element.layout.screenWidth += element.layout.growWidth
+            element.layout.screenHeight = height(element, element.layout.screenWidth, includeMargins = false)
+            element.layout.screenHeight += element.layout.growHeight
 
             when (cs.position) {
                 Position.FIXED -> {
@@ -249,12 +270,7 @@ class Layouter {
                 is ZIndex.Auto -> element.parent?.layout?.zIndex ?: 0
                 is ZIndex.Inherit -> element.parent?.layout?.zIndex ?: 0
             }
-
-            element.layout.screenWidth = width(element, includeMargins = false)
-            element.layout.screenHeight = height(element, includeMargins = false)
-            element.layout.screenWidth += element.layout.growWidth
-            element.layout.screenHeight += element.layout.growHeight
-            positionChildren(element)
+            val result = positionChildren(element)
         }
         element.children.forEach { layout(it) }
     }

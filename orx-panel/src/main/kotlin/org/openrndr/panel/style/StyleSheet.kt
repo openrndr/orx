@@ -25,6 +25,8 @@ sealed class Color(inherit: Boolean = false) : PropertyValue(inherit) {
     object Inherit : Color(inherit = true)
 }
 
+class CalculateContext(val elementWidth:Double?, val elementHeight:Double?)
+
 sealed class LinearDimension(inherit: Boolean = false) : PropertyValue(inherit) {
     class PX(val value: Double) : LinearDimension() {
         override fun toString(): String {
@@ -32,9 +34,12 @@ sealed class LinearDimension(inherit: Boolean = false) : PropertyValue(inherit) 
         }
     }
     class Percent(val value: Double) : LinearDimension()
+    class Calculate(val function: (CalculateContext) -> Double) : LinearDimension()
     object Auto : LinearDimension()
     object Inherit : LinearDimension(inherit = true)
 }
+
+
 
 data class PropertyBehaviour(val inheritance: PropertyInheritance, val intitial: Any)
 
