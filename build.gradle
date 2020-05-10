@@ -75,7 +75,7 @@ allprojects {
         implementation "org.openrndr:openrndr-core:$openrndrVersion"
         implementation "org.openrndr:openrndr-filter:$openrndrVersion"
         implementation "org.openrndr:openrndr-shape:$openrndrVersion"
-        implementation group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '1.3.5'
+        implementation group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '1.3.6'
         testImplementation "org.spekframework.spek2:spek-dsl-jvm:$spekVersion"
         testImplementation "org.amshove.kluent:kluent:1.61"
         testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlinVersion"
