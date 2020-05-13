@@ -80,7 +80,7 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
         val socket = Socket()
         socket.connect(InetSocketAddress("google.com", 80))
         val ip = socket.localAddress.toString().replace("/", "")
-        val clientUrlWithHash = "http://$ip:8080/rabbit-client/index.html/#$ip:$rcpPort"
+        val clientUrlWithHash = "http://$ip:$staticFilesPort/rabbit-client/index.html/#$ip:$rcpPort"
         qrCodeImage = getQRCodeImage(barcodeText = clientUrlWithHash)
         println("RabbitControl Web Client: $clientUrlWithHash")
 
@@ -159,6 +159,7 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
     }
 
 
+    @Suppress("UNCHECKED_CAST")
     fun add(objectWithParameters: Any) {
         val parameters = objectWithParameters.listParameters()
 
@@ -215,7 +216,6 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
                     param.value = org.rabbitcontrol.rcp.model.types.Vector4(v4.x.toFloat(), v4.y.toFloat(), v4.z.toFloat(), v4.w.toFloat())
                     param
                 }
-
                 else -> rabbitServer.createBangParameter(it.label)
             }
 
@@ -262,5 +262,6 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
 }
 
 fun <T> KMutableProperty1<out Any, Any?>?.qset(obj: Any, value: T) {
+    @Suppress("UNCHECKED_CAST")
     return (this as KMutableProperty1<Any, T>).set(obj, value)
 }
