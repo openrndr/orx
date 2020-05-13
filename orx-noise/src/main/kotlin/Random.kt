@@ -142,15 +142,15 @@ object Random {
         }
     }
 
-    fun Vector2(min: Double = -1.0, max: Double = 1.0): Vector2 {
+    fun vector2(min: Double = -1.0, max: Double = 1.0): Vector2 {
         return Vector2.uniform(min, max, rnd)
     }
 
-    fun Vector3(min: Double = -1.0, max: Double = 1.0): Vector3 {
+    fun vector3(min: Double = -1.0, max: Double = 1.0): Vector3 {
         return Vector3.uniform(min, max, rnd)
     }
 
-    fun Vector4(min: Double = -1.0, max: Double = 1.0): Vector4 {
+    fun vector4(min: Double = -1.0, max: Double = 1.0): Vector4 {
         return Vector4.uniform(min, max, rnd)
     }
 
