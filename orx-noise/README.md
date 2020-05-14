@@ -183,3 +183,8 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 [source code](src/demo/kotlin/DemoPoissonDiskSampling.kt)
 
 ![DemoPoissonDiskSamplingKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoPoissonDiskSamplingKt.png)
+
+### DemoSimplex01
+[source code](src/demo/kotlin/DemoSimplex01.kt)
+
+![DemoSimplex01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoSimplex01Kt.png)
