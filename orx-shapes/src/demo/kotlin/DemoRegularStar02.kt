@@ -1,0 +1,45 @@
+import org.openrndr.application
+import org.openrndr.color.ColorRGBa
+import org.openrndr.extensions.SingleScreenshot
+import org.openrndr.extra.shapes.RoundedRectangle
+import org.openrndr.extra.shapes.regularStar
+import org.openrndr.math.Vector2
+import kotlin.math.cos
+import kotlin.math.sin
+
+fun main() = application {
+    program {
+        // -- this block is for automation purposes only
+        if (System.getProperty("takeScreenshot") == "true") {
+            extend(SingleScreenshot()) {
+                this.outputFile = System.getProperty("screenshotPath")
+            }
+        }
+        extend {
+            drawer.fill = ColorRGBa.PINK
+            drawer.stroke = ColorRGBa.WHITE
+            val radius0 = cos(seconds) * 50.0 + 130.0
+            val radius1 = sin(seconds * 2.0) * 50.0 + 130.0
+
+            val star = regularStar(12, radius0, radius1)
+
+            drawer.translate(width / 2.0, height / 2.0)
+            drawer.rotate(seconds * 45.0)
+            drawer.fill = null
+            drawer.strokeWeight = 2.0
+            drawer.contour(star)
+
+            drawer.strokeWeight = 1.0
+            drawer.fill = ColorRGBa.WHITE
+
+            for (j in -20 until 20) {
+                for (i in -20 until 20) {
+                    val q = Vector2(i * 10.0, j * 10.0)
+                    if (q in star) {
+                        drawer.circle(i * 10.0, j * 10.0, 5.0)
+                    }
+                }
+            }
+        }
+    }
+}
