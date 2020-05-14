@@ -9,10 +9,15 @@ A collection of shape generators and modifiers
 
 ![DemoRegularPolygonKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoRegularPolygonKt.png)
 
-### DemoRegularStar
-[source code](src/demo/kotlin/DemoRegularStar.kt)
+### DemoRegularStar01
+[source code](src/demo/kotlin/DemoRegularStar01.kt)
 
-![DemoRegularStarKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoRegularStarKt.png)
+![DemoRegularStar01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoRegularStar01Kt.png)
+
+### DemoRegularStar02
+[source code](src/demo/kotlin/DemoRegularStar02.kt)
+
+![DemoRegularStar02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoRegularStar02Kt.png)
 
 ### DemoRoundedRectangle
 [source code](src/demo/kotlin/DemoRoundedRectangle.kt)
