@@ -1,5 +1,6 @@
 package org.openrndr.extra.fx.blur
 
+import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.extra.fx.filterFragmentUrl
 import org.openrndr.extra.parameters.Description
@@ -29,6 +30,7 @@ class FrameBlur : Filter(filterShaderFromUrl(filterFragmentUrl("blur/frame-blur.
 
             if (intermediate == null) {
                 intermediate = colorBuffer(target[0].width, target[0].height, type = ColorType.FLOAT16)
+                intermediate?.fill(ColorRGBa.TRANSPARENT)
             }
 
             super.apply(arrayOf(source[0], intermediate!!), arrayOf(intermediate!!))
