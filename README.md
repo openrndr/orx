@@ -8,6 +8,7 @@ A growing library of assorted data structures, algorithms and utilities.
 - [`orx-easing`](orx-easing/README.md), a collection of easing functions.
 - [`orx-file-watcher`](orx-file-watcher/README.md), `Program` extension method that allows monitoring and hot loading from files.
 - [`orx-filter-extension`](orx-filter-extension/README.md), `Program` extension method that provides Filter based `extend()`
+- [`orx-glslify`](orx-glslify/README.md), use [glslify](http://stack.gl/packages/) modules within openrndr shaders
 - [`orx-gui`](orx-gui/README.md), automatic UI generation for annotated classes and properties
 - [`orx-gradient-descent`](orx-gradient-descent/README.md), a gradient descent based minimizer
 - [`orx-image-fit`](orx-image-fit/README.md), easier drawing of images 
@@ -34,6 +35,7 @@ A growing library of assorted data structures, algorithms and utilities.
 - [`orx-shapes`](orx-shapes), tools for generating and modifying shapes
 - [`orx-syphon`](orx-syphon/README.md), send frames to- and from OPENRNDR and other applications in real time using Syphon
 - [`orx-temporal-blur`](orx-temporal-blur/README.md), temporal (motion) blur for video production.
+- [`orx-time-operators`](orx-time-operators/README.md), A collection of time-sensitive functions aimed at controlling raw data over-time.
 - [`orx-timer`](orx-timer/README.md), simple timer functionality for OPENRNDR
 
 # Developer notes
