@@ -3,7 +3,6 @@ package org.openrndr.extra.fx
 import org.openrndr.draw.ColorFormat
 import org.openrndr.draw.ColorType
 import org.openrndr.resourceUrl
-import java.net.URL
 
 internal class FilterTools
 

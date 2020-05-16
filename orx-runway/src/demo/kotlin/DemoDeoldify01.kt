@@ -5,7 +5,6 @@ import org.openrndr.extra.fx.transform.FlipVertically
 import org.openrndr.extra.runway.DeOldifyRequest
 import org.openrndr.extra.runway.DeOldifyResponse
 import org.openrndr.extra.runway.runwayQuery
-import org.openrndr.ffmpeg.ScreenRecorder
 import org.openrndr.ffmpeg.VideoPlayerFFMPEG
 
 /**

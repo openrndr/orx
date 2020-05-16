@@ -10,7 +10,6 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.color.rgb
 import org.openrndr.draw.loadImage
 import org.openrndr.extensions.SingleScreenshot
-import org.openrndr.resourceUrl
 import kotlin.math.cos
 import kotlin.math.sin
 
