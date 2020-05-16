@@ -24,7 +24,7 @@ fun main() = application {
             }
         }
         extend {
-            drawer.background(ColorRGBa.PINK)
+            drawer.clear(ColorRGBa.PINK)
             // -- by explicitly calling deliver we know that the drawing code in the listener will be
             // -- executed exactly here
             event.deliver()

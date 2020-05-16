@@ -34,7 +34,7 @@ class AxisHelper(var size: Int = 80) : Extension {
             drawer.defaults()
             drawer.ortho(fbo)
 
-            drawer.background(ColorRGBa.TRANSPARENT)
+            drawer.clear(ColorRGBa.TRANSPARENT)
             drawer.stroke = null
             drawer.fill = ColorRGBa.PINK.opacify(0.7)
             drawer.circle(axisLength, axisLength, axisLength)

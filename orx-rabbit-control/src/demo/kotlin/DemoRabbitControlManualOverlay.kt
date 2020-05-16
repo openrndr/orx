@@ -43,7 +43,7 @@ fun main() = application {
         }
 
         extend {
-            drawer.background(if (settings.whiteOnBlack) ColorRGBa.BLACK else ColorRGBa.WHITE)
+            drawer.clear(if (settings.whiteOnBlack) ColorRGBa.BLACK else ColorRGBa.WHITE)
             drawer.fill = if (settings.whiteOnBlack) ColorRGBa.WHITE else ColorRGBa.BLACK
             drawer.circle(drawer.bounds.center, 250.0)
         }

@@ -14,7 +14,7 @@ fun main() = application {
         extend(SyphonServer("Test"))
 
         extend {
-            drawer.background(ColorRGBa.PINK)
+            drawer.clear(ColorRGBa.PINK)
             drawer.fill = ColorRGBa.WHITE
             drawer.circle(drawer.bounds.center, abs(cos(seconds)) * height * 0.5)
         }

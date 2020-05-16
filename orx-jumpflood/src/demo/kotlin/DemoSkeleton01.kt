@@ -31,7 +31,7 @@ fun main() {
                 drawer.isolatedWithTarget(input) {
                     // -- draw something interesting
                     drawer.stroke = null
-                    drawer.background(ColorRGBa.BLACK)
+                    drawer.clear(ColorRGBa.BLACK)
                     drawer.fill = ColorRGBa.WHITE
                     drawer.circle(mouse.position, 300.0)
                     drawer.fill = ColorRGBa.BLACK

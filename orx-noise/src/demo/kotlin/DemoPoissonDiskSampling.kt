@@ -25,7 +25,7 @@ fun main() {
             val circlePoints = points.map { Circle(Vector2(350.0, 100.0) + it, 3.0) }
 
             extend {
-                drawer.background(ColorRGBa.BLACK)
+                drawer.clear(ColorRGBa.BLACK)
 
                 drawer.stroke = null
                 drawer.fill = ColorRGBa.PINK

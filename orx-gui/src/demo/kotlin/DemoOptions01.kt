@@ -32,9 +32,9 @@ fun main() = application {
         extend(gui)
         extend {
             when(settings.option) {
-                BackgroundColors.Pink -> drawer.background(ColorRGBa.PINK)
-                BackgroundColors.Black -> drawer.background(ColorRGBa.BLACK)
-                BackgroundColors.Yellow -> drawer.background(ColorRGBa.YELLOW)
+                BackgroundColors.Pink -> drawer.clear(ColorRGBa.PINK)
+                BackgroundColors.Black -> drawer.clear(ColorRGBa.BLACK)
+                BackgroundColors.Yellow -> drawer.clear(ColorRGBa.YELLOW)
             }
         }
     }

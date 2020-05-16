@@ -29,7 +29,7 @@ fun main() {
                 eye = Vector3(1.0, 1.0, 1.0)
             }
             extend {
-                drawer.background(ColorRGBa.PINK)
+                drawer.clear(ColorRGBa.PINK)
                 drawer.shadeStyle = shadeStyle {
                     fragmentTransform = """
                         x_fill = texture(p_texture, va_texCoord0.xy);

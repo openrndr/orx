@@ -38,7 +38,7 @@ fun main() {
                 }
             }
             extend {
-                drawer.background(ColorRGBa.PINK)
+                drawer.clear(ColorRGBa.PINK)
 
                 sdf0.setShapes(shapes.mapIndexed { index, it ->
                     it.transform(transform {

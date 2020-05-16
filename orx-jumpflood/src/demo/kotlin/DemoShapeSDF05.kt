@@ -56,7 +56,7 @@ fun main() {
 
             extend(gui)
             extend {
-                drawer.background(ColorRGBa.PINK)
+                drawer.clear(ColorRGBa.PINK)
 
                 perturb.offset = Vector2(cos(seconds*0.2), sin(seconds*0.2))
                 perturb.outputUV = true

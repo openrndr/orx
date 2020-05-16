@@ -56,7 +56,7 @@ fun main() = application {
         }
         extend(rabbit)
         extend {
-            drawer.background(if (settings.b) ColorRGBa.BLUE else ColorRGBa.BLACK)
+            drawer.clear(if (settings.b) ColorRGBa.BLUE else ColorRGBa.BLACK)
             drawer.fontMap = font
             drawer.fill = settings.fill
             drawer.stroke = settings.stroke
