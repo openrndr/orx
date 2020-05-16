@@ -26,8 +26,7 @@ fun main() {
             }
 
             // Load an image, convert to BoofCV format using orx-boofcv
-            val input = loadImage(resourceUrl("/data/images/image-001.png"))
-                    .toGrayF32()
+            val input = loadImage("demo-data/images/image-001.png").toGrayF32()
 
             // BoofCV: calculate a good threshold for the loaded image
             val threshold = GThresholdImageOps.computeOtsu(input, 0.0, 255.0)
