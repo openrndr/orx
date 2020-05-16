@@ -33,7 +33,7 @@ class NoClear : Extension {
 
                 renderTarget?.let {
                     drawer.withTarget(it) {
-                        background(program.backgroundColor ?: ColorRGBa.TRANSPARENT)
+                        clear(program.backgroundColor ?: ColorRGBa.TRANSPARENT)
                         backdrop?.invoke() // draw custom backdrop
                     }
                 }

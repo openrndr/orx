@@ -18,7 +18,7 @@ fun main() = application {
 
         extend(syphonClient)
         extend {
-            drawer.background(ColorRGBa.BLACK)
+            drawer.clear(ColorRGBa.BLACK)
             drawer.image(syphonClient.buffer)
         }
     }

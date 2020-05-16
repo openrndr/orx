@@ -124,7 +124,7 @@ class TemporalBlur : Extension {
 
         accumulator?.let {
             drawer.withTarget(it) {
-                drawer.background(ColorRGBa.BLACK)
+                drawer.clear(ColorRGBa.BLACK)
             }
         }
         val oldClock = program.clock
@@ -133,7 +133,7 @@ class TemporalBlur : Extension {
         for (i in samples - 1 downTo 1) {
             image?.bind()
 
-            drawer.background(ColorRGBa.BLACK)
+            drawer.clear(ColorRGBa.BLACK)
             program.clock = { oldClockValue - (i * duration) / (fps * samples) }
 
             // I guess we need something better here.
@@ -169,7 +169,7 @@ class TemporalBlur : Extension {
         }
         image?.let {
             drawer.withTarget(it) {
-                drawer.background(ColorRGBa.BLACK)
+                drawer.clear(ColorRGBa.BLACK)
             }
         }
         image?.bind()
@@ -191,7 +191,7 @@ class TemporalBlur : Extension {
             drawer.isolatedWithTarget(result!!) {
                 drawer.drawStyle.blendMode = BlendMode.OVER
 
-                drawer.background(ColorRGBa.BLACK)
+                drawer.clear(ColorRGBa.BLACK)
                 drawer.drawStyle.colorMatrix = tint(ColorRGBa.WHITE.shade(1.0 / samples))
                 drawer.image(accumulator!!.colorBuffer(0))
             }
@@ -202,7 +202,7 @@ class TemporalBlur : Extension {
             drawer.drawStyle.colorMatrix = Matrix55.IDENTITY
             drawer.drawStyle.depthTestPass = DepthTestPass.ALWAYS
 
-            drawer.background(ColorRGBa.BLACK)
+            drawer.clear(ColorRGBa.BLACK)
             drawer.image(result!!.colorBuffer(0))
         }
     }

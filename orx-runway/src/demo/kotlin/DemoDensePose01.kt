@@ -22,7 +22,7 @@ fun main() = application {
 
         drawer.isolatedWithTarget(rt) {
             drawer.ortho(rt)
-            drawer.background(ColorRGBa.BLACK)
+            drawer.clear(ColorRGBa.BLACK)
             drawer.image(startImage, (rt.width - startImage.width)/2.0, (rt.height - startImage.height) / 2.0)
         }
 

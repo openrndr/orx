@@ -25,10 +25,10 @@ fun main() = application {
              * This is what will be sent to Syphon, and drawn in a small corner of the screen
              */
             drawer.isolatedWithTarget(rt) {
-                drawer.background(ColorRGBa(sin(seconds), cos(seconds / 2.0), 0.5, 1.0))
+                drawer.clear(ColorRGBa(sin(seconds), cos(seconds / 2.0), 0.5, 1.0))
             }
 
-            drawer.background(ColorRGBa.PINK)
+            drawer.clear(ColorRGBa.PINK)
             drawer.fill = ColorRGBa.WHITE
             drawer.circle(drawer.bounds.center, abs(cos(seconds)) * height * 0.5)
             drawer.image(rt.colorBuffer(0))

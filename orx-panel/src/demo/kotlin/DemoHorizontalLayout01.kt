@@ -73,7 +73,7 @@ fun main() = application {
         }
         extend(cm)
         extend {
-            drawer.background(0.2, 0.18, 0.16, 1.0)
+            drawer.clear(0.2, 0.18, 0.16, 1.0)
         }
     }
 }

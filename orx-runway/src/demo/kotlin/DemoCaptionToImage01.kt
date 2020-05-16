@@ -20,8 +20,8 @@ fun main() = application {
 
     program {
         val runwayHost = "http://localhost:8000/query"
-        val dictionary = URL(resourceUrl("/data/dictionary/words.txt")).readText().split("\n")
-        val font = loadFont(resourceUrl("/data/fonts/IBMPlexMono-Regular.ttf"), 72.0)
+        val dictionary = URL("demo-data/dictionary/words.txt").readText().split("\n")
+        val font = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 72.0)
         extend {
             val text = dictionary.random()
             val result: AttnGANResult = runwayQuery(runwayHost, AttnGANRequest(text))

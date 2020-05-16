@@ -24,7 +24,7 @@ fun main() = application {
         val alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         extend {
             drawer.isolatedWithTarget(rt) {
-                drawer.background(ColorRGBa.BLACK)
+                drawer.clear(ColorRGBa.BLACK)
                 drawer.ortho(rt)
                 val it = seconds.toInt()
                 val t = seconds-it

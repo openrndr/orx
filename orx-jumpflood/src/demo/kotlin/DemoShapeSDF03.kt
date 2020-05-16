@@ -39,7 +39,7 @@ fun main() {
                 }
             }
             extend {
-                drawer.background(ColorRGBa.PINK)
+                drawer.clear(ColorRGBa.PINK)
 
                 fd.apply(emptyArray(), uvmap)
 

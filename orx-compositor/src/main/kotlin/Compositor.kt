@@ -77,7 +77,7 @@ open class Layer internal constructor() {
                 copyLayers.forEach {
                     drawer.isolatedWithTarget(target) {
                         clearColor?.let {
-                            drawer.background(it)
+                            drawer.clear(it)
                         }
 
                         it.layerTarget?.let { copyTarget ->
@@ -96,7 +96,7 @@ open class Layer internal constructor() {
                     drawer.isolatedWithTarget(maskRt) {
                         if (copyLayers.isEmpty()) {
                             clearColor?.let { color ->
-                                drawer.background(color)
+                                drawer.clear(color)
                             }
                         }
                         drawer.fill = ColorRGBa.WHITE
@@ -109,7 +109,7 @@ open class Layer internal constructor() {
             drawer.isolatedWithTarget(target) {
                 if (copyLayers.isEmpty()) {
                     clearColor?.let {
-                        drawer.background(it)
+                        drawer.clear(it)
                     }
                 }
                 drawFunc()
@@ -182,7 +182,7 @@ open class Layer internal constructor() {
         }
         layerTarget?.let {
             drawer.withTarget(it) {
-                drawer.background(ColorRGBa.TRANSPARENT)
+                drawer.clear(ColorRGBa.TRANSPARENT)
             }
         }
     }

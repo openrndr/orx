@@ -36,13 +36,13 @@ fun <F : Filter> Program.extend(filter: F, configuration: F.() -> Unit = {}): Ex
 
                 renderTarget?.let {
                     drawer.withTarget(it) {
-                        background(program.backgroundColor ?: ColorRGBa.TRANSPARENT)
+                        clear(program.backgroundColor ?: ColorRGBa.TRANSPARENT)
                     }
                 }
             }
             renderTarget?.bind()
             program.backgroundColor?.let {
-                drawer.background(it)
+                drawer.clear(it)
             }
         }
 

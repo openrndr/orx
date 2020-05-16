@@ -45,7 +45,7 @@ fun main() {
             }
             extend(gui)
             extend {
-                drawer.background(ColorRGBa.PINK)
+                drawer.clear(ColorRGBa.PINK)
 
                 perturb.phase = seconds * 0.1
                 perturb.apply(uvmap, uvmap)

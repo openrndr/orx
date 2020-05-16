@@ -379,7 +379,7 @@ class ControlManager : Extension {
         }
 
         renderTarget.bind()
-        program.drawer.background(ColorRGBa.BLACK.opacify(0.0))
+        program.drawer.clear(ColorRGBa.BLACK.opacify(0.0))
         renderTarget.unbind()
 
         renderTargetCache.forEach { (_, u) -> u.destroy() }
@@ -422,7 +422,7 @@ class ControlManager : Extension {
                 }
 
                 rt.bind()
-                drawer.background(ColorRGBa.BLACK.opacify(0.0))
+                drawer.clear(ColorRGBa.BLACK.opacify(0.0))
 
                 drawer.pushProjection()
                 drawer.ortho(rt)
@@ -486,7 +486,7 @@ class ControlManager : Extension {
                         }
 
                         renderTarget.bind()
-                        program.drawer.background(ColorRGBa.BLACK.opacify(0.0))
+                        program.drawer.clear(ColorRGBa.BLACK.opacify(0.0))
                         renderTarget.unbind()
                     }
                 }
@@ -507,7 +507,7 @@ class ControlManager : Extension {
                         body?.style?.height = program.height.px
 
                         body?.let {
-                            program.drawer.background(ColorRGBa.BLACK.opacify(0.0))
+                            program.drawer.clear(ColorRGBa.BLACK.opacify(0.0))
                             layouter.computeStyles(it)
                             layouter.layout(it)
                             drawElement(it, program.drawer, 0, 0)
