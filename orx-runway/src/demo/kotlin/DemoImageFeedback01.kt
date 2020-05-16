@@ -26,11 +26,11 @@ fun main() = application {
         val attnHost = "http://localhost:8001/query"
         val im2txtHost = "http://localhost:8000/query"
 
-        val nouns = URL(resourceUrl("/data/dictionary/nouns.txt")).readText().split("\n")
-        val prepositions = URL(resourceUrl("/data/dictionary/prepositions.txt")).readText().split("\n")
-        val adjectives = URL(resourceUrl("/data/dictionary/adjectives.txt")).readText().split("\n")
+        val nouns = File("demo-data/words/nouns.txt").readText().split("\n")
+        val prepositions = File("demo-data/words/prepositions.txt").readText().split("\n")
+        val adjectives = File("demo-data/words/adjectives.txt").readText().split("\n")
 
-        val font = loadFont("data/fonts/IBMPlexMono-Regular.ttf", 36.0)
+        val font = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 36.0)
 
         var text = "a ${adjectives.random()} ${nouns.random()} ${prepositions.random()} a ${adjectives.random()} ${nouns.random()}"
 

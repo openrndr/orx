@@ -4,7 +4,6 @@ import org.openrndr.draw.*
 import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.fx.blur.*
 import org.openrndr.math.Polar
-import org.openrndr.resourceUrl
 import kotlin.math.sin
 
 fun main() {
@@ -39,8 +38,7 @@ fun main() {
             // On this buffer we will draw the dry buffer with an effect applied
             val wet = colorBuffer(dry.width, dry.height)
 
-            val font = loadFont(resourceUrl("/data/fonts/IBMPlexMono-Regular" +
-                    ".ttf"), 16.0)
+            val font = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 16.0)
 
             extend {
                 // Draw two moving circles

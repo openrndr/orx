@@ -20,9 +20,9 @@ fun main() = application {
     }
 
     program {
-        val image = loadImage("data/images/pm5544.png")
+        val image = loadImage("demo-data/images/pm5544.png")
 
-        val font = loadFont("data/fonts/IBMPlexMono-Regular.ttf", 24.0)
+        val font = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 24.0)
         extend {
             drawer.fontMap = font
             val response: Im2txtResult =

@@ -1,11 +1,12 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.loadFont
-import org.openrndr.extra.runway.*
-import org.openrndr.ffmpeg.ScreenRecorder
-import org.openrndr.resourceUrl
+import org.openrndr.extra.runway.Gpt2Request
+import org.openrndr.extra.runway.Gpt2Result
+import org.openrndr.extra.runway.runwayQuery
 import org.openrndr.shape.Rectangle
 import org.openrndr.text.Writer
+import java.io.File
 import java.net.URL
 
 /**
@@ -23,13 +24,13 @@ fun main() = application {
 
         val runwayHost = "http://localhost:8000/query"
 
-        val nouns = URL(resourceUrl("/data/dictionary/nouns.txt")).readText().split("\n")
-        val prepositions = URL(resourceUrl("/data/dictionary/prepositions.txt")).readText().split("\n")
-        val adjectives = URL(resourceUrl("/data/dictionary/adjectives.txt")).readText().split("\n")
+        val nouns = File("demo-data/words/nouns.txt").readText().split("\n")
+        val prepositions = File("demo-data/words/prepositions.txt").readText().split("\n")
+        val adjectives = File("demo-data/words/adjectives.txt").readText().split("\n")
 
-        val font = loadFont(resourceUrl("/data/fonts/IBMPlexMono-Regular.ttf"), 36.0)
+        val font = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 36.0)
 
-        val promptFont = loadFont(resourceUrl("/data/fonts/IBMPlexMono-Regular.ttf"), 24.0)
+        val promptFont = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 24.0)
 
         extend {
             val prompt = "a ${adjectives.random()} ${nouns.random()} ${prepositions.random()} a ${adjectives.random()} ${nouns.random()}"

@@ -2,7 +2,6 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.extra.runway.*
-import org.openrndr.resourceUrl
 
 /**
  * This demonstrates an image feedback effect. It starts from a single image.
@@ -20,12 +19,12 @@ fun main() = application {
         val rt = renderTarget(256, 256) {
             colorBuffer()
         }
-        val startImage = loadImage(resourceUrl("/data/images/portrait.jpg"))
+        val startImage = loadImage("demo-data/images/portrait.jpg")
 
         drawer.isolatedWithTarget(rt) {
             drawer.ortho(rt)
             drawer.clear(ColorRGBa.BLACK)
-            drawer.image(startImage, (rt.width - startImage.width)/2.0, (rt.height - startImage.height) / 2.0)
+            drawer.image(startImage, (rt.width - startImage.width) / 2.0, (rt.height - startImage.height) / 2.0)
         }
 
         extend {
@@ -37,9 +36,9 @@ fun main() = application {
 
             drawer.isolatedWithTarget(rt) {
                 drawer.ortho(rt)
-                drawer.translate(image.width/2.0, image.height/2.0)
+                drawer.translate(image.width / 2.0, image.height / 2.0)
                 drawer.rotate(10.0)
-                drawer.translate(-image.width/2.0, -image.height/2.0)
+                drawer.translate(-image.width / 2.0, -image.height / 2.0)
                 drawer.drawStyle.colorMatrix = tint(ColorRGBa.WHITE.opacify(0.5))
                 drawer.image(image)
             }
