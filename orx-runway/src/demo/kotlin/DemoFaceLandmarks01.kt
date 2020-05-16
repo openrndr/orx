@@ -22,7 +22,7 @@ fun main() = application {
         camera.play()
         val flip = FlipVertically()
 
-        val font = loadFont(resourceUrl("/data/fonts/IBMPlexMono-Regular.ttf"), 12.0)
+        val font = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 12.0)
         camera.newFrame.listen {
             flip.apply(it.frame, image)
         }
