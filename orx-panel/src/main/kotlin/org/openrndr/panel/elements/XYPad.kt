@@ -25,7 +25,7 @@ class XYPad : Element(ElementType("xy-pad")) {
     /**
      * The label
      */
-    var label: String? = null
+    var label = ""
 
     /**
      * The precision of the control, default is 2
@@ -217,10 +217,7 @@ class XYPad : Element(ElementType("xy-pad")) {
                 )
 
 
-                if (label != null) {
-                    drawer.text(label!!, Vector2(0.0, 0.0))
-                }
-
+                drawer.text(label, Vector2(4.0, 14.0))
                 drawer.text(valueLabel, Vector2(layout.screenWidth - textWidth - 4.0, layout.screenHeight - textHeight + 6.0))
             }
 
