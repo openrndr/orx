@@ -25,6 +25,9 @@ A simple UI can be created by creating an annotated `object`.
 import org.openrndr.application
 import org.openrndr.extra.gui.GUI
 import org.openrndr.extra.parameters.*
+import org.openrndr.math.Vector2
+import org.openrndr.math.Vector3
+import org.openrndr.math.Vector4
 
 enum class Option {
     Option1,
@@ -52,18 +55,18 @@ fun main() = application {
             @ColorParameter("A fill color", order = 4)
             var fill = ColorRGBa.PINK
 
-            @XYParameter("Position", minX = 0.0, maxX = width * 1.0,
-                                     minY = 0.0, maxY = height * 1.0, order = 5)
+            @XYParameter("Position", minX = 0.0, maxX = 640.0,
+                                     minY = 0.0, maxY = 480.0, order = 5)
             var pos = Vector2.ZERO 
 
             @Vector2Parameter("A Vector2", order = 6)
             var v2 = Vector2(200.0, 200.0)
 
-            @Vector3Parameter("A Vector3")
-            var v3 = Vector3(200.0, 200.0, 200.0, order = 7)
+            @Vector3Parameter("A Vector3", order = 7)
+            var v3 = Vector3(200.0, 200.0, 200.0)
 
-            @Vector4Parameter("A Vector4")
-            var v4 = Vector4(200.0, 200.0, 200.0, 200.0, order = 8)
+            @Vector4Parameter("A Vector4", order = 8)
+            var v4 = Vector4(200.0, 200.0, 200.0, 200.0)
 
             @DoubleListParameter("Mixer", order = 9)
             var mixer = MutableList(5) { 0.5 }
