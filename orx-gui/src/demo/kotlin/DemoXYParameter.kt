@@ -1,6 +1,5 @@
 import org.openrndr.application
 import org.openrndr.extra.gui.GUI
-import org.openrndr.extra.parameters.ActionParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.XYParameter
 import org.openrndr.math.Vector2
@@ -14,7 +13,7 @@ fun main() = application {
     program {
         val gui = GUI()
 
-        val settings = @Description("Vector parameter!") object {
+        val settings = @Description("Settings") object {
             @XYParameter("Position", 0.0, 800.0, 0.0, 800.0,
                     precision = 2,
                     invertY = true,
