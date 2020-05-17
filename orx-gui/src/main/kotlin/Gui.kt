@@ -463,6 +463,7 @@ class GUI : Extension {
                     precision = parameter.precision!!
                     showVector = parameter.showVector!!
                     invertY = parameter.invertY!!
+                    label = parameter.label
 
                     events.valueChanged.listen {
                         setAndPersist(

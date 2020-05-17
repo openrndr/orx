@@ -23,6 +23,11 @@ class XYPad : Element(ElementType("xy-pad")) {
     var maxY = 1.0
 
     /**
+     * The label
+     */
+    var label: String? = null
+
+    /**
      * The precision of the control, default is 2
      */
     var precision = 2
@@ -198,12 +203,13 @@ class XYPad : Element(ElementType("xy-pad")) {
             drawer.stroke = ColorRGBa.WHITE
             drawer.circle(ballPosition, 8.0)
 
-            val label = "${String.format("%.0${precision}f", value.x)}, ${String.format("%.0${precision}f", value.y)}"
+            val valueLabel = "${String.format("%.0${precision}f", value.x)}, ${String.format("%.0${precision}f", value.y)}"
+
             (root() as? Body)?.controlManager?.fontManager?.let {
                 val font = it.font(computedStyle)
                 val writer = Writer(drawer)
                 drawer.fontMap = (font)
-                val textWidth = writer.textWidth(label)
+                val textWidth = writer.textWidth(valueLabel)
                 val textHeight = font.ascenderLength
 
                 drawer.fill = ((computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE).opacify(
@@ -211,7 +217,11 @@ class XYPad : Element(ElementType("xy-pad")) {
                 )
 
 
-                drawer.text(label, Vector2(layout.screenWidth - textWidth - 4.0, layout.screenHeight - textHeight + 6.0))
+                if (label != null) {
+                    drawer.text(label!!, Vector2(0.0, 0.0))
+                }
+
+                drawer.text(valueLabel, Vector2(layout.screenWidth - textWidth - 4.0, layout.screenHeight - textHeight + 6.0))
             }
 
             drawer.popStyle()
