@@ -10,6 +10,7 @@ import kotlin.streams.toList
 open class OliveProgram(private val sourceLocation: String, private val scriptHost: OliveScriptHost) : Program() {
     val olive = extend(Olive<OliveProgram>(scriptMode = ScriptMode.OLIVE_PROGRAM)) {
         script = sourceLocation
+        scriptHost = this@OliveProgram.scriptHost
     }
 }
 
