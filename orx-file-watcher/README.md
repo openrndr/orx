@@ -1,6 +1,6 @@
 # orx-file-watcher
 
-A file watcher for OPENRNDR
+Monitor files on disk and auto-reload them if they change.
 
 ## Usage
 

@@ -1,6 +1,6 @@
 # orx-noise
 
-A collection of noisy functions
+Randomness for every type of person: Perlin, uniform, value, simplex, fractal and many other types of noise.
 
 ## Uniform random numbers
 

@@ -1,6 +1,8 @@
 # orx-midi
 
-A minimal and limited library for Midi controllers. Orx-midi is a wrapper around javax.midi.
+Basic MIDI support for keyboards and controllers. Send and receive note and control change events. 
+
+Orx-midi is a wrapper around javax.midi.
 
 ## Usage
 

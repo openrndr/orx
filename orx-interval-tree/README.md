@@ -1,7 +1,7 @@
 # orx-interval-tree
 
-Interval trees intend to speed-up point in interval queries. Specifically in cases with a large set of items with a given
-fixed start and end time.
+For querying a data set containing time segments (start time and end time)
+when we need all entries containing a specific time value. Useful when creating a timeline.
 
 For more information on interval trees read the [wikipedia page](https://en.wikipedia.org/wiki/Interval_tree).
 

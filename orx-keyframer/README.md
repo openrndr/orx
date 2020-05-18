@@ -1,6 +1,8 @@
 # orx-keyframer
 
-A highly reusable keyframer.
+Create animated timelines by specifying properties and times in keyframes, 
+then play it back at any speed (even backwards) automatically interpolating properties. 
+Save, load, use mathematical expressions and callbacks. Powerful and highly reusable.
 
 What this allows you to do:
 

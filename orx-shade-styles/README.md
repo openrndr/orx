@@ -1,4 +1,7 @@
 # orx-shade-styles
+
+Collection of shader based fills and strokes. Currently includes 4 types of gradient fills. 
+
 <!-- __demos__ >
 # Demos
 [DemoRadialGradient01Kt](src/demo/kotlin/DemoRadialGradient01Kt.kt

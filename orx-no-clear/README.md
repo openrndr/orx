@@ -1,7 +1,7 @@
 # orx-no-clear
 
-A simple OPENRNDR Extension that provides the classical drawing-without-clearing-the-screen functionality that
-OPENRNDR does not support natively.
+Provides the classical draw-without-clearing-the-screen functionality that
+OPENRNDR does not provide by default.
 
 #### Usage
 

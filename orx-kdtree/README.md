@@ -1,5 +1,7 @@
 # orx-kdtree
 
+Fast search of the point closest to the queried point in a data set. 2D, 3D and 4D.
+
 <!-- __demos__ -->
 ## Demos
 ### DemoNearestNeighbour01

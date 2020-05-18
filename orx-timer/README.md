@@ -1,6 +1,7 @@
 # orx-timer
 
-`orx-timer` adds simple timer functionality to OPENRNDR's Program
+Simple timer functionality providing `repeat`, to run code with a given interval
+and `timeOut`, to run code once after a given delay.
 
 ## Prerequisites
 

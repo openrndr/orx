@@ -1,6 +1,6 @@
 # orx-filter-extension
 
-Provides extension methods for Program that can be used to provide Filters to the `extend()` mechanism
+To apply graphics filters on every animation frame using `extend(FILTER_NAME())`.
 
 ##### API
 

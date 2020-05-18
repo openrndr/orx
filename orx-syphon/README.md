@@ -1,5 +1,6 @@
 # orx-syphon
-`orx-syphon` is an extension to send frames to- and from OPENRNDR and other applications in real time using Syphon for Mac.
+
+Send frames to- and from OPENRNDR to other applications in real time using _Syphon_ for Mac.
 
 ![Example](./preview.gif)
 

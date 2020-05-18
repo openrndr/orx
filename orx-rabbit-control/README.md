@@ -1,6 +1,8 @@
 # orx-rabbit-control
 
-`orx-rabbit-control` uses `orx-parameters` annotations to generate a control interface, just like `orx-gui`. It can be used as an alternative to `orx-gui` when you want to control your OPENRNDR program from a mobile device or a different computer.
+Automatically creates a remote UI to control your OPENRNDR program from a mobile device or a different computer. Alternative to `orx-gui`. 
+
+`orx-rabbit-control` uses `orx-parameters` annotations to generate a control interface, just like `orx-gui`. 
 
 <a href="https://rabbitcontrol.github.io">
 <img src="https://rabbitcontrol.github.io/carrot-sketch-c-trans.png" width="50px"> 

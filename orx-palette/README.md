@@ -1,6 +1,6 @@
 # orx-palette
 
-An extension that helps managing a palette of colors. Includes 300 palettes organized in 3 collections gathered from different sources.
+Provides 300 color palettes gathered from different sources, organized in 3 collections.
 
 ## Usage
 

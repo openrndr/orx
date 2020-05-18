@@ -1,6 +1,6 @@
 # orx-mesh-generators
 
-Simple mesh generators for OPENRNDR
+Generates 3D meshes: sphere, box, cylinder, plane, dodecahedron.
 
 ##### usage
 

@@ -1,7 +1,7 @@
 # orx-boofcv
 
-An extension that simplifies the use of the BoofCV computer vision
-library inside OPENRNDR.
+Helper functions to ease working with the BoofCV computer vision library
+and its data types.
 
 BoofCV is an open source library written from scratch for real-time
 computer vision. Its functionality covers a range of subjects,

@@ -1,6 +1,11 @@
 # orx-fx
 
-orx-fx contains ready-to-use effects, or filters, for OPENRNDR. The provided filters are based on OPENRNDR's [`Filter` class](https://api.openrndr.org/org.openrndr.draw/-filter/index.html) and most will have [orx-parameters](https://github.com/openrndr/orx/tree/master/orx-parameters) annotations such that they can easily be used in combination with tools such as [orx-gui](https://github.com/openrndr/orx/tree/master/orx-gui).
+Ready-to-use visual effects or filters. Most include
+[orx-parameters](https://github.com/openrndr/orx/tree/master/orx-parameters) annotations 
+so they can be easily controlled via orx-gui.
+
+The provided filters are based on OPENRNDR's 
+[`Filter` class](https://api.openrndr.org/org.openrndr.draw/-filter/index.html) 
 
 All filters provided by orx-fx assume pre-multiplied alpha inputs, which is OPENRNDR's default.
 
