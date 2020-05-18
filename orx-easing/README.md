@@ -1,6 +1,8 @@
 # orx-easing
 
-A collection of easing functions similar to those on https://easings.net
+Provides easing functions for smooth animation or non-linear interpolation.
+
+Similar to those on https://easings.net
 
  - `easeLinear`
  - `easeBackIn`, `easeBackInOut`, `easeBackOut`

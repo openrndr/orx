@@ -1,6 +1,6 @@
 # orx-camera
 
-3D camera and controls for OPENRNDR. This supersedes the to be deprecated functionality in OPENRNDR.
+3D camera controllable via mouse and keyboard.
 
 ## Usage
 

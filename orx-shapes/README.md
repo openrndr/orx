@@ -1,6 +1,6 @@
 # orx-shapes
 
-A collection of shape generators and modifiers
+Collection of 2D shape generators (polygon, star, rounded rectangle) and shape modifiers.
 
 <!-- __demos__ -->
 ## Demos

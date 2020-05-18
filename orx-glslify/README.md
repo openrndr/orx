@@ -1,6 +1,6 @@
 # orx-glslify
 
-Easily use glslify compatible shaders found on [npm](https://www.npmjs.com/search?q=glslify).
+Load glslify compatible shaders from [npm](https://www.npmjs.com/search?q=glslify).
 
 ### Caveats
 

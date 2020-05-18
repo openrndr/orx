@@ -1,6 +1,6 @@
 # orx-obj-loader
 
-A simple loader for Wavefront .obj files
+Simple loader for Wavefront .obj 3D mesh files.
 
 ##### Usage
 

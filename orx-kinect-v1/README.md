@@ -1,6 +1,6 @@
 # orx-kinect-v1
 
-Support for Kinect V1 RGB-D sensors.
+Support for the Kinect V1 RGB+Depth camera.
 
 ## Example usage
 

@@ -1,6 +1,7 @@
 # orx-jumpflood
 
-An OPENRNDR extra that provides GPU accelerated jump flooding functionality.
+Takes an image and calculates either a distance field or a direction field. 
+GPU accelerated, 2D. Results are provided as an image.
 
 [Original jump flooding algorithm](https://www.comp.nus.edu.sg/~tants/jfa.html)
 
@@ -12,7 +13,7 @@ An OPENRNDR extra that provides GPU accelerated jump flooding functionality.
 the distance in red and the original bitmap in green.
 
 
-````kotlin
+```kotlin
 import org.openrndr.application
 import org.openrndr.draw.*
 import org.openrndr.extra.jumpfill.Threshold
@@ -76,7 +77,7 @@ fun main() = application {
         }
     }
 }
-````
+```
 
 ## Direction field example
 
@@ -84,7 +85,7 @@ fun main() = application {
 x-direction in red, y-direction in green, and the original bitmap in blue.
 
 
-```
+```kotlin
 import org.openrndr.application
 import org.openrndr.draw.*
 import org.openrndr.extra.jumpfill.Threshold

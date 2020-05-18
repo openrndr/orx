@@ -1,7 +1,6 @@
 # orx-gradient-descent
 
-A gradient descent based minimizer that is incredibly
-easy to use.
+Finds equation inputs that output a minimum value: easy to use gradient descent based minimizer. 
 
 ## Usage
 

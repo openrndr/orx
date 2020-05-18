@@ -1,5 +1,7 @@
 # orx-gui
 
+Automatic UI (sliders, buttons, etc.) generated from annotated classes and properties. Uses `orx-panel` and `orx-parameters`.
+
 A quick-and-dirty user interface toolkit.
 
 `orx-gui` uses class and property annotations to generate simple interfaces. The annotations used 

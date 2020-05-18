@@ -1,8 +1,11 @@
 # orx-temporal-blur
 
-`orx-temporal-blur` is a an extension intended for off-line production;
-i.e. videos made using the `ScreenRecorder` extension. This extension uses multi-sampling
-to accumulate and average the final image. Multi-sampling is performed by modifying `Program.clock` 
+Post-processing temporal-blur video effect. CPU intense, therefore not intended 
+for use with the `ScreenRecorder` extension or other real-time uses.
+
+This extension uses multi-sampling to accumulate and average the final image. 
+
+Multi-sampling is performed by modifying `Program.clock` 
 while processing the tail-end of the extension chain. This multi-sampling strategy is slow and not
 entirely suited in real-time and/or interactive settings.
 

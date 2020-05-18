@@ -1,9 +1,13 @@
 # orx-parameters
 
-A collection of annotations and tools that are used to turn Kotlin properties into introspectable parameters. Parameters 
-are highly suitable for automatically generating user interfaces, but note that this is _not_ what `orx-parameters` does.
+Provides annotations and tools for turning Kotlin properties into introspectable parameters.
+Used by [`orx-gui`](../orx-gui/README.md) to automatically generate user interfaces.
 
-For an example (and a highly usable implementation) of generating interfaces from the annotations you are encouraged to check out [`orx-gui`](../orx-gui/README.md). 
+Note that `orx-parameters` does _not_ generate user interfaces, 
+it only provides the information needed to create them.
+
+For an example (and a highly usable implementation) of generating interfaces 
+from the annotations you are encouraged to check out [`orx-gui`](../orx-gui/README.md). 
 
 Currently orx-parameters facilitates the following annotations:
 
@@ -23,7 +27,7 @@ Additionally there is an `ActionParameter` that can be used to annotate function
 
 ## Annotation application
 
-Annotations can be applied to a properties inside a class or object class.
+Annotations can be applied to properties inside a class or object class.
 
 ```kotlin
 val foo = object {
@@ -52,7 +56,7 @@ val foo = object {
     fun actionFunction() {
         // -- 
     }
-    @DoublieListParameter("a double-list parameter", order = 8)
+    @DoubleListParameter("a double-list parameter", order = 8)
     var dl = mutableListOf(0.0, 0.0, 0.0)
 
     @OptionParameter("an option parameter", order = 9)

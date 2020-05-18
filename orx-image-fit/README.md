@@ -1,8 +1,10 @@
 # orx-image-fit
 
-Fits images in frames with two options, contain and cover. Similar to CSS object-fit (https://www.w3schools.com/css/css3_object-fit.asp)
+Draws the given image making sure it fits (`contain`) or it covers (`cover`) the specified area.
 
-`orx-image-fit` provides an extension function`imageFit` for `Drawer`.
+Similar to CSS object-fit (https://www.w3schools.com/css/css3_object-fit.asp)
+
+`orx-image-fit` provides an extension function `imageFit` for `Drawer`.
 
 ## Usage
 

@@ -1,5 +1,13 @@
 # orx-osc
 
+Open Sound Control makes it possible to send and receive messages
+from other OSC enabled programs in the same or a different computer.
+Used to create multi-application or multi-device software.
+
+Can be used to remote control your program from a mobile device,
+to produce sound in a audio programming environment, make games
+and networked experiments.
+
 Orx-osc is a wrapper around javaOSC
 
 ## Usage

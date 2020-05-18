@@ -1,6 +1,6 @@
 # orx-compositor
 
-A simple toolkit to make composite images.
+Toolkit to make composite (layered) images using blend modes and filters.
 
 ##### Usage
 
