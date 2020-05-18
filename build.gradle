@@ -130,7 +130,8 @@ task buildMainReadme {
         for (line in header) {
             newReadme.add(line)
         }
-        newReadme.add("| name | description |")
+        newReadme.add("| name" + ("&nbsp;".repeat(36)) + " | description |")
+        newReadme.add("| --- | --- |")
 
         // Search for the description at the top of the readme.
         // Skip the hash character from the headline, then start

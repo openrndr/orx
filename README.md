@@ -5,7 +5,8 @@
 A growing library of assorted data structures, algorithms and utilities.
 
 <!-- __orxListBegin__ -->
-| name | description |
+| name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | description |
+| --- | --- |
 | [`orx-boofcv`](orx-boofcv/README.md) | Helper functions to ease working with the BoofCV computer vision library and its data types. |
 | [`orx-camera`](orx-camera/README.md) | 3D camera controllable via mouse and keyboard. |
 | [`orx-compositor`](orx-compositor/README.md) | Toolkit to make composite (layered) images using blend modes and filters. |
