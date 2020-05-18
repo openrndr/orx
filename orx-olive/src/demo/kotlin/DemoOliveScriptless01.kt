@@ -2,6 +2,7 @@ import org.openrndr.Extension
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extensions.SingleScreenshot
+import org.openrndr.extra.olive.OliveScriptHost
 import org.openrndr.extra.olive.oliveProgram
 import kotlin.math.cos
 
@@ -11,7 +12,7 @@ fun main() {
             width = 1280
             height = 720
         }
-        oliveProgram {
+        oliveProgram(scriptHost = OliveScriptHost.JSR223) {
             extend {
                 drawer.clear(ColorRGBa.GRAY)
                 drawer.fill = ColorRGBa.WHITE
