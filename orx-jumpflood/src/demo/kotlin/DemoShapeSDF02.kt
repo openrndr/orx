@@ -10,6 +10,7 @@ import org.openrndr.extra.jumpfill.ops.*
 import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
 import org.openrndr.svg.loadSVG
+import kotlin.math.min
 
 fun main() {
     application {
@@ -32,6 +33,7 @@ fun main() {
 
             val strokeFill = SDFStrokeFill()
 
+            // -- this block is for automation purposes only
             if (System.getProperty("takeScreenshot") == "true") {
                 extend(SingleScreenshot()) {
                     this.outputFile = System.getProperty("screenshotPath")
@@ -50,14 +52,14 @@ fun main() {
                 sdf1.setShapes(shapes.mapIndexed { index, it ->
                     it.transform(transform {
                         translate(1280 / 2.0, 720.0 / 2)
-                        rotate(Vector3.Companion.UNIT_Z, seconds * 45.0)
+                        rotate(Vector3.Companion.UNIT_Z, seconds * 45.0 - 30.0)
                         translate(-1280 / 2.0, -720.0 / 2.0)
                     })
                 })
 
                 sdf0.apply(emptyArray(), df0)
                 sdf1.apply(emptyArray(), df1)
-                union.radius = mouse.position.y
+                union.radius = 10.0 + min(mouse.position.y, 100.0)
                 union.apply(arrayOf(df0, df1), df0)
                 onion.radius = 20.0
                 onion.apply(df0, df0)

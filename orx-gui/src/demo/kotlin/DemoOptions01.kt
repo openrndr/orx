@@ -16,6 +16,13 @@ enum class BackgroundColors {
 
 fun main() = application {
     program {
+        // -- this block is for automation purposes only
+        if (System.getProperty("takeScreenshot") == "true") {
+            extend(SingleScreenshot()) {
+                this.outputFile = System.getProperty("screenshotPath")
+            }
+        }
+
         val gui = GUI()
         gui.compartmentsCollapsedByDefault = false
         val settings = @Description("Settings") object {
@@ -24,11 +31,6 @@ fun main() = application {
         }
 
         gui.add(settings)
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
         extend(gui)
         extend {
             when(settings.option) {

@@ -15,6 +15,13 @@ fun main() = application {
     }
 
     program {
+        // -- this block is for automation purposes only
+        if (System.getProperty("takeScreenshot") == "true") {
+            extend(SingleScreenshot()) {
+                this.outputFile = System.getProperty("screenshotPath")
+            }
+        }
+
         val rabbit = RabbitControlServer()
         val font= loadFont("orx-rabbit-control/src/demo/resources/fonts/Roboto-Regular.ttf", 20.0)
         val settings = object {
@@ -49,11 +56,6 @@ fun main() = application {
         }
 
         rabbit.add(settings)
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
         extend(rabbit)
         extend {
             drawer.clear(if (settings.b) ColorRGBa.BLUE else ColorRGBa.BLACK)
