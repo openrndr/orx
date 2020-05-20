@@ -13,6 +13,7 @@ fun main() {
             val rotation = LFO(LFOWave.Sine)
             if (System.getProperty("takeScreenshot") == "true") {
                 extend(SingleScreenshot()) {
+                    this.delayFrames = 10
                     this.outputFile = System.getProperty("screenshotPath")
                 }
             }

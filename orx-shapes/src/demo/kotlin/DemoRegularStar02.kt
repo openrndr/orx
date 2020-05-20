@@ -1,7 +1,6 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extensions.SingleScreenshot
-import org.openrndr.extra.shapes.RoundedRectangle
 import org.openrndr.extra.shapes.regularStar
 import org.openrndr.math.Vector2
 import kotlin.math.cos
