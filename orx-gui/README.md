@@ -183,3 +183,8 @@ import org.openrndr.extra.parameters.DoubleParameter
 [source code](src/demo/kotlin/DemoSimple01.kt)
 
 ![DemoSimple01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-gui/images/DemoSimple01Kt.png)
+
+### DemoXYParameter
+[source code](src/demo/kotlin/DemoXYParameter.kt)
+
+![DemoXYParameterKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-gui/images/DemoXYParameterKt.png)
