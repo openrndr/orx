@@ -7,6 +7,7 @@ import org.openrndr.draw.ColorType
 import org.openrndr.draw.colorBuffer
 import org.openrndr.draw.isolatedWithTarget
 import org.openrndr.draw.renderTarget
+import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.noise.Random
 import org.openrndr.math.Polar
 import org.openrndr.math.clamp
@@ -20,6 +21,14 @@ data class Thing(val color: ColorRGBa, var pos: Polar, val speed: Polar)
 fun main() {
     application {
         program {
+
+            // -- this block is for automation purposes only
+            if (System.getProperty("takeScreenshot") == "true") {
+                extend(SingleScreenshot()) {
+                    this.outputFile = System.getProperty("screenshotPath")
+                }
+            }
+
             val dry = renderTarget(width, height) {
                 colorBuffer(type = ColorType.FLOAT32)
             }
