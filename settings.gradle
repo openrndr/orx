@@ -3,6 +3,7 @@ rootProject.name = 'orx'
 include 'orx-boofcv',
         'orx-camera',
         'orx-compositor',
+        'orx-dnk3',
         'orx-easing',
         'orx-file-watcher',
         'orx-parameters',
