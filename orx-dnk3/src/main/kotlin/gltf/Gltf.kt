@@ -9,6 +9,8 @@ import java.io.RandomAccessFile
 import java.nio.Buffer
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import java.util.*
+import kotlin.collections.LinkedHashMap
 import kotlin.math.max
 
 const val GLTF_FLOAT = 5126
@@ -46,6 +48,7 @@ class GltfPrimitive(val attributes: LinkedHashMap<String, Int>, val indices: Int
             val bufferView = gltfFile.bufferViews[accessor.bufferView]
             val buffer = gltfFile.buffers[bufferView.buffer]
             val contents = buffer.contents(gltfFile)
+            (contents as Buffer).limit(contents.capacity())
             (contents as Buffer).position((bufferView.byteOffset ?: 0) + (accessor.byteOffset))
             (contents as Buffer).limit((bufferView.byteOffset ?: 0) + (accessor.byteOffset)
                     + accessor.count * indexType.sizeInBytes)
@@ -146,7 +149,7 @@ class GltfPbrMetallicRoughness(val baseColorFactor: DoubleArray?,
                                val metallicFactor: Double?)
 class GltfMaterialTexture(val index: Int, val scale: Double?, val texCoord: Int?)
 
-class GltfImage(val uri: String)
+class GltfImage(val uri: String?, val bufferView: Int?)
 
 class GltfSampler(val magFilter: Int, val minFilter: Int, val wrapS: Int, val wrapT: Int)
 
@@ -158,7 +161,15 @@ class GltfMaterial(val name: String,
                    val occlusionTexture: GltfMaterialTexture?,
                    val emissiveTexture: GltfMaterialTexture?,
                    val emissiveFactor: DoubleArray?,
-                   val pbrMetallicRoughness: GltfPbrMetallicRoughness?)
+                   val pbrMetallicRoughness: GltfPbrMetallicRoughness?,
+                   val extensions: GltfMaterialExtensions?
+                   )
+
+class GltfMaterialExtensions(
+        val KHR_materials_pbrSpecularGlossiness: KhrMaterialsPbrSpecularGlossiness?
+)
+
+class KhrMaterialsPbrSpecularGlossiness(val diffuseFactor: DoubleArray?, val diffuseTexture: GltfMaterialTexture?)
 
 class GltfBufferView(val buffer: Int,
                      val byteOffset: Int?,
@@ -168,13 +179,24 @@ class GltfBufferView(val buffer: Int,
 
 class GltfBuffer(val byteLength: Int, val uri: String?) {
     fun contents(gltfFile: GltfFile): ByteBuffer = if (uri != null) {
-        val raf = RandomAccessFile(File(gltfFile.file.parentFile, uri), "r")
-        val buffer = ByteBuffer.allocateDirect(byteLength)
-        buffer.order(ByteOrder.nativeOrder())
-        buffer.rewind()
-        raf.channel.read(buffer)
-        buffer.rewind()
-        buffer
+
+        if (uri.startsWith("data:")) {
+            val base64 = uri.substring(uri.indexOf(",") + 1)
+            val decoded = Base64.getDecoder().decode(base64)
+            val buffer = ByteBuffer.allocateDirect(decoded.size)
+            buffer.order(ByteOrder.nativeOrder())
+            buffer.put(decoded)
+            buffer.rewind()
+            buffer
+        } else {
+            val raf = RandomAccessFile(File(gltfFile.file.parentFile, uri), "r")
+            val buffer = ByteBuffer.allocateDirect(byteLength)
+            buffer.order(ByteOrder.nativeOrder())
+            buffer.rewind()
+            raf.channel.read(buffer)
+            buffer.rewind()
+            buffer
+        }
     } else {
         gltfFile.bufferBuffer ?: error("no embedded buffer from glb")
     }

@@ -14,7 +14,28 @@ fun GltfFile.buildSceneNodes(): List<List<SceneNode>> {
 
     val sceneImages = mutableMapOf<GltfImage, ColorBuffer>()
     fun GltfImage.createSceneImage(): ColorBuffer {
-        return sceneImages.getOrPut(this) { loadImage(File(file.parent, uri)) }
+        return sceneImages.getOrPut(this) {
+            if (uri == null) {
+
+                bufferView?.let { bv ->
+                    val localBufferView = bufferViews[bv]
+
+                    val localBuffer = buffers[localBufferView.buffer].contents(this@buildSceneNodes)
+                    require(localBufferView.byteOffset != null)
+                    require(localBufferView.byteLength != null)
+                    localBuffer.position(localBufferView.byteOffset)
+                    localBuffer.limit(localBufferView.byteOffset + localBufferView.byteLength)
+                    ColorBuffer.fromBuffer(localBuffer)
+                } ?: error("no uri and no bufferview")
+
+            } else {
+                if (uri.startsWith("data:")) {
+                    loadImage(uri)
+                } else {
+                    loadImage(File(file.parent, uri))
+                }
+            }
+        }
     }
 
     val sceneMaterials = mutableMapOf<GltfMaterial, Material>()
@@ -58,9 +79,42 @@ fun GltfFile.buildSceneNodes(): List<List<SceneNode>> {
             cb.filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
             cb.wrapU = WrapMode.REPEAT
             cb.wrapV = WrapMode.REPEAT
+
             val sceneTexture = Texture(ModelCoordinates(texture = cb, tangentInput = "va_tangent", pre = "x_texCoord.y = 1.0-x_texCoord.y;"), TextureTarget.NORMAL)
             material.textures.add(sceneTexture)
         }
+
+        emissiveFactor?.let {
+            material.emission = ColorRGBa(it[0], it[1], it[2])
+        }
+
+        emissiveTexture?.let {
+            val cb = images!![textures!![it.index].source].createSceneImage()
+            val sceneTexture = Texture(ModelCoordinates(texture = cb, pre = "x_texCoord.y = 1.0-x_texCoord.y;"), TextureTarget.EMISSION)
+            material.textures.add(sceneTexture)
+        }
+
+
+        extensions?.let { ext ->
+
+            ext.KHR_materials_pbrSpecularGlossiness?.let { sg ->
+                sg.diffuseFactor?.let {
+                    material.color = ColorRGBa(it[0], it[1], it[2], it[3])
+                }
+                sg.diffuseTexture?.let {
+                    val cb = images!![textures!![it.index].source].createSceneImage()
+                    cb.filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
+                    cb.wrapU = WrapMode.REPEAT
+                    cb.wrapV = WrapMode.REPEAT
+                    val sceneTexture = Texture(ModelCoordinates(texture = cb, pre = "x_texCoord.y = 1.0-x_texCoord.y;"), TextureTarget.COLOR)
+                    material.textures.add(sceneTexture)
+                }
+
+            }
+
+
+        }
+
 
         emissiveFactor?.let {
             material.emission = ColorRGBa(it[0], it[1], it[2], 1.0)

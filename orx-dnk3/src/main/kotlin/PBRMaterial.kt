@@ -310,7 +310,7 @@ class PBRMaterial : Material {
                         TextureTarget.METALNESS -> "m_metalness = tex$index.r;"
                         TextureTarget.ROUGHNESS -> "m_roughness = tex$index.r;"
                         TextureTarget.METALNESS_ROUGHNESS -> "m_metalness = tex$index.r; m_roughness = tex$index.g;"
-                        TextureTarget.EMISSION -> "m_emission += tex$index.rgb;"
+                        TextureTarget.EMISSION -> "m_emission *= tex$index.rgb;"
                         TextureTarget.NORMAL -> "f_worldNormal = normalize((v_modelNormalMatrix * vec4(tex$index.xyz,0.0)).xyz);"
                         TextureTarget.AMBIENT_OCCLUSION -> "m_ambientOcclusion *= tex$index.r;"
                         is TextureTarget.Height -> ""
