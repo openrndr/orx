@@ -95,27 +95,19 @@ class Envelope(
         }
 
         if (phase == EnvelopePhase.Attack) {
-            current = if (attack == 0.0) {
-                targetValue
-            } else {
-                val t = clamp(cycleTime / attack, 0.0, 1.0)
+            val denom = if (attack == 0.0) 1.0 else attack
 
-                mix(restValue, targetValue, exponentialEasing(t, easingFactor))
-            }
+            val t = clamp(cycleTime / denom, 0.0, 1.0)
+
+            current = mix(restValue, targetValue, exponentialEasing(t, easingFactor))
         }
 
         if (phase == EnvelopePhase.Decay) {
-            current = if (decay == 0.0) {
-                initialRestValue
-            } else {
-                val t = clamp((cycleTime - attack) / decay, 0.0, 1.0)
+            val denom = if (decay == 0.0) 1.0 else decay
 
-                mix(targetValue, initialRestValue, exponentialEasing(t, easingFactor))
-            }
-        }
+            val t = clamp((cycleTime - attack) / denom, 0.0, 1.0)
 
-        if (current.isNaN()) {
-            println("current is NaN, $phase")
+            current = mix(targetValue, initialRestValue, exponentialEasing(t, easingFactor))
         }
     }
 
