@@ -43,11 +43,13 @@ class LambdaExtractor(val ruleNames: List<String>, val lambdaName: String) : Kot
 
     var result: String? = null
     override fun enterAnnotatedLambda(ctx: KotlinParser.AnnotatedLambdaContext?) {
-        val puec = ctx!!.parent!!.parent!!.parent!! as KotlinParser.PostfixUnaryExpressionContext
-        val identifier = puec.primaryExpression().simpleIdentifier().Identifier().text
-        if (identifier == lambdaName) {
-            if (result == null) {
-                result = ctx.verbatimText(1, 1)
+        val puec = ctx?.parent?.parent?.parent as? KotlinParser.PostfixUnaryExpressionContext
+        if (puec != null) {
+            val identifier = puec.primaryExpression()?.simpleIdentifier()?.Identifier()?.text
+            if (identifier == lambdaName) {
+                if (result == null) {
+                    result = ctx.verbatimText(1, 1)
+                }
             }
         }
     }
