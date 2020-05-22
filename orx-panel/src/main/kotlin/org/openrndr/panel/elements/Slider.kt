@@ -23,13 +23,20 @@ data class Range(val min: Double, val max: Double) {
     val span: Double get() = max - min
 }
 
+enum class SliderMode {
+    RANGE,
+    POINT,
+    SEGMENT
+}
+
 class Slider : Element(ElementType("slider")), DisposableElement {
     override var disposed = false
-
     override val handlesKeyboardFocus = true
 
     var label = ""
     var precision = 3
+    var mode = SliderMode.RANGE
+
     var value: Double
         set(v) {
             val oldV = realValue
@@ -204,11 +211,59 @@ class Slider : Element(ElementType("slider")), DisposableElement {
         drawer.stroke = ((computedStyle.color as Color.RGBa).color.opacify(0.25))
         drawer.lineSegment(margin + 0.0, 2.0, margin + layout.screenWidth - 2 * margin, 2.0)
 
-        drawer.stroke = ((computedStyle.color as Color.RGBa).color.opacify(1.0))
-        drawer.lineSegment(margin, 2.0, margin + x, 2.0)
+        if (mode == SliderMode.RANGE) {
+            drawer.stroke = ((computedStyle.color as Color.RGBa).color.opacify(1.0))
+            drawer.lineSegment(margin, 2.0, margin + x, 2.0)
 
-        drawer.stroke = null
-        drawer.circle(Vector2(margin + x, 2.0), 5.0)
+            drawer.fill = ((computedStyle.color as Color.RGBa).color.opacify(1.0))
+            drawer.stroke = null
+            drawer.strokeWeight = 0.0
+            drawer.circle(margin + x, 2.0, 5.0)
+        }
+
+        if (mode == SliderMode.POINT && precision == 0) {
+            val lineSegments = mutableListOf<Vector2>()
+            for (i in range.min.toInt()..range.max.toInt()) {
+                val lx = ((i - range.min) / range.span) * (layout.screenWidth - 2 * margin)
+                drawer.strokeWeight = 1.0
+                drawer.stroke = ((computedStyle.color as Color.RGBa).color.opacify(0.5))
+                lineSegments.add(Vector2(margin + lx, -2.0))
+                lineSegments.add(Vector2(margin + lx, 4.0))
+            }
+            drawer.lineSegments(lineSegments)
+        }
+
+        if (mode == SliderMode.SEGMENT) {
+            drawer.stroke = ((computedStyle.color as Color.RGBa).color.opacify(1.0))
+
+            val sx = ((value - range.min) / (range.span+1.0)) * (layout.screenWidth - 2 * margin) + margin
+            val ex = (((value+1) - range.min) / (range.span+1.0)) * (layout.screenWidth - 2 * margin) + margin
+
+            drawer.strokeWeight = 8.0
+            drawer.lineSegment(sx, 2.0, ex, 2.0)
+
+            drawer.stroke = null
+            drawer.strokeWeight = 0.0
+
+
+            val lineSegments = mutableListOf<Vector2>()
+            for (i in range.min.toInt()..(range.max.toInt()+1)) {
+                val lx = ((i - range.min) / (range.span+1.0)) * (layout.screenWidth - 2 * margin)
+                drawer.strokeWeight = 1.0
+                drawer.stroke = ((computedStyle.color as Color.RGBa).color.opacify(0.5))
+                lineSegments.add(Vector2(margin + lx, -2.0))
+                lineSegments.add(Vector2(margin + lx, 4.0))
+            }
+            drawer.lineSegments(lineSegments)
+        }
+
+
+        if (mode == SliderMode.POINT) {
+            drawer.fill = ((computedStyle.color as Color.RGBa).color.opacify(1.0))
+            drawer.stroke = null
+            drawer.circle(margin + x, 2.0, 8.0)
+        }
+
 
         (root() as? Body)?.controlManager?.fontManager?.let {
             val font = it.font(computedStyle)
