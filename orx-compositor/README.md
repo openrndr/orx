@@ -52,3 +52,9 @@ fun main() {
     }
 }
 ```
+<!-- __demos__ -->
+## Demos
+### DemoCompositor01
+[source code](src/demo/kotlin/DemoCompositor01.kt)
+
+![DemoCompositor01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-compositor/images/DemoCompositor01Kt.png)
