@@ -147,6 +147,7 @@ class GltfPbrMetallicRoughness(val baseColorFactor: DoubleArray?,
                                var metallicRoughnessTexture: GltfMaterialTexture?,
                                val roughnessFactor: Double?,
                                val metallicFactor: Double?)
+
 class GltfMaterialTexture(val index: Int, val scale: Double?, val texCoord: Int?)
 
 class GltfImage(val uri: String?, val bufferView: Int?)
@@ -156,6 +157,7 @@ class GltfSampler(val magFilter: Int, val minFilter: Int, val wrapS: Int, val wr
 class GltfTexture(val sampler: Int, val source: Int)
 
 class GltfMaterial(val name: String,
+                   val alphaMode: String?,
                    val doubleSided: Boolean?,
                    val normalTexture: GltfMaterialTexture?,
                    val occlusionTexture: GltfMaterialTexture?,
@@ -163,7 +165,7 @@ class GltfMaterial(val name: String,
                    val emissiveFactor: DoubleArray?,
                    val pbrMetallicRoughness: GltfPbrMetallicRoughness?,
                    val extensions: GltfMaterialExtensions?
-                   )
+)
 
 class GltfMaterialExtensions(
         val KHR_materials_pbrSpecularGlossiness: KhrMaterialsPbrSpecularGlossiness?
@@ -214,6 +216,13 @@ class GltfAccessor(
         val type: String
 )
 
+class GltfAnimation(val name: String?, val channels: List<GltfChannel>, val samplers: List<GltfAnimationSampler>)
+class GltfAnimationSampler(val input: Int, val interpolation: String, val output: Int)
+
+class GltfChannelTarget(val node: Int?, val path: String?)
+
+class GltfChannel(val sampler: Int, val target: GltfChannelTarget)
+
 class GltfFile(
         val asset: GltfAsset?,
         val scene: Int?,
@@ -226,17 +235,26 @@ class GltfFile(
         val buffers: List<GltfBuffer>,
         val images: List<GltfImage>?,
         val textures: List<GltfTexture>?,
-        val samplers: List<GltfSampler>?
+        val samplers: List<GltfSampler>?,
+        val animations: List<GltfAnimation>?) {
+    @Transient
+    lateinit var file: File
 
-) {
-    @Transient lateinit var file: File
-    @Transient var bufferBuffer : ByteBuffer? = null
+    @Transient
+    var bufferBuffer: ByteBuffer? = null
 }
 
-fun loadGltfFromFile(file: File): GltfFile {
-    val gson = Gson()
-    val json = file.readText()
-    return gson.fromJson(json, GltfFile::class.java).apply {
-        this.file = file
+fun loadGltfFromFile(file: File): GltfFile = when (file.extension) {
+    "gltf" -> {
+        val gson = Gson()
+        val json = file.readText()
+        gson.fromJson(json, GltfFile::class.java).apply {
+            this.file = file
+        }
     }
+    "glb" -> {
+        loadGltfFromGlbFile(file)
+    }
+    else -> error("extension ${file.extension} not supported in ${file}")
 }
+

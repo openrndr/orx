@@ -5,7 +5,10 @@ import org.openrndr.extra.dnk3.*
 import org.openrndr.extra.dnk3.gltf.buildSceneNodes
 import org.openrndr.extra.dnk3.gltf.loadGltfFromFile
 import org.openrndr.extras.camera.Orbital
+import org.openrndr.math.Matrix33
+import org.openrndr.math.Quaternion
 import org.openrndr.math.Vector3
+import org.openrndr.math.mod_
 import org.openrndr.math.transforms.transform
 import java.io.File
 
@@ -23,8 +26,9 @@ fun main() = application {
             }
         }
 
-        val gltf = loadGltfFromFile(File("demo-data/gltf-models/suzanne/Suzanne.gltf"))
+        val gltf = loadGltfFromFile(File("demo-data/gltf-models/box-animated/BoxAnimated.glb"))
         val scene = Scene(SceneNode())
+
 
         // -- add some lights
         val lightNode = SceneNode()
@@ -36,9 +40,10 @@ fun main() = application {
         scene.root.entities.add(HemisphereLight().apply {
             upColor = ColorRGBa.BLUE.shade(0.4)
             downColor = ColorRGBa.GRAY.shade(0.1)
-            })
+        })
         scene.root.children.add(lightNode)
-        scene.root.children.addAll(gltf.buildSceneNodes().scenes.first())
+        val sceneData = gltf.buildSceneNodes()
+        scene.root.children.addAll(sceneData.scenes.first())
 
         // -- create a renderer
         val renderer = dryRenderer()
@@ -48,6 +53,7 @@ fun main() = application {
             fov = 40.0
         }
         extend {
+            sceneData.animations[0].applyToTargets(seconds.mod_(4.0))
             drawer.clear(ColorRGBa.PINK)
             renderer.draw(drawer, scene)
         }

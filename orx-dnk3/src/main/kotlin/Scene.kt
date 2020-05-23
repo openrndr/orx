@@ -1,14 +1,15 @@
 package org.openrndr.extra.dnk3
 
+import org.openrndr.Dispatcher
 import org.openrndr.math.Matrix44
 
-class Scene(val root: SceneNode = SceneNode(),
-            val updateFunctions: MutableList<() -> Unit> = mutableListOf())
+class Scene(val root: SceneNode = SceneNode(), val dispatcher: Dispatcher = Dispatcher())
 
 
-open class SceneNode(var entities: MutableList<Entity> = mutableListOf()) {
+open class SceneNode() {
+    var entities: MutableList<Entity> = mutableListOf()
     var parent: SceneNode? = null
-    var transform = Matrix44.IDENTITY
+    open var transform = Matrix44.IDENTITY
     var worldTransform = Matrix44.IDENTITY
     val children = mutableListOf<SceneNode>()
     var disposed = false

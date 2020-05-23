@@ -57,12 +57,12 @@ private fun DirectionalLight.fs(index: Int) = """
 //|    vec3 L = normalize(Lr);
 |    ${shadows.fs(index)}
 |    
-|    f_diffuse += NoL * attenuation * Fd_Burley(m_roughness * m_roughness, NoV, NoL, LoH) * p_lightColor$index.rgb * m_color.rgb ;
+|    f_diffuse += NoL * attenuation * Fd_Burley(m_roughness * m_roughness, NoV, NoL, LoH) * p_lightColor$index.rgb * m_color.rgb * m_ambientOcclusion;;
 |    float Dg = D_GGX(m_roughness * m_roughness, NoH, H);
 |    float Vs = V_SmithGGXCorrelated(m_roughness * m_roughness, NoV, NoL);
-|    vec3 F = F_Schlick(m_color * (m_metalness) + 0.04 * (1.0-m_metalness), LoH);
+|    vec3 F = F_Schlick(m_color.rgb * (m_metalness) + 0.04 * (1.0-m_metalness), LoH);
 |    vec3 Fr = (Dg * Vs) * F;
-|    f_specular += NoL * attenuation * Fr * p_lightColor$index.rgb;
+|    f_specular += NoL * attenuation * Fr * p_lightColor$index.rgb *  m_ambientOcclusion;;
 |}
 """.trimMargin()
 
@@ -70,7 +70,7 @@ private fun HemisphereLight.fs(index: Int): String = """
 |{
 |   float f = dot(N, p_lightDirection$index) * 0.5 + 0.5;
 |   vec3 irr = ${irradianceMap?.let { "texture(p_lightIrradianceMap$index, N).rgb" } ?: "vec3(1.0)"};
-|   f_diffuse += mix(p_lightDownColor$index.rgb, p_lightUpColor$index.rgb, f) * irr * ((1.0 - m_metalness) * m_color.rgb);// * m_ambientOcclusion;
+|   f_diffuse += mix(p_lightDownColor$index.rgb, p_lightUpColor$index.rgb, f) * irr * ((1.0 - m_metalness) * m_color.rgb) * m_ambientOcclusion;
 |}
 """.trimMargin()
 
@@ -98,7 +98,7 @@ private fun SpotLight.fs(index: Int): String {
 |       f_diffuse += NoL * (0.1+0.9*attenuation) * Fd_Burley(m_roughness * m_roughness, NoV, NoL, LoH) * p_lightColor$index.rgb * m_color.rgb ;
 |       float Dg = D_GGX(m_roughness * m_roughness, NoH, H);
 |       float Vs = V_SmithGGXCorrelated(m_roughness * m_roughness, NoV, NoL);
-|       vec3 F = F_Schlick(m_color * (m_metalness) + 0.04 * (1.0-m_metalness), LoH);
+|       vec3 F = F_Schlick(m_color.rgb * (m_metalness) + 0.04 * (1.0-m_metalness), LoH);
 |       vec3 Fr = (Dg * Vs) * F;
 |       f_specular += NoL * attenuation * Fr * p_lightColor$index.rgb;
 |   }
@@ -252,7 +252,6 @@ class PBRMaterial : Material {
     var color = ColorRGBa.WHITE
     var metalness = 0.5
     var roughness = 1.0
-    var opacity = 1.0
     var emission = ColorRGBa.BLACK
 
     var vertexPreamble: String? = null
@@ -281,15 +280,13 @@ class PBRMaterial : Material {
         val cached = shadeStyles.getOrPut(context) {
             val needLight = needLight(context)
             val preambleFS = """
-            vec3 m_color = p_color.rgb;
+            vec4 m_color = p_color;
             float m_f0 = 0.5;
             float m_roughness = p_roughness;
             float m_metalness = p_metalness;
-            float m_opacity = p_opacity;
             float m_ambientOcclusion = 1.0;
             vec3 m_emission = p_emission.rgb;
             vec3 m_normal = vec3(0.0, 0.0, 1.0);
-            float f_alpha = m_opacity;
             vec4 f_fog = vec4(0.0, 0.0, 0.0, 0.0);
             vec3 f_worldNormal = v_worldNormal;
         """.trimIndent()
@@ -306,7 +303,7 @@ class PBRMaterial : Material {
                 } + textures.mapIndexed { index, texture ->
                     when (texture.target) {
                         TextureTarget.NONE -> ""
-                        TextureTarget.COLOR -> "m_color.rgb *= pow(tex$index.rgb, vec3(2.2));"
+                        TextureTarget.COLOR -> "m_color.rgb *= pow(tex$index.rgb, vec3(2.2)); m_color.a *= tex$index.a;"
                         TextureTarget.METALNESS -> "m_metalness = tex$index.r;"
                         TextureTarget.ROUGHNESS -> "m_roughness = tex$index.r;"
                         TextureTarget.METALNESS_ROUGHNESS -> "m_metalness = tex$index.r; m_roughness = tex$index.g;"
@@ -420,7 +417,6 @@ class PBRMaterial : Material {
         shadeStyle.parameter("color", color)
         shadeStyle.parameter("metalness", metalness)
         shadeStyle.parameter("roughness", roughness)
-        shadeStyle.parameter("opacity", opacity)
 
         parameters.forEach { (k, v) ->
             when (v) {
@@ -464,7 +460,6 @@ class PBRMaterial : Material {
                 when (light) {
                     is AmbientLight -> {
                     }
-
                     is PointLight -> {
                         shadeStyle.parameter("lightPosition$index", (node.worldTransform * Vector4.UNIT_W).xyz)
                         shadeStyle.parameter("lightConstantAttenuation$index", light.constantAttenuation)

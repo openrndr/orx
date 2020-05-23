@@ -21,7 +21,7 @@ class SceneRenderer {
 
     var cubemapDepthBuffer = depthBuffer(256, 256, DepthFormat.DEPTH16, BufferMultisample.Disabled)
 
-    var outputPasses = mutableListOf(DefaultPass)
+    var outputPasses = mutableListOf(DefaultOpaquePass, DefaultTransparentPass)
     var outputPassTarget: RenderTarget? = null
     var outputPassTargetMS: RenderTarget? = null
 
@@ -36,9 +36,9 @@ class SceneRenderer {
         drawer.depthTestPass = DepthTestPass.LESS_OR_EQUAL
 
         drawer.cullTestPass = CullTestPass.FRONT
-        scene.updateFunctions.forEach {
-            it()
-        }
+
+        scene.dispatcher.execute()
+
 
         // update all the transforms
         scene.root.scan(Matrix44.IDENTITY) { p ->
@@ -99,7 +99,10 @@ class SceneRenderer {
             for (pass in outputPasses) {
                 val materialContext = MaterialContext(pass, lights, fogs, shadowLightTargets, meshCubemaps)
 
-                if ((pass != DefaultPass || postSteps.isNotEmpty()) && outputPassTarget == null) {
+
+                val defaultPasses = setOf(DefaultTransparentPass, DefaultOpaquePass)
+
+                if ((pass !in defaultPasses || postSteps.isNotEmpty()) && outputPassTarget == null) {
                     outputPassTarget = pass.createPassTarget(RenderTarget.active.width, RenderTarget.active.height)
                 }
 
@@ -165,6 +168,8 @@ class SceneRenderer {
     private fun drawPass(drawer: Drawer, pass: RenderPass, materialContext: MaterialContext,
                          meshes: List<NodeContent<Mesh>>,
                          instancedMeshes: List<NodeContent<InstancedMesh>>) {
+
+        drawer.depthWrite = pass.depthWrite
         val primitives = meshes.flatMap { mesh ->
             mesh.content.primitives.map { primitive ->
                 NodeContent(mesh.node, primitive)
@@ -230,6 +235,7 @@ class SceneRenderer {
                                 primitive.primitive.geometry.vertexCount)
                     }
                 }
+        drawer.depthWrite = true
     }
 }
 

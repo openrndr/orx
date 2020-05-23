@@ -26,7 +26,7 @@ abstract class ColorBufferFacetCombiner(facets: Set<FacetType>,
                                         targetOutput: String,
                                         val format: ColorFormat,
                                         val type: ColorType,
-                                        val blendMode: BlendMode = BlendMode.REPLACE) : FacetCombiner(facets, targetOutput)
+                                        val blendMode: BlendMode = BlendMode.BLEND) : FacetCombiner(facets, targetOutput)
 
 class MomentsFacet : ColorBufferFacetCombiner(setOf(FacetType.WORLD_POSITION), "moments", ColorFormat.RG, ColorType.FLOAT16) {
     override fun generateShader(): String {
@@ -114,7 +114,9 @@ class ClipPositionFacet : ColorBufferFacetCombiner(setOf(FacetType.CLIP_POSITION
 class LDRColorFacet : ColorBufferFacetCombiner(setOf(FacetType.DIFFUSE, FacetType.SPECULAR), "color", ColorFormat.RGBa, ColorType.UINT8) {
     override fun generateShader() = """
     vec3 oofinalColor =  (f_diffuse.rgb + f_specular.rgb + f_emission.rgb) * (1.0 - f_fog.a) + f_fog.rgb * f_fog.a;
-    o_$targetOutput.rgba = pow(vec4(oofinalColor, 1.0), vec4(1.0/2.2));
-    o_$targetOutput.a = f_alpha;
+    o_$targetOutput = pow(vec4(oofinalColor.rgb, 1.0), vec4(1.0/2.2));
+    o_$targetOutput *= m_color.a; 
+    
+    
     """
 }

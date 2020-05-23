@@ -11,6 +11,7 @@ sourceSets {
 dependencies {
     implementation "com.google.code.gson:gson:$gsonVersion"
     implementation(project(":orx-fx"))
+    implementation(project(":orx-keyframer"))
     demoImplementation(project(":orx-camera"))
     demoImplementation("org.openrndr:openrndr-core:$openrndrVersion")
     demoImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")

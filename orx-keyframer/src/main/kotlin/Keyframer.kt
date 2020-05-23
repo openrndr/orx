@@ -23,8 +23,6 @@ enum class KeyframerFormat {
     FULL
 }
 
-
-
 open class Keyframer {
     private var currentTime = 0.0
     operator fun invoke(time: Double) {

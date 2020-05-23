@@ -5,6 +5,7 @@ import org.openrndr.extra.dnk3.*
 
 import org.openrndr.extra.dnk3.gltf.buildSceneNodes
 import org.openrndr.extra.dnk3.gltf.loadGltfFromFile
+import org.openrndr.extra.dnk3.gltf.loadGltfFromGlbFile
 import org.openrndr.extras.camera.Orbital
 import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
@@ -24,30 +25,32 @@ fun main() = application {
             }
         }
 
-        val gltf = loadGltfFromFile(File("demo-data/gltf-models/duck/Duck.gltf"))
+        val gltf = loadGltfFromFile(File("demo-data/gltf-models/complex02/scene.gltf"))
+//        val gltf = loadGltfFromGlbFile(File("demo-data/gltf-models/splash-sss.glb"))
         val scene = Scene(SceneNode())
 
         // -- add some lights
         val lightNode = SceneNode()
         lightNode.transform = transform {
             translate(0.0, 10.0, 0.0)
-            rotate(Vector3.UNIT_X, -65.0)
+            rotate(Vector3.UNIT_X, -90.0)
         }
         lightNode.entities.add(DirectionalLight())
         scene.root.entities.add(HemisphereLight().apply {
-            upColor = ColorRGBa.WHITE.shade(0.4)
+            upColor = ColorRGBa.WHITE.shade(1.0)
             downColor = ColorRGBa.WHITE.shade(0.1)
             })
         scene.root.children.add(lightNode)
-        scene.root.children.addAll(gltf.buildSceneNodes().first())
+        scene.root.children.addAll(gltf.buildSceneNodes().scenes.first())
+
 
         // -- create a renderer
         val renderer = dryRenderer()
         extend(Orbital()) {
-            far = 50.0
+            far = 500.0
             lookAt = Vector3(0.0, 0.7, 0.0)
             eye = Vector3(3.0, 0.7, -2.0)
-            fov = 40.0
+            fov = 30.0
         }
         extend {
             drawer.clear(ColorRGBa.PINK)

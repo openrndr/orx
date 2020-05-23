@@ -5,9 +5,16 @@ import org.openrndr.draw.DepthFormat
 import org.openrndr.draw.RenderTarget
 import org.openrndr.draw.renderTarget
 
-class RenderPass(val combiners: List<FacetCombiner>, val renderOpaque: Boolean = true, val renderTransparent: Boolean = false)
+class RenderPass(val combiners: List<FacetCombiner>,
+                 val renderOpaque: Boolean = true,
+                 val renderTransparent: Boolean = false,
+                 val depthWrite: Boolean = true
+
+)
 
 val DefaultPass = RenderPass(listOf(LDRColorFacet()))
+val DefaultOpaquePass = RenderPass(listOf(LDRColorFacet()), renderOpaque = true, renderTransparent = false)
+val DefaultTransparentPass = RenderPass(listOf(LDRColorFacet()), renderOpaque = false, renderTransparent = true, depthWrite = false)
 val LightPass = RenderPass(emptyList())
 val VSMLightPass = RenderPass(listOf(MomentsFacet()))
 
