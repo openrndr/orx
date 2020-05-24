@@ -248,13 +248,7 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
                 for (i in 0 until 16) {
                     array[i] = ibmData.float.toDouble()
                 }
-
-                val m = Matrix44.fromDoubleArray(array).transposed
-                println("--")
-                println(m)
-                println(array.joinToString(","))
-
-                m
+                Matrix44.fromDoubleArray(array).transposed
             }
 
             SkinnedMesh(primitives.map {
@@ -264,9 +258,7 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
     }
 
     val scenes = scenes.map { scene ->
-        println(scene.nodes.size)
         scene.nodes.map { node ->
-            println("node: $node")
             val gltfNode = nodes[node]
             val sceneNode = gltfNode.createSceneNode()
             sceneNode
@@ -275,7 +267,6 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
     for ((gltfNode, sceneNode) in sceneNodes) {
         gltfNode.mesh?.let {
             val skin = gltfNode.skin?.let { (skins!!)[it] }
-            println("adding mesh")
             sceneNode.entities.add(meshes[it].createSceneMesh(skin))
         }
     }
