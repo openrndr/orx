@@ -307,6 +307,8 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
                         val outputOffset = (outputBufferView.byteOffset ?: 0) + (outputAccessor.byteOffset ?: 0)
                         val inputStride = (inputBufferView.byteStride ?: 4)
                         val outputStride = (outputBufferView.byteStride ?: 12)
+
+                        inputData.limit(inputData.capacity())
                         for (i in 0 until outputAccessor.count) {
                             val input = inputData.getFloat(inputOffset + i * inputStride).toDouble()
                             val outputX = outputData.getFloat(outputOffset + i * outputStride).toDouble()
