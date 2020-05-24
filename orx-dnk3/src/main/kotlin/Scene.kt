@@ -7,6 +7,7 @@ class Scene(val root: SceneNode = SceneNode(), val dispatcher: Dispatcher = Disp
 
 
 open class SceneNode() {
+    var name: String = ""
     var entities: MutableList<Entity> = mutableListOf()
     var parent: SceneNode? = null
     open var transform = Matrix44.IDENTITY

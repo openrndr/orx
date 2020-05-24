@@ -28,7 +28,8 @@ class GltfAsset(val generator: String?, val version: String?)
 
 class GltfScene(val nodes: IntArray)
 
-class GltfNode(val children: IntArray?,
+class GltfNode(val name:String,
+               val children: IntArray?,
                val matrix: DoubleArray?,
                val scale: DoubleArray?,
                val rotation: DoubleArray?,

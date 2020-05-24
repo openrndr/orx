@@ -210,6 +210,7 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
     val sceneNodes = mutableMapOf<GltfNode, SceneNode>()
     fun GltfNode.createSceneNode(): SceneNode = sceneNodes.getOrPut(this) {
         val node = GltfSceneNode()
+        node.name = name ?: ""
         node.translation = translation?.let { Vector3(it[0], it[1], it[2]) } ?: Vector3.ZERO
         node.scale = scale?.let { Vector3(it[0], it[1], it[2]) } ?: Vector3.ONE
         node.rotation = rotation?.let { Quaternion(it[0], it[1], it[2], it[3]) } ?: Quaternion.IDENTITY
