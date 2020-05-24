@@ -12,10 +12,10 @@ Supported Gltf features
   - [x] Basic materials
   - [x] Normal maps
   - [x] Metallic/roughness maps
-  - [ ] Skinning
+  - [x] Skinning
   - [x] Double-sided materials
   - [ ] Transparency
-- [ ] Animations 
+- [x] Animations 
 - [ ] Cameras
 - [ ] Lights
 <!-- __demos__ -->

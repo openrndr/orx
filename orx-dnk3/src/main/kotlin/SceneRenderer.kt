@@ -5,6 +5,7 @@ import org.openrndr.draw.*
 import org.openrndr.draw.depthBuffer
 import org.openrndr.extra.fx.blur.ApproximateGaussianBlur
 import org.openrndr.math.Matrix44
+import org.openrndr.math.transforms.normalMatrix
 
 class SceneRenderer {
 
@@ -48,9 +49,10 @@ class SceneRenderer {
 
         val lights = scene.root.findContent { this as? Light }
         val meshes = scene.root.findContent { this as? Mesh }
+        val skinnedMeshes = scene.root.findContent { this as? SkinnedMesh }
+
         val fogs = scene.root.findContent { this as? Fog }
         val instancedMeshes = scene.root.findContent { this as? InstancedMesh }
-
 
         run {
             lights.filter { it.content is ShadowLight && (it.content as ShadowLight).shadows is Shadows.MappedShadows }.forEach {
@@ -80,7 +82,7 @@ class SceneRenderer {
 
                     drawer.clear(ColorRGBa.BLACK)
                     drawer.cullTestPass = CullTestPass.FRONT
-                    drawPass(drawer, pass, materialContext, meshes, instancedMeshes)
+                    drawPass(drawer, pass, materialContext, meshes, instancedMeshes, skinnedMeshes)
                 }
                 when (shadowLight.shadows) {
                     is Shadows.VSM -> {
@@ -99,7 +101,6 @@ class SceneRenderer {
             for (pass in outputPasses) {
                 val materialContext = MaterialContext(pass, lights, fogs, shadowLightTargets, meshCubemaps)
 
-
                 val defaultPasses = setOf(DefaultTransparentPass, DefaultOpaquePass)
 
                 if ((pass !in defaultPasses || postSteps.isNotEmpty()) && outputPassTarget == null) {
@@ -109,7 +110,7 @@ class SceneRenderer {
                 if (pass == outputPasses[0]) {
                     outputPassTarget?.let {
                         drawer.withTarget(it) {
-                            background(ColorRGBa.PINK)
+                            clear(ColorRGBa.PINK)
                         }
                     }
                 }
@@ -122,7 +123,7 @@ class SceneRenderer {
                     }
                 }
                 outputPassTarget?.bind()
-                drawPass(drawer, pass, materialContext, meshes, instancedMeshes)
+                drawPass(drawer, pass, materialContext, meshes, instancedMeshes, skinnedMeshes)
                 outputPassTarget?.unbind()
 
                 outputPassTarget?.let { output ->
@@ -167,7 +168,9 @@ class SceneRenderer {
 
     private fun drawPass(drawer: Drawer, pass: RenderPass, materialContext: MaterialContext,
                          meshes: List<NodeContent<Mesh>>,
-                         instancedMeshes: List<NodeContent<InstancedMesh>>) {
+                         instancedMeshes: List<NodeContent<InstancedMesh>>,
+                         skinnedMeshes: List<NodeContent<SkinnedMesh>>
+    ) {
 
         drawer.depthWrite = pass.depthWrite
         val primitives = meshes.flatMap { mesh ->
@@ -185,8 +188,9 @@ class SceneRenderer {
                         if (primitive.material.doubleSided) {
                             drawer.drawStyle.cullTestPass = CullTestPass.ALWAYS
                         }
-
-                        val shadeStyle = primitive.material.generateShadeStyle(materialContext)
+                        val hasNormalAttribute = primitive.geometry.vertexBuffers.any { it.vertexFormat.hasAttribute("normal") }
+                        val primitiveContext = PrimitiveContext(hasNormalAttribute, false)
+                        val shadeStyle = primitive.material.generateShadeStyle(materialContext, primitiveContext)
                         shadeStyle.parameter("viewMatrixInverse", drawer.view.inversed)
                         primitive.material.applyToShadeStyle(materialContext, shadeStyle)
                         drawer.shadeStyle = shadeStyle
@@ -207,6 +211,62 @@ class SceneRenderer {
                     }
                 }
 
+
+        val skinnedPrimitives = skinnedMeshes.flatMap { mesh ->
+            mesh.content.primitives.map { primitive ->
+                NodeContent(mesh.node, Pair(primitive, mesh))
+            }
+        }
+
+        skinnedPrimitives
+                .filter {
+                    (it.content.first.material.transparent && pass.renderTransparent) ||
+                            (!it.content.first.material.transparent && pass.renderOpaque)
+                }
+                .forEach {
+                    val primitive = it.content.first
+                    val skinnedMesh = it.content.second.content
+                    drawer.isolated {
+                        if (primitive.material.doubleSided) {
+                            drawer.drawStyle.cullTestPass = CullTestPass.ALWAYS
+                        }
+                        val hasNormalAttribute = primitive.geometry.vertexBuffers.any { it.vertexFormat.hasAttribute("normal") }
+                        val primitiveContext = PrimitiveContext(hasNormalAttribute, true)
+
+                        val nodeInverse = it.node.worldTransform.inversed
+
+
+
+                        val jointTransforms = (skinnedMesh.joints zip skinnedMesh.inverseBindMatrices)
+                                .map{ (nodeInverse * it.first.worldTransform * it.second) }
+//                        val jointNormalTransforms = jointTransforms.map { Matrix44.IDENTITY }
+
+                        val shadeStyle = primitive.material.generateShadeStyle(materialContext, primitiveContext)
+
+                        shadeStyle.parameter("jointTransforms", jointTransforms.toTypedArray())
+//                        shadeStyle.parameter("jointNormalTransforms", jointNormalTransforms.toTypedArray())
+
+                        shadeStyle.parameter("viewMatrixInverse", drawer.view.inversed)
+                        primitive.material.applyToShadeStyle(materialContext, shadeStyle)
+                        drawer.shadeStyle = shadeStyle
+                        drawer.model = it.node.worldTransform
+
+                        if (primitive.geometry.indexBuffer == null) {
+                            drawer.vertexBuffer(primitive.geometry.vertexBuffers,
+                                    primitive.geometry.primitive,
+                                    primitive.geometry.offset,
+                                    primitive.geometry.vertexCount)
+                        } else {
+                            drawer.vertexBuffer(primitive.geometry.indexBuffer!!,
+                                    primitive.geometry.vertexBuffers,
+                                    primitive.geometry.primitive,
+                                    primitive.geometry.offset,
+                                    primitive.geometry.vertexCount)
+                        }
+                    }
+                }
+
+
         val instancedPrimitives = instancedMeshes.flatMap { mesh ->
             mesh.content.primitives.map { primitive ->
                 NodeContent(mesh.node, MeshPrimitiveInstance(primitive, mesh.content.instances, mesh.content.attributes))
@@ -219,7 +279,8 @@ class SceneRenderer {
                 .forEach {
                     val primitive = it.content
                     drawer.isolated {
-                        val shadeStyle = primitive.primitive.material.generateShadeStyle(materialContext)
+                        val primitiveContext = PrimitiveContext(true,  false)
+                        val shadeStyle = primitive.primitive.material.generateShadeStyle(materialContext, primitiveContext)
                         shadeStyle.parameter("viewMatrixInverse", drawer.view.inversed)
                         primitive.primitive.material.applyToShadeStyle(materialContext, shadeStyle)
                         if (primitive.primitive.material.doubleSided) {

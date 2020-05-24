@@ -2,13 +2,11 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.dnk3.*
-
 import org.openrndr.extra.dnk3.gltf.buildSceneNodes
 import org.openrndr.extra.dnk3.gltf.loadGltfFromFile
-import org.openrndr.extra.dnk3.gltf.loadGltfFromGlbFile
 import org.openrndr.extras.camera.Orbital
 import org.openrndr.math.Vector3
-import org.openrndr.math.transforms.transform
+import org.openrndr.math.mod_
 import java.io.File
 
 fun main() = application {
@@ -25,34 +23,28 @@ fun main() = application {
             }
         }
 
-        val gltf = loadGltfFromFile(File("demo-data/gltf-models/duck/Duck.gltf"))
-//        val gltf = loadGltfFromGlbFile(File("demo-data/gltf-models/splash-sss.glb"))
+        val gltf = loadGltfFromFile(File("demo-data/gltf-models/fox/Fox.glb"))
         val scene = Scene(SceneNode())
 
-        // -- add some lights
-        val lightNode = SceneNode()
-        lightNode.transform = transform {
-            translate(0.0, 10.0, 0.0)
-            rotate(Vector3.UNIT_X, -90.0)
-        }
-        lightNode.entities.add(DirectionalLight())
         scene.root.entities.add(HemisphereLight().apply {
-            upColor = ColorRGBa.WHITE.shade(1.0)
-            downColor = ColorRGBa.WHITE.shade(0.1)
-            })
-        scene.root.children.add(lightNode)
-        scene.root.children.addAll(gltf.buildSceneNodes().scenes.first())
+            upColor = ColorRGBa.WHITE.shade(0.4)
+            downColor = ColorRGBa.GRAY.shade(0.1)
+        })
+        val sceneData = gltf.buildSceneNodes()
+        scene.root.children.addAll(sceneData.scenes.first())
 
 
         // -- create a renderer
         val renderer = dryRenderer()
         extend(Orbital()) {
             far = 500.0
-            lookAt = Vector3(0.0, 0.8, 0.0)
-            eye = Vector3(3.0, 0.8, -2.0)
-            fov = 30.0
+            lookAt = Vector3(0.0, 40.0, 0.0)
+            eye = Vector3(150.0, 40.0, 200.0)
+            fov = 40.0
         }
+
         extend {
+            sceneData.animations[2].applyToTargets(seconds.mod_(sceneData.animations[2].duration))
             drawer.clear(ColorRGBa.PINK)
             renderer.draw(drawer, scene)
         }

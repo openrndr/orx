@@ -33,7 +33,8 @@ class GltfNode(val children: IntArray?,
                val scale: DoubleArray?,
                val rotation: DoubleArray?,
                val translation: DoubleArray?,
-               val mesh: Int?)
+               val mesh: Int?,
+               val skin: Int?)
 
 class GltfPrimitive(val attributes: LinkedHashMap<String, Int>, val indices: Int?, val mode: Int?, val material: Int) {
     fun createDrawCommand(gltfFile: GltfFile): GltfDrawCommand {
@@ -85,6 +86,23 @@ class GltfPrimitive(val attributes: LinkedHashMap<String, Int>, val indices: Int
                             else -> error("unsupported texture coordinate type ${accessor.type}")
                         }
                         textureCoordinate(dimensions, 0)
+                        accessors.add(accessor)
+                    }
+                    "JOINTS_0" -> {
+                        val type = when (Pair(accessor.type, accessor.componentType)) {
+                            Pair("VEC4", GLTF_UNSIGNED_BYTE) -> VertexElementType.VECTOR4_UINT8
+                            Pair("VEC4", GLTF_UNSIGNED_SHORT) -> VertexElementType.VECTOR4_UINT16
+                            else -> error("not supported ${accessor.type} / ${accessor.componentType}")
+                        }
+                        attribute("joints", type)
+                        accessors.add(accessor)
+                    }
+                    "WEIGHTS_0" -> {
+                        val type = when (Pair(accessor.type, accessor.componentType)) {
+                            Pair("VEC4", GLTF_FLOAT) -> VertexElementType.VECTOR4_FLOAT32
+                            else -> error("not supported ${accessor.type} / ${accessor.componentType}")
+                        }
+                        attribute("weights", type)
                         accessors.add(accessor)
                     }
                 }
@@ -181,7 +199,6 @@ class GltfBufferView(val buffer: Int,
 
 class GltfBuffer(val byteLength: Int, val uri: String?) {
     fun contents(gltfFile: GltfFile): ByteBuffer = if (uri != null) {
-
         if (uri.startsWith("data:")) {
             val base64 = uri.substring(uri.indexOf(",") + 1)
             val decoded = Base64.getDecoder().decode(base64)
@@ -223,6 +240,9 @@ class GltfChannelTarget(val node: Int?, val path: String?)
 
 class GltfChannel(val sampler: Int, val target: GltfChannelTarget)
 
+
+class GltfSkin(val inverseBindMatrices: Int, val joints: IntArray, val skeleton: Int)
+
 class GltfFile(
         val asset: GltfAsset?,
         val scene: Int?,
@@ -236,7 +256,9 @@ class GltfFile(
         val images: List<GltfImage>?,
         val textures: List<GltfTexture>?,
         val samplers: List<GltfSampler>?,
-        val animations: List<GltfAnimation>?) {
+        val animations: List<GltfAnimation>?,
+        val skins: List<GltfSkin>?
+) {
     @Transient
     lateinit var file: File
 

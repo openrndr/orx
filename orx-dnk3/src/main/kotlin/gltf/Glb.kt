@@ -28,6 +28,7 @@ fun loadGltfFromGlbFile(file: File): GltfFile {
                 if (chunkType == 0x004E4942) ByteBuffer.allocateDirect(chunkLength) else ByteBuffer.allocate(chunkLength)
         (chunkBuffer as ByteBuffer)
         channel.read(chunkBuffer)
+        chunkBuffer.order(ByteOrder.nativeOrder())
         return chunkBuffer
     }
 

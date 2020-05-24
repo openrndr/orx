@@ -8,7 +8,7 @@ import org.openrndr.draw.shadeStyle
 interface Material {
     var doubleSided: Boolean
     var transparent: Boolean
-    fun generateShadeStyle(context: MaterialContext): ShadeStyle
+    fun generateShadeStyle(context: MaterialContext, primitiveContext: PrimitiveContext): ShadeStyle
     fun applyToShadeStyle(context: MaterialContext, shadeStyle: ShadeStyle)
 }
 
@@ -17,7 +17,7 @@ class DummyMaterial : Material {
     override var transparent: Boolean = false
 
 
-    override fun generateShadeStyle(context: MaterialContext): ShadeStyle {
+    override fun generateShadeStyle(context: MaterialContext, primitiveContext: PrimitiveContext): ShadeStyle {
         return shadeStyle {
             fragmentTransform = """
                 x_fill.rgb = vec3(normalize(v_viewNormal).z);
@@ -38,3 +38,7 @@ data class MaterialContext(val pass: RenderPass,
                            val meshCubemaps: Map<Mesh, Cubemap>
 )
 
+data class PrimitiveContext(val hasNormalAttribute: Boolean, val hasSkinning: Boolean)
+
+
+data class ContextKey(val materialContext: MaterialContext, val primitiveContext: PrimitiveContext)

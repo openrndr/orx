@@ -7,6 +7,7 @@ import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
 import org.openrndr.math.transforms.normalMatrix
 import java.nio.ByteBuffer
+import javax.naming.Context
 import kotlin.math.cos
 
 
@@ -29,7 +30,7 @@ private val noise128 by lazy {
     cb
 }
 
-private fun PointLight.fs(index: Int): String = """
+private fun PointLight.fs(index: Int, hasNormalAttribute: Boolean): String = """
 |{
 |   vec3 Lr = p_lightPosition$index - v_worldPosition;
 |   float distance = length(Lr);
@@ -37,7 +38,7 @@ private fun PointLight.fs(index: Int): String = """
 |   p_lightLinearAttenuation$index * distance + p_lightQuadraticAttenuation$index * distance * distance);
 |   vec3 L = normalize(Lr);
 |
-|   float side = dot(L, N) ;
+|   float side = ${if (hasNormalAttribute) "dot(L, N)" else "3.1415"};
 |   f_diffuse += attenuation * max(0, side / 3.1415) * p_lightColor$index.rgb * m_color.rgb;
 |   f_specular += attenuation * ggx(N, V, L, m_roughness, m_f0) * p_lightColor$index.rgb * m_color.rgb;
 }
@@ -45,14 +46,14 @@ private fun PointLight.fs(index: Int): String = """
 
 private fun AmbientLight.fs(index: Int): String = "f_ambient += p_lightColor$index.rgb * ((1.0 - m_metalness) * m_color.rgb);"
 
-private fun DirectionalLight.fs(index: Int) = """
+private fun DirectionalLight.fs(index: Int, hasNormalAttribute: Boolean) = """
 |{
 |    vec3 L = normalize(-p_lightDirection$index);
 |    float attenuation = 1.0;
 |    vec3 H = normalize(V + L);
-|    float NoL = clamp(dot(N, L), 0.0, 1.0);
+|    float NoL = ${if (hasNormalAttribute) "clamp(dot(N, L), 0.0, 1.0)" else "1"};
 |    float LoH = clamp(dot(L, H), 0.0, 1.0);
-|    float NoH = clamp(dot(N, H), 0.0, 1.0);
+|    float NoH = ${if (hasNormalAttribute) "clamp(dot(N, H), 0.0, 1.0)" else "1"};
 |    vec3 Lr = (p_lightPosition$index - v_worldPosition);
 //|    vec3 L = normalize(Lr);
 |    ${shadows.fs(index)}
@@ -66,15 +67,15 @@ private fun DirectionalLight.fs(index: Int) = """
 |}
 """.trimMargin()
 
-private fun HemisphereLight.fs(index: Int): String = """
+private fun HemisphereLight.fs(index: Int, hasNormalAttribute: Boolean): String = """
 |{
-|   float f = dot(N, p_lightDirection$index) * 0.5 + 0.5;
+|   float f = ${if (hasNormalAttribute) "dot(N, p_lightDirection$index) * 0.5 + 0.5" else "1"};
 |   vec3 irr = ${irradianceMap?.let { "texture(p_lightIrradianceMap$index, N).rgb" } ?: "vec3(1.0)"};
 |   f_diffuse += mix(p_lightDownColor$index.rgb, p_lightUpColor$index.rgb, f) * irr * ((1.0 - m_metalness) * m_color.rgb) * m_ambientOcclusion;
 |}
 """.trimMargin()
 
-private fun SpotLight.fs(index: Int): String {
+private fun SpotLight.fs(index: Int, hasNormalAttribute: Boolean): String {
     val shadows = shadows
     return """
 |{
@@ -85,7 +86,7 @@ private fun SpotLight.fs(index: Int): String {
 |   attenuation = 1.0;
 |   vec3 L = normalize(Lr);
 
-|   float NoL = clamp(dot(N, L), 0.0, 1.0);
+|   float NoL = ${if (hasNormalAttribute) "clamp(dot(N, L), 0.0, 1.0)" else "1"};
 |   float side = dot(L, N);
 |   float hit = max(dot(-L, p_lightDirection$index), 0.0);
 |   float falloff = clamp((hit - p_lightOuterCos$index) / (p_lightInnerCos$index - p_lightOuterCos$index), 0.0, 1.0);
@@ -94,7 +95,7 @@ private fun SpotLight.fs(index: Int): String {
 |   {
 |       vec3 H = normalize(V + L);
 |       float LoH = clamp(dot(L, H), 0.0, 1.0);
-|       float NoH = clamp(dot(N, H), 0.0, 1.0);
+|       float NoH = ${if (hasNormalAttribute) "clamp(dot(N, H), 0.0, 1.0)" else 1.0};
 |       f_diffuse += NoL * (0.1+0.9*attenuation) * Fd_Burley(m_roughness * m_roughness, NoV, NoL, LoH) * p_lightColor$index.rgb * m_color.rgb ;
 |       float Dg = D_GGX(m_roughness * m_roughness, NoH, H);
 |       float Vs = V_SmithGGXCorrelated(m_roughness * m_roughness, NoV, NoL);
@@ -114,7 +115,12 @@ private fun Fog.fs(index: Int): String = """
 """.trimMargin()
 
 sealed class TextureSource
-object DummySource : TextureSource()
+object DummySource : TextureSource() {
+    override fun toString(): String {
+        return "DummySource()"
+    }
+}
+
 abstract class TextureFromColorBuffer(var texture: ColorBuffer, var textureFunction: TextureFunction) : TextureSource()
 
 class TextureFromCode(val code: String) : TextureSource()
@@ -142,10 +148,14 @@ enum class TextureFunction(val function: (String, String) -> String) {
  */
 class ModelCoordinates(texture: ColorBuffer,
                        var input: String = "va_texCoord0.xy",
-                       var tangentInput : String? = null,
+                       var tangentInput: String? = null,
                        textureFunction: TextureFunction = TextureFunction.TILING,
                        var pre: String? = null,
-                       var post: String? = null) : TextureFromColorBuffer(texture, textureFunction)
+                       var post: String? = null) : TextureFromColorBuffer(texture, textureFunction) {
+    override fun toString(): String {
+        return "ModelCoordinates(texture: $texture, input: $input, $tangentInput: $tangentInput, textureFunction: $textureFunction, pre: $pre, post: $post)"
+    }
+}
 
 class Triplanar(texture: ColorBuffer,
                 var scale: Double = 1.0,
@@ -171,7 +181,8 @@ private fun ModelCoordinates.fs(index: Int) = """
 |   ${if (pre != null) "{ $pre } " else ""}
 |   x_texture = ${textureFunction.function("p_texture$index", "x_texCoord")};
 |   ${if (post != null) "{ $post } " else ""}
-|   ${if (tangentInput != null) { """
+|   ${if (tangentInput != null) {
+    """
 |        vec3 normal = normalize(va_normal.xyz);
 |        vec3 tangent = normalize(${tangentInput}.xyz);
 |        vec3 bitangent = cross(normal, tangent) * ${tangentInput}.w;
@@ -179,7 +190,7 @@ private fun ModelCoordinates.fs(index: Int) = """
 |        x_texture.rgb = tbn * normalize(x_texture.rgb - vec3(0.5, 0.5, 0.)) ;
 |    
 """.trimMargin()
-    
+
 } else ""}   
 |   tex$index = x_texture;
 |}
@@ -225,16 +236,20 @@ private fun Triplanar.fs(index: Int, target: TextureTarget) = """
     """.trimIndent() else ""}
 """.trimMargin()
 
-sealed class TextureTarget {
-    object NONE : TextureTarget()
-    object COLOR : TextureTarget()
-    object ROUGHNESS : TextureTarget()
-    object METALNESS : TextureTarget()
-    object METALNESS_ROUGHNESS : TextureTarget()
-    object EMISSION : TextureTarget()
-    object NORMAL : TextureTarget()
-    object AMBIENT_OCCLUSION : TextureTarget()
-    class Height(var scale: Double = 1.0) : TextureTarget()
+sealed class TextureTarget(val name: String) {
+    object NONE : TextureTarget("NONE")
+    object COLOR : TextureTarget("COLOR")
+    object ROUGHNESS : TextureTarget("ROUGHNESS")
+    object METALNESS : TextureTarget("METALNESS")
+    object METALNESS_ROUGHNESS : TextureTarget("METALNESS_ROUGHNESS")
+    object EMISSION : TextureTarget("EMISSION")
+    object NORMAL : TextureTarget("NORMAL")
+    object AMBIENT_OCCLUSION : TextureTarget("AMBIENT_OCCLUSION")
+    class Height(var scale: Double = 1.0) : TextureTarget("Height")
+
+    override fun toString(): String {
+        return "TextureTarget(name: $name)"
+    }
 }
 
 class Texture(var source: TextureSource,
@@ -243,9 +258,17 @@ class Texture(var source: TextureSource,
         val copied = Texture(source, target)
         return copied
     }
+
+    override fun toString(): String {
+        return "Texture(source: $source, target: $target)"
+    }
 }
 
 class PBRMaterial : Material {
+    override fun toString(): String {
+        return "PBRMaterial(textures: $textures, color: $color, metalness: $metalness, roughness: $roughness, emissive: $emission))"
+    }
+
     override var doubleSided: Boolean = false
     override var transparent: Boolean = false
     var environmentMap = false
@@ -259,7 +282,7 @@ class PBRMaterial : Material {
     var parameters = mutableMapOf<String, Any>()
     var textures = mutableListOf<Texture>()
 
-    val shadeStyles = mutableMapOf<MaterialContext, ShadeStyle>()
+    val shadeStyles = mutableMapOf<ContextKey, ShadeStyle>()
 
 //    fun copy(): PBRMaterial {
 //        val copied = PBRMaterial()
@@ -276,9 +299,9 @@ class PBRMaterial : Material {
 //        return copied
 //    }
 
-    override fun generateShadeStyle(context: MaterialContext): ShadeStyle {
-        val cached = shadeStyles.getOrPut(context) {
-            val needLight = needLight(context)
+    override fun generateShadeStyle(materialContext: MaterialContext, primitiveContext: PrimitiveContext): ShadeStyle {
+        val cached = shadeStyles.getOrPut(ContextKey(materialContext, primitiveContext)) {
+            val needLight = needLight(materialContext)
             val preambleFS = """
             vec4 m_color = p_color;
             float m_f0 = 0.5;
@@ -317,6 +340,20 @@ class PBRMaterial : Material {
 
             val displacers = textures.filter { it.target is TextureTarget.Height }
 
+            val skinVS = if (primitiveContext.hasSkinning) """
+                    uvec4 j = a_joints;
+                    mat4 skinTransform = p_jointTransforms[j.x] * a_weights.x 
+                    + p_jointTransforms[j.y] * a_weights.y 
+                    + p_jointTransforms[j.z] * a_weights.z 
+                    + p_jointTransforms[j.w] * a_weights.w;                    
+
+                    ${if (primitiveContext.hasNormalAttribute) """
+                    x_normal = normalize(mat3(skinTransform) * x_normal);                        
+                    """.trimIndent() else ""}
+                    
+                    x_position = (skinTransform * vec4(x_position,1)).xyz;
+            """.trimIndent() else ""
+
             val textureVS = if (displacers.isNotEmpty()) textures.mapIndexed { index, it ->
                 if (it.target is TextureTarget.Height) {
                     when (val source = it.source) {
@@ -331,7 +368,7 @@ class PBRMaterial : Material {
                 } else ""
             }.joinToString("\n") else ""
 
-            val lights = context.lights
+            val lights = materialContext.lights
             val lightFS = if (needLight) """
         vec3 f_diffuse = vec3(0.0);
         vec3 f_specular = vec3(0.0);
@@ -342,9 +379,9 @@ class PBRMaterial : Material {
         vec3 ep = (p_viewMatrixInverse * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
         vec3 Vr = ep - v_worldPosition;
         vec3 V = normalize(Vr);
-        float NoV = abs(dot(N, V)) + 1e-5;
+        float NoV = ${if (primitiveContext.hasNormalAttribute) "abs(dot(N, V)) + 1e-5" else "1"};
 
-        ${if (environmentMap && context.meshCubemaps.isNotEmpty()) """
+        ${if (environmentMap && materialContext.meshCubemaps.isNotEmpty() && primitiveContext.hasNormalAttribute) """
            {
                 vec2 dfg = PrefilteredDFG_Karis(m_roughness, NoV);
                 vec3 sc = m_metalness * m_color.rgb + (1.0-m_metalness) * vec3(0.04);
@@ -356,32 +393,32 @@ class PBRMaterial : Material {
         ${lights.mapIndexed { index, (node, light) ->
                 when (light) {
                     is AmbientLight -> light.fs(index)
-                    is PointLight -> light.fs(index)
-                    is SpotLight -> light.fs(index)
-                    is DirectionalLight -> light.fs(index)
-                    is HemisphereLight -> light.fs(index)
+                    is PointLight -> light.fs(index, primitiveContext.hasNormalAttribute)
+                    is SpotLight -> light.fs(index, primitiveContext.hasNormalAttribute)
+                    is DirectionalLight -> light.fs(index, primitiveContext.hasNormalAttribute)
+                    is HemisphereLight -> light.fs(index, primitiveContext.hasNormalAttribute)
                     else -> TODO()
                 }
             }.joinToString("\n")}
 
-        ${context.fogs.mapIndexed { index, (node, fog) ->
+        ${materialContext.fogs.mapIndexed { index, (node, fog) ->
                 fog.fs(index)
             }.joinToString("\n")}
 
     """.trimIndent() else ""
             val rt = RenderTarget.active
 
-            val combinerFS = context.pass.combiners.map {
+            val combinerFS = materialContext.pass.combiners.map {
                 it.generateShader()
             }.joinToString("\n")
 
             val fs = preambleFS + textureFs + lightFS + combinerFS
-            val vs = (this@PBRMaterial.vertexTransform ?: "") + textureVS
+            val vs = (this@PBRMaterial.vertexTransform ?: "") + textureVS + skinVS
 
             shadeStyle {
                 vertexPreamble = """
                     $shaderNoRepetitionVert
-                     ${(this@PBRMaterial.vertexPreamble)?:""}
+                     ${(this@PBRMaterial.vertexPreamble) ?: ""}
                 """.trimIndent()
                 fragmentPreamble = """
             |$shaderLinePlaneIntersect
@@ -394,7 +431,7 @@ class PBRMaterial : Material {
                 this.suppressDefaultOutput = true
                 this.vertexTransform = vs
                 fragmentTransform = fs
-                context.pass.combiners.map {
+                materialContext.pass.combiners.map {
                     if (rt.colorBuffers.size <= 1) {
                         this.output(it.targetOutput, 0)
                     } else

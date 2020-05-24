@@ -10,10 +10,18 @@ import org.openrndr.math.Quaternion
 import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
 import java.io.File
+import java.nio.Buffer
 import java.nio.ByteOrder
 import kotlin.reflect.KMutableProperty0
 
 class SceneAnimation(var channels: List<AnimationChannel>) {
+
+    val duration: Double
+    get() {
+        return channels.maxBy { it.duration }?.duration ?:0.0
+    }
+
+
     fun applyToTargets(input: Double) {
         for (channel in channels) {
             channel.applyToTarget(input)
@@ -22,6 +30,7 @@ class SceneAnimation(var channels: List<AnimationChannel>) {
 }
 
 sealed class AnimationChannel {
+    abstract val duration: Double
     abstract fun applyToTarget(input: Double)
 }
 
@@ -30,6 +39,9 @@ class QuaternionChannel(val target: KMutableProperty0<Quaternion>,
     override fun applyToTarget(input: Double) {
         target.set(keyframer.value(input) ?: Quaternion.IDENTITY)
     }
+
+    override val duration: Double
+        get() = keyframer.duration()
 }
 
 class Vector3Channel(val target: KMutableProperty0<Vector3>,
@@ -37,12 +49,19 @@ class Vector3Channel(val target: KMutableProperty0<Vector3>,
     override fun applyToTarget(input: Double) {
         target.set(keyframer.value(input) ?: default)
     }
+    override val duration: Double
+        get() = keyframer.duration()
 }
 
 class GltfSceneNode : SceneNode() {
     var translation = Vector3.ZERO
     var scale = Vector3.ONE
     var rotation = Quaternion.IDENTITY
+
+    override fun toString(): String {
+        return "translation: $translation, scale: $scale, rotation: $rotation, children: ${children.size}, entities: ${entities} "
+    }
+
 
     override var transform: Matrix44 = Matrix44.IDENTITY
         get() = transform {
@@ -93,6 +112,12 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
         pbrMetallicRoughness?.let { pbr ->
             material.roughness = pbr.roughnessFactor ?: 1.0
             material.metalness = pbr.metallicFactor ?: 1.0
+
+            material.color = ColorRGBa.WHITE
+            pbr.baseColorFactor?.let {
+                material.color = ColorRGBa(it[0], it[1], it[2], it[3])
+            }
+
             pbr.baseColorTexture?.let { texture ->
                 val cb = images!![textures!![texture.index].source].createSceneImage()
                 cb.filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
@@ -181,32 +206,10 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
         return MeshPrimitive(geometry, material)
     }
 
-    val sceneMeshes = mutableMapOf<GltfMesh, Mesh>()
-    fun GltfMesh.createSceneMesh(): Mesh = sceneMeshes.getOrPut(this) {
-        Mesh(primitives.map {
-            it.createScenePrimitive()
-        })
-    }
 
     val sceneNodes = mutableMapOf<GltfNode, SceneNode>()
     fun GltfNode.createSceneNode(): SceneNode = sceneNodes.getOrPut(this) {
         val node = GltfSceneNode()
-        mesh?.let {
-            node.entities.add(meshes[it].createSceneMesh())
-        }
-//        val localTransform = transform {
-//            translation?.let {
-//                translate(it[0], it[1], it[2])
-//            }
-//            rotation?.let {
-//                val q = Quaternion(it[0], it[1], it[2], it[3])
-//                multiply(q.matrix.matrix44)
-//            }
-//            scale?.let {
-//                scale(it[0], it[1], it[2])
-//            }
-//        }
-
         node.translation = translation?.let { Vector3(it[0], it[1], it[2]) } ?: Vector3.ZERO
         node.scale = scale?.let { Vector3(it[0], it[1], it[2]) } ?: Vector3.ONE
         node.rotation = rotation?.let { Quaternion(it[0], it[1], it[2], it[3]) } ?: Quaternion.IDENTITY
@@ -214,20 +217,66 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
         matrix?.let {
             node.transform = Matrix44.fromDoubleArray(it).transposed
         }
-
-
-//        node.transform = this.matrix?.let {
-//            Matrix44.fromDoubleArray(it).transposed
-//        } ?: localTransform
         for (child in children.orEmpty) {
             node.children.add(nodes[child].createSceneNode())
         }
         node
     }
 
+    val sceneMeshes = mutableMapOf<GltfMesh, MeshBase>()
+    fun GltfMesh.createSceneMesh(skin: GltfSkin?): MeshBase = sceneMeshes.getOrPut(this) {
+        if (skin == null) {
+            Mesh(primitives.map {
+                it.createScenePrimitive()
+            })
+        } else {
+            val joints = skin.joints.map { nodes[it].createSceneNode() }
+            val skeleton = nodes[skin.skeleton].createSceneNode()
+            val ibmAccessor = accessors[skin.inverseBindMatrices]
+            val ibmBufferView = bufferViews[ibmAccessor.bufferView]
+            val ibmBuffer = buffers[ibmBufferView.buffer]
+
+            val ibmData = ibmBuffer.contents(this@buildSceneNodes)
+            ibmData.order(ByteOrder.nativeOrder())
+            (ibmData as Buffer).position(ibmAccessor.byteOffset + (ibmBufferView.byteOffset ?: 0))
+
+            require(ibmAccessor.type == "MAT4")
+            require(ibmAccessor.componentType == GLTF_FLOAT)
+            require(ibmAccessor.count == joints.size)
+            val ibms = (0 until ibmAccessor.count).map {
+                val array = DoubleArray(16)
+                for (i in 0 until 16) {
+                    array[i] = ibmData.float.toDouble()
+                }
+
+                val m = Matrix44.fromDoubleArray(array).transposed
+                println("--")
+                println(m)
+                println(array.joinToString(","))
+
+                m
+            }
+
+            SkinnedMesh(primitives.map {
+                it.createScenePrimitive()
+            }, joints, skeleton, ibms)
+        }
+    }
+
     val scenes = scenes.map { scene ->
+        println(scene.nodes.size)
         scene.nodes.map { node ->
-            nodes[node].createSceneNode()
+            println("node: $node")
+            val gltfNode = nodes[node]
+            val sceneNode = gltfNode.createSceneNode()
+            sceneNode
+        }
+    }
+    for ((gltfNode, sceneNode) in sceneNodes) {
+        gltfNode.mesh?.let {
+            val skin = gltfNode.skin?.let { (skins!!)[it] }
+            println("adding mesh")
+            sceneNode.entities.add(meshes[it].createSceneMesh(skin))
         }
     }
 
@@ -276,7 +325,7 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
                         }
                         val keyframer = KeyframerChannelQuaternion()
                         val inputOffset = (inputBufferView.byteOffset ?: 0) + (inputAccessor.byteOffset ?: 0)
-                        val outputOffset = (outputBufferView.byteOffset ?: 0) + (inputAccessor.byteOffset ?: 0)
+                        val outputOffset = (outputBufferView.byteOffset ?: 0) + (outputAccessor.byteOffset ?: 0)
                         val inputStride = (inputBufferView.byteStride ?: 4)
                         val outputStride = (outputBufferView.byteStride ?: 16)
                         for (i in 0 until outputAccessor.count) {
