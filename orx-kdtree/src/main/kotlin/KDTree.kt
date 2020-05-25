@@ -10,6 +10,7 @@ import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
 import java.util.*
 import kotlin.IllegalStateException
+import kotlin.math.abs
 
 /** built-in mapper for [Vector2] */
 fun vector2Mapper(v: Vector2, dimension: Int): Double {
@@ -32,7 +33,7 @@ fun vector3Mapper(v: Vector3, dimension: Int): Double {
     return when (dimension) {
         0 -> v.x
         1 -> v.y
-        else -> v.y
+        else -> v.z
     }
 }
 
@@ -210,7 +211,7 @@ fun <T> findNearest(root: KDTreeNode<T>, item: T, dimensions: Int, mapper: (T, I
             }
 
 
-            val d = Math.abs(node.median - mapper(item, node.dimension))
+            val d = abs(node.median - mapper(item, node.dimension))
             if (d * d < nearest) {
                 nearest(node.children[1 - route], item)
             }
