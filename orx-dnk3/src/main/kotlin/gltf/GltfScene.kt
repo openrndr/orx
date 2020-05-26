@@ -17,9 +17,9 @@ import kotlin.reflect.KMutableProperty0
 class SceneAnimation(var channels: List<AnimationChannel>) {
 
     val duration: Double
-    get() {
-        return channels.maxBy { it.duration }?.duration ?:0.0
-    }
+        get() {
+            return channels.maxBy { it.duration }?.duration ?: 0.0
+        }
 
 
     fun applyToTargets(input: Double) {
@@ -49,6 +49,7 @@ class Vector3Channel(val target: KMutableProperty0<Vector3>,
     override fun applyToTarget(input: Double) {
         target.set(keyframer.value(input) ?: default)
     }
+
     override val duration: Double
         get() = keyframer.duration()
 }
@@ -269,6 +270,36 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
         gltfNode.mesh?.let {
             val skin = gltfNode.skin?.let { (skins!!)[it] }
             sceneNode.entities.add(meshes[it].createSceneMesh(skin))
+        }
+        gltfNode.extensions?.let { exts ->
+            exts.KHR_lights_punctual?.let { lightIndex ->
+                extensions?.KHR_lights_punctual?.lights?.get(lightIndex.light)?.let { light ->
+                    val sceneLight = when (light.type) {
+                        "point" -> {
+                            PointLight()
+                        }
+                        "directional" -> {
+                            DirectionalLight().apply {
+                                shadows = Shadows.PCF()
+                            }
+                        }
+                        "spot" -> {
+                            SpotLight().apply {
+                                innerAngle = Math.toDegrees(light.spot!!.innerConeAngle ?: 0.0)
+                                outerAngle = Math.toDegrees(light.spot.outerConeAngle ?: Math.PI / 4.0)
+                                shadows = Shadows.PCF()
+                            }
+
+                        }
+                        else -> error("unsupported light type ${light.type}")
+                    }
+                    sceneLight.apply {
+                        val lightColor = (light.color ?: doubleArrayOf(1.0, 1.0, 1.0))
+                        color = ColorRGBa(lightColor[0], lightColor[1], lightColor[2])
+                    }
+                    sceneNode.entities.add(sceneLight)
+                }
+            }
         }
     }
 

@@ -346,7 +346,6 @@ class PBRMaterial : Material {
                     + p_jointTransforms[j.y] * a_weights.y 
                     + p_jointTransforms[j.z] * a_weights.z 
                     + p_jointTransforms[j.w] * a_weights.w;                    
-
                     ${if (primitiveContext.hasNormalAttribute) """
                     x_normal = normalize(mat3(skinTransform) * x_normal);                        
                     """.trimIndent() else ""}

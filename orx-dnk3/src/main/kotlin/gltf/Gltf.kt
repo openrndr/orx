@@ -35,7 +35,15 @@ class GltfNode(val name:String,
                val rotation: DoubleArray?,
                val translation: DoubleArray?,
                val mesh: Int?,
-               val skin: Int?)
+               val skin: Int?,
+               val extensions: GltfNodeExtensions?)
+
+class KHRLightsPunctualIndex(val light: Int)
+
+class GltfNodeExtensions(val KHR_lights_punctual: KHRLightsPunctualIndex?) {
+
+}
+
 
 class GltfPrimitive(val attributes: LinkedHashMap<String, Int>, val indices: Int?, val mode: Int?, val material: Int) {
     fun createDrawCommand(gltfFile: GltfFile): GltfDrawCommand {
@@ -244,6 +252,14 @@ class GltfChannel(val sampler: Int, val target: GltfChannelTarget)
 
 class GltfSkin(val inverseBindMatrices: Int, val joints: IntArray, val skeleton: Int)
 
+
+class KHRLightsPunctualLight(val color: DoubleArray?, val type: String, val intensity: Double?, val range: Double, val spot: KHRLightsPunctualLightSpot?)
+class KHRLightsPunctualLightSpot(val innerConeAngle: Double?, val outerConeAngle: Double?)
+
+class KHRLightsPunctual(val lights: List<KHRLightsPunctualLight>)
+
+class GltfExtensions(val KHR_lights_punctual: KHRLightsPunctual?)
+
 class GltfFile(
         val asset: GltfAsset?,
         val scene: Int?,
@@ -258,7 +274,8 @@ class GltfFile(
         val textures: List<GltfTexture>?,
         val samplers: List<GltfSampler>?,
         val animations: List<GltfAnimation>?,
-        val skins: List<GltfSkin>?
+        val skins: List<GltfSkin>?,
+        val extensions: GltfExtensions?
 ) {
     @Transient
     lateinit var file: File
