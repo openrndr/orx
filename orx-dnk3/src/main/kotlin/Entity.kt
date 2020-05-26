@@ -58,3 +58,7 @@ abstract class Light : Entity() {
     var color: ColorRGBa = ColorRGBa.WHITE
 }
 
+abstract class Camera : Entity() {
+    abstract val projectionMatrix: Matrix44
+    abstract val viewMatrix: Matrix44
+}

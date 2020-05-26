@@ -259,6 +259,28 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
         }
     }
 
+    fun GltfCamera.createSceneCamera(sceneNode: SceneNode): Camera {
+        return when (type) {
+            "perspective" -> {
+                PerspectiveCamera(sceneNode).apply {
+                    aspectRatio = perspective?.aspectRatio ?: aspectRatio
+                    far = perspective?.zfar ?: far
+                    near = perspective?.znear ?: near
+                    fov = perspective?.yfov?.let { Math.toDegrees(it) } ?: fov
+                }
+            }
+            "orthographic" -> {
+                OrthographicCamera(sceneNode).apply {
+                    xMag = orthographic?.xmag ?: xMag
+                    yMag = orthographic?.ymag ?: yMag
+                    near = orthographic?.znear ?: near
+                    far = orthographic?.zfar ?: far
+                }
+            }
+            else -> error("unsupported camera type: $type")
+        }
+    }
+
     val scenes = scenes.map { scene ->
         scene.nodes.map { node ->
             val gltfNode = nodes[node]
@@ -271,6 +293,11 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
             val skin = gltfNode.skin?.let { (skins!!)[it] }
             sceneNode.entities.add(meshes[it].createSceneMesh(skin))
         }
+
+        gltfNode.camera?.let {
+            sceneNode.entities.add(cameras!![it].createSceneCamera(sceneNode))
+        }
+
         gltfNode.extensions?.let { exts ->
             exts.KHR_lights_punctual?.let { lightIndex ->
                 extensions?.KHR_lights_punctual?.lights?.get(lightIndex.light)?.let { light ->

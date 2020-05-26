@@ -28,7 +28,7 @@ class GltfAsset(val generator: String?, val version: String?)
 
 class GltfScene(val nodes: IntArray)
 
-class GltfNode(val name:String,
+class GltfNode(val name: String,
                val children: IntArray?,
                val matrix: DoubleArray?,
                val scale: DoubleArray?,
@@ -36,6 +36,7 @@ class GltfNode(val name:String,
                val translation: DoubleArray?,
                val mesh: Int?,
                val skin: Int?,
+               val camera: Int?,
                val extensions: GltfNodeExtensions?)
 
 class KHRLightsPunctualIndex(val light: Int)
@@ -260,6 +261,11 @@ class KHRLightsPunctual(val lights: List<KHRLightsPunctualLight>)
 
 class GltfExtensions(val KHR_lights_punctual: KHRLightsPunctual?)
 
+class GltfCameraPerspective(val aspectRatio: Double?, val yfov: Double, val zfar: Double?, val znear: Double)
+class GltfCameraOrthographic(val xmag: Double, val ymag: Double, val zfar: Double, val znear: Double)
+
+class GltfCamera(val name: String?, val type: String, val perspective: GltfCameraPerspective?, val orthographic: GltfCameraOrthographic?)
+
 class GltfFile(
         val asset: GltfAsset?,
         val scene: Int?,
@@ -275,7 +281,8 @@ class GltfFile(
         val samplers: List<GltfSampler>?,
         val animations: List<GltfAnimation>?,
         val skins: List<GltfSkin>?,
-        val extensions: GltfExtensions?
+        val extensions: GltfExtensions?,
+        val cameras: List<GltfCamera>?
 ) {
     @Transient
     lateinit var file: File
