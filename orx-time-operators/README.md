@@ -3,6 +3,8 @@
 A collection of time-sensitive functions aimed at controlling raw data over-time, 
 such as Envelope and LFO.
 
+For more detailed information, read: [An introduction to orx-time-operators](https://openrndr.discourse.group/t/an-introduction-to-orx-time-operators/108)
+
 ## Usage
 
 Use the TimeOperators extension to `tick` the operators, making them advance in time.
@@ -15,6 +17,8 @@ extend(TimeOperators()) {
 
 ### Envelope
 
+An Attack/Decay based envelope which takes into account the elapsed time to change a given value over time. It runs through two phases, `Attack` and `Decay` which can be changed to shape the output values.
+
 ```kotlin
 val size = Envelope(50.0, 400.0, 0.5, 0.5)
 
@@ -26,6 +30,8 @@ drawer.circle(0.0, 0.0, size.value)
 ```
 
 ### LFO
+
+Generates oscillating waves between `[0.0, 1.0]` tied to the frame rate.
 
 ```kotlin
 val size = LFO(LFOWave.Sine) // default LFOWave.Saw
