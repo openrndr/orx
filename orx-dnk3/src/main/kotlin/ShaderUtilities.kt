@@ -101,7 +101,7 @@ val shaderVSM = """
 |   // Compute probabilistic upper bound.
 |   float d = t - moments.x;
 |   float p_max = variance / (variance + d*d);
-|   p_max = smoothstep(0.6, 1, p_max);
+|   p_max = smoothstep(0.6, 1.0, p_max);
 |   return max(p, p_max);
 }
 """.trimIndent()
