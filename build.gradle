@@ -14,7 +14,7 @@ buildscript {
 apply plugin: 'org.jetbrains.dokka'
 
 project.ext {
-    openrndrVersion = "0.3.43-rc.3"
+    openrndrVersion = "0.3.43-rc.5"
     kotlinVersion = "1.3.72"
     spekVersion = "2.0.10"
     libfreenectVersion = "0.5.7-1.5.3"
@@ -59,7 +59,6 @@ allprojects {
 
 
     repositories {
-        mavenCentral()
         jcenter()
         maven {
             url = "https://dl.bintray.com/openrndr/openrndr"
@@ -174,6 +173,8 @@ task collectScreenshots {
     doFirst {
         def demoProjects = project.subprojects.findAll { it.sourceSets.hasProperty("demo") }
         for (sub in demoProjects) {
+            if (sub.name == "openrndr-demos")
+                continue
             if (sub.name == "orx-rabbit-control")
                 continue
             if (sub.name == "orx-runway")

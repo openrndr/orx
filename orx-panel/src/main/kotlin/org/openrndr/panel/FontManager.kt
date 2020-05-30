@@ -15,7 +15,7 @@ class FontManager {
     fun font(cs: StyleSheet): FontImageMap {
         val fontUrl = resolve(cs.fontFamily) ?: "cp:fonts/Roboto-Medium.ttf"
         val fontSize = (cs.fontSize as? LinearDimension.PX)?.value ?: 16.0
-        return FontImageMap.fromUrl(fontUrl, fontSize, contentScale)
+        return FontImageMap.fromUrl(fontUrl, fontSize, contentScale = contentScale)
     }
 
     fun register(name: String, url: String) {
