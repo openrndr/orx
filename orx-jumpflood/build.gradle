@@ -12,6 +12,7 @@ dependencies {
     implementation project(":orx-fx")
     demoImplementation project(":orx-noise")
     demoImplementation project(":orx-gui")
+    demoImplementation project(":orx-compositor")
     demoImplementation("org.openrndr:openrndr-core:$openrndrVersion")
     demoImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
     demoImplementation("org.openrndr:openrndr-svg:$openrndrVersion")

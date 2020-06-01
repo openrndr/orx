@@ -27,6 +27,13 @@ void main() {
 
     vec2 h = hash22(v_texCoord0)*10.0;
     float e = exp(-( pow((d+h.x*noise)*1.0/width, shape)) );
-    o_color = original * imageOpacity + original.a* vec4(color.rgb, 1.0) * e * color.a;
-    o_color.a = max(o_color.a, 1.0);
+
+    vec3 norginal = original.a > 0.0 ? original.rgb / original.a : vec3(0.0);
+
+    vec3 add = norginal + color.rgb * e * color.a;
+    o_color = vec4(add, 1.0) * original.a;
+
+//    //o_color = original * imageOpacity + original.a* vec4(color.rgb, 1.0) * e * color.a;
+//    o_color.rgb = max(vec3(0.0), o_color.rgb);
+//    o_color.a = min(o_color.a, 1.0);
 }
