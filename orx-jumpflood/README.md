@@ -156,6 +156,16 @@ fun main() = application {
 ```
 <!-- __demos__ -->
 ## Demos
+### DemoInnerGlow01
+[source code](src/demo/kotlin/DemoInnerGlow01.kt)
+
+![DemoInnerGlow01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoInnerGlow01Kt.png)
+
+### DemoInnerGlow02
+[source code](src/demo/kotlin/DemoInnerGlow02.kt)
+
+![DemoInnerGlow02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoInnerGlow02Kt.png)
+
 ### DemoShapeSDF01
 [source code](src/demo/kotlin/DemoShapeSDF01.kt)
 
