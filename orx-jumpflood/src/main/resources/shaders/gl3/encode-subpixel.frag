@@ -8,7 +8,7 @@ out vec4 o_color;
 
 float zd(float d) {
     if (d < 0.0001) {
-        return 1;
+        return 1.0;
     } else {
         return d;
     }
