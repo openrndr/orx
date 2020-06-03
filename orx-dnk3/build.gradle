@@ -14,6 +14,7 @@ dependencies {
     implementation(project(":orx-keyframer"))
 
     demoImplementation(project(":orx-camera"))
+    demoImplementation(project(":orx-mesh-generators"))
     demoImplementation("org.openrndr:openrndr-core:$openrndrVersion")
     demoImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
     demoImplementation("org.openrndr:openrndr-ffmpeg:$openrndrVersion")
