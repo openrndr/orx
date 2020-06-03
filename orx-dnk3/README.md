@@ -50,6 +50,11 @@ Supported Gltf features
 
 ![DemoScene02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-dnk3/images/DemoScene02Kt.png)
 
+### DemoScene03
+[source code](src/demo/kotlin/DemoScene03.kt)
+
+![DemoScene03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-dnk3/images/DemoScene03Kt.png)
+
 ### DemoSkinning01
 [source code](src/demo/kotlin/DemoSkinning01.kt)
 
