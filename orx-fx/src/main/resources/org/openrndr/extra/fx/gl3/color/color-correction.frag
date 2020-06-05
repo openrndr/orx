@@ -8,6 +8,7 @@ uniform float contrast;
 uniform float hueShift;
 uniform float gamma;
 uniform float opacity;
+uniform bool clamped;
 
 uniform sampler2D tex0;
 in vec2 v_texCoord0;
@@ -61,5 +62,9 @@ void main() {
     nc.rgb = pow(nc.rgb, vec3(gamma));
     nc.rgb = shiftHue(nc.rgb, (hueShift/360.0));
     vec4 cc = brightnessMatrix(brightness) * contrastMatrix((contrast + 1)) * saturationMatrix(saturation + 1) * nc;
-    o_color = vec4(cc.rgb, 1.0) * color.a * opacity;
+    if(clamped) {
+        o_color = clamp(vec4(cc.rgb, 1.0) * color.a * opacity, 0.0, 1.0);
+    } else {
+        o_color = vec4(cc.rgb, 1.0) * color.a * opacity;
+    }
 }

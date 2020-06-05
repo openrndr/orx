@@ -2,6 +2,7 @@ package org.openrndr.extra.fx.color
 
 import org.openrndr.draw.*
 import org.openrndr.extra.fx.filterFragmentUrl
+import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 
@@ -25,6 +26,9 @@ class ColorCorrection : Filter(filterShaderFromUrl(filterFragmentUrl("color/colo
     @DoubleParameter("opacity", 0.0, 1.0, order = 5)
     var opacity: Double by parameters
 
+    @BooleanParameter("clamp", order = 6)
+    var clamped: Boolean by parameters
+
     init {
         contrast = 0.0
         brightness = 0.0
@@ -32,5 +36,6 @@ class ColorCorrection : Filter(filterShaderFromUrl(filterFragmentUrl("color/colo
         hueShift = 0.0
         gamma = 1.0
         opacity = 1.0
+        clamped = true
     }
 }
