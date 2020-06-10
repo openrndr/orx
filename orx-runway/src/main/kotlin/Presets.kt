@@ -66,3 +66,13 @@ class DeOldifyResponse(val image: String)
 
 class DenseCapRequest(val image: String, @SerializedName("max_detections") val maxDetections: Int = 10)
 class DenseCapResponse(val bboxes: List<List<Double>>, val classes: List<String>, val scores: List<Double>)
+
+// -- PoseNet
+class PoseNetRequest(
+        val image: String,
+        @SerializedName("estimationType") val estimationType: String = "Multi Pose",
+        @SerializedName("maxPoseDetections") val maxPoseDetections: Int = 5,
+        @SerializedName("scoreThreshold") val scoreThreshold: Double = 0.25
+        )
+class PoseNetResponse(val poses: List<List<List<Double>>>, val scores: List<Double>)
+
