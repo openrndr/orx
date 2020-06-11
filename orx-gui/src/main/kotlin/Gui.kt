@@ -2,11 +2,7 @@ package org.openrndr.extra.gui
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import org.openrndr.Extension
-import org.openrndr.KEY_F11
-import org.openrndr.KEY_LEFT_SHIFT
-import org.openrndr.KeyModifier
-import org.openrndr.Program
+import org.openrndr.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.dialogs.getDefaultPathForContext
 import org.openrndr.dialogs.openFileDialog
@@ -22,8 +18,6 @@ import org.openrndr.panel.ControlManager
 import org.openrndr.panel.controlManager
 import org.openrndr.panel.elements.*
 import org.openrndr.panel.style.*
-import org.openrndr.panel.styleSheet
-
 import java.io.File
 import kotlin.math.roundToInt
 import kotlin.reflect.KMutableProperty1
@@ -631,49 +625,62 @@ class GUI : Extension {
         }
     }
 
-    private class ParameterValue(var doubleValue: Double? = null,
-                                 var intValue: Int? = null,
-                                 var booleanValue: Boolean? = null,
-                                 var colorValue: ColorRGBa? = null,
-                                 var vector2Value: Vector2? = null,
-                                 var vector3Value: Vector3? = null,
-                                 var vector4Value: Vector4? = null,
-                                 var doubleListValue: MutableList<Double>? = null,
-                                 var textValue: String? = null,
-                                 var optionValue: String? = null
+    class ParameterValue(var doubleValue: Double? = null,
+                         var intValue: Int? = null,
+                         var booleanValue: Boolean? = null,
+                         var colorValue: ColorRGBa? = null,
+                         var vector2Value: Vector2? = null,
+                         var vector3Value: Vector3? = null,
+                         var vector4Value: Vector4? = null,
+                         var doubleListValue: MutableList<Double>? = null,
+                         var textValue: String? = null,
+                         var optionValue: String? = null
 
     )
 
-
-    fun saveParameters(file: File) {
+    /**
+     * Can be called by the user to obtain an object to be serialized
+     * externally. This allows the user to combine custom data with gui
+     * state and save it all to one file. Complements `.fromObject()`.
+     */
+    fun toObject(): Map<String, Map<String, ParameterValue>> {
         fun <T> KMutableProperty1<out Any, Any?>?.qget(obj: Any): T {
             return (this as KMutableProperty1<Any, T>).get(obj)
         }
 
-        val toSave =
-                trackedObjects.entries.associate { (lo, b) ->
-                    Pair(lo.label, b.parameterControls.keys.associate { k ->
-                        Pair(k.property?.name ?: k.function?.name ?: error("no name"), when (k.parameterType) {
-                            /* 3) setup serializers */
-                            ParameterType.Double -> ParameterValue(doubleValue = k.property.qget(lo.obj) as Double)
-                            ParameterType.Int -> ParameterValue(intValue = k.property.qget(lo.obj) as Int)
-                            ParameterType.Action -> ParameterValue()
-                            ParameterType.Color -> ParameterValue(colorValue = k.property.qget(lo.obj) as ColorRGBa)
-                            ParameterType.Text -> ParameterValue(textValue = k.property.qget(lo.obj) as String)
-                            ParameterType.Boolean -> ParameterValue(booleanValue = k.property.qget(lo.obj) as Boolean)
-                            ParameterType.XY -> ParameterValue(vector2Value = k.property.qget(lo.obj) as Vector2)
-                            ParameterType.DoubleList -> ParameterValue(doubleListValue = k.property.qget(lo.obj) as MutableList<Double>)
-                            ParameterType.Vector2 -> ParameterValue(vector2Value = k.property.qget(lo.obj) as Vector2)
-                            ParameterType.Vector3 -> ParameterValue(vector3Value = k.property.qget(lo.obj) as Vector3)
-                            ParameterType.Vector4 -> ParameterValue(vector4Value = k.property.qget(lo.obj) as Vector4)
-                            ParameterType.Option -> ParameterValue(optionValue = (k.property.qget(lo.obj) as Enum<*>).name)
-                        })
-                    })
-                }
-        file.writeText(Gson().toJson(toSave))
+        return trackedObjects.entries.associate { (lo, b) ->
+            Pair(lo.label, b.parameterControls.keys.associate { k ->
+                Pair(k.property?.name ?: k.function?.name
+                ?: error("no name"), when (k.parameterType) {
+                    /* 3) setup serializers */
+                    ParameterType.Double -> ParameterValue(doubleValue = k.property.qget(lo.obj) as Double)
+                    ParameterType.Int -> ParameterValue(intValue = k.property.qget(lo.obj) as Int)
+                    ParameterType.Action -> ParameterValue()
+                    ParameterType.Color -> ParameterValue(colorValue = k.property.qget(lo.obj) as ColorRGBa)
+                    ParameterType.Text -> ParameterValue(textValue = k.property.qget(lo.obj) as String)
+                    ParameterType.Boolean -> ParameterValue(booleanValue = k.property.qget(lo.obj) as Boolean)
+                    ParameterType.XY -> ParameterValue(vector2Value = k.property.qget(lo.obj) as Vector2)
+                    ParameterType.DoubleList -> ParameterValue(doubleListValue = k.property.qget(lo.obj) as MutableList<Double>)
+                    ParameterType.Vector2 -> ParameterValue(vector2Value = k.property.qget(lo.obj) as Vector2)
+                    ParameterType.Vector3 -> ParameterValue(vector3Value = k.property.qget(lo.obj) as Vector3)
+                    ParameterType.Vector4 -> ParameterValue(vector4Value = k.property.qget(lo.obj) as Vector4)
+                    ParameterType.Option -> ParameterValue(optionValue = (k.property.qget(lo.obj) as Enum<*>).name)
+                })
+            })
+        }
     }
 
-    fun loadParameters(file: File) {
+    fun saveParameters(file: File) {
+        file.writeText(Gson().toJson(toObject()))
+    }
+
+    /**
+     * Can be called by the user to update the gui using an object
+     * deserialized externally. Allows the user to load a larger json object,
+     * deserialize it, and use part of it to update the GUI.
+     * Complements `.toObject()`.
+     */
+    fun fromObject(labeledValues: Map<String, Map<String, ParameterValue>>) {
         fun <T> KMutableProperty1<out Any, Any?>?.qset(obj: Any, value: T) =
                 (this as KMutableProperty1<Any, T>).set(obj, value)
 
@@ -685,10 +692,6 @@ class GUI : Extension {
                     ?: error("cannot map value $value to enum")
             (this as KMutableProperty1<Any, Enum<*>>).set(obj, enumValue)
         }
-
-        val json = file.readText()
-        val typeToken = object : TypeToken<Map<String, Map<String, ParameterValue>>>() {}
-        val labeledValues: Map<String, Map<String, ParameterValue>> = Gson().fromJson(json, typeToken.type)
 
         labeledValues.forEach { (label, ps) ->
             trackedObjects.keys.find { it.label == label }?.let { lo ->
@@ -739,6 +742,14 @@ class GUI : Extension {
             }
         }
         updateControls()
+    }
+
+    fun loadParameters(file: File) {
+        val json = file.readText()
+        val typeToken = object : TypeToken<Map<String, Map<String, ParameterValue>>>() {}
+        val labeledValues: Map<String, Map<String, ParameterValue>> = Gson().fromJson(json, typeToken.type)
+
+        fromObject(labeledValues)
     }
 
     private fun updateControl(labeledObject: LabeledObject, parameter: Parameter, control: Element) {
