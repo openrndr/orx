@@ -440,8 +440,9 @@ class PBRMaterial : Material {
                 this.suppressDefaultOutput = true
                 this.vertexTransform = vs
                 fragmentTransform = fs
+
                 materialContext.pass.combiners.map {
-                    if (rt is ProgramRenderTarget) {
+                    if (rt is ProgramRenderTarget || materialContext.pass === DefaultPass || materialContext.pass === DefaultOpaquePass || materialContext.pass == DefaultTransparentPass) {
                         this.output(it.targetOutput, ShadeStyleOutput(0))
                     } else {
                         val index = rt.colorBufferIndex(it.targetOutput)
