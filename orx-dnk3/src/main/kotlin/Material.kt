@@ -8,6 +8,7 @@ import org.openrndr.draw.shadeStyle
 interface Material {
     var doubleSided: Boolean
     var transparent: Boolean
+    val fragmentID: Int
     fun generateShadeStyle(context: MaterialContext, primitiveContext: PrimitiveContext): ShadeStyle
     fun applyToShadeStyle(context: MaterialContext, shadeStyle: ShadeStyle)
 }
@@ -15,13 +16,19 @@ interface Material {
 class DummyMaterial : Material {
     override var doubleSided: Boolean = true
     override var transparent: Boolean = false
-
+    override var fragmentID = 0
 
     override fun generateShadeStyle(context: MaterialContext, primitiveContext: PrimitiveContext): ShadeStyle {
         return shadeStyle {
+            fragmentPreamble = """
+                int f_fragmentID = p_fragmentID;
+            """.trimIndent()
+
             fragmentTransform = """
                 x_fill.rgb = vec3(normalize(v_viewNormal).z);
             """.trimIndent()
+
+            parameter("fragmentID", fragmentID)
         }
     }
 

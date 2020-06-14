@@ -110,7 +110,7 @@ class SceneRenderer {
                 if (pass == outputPasses[0]) {
                     outputPassTarget?.let {
                         drawer.withTarget(it) {
-                            clear(ColorRGBa.PINK)
+                            clear(ColorRGBa.TRANSPARENT)
                         }
                     }
                 }
@@ -136,18 +136,8 @@ class SceneRenderer {
             val postContext = PostContext(lightContext, drawer.view.inversed)
 
             for (postStep in postSteps) {
-//                if (postStep is FilterPostStep) {
-//                    if (postStep.filter is Ssao) {
-//                        postStep.filter.projection = drawer.projection
-//                    }
-//                    if (postStep.filter is Sslr) {
-//                        val p = Matrix44.scale(drawer.width / 2.0, drawer.height / 2.0, 1.0) * Matrix44.translate(Vector3(1.0, 1.0, 0.0)) * drawer.projection
-//                        postStep.filter.projection = p
-//                    }
-//                }
                 postStep.apply(buffers, postContext)
             }
-
         }
 
         drawer.popStyle()

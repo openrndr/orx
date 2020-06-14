@@ -15,18 +15,26 @@ enum class FacetType(val shaderFacet: String) {
     EMISSIVE("f_emission"),
     AMBIENT("f_ambient"),
     OCCLUSION("f_occlusion"),
+    FRAGMENT_ID("f_fragmentID"),
     COLOR("m_color"),
 }
 
 abstract class FacetCombiner(val facets: Set<FacetType>, val targetOutput: String) {
     abstract fun generateShader(): String
+    override fun toString(): String {
+        return "FacetCombiner(facets=$facets, targetOutput='$targetOutput')"
+    }
+
+
 }
 
 abstract class ColorBufferFacetCombiner(facets: Set<FacetType>,
                                         targetOutput: String,
                                         val format: ColorFormat,
                                         val type: ColorType,
-                                        val blendMode: BlendMode = BlendMode.BLEND) : FacetCombiner(facets, targetOutput)
+                                        val blendMode: BlendMode = BlendMode.BLEND) : FacetCombiner(facets, targetOutput) {
+
+}
 
 class MomentsFacet : ColorBufferFacetCombiner(setOf(FacetType.WORLD_POSITION), "moments", ColorFormat.RG, ColorType.FLOAT16) {
     override fun generateShader(): String {
@@ -109,6 +117,12 @@ class ViewNormalFacet : ColorBufferFacetCombiner(setOf(FacetType.VIEW_NORMAL), "
 
 class ClipPositionFacet : ColorBufferFacetCombiner(setOf(FacetType.CLIP_POSITION), "position", ColorFormat.RGB, ColorType.FLOAT16) {
     override fun generateShader() = "o_$targetOutput.rgb = gl_FragCoord.xyz;"
+}
+
+class FragmentIDFacet: ColorBufferFacetCombiner(setOf(FacetType.FRAGMENT_ID), "fragmentID", ColorFormat.R, ColorType.UINT16_INT) {
+    override fun generateShader(): String {
+        return "o_$targetOutput = f_fragmentID;"
+    }
 }
 
 class LDRColorFacet : ColorBufferFacetCombiner(setOf(FacetType.DIFFUSE, FacetType.SPECULAR), "color", ColorFormat.RGBa, ColorType.UINT8) {

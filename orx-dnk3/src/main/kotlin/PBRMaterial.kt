@@ -264,9 +264,16 @@ class Texture(var source: TextureSource,
     }
 }
 
+private var fragmentIDCounter = 1
+
 class PBRMaterial : Material {
     override fun toString(): String {
         return "PBRMaterial(textures: $textures, color: $color, metalness: $metalness, roughness: $roughness, emissive: $emission))"
+    }
+
+    override var fragmentID = fragmentIDCounter.apply {
+        fragmentIDCounter++
+
     }
 
     override var doubleSided: Boolean = false
@@ -277,6 +284,7 @@ class PBRMaterial : Material {
     var roughness = 1.0
     var emission = ColorRGBa.BLACK
 
+    var fragmentPreamble: String? = null
     var vertexPreamble: String? = null
     var vertexTransform: String? = null
     var parameters = mutableMapOf<String, Any>()
@@ -304,6 +312,7 @@ class PBRMaterial : Material {
             val needLight = needLight(materialContext)
             val preambleFS = """
             vec4 m_color = p_color;
+            uint f_fragmentID = uint(p_fragmentID);
             float m_f0 = 0.5;
             float m_roughness = p_roughness;
             float m_metalness = p_metalness;
@@ -415,11 +424,12 @@ class PBRMaterial : Material {
             val vs = (this@PBRMaterial.vertexTransform ?: "") + textureVS + skinVS
 
             shadeStyle {
+                fragmentPreamble = this@PBRMaterial.fragmentPreamble ?: ""
                 vertexPreamble = """
                     $shaderNoRepetitionVert
                      ${(this@PBRMaterial.vertexPreamble) ?: ""}
                 """.trimIndent()
-                fragmentPreamble = """
+                fragmentPreamble += """
             |$shaderLinePlaneIntersect
             |$shaderProjectOnPlane
             |$shaderSideOfPlane
@@ -431,10 +441,14 @@ class PBRMaterial : Material {
                 this.vertexTransform = vs
                 fragmentTransform = fs
                 materialContext.pass.combiners.map {
-                    if (rt.colorBuffers.size <= 1) {
-                        this.output(it.targetOutput, 0)
-                    } else
-                        this.output(it.targetOutput, rt.colorBufferIndex(it.targetOutput))
+                    if (rt is ProgramRenderTarget) {
+                        this.output(it.targetOutput, ShadeStyleOutput(0))
+                    } else {
+                        val index = rt.colorBufferIndex(it.targetOutput)
+                        val type = rt.colorBuffer(index).type
+                        val format = rt.colorBuffer(0).format
+                        this.output(it.targetOutput, ShadeStyleOutput(index, format, type))
+                    }
                 }
             }
         }
@@ -453,6 +467,7 @@ class PBRMaterial : Material {
         shadeStyle.parameter("color", color)
         shadeStyle.parameter("metalness", metalness)
         shadeStyle.parameter("roughness", roughness)
+        shadeStyle.parameter("fragmentID", fragmentID)
 
         parameters.forEach { (k, v) ->
             when (v) {

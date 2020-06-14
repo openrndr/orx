@@ -1,6 +1,7 @@
 package org.openrndr.extra.dnk3
 
 val shaderNoRepetition = """
+// -- shaderNoRepetition    
 float sum( vec3 v ) { return v.x+v.y+v.z; }
     
 // based on https://www.shadertoy.com/view/Xtl3zf 
@@ -35,7 +36,7 @@ vec4 textureNoTile(in sampler2D noiseTex, in sampler2D tex, in vec2 noiseOffset,
 """
 
 val shaderNoRepetitionVert = """
-// shaderNoRepetitionVert
+// -- shaderNoRepetitionVert
 float sum( vec3 v ) { return v.x+v.y+v.z; }
     
 // based on https://www.shadertoy.com/view/Xtl3zf 
@@ -67,7 +68,7 @@ vec4 textureNoTile(in sampler2D tex, in vec2 noiseOffset, in vec2 x)
 """
 
 val shaderProjectOnPlane = """
-// shaderProjectOnPlane
+// -- shaderProjectOnPlane
 vec3 projectOnPlane(vec3 p, vec3 pc, vec3 pn) {
     float distance = dot(pn, p-pc);
     return p - distance * pn;
@@ -75,18 +76,21 @@ vec3 projectOnPlane(vec3 p, vec3 pc, vec3 pn) {
 """.trimIndent()
 
 val shaderSideOfPlane = """
+// -- shaderSideOfPlane     
 int sideOfPlane(in vec3 p, in vec3 pc, in vec3 pn){
    if (dot(p-pc,pn) >= 0.0) return 1; else return 0;
 }
 """.trimIndent()
 
 val shaderLinePlaneIntersect = """
+// -- shaderLinePlaneIntersect    
 vec3 linePlaneIntersect(in vec3 lp, in vec3 lv, in vec3 pc, in vec3 pn){
    return lp+lv*(dot(pn,pc-lp)/dot(pn,lv));
 }
 """.trimIndent()
 
 val shaderVSM = """
+|// -- shaderVSM    
 |float linstep(float min, float max, float v)
 |{
 |  return clamp((v - min) / (max - min), 0, 1);
@@ -112,6 +116,7 @@ V - eye - world vertex position
 L - world light pos - world vertex position
  */
 val shaderGGX = """
+// -- shaderGGX
 #define bias 0.125
 #define HASHSCALE 443.8975
 vec2 hash22(vec2 p) {

@@ -5,12 +5,12 @@ import org.openrndr.draw.DepthFormat
 import org.openrndr.draw.RenderTarget
 import org.openrndr.draw.renderTarget
 
-class RenderPass(val combiners: List<FacetCombiner>,
+data class RenderPass(val combiners: List<FacetCombiner>,
                  val renderOpaque: Boolean = true,
                  val renderTransparent: Boolean = false,
-                 val depthWrite: Boolean = true
+                 val depthWrite: Boolean = true,
+                 val multisample: BufferMultisample = BufferMultisample.Disabled)
 
-)
 
 val DefaultPass = RenderPass(listOf(LDRColorFacet()))
 val DefaultOpaquePass = RenderPass(listOf(LDRColorFacet()), renderOpaque = true, renderTransparent = false)
@@ -18,7 +18,7 @@ val DefaultTransparentPass = RenderPass(listOf(LDRColorFacet()), renderOpaque = 
 val LightPass = RenderPass(emptyList())
 val VSMLightPass = RenderPass(listOf(MomentsFacet()))
 
-fun RenderPass.createPassTarget(width: Int, height: Int, depthFormat: DepthFormat = DepthFormat.DEPTH24, multisample: BufferMultisample = BufferMultisample.Disabled): RenderTarget {
+fun RenderPass.createPassTarget(width: Int, height: Int, depthFormat: DepthFormat = DepthFormat.DEPTH24, multisample: BufferMultisample = this.multisample): RenderTarget {
     return renderTarget(width, height, multisample = multisample) {
         for (combiner in combiners) {
             when (combiner) {
