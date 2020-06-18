@@ -3,6 +3,7 @@ package org.openrndr.panel.elements
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.FontImageMap
+import org.openrndr.draw.isolated
 import org.openrndr.events.Event
 import org.openrndr.panel.style.*
 import org.openrndr.shape.Rectangle
@@ -73,10 +74,12 @@ class Button : Element(ElementType("button")) {
             drawer.pushTransforms()
             drawer.pushStyle()
             drawer.fill = ((it.background as? Color.RGBa)?.color ?: ColorRGBa.PINK)
-            drawer.stroke = null
-            drawer.strokeWeight = 0.0
 
-            drawer.rectangle(0.0, 0.0, layout.screenWidth, layout.screenHeight)
+            drawer.isolated {
+                drawer.stroke = computedStyle.effectiveBorderColor
+                drawer.strokeWeight = computedStyle.effectiveBorderWidth
+                drawer.rectangle(0.0, 0.0, layout.screenWidth, layout.screenHeight)
+            }
 
             (root() as? Body)?.controlManager?.fontManager?.let {
                 val font = it.font(computedStyle)

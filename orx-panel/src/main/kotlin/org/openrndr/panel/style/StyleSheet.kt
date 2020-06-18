@@ -22,10 +22,11 @@ sealed class Color(inherit: Boolean = false) : PropertyValue(inherit) {
             return "RGBa(color=$color)"
         }
     }
+
     object Inherit : Color(inherit = true)
 }
 
-class CalculateContext(val elementWidth:Double?, val elementHeight:Double?)
+class CalculateContext(val elementWidth: Double?, val elementHeight: Double?)
 
 sealed class LinearDimension(inherit: Boolean = false) : PropertyValue(inherit) {
     class PX(val value: Double) : LinearDimension() {
@@ -33,12 +34,12 @@ sealed class LinearDimension(inherit: Boolean = false) : PropertyValue(inherit) 
             return "PX(value=$value)"
         }
     }
+
     class Percent(val value: Double) : LinearDimension()
     class Calculate(val function: (CalculateContext) -> Double) : LinearDimension()
     object Auto : LinearDimension()
     object Inherit : LinearDimension(inherit = true)
 }
-
 
 
 data class PropertyBehaviour(val inheritance: PropertyInheritance, val intitial: Any)
@@ -160,7 +161,10 @@ var StyleSheet.display by PropertyHandler("display", RESET, Display.BLOCK) // cs
 
 var StyleSheet.flexDirection by PropertyHandler<FlexDirection>("flex-direction", RESET, FlexDirection.Row)
 var StyleSheet.flexGrow by PropertyHandler<FlexGrow>("flex-grow", RESET, FlexGrow.Ratio(0.0))
+var StyleSheet.flexShrink by PropertyHandler<FlexGrow>("flex-shrink", RESET, FlexGrow.Ratio(1.0))
 
+var StyleSheet.borderWidth by PropertyHandler<LinearDimension>("border-width", RESET, 0.px)
+var StyleSheet.borderColor by PropertyHandler<Color>("border-color", INHERIT, Color.RGBa(ColorRGBa.TRANSPARENT))
 
 var StyleSheet.background by PropertyHandler<Color>("background-color", RESET, Color.RGBa(ColorRGBa.BLACK.opacify(0.0)))
 val StyleSheet.effectiveBackground: ColorRGBa?
@@ -189,6 +193,14 @@ val StyleSheet.effectivePaddingHeight: Double
 
 val StyleSheet.effectivePaddingWidth: Double
     get() = effectivePaddingLeft + effectivePaddingRight
+
+
+val StyleSheet.effectiveBorderWidth: Double
+    get() = (borderWidth as? LinearDimension.PX)?.value ?: 0.0
+
+val StyleSheet.effectiveBorderColor: ColorRGBa?
+    get() = (borderColor as? Color.RGBa)?.color
+
 
 var StyleSheet.fontSize by PropertyHandler<LinearDimension>("font-size", INHERIT, 14.px)
 var StyleSheet.fontFamily by PropertyHandler("font-family", INHERIT, "default")

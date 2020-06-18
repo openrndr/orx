@@ -29,19 +29,23 @@ class Layouter {
                             val totalWidth = element.children.filter { it.computedStyle.display in blockLike && it.computedStyle.position !in manualPosition }.map { width(it) }.sum()
                             val remainder = (knownWidth?: element.layout.screenWidth) - totalWidth
                             val totalGrow = element.children.filter { it.computedStyle.display in blockLike && it.computedStyle.position !in manualPosition }.map { (it.computedStyle.flexGrow as FlexGrow.Ratio).value }.sum()
+                            val totalShrink = element.children.filter { it.computedStyle.display in blockLike && it.computedStyle.position !in manualPosition }.map { (it.computedStyle.flexShrink as FlexGrow.Ratio).value }.sum()
+
 
                             element.children.filter { it.computedStyle.display in blockLike && it.computedStyle.position !in manualPosition }.forEach { child ->
                                 val elementGrow = (child.computedStyle.flexGrow as FlexGrow.Ratio).value
+                                val elementShrink = (child.computedStyle.flexShrink as FlexGrow.Ratio).value
                                 val growWidth = if (totalGrow > 0) (elementGrow / totalGrow) * remainder else 0.0
+                                val shrinkWidth = if (totalShrink > 0) (elementShrink / totalShrink) * remainder else 0.0
 
                                 child.layout.screenY = y + ((child.computedStyle.marginTop as? LinearDimension.PX)?.value
                                         ?: 0.0)
                                 child.layout.screenX = x + ((child.computedStyle.marginLeft as? LinearDimension.PX)?.value
                                         ?: 0.0)
 
-                                child.layout.growWidth = growWidth
+                                child.layout.growWidth = if (remainder > 0) growWidth else shrinkWidth
 
-                                val effectiveWidth = width(child) + growWidth
+                                val effectiveWidth = width(child) + (if (remainder > 0) growWidth else shrinkWidth)
                                 x += effectiveWidth
                                 maxHeight = max(height(child, effectiveWidth), maxHeight)
                             }
