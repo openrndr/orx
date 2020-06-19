@@ -101,6 +101,7 @@ class MidiTransceiver(val receiverDevice: MidiDevice, val transmitterDevicer: Mi
                     ShortMessage.NOTE_ON -> noteOn.trigger(MidiEvent.noteOn(channel, cmd[1].toInt() and 0xff, cmd[2].toInt() and 0xff))
                     ShortMessage.NOTE_OFF -> noteOff.trigger(MidiEvent.noteOff(channel, cmd[1].toInt() and 0xff))
                     ShortMessage.CONTROL_CHANGE -> controlChanged.trigger(MidiEvent.controlChange(channel,cmd[1].toInt() and 0xff, cmd[2].toInt() and 0xff))
+                    ShortMessage.PROGRAM_CHANGE -> programChanged.trigger(MidiEvent.programChange(channel,cmd[1].toInt() and 0xff))
                 }
             }
             override fun close() {
@@ -116,12 +117,25 @@ class MidiTransceiver(val receiverDevice: MidiDevice, val transmitterDevicer: Mi
     }
 
     val controlChanged = Event<MidiEvent>("midi-transceiver::controller-changed").signature(MidiEvent::class.java)
+    val programChanged = Event<MidiEvent>("midi-transceiver::program-changed").signature(MidiEvent::class.java)
     val noteOn = Event<MidiEvent>("midi-transceiver::note-on").signature(MidiEvent::class.java)
     val noteOff = Event<MidiEvent>("midi-transceiver::note-off").signature(MidiEvent::class.java)
 
     fun controlChange(channel: Int, control: Int, value: Int) {
         try {
             val msg = ShortMessage(ShortMessage.CONTROL_CHANGE, channel, control, value)
+            if (receiverDevice != null) {
+                val tc = receiverDevice!!.microsecondPosition
+                receiver.send(msg, tc)
+            }
+        } catch (e: InvalidMidiDataException) {
+            //
+        }
+    }
+
+    fun programChange(channel: Int, program: Int) {
+        try {
+            val msg = ShortMessage(ShortMessage.PROGRAM_CHANGE, channel, program)
             if (receiverDevice != null) {
                 val tc = receiverDevice!!.microsecondPosition
                 receiver.send(msg, tc)
