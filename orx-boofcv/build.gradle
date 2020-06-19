@@ -8,7 +8,7 @@ sourceSets {
     }
 }
 
-def boofcvVersion = "0.34"
+def boofcvVersion = "0.36"
 
 dependencies {
 
