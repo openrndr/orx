@@ -45,11 +45,10 @@ class MidiEvent(val eventType: MidiEventType) {
             return midiEvent
         }
 
-        fun programChange(channel:Int, program: Int, value: Int): MidiEvent {
+        fun programChange(channel:Int, program: Int): MidiEvent {
             val midiEvent = MidiEvent(MidiEventType.PROGRAM_CHANGE)
             midiEvent.channel = channel
             midiEvent.program = program
-            midiEvent.value = value
             return midiEvent
         }
     }

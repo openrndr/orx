@@ -101,7 +101,7 @@ class MidiTransceiver(val receiverDevice: MidiDevice, val transmitterDevicer: Mi
                     ShortMessage.NOTE_ON -> noteOn.trigger(MidiEvent.noteOn(channel, cmd[1].toInt() and 0xff, cmd[2].toInt() and 0xff))
                     ShortMessage.NOTE_OFF -> noteOff.trigger(MidiEvent.noteOff(channel, cmd[1].toInt() and 0xff))
                     ShortMessage.CONTROL_CHANGE -> controlChanged.trigger(MidiEvent.controlChange(channel,cmd[1].toInt() and 0xff, cmd[2].toInt() and 0xff))
-                    ShortMessage.PROGRAM_CHANGE -> programChanged.trigger(MidiEvent.programChange(channel,cmd[1].toInt() and 0xff, cmd[2].toInt() and 0xff))
+                    ShortMessage.PROGRAM_CHANGE -> programChanged.trigger(MidiEvent.programChange(channel,cmd[1].toInt() and 0xff))
                 }
             }
             override fun close() {
@@ -133,9 +133,9 @@ class MidiTransceiver(val receiverDevice: MidiDevice, val transmitterDevicer: Mi
         }
     }
 
-    fun programChange(channel: Int, program: Int, value: Int) {
+    fun programChange(channel: Int, program: Int) {
         try {
-            val msg = ShortMessage(ShortMessage.PROGRAM_CHANGE, channel, program, value)
+            val msg = ShortMessage(ShortMessage.PROGRAM_CHANGE, channel, program)
             if (receiverDevice != null) {
                 val tc = receiverDevice!!.microsecondPosition
                 receiver.send(msg, tc)
