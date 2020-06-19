@@ -18,6 +18,11 @@ val dev = MidiTransceiver.fromDeviceVendor("BCR2000 [hw:2,0,0]", "ALSA (http://w
 dev.controlChanged.listen {
     println("${it.channel} ${it.control} ${it.value}")
 }
+
+// or program changes
+dev.programChange.listen {
+    println("${it.channel} ${it.program}")
+}
 ```
 
 ## Further reading
