@@ -106,14 +106,20 @@ fun Toggle.bind(property: KMutableProperty0<Boolean>) {
         currentValue = it.newValue
         property.set(it.newValue)
     }
-
+    if (root() as? Body == null) {
+        throw RuntimeException("no body")
+    }
+    fun update() {
+        if (property.get() != currentValue) {
+            val lcur = property.get()
+            currentValue = lcur
+            value = lcur
+        }
+    }
+    update()
     (root() as Body).controlManager.program.launch {
         while (!disposed) {
-            val cval = property.get()
-            if (cval != currentValue) {
-                currentValue = cval
-                value = cval
-            }
+            update()
             yield()
         }
     }
