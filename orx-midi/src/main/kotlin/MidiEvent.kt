@@ -3,12 +3,14 @@ package org.openrndr.extra.midi
 enum class MidiEventType {
     NOTE_ON,
     NOTE_OFF,
-    CONTROL_CHANGED
+    CONTROL_CHANGED,
+    PROGRAM_CHANGE
 }
 
 class MidiEvent(val eventType: MidiEventType) {
     var origin = Origin.DEVICE
     var control: Int = 0
+    var program: Int = 0
     var note: Int = 0
     var channel: Int = 0
     var value: Int = 0
@@ -42,9 +44,17 @@ class MidiEvent(val eventType: MidiEventType) {
             midiEvent.value = value
             return midiEvent
         }
+
+        fun programChange(channel:Int, program: Int, value: Int): MidiEvent {
+            val midiEvent = MidiEvent(MidiEventType.PROGRAM_CHANGE)
+            midiEvent.channel = channel
+            midiEvent.program = program
+            midiEvent.value = value
+            return midiEvent
+        }
     }
 
     override fun toString(): String {
-        return "MidiEvent(eventType=$eventType, origin=$origin, control=$control, note=$note, channel=$channel, value=$value, velocity=$velocity)"
+        return "MidiEvent(eventType=$eventType, origin=$origin, program=$program, control=$control, note=$note, channel=$channel, value=$value, velocity=$velocity)"
     }
 }
