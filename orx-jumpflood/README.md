@@ -58,7 +58,7 @@ fun main() = application {
             thresholdFilter.threshold = 0.5
             thresholdFilter.apply(blurred, thresholded)
 
-            distanceFieldFromBitmap(drawer, thresholded, result = distanceField)
+            distanceFieldFromBitmap(thresholded, result = distanceField)
 
             drawer.isolated {
                 // -- use a shadestyle to visualize the distance field
@@ -131,7 +131,7 @@ fun main() = application {
             thresholdFilter.threshold = 0.5
             thresholdFilter.apply(blurred, thresholded)
 
-            directionFieldFromBitmap(drawer, thresholded, result = directionField)
+            directionFieldFromBitmap(thresholded, result = directionField)
 
             drawer.isolated {
                 // -- use a shadestyle to visualize the direction field
