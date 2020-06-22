@@ -58,7 +58,7 @@ fun main() = application {
             thresholdFilter.threshold = 0.5
             thresholdFilter.apply(blurred, thresholded)
 
-            distanceFieldFromBitmap(drawer, thresholded, result = distanceField)
+            distanceFieldFromBitmap(thresholded, result = distanceField)
 
             drawer.isolated {
                 // -- use a shadestyle to visualize the distance field
@@ -66,7 +66,7 @@ fun main() = application {
                     fragmentTransform = """
                         float d = x_fill.r;
                         if (x_fill.g > 0.5) { 
-                        x_fill.rgb = 1.0 * vec3(cos(d) * 0.5 + 0.5);
+                            x_fill.rgb = vec3(cos(d) * 0.5 + 0.5);
                         } else {
                             x_fill.rgb = 0.25 * vec3(1.0 - (cos(d) * 0.5 + 0.5));
                         }
@@ -131,20 +131,17 @@ fun main() = application {
             thresholdFilter.threshold = 0.5
             thresholdFilter.apply(blurred, thresholded)
 
-            directionFieldFromBitmap(drawer, thresholded, result = directionField)
+            directionFieldFromBitmap(thresholded, result = directionField)
 
             drawer.isolated {
                 // -- use a shadestyle to visualize the direction field
                 drawer.shadeStyle = shadeStyle {
                     fragmentTransform = """
                         float a = atan(x_fill.r, x_fill.g);
-                        if (a < 0) {
-                            a += 3.1415926535*2;
-                        }
-                        if (x_fill.g > 0.5) { 
-                            x_fill.rgb = 1.0*vec3(cos(a*1.0)*0.5+0.5);
+                        if (x_fill.b > 0.5) { 
+                            x_fill.rgb = vec3(cos(a)*0.5+0.5, 1.0, sin(a)*0.5+0.5);
                         } else {
-                            x_fill.rgb = 0.25*vec3(cos(a*1.0)*0.5+0.5);
+                            x_fill.rgb = vec3(cos(a)*0.5+0.5, 0.0, sin(a)*0.5+0.5);
                         }
                     """
                 }
