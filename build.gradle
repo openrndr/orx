@@ -179,6 +179,8 @@ task collectScreenshots {
                 continue
             if (sub.name == "orx-runway")
                 continue
+            if (sub.name == "orx-chataigne")
+                continue
             def set = sub.sourceSets.demo
             def ucl = new URLClassLoader(set.runtimeClasspath.collect { it.toURI().toURL() } as URL[])
 
