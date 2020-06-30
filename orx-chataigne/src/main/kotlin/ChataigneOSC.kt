@@ -44,14 +44,10 @@ open class ChataigneOSC(
     }
 
     fun update(seconds: Double) {
-        osc.send("/example", seconds.toFloat())
+        osc.send("/setTime", seconds.toFloat())
     }
 
     init {
         println("setup Chataigne with OSC ${osc.address} in:${osc.portIn} out:${osc.portOut}")
-
-        println("send")
-
-
     }
 }
