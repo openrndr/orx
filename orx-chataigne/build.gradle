@@ -1,0 +1,25 @@
+sourceSets {
+    demo {
+        java {
+            srcDirs = ["src/demo/kotlin"]
+            compileClasspath += main.getCompileClasspath()
+            runtimeClasspath += main.getRuntimeClasspath()
+        }
+    }
+}
+dependencies {
+    api project(":orx-osc")
+
+    implementation "com.google.code.gson:gson:$gsonVersion"
+    demoImplementation("org.openrndr:openrndr-core:$openrndrVersion")
+
+    demoRuntimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
+    demoRuntimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
+    demoRuntimeOnly("org.openrndr:openrndr-extensions:$openrndrVersion")
+    demoImplementation("org.openrndr:openrndr-ffmpeg:$openrndrVersion")
+    demoRuntimeOnly("org.openrndr:openrndr-ffmpeg-natives-$openrndrOS:$openrndrVersion")
+    demoImplementation(project(":orx-fx"))
+//    demoImplementation(project(":orx-osc"))
+
+    demoImplementation(sourceSets.getByName("main").output)
+}
