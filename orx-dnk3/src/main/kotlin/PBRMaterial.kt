@@ -445,7 +445,7 @@ class PBRMaterial : Material {
                     if (rt is ProgramRenderTarget || materialContext.pass === DefaultPass || materialContext.pass === DefaultOpaquePass || materialContext.pass == DefaultTransparentPass) {
                         this.output(it.targetOutput, ShadeStyleOutput(0))
                     } else {
-                        val index = rt.colorBufferIndex(it.targetOutput)
+                        val index = rt.colorAttachmentIndexByName(it.targetOutput) ?: error("no such attachment ${it.targetOutput}")
                         val type = rt.colorBuffer(index).type
                         val format = rt.colorBuffer(0).format
                         this.output(it.targetOutput, ShadeStyleOutput(index, format, type))
@@ -521,7 +521,7 @@ class PBRMaterial : Material {
 
                     is SpotLight -> {
                         shadeStyle.parameter("lightPosition$index", (node.worldTransform * Vector4.UNIT_W).xyz)
-                        shadeStyle.parameter("lightDirection$index", ((normalMatrix(node.worldTransform)) * light.direction).normalized)
+                        shadeStyle.parameter("lightDirection$index", ((normalMatrix(node.worldTransform)) * light.direction.xyz0).normalized.xyz)
                         shadeStyle.parameter("lightConstantAttenuation$index", light.constantAttenuation)
                         shadeStyle.parameter("lightLinearAttenuation$index", light.linearAttenuation)
                         shadeStyle.parameter("lightQuadraticAttenuation$index", light.quadraticAttenuation)
@@ -546,7 +546,7 @@ class PBRMaterial : Material {
                     }
                     is DirectionalLight -> {
                         shadeStyle.parameter("lightPosition$index", (node.worldTransform * Vector4.UNIT_W).xyz)
-                        shadeStyle.parameter("lightDirection$index", ((normalMatrix(node.worldTransform)) * light.direction).normalized)
+                        shadeStyle.parameter("lightDirection$index", ((normalMatrix(node.worldTransform)) * light.direction.xyz0).normalized.xyz)
                         if (light.shadows is Shadows.MappedShadows) {
                             context.shadowMaps[light]?.let {
                                 val look = light.view(node)
@@ -565,7 +565,7 @@ class PBRMaterial : Material {
                     }
 
                     is HemisphereLight -> {
-                        shadeStyle.parameter("lightDirection$index", ((normalMatrix(node.worldTransform)) * light.direction).normalized)
+                        shadeStyle.parameter("lightDirection$index", ((normalMatrix(node.worldTransform)) * light.direction.xyz0).normalized.xyz)
                         shadeStyle.parameter("lightUpColor$index", light.upColor)
                         shadeStyle.parameter("lightDownColor$index", light.downColor)
 

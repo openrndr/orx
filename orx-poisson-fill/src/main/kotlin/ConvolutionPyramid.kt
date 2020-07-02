@@ -124,11 +124,16 @@ internal class ConvolutionPyramid(width: Int, height: Int,
     fun destroy() {
         result.destroy()
         (levelsIn+levelsOut).forEach {
-            it.colorBuffers.forEach { it.destroy() }
-            it.detachColorBuffers()
+            it.colorAttachments.forEach {
+                when(it) {
+                    is ColorBufferAttachment -> it.colorBuffer.destroy()
+                    is CubemapAttachment -> it.cubemap.destroy()
+                    is ArrayTextureAttachment -> it.arrayTexture.destroy()
+                    is ArrayCubemapAttachment -> it.arrayCubemap.destroy()
+                }
+            }
+            it.detachColorAttachments()
             it.destroy()
         }
     }
-
-
 }

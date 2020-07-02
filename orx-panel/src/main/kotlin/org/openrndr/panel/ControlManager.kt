@@ -363,10 +363,10 @@ class ControlManager : Extension {
 
         body?.draw?.dirty = true
 
-        if (renderTarget.colorBuffers.isNotEmpty()) {
+        if (renderTarget.colorAttachments.isNotEmpty()) {
             renderTarget.colorBuffer(0).destroy()
             renderTarget.depthBuffer?.destroy()
-            renderTarget.detachColorBuffers()
+            renderTarget.detachColorAttachments()
             renderTarget.detachDepthBuffer()
             renderTarget.destroy()
         } else {

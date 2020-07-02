@@ -13,12 +13,17 @@ import org.openrndr.math.Matrix44
 private val postBufferCache = mutableListOf<ColorBuffer>()
 
 fun RenderTarget.deepDestroy() {
-    val cbcopy = colorBuffers.map { it }
+    val cbcopy = colorAttachments.map { it }
     val dbcopy = depthBuffer
     detachDepthBuffer()
-    detachColorBuffers()
+    detachColorAttachments()
     cbcopy.forEach {
-        it.destroy()
+        when (it) {
+            is ColorBufferAttachment -> it.colorBuffer.destroy()
+            is CubemapAttachment -> it.cubemap.destroy()
+            is ArrayTextureAttachment -> it.arrayTexture.destroy()
+            is ArrayCubemapAttachment -> it.arrayCubemap.destroy()
+        }
     }
     dbcopy?.destroy()
     destroy()
@@ -42,15 +47,16 @@ open class Layer internal constructor() {
 
     @BooleanParameter("enabled")
     var enabled = true
+
     @BooleanParameter("Invert mask")
     var invertMask = false
     var clearColor: ColorRGBa? = ColorRGBa.TRANSPARENT
     private var layerTarget: RenderTarget? = null
 
     val result: ColorBuffer?
-    get() {
-        return layerTarget?.colorBuffer(0)
-    }
+        get() {
+            return layerTarget?.colorBuffer(0)
+        }
 
     /**
      * draw the layer
@@ -65,7 +71,7 @@ open class Layer internal constructor() {
         accumulation = if (activeRenderTarget !is ProgramRenderTarget) {
             activeRenderTarget.colorBuffer(0)
         } else {
-          null
+            null
         }
 
         if (shouldCreateLayerTarget(activeRenderTarget)) {
@@ -238,8 +244,8 @@ fun <F : Filter> Layer.blend(filter: F, configure: F.() -> Unit = {}): F {
     return filter
 }
 
-class Composite: Layer() {
-    fun draw(drawer:Drawer) {
+class Composite : Layer() {
+    fun draw(drawer: Drawer) {
         drawLayer(drawer)
     }
 }

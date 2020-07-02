@@ -65,7 +65,7 @@ class TemporalBlur : Extension {
         accumulator?.let { a ->
             if (a.width != program.width || a.height != program.height) {
                 a.colorBuffer(0).destroy()
-                a.detachColorBuffers()
+                a.detachColorAttachments()
                 a.destroy()
             }
         }
@@ -73,7 +73,7 @@ class TemporalBlur : Extension {
         result?.let { r ->
             if (r.width != program.width || r.height != program.height) {
                 r.colorBuffer(0).destroy()
-                r.detachColorBuffers()
+                r.detachColorAttachments()
                 r.destroy()
             }
         }
@@ -82,7 +82,7 @@ class TemporalBlur : Extension {
             if (i.width != program.width || i.height != program.height) {
                 i.colorBuffer(0).destroy()
                 i.depthBuffer?.destroy()
-                i.detachColorBuffers()
+                i.detachColorAttachments()
                 i.detachDepthBuffer()
                 i.destroy()
             }
@@ -91,7 +91,7 @@ class TemporalBlur : Extension {
         imageResolved?.let { i ->
             if (i.width != program.width || i.height != program.height) {
                 i.colorBuffer(0).destroy()
-                i.detachColorBuffers()
+                i.detachColorAttachments()
                 i.destroy()
             }
         }
@@ -160,7 +160,7 @@ class TemporalBlur : Extension {
 
             if (linearizeInput) {
                 imageResolved?.let {
-                    linearize.apply(it, it)
+                    linearize.apply(it.colorBuffer(0), it.colorBuffer(0))
                 }
             }
 

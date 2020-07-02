@@ -117,7 +117,8 @@ class SceneRenderer {
                 outputPassTarget?.let { target ->
                     pass.combiners.forEach {
                         if (it is ColorBufferFacetCombiner) {
-                            val index = target.colorBufferIndex(it.targetOutput)
+                            val index = target.colorAttachmentIndexByName(it.targetOutput)
+                                    ?: error("no such attachment ${it.targetOutput}")
                             target.blendMode(index, it.blendMode)
                         }
                     }
@@ -128,7 +129,8 @@ class SceneRenderer {
 
                 outputPassTarget?.let { output ->
                     for (combiner in pass.combiners) {
-                        buffers[combiner.targetOutput] = output.colorBuffer(combiner.targetOutput)
+                        buffers[combiner.targetOutput] = (output.colorAttachmentByName(combiner.targetOutput) as? ColorBufferAttachment)?.colorBuffer
+                                ?: error("no such attachment: ${combiner.targetOutput}")
                     }
                 }
             }
@@ -226,9 +228,8 @@ class SceneRenderer {
                         val nodeInverse = it.node.worldTransform.inversed
 
 
-
                         val jointTransforms = (skinnedMesh.joints zip skinnedMesh.inverseBindMatrices)
-                                .map{ (nodeInverse * it.first.worldTransform * it.second) }
+                                .map { (nodeInverse * it.first.worldTransform * it.second) }
 //                        val jointNormalTransforms = jointTransforms.map { Matrix44.IDENTITY }
 
                         val shadeStyle = primitive.material.generateShadeStyle(materialContext, primitiveContext)
@@ -269,7 +270,7 @@ class SceneRenderer {
                 .forEach {
                     val primitive = it.content
                     drawer.isolated {
-                        val primitiveContext = PrimitiveContext(true,  false)
+                        val primitiveContext = PrimitiveContext(true, false)
                         val shadeStyle = primitive.primitive.material.generateShadeStyle(materialContext, primitiveContext)
                         shadeStyle.parameter("viewMatrixInverse", drawer.view.inversed)
                         primitive.primitive.material.applyToShadeStyle(materialContext, shadeStyle)
