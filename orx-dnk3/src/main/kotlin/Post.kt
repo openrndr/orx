@@ -9,16 +9,16 @@ interface PostStep {
     fun apply(buffers: MutableMap<String, ColorBuffer>, postContext: PostContext)
 }
 
-class FilterPostStep(val outputScale: Double,
-                     val filter: Filter,
+class FilterPostStep<T:Filter>(val outputScale: Double,
+                     val filter: T,
                      val inputs: List<String>,
                      val output: String,
                      val outputFormat: ColorFormat,
                      val outputType: ColorType,
-                     val update: (Filter.(PostContext) -> Unit)? = null) : PostStep {
+                     val update: (T.(PostContext) -> Unit)? = null) : PostStep {
 
     override fun apply(buffers: MutableMap<String, ColorBuffer>, postContext: PostContext) {
-        val inputBuffers = inputs.map { buffers[it]!! }
+        val inputBuffers = inputs.map { buffers[it]?: error("buffer not found: $it") }
         val outputBuffer = buffers.getOrPut(output) {
             colorBuffer((inputBuffers[0].width * outputScale).toInt(),
                     (inputBuffers[0].height * outputScale).toInt(),

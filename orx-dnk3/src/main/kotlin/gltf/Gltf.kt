@@ -24,11 +24,11 @@ const val GLTF_BYTE = 5120
 const val GLTF_ARRAY_BUFFER = 34962
 const val GLTF_ELEMENT_ARRAY_BUFFER = 34963
 
-class GltfAsset(val generator: String?, val version: String?)
+data class GltfAsset(val generator: String?, val version: String?)
 
-class GltfScene(val nodes: IntArray)
+data class GltfScene(val nodes: IntArray)
 
-class GltfNode(val name: String,
+data class GltfNode(val name: String,
                val children: IntArray?,
                val matrix: DoubleArray?,
                val scale: DoubleArray?,
@@ -39,14 +39,14 @@ class GltfNode(val name: String,
                val camera: Int?,
                val extensions: GltfNodeExtensions?)
 
-class KHRLightsPunctualIndex(val light: Int)
+data class KHRLightsPunctualIndex(val light: Int)
 
-class GltfNodeExtensions(val KHR_lights_punctual: KHRLightsPunctualIndex?) {
+data class GltfNodeExtensions(val KHR_lights_punctual: KHRLightsPunctualIndex?) {
 
 }
 
 
-class GltfPrimitive(val attributes: LinkedHashMap<String, Int>, val indices: Int?, val mode: Int?, val material: Int) {
+data class GltfPrimitive(val attributes: LinkedHashMap<String, Int>, val indices: Int?, val mode: Int?, val material: Int) {
     fun createDrawCommand(gltfFile: GltfFile): GltfDrawCommand {
 
         val indexBuffer = indices?.let { indices ->
@@ -164,27 +164,27 @@ class GltfPrimitive(val attributes: LinkedHashMap<String, Int>, val indices: Int
     }
 }
 
-class GltfMesh(val primitives: List<GltfPrimitive>, val name: String) {
+data class GltfMesh(val primitives: List<GltfPrimitive>, val name: String) {
     fun createDrawCommands(gltfFile: GltfFile): List<GltfDrawCommand> {
         return primitives.map { it.createDrawCommand(gltfFile) }
     }
 }
 
-class GltfPbrMetallicRoughness(val baseColorFactor: DoubleArray?,
+data class GltfPbrMetallicRoughness(val baseColorFactor: DoubleArray?,
                                val baseColorTexture: GltfMaterialTexture?,
                                var metallicRoughnessTexture: GltfMaterialTexture?,
                                val roughnessFactor: Double?,
                                val metallicFactor: Double?)
 
-class GltfMaterialTexture(val index: Int, val scale: Double?, val texCoord: Int?)
+data class GltfMaterialTexture(val index: Int, val scale: Double?, val texCoord: Int?)
 
-class GltfImage(val uri: String?, val bufferView: Int?)
+data class GltfImage(val uri: String?, val bufferView: Int?)
 
-class GltfSampler(val magFilter: Int, val minFilter: Int, val wrapS: Int, val wrapT: Int)
+data class GltfSampler(val magFilter: Int, val minFilter: Int, val wrapS: Int, val wrapT: Int)
 
-class GltfTexture(val sampler: Int, val source: Int)
+data class GltfTexture(val sampler: Int, val source: Int)
 
-class GltfMaterial(val name: String,
+data class GltfMaterial(val name: String,
                    val alphaMode: String?,
                    val doubleSided: Boolean?,
                    val normalTexture: GltfMaterialTexture?,
@@ -195,19 +195,19 @@ class GltfMaterial(val name: String,
                    val extensions: GltfMaterialExtensions?
 )
 
-class GltfMaterialExtensions(
+data class GltfMaterialExtensions(
         val KHR_materials_pbrSpecularGlossiness: KhrMaterialsPbrSpecularGlossiness?
 )
 
 class KhrMaterialsPbrSpecularGlossiness(val diffuseFactor: DoubleArray?, val diffuseTexture: GltfMaterialTexture?)
 
-class GltfBufferView(val buffer: Int,
+data class GltfBufferView(val buffer: Int,
                      val byteOffset: Int?,
                      val byteLength: Int,
                      val byteStride: Int?,
                      val target: Int)
 
-class GltfBuffer(val byteLength: Int, val uri: String?) {
+data class GltfBuffer(val byteLength: Int, val uri: String?) {
     fun contents(gltfFile: GltfFile): ByteBuffer = if (uri != null) {
         if (uri.startsWith("data:")) {
             val base64 = uri.substring(uri.indexOf(",") + 1)
@@ -231,9 +231,9 @@ class GltfBuffer(val byteLength: Int, val uri: String?) {
     }
 }
 
-class GltfDrawCommand(val vertexBuffer: VertexBuffer, val indexBuffer: IndexBuffer?, val primitive: DrawPrimitive, var vertexCount: Int)
+data class GltfDrawCommand(val vertexBuffer: VertexBuffer, val indexBuffer: IndexBuffer?, val primitive: DrawPrimitive, var vertexCount: Int)
 
-class GltfAccessor(
+data class GltfAccessor(
         val bufferView: Int,
         val byteOffset: Int,
         val componentType: Int,
@@ -243,28 +243,28 @@ class GltfAccessor(
         val type: String
 )
 
-class GltfAnimation(val name: String?, val channels: List<GltfChannel>, val samplers: List<GltfAnimationSampler>)
-class GltfAnimationSampler(val input: Int, val interpolation: String, val output: Int)
+data class GltfAnimation(val name: String?, val channels: List<GltfChannel>, val samplers: List<GltfAnimationSampler>)
+data class GltfAnimationSampler(val input: Int, val interpolation: String, val output: Int)
 
-class GltfChannelTarget(val node: Int?, val path: String?)
+data class GltfChannelTarget(val node: Int?, val path: String?)
 
-class GltfChannel(val sampler: Int, val target: GltfChannelTarget)
-
-
-class GltfSkin(val inverseBindMatrices: Int, val joints: IntArray, val skeleton: Int)
+data class GltfChannel(val sampler: Int, val target: GltfChannelTarget)
 
 
-class KHRLightsPunctualLight(val color: DoubleArray?, val type: String, val intensity: Double?, val range: Double, val spot: KHRLightsPunctualLightSpot?)
-class KHRLightsPunctualLightSpot(val innerConeAngle: Double?, val outerConeAngle: Double?)
+data class GltfSkin(val inverseBindMatrices: Int, val joints: IntArray, val skeleton: Int)
 
-class KHRLightsPunctual(val lights: List<KHRLightsPunctualLight>)
 
-class GltfExtensions(val KHR_lights_punctual: KHRLightsPunctual?)
+data class KHRLightsPunctualLight(val color: DoubleArray?, val type: String, val intensity: Double?, val range: Double, val spot: KHRLightsPunctualLightSpot?)
+data class KHRLightsPunctualLightSpot(val innerConeAngle: Double?, val outerConeAngle: Double?)
 
-class GltfCameraPerspective(val aspectRatio: Double?, val yfov: Double, val zfar: Double?, val znear: Double)
-class GltfCameraOrthographic(val xmag: Double, val ymag: Double, val zfar: Double, val znear: Double)
+data class KHRLightsPunctual(val lights: List<KHRLightsPunctualLight>)
 
-class GltfCamera(val name: String?, val type: String, val perspective: GltfCameraPerspective?, val orthographic: GltfCameraOrthographic?)
+data class GltfExtensions(val KHR_lights_punctual: KHRLightsPunctual?)
+
+data class GltfCameraPerspective(val aspectRatio: Double?, val yfov: Double, val zfar: Double?, val znear: Double)
+data class GltfCameraOrthographic(val xmag: Double, val ymag: Double, val zfar: Double, val znear: Double)
+
+data class GltfCamera(val name: String?, val type: String, val perspective: GltfCameraPerspective?, val orthographic: GltfCameraOrthographic?)
 
 class GltfFile(
         val asset: GltfAsset?,

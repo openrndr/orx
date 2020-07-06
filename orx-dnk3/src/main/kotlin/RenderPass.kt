@@ -13,6 +13,8 @@ data class RenderPass(val combiners: List<FacetCombiner>,
 
 
 val DefaultPass = RenderPass(listOf(LDRColorFacet()))
+val IrradianceProbePass = RenderPass(listOf(DiffuseIrradianceFacet()))
+
 val DefaultOpaquePass = RenderPass(listOf(LDRColorFacet()), renderOpaque = true, renderTransparent = false)
 val DefaultTransparentPass = RenderPass(listOf(LDRColorFacet()), renderOpaque = false, renderTransparent = true, depthWrite = false)
 val LightPass = RenderPass(emptyList())

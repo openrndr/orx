@@ -2,14 +2,16 @@ package org.openrndr.extra.dnk3
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
+import org.openrndr.extra.dnk3.cubemap.glslEvaluateSH
+import org.openrndr.extra.dnk3.cubemap.glslFetchSH
+import org.openrndr.extra.dnk3.cubemap.genGlslGatherSH
+import org.openrndr.extra.shaderphrases.phrases.phraseTbnMatrix
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
 import org.openrndr.math.transforms.normalMatrix
 import java.nio.ByteBuffer
-import javax.naming.Context
 import kotlin.math.cos
-
 
 private val noise128 by lazy {
     val cb = colorBuffer(128, 128)
@@ -123,7 +125,11 @@ object DummySource : TextureSource() {
 
 abstract class TextureFromColorBuffer(var texture: ColorBuffer, var textureFunction: TextureFunction) : TextureSource()
 
-class TextureFromCode(val code: String) : TextureSource()
+class TextureFromCode(val code: String) : TextureSource() {
+    override fun hashCode(): Int {
+        return code.hashCode()
+    }
+}
 
 private fun TextureFromCode.fs(index: Int, target: TextureTarget) = """
 |vec4 tex$index = vec4(0.0, 0.0, 0.0, 1.0);
@@ -137,6 +143,7 @@ private fun TextureFromCode.fs(index: Int, target: TextureTarget) = """
 enum class TextureFunction(val function: (String, String) -> String) {
     TILING({ texture, uv -> "texture($texture, $uv)" }),
     NOT_TILING({ texture, uv -> "textureNoTile(p_textureNoise, $texture, x_noTileOffset, $uv)" })
+    ;
 }
 
 /**
@@ -155,7 +162,16 @@ class ModelCoordinates(texture: ColorBuffer,
     override fun toString(): String {
         return "ModelCoordinates(texture: $texture, input: $input, $tangentInput: $tangentInput, textureFunction: $textureFunction, pre: $pre, post: $post)"
     }
+
+    override fun hashCode(): Int {
+        var result = input.hashCode()
+        result = 31 * result + (tangentInput?.hashCode() ?: 0)
+        result = 31 * result + (pre?.hashCode() ?: 0)
+        result = 31 * result + (post?.hashCode() ?: 0)
+        return result
+    }
 }
+
 
 class Triplanar(texture: ColorBuffer,
                 var scale: Double = 1.0,
@@ -170,6 +186,17 @@ class Triplanar(texture: ColorBuffer,
         texture.wrapU = WrapMode.REPEAT
         texture.wrapV = WrapMode.REPEAT
     }
+
+    override fun hashCode(): Int {
+        var result = scale.hashCode()
+        result = 31 * result + offset.hashCode()
+        result = 31 * result + sharpness.hashCode()
+        result = 31 * result + (pre?.hashCode() ?: 0)
+        result = 31 * result + (post?.hashCode() ?: 0)
+        return result
+    }
+
+
 }
 
 private fun ModelCoordinates.fs(index: Int) = """
@@ -187,8 +214,7 @@ private fun ModelCoordinates.fs(index: Int) = """
 |        vec3 tangent = normalize(${tangentInput}.xyz);
 |        vec3 bitangent = cross(normal, tangent) * ${tangentInput}.w;
 |        mat3 tbn = mat3(tangent, bitangent, normal);
-|        x_texture.rgb = tbn * normalize(x_texture.rgb - vec3(0.5, 0.5, 0.)) ;
-|    
+|        x_texture.rgb = tbn * normalize( (x_texture.rgb - vec3(0.5, 0.5, 0.0))*vec3(2.0, 2.0, 1.0)) ;
 """.trimMargin()
 
 } else ""}   
@@ -250,6 +276,10 @@ sealed class TextureTarget(val name: String) {
     override fun toString(): String {
         return "TextureTarget(name: $name)"
     }
+
+    override fun hashCode(): Int {
+        return name.hashCode()
+    }
 }
 
 class Texture(var source: TextureSource,
@@ -262,18 +292,63 @@ class Texture(var source: TextureSource,
     override fun toString(): String {
         return "Texture(source: $source, target: $target)"
     }
+
+    override fun hashCode(): Int {
+        var result = source.hashCode()
+        result = 31 * result + target.hashCode()
+        return result
+    }
 }
 
 private var fragmentIDCounter = 1
 
+data class SubsurfaceScatter(var enabled: Boolean) {
+    var color: ColorRGBa = ColorRGBa.WHITE
+    var shape = 1.0
+
+    fun fs(): String {
+        return if (enabled) """
+            f_diffuse.rgb += pow(smoothstep(1.0, 0.0, abs(dot(normalize(N),normalize(V)))), p_sssShape) * clamp(evaluateSH(-V, sh), vec3(0.0), vec3(1.0)) * p_sssColor.rgb;            
+        """ else ""
+    }
+
+    fun applyToShadeStyle(shadeStyle: ShadeStyle) {
+        if (enabled) {
+            shadeStyle.parameter("sssColor", color)
+            shadeStyle.parameter("sssShape", shape)
+        }
+    }
+}
+
+data class CubemapReflection(var cubemap: Cubemap? = null) {
+    var color: ColorRGBa = ColorRGBa.WHITE
+
+    fun fs(): String {
+        return if (cubemap != null) {
+            """
+            vec2 dfg = PrefilteredDFG_Karis(m_roughness, NoV);
+            vec3 sc = m_metalness * m_color.rgb + (1.0-m_metalness) * vec3(0.04);
+            f_specular.rgb += sc * (texture(p_radianceMap, reflect(-V, normalize(f_worldNormal)),  m_roughness*7.0 ).rgb * dfg.x + dfg.y) * p_radianceColor.rgb;
+            """
+        } else { "" }
+    }
+    fun applyToShadeStyle(shadeStyle: ShadeStyle) {
+        if (cubemap != null) {
+            shadeStyle.parameter("radianceMap", cubemap!!)
+            shadeStyle.parameter("radianceColor", color)
+        }
+    }
+}
+
+
 class PBRMaterial : Material {
+    override var name: String? = null
     override fun toString(): String {
-        return "PBRMaterial(textures: $textures, color: $color, metalness: $metalness, roughness: $roughness, emissive: $emission))"
+        return "PBRMaterial(name: $name, fragmentID: $fragmentID, doubleSided: $doubleSided, textures: $textures, color: $color, metalness: $metalness, roughness: $roughness, emissive: $emission))"
     }
 
     override var fragmentID = fragmentIDCounter.apply {
         fragmentIDCounter++
-
     }
 
     override var doubleSided: Boolean = false
@@ -284,6 +359,10 @@ class PBRMaterial : Material {
     var roughness = 1.0
     var emission = ColorRGBa.BLACK
 
+    var subsurfaceScatter = SubsurfaceScatter(false)
+    var cubemapReflection = CubemapReflection(null)
+
+
     var fragmentPreamble: String? = null
     var vertexPreamble: String? = null
     var vertexTransform: String? = null
@@ -291,21 +370,6 @@ class PBRMaterial : Material {
     var textures = mutableListOf<Texture>()
 
     val shadeStyles = mutableMapOf<ContextKey, ShadeStyle>()
-
-//    fun copy(): PBRMaterial {
-//        val copied = PBRMaterial()
-//        copied.environmentMap = environmentMap
-//        copied.color = color
-//        copied.opacity = opacity
-//        copied.metalness = metalness
-//        copied.roughness = roughness
-//        copied.emission = emission
-//        copied.vertexPreamble = vertexPreamble
-//        copied.vertexTransform = vertexTransform
-//        copied.parameters.putAll(parameters)
-//        copied.textures.addAll(textures.map { it.copy() })
-//        return copied
-//    }
 
     override fun generateShadeStyle(materialContext: MaterialContext, primitiveContext: PrimitiveContext): ShadeStyle {
         val cached = shadeStyles.getOrPut(ContextKey(materialContext, primitiveContext)) {
@@ -321,6 +385,7 @@ class PBRMaterial : Material {
             vec3 m_normal = vec3(0.0, 0.0, 1.0);
             vec4 f_fog = vec4(0.0, 0.0, 0.0, 0.0);
             vec3 f_worldNormal = v_worldNormal;
+            vec3 f_emission = m_emission;
         """.trimIndent()
 
             val textureFs = if (needLight) {
@@ -346,7 +411,6 @@ class PBRMaterial : Material {
                     }
                 }).joinToString("\n")
             } else ""
-
             val displacers = textures.filter { it.target is TextureTarget.Height }
 
             val skinVS = if (primitiveContext.hasSkinning) """
@@ -377,23 +441,32 @@ class PBRMaterial : Material {
             }.joinToString("\n") else ""
 
             val lights = materialContext.lights
+
+            val doubleSidedFS = if (doubleSided) {
+                """
+                    if (dot(V, N) <0) {
+                        N *= -1.0;
+                    }
+                """.trimIndent()
+            } else ""
             val lightFS = if (needLight) """
         vec3 f_diffuse = vec3(0.0);
         vec3 f_specular = vec3(0.0);
-        vec3 f_emission = m_emission;
         vec3 f_ambient = vec3(0.0);
         float f_occlusion = 1.0;
         vec3 N = normalize(f_worldNormal);
+        
         vec3 ep = (p_viewMatrixInverse * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
         vec3 Vr = ep - v_worldPosition;
         vec3 V = normalize(Vr);
+
         float NoV = ${if (primitiveContext.hasNormalAttribute) "abs(dot(N, V)) + 1e-5" else "1"};
 
         ${if (environmentMap && materialContext.meshCubemaps.isNotEmpty() && primitiveContext.hasNormalAttribute) """
            {
                 vec2 dfg = PrefilteredDFG_Karis(m_roughness, NoV);
                 vec3 sc = m_metalness * m_color.rgb + (1.0-m_metalness) * vec3(0.04);
-
+                
                 f_specular.rgb += sc * (texture(p_environmentMap, reflect(-V, normalize(f_worldNormal))).rgb * dfg.x + dfg.y) * m_ambientOcclusion;
             }
         """.trimIndent() else ""}
@@ -409,7 +482,21 @@ class PBRMaterial : Material {
                 }
             }.joinToString("\n")}
 
+
+        ${if (materialContext.irradianceSH?.shMap != null) """
+                vec3[9] sh;
+                gatherSH(p_shMap, v_worldPosition, sh);
+                vec3 irradiance = clamp(evaluateSH(normalize(N), sh), vec3(0.0), vec3(1.0)) * m_color.rgb;
+                vec3 ks = F_SchlickRoughness(m_color.rgb * (m_metalness) + 0.04 * (1.0-m_metalness), m_roughness+0.1, min(NoV, 1.0-1.0e-6));
+                f_diffuse.rgb = irradiance * ks;
+                f_ambient.rgb = (1.0-ks) * irradiance;
+                ${subsurfaceScatter.fs()}
+                ${cubemapReflection.fs()}
+        """.trimIndent() else ""
+            }
+        
         ${materialContext.fogs.mapIndexed { index, (node, fog) ->
+                
                 fog.fs(index)
             }.joinToString("\n")}
 
@@ -430,24 +517,36 @@ class PBRMaterial : Material {
                      ${(this@PBRMaterial.vertexPreamble) ?: ""}
                 """.trimIndent()
                 fragmentPreamble += """
+                    ${if (materialContext.irradianceSH?.shMap != null) {
+                    """
+                $glslEvaluateSH
+                $glslFetchSH
+                ${genGlslGatherSH(materialContext.irradianceSH!!.xCount, materialContext.irradianceSH!!.yCount,
+                            materialContext.irradianceSH!!.zCount, materialContext.irradianceSH!!.spacing, materialContext.irradianceSH!!.offset)}
+                """
+                } else {
+                    ""
+                }
+                }
             |$shaderLinePlaneIntersect
             |$shaderProjectOnPlane
             |$shaderSideOfPlane
             |$shaderGGX
             |$shaderVSM
             |$shaderNoRepetition
+            |$phraseTbnMatrix
             """.trimMargin()
                 this.suppressDefaultOutput = true
                 this.vertexTransform = vs
                 fragmentTransform = fs
 
                 materialContext.pass.combiners.map {
-                    if (rt is ProgramRenderTarget || materialContext.pass === DefaultPass || materialContext.pass === DefaultOpaquePass || materialContext.pass == DefaultTransparentPass) {
+                    if (rt is ProgramRenderTarget || materialContext.pass === DefaultPass || materialContext.pass === DefaultOpaquePass || materialContext.pass == DefaultTransparentPass || materialContext.pass == IrradianceProbePass) {
                         this.output(it.targetOutput, ShadeStyleOutput(0))
                     } else {
-                        val index = rt.colorAttachmentIndexByName(it.targetOutput) ?: error("no such attachment ${it.targetOutput}")
+                        val index = rt.colorAttachmentIndexByName(it.targetOutput)?:error("attachment ${it.targetOutput} not found")
                         val type = rt.colorBuffer(index).type
-                        val format = rt.colorBuffer(0).format
+                        val format = rt.colorBuffer(index).format
                         this.output(it.targetOutput, ShadeStyleOutput(index, format, type))
                     }
                 }
@@ -470,6 +569,10 @@ class PBRMaterial : Material {
         shadeStyle.parameter("roughness", roughness)
         shadeStyle.parameter("fragmentID", fragmentID)
 
+        if (context.irradianceProbeCount > 0) {
+            shadeStyle.parameter("shMap", context.irradianceSH?.shMap!!)
+        }
+
         parameters.forEach { (k, v) ->
             when (v) {
                 is Double -> shadeStyle.parameter(k, v)
@@ -483,6 +586,10 @@ class PBRMaterial : Material {
             }
         }
         if (needLight(context)) {
+
+            subsurfaceScatter.applyToShadeStyle(shadeStyle)
+            cubemapReflection.applyToShadeStyle(shadeStyle)
+
             textures.forEachIndexed { index, texture ->
                 when (val source = texture.source) {
                     is TextureFromColorBuffer -> {
@@ -597,6 +704,24 @@ class PBRMaterial : Material {
                 }
             }
         }
+    }
+
+    override fun hashCode(): Int {
+        var result = fragmentID.hashCode()
+        result = 31 * doubleSided.hashCode()
+        result = 31 * result + transparent.hashCode()
+//        result = 31 * result + environmentMap.hashCode()
+        result = 31 * result + color.hashCode()
+        result = 31 * result + metalness.hashCode()
+        result = 31 * result + roughness.hashCode()
+        result = 31 * result + emission.hashCode()
+        result = 31 * result + (fragmentPreamble?.hashCode() ?: 0)
+        result = 31 * result + (vertexPreamble?.hashCode() ?: 0)
+        result = 31 * result + (vertexTransform?.hashCode() ?: 0)
+//        result = 31 * result + parameters.hashCode()
+//        result = 31 * result + textures.hashCode()
+//        result = 31 * result + shadeStyles.hashCode()
+        return result
     }
 }
 

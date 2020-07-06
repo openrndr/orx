@@ -12,7 +12,7 @@ fun segmentContourRenderer(multisample: BufferMultisample = BufferMultisample.Di
     sr.outputPasses.clear()
     sr.outputPasses.add(
             RenderPass(
-                    listOf(FragmentIDFacet()),
+                    listOf(LDRColorFacet(),FragmentIDFacet()),
                     multisample = multisample
             )
     )

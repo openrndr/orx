@@ -15,13 +15,10 @@ import java.nio.ByteOrder
 import kotlin.reflect.KMutableProperty0
 
 class SceneAnimation(var channels: List<AnimationChannel>) {
-
     val duration: Double
         get() {
             return channels.maxBy { it.duration }?.duration ?: 0.0
         }
-
-
     fun applyToTargets(input: Double) {
         for (channel in channels) {
             channel.applyToTarget(input)
@@ -33,6 +30,7 @@ sealed class AnimationChannel {
     abstract val duration: Double
     abstract fun applyToTarget(input: Double)
 }
+
 
 class QuaternionChannel(val target: KMutableProperty0<Quaternion>,
                         val keyframer: KeyframerChannelQuaternion) : AnimationChannel() {
@@ -63,7 +61,6 @@ class GltfSceneNode : SceneNode() {
         return "translation: $translation, scale: $scale, rotation: $rotation, children: ${children.size}, entities: ${entities} "
     }
 
-
     override var transform: Matrix44 = Matrix44.IDENTITY
         get() = transform {
             translate(translation)
@@ -90,7 +87,12 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
                     require(localBufferView.byteLength != null)
                     localBuffer.position(localBufferView.byteOffset)
                     localBuffer.limit(localBufferView.byteOffset + localBufferView.byteLength)
-                    ColorBuffer.fromBuffer(localBuffer)
+                    val cb = ColorBuffer.fromBuffer(localBuffer)
+                    cb.generateMipmaps()
+                    cb.filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
+                    cb.anisotropy = 100.0
+                    localBuffer.limit(localBuffer.capacity())
+                    cb
                 } ?: error("no uri and no bufferview")
 
             } else {
@@ -106,6 +108,7 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
     val sceneMaterials = mutableMapOf<GltfMaterial, Material>()
     fun GltfMaterial.createSceneMaterial(): Material = sceneMaterials.getOrPut(this) {
         val material = PBRMaterial()
+        material.name = this.name
 
         material.doubleSided = this.doubleSided ?: false
         material.transparent = this.alphaMode != null
@@ -203,7 +206,7 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
                 drawCommand.primitive,
                 0,
                 drawCommand.vertexCount)
-        val material = materials[material].createSceneMaterial()
+        val material = materials?.getOrNull(material)?.createSceneMaterial() ?: PBRMaterial()
         return MeshPrimitive(geometry, material)
     }
 

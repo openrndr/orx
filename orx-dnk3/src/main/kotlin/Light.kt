@@ -18,10 +18,14 @@ interface AttenuatedLight {
 }
 
 class DirectionalLight(var direction: Vector3 = -Vector3.UNIT_Z, override var shadows: Shadows = Shadows.None) : Light(), ShadowLight {
-    var projectionSize = 10.0
+    var projectionSize = 50.0
 
     override fun projection(renderTarget: RenderTarget): Matrix44 {
         return ortho(-projectionSize / 2.0, projectionSize / 2.0, -projectionSize / 2.0, projectionSize / 2.0, 1.0, 150.0)
+    }
+
+    override fun hashCode(): Int {
+        return color.hashCode()
     }
 }
 
@@ -33,16 +37,46 @@ class SpotLight(var direction: Vector3 = -Vector3.UNIT_Z, var innerAngle: Double
     override fun projection(renderTarget: RenderTarget): Matrix44 {
         return perspective(outerAngle * 2.0, renderTarget.width * 1.0 / renderTarget.height, 1.0, 150.0)
     }
+
+    override fun hashCode(): Int {
+        var result = direction.hashCode()
+        result = 31 * result + innerAngle.hashCode()
+        result = 31 * result + outerAngle.hashCode()
+        result = 31 * result + constantAttenuation.hashCode()
+        result = 31 * result + linearAttenuation.hashCode()
+        result = 31 * result + quadraticAttenuation.hashCode()
+        return result
+    }
 }
 
 class HemisphereLight(var direction: Vector3 = Vector3.UNIT_Y,
                       var upColor: ColorRGBa = ColorRGBa.WHITE,
                       var downColor: ColorRGBa = ColorRGBa.BLACK) : Light() {
     var irradianceMap: Cubemap? = null
+    override fun hashCode(): Int {
+        var result = direction.hashCode()
+        result = 31 * result + upColor.hashCode()
+        result = 31 * result + downColor.hashCode()
+        return result
+    }
+
 }
 
 class PointLight(var constantAttenuation: Double = 1.0,
                  var linearAttenuation: Double = 0.0,
-                 var quadraticAttenuation: Double = 0.0) : Light()
+                 var quadraticAttenuation: Double = 1.0) : Light() {
+    override fun hashCode(): Int {
+        var result = constantAttenuation.hashCode()
+        result = 31 * result + linearAttenuation.hashCode()
+        result = 31 * result + quadraticAttenuation.hashCode()
+        result = 31 * result + color.hashCode()
+        return result
+    }
+}
 
-class AmbientLight : Light()
+class AmbientLight : Light() {
+
+    override fun hashCode(): Int {
+        return color.hashCode()
+    }
+}

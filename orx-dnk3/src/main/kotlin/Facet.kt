@@ -24,8 +24,6 @@ abstract class FacetCombiner(val facets: Set<FacetType>, val targetOutput: Strin
     override fun toString(): String {
         return "FacetCombiner(facets=$facets, targetOutput='$targetOutput')"
     }
-
-
 }
 
 abstract class ColorBufferFacetCombiner(facets: Set<FacetType>,
@@ -107,6 +105,14 @@ class NormalFacet : ColorBufferFacetCombiner(setOf(FacetType.WORLD_NORMAL), "nor
     override fun generateShader(): String = "o_$targetOutput = vec4(v_worldNormal.rgb, 1.0);"
 }
 
+class ViewDepthFacet : ColorBufferFacetCombiner(setOf(FacetType.VIEW_POSITION), "viewDepth", ColorFormat.R, ColorType.FLOAT16) {
+    override fun generateShader(): String = "o_$targetOutput.r = v_viewPosition.z;"
+}
+class ClipDepthFacet : ColorBufferFacetCombiner(setOf(FacetType.CLIP_POSITION), "clipDepth", ColorFormat.R, ColorType.FLOAT32) {
+    override fun generateShader(): String = "o_$targetOutput.r = gl_FragCoord.z;"
+}
+
+
 class ViewPositionFacet : ColorBufferFacetCombiner(setOf(FacetType.VIEW_POSITION), "viewPosition", ColorFormat.RGB, ColorType.FLOAT32) {
     override fun generateShader(): String = "o_$targetOutput.rgb = v_viewPosition.rgb;"
 }
@@ -125,11 +131,28 @@ class FragmentIDFacet: ColorBufferFacetCombiner(setOf(FacetType.FRAGMENT_ID), "f
     }
 }
 
-class LDRColorFacet : ColorBufferFacetCombiner(setOf(FacetType.DIFFUSE, FacetType.SPECULAR), "color", ColorFormat.RGBa, ColorType.UINT8) {
+class LDRColorFacet : ColorBufferFacetCombiner(setOf(FacetType.DIFFUSE, FacetType.SPECULAR, FacetType.EMISSIVE), "color", ColorFormat.RGBa, ColorType.UINT8) {
     override fun generateShader() = """
-    vec3 finalColor =  (max(vec3(0.0), f_diffuse.rgb) + max(vec3(0.0),f_specular.rgb) + max(vec3(0.0), f_emission.rgb)) * (1.0 - f_fog.a) + f_fog.rgb * f_fog.a;
+    vec3 finalColor =  (max(vec3(0.0), f_diffuse.rgb) + max(vec3(0.0),f_specular.rgb) + max(vec3(0.0), f_emission.rgb) + max(vec3(0.0), f_ambient.rgb)) * (1.0 - f_fog.a) + f_fog.rgb * f_fog.a;
     o_$targetOutput = pow(vec4(finalColor.rgb, 1.0), vec4(1.0/2.2));
     o_$targetOutput *= m_color.a;
+    
+    """
+}
+
+class HDRColorFacet : ColorBufferFacetCombiner(setOf(FacetType.DIFFUSE, FacetType.SPECULAR, FacetType.EMISSIVE), "color", ColorFormat.RGBa, ColorType.FLOAT16) {
+    override fun generateShader() = """
+    vec3 finalColor =  (max(vec3(0.0), f_diffuse.rgb) + max(vec3(0.0),f_specular.rgb) + max(vec3(0.0), f_emission.rgb) + max(vec3(0.0), f_ambient.rgb)) * (1.0 - f_fog.a) + f_fog.rgb * f_fog.a;
+    o_$targetOutput = vec4(finalColor.rgb, 1.0);
+    o_$targetOutput *= m_color.a;
+    """
+}
+
+class DiffuseIrradianceFacet : ColorBufferFacetCombiner(setOf(FacetType.DIFFUSE, FacetType.SPECULAR), "color", ColorFormat.RGBa, ColorType.UINT8) {
+    override fun generateShader() = """
+    vec3 finalColor =  (max(vec3(0.0), f_diffuse.rgb) + max(vec3(0.0), f_emission.rgb));
+    o_$targetOutput = vec4(finalColor.rgb, 1.0);
+    
     
     """
 }

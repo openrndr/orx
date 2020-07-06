@@ -16,6 +16,13 @@ class PerspectiveCamera(var node: SceneNode) : Camera() {
     var far = 100.0
     var near = 0.1
 
+    override fun hashCode(): Int {
+        var result = aspectRatio.hashCode()
+        result = 31 * result + fov.hashCode()
+        result = 31 * result + far.hashCode()
+        result = 31 * result + near.hashCode()
+        return result
+    }
 }
 
 class OrthographicCamera(var node: SceneNode) : Camera() {
@@ -29,4 +36,12 @@ class OrthographicCamera(var node: SceneNode) : Camera() {
     var yMag = 1.0
     var near = 0.1
     var far = 100.0
+
+    override fun hashCode(): Int {
+        var result = xMag.hashCode()
+        result = 31 * result + yMag.hashCode()
+        result = 31 * result + near.hashCode()
+        result = 31 * result + far.hashCode()
+        return result
+    }
 }

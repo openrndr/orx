@@ -5,7 +5,7 @@ import org.openrndr.extra.dnk3.*
 
 import org.openrndr.extra.dnk3.gltf.buildSceneNodes
 import org.openrndr.extra.dnk3.gltf.loadGltfFromFile
-import org.openrndr.extra.dnk3.gltf.loadGltfFromGlbFile
+import org.openrndr.extra.dnk3.renderers.dryRenderer
 import org.openrndr.extras.camera.Orbital
 import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
@@ -15,7 +15,6 @@ fun main() = application {
     configure {
         width = 1280
         height = 720
-        //multisample = WindowMultisample.SampleCount(8)
     }
 
     program {
@@ -26,7 +25,6 @@ fun main() = application {
         }
 
         val gltf = loadGltfFromFile(File("demo-data/gltf-models/duck/Duck.gltf"))
-//        val gltf = loadGltfFromGlbFile(File("demo-data/gltf-models/splash-sss.glb"))
         val scene = Scene(SceneNode())
 
         // -- add some lights
@@ -36,13 +34,13 @@ fun main() = application {
             rotate(Vector3.UNIT_X, -90.0)
         }
         lightNode.entities.add(DirectionalLight())
+
         scene.root.entities.add(HemisphereLight().apply {
             upColor = ColorRGBa.WHITE.shade(1.0)
             downColor = ColorRGBa.WHITE.shade(0.1)
             })
         scene.root.children.add(lightNode)
         scene.root.children.addAll(gltf.buildSceneNodes().scenes.first())
-
 
         // -- create a renderer
         val renderer = dryRenderer()

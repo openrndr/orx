@@ -2,11 +2,21 @@ package org.openrndr.extra.dnk3
 
 import org.openrndr.Dispatcher
 import org.openrndr.math.Matrix44
+import org.openrndr.math.Vector3
+import org.openrndr.math.Vector4
+import java.util.*
 
-class Scene(val root: SceneNode = SceneNode(), val dispatcher: Dispatcher = Dispatcher())
+class Scene(val root: SceneNode = SceneNode(), val dispatcher: Dispatcher = Dispatcher()) {
+    val features = mutableListOf<Feature>()
+    override fun hashCode(): Int {
+        var result = root.hashCode()
+        result = result * 31 + features.hashCode()
+        return result
+    }
+    fun hash(): String = Base64.getEncoder().encodeToString(hashCode().toString().toByteArray())
+}
 
-
-open class SceneNode() {
+open class SceneNode {
     var name: String = ""
     var entities: MutableList<Entity> = mutableListOf()
     var parent: SceneNode? = null
@@ -14,7 +24,23 @@ open class SceneNode() {
     var worldTransform = Matrix44.IDENTITY
     val children = mutableListOf<SceneNode>()
     var disposed = false
+
+    override fun hashCode(): Int {
+        var result = name.hashCode()
+        result = 31 * result + entities.hashCode()
+//        result = 31 * result + (parent?.hashCode() ?: 0)
+        result = 31 * result + transform.hashCode()
+        result = 31 * result + worldTransform.hashCode()
+        result = 31 * result + children.hashCode()
+        result = 31 * result + disposed.hashCode()
+        return result
+    }
 }
+
+val SceneNode.worldPosition: Vector3
+    get() {
+        return (worldTransform * Vector4.UNIT_W).xyz
+    }
 
 class NodeContent<T>(val node: SceneNode, val content: T) {
     operator fun component1() = node

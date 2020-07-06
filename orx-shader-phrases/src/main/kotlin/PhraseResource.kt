@@ -16,6 +16,7 @@ class PhraseResource<R>(private val resourceUrl: String) : ReadOnlyProperty<R, S
 }
 
 /**
+ *
  * PhraseResource delegate builder function
  */
 fun phraseResource(resource: String) : PhraseResource<Any?> {

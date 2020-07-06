@@ -12,6 +12,8 @@ dependencies {
     implementation "com.google.code.gson:gson:$gsonVersion"
     implementation(project(":orx-fx"))
     implementation(project(":orx-keyframer"))
+    implementation(project(":orx-shader-phrases"))
+    implementation(project(":orx-mesh-generators"))
 
     demoImplementation(project(":orx-camera"))
     demoImplementation(project(":orx-mesh-generators"))

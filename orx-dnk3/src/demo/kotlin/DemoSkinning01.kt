@@ -4,6 +4,7 @@ import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.dnk3.*
 import org.openrndr.extra.dnk3.gltf.buildSceneNodes
 import org.openrndr.extra.dnk3.gltf.loadGltfFromFile
+import org.openrndr.extra.dnk3.renderers.dryRenderer
 import org.openrndr.extras.camera.Orbital
 import org.openrndr.math.Vector3
 import org.openrndr.math.mod_

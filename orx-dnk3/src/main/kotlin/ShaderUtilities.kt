@@ -167,6 +167,10 @@ vec3 F_Schlick(const vec3 f0, float VoH) {
     // Schlick 1994, "An Inexpensive BRDF Model for Physically-Based Rendering"
     return f0 + (vec3(1.0) - f0) * pow5(1.0 - VoH);
 }
+vec3 F_SchlickRoughness(vec3 F0, float roughness, float VoH)
+{
+    return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(1.0 - VoH, 5.0);
+} 
 
 float F_Schlick(float f0, float f90, float VoH) {
     return f0 + (f90 - f0) * pow5(1.0 - VoH);

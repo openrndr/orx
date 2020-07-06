@@ -2,10 +2,19 @@ package org.openrndr.extra.dnk3
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
-import org.openrndr.draw.depthBuffer
+import org.openrndr.extra.dnk3.features.IrradianceSH
 import org.openrndr.extra.fx.blur.ApproximateGaussianBlur
 import org.openrndr.math.Matrix44
-import org.openrndr.math.transforms.normalMatrix
+import org.openrndr.math.Vector3
+import java.nio.ByteBuffer
+
+class RenderContext(
+        val lights: List<NodeContent<Light>>,
+        val meshes: List<NodeContent<Mesh>>,
+        val skinnedMeshes: List<NodeContent<SkinnedMesh>>,
+        val instancedMeshes: List<NodeContent<InstancedMesh>>,
+        val fogs: List<NodeContent<Fog>>
+)
 
 class SceneRenderer {
 
@@ -20,7 +29,6 @@ class SceneRenderer {
     var shadowLightTargets = mutableMapOf<ShadowLight, RenderTarget>()
     var meshCubemaps = mutableMapOf<Mesh, Cubemap>()
 
-    var cubemapDepthBuffer = depthBuffer(256, 256, DepthFormat.DEPTH16, BufferMultisample.Disabled)
 
     var outputPasses = mutableListOf(DefaultOpaquePass, DefaultTransparentPass)
     var outputPassTarget: RenderTarget? = null
@@ -31,6 +39,7 @@ class SceneRenderer {
 
     var drawFinalBuffer = true
 
+    var first = true
     fun draw(drawer: Drawer, scene: Scene) {
         drawer.pushStyle()
         drawer.depthWrite = true
@@ -40,22 +49,27 @@ class SceneRenderer {
 
         scene.dispatcher.execute()
 
-
         // update all the transforms
         scene.root.scan(Matrix44.IDENTITY) { p ->
-            worldTransform = p * transform
+            if (p !== Matrix44.IDENTITY) {
+                worldTransform = p * transform
+            } else {
+                worldTransform = transform
+            }
             worldTransform
         }
 
-        val lights = scene.root.findContent { this as? Light }
-        val meshes = scene.root.findContent { this as? Mesh }
-        val skinnedMeshes = scene.root.findContent { this as? SkinnedMesh }
+        val context = RenderContext(
+                lights = scene.root.findContent { this as? Light },
+                meshes = scene.root.findContent { this as? Mesh },
+                skinnedMeshes = scene.root.findContent { this as? SkinnedMesh },
+                fogs = scene.root.findContent { this as? Fog },
+                instancedMeshes = scene.root.findContent { this as? InstancedMesh }
+        )
 
-        val fogs = scene.root.findContent { this as? Fog }
-        val instancedMeshes = scene.root.findContent { this as? InstancedMesh }
-
+        // shadow passes
         run {
-            lights.filter { it.content is ShadowLight && (it.content as ShadowLight).shadows is Shadows.MappedShadows }.forEach {
+            context.lights.filter { it.content is ShadowLight && (it.content as ShadowLight).shadows is Shadows.MappedShadows }.forEach {
                 val shadowLight = it.content as ShadowLight
                 val pass: RenderPass
                 pass = when (shadowLight.shadows) {
@@ -74,7 +88,7 @@ class SceneRenderer {
                 target.clearDepth(depth = 1.0)
 
                 val look = shadowLight.view(it.node)
-                val materialContext = MaterialContext(pass, lights, fogs, shadowLightTargets, emptyMap())
+                val materialContext = MaterialContext(pass, context.lights, context.fogs, shadowLightTargets, emptyMap(), 0)
                 drawer.isolatedWithTarget(target) {
                     drawer.projection = shadowLight.projection(target)
                     drawer.view = look
@@ -82,7 +96,7 @@ class SceneRenderer {
 
                     drawer.clear(ColorRGBa.BLACK)
                     drawer.cullTestPass = CullTestPass.FRONT
-                    drawPass(drawer, pass, materialContext, meshes, instancedMeshes, skinnedMeshes)
+                    drawPass(drawer, pass, materialContext, context)
                 }
                 when (shadowLight.shadows) {
                     is Shadows.VSM -> {
@@ -96,10 +110,18 @@ class SceneRenderer {
             }
         }
 
+        // -- feature passes
+        for (feature in scene.features) {
+            feature.update(drawer, this, scene, feature, context)
+        }
+
+        // -- output passes
         run {
-            //val pass = outputPasses
+            val irradianceSH = scene.features.find { it is IrradianceSH } as? IrradianceSH
             for (pass in outputPasses) {
-                val materialContext = MaterialContext(pass, lights, fogs, shadowLightTargets, meshCubemaps)
+                val materialContext = MaterialContext(pass, context.lights, context.fogs, shadowLightTargets, meshCubemaps, irradianceSH?.probeCount
+                        ?: 0)
+                materialContext.irradianceSH = irradianceSH
 
                 val defaultPasses = setOf(DefaultTransparentPass, DefaultOpaquePass)
 
@@ -118,23 +140,23 @@ class SceneRenderer {
                     pass.combiners.forEach {
                         if (it is ColorBufferFacetCombiner) {
                             val index = target.colorAttachmentIndexByName(it.targetOutput)
-                                    ?: error("no such attachment ${it.targetOutput}")
+                                    ?: error("attachement not found ${it.targetOutput}")
                             target.blendMode(index, it.blendMode)
                         }
                     }
                 }
                 outputPassTarget?.bind()
-                drawPass(drawer, pass, materialContext, meshes, instancedMeshes, skinnedMeshes)
+                drawPass(drawer, pass, materialContext, context)
                 outputPassTarget?.unbind()
 
                 outputPassTarget?.let { output ->
                     for (combiner in pass.combiners) {
                         buffers[combiner.targetOutput] = (output.colorAttachmentByName(combiner.targetOutput) as? ColorBufferAttachment)?.colorBuffer
-                                ?: error("no such attachment: ${combiner.targetOutput}")
+                                ?: error("attachment not found ${combiner.targetOutput}")
                     }
                 }
             }
-            val lightContext = LightContext(lights, shadowLightTargets)
+            val lightContext = LightContext(context.lights, shadowLightTargets)
             val postContext = PostContext(lightContext, drawer.view.inversed)
 
             for (postStep in postSteps) {
@@ -146,10 +168,9 @@ class SceneRenderer {
         if (drawFinalBuffer) {
             outputPassTarget?.let { output ->
                 drawer.isolated {
+                    drawer.defaults()
                     drawer.ortho()
-                    drawer.view = Matrix44.IDENTITY
-                    drawer.model = Matrix44.IDENTITY
-                    val outputName = (postSteps.last() as FilterPostStep).output
+                    val outputName = (postSteps.lastOrNull() as? FilterPostStep<*>)?.output ?: "color"
                     val outputBuffer = buffers[outputName]
                             ?: throw IllegalArgumentException("can't find $outputName buffer")
                     drawer.image(outputBuffer)
@@ -158,14 +179,12 @@ class SceneRenderer {
         }
     }
 
-    private fun drawPass(drawer: Drawer, pass: RenderPass, materialContext: MaterialContext,
-                         meshes: List<NodeContent<Mesh>>,
-                         instancedMeshes: List<NodeContent<InstancedMesh>>,
-                         skinnedMeshes: List<NodeContent<SkinnedMesh>>
+    internal fun drawPass(drawer: Drawer, pass: RenderPass, materialContext: MaterialContext,
+                          context: RenderContext
     ) {
 
         drawer.depthWrite = pass.depthWrite
-        val primitives = meshes.flatMap { mesh ->
+        val primitives = context.meshes.flatMap { mesh ->
             mesh.content.primitives.map { primitive ->
                 NodeContent(mesh.node, primitive)
             }
@@ -204,7 +223,7 @@ class SceneRenderer {
                 }
 
 
-        val skinnedPrimitives = skinnedMeshes.flatMap { mesh ->
+        val skinnedPrimitives = context.skinnedMeshes.flatMap { mesh ->
             mesh.content.primitives.map { primitive ->
                 NodeContent(mesh.node, Pair(primitive, mesh))
             }
@@ -230,12 +249,9 @@ class SceneRenderer {
 
                         val jointTransforms = (skinnedMesh.joints zip skinnedMesh.inverseBindMatrices)
                                 .map { (nodeInverse * it.first.worldTransform * it.second) }
-//                        val jointNormalTransforms = jointTransforms.map { Matrix44.IDENTITY }
-
                         val shadeStyle = primitive.material.generateShadeStyle(materialContext, primitiveContext)
 
                         shadeStyle.parameter("jointTransforms", jointTransforms.toTypedArray())
-//                        shadeStyle.parameter("jointNormalTransforms", jointNormalTransforms.toTypedArray())
 
                         shadeStyle.parameter("viewMatrixInverse", drawer.view.inversed)
                         primitive.material.applyToShadeStyle(materialContext, shadeStyle)
@@ -258,7 +274,7 @@ class SceneRenderer {
                 }
 
 
-        val instancedPrimitives = instancedMeshes.flatMap { mesh ->
+        val instancedPrimitives = context.instancedMeshes.flatMap { mesh ->
             mesh.content.primitives.map { primitive ->
                 NodeContent(mesh.node, MeshPrimitiveInstance(primitive, mesh.content.instances, mesh.content.attributes))
             }
@@ -295,4 +311,10 @@ fun sceneRenderer(builder: SceneRenderer.() -> Unit): SceneRenderer {
     val sceneRenderer = SceneRenderer()
     sceneRenderer.builder()
     return sceneRenderer
+}
+
+internal fun ByteBuffer.putVector3(v: Vector3) {
+    putFloat(v.x.toFloat())
+    putFloat(v.y.toFloat())
+    putFloat(v.z.toFloat())
 }

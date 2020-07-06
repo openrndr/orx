@@ -11,14 +11,20 @@ fun main() = application {
         cubemap1.copyTo(cubemap2, 0, 0)
         cubemap2.generateMipmaps()
 
-        val cma = arrayCubemap(256, 10)
+        val cma = arrayCubemap(cubemap1.width, 10)
+        for (i in 0 until 1) {
+            cubemap1.copyTo(cma, 8)
+        }
+
+        cma.generateMipmaps()
+
         extend(Orbital()) {
 
         }
         extend {
             drawer.shadeStyle = shadeStyle {
                 fragmentTransform = """
-                    x_fill = texture(p_cma, vec4(va_position,0.0)); 
+                    x_fill = texture(p_cma, vec4(va_position, 8.0)); 
                 """
                 parameter("cubemap", cubemap2)
                 parameter("cma", cma)
