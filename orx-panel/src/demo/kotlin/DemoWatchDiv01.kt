@@ -113,8 +113,8 @@ fun main() = application {
                     }
                 }
 
-                watchDiv("matrix", watchList = programState.matrix) { row ->
-                    watchDiv("row", watchList = row) { item ->
+                watchListDiv("matrix", watchList = programState.matrix) { row ->
+                    watchListDiv("row", watchList = row) { item ->
                         this.id = "some-row"
                         slider {
                             label = "value"

@@ -4,11 +4,18 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.yield
 import org.openrndr.draw.Drawer
 import org.openrndr.launch
+import org.openrndr.panel.elements.*
+import kotlin.reflect.KMutableProperty0
 
-class WatchDiv<T : Any>(private val watchList: List<T>, private val builder: WatchDiv<T>.(T) -> Unit) : Div(), DisposableElement {
+class WatchPropertyDiv<T : Any>(
+    private val watchProperty: KMutableProperty0<T>,
+    private val builder: WatchPropertyDiv<T>.(T) -> Unit
+) : Div(),
+    DisposableElement {
     override var disposed: Boolean = false
-    private var listState = emptyList<T>()
+    private var propertyState = watchProperty.get()
     private var watchJob: Job? = null
+
 
     override fun dispose() {
         super.dispose()
@@ -19,36 +26,28 @@ class WatchDiv<T : Any>(private val watchList: List<T>, private val builder: Wat
         children.clear()
     }
 
-    fun regenerate() {
-        var regenerate = false
-        if (listState.size != watchList.size) {
+    fun regenerate(force: Boolean = false) {
+        var regenerate = force
+        if (watchProperty.get() != propertyState) {
             regenerate = true
         }
-        if (!regenerate) {
-            for (i in watchList.indices) {
-                if (watchList[i] !== listState[i]) {
-                    regenerate = true
-                    break
-                }
-            }
-        }
+
         if (regenerate) {
             for (child in children) {
                 child.parent = null
                 (child as? DisposableElement)?.dispose()
             }
+            propertyState = watchProperty.get()
             children.clear()
-            listState = watchList.map { it }
-            for (i in watchList) {
-                builder(i)
-            }
+            builder(propertyState)
+
             requestRedraw()
         }
     }
 
     fun checkJob() {
         if (watchJob == null) {
-            watchJob = (root() as Body).controlManager.program.launch {
+            watchJob = (root() as? Body)?.controlManager?.program?.launch {
                 while (!disposed) {
                     regenerate()
                     yield()
@@ -56,16 +55,21 @@ class WatchDiv<T : Any>(private val watchList: List<T>, private val builder: Wat
             }
         }
     }
+
     override fun draw(drawer: Drawer) {
         checkJob()
         super.draw(drawer)
     }
 }
 
-fun <T : Any> Element.watchDiv(vararg classes: String, watchList: List<T>, builder: WatchDiv<T>.(T) -> Unit) {
-    val wd = WatchDiv(watchList, builder)
+fun <T : Any> Element.watchPropertyDiv(
+    vararg classes: String,
+    watchProperty: KMutableProperty0<T>,
+    builder: WatchPropertyDiv<T>.(T) -> Unit
+) {
+    val wd = WatchPropertyDiv(watchProperty, builder)
     wd.classes.addAll(classes.map { ElementClass(it) })
     this.append(wd)
-    wd.regenerate()
+    wd.regenerate(true)
     wd.checkJob()
 }
