@@ -73,6 +73,6 @@ fun preprocessShader(source: String, symbols: Set<String> = emptySet()): String 
  * @param url url pointing to GLSL shader source
  * @return GLSL source code with injected shader phrases
  */
-fun preprocessShaderFromUrl(url: String, symbols: Set<String>): String {
+fun preprocessShaderFromUrl(url: String, symbols: Set<String> = emptySet()): String {
     return preprocessShader(codeFromURL(url), symbols)
 }
