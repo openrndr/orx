@@ -20,6 +20,16 @@ Supported Gltf features
 - [ ] Lights
 <!-- __demos__ -->
 ## Demos
+### DemoAnimations01
+[source code](src/demo/kotlin/DemoAnimations01.kt)
+
+![DemoAnimations01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-dnk3/images/DemoAnimations01Kt.png)
+
+### DemoCamera01
+[source code](src/demo/kotlin/DemoCamera01.kt)
+
+![DemoCamera01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-dnk3/images/DemoCamera01Kt.png)
+
 ### DemoLights01
 [source code](src/demo/kotlin/DemoLights01.kt)
 
@@ -54,13 +64,3 @@ Supported Gltf features
 [source code](src/demo/kotlin/DemoScene03.kt)
 
 ![DemoScene03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-dnk3/images/DemoScene03Kt.png)
-
-### DemoSegmentContours01
-[source code](src/demo/kotlin/DemoSegmentContours01.kt)
-
-![DemoSegmentContours01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-dnk3/images/DemoSegmentContours01Kt.png)
-
-### DemoSkinning01
-[source code](src/demo/kotlin/DemoSkinning01.kt)
-
-![DemoSkinning01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-dnk3/images/DemoSkinning01Kt.png)
