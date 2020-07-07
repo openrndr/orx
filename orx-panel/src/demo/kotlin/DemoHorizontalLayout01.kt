@@ -27,6 +27,7 @@ fun main() = application {
                 // ----------------------------------------------
                 display = Display.FLEX
                 flexDirection = FlexDirection.Row
+                width = 100.percent
             }
 
             styleSheet(has type "h1") {
