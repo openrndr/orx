@@ -1,5 +1,7 @@
 package org.openrndr.panel.elements
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 import mu.KotlinLogging
 import org.openrndr.*
@@ -296,22 +298,26 @@ fun Slider.bind(property: KMutableProperty0<Double>) {
         currentValue = it.newValue
         property.set(it.newValue)
     }
-    if (root() as? Body == null) {
-        throw RuntimeException("no body")
-    }
-
-    fun update() {
-        if (property.get() != currentValue) {
-            val lcur = property.get()
-            currentValue = lcur
-            value = lcur
-        }
-    }
-    update()
-
-    (root() as? Body)?.controlManager?.program?.launch {
-        while (!disposed) {
-            update()
+    GlobalScope.launch {
+        while(!disposed) {
+            val body = (root() as? Body)
+            if (body != null) {
+                fun update() {
+                    if (property.get() != currentValue) {
+                        val lcur = property.get()
+                        currentValue = lcur
+                        value = lcur.toDouble()
+                    }
+                }
+                update()
+                body.controlManager.program.launch {
+                    while (!disposed) {
+                        update()
+                        yield()
+                    }
+                }
+                break
+            }
             yield()
         }
     }
@@ -324,20 +330,26 @@ fun Slider.bind(property: KMutableProperty0<Int>) {
         currentValue = it.newValue.toInt()
         property.set(it.newValue.toInt())
     }
-    if (root() as? Body == null) {
-        throw RuntimeException("no body")
-    }
-    fun update() {
-        if (property.get() != currentValue) {
-            val lcur = property.get()
-            currentValue = lcur
-            value = lcur.toDouble()
-        }
-    }
-    update()
-    (root() as? Body)?.controlManager?.program?.launch {
-        while (!disposed) {
-            update()
+    GlobalScope.launch {
+        while(!disposed) {
+            val body = (root() as? Body)
+            if (body != null) {
+                fun update() {
+                    if (property.get() != currentValue) {
+                        val lcur = property.get()
+                        currentValue = lcur
+                        value = lcur.toDouble()
+                    }
+                }
+                update()
+                body.controlManager.program.launch {
+                    while (!disposed) {
+                        update()
+                        yield()
+                    }
+                }
+                break
+            }
             yield()
         }
     }
