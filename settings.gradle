@@ -3,6 +3,7 @@ rootProject.name = 'orx'
 include 'openrndr-demos',
         'orx-boofcv',
         'orx-camera',
+        'orx-chataigne',
         'orx-compositor',
         'orx-dnk3',
         'orx-easing',
@@ -46,5 +47,5 @@ include 'openrndr-demos',
         'orx-kinect-v1-natives-macos',
         'orx-kinect-v1-natives-windows',
         'orx-kinect-v1-demo',
-        'orx-chataigne'
+        'orx-video-profiles'
 
