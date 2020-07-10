@@ -1,5 +1,7 @@
 package org.openrndr.panel.elements
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.openrndr.KEY_BACKSPACE
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
@@ -14,7 +16,7 @@ import org.openrndr.text.Cursor
 import org.openrndr.text.writer
 import kotlin.reflect.KMutableProperty0
 
-class Textfield : Element(ElementType("textfield")) {
+class Textfield : Element(ElementType("textfield")), DisposableElement {
 
     var value: String = ""
     var label: String = "label"
@@ -133,6 +135,9 @@ class Textfield : Element(ElementType("textfield")) {
             //drawer.lineSegment(0.0, yOffset + 4.0, layout.screenWidth, yOffset + 4.0)
         }
     }
+
+    override var disposed: Boolean = false
+
 }
 
 fun Textfield.bind(property: KMutableProperty0<String>) {
@@ -142,17 +147,27 @@ fun Textfield.bind(property: KMutableProperty0<String>) {
         currentValue = it.newValue
         property.set(it.newValue)
     }
-    fun update() {
-        val cval = property.get()
-        if (cval != currentValue) {
-            currentValue = cval
-            value = cval
-        }
-    }
-    update()
-    (root() as Body).controlManager.program.launch {
-        while (true) {
-            update()
+
+    GlobalScope.launch {
+        while (!disposed) {
+            val body = (root() as? Body)
+            if (body != null) {
+                fun update() {
+                    val cval = property.get()
+                    if (cval != currentValue) {
+                        currentValue = cval
+                        value = cval
+                    }
+                }
+                update()
+                (root() as Body).controlManager.program.launch {
+                    while (true) {
+                        update()
+                        yield()
+                    }
+                }
+                break
+            }
             yield()
         }
     }
