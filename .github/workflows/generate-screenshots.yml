@@ -20,6 +20,10 @@ jobs:
           xvfb-run glxinfo
       - name: Collect screenshots
         run: xvfb-run ./gradlew collectScreenshots
+      - name: Build main readme
+        run: |
+          xvfb-run ./gradlew buildMainReadme
+          (git add README.md && git commit -m "add auto-generated README" && git push origin master) || true
       - name: Prepare media branch
         run: |
           git config --global user.email "actions@openrndr.org"

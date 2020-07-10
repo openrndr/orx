@@ -129,7 +129,13 @@ task buildMainReadme {
         for (line in header) {
             newReadme.add(line)
         }
-        newReadme.add("| name" + ("&nbsp;".repeat(36)) + " | description |")
+        newReadme.add("| name" + 
+          "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
+          "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
+          "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
+          "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
+          "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
+          "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + " | description |")
         newReadme.add("| --- | --- |")
 
         // Search for the description at the top of the readme.
@@ -146,7 +152,7 @@ task buildMainReadme {
                 def orxReadmeText = orxReadmeFile.getText()
                 orxReadmeText.find(descriptionRx) {
                     description ->
-                        def trimmedDescription = description[1].strip()
+                        def trimmedDescription = description[1].trim() //.strip() supports unicode, java11 only
                                 .replace("\n", " ").replace("\r", "")
                         newReadme.add("| [`${sub.name}`](${sub.name}/README.md) " +
                                 "| $trimmedDescription |")
