@@ -9,7 +9,9 @@ A growing library of assorted data structures, algorithms and utilities.
 | --- | --- |
 | [`orx-boofcv`](orx-boofcv/README.md) | Helper functions to ease working with the BoofCV computer vision library and its data types. |
 | [`orx-camera`](orx-camera/README.md) | 3D camera controllable via mouse and keyboard. |
+| [`orx-chataigne`](orx-chataigne/README.md) | Expose variables to [Chataigne](http://benjamin.kuperberg.fr/chataigne/en) and any other applications that can interface with it. The current implementation makes use of the OSC protocol and supports `Double` and `ColorRGBa`. |
 | [`orx-compositor`](orx-compositor/README.md) | Toolkit to make composite (layered) images using blend modes and filters. |
+| [`orx-dnk3`](orx-dnk3/README.md) | A scene graph based 3d renderer with support for Gltf based assets |
 | [`orx-easing`](orx-easing/README.md) | Provides easing functions for smooth animation or non-linear interpolation. |
 | [`orx-file-watcher`](orx-file-watcher/README.md) | Monitor files on disk and auto-reload them if they change. |
 | [`orx-filter-extension`](orx-filter-extension/README.md) | To apply graphics filters on every animation frame using `extend(FILTER_NAME())`. |
@@ -44,6 +46,7 @@ A growing library of assorted data structures, algorithms and utilities.
 | [`orx-temporal-blur`](orx-temporal-blur/README.md) | Post-processing temporal-blur video effect. CPU intense, therefore not intended  for use with the `ScreenRecorder` extension or other real-time uses. |
 | [`orx-time-operators`](orx-time-operators/README.md) | A collection of time-sensitive functions aimed at controlling raw data over-time,  such as Envelope and LFO. |
 | [`orx-timer`](orx-timer/README.md) | Simple timer functionality providing `repeat`, to run code with a given interval and `timeOut`, to run code once after a given delay. |
+| [`orx-video-profiles`](orx-video-profiles/README.md) | A collection of `VideoWriterProfile` implementations that can be used with `ScreenRecorder` and `VideoWriter` |
 <!-- __orxListEnd__ -->
 
 # Developer notes

@@ -1,7 +1,6 @@
 # orx-chataigne
 
-With `orx-chataigne` you can share [Chataigne](http://benjamin.kuperberg.fr/chataigne/en) variables within a OPENRNDR project. 
-
+Expose variables to [Chataigne](http://benjamin.kuperberg.fr/chataigne/en) and any other applications that can interface with it.
 The current implementation makes use of the OSC protocol and supports `Double` and `ColorRGBa`.
 
 ## Usage
