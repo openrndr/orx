@@ -154,7 +154,7 @@ task buildMainReadme {
                     description ->
                         def trimmedDescription = description[1].trim() //.strip() supports unicode, java11 only
                                 .replace("\n", " ").replace("\r", "")
-                        newReadme.add("| [`${sub.name}`](${sub.name}/README.md) " +
+                        newReadme.add("| [`${sub.name}`](${sub.name}/) " +
                                 "| $trimmedDescription |")
                 }
 
