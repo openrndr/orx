@@ -125,6 +125,28 @@ class PaletteStudio(
 
     private fun loadFromURL(url: URL): Unit = load(url.readText())
 
+    private fun assemblePalette(clrs: List<ColorRGBa>): Palette {
+        val background = clrs.first()
+        val foreground = clrs
+                .takeLast(clrs.size - 1)
+                .map { getContrast(background, it) to it }
+                .maxBy { it.first }!!
+                .second
+
+        var constraint = clrs.size
+        var constraint2 = clrs.size
+
+        if (colorCountConstraint > 0 && colorCountConstraint < clrs.size) {
+            constraint = colorCountConstraint
+            constraint2 = colorCountConstraint + 1
+        }
+
+        val colors1 = clrs.slice(0 until constraint)
+        val colors2 = clrs.slice(1 until constraint2)
+
+        return Palette(background, foreground, colors1, colors2)
+    }
+
     private fun createPalette(colors: List<ColorRGBa>): Palette {
         val sortedColors = when (sortBy) {
             SortBy.DARKEST -> {
@@ -140,25 +162,7 @@ class PaletteStudio(
             }
         }
 
-        val background = sortedColors.first()
-        val foreground = sortedColors
-                .takeLast(sortedColors.size - 1)
-                .map { getContrast(background, it) to it }
-                .maxBy { it.first }!!
-                .second
-
-        var constraint = sortedColors.size
-        var constraint2 = sortedColors.size
-
-        if (colorCountConstraint > 0 && colorCountConstraint < sortedColors.size) {
-            constraint = colorCountConstraint
-            constraint2 = colorCountConstraint + 1
-        }
-
-        val colors1 = sortedColors.slice(0 until constraint)
-        val colors2 = sortedColors.slice(1 until constraint2)
-
-        return Palette(background, foreground, colors1, colors2)
+        return assemblePalette(sortedColors)
     }
 
     fun onChange(fn: () -> Unit) {
@@ -193,12 +197,7 @@ class PaletteStudio(
     }
 
     fun randomize() {
-        palette = Palette(
-                background,
-                foreground,
-                Random.pick(colors, count = colors.size),
-                Random.pick(colors2, count = colors2.size)
-        )
+        palette = assemblePalette(colors.shuffled())
     }
 
     fun randomPalette() {
