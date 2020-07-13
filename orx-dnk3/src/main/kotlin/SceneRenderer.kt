@@ -180,7 +180,7 @@ class SceneRenderer {
     }
 
     internal fun drawPass(drawer: Drawer, pass: RenderPass, materialContext: MaterialContext,
-                          context: RenderContext
+                          context: RenderContext, shadeStyleTransformer: ((ShadeStyle)->Unit)? = null
     ) {
 
         drawer.depthWrite = pass.depthWrite
@@ -204,6 +204,8 @@ class SceneRenderer {
                         val shadeStyle = primitive.material.generateShadeStyle(materialContext, primitiveContext)
                         shadeStyle.parameter("viewMatrixInverse", drawer.view.inversed)
                         primitive.material.applyToShadeStyle(materialContext, shadeStyle)
+                        shadeStyleTransformer?.invoke(shadeStyle)
+
                         drawer.shadeStyle = shadeStyle
                         drawer.model = it.node.worldTransform
 

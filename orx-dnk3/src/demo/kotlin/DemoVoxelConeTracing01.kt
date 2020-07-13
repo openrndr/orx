@@ -1,30 +1,19 @@
 import kotlinx.coroutines.yield
 import org.openrndr.*
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.BufferMultisample
-import org.openrndr.draw.ColorFormat
-import org.openrndr.draw.ColorType
-import org.openrndr.draw.DrawPrimitive
+import org.openrndr.draw.*
 import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.dnk3.*
-import org.openrndr.extra.dnk3.features.IrradianceSH
-import org.openrndr.extra.dnk3.features.addIrradianceSH
+import org.openrndr.extra.dnk3.features.addVoxelConeTracing
 import org.openrndr.extra.dnk3.gltf.buildSceneNodes
 import org.openrndr.extra.dnk3.gltf.loadGltfFromFile
-import org.openrndr.extra.dnk3.post.ScreenspaceReflections
-import org.openrndr.extra.dnk3.post.VolumetricIrradiance
 import org.openrndr.extra.dnk3.renderers.postRenderer
-import org.openrndr.extra.shaderphrases.annotations.ShaderPhrases
 import org.openrndr.extras.camera.Orbital
 import org.openrndr.extras.meshgenerators.sphereMesh
-import org.openrndr.ffmpeg.ScreenRecorder
 import org.openrndr.filter.color.Delinearize
-import org.openrndr.math.Matrix44
 import org.openrndr.math.Spherical
 import org.openrndr.math.Vector3
-import org.openrndr.math.transforms.scale
 import org.openrndr.math.transforms.transform
-import org.openrndr.math.transforms.translate
 import java.io.File
 import kotlin.math.cos
 import kotlin.math.sin
@@ -51,7 +40,9 @@ fun main() = application {
         val probeGeometry = Geometry(listOf(probeBox), null, DrawPrimitive.TRIANGLES, 0, probeBox.vertexCount)
 
         val c = 5
-        scene.addIrradianceSH(c, c, c, 3.0 / c, cubemapSize = 32, offset = Vector3(0.0, 0.0, 0.0))
+//        scene.addIrradianceSH(c, c, c, 3.0 / c, cubemapSize = 32, offset = Vector3(0.0, 0.0, 0.0))
+        val vctFeature = scene.addVoxelConeTracing(64,64,64, 0.1)
+
 
 
         val sceneData = gltf.buildSceneNodes()
@@ -105,11 +96,19 @@ fun main() = application {
             }
         }
 
+        val viz = colorBuffer(64,64)
         extend {
             drawer.clear(ColorRGBa.BLACK)
             renderer.draw(drawer, scene)
             drawer.defaults()
 
+            for (i in 0 until 128) {
+                vctFeature.voxelMap?.let {
+                    it.copyTo(viz, i)
+                }
+                drawer.image(viz, (i * 128) % width + 0.0,  ((i * 128)/width * 128 + 0.0 ))
+            }
+            drawer.image(vctFeature.voxelRenderTarget!!.colorBuffer(0))
         }
     }
 }

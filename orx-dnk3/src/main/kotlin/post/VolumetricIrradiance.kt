@@ -13,7 +13,7 @@ fun preprocessedFilterShaderFromUrl(url: String): Shader {
 }
 
 fun preprocessedFilterShaderFromCode(fragmentShaderCode: String, name: String): Shader {
-    return Shader.createFromCode(Filter.filterVertexCode, fragmentShaderCode, name)
+    return Shader.createFromCode(vsCode = Filter.filterVertexCode,  fsCode = fragmentShaderCode, name = name)
 }
 
 class VolumetricIrradiance : Filter(preprocessedFilterShaderFromUrl(resourceUrl("/shaders/volumetric-irradiance.frag"))) {

@@ -46,6 +46,7 @@ data class MaterialContext(val pass: RenderPass,
                            val meshCubemaps: Map<Mesh, Cubemap>,
                            val irradianceProbeCount: Int
                            ) {
+
     var irradianceSH: IrradianceSH? = null
 }
 

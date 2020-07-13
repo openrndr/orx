@@ -541,7 +541,7 @@ class PBRMaterial : Material {
                 fragmentTransform = fs
 
                 materialContext.pass.combiners.map {
-                    if (rt is ProgramRenderTarget || materialContext.pass === DefaultPass || materialContext.pass === DefaultOpaquePass || materialContext.pass == DefaultTransparentPass || materialContext.pass == IrradianceProbePass) {
+                    if (rt is ProgramRenderTarget || materialContext.pass === DefaultPass || materialContext.pass === DefaultOpaquePass || materialContext.pass == DefaultTransparentPass || materialContext.pass == IrradianceProbePass || materialContext.pass.skipTarget )  {
                         this.output(it.targetOutput, ShadeStyleOutput(0))
                     } else {
                         val index = rt.colorAttachmentIndexByName(it.targetOutput)?:error("attachment ${it.targetOutput} not found")

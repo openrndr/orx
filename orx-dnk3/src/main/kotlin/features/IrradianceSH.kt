@@ -47,7 +47,7 @@ fun Scene.addIrradianceSH(xCount: Int,
     }
 }
 
-fun SceneRenderer.processIrradiance(drawer: Drawer, scene: Scene, feature: IrradianceSH, context: RenderContext) {
+private fun SceneRenderer.processIrradiance(drawer: Drawer, scene: Scene, feature: IrradianceSH, context: RenderContext) {
     val irradianceProbes = scene.root.findContent { this as? IrradianceProbe }
     val irradianceProbePositions = irradianceProbes.map { it.node.worldPosition }
 

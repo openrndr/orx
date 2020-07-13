@@ -6,10 +6,12 @@ import org.openrndr.draw.RenderTarget
 import org.openrndr.draw.renderTarget
 
 data class RenderPass(val combiners: List<FacetCombiner>,
-                 val renderOpaque: Boolean = true,
-                 val renderTransparent: Boolean = false,
-                 val depthWrite: Boolean = true,
-                 val multisample: BufferMultisample = BufferMultisample.Disabled)
+                      val renderOpaque: Boolean = true,
+                      val renderTransparent: Boolean = false,
+                      val depthWrite: Boolean = true,
+                      val multisample: BufferMultisample = BufferMultisample.Disabled,
+                      val skipTarget: Boolean = false
+)
 
 
 val DefaultPass = RenderPass(listOf(LDRColorFacet()))
