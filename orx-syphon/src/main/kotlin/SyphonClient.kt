@@ -8,6 +8,7 @@ import org.openrndr.Program
 import org.openrndr.draw.*
 
 import org.openrndr.internal.gl3.ColorBufferGL3
+import org.openrndr.internal.gl3.TextureStorageModeGL
 
 
 class SyphonClient(private val appName: String? = null, private val serverName: String? = null): Extension {
@@ -36,7 +37,7 @@ class SyphonClient(private val appName: String? = null, private val serverName: 
             /**
              * GL_TEXTURE_RECTANGLE is necessary
              */
-            val rectBuffer = ColorBufferGL3(GL_TEXTURE_RECTANGLE, name, w, h, 1.0, ColorFormat.RGBa, ColorType.UINT8, 0, BufferMultisample.Disabled, Session.root)
+            val rectBuffer = ColorBufferGL3(GL_TEXTURE_RECTANGLE, name, TextureStorageModeGL.IMAGE, w, h, 1.0, ColorFormat.RGBa, ColorType.UINT8, 0, BufferMultisample.Disabled, Session.root)
 
             /**
              * Only create a new buffer if it's size changed
