@@ -9,6 +9,7 @@ sourceSets {
 }
 
 dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
     demoImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
     demoImplementation("org.openrndr:openrndr-dialogs:$openrndrVersion")
     demoImplementation("com.google.code.gson:gson:$gsonVersion")
