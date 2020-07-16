@@ -95,7 +95,7 @@ class Textfield : Element(ElementType("textfield")), DisposableElement {
             val yOffset = Math.round((layout.screenHeight / 2) + textHeight / 2.0 - 2.0) * 1.0
 
             drawer.fill = ((computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE)
-            drawer.text("$label", 0.0 + offset, 0.0 + yOffset - textHeight * 1.5)
+            drawer.text(label, 0.0 + offset, 0.0 + yOffset - textHeight * 1.5)
 
             drawer.fill = (((computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE).opacify(0.05))
             drawer.rectangle(0.0 + offset, 0.0 + yOffset - (textHeight + 2), layout.screenWidth - 10.0, textHeight + 8.0)
@@ -132,41 +132,34 @@ class Textfield : Element(ElementType("textfield")), DisposableElement {
 
             drawer.stroke = computedStyle.effectiveColor?.shade(0.25)
             drawer.lineCap = LineCap.ROUND
-            //drawer.lineSegment(0.0, yOffset + 4.0, layout.screenWidth, yOffset + 4.0)
         }
     }
 
     override var disposed: Boolean = false
-
 }
 
 fun Textfield.bind(property: KMutableProperty0<String>) {
-    var currentValue = property.get()
-
-    events.valueChanged.listen {
-        currentValue = it.newValue
-        property.set(it.newValue)
-    }
-
     GlobalScope.launch {
-        while (!disposed) {
+        install@ while (!disposed) {
             val body = (root() as? Body)
             if (body != null) {
+                events.valueChanged.listen {
+                    property.set(it.newValue)
+                }
                 fun update() {
-                    val cval = property.get()
-                    if (cval != currentValue) {
-                        currentValue = cval
-                        value = cval
+                    val propertyValue = property.get()
+                    if (propertyValue != value) {
+                        value = propertyValue
                     }
                 }
                 update()
                 (root() as Body).controlManager.program.launch {
-                    while (true) {
+                    while (!disposed) {
                         update()
                         yield()
                     }
                 }
-                break
+                break@install
             }
             yield()
         }

@@ -12,7 +12,9 @@ import org.openrndr.KEY_ARROW_UP
 import org.openrndr.KEY_ENTER
 import org.openrndr.events.Event
 import org.openrndr.launch
+import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.roundToInt
 import kotlin.reflect.KMutableProperty0
 
 class Item : Element(ElementType("item")) {
@@ -122,7 +124,7 @@ class DropdownButton : Element(ElementType("dropdown-button")), DisposableElemen
             val textHeight = font.ascenderLength
 
             val offset = Math.round((layout.screenWidth - textWidth))
-            val yOffset = Math.round((layout.screenHeight / 2) + textHeight / 2.0) - 2.0
+            val yOffset = ((layout.screenHeight / 2) + textHeight / 2.0).roundToInt() - 2.0
 
             drawer.fill = ((computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE)
 
@@ -155,8 +157,8 @@ class DropdownButton : Element(ElementType("dropdown-button")), DisposableElemen
                     it.cancelPropagation()
                     val newValue = parent.items()[activeIndex]
 
-                    parent.value?.let {
-                        itemButtons[it]?.pseudoClasses?.remove(ElementPseudoClass("selected"))
+                    parent.value?.let { item ->
+                        itemButtons[item]?.pseudoClasses?.remove(ElementPseudoClass("selected"))
                     }
                     parent.value?.let {
                         itemButtons[newValue]?.pseudoClasses?.add(ElementPseudoClass("selected"))
@@ -185,8 +187,8 @@ class DropdownButton : Element(ElementType("dropdown-button")), DisposableElemen
                         scrollTop -= 24.0
                     }
 
-                    parent.value?.let {
-                        itemButtons[it]?.pseudoClasses?.remove(ElementPseudoClass("selected"))
+                    parent.value?.let { item ->
+                        itemButtons[item]?.pseudoClasses?.remove(ElementPseudoClass("selected"))
                     }
                     parent.value?.let {
                         itemButtons[newValue]?.pseudoClasses?.add(ElementPseudoClass("selected"))
@@ -201,7 +203,7 @@ class DropdownButton : Element(ElementType("dropdown-button")), DisposableElemen
 
             mouse.scrolled.listen {
                 scrollTop -= it.rotation.y
-                scrollTop = Math.max(0.0, scrollTop)
+                scrollTop = max(0.0, scrollTop)
                 draw.dirty = true
                 it.cancelPropagation()
             }
