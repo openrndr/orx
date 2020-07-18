@@ -1,4 +1,3 @@
-
 #version 430 core
 
 vec3 bezier2(vec3 a, vec3 b, float t) {
@@ -20,7 +19,10 @@ struct Vertex {
 layout(isolines) in;
 in vec3 cva_position[];
 
+out vec3 derivative;
+out vec3 position;
 
+uniform int resolution;
 
 uniform mat4 proj;
 uniform mat4 view;
@@ -29,12 +31,18 @@ uniform mat4 model;
 void main() {
     float t = gl_TessCoord.x;
     vec3 ePos = bezier4(
-        cva_position[0],
-        cva_position[1],
-        cva_position[2],
-        cva_position[3],
-        t);
+    cva_position[0],
+    cva_position[1],
+    cva_position[2],
+    cva_position[3],
+    t);
 
+    // calculate derivative using Hodograph
+    derivative = bezier3(cva_position[1] - cva_position[0], cva_position[2]-cva_position[1], cva_position[3]-cva_position[2], t);
 
-    gl_Position = proj * view * model * vec4(ePos, 1);
+    // output model space positions
+    position = ePos;
+
+    float r = resolution + 1.0;
+    //gl_Position = proj * view * model * vec4(ePos, 1);
 }
