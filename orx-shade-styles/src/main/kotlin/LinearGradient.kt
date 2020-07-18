@@ -11,7 +11,7 @@ import org.openrndr.math.Vector2
 class LinearGradient(
         color0: ColorRGBa,
         color1: ColorRGBa,
-        offset: Vector2,
+        offset: Vector2 = Vector2.ZERO,
         rotation: Double = 0.0,
         exponent: Double = 1.0) : ShadeStyle() {
 
