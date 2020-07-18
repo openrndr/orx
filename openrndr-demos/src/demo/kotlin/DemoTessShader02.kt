@@ -1,17 +1,21 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.*
-import org.openrndr.extras.camera.Orbital
-import org.openrndr.extras.meshgenerators.boxMesh
-import org.openrndr.math.Vector3
+import org.openrndr.draw.DrawPrimitive
+import org.openrndr.draw.Shader
+import org.openrndr.draw.vertexBuffer
+import org.openrndr.draw.vertexFormat
 import org.openrndr.resourceUrl
+import org.openrndr.shape.Ellipse
 
 fun main() {
     application {
         program {
+
+            val ellipse = Ellipse(width/2.0, height/2.0, 100.0, 300.0).contour
+
             val vb = vertexBuffer(vertexFormat {
                 position(3)
-            }, 12)
+            }, ellipse.segments.size * 4)
 
             val shader = Shader.createFromUrls(
                     vsUrl = resourceUrl("/shaders/ts-02.vert"),
@@ -22,18 +26,13 @@ fun main() {
             )
 
             vb.put {
-                write(Vector3(0.0, 0.0, 0.0))
-                write(Vector3(100.0, 0.0, 0.0))
-                write(Vector3(140.0, 200.0, 0.0))
-                write(Vector3(200.0, 300.0, 0.0))
-                write(Vector3(0.0, 0.0, 0.0))
-                write(Vector3(100.0, 0.0, 0.0))
-                write(Vector3(140.0, 200.0, 0.0))
-                write(Vector3(200.0, 400.0, 0.0))
-                write(Vector3(0.0, 0.0, 0.0))
-                write(Vector3(100.0, 0.0, 0.0))
-                write(Vector3(140.0, 200.0, 0.0))
-                write(Vector3(200.0, 500.0, 0.0))
+                for (segment in ellipse.segments) {
+                    val cubic = segment.cubic
+                    write(cubic.start.xy0)
+                    write(cubic.control[0].xy0)
+                    write(cubic.control[1].xy0)
+                    write(cubic.end.xy0)
+                }
             }
 
             extend {
@@ -43,6 +42,7 @@ fun main() {
                 shader.uniform("view", drawer.view)
                 shader.uniform("proj", drawer.projection)
                 shader.uniform("model", drawer.model)
+                shader.uniform("resolution", ((mouse.position.x / width) * 63 + 1).toInt())
                 driver.drawVertexBuffer(shader, listOf(vb), DrawPrimitive.PATCHES, 0, vb.vertexCount)
                 shader.end()
             }
