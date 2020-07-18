@@ -1,7 +1,9 @@
 package org.openrndr.extra.shaderphrases
 
+import org.openrndr.draw.Shader
 import org.openrndr.draw.codeFromURL
 import org.openrndr.extra.shaderphrases.annotations.ShaderPhrases
+import org.openrndr.internal.Driver
 
 /**
  * Preprocess shader source.
@@ -67,6 +69,9 @@ fun preprocessShader(source: String, symbols: Set<String> = emptySet()): String 
     return processed.joinToString("\n")
 }
 
+fun String.preprocess() = preprocessShader(this)
+
+
 /**
  * Preprocess shader source from url
  * Looks for "#pragma import" statements and injects found phrases.
@@ -76,3 +81,20 @@ fun preprocessShader(source: String, symbols: Set<String> = emptySet()): String 
 fun preprocessShaderFromUrl(url: String, symbols: Set<String> = emptySet()): String {
     return preprocessShader(codeFromURL(url), symbols)
 }
+
+fun Shader.Companion.preprocessedFromUrls(
+        vsUrl: String,
+        tcsUrl: String? = null,
+        tesUrl: String? = null,
+        gsUrl: String? = null,
+        fsUrl: String): Shader {
+
+    val vsCode = codeFromURL(vsUrl).preprocess()
+    val tcsCode = tcsUrl?.let { codeFromURL(it) }?.preprocess()
+    val tesCode = tesUrl?.let { codeFromURL(it) }?.preprocess()
+    val gsCode = gsUrl?.let { codeFromURL(it) }?.preprocess()
+    val fsCode = codeFromURL(fsUrl).preprocess()
+    val name = "$$vsUrl / $gsUrl / $fsUrl"
+    return Shader.createFromCode(vsCode, tcsCode, tesCode, gsCode, fsCode, name)
+}
+
