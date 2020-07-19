@@ -11,15 +11,8 @@ vec3 bezier4(vec3 a, vec3 b, vec3 c, vec3 d, float t) {
     return mix(bezier3(a, b, c, t), bezier3(b, c, d, t), t);
 }
 
-struct Vertex {
-    vec3 va_position;
-    vec3 va_normal;
-    vec4 v_addedProperty;
-};
-
 layout(isolines) in;
 in vec3 cva_position[];
-
 
 uniform mat4 proj;
 uniform mat4 view;

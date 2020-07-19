@@ -4,7 +4,6 @@ layout(vertices = 4) out; // 4 points per patch
 
 uniform int resolution;
 
-
 in vec3 va_position[];
 out vec3 cva_position[];
 

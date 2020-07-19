@@ -3,7 +3,6 @@
 #pragma import org.openrndr.extra.noise.phrases.SimplexKt.phraseSimplex3;
 
 in vec3 a_position;
-
 out vec3 va_position;
 
 uniform mat4 view;

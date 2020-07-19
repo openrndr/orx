@@ -43,10 +43,7 @@ fun main() {
                 shader.uniform("model", drawer.model)
                 driver.drawVertexBuffer(shader, listOf(vb), DrawPrimitive.PATCHES, 0, vb.vertexCount)
 
-
                 shader.end()
-
-
             }
         }
     }

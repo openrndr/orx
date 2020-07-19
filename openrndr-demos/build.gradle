@@ -14,6 +14,8 @@ dependencies {
     demoImplementation(project(":orx-parameters"))
     demoImplementation(project(":orx-noise"))
     demoImplementation(project(":orx-shader-phrases"))
+    demoImplementation("org.slf4j:slf4j-simple:1.7.30")
+
     demoImplementation("org.openrndr:openrndr-core:$openrndrVersion")
     demoImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
     demoImplementation("org.openrndr:openrndr-ffmpeg:$openrndrVersion")

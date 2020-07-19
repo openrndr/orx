@@ -34,27 +34,15 @@ void main() {
 
     // output a triangle strip encoded quad
 
-    v_addedProperty = vertices[0].v_addedProperty;
-    va_normal = vertices[0].va_normal;
-    va_position = vertices[0].va_position;
     gl_Position = pvm * vec4( vec4(position[0],1.0) + perp0 * weight);
     EmitVertex();
 
-    v_addedProperty = vertices[0].v_addedProperty;
-    va_normal = vertices[0].va_normal;
-    va_position = vertices[0].va_position;
     gl_Position = pvm * vec4( vec4(position[0],1.0) - perp0 * weight);
     EmitVertex();
 
-    v_addedProperty = vertices[1].v_addedProperty;
-    va_normal = vertices[1].va_normal;
-    va_position = vertices[1].va_position;
     gl_Position = pvm * vec4( vec4(position[1],1.0) + perp1 * weight);
     EmitVertex();
 
-    v_addedProperty = vertices[1].v_addedProperty;
-    va_normal = vertices[1].va_normal;
-    va_position = vertices[1].va_position;
     gl_Position = pvm * vec4( vec4(position[1],1.0) - perp1 * weight);
     EmitVertex();
 

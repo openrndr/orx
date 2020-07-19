@@ -19,9 +19,6 @@ uniform vec3 offset;
 void main() {
     int i;
     for(i = 0;i < gl_in.length();i++) {
-        v_addedProperty = vertices[i].v_addedProperty;
-        va_normal = vertices[i].va_normal;
-        va_position = vertices[i].va_position;
         gl_Position = gl_in[i].gl_Position;
         EmitVertex();
     }
