@@ -1,8 +1,6 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
-import org.openrndr.extras.camera.Orbital
-import org.openrndr.extras.meshgenerators.boxMesh
 import org.openrndr.math.Vector3
 import org.openrndr.resourceUrl
 
