@@ -1,4 +1,4 @@
-#version 430 core
+#version 410 core
 
 in vec3 a_position;
 

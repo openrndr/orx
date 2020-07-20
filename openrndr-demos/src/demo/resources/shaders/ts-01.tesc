@@ -1,4 +1,4 @@
-#version 430 core
+#version 410 core
 
 layout(vertices = 4) out; // 4 points per patch
 

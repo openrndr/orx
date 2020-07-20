@@ -1,4 +1,4 @@
-#version 430 core
+#version 410 core
 
 vec3 bezier2(vec3 a, vec3 b, float t) {
     return mix(a, b, t);

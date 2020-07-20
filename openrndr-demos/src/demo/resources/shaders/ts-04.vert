@@ -1,4 +1,4 @@
-#version 430 core
+#version 410 core
 
 #pragma import org.openrndr.extra.noise.phrases.SimplexKt.phraseSimplex3;
 

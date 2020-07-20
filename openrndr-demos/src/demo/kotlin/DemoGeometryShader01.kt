@@ -2,7 +2,6 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.Shader
-import org.openrndr.draw.shadeStyle
 import org.openrndr.extras.camera.Orbital
 import org.openrndr.extras.meshgenerators.boxMesh
 import org.openrndr.resourceUrl
@@ -26,11 +25,6 @@ fun main() {
                 shader.uniform("model", drawer.model)
                 driver.drawVertexBuffer(shader, listOf(vb), DrawPrimitive.TRIANGLES, 0, vb.vertexCount)
                 shader.end()
-
-                drawer.shadeStyle = shadeStyle {
-                    vertexPreamble = "krak"
-              }
-                //drawer.vertexBuffer(vb, DrawPrimitive.TRIANGLES, 0, vb.vertexCount)
             }
         }
     }
