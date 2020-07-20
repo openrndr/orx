@@ -15,9 +15,9 @@ class BloomDownscale : Filter(filterShaderFromUrl(filterFragmentUrl("blur/bloom-
 }
 
 class BloomUpscale : Filter(filterShaderFromUrl(filterFragmentUrl("blur/bloom-upscale.frag"))) {
-    var gain:Double by parameters
-    var shape:Double by parameters
-    var seed:Double by parameters
+    var gain: Double by parameters
+    var shape: Double by parameters
+    var seed: Double by parameters
 
     init {
         gain = 1.0
@@ -26,7 +26,7 @@ class BloomUpscale : Filter(filterShaderFromUrl(filterFragmentUrl("blur/bloom-up
     }
 }
 
-class BloomCombine: Filter(filterShaderFromUrl(filterFragmentUrl("blur/bloom-combine.frag"))) {
+class BloomCombine : Filter(filterShaderFromUrl(filterFragmentUrl("blur/bloom-combine.frag"))) {
     var gain: Double by parameters
     var bias: ColorRGBa by parameters
 
@@ -37,7 +37,7 @@ class BloomCombine: Filter(filterShaderFromUrl(filterFragmentUrl("blur/bloom-com
 }
 
 @Description("MipBloom")
-open class MipBloom<T:Filter>(val blur:T) : Filter(filterShaderFromUrl(filterFragmentUrl("blur/bloom-combine.frag"))) {
+open class MipBloom<T : Filter>(val blur: T) : Filter(filterShaderFromUrl(filterFragmentUrl("blur/bloom-combine.frag"))) {
     var passes = 6
 
     @DoubleParameter("shape", 0.0, 4.0)
@@ -57,30 +57,28 @@ open class MipBloom<T:Filter>(val blur:T) : Filter(filterShaderFromUrl(filterFra
     val combine = BloomCombine()
 
     override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
-
         sourceCopy?.let {
-            if (it.width != source[0].width || it.height != source[0].height) {
+            if (!it.isEquivalentTo(source[0], ignoreType = true)) {
                 it.destroy()
                 sourceCopy = null
             }
         }
-
         if (sourceCopy == null) {
-            sourceCopy = colorBuffer(source[0].width, source[0].height, type = ColorType.FLOAT16)
+            sourceCopy = source[0].createEquivalent(type = ColorType.FLOAT16)
         }
 
         source[0].copyTo(sourceCopy!!)
 
         upscale.shape = shape
         if (intermediates.size != passes
-                || (intermediates.isNotEmpty() && (intermediates[0].width!=target[0].width || intermediates[0].height != target[0].height) )) {
+                || (intermediates.isNotEmpty() && (!intermediates[0].isEquivalentTo(target[0], ignoreType = true, ignoreFormat = true)))) {
             intermediates.forEach {
                 it.destroy()
             }
             intermediates.clear()
 
             for (pass in 0 until passes) {
-                val tdiv = 1 shl (pass+1)
+                val tdiv = 1 shl (pass + 1)
                 val cb = colorBuffer(target[0].width / tdiv, target[0].height / tdiv, type = ColorType.FLOAT16)
                 intermediates.add(cb)
             }
@@ -95,7 +93,7 @@ open class MipBloom<T:Filter>(val blur:T) : Filter(filterShaderFromUrl(filterFra
         blur.apply(intermediates[0], intermediates[0])
 
         for (pass in 1 until passes) {
-            downScale.apply(intermediates[pass-1], intermediates[pass])
+            downScale.apply(intermediates[pass - 1], intermediates[pass])
             blur.apply(intermediates[pass], intermediates[pass])
         }
 
