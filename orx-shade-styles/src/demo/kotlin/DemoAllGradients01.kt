@@ -1,13 +1,15 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.color.ColorXSVa
 import org.openrndr.draw.isolated
 import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.shadestyles.*
 import org.openrndr.math.Polar
 import org.openrndr.shape.Rectangle
-import kotlin.random.Random
 
+/**
+ * Example of 5 gradient styles.
+ * NPointLinear and NPoingGradient have separate demos.
+ */
 fun main() {
     application {
         configure {
@@ -25,7 +27,7 @@ fun main() {
             val gradients = listOf(
                     RadialGradient(ColorRGBa.PINK, ColorRGBa.WHITE),
                     AngularGradient(ColorRGBa.PINK, ColorRGBa.WHITE),
-                    NPointGradient(4, Array(4) {
+                    NPointGradient(Array(4) {
                         ColorRGBa.PINK.shade(it / 3.0)
                     }),
                     LinearGradient(ColorRGBa.PINK, ColorRGBa.WHITE),
@@ -72,7 +74,7 @@ fun main() {
                                 is NPointGradient -> {
                                     // Animate points.
                                     // We could also animate colors.
-                                    gradient.points = Array(gradient.numPoints) {
+                                    gradient.points = Array(gradient.colors.size) {
                                         rect.center + Polar(it * 90.0 +
                                                 column * 36 - seconds * 10,
                                                 40.0).cartesian
