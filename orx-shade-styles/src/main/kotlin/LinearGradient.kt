@@ -17,11 +17,14 @@ class LinearGradient(
 
     @ColorParameter("start color", order = 0)
     var color0: ColorRGBa by Parameter()
+
     @ColorParameter("end color", order = 1)
     var color1: ColorRGBa by Parameter()
     var offset: Vector2 by Parameter()
+
     @DoubleParameter("rotation", -180.0, 180.0, order = 2)
     var rotation: Double by Parameter()
+
     @DoubleParameter("exponent", 0.01, 10.0, order = 3)
     var exponent: Double by Parameter()
 
@@ -65,6 +68,6 @@ fun linearGradient(
         offset: Vector2 = Vector2.ZERO,
         rotation: Double = 0.0,
         exponent: Double = 1.0
-) : ShadeStyle {
+): ShadeStyle {
     return LinearGradient(color0, color1, offset, rotation, exponent)
 }

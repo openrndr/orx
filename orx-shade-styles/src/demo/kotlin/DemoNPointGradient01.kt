@@ -27,7 +27,7 @@ fun main() {
             }
 
             val numPoints = 8
-            val gradient = NPointGradient(numPoints, Array(numPoints) {
+            val gradient = NPointGradient(Array(numPoints) {
                 ColorXSVa(it * 360.0 / numPoints, 1.0, 1.0).toRGBa()
             })
 
