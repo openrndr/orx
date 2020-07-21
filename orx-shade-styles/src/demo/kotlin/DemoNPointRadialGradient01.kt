@@ -10,7 +10,7 @@ import kotlin.random.Random
  * Demonstrate using a multi color radial gradient.
  * The gradient has 5 colors (first and last ones are transparent).
  * Any of the properties can be animated, including colors and points.
- * See DemoNPointLineaGradient01.kt for an example of animated properties.
+ * See DemoNPointLinearGradient01.kt for an example of animated properties.
  */
 fun main() {
     application {

@@ -5,7 +5,7 @@ import org.openrndr.draw.ShadeStyle
 import org.openrndr.extra.parameters.Description
 import org.openrndr.math.Vector2
 
-@Description("Radial gradient")
+@Description("Multicolor radial gradient")
 class NPointRadialGradient(
         colors: Array<ColorRGBa>,
         points: Array<Double> = Array(colors.size) { it / (colors.size - 1.0) },
