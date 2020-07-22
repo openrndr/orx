@@ -22,11 +22,19 @@ class OrbitalControls(val orbitalCamera: OrbitalCamera, val userInteraction: Boo
 
     private fun mouseScrolled(event: MouseEvent) {
         if (!event.propagationCancelled) {
-            if (abs(event.rotation.x) > 0.1) return
 
-            when {
-                event.rotation.y > 0 -> orbitalCamera.dollyIn()
-                event.rotation.y < 0 -> orbitalCamera.dollyOut()
+            if (orbitalCamera.projectionType == ProjectionType.PERSPECTIVE) {
+                if (abs(event.rotation.x) > 0.1) return
+                when {
+                    event.rotation.y > 0 -> orbitalCamera.dollyIn()
+                    event.rotation.y < 0 -> orbitalCamera.dollyOut()
+                }
+            } else {
+                if (abs(event.rotation.x) > 0.1) return
+                when {
+                    event.rotation.y > 0 -> orbitalCamera.scale(1.0)
+                    event.rotation.y < 0 -> orbitalCamera.scale(-1.0)
+                }
             }
         }
     }

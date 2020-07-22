@@ -10,7 +10,13 @@ import org.openrndr.math.Vector3
 import kotlin.math.abs
 import org.openrndr.math.transforms.lookAt as lookAt_
 
-class OrbitalCamera(eye: Vector3 = Vector3.ZERO, lookAt: Vector3 = Vector3.UNIT_Z, var fov: Double = 90.0, var near: Double = 0.1, var far: Double = 1000.0) : Extension {
+enum class ProjectionType {
+    PERSPECTIVE,
+    ORTHOGONAL
+}
+
+
+class OrbitalCamera(eye: Vector3 = Vector3.ZERO, lookAt: Vector3 = Vector3.UNIT_Z, var fov: Double = 90.0, var near: Double = 0.1, var far: Double = 1000.0, var projectionType: ProjectionType = ProjectionType.PERSPECTIVE) : Extension {
     // current position in spherical coordinates
     var spherical = Spherical.fromVector(eye)
         private set
@@ -18,6 +24,9 @@ class OrbitalCamera(eye: Vector3 = Vector3.ZERO, lookAt: Vector3 = Vector3.UNIT_
         private set
 
     var depthTest = true
+
+    var magnitude = 100.0
+    var magnitudeEnd = magnitude
 
     private var sphericalEnd = Spherical.fromVector(eye)
     private var lookAtEnd = lookAt
@@ -90,6 +99,11 @@ class OrbitalCamera(eye: Vector3 = Vector3.ZERO, lookAt: Vector3 = Vector3.UNIT_
         dirty = true
     }
 
+    fun scale(s: Double) {
+        magnitudeEnd += s
+        dirty = true
+    }
+
     fun zoom(degrees: Double) {
         fovEnd += degrees
         dirty = true
@@ -108,25 +122,27 @@ class OrbitalCamera(eye: Vector3 = Vector3.ZERO, lookAt: Vector3 = Vector3.UNIT_
         val sphericalDelta = sphericalEnd - spherical
         val lookAtDelta = lookAtEnd - lookAt
         val fovDelta = fovEnd - fov
+        val magnitudeDelta = magnitudeEnd - magnitude
         if (
-                abs(sphericalEnd.radius) > EPSILON ||
-                abs(sphericalEnd.theta) > EPSILON ||
-                abs(sphericalEnd.phi) > EPSILON ||
+                abs(sphericalDelta.radius) > EPSILON ||
+                abs(sphericalDelta.theta) > EPSILON ||
+                abs(sphericalDelta.phi) > EPSILON ||
                 abs(lookAtDelta.x) > EPSILON ||
                 abs(lookAtDelta.y) > EPSILON ||
                 abs(lookAtDelta.z) > EPSILON ||
                 abs(fovDelta) > EPSILON
         ) {
-
             fov += (fovDelta * dampingFactor)
             spherical += (sphericalDelta * dampingFactor)
             spherical = spherical.makeSafe()
             lookAt += (lookAtDelta * dampingFactor)
+            magnitude += (magnitudeDelta * dampingFactor)
             dirty = true
-
         } else {
+            magnitude = magnitudeEnd
             spherical = sphericalEnd.copy()
             lookAt = lookAtEnd.copy()
+            fov = fovEnd
         }
         spherical = spherical.makeSafe()
     }
@@ -150,7 +166,12 @@ class OrbitalCamera(eye: Vector3 = Vector3.ZERO, lookAt: Vector3 = Vector3.UNIT_
 
         update(delta)
 
-        drawer.perspective(fov, program.window.size.x / program.window.size.y, near, far)
+        if (projectionType == ProjectionType.PERSPECTIVE) {
+            drawer.perspective(fov, drawer.width.toDouble() / drawer.height, near, far)
+        } else {
+            val ar = drawer.width * 1.0 / drawer.height
+            drawer.ortho(-ar * magnitude, ar * magnitude, -1.0 * magnitude, 1.0 * magnitude, -1000.0, 1000.0)
+        }
         drawer.view = viewMatrix()
 
         if (depthTest) {
@@ -188,7 +209,13 @@ fun OrbitalCamera.isolated(drawer: Drawer, function: Drawer.() -> Unit) {
  * if you don't need to revert back to the orthographic projection.
  */
 fun OrbitalCamera.applyTo(drawer: Drawer) {
-    drawer.perspective(fov, drawer.width.toDouble() / drawer.height, near, far)
+
+    if (projectionType == ProjectionType.PERSPECTIVE) {
+        drawer.perspective(fov, drawer.width.toDouble() / drawer.height, near, far)
+    } else {
+        val ar = drawer.width * 1.0 / drawer.height
+        drawer.ortho(-ar, ar, 1.0, -1.0, near, far)
+    }
     drawer.view = viewMatrix()
     drawer.drawStyle.depthWrite = true
     drawer.drawStyle.depthTestPass = DepthTestPass.LESS_OR_EQUAL
