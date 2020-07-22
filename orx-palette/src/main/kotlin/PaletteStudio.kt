@@ -51,6 +51,14 @@ class PaletteStudio(
     var randomizeKey = 'k'
 
     private var paletteIndex: Int = 0
+    var nextColorIndex: Int = 0
+    get() {
+        return field++ % colors.size
+    }
+    var nextColor2Index: Int = 0
+    get() {
+        return field++ % colors2.size
+    }
 
     enum class SortBy {
         NO_SORTING, DARKEST, BRIGHTEST
@@ -195,6 +203,12 @@ class PaletteStudio(
     fun getIndex(): Int {
         return paletteIndex
     }
+
+    val nextColor: ColorRGBa
+    get() = colors[nextColorIndex]
+
+    val nextColor2: ColorRGBa
+    get() = colors2[nextColor2Index]
 
     fun randomize() {
         palette = assemblePalette(colors.shuffled())
