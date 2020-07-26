@@ -20,7 +20,7 @@ class Orbital : Extension {
     var keySpeed = 1.0
     var projectionType = ProjectionType.PERSPECTIVE
 
-    val camera by lazy { println("creating camera $projectionType"); OrbitalCamera(eye, lookAt, fov, near, far, projectionType) }
+    val camera by lazy { OrbitalCamera(eye, lookAt, fov, near, far, projectionType) }
     val controls by lazy { OrbitalControls(camera, userInteraction, keySpeed) }
 
     override fun setup(program: Program) {
