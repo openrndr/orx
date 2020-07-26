@@ -33,7 +33,7 @@ data class SkyboxMaterial(val cubemap: Cubemap, val intensity: Double = 0.0) : M
                 
             """.trimIndent()
             fragmentTransform = """
-                f_diffuse =  texture(p_skybox, va_position);
+                f_diffuse = texture(p_skybox, va_position);
                 f_diffuse.rgb *= p_intensity;
             """ + combinerFS
 
@@ -71,8 +71,8 @@ data class SkyboxMaterial(val cubemap: Cubemap, val intensity: Double = 0.0) : M
 
 }
 
-fun Scene.addSkybox(cubemapUrl: String, size: Double = 100.0, intensity:Double = 1.0) {
-    val cubemap = Cubemap.fromUrl(cubemapUrl, Session.active)
+fun Scene.addSkybox(cubemapUrl: String, size: Double = 100.0, intensity: Double = 1.0) {
+    val cubemap = Cubemap.fromUrl(cubemapUrl, Session.active).apply { generateMipmaps() }
     val box = boxMesh(size, size, size, 1, 1, 1, true)
     val node = SceneNode()
     val material = SkyboxMaterial(cubemap, intensity)
