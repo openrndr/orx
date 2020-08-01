@@ -29,7 +29,7 @@ fun main() {
                     }
                 }
                 for (i in ints) {
-                    drawer.circle(i.position, 15.0)
+                    drawer.circle(i.position, 10.0)
                 }
             }
         }

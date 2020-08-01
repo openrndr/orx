@@ -12,7 +12,6 @@ fun main() {
                 val circle = Circle(mouse.position, 200.0).contour
 
                 drawer.fill = null
-                drawer.stroke = ColorRGBa.GREEN
                 for (y in 50 until height step 100) {
                     for (x in 50 until width step 100) {
 
@@ -21,8 +20,10 @@ fun main() {
 
                             val ints = intersections(circle, r)
                             if (ints.isEmpty()) {
+                                drawer.stroke = ColorRGBa.GREEN
                                 drawer.contour(r)
                             } else {
+                                drawer.stroke = ColorRGBa.WHITE
                                 ints.map { it.contourTB }.let { it + it.take(1) }.zipWithNext().forEach {
                                     val end = if (it.second <= it.first) it.second + 1.0 else it.second
                                     val sub = r.sub(it.first, end)
