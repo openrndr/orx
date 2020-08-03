@@ -78,29 +78,46 @@ fun extrudeShape(baseTriangles: List<Vector2>, contours: List<List<Vector2>>, fr
     contours.forEach {
         val points = it
 
-        val normals = (0 until points.size).map {
-            (points[mod(it + 1, points.size)] - points[mod(it - 1, points.size)]).safeNormalized * -flip
+        val normals = (points.indices).map { index ->
+            (points[mod(index + 1, points.size)] - points[mod(index - 1, points.size)]).safeNormalized * -flip
         }
         val forward = Vector3(0.0, 0.0, depth)
         val base = Vector3(0.0, 0.0, front)
 
+        var offset = 0.0
         (points zip normals).zipWithNext().forEach { (left, right) ->
+
+            val width = right.first.distanceTo(left.first)
+
             val frontRight = (right.first * frontScale).xy0 + base
             val frontLeft = (left.first * frontScale).xy0 + base
+
 
             val backRight = (right.first * backScale).xy0 + base + forward
             val backLeft = (left.first * backScale).xy0 + base + forward
 
+            val height = frontRight.distanceTo(backRight)
+
+
+            val backRightUV = Vector2(offset + width, 0.0)
+            val backLeftUV = Vector2(offset, 0.0)
+
+            val frontLeftUV = Vector2(offset, height)
+            val frontRightUV = Vector2(offset + width, height)
+
+
             val lnormal = (frontLeft - backLeft).normalized.cross(left.second.xy0)
             val rnormal = (frontRight - backRight).normalized.cross(right.second.xy0)
 
-            writer(frontLeft, lnormal, Vector2.ZERO)
-            writer(frontRight, rnormal, Vector2.ZERO)
-            writer(backRight, rnormal, Vector2.ZERO)
+            writer(frontLeft, lnormal, frontLeftUV)
+            writer(frontRight, rnormal, frontRightUV)
+            writer(backRight, rnormal, backRightUV)
 
-            writer(backRight, rnormal, Vector2.ZERO)
-            writer(backLeft, lnormal, Vector2.ZERO)
-            writer(frontLeft, lnormal, Vector2.ZERO)
+            writer(backRight, rnormal, backRightUV)
+            writer(backLeft, lnormal, backLeftUV)
+            writer(frontLeft, lnormal, frontLeftUV)
+
+            offset += width
         }
     }
 }

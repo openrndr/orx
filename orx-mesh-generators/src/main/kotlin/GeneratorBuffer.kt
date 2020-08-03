@@ -125,12 +125,27 @@ fun GeneratorBuffer.revolve(sides: Int, length: Double, enveloppe: List<Vector2>
     generateRevolve(sides, length, enveloppe, this::write)
 }
 
-fun GeneratorBuffer.extrudeShape(baseTriangles: List<Vector2>, contours: List<List<Vector2>>, length: Double, scale: Double = 1.0, distanceTolerance: Double = 0.5) {
-    extrudeShape(baseTriangles, contours, -length / 2.0, length / 2.0, scale, scale, true, true, distanceTolerance, false, this::write)
+fun GeneratorBuffer.extrudeShape(
+        baseTriangles: List<Vector2>,
+        contours: List<List<Vector2>>,
+        length: Double,
+        scale: Double = 1.0,
+        frontCap: Boolean = true,
+        backCap: Boolean = true,
+        distanceTolerance: Double = 0.5
+) {
+    extrudeShape(baseTriangles, contours, -length / 2.0, length / 2.0, scale, scale, frontCap = frontCap, backCap = backCap, distanceTolerance = distanceTolerance, flipNormals = false, writer = this::write)
 }
 
-fun GeneratorBuffer.extrudeShape(shape: Shape, length: Double, scale: Double = 1.0, distanceTolerance: Double = 0.5) {
-    extrudeShape(shape, -length / 2.0, length / 2.0, scale, scale, true, true, distanceTolerance, false, this::write)
+fun GeneratorBuffer.extrudeShape(
+        shape: Shape,
+        length: Double,
+        scale: Double = 1.0,
+        frontCap: Boolean = true,
+        backCap: Boolean = true,
+        distanceTolerance: Double = 0.5
+) {
+    extrudeShape(shape, -length / 2.0, length / 2.0, scale, scale, frontCap, backCap, distanceTolerance, false, this::write)
 }
 
 fun GeneratorBuffer.extrudeShapes(shapes: List<Shape>, length: Double, scale: Double = 1.0, distanceTolerance: Double = 0.5) {
