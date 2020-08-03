@@ -44,14 +44,13 @@ inline fun <Q, reified R> runwayQuery(target: String, query: Q): R {
     try {
         val queryJson = Gson().toJson(query)
         val connection = URL(target).openConnection() as HttpURLConnection
-        //with(connection) {
+
         connection.doOutput = true
         connection.connectTimeout = 1_000
         connection.readTimeout = 200_000
         connection.requestMethod = "POST"
         connection.setRequestProperty("Content-Type", "application/json")
         connection.setRequestProperty("Accept", "application/json")
-        //}
 
         val outputStream = connection.outputStream
         outputStream.write(queryJson.toByteArray())
@@ -59,9 +58,10 @@ inline fun <Q, reified R> runwayQuery(target: String, query: Q): R {
 
         val inputStream = connection.inputStream
         val responseJson = String(inputStream.readBytes())
-        println(responseJson)
+
         inputStream.close()
         connection.disconnect()
+
         return Gson().fromJson(responseJson, R::class.java)
     } catch (e: SocketTimeoutException) {
         error("RunwayML connection timed out '$target'. Check if Runway and model are running.")

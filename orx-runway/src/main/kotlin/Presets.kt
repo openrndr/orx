@@ -7,6 +7,11 @@ class AttnGANRequest(val caption: String)
 
 class AttnGANResult(val result: String)
 
+// -- BASNET
+class BASNETRequest(val image: String)
+
+class BASNETResult(val image: String)
+
 // -- BDCN
 class BdcnRequest(val input_image: String)
 
@@ -67,6 +72,17 @@ class DeOldifyResponse(val image: String)
 class DenseCapRequest(val image: String, @SerializedName("max_detections") val maxDetections: Int = 10)
 class DenseCapResponse(val bboxes: List<List<Double>>, val classes: List<String>, val scores: List<Double>)
 
+// -- Person-Segmentation
+/**
+ * Automatically detects people and extracts them from photos
+ *
+ * @property image
+ * @property threshold [0.0, 1.0]
+ */
+class PersonSegmentationRequest(val image: String, val threshold: Double)
+
+class PersonSegmentationResult(val image: String)
+
 // -- PoseNet
 class PoseNetRequest(
         val image: String,
@@ -76,3 +92,7 @@ class PoseNetRequest(
         )
 class PoseNetResponse(val poses: List<List<List<Double>>>, val scores: List<Double>)
 
+// -- U-2-Net
+class U2NetRequest(val image: String)
+
+class U2NetResult(val image: String)
