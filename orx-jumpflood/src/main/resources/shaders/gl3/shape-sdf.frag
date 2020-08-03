@@ -7,6 +7,8 @@ out vec4 o_color;
 uniform bool useUV;
 uniform bool rectify;
 
+uniform mat4 modelViewMatrixInverse;
+
 uniform samplerBuffer toBuffer;
 uniform samplerBuffer fromBuffer;
 uniform int segmentCount;
@@ -63,23 +65,7 @@ vec3 minimum_distance_and_perpendicular(vec4 v, vec4 w, vec2 p) {
     return vec3(distance(p.xy, projection.xy), projection.z, v.w);
 }
 
-
-void main() {
-    vec2 uv = v_texCoord0;
-
-    vec2 fixDistance = vec2(1.0);
-
-    if (useUV) {
-        vec2 o = 0.5 / textureSize(tex0, 0);
-        uv = texture(tex0, v_texCoord0 + o).xy;
-        if (rectify) {
-            fixDistance = (fwidth(uv))*vec2(1280.0, 720.0);
-        }
-    }
-
-    uv.y = 1.0 - uv.y;
-    uv *= targetSize;
-
+float shapeDistance(vec2 uv, out float perpDistOut, out float contourLengthOut ) {
     float mindist = 10E10;
     float perpdist = 0.0;
     float contourLength = 0.0;
@@ -97,7 +83,29 @@ void main() {
         }
     }
     float signedDistance = mindist * (windingNr==0 ? 1.0 : -1.0);
+    contourLengthOut = contourLength;
+    perpDistOut = perpdist;
+    return signedDistance;
+}
 
+void main() {
+    vec2 uv = v_texCoord0;
 
+    vec2 fixDistance = vec2(1.0);
+
+    if (useUV) {
+        vec2 o = 0.5 / textureSize(tex0, 0);
+        uv = texture(tex0, v_texCoord0 + o).xy;
+        if (rectify) {
+            fixDistance = (fwidth(uv))*vec2(1280.0, 720.0);
+        }
+    }
+    uv.y = 1.0 - uv.y;
+    uv *= targetSize;
+    uv = (modelViewMatrixInverse * vec4(uv, 0.0, 1.0)).xy;
+
+    float perpdist;
+    float contourLength;
+    float signedDistance = shapeDistance(uv, perpdist, contourLength);
     o_color = vec4(signedDistance / length(fixDistance), perpdist/contourLength, contourLength, 1.0);
 }

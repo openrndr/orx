@@ -2,6 +2,7 @@ package org.openrndr.extra.jumpfill
 
 import org.openrndr.draw.*
 import org.openrndr.extra.parameters.BooleanParameter
+import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector4
 import org.openrndr.resourceUrl
 import org.openrndr.shape.Shape
@@ -19,10 +20,18 @@ class ShapeSDF : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/shape-sdf.
     @BooleanParameter("rectify distance")
     var rectify: Boolean by parameters
 
+    private var modelViewMatrixInverse by parameters
+
+    var modelViewMatrix = Matrix44.IDENTITY
+    set(value) {
+        modelViewMatrixInverse = modelViewMatrix.inversed
+        field = value
+    }
 
     init {
         useUV = false
         rectify = false
+        modelViewMatrix = Matrix44.IDENTITY
     }
 
     fun setShapes(shapes: List<Shape>) {
