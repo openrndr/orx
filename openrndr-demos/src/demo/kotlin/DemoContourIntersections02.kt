@@ -24,7 +24,7 @@ fun main() {
                                 drawer.contour(r)
                             } else {
                                 drawer.stroke = ColorRGBa.WHITE
-                                ints.map { it.contourTB }.let { it + it.take(1) }.zipWithNext().forEach {
+                                ints.map { it.b.contourT }.let { it + it.take(1) }.zipWithNext().forEach {
                                     val end = if (it.second <= it.first) it.second + 1.0 else it.second
                                     val sub = r.sub(it.first, end)
                                     val length = sub.length

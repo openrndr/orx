@@ -19,7 +19,7 @@ fun main() {
                 if (ints.isEmpty()) {
                     drawer.contour(c2)
                 } else {
-                    (ints + ints.take(1)).map { it.contourTB }.zipWithNext().forEach {
+                    (ints + ints.take(1)).map { it.b.contourT }.zipWithNext().forEach {
                         val end = if (it.second <= it.first) it.second + 1.0 else it.second
                         val sub = c2.sub(it.first, end)
                         val l = sub.length
