@@ -29,6 +29,11 @@ this addon provides some helper functions to convert them to OPENRNDR types:
 
 ![DemoContours01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-boofcv/images/DemoContours01Kt.png)
 
+### DemoResize01
+[source code](src/demo/kotlin/DemoResize01.kt)
+
+![DemoResize01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-boofcv/images/DemoResize01Kt.png)
+
 ### DemoSimplified01
 [source code](src/demo/kotlin/DemoSimplified01.kt)
 
