@@ -62,3 +62,6 @@ fun simplex(seed: Int, x: Double, y: Double): Double {
 
     return 50.0 * (n0 + n1 + n2)
 }
+
+fun Vector2.Companion.simplex(seed: Int, x: Double): Vector2 = Vector2(simplex(seed, x, 0.0, 0.0, 0.0),
+        simplex(seed, 0.0, x + 31.3383, 0.0, 0.0))

@@ -100,3 +100,7 @@ fun simplex(seed: Int, x: Double, y: Double, z: Double): Double {
     }
     return 32 * (n0 + n1 + n2 + n3)
 }
+
+fun Vector3.Companion.simplex(seed: Int, x: Double): Vector3 = Vector3(simplex(seed, x, 0.0, 0.0),
+        simplex(seed, 0.0, x + 31.3383, 0.0),
+        simplex(seed, 0.0, 0.0, x - 483.23))

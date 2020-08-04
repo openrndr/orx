@@ -106,3 +106,9 @@ fun simplex(seed: Int, x: Double, y: Double, z: Double, w: Double): Double {
 
     return 27 * (n0 + n1 + n2 + n3 + n4)
 }
+
+fun Vector4.Companion.simplex(seed: Int, x: Double): Vector4 = Vector4(simplex(seed, x, 0.0, 0.0, 0.0),
+        simplex(seed, 0.0, x + 31.3383, 0.0, 0.0),
+        simplex(seed, 0.0, 0.0, x - 483.23, 0.0),
+        simplex(seed, 0.0, 0.0, 0.0, x + 943.3)
+)
