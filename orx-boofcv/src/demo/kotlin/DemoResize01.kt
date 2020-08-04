@@ -2,11 +2,18 @@ import org.openrndr.application
 import org.openrndr.boofcv.binding.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.loadImage
+import org.openrndr.extensions.SingleScreenshot
 
 
 fun main() {
     application {
         program {
+            if (System.getProperty("takeScreenshot") == "true") {
+                extend(SingleScreenshot()) {
+                    this.outputFile = System.getProperty("screenshotPath")
+                }
+            }
+
             // Load an image, convert to BoofCV format using orx-boofcv
             val input = loadImage("demo-data/images/image-001.png").toPlanarU8()
 
