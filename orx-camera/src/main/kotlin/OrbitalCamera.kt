@@ -104,6 +104,11 @@ class OrbitalCamera(eye: Vector3 = Vector3.ZERO, lookAt: Vector3 = Vector3.UNIT_
         dirty = true
     }
 
+    fun scaleTo(s: Double) {
+        magnitudeEnd = s
+        dirty = true
+    }
+
     fun zoom(degrees: Double) {
         fovEnd += degrees
         dirty = true
@@ -118,7 +123,7 @@ class OrbitalCamera(eye: Vector3 = Vector3.ZERO, lookAt: Vector3 = Vector3.UNIT_
         if (!dirty) return
         dirty = false
 
-        val dampingFactor = dampingFactor * timeDelta / 0.0060
+        val dampingFactor = if (dampingFactor > 0.0) { dampingFactor * timeDelta / 0.0060 } else 1.0
         val sphericalDelta = sphericalEnd - spherical
         val lookAtDelta = lookAtEnd - lookAt
         val fovDelta = fovEnd - fov
