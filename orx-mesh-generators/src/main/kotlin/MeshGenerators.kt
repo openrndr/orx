@@ -53,6 +53,7 @@ fun extrudeShape(baseTriangles: List<Vector2>, contours: List<List<Vector2>>, fr
                  backScale: Double = 1.0,
                  frontCap: Boolean = true,
                  backCap: Boolean = true,
+                 sides: Boolean = true,
                  distanceTolerance: Double = 0.5,
                  flipNormals: Boolean = false, writer: VertexWriter) {
 
@@ -75,49 +76,51 @@ fun extrudeShape(baseTriangles: List<Vector2>, contours: List<List<Vector2>>, fr
         }
     }
 
-    contours.forEach {
-        val points = it
+    if (sides) {
+        contours.forEach {
+            val points = it
 
-        val normals = (points.indices).map { index ->
-            (points[mod(index + 1, points.size)] - points[mod(index - 1, points.size)]).safeNormalized * -flip
-        }
-        val forward = Vector3(0.0, 0.0, depth)
-        val base = Vector3(0.0, 0.0, front)
+            val normals = (points.indices).map { index ->
+                (points[mod(index + 1, points.size)] - points[mod(index - 1, points.size)]).safeNormalized * -flip
+            }
+            val forward = Vector3(0.0, 0.0, depth)
+            val base = Vector3(0.0, 0.0, front)
 
-        var offset = 0.0
-        (points zip normals).zipWithNext().forEach { (left, right) ->
+            var offset = 0.0
+            (points zip normals).zipWithNext().forEach { (left, right) ->
 
-            val width = right.first.distanceTo(left.first)
+                val width = right.first.distanceTo(left.first)
 
-            val frontRight = (right.first * frontScale).xy0 + base
-            val frontLeft = (left.first * frontScale).xy0 + base
-
-
-            val backRight = (right.first * backScale).xy0 + base + forward
-            val backLeft = (left.first * backScale).xy0 + base + forward
-
-            val height = frontRight.distanceTo(backRight)
+                val frontRight = (right.first * frontScale).xy0 + base
+                val frontLeft = (left.first * frontScale).xy0 + base
 
 
-            val backRightUV = Vector2(offset + width, 0.0)
-            val backLeftUV = Vector2(offset, 0.0)
+                val backRight = (right.first * backScale).xy0 + base + forward
+                val backLeft = (left.first * backScale).xy0 + base + forward
 
-            val frontLeftUV = Vector2(offset, height)
-            val frontRightUV = Vector2(offset + width, height)
+                val height = frontRight.distanceTo(backRight)
 
 
-            val lnormal = (frontLeft - backLeft).normalized.cross(left.second.xy0)
-            val rnormal = (frontRight - backRight).normalized.cross(right.second.xy0)
+                val backRightUV = Vector2(offset + width, 0.0)
+                val backLeftUV = Vector2(offset, 0.0)
 
-            writer(frontLeft, lnormal, frontLeftUV)
-            writer(frontRight, rnormal, frontRightUV)
-            writer(backRight, rnormal, backRightUV)
+                val frontLeftUV = Vector2(offset, height)
+                val frontRightUV = Vector2(offset + width, height)
 
-            writer(backRight, rnormal, backRightUV)
-            writer(backLeft, lnormal, backLeftUV)
-            writer(frontLeft, lnormal, frontLeftUV)
 
-            offset += width
+                val lnormal = (frontLeft - backLeft).normalized.cross(left.second.xy0)
+                val rnormal = (frontRight - backRight).normalized.cross(right.second.xy0)
+
+                writer(frontLeft, lnormal, frontLeftUV)
+                writer(frontRight, rnormal, frontRightUV)
+                writer(backRight, rnormal, backRightUV)
+
+                writer(backRight, rnormal, backRightUV)
+                writer(backLeft, lnormal, backLeftUV)
+                writer(frontLeft, lnormal, frontLeftUV)
+
+                offset += width
+            }
         }
     }
 }
@@ -133,12 +136,13 @@ fun extrudeShape(shape: Shape,
                  backScale: Double = 1.0,
                  frontCap: Boolean = true,
                  backCap: Boolean = true,
+                 sides: Boolean = true,
                  distanceTolerance: Double = 0.5,
                  flipNormals: Boolean = false, writer: VertexWriter) {
     val baseTriangles = triangulate(shape, distanceTolerance)
     val points = shape.contours.map { it.adaptivePositions(distanceTolerance) }
 
-    extrudeShape(baseTriangles, points, front, back, frontScale, backScale, frontCap, backCap, distanceTolerance,
+    extrudeShape(baseTriangles, points, front, back, frontScale, backScale, sides, frontCap, backCap, distanceTolerance,
             flipNormals, writer)
 }
 
@@ -149,10 +153,11 @@ fun extrudeShapes(shapes: List<Shape>,
                   backScale: Double = 1.0,
                   frontCap: Boolean = true,
                   backCap: Boolean = true,
+                  sides: Boolean = true,
                   distanceTolerance: Double = 0.5,
                   flipNormals: Boolean = false, writer: VertexWriter) {
     shapes.forEach {
-        extrudeShape(it, front, back, frontScale, backScale, frontCap, backCap, distanceTolerance, flipNormals, writer)
+        extrudeShape(it, front, back, frontScale, backScale, frontCap, backCap, sides, distanceTolerance, flipNormals, writer)
     }
 }
 
@@ -164,15 +169,3 @@ private val Vector2.safeNormalized: Vector2
             Vector2.ZERO
         }
     }
-
-/**
- * @suppress
- */
-private fun sample() {
-    val shape = Circle(100.0, 100.0, 200.0).shape
-    val vbo = meshVertexBuffer(400)
-
-    val vertexCount = vbo.put {
-        extrudeShape(shape, 0.0, 10.0, 0.05, bufferWriter(this))
-    }
-}

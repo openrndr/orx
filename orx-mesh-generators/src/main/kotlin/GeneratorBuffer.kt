@@ -143,15 +143,39 @@ fun GeneratorBuffer.extrudeShape(
         scale: Double = 1.0,
         frontCap: Boolean = true,
         backCap: Boolean = true,
+        sides: Boolean = true,
         distanceTolerance: Double = 0.5
 ) {
-    extrudeShape(shape, -length / 2.0, length / 2.0, scale, scale, frontCap, backCap, distanceTolerance, false, this::write)
+    extrudeShape(
+            shape = shape,
+            front = -length / 2.0,
+            back = length / 2.0,
+            frontScale = scale,
+            backScale = scale,
+            frontCap = frontCap,
+            backCap = backCap,
+            sides = sides,
+            distanceTolerance = distanceTolerance,
+            flipNormals = false,
+            writer = this::write
+    )
 }
 
 fun GeneratorBuffer.extrudeShapes(shapes: List<Shape>, length: Double, scale: Double = 1.0, distanceTolerance: Double = 0.5) {
-    extrudeShapes(shapes, -length / 2.0, length / 2.0, scale, scale, true, true, distanceTolerance, false, this::write)
+    extrudeShapes(
+            shapes = shapes,
+            front = -length / 2.0,
+            back = length / 2.0,
+            frontScale = scale,
+            backScale = scale,
+            frontCap = true,
+            backCap = true,
+            sides = true,
+            distanceTolerance = distanceTolerance,
+            flipNormals = false,
+            writer = this::write
+    )
 }
-
 
 fun meshGenerator(vertexBuffer: VertexBuffer? = null, builder: GeneratorBuffer.() -> Unit): VertexBuffer {
     val gb = GeneratorBuffer()
