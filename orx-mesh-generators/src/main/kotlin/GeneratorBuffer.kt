@@ -132,9 +132,21 @@ fun GeneratorBuffer.extrudeShape(
         scale: Double = 1.0,
         frontCap: Boolean = true,
         backCap: Boolean = true,
-        distanceTolerance: Double = 0.5
+        sides: Boolean = true
 ) {
-    extrudeShape(baseTriangles, contours, -length / 2.0, length / 2.0, scale, scale, frontCap = frontCap, backCap = backCap, distanceTolerance = distanceTolerance, flipNormals = false, writer = this::write)
+    extrudeShape(
+            baseTriangles = baseTriangles,
+            contours = contours,
+            front = -length / 2.0,
+            back = length / 2.0,
+            frontScale = scale,
+            backScale = scale,
+            frontCap = frontCap,
+            backCap = backCap,
+            sides = sides,
+            flipNormals = false,
+            writer = this::write
+    )
 }
 
 fun GeneratorBuffer.extrudeShape(

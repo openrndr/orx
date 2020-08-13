@@ -54,7 +54,6 @@ fun extrudeShape(baseTriangles: List<Vector2>, contours: List<List<Vector2>>, fr
                  frontCap: Boolean = true,
                  backCap: Boolean = true,
                  sides: Boolean = true,
-                 distanceTolerance: Double = 0.5,
                  flipNormals: Boolean = false, writer: VertexWriter) {
 
     val depth = back - front
@@ -142,8 +141,19 @@ fun extrudeShape(shape: Shape,
     val baseTriangles = triangulate(shape, distanceTolerance)
     val points = shape.contours.map { it.adaptivePositions(distanceTolerance) }
 
-    extrudeShape(baseTriangles, points, front, back, frontScale, backScale, sides, frontCap, backCap, distanceTolerance,
-            flipNormals, writer)
+    extrudeShape(
+            baseTriangles = baseTriangles,
+            contours = points,
+            front = front,
+            back = back,
+            frontScale = frontScale,
+            backScale = backScale,
+            frontCap = frontCap,
+            backCap = backCap,
+            sides = sides,
+            flipNormals = flipNormals,
+            writer = writer
+    )
 }
 
 fun extrudeShapes(shapes: List<Shape>,
@@ -157,7 +167,19 @@ fun extrudeShapes(shapes: List<Shape>,
                   distanceTolerance: Double = 0.5,
                   flipNormals: Boolean = false, writer: VertexWriter) {
     shapes.forEach {
-        extrudeShape(it, front, back, frontScale, backScale, frontCap, backCap, sides, distanceTolerance, flipNormals, writer)
+        extrudeShape(
+                shape = it,
+                front = front,
+                back = back,
+                frontScale = frontScale,
+                backScale = backScale,
+                frontCap = frontCap,
+                backCap = backCap,
+                sides = sides,
+                distanceTolerance = distanceTolerance,
+                flipNormals = flipNormals,
+                writer = writer
+        )
     }
 }
 
