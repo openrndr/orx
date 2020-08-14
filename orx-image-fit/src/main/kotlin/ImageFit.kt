@@ -21,8 +21,8 @@ fun fitRectangle(
     val sourceWidth = src.width
     val sourceHeight = src.height
 
-    var targetX: Double
-    var targetY: Double
+    val targetX: Double
+    val targetY: Double
     var targetWidth: Double
     var targetHeight: Double
 
@@ -99,7 +99,7 @@ fun Drawer.imageFit(
         horizontalPosition: Double = 0.0,
         verticalPosition: Double = 0.0,
         fitMethod: FitMethod = FitMethod.Cover
-) {
+): Pair<Rectangle, Rectangle> {
     val (source, target) = fitRectangle(
             img.bounds,
             Rectangle(x, y, width, height),
@@ -109,4 +109,5 @@ fun Drawer.imageFit(
     )
 
     image(img, source, target)
+    return Pair(source, target)
 }
