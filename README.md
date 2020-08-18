@@ -10,6 +10,7 @@ A growing library of assorted data structures, algorithms and utilities.
 | [`orx-boofcv`](orx-boofcv/) | Helper functions to ease working with the BoofCV computer vision library and its data types. |
 | [`orx-camera`](orx-camera/) | 3D camera controllable via mouse and keyboard. |
 | [`orx-chataigne`](orx-chataigne/) | Expose variables to [Chataigne](http://benjamin.kuperberg.fr/chataigne/en) and any other applications that can interface with it. The current implementation makes use of the OSC protocol and supports `Double` and `ColorRGBa`. |
+| [`orx-color`](orx-color/) | Tools to work with color |
 | [`orx-compositor`](orx-compositor/) | Toolkit to make composite (layered) images using blend modes and filters. |
 | [`orx-dnk3`](orx-dnk3/) | A scene graph based 3d renderer with support for Gltf based assets |
 | [`orx-easing`](orx-easing/) | Provides easing functions for smooth animation or non-linear interpolation. |
