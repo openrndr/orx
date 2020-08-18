@@ -37,7 +37,7 @@ class Envelope(constant:Double = 0.5) {
         events.envelopeChanged.trigger(EnvelopeChangedEvent(this))
     }
 
-    fun findNearestPoint(v: Vector2) = points.minBy { (it - v).length }
+    fun findNearestPoint(v: Vector2) = points.minByOrNull { (it - v).length }
 
     fun removePoint(v: Vector2) {
         points.remove(v)

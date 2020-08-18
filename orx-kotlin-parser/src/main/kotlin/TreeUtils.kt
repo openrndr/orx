@@ -22,7 +22,7 @@ object TreeUtils {
     }
 
     private fun process(t: Tree, ruleNames: List<String>): String {
-        if (t.getChildCount() === 0) return Utils.escapeWhitespace(Trees.getNodeText(t, ruleNames), false)
+        if (t.getChildCount() == 0) return Utils.escapeWhitespace(Trees.getNodeText(t, ruleNames), false)
         val sb = StringBuilder()
         sb.append(lead(level))
         level++

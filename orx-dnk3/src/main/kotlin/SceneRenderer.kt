@@ -13,11 +13,11 @@ class RenderContext(
         val meshes: List<NodeContent<Mesh>>,
         val skinnedMeshes: List<NodeContent<SkinnedMesh>>,
         val instancedMeshes: List<NodeContent<InstancedMesh>>,
+        val pathMeshes: List<NodeContent<PathMesh>>,
         val fogs: List<NodeContent<Fog>>
 )
 
 class SceneRenderer {
-
     class Configuration {
         var multisampleLines = false
     }
@@ -64,7 +64,8 @@ class SceneRenderer {
                 meshes = scene.root.findContent { this as? Mesh },
                 skinnedMeshes = scene.root.findContent { this as? SkinnedMesh },
                 fogs = scene.root.findContent { this as? Fog },
-                instancedMeshes = scene.root.findContent { this as? InstancedMesh }
+                instancedMeshes = scene.root.findContent { this as? InstancedMesh },
+                pathMeshes = scene.root.findContent { this as? PathMesh}
         )
 
         // shadow passes
@@ -140,7 +141,7 @@ class SceneRenderer {
                     pass.combiners.forEach {
                         if (it is ColorBufferFacetCombiner) {
                             val index = target.colorAttachmentIndexByName(it.targetOutput)
-                                    ?: error("attachement not found ${it.targetOutput}")
+                                    ?: error("attachment not found ${it.targetOutput}")
                             target.blendMode(index, it.blendMode)
                         }
                     }
@@ -305,7 +306,26 @@ class SceneRenderer {
                                 primitive.primitive.geometry.vertexCount)
                     }
                 }
-        drawer.depthWrite = true
+
+                context.pathMeshes.filter { (it.content.material.transparent && pass.renderTransparent) || (!it.content.material.transparent && pass.renderOpaque) }
+                .forEach {
+                    drawer.isolated {
+                        val primitiveContext = PrimitiveContext(true, false)
+                        val shadeStyle = it.content.material.generateShadeStyle(materialContext, primitiveContext)
+                        shadeStyle.parameter("viewMatrixInverse", drawer.view.inversed)
+                        it.content.material.applyToShadeStyle(materialContext, shadeStyle)
+                        drawer.drawStyle.cullTestPass = CullTestPass.ALWAYS
+                        drawer.shadeStyle = shadeStyle
+                        drawer.model = it.node.worldTransform
+                        drawer.strokeWeight = it.content.weight
+                        for (path in it.content.paths) {
+                            drawer.path(path.sampleLinear(0.0005))
+                        }
+                    }
+                }
+
+
+                drawer.depthWrite = true
     }
 }
 

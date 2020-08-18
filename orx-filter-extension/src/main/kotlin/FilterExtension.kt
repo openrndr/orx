@@ -22,7 +22,7 @@ fun <F : Filter> Program.extend(filter: F, configuration: F.() -> Unit = {}): Ex
             if (renderTarget == null || renderTarget?.width != program.width || renderTarget?.height != program.height) {
                 renderTarget?.let {
                     it.colorBuffer(0).destroy()
-                    it.detachColorBuffers()
+                    it.detachColorAttachments()
                     it.destroy()
                 }
 

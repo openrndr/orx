@@ -70,9 +70,9 @@ fun ColorBuffer.toPlanarU8() : Planar<GrayU8> {
     for (y in 0 until height) {
         for (x in 0 until width) {
             val c = shadow.read(x, y)
-            bands[0].data[offset] = (c.r * 255).toByte()
-            bands[1].data[offset] = (c.g * 255).toByte()
-            bands[2].data[offset] = (c.b * 255).toByte()
+            bands[0].data[offset] = (c.r * 255).toInt().toByte()
+            bands[1].data[offset] = (c.g * 255).toInt().toByte()
+            bands[2].data[offset] = (c.b * 255).toInt().toByte()
             offset++
         }
     }

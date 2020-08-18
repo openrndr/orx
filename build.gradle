@@ -1,24 +1,26 @@
-def openrndrUseSnapshot = false
-
 buildscript {
     repositories {
         jcenter()
     }
     dependencies {
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
-        classpath "com.netflix.nebula:nebula-kotlin-plugin:1.3.72"
-        classpath "com.netflix.nebula:nebula-publishing-plugin:17.0.5"
-        classpath "com.netflix.nebula:nebula-release-plugin:14.1.0"
+        classpath "com.netflix.nebula:nebula-publishing-plugin:17.3.0"
+        classpath "com.netflix.nebula:nebula-release-plugin:15.1.0"
         classpath "com.github.ben-manes:gradle-versions-plugin:0.28.0"
     }
 }
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.4.0'
+}
+
+def openrndrUseSnapshot = false
 
 apply plugin: 'org.jetbrains.dokka'
 
 project.ext {
-    openrndrVersion = openrndrUseSnapshot? "0.4.0-SNAPSHOT" : "0.3.44-rc.8"
-    kotlinVersion = "1.3.72"
-    spekVersion = "2.0.11"
+    openrndrVersion = openrndrUseSnapshot? "0.4.0-SNAPSHOT" : "0.3.44-rc.10"
+    kotlinVersion = "1.4.0"
+    spekVersion = "2.0.12"
     libfreenectVersion = "0.5.7-1.5.3"
     gsonVersion = "2.8.6"
     antlrVersion = "4.8-1"
@@ -47,7 +49,7 @@ dokka {
 allprojects {
     apply plugin: 'idea'
     apply plugin: 'java'
-    apply plugin: 'nebula.kotlin'
+    apply plugin: 'kotlin'
     apply plugin: 'nebula.contacts'
     apply plugin: 'nebula.info'
     apply plugin: 'nebula.release'
@@ -75,11 +77,12 @@ allprojects {
     }
 
     dependencies {
+        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
         implementation 'io.github.microutils:kotlin-logging:1.7.9'
         implementation "org.openrndr:openrndr-core:$openrndrVersion"
         implementation "org.openrndr:openrndr-filter:$openrndrVersion"
         implementation "org.openrndr:openrndr-shape:$openrndrVersion"
-        implementation group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '1.3.6'
+        implementation group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '1.3.9'
         testImplementation "org.spekframework.spek2:spek-dsl-jvm:$spekVersion"
         testImplementation "org.amshove.kluent:kluent:1.61"
         testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlinVersion"

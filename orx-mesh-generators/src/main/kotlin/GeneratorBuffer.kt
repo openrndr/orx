@@ -32,8 +32,8 @@ class GeneratorBuffer {
     fun toByteBuffer(): ByteBuffer {
         val bb = ByteBuffer.allocateDirect(data.size * (3 * 4 + 3 * 4 + 2 * 4))
         bb.order(ByteOrder.nativeOrder())
-        bb.rewind()
         for (d in data) {
+        bb.rewind()
             bb.putFloat(d.position.x.toFloat())
             bb.putFloat(d.position.y.toFloat())
             bb.putFloat(d.position.z.toFloat())
@@ -211,16 +211,4 @@ fun GeneratorBuffer.group(builder: GeneratorBuffer.() -> Unit) {
     val gb = GeneratorBuffer()
     gb.builder()
     this.concat(gb)
-}
-
-fun main(args: Array<String>) {
-    val gb = generator {
-        box(20.0, 20.0, 20.0)
-        group {
-            box(40.0, 40.0, 40.0)
-            transform(transform {
-                translate(0.0, 20.0, 0.0)
-            })
-        }
-    }
 }

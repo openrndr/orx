@@ -20,7 +20,7 @@ private val noise128 by lazy {
     for (y in 0 until cb.height) {
         for (x in 0 until cb.width) {
             for (i in 0 until 4)
-                buffer.put((Math.random() * 255).toByte())
+                buffer.put((Math.random() * 255).toInt().toByte())
         }
     }
     buffer.rewind()

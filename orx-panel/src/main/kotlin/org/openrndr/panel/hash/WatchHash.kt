@@ -1,12 +1,13 @@
 package org.openrndr.panel.hash
 
 import kotlin.reflect.KProperty0
+import kotlin.reflect.KProperty1
 import kotlin.reflect.full.declaredMemberProperties
 
 fun watchHash(toHash: Any): Int {
     var hash = 0
     for (property in toHash::class.declaredMemberProperties) {
-        val v = (property.getter)(toHash)
+        val v = ((property.getter) as KProperty1<Any, Any>).invoke(toHash)
         if (v is KProperty0<*>) {
             val pv = v.get()
             hash = 31 * hash + (pv?.hashCode() ?: 0)

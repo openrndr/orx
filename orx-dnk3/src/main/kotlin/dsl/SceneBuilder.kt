@@ -19,7 +19,7 @@ fun SceneNode.node(builder: SceneNode.() -> Unit): SceneNode {
     return node
 }
 
-fun SceneNode.hemisphereLight(builder: HemisphereLight.() -> Unit) : HemisphereLight {
+fun SceneNode.hemisphereLight(builder: HemisphereLight.() -> Unit): HemisphereLight {
     val hemisphereLight = HemisphereLight()
     hemisphereLight.builder()
     entities.add(hemisphereLight)
@@ -64,17 +64,25 @@ class SimpleMeshBuilder {
     }
 }
 
-fun Scene.update(function: ()->Unit) {
+fun SceneNode.simpleMesh(builder: SimpleMeshBuilder.() -> Unit): Mesh {
+    val mesh = SimpleMeshBuilder().apply { builder() }.build()
+    entities.add(mesh)
+    return mesh
+}
+
+
+fun SceneNode.pathMesh(builder: PathMesh.() -> Unit): PathMesh {
+    val pathMesh = PathMesh(mutableListOf(), DummyMaterial(), 1.0)
+    pathMesh.builder()
+    entities.add(pathMesh)
+    return pathMesh
+}
+
+fun Scene.update(function: () -> Unit) {
     dispatcher.launch {
         while (true) {
             function()
             yield()
         }
-     }
-}
-
-fun SceneNode.simpleMesh(builder: SimpleMeshBuilder.() -> Unit): Mesh {
-    val mesh = SimpleMeshBuilder().apply { builder() }.build()
-    entities.add(mesh)
-    return mesh
+    }
 }

@@ -59,7 +59,7 @@ open class Keyframer {
     }
 
     val duration: Double
-        get() = channels.values.maxBy { it.duration() }?.duration() ?: 0.0
+        get() = channels.values.maxByOrNull { it.duration() }?.duration() ?: 0.0
 
 
     inner class DoubleChannel(key: String, defaultValue: Double = 0.0) :

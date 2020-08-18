@@ -73,7 +73,7 @@ open class CubemapFilter(private val shader: Shader? = null, private val watcher
                 renderTarget.detachDepthBuffer()
             }
 
-            renderTarget.detachColorBuffers()
+            renderTarget.detachColorAttachments()
             renderTarget.destroy()
         }
     }

@@ -1,9 +1,12 @@
 package org.openrndr.extra.dnk3
 
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.*
+import org.openrndr.draw.DrawPrimitive
+import org.openrndr.draw.IndexBuffer
+import org.openrndr.draw.VertexBuffer
 import org.openrndr.math.Matrix44
 import org.openrndr.math.transforms.perspective
+import org.openrndr.shape.Path3D
 
 
 class Geometry(val vertexBuffers: List<VertexBuffer>,
@@ -15,6 +18,7 @@ class Geometry(val vertexBuffers: List<VertexBuffer>,
     override fun toString(): String {
         return "Geometry(vertexBuffers: $vertexBuffers, indexBuffers: $indexBuffer, primitive: $primitive, offset: $offset, vertexCount: $vertexCount)"
     }
+
     override fun hashCode(): Int {
         var result = 0
         result = 31 * result + primitive.ordinal.hashCode()
@@ -41,11 +45,22 @@ class MeshPrimitive(var geometry: Geometry, var material: Material) {
 
 class MeshPrimitiveInstance(val primitive: MeshPrimitive, val instances: Int, val attributes: List<VertexBuffer>)
 
+class PathMesh(var paths: MutableList<Path3D>, var material: Material, var weight: Double) : Entity() {
+    override fun toString(): String {
+        return "PathMesh(paths=$paths)"
+    }
+
+    override fun hashCode(): Int {
+        return paths.hashCode()
+    }
+}
+
 abstract class MeshBase(var primitives: List<MeshPrimitive>) : Entity()
 class Mesh(primitives: List<MeshPrimitive>) : MeshBase(primitives) {
     override fun toString(): String {
         return "Mesh(primitives: $primitives)"
     }
+
     override fun hashCode(): Int {
         return primitives.hashCode()
     }
@@ -62,7 +77,7 @@ class InstancedMesh(primitives: List<MeshPrimitive>,
                     var attributes: List<VertexBuffer>) : MeshBase(primitives)
 
 
-data class Fog(var color: ColorRGBa = ColorRGBa.WHITE, var end : Double = 100.0) : Entity()
+data class Fog(var color: ColorRGBa = ColorRGBa.WHITE, var end: Double = 100.0) : Entity()
 
 abstract class Light : Entity() {
     var color: ColorRGBa = ColorRGBa.WHITE
@@ -75,14 +90,14 @@ abstract class Camera : Entity() {
 
 abstract class CubemapProbe : Entity() {
     open val projectionMatrix: Matrix44
-    get() {
-        return perspective(90.0, 1.0, 0.1, 150.0)
-    }
+        get() {
+            return perspective(90.0, 1.0, 0.1, 150.0)
+        }
     var dirty = true
 }
 
-class IrradianceProbe: CubemapProbe() {
-      override fun hashCode(): Int {
+class IrradianceProbe : CubemapProbe() {
+    override fun hashCode(): Int {
         return true.hashCode()
     }
 }

@@ -138,7 +138,7 @@ class PaletteStudio(
         val foreground = clrs
                 .takeLast(clrs.size - 1)
                 .map { getContrast(background, it) to it }
-                .maxBy { it.first }!!
+                .maxByOrNull { it.first }!!
                 .second
 
         var constraint = clrs.size

@@ -17,7 +17,7 @@ import kotlin.reflect.KMutableProperty0
 class SceneAnimation(var channels: List<AnimationChannel>) {
     val duration: Double
         get() {
-            return channels.maxBy { it.duration }?.duration ?: 0.0
+            return channels.maxByOrNull { it.duration }?.duration ?: 0.0
         }
     fun applyToTargets(input: Double) {
         for (channel in channels) {

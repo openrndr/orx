@@ -172,7 +172,7 @@ open class Layer internal constructor() {
                 localBlendFilter.first.apply(arrayOf(activeRenderTarget.colorBuffer(0), layerPost), activeRenderTarget.colorBuffer(0))
             }
 
-            accumulation?.resolveTo(target.colorBuffer(0))
+            accumulation?.copyTo(target.colorBuffer(0))
         }
     }
 
