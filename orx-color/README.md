@@ -14,3 +14,19 @@ orx-color comes with tools to calculate color histograms for images.
 val histogram = calculateHistogramRGB(image)
 val colors = histogram.sortedColors()
 ```
+<!-- __demos__ -->
+## Demos
+### DemoHistogram01
+[source code](src/demo/kotlin/DemoHistogram01.kt)
+
+![DemoHistogram01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHistogram01Kt.png)
+
+### DemoHistogram02
+[source code](src/demo/kotlin/DemoHistogram02.kt)
+
+![DemoHistogram02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHistogram02Kt.png)
+
+### DemoHistogram03
+[source code](src/demo/kotlin/DemoHistogram03.kt)
+
+![DemoHistogram03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHistogram03Kt.png)
