@@ -10,6 +10,7 @@ import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
 import java.io.File
 import java.lang.IllegalStateException
+import java.lang.NullPointerException
 import java.net.URL
 import kotlin.math.roundToInt
 import kotlin.reflect.KProperty
@@ -142,6 +143,8 @@ open class Keyframer {
                     val keys: List<MutableMap<String, Any>> = Gson().fromJson(json, type)
                     loadFromKeyObjects(keys, parameters, functions)
                 } catch (e: JsonSyntaxException) {
+                    error("Error parsing simple Keyframer data: ${e.cause?.message}")
+                } catch (e: NullPointerException) {
                     error("Error parsing simple Keyframer data: ${e.cause?.message}")
                 }
             }
