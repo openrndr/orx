@@ -14,6 +14,10 @@ orx-color comes with tools to calculate color histograms for images.
 val histogram = calculateHistogramRGB(image)
 val colors = histogram.sortedColors()
 ```
+
+## HSLUVa and HPLUVa colorspaces
+
+Two color spaces are added: `ColorHSLUVa` and `ColorHPLUVa`, they are an implementation of the colorspaces presented at [hsluv.org](http://www.hsluv.org)
 <!-- __demos__ -->
 ## Demos
 ### DemoHistogram01
