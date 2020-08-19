@@ -20,6 +20,16 @@ val colors = histogram.sortedColors()
 Two color spaces are added: `ColorHSLUVa` and `ColorHPLUVa`, they are an implementation of the colorspaces presented at [hsluv.org](http://www.hsluv.org)
 <!-- __demos__ -->
 ## Demos
+### DemoHSLUV01
+[source code](src/demo/kotlin/DemoHSLUV01.kt)
+
+![DemoHSLUV01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHSLUV01Kt.png)
+
+### DemoHSLUV02
+[source code](src/demo/kotlin/DemoHSLUV02.kt)
+
+![DemoHSLUV02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHSLUV02Kt.png)
+
 ### DemoHistogram01
 [source code](src/demo/kotlin/DemoHistogram01.kt)
 
