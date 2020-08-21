@@ -38,7 +38,7 @@ fun main() {
                 gradients.forEachIndexed { gradientId, gradient ->
                     for (column in 0 until 10) {
                         val color1 = ColorRGBa.PINK.toHSVa().shiftHue(column * 12.0)
-                                .scaleValue(0.5).toRGBa()
+                                .shade(0.5).toRGBa()
 
                         val w = width.toDouble() / 10.0
                         val h = height.toDouble() / gradients.size

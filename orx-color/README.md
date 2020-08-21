@@ -15,6 +15,35 @@ val histogram = calculateHistogramRGB(image)
 val colors = histogram.sortedColors()
 ```
 
+## Color sequences
+
+Easy ways of creating blends between colors.
+
+Using the `rangeTo` operator:
+```
+for (c in ColorRGBa.PINK..ColorRGBa.BLUE.toHSVa() blend 10) {
+    drawer.fill = c
+    drawer.rectangle(0.0, 0.0, 40.0, 40.0)
+    drawer.translate(0.0, 40.0)
+}
+```
+
+Or blends for multiple color stops using `colorSequence`. Blending takes place in the colorspace of the input arguments.
+```
+val cs = colorSequence(0.0 to ColorRGBa.PINK,
+        0.5 to ColorRGBa.BLUE,
+        1.0 to ColorRGBa.PINK.toHSLUVa()) // <-- note this one is in hsluv
+
+for (c in cs blend (width / 40)) {
+    drawer.fill = c
+    drawer.stroke = null
+    drawer.rectangle(0.0, 0.0, 40.0,  height.toDouble())
+    drawer.translate(40.0, 0.0)
+}
+```
+
+
+
 ## HSLUVa and HPLUVa colorspaces
 
 Two color spaces are added: `ColorHSLUVa` and `ColorHPLUVa`, they are an implementation of the colorspaces presented at [hsluv.org](http://www.hsluv.org)

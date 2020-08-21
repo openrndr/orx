@@ -16,7 +16,7 @@ fun main() {
             extend {
                 drawer.shadeStyle = radialGradient(
                         ColorRGBa.PINK,
-                        ColorRGBa.PINK.toHSVa().shiftHue(180.0).scaleValue(0.5).toRGBa(),
+                        ColorRGBa.PINK.toHSVa().shiftHue(180.0).shade(0.5).toRGBa(),
                         exponent = cos(seconds)*0.5+0.5
                 )
                 drawer.rectangle(120.0, 40.0, 400.0, 400.0)

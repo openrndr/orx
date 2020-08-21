@@ -39,7 +39,7 @@ fun main() = application {
                         for (x in -1..1) {
                             drawer.stroke = ColorRGBa.RED.toHSVa()
                                     .shiftHue(0.0 + simplex(500+x+y,seconds)*5.0)
-                                    .scaleValue(0.5 + 0.5 * simplex(300+x+y,seconds*4.0).absoluteValue)
+                                    .shade(0.5 + 0.5 * simplex(300+x+y,seconds*4.0).absoluteValue)
                                     .toRGBa()
                             val r = simplex(400+x+y, seconds) * 150.0 + 150.0
                             drawer.circle(width / 2.0 + x * 100.0, height / 2.0 + y * 100.0, r)
