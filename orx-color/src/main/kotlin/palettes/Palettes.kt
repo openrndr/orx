@@ -7,21 +7,6 @@ import org.openrndr.extras.color.spaces.toHPLUVa
 import org.openrndr.extras.color.spaces.toHSLUVa
 
 
-fun main() {
-    for (c in ColorRGBa.PINK..ColorRGBa.GRAY blend 10) {
-
-    }
-    for (c in ColorRGBa.PINK..ColorHSVa(20.0, 0.5, 0.5) blend 10) {
-        println(c)
-    }
-
-    colorSequence(
-            0.0 to ColorRGBa.PINK,
-            0.5 to ColorRGBa.RED,
-            1.0 to hsv(360.0, 1.0, 1.0)
-    ).index(0.8)
-
-}
 
 fun <T> colorSequence(vararg offsets: Pair<Double, T>): ColorSequence
         where T : ConvertibleToColorRGBa {
@@ -32,20 +17,20 @@ class ColorSequence(val colors: List<Pair<Double, ConvertibleToColorRGBa>>) {
     infix fun blend(steps: Int): List<ColorRGBa> = index(0.0, 1.0, steps)
 
     fun index(t0: Double, t1: Double, steps: Int) = (0 until steps).map {
-        val f = (it / (steps+0.0))
+        val f = (it / (steps - 1.0))
         val t = t0 * (1.0 - f) + t1 * f
         index(t)
     }
 
     fun index(t: Double): ColorRGBa {
         if (colors.size == 1) {
-            return colors.first().second.toRGBa()
+            return colors.first().second.toRGBa().toSRGB()
         }
         if (t < colors[0].first) {
-            return colors[0].second.toRGBa()
+            return colors[0].second.toRGBa().toSRGB()
         }
         if (t >= colors.last().first) {
-            return colors.last().second.toRGBa()
+            return colors.last().second.toRGBa().toSRGB()
         }
         val rightIndex = colors.indexOfLast { it.first <= t }
         val leftIndex = (rightIndex + 1).coerceIn(0, colors.size - 1)
