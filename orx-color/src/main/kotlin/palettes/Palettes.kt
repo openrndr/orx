@@ -1,11 +1,7 @@
 package org.openrndr.extras.color.palettes
 
 import org.openrndr.color.*
-import org.openrndr.extras.color.spaces.ColorHPLUVa
-import org.openrndr.extras.color.spaces.ColorHSLUVa
-import org.openrndr.extras.color.spaces.toHPLUVa
-import org.openrndr.extras.color.spaces.toHSLUVa
-
+import org.openrndr.extras.color.spaces.*
 
 
 fun <T> colorSequence(vararg offsets: Pair<Double, T>): ColorSequence
@@ -52,6 +48,7 @@ class ColorSequence(val colors: List<Pair<Double, ConvertibleToColorRGBa>>) {
             is ColorLUVa -> right.second.toRGBa().toLUVa().mix(l, nt).toRGBa()
             is ColorHSLUVa -> right.second.toRGBa().toHSLUVa().mix(l, nt).toRGBa()
             is ColorHPLUVa -> right.second.toRGBa().toHPLUVa().mix(l, nt).toRGBa()
+            is ColorXSLUVa -> right.second.toRGBa().toXSLUVa().mix(l, nt).toRGBa()
             is ColorLCHUVa -> right.second.toRGBa().toLCHUVa().mix(l, nt).toRGBa()
             is ColorLCHABa -> right.second.toRGBa().toLCHABa().mix(l, nt).toRGBa()
             else -> error("unsupported color space: ${l::class}")
