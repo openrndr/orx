@@ -50,8 +50,8 @@ private class Length(val length: Double) {
     val greaterEqualZero: Boolean = length >= 0
 }
 
-private fun maxSafeChromaForL(L: Double): Double {
-    val bounds = getBounds(L)
+private fun maxSafeChromaForL(L100: Double): Double {
+    val bounds = getBounds(L100)
     var min = Double.MAX_VALUE
     for (i in 0..1) {
         val m1 = bounds!![i][0]
@@ -64,9 +64,9 @@ private fun maxSafeChromaForL(L: Double): Double {
     return min
 }
 
-fun maxChromaForLH(L: Double, H: Double): Double {
+fun maxChromaForLH(L100: Double, H: Double): Double {
     val hrad = H / 360 * Math.PI * 2
-    val bounds = getBounds(L)
+    val bounds = getBounds(L100)
     var min = Double.MAX_VALUE
     for (bound in bounds!!) {
         val length: Length = lengthOfRayUntilIntersect(hrad, bound)
@@ -84,18 +84,25 @@ data class ColorHSLUVa(val h: Double, val s: Double, val l: Double, val a: Doubl
         ShadableColor<ColorHSLUVa>,
         OpacifiableColor<ColorHSLUVa>,
         AlgebraicColor<ColorHSLUVa> {
+
+
     fun toLCHUVa(): ColorLCHUVa {
-        if (l > 99.9999999) {
+
+        val l100 = l * 100.0
+        val s100 = s * 100.0
+
+        if (l100 > 99.9999999) {
             ColorLCHUVa(100.0, 0.0, h, a)
         }
 
-        if (l < 0.00000001) {
+        if (l100 < 0.00000001) {
             ColorLCHUVa(0.0, 0.0, h, a)
         }
-        val max = maxChromaForLH(l, h)
-        val c: Double = max / 100 * s
+        val max100 = maxChromaForLH(l100, h)
 
-        return ColorLCHUVa(l, c, h, a)
+        val c: Double = max100 / 100 * s100
+
+        return ColorLCHUVa(l100, c, h, a)
     }
 
     override fun shiftHue(shiftInDegrees: Double) = copy(h = h + (shiftInDegrees))
@@ -138,15 +145,17 @@ data class ColorHPLUVa(val h: Double, val s: Double, val l: Double, val a: Doubl
         OpacifiableColor<ColorHPLUVa>,
         AlgebraicColor<ColorHPLUVa> {
     fun toLCHUVa(): ColorLCHUVa {
-        if (l > 99.9999999) {
+        val l1 = l
+        if (l1 > 0.9999999) {
             return ColorLCHUVa(100.0, 0.0, h)
         }
-        if (l < 0.00000001) {
+        if (l1 < 0.00000001) {
             return ColorLCHUVa(0.0, 0.0, h)
         }
-        val max = maxSafeChromaForL(l)
-        val c = max / 100 * s
-        return ColorLCHUVa(l, c, h)
+        val l100 = l1 * 100.0
+        val max100 = maxSafeChromaForL(l100)
+        val c100 = max100 * s
+        return ColorLCHUVa(l100, c100, h)
     }
 
     override fun shiftHue(shiftInDegrees: Double): ColorHPLUVa {
@@ -182,28 +191,32 @@ fun mix(left: ColorHPLUVa, right: ColorHPLUVa, x: Double): ColorHPLUVa {
 
 
 fun ColorLCHUVa.toHPLUVa(): ColorHPLUVa {
-    if (l > 99.9999999) {
-        return ColorHPLUVa(h, 0.0, 100.0)
+    val l100 = l
+    if (l100 > 99.9999999) {
+        return ColorHPLUVa(h, 0.0, 1.0)
     }
-    if (l < 0.00000001) {
+    if (l100 < 0.00000001) {
         return ColorHPLUVa(h, 0.0, 0.0)
 
     }
-    val max = maxSafeChromaForL(l)
-    val s = c / max * 100
-    return ColorHPLUVa(h, s, l)
+    val max100 = maxSafeChromaForL(l)
+    val s1 = c / max100
+    return ColorHPLUVa(h, s1, l100 / 100.0)
 }
 
 fun ColorLCHUVa.toHSLUVa(): ColorHSLUVa {
-    if (l > 99.99999) {
-        return ColorHSLUVa(h, 0.0, 100.0)
+    val l100 = l
+
+    if (l100 > 99.99999) {
+        return ColorHSLUVa(h, 0.0, 1.0)
     }
     if (l < 0.000001) {
         return ColorHSLUVa(h, 0.0, 0.0)
     }
-    val max = maxChromaForLH(l, h)
-    val s = c / max * 100.0
-    return ColorHSLUVa(h, s, l, alpha)
+    val max100 = maxChromaForLH(l100, h)
+    val c100 = c
+    val s1 = c100 / max100
+    return ColorHSLUVa(h, s1, l100 / 100.0, alpha)
 }
 
 fun ColorRGBa.toHSLUVa(): ColorHSLUVa = toLCHUVa().toHSLUVa()
