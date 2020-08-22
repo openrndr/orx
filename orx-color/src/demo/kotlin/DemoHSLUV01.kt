@@ -1,9 +1,12 @@
 // Draw rectangles shaded in RGB and HSLUV space
 
 import org.openrndr.application
-import org.openrndr.color.ColorRGBa
+import org.openrndr.color.ColorHSLa
+import org.openrndr.draw.isolated
 import org.openrndr.extensions.SingleScreenshot
-import org.openrndr.extras.color.spaces.toHSLUVa
+import org.openrndr.extras.color.spaces.ColorHSLUVa
+import org.openrndr.math.Vector2
+import org.openrndr.shape.Rectangle
 
 fun main() {
     application {
@@ -15,14 +18,19 @@ fun main() {
                 }
             }
             extend {
-                val color = ColorRGBa.PINK
                 drawer.stroke = null
-                for (i in 0 until 10) {
-                    drawer.fill = color.shade(1.0 - i / 10.0)
-                    drawer.rectangle(100.0, 100.0 + i * 20.0, 100.0, 20.0)
+                for (a in 0 until 360 step 12) {
+                    val pos = Vector2(0.0, 110.0)
+                    drawer.isolated {
+                        translate(bounds.center)
+                        rotate(a * 1.0)
 
-                    drawer.fill = color.toHSLUVa().shade(1.0 - i / 10.0).toRGBa().toSRGB()
-                    drawer.rectangle(200.0, 100.0 + i * 20.0, 100.0, 20.0)
+                        fill = ColorHSLUVa(a * 1.0, 1.0, 0.5).toRGBa().toSRGB()
+                        rectangle(Rectangle(pos * 1.2, 40.0, 300.0))
+
+                        fill = ColorHSLa(a * 1.0, 1.0, 0.5).toRGBa()
+                        rectangle(Rectangle.fromCenter(pos,30.0, 60.0))
+                    }
                 }
             }
         }
