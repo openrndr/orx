@@ -14,17 +14,27 @@ fun main() = application {
             }
         }
         val image = loadImage("demo-data/images/image-001.png")
-        val histogram = calculateHistogramRGB(image)
-        val colors = histogram.sortedColors()
+
+        val histogram = calculateHistogramRGB(image, binCount = 8)
+        println("Histogram calculated with ${histogram.binCount} bins per channel")
+
+        val colorsSortedByFreq = histogram.sortedColors()
+        println("therefore it contains ${colorsSortedByFreq.size} colors.")
+
+        val topColors = colorsSortedByFreq.subList(0, 32)
+        val topColorsSortedByLuminosity = topColors.sortedBy {
+            it.first.toHSLa().l
+        }
         extend {
-
             drawer.image(image)
-            for (i in 0 until 32) {
-                drawer.fill = colors[i].first
-                drawer.stroke = null
-                drawer.rectangle(i * (width/32.0), height-16.0, width/32.0, 16.0)
+            drawer.stroke = null
+            topColorsSortedByLuminosity.forEachIndexed { i, (color, freq) ->
+                drawer.fill = color
+                drawer.rectangle(i * width / 32.0 + 2.0,
+                        height - 2.0,
+                        width / 32.0 - 4.0,
+                        -1000 * freq)
             }
-
         }
     }
 }
