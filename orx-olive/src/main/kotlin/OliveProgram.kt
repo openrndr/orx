@@ -7,8 +7,8 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.streams.toList
 
-open class OliveProgram(private val sourceLocation: String, private val scriptHost: OliveScriptHost) : Program() {
-    val olive = extend(Olive<OliveProgram>(scriptMode = ScriptMode.OLIVE_PROGRAM)) {
+open class OliveProgram(private val sourceLocation: String, private val scriptHost: OliveScriptHost, resources: Resources?) : Program() {
+    val olive = extend(Olive<OliveProgram>(scriptMode = ScriptMode.OLIVE_PROGRAM, resources = resources)) {
         script = sourceLocation
         scriptHost = this@OliveProgram.scriptHost
     }
@@ -20,7 +20,7 @@ fun stackRootClassName(thread: Thread = Thread.currentThread(), sanitize: Boolea
     return if (sanitize) rootClass.replace(Regex("Kt$"), "") else rootClass
 }
 
-fun ApplicationBuilder.oliveProgram(scriptHost: OliveScriptHost = OliveScriptHost.JSR223_REUSE, init: OliveProgram.() -> Unit): OliveProgram {
+fun ApplicationBuilder.oliveProgram(scriptHost: OliveScriptHost = OliveScriptHost.JSR223_REUSE, resources: Resources? = null, init: OliveProgram.() -> Unit): OliveProgram {
     val rootClassName = stackRootClassName(sanitize = true).split(".").last()
 
     var sourceLocation = "src/main/kotlin/$rootClassName.kt"
@@ -34,7 +34,7 @@ fun ApplicationBuilder.oliveProgram(scriptHost: OliveScriptHost = OliveScriptHos
             error("multiple source candidates found: $otherCandidates")
         }
     }
-    program = object : OliveProgram(sourceLocation, scriptHost) {
+    program = object : OliveProgram(sourceLocation, scriptHost, resources) {
         override fun setup() {
             super.setup()
             init()
