@@ -32,8 +32,8 @@ class GeneratorBuffer {
     fun toByteBuffer(): ByteBuffer {
         val bb = ByteBuffer.allocateDirect(data.size * (3 * 4 + 3 * 4 + 2 * 4))
         bb.order(ByteOrder.nativeOrder())
-        for (d in data) {
         bb.rewind()
+        for (d in data) {
             bb.putFloat(d.position.x.toFloat())
             bb.putFloat(d.position.y.toFloat())
             bb.putFloat(d.position.z.toFloat())
