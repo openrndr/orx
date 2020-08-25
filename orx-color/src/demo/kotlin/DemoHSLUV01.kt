@@ -1,9 +1,15 @@
 // Draw rectangles shaded in RGB and HSLUV space
 
 import org.openrndr.application
+import org.openrndr.color.ColorHSLa
 import org.openrndr.color.ColorRGBa
+import org.openrndr.color.rgb
+import org.openrndr.draw.isolated
+import org.openrndr.draw.loadFont
 import org.openrndr.extensions.SingleScreenshot
-import org.openrndr.extras.color.spaces.toHSLUVa
+import org.openrndr.extras.color.spaces.ColorHSLUVa
+import org.openrndr.math.Vector2
+import org.openrndr.shape.Rectangle
 
 fun main() {
     application {
@@ -14,16 +20,33 @@ fun main() {
                     this.outputFile = System.getProperty("screenshotPath")
                 }
             }
+            val font = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 26.0)
             extend {
-                val color = ColorRGBa.PINK
                 drawer.stroke = null
-                for (i in 0 until 10) {
-                    drawer.fill = color.shade(1.0 - i / 10.0)
-                    drawer.rectangle(100.0, 100.0 + i * 20.0, 100.0, 20.0)
+                drawer.clear(rgb(0.3))
+                val s = mouse.position.x / width
+                val l = mouse.position.y / height
+                for (a in 0 until 360 step 12) {
+                    val pos = Vector2(0.0, 110.0)
+                    drawer.isolated {
+                        translate(bounds.center)
+                        rotate(a * 1.0)
 
-                    drawer.fill = color.toHSLUVa().shade(1.0 - i / 10.0).toRGBa().toSRGB()
-                    drawer.rectangle(200.0, 100.0 + i * 20.0, 100.0, 20.0)
+                        fill = ColorHSLUVa(a * 1.0, s, l).toRGBa().toSRGB()
+                        rectangle(Rectangle(pos * 1.2, 40.0, 300.0))
+
+                        fill = ColorHSLa(a * 1.0, s, l).toRGBa()
+                        rectangle(Rectangle.fromCenter(pos, 30.0, 60.0))
+                    }
                 }
+                drawer.fontMap = font
+                drawer.fill = if(l > 0.8) ColorRGBa.BLACK else ColorRGBa.WHITE
+                drawer.text("HSLa", width * 0.48, height * 0.73)
+                drawer.text("HSLUVa", width * 0.8, height * 0.52)
+                drawer.text("hue: 0 to 360, " +
+                        "saturation: ${String.format("%.02f", s)}, " +
+                        "lightness: ${String.format("%.02f", l)}",
+                        30.0, 460.0)
             }
         }
     }
