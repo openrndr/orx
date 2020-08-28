@@ -1,26 +1,48 @@
 package org.openrndr.extra.noise
 
+import org.openrndr.math.IntVector2
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
+import org.openrndr.shape.Rectangle
 import kotlin.random.Random
 
-fun random(min: Double = -1.0, max: Double = 1.0, random: Random = Random.Default): Double {
-    return (random.nextDouble() * (max - min)) + min
-}
+fun random(min: Double = -1.0, max: Double = 1.0,
+           random: Random = Random.Default) =
+    (random.nextDouble() * (max - min)) + min
 
+fun Int.Companion.uniform(min: Int = -1, max: Int = 2,
+                          random: Random = Random.Default) =
+        (random.nextDouble() * (max - min)).toInt() + min
 
+fun Double.Companion.uniform(min: Double = -1.0, max: Double = 1.0,
+                             random: Random = Random.Default) =
+        (random.nextDouble() * (max - min)) + min
 
-fun Double.Companion.uniform(min: Double = -1.0, max: Double = 1.0, random: Random = Random.Default): Double {
-    return (random.nextDouble() * (max - min)) + min
-}
+fun Vector2.Companion.uniform(min: Vector2 = -ONE, max: Vector2 = ONE,
+                              random: Random = Random.Default) =
+        Vector2(Double.uniform(min.x, max.x, random),
+                Double.uniform(min.y, max.y, random))
 
-fun Vector2.Companion.uniform(min: Vector2 = -ONE, max: Vector2 = ONE, random: Random = Random.Default): Vector2 {
-    return Vector2(Double.uniform(min.x, max.x, random), Double.uniform(min.y, max.y, random))
-}
-
-fun Vector2.Companion.uniform(min: Double = -1.0, max: Double = 1.0, random: Random = Random.Default) =
+fun Vector2.Companion.uniform(min: Double = -1.0, max: Double = 1.0,
+                              random: Random = Random.Default) =
         Vector2.uniform(Vector2(min, min), Vector2(max, max), random)
+
+fun Vector2.Companion.uniform(rect: Rectangle,
+                              random: Random = Random.Default) =
+        Vector2.uniform(rect.corner,
+                rect.corner + rect.dimensions, random)
+
+fun IntVector2.Companion.uniform(min: IntVector2 = IntVector2(-1, -1),
+                                 max: IntVector2 = IntVector2(2, 2),
+                                 random: Random = Random.Default) =
+        IntVector2(Int.uniform(min.x, max.x, random),
+                Int.uniform(min.y, max.y, random))
+
+fun IntVector2.Companion.uniform(min: Int = -1, max: Int = 2,
+                                 random: Random = Random.Default) =
+        IntVector2.uniform(IntVector2(min, min),
+                IntVector2(max, max), random)
 
 fun Vector2.Companion.uniformRing(innerRadius: Double = 0.0,
                                   outerRadius: Double = 1.0,
@@ -42,6 +64,11 @@ fun Vector2.Companion.uniforms(count: Int,
         List(count) {
             Vector2.uniform(min, max, random)
         }
+
+fun Vector2.Companion.uniforms(count: Int,
+                               rect: Rectangle,
+                               random: Random = Random.Default): List<Vector2> =
+        List(count) { Vector2.uniform(rect, random) }
 
 fun Vector2.Companion.uniformsRing(count: Int,
                                    innerRadius: Double = 0.0, outerRadius: Double = 1.0,
