@@ -1,5 +1,6 @@
 package org.openrndr.extra.temporalblur
 
+import org.intellij.lang.annotations.Language
 import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
@@ -13,7 +14,29 @@ import org.openrndr.math.Matrix55
 import org.openrndr.math.Vector2
 import org.openrndr.math.transforms.translate
 
-private val add by lazy { Add() }
+
+private fun glslFull(@Language("GLSL") glsl: String) = glsl
+
+class PlainAdd : Filter(filterShaderFromCode(glslFull("""
+
+#version 330
+
+uniform sampler2D tex0;
+uniform sampler2D tex1;
+in vec2 v_texCoord0;
+out vec4 o_output;
+
+void main() {
+    vec4 a = texture(tex0, v_texCoord0);
+    vec4 b = texture(tex1, v_texCoord0);
+    o_output = a + b;    
+}
+    
+    
+"""), "plain-add"))
+
+
+private val add by lazy { PlainAdd() }
 
 /**
  * Temporal blur extension.
@@ -156,7 +179,7 @@ class TemporalBlur : Extension {
             }
 
             image?.unbind()
-            image!!.colorBuffer(0).resolveTo(imageResolved!!.colorBuffer(0))
+            image!!.colorBuffer(0).copyTo(imageResolved!!.colorBuffer(0))
 
             if (linearizeInput) {
                 imageResolved?.let {
@@ -178,7 +201,7 @@ class TemporalBlur : Extension {
     override fun afterDraw(drawer: Drawer, program: Program) {
         // -- we receive one last frame here
         image?.unbind()
-        image!!.colorBuffer(0).resolveTo(imageResolved!!.colorBuffer(0))
+        image!!.colorBuffer(0).copyTo(imageResolved!!.colorBuffer(0))
 
         add.apply(arrayOf(imageResolved!!.colorBuffer(0), accumulator!!.colorBuffer(0)), accumulator!!.colorBuffer(0))
 
