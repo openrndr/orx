@@ -170,19 +170,7 @@ class OrbitalCamera(eye: Vector3 = Vector3.ZERO, lookAt: Vector3 = Vector3.UNIT_
         lastSeconds = program.seconds
 
         update(delta)
-
-        if (projectionType == ProjectionType.PERSPECTIVE) {
-            drawer.perspective(fov, drawer.width.toDouble() / drawer.height, near, far)
-        } else {
-            val ar = drawer.width * 1.0 / drawer.height
-            drawer.ortho(-ar * magnitude, ar * magnitude, -1.0 * magnitude, 1.0 * magnitude, -1000.0, 1000.0)
-        }
-        drawer.view = viewMatrix()
-
-        if (depthTest) {
-            drawer.drawStyle.depthWrite = true
-            drawer.drawStyle.depthTestPass = DepthTestPass.LESS_OR_EQUAL
-        }
+        applyTo(drawer)
     }
 
     override fun afterDraw(drawer: Drawer, program: Program) {
@@ -219,9 +207,12 @@ fun OrbitalCamera.applyTo(drawer: Drawer) {
         drawer.perspective(fov, drawer.width.toDouble() / drawer.height, near, far)
     } else {
         val ar = drawer.width * 1.0 / drawer.height
-        drawer.ortho(-ar, ar, 1.0, -1.0, near, far)
+        drawer.ortho(-ar * magnitude, ar * magnitude, -1.0 * magnitude, 1.0 * magnitude, -1000.0, 1000.0)
     }
     drawer.view = viewMatrix()
-    drawer.drawStyle.depthWrite = true
-    drawer.drawStyle.depthTestPass = DepthTestPass.LESS_OR_EQUAL
+
+    if (depthTest) {
+        drawer.drawStyle.depthWrite = true
+        drawer.drawStyle.depthTestPass = DepthTestPass.LESS_OR_EQUAL
+    }
 }
