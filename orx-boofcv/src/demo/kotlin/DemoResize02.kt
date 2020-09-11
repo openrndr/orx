@@ -16,10 +16,9 @@ fun main() {
 
             // Load an image, convert to BoofCV format using orx-boofcv
             val input = loadImage("demo-data/images/image-001.png")
-
-            val scaled = input.resizeBy(0.5)
-            val scaled2 = input.resizeBy(0.25, convertToGray = true)
-            val scaled3 = input.resizeBy(0.1)
+            val scaled = input.resizeTo(input.width / 3)
+            val scaled2 = input.resizeTo(newHeight = input.height / 4, convertToGray = true)
+            val scaled3 = input.resizeTo(input.width / 5, input.height / 5)
 
             extend {
                 drawer.clear(ColorRGBa.BLACK)
