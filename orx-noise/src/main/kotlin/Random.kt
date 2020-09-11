@@ -86,6 +86,8 @@ object Random {
         var list = coll.toMutableList()
         val picked = mutableListOf<T>()
 
+        if (coll.isEmpty()) return list
+
         while (picked.size < count) {
             if (list.isEmpty()) {
                 list = coll.toMutableList()
