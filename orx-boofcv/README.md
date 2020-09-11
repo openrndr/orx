@@ -34,6 +34,11 @@ this addon provides some helper functions to convert them to OPENRNDR types:
 
 ![DemoResize01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-boofcv/images/DemoResize01Kt.png)
 
+### DemoResize02
+[source code](src/demo/kotlin/DemoResize02.kt)
+
+![DemoResize02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-boofcv/images/DemoResize02Kt.png)
+
 ### DemoSimplified01
 [source code](src/demo/kotlin/DemoSimplified01.kt)
 
