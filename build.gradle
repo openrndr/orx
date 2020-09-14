@@ -21,7 +21,7 @@ project.ext {
     openrndrVersion = openrndrUseSnapshot? "0.4.0-SNAPSHOT" : "0.3.44-rc.11"
     kotlinVersion = "1.4.0"
     spekVersion = "2.0.12"
-    libfreenectVersion = "0.5.7-1.5.3"
+    libfreenectVersion = "0.5.7-1.5.4"
     gsonVersion = "2.8.6"
     antlrVersion = "4.8-1"
 }
