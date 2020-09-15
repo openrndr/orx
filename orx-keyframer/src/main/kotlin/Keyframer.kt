@@ -18,7 +18,6 @@ import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
 
-
 enum class KeyframerFormat {
     SIMPLE,
     FULL
@@ -64,46 +63,58 @@ open class Keyframer {
 
 
     inner class DoubleChannel(key: String, defaultValue: Double = 0.0) :
-        CompoundChannel(arrayOf(key), arrayOf(defaultValue)) {
+            CompoundChannel(arrayOf(key), arrayOf(defaultValue)) {
         operator fun getValue(keyframer: Keyframer, property: KProperty<*>): Double = getValue(0)
     }
 
     inner class Vector2Channel(keys: Array<String>, defaultValue: Vector2 = Vector2.ZERO) :
-        CompoundChannel(keys, arrayOf(defaultValue.x, defaultValue.y)) {
+            CompoundChannel(keys, arrayOf(defaultValue.x, defaultValue.y)) {
         operator fun getValue(keyframer: Keyframer, property: KProperty<*>): Vector2 = Vector2(getValue(0), getValue(1))
     }
 
     inner class Vector3Channel(keys: Array<String>, defaultValue: Vector3 = Vector3.ZERO) :
-        CompoundChannel(keys, arrayOf(defaultValue.x, defaultValue.y, defaultValue.z)) {
+            CompoundChannel(keys, arrayOf(defaultValue.x, defaultValue.y, defaultValue.z)) {
         operator fun getValue(keyframer: Keyframer, property: KProperty<*>): Vector3 =
-            Vector3(getValue(0), getValue(1), getValue(2))
+                Vector3(getValue(0), getValue(1), getValue(2))
     }
 
     inner class Vector4Channel(keys: Array<String>, defaultValue: Vector4 = Vector4.ZERO) :
-        CompoundChannel(keys, arrayOf(defaultValue.x, defaultValue.y, defaultValue.z, defaultValue.w)) {
+            CompoundChannel(keys, arrayOf(defaultValue.x, defaultValue.y, defaultValue.z, defaultValue.w)) {
         operator fun getValue(keyframer: Keyframer, property: KProperty<*>): Vector4 =
-            Vector4(getValue(0), getValue(1), getValue(2), getValue(3))
+                Vector4(getValue(0), getValue(1), getValue(2), getValue(3))
     }
 
     inner class RGBaChannel(keys: Array<String>, defaultValue: ColorRGBa = ColorRGBa.WHITE) :
-        CompoundChannel(keys, arrayOf(defaultValue.r, defaultValue.g, defaultValue.b, defaultValue.a)) {
+            CompoundChannel(keys, arrayOf(defaultValue.r, defaultValue.g, defaultValue.b, defaultValue.a)) {
         operator fun getValue(keyframer: Keyframer, property: KProperty<*>): ColorRGBa =
-            ColorRGBa(getValue(0), getValue(1), getValue(2), getValue(3))
+                ColorRGBa(getValue(0), getValue(1), getValue(2), getValue(3))
     }
 
     inner class RGBChannel(keys: Array<String>, defaultValue: ColorRGBa = ColorRGBa.WHITE) :
-        CompoundChannel(keys, arrayOf(defaultValue.r, defaultValue.g, defaultValue.b)) {
+            CompoundChannel(keys, arrayOf(defaultValue.r, defaultValue.g, defaultValue.b)) {
         operator fun getValue(keyframer: Keyframer, property: KProperty<*>): ColorRGBa =
-            ColorRGBa(getValue(0), getValue(1), getValue(2))
+                ColorRGBa(getValue(0), getValue(1), getValue(2))
     }
+
+    inner class DoubleArrayChannel(keys: Array<String>, defaultValue: DoubleArray = DoubleArray(keys.size)) :
+            CompoundChannel(keys, defaultValue.toTypedArray()) {
+        operator fun getValue(keyframer: Keyframer, property: KProperty<*>): DoubleArray {
+            val result = DoubleArray(keys.size)
+            for (i in keys.indices) {
+                result[i] = getValue(i)
+            }
+            return result
+        }
+    }
+
 
     val channels = mutableMapOf<String, KeyframerChannel>()
 
     fun loadFromJson(
-        file: File,
-        format: KeyframerFormat = KeyframerFormat.SIMPLE,
-        parameters: Map<String, Double> = emptyMap(),
-        functions: FunctionExtensions = FunctionExtensions.EMPTY
+            file: File,
+            format: KeyframerFormat = KeyframerFormat.SIMPLE,
+            parameters: Map<String, Double> = emptyMap(),
+            functions: FunctionExtensions = FunctionExtensions.EMPTY
     ) {
         require(file.exists()) {
             "failed to load keyframer from json: '${file.absolutePath}' does not exist."
@@ -125,16 +136,16 @@ open class Keyframer {
             loadFromJsonString(url.readText(), format, parameters, functions)
         } catch (e: ExpressionException) {
             throw ExpressionException("Error loading $format from '${url}': ${e.message ?: ""}")
-        } catch(e: IllegalStateException) {
+        } catch (e: IllegalStateException) {
             throw ExpressionException("Error loading $format from '${url}': ${e.message ?: ""}")
         }
     }
 
     fun loadFromJsonString(
-        json: String,
-        format: KeyframerFormat = KeyframerFormat.SIMPLE,
-        parameters: Map<String, Double> = emptyMap(),
-        functions: FunctionExtensions = FunctionExtensions.EMPTY
+            json: String,
+            format: KeyframerFormat = KeyframerFormat.SIMPLE,
+            parameters: Map<String, Double> = emptyMap(),
+            functions: FunctionExtensions = FunctionExtensions.EMPTY
     ) {
         when (format) {
             KeyframerFormat.SIMPLE -> {
@@ -164,9 +175,9 @@ open class Keyframer {
     private val prototypes = mutableMapOf<String, Map<String, Any>>()
 
     fun loadFromObjects(
-        dict: Map<String, Any>,
-        externalParameters: Map<String, Double> = emptyMap(),
-        functions: FunctionExtensions = FunctionExtensions.EMPTY
+            dict: Map<String, Any>,
+            externalParameters: Map<String, Double> = emptyMap(),
+            functions: FunctionExtensions = FunctionExtensions.EMPTY
     ) {
         this.parameters.clear()
         this.parameters.putAll(externalParameters)
@@ -179,7 +190,7 @@ open class Keyframer {
                     when (val candidate = entry.value) {
                         is Double -> candidate
                         is String -> evaluateExpression(candidate, parameters, functions)
-                            ?: error("could not evaluate expression: '$candidate'")
+                                ?: error("could not evaluate expression: '$candidate'")
                         is Int -> candidate.toDouble()
                         is Float -> candidate.toDouble()
                         else -> error("unknown type for parameter '${entry.key}'")
@@ -214,9 +225,9 @@ open class Keyframer {
     }
 
     fun loadFromKeyObjects(
-        keys: List<Map<String, Any>>,
-        externalParameters: Map<String, Double>,
-        functions: FunctionExtensions
+            keys: List<Map<String, Any>>,
+            externalParameters: Map<String, Double>,
+            functions: FunctionExtensions
     ) {
         if (externalParameters !== parameters) {
             parameters.clear()
@@ -226,12 +237,12 @@ open class Keyframer {
         var lastTime = 0.0
 
         val channelDelegates = this::class.memberProperties
-            .mapNotNull {
-                @Suppress("UNCHECKED_CAST")
-                it as? KProperty1<Keyframer, Any>
-            }
-            .filter { it.isAccessible = true; it.getDelegate(this) is CompoundChannel }
-            .associate { Pair(it.name, it.getDelegate(this) as CompoundChannel) }
+                .mapNotNull {
+                    @Suppress("UNCHECKED_CAST")
+                    it as? KProperty1<Keyframer, Any>
+                }
+                .filter { it.isAccessible = true; it.getDelegate(this) is CompoundChannel }
+                .associate { Pair(it.name, it.getDelegate(this) as CompoundChannel) }
 
         val channelKeys = channelDelegates.values.flatMap { channel ->
             channel.keys.map { it }
@@ -260,7 +271,7 @@ open class Keyframer {
                 when (val candidate = computed["time"]) {
                     null -> lastTime
                     is String -> evaluateExpression(candidate, expressionContext, functions)
-                        ?: error { "unknown value format for time : $candidate" }
+                            ?: error { "unknown value format for time : $candidate" }
                     is Double -> candidate
                     is Int -> candidate.toDouble()
                     is Float -> candidate.toDouble()
@@ -274,7 +285,7 @@ open class Keyframer {
                 when (val candidate = computed["duration"]) {
                     null -> 0.0
                     is String -> evaluateExpression(candidate, expressionContext, functions)
-                        ?: error { "unknown value format for time : $candidate" }
+                            ?: error { "unknown value format for time : $candidate" }
                     is Int -> candidate.toDouble()
                     is Float -> candidate.toDouble()
                     is Double -> candidate
@@ -343,7 +354,7 @@ open class Keyframer {
                         when (val candidate = channelCandidate.value) {
                             is Double -> candidate
                             is String -> evaluateExpression(candidate, expressionContext, functions)
-                                ?: error("unknown value format for key '${channelCandidate.key}' : $candidate")
+                                    ?: error("unknown value format for key '${channelCandidate.key}' : $candidate")
                             is Int -> candidate.toDouble()
                             else -> error("unknown value type for key '${channelCandidate.key}' : $candidate")
                         }
@@ -365,7 +376,7 @@ open class Keyframer {
                         is Int -> candidate
                         is Double -> candidate.toInt()
                         is String -> evaluateExpression(candidate, expressionContext, functions)?.roundToInt()
-                            ?: error("cannot evaluate expression for count: '$candidate'")
+                                ?: error("cannot evaluate expression for count: '$candidate'")
                         else -> error("unknown value type for count: '$candidate")
                     }
                 } catch (e: ExpressionException) {
