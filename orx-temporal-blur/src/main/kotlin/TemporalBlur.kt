@@ -207,9 +207,8 @@ class TemporalBlur : Extension {
 
         // -- render accumulated result
         drawer.isolated {
+            drawer.defaults()
             drawer.ortho(result!!)
-            drawer.model = Matrix44.IDENTITY
-            drawer.view = Matrix44.IDENTITY
 
             drawer.isolatedWithTarget(result!!) {
                 drawer.drawStyle.blendMode = BlendMode.OVER
