@@ -38,6 +38,9 @@ class OrbitalCamera(eye: Vector3 = Vector3.ZERO, lookAt: Vector3 = Vector3.UNIT_
     var dampingFactor = 0.05
     var zoomSpeed = 1.0
 
+    var orthoNear = -1000.0
+    var orthoFar = 1000.0
+
     fun setView(lookAt: Vector3, spherical: Spherical, fov: Double) {
         this.lookAt = lookAt
         this.lookAtEnd = lookAt
@@ -207,7 +210,7 @@ fun OrbitalCamera.applyTo(drawer: Drawer) {
         drawer.perspective(fov, drawer.width.toDouble() / drawer.height, near, far)
     } else {
         val ar = drawer.width * 1.0 / drawer.height
-        drawer.ortho(-ar * magnitude, ar * magnitude, -1.0 * magnitude, 1.0 * magnitude, -1000.0, 1000.0)
+        drawer.ortho(-ar * magnitude, ar * magnitude, -1.0 * magnitude, 1.0 * magnitude, orthoNear, orthoFar)
     }
     drawer.view = viewMatrix()
 
