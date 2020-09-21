@@ -33,6 +33,10 @@ class KeyframerChannel {
         return keys.lastOrNull()?.value
     }
 
+    fun lastTime(): Double? {
+        return keys.lastOrNull()?.time
+    }
+
     fun duration(): Double {
         return keys.last().time
     }

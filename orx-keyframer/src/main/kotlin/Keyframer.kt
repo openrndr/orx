@@ -5,6 +5,7 @@ import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extras.easing.Easing
+import org.openrndr.extras.easing.EasingFunction
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
@@ -12,6 +13,7 @@ import java.io.File
 import java.lang.IllegalStateException
 import java.lang.NullPointerException
 import java.net.URL
+import kotlin.math.max
 import kotlin.math.roundToInt
 import kotlin.reflect.KProperty
 import kotlin.reflect.KProperty1
@@ -257,6 +259,45 @@ open class Keyframer {
         expressionContext["t"] = 0.0
 
 
+        fun easingFunctionFromName(easingCandidate: String): EasingFunction {
+            return when (easingCandidate) {
+                "linear" -> Easing.Linear.function
+                "back-in" -> Easing.BackIn.function
+                "back-out" -> Easing.BackOut.function
+                "back-in-out" -> Easing.BackInOut.function
+                "bounce-in" -> Easing.BounceIn.function
+                "bounce-out" -> Easing.BounceOut.function
+                "bounce-in-out" -> Easing.BackInOut.function
+                "circ-in" -> Easing.CircIn.function
+                "circ-out" -> Easing.CircOut.function
+                "circ-in-out" -> Easing.CircInOut.function
+                "cubic-in" -> Easing.CubicIn.function
+                "cubic-out" -> Easing.CubicOut.function
+                "cubic-in-out" -> Easing.CubicInOut.function
+                "elastic-in" -> Easing.ElasticIn.function
+                "elastic-out" -> Easing.ElasticInOut.function
+                "elastic-in-out" -> Easing.ElasticOut.function
+                "expo-in" -> Easing.ExpoIn.function
+                "expo-out" -> Easing.ExpoOut.function
+                "expo-in-out" -> Easing.ExpoInOut.function
+                "quad-in" -> Easing.QuadIn.function
+                "quad-out" -> Easing.QuadOut.function
+                "quad-in-out" -> Easing.QuadInOut.function
+                "quart-in" -> Easing.QuartIn.function
+                "quart-out" -> Easing.QuartOut.function
+                "quart-in-out" -> Easing.QuartInOut.function
+                "quint-in" -> Easing.QuintIn.function
+                "quint-out" -> Easing.QuintOut.function
+                "quint-in-out" -> Easing.QuintInOut.function
+                "sine-in" -> Easing.SineIn.function
+                "sine-out" -> Easing.SineOut.function
+                "sine-in-out" -> Easing.SineInOut.function
+                "one" -> Easing.One.function
+                "zero" -> Easing.Zero.function
+                else -> error("unknown easing name '$easingCandidate'")
+            }
+        }
+
         fun handleKey(key: Map<String, Any>, path: String) {
 
             val prototype = (key["prototypes"] as? String)?.let {
@@ -298,42 +339,7 @@ open class Keyframer {
             val easing = try {
                 when (val easingCandidate = computed["easing"]) {
                     null -> Easing.Linear.function
-                    is String -> when (easingCandidate) {
-                        "linear" -> Easing.Linear.function
-                        "back-in" -> Easing.BackIn.function
-                        "back-out" -> Easing.BackOut.function
-                        "back-in-out" -> Easing.BackInOut.function
-                        "bounce-in" -> Easing.BounceIn.function
-                        "bounce-out" -> Easing.BounceOut.function
-                        "bounce-in-out" -> Easing.BackInOut.function
-                        "circ-in" -> Easing.CircIn.function
-                        "circ-out" -> Easing.CircOut.function
-                        "circ-in-out" -> Easing.CircInOut.function
-                        "cubic-in" -> Easing.CubicIn.function
-                        "cubic-out" -> Easing.CubicOut.function
-                        "cubic-in-out" -> Easing.CubicInOut.function
-                        "elastic-in" -> Easing.ElasticIn.function
-                        "elastic-out" -> Easing.ElasticInOut.function
-                        "elastic-in-out" -> Easing.ElasticOut.function
-                        "expo-in" -> Easing.ExpoIn.function
-                        "expo-out" -> Easing.ExpoOut.function
-                        "expo-in-out" -> Easing.ExpoInOut.function
-                        "quad-in" -> Easing.QuadIn.function
-                        "quad-out" -> Easing.QuadOut.function
-                        "quad-in-out" -> Easing.QuadInOut.function
-                        "quart-in" -> Easing.QuartIn.function
-                        "quart-out" -> Easing.QuartOut.function
-                        "quart-in-out" -> Easing.QuartInOut.function
-                        "quint-in" -> Easing.QuintIn.function
-                        "quint-out" -> Easing.QuintOut.function
-                        "quint-in-out" -> Easing.QuintInOut.function
-                        "sine-in" -> Easing.SineIn.function
-                        "sine-out" -> Easing.SineOut.function
-                        "sine-in-out" -> Easing.SineInOut.function
-                        "one" -> Easing.One.function
-                        "zero" -> Easing.Zero.function
-                        else -> error("unknown easing name '$easingCandidate'")
-                    }
+                    is String -> easingFunctionFromName(easingCandidate)
                     else -> error("unknown easing for '$easingCandidate'")
                 }
             } catch (e: IllegalStateException) {
@@ -349,19 +355,76 @@ open class Keyframer {
                     val channel = channels.getOrPut(channelCandidate.key) {
                         KeyframerChannel()
                     }
-                    expressionContext["v"] = channel.lastValue() ?: 0.0
-                    val value = try {
-                        when (val candidate = channelCandidate.value) {
-                            is Double -> candidate
-                            is String -> evaluateExpression(candidate, expressionContext, functions)
-                                    ?: error("unknown value format for key '${channelCandidate.key}' : $candidate")
-                            is Int -> candidate.toDouble()
-                            else -> error("unknown value type for key '${channelCandidate.key}' : $candidate")
+
+                    val lastValue = channel.lastValue() ?: 0.0
+                    expressionContext["v"] = lastValue
+
+                    val lastTime = (channel.lastTime()) ?: 0.0
+                    expressionContext["d"] = time - lastTime
+
+                    if (channelCandidate.value is Map<*, *>) {
+                        @Suppress("UNCHECKED_CAST")
+                        val valueMap = channelCandidate.value as Map<String, Any>
+
+                        val value = try {
+                            when (val candidate = valueMap["value"]) {
+                                null -> error("no value for '${channelCandidate.key}'")
+                                is Double -> candidate
+                                is String -> evaluateExpression(candidate, expressionContext, functions)
+                                        ?: error("unknown value format for key '${channelCandidate.key}' : $candidate")
+                                is Int -> candidate.toDouble()
+                                else -> error("unknown value type for key '${channelCandidate.key}' : $candidate")
+                            }
+                        } catch (e: ExpressionException) {
+                            throw ExpressionException("error in $path.'${channelCandidate.key}': ${e.message ?: ""}")
                         }
-                    } catch (e: ExpressionException) {
-                        throw ExpressionException("error in $path.'${channelCandidate.key}': ${e.message ?: ""}")
+
+                        val dictEasing = when (val candidate = valueMap["easing"]) {
+                            null -> easing
+                            is String -> easingFunctionFromName(candidate)
+                            else -> error("unknown easing for '$candidate'")
+                        }
+
+                        val dictDuration = try {
+                            when (val candidate = valueMap["duration"]) {
+                                null -> null
+                                is Double -> candidate
+                                is String -> evaluateExpression(candidate, expressionContext, functions)
+                                        ?: error("unknown value format for key '${channelCandidate.key}' : $candidate")
+                                is Int -> candidate.toDouble()
+                                else -> error("unknown value type for key '${channelCandidate.key}' : $candidate")
+                            }
+                        } catch (e: ExpressionException) {
+                            throw ExpressionException("error in $path.'${channelCandidate.key}': ${e.message ?: ""}")
+                        }
+
+                        if (dictDuration != null) {
+                            if (dictDuration <= 0.0) {
+                                println(lastTime)
+                                println(time + dictDuration)
+                                println(lastValue)
+                                channel.add(max(lastTime, time + dictDuration), lastValue, Easing.Linear.function, hold)
+                                channel.add(time, value, dictEasing, hold)
+                            } else {
+                                channel.add(time, lastValue, Easing.Linear.function, hold)
+                                channel.add(time + dictDuration, value, dictEasing, hold)
+                            }
+                        }
+
+                    } else {
+                        val value = try {
+                            when (val candidate = channelCandidate.value) {
+                                is Double -> candidate
+                                is String -> evaluateExpression(candidate, expressionContext, functions)
+                                        ?: error("unknown value format for key '${channelCandidate.key}' : $candidate")
+                                is Int -> candidate.toDouble()
+                                else -> error("unknown value type for key '${channelCandidate.key}' : $candidate")
+                            }
+                        } catch (e: ExpressionException) {
+                            throw ExpressionException("error in $path.'${channelCandidate.key}': ${e.message ?: ""}")
+                        }
+                        channel.add(time, value, easing, hold)
                     }
-                    channel.add(time, value, easing, hold)
                 }
             }
             lastTime = time + duration

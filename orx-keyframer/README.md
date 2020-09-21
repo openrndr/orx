@@ -47,7 +47,10 @@ What this allows you to do:
     "easing": "cubic-in-out",
     "x": 100.0,
     "y": 320.0,
-    "radius": 40
+    "radius": {
+      "value": 50.0,
+      "easing": "linear"
+    }   
   }
 ]
 ```
@@ -135,20 +138,6 @@ Supported functions in expressions:
   
 [Parameters and prototypes](src/demo/resources/demo-full-01.json)
 
-<!-- __demos__ >
-# Demos
-[DemoFull01Kt](src/demo/kotlin/DemoFull01Kt.kt
-![DemoFull01Kt](https://github.com/openrndr/orx/blob/media/orx-keyframer/images/DemoFull01Kt.png
-[DemoScrub01Kt](src/demo/kotlin/DemoScrub01Kt.kt
-![DemoScrub01Kt](https://github.com/openrndr/orx/blob/media/orx-keyframer/images/DemoScrub01Kt.png
-[DemoSimple01Kt](src/demo/kotlin/DemoSimple01Kt.kt
-![DemoSimple01Kt](https://github.com/openrndr/orx/blob/media/orx-keyframer/images/DemoSimple01Kt.png
-[DemoSimple02Kt](src/demo/kotlin/DemoSimple02Kt.kt
-![DemoSimple02Kt](https://github.com/openrndr/orx/blob/media/orx-keyframer/images/DemoSimple02Kt.png
-[DemoSimpleExpressions01Kt](src/demo/kotlin/DemoSimpleExpressions01Kt.kt
-![DemoSimpleExpressions01Kt](https://github.com/openrndr/orx/blob/media/orx-keyframer/images/DemoSimpleExpressions01Kt.png
-[DemoSimpleRepetitions01Kt](src/demo/kotlin/DemoSimpleRepetitions01Kt.kt
-![DemoSimpleRepetitions01Kt](https://github.com/openrndr/orx/blob/media/orx-keyframer/images/DemoSimpleRepetitions01Kt.png
 <!-- __demos__ -->
 ## Demos
 ### DemoFull01
