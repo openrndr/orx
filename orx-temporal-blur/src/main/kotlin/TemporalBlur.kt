@@ -81,6 +81,11 @@ class TemporalBlur : Extension {
      */
     var delinearizeOutput = true
 
+    /**
+     * multisampling setting
+     * */
+    var multisample: BufferMultisample = BufferMultisample.SampleCount(8)
+
     override fun beforeDraw(drawer: Drawer, program: Program) {
         val extensionOffset = program.extensions.indexOf(this)
         val extensionTail = program.extensions.drop(extensionOffset + 1)
@@ -132,7 +137,7 @@ class TemporalBlur : Extension {
         }
 
         if (image == null) {
-            image = renderTarget(program.width, program.height, multisample = BufferMultisample.SampleCount(8)) {
+            image = renderTarget(program.width, program.height, multisample = multisample) {
                 depthBuffer()
                 colorBuffer(type = ColorType.FLOAT32)
             }
