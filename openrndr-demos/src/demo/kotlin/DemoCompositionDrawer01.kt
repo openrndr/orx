@@ -2,7 +2,7 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.math.Vector2
 import org.openrndr.shape.drawComposition
-import org.openrndr.svg.svgNamespaceInkscape
+//import org.openrndr.svg.svgNamespaceInkscape
 import org.openrndr.svg.toSVG
 import org.openrndr.svg.writeSVG
 
@@ -22,15 +22,15 @@ fun main() {
                     }
                     // demonstrating how to set custom attributes on the CompositionNode
                     // these are stored in SVG
-                    layer.id = "Layer_2"
-                    layer.attributes["inkscape:label"] = "Layer 1"
-                    layer.attributes["inkscape:groupmode"] = "layer"
+//                    layer.id = "Layer_2"
+//                    layer.attributes["inkscape:label"] = "Layer 1"
+//                    layer.attributes["inkscape:groupmode"] = "layer"
                 }
                 // draw the composition to the screen
                 drawer.composition(composition)
 
                 // print the svg to the console
-                println(composition.toSVG(namespaces = listOf(svgNamespaceInkscape)))
+//                println(composition.toSVG(namespaces = listOf(svgNamespaceInkscape)))
             }
         }
     }
