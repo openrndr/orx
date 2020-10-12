@@ -1,5 +1,6 @@
 package org.openrndr.extra.shapes
 
+import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 import org.openrndr.shape.Segment
@@ -24,7 +25,18 @@ class BezierPatch(val points: List<List<Vector2>>) {
                 )
         )
 
-    private fun coeffs(t: Double): DoubleArray {
+    fun transform(transform: Matrix44) = BezierPatch(points.map { r ->
+        r.map { (transform * it.xy01).div.xy }
+    })
+
+    private fun coeffs2(t: Double): DoubleArray {
+        val it = 1.0 - t
+        val it2 = it * it
+        val t2 = t * t
+        return doubleArrayOf(it2, 2 * it * t, t2)
+    }
+
+    private fun coeffs3(t: Double): DoubleArray {
         val it = 1.0 - t
         val it2 = it * it
         val it3 = it2 * it
@@ -39,12 +51,43 @@ class BezierPatch(val points: List<List<Vector2>>) {
      * @param v a value between 0 and 1
      */
     fun position(u: Double, v: Double): Vector2 {
-        val csu = coeffs(u)
-        val csv = coeffs(v)
+        val csu = coeffs3(u)
+        val csv = coeffs3(v)
         var result = Vector2.ZERO
         for (j in 0 until 4) {
             for (i in 0 until 4) {
                 result += points[j][i] * csu[i] * csv[j]
+            }
+        }
+        return result
+    }
+
+    /**
+     * Return a gradient vector on the patch by using its u,v parameterization
+     * @param u a value between 0 and 1
+     * @param v a value between 0 and 1
+     */
+    fun gradient(u: Double, v: Double): Vector2 {
+        val f0 = List(4) { MutableList(3) { Vector2.ZERO } }
+        for (j in 0 until 4) {
+            for (i in 0 until 3) {
+                f0[j][i] = points[j][i+1] - points[j][i]
+            }
+        }
+
+        val f1 = List(3) { MutableList(3) { Vector2.ZERO } }
+        for (j in 0 until 3) {
+            for (i in 0 until 3) {
+                f1[j][i] = f0[j+1][i] - f0[j][i]
+            }
+        }
+
+        val csu = coeffs2(u)
+        val csv = coeffs2(v)
+        var result = Vector2.ZERO
+        for (j in 0 until 3) {
+            for (i in 0 until 3) {
+                result += f1[j][i] * csu[i] * csv[j]
             }
         }
         return result
@@ -57,7 +100,7 @@ class BezierPatch(val points: List<List<Vector2>>) {
     fun randomPoint(random: Random = Random.Default) = position(random.nextDouble(), random.nextDouble())
 
     fun horizontal(v: Double): ShapeContour {
-        val cs = coeffs(v)
+        val cs = coeffs3(v)
         val cps = Array(4) { Vector2.ZERO }
         for (j in 0 until 4) {
             for (i in 0 until 4) {
@@ -68,7 +111,7 @@ class BezierPatch(val points: List<List<Vector2>>) {
     }
 
     fun vertical(u: Double): ShapeContour {
-        val cs = coeffs(u)
+        val cs = coeffs3(u)
         val cps = Array(4) { Vector2.ZERO }
         for (j in 0 until 4) {
             for (i in 0 until 4) {
@@ -139,7 +182,7 @@ fun bezierPatch(shapeContour: ShapeContour, alpha: Double = 1.0 / 3.0): BezierPa
             listOf(c3.control[1], x00, x01, c1.control[0]),
             listOf(c3.control[0], x10, x11, c1.control[1]),
             listOf(c2.end, c2.control[1], c2.control[0], c2.start),
-            )
+    )
     return BezierPatch(cps)
 }
 
@@ -157,7 +200,7 @@ fun bezierPatch(corners: List<Vector2>, alpha: Double = 1.0 / 3.0): BezierPatch 
 
 /**
  * Distort a shape contour
-  */
+ */
 fun BezierPatch.distort(shapeContour: ShapeContour, referenceRectangle: Rectangle = shapeContour.bounds): ShapeContour {
     val distortedSegments = shapeContour.segments.map {
         val c = it.cubic
