@@ -71,14 +71,14 @@ class BezierPatch(val points: List<List<Vector2>>) {
         val f0 = List(4) { MutableList(3) { Vector2.ZERO } }
         for (j in 0 until 4) {
             for (i in 0 until 3) {
-                f0[j][i] = points[j][i+1] - points[j][i]
+                f0[j][i] = points[j][i + 1] - points[j][i]
             }
         }
 
         val f1 = List(3) { MutableList(3) { Vector2.ZERO } }
         for (j in 0 until 3) {
             for (i in 0 until 3) {
-                f1[j][i] = f0[j+1][i] - f0[j][i]
+                f1[j][i] = f0[j + 1][i] - f0[j][i]
             }
         }
 
@@ -138,7 +138,25 @@ class BezierPatch(val points: List<List<Vector2>>) {
 
         return bezierPatch(d0, d1, d2, d3).transposed
     }
+
+    val contour: ShapeContour = ShapeContour(
+            listOf(
+                    Segment(points[0][0], points[0][1], points[0][2], points[0][3]),
+                    Segment(points[0][3], points[1][3], points[2][3], points[3][3]),
+                    Segment(points[3][3], points[3][2], points[3][1], points[3][0]),
+                    Segment(points[3][0], points[2][0], points[1][0], points[0][0]),
+            ), true)
+
+    operator fun times(scale: Double) = BezierPatch(points.map { j -> j.map { i -> i * scale } })
+    operator fun div(scale: Double) = BezierPatch(points.map { j -> j.map { i -> i / scale } })
+    operator fun plus(right: BezierPatch) =
+            BezierPatch(List(4) { j -> List(4) { i -> points[j][i] + right.points[j][i] } })
+
+    operator fun minus(right: BezierPatch) =
+            BezierPatch(List(4) { j -> List(4) { i -> points[j][i] - right.points[j][i] } })
+
 }
+
 
 /**
  * Create a cubic bezier patch from 4 segments. The control points of the segments are used in row-wise fashion
