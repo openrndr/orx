@@ -117,10 +117,16 @@ fun loadOBJasVertexBuffer(lines: List<String>): VertexBuffer {
     return vertexBuffer
 }
 
-fun loadOBJ(file: File): Map<String, List<Triangle>> = loadOBJ(file.readLines())
-fun loadOBJ(url: URL): Map<String, List<Triangle>> = loadOBJ(url.readText().split("\n"))
+fun loadOBJ(file: File) = loadOBJ(file.readLines())
+fun loadOBJEx(file: File) = loadOBJEx(file.readLines())
+fun loadOBJ(url: URL) = loadOBJ(url.readText().split("\n"))
+fun loadOBJEx(url: URL) = loadOBJEx(url.readText().split("\n"))
 
-fun loadOBJ(lines: List<String>): Map<String, List<Triangle>> {
+class OBJData(val positions: List<Vector3>, val normals: List<Vector3>, val textureCoords: List<Vector2>)
+
+fun loadOBJ(lines: List<String>): Map<String, List<Triangle>> = loadOBJEx(lines).second
+
+fun loadOBJEx(lines: List<String>): Pair<OBJData, Map<String, List<Triangle>>> {
     val meshes = mutableMapOf<String, List<Triangle>>()
     val positions = mutableListOf<Vector3>()
     val normals = mutableListOf<Vector3>()
@@ -140,7 +146,7 @@ fun loadOBJ(lines: List<String>): Map<String, List<Triangle>> {
                     "vt" -> textureCoords += Vector2(tokens[1].toDouble(), tokens[2].toDouble())
                     "g" -> {
                         activeMesh = mutableListOf()
-                        meshes[tokens.getOrNull(1)?:"no-name-${meshes.size}"] = activeMesh
+                        meshes[tokens.getOrNull(1) ?: "no-name-${meshes.size}"] = activeMesh
                     }
                     "f" -> {
                         val indices = tokens.subList(1, tokens.size).map { it.split("/") }.map {
@@ -185,5 +191,5 @@ fun loadOBJ(lines: List<String>): Map<String, List<Triangle>> {
             }
         }
     }
-    return meshes
+    return Pair(OBJData(positions, normals, textureCoords), meshes)
 }
