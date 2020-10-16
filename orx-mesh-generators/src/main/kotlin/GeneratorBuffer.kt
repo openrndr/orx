@@ -4,6 +4,7 @@ import org.openrndr.draw.VertexBuffer
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
+import org.openrndr.math.transforms.normalMatrix
 import org.openrndr.math.transforms.rotate
 import org.openrndr.math.transforms.transform
 import org.openrndr.shape.Shape
@@ -24,8 +25,15 @@ class GeneratorBuffer {
     }
 
     fun transform(m: Matrix44) {
+        val nm = normalMatrix(m)
         data = data.map {
-            VertexData((m * (it.position.xyz1)).xyz, (m * (it.normal.xyz0)).xyz, it.texCoord)
+            VertexData((m * (it.position.xyz1)).xyz, (nm * (it.normal.xyz0)).xyz, it.texCoord)
+        }.toMutableList()
+    }
+
+    fun transformUV(m: Matrix44) {
+        data = data.map {
+            VertexData(it.position, it.normal, (m * (it.texCoord.xy01)).xy)
         }.toMutableList()
     }
 
@@ -124,6 +132,11 @@ fun GeneratorBuffer.cap(sides: Int, radius: Double, enveloppe: List<Vector2>) {
 fun GeneratorBuffer.revolve(sides: Int, length: Double, enveloppe: List<Vector2>) {
     generateRevolve(sides, length, enveloppe, this::write)
 }
+
+fun GeneratorBuffer.plane(center: Vector3, right: Vector3, forward: Vector3, up: Vector3, width: Double = 1.0, height: Double = 1.0,
+widthSegments: Int = 1, heightSegments: Int= 1) =
+        generatePlane(center, right, forward, up, width, height, widthSegments, heightSegments, this::write)
+
 
 fun GeneratorBuffer.extrudeShape(
         baseTriangles: List<Vector2>,
