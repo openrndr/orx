@@ -25,6 +25,7 @@ project.ext {
     gsonVersion = "2.8.6"
     antlrVersion = "4.8-1"
     tensorflowVersion = "0.2.0"
+    mklDnnVersion = "0.21.5-1.5.4"
 }
 
 switch (org.gradle.internal.os.OperatingSystem.current()) {

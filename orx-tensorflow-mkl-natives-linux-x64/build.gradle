@@ -1,0 +1,4 @@
+dependencies {
+    runtimeOnly "org.bytedeco:mkl-dnn:$mklDnnVersion:linux-x86_64"
+    runtimeOnly "org.tensorflow:tensorflow-core-api:$tensorflowVersion:linux-x86_64-mkl"
+}
