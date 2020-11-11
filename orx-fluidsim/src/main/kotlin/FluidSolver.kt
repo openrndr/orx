@@ -2,13 +2,7 @@
 package org.openrndr.extra.fluidsim
 
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.ColorBuffer
-import org.openrndr.draw.ColorFormat
-import org.openrndr.draw.ColorType
-import org.openrndr.draw.Drawer
-import org.openrndr.draw.colorBuffer
-import org.openrndr.draw.renderTarget
-import org.openrndr.draw.shadeStyle
+import org.openrndr.draw.*
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 import kotlin.math.pow
@@ -38,6 +32,10 @@ class FluidSolver(
     val divergence  =    colorBuffer(width, height, format = ColorFormat.R,    type = ColorType.FLOAT32)
 
     init {
+        reset()
+    }
+
+    fun reset() {
         val clearColor = ColorRGBa.TRANSPARENT
         velocity.fill(clearColor)
         density.fill(clearColor)
@@ -190,10 +188,10 @@ class FluidSolver(
                     // no-slip (zero) velocity boundary conditions
                     // use negative center velocity if neighbor is an obstacle
                     vec4 oN = texture(p_obstacleN, pos);
-                    vT = mix(vT, -vC, oN.x);  // if(oT > 0.0) vT = -vC;
-                    vB = mix(vB, -vC, oN.y);  // if(oB > 0.0) vB = -vC;
-                    vR = mix(vR, -vC, oN.z);  // if(oR > 0.0) vR = -vC;
-                    vL = mix(vL, -vC, oN.w);  // if(oL > 0.0) vL = -vC;
+                    vT = mix(vT, -vC, oN.x);
+                    vB = mix(vB, -vC, oN.y);
+                    vR = mix(vR, -vC, oN.z);
+                    vL = mix(vL, -vC, oN.w);
                       
                     x_fill.r = p_halfrdx  * ((vR.x - vL.x) + (vT.y - vB.y));
   
@@ -287,7 +285,7 @@ class FluidSolver(
                     x_fill.rg = vOld - grad;
 
                 """.trimIndent()
-                parameter("halfrdx", 0.5 / params.gridScale)
+                parameter("halfrdx", 1.0 / params.gridScale)
                 parameter("gradientMag", params.gradientScale)
                 parameter("pressure", pressure.src())
                 parameter("velocity", velocity.src())
@@ -299,7 +297,7 @@ class FluidSolver(
         velocity.swap()
     }
 
-    fun addVelocity(drawer: Drawer, pos: Vector2, vel: Vector2, radius: Double, blendMode: Int, mix: Double = 0.5) {
+    fun addVelocity(drawer: Drawer, pos: Vector2, vel: Vector2, radius: Double, strength: Double = 0.5) {
         drawer.isolated(velocity) {
             shadeStyle = shadeStyle {
                 fragmentTransform = """
@@ -310,36 +308,28 @@ class FluidSolver(
                     float dist = distance(mousePos, pos);
                     
                     if (dist < p_radius) {
-                        float dist_norm = 1.0 - clamp( dist / p_radius, 0.0, 1.0);
-
-                        if (p_blendmode == 0) {
-                            x_fill.rg = p_vel;
-                        }
-                        if (p_blendmode == 1) {
-                            float falloff = clamp(sqrt(dist_norm * 0.1), 0, 1);
-                            x_fill.rg = vOld + p_vel * falloff;
-                        }
-                        if (p_blendmode == 2) {
-                            vec2 vNew = p_vel * dist_norm;
-                            if (length(vOld) > length(vNew)) {
-                                x_fill.rg = vOld;
-                            } else {
-                                x_fill.rg = mix(vOld, vNew, p_mix);
-                            }
-                        }
+                        float dist_norm = 1.0 - dist/p_radius;
+                        float falloff = smoothstep(0.0, 1.0, dist_norm);
+                        x_fill.rg = mix(vOld, p_vel, p_strength * falloff);
                     } else {
                         x_fill.rg = vOld;
                     }
                 """.trimIndent()
                 parameter("obstacleC", obstacleC)
                 parameter("velocityTexture", velocity.src())
-                parameter("blendmode", blendMode)
                 parameter("radius", radius / fluidBounds.width)
                 parameter("pos", pos)
                 parameter("vel", vel)
-                parameter("mix", mix)
+                parameter("strength", strength)
             }
             rectangle(fluidBounds)
+        }
+        velocity.swap()
+    }
+
+    inline fun updateFluidVelocityBuffer(drawer: Drawer, block: Drawer.() -> Unit) {
+        drawer.isolated(velocity) {
+            block()
         }
         velocity.swap()
     }
@@ -373,8 +363,23 @@ class FluidSolver(
         density.swap()
     }
 
-    private inline fun Drawer.isolated(buffer: PingPongBuffer, block: Drawer.() -> Unit) {
-        isolated(buffer.dst(), block)
+    inline fun updateFluidColorBuffer(drawer: Drawer, block: Drawer.() -> Unit) {
+        drawer.isolated(density) {
+            block()
+        }
+        density.swap()
+    }
+
+    inline fun Drawer.isolated(buffer: PingPongBuffer, block: Drawer.() -> Unit) {
+        renderTarget.attach(buffer.dst())
+        renderTarget.bind()
+        pushTransforms()
+        pushStyle()
+        block()
+        popStyle()
+        popTransforms()
+        renderTarget.unbind()
+        renderTarget.detachColorAttachments()
     }
 
     private inline fun Drawer.isolated(buffer: ColorBuffer, block: Drawer.() -> Unit) {
@@ -388,6 +393,5 @@ class FluidSolver(
         renderTarget.unbind()
         renderTarget.detachColorAttachments()
     }
-
 
 }

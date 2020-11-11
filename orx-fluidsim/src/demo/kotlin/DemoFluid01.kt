@@ -25,6 +25,7 @@ fun main() = application {
             timestep = 0.125
         }
 
+        // fill the fluid with white initially
         fluidSolver.density.fill(ColorRGBa.WHITE)
 
         var mousePosition: Vector2? = null
@@ -46,9 +47,9 @@ fun main() = application {
 
                     val scaledPosition = mousePosition!! / fluidSolver.fluidBounds.dimensions
                     val scaledVelocity = mouseDrag!! * Vector2(150.0, -150.0)
-                    fluidSolver.addVelocity(drawer, scaledPosition, scaledVelocity, 20.0, 1, 0.5)
+                    fluidSolver.addVelocity(drawer, scaledPosition, scaledVelocity, 20.0)
 
-                    val color = ColorHSLa(360 * (seconds % 5), 0.8, 0.5).toRGBa()
+                    val color = ColorHSLa(360 * (seconds % 3) / 3.0, 0.8, 0.5).toRGBa()
                     fluidSolver.addFluidColor(drawer, scaledPosition, color, 20.0)
 
                     mousePosition = null
