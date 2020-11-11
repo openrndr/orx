@@ -16,6 +16,7 @@ A growing library of assorted data structures, algorithms and utilities.
 | [`orx-easing`](orx-easing/) | Provides easing functions for smooth animation or non-linear interpolation. |
 | [`orx-file-watcher`](orx-file-watcher/) | Monitor files on disk and auto-reload them if they change. |
 | [`orx-filter-extension`](orx-filter-extension/) | To apply graphics filters on every animation frame using `extend(FILTER_NAME())`. |
+| [`orx-fluidsim`](orx-fluidsim/) | A fast, stable fluid simulation that runs on the GPU. |
 | [`orx-fx`](orx-fx/) | Ready-to-use visual effects or filters. Most include [orx-parameters](https://github.com/openrndr/orx/tree/master/orx-parameters) annotations  so they can be easily controlled via orx-gui. |
 | [`orx-glslify`](orx-glslify/) | Load glslify compatible shaders from [npm](https://www.npmjs.com/search?q=glslify). |
 | [`orx-gradient-descent`](orx-gradient-descent/) | Finds equation inputs that output a minimum value: easy to use gradient descent based minimizer. |
