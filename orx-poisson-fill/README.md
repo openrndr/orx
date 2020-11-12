@@ -4,7 +4,3 @@ Post processing effect that fills transparent parts of the image interpolating t
 
 <!-- __demos__ -->
 ## Demos
-### DemoPoissonFill01
-[source code](src/demo/kotlin/DemoPoissonFill01.kt)
-
-![DemoPoissonFill01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-poisson-fill/images/DemoPoissonFill01Kt.png)
