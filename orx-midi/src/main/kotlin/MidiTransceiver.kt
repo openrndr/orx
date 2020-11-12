@@ -116,10 +116,10 @@ class MidiTransceiver(val receiverDevice: MidiDevice, val transmitterDevicer: Mi
         })
     }
 
-    val controlChanged = Event<MidiEvent>("midi-transceiver::controller-changed").signature(MidiEvent::class.java)
-    val programChanged = Event<MidiEvent>("midi-transceiver::program-changed").signature(MidiEvent::class.java)
-    val noteOn = Event<MidiEvent>("midi-transceiver::note-on").signature(MidiEvent::class.java)
-    val noteOff = Event<MidiEvent>("midi-transceiver::note-off").signature(MidiEvent::class.java)
+    val controlChanged = Event<MidiEvent>("midi-transceiver::controller-changed")
+    val programChanged = Event<MidiEvent>("midi-transceiver::program-changed")
+    val noteOn = Event<MidiEvent>("midi-transceiver::note-on")
+    val noteOff = Event<MidiEvent>("midi-transceiver::note-off")
 
     fun controlChange(channel: Int, control: Int, value: Int) {
         try {

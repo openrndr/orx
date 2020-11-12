@@ -87,7 +87,7 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
                     require(localBufferView.byteLength != null)
                     localBuffer.position(localBufferView.byteOffset)
                     localBuffer.limit(localBufferView.byteOffset + localBufferView.byteLength)
-                    val cb = ColorBuffer.fromBuffer(localBuffer)
+                    val cb = ColorBuffer.fromBuffer(localBuffer, null)
                     cb.generateMipmaps()
                     cb.filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
                     cb.anisotropy = 100.0
