@@ -1,0 +1,3 @@
+dependencies {
+    runtimeOnly "org.bytedeco:librealsense2:$librealsense2Version:linux-x86_64"
+}

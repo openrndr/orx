@@ -18,10 +18,11 @@ def openrndrUseSnapshot = false
 apply plugin: 'org.jetbrains.dokka'
 
 project.ext {
-    openrndrVersion = openrndrUseSnapshot? "0.4.0-SNAPSHOT" : "0.3.44"
+    openrndrVersion = openrndrUseSnapshot? "0.4.0-SNAPSHOT" : "0.3.45.rc-1"
     kotlinVersion = "1.4.0"
     spekVersion = "2.0.12"
     libfreenectVersion = "0.5.7-1.5.4"
+    librealsense2Version = "2.29.0-1.5.4"
     gsonVersion = "2.8.6"
     antlrVersion = "4.8-1"
     tensorflowVersion = "0.2.0"
@@ -200,7 +201,8 @@ task collectScreenshots {
                 continue
             if (sub.name == "orx-video-profiles")
                 continue
-
+            if (sub.name == "orx-realsense2")
+                continue
             def set = sub.sourceSets.demo
             def ucl = new URLClassLoader(set.runtimeClasspath.collect { it.toURI().toURL() } as URL[])
 
