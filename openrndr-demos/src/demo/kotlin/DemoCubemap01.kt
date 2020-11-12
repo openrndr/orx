@@ -9,7 +9,7 @@ import org.openrndr.extras.meshgenerators.boxMesh
 fun main() = application {
     program {
 
-        val cubemap = Cubemap.fromUrl("file:demo-data/cubemaps/garage_iem.dds", session = Session.active)
+        val cubemap = Cubemap.fromUrl("file:demo-data/cubemaps/garage_iem.dds", null, session = Session.active)
         val cube = boxMesh()
         extend(Orbital()) {
 
