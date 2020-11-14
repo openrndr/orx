@@ -18,7 +18,7 @@ def openrndrUseSnapshot = false
 apply plugin: 'org.jetbrains.dokka'
 
 project.ext {
-    openrndrVersion = openrndrUseSnapshot? "0.4.0-SNAPSHOT" : "0.3.45-rc.1"
+    openrndrVersion = openrndrUseSnapshot? "0.4.0-SNAPSHOT" : "0.3.45-rc.2"
     kotlinVersion = "1.4.0"
     spekVersion = "2.0.12"
     libfreenectVersion = "0.5.7-1.5.4"
