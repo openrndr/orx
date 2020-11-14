@@ -54,3 +54,7 @@ extend(NoClear()) {
 NB! any submitted _lambda expression_ must be valid within the `renderTarget` context.
 <!-- __demos__ -->
 ## Demos
+### DemoNoClear
+[source code](src/demo/kotlin/DemoNoClear.kt)
+
+![DemoNoClearKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-no-clear/images/DemoNoClearKt.png)
