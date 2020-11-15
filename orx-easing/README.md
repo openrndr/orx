@@ -34,7 +34,3 @@ val et = Easing.QuadIn.function(t, 0.0, 1.0, 1.0)
 
 <!-- __demos__ -->
 ## Demos
-### DemoEasings01
-[source code](src/demo/kotlin/DemoEasings01.kt)
-
-![DemoEasings01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-easing/images/DemoEasings01Kt.png)

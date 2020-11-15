@@ -19,11 +19,6 @@ Collection of 2D shape generators (polygon, star, rounded rectangle) and shape m
 
 ![DemoBezierPatch03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoBezierPatch03Kt.png)
 
-### DemoBezierPatch04
-[source code](src/demo/kotlin/DemoBezierPatch04.kt)
-
-![DemoBezierPatch04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoBezierPatch04Kt.png)
-
 ### DemoRegularPolygon
 [source code](src/demo/kotlin/DemoRegularPolygon.kt)
 
