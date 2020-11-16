@@ -5,6 +5,7 @@ import org.bytedeco.librealsense2.*
 import org.bytedeco.librealsense2.global.realsense2.*
 import org.openrndr.draw.ColorBuffer
 import org.openrndr.events.Event
+import org.openrndr.math.Vector3
 import java.nio.ByteBuffer
 
 private val rs2Context by lazy {
@@ -26,7 +27,6 @@ enum class RS2DepthFormat {
     UINT16
 }
 class RS2SensorDescription(private val deviceList: rs2_device_list, private val deviceIndex: Int) {
-
     /**
      * open realsense sensor from description entry
      */
@@ -73,11 +73,65 @@ class RS2FrameEvent(private val frame: rs2_frame, val frameWidth: Int, val frame
     }
 }
 
+/**
+ * Distortion model
+ */
+enum class DistortionModel {
+    NONE,
+    FTHETA,
+    BROWN_CONRADY,
+    INVERSE_BROWN_CONRADY,
+    KANNALA_BRANDT4,
+    MODIFIED_BROWN_CONRADY
+}
+
+/**
+ * Stream intrinsics
+ */
+data class Intrinsics(
+        /** width of the stream image in pixels */
+        val width: Int,
+        /** height of the stream image in pixels */
+        val height: Int,
+        /** horizontal coordinate of the principal point of the image, as a pixel offset from the left edge */
+        val ppx: Double,
+        /** vertical coordinate of the principal point of the image, as a pixel offset from the left edge */
+        val ppy: Double,
+        /** focal length of the image plane, as a multiple of pixel width */
+        val fx: Double,
+        /** focal length of the image plane, as a multiple of pixel height */
+        val fy: Double,
+        /** distortion model of the image */
+        val model: DistortionModel
+        ) {
+
+    fun unproject(x: Double, y: Double, depth: Double) : Vector3 {
+        if (model == DistortionModel.BROWN_CONRADY) {
+            return Vector3(((x - ppx) / fx) * depth , ((y - ppy) / fy) * depth, depth)
+        } else {
+            error("unsupported distortion model $model")
+        }
+    }
+}
+
+/**
+ * Stream descriptor
+ */
+data class Stream(val intrinsics: Intrinsics) {
+
+}
+
+
 abstract class Sensor {
     /**
      * depth frame received event, triggered from [waitForFrames]
      */
     val depthFrameReceived = Event<RS2FrameEvent>()
+
+    /**
+     * a list of [Stream]s for the [Sensor]
+     */
+    abstract val streams: List<Stream>
 
     /**
      * wait for frames to arrives
@@ -96,6 +150,9 @@ class DummySensor : Sensor() {
 
     override fun destroy() {
     }
+
+    override val streams: List<Stream>
+        get() = emptyList()
 }
 
 class RS2Sensor(
@@ -134,6 +191,43 @@ class RS2Sensor(
         rs2_pipeline_stop(pipeline, error)
         error.check()
     }
+
+    override val streams: List<Stream> by lazy {
+        val error = rs2_error()
+        val streamProfileList = rs2_pipeline_profile_get_streams(pipelineProfile, error)
+        error.check()
+        val streamProfileCount = rs2_get_stream_profiles_count(streamProfileList, error)
+        error.check()
+        val result = (0 until streamProfileCount).map {
+            val streamProfile = rs2_get_stream_profile(streamProfileList, it, error)
+            error.check()
+            val intrinsics = rs2_intrinsics()
+            rs2_get_video_stream_intrinsics(streamProfile, intrinsics, error)
+            val result = Stream(
+                    Intrinsics(
+                            width = intrinsics.width(),
+                            height = intrinsics.height(),
+                            ppx = intrinsics.ppx().toDouble(),
+                            ppy = intrinsics.ppy().toDouble(),
+                            fx = intrinsics.fx().toDouble(),
+                            fy = intrinsics.fy().toDouble(),
+                            model = when (intrinsics.model()) {
+                                RS2_DISTORTION_NONE -> DistortionModel.NONE
+                                RS2_DISTORTION_FTHETA -> DistortionModel.FTHETA
+                                RS2_DISTORTION_BROWN_CONRADY -> DistortionModel.BROWN_CONRADY
+                                RS2_DISTORTION_INVERSE_BROWN_CONRADY -> DistortionModel.INVERSE_BROWN_CONRADY
+                                RS2_DISTORTION_KANNALA_BRANDT4 -> DistortionModel.KANNALA_BRANDT4
+                                RS2_DISTORTION_MODIFIED_BROWN_CONRADY -> DistortionModel.MODIFIED_BROWN_CONRADY
+                                else -> error("unsupported distortion model for stream")
+                            }
+                            )
+            )
+            result
+        }
+        rs2_delete_stream_profiles_list(streamProfileList)
+        result
+    }
+
 
     companion object {
         /**
