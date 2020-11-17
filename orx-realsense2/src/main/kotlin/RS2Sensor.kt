@@ -26,7 +26,7 @@ private fun rs2_error.check() {
 enum class RS2DepthFormat {
     UINT16
 }
-class RS2SensorDescription(private val deviceList: rs2_device_list, private val deviceIndex: Int) {
+data class RS2SensorDescription(private val deviceList: rs2_device_list, private val deviceIndex: Int) {
     /**
      * open realsense sensor from description entry
      */
@@ -46,6 +46,9 @@ class RS2SensorDescription(private val deviceList: rs2_device_list, private val 
 
         val config = rs2_create_config(error)
         error.check()
+
+        val info = rs2_get_device_info(device, RS2_CAMERA_INFO_SERIAL_NUMBER, error)
+        rs2_config_enable_device(config, info, error)
 
         rs2_config_enable_stream(config, RS2_STREAM_DEPTH, 0, depthWidth, depthHeight, RS2_FORMAT_Z16, depthFps, error)
         error.check()
@@ -128,6 +131,9 @@ abstract class Sensor {
      */
     val depthFrameReceived = Event<RS2FrameEvent>()
 
+
+    abstract val serial: String
+
     /**
      * a list of [Stream]s for the [Sensor]
      */
@@ -145,6 +151,8 @@ abstract class Sensor {
 }
 
 class DummySensor : Sensor() {
+    override val serial: String = "DummySensor-${System.identityHashCode(this)}"
+
     override fun waitForFrames() {
     }
 
@@ -161,6 +169,16 @@ class RS2Sensor(
         private val pipelineProfile: rs2_pipeline_profile
 
 ) : Sensor() {
+
+    override val serial: String by lazy {
+        val error = rs2_error()
+        val info = rs2_get_device_info(device, RS2_CAMERA_INFO_SERIAL_NUMBER, error)
+        val serial = info.string
+        error.close()
+        info.close()
+        serial
+    }
+
     override fun waitForFrames() {
         val error = rs2_error()
         val frames = rs2_pipeline_wait_for_frames(pipeline, RS2_DEFAULT_TIMEOUT, error)
