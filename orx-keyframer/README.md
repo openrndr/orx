@@ -145,6 +145,11 @@ Supported functions in expressions:
 
 ![DemoFull01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-keyframer/images/DemoFull01Kt.png)
 
+### DemoScrub01
+[source code](src/demo/kotlin/DemoScrub01.kt)
+
+![DemoScrub01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-keyframer/images/DemoScrub01Kt.png)
+
 ### DemoSimple01
 [source code](src/demo/kotlin/DemoSimple01.kt)
 
