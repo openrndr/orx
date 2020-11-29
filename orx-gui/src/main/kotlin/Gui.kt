@@ -72,12 +72,23 @@ class GUI : Extension {
     private var onChangeListener: ((name: String, value: Any?) -> Unit)? = null
     override var enabled = true
 
-    private var visible = true
+    var visible = true
+    set(value) {
+        if (field != value) {
+            field = value
+            if (field) {
+                panel?.body?.classes?.remove(collapsed)
+            } else {
+                panel?.body?.classes?.add(collapsed)
+            }
+            sidebarState().hidden = !field
+        }
+    }
 
     var compartmentsCollapsedByDefault = true
     var doubleBind = false
 
-    private lateinit var panel: ControlManager
+    private var panel: ControlManager? = null
 
     // Randomize button
     private var shiftDown = false
@@ -95,12 +106,8 @@ class GUI : Extension {
                 println("f11 pressed")
                 visible = !visible
 
-                if(visible) {
-                    panel.body!!.classes.remove(collapsed)
-                } else {
-                    panel.body!!.classes.add(collapsed)
-                }
-                sidebarState().hidden = !visible
+
+
             }
 
             if (it.key == KEY_LEFT_SHIFT) {
@@ -341,13 +348,9 @@ class GUI : Extension {
         }
 
         visible = !sidebarState().hidden
-        if(visible) {
-            panel.body!!.classes.remove(collapsed)
-        } else {
-            panel.body!!.classes.add(collapsed)
-        }
 
-        program.extend(panel)
+
+        program.extend(panel ?: error("no panel"))
     }
 
     /* 2) control creation. create control, set label, set range, setup event-handler, load values */
