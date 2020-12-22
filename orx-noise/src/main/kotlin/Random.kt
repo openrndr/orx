@@ -54,6 +54,18 @@ object Random {
         seed = "${seedBase}-${seedTracking}"
     }
 
+    fun isolated(fn: Random.() -> Unit) {
+        val state = rnd
+        val currentSeed = seed
+
+        resetState()
+
+        this.fn()
+
+        seed = currentSeed
+        rnd = state
+    }
+
     fun double(min: Double = -1.0, max: Double = 1.0): Double {
         return Double.uniform(min, max, rnd)
     }
