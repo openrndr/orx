@@ -26,9 +26,9 @@ fun main() = application {
                 translate(width * 0.5, height * 0.5)
                 fill = null
                 stroke = ColorRGBa.BLACK
-                lineJoin = LineJoin.ROUND
                 contour(contour)
                 fill = ColorRGBa.PINK.opacify(0.3)
+
                 circles(ints.map { it.position }, 10.0)
             }
         }
