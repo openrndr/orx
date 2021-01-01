@@ -29,8 +29,12 @@ open class ChataigneOSC(
 
         init {
             osc.listen(key) {
-                val c = it[0] as Color
-                currentColor = ColorRGBa(c.red / 255.0, c.green / 255.0, c.blue / 255.0, c.alpha / 255.0)
+                val red = it[0] as Float
+                val green = it[1] as Float
+                val blue = it[2] as Float
+                val alpha = it[3] as Float
+
+                currentColor = ColorRGBa(red.toDouble(), green.toDouble(), blue.toDouble(), alpha.toDouble())
             }
         }
 
