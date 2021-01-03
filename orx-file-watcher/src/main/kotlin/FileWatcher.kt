@@ -5,6 +5,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import mu.KotlinLogging
 import org.openrndr.Program
 import org.openrndr.launch
 import java.io.File
@@ -13,6 +14,7 @@ import java.nio.file.Path
 import java.nio.file.StandardWatchEventKinds
 import java.nio.file.WatchKey
 import kotlin.concurrent.thread
+private val logger = KotlinLogging.logger {}
 
 class FileWatcher(private val program: Program, val file: File, private val onChange: (File) -> Unit) {
     val path = file.absoluteFile.toPath()
@@ -53,7 +55,9 @@ fun <T> watchFile(program: Program, file: File, transducer: (File) -> T): () -> 
         try {
             result = transducer(file)
         } catch (e: Throwable) {
-            e.printStackTrace()
+            logger.error(e) {
+                """exception while transducing file"""
+            }
         }
     }
 
@@ -87,7 +91,7 @@ fun <T> (() -> T).triggerChange() {
 /**
  * add watcher to file watcher
  */
-fun <T, R> (() -> T).watch(transducer: (T) -> R):()->R {
+fun <T, R> (() -> T).watch(transducer: (T) -> R): () -> R {
 
     var result = transducer(this())
 
@@ -141,11 +145,8 @@ fun main() {
     val a = watchFile(Program(), File("README.md")) {
         it.readText()
     }
-
-
     a.stop()
     a.triggerChange()
-
     while (true) {
         println(a())
         Thread.sleep(2000)
