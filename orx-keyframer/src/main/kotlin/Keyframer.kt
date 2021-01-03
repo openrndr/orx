@@ -400,9 +400,6 @@ open class Keyframer {
 
                         if (dictDuration != null) {
                             if (dictDuration <= 0.0) {
-                                println(lastTime)
-                                println(time + dictDuration)
-                                println(lastValue)
                                 channel.add(max(lastTime, time + dictDuration), lastValue, Easing.Linear.function, hold)
                                 channel.add(time, value, dictEasing, hold)
                             } else {
