@@ -1,0 +1,25 @@
+[
+  {
+    "time": 0.0,
+    "x": 320.0,
+    "y": 240.0
+  },
+  {
+    "time": 10.0,
+    "easing": "cubic-in-out",
+    "x": {
+      "envelope": [0.5, 1.0],
+      "value": 0.0
+    },
+    "y": {
+      "envelope": [0.4, 1.0],
+      "value": 0.0
+    }
+  },
+  {
+    "time": 20.0,
+    "x": 640.0,
+    "y": 480.0,
+    "easing": "cubic-in-out"
+  }
+]

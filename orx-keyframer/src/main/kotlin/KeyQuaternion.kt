@@ -14,12 +14,8 @@ class KeyframerChannelQuaternion {
         return 0.0
     }
 
-    fun add(time: Double, value: Quaternion?, easing: EasingFunction = Easing.Linear.function, jump: Hold = Hold.HoldNone) {
-        if (jump == Hold.HoldAll || (jump == Hold.HoldSet && value != null)) {
-            lastValue()?.let {
-                keys.add(KeyQuaternion(time, it, Easing.Linear.function))
-            }
-        }
+    fun add(time: Double, value: Quaternion?, easing: EasingFunction = Easing.Linear.function) {
+
         value?.let {
             keys.add(KeyQuaternion(time, it, easing))
         }

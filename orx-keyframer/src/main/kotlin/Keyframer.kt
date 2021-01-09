@@ -14,7 +14,6 @@ import java.lang.IllegalStateException
 import java.lang.NullPointerException
 import java.net.URL
 import kotlin.math.max
-import kotlin.math.roundToInt
 import kotlin.reflect.KProperty
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
@@ -258,7 +257,6 @@ open class Keyframer {
         expressionContext.putAll(parameters)
         expressionContext["t"] = 0.0
 
-
         fun easingFunctionFromName(easingCandidate: String): EasingFunction {
             return when (easingCandidate) {
                 "linear" -> Easing.Linear.function
@@ -346,9 +344,20 @@ open class Keyframer {
                 throw ExpressionException("error in $path.'easing': ${e.message ?: ""}")
             }
 
-            val hold = Hold.HoldNone
+            val envelope = try {
+                when (val candidate = computed["envelope"]) {
+                    null -> defaultEnvelope
+                    is DoubleArray -> candidate
+                    is List<*> -> candidate.map { it.toString().toDouble() }.toDoubleArray()
+                    is Array<*> -> candidate.map { it.toString().toDouble() }.toDoubleArray()
+                    else -> error("unknown envelope for '$candidate")
+                }
+            } catch (e: IllegalStateException) {
+                throw ExpressionException("error in $path.'envelope': ${e.message ?: ""}")
+            }
 
-            val reservedKeys = setOf("time", "easing", "hold")
+
+            val reservedKeys = setOf("time", "easing", "envelope")
 
             for (channelCandidate in computed.filter { it.key !in reservedKeys }) {
                 if (channelCandidate.key in channelKeys) {
@@ -385,6 +394,14 @@ open class Keyframer {
                             else -> error("unknown easing for '$candidate'")
                         }
 
+                        val dictEnvelope = when (val candidate = valueMap["envelope"]) {
+                                null -> envelope
+                                is DoubleArray -> candidate
+                                is List<*> -> candidate.map { it.toString().toDouble() }.toDoubleArray()
+                                is Array<*> -> candidate.map { it.toString().toDouble() }.toDoubleArray()
+                                else -> error("unknown envelope for '$candidate")
+
+                        }
                         val dictDuration = try {
                             when (val candidate = valueMap["duration"]) {
                                 null -> null
@@ -400,12 +417,14 @@ open class Keyframer {
 
                         if (dictDuration != null) {
                             if (dictDuration <= 0.0) {
-                                channel.add(max(lastTime, time + dictDuration), lastValue, Easing.Linear.function, hold)
-                                channel.add(time, value, dictEasing, hold)
+                                channel.add(max(lastTime, time + dictDuration), lastValue, Easing.Linear.function, defaultEnvelope)
+                                channel.add(time, value, dictEasing, dictEnvelope)
                             } else {
-                                channel.add(time, lastValue, Easing.Linear.function, hold)
-                                channel.add(time + dictDuration, value, dictEasing, hold)
+                                channel.add(time, lastValue, Easing.Linear.function, defaultEnvelope)
+                                channel.add(time + dictDuration, value, dictEasing, dictEnvelope)
                             }
+                        } else {
+                            channel.add(time, value, dictEasing, dictEnvelope)
                         }
 
                     } else {
@@ -420,39 +439,12 @@ open class Keyframer {
                         } catch (e: ExpressionException) {
                             throw ExpressionException("error in $path.'${channelCandidate.key}': ${e.message ?: ""}")
                         }
-                        channel.add(time, value, easing, hold)
+                        channel.add(time, value, easing, envelope)
                     }
                 }
             }
             lastTime = time + duration
             expressionContext["t"] = lastTime
-
-            if (computed.containsKey("repeat")) {
-                @Suppress("UNCHECKED_CAST")
-                val repeatObject = computed["repeat"] as? Map<String, Any> ?: error("'repeat' should be a map")
-                val count = try {
-                    when (val candidate = repeatObject["count"]) {
-                        null -> 1
-                        is Int -> candidate
-                        is Double -> candidate.toInt()
-                        is String -> evaluateExpression(candidate, expressionContext, functions)?.roundToInt()
-                                ?: error("cannot evaluate expression for count: '$candidate'")
-                        else -> error("unknown value type for count: '$candidate")
-                    }
-                } catch (e: ExpressionException) {
-                    throw ExpressionException("error in $path.repeat.'count': ${e.message ?: ""}")
-                }
-
-                @Suppress("UNCHECKED_CAST")
-                val repeatKeys = repeatObject["keys"] as? List<Map<String, Any>> ?: error("no repeat keys")
-
-                for (i in 0 until count) {
-                    expressionContext["rep"] = i.toDouble()
-                    for (repeatKey in repeatKeys) {
-                        handleKey(repeatKey, "$path.repeat")
-                    }
-                }
-            }
         }
 
         for ((index, key) in keys.withIndex()) {

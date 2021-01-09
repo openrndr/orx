@@ -2,14 +2,12 @@ package org.openrndr.extra.keyframer
 
 import org.openrndr.extras.easing.Easing
 import org.openrndr.extras.easing.EasingFunction
+import org.openrndr.math.map
 
-class Key(val time: Double, val value: Double, val easing: EasingFunction)
+internal val defaultEnvelope = doubleArrayOf(0.0, 1.0)
 
-enum class Hold {
-    HoldNone,
-    HoldSet,
-    HoldAll
-}
+class Key(val time: Double, val value: Double, val easing: EasingFunction, val envelope: DoubleArray = defaultEnvelope)
+
 
 class KeyframerChannel {
     val keys = mutableListOf<Key>()
@@ -18,14 +16,17 @@ class KeyframerChannel {
         return 0.0
     }
 
-    fun add(time: Double, value: Double?, easing: EasingFunction = Easing.Linear.function, jump: Hold = Hold.HoldNone) {
-        if (jump == Hold.HoldAll || (jump == Hold.HoldSet && value != null)) {
-            lastValue()?.let {
-                keys.add(Key(time, it, Easing.Linear.function))
-            }
+    fun add(
+            time: Double,
+            value: Double?,
+            easing: EasingFunction = Easing.Linear.function,
+            envelope: DoubleArray = defaultEnvelope
+    ) {
+        require(envelope.size >= 2) {
+            "envelope should contain at least 2 entries"
         }
         value?.let {
-            keys.add(Key(time, it, easing))
+            keys.add(Key(time, it, easing, envelope))
         }
     }
 
@@ -65,7 +66,8 @@ class KeyframerChannel {
             val rightKey = keys[rightIndex]
             val leftKey = keys[leftIndex]
             val t0 = (time - leftKey.time) / (rightKey.time - leftKey.time)
-            val e0 = rightKey.easing(t0, 0.0, 1.0, 1.0)
+            val te = t0.map(rightKey.envelope[0], rightKey.envelope[1], 0.0, 1.0, clamp = true)
+            val e0 = rightKey.easing(te, 0.0, 1.0, 1.0)
             leftKey.value * (1.0 - e0) + rightKey.value * (e0)
         }
     }

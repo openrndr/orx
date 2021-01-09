@@ -13,12 +13,7 @@ class KeyframerChannelVector3 {
         return 0.0
     }
 
-    fun add(time: Double, value: Vector3?, easing: EasingFunction = Easing.Linear.function, jump: Hold = Hold.HoldNone) {
-        if (jump == Hold.HoldAll || (jump == Hold.HoldSet && value != null)) {
-            lastValue()?.let {
-                keys.add(KeyVector3(time, it, Easing.Linear.function))
-            }
-        }
+    fun add(time: Double, value: Vector3?, easing: EasingFunction = Easing.Linear.function) {
         value?.let {
             keys.add(KeyVector3(time, it, easing))
         }
