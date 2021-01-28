@@ -47,6 +47,7 @@ A growing library of assorted data structures, algorithms and utilities.
 | [`orx-temporal-blur`](orx-temporal-blur/) | Post-processing temporal-blur video effect. CPU intense, therefore not intended  for use with the `ScreenRecorder` extension or other real-time uses. |
 | [`orx-time-operators`](orx-time-operators/) | A collection of time-sensitive functions aimed at controlling raw data over-time,  such as Envelope and LFO. |
 | [`orx-timer`](orx-timer/) | Simple timer functionality providing `repeat`, to run code with a given interval and `timeOut`, to run code once after a given delay. |
+| [`orx-triangulation`](orx-triangulation/) | An extension for triangulating a set of points using the **Delaunay** triangulation method. From that triangulation we can also derive a **Voronoi** diagram. |
 | [`orx-video-profiles`](orx-video-profiles/) | A collection of `VideoWriterProfile` implementations that can be used with `ScreenRecorder` and `VideoWriter` |
 <!-- __orxListEnd__ -->
 
