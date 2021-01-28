@@ -67,3 +67,19 @@ voronoi.update()
 ### Author
 
 Ricardo Matias / [@ricardomatias](https://github.com/ricardomatias)
+<!-- __demos__ -->
+## Demos
+### DemoDelaunay01
+[source code](src/demo/kotlin/DemoDelaunay01.kt)
+
+![DemoDelaunay01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoDelaunay01Kt.png)
+
+### DemoDelaunay02
+[source code](src/demo/kotlin/DemoDelaunay02.kt)
+
+![DemoDelaunay02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoDelaunay02Kt.png)
+
+### DemoVoronoi01
+[source code](src/demo/kotlin/DemoVoronoi01.kt)
+
+![DemoVoronoi01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoVoronoi01Kt.png)
