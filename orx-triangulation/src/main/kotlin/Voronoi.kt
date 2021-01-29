@@ -37,7 +37,8 @@ THIS SOFTWARE.
  */
 class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
     private val _circumcenters = DoubleArray(delaunay.points.size * 2)
-    val circumcenters = _circumcenters.copyOf(delaunay.triangles.size / 3 * 2)
+    lateinit var circumcenters: DoubleArray
+    private set
 
     val vectors = DoubleArray(delaunay.points.size * 2)
 
@@ -54,6 +55,8 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
         val points = delaunay.points
         val triangles = delaunay.triangles
         val hull = delaunay.hull
+
+        circumcenters = _circumcenters.copyOf(delaunay.triangles.size / 3 * 2)
 
         // Compute circumcenters
         var i = 0
@@ -160,7 +163,7 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
         val polygon = mutableListOf(Vector2(points[0], points[1]))
         var n = points.size
 
-        while (points[0] == points[n-2] && points[1] == points[n-1] && n > 1) n -= 2
+        while (n > 1 && points[0] == points[n - 2] && points[1] == points[n - 1]) n -= 2
 
         for (idx in 2 until n step 2) {
             if (points[idx] != points[idx - 2] || points[idx + 1] != points[idx - 1]) {

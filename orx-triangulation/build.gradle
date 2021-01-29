@@ -8,10 +8,13 @@ sourceSets {
     }
 }
 
+def useSnapshot = false
+def delaunatorVersion = (useSnapshot) ? "0.4.0-SNAPSHOT" : "1.0.1"
+
 dependencies {
     implementation project(":orx-noise")
 
-    implementation("com.github.ricardomatias:delaunator:1.0.0")
+    implementation("com.github.ricardomatias:delaunator:$delaunatorVersion")
 
     demoImplementation("org.openrndr:openrndr-core:$openrndrVersion")
     demoImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
