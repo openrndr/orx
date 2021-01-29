@@ -59,10 +59,8 @@ class Delaunay(val points: DoubleArray) {
 
     private var delaunator = Delaunator(points)
 
-    val inedges = IntArray(points.size / 2) { -1 }
-    private val hullIndex = IntArray(points.size / 2) { -1 }
-
-    private var collinear = IntArray(points.size / 2) { it }
+    val inedges = IntArray(points.size / 2)
+    private val hullIndex = IntArray(points.size / 2)
 
     var halfedges = delaunator.halfedges
     var hull = delaunator.hull
@@ -81,6 +79,9 @@ class Delaunay(val points: DoubleArray) {
         halfedges = delaunator.halfedges
         hull = delaunator.hull
         triangles = delaunator.triangles
+
+        inedges.fill(-1)
+        hullIndex.fill(-1)
 
         // Compute an index from each point to an (arbitrary) incoming halfedge
         // Used to give the first neighbor of each point for this reason,
