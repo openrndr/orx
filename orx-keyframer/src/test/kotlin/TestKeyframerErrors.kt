@@ -20,11 +20,11 @@ private fun testFile(path: String) : File {
 }
 private fun testName(path: String) : String {
     val test = File(".")
-    return if (test.absolutePath.endsWith("orx-keyframer/.")) {
+    return (if (test.absolutePath.endsWith("orx-keyframer/.")) {
         path
     } else {
         "orx-keyframer/$path"
-    }
+    }).replace("/", File.separator)
 }
 
 
@@ -55,6 +55,8 @@ object TestKeyframerErrors : Spek({
             println(this.absolutePath)
         }
 
+
+
         val animation = Animation()
         it("should throw an exception") {
             invoking {
@@ -65,7 +67,10 @@ object TestKeyframerErrors : Spek({
             } `should throw` ExpressionException::class `with message` "Error loading from '${testName("src/test/resources/error-reporting/time-01.json")}': error in keys[0].'time': parser error in expression: ')('; [line: 1, character: 0 , near: [@0,0:0=')',<21>,1:0] ]"
         }
     }
-
+    // Paths.sep
+    //
+    //Expected <Error loading from 'orx-keyframer/src\test\resources\error-reporting\time-01.json': error in keys[0].'time': parser error in expression: ')('; [line: 1, character: 0 , near: [@0,0:0=')',<21>,1:0] ]>,
+    //  actual <Error loading from 'orx-keyframer\src\test\resources\error-reporting\time-01.json': error in keys[0].'time': parser error in expression: ')('; [line: 1, character: 0 , near: [@0,0:0=')',<21>,1:0] ]>.
     describe("loading a json with a faulty time expression (2) ") {
         val animation = Animation()
         it("should throw an exception") {
