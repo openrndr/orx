@@ -149,18 +149,12 @@ class Delaunay(val points: DoubleArray) {
     }
 
     fun find(x: Double, y: Double, i: Int = 0): Int {
-        val x0 = +x
-        val y0 = +y
-        var i0 = i
-
-        if ((x0 != x) || (y0 != y)) return -1
-
-        val i1 = i0
-        var c = step(i0, x, y)
+        var i1 = i
+        var c = step(i, x, y)
 
         while (c >= 0 && c != i && c != i1) {
-            i0 = c
-            c = step(i0, x, y)
+            i1 = c
+            c = step(i1, x, y)
         }
         return c
     }
