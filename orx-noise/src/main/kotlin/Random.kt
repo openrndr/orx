@@ -121,28 +121,7 @@ object Random {
     }
 
     fun gaussian(mean: Double = 0.0, standardDeviation: Double = 1.0): Double {
-        if (hasNextGaussian) {
-            val result = nextGaussian
-            nextGaussian = 0.0
-            hasNextGaussian = false
-
-            return mean + standardDeviation * result
-        } else {
-            var v1 = 0.0
-            var v2 = 0.0
-            var s = 0.0
-
-            while (s >= 1.0 || s == 0.0) {
-                v1 = double() // between -1 and 1
-                v2 = double() // between -1 and 1
-                s = v1 * v1 + v2 * v2
-            }
-            val multiplier = sqrt(-2.0 * ln(s) / s)
-
-            nextGaussian = (v2 * multiplier)
-            hasNextGaussian = true
-            return mean + standardDeviation * (v1 * multiplier)
-        }
+        return gaussian(mean, standardDeviation, rnd)
     }
 
     /**
