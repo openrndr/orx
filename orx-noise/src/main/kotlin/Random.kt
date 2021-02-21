@@ -3,6 +3,7 @@ package org.openrndr.extra.noise
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
+import org.openrndr.shape.Rectangle
 import kotlin.math.ln
 import kotlin.math.max
 import kotlin.math.pow
@@ -54,6 +55,25 @@ object Random {
         seed = "${seedBase}-${seedTracking}"
     }
 
+    fun unseeded(fn: Random.() -> Unit) {
+        val state = rnd
+        val currentSeed = seed
+
+        rnd = DefaultRandom
+
+        this.fn()
+
+        resetState()
+
+        seed = currentSeed
+        rnd = state
+    }
+
+    /**
+     * Use this inside `extend` methods to get the same result between iterations
+     *
+     * @param fn
+     */
     fun isolated(fn: Random.() -> Unit) {
         val state = rnd
         val currentSeed = seed
@@ -354,6 +374,10 @@ object Random {
         val index = probabilities.indexOfFirst { result <= it }
 
         return elements.elementAtOrNull(index) ?: elements.last()
+    }
+
+    fun point(rect: Rectangle): Vector2 {
+        return rect.position(vector2(0.0, 1.0))
     }
 }
 
