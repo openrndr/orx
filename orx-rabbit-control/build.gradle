@@ -13,7 +13,7 @@ dependencies {
     api project(":orx-compositor")
     api project(":orx-image-fit")
 
-    implementation "io.github.rabbitcontrol:rcp:0.3.1"
+    implementation "cc.rabbitcontrol:rcp:0.3.23"
     implementation "com.google.zxing:core:3.4.0"
     implementation "com.google.zxing:javase:3.4.0"
     implementation "io.ktor:ktor-server-netty:1.3.2"
