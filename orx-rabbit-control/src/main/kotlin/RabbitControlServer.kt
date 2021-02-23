@@ -37,6 +37,7 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
         10000, staticFilesPort: Int = 8080, rabbithole: String = "") : Extension {
     private val rabbitServer = RCPServer()
     private val transporter = WebsocketServerTransporterNetty()
+    private var rabbitholeTransporter: RabbitHoleWsServerTransporterNetty? = null
 
     private var parameterMap = mutableMapOf<IParameter, Pair<Any, Parameter>>()
 
@@ -74,6 +75,7 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
                 val rhlTransporter = RabbitHoleWsServerTransporterNetty(URI(rabbithole))
                 rabbitServer.addTransporter(rhlTransporter)
                 rhlTransporter.bind(0)
+                rabbitholeTransporter = rhlTransporter
             } catch (e: URISyntaxException) {
                 //
                 println("invalid URI for rabbithole: $rabbithole")
@@ -249,6 +251,10 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
 
     override fun shutdown(program: Program) {
         transporter.dispose()
+        if (rabbitholeTransporter != null)
+        {
+            (rabbitholeTransporter as RabbitHoleWsServerTransporterNetty).unbind()
+        }
     }
 
     private fun getQRCodeImage(barcodeText: String): ColorBuffer {
