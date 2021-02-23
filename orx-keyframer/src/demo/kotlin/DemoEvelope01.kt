@@ -8,10 +8,9 @@ fun main() = application {
     program {
         class Animation: Keyframer() {
             val position by Vector2Channel(arrayOf("x", "y"))
-            val radius by DoubleChannel("x")
         }
         val animation = Animation()
-        animation.loadFromJson(URL(resourceUrl("/demo-simple-repetitions-01.json")))
+        animation.loadFromJson(URL(resourceUrl("/demo-envelope-01.json")))
         if (System.getProperty("takeScreenshot") == "true") {
             extend(SingleScreenshot()) {
                 this.outputFile = System.getProperty("screenshotPath")
@@ -19,7 +18,7 @@ fun main() = application {
         }
         extend {
             animation(seconds)
-            drawer.circle(animation.position, animation.radius)
+            drawer.circle(animation.position, 100.0)
         }
     }
 }

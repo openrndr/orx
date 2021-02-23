@@ -20,8 +20,8 @@ DECIMAL            : 'Decimal';
 STRING             : 'String';
 
 // Identifiers
-ID                 : [_]*[a-zA-Z][A-Za-z0-9_]* ;
-FUNCTION_ID        : [_]*[a-z][A-Za-z0-9_]* ;
+ID                 : [$_]*[a-zA-Z][A-Za-z0-9_]* ;
+FUNCTION_ID        : [$_]*[a-z][A-Za-z0-9_]* ;
 
 // Literals
 

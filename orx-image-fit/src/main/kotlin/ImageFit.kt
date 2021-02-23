@@ -2,6 +2,7 @@ package org.openrndr.extras.imageFit
 
 import org.openrndr.draw.ColorBuffer
 import org.openrndr.draw.Drawer
+import org.openrndr.math.Vector2
 import org.openrndr.math.map
 import org.openrndr.shape.Rectangle
 
@@ -106,6 +107,25 @@ fun Drawer.imageFit(
             horizontalPosition,
             verticalPosition,
             fitMethod
+    )
+
+    image(img, source, target)
+    return Pair(source, target)
+}
+
+fun Drawer.imageFit(
+    img: ColorBuffer,
+    bounds: Rectangle = Rectangle(Vector2.ZERO, img.width * 1.0, img.height * 1.0),
+    horizontalPosition: Double = 0.0,
+    verticalPosition: Double = 0.0,
+    fitMethod: FitMethod = FitMethod.Cover
+): Pair<Rectangle, Rectangle> {
+    val (source, target) = fitRectangle(
+        img.bounds,
+        bounds,
+        horizontalPosition,
+        verticalPosition,
+        fitMethod
     )
 
     image(img, source, target)

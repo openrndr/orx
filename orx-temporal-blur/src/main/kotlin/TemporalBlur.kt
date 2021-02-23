@@ -172,8 +172,10 @@ class TemporalBlur : Extension {
             drawer.drawStyle.blendMode = BlendMode.OVER
             drawer.drawStyle.colorMatrix = Matrix55.IDENTITY
             drawer.isolated {
-                val offset = Vector2.uniformRing(0.0, jitter)
-                drawer.projection = Matrix44.translate(offset.x * (1.0 / program.width), offset.y * (1.0 / program.height), 0.0) * drawer.projection
+                if (jitter > 0.0){
+                    val offset = Vector2.uniformRing(0.0, jitter)
+                    drawer.projection = Matrix44.translate(offset.x * (1.0 / program.width), offset.y * (1.0 / program.height), 0.0) * drawer.projection
+                }
 
                 for (extension in extensionTail) {
                     extension.beforeDraw(drawer, program)
@@ -194,6 +196,7 @@ class TemporalBlur : Extension {
 
             add.apply(arrayOf(imageResolved!!.colorBuffer(0), accumulator!!.colorBuffer(0)), accumulator!!.colorBuffer(0))
             program.clock = oldClock
+            fsf.setDouble(program, program.clock())
         }
         image?.let {
             drawer.withTarget(it) {

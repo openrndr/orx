@@ -25,7 +25,7 @@ A growing library of assorted data structures, algorithms and utilities.
 | [`orx-interval-tree`](orx-interval-tree/) | For querying a data set containing time segments (start time and end time) when we need all entries containing a specific time value. Useful when creating a timeline. |
 | [`orx-jumpflood`](orx-jumpflood/) | Takes an image and calculates either a distance field or a direction field.  GPU accelerated, 2D. Results are provided as an image. |
 | [`orx-kdtree`](orx-kdtree/) | Fast search of the point closest to the queried point in a data set. 2D, 3D and 4D. |
-| [`orx-keyframer`](orx-keyframer/) | Create animated timelines by specifying properties and times in keyframes,  then play it back at any speed (even backwards) automatically interpolating properties.  Save, load, use mathematical expressions and callbacks. Powerful and highly reusable. |
+| [`orx-keyframer`](orx-keyframer/) | Create animated timelines by specifying properties and times in keyframes, then play it back at any speed (even backwards) automatically interpolating properties. Save, load, use mathematical expressions and callbacks. Powerful and highly reusable. |
 | [`orx-kinect-v1`](orx-kinect-v1/) | Support for the Kinect V1 RGB+Depth camera. |
 | [`orx-mesh-generators`](orx-mesh-generators/) | Generates 3D meshes: sphere, box, cylinder, plane, dodecahedron. |
 | [`orx-midi`](orx-midi/) | Basic MIDI support for keyboards and controllers. Send and receive note and control change events. |
@@ -47,6 +47,7 @@ A growing library of assorted data structures, algorithms and utilities.
 | [`orx-temporal-blur`](orx-temporal-blur/) | Post-processing temporal-blur video effect. CPU intense, therefore not intended  for use with the `ScreenRecorder` extension or other real-time uses. |
 | [`orx-time-operators`](orx-time-operators/) | A collection of time-sensitive functions aimed at controlling raw data over-time,  such as Envelope and LFO. |
 | [`orx-timer`](orx-timer/) | Simple timer functionality providing `repeat`, to run code with a given interval and `timeOut`, to run code once after a given delay. |
+| [`orx-triangulation`](orx-triangulation/) | An extension for triangulating a set of points using the **Delaunay** triangulation method. From that triangulation we can also derive a **Voronoi** diagram. |
 | [`orx-video-profiles`](orx-video-profiles/) | A collection of `VideoWriterProfile` implementations that can be used with `ScreenRecorder` and `VideoWriter` |
 <!-- __orxListEnd__ -->
 

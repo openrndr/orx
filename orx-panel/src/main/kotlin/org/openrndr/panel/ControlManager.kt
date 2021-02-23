@@ -283,7 +283,7 @@ class ControlManager : Extension {
             val toRemove = insideElements.filter { (event.position !in it.screenArea) }
 
             toRemove.forEach {
-                it.mouse.exited.trigger(MouseEvent(event.position, Vector2.ZERO, Vector2.ZERO, MouseEventType.MOVED, MouseButton.NONE, event.modifiers, false))
+                it.mouse.exited.trigger(MouseEvent(event.position, Vector2.ZERO, Vector2.ZERO, MouseEventType.MOVED, MouseButton.NONE, event.modifiers))
             }
 
             insideElements.removeAll(toRemove)

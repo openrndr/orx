@@ -3,7 +3,9 @@ package org.openrndr.extra.keyframer
 import org.antlr.v4.runtime.*
 import org.antlr.v4.runtime.tree.ParseTreeWalker
 import org.antlr.v4.runtime.tree.TerminalNode
-import org.openrndr.extra.keyframer.antlr.*
+import org.openrndr.extra.keyframer.antlr.KeyLangLexer
+import org.openrndr.extra.keyframer.antlr.KeyLangParser
+import org.openrndr.extra.keyframer.antlr.KeyLangParserBaseListener
 import org.openrndr.extra.noise.uniform
 import org.openrndr.math.*
 import java.util.*
@@ -357,20 +359,6 @@ fun evaluateExpression(
         functions: FunctionExtensions = FunctionExtensions.EMPTY
 ): Double? {
     val lexer = KeyLangLexer(CharStreams.fromString(input))
-//
-//    lexer.removeErrorListeners()
-//    lexer.addErrorListener(object : BaseErrorListener() {
-//        override fun syntaxError(
-//            recognizer: Recognizer<*, *>?,
-//            offendingSymbol: Any?,
-//            line: Int,
-//            charPositionInLine: Int,
-//            msg: String?,
-//            e: RecognitionException?
-//        ) {
-//            println("syntax error!")
-//        }
-//    })
     val parser = KeyLangParser(CommonTokenStream(lexer))
     parser.removeErrorListeners()
     parser.addErrorListener(object : BaseErrorListener() {

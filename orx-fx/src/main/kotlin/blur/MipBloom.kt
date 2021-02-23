@@ -17,12 +17,14 @@ class BloomDownscale : Filter(filterShaderFromUrl(filterFragmentUrl("blur/bloom-
 class BloomUpscale : Filter(filterShaderFromUrl(filterFragmentUrl("blur/bloom-upscale.frag"))) {
     var gain: Double by parameters
     var shape: Double by parameters
-    var seed: Double by parameters
+    var noiseSeed: Double by parameters
+    var noiseGain: Double by parameters
 
     init {
         gain = 1.0
         shape = 1.0
-        seed = 1.0
+        noiseSeed = 1.0
+        noiseGain = 0.25
     }
 }
 
@@ -45,6 +47,15 @@ open class MipBloom<T : Filter>(val blur: T) : Filter(filterShaderFromUrl(filter
 
     @DoubleParameter("gain", 0.0, 4.0)
     var gain: Double = 1.0
+
+    /**
+     * noise gain. low noise gains will result in visible banding of the image. default value is 0.25
+     */
+    @DoubleParameter("noise gain", 0.0, 1.0)
+    var noiseGain: Double = 0.25
+
+    @DoubleParameter("noise seed", 0.0, 1000.0)
+    var noiseSeed: Double = 0.0
 
     @BooleanParameter("sRGB")
     var sRGB = true
@@ -89,6 +100,8 @@ open class MipBloom<T : Filter>(val blur: T) : Filter(filterShaderFromUrl(filter
             linearize.apply(sourceCopy!!, sourceCopy!!)
         }
 
+        upscale.noiseGain = noiseGain
+        upscale.noiseSeed = noiseSeed
         downScale.apply(sourceCopy!!, intermediates[0])
         blur.apply(intermediates[0], intermediates[0])
 
@@ -131,7 +144,6 @@ class HashBloom : MipBloom<HashBlur>(blur = HashBlur()) {
 
 @Description("Gaussian bloom")
 class GaussianBloom : MipBloom<GaussianBlur>(blur = GaussianBlur()) {
-
     /**
      * blur sample window, default value is 5
      */
@@ -143,6 +155,7 @@ class GaussianBloom : MipBloom<GaussianBlur>(blur = GaussianBlur()) {
      */
     @DoubleParameter("kernel sigma", 0.0, 25.0)
     var sigma: Double = 1.0
+
 
     override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
         blur.window = window

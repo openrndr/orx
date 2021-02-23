@@ -7,6 +7,13 @@ uniform float time;
 uniform float gain;
 uniform float noiseLow;
 uniform float noiseHigh;
+uniform vec4 tint;
+uniform bool monochrome;
+uniform float deformAmplitude;
+uniform float deformFrequency;
+uniform float gapFrequency;
+uniform float gapLow;
+uniform float gapHigh;
 
 #define HASHSCALE 443.8975
 vec2 hash22(vec2 p) {
@@ -26,10 +33,11 @@ vec3 aberrationColor(float f) {
 
 void main() {
     float dk = 1.0/600.0;
+    o_output = vec4(0.0);
     for (int k = 0; k < 10; ++k ) {
         vec2 duv = v_texCoord0;
-        duv.y += smoothstep(pow(cos(time+k*dk+v_texCoord0.y*1.0),10.0)*0.1+0.1, 0.0, v_texCoord0.x)*0.1 * cos(time+k*dk);
-        duv.y += smoothstep(pow(1.0-cos(time+k*dk+v_texCoord0.y*1.0),10.0)*0.1+0.1, 0.9, v_texCoord0.x)*0.1 * cos(time+k*dk);
+        duv.y += smoothstep(pow(cos(time+k*dk+v_texCoord0.y*1.0),10.0)*0.1+0.1, 0.0, v_texCoord0.x)*deformAmplitude * cos((time+k*dk)*deformFrequency);
+        duv.y += smoothstep(pow(1.0-cos(time+k*dk+v_texCoord0.y*1.0),10.0)*0.1+0.1, 0.9, v_texCoord0.x)*deformAmplitude * cos((time+k*dk)*deformFrequency);
         duv.y += sin(v_texCoord0.x*3.1415926535)*0.0;
         float bc = floor(hash22(vec2(time+k*dk, (time+k*dk)*0.1)).x*20.0);
 
@@ -40,13 +48,17 @@ void main() {
         vec2 v2b = hash22(duv.yx*0.03+time+k*dk);
         float stretch = (cos(time+k*dk)*0.001+0.002)*0.3+0.001;
         vec2 h = hash22(duv.yy*stretch+time+k*dk);
-        float gap = smoothstep(-1.0, -0.99, cos(gb3*(10.0+duv.y*10.0 + (time+k*dk)*10.0) +duv.x*10.0)) * (cos(gb3)*0.5+0.5);
+        float gap = smoothstep(gapLow, gapHigh, cos(gb3*(gapFrequency+duv.y*gapFrequency + (time+k*dk)*gapFrequency) +duv.x*gapFrequency)) * (cos(gb3)*0.5+0.5);
 
         float r = smoothstep(noiseLow, noiseHigh, h.x*gap*v2.x)*1.0;
         float g = smoothstep(noiseLow, noiseHigh, h.x*gap*v2.y)*1.0;
         float b = smoothstep(noiseLow, noiseHigh, h.x*gap*v2b.x)*1.0;
         float a = smoothstep(noiseLow, noiseHigh, h.x*gap*v2b.y)*1.0;
-        o_output += vec4(r,g,b,a)*gain;
+        if (!monochrome) {
+            o_output += vec4(r, g, b, a)*gain * tint;
+        } else {
+            o_output += vec4(r, r, r, a)*gain * tint;
+        }
     }
     o_output *= o_output.a;
     o_output += texture(tex0, v_texCoord0);

@@ -19,9 +19,11 @@ fun gaussian(mean: Double = 0.0, deviation: Double = 1.0, random: Random = Rando
     return v1 * multiplier * deviation + mean
 }
 
-fun Double.Companion.gaussian(mean: Double = 0.0, deviation: Double = 1.0, random: Random = Random.Default): Double {
-    return gaussian(mean, deviation, random)
-}
+fun Double.Companion.gaussian(
+    mean: Double = 0.0,
+    deviation: Double = 1.0,
+    random: Random = Random.Default
+): Double = org.openrndr.extra.noise.gaussian(mean, deviation, random)
 
 fun Vector2.Companion.gaussian(mean: Vector2 = Vector2.ZERO, deviation: Vector2 = Vector2.ONE, random: Random = Random.Default): Vector2 {
     return Vector2(gaussian(mean.x, deviation.x, random), gaussian(mean.y, deviation.y, random))

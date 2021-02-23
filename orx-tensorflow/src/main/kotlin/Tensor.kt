@@ -36,12 +36,12 @@ fun ColorBuffer.copyTo(tensor: Tensor<TUint8>) {
 
 fun Tensor<TFloat32>.copyTo(colorBuffer: ColorBuffer) {
     val s = shape()
-    require(s.numDimensions() == 2 || s.numDimensions() == 3)
 
     val components = when {
+        s.numDimensions() == 2 -> 1
         s.numDimensions() == 3 -> s.size(2).toInt()
         s.numDimensions() == 4 -> s.size(3).toInt()
-        else -> 1
+        else -> error("can't copy to colorbuffer from ${s.numDimensions()}D tensor")
     }
 
     val format = when (components) {

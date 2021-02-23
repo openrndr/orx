@@ -82,6 +82,7 @@ fun main() {
                             blur.window = 5
                             blur.sigma = 3.0
                             blur.gain = 3.0
+                            blur.noiseSeed = seconds
                         }
                         is FrameBlur -> {
                             blur.blend = 0.05
