@@ -23,14 +23,18 @@ import org.openrndr.math.mix
 import org.rabbitcontrol.rcp.RCPServer
 import org.rabbitcontrol.rcp.model.interfaces.IParameter
 import org.rabbitcontrol.rcp.model.parameter.*
+import org.rabbitcontrol.rcp.transport.websocket.server.RabbitHoleWsServerTransporterNetty
 import org.rabbitcontrol.rcp.transport.websocket.server.WebsocketServerTransporterNetty
 import java.awt.Color
 import java.net.InetSocketAddress
 import java.net.Socket
+import java.net.URI
+import java.net.URISyntaxException
 import kotlin.reflect.KMutableProperty1
 
 
-class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true, rcpPort: Int = 10000, staticFilesPort: Int = 8080) : Extension {
+class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true, rcpPort: Int =
+        10000, staticFilesPort: Int = 8080, rabbithole: String = "") : Extension {
     private val rabbitServer = RCPServer()
     private val transporter = WebsocketServerTransporterNetty()
 
@@ -61,6 +65,20 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
     init {
         rabbitServer.addTransporter(transporter)
         transporter.bind(rcpPort)
+
+        /**
+         * add rabbithole transporter
+         */
+        if (rabbithole.isNotEmpty()) {
+            try {
+                val rhlTransporter = RabbitHoleWsServerTransporterNetty(URI(rabbithole))
+                rabbitServer.addTransporter(rhlTransporter)
+                rhlTransporter.bind(0)
+            } catch (e: URISyntaxException) {
+                //
+                println("invalid URI for rabbithole: $rabbithole")
+            }
+        }
 
         /**
          * Start KTOR to serve the static files of the RabbitControl client
