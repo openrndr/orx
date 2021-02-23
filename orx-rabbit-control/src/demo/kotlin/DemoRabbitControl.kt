@@ -23,7 +23,7 @@ fun main() = application {
         }
 
         val rabbit = RabbitControlServer()
-        val font= loadFont("orx-rabbit-control/src/demo/resources/fonts/Roboto-Regular.ttf", 20.0)
+        val font = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 20.0)
         val settings = object {
             @TextParameter("A string")
             var s: String = "Hello"

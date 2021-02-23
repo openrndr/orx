@@ -30,7 +30,7 @@ fun main() = application {
          * To use it with this example just use 'orxtest' as tunnel-name on the main page.
          */
         val rabbit = RabbitControlServer(false, 10000, 8080, "wss://rabbithole.rabbitcontrol.cc/public/rcpserver/connect?key=orxtest")
-        val font= loadFont("orx-rabbit-control/src/demo/resources/fonts/Roboto-Regular.ttf", 20.0)
+        val font = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 20.0)
         val settings = object {
             @TextParameter("A string")
             var s: String = "Hello"
