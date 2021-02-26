@@ -6,16 +6,30 @@ import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 import org.openrndr.shape.intersects
 
-data class QuadTreeQuery<T>(val nearest: T, val neighbours: List<T>, val quads: List<QuadTree<T>>)
+data class QuadtreeQuery<T>(val nearest: T, val neighbours: List<T>, val quads: List<Quadtree<T>>)
 
-class QuadTree<T>(val bounds: Rectangle, val maxPoints: Int = 10, val mapper: ((T) -> Vector2)) {
-    val nodes = arrayOfNulls<QuadTree<T>>(4)
+/**
+ * Quadtree
+ *
+ * @param T
+ * @property bounds the tree's bounding box
+ * @property maxObjects maximum number of objects per node
+ * @property mapper
+ */
+class Quadtree<T>(val bounds: Rectangle, val maxObjects: Int = 10, val mapper: ((T) -> Vector2)) {
+    /**
+     * The 4 nodes of the tree
+     */
+    val nodes = arrayOfNulls<Quadtree<T>>(4)
     var depth = 0
     val objects = mutableListOf<T>()
 
     private val isLeaf: Boolean
         get() = nodes[0] == null
 
+    /**
+     * Clears the whole tree
+     */
     fun clear() {
         objects.clear()
 
@@ -28,7 +42,14 @@ class QuadTree<T>(val bounds: Rectangle, val maxPoints: Int = 10, val mapper: ((
         }
     }
 
-    fun nearest(element: T, radius: Double): QuadTreeQuery<T>? {
+    /**
+     * Finds the nearest and neighbouring points within a radius
+     *
+     * @param element
+     * @param radius
+     * @return
+     */
+    fun nearest(element: T, radius: Double): QuadtreeQuery<T>? {
         val point = mapper(element)
 
         if (!bounds.contains(point)) return null
@@ -36,7 +57,7 @@ class QuadTree<T>(val bounds: Rectangle, val maxPoints: Int = 10, val mapper: ((
         val r2 = radius * radius
 
         val scaledBounds = Rectangle.fromCenter(point, radius * 2)
-        val intersected: List<QuadTree<T>> = intersect(scaledBounds) ?: return null
+        val intersected: List<Quadtree<T>> = intersect(scaledBounds) ?: return null
 
         var minDist = Double.MAX_VALUE
         val nearestObjects = mutableListOf<T>()
@@ -62,34 +83,22 @@ class QuadTree<T>(val bounds: Rectangle, val maxPoints: Int = 10, val mapper: ((
 
         if (nearestObject == null) return null
 
-        return QuadTreeQuery(nearestObject, nearestObjects, intersected)
+        return QuadtreeQuery(nearestObject, nearestObjects, intersected)
     }
 
-    private fun intersect(rect: Rectangle): List<QuadTree<T>>? {
-        val intersects = intersects(bounds, rect)
-
-        if (!intersects) return null
-
-        if (isLeaf) return listOf(this)
-
-        val intersected = mutableListOf<QuadTree<T>>()
-
-        for (node in nodes) {
-            if (node != null) node.intersect(rect)?.let {
-                intersected.addAll(it)
-            }
-        }
-
-        return intersected
-    }
-
+    /**
+     * Inserts the element in the appropriate node
+     *
+     * @param element
+     * @return
+     */
     fun insert(element: T): Boolean {
         // only* the root needs to check this
         if (depth == 0) {
             if (!bounds.contains(mapper(element))) return false
         }
 
-        if ((objects.size < maxPoints && isLeaf)) {
+        if ((objects.size < maxObjects && isLeaf)) {
             objects.add(element)
 
             return true
@@ -113,42 +122,31 @@ class QuadTree<T>(val bounds: Rectangle, val maxPoints: Int = 10, val mapper: ((
         return true
     }
 
-    private fun subdivide() {
-        val width = bounds.center.x - bounds.corner.x
-        val height = bounds.center.y - bounds.corner.y
+    /**
+     * Finds which node the element is within (but not necessarily belonging to)
+     *
+     * @param element
+     * @return
+     */
+    fun findNode(element: T): Quadtree<T>? {
+        val v = mapper(element)
 
-        val newDepth = depth + 1
-
-        var node = QuadTree(Rectangle(bounds.corner, width, height), maxPoints, mapper)
-        node.depth = newDepth
-        nodes[0] = node
-
-        node = QuadTree(Rectangle(Vector2(bounds.center.x, bounds.corner.y), width, height), maxPoints, mapper)
-        node.depth = newDepth
-        nodes[1] = node
-
-        node = QuadTree(Rectangle(Vector2(bounds.corner.x, bounds.center.y), width, height), maxPoints, mapper)
-        node.depth = newDepth
-        nodes[2] = node
-
-        node = QuadTree(Rectangle(bounds.center, width, height), maxPoints, mapper)
-        node.depth = newDepth
-        nodes[3] = node
-    }
-
-
-    fun findNode(v: Vector2): QuadTree<T>? {
         if (!bounds.contains(v)) return null
 
         if (isLeaf) return this
 
         for (node in nodes) {
-            node?.findNode(v)?.let { return it }
+            node?.findNode(element)?.let { return it }
         }
 
         return null
     }
 
+    /**
+     * Draw the quadtree using batching
+     *
+     * @param batchBuilder
+     */
     fun batch(batchBuilder: RectangleBatchBuilder) {
         batchBuilder.rectangle(bounds)
 
@@ -157,6 +155,11 @@ class QuadTree<T>(val bounds: Rectangle, val maxPoints: Int = 10, val mapper: ((
         }
     }
 
+    /**
+     * Draw the quadtree
+     *
+     * @param drawer
+     */
     fun draw(drawer: Drawer) {
         drawer.rectangle(bounds)
 
@@ -165,7 +168,48 @@ class QuadTree<T>(val bounds: Rectangle, val maxPoints: Int = 10, val mapper: ((
         }
     }
 
+    private fun intersect(rect: Rectangle): List<Quadtree<T>>? {
+        val intersects = intersects(bounds, rect)
+
+        if (!intersects) return null
+
+        if (isLeaf) return listOf(this)
+
+        val intersected = mutableListOf<Quadtree<T>>()
+
+        for (node in nodes) {
+            if (node != null) node.intersect(rect)?.let {
+                intersected.addAll(it)
+            }
+        }
+
+        return intersected
+    }
+
+    private fun subdivide() {
+        val width = bounds.center.x - bounds.corner.x
+        val height = bounds.center.y - bounds.corner.y
+
+        val newDepth = depth + 1
+
+        var node = Quadtree(Rectangle(bounds.corner, width, height), maxObjects, mapper)
+        node.depth = newDepth
+        nodes[0] = node
+
+        node = Quadtree(Rectangle(Vector2(bounds.center.x, bounds.corner.y), width, height), maxObjects, mapper)
+        node.depth = newDepth
+        nodes[1] = node
+
+        node = Quadtree(Rectangle(Vector2(bounds.corner.x, bounds.center.y), width, height), maxObjects, mapper)
+        node.depth = newDepth
+        nodes[2] = node
+
+        node = Quadtree(Rectangle(bounds.center, width, height), maxObjects, mapper)
+        node.depth = newDepth
+        nodes[3] = node
+    }
+
     override fun toString(): String {
-        return "${objects.size}"
+        return "QuadTree { objects: ${objects.size}, depth: $depth, isLeaf: $isLeaf"
     }
 }
