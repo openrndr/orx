@@ -38,6 +38,7 @@ A growing library of assorted data structures, algorithms and utilities.
 | [`orx-panel`](orx-panel/) | The OPENRNDR UI toolkit. Provides buttons, sliders, text, a color picker and much more. HTML/CSS-like. |
 | [`orx-parameters`](orx-parameters/) | Provides annotations and tools for turning Kotlin properties into introspectable parameters. Used by [`orx-gui`](../orx-gui/README.md) to automatically generate user interfaces. |
 | [`orx-poisson-fill`](orx-poisson-fill/) | Post processing effect that fills transparent parts of the image interpolating the edge pixel colors. GPU-based. |
+| [`orx-quadtree`](orx-quadtree/) | An extension for creating a [Quadtree](https://en.wikipedia.org/wiki/Quadtree) for points. A quadtree is a spatial partioning tree structure meant to provide fast spatial queries such as nearest points within a range. |
 | [`orx-rabbit-control`](orx-rabbit-control/) | Automatically creates a remote UI to control your OPENRNDR program from a mobile device or a different computer. Alternative to `orx-gui`. |
 | [`orx-runway`](orx-runway/) | Interfaces with the RunwayML machine learning library that provides features like motion capture, image synthesis, object recognition, style transfer and more. More info at [runwayml.com](https://runwayml.com/). |
 | [`orx-shade-styles`](orx-shade-styles/) | Collection of shader based fills and strokes. Currently includes 4 types of gradient fills. |
