@@ -3,8 +3,8 @@ import com.google.zxing.qrcode.QRCodeWriter
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
 import io.ktor.routing.routing
-import io.ktor.server.engine.embeddedServer
-import io.ktor.server.netty.Netty
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
 import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
@@ -38,6 +38,7 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
     private val rabbitServer = RCPServer()
     private val transporter = WebsocketServerTransporterNetty()
     private var rabbitholeTransporter: RabbitHoleWsServerTransporterNetty? = null
+    private var webServer: NettyApplicationEngine? = null
 
     private var parameterMap = mutableMapOf<IParameter, Pair<Any, Parameter>>()
 
@@ -93,6 +94,7 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
             }
         }
         server.start()
+        webServer = server
 
         /**
          * Print the address
@@ -250,10 +252,14 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
     override var enabled = true
 
     override fun shutdown(program: Program) {
+
         transporter.dispose()
-        if (rabbitholeTransporter != null)
-        {
+        if (rabbitholeTransporter != null) {
             (rabbitholeTransporter as RabbitHoleWsServerTransporterNetty).dispose()
+        }
+
+        if (webServer != null) {
+            (webServer as NettyApplicationEngine).stop(0, 0)
         }
     }
 
