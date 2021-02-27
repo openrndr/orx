@@ -253,7 +253,7 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
         transporter.dispose()
         if (rabbitholeTransporter != null)
         {
-            (rabbitholeTransporter as RabbitHoleWsServerTransporterNetty).unbind()
+            (rabbitholeTransporter as RabbitHoleWsServerTransporterNetty).dispose()
         }
     }
 
