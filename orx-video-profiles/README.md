@@ -57,6 +57,27 @@ fun main() = application {
 }
 ```
 
+### Animated Webp
+
+```
+import org.openrndr.application
+import org.openrndr.color.ColorRGBa
+import org.openrndr.extra.videoprofiles.*
+import org.openrndr.ffmpeg.ScreenRecorder
+
+fun main() = application {
+    program {
+        extend(ScreenRecorder()) {
+            profile = WebpProfile()
+        }
+        extend {
+            drawer.clear(ColorRGBa.GREEN)
+        }
+    }
+}
+```
+
+
 ### Prores (large file, high quality video)
 
 ```
