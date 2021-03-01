@@ -252,15 +252,9 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
     override var enabled = true
 
     override fun shutdown(program: Program) {
-
         transporter.dispose()
-        if (rabbitholeTransporter != null) {
-            (rabbitholeTransporter as RabbitHoleWsServerTransporterNetty).dispose()
-        }
-
-        if (webServer != null) {
-            (webServer as NettyApplicationEngine).stop(0, 0)
-        }
+        rabbitholeTransporter?.dispose()
+        webServer?.stop(0, 0)
     }
 
     private fun getQRCodeImage(barcodeText: String): ColorBuffer {
