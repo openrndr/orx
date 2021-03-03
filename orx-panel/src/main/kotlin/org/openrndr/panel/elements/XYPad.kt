@@ -254,7 +254,6 @@ fun XYPad.bind(property: KMutableProperty0<Vector2>) {
 }
 
 fun Double.round(decimals: Int): Double {
-    var multiplier = 1.0
-    repeat(decimals) { multiplier *= 10 }
+    val multiplier = 10.0.pow(decimals)
     return round(this * multiplier) / multiplier
 }
