@@ -22,7 +22,14 @@ fun main() = application {
             }
         }
 
-        val rabbit = RabbitControlServer()
+        /**
+         * Start RabbitControlServer with a Rabbithole with key 'orxtest'
+         * Please visit https://rabbithole.rabbitcontrol.cc for more information.
+         *
+         * Rabbithole allows you to access your exposed parameter from the internet.
+         * To use it with this example just use 'orxtest' as tunnel-name on the main page.
+         */
+        val rabbit = RabbitControlServer(false, 10000, 8080, "wss://rabbithole.rabbitcontrol.cc/public/rcpserver/connect?key=orxtest")
         val font = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 20.0)
         val settings = object {
             @TextParameter("A string")
