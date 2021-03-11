@@ -102,7 +102,7 @@ class PaletteStudio(
 
     private var onChangeListener = {}
 
-    private fun loadCollection(newCollection: Collections) {
+    fun loadCollection(newCollection: Collections) {
         val collectionPath: URL = collectionsResource.getValue(newCollection)
         palettes = mutableListOf()
 
@@ -177,7 +177,17 @@ class PaletteStudio(
         onChangeListener = fn
     }
 
+    @JvmName("addColorRGBaList")
     fun add(newPalette: List<ColorRGBa>) {
+        palette = createPalette(newPalette)
+
+        palettes.add(newPalette)
+        paletteIndex = palettes.lastIndex
+    }
+
+    @JvmName("addHexList")
+    fun add(hexColors: List<String>) {
+        val newPalette = hexColors.map { ColorRGBa.fromHex(it) }
         palette = createPalette(newPalette)
 
         palettes.add(newPalette)
@@ -222,8 +232,8 @@ class PaletteStudio(
         palette = createPalette(colors)
     }
 
-    fun changeCollection(newCollection: Collections) {
-        loadCollection(newCollection)
+    fun newCollection() {
+        palettes.clear()
     }
 
     private fun registerKeybindings(keyboard: Keyboard) {
