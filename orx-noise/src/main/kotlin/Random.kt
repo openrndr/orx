@@ -11,6 +11,7 @@ import kotlin.math.sqrt
 import org.openrndr.extra.noise.fbm as orxFbm
 import kotlin.random.Random as DefaultRandom
 
+private data class RandomState(var seed: String, var rng: DefaultRandom)
 /**
  * Deterministic Random using a seed to guarantee the same random values between iterations
  */
@@ -20,6 +21,8 @@ object Random {
     private var seedTracking: Int = 0
     private var nextGaussian: Double = 0.0
     private var hasNextGaussian = false
+
+    private lateinit var state: RandomState
 
     enum class Fractal {
         FBM, BILLOW, RIGID
@@ -37,6 +40,8 @@ object Random {
 
     init {
         rnd = newRandomGenerator(seed)
+
+        state = RandomState(seed, rnd)
     }
 
     private fun newRandomGenerator(newSeed: String): DefaultRandom {
@@ -62,18 +67,32 @@ object Random {
      *
      * @param fn
      */
-    fun unseeded(fn: Random.() -> Unit) {
-        val state = rnd
-        val currentSeed = seed
+    fun unseeded(fn: () -> Unit) {
+        push()
+
+        fn()
+
+        pop()
+    }
+
+    /**
+     * Use this when you want to get non-deterministic values aka random every call
+     * Follow it by calling .pop
+     */
+    fun push() {
+        state = RandomState(seed, rnd)
 
         rnd = DefaultRandom
+    }
 
-        this.fn()
-
+    /**
+     * Use this to go back to seeded state
+     */
+    fun pop() {
         resetState()
 
-        seed = currentSeed
-        rnd = state
+        seed = state.seed
+        rnd = state.rng
     }
 
     /**
@@ -366,4 +385,3 @@ object Random {
         return rect.position(vector2(0.0, 1.0))
     }
 }
-
