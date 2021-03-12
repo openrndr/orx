@@ -77,6 +77,9 @@ fun maxChromaForLH(L100: Double, H: Double): Double {
     return min
 }
 
+/**
+ * HSLUV color space
+ */
 data class ColorHSLUVa(val h: Double, val s: Double, val l: Double, val a: Double = 1.0) :
         ConvertibleToColorRGBa,
         HueShiftableColor<ColorHSLUVa>,
@@ -84,7 +87,6 @@ data class ColorHSLUVa(val h: Double, val s: Double, val l: Double, val a: Doubl
         ShadableColor<ColorHSLUVa>,
         OpacifiableColor<ColorHSLUVa>,
         AlgebraicColor<ColorHSLUVa> {
-
 
     fun toLCHUVa(): ColorLCHUVa {
 
