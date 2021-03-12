@@ -49,6 +49,16 @@ for (c in cs blend (width / 40)) {
 Two color spaces are added: `ColorHSLUVa` and `ColorHPLUVa`, they are an implementation of the colorspaces presented at [hsluv.org](http://www.hsluv.org)
 <!-- __demos__ -->
 ## Demos
+### DemoColorPlane01
+[source code](src/demo/kotlin/DemoColorPlane01.kt)
+
+![DemoColorPlane01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorPlane01Kt.png)
+
+### DemoColorPlane02
+[source code](src/demo/kotlin/DemoColorPlane02.kt)
+
+![DemoColorPlane02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorPlane02Kt.png)
+
 ### DemoColorRange01
 [source code](src/demo/kotlin/DemoColorRange01.kt)
 
@@ -58,6 +68,16 @@ Two color spaces are added: `ColorHSLUVa` and `ColorHPLUVa`, they are an impleme
 [source code](src/demo/kotlin/DemoColorRange02.kt)
 
 ![DemoColorRange02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorRange02Kt.png)
+
+### DemoColorRange03
+[source code](src/demo/kotlin/DemoColorRange03.kt)
+
+![DemoColorRange03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorRange03Kt.png)
+
+### DemoColorRange04
+[source code](src/demo/kotlin/DemoColorRange04.kt)
+
+![DemoColorRange04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorRange04Kt.png)
 
 ### DemoHSLUV01
 [source code](src/demo/kotlin/DemoHSLUV01.kt)
