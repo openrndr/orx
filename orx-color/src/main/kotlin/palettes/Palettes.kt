@@ -2,10 +2,6 @@ package org.openrndr.extras.color.palettes
 
 import org.openrndr.color.*
 import org.openrndr.extras.color.spaces.*
-import spaces.ColorOKLABa
-import spaces.ColorOKLCHa
-import spaces.toOKLABa
-import spaces.toOKLCHa
 
 
 fun <T> colorSequence(vararg offsets: Pair<Double, T>): ColorSequence

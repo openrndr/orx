@@ -1,4 +1,4 @@
-package spaces
+package org.openrndr.extras.color.spaces
 
 import org.openrndr.color.*
 import org.openrndr.math.mixAngle
@@ -14,6 +14,7 @@ data class ColorOKLCHa(val l: Double, val c: Double, val h: Double, val a: Doubl
     OpacifiableColor<ColorOKLCHa>,
     ShadableColor<ColorOKLCHa>,
     HueShiftableColor<ColorOKLCHa>,
+    SaturatableColor<ColorOKLCHa>,
     AlgebraicColor<ColorOKLCHa> {
 
     companion object {
@@ -33,6 +34,7 @@ data class ColorOKLCHa(val l: Double, val c: Double, val h: Double, val a: Doubl
     override fun opacify(factor: Double) = copy(a = a * factor)
     override fun shade(factor: Double) = copy(l = l * factor)
     override fun shiftHue(shiftInDegrees: Double) = copy(h = h + shiftInDegrees)
+    override fun saturate(factor: Double) = copy(c = c * factor)
 
     override fun plus(right: ColorOKLCHa) = copy(l = l + right.l, c = c + right.c, h = h + right.h, a = a + right.a)
     override fun minus(right: ColorOKLCHa) = copy(l = l - right.l, c = c - right.c, h = h - right.h, a = a - right.a)

@@ -1,4 +1,4 @@
-package spaces
+package org.openrndr.extras.color.spaces
 
 import org.openrndr.color.*
 import kotlin.math.pow
