@@ -9,6 +9,8 @@ sourceSets {
 }
 
 dependencies {
+    implementation(project(":orx-shader-phrases"))
+
     demoImplementation(project(":orx-camera"))
     demoImplementation(project(":orx-mesh-generators"))
     demoImplementation("org.openrndr:openrndr-core:$openrndrVersion")
