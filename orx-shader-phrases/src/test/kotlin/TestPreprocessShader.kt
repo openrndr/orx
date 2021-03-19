@@ -18,9 +18,9 @@ object TestPreprocessShader : Spek({
     }
 
     describe("A shader with import statements") {
-        val shader = """#version 330
-#pragma import org.openrndr.extra.shaderphrases.phrases.Dummy.*
-"""
+        val shader = """
+            |#version 330
+            |#pragma import org.openrndr.extra.shaderphrases.phrases.Dummy.*""".trimMargin()
         describe("injects dummy phrase when preprocessed") {
             val processed = preprocessShader(shader)
             processed `should contain` "float dummy"
