@@ -361,29 +361,31 @@ class ControlManager : Extension {
         this.width = width
         this.height = height
 
-        body?.draw?.dirty = true
+        // check if user did not minimize window
+        if (width > 0 && height > 0) {
+            body?.draw?.dirty = true
+            if (renderTarget.colorAttachments.isNotEmpty()) {
+                renderTarget.colorBuffer(0).destroy()
+                renderTarget.depthBuffer?.destroy()
+                renderTarget.detachColorAttachments()
+                renderTarget.detachDepthBuffer()
+                renderTarget.destroy()
+            } else {
+                logger.error { "that is strange. no color buffers" }
+            }
 
-        if (renderTarget.colorAttachments.isNotEmpty()) {
-            renderTarget.colorBuffer(0).destroy()
-            renderTarget.depthBuffer?.destroy()
-            renderTarget.detachColorAttachments()
-            renderTarget.detachDepthBuffer()
-            renderTarget.destroy()
-        } else {
-            logger.error { "that is strange. no color buffers" }
+            renderTarget = renderTarget(program.width, program.height, contentScale) {
+                colorBuffer()
+                depthBuffer()
+            }
+
+            renderTarget.bind()
+            program.drawer.clear(ColorRGBa.BLACK.opacify(0.0))
+            renderTarget.unbind()
+
+            renderTargetCache.forEach { (_, u) -> u.destroy() }
+            renderTargetCache.clear()
         }
-
-        renderTarget = renderTarget(program.width, program.height, contentScale) {
-            colorBuffer()
-            depthBuffer()
-        }
-
-        renderTarget.bind()
-        program.drawer.clear(ColorRGBa.BLACK.opacify(0.0))
-        renderTarget.unbind()
-
-        renderTargetCache.forEach { (_, u) -> u.destroy() }
-        renderTargetCache.clear()
     }
 
     private fun drawElement(element: Element, drawer: Drawer, zIndex: Int, zComp: Int) {
