@@ -1,5 +1,8 @@
 package org.openrndr.extra.shapes
 
+import org.openrndr.color.AlgebraicColor
+import org.openrndr.color.ColorRGBa
+import org.openrndr.color.ConvertibleToColorRGBa
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
@@ -7,27 +10,40 @@ import org.openrndr.shape.Segment
 import org.openrndr.shape.ShapeContour
 import kotlin.random.Random
 
-class BezierPatch(val points: List<List<Vector2>>) {
+open class BezierPatchBase<C>(
+    val points: List<List<Vector2>>,
+    val colors: List<List<C>> = emptyList()
+)
+        where C : AlgebraicColor<C>, C : ConvertibleToColorRGBa {
     init {
         require(points.size == 4 && points.all { it.size == 4 })
+        require(colors.isEmpty() || colors.size == 4 && colors.all { it.size == 4 })
     }
 
     /**
      * Return a transposed version of the bezier path by transposing the [points] matrix
      */
     val transposed
-        get() = BezierPatch(
+        get() = BezierPatchBase(
+            listOf(
+                listOf(points[0][0], points[1][0], points[2][0], points[3][0]),
+                listOf(points[0][1], points[1][1], points[2][1], points[3][1]),
+                listOf(points[0][2], points[1][2], points[2][2], points[3][2]),
+                listOf(points[0][3], points[1][3], points[2][3], points[3][3]),
+            ),
+            if (colors.isEmpty()) emptyList() else {
                 listOf(
-                        listOf(points[0][0], points[1][0], points[2][0], points[3][0]),
-                        listOf(points[0][1], points[1][1], points[2][1], points[3][1]),
-                        listOf(points[0][2], points[1][2], points[2][2], points[3][2]),
-                        listOf(points[0][3], points[1][3], points[2][3], points[3][3]),
+                    listOf(colors[0][0], colors[1][0], colors[2][0], colors[3][0]),
+                    listOf(colors[0][1], colors[1][1], colors[2][1], colors[3][1]),
+                    listOf(colors[0][2], colors[1][2], colors[2][2], colors[3][2]),
+                    listOf(colors[0][3], colors[1][3], colors[2][3], colors[3][3]),
                 )
+            }
         )
 
-    fun transform(transform: Matrix44) = BezierPatch(points.map { r ->
+    fun transform(transform: Matrix44) = BezierPatchBase(points.map { r ->
         r.map { (transform * it.xy01).div.xy }
-    })
+    }, colors)
 
     private fun coeffs2(t: Double): DoubleArray {
         val it = 1.0 - t
@@ -124,7 +140,7 @@ class BezierPatch(val points: List<List<Vector2>>) {
     /**
      * Extract a sub-patch based on uv parameterization
      */
-    fun sub(u0: Double, v0: Double, u1: Double, v1: Double): BezierPatch {
+    fun sub(u0: Double, v0: Double, u1: Double, v1: Double): BezierPatchBase<C> {
         val c0 = Segment(points[0][0], points[0][1], points[0][2], points[0][3]).sub(u0, u1)
         val c1 = Segment(points[1][0], points[1][1], points[1][2], points[1][3]).sub(u0, u1)
         val c2 = Segment(points[2][0], points[2][1], points[2][2], points[2][3]).sub(u0, u1)
@@ -136,27 +152,69 @@ class BezierPatch(val points: List<List<Vector2>>) {
         val d2 = Segment(sub0.points[0][2], sub0.points[1][2], sub0.points[2][2], sub0.points[3][2]).sub(v0, v1)
         val d3 = Segment(sub0.points[0][3], sub0.points[1][3], sub0.points[2][3], sub0.points[3][3]).sub(v0, v1)
 
-        return bezierPatch(d0, d1, d2, d3).transposed
+        return fromSegments<C>(d0, d1, d2, d3).transposed
     }
 
     val contour: ShapeContour = ShapeContour(
-            listOf(
-                    Segment(points[0][0], points[0][1], points[0][2], points[0][3]),
-                    Segment(points[0][3], points[1][3], points[2][3], points[3][3]),
-                    Segment(points[3][3], points[3][2], points[3][1], points[3][0]),
-                    Segment(points[3][0], points[2][0], points[1][0], points[0][0]),
-            ), true)
+        listOf(
+            Segment(points[0][0], points[0][1], points[0][2], points[0][3]),
+            Segment(points[0][3], points[1][3], points[2][3], points[3][3]),
+            Segment(points[3][3], points[3][2], points[3][1], points[3][0]),
+            Segment(points[3][0], points[2][0], points[1][0], points[0][0]),
+        ), true
+    )
 
-    operator fun times(scale: Double) = BezierPatch(points.map { j -> j.map { i -> i * scale } })
-    operator fun div(scale: Double) = BezierPatch(points.map { j -> j.map { i -> i / scale } })
-    operator fun plus(right: BezierPatch) =
-            BezierPatch(List(4) { j -> List(4) { i -> points[j][i] + right.points[j][i] } })
+    operator fun times(scale: Double) =
+        BezierPatchBase(
+            points.map { j -> j.map { i -> i * scale } },
+            if (colors.isEmpty()) colors else colors.map { j -> j.map { i -> i * scale } }
+        )
 
-    operator fun minus(right: BezierPatch) =
-            BezierPatch(List(4) { j -> List(4) { i -> points[j][i] - right.points[j][i] } })
+    operator fun div(scale: Double) =
+        BezierPatchBase(points.map { j -> j.map { i -> i / scale } },
+            if (colors.isEmpty()) colors else colors.map { j -> j.map { i -> i / scale } }
+        )
+    operator fun plus(right: BezierPatchBase<C>) =
+        BezierPatchBase(List(4) { j -> List(4) { i -> points[j][i] + right.points[j][i] } },
+            if (colors.isEmpty() && right.colors.isEmpty()) { colors }
+            else if (colors.isEmpty() && right.colors.isNotEmpty()) { right.colors }
+            else if (colors.isNotEmpty() && right.colors.isEmpty()) { colors }
+            else { List(4) { j -> List(4) { i -> colors[j][i] + right.colors[j][i] } } }
+            )
 
+    operator fun minus(right: BezierPatchBase<C>) =
+        BezierPatchBase(List(4) { j -> List(4) { i -> points[j][i] - right.points[j][i] } },
+            if (colors.isEmpty() && right.colors.isEmpty()) { colors }
+            else if (colors.isEmpty() && right.colors.isNotEmpty()) { right.colors }
+            else if (colors.isNotEmpty() && right.colors.isEmpty()) { colors }
+            else { List(4) { j -> List(4) { i -> colors[j][i] - right.colors[j][i] } } }
+            )
+
+    fun <K> withColors(colors: List<List<K>>): BezierPatchBase<K>
+            where K : AlgebraicColor<K>, K : ConvertibleToColorRGBa {
+        return BezierPatchBase(points, colors)
+    }
+
+    companion object {
+        fun <C> fromSegments(c0: Segment, c1: Segment, c2: Segment, c3: Segment): BezierPatchBase<C>
+                where C : AlgebraicColor<C>, C : ConvertibleToColorRGBa {
+            val c0c = c0.cubic
+            val c1c = c1.cubic
+            val c2c = c2.cubic
+            val c3c = c3.cubic
+
+            val c0l = listOf(c0c.start, c0c.control[0], c0c.control[1], c0c.end)
+            val c1l = listOf(c1c.start, c1c.control[0], c1c.control[1], c1c.end)
+            val c2l = listOf(c2c.start, c2c.control[0], c2c.control[1], c2c.end)
+            val c3l = listOf(c3c.start, c3c.control[0], c3c.control[1], c3c.end)
+
+            return BezierPatchBase(listOf(c0l, c1l, c2l, c3l))
+        }
+    }
 }
 
+class BezierPatch(points: List<List<Vector2>>, colors: List<List<ColorRGBa>> = emptyList()) :
+    BezierPatchBase<ColorRGBa>(points, colors)
 
 /**
  * Create a cubic bezier patch from 4 segments. The control points of the segments are used in row-wise fashion
@@ -196,10 +254,10 @@ fun bezierPatch(shapeContour: ShapeContour, alpha: Double = 1.0 / 3.0): BezierPa
     val x10 = (c0.control[0] * fb + c2.control[1] * fa + c3.control[0] * fa + c1.control[1] * fb) / 2.0
     val x11 = (c0.control[1] * fb + c2.control[0] * fa + c3.control[0] * fb + c1.control[1] * fa) / 2.0
     val cps = listOf(
-            listOf(c0.start, c0.control[0], c0.control[1], c0.end),
-            listOf(c3.control[1], x00, x01, c1.control[0]),
-            listOf(c3.control[0], x10, x11, c1.control[1]),
-            listOf(c2.end, c2.control[1], c2.control[0], c2.start),
+        listOf(c0.start, c0.control[0], c0.control[1], c0.end),
+        listOf(c3.control[1], x00, x01, c1.control[0]),
+        listOf(c3.control[0], x10, x11, c1.control[1]),
+        listOf(c2.end, c2.control[1], c2.control[0], c2.start),
     )
     return BezierPatch(cps)
 }
