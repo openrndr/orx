@@ -9,7 +9,8 @@ sourceSets {
 }
 dependencies {
     api project(":orx-parameters")
-
+    implementation project(":orx-color")
+    implementation project(":orx-shader-phrases")
     demoImplementation("org.openrndr:openrndr-core:$openrndrVersion")
     demoImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
     demoRuntimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")

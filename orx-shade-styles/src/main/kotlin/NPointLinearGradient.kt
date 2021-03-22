@@ -1,18 +1,25 @@
 package org.openrndr.extra.shadestyles
 
+import org.openrndr.color.AlgebraicColor
 import org.openrndr.color.ColorRGBa
+import org.openrndr.color.ConvertibleToColorRGBa
 import org.openrndr.draw.ShadeStyle
 import org.openrndr.extra.parameters.Description
+import org.openrndr.extras.color.spaces.ColorOKLABa
+import org.openrndr.math.CastableToVector4
 import org.openrndr.math.Vector2
 
 @Description("Multicolor linear gradient")
-class NPointLinearGradient(
-        colors: Array<ColorRGBa>,
-        points: Array<Double> = Array(colors.size) { it / (colors.size - 1.0) },
-        offset: Vector2 = Vector2.ZERO,
-        rotation: Double = 0.0) : ShadeStyle() {
+open class NPointLinearGradientBase<C>(
+    colors: Array<C>,
+    points: Array<Double> = Array(colors.size) { it / (colors.size - 1.0) },
+    offset: Vector2 = Vector2.ZERO,
+    rotation: Double = 0.0
+) : ShadeStyle()
+        where C : ConvertibleToColorRGBa, C : AlgebraicColor<C>, C : CastableToVector4 {
 
-    var colors: Array<ColorRGBa> by Parameter()
+    var colors: Array<C> by Parameter()
+
     // Sorted normalized values defining relative positions of colors
     var points: Array<Double> by Parameter()
     var offset: Vector2 by Parameter()
@@ -37,17 +44,14 @@ class NPointLinearGradient(
             while(i < p_points_SIZE - 1 && f >= p_points[i+1]) { i++; }
             
             vec4 color0 = p_colors[i];
-            color0.rgb *= color0.a;
-
             vec4 color1 = p_colors[i+1]; 
-            color1.rgb *= color1.a;
             
             float g = (f - p_points[i]) / (p_points[i+1] - p_points[i]);
             vec4 gradient = mix(color0, color1, clamp(g, 0.0, 1.0)); 
-
-            vec4 fn = vec4(x_fill.rgb, 1.0) * x_fill.a;
             
-            x_fill = fn * gradient;
+            ${generateColorTransform(colors[0]::class)}
+            
+            x_fill *= gradient;
             if (x_fill.a != 0) {
                 x_fill.rgb /= x_fill.a;
             }
@@ -55,3 +59,19 @@ class NPointLinearGradient(
         """
     }
 }
+
+class NPointLinearGradient(
+    colors: Array<ColorRGBa>,
+    points: Array<Double> = Array(colors.size) { it / (colors.size - 1.0) },
+    offset: Vector2 = Vector2.ZERO,
+    rotation: Double = 0.0
+) : NPointLinearGradientBase<ColorRGBa>(colors, points, offset, rotation)
+
+class NPointLinearGradientOKLab(
+    colors: Array<ColorOKLABa>,
+    points: Array<Double> = Array(colors.size) { it / (colors.size - 1.0) },
+    offset: Vector2 = Vector2.ZERO,
+    rotation: Double = 0.0
+) : NPointLinearGradientBase<ColorOKLABa>(colors, points, offset, rotation)
+
+

@@ -1,26 +1,29 @@
 package org.openrndr.extra.shadestyles
 
-import org.openrndr.color.ColorRGBa
+import org.openrndr.color.*
 import org.openrndr.draw.ShadeStyle
 import org.openrndr.draw.shadeStyle
 import org.openrndr.extra.parameters.ColorParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
+import org.openrndr.extras.color.spaces.ColorOKLABa
+import org.openrndr.math.CastableToVector4
 import org.openrndr.math.Vector2
 
 @Description("Radial gradient")
-class RadialGradient(
-        color0: ColorRGBa,
-        color1: ColorRGBa,
+open class RadialGradientBase<C>(
+        color0: C,
+        color1: C,
         offset: Vector2 = Vector2.ZERO,
         rotation: Double = 0.0,
         length: Double = 1.0,
-        exponent: Double = 1.0) : ShadeStyle() {
-
+        exponent: Double = 1.0)
+    : ShadeStyle()
+where C : ConvertibleToColorRGBa, C : AlgebraicColor<C>, C: CastableToVector4 {
     @ColorParameter("start color", order = 0)
-    var color0 : ColorRGBa by Parameter()
+    var color0 : C by Parameter()
     @ColorParameter("end color", order = 1)
-    var color1 : ColorRGBa by Parameter()
+    var color1 : C by Parameter()
     var offset : Vector2 by Parameter()
     @DoubleParameter("rotation", -180.0, 180.0, order = 2)
     var rotation : Double by Parameter()
@@ -47,22 +50,33 @@ class RadialGradient(
             float f =  clamp(p_length * length(rc), 0.0, 1.0);            
 
             vec4 color0 = p_color0;
-            color0.rgb *= color0.a;
-
             vec4 color1 = p_color1; 
-            color1.rgb *= color1.a;
 
             vec4 gradient = mix(color0, color1, pow(f, p_exponent));
-            
-            vec4 fn = vec4(x_fill.rgb, 1.0) * x_fill.a;            
-            
-            x_fill = fn * gradient;
-            if (x_fill.a != 0) {
-                x_fill.rgb /= x_fill.a;
-            }
+            ${generateColorTransform(color0::class)}
+
+            x_fill *= gradient;
         """
     }
 }
+
+class RadialGradient(
+    color0: ColorRGBa,
+    color1: ColorRGBa,
+    offset: Vector2 = Vector2.ZERO,
+    rotation: Double = 0.0,
+    length: Double = 1.0,
+    exponent: Double = 1.0
+): RadialGradientBase<ColorRGBa>(color0, color1, offset, rotation, length, exponent)
+
+class RadialGradientOKLab(
+    color0: ColorOKLABa,
+    color1: ColorOKLABa,
+    offset: Vector2 = Vector2.ZERO,
+    rotation: Double = 0.0,
+    length: Double = 1.0,
+    exponent: Double = 1.0
+): RadialGradientBase<ColorOKLABa>(color0, color1, offset, rotation, length, exponent)
 
 fun radialGradient(
         color0: ColorRGBa,
@@ -71,6 +85,19 @@ fun radialGradient(
         rotation: Double = 0.0,
         length: Double = 1.0,
         exponent: Double = 1.0
-): ShadeStyle {
+): RadialGradient {
     return RadialGradient(color0, color1, offset, rotation, length, exponent)
 }
+
+fun radialGradient(
+    color0: ColorOKLABa,
+    color1: ColorOKLABa,
+    offset: Vector2 = Vector2.ZERO,
+    rotation: Double = 0.0,
+    length: Double = 1.0,
+    exponent: Double = 1.0
+): RadialGradientOKLab {
+    return RadialGradientOKLab(color0, color1, offset, rotation, length, exponent)
+}
+
+

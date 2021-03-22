@@ -128,6 +128,7 @@ fun preprocessShader(source: String, symbols: Set<String> = emptySet()): String 
                                                 newSymbols
                                             )
                                     } catch (e: NoSuchFieldException) {
+                                        println(source)
                                         error("field \"$fieldName\" not found in \"#pragma import $packageClass.$fieldName\" on line ${index + 1}")
                                     }
                                 }
@@ -137,6 +138,7 @@ fun preprocessShader(source: String, symbols: Set<String> = emptySet()): String 
                             throw IllegalArgumentException("class $packageClass has no ShaderPhrases annotation")
                         }
                     } catch (e: ClassNotFoundException) {
+                        println(source)
                         error("class \"$packageClass\" not found in \"#pragma import $packageClass\" on line ${index + 1}")
                     }
             } else {

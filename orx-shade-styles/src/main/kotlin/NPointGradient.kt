@@ -4,7 +4,6 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ShadeStyle
 import org.openrndr.extra.parameters.Description
 import org.openrndr.math.Vector2
-import org.openrndr.math.Vector3
 
 @Description("N-Point gradient")
 class NPointGradient(

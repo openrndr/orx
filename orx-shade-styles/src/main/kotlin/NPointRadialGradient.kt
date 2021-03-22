@@ -11,7 +11,10 @@ class NPointRadialGradient(
         points: Array<Double> = Array(colors.size) { it / (colors.size - 1.0) },
         offset: Vector2 = Vector2.ZERO,
         rotation: Double = 0.0,
-        length: Double = 1.0) : ShadeStyle() {
+        length: Double = 1.0) : ShadeStyle()
+
+
+{
 
     var colors: Array<ColorRGBa> by Parameter()
 
