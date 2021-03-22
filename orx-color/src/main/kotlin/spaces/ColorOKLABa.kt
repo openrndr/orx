@@ -1,6 +1,8 @@
 package org.openrndr.extras.color.spaces
 
 import org.openrndr.color.*
+import org.openrndr.math.CastableToVector4
+import org.openrndr.math.Vector4
 import kotlin.math.pow
 
 /**
@@ -8,6 +10,7 @@ import kotlin.math.pow
  */
 data class ColorOKLABa(val l: Double, val a: Double, val b: Double, val alpha: Double = 1.0) :
     ConvertibleToColorRGBa,
+    CastableToVector4,
     ShadableColor<ColorOKLABa>,
     OpacifiableColor<ColorOKLABa>,
     AlgebraicColor<ColorOKLABa> {
@@ -57,6 +60,8 @@ data class ColorOKLABa(val l: Double, val a: Double, val b: Double, val alpha: D
     override fun minus(right: ColorOKLABa) = ColorOKLABa(l - right.l, a - right.a, b - right.b, alpha - right.alpha)
     override fun plus(right: ColorOKLABa) = ColorOKLABa(l + right.l, a + right.a, b + right.b, alpha + right.alpha)
     override fun times(scale: Double) = ColorOKLABa(l * scale, a * scale, b * scale, alpha * scale)
+
+    override fun toVector4() = Vector4(l, a, b, alpha)
 }
 
 fun ColorRGBa.toOKLABa() = ColorOKLABa.fromRGBa(this)
