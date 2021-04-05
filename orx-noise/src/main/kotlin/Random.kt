@@ -120,12 +120,14 @@ object Random {
         return rnd.nextDouble(max)
     }
 
+    // [0, max]
     fun int0(max: Int = Int.MAX_VALUE): Int {
-        return rnd.nextInt(max)
+        return rnd.nextInt(max + 1)
     }
 
+    // [min, max]
     fun int(min: Int = 0, max: Int = Int.MAX_VALUE): Int {
-        return rnd.nextInt(min, max)
+        return rnd.nextInt(min, max + 1)
     }
 
     fun bool(probability: Double = 0.5): Boolean {
