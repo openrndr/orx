@@ -86,6 +86,11 @@ class MidiTransceiver(val receiverDevice: MidiDevice, val transmitterDevicer: Mi
 
     private val receiver = receiverDevice.receiver
     private val transmitter = transmitterDevicer.transmitter
+    private inner class Destroyer: Thread() {
+        override fun run() {
+            destroy()
+        }
+    }
 
     init {
         transmitter.receiver = object : MidiDeviceReceiver {
@@ -109,11 +114,7 @@ class MidiTransceiver(val receiverDevice: MidiDevice, val transmitterDevicer: Mi
         }
 
         // shut down midi if user calls `exitProcess(0)`
-        Runtime.getRuntime().addShutdownHook(object : Thread() {
-            override fun run() {
-                destroy()
-            }
-        })
+        Runtime.getRuntime().addShutdownHook(Destroyer())
     }
 
     val controlChanged = Event<MidiEvent>("midi-transceiver::controller-changed")
