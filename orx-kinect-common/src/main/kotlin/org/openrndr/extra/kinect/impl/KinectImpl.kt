@@ -13,23 +13,21 @@ import java.util.function.Supplier
 import kotlin.concurrent.thread
 
 class DefaultKinects<CTX>(
-        private val program: Program,
-        private val manager: KinectsManager<CTX>
+    private val program: Program,
+    private val manager: KinectsManager<CTX>
 ) : Kinects<CTX> {
+
+    private inner class Destroyer : Thread() {
+        override fun run() {
+            manager.shutdown()
+        }
+    }
 
     init {
         manager.initialize()
         // as we don't have explicit shutdown mechanism in OPENRNDR
         // we need to install a shutdown hook for now
-        Runtime.getRuntime().addShutdownHook(
-                thread(
-                        name = "${manager.javaClass.simpleName}-closer",
-                        start = false,
-                        isDaemon = false
-                ) {
-                    manager.shutdown()
-                }
-        )
+        Runtime.getRuntime().addShutdownHook(Destroyer())
     }
 
     override fun countDevices(): Int {
@@ -65,8 +63,8 @@ interface KinectCommandsExecutor<CTX> {
 }
 
 class DefaultKinectDevice<CTX>(
-        override val depthCamera: DefaultKinectDepthCamera,
-        private val commandsExecutor: KinectCommandsExecutor<CTX>
+    override val depthCamera: DefaultKinectDepthCamera,
+    private val commandsExecutor: KinectCommandsExecutor<CTX>
 ) : KinectDevice<CTX> {
     override var enabled: Boolean = true
     override fun beforeDraw(drawer: Drawer, program: Program) {
@@ -79,13 +77,13 @@ class DefaultKinectDevice<CTX>(
 }
 
 class DefaultKinectDepthCamera(
-        override val width: Int,
-        override val height: Int,
-        depthScale: Double,
-        private val enabler: KinectFeatureEnabler,
-        private val bytesSupplier: Supplier<ByteBuffer?>
+    override val width: Int,
+    override val height: Int,
+    depthScale: Double,
+    private val enabler: KinectFeatureEnabler,
+    private val bytesSupplier: Supplier<ByteBuffer?>
 ) :
-        KinectDepthCamera, UpdatableKinectCamera {
+    KinectDepthCamera, UpdatableKinectCamera {
 
     override var enabled: Boolean
         get() = enabler.enabled
@@ -94,16 +92,16 @@ class DefaultKinectDepthCamera(
         }
 
     private val rawBuffer: ColorBuffer = colorBuffer(
-            width,
-            height,
-            format = ColorFormat.R,
-            type = ColorType.UINT16 // it would be perfect if we could use isampler in the shader
+        width,
+        height,
+        format = ColorFormat.R,
+        type = ColorType.UINT16 // it would be perfect if we could use isampler in the shader
     )
     override val currentFrame: ColorBuffer = colorBuffer(
-            width,
-            height,
-            format = ColorFormat.R,
-            type = ColorType.FLOAT16 // in the future we might want to choose the precision here
+        width,
+        height,
+        format = ColorFormat.R,
+        type = ColorType.FLOAT16 // in the future we might want to choose the precision here
     )
 
     private val depthMapper = KinectRawDataToDepthMapper()
@@ -132,15 +130,21 @@ class DefaultKinectDepthCamera(
 
     override var mirror: Boolean
         get() = depthMapper.mirror
-        set(value) { depthMapper.mirror = value }
+        set(value) {
+            depthMapper.mirror = value
+        }
 
 }
 
 private class KinectRawDataToDepthMapper :
-        Filter(filterShaderFromUrl(
-                resourceUrl("kinect-raw-to-depth.frag",
-                DefaultKinects::class.java))
-        ) {
+    Filter(
+        filterShaderFromUrl(
+            resourceUrl(
+                "kinect-raw-to-depth.frag",
+                DefaultKinects::class.java
+            )
+        )
+    ) {
     var depthScale: Double by parameters
     var mirror: Boolean by parameters
     var resolution: Vector2 by parameters
