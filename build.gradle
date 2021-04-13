@@ -1,10 +1,11 @@
+import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
+
 buildscript {
     repositories {
         jcenter()
     }
     dependencies {
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
-        classpath "com.netflix.nebula:nebula-publishing-plugin:17.3.0"
         classpath "com.netflix.nebula:nebula-release-plugin:15.1.0"
         classpath "com.github.ben-manes:gradle-versions-plugin:0.28.0"
     }
@@ -16,6 +17,8 @@ plugins {
 def openrndrUseSnapshot = false
 
 apply plugin: 'org.jetbrains.dokka'
+
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 project.ext {
     openrndrVersion = openrndrUseSnapshot? "0.4.0-SNAPSHOT" : "0.3.47"
@@ -53,13 +56,8 @@ allprojects {
     apply plugin: 'idea'
     apply plugin: 'java'
     apply plugin: 'kotlin'
-    apply plugin: 'nebula.contacts'
-    apply plugin: 'nebula.info'
     apply plugin: 'nebula.release'
-    apply plugin: 'nebula.maven-publish'
 
-    apply plugin: 'nebula.source-jar'
-    apply plugin: 'nebula.javadoc-jar'
     apply plugin: "com.github.ben-manes.versions"
 
     group 'org.openrndr.extra'
@@ -71,9 +69,6 @@ allprojects {
 
         mavenCentral()
         jcenter()
-        maven {
-            url = "https://dl.bintray.com/openrndr/openrndr"
-        }
         maven {
             url "https://dl.bintray.com/spekframework/spek"
         }
@@ -100,13 +95,6 @@ allprojects {
     }
     javadoc {
         options.addBooleanOption 'Xdoclint:none', true
-    }
-
-    contacts {
-        'edwin@openrndr.org' {
-            moniker 'Edwin Jakobs'
-            github 'edwinRNDR'
-        }
     }
 
     test {
@@ -261,6 +249,80 @@ task collectScreenshots {
         }
     }
 }
+
+configure(allprojects.findAll { it.name != "openrndr-demos" }) {
+    apply plugin: 'nebula.release'
+    apply plugin: 'maven-publish'
+    apply plugin: 'signing'
+
+    java {
+        withJavadocJar()
+        withSourcesJar()
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                groupId = "org.openrndr.extra"
+                artifactId = "$project.name"
+
+                description = "$project.name"
+                pom {
+                    name = "$project.name"
+                    description = "$project.name"
+                    url = 'http://openrndr.org'
+                    developers {
+                        developer {
+                            id = 'edwinjakobs'
+                            name = 'Edwin Jakobs'
+                            email = 'edwin@openrndr.org'
+                        }
+                    }
+                    license {
+                        licenses {
+                            license {
+                                name = 'BSD-2-Clause'
+                                url = 'https://github.com/openrndr/openrndr/blob/master/LICENSE'
+                                distribution = 'repo'
+                            }
+                        }
+                    }
+                    scm {
+                        connection = "scm:git:git@github.com:openrndr/openrndr.git"
+                        developerConnection = "scm:git:ssh://github.com/openrndr/openrndr.git"
+                        url = "https://github.com/openrndr/openrndr"
+                    }
+                }
+            }
+        }
+        repositories {
+            maven {
+                credentials {
+                    username findProperty("ossrhUsername") ?: System.getenv("OSSRH_USERNAME")
+                    password findProperty("ossrhPassword") ?: System.getenv("OSSRH_PASSWORD")
+                }
+                if (!isReleaseVersion) {
+                    url "https://s01.oss.sonatype.org/content/repositories/snapshots"
+                } else {
+                    url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2"
+                }
+            }
+        }
+    }
+    signing {
+        required { isReleaseVersion && gradle.taskGraph.hasTask("publish") }
+        sign publishing.publications.mavenJava
+    }
+}
+
+configure(subprojects) {
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile).all {
+        kotlinOptions.freeCompilerArgs += ["-Xuse-experimental=kotlinx.coroutines.InternalCoroutinesApi"]
+    }
+}
+
+
 collectScreenshots.dependsOn {
     project.subprojects.findAll { it.sourceSets.hasProperty("demo") }.collect { it.tasks.demoClasses }
 }
