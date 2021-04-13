@@ -19,7 +19,7 @@ apply plugin: 'org.jetbrains.dokka'
 
 project.ext {
     openrndrVersion = openrndrUseSnapshot? "0.4.0-SNAPSHOT" : "0.3.47"
-    kotlinVersion = "1.4.31"
+    kotlinVersion = "1.4.32"
     spekVersion = "2.0.15"
     libfreenectVersion = "0.5.7-1.5.5"
     librealsense2Version = "2.40.0-1.5.5"
@@ -221,6 +221,7 @@ task collectScreenshots {
                             def klass = ucl.loadClass(klassName)
                             try {
                                 def mainMethod = klass.getMethod("main")
+                                println "Collecting screenshot for ${klassName}"
                                 javaexec {
                                     classpath set.runtimeClasspath
                                     def className = y.name.replace(".class", "")

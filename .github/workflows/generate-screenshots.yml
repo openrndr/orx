@@ -18,6 +18,16 @@ jobs:
           echo $LD_LIBRARY_PATH
           export GALLIUM_DRIVER=swr
           xvfb-run glxinfo
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: Collect screenshots
         run: xvfb-run ./gradlew collectScreenshots
       - name: Build main readme
