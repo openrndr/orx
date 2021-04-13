@@ -10,7 +10,7 @@ buildscript {
     }
 }
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.4.31'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.32'
 }
 
 def openrndrUseSnapshot = false
@@ -18,15 +18,15 @@ def openrndrUseSnapshot = false
 apply plugin: 'org.jetbrains.dokka'
 
 project.ext {
-    openrndrVersion = openrndrUseSnapshot? "0.4.0-SNAPSHOT" : "0.3.47-rc.2"
+    openrndrVersion = openrndrUseSnapshot? "0.4.0-SNAPSHOT" : "0.3.47"
     kotlinVersion = "1.4.31"
     spekVersion = "2.0.15"
-    libfreenectVersion = "0.5.7-1.5.4"
-    librealsense2Version = "2.29.0-1.5.4"
+    libfreenectVersion = "0.5.7-1.5.5"
+    librealsense2Version = "2.40.0-1.5.5"
     gsonVersion = "2.8.6"
     antlrVersion = "4.9.1"
-    tensorflowVersion = "0.2.0"
-    mklDnnVersion = "0.21.5-1.5.4"
+    tensorflowVersion = "0.3.1"
+    mklDnnVersion = "0.21.5-1.5.5"
 }
 
 switch (org.gradle.internal.os.OperatingSystem.current()) {
