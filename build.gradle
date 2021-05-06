@@ -11,7 +11,7 @@ buildscript {
     }
 }
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.4.32'
+    id 'org.jetbrains.kotlin.jvm' version '1.5.0'
 }
 
 def openrndrUseSnapshot = false
@@ -22,7 +22,7 @@ ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 project.ext {
     openrndrVersion = openrndrUseSnapshot? "0.4.0-SNAPSHOT" : "0.3.47"
-    kotlinVersion = "1.4.32"
+    kotlinVersion = "1.5.0"
     spekVersion = "2.0.15"
     libfreenectVersion = "0.5.7-1.5.5"
     librealsense2Version = "2.40.0-1.5.5"
