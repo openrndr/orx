@@ -44,7 +44,7 @@ dependencies {
     demoRuntimeOnly("org.openrndr:openrndr-ffmpeg-natives-$openrndrOS:$openrndrVersion")
     demoImplementation(project(":orx-fx"))
     demoImplementation(sourceSets.getByName("main").output)
-    compile "org.tensorflow:tensorflow-core-api:$tensorflowVersion"
+    implementation "org.tensorflow:tensorflow-core-api:$tensorflowVersion"
 
     // -- wrapgen
     wrapgenImplementation 'com.github.javaparser:javaparser-core:3.15.21'

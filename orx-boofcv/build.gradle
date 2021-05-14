@@ -12,7 +12,7 @@ def boofcvVersion = "0.37"
 
 dependencies {
 
-    compile("org.boofcv:boofcv-core:$boofcvVersion")
+    implementation("org.boofcv:boofcv-core:$boofcvVersion")
     demoImplementation("org.openrndr:openrndr-core:$openrndrVersion")
     demoImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
     demoRuntimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
