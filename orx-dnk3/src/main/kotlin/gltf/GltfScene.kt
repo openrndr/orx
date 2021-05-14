@@ -19,6 +19,7 @@ class SceneAnimation(var channels: List<AnimationChannel>) {
         get() {
             return channels.maxByOrNull { it.duration }?.duration ?: 0.0
         }
+
     fun applyToTargets(input: Double) {
         for (channel in channels) {
             channel.applyToTarget(input)
@@ -32,8 +33,10 @@ sealed class AnimationChannel {
 }
 
 
-class QuaternionChannel(val target: KMutableProperty0<Quaternion>,
-                        val keyframer: KeyframerChannelQuaternion) : AnimationChannel() {
+class QuaternionChannel(
+    val target: KMutableProperty0<Quaternion>,
+    val keyframer: KeyframerChannelQuaternion
+) : AnimationChannel() {
     override fun applyToTarget(input: Double) {
         target.set(keyframer.value(input) ?: Quaternion.IDENTITY)
     }
@@ -42,8 +45,10 @@ class QuaternionChannel(val target: KMutableProperty0<Quaternion>,
         get() = keyframer.duration()
 }
 
-class Vector3Channel(val target: KMutableProperty0<Vector3>,
-                     val keyframer: KeyframerChannelVector3, val default: Vector3) : AnimationChannel() {
+class Vector3Channel(
+    val target: KMutableProperty0<Vector3>,
+    val keyframer: KeyframerChannelVector3, val default: Vector3
+) : AnimationChannel() {
     override fun applyToTarget(input: Double) {
         target.set(keyframer.value(input) ?: default)
     }
@@ -127,7 +132,10 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
                 cb.filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
                 cb.wrapU = WrapMode.REPEAT
                 cb.wrapV = WrapMode.REPEAT
-                val sceneTexture = Texture(ModelCoordinates(texture = cb, pre = "x_texCoord.y = 1.0-x_texCoord.y;"), TextureTarget.COLOR)
+                val sceneTexture = Texture(
+                    ModelCoordinates(texture = cb, pre = "x_texCoord.y = 1.0-x_texCoord.y;"),
+                    TextureTarget.COLOR
+                )
                 material.textures.add(sceneTexture)
             }
             pbr.metallicRoughnessTexture?.let { texture ->
@@ -135,7 +143,10 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
                 cb.filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
                 cb.wrapU = WrapMode.REPEAT
                 cb.wrapV = WrapMode.REPEAT
-                val sceneTexture = Texture(ModelCoordinates(texture = cb, pre = "x_texCoord.y = 1.0-x_texCoord.y;"), TextureTarget.METALNESS_ROUGHNESS)
+                val sceneTexture = Texture(
+                    ModelCoordinates(texture = cb, pre = "x_texCoord.y = 1.0-x_texCoord.y;"),
+                    TextureTarget.METALNESS_ROUGHNESS
+                )
                 material.textures.add(sceneTexture)
             }
         }
@@ -145,7 +156,10 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
             cb.filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
             cb.wrapU = WrapMode.REPEAT
             cb.wrapV = WrapMode.REPEAT
-            val sceneTexture = Texture(ModelCoordinates(texture = cb, pre = "x_texCoord.y = 1.0-x_texCoord.y;"), TextureTarget.AMBIENT_OCCLUSION)
+            val sceneTexture = Texture(
+                ModelCoordinates(texture = cb, pre = "x_texCoord.y = 1.0-x_texCoord.y;"),
+                TextureTarget.AMBIENT_OCCLUSION
+            )
             material.textures.add(sceneTexture)
         }
 
@@ -155,7 +169,13 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
             cb.wrapU = WrapMode.REPEAT
             cb.wrapV = WrapMode.REPEAT
 
-            val sceneTexture = Texture(ModelCoordinates(texture = cb, tangentInput = "va_tangent", pre = "x_texCoord.y = 1.0-x_texCoord.y;"), TextureTarget.NORMAL)
+            val sceneTexture = Texture(
+                ModelCoordinates(
+                    texture = cb,
+                    tangentInput = "va_tangent",
+                    pre = "x_texCoord.y = 1.0-x_texCoord.y;"
+                ), TextureTarget.NORMAL
+            )
             material.textures.add(sceneTexture)
         }
 
@@ -165,7 +185,10 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
 
         emissiveTexture?.let {
             val cb = images!![textures!![it.index].source].createSceneImage()
-            val sceneTexture = Texture(ModelCoordinates(texture = cb, pre = "x_texCoord.y = 1.0-x_texCoord.y;"), TextureTarget.EMISSION)
+            val sceneTexture = Texture(
+                ModelCoordinates(texture = cb, pre = "x_texCoord.y = 1.0-x_texCoord.y;"),
+                TextureTarget.EMISSION
+            )
             material.textures.add(sceneTexture)
         }
 
@@ -179,7 +202,10 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
                     cb.filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
                     cb.wrapU = WrapMode.REPEAT
                     cb.wrapV = WrapMode.REPEAT
-                    val sceneTexture = Texture(ModelCoordinates(texture = cb, pre = "x_texCoord.y = 1.0-x_texCoord.y;"), TextureTarget.COLOR)
+                    val sceneTexture = Texture(
+                        ModelCoordinates(texture = cb, pre = "x_texCoord.y = 1.0-x_texCoord.y;"),
+                        TextureTarget.COLOR
+                    )
                     material.textures.add(sceneTexture)
                 }
                 occlusionTexture?.let { texture ->
@@ -187,7 +213,10 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
                     cb.filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
                     cb.wrapU = WrapMode.REPEAT
                     cb.wrapV = WrapMode.REPEAT
-                    val sceneTexture = Texture(ModelCoordinates(texture = cb, pre = "x_texCoord.y = 1.0-x_texCoord.y;"), TextureTarget.AMBIENT_OCCLUSION)
+                    val sceneTexture = Texture(
+                        ModelCoordinates(texture = cb, pre = "x_texCoord.y = 1.0-x_texCoord.y;"),
+                        TextureTarget.AMBIENT_OCCLUSION
+                    )
                     material.textures.add(sceneTexture)
                 }
             }
@@ -201,12 +230,14 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
 
     fun GltfPrimitive.createScenePrimitive(): MeshPrimitive {
         val drawCommand = createDrawCommand(this@buildSceneNodes)
-        val geometry = Geometry(listOf(drawCommand.vertexBuffer),
-                drawCommand.indexBuffer,
-                drawCommand.primitive,
-                0,
-                drawCommand.vertexCount)
-        val material = materials?.getOrNull(material)?.createSceneMaterial() ?: PBRMaterial()
+        val geometry = Geometry(
+            listOf(drawCommand.vertexBuffer),
+            drawCommand.indexBuffer,
+            drawCommand.primitive,
+            0,
+            drawCommand.vertexCount
+        )
+        val material = materials.getOrNull(material)?.createSceneMaterial() ?: PBRMaterial()
         return MeshPrimitive(geometry, material)
     }
 
@@ -214,7 +245,7 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
     val sceneNodes = mutableMapOf<GltfNode, SceneNode>()
     fun GltfNode.createSceneNode(): SceneNode = sceneNodes.getOrPut(this) {
         val node = GltfSceneNode()
-        node.name = name ?: ""
+        node.name = name ?: "no name"
         node.translation = translation?.let { Vector3(it[0], it[1], it[2]) } ?: Vector3.ZERO
         node.scale = scale?.let { Vector3(it[0], it[1], it[2]) } ?: Vector3.ONE
         node.rotation = rotation?.let { Quaternion(it[0], it[1], it[2], it[3]) } ?: Quaternion.IDENTITY
@@ -223,7 +254,8 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
             node.transform = Matrix44.fromDoubleArray(it).transposed
         }
         for (child in children.orEmpty) {
-            node.children.add(nodes[child].createSceneNode())
+            val childNode = nodes.getOrNull(child) ?: error("child node not found: $child")
+            node.children.add(childNode.createSceneNode())
         }
         node
     }
@@ -286,7 +318,8 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
 
     val scenes = scenes.map { scene ->
         scene.nodes.map { node ->
-            val gltfNode = nodes[node]
+            val gltfNode = nodes.getOrNull(node) ?: error("node not found: $node")
+            require(gltfNode != null)
             val sceneNode = gltfNode.createSceneNode()
             sceneNode
         }
@@ -369,7 +402,8 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
                             val outputZ = outputData.getFloat(outputOffset + i * outputStride + 8).toDouble()
                             keyframer.add(input, Vector3(outputX, outputY, outputZ))
                         }
-                        val target = if (channel.target.path == "translation") sceneNode::translation else sceneNode::scale
+                        val target =
+                            if (channel.target.path == "translation") sceneNode::translation else sceneNode::scale
                         val default = if (channel.target.path == "translation") Vector3.ZERO else Vector3.ONE
                         Vector3Channel(target, keyframer, default)
                     }
