@@ -30,6 +30,16 @@ Supported Gltf features
 
 ![DemoCamera01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-dnk3/images/DemoCamera01Kt.png)
 
+### DemoDSL01
+[source code](src/demo/kotlin/DemoDSL01.kt)
+
+![DemoDSL01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-dnk3/images/DemoDSL01Kt.png)
+
+### DemoDSL02
+[source code](src/demo/kotlin/DemoDSL02.kt)
+
+![DemoDSL02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-dnk3/images/DemoDSL02Kt.png)
+
 ### DemoLights01
 [source code](src/demo/kotlin/DemoLights01.kt)
 
