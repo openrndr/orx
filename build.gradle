@@ -211,7 +211,8 @@ task collectScreenshots {
                                 def mainMethod = klass.getMethod("main")
                                 println "Collecting screenshot for ${klassName}"
                                 javaexec {
-                                    classpath set.runtimeClasspath
+                                    classpath += set.runtimeClasspath
+                                    classpath += set.compileClasspath
                                     def className = y.name.replace(".class", "")
                                     main = className
                                     jvmArgs += "-DtakeScreenshot=true"
