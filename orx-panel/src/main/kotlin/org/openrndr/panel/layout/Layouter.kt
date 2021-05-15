@@ -59,11 +59,11 @@ class Layouter {
                             val verticalPadding = element.computedStyle.effectivePaddingTop + element.computedStyle.effectivePaddingBottom
                             val totalHeight = element.children
                                     .filter { it.computedStyle.display in blockLike && it.computedStyle.position !in manualPosition }
-                                    .sumByDouble { height(it, width(it)) }
+                                    .sumOf { height(it, width(it)) }
                             val remainder = ((element.layout.screenHeight - verticalPadding) - totalHeight)
                             val totalGrow = element.children
                                     .filter { it.computedStyle.display in blockLike && it.computedStyle.position !in manualPosition }
-                                    .sumByDouble { (it.computedStyle.flexGrow as FlexGrow.Ratio).value }
+                                    .sumOf { (it.computedStyle.flexGrow as FlexGrow.Ratio).value }
 
                             element.children.filter { it.computedStyle.display in blockLike && it.computedStyle.position !in manualPosition }.forEach { child ->
                                 val elementGrow = (child.computedStyle.flexGrow as FlexGrow.Ratio).value

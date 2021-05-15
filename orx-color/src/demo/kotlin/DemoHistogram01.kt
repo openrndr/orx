@@ -30,7 +30,7 @@ fun main() = application {
         }
         println(" and sort them by luminosity.")
 
-        val topColorsFreqSum = topColors.sumByDouble { it.second }
+        val topColorsFreqSum = topColors.sumOf { it.second }
         println("\nThose top $useColors colors represent " +
                 String.format("%.02f", 100 * topColorsFreqSum) +
                 "% of the image colors.")

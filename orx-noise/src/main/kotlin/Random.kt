@@ -22,7 +22,7 @@ object Random {
     private var nextGaussian: Double = 0.0
     private var hasNextGaussian = false
 
-    private lateinit var state: RandomState
+    private var state: RandomState
 
     enum class Fractal {
         FBM, BILLOW, RIGID

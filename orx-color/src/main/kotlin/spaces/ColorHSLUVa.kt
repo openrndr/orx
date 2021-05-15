@@ -123,11 +123,11 @@ data class ColorHSLUVa(val h: Double, val s: Double, val l: Double, val a: Doubl
 
     override fun opacify(factor: Double) = copy(a = a * factor)
 
-    override fun minus(other: ColorHSLUVa) = copy(h = h - other.h, s = s - other.s, l = l - other.l, a = a - other.a)
+    override fun minus(right: ColorHSLUVa) = copy(h = h - right.h, s = s - right.s, l = l - right.l, a = a - right.a)
 
-    override fun plus(other: ColorHSLUVa) = copy(h = h + other.h, s = s + other.s, l = l + other.l, a = a + other.a)
+    override fun plus(right: ColorHSLUVa) = copy(h = h + right.h, s = s + right.s, l = l + right.l, a = a + right.a)
 
-    override fun times(factor: Double) = copy(h = h * factor, s = s * factor, l = l * factor, a = a * factor)
+    override fun times(scale: Double) = copy(h = h * scale, s = s * scale, l = l * scale, a = a * scale)
 
     override fun mix(other: ColorHSLUVa, factor: Double) = mix(this, other, factor)
 
@@ -163,11 +163,11 @@ data class ColorXSLUVa(val x: Double, val s: Double, val l: Double, val a: Doubl
 
     override fun opacify(factor: Double) = copy(a = a * factor)
 
-    override fun minus(other: ColorXSLUVa) = copy(x = x - other.x, s = s - other.s, l = l - other.l, a = a - other.a)
+    override fun minus(right: ColorXSLUVa) = copy(x = x - right.x, s = s - right.s, l = l - right.l, a = a - right.a)
 
-    override fun plus(other: ColorXSLUVa) = copy(x = x + other.x, s = s + other.s, l = l + other.l, a = a + other.a)
+    override fun plus(right: ColorXSLUVa) = copy(x = x + right.x, s = s + right.s, l = l + right.l, a = a + right.a)
 
-    override fun times(factor: Double) = copy(x = x * factor, s = s * factor, l = l * factor, a = a * factor)
+    override fun times(scale: Double) = copy(x = x * scale, s = s * scale, l = l * scale, a = a * scale)
 
     override fun mix(other: ColorXSLUVa, factor: Double) = mix(this, other, factor)
 }
@@ -254,11 +254,11 @@ data class ColorHPLUVa(val h: Double, val s: Double, val l: Double, val a: Doubl
 
     override fun opacify(factor: Double) = copy(a = a * factor)
 
-    override fun minus(other: ColorHPLUVa) = copy(h = h - other.h, s = s - other.s, l = l - other.l, a = a - other.a)
+    override fun minus(right: ColorHPLUVa) = copy(h = h - right.h, s = s - right.s, l = l - right.l, a = a - right.a)
 
-    override fun plus(other: ColorHPLUVa) = copy(h = h + other.h, s = s + other.s, l = l + other.l, a = a + other.a)
+    override fun plus(right: ColorHPLUVa) = copy(h = h + right.h, s = s + right.s, l = l + right.l, a = a + right.a)
 
-    override fun times(factor: Double) = copy(h = h * factor, s = s * factor, l = l * factor, a = a * factor)
+    override fun times(scale: Double) = copy(h = h * scale, s = s * scale, l = l * scale, a = a * scale)
 
     override fun mix(other: ColorHPLUVa, factor: Double) = mix(this, other, factor)
 

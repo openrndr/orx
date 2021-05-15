@@ -39,7 +39,7 @@ class IntervalNode<T>(val center: Double) {
 
 fun <T : Any> buildIntervalTree(items: List<T>, intervalFunction: (T) -> Pair<Double, Double>): IntervalNode<T> {
     val ranges = items.map { intervalFunction(it) }
-    val center = ranges.sumByDouble { (it.first + it.second) / 2.0 } / ranges.size
+    val center = ranges.sumOf { (it.first + it.second) / 2.0 } / ranges.size
     val node = IntervalNode<T>(center)
     val leftItems = mutableListOf<T>()
     val rightItems = mutableListOf<T>()

@@ -86,7 +86,7 @@ private fun mul(x: DoubleArray, y: DoubleArray) = DoubleArray(x.size) { x[it] * 
 private fun div(x: Array<DoubleArray>, y: Double) = Array(x.size) { div(x[it], y) }
 private fun div(x: DoubleArray, y: Double) = DoubleArray(x.size) { x[it] / y }
 private fun norm2(x: DoubleArray): Double {
-    return sqrt(x.sumByDouble { it * it })
+    return sqrt(x.sumOf { it * it })
 }
 
 internal fun dot(x: DoubleArray, y: DoubleArray): Double = (x.mapIndexed { index, it -> it * y[index] }).sum()
