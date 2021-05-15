@@ -1,7 +1,11 @@
+
+
 # ORX (OPENRNDR EXTRA)
 
- [ ![Download](https://api.bintray.com/packages/openrndr/openrndr/orx/images/download.svg) ](https://bintray.com/openrndr/openrndr/orx/_latestVersion)
+[![Download](https://maven-badges.herokuapp.com/maven-central/org.openrndr.extra/orx-panel/badge.svg)](https://mvnrepository.com/artifact/org.openrndr.extra/orx-panel)
+![Build status](https://github.com/openrndr/orx/actions/workflows/generate-screenshots.yml/badge.svg)
 
+ 
 A growing library of assorted data structures, algorithms and utilities.
 
 <!-- __orxListBegin__ -->
