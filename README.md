@@ -1,4 +1,4 @@
-# ORX (OPENRNDR EXTRA)
+# ORX (OPENRNDR EXTRA) 0.4 (development branch)
 
  [ ![Download](https://api.bintray.com/packages/openrndr/openrndr/orx/images/download.svg) ](https://bintray.com/openrndr/openrndr/orx/_latestVersion)
 
@@ -56,6 +56,8 @@ A growing library of assorted data structures, algorithms and utilities.
 
 ## Create and use local builds of the library
 
-run `./gradlew publishToMavenLocal -Prelease.version=0.4.0-SNAPSHOT` (or import in IntelliJ IDEA and edit the run configuration)
+First build and publish OPENRNDR 0.4 SNAPSHOT (using `-Prelease.version=0.5.1-SNAPSHOT`) from the `openrndr-0.4` branch.  
 
-In an [`openrndr-template`](https://github.com/openrndr/openrndr-template) based project set `orxUseSnapshot = true` in order to use the snapshot build.
+run `./gradlew publishToMavenLocal -Prelease.version=0.5.1-SNAPSHOT` (or import in IntelliJ IDEA and edit the run configuration)
+
+In an [`openrndr-template`](https://youtu.be/saAzoREfa90?t=787) based project set `orxUseSnapshot = true` in order to use the snapshot build.
