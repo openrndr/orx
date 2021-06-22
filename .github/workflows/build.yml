@@ -2,7 +2,7 @@ name: Build
 on:
   push:
     branches:
-      - master
+      - orx-0.4
 
 jobs:
   build:
