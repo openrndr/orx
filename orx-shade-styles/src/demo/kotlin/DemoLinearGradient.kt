@@ -7,7 +7,7 @@ import org.openrndr.extra.shadestyles.radialGradient
 import org.openrndr.extras.color.spaces.toOKLABa
 import kotlin.math.cos
 
-fun main() {
+suspend fun main() {
     application {
         program {
             if (System.getProperty("takeScreenshot") == "true") {

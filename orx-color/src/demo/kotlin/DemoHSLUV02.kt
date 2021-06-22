@@ -8,7 +8,7 @@ import org.openrndr.math.Polar
 import org.openrndr.math.Vector2
 import kotlin.math.sqrt
 
-fun main() {
+suspend fun main() {
     application {
         configure {
             width = 720

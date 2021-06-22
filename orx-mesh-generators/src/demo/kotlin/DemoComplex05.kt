@@ -9,7 +9,7 @@ import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
 import org.openrndr.shape.Circle
 
-fun main() {
+suspend fun main() {
     application {
         program {
             if (System.getProperty("takeScreenshot") == "true") {

@@ -17,7 +17,7 @@ import org.openrndr.svg.loadSVG
 import kotlin.math.cos
 import kotlin.math.sin
 
-fun main() {
+suspend fun main() {
     application {
         configure {
             width = 1280

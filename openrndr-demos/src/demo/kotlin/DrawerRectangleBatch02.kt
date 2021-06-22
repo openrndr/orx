@@ -3,7 +3,7 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.rectangleBatch
 
-fun main() = application {
+suspend fun main() = application {
     program {
         val batch = drawer.rectangleBatch {
             fill = ColorRGBa.PINK

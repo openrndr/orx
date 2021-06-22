@@ -6,7 +6,7 @@ import org.openrndr.panel.elements.div
 import org.openrndr.panel.elements.slider
 import org.openrndr.panel.style.*
 
-fun main() = application {
+suspend fun main() = application {
     program {
         // -- this block is for automation purposes only
         if (System.getProperty("takeScreenshot") == "true") {

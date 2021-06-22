@@ -2,7 +2,7 @@ import org.openrndr.application
 import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.timer.timeOut
 
-fun main() = application {
+suspend fun main() = application {
     program {
         if (System.getProperty("takeScreenshot") == "true") {
             extend(SingleScreenshot()) {

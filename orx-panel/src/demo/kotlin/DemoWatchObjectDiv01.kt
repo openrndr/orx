@@ -5,7 +5,7 @@ import org.openrndr.panel.elements.*
 import org.openrndr.panel.style.*
 
 
-fun main() = application {
+suspend fun main() = application {
     configure {
         width = 900
         height = 720

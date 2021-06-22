@@ -8,7 +8,7 @@ import org.openrndr.extras.color.spaces.toOKLABa
 import org.openrndr.extras.color.spaces.toOKLCHa
 import org.openrndr.extras.color.spaces.toXSLUVa
 
-fun main() {
+suspend fun main() {
     application {
         program {
             // -- this block is for automation purposes only

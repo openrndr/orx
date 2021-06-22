@@ -29,7 +29,7 @@ import kotlin.random.Random
 // Toggle to see the difference between a simple blur and multilayer bloom
 const val effectEnabled = true
 
-fun main() = application {
+suspend fun main() = application {
     configure {
         width = 900
         height = 900

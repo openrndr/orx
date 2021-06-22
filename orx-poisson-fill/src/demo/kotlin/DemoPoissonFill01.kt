@@ -18,7 +18,7 @@ import kotlin.math.sin
 
 data class Thing(val color: ColorRGBa, var pos: Polar, val speed: Polar)
 
-fun main() {
+suspend fun main() {
     application {
         program {
 

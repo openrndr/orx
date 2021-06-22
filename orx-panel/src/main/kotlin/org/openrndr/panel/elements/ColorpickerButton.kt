@@ -4,10 +4,11 @@ import kotlinx.coroutines.yield
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.LineCap
+import org.openrndr.draw.Writer
 import org.openrndr.events.Event
 import org.openrndr.launch
 import org.openrndr.panel.style.*
-import org.openrndr.text.Writer
+
 import kotlin.reflect.KMutableProperty0
 
 class ColorpickerButton : Element(ElementType("colorpicker-button")), DisposableElement {

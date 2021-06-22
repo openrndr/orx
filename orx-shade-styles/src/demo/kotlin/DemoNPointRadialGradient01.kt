@@ -12,7 +12,7 @@ import kotlin.random.Random
  * Any of the properties can be animated, including colors and points.
  * See DemoNPointLinearGradient01.kt for an example of animated properties.
  */
-fun main() {
+suspend fun main() {
     application {
         program {
             if (System.getProperty("takeScreenshot") == "true") {

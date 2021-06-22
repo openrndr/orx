@@ -162,7 +162,7 @@ class ControlManager : Extension {
             }
         }
 
-        fun character(event: Program.CharacterEvent) {
+        fun character(event: CharacterEvent) {
             target?.keyboard?.character?.trigger(event)
             if (target != null) {
                 checkForManualRedraw()
@@ -325,7 +325,7 @@ class ControlManager : Extension {
     override fun setup(program: Program) {
         this.program = program
 
-        contentScale = program.window.scale.x
+        contentScale = program.window.contentScale
         window = program.window
 
         //surfaceCache = SurfaceCache(4096, 4096, contentScale)

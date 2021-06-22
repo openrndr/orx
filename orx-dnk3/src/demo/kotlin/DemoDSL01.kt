@@ -10,7 +10,7 @@ import org.openrndr.extras.meshgenerators.groundPlaneMesh
 import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
 
-fun main() = application {
+suspend fun main() = application {
     configure {
         width = 1280
         height = 720

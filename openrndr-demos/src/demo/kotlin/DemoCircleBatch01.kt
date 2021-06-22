@@ -4,7 +4,7 @@ import org.openrndr.color.ColorRGBa
 /*
 This demo just verifies that drawing a single circle still works with revamped circle drawing code
  */
-fun main() = application {
+suspend fun main() = application {
     program {
         extend {
             drawer.clear(ColorRGBa.GRAY)

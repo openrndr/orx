@@ -8,7 +8,7 @@ import kotlin.math.abs
 This program demonstrates dynamic circle batches
  */
 
-fun main() = application {
+suspend fun main() = application {
     program {
 
         extend {

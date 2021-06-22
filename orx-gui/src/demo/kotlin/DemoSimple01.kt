@@ -9,7 +9,7 @@ import org.openrndr.shape.Circle
 /**
  * A simple demonstration of a GUI for drawing some circles
  */
-fun main() = application {
+suspend fun main() = application {
     program {
         // -- this block is for automation purposes only
         if (System.getProperty("takeScreenshot") == "true") {

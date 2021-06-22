@@ -8,7 +8,7 @@ import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.jumpfill.fx.StraightSkeleton
 import org.openrndr.extra.noise.simplex
 
-fun main() {
+suspend fun main() {
     application {
         configure {
             width = 1280

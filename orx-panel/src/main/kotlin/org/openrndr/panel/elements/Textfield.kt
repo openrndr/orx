@@ -9,11 +9,11 @@ import org.openrndr.draw.LineCap
 import org.openrndr.panel.style.*
 import kotlinx.coroutines.yield
 import org.openrndr.KeyModifier
+import org.openrndr.draw.Cursor
+import org.openrndr.draw.writer
 import org.openrndr.events.Event
 import org.openrndr.launch
 import org.openrndr.shape.Rectangle
-import org.openrndr.text.Cursor
-import org.openrndr.text.writer
 import kotlin.reflect.KMutableProperty0
 
 class Textfield : Element(ElementType("textfield")), DisposableElement {

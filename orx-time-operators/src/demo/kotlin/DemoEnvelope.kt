@@ -5,7 +5,7 @@ import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.timeoperators.Envelope
 import org.openrndr.extra.timeoperators.TimeOperators
 
-fun main() {
+suspend fun main() {
     application {
         program {
             val size = Envelope(50.0, 400.0, 0.5, 0.5)

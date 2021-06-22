@@ -8,7 +8,7 @@ import org.openrndr.extras.camera.Orbital
 import org.openrndr.extras.meshgenerators.boxMesh
 import org.openrndr.math.Vector3
 
-fun main() {
+suspend fun main() {
     application {
         program {
             val box = boxMesh(1.0, 1.0, 1.0)

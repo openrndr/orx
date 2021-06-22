@@ -13,7 +13,7 @@ import org.openrndr.extra.noise.simplex
 import org.openrndr.math.Vector2
 import kotlin.math.absoluteValue
 
-fun main() = application {
+suspend fun main() = application {
     configure {
         width = 1280
         height = 720

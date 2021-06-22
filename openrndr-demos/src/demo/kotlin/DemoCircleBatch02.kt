@@ -11,7 +11,7 @@ Batches are (currently) static but stored in GPU memory but can be
 animated using a vertex shader. Batches are fast to draw.
 */
 
-fun main() = application {
+suspend fun main() = application {
     program {
         val batch = drawer.circleBatch {
             for (i in 0 until 2000) {

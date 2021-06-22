@@ -3,7 +3,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.extensions.Screenshots
 
-fun main() = application {
+suspend fun main() = application {
     program {
         val volumeTexture = VolumeTexture.create(128,128,32)
         val rt = renderTarget(128, 128) {

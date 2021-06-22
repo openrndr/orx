@@ -4,11 +4,11 @@ import kotlinx.coroutines.yield
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.FontImageMap
+import org.openrndr.draw.Writer
 import org.openrndr.launch
 import org.openrndr.math.Vector2
 import org.openrndr.panel.style.*
 import org.openrndr.shape.Rectangle
-import org.openrndr.text.Writer
 import kotlin.reflect.KMutableProperty0
 
 class TextNode(var text: String) : Element(ElementType("text")) {
@@ -23,7 +23,7 @@ class TextNode(var text: String) : Element(ElementType("text")) {
             val writer = Writer(drawer)
             drawer.fontMap = (fontMap)
 
-            writer.box= Rectangle(Vector2(layout.screenX * 0.0, layout.screenY * 0.0), layout.screenWidth, layout.screenHeight)
+            writer.box = Rectangle(Vector2(layout.screenX * 0.0, layout.screenY * 0.0), layout.screenWidth, layout.screenHeight)
             writer.newLine()
             writer.text(text)
         }

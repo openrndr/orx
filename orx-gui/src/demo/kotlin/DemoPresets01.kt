@@ -11,7 +11,7 @@ import org.openrndr.extra.parameters.*
  * [Left Shift] + [0]..[9] => store current gui values to a preset
  *                [0]..[9] => recall a preset
  */
-fun main() = application {
+suspend fun main() = application {
     program {
         // -- this block is for automation purposes only
         if (System.getProperty("takeScreenshot") == "true") {

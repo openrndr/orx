@@ -10,7 +10,7 @@ import org.openrndr.shape.Rectangle
  * Example of 5 gradient styles.
  * NPointLinear and NPoingGradient have separate demos.
  */
-fun main() {
+suspend fun main() {
     application {
         configure {
             width = 1000

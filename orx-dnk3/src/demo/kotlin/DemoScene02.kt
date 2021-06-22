@@ -11,7 +11,7 @@ import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
 import java.io.File
 
-fun main() = application {
+suspend fun main() = application {
     configure {
         width = 1280
         height = 720

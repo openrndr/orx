@@ -13,7 +13,7 @@ import org.openrndr.shape.Triangle
  * a 3x3 grid of triangles and lines.
  */
 
-fun main() {
+suspend fun main() {
     application {
         configure {
             width = 720

@@ -8,7 +8,7 @@ import org.openrndr.math.Polar
 import org.openrndr.shape.contour
 import kotlin.math.sin
 
-fun main() {
+suspend fun main() {
     application {
         program {
             var time = 0.0

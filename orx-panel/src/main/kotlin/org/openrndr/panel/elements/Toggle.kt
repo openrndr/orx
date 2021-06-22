@@ -7,9 +7,9 @@ import org.openrndr.draw.FontImageMap
 import org.openrndr.draw.LineCap
 import org.openrndr.panel.style.*
 import org.openrndr.shape.Rectangle
-import org.openrndr.text.Writer
 
 import kotlinx.coroutines.yield
+import org.openrndr.draw.Writer
 import org.openrndr.events.Event
 import org.openrndr.launch
 import kotlin.reflect.KMutableProperty0

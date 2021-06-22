@@ -2,19 +2,21 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.math.Vector3
+import org.openrndr.resourceText
 import org.openrndr.resourceUrl
 
-fun main() {
+suspend fun main() {
     application {
         program {
             val vb = vertexBuffer(vertexFormat {
                 position(3)
             }, 12)
-            val shader = Shader.Companion.createFromUrls(
-                    vsUrl = resourceUrl("/shaders/ts-01.vert"),
-                    tcsUrl = resourceUrl("/shaders/ts-01.tesc"),
-                    tesUrl = resourceUrl("/shaders/ts-01.tese"),
-                    fsUrl = resourceUrl("/shaders/ts-01.frag")
+            val shader = Shader.Companion.createFromCode(
+                vsCode = resourceText("/shaders/ts-01.vert"),
+                tcsCode = resourceText("/shaders/ts-01.tesc"),
+                tesCode = resourceText("/shaders/ts-01.tese"),
+                fsCode = resourceText("/shaders/ts-01.frag"),
+                name = "x"
             )
 
             vb.put {

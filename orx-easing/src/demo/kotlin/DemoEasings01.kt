@@ -4,7 +4,7 @@ import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extras.easing.*
 import org.openrndr.math.Vector2
 
-fun main() {
+suspend fun main() {
     application {
         configure {
             width = 1280

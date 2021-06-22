@@ -1,4 +1,5 @@
 dependencies {
     implementation project(":orx-noise")
     implementation project(":orx-fx")
+    implementation("org.openrndr:openrndr-filter:$openrndrVersion")
 }

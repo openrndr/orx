@@ -5,7 +5,7 @@ import org.openrndr.extra.kdtree.findNearest
 import org.openrndr.extra.kdtree.vector2Mapper
 import org.openrndr.math.Vector2
 
-fun main() {
+suspend fun main() {
     application {
         configure {
             width = 1280

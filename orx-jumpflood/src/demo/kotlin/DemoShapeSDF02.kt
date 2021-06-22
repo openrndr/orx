@@ -12,7 +12,7 @@ import org.openrndr.math.transforms.transform
 import org.openrndr.svg.loadSVG
 import kotlin.math.min
 
-fun main() {
+suspend fun main() {
     application {
         configure {
             width = 1280

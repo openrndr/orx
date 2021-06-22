@@ -11,7 +11,7 @@ import org.openrndr.extras.color.spaces.ColorHSLUVa
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 
-fun main() {
+suspend fun main() {
     application {
         program {
             // -- this block is for automation purposes only

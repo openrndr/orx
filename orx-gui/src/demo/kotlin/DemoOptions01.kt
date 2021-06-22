@@ -14,7 +14,7 @@ enum class BackgroundColors {
     Yellow
 }
 
-fun main() = application {
+suspend fun main() = application {
     program {
         // -- this block is for automation purposes only
         if (System.getProperty("takeScreenshot") == "true") {

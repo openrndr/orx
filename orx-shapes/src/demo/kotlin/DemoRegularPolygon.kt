@@ -6,7 +6,7 @@ import org.openrndr.extra.shapes.regularPolygon
 import org.openrndr.math.map
 import kotlin.math.cos
 
-fun main() = application {
+suspend fun main() = application {
     program {
         // -- this block is for automation purposes only
         if (System.getProperty("takeScreenshot") == "true") {

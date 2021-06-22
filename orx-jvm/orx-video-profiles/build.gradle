@@ -1,0 +1,19 @@
+sourceSets {
+    demo {
+        java {
+            srcDirs = ["src/demo/kotlin"]
+            compileClasspath += main.getCompileClasspath()
+            runtimeClasspath += main.getRuntimeClasspath()
+        }
+    }
+}
+
+dependencies {
+    demoImplementation("org.openrndr:openrndr-application:$openrndrVersion")
+    demoImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
+    demoImplementation("org.openrndr:openrndr-ffmpeg:$openrndrVersion")
+    demoRuntimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
+    demoRuntimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
+    implementation("org.openrndr:openrndr-ffmpeg:$openrndrVersion")
+    demoImplementation(sourceSets.getByName("main").output)
+}

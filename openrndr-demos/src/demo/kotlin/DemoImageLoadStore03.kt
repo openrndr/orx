@@ -3,7 +3,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 
 
-fun main() = application {
+suspend fun main() = application {
     program {
         val cb = colorBuffer(128, 128)
         val at = arrayTexture(128, 128, 32)

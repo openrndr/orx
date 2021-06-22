@@ -7,7 +7,7 @@ import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
 import org.openrndr.shape.Rectangle
 
-fun main() {
+suspend fun main() {
     application {
         configure {
             width = 800

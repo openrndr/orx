@@ -1,7 +1,7 @@
 import org.openrndr.CursorType
 import org.openrndr.application
 
-fun main() {
+suspend fun main() {
     application {
         program {
             keyboard.character.listen {

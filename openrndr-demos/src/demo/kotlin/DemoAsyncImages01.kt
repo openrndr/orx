@@ -1,7 +1,7 @@
 import org.openrndr.application
 import org.openrndr.internal.colorBufferLoader
 
-fun main() {
+suspend fun main() {
     application {
         program {
             extend {

@@ -4,11 +4,10 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.FontImageMap
 import org.openrndr.draw.isolated
+import org.openrndr.draw.writer
 import org.openrndr.math.Vector2
-import org.openrndr.panel.ControlManager
 import org.openrndr.panel.elements.Body
 import org.openrndr.panel.elements.Element
-import org.openrndr.text.writer
 import kotlin.math.max
 
 class Tooltip(val parent: Element, val position: Vector2, val message: String) {

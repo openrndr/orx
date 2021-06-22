@@ -1,11 +1,11 @@
 package org.openrndr.panel.elements
 
 import org.openrndr.color.ColorRGBa
+import org.openrndr.draw.Cursor
 import org.openrndr.draw.Drawer
+import org.openrndr.draw.Writer
 import org.openrndr.math.Vector2
 import org.openrndr.panel.style.*
-import org.openrndr.text.Cursor
-import org.openrndr.text.Writer
 
 class EnvelopeButton : Element(ElementType("envelope-button")) {
 

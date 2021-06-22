@@ -5,7 +5,7 @@ import org.openrndr.extra.shapes.regularStar
 import kotlin.math.cos
 import kotlin.math.sin
 
-fun main() = application {
+suspend fun main() = application {
     program {
         // -- this block is for automation purposes only
         if (System.getProperty("takeScreenshot") == "true") {

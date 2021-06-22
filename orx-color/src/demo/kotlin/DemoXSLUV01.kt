@@ -8,7 +8,7 @@ import org.openrndr.extras.color.spaces.toHSLUVa
 import org.openrndr.math.Polar
 import org.openrndr.shape.contour
 
-fun main() {
+suspend fun main() {
     class Arc(val start: Double, val radius: Double, val length: Double, val height: Double) {
         fun split(offset: Double = 0.0): List<Arc> {
             val hl = length / 2.0

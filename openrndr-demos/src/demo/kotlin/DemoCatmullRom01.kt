@@ -7,7 +7,7 @@ import org.openrndr.math.Polar
 import org.openrndr.shape.ShapeContour
 import org.openrndr.shape.toContour
 
-fun main() = application {
+suspend fun main() = application {
     program {
         val points = List(6) { Polar(it * 70.0, 100.0).cartesian + drawer.bounds.center }
         val cmr = CatmullRomChain2(points, 1.0, loop = true)

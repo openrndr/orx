@@ -6,7 +6,7 @@ import org.openrndr.internal.Driver
 import org.openrndr.math.Vector3
 
 
-fun main() = application {
+suspend fun main() = application {
     program {
         val cb = colorBuffer(128, 128)
         extend {

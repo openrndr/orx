@@ -5,11 +5,12 @@ import org.openrndr.draw.Drawer
 import org.openrndr.draw.FontImageMap
 import org.openrndr.panel.style.*
 import org.openrndr.shape.Rectangle
-import org.openrndr.text.Writer
+
 import kotlinx.coroutines.yield
 import org.openrndr.KEY_ARROW_DOWN
 import org.openrndr.KEY_ARROW_UP
 import org.openrndr.KEY_ENTER
+import org.openrndr.draw.Writer
 import org.openrndr.events.Event
 import org.openrndr.launch
 import kotlin.math.max

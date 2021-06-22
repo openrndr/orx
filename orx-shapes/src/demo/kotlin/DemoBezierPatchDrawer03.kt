@@ -15,7 +15,7 @@ import org.openrndr.shape.Circle
 import org.openrndr.shape.Rectangle
 import kotlin.math.min
 
-fun main() {
+suspend fun main() {
     application {
         configure {
             width = 720

@@ -6,7 +6,7 @@ import org.openrndr.draw.shadeStyle
 import org.openrndr.extras.camera.Orbital
 import org.openrndr.extras.meshgenerators.boxMesh
 
-fun main() = application {
+suspend fun main() = application {
     program {
 
         val cubemap = Cubemap.fromUrl("file:demo-data/cubemaps/garage_iem.dds", null, session = Session.active)

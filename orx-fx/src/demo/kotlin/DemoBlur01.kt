@@ -6,7 +6,7 @@ import org.openrndr.extra.fx.blur.*
 import org.openrndr.math.Polar
 import kotlin.math.sin
 
-fun main() {
+suspend fun main() {
     application {
         program {
 

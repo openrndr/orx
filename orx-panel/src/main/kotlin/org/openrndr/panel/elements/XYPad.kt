@@ -4,13 +4,13 @@ import kotlinx.coroutines.yield
 import org.openrndr.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
+import org.openrndr.draw.Writer
 import org.openrndr.events.Event
 import org.openrndr.math.Vector2
 import org.openrndr.math.clamp
 import org.openrndr.math.map
 import org.openrndr.panel.style.Color
 import org.openrndr.panel.style.color
-import org.openrndr.text.Writer
 import kotlin.math.pow
 import kotlin.math.round
 import kotlin.reflect.KMutableProperty0

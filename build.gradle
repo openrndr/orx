@@ -14,20 +14,20 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.5.0'
 }
 
-def openrndrUseSnapshot = false
+def openrndrUseSnapshot = true
 
 apply plugin: 'org.jetbrains.dokka'
 
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 project.ext {
-    openrndrVersion = openrndrUseSnapshot? "0.4.0-SNAPSHOT" : "0.3.58"
+    openrndrVersion = openrndrUseSnapshot? "0.5.1-SNAPSHOT" : "0.4.0"
     kotlinVersion = "1.5.0"
     spekVersion = "2.0.15"
     libfreenectVersion = "0.5.7-1.5.5"
     librealsense2Version = "2.40.0-1.5.5"
     gsonVersion = "2.8.6"
-    antlrVersion = "4.9.1"
+    antlrVersion = "4.9.2"
     tensorflowVersion = "0.3.1"
     mklDnnVersion = "0.21.5-1.5.5"
 }
@@ -77,8 +77,7 @@ allprojects {
     dependencies {
         implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
         implementation 'io.github.microutils:kotlin-logging-jvm:2.0.6'
-        implementation "org.openrndr:openrndr-core:$openrndrVersion"
-        implementation "org.openrndr:openrndr-filter:$openrndrVersion"
+        implementation "org.openrndr:openrndr-application:$openrndrVersion"
         implementation "org.openrndr:openrndr-shape:$openrndrVersion"
         implementation group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '1.4.3'
         testImplementation "org.spekframework.spek2:spek-dsl-jvm:$spekVersion"

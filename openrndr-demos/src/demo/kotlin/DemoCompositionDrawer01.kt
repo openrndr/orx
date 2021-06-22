@@ -6,7 +6,7 @@ import org.openrndr.shape.drawComposition
 import org.openrndr.svg.toSVG
 import org.openrndr.svg.writeSVG
 
-fun main() {
+suspend fun main() {
     application {
         program {
             extend {

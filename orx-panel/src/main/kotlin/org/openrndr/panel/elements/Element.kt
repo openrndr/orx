@@ -1,9 +1,6 @@
 package org.openrndr.panel.elements
 
-import org.openrndr.DropEvent
-import org.openrndr.KeyEvent
-import org.openrndr.MouseEvent
-import org.openrndr.Program
+import org.openrndr.*
 import org.openrndr.draw.Drawer
 import org.openrndr.events.Event
 import org.openrndr.math.Vector2
@@ -72,7 +69,7 @@ open class Element(val type: ElementType) {
         val pressed = Event<KeyEvent>("element-keyboard-pressed")
         val released = Event<KeyEvent>("element-keyboard-released")
         val repeated = Event<KeyEvent>("element-keyboard-repeated")
-        val character = Event<Program.CharacterEvent>("element-keyboard-character")
+        val character = Event<CharacterEvent>("element-keyboard-character")
         val focusGained = Event<FocusEvent>("element-keyboard-focus-gained")
         val focusLost = Event<FocusEvent>("element-keyboard-focus-lost")
     }

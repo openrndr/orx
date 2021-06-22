@@ -4,7 +4,7 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.pointBatch
 
-fun main() = application {
+suspend fun main() = application {
     program {
         val storedBatch = drawer.pointBatch {
             for (y in 10 until height step 20) {

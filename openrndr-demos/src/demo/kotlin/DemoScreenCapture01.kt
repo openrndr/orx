@@ -8,7 +8,7 @@ import org.openrndr.extras.meshgenerators.boxMesh
 import org.openrndr.ffmpeg.VideoPlayerFFMPEG
 import org.openrndr.math.Vector3
 
-fun main() {
+suspend fun main() {
     application {
         program {
             val cube = boxMesh()

@@ -1,0 +1,38 @@
+name: Build
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: openrndr/openrndr
+          path: openrndr
+          ref: openrndr-0.4
+      - uses: actions/checkout@v2.3.4
+        with:
+          path: orx
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 14
+      - uses: actions/cache@v2.3.4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Build OPENRNDR snapshot
+        run: |
+          cd ~/openrndr
+          ./gradlew publishToMavenLocal -Prelease.version=0.5.1-SNAPSHOT
+      - name: Build ORX
+        run: |
+          cd ~/orx
+          ./gradlew build

@@ -10,9 +10,7 @@ import org.openrndr.extra.parameters.IntParameter
 import org.openrndr.filter.color.delinearize
 import org.openrndr.filter.color.linearize
 
-class BloomDownscale : Filter(filterShaderFromUrl(filterFragmentUrl("blur/bloom-downscale.frag"))) {
-
-}
+class BloomDownscale : Filter(filterShaderFromUrl(filterFragmentUrl("blur/bloom-downscale.frag")))
 
 class BloomUpscale : Filter(filterShaderFromUrl(filterFragmentUrl("blur/bloom-upscale.frag"))) {
     var gain: Double by parameters

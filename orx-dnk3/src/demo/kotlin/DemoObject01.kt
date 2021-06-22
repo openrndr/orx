@@ -7,7 +7,7 @@ import org.openrndr.extras.camera.Orbital
 import org.openrndr.math.Vector3
 import java.io.File
 
-fun main() = application {
+suspend fun main() = application {
     program {
         if (System.getProperty("takeScreenshot") == "true") {
             extend(SingleScreenshot()) {

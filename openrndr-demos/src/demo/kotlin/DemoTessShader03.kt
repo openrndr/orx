@@ -4,10 +4,11 @@ import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.Shader
 import org.openrndr.draw.vertexBuffer
 import org.openrndr.draw.vertexFormat
+import org.openrndr.resourceText
 import org.openrndr.resourceUrl
 import org.openrndr.shape.Ellipse
 
-fun main() {
+suspend fun main() {
     application {
         program {
 
@@ -17,12 +18,13 @@ fun main() {
                 position(3)
             }, ellipse.segments.size * 4)
 
-            val shader = Shader.createFromUrls(
-                    vsUrl = resourceUrl("/shaders/ts-03.vert"),
-                    tcsUrl = resourceUrl("/shaders/ts-03.tesc"),
-                    tesUrl = resourceUrl("/shaders/ts-03.tese"),
-                    gsUrl = resourceUrl("/shaders/ts-03.geom"),
-                    fsUrl = resourceUrl("/shaders/ts-03.frag")
+            val shader = Shader.createFromCode(
+                    vsCode = resourceText("/shaders/ts-03.vert"),
+                    tcsCode = resourceText("/shaders/ts-03.tesc"),
+                    tesCode = resourceText("/shaders/ts-03.tese"),
+                    gsCode = resourceText("/shaders/ts-03.geom"),
+                    fsCode = resourceText("/shaders/ts-03.frag"),
+                    name = "x"
             )
 
             vb.put {
@@ -37,7 +39,6 @@ fun main() {
 
             extend {
                 drawer.clear(ColorRGBa.PINK)
-
                 drawer.translate(width/2.0, height/2.0, 0.0)
                 drawer.rotate(seconds*45.0)
                 drawer.translate(-width/2.0, -height/2.0, 0.0)

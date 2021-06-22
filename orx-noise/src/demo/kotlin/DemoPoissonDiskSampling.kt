@@ -5,7 +5,7 @@ import org.openrndr.extra.noise.poissonDiskSampling
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
 
-fun main() {
+suspend fun main() {
     application {
         program {
             if (System.getProperty("takeScreenshot") == "true") {

@@ -8,7 +8,7 @@ import org.openrndr.extra.dnk3.renderers.dryRenderer
 import org.openrndr.math.*
 import java.io.File
 
-fun main() = application {
+suspend fun main() = application {
     configure {
         width = 1280
         height = 720

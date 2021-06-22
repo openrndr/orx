@@ -14,7 +14,7 @@ import org.openrndr.shape.ShapeContour
  * The created contours are horizontal and vertical in "bezier-patch space" but
  * are rendered deformed following the shape of the bezier patch.
  */
-fun main() {
+suspend fun main() {
     application {
         configure {
             width = 800
