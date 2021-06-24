@@ -2,7 +2,7 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.osc.OSC
 
-fun main() = application {
+suspend fun main() = application {
 
     configure {
         width = 500
