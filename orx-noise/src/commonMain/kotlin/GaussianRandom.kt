@@ -3,6 +3,9 @@ package org.openrndr.extra.noise
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
+import kotlin.math.ln
+import kotlin.math.log
+import kotlin.math.sqrt
 import kotlin.random.Random
 
 fun gaussian(mean: Double = 0.0, deviation: Double = 1.0, random: Random = Random.Default): Double {
@@ -14,7 +17,7 @@ fun gaussian(mean: Double = 0.0, deviation: Double = 1.0, random: Random = Rando
         v2 = 2 * random.nextDouble() - 1
         s = v1 * v1 + v2 * v2
     } while (s >= 1 || s == 0.0)
-    val multiplier = StrictMath.sqrt(-2 * StrictMath.log(s) / s)
+    val multiplier = sqrt(-2 * ln(s) / s)
 
     return v1 * multiplier * deviation + mean
 }

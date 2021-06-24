@@ -1,9 +1,9 @@
 rootProject.name = 'orx'
 
 include 'openrndr-demos',
-        'orx-boofcv',
+        'orx-jvm:orx-boofcv',
         'orx-camera',
-        'orx-chataigne',
+        'orx-jvm:orx-chataigne',
         'orx-color',
         'orx-compositor',
         'orx-dnk3',

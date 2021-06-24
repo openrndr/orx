@@ -8,7 +8,7 @@ sourceSets {
     }
 }
 dependencies {
-    api project(":orx-osc")
+    api project(":orx-jvm:orx-osc")
 
     implementation "com.google.code.gson:gson:$gsonVersion"
     demoImplementation("org.openrndr:openrndr-application:$openrndrVersion")
