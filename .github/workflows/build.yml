@@ -18,7 +18,7 @@ jobs:
           path: orx
       - uses: actions/setup-java@v2
         with:
-          distrubution: 'adopt'
+          distribution: 'adopt'
           java-version: '16'
       - uses: actions/cache@v2
         with:
