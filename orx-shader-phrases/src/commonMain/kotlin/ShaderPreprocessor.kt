@@ -2,8 +2,8 @@ package org.openrndr.extra.shaderphrases
 
 import mu.KotlinLogging
 import org.openrndr.draw.Shader
+//import org.openrndr.extra.shaderphrases.phrases.phraseTbnMatrix
 import org.openrndr.utils.url.textFromURL
-
 
 private val logger = KotlinLogging.logger {}
 
@@ -115,7 +115,6 @@ fun Shader.Companion.preprocessedFromUrls(
     gsUrl: String? = null,
     fsUrl: String
 ): Shader {
-
     val vsCode = textFromURL(vsUrl).preprocess()
     val tcsCode = tcsUrl?.let { textFromURL(it) }?.preprocess()
     val tesCode = tesUrl?.let { textFromURL(it) }?.preprocess()

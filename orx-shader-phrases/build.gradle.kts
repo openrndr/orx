@@ -1,6 +1,9 @@
+import Orx_embed_shaders_gradle.EmbedShadersTask
+
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
+    id("orx.embed-shaders")
 }
 
 val kotlinxSerializationVersion: String by rootProject.extra
@@ -40,14 +43,15 @@ kotlin {
             useJUnitPlatform()
         }
     }
-
     js(IR) {
         browser()
         nodejs()
     }
 
-
     sourceSets {
+        val shaderKotlin by creating {
+            this.kotlin.srcDir("$projectDir/build/generated/shaderKotlin")
+        }
         @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
@@ -56,9 +60,10 @@ kotlin {
                 implementation("org.openrndr:openrndr-draw:$openrndrVersion")
                 implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
                 implementation("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
+                api(shaderKotlin.kotlin)
             }
         }
-
+        commonMain.dependsOn(shaderKotlin)
         @Suppress("UNUSED_VARIABLE")
         val commonTest by getting {
             dependencies {
@@ -68,7 +73,6 @@ kotlin {
                 implementation("io.kotest:kotest-assertions-core:$kotestVersion")
             }
         }
-
         @Suppress("UNUSED_VARIABLE")
         val jvmMain by getting
 
@@ -97,3 +101,12 @@ kotlin {
         }
     }
 }
+
+val embedShaders = tasks.register<EmbedShadersTask>("embedShaders") {
+    inputDir.set(file("$projectDir/src/shaders/glsl"))
+    outputDir.set(file("$buildDir/generated/shaderKotlin"))
+    defaultPackage.set("org.openrndr.shaderphrases.phrases")
+}.get()
+
+tasks.getByName("compileKotlinJvm").dependsOn(embedShaders)
+tasks.getByName("compileKotlinJs").dependsOn(embedShaders)

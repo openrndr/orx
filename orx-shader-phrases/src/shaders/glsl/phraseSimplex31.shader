@@ -1,4 +1,4 @@
-#pragma import org.openrndr.extra.noise.phrases.NoisePhrasesKt.phraseHash33;
+#pragma import phraseHash33;
 
 float simplex31(vec3 p) {
     const float K1 = 0.333333333;
