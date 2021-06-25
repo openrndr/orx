@@ -4,10 +4,6 @@ import org.openrndr.math.Vector2
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty1
-import kotlin.reflect.KVisibility
-import kotlin.reflect.full.declaredMemberFunctions
-import kotlin.reflect.full.findAnnotation
-import kotlin.reflect.full.memberProperties
 
 /*  In case you are here to add an extra annotation type:
     1. Add an annotation class
@@ -30,7 +26,7 @@ annotation class Description(val title: String, val description: String = "")
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class OptionParameter(val label: String, val order: Int = Integer.MAX_VALUE)
+annotation class OptionParameter(val label: String, val order: Int = Int.MAX_VALUE)
 
 /**
  * DoubleParameter annotation for a double precision parameter
@@ -42,8 +38,7 @@ annotation class OptionParameter(val label: String, val order: Int = Integer.MAX
  */
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class DoubleParameter(val label: String, val low: Double, val high: Double, val precision: Int = 3, val order: Int = Integer.MAX_VALUE)
-
+annotation class DoubleParameter(val label: String, val low: Double, val high: Double, val precision: Int = 3, val order: Int = Int.MAX_VALUE)
 
 /**
  * DoubleListParameter annotation for a double precision parameter
@@ -64,7 +59,7 @@ annotation class DoubleListParameter(
         val minimumListLength: Int = 1,
         val maximumListLength: Int = 16,
         val precision: Int = 3,
-        val order: Int = Integer.MAX_VALUE
+        val order: Int = Int.MAX_VALUE
 )
 
 /**
@@ -76,7 +71,7 @@ annotation class DoubleListParameter(
  */
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class IntParameter(val label: String, val low: Int, val high: Int, val order: Int = Integer.MAX_VALUE)
+annotation class IntParameter(val label: String, val low: Int, val high: Int, val order: Int = Int.MAX_VALUE)
 
 /**
  * BooleanParameter annotation for a boolean parameter
@@ -85,7 +80,7 @@ annotation class IntParameter(val label: String, val low: Int, val high: Int, va
  */
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class BooleanParameter(val label: String, val order: Int = Integer.MAX_VALUE)
+annotation class BooleanParameter(val label: String, val order: Int = Int.MAX_VALUE)
 
 /**
  * TextParameter annotation for a text parameter
@@ -94,7 +89,7 @@ annotation class BooleanParameter(val label: String, val order: Int = Integer.MA
  */
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class TextParameter(val label: String, val order: Int = Integer.MAX_VALUE)
+annotation class TextParameter(val label: String, val order: Int = Int.MAX_VALUE)
 
 /**
  * ColorParameter annotation for a ColorRGBa parameter
@@ -103,7 +98,7 @@ annotation class TextParameter(val label: String, val order: Int = Integer.MAX_V
  */
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class ColorParameter(val label: String, val order: Int = Integer.MAX_VALUE)
+annotation class ColorParameter(val label: String, val order: Int = Int.MAX_VALUE)
 
 
 /**
@@ -122,7 +117,7 @@ annotation class XYParameter(
         val precision: Int = 2,
         val showVector: Boolean = false,
         val invertY: Boolean = true,
-        val order: Int = Integer.MAX_VALUE
+        val order: Int = Int.MAX_VALUE
 )
 
 @Target(AnnotationTarget.PROPERTY)
@@ -132,7 +127,7 @@ annotation class Vector2Parameter(
         val min: Double = -1.0,
         val max: Double = 1.0,
         val precision: Int = 2,
-        val order: Int = Integer.MAX_VALUE
+        val order: Int = Int.MAX_VALUE
 )
 
 @Target(AnnotationTarget.PROPERTY)
@@ -142,7 +137,7 @@ annotation class Vector3Parameter(
         val min: Double = -1.0,
         val max: Double = 1.0,
         val precision: Int = 2,
-        val order: Int = Integer.MAX_VALUE
+        val order: Int = Int.MAX_VALUE
 )
 
 @Target(AnnotationTarget.PROPERTY)
@@ -152,7 +147,7 @@ annotation class Vector4Parameter(
         val min: Double = -1.0,
         val max: Double = 1.0,
         val precision: Int = 2,
-        val order: Int = Integer.MAX_VALUE
+        val order: Int = Int.MAX_VALUE
 )
 
 /**
@@ -162,7 +157,7 @@ annotation class Vector4Parameter(
  */
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class ActionParameter(val label: String, val order: Int = Integer.MAX_VALUE)
+annotation class ActionParameter(val label: String, val order: Int = Int.MAX_VALUE)
 
 //</editor-fold>
 //<editor-fold desc="2. Add an entry to ParameterType" id="add-parameter-type" defaultstate="collapsed">
@@ -182,11 +177,9 @@ enum class ParameterType(val annotationClass: KClass<out Annotation>) {
     ;
 
     companion object {
-        fun forParameterAnnotationClass(annotation: Annotation): ParameterType =
-                values().find { it.annotationClass == annotation.annotationClass } ?: error("no type for $annotation")
 
-        val parameterAnnotationClasses get() = values().map { it.annotationClass }
     }
+
 }
 //</editor-fold>
 //<editor-fold desc="3. Add extra fields (if any) to Parameter" defaultstate="collapsed">
@@ -222,129 +215,11 @@ class Parameter(
 /**
  * List all parameters, (public var properties with a parameter annotation)
  */
-fun Any.listParameters(): List<Parameter> {
-    return (this::class.memberProperties.filter { property ->
-        !property.isConst &&
-                property is KMutableProperty1<*, *> &&
-                property.visibility == KVisibility.PUBLIC &&
-                property.annotations.map { it.annotationClass }.intersect(ParameterType.parameterAnnotationClasses).isNotEmpty()
-    }.map { property ->
-        val annotations = property.annotations.filter { it.annotationClass in ParameterType.parameterAnnotationClasses }
-        var intRange: IntRange? = null
-        var doubleRange: ClosedRange<Double>? = null
-        var sizeRange: ClosedRange<Int>? = null
-        var order: Int = Integer.MAX_VALUE
-        var label = ""
-        var precision: Int? = null
-        var type: ParameterType? = null
-        var vectorRange = Pair(Vector2(-1.0, -1.0), Vector2(1.0, 1.0))
-        var invertY: Boolean? = null
-        var showVector: Boolean? = null
 
-        annotations.forEach {
-            type = ParameterType.forParameterAnnotationClass(it)
-            when (it) {
-                is BooleanParameter -> {
-                    label = it.label
-                    order = it.order
-                }
-                is DoubleParameter -> {
-                    label = it.label
-                    doubleRange = it.low..it.high
-                    precision = it.precision
-                    order = it.order
-                }
-                is IntParameter -> {
-                    label = it.label
-                    intRange = it.low..it.high
-                    order = it.order
-                }
-                is TextParameter -> {
-                    label = it.label
-                    order = it.order
-                }
-                is ColorParameter -> {
-                    label = it.label
-                    order = it.order
-                }
-                is XYParameter -> {
-                    label = it.label
-                    order = it.order
-                    vectorRange = Pair(Vector2(it.minX, it.minY), Vector2(it.maxX, it.maxY))
-                    precision = it.precision
-                    invertY = it.invertY
-                    showVector = it.showVector
-                }
-                is DoubleListParameter -> {
-                    label = it.label
-                    order = it.order
-                    doubleRange = it.low..it.high
-                    precision = it.precision
-                    sizeRange = it.minimumListLength..it.maximumListLength
-                }
-                is Vector2Parameter -> {
-                    label = it.label
-                    order = it.order
-                    doubleRange = it.min..it.max
-                    precision = it.precision
-                }
-                is Vector3Parameter -> {
-                    label = it.label
-                    order = it.order
-                    doubleRange = it.min..it.max
-                    precision = it.precision
-                }
-                is Vector4Parameter -> {
-                    label = it.label
-                    order = it.order
-                    doubleRange = it.min..it.max
-                    precision = it.precision
-                }
-                is OptionParameter -> {
-                    label = it.label
-                    order = it.order
-                }
-            }
-        }
-        Parameter(
-                parameterType = type ?: error("no type"),
-                property = property as KMutableProperty1<out Any, Any?>,
-                function = null,
-                label = label,
-                doubleRange = doubleRange,
-                vectorRange = vectorRange,
-                sizeRange = sizeRange,
-                intRange = intRange,
-                precision = precision,
-                showVector = showVector,
-                invertY = invertY,
-                order = order
-        )
-    } + this::class.declaredMemberFunctions.filter {
-        it.findAnnotation<ActionParameter>() != null
-    }.map {
-        val annotation = it.findAnnotation<ActionParameter>()!!
-        val label = annotation.label
-        val order = annotation.order
-        val type = ParameterType.Action
-        Parameter(
-                type,
-                property = null,
-                function = it as KCallable<Unit>,
-                label = label,
-                doubleRange = null,
-                intRange = null,
-                sizeRange = null,
-                vectorRange = null,
-                precision = null,
-                showVector = null,
-                invertY = null,
-                order = order
-        )
-    }).sortedBy { it.order }
-}
 //</editor-fold>
 
-fun Any.title() = this::class.findAnnotation<Description>()?.title
 
-fun Any.description() = this::class.findAnnotation<Description>()?.description
+expect fun Any.title(): String?
+
+expect fun Any.description(): String?
+
