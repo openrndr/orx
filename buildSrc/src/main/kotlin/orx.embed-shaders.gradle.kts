@@ -1,4 +1,4 @@
-
+import javax.inject.Inject
 
 abstract class EmbedShadersTask : DefaultTask() {
     @get:Incremental
@@ -12,18 +12,35 @@ abstract class EmbedShadersTask : DefaultTask() {
     @get:Input
     abstract val defaultPackage: Property<String>
 
+    @get:Input
+    abstract val defaultVisibility: Property<String>
+
+    @get:Input
+    abstract val namePrefix: Property<String>
+
+    @Inject
+    abstract fun getWorkerExecutor(): WorkerExecutor
+
+    init {
+        defaultVisibility.set("")
+        namePrefix.set("")
+    }
+
     @TaskAction
     fun execute(inputChanges: InputChanges) {
         inputChanges.getFileChanges(inputDir).forEach { change ->
             if (change.fileType == FileType.DIRECTORY) return@forEach
-            val name = change.file.nameWithoutExtension
-            val targetFile = outputDir.file(change.normalizedPath.replace(".","_")+".kt").get().asFile
+            val name = "${namePrefix.get()}${change.file.nameWithoutExtension.replace("-", "_")}"
+            val targetFile = outputDir.file(change.normalizedPath.replace(".", "_") + ".kt").get().asFile
             if (change.changeType == ChangeType.REMOVED) {
                 targetFile.delete()
             } else {
                 val contents = change.file.readText()
                 val lines = contents.split("\n")
                 var packageStatement = "package ${defaultPackage.get()}\n"
+                val visibilityStatement =
+                    if (defaultVisibility.get().isNotBlank()) "${defaultVisibility.get()} " else ""
+
                 val r = Regex("#pragma package ([a-z.]+)")
                 for (line in lines) {
                     val m = r.find(line.trim())
@@ -31,7 +48,8 @@ abstract class EmbedShadersTask : DefaultTask() {
                         packageStatement = "package ${m.groupValues[1]}\n"
                     }
                 }
-                val text = "${packageStatement}const val $name = ${"\"\"\""}${contents}${"\"\"\""}"
+                val text =
+                    "${packageStatement}${visibilityStatement}const val $name = ${"\"\"\""}${contents}${"\"\"\""}"
                 targetFile.writeText(text)
             }
         }
