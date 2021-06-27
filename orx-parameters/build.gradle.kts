@@ -37,6 +37,7 @@ kotlin {
         @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
+                implementation("org.openrndr:openrndr-application:$openrndrVersion")
                 implementation("org.openrndr:openrndr-math:$openrndrVersion")
                 implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
                 implementation("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")

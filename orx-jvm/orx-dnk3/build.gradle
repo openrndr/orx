@@ -9,13 +9,21 @@ sourceSets {
 }
 
 dependencies {
-    api project(":orx-parameters")
-    api project(":orx-panel")
-    implementation "org.openrndr:openrndr-dialogs:$openrndrVersion"
     implementation "com.google.code.gson:gson:$gsonVersion"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    implementation(project(":orx-fx"))
+    implementation(project(":orx-jvm:orx-keyframer"))
+    implementation(project(":orx-easing"))
+    implementation(project(":orx-shader-phrases"))
+    implementation(project(":orx-mesh-generators"))
+
+    demoImplementation(project(":orx-camera"))
+    demoImplementation(project(":orx-mesh-generators"))
+    demoImplementation(project(":orx-noise"))
+
     demoImplementation("org.openrndr:openrndr-application:$openrndrVersion")
     demoImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
+    demoImplementation("org.openrndr:openrndr-ffmpeg:$openrndrVersion")
+    demoImplementation("org.openrndr:openrndr-filter:$openrndrVersion")
     demoRuntimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
     demoRuntimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
     demoImplementation(sourceSets.getByName("main").output)
