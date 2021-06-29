@@ -1,11 +1,10 @@
 package org.openrndr.extras.color.spaces
 
 import org.openrndr.color.*
+import org.openrndr.math.asDegrees
+import org.openrndr.math.asRadians
 import org.openrndr.math.mixAngle
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
+import kotlin.math.*
 
 /**
  * Color in cylindrical OKLab space
@@ -24,9 +23,9 @@ data class ColorOKLCHa(val l: Double, val c: Double, val h: Double, val a: Doubl
             var h = atan2(oklaba.b, oklaba.a)
 
             if (h < 0) {
-                h += Math.PI * 2
+                h += PI * 2
             }
-            h = Math.toDegrees(h)
+            h = h.asDegrees
             return ColorOKLCHa(l, c, h, oklaba.alpha)
         }
     }
@@ -42,8 +41,8 @@ data class ColorOKLCHa(val l: Double, val c: Double, val h: Double, val a: Doubl
     override fun mix(other: ColorOKLCHa, factor: Double) = mix(this, other, factor)
 
     fun toOKLABa(): ColorOKLABa {
-        val a = c * cos(Math.toRadians(h))
-        val b = c * sin(Math.toRadians(h))
+        val a = c * cos(h.asRadians)
+        val b = c * sin(h.asRadians)
         return ColorOKLABa(l, a, b, alpha = this.a)
     }
 

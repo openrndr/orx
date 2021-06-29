@@ -1,16 +1,3 @@
-package org.openrndr.extras.color.statistics
-
-import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.ColorBuffer
-import kotlin.random.Random
-
-private fun ColorRGBa.binIndex(binCount: Int): Triple<Int, Int, Int> {
-    val rb = (r * binCount).toInt().coerceIn(0, binCount - 1)
-    val gb = (g * binCount).toInt().coerceIn(0, binCount - 1)
-    val bb = (b * binCount).toInt().coerceIn(0, binCount - 1)
-    return Triple(rb, gb, bb)
-}
-
 fun calculateHistogramRGB(buffer: ColorBuffer,
                           binCount: Int = 16,
                           weighting: ColorRGBa.() -> Double = { 1.0 },
@@ -51,7 +38,7 @@ class RGBHistogram(val freqs: Array<Array<DoubleArray>>, val binCount: Int) {
     }
 
     fun color(rBin: Int, gBin: Int, bBin: Int): ColorRGBa =
-            ColorRGBa(rBin / (binCount - 1.0), gBin / (binCount - 1.0), bBin / (binCount - 1.0))
+        ColorRGBa(rBin / (binCount - 1.0), gBin / (binCount - 1.0), bBin / (binCount - 1.0))
 
     fun sample(random: Random = Random.Default): ColorRGBa {
         val x = random.nextDouble()
@@ -75,8 +62,8 @@ class RGBHistogram(val freqs: Array<Array<DoubleArray>>, val binCount: Int) {
             for (g in 0 until binCount) {
                 for (b in 0 until binCount) {
                     result += Pair(
-                            ColorRGBa(r / (binCount - 1.0), g / (binCount - 1.0), b / (binCount - 1.0)),
-                            freqs[r][g][b]
+                        ColorRGBa(r / (binCount - 1.0), g / (binCount - 1.0), b / (binCount - 1.0)),
+                        freqs[r][g][b]
                     )
                 }
             }
@@ -84,4 +71,3 @@ class RGBHistogram(val freqs: Array<Array<DoubleArray>>, val binCount: Int) {
         return result.sortedByDescending { it.second }
     }
 }
-

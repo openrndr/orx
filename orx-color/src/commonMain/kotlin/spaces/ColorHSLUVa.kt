@@ -2,10 +2,7 @@ package org.openrndr.extras.color.spaces
 
 import org.openrndr.color.*
 import org.openrndr.math.mixAngle
-import java.util.*
-import kotlin.math.min
-import kotlin.math.pow
-import kotlin.math.sqrt
+import kotlin.math.*
 
 private val m = arrayOf(
         doubleArrayOf(3.240969941904521, -1.537383177570093, -0.498610760293),
@@ -42,7 +39,7 @@ private fun distanceFromPole(point: DoubleArray): Double {
 }
 
 private fun lengthOfRayUntilIntersect(theta: Double, line: DoubleArray): Length {
-    val length = line[1] / (Math.sin(theta) - line[0] * Math.cos(theta))
+    val length = line[1] / (sin(theta) - line[0] * cos(theta))
     return Length(length)
 }
 
@@ -65,7 +62,7 @@ private fun maxSafeChromaForL(L100: Double): Double {
 }
 
 fun maxChromaForLH(L100: Double, H: Double): Double {
-    val hrad = H / 360 * Math.PI * 2
+    val hrad = H / 360 * PI * 2
     val bounds = getBounds(L100)
     var min = Double.MAX_VALUE
     for (bound in bounds!!) {

@@ -22,7 +22,9 @@ def multiplatformModules = [
     "orx-shader-phrases",
     "orx-parameters",
     "orx-fx",
-    "orx-easing"
+    "orx-easing",
+    "orx-color"
+
 
 ]
 
