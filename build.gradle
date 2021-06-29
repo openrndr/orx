@@ -23,9 +23,9 @@ def multiplatformModules = [
     "orx-parameters",
     "orx-fx",
     "orx-easing",
-    "orx-color"
-
-
+    "orx-color",
+    "orx-image-fit",
+    "orx-shade-styles"
 ]
 
 project.ext {
