@@ -9,9 +9,10 @@ sourceSets {
 }
 
 dependencies {
-    api project(":orx-parameters")
-    api project(":orx-compositor")
-    api project(":orx-image-fit")
+    implementation project(":orx-parameters")
+    implementation project(":orx-compositor")
+    implementation project(":orx-image-fit")
+    implementation project(":orx-fx")
 
     implementation "cc.rabbitcontrol:rcp:0.3.26"
     implementation "com.google.zxing:core:3.4.0"
