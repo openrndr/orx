@@ -1,4 +1,4 @@
-package quadtree
+package org.openrndr.extra.quadtree
 
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.RectangleBatchBuilder

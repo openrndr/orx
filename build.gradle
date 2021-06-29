@@ -19,15 +19,16 @@ plugins {
 
 def multiplatformModules = [
     "orx-camera",
-    "orx-compositor",
-    "orx-noise",
-    "orx-shader-phrases",
-    "orx-parameters",
-    "orx-fx",
-    "orx-easing",
     "orx-color",
+    "orx-compositor",
+    "orx-easing",
+    "orx-fx",
     "orx-image-fit",
-    "orx-shade-styles"
+    "orx-noise",
+    "orx-parameters",
+    "orx-shade-styles",
+    "orx-shader-phrases",
+    "orx-quadtree",
 ]
 
 project.ext {

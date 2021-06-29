@@ -6,7 +6,7 @@ import org.openrndr.extra.noise.Random
 import org.openrndr.extra.noise.gaussian
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
-import quadtree.Quadtree
+import org.openrndr.extra.quadtree.Quadtree
 
 suspend fun main() {
     application {
