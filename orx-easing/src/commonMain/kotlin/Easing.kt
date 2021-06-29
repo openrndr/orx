@@ -1,9 +1,6 @@
 package org.openrndr.extras.easing
 
-import kotlin.math.cos
-import kotlin.math.pow
-import kotlin.math.sin
-import kotlin.math.sqrt
+import kotlin.math.*
 
 typealias EasingFunction = (Double, Double, Double, Double) -> Double
 
@@ -167,7 +164,7 @@ fun easeElasticIn(t: Double, b: Double, c: Double, d: Double): Double {
         val p = d * .3
         val s = p / 4
         td -= 1.0
-        return -(c * 2.0.pow(10 * (td)) * sin((td * d - s) * (2 * Math.PI) / p)) + b
+        return -(c * 2.0.pow(10 * (td)) * sin((td * d - s) * (2 * PI) / p)) + b
     }
 }
 
@@ -182,9 +179,9 @@ fun easeElasticInOut(t: Double, b: Double, c: Double, d: Double): Double {
     val s = p / 4
     val td3 = td2 - 1.0
     return if (td2 < 1) {
-        -.5 * (c * 2.0.pow(10 * (td3)) * sin((td3 - s) * (2 * Math.PI) / p)) + b
+        -.5 * (c * 2.0.pow(10 * (td3)) * sin((td3 - s) * (2 * PI) / p)) + b
     } else {
-        c * 2.0.pow(-10 * (td3) * sin(td3 - s) * (2 * Math.PI) / p) * .5 + c + b
+        c * 2.0.pow(-10 * (td3) * sin(td3 - s) * (2 * PI) / p) * .5 + c + b
     }
 
 }
@@ -197,7 +194,7 @@ fun easeElasticOut(t: Double, b: Double, c: Double, d: Double): Double {
         return b + c
     val p = d * .3
     val s = p / 4
-    return c * 2.0.pow(-10 * td) * sin((td * d - s) * (2 * Math.PI) / p) + c + b
+    return c * 2.0.pow(-10 * td) * sin((td * d - s) * (2 * PI) / p) + c + b
 }
 
 // -- expo
@@ -279,13 +276,13 @@ fun easeQuintOut(t: Double, b: Double, c: Double, d: Double): Double {
 // -- sine
 
 fun easeSineIn(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): Double =
-        -c * cos(t / d * (Math.PI / 2)) + c + b
+        -c * cos(t / d * (PI / 2)) + c + b
 
 fun easeSineOut(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): Double =
-        c * sin(t / d * (Math.PI / 2)) + b
+        c * sin(t / d * (PI / 2)) + b
 
 fun easeSineInOut(t: Double, b: Double, c: Double, d: Double): Double =
-        -c / 2 * (cos(Math.PI * t / d) - 1) + b
+        -c / 2 * (cos(PI * t / d) - 1) + b
 
 
 enum class Easing(val function: EasingFunction) {
