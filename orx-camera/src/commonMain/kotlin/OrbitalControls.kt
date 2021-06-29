@@ -3,6 +3,7 @@ package org.openrndr.extras.camera
 import org.openrndr.*
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
+import org.openrndr.math.asRadians
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.tan
@@ -51,7 +52,7 @@ class OrbitalControls(val orbitalCamera: OrbitalCamera, val userInteraction: Boo
                 val offset = Vector3.fromSpherical(orbitalCamera.spherical) - orbitalCamera.lookAt
 
                 // half of the fov is center to top of screen
-                val targetDistance = offset.length * tan((Math.toRadians((fov) / 2)))
+                val targetDistance = offset.length * tan(fov / 2).asRadians
                 val panX = (2 * delta.x * targetDistance / program.window.size.x)
                 val panY = (2 * delta.y * targetDistance / program.window.size.y)
 

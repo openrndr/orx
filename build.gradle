@@ -18,6 +18,7 @@ plugins {
 }
 
 def multiplatformModules = [
+    "orx-camera",
     "orx-noise",
     "orx-shader-phrases",
     "orx-parameters",

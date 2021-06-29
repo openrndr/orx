@@ -8,6 +8,7 @@ import org.openrndr.math.Matrix44
 import org.openrndr.math.Spherical
 import org.openrndr.math.Vector3
 import kotlin.math.abs
+import kotlin.math.pow
 import org.openrndr.math.transforms.lookAt as lookAt_
 
 enum class ProjectionType {
@@ -69,12 +70,12 @@ class OrbitalCamera(eye: Vector3 = Vector3.ZERO, lookAt: Vector3 = Vector3.UNIT_
     }
 
     fun dollyIn() {
-        val zoomScale = Math.pow(0.95, zoomSpeed)
+        val zoomScale = pow(0.95, zoomSpeed)
         dolly(sphericalEnd.radius * zoomScale - sphericalEnd.radius)
     }
 
     fun dollyOut() {
-        val zoomScale = Math.pow(0.95, zoomSpeed)
+        val zoomScale = pow(0.95, zoomSpeed)
         dolly(sphericalEnd.radius / zoomScale - sphericalEnd.radius)
     }
 
@@ -219,3 +220,5 @@ fun OrbitalCamera.applyTo(drawer: Drawer) {
         drawer.drawStyle.depthTestPass = DepthTestPass.LESS_OR_EQUAL
     }
 }
+
+private fun pow(a:Double, x:Double): Double = a.pow(x)
