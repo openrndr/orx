@@ -23,12 +23,14 @@ def multiplatformModules = [
     "orx-compositor",
     "orx-easing",
     "orx-fx",
+    "orx-gradient-descent",
     "orx-image-fit",
     "orx-noise",
     "orx-parameters",
     "orx-shade-styles",
     "orx-shader-phrases",
     "orx-quadtree",
+
 ]
 
 project.ext {
