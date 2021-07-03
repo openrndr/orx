@@ -67,7 +67,7 @@ project.ext {
 }
 
 allprojects {
-    group 'org.openrndr'
+    group 'org.openrndr.extra'
     repositories {
         mavenCentral()
         if (openrndrUseSnapshot) {
