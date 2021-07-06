@@ -32,7 +32,7 @@ class ShaderPhrase(val phrase: String) {
  * A book of shader phrases.
  */
 expect open class ShaderPhraseBook(bookId: String) {
-    //private var registered = false
+    val bookId: String
     /**
      * Registers all known shader phrases
      */

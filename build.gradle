@@ -29,6 +29,7 @@ def multiplatformModules = [
     "orx-parameters",
     "orx-shade-styles",
     "orx-shader-phrases",
+    "orx-shapes",
     "orx-quadtree",
 
 ]

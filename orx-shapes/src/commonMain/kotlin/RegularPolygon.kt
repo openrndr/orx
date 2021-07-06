@@ -1,17 +1,19 @@
 package org.openrndr.extra.shapes
 
 import org.openrndr.math.Vector2
+import org.openrndr.math.asRadians
 import org.openrndr.shape.ShapeContour
 import org.openrndr.shape.contour
+import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
 fun regularPolygon(sides: Int, center: Vector2 = Vector2.ZERO, radius: Double = 100.0, phase: Double = 0.0): ShapeContour {
     val c = contour {
-        val phi = Math.toRadians(phase)
+        val phi = phase.asRadians
         for (i in 0 until sides) {
-            val x = center.x + radius * cos(i.toDouble() / sides * Math.PI * 2 + phi)
-            val y = center.y + radius * sin(i.toDouble() / sides * Math.PI * 2 + phi)
+            val x = center.x + radius * cos(i.toDouble() / sides * PI * 2 + phi)
+            val y = center.y + radius * sin(i.toDouble() / sides * PI * 2 + phi)
 
             moveOrLineTo(x, y)
         }
@@ -22,16 +24,16 @@ fun regularPolygon(sides: Int, center: Vector2 = Vector2.ZERO, radius: Double = 
 
 fun regularPolygonRounded(sides: Int, roundFactor: Double = 0.5, center: Vector2 = Vector2.ZERO, radius: Double = 100.0, phase: Double = 0.0): ShapeContour {
     val c = contour {
-        val phi = Math.toRadians(phase)
+        val phi = phase.asRadians
         for (i in 0 until sides) {
-            val x0 = center.x + radius * cos(i.toDouble() / sides * Math.PI * 2 + phi)
-            val y0 = center.y + radius * sin(i.toDouble() / sides * Math.PI * 2 + phi)
+            val x0 = center.x + radius * cos(i.toDouble() / sides * PI * 2 + phi)
+            val y0 = center.y + radius * sin(i.toDouble() / sides * PI * 2 + phi)
 
-            val x1 = center.x + radius * cos((i + 1.0) / sides * Math.PI * 2 + phi)
-            val y1 = center.y + radius * sin((i + 1.0) / sides * Math.PI * 2 + phi)
+            val x1 = center.x + radius * cos((i + 1.0) / sides * PI * 2 + phi)
+            val y1 = center.y + radius * sin((i + 1.0) / sides * PI * 2 + phi)
 
-            val x2 = center.x + radius * cos((i + 2.0) / sides * Math.PI * 2 + phi)
-            val y2 = center.y + radius * sin((i + 2.0) / sides * Math.PI * 2 + phi)
+            val x2 = center.x + radius * cos((i + 2.0) / sides * PI * 2 + phi)
+            val y2 = center.y + radius * sin((i + 2.0) / sides * PI * 2 + phi)
 
             val f = roundFactor / 2.0
 
@@ -60,16 +62,16 @@ fun regularPolygonRounded(sides: Int, roundFactor: Double = 0.5, center: Vector2
 
 fun regularPolygonBeveled(sides: Int, bevelFactor: Double = 0.5, center: Vector2 = Vector2.ZERO, radius: Double = 100.0, phase: Double = 0.0): ShapeContour {
     val c = contour {
-        val phi = Math.toRadians(phase)
+        val phi = phase.asRadians
         for (i in 0 until sides) {
-            val x0 = center.x + radius * cos(i.toDouble() / sides * Math.PI * 2 + phi)
-            val y0 = center.y + radius * sin(i.toDouble() / sides * Math.PI * 2 + phi)
+            val x0 = center.x + radius * cos(i.toDouble() / sides * PI * 2 + phi)
+            val y0 = center.y + radius * sin(i.toDouble() / sides * PI * 2 + phi)
 
-            val x1 = center.x + radius * cos((i + 1.0) / sides * Math.PI * 2 + phi)
-            val y1 = center.y + radius * sin((i + 1.0) / sides * Math.PI * 2 + phi)
+            val x1 = center.x + radius * cos((i + 1.0) / sides * PI * 2 + phi)
+            val y1 = center.y + radius * sin((i + 1.0) / sides * PI * 2 + phi)
 
-            val x2 = center.x + radius * cos((i + 2.0) / sides * Math.PI * 2 + phi)
-            val y2 = center.y + radius * sin((i + 2.0) / sides * Math.PI * 2 + phi)
+            val x2 = center.x + radius * cos((i + 2.0) / sides * PI * 2 + phi)
+            val y2 = center.y + radius * sin((i + 2.0) / sides * PI * 2 + phi)
 
             val f = bevelFactor / 2.0
 

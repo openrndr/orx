@@ -1,6 +1,7 @@
 package org.openrndr.extra.shapes
 
 import org.openrndr.math.Vector2
+import org.openrndr.math.asRadians
 import org.openrndr.shape.ShapeContour
 import org.openrndr.shape.contour
 import kotlin.math.PI
@@ -9,7 +10,7 @@ import kotlin.math.sin
 
 fun regularStar(points: Int, innerRadius: Double, outerRadius: Double, center: Vector2 = Vector2.ZERO, phase: Double = 0.0): ShapeContour {
     return contour {
-        val theta = Math.toRadians(phase)
+        val theta = phase.asRadians
         val phi = PI * 2.0 / (points * 2)
         for (i in 0 until points * 2 step 2) {
             val outerPoint = Vector2(cos(i * phi + theta), sin(i * phi + theta)) * outerRadius + center
@@ -26,7 +27,7 @@ fun regularStarRounded(points: Int, innerRadius: Double, outerRadius: Double,
                        center: Vector2 = Vector2.ZERO,
                        phase: Double = 0.0): ShapeContour {
     return contour {
-        val theta = Math.toRadians(phase)
+        val theta = phase.asRadians
         val phi = PI * 2.0 / (points * 2)
         for (i in 0 until points * 2 step 2) {
             val outerPoint0 = Vector2(cos(i * phi + theta), sin(i * phi + theta)) * outerRadius + center
@@ -56,7 +57,7 @@ fun regularStarBeveled(points: Int, innerRadius: Double, outerRadius: Double,
                        center: Vector2 = Vector2.ZERO,
                        phase: Double = 0.0): ShapeContour {
     return contour {
-        val theta = Math.toRadians(phase)
+        val theta = phase.asRadians
         val phi = PI * 2.0 / (points * 2)
         for (i in 0 until points * 2 step 2) {
             val outerPoint0 = Vector2(cos(i * phi + theta), sin(i * phi + theta)) * outerRadius + center

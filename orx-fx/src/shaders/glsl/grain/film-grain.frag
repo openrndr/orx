@@ -3,7 +3,12 @@
 
 // Ad[a|o]pted from shader by "noby" https://www.shadertoy.com/view/3sGSWV
 uniform sampler2D tex0;
+
+#ifdef OR_IN_OUT
 in vec2 v_texCoord0;
+#else
+varying vec2 v_texCoord0;
+#endif
 
 uniform bool useColor;// false
 uniform float time;
@@ -15,8 +20,9 @@ uniform float grainPitch;// = 1.0;
 
 uniform float colorLevel;// = 1.0;
 
+#ifndef OR_GL_FRAGCOLOR
 out vec4 o_output;
-
+#endif
 
 // From Dave Hoskins: https://www.shadertoy.com/view/4djSRW.
 float hash(vec3 p3){
@@ -59,7 +65,12 @@ void main() {
     // Alternatively use iTime here instead and change the grain_rate
     // parameter to correspond to frames-per-second.
     float t = time;
+    #ifndef OR_GL_TEXTURE2D
     vec4 colorAlpha = texture(tex0, uv);
+    #else
+    vec4 colorAlpha = texture2D(tex0, uv);
+    #endif
+
     vec3 color = colorAlpha.rgb;
     vec3 grain = vec3(0);
 
@@ -86,6 +97,11 @@ void main() {
 
     // After this you would normally perform tone mapping,
     // apply the grain before that.
+    #ifndef OR_GL_FRACOLOR
     o_output.rgb = color;
     o_output.a = 1.0;
+    #else
+    gl_FragColor.rgb = color;
+    gl_FragColor.a = 1.0;
+    #endif
 }

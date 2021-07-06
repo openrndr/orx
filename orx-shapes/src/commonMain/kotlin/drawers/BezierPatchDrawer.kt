@@ -14,6 +14,7 @@ import org.openrndr.extra.shapes.phrases.BezierPhraseBook
 import org.openrndr.extras.color.phrases.ColorPhraseBook
 import org.openrndr.extras.color.spaces.ColorOKLABa
 import org.openrndr.math.Vector4
+import kotlin.jvm.JvmName
 
 private val glslVersion = "410 core"
 
