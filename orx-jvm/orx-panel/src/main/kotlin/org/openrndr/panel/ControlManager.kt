@@ -524,7 +524,6 @@ class ControlManager : Extension {
                 }
 
                 profile("draw image") {
-                    drawer.size(program.width, program.height)
                     drawer.ortho()
                     drawer.view = Matrix44.IDENTITY
                     drawer.defaults()

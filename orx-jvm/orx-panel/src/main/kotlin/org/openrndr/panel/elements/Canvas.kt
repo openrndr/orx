@@ -33,7 +33,6 @@ class Canvas : Element(ElementType("canvas")) {
                     model = Matrix44.IDENTITY
                     view = Matrix44.IDENTITY
                     clear(ColorRGBa.TRANSPARENT)
-                    size(screenArea.width.toInt(), screenArea.height.toInt())
                     ortho(rt)
                     userDraw?.invoke(this)
                 }
