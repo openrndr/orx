@@ -2,7 +2,7 @@ name: Build
 on:
   push:
     branches:
-      - orx-0.4
+      - master
 
 jobs:
   build:
@@ -12,7 +12,7 @@ jobs:
         with:
           repository: openrndr/openrndr
           path: ./openrndr
-          ref: openrndr-0.4
+          ref: master
       - uses: actions/checkout@v2.3.4
         with:
           path: orx
