@@ -35,7 +35,7 @@ fun ApplicationBuilder.oliveProgram(scriptHost: OliveScriptHost = OliveScriptHos
         }
     }
     program = object : OliveProgram(sourceLocation, scriptHost, resources) {
-        override fun setup() {
+        override suspend fun setup() {
             super.setup()
             init()
         }

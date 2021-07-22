@@ -9,8 +9,8 @@ sourceSets {
 }
 
 dependencies {
-    implementation project(":orx-file-watcher")
-    implementation project(":orx-kotlin-parser")
+    implementation project(":orx-jvm:orx-file-watcher")
+    implementation project(":orx-jvm:orx-kotlin-parser")
     
     implementation "org.jetbrains.kotlin:kotlin-scripting-jvm:$kotlinVersion"
     implementation "org.jetbrains.kotlin:kotlin-scripting-jvm-host:$kotlinVersion"
