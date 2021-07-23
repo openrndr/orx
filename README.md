@@ -1,6 +1,6 @@
-# ORX (OPENRNDR EXTRA) 0.4 (development branch)
+# ORX (OPENRNDR EXTRA) 0.4 
 
- [ ![Download](https://api.bintray.com/packages/openrndr/openrndr/orx/images/download.svg) ](https://bintray.com/openrndr/openrndr/orx/_latestVersion)
+Note that this is a yet unreleased version of ORX. The prior released version of ORX can be found in the [ORX 0.3 branch](https://github.com/openrndr/orx/tree/orx-0.3).  
 
 A growing library of assorted data structures, algorithms and utilities.
 
