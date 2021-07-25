@@ -44,12 +44,16 @@ private val add by lazy { PlainAdd() }
  * the scene as many times as you have samples.
  */
 class TemporalBlur : Extension {
+    private var oldClock: () -> Double = { 0.0 }
     override var enabled: Boolean = true
 
     private var accumulator: RenderTarget? = null
     private var result: RenderTarget? = null
     private var image: RenderTarget? = null
     private var imageResolved: RenderTarget? = null
+
+    // modifier for final stage averager, higher gain results in brighter images
+    var gain = 1.0
 
     /**
      * number of samples to take, more is slower
@@ -85,6 +89,12 @@ class TemporalBlur : Extension {
      * multisampling setting
      * */
     var multisample: BufferMultisample = BufferMultisample.SampleCount(8)
+
+
+    var colorMatrix: (Double)->Matrix55 = { Matrix55.IDENTITY }
+
+
+    var beforeDrawAccumulated : TemporalBlur.() -> Unit = {}
 
     override fun beforeDraw(drawer: Drawer, program: Program) {
         val extensionOffset = program.extensions.indexOf(this)
@@ -155,12 +165,11 @@ class TemporalBlur : Extension {
                 drawer.clear(ColorRGBa.BLACK)
             }
         }
-        val oldClock = program.clock
+        oldClock = program.clock
         val oldClockValue = oldClock()
 
         for (i in samples - 1 downTo 1) {
             image?.bind()
-
             drawer.clear(ColorRGBa.BLACK)
             program.clock = { oldClockValue - (i * duration) / (fps * samples) }
 
@@ -194,8 +203,16 @@ class TemporalBlur : Extension {
                 }
             }
 
+            val activeColorMatrix = colorMatrix(i / (samples - 1.0))
+            if (activeColorMatrix !== Matrix55.IDENTITY) {
+                drawer.isolatedWithTarget(imageResolved!!) {
+                    drawer.drawStyle.colorMatrix = activeColorMatrix
+                    drawer.drawStyle.blendMode = BlendMode.REPLACE
+                    drawer.image(imageResolved!!.colorBuffer(0))
+                }
+            }
             add.apply(arrayOf(imageResolved!!.colorBuffer(0), accumulator!!.colorBuffer(0)), accumulator!!.colorBuffer(0))
-            program.clock = oldClock
+
             fsf.setDouble(program, program.clock())
         }
         image?.let {
@@ -207,11 +224,23 @@ class TemporalBlur : Extension {
     }
 
     override fun afterDraw(drawer: Drawer, program: Program) {
+        // restore clock
+        program.clock = oldClock
         // -- we receive one last frame here
         image?.unbind()
         image!!.colorBuffer(0).copyTo(imageResolved!!.colorBuffer(0))
 
+        val activeColorMatrix = colorMatrix(0.0)
+        if (activeColorMatrix !== Matrix55.IDENTITY) {
+            drawer.isolatedWithTarget(imageResolved!!) {
+                drawer.drawStyle.colorMatrix = activeColorMatrix
+                drawer.drawStyle.blendMode = BlendMode.REPLACE
+                drawer.image(imageResolved!!.colorBuffer(0))
+            }
+        }
+
         add.apply(arrayOf(imageResolved!!.colorBuffer(0), accumulator!!.colorBuffer(0)), accumulator!!.colorBuffer(0))
+        beforeDrawAccumulated()
 
         // -- render accumulated result
         drawer.isolated {
@@ -222,7 +251,7 @@ class TemporalBlur : Extension {
                 drawer.drawStyle.blendMode = BlendMode.OVER
 
                 drawer.clear(ColorRGBa.BLACK)
-                drawer.drawStyle.colorMatrix = tint(ColorRGBa.WHITE.shade(1.0 / samples))
+                drawer.drawStyle.colorMatrix = tint(ColorRGBa.WHITE.shade((1.0 / samples) * gain))
                 drawer.image(accumulator!!.colorBuffer(0))
             }
             if (delinearizeOutput) {
