@@ -39,3 +39,7 @@ inline fun value(seed: Int, x: Double, y: Double, z: Double, crossinline interpo
 
     return mix(yf0, yf1, zs)
 }
+
+val valueLinear3D: (Int, Double, Double, Double) -> Double = ::valueLinear
+val valueQuintic3D: (Int, Double, Double, Double) -> Double = ::valueQuintic
+val valueHermite3D: (Int, Double, Double, Double) -> Double = ::valueHermite

@@ -8,6 +8,8 @@ private const val G2 = (3.0 - SQRT3) / 6.0
 
 fun simplex(seed: Int, position: Vector2): Double = simplex(seed, position.x, position.y)
 
+
+//fun simplex2D(seed:Int, x:Double, y:Double) = simplex(seed, x, y)
 fun simplex(seed: Int, x: Double, y: Double): Double {
     var t = (x + y) * F2
     val i = (x + t).fastFloor()
@@ -63,5 +65,12 @@ fun simplex(seed: Int, x: Double, y: Double): Double {
     return 50.0 * (n0 + n1 + n2)
 }
 
-fun Vector2.Companion.simplex(seed: Int, x: Double): Vector2 = Vector2(simplex(seed, x, 0.0, 0.0, 0.0),
-        simplex(seed, 0.0, x + 31.3383, 0.0, 0.0))
+val simplex1D: (Int, Double) -> Double = ::simplex
+val simplex2D: (Int, Double, Double) -> Double = ::simplex
+val simplex3D: (Int, Double, Double, Double) -> Double = ::simplex
+val simplex4D: (Int, Double, Double, Double) -> Double = ::simplex
+
+fun Vector2.Companion.simplex(seed: Int, x: Double): Vector2 = Vector2(
+    simplex(seed, x, 0.0, 0.0, 0.0),
+    simplex(seed, 0.0, x + 31.3383, 0.0, 0.0)
+)

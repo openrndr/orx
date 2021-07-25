@@ -60,3 +60,7 @@ fun cubic(seed: Int, x: Double, y: Double, z: Double, interpolator: (Double) -> 
                     ys),
             zs) * CUBIC_3D_BOUNDING
 }
+
+val cubicLinear3D: (Int, Double, Double, Double) -> Double = ::cubicLinear
+val cubicQuintic3D: (Int, Double, Double, Double) -> Double = ::cubicQuintic
+val cubicHermite3D: (Int, Double, Double, Double) -> Double = ::cubicHermite

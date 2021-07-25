@@ -40,3 +40,5 @@ inline fun perlin(seed: Int, x: Double, y: Double, z: Double, crossinline interp
 
     return mix(yf0, yf1, zs)
 }
+
+val perlin3D: (Int, Double, Double, Double) -> Double = ::perlinLinear

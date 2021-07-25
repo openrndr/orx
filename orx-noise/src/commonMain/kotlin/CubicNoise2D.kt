@@ -39,3 +39,7 @@ fun cubic(seed: Int, x: Double, y: Double, interpolator: (Double) -> Double = ::
                     xs),
             ys) * CUBIC_2D_BOUNDING
 }
+
+val cubicLinear2D: (Int, Double, Double) -> Double = ::cubicLinear
+val cubicQuintic2D: (Int, Double, Double) -> Double = ::cubicQuintic
+val cubicHermite2D: (Int, Double, Double) -> Double = ::cubicHermite

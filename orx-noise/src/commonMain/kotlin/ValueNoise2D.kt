@@ -30,3 +30,7 @@ inline fun value(seed: Int, x: Double, y: Double, crossinline interpolation: (Do
 
     return mix(xf0, xf1, ys)
 }
+
+val valueLinear2D: (Int, Double, Double) -> Double = ::valueLinear
+val valueQuintic2D: (Int, Double, Double) -> Double = ::valueQuintic
+val valueHermite2D: (Int, Double, Double) -> Double = ::valueHermite

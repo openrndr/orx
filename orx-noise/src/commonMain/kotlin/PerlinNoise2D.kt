@@ -32,3 +32,5 @@ inline fun perlin(seed: Int, x: Double, y: Double, crossinline interpolator: (Do
 
     return mix(xf0, xf1, ys)
 }
+
+val perlin2D: (Int, Double, Double) -> Double = ::perlin
