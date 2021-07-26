@@ -37,7 +37,7 @@ fun polarOffsetFunc(
     noise: (Int, Double, Double) -> Double,
     origin: Vector2 = Vector2.ZERO,
 
-): (seed: Int, polar: Polar, offset: Vector2) -> Double {
+    ): (seed: Int, polar: Polar, offset: Vector2) -> Double {
     return { seed, polar, offset ->
         val c = polar.cartesian + origin + offset
         noise(seed, c.x, c.y)
@@ -59,14 +59,15 @@ fun ((Int, Vector2) -> Double).withPolarOffsetInput(origin: Vector2 = Vector2.ZE
     polarOffsetFunc(this.withScalarInput(), origin)
 
 
-
 fun ((Int, Double, Double) -> Double).fixedRadiusPolar(
     radius: Double,
     origin: Vector2 = Vector2.ZERO
 ): (Int, Double) -> Double =
     fixedRadiusPolarFunc(this, radius, origin)
 
-private fun example() {
+
+
+fun example() {
     val polarFbmSimplex = polarFunc(noise = fbmFunc2D(noise = ::simplex))
     val polarBillowPerlin = polarFunc(noise = billowFunc2D(noise = ::perlin))
 

@@ -1,8 +1,6 @@
 package org.openrndr.extra.noise
 
-import org.openrndr.math.Vector2
-import org.openrndr.math.Vector3
-import org.openrndr.math.Vector4
+import org.openrndr.math.*
 import kotlin.jvm.JvmName
 
 fun ((Double) -> Double).withSeedAsOffset(offset: Double): (Int, Double) -> Double = { seed, x ->
@@ -11,6 +9,46 @@ fun ((Double) -> Double).withSeedAsOffset(offset: Double): (Int, Double) -> Doub
 
 fun ((Int, Double) -> Double).withFixedSeed(seed: Int): (Double) -> Double = { x -> this(seed, x) }
 
+
+fun ((Int, Double) -> Double).gradient(epsilon: Double = 1e-6): (Int, Double) -> Double = { seed, x ->
+    (this(seed, x + epsilon) - this(seed, x - epsilon)) / (2 * epsilon)
+}
+
+fun ((Int, Double, Double) -> Vector2).gradient(epsilon: Double = 1e-6): (Int, Double, Double) -> Vector2 =
+    { seed, x, y ->
+        val dfdx = (this(seed, x + epsilon, y) - this(seed, x - epsilon, y)) / (2 * epsilon)
+        val dfdy = (this(seed, x, y + epsilon) - this(seed, x, y - epsilon)) / (2 * epsilon)
+        dfdx + dfdy
+    }
+
+fun ((Int, Double, Double, Double) -> Double).crossFade(
+    start: Double,
+    end: Double,
+    width: Double = 0.5
+): (Int, Double, Double, Double) -> Double {
+    return { seed, x, y, z ->
+        val a = z.map(start, end, 0.0, 1.0).mod_(1.0)
+        val f = (a / width).coerceAtMost(1.0)
+
+        val o = this(seed, x, y, a.map(0.0, 1.0, start, end)) * f + (1.0 - f) * this(
+            seed,
+            x,
+            y,
+            (a + 1.0).map(0.0, 1.0, start, end)
+        )
+        o
+
+    }
+}
+
+fun ((Int, Double, Double, Double) -> Vector2).gradient(epsilon: Double = 1e-2 / 2.0): (Int, Double, Double, Double) -> Vector2 =
+    { seed, x, y, z ->
+        val dfdx = (this(seed, x + epsilon, y, z) - this(seed, x - epsilon, y, z)) / (2 * epsilon)
+        val dfdy = (this(seed, x, y + epsilon, z) - this(seed, x, y - epsilon, z)) / (2 * epsilon)
+        dfdx + dfdy
+    }
+
+
 fun ((Int, Double) -> Double).scaleBiasOutput(
     scale: Double = 1.0,
     bias: Double = 0.0
@@ -18,7 +56,7 @@ fun ((Int, Double) -> Double).scaleBiasOutput(
     this(seed, x) * scale + bias
 }
 
-fun ((Int, Double) -> Double).mapOutput(map: (Double)->Double): (Int, Double) -> Double = { seed, x ->
+fun ((Int, Double) -> Double).mapOutput(map: (Double) -> Double): (Int, Double) -> Double = { seed, x ->
     map(this(seed, x))
 }
 
