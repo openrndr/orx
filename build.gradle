@@ -181,14 +181,6 @@ task buildMainReadme {
         for (line in header) {
             newReadme.add(line)
         }
-        newReadme.add("| name" +
-          "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
-          "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
-          "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
-          "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
-          "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
-          "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + " | description |")
-        newReadme.add("| --- | --- |")
 
         // Search for the description at the top of the readme.
         // Skip the hash character from the headline, then start
@@ -196,6 +188,9 @@ task buildMainReadme {
         // Don't fall into Windows line breaks.
         def descriptionRx = ~/(?s)\#.*?\n(.+?)\n\r?\n/
         // Note: the readme needs an empty line after the description
+
+        def orxMultiplatform = []
+        def orxJVMOnly = []
 
         // Build orx list
         for (sub in subProjects) {
@@ -206,14 +201,30 @@ task buildMainReadme {
                     description ->
                         def trimmedDescription = description[1].trim() //.strip() supports unicode, java11 only
                                 .replace("\n", " ").replace("\r", "")
-                        newReadme.add("| [`${sub.name}`](${sub.name}/) " +
-                                "| $trimmedDescription |")
+                        def path = sub.path.substring(1).replace(":", "/")
+                        if (path.startsWith("orx-jvm")) {
+                            orxJVMOnly.add("| [`${sub.name}`]($path/) " +
+                                    "| $trimmedDescription |")
+                        } else {
+                            orxMultiplatform.add("| [`${sub.name}`]($path/) " +
+                                    "| $trimmedDescription |")
+                        }
                 }
 
             } else {
                 println("${sub.name}/README.md not found!")
             }
         }
+
+        newReadme.add("\n## Multiplatform\n")
+        newReadme.add("| name" + "&nbsp;" * 36 + " | description |")
+        newReadme.add("| --- | --- |")
+        newReadme.addAll(orxMultiplatform)
+
+        newReadme.add("\n## JVM only\n")
+        newReadme.add("| name" + "&nbsp;" * 36 + " | description |")
+        newReadme.add("| --- | --- |")
+        newReadme.addAll(orxJVMOnly)
 
         for (line in footer) {
             newReadme.add(line)
