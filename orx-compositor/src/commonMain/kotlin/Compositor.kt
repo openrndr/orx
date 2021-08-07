@@ -177,7 +177,7 @@ open class Layer internal constructor() {
     }
 
     private fun shouldCreateLayerTarget(activeRenderTarget: RenderTarget): Boolean {
-        return layerTarget == null || (layerTarget?.width != activeRenderTarget.width || layerTarget?.height != activeRenderTarget.height)
+        return layerTarget == null || ((layerTarget?.width != activeRenderTarget.width || layerTarget?.height != activeRenderTarget.height) && activeRenderTarget.width > 0 && activeRenderTarget.height > 0)
     }
 
     private fun createLayerTarget(activeRenderTarget: RenderTarget, drawer: Drawer) {
