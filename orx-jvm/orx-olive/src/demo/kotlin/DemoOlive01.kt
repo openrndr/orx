@@ -1,10 +1,11 @@
 import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.application
+import org.openrndr.applicationSynchronous
 import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.olive.Olive
 
-fun main() = application {
+fun main() = applicationSynchronous {
     configure {
         width = 768
         height = 576

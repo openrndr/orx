@@ -24,14 +24,17 @@ kotlin {
             val demo by creating {
                 defaultSourceSet {
                     kotlin.srcDir("src/demo")
-                    dependencies {
-                        implementation(project(":orx-camera"))
-                        implementation("org.openrndr:openrndr-application:$openrndrVersion")
-                        implementation("org.openrndr:openrndr-extensions:$openrndrVersion")
-                        runtimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
-                        runtimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
-                        implementation(compilations["main"]!!.output.allOutputs)
-                    }
+                }
+                dependencies {
+                    implementation(project(":orx-camera"))
+                    implementation(project(":orx-mesh-generators"))
+                    implementation(project(":orx-color"))
+
+                    implementation("org.openrndr:openrndr-application:$openrndrVersion")
+                    implementation("org.openrndr:openrndr-extensions:$openrndrVersion")
+                    runtimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
+                    runtimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
+                    implementation(compilations["main"]!!.output.allOutputs)
                 }
             }
         }
@@ -62,6 +65,7 @@ kotlin {
                 implementation("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
             }
         }
+
         @Suppress("UNUSED_VARIABLE")
         val commonTest by getting {
             dependencies {
@@ -71,6 +75,9 @@ kotlin {
                 implementation("io.kotest:kotest-assertions-core:$kotestVersion")
             }
         }
+
+        val jvmMain by getting {}
+
 
         @Suppress("UNUSED_VARIABLE")
         val jvmTest by getting {

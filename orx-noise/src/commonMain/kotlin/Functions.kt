@@ -29,15 +29,9 @@ fun ((Int, Double, Double, Double) -> Double).crossFade(
     return { seed, x, y, z ->
         val a = z.map(start, end, 0.0, 1.0).mod_(1.0)
         val f = (a / width).coerceAtMost(1.0)
-
-        val o = this(seed, x, y, a.map(0.0, 1.0, start, end)) * f + (1.0 - f) * this(
-            seed,
-            x,
-            y,
-            (a + 1.0).map(0.0, 1.0, start, end)
-        )
-        o
-
+        val o = this(seed, x, y, a.map(0.0, 1.0, start, end)) * f
+        val s = this(seed, x, y, (a + 1.0).map(0.0, 1.0, start, end) * (1.0 - f))
+        o + s
     }
 }
 
@@ -132,3 +126,6 @@ inline fun ((Int, Vector4) -> Double).perturb(crossinline distort: (Vector4) -> 
     { seed, v ->
         this(seed, distort(v))
     }
+
+typealias IDDD_D = ((Int, Double, Double, Double) -> Double)
+

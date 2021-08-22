@@ -1,3 +1,9 @@
+package org.openrndr.extras.color.statistics
+
+import org.openrndr.color.ColorRGBa
+import org.openrndr.draw.ColorBuffer
+import kotlin.random.Random
+
 fun calculateHistogramRGB(buffer: ColorBuffer,
                           binCount: Int = 16,
                           weighting: ColorRGBa.() -> Double = { 1.0 },

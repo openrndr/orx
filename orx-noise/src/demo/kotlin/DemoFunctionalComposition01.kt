@@ -2,6 +2,7 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.LineJoin
 import org.openrndr.extensions.SingleScreenshot
+import org.openrndr.extra.noise.perturb
 import org.openrndr.extra.noise.simplex
 import org.openrndr.extra.noise.simplex1D
 import org.openrndr.extra.noise.simplex2D
@@ -10,6 +11,7 @@ import org.openrndr.extra.noise.withVector2Output
 import org.openrndr.extra.noise.gradient
 import org.openrndr.shape.contour
 
+typealias IDDD_D = ((Int, Double, Double, Double) -> Double)
 suspend fun main() = application {
     configure {
         width = 720
@@ -21,6 +23,10 @@ suspend fun main() = application {
                 this.outputFile = System.getProperty("screenshotPath")
             }
         }
+
+        val c = simplex3D.perturb({v->v})::class
+        println(c)
+        println(IDDD_D::perturb)
         val n = simplex3D.withVector2Output().gradient()
         extend {
             drawer.stroke = null
