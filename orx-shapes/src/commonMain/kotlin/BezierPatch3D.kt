@@ -145,7 +145,7 @@ open class BezierPatch3DBase<C>(
         val c2 = Segment3D(points[2][0], points[2][1], points[2][2], points[2][3]).sub(u0, u1)
         val c3 = Segment3D(points[3][0], points[3][1], points[3][2], points[3][3]).sub(u0, u1)
 
-        val sub0 = bezierPatch3D(c0, c1, c2, c3)
+        val sub0 = bezierPatch(c0, c1, c2, c3)
         val d0 = Segment3D(sub0.points[0][0], sub0.points[1][0], sub0.points[2][0], sub0.points[3][0]).sub(v0, v1)
         val d1 = Segment3D(sub0.points[0][1], sub0.points[1][1], sub0.points[2][1], sub0.points[3][1]).sub(v0, v1)
         val d2 = Segment3D(sub0.points[0][2], sub0.points[1][2], sub0.points[2][2], sub0.points[3][2]).sub(v0, v1)
@@ -218,7 +218,7 @@ class BezierPatch3D(points: List<List<Vector3>>, colors: List<List<ColorRGBa>> =
 /**
  * Create a cubic bezier patch from 4 segments. The control points of the segments are used in row-wise fashion
  */
-fun bezierPatch3D(c0: Segment3D, c1: Segment3D, c2: Segment3D, c3: Segment3D): BezierPatch3D {
+fun bezierPatch(c0: Segment3D, c1: Segment3D, c2: Segment3D, c3: Segment3D): BezierPatch3D {
     val c0c = c0.cubic
     val c1c = c1.cubic
     val c2c = c2.cubic
