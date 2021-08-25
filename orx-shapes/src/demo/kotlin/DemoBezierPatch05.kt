@@ -1,6 +1,7 @@
 import org.openrndr.WindowMultisample
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
+import org.openrndr.draw.BufferMultisample
 import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.shapes.bezierPatch
 import org.openrndr.extra.shapes.drawers.bezierPatch
@@ -30,6 +31,7 @@ suspend fun main() {
             if (System.getProperty("takeScreenshot") == "true") {
                 extend(SingleScreenshot()) {
                     this.outputFile = System.getProperty("screenshotPath")
+                    multisample = BufferMultisample.SampleCount(8)
                 }
             }
 
@@ -50,7 +52,6 @@ suspend fun main() {
             }
 
             extend {
-                print("${cam.camera.spherical.cartesian}\t${cam.camera.lookAt}\r")
                 drawer.clear(ColorRGBa.PINK)
 
                 drawer.translate(-5.0, 0.0, 0.0)
