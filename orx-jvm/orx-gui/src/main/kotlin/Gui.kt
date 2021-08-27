@@ -2,6 +2,7 @@ package org.openrndr.extra.gui
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import mu.KotlinLogging
 import org.openrndr.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.dialogs.getDefaultPathForContext
@@ -67,10 +68,14 @@ private fun <T : Any> setAndPersist(compartmentLabel: String, property: KMutable
     state.parameterValues[property.name] = value
 }
 
+private val logger = KotlinLogging.logger {  }
+
 @Suppress("unused", "UNCHECKED_CAST")
 class GUI : Extension {
     private var onChangeListener: ((name: String, value: Any?) -> Unit)? = null
     override var enabled = true
+
+    var listenToProduceAssetsEvent = true
 
     var visible = true
     set(value) {
@@ -101,13 +106,19 @@ class GUI : Extension {
     val collapsed = ElementClass("collapsed")
 
     override fun setup(program: Program) {
+        program.produceAssets.listen {
+            if (listenToProduceAssetsEvent) {
+                val targetDir = File("gui-parameters")
+                if (!targetDir.exists()) { targetDir.mkdir() }
+                val targetFile = File(targetDir, "${it.assetMetadata.assetBaseName}.json")
+                logger.info("Saving parameters to '${targetFile.absolutePath}")
+                saveParameters(targetFile)
+            }
+        }
+
         program.keyboard.keyDown.listen {
             if (it.key == KEY_F11) {
-                println("f11 pressed")
                 visible = !visible
-
-
-
             }
 
             if (it.key == KEY_LEFT_SHIFT) {
