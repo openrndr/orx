@@ -49,3 +49,4 @@ dependencies {
 }
 
 tasks.getByName("compileKotlin").dependsOn("generateGrammarSource")
+tasks.getByName("compileTestKotlin").dependsOn("generateTestGrammarSource")

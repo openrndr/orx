@@ -12,9 +12,9 @@ buildscript {
 
 plugins {
     // remember to update all the versions here when upgrading kotlin version
-    id 'org.jetbrains.kotlin.jvm' version '1.5.20' apply false
-    id 'org.jetbrains.kotlin.multiplatform' version '1.5.20' apply false
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.5.20' apply false
+    id 'org.jetbrains.kotlin.jvm' version '1.5.30' apply false
+    id 'org.jetbrains.kotlin.multiplatform' version '1.5.30' apply false
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.5.30' apply false
 }
 
 def multiplatformModules = [
@@ -38,7 +38,7 @@ def multiplatformModules = [
 project.ext {
     kotlinApiVersion = '1.4'
     kotlinLanguageVersion = '1.4'
-    kotlinVersion = '1.5.20'
+    kotlinVersion = '1.5.30'
     kotlinLoggingVersion = '2.0.8'
     kotlinxSerializationVersion = '1.1.0'
     spekVersion = '2.0.15'
@@ -57,7 +57,7 @@ ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 project.ext {
     openrndrVersion = openrndrUseSnapshot? "0.5.1-SNAPSHOT" : "0.4.0"
     jvmTarget = "1.8"
-    kotlinVersion = "1.5.20"
+    kotlinVersion = "1.5.30"
     kotlinApiVersion = "1.4"
     spekVersion = "2.0.15"
     libfreenectVersion = "0.5.7-1.5.5"

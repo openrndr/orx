@@ -110,3 +110,6 @@ val embedShaders = tasks.register<EmbedShadersTask>("embedShaders") {
 
 tasks.getByName("compileKotlinJvm").dependsOn(embedShaders)
 tasks.getByName("compileKotlinJs").dependsOn(embedShaders)
+tasks.getByName("compileKotlinMetadata").dependsOn(embedShaders)
+tasks.getByName("jvmSourcesJar").dependsOn(embedShaders)
+tasks.getByName("sourcesJar").dependsOn(embedShaders)
