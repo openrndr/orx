@@ -162,7 +162,7 @@ class BezierPatchDrawer {
     internal fun ensureVertexCount(count: Int) {
         if (vertices.vertexCount < count) {
             vertices.destroy()
-            vertexBuffer(
+            vertices = vertexBuffer(
                 vertexFormat {
                     position(3)
                     color(4)
@@ -213,7 +213,7 @@ class BezierPatchDrawer {
         shader.end()
     }
 
-    @JvmName("drawBezierPatchOKLab")
+    @JvmName("drawBezierPatchesOKLab")
     fun drawBezierPatches(
         context: DrawContext,
         drawStyle: DrawStyle,
@@ -260,7 +260,7 @@ class BezierPatchDrawer {
         shader.end()
     }
 
-    @JvmName("drawBezierPatch3D")
+    @JvmName("drawBezierPatches3D")
     fun drawBezierPatches(
         context: DrawContext,
         drawStyle: DrawStyle,
@@ -304,7 +304,7 @@ class BezierPatchDrawer {
         shader.end()
     }
 
-    @JvmName("drawBezierPatch3DOKLab")
+    @JvmName("drawBezierPatches3DOKLab")
     fun drawBezierPatches(
         context: DrawContext,
         drawStyle: DrawStyle,
