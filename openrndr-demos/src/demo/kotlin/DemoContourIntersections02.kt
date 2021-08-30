@@ -5,7 +5,7 @@ import org.openrndr.shape.Circle
 import org.openrndr.shape.Rectangle
 import org.openrndr.shape.intersections
 
-suspend fun main() {
+fun main() {
     application {
         program {
             extend {

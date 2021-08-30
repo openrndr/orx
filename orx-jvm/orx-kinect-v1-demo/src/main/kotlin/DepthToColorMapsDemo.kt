@@ -31,7 +31,7 @@ import org.openrndr.extra.kinect.v1.getKinectsV1
  * @see DepthToColorsZucconi6Mapper
  * @see DepthToColorsTurboMapper
  */
-suspend fun main() = application {
+fun main() = application {
     configure {
         width =  2 * 640
         height = 2 * 480

@@ -34,7 +34,7 @@ private class ProgramState {
     }
 }
 
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 900
         height = 720

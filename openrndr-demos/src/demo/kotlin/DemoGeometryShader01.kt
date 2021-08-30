@@ -7,7 +7,7 @@ import org.openrndr.extras.meshgenerators.boxMesh
 import org.openrndr.resourceText
 import org.openrndr.resourceUrl
 
-suspend fun main() {
+fun main() {
     application {
         program {
             val vb = boxMesh()

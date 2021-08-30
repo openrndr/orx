@@ -3,7 +3,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.videoprofiles.TIFFProfile
 import org.openrndr.ffmpeg.ScreenRecorder
 
-suspend fun main() = application {
+fun main() = application {
     program {
         extend(ScreenRecorder()) {
             profile = TIFFProfile()

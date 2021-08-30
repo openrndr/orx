@@ -18,7 +18,7 @@ import org.openrndr.shape.ShapeContour
 import org.openrndr.shape.simplify
 import org.openrndr.shape.toContour
 
-suspend fun main() {
+fun main() {
     application {
         program {
 

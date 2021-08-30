@@ -15,7 +15,7 @@ import org.openrndr.math.Vector2
  */
 
 
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 768
         height = 576

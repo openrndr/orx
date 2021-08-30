@@ -12,7 +12,7 @@ import org.openrndr.extra.noise.gradient
 import org.openrndr.shape.contour
 
 typealias IDDD_D = ((Int, Double, Double, Double) -> Double)
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 720
         height = 720

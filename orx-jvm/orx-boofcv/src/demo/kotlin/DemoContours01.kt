@@ -13,7 +13,7 @@ import org.openrndr.extensions.SingleScreenshot
 import kotlin.math.cos
 import kotlin.math.sin
 
-suspend fun main() {
+fun main() {
     application {
         program {
 

@@ -5,7 +5,7 @@ import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.noise.simplex
 import org.openrndr.shape.contour
 
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 720
         height = 720

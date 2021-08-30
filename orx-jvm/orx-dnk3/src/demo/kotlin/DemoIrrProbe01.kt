@@ -29,7 +29,7 @@ import java.io.File
 import kotlin.math.cos
 import kotlin.math.sin
 
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 1280
         height = 720

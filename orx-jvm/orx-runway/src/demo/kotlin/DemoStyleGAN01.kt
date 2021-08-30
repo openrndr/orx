@@ -9,7 +9,7 @@ import org.openrndr.extra.runway.runwayQuery
  * This example requires a `runway/StyleGAN` model to be active in Runway.
  * This also works with `eryksalvaggio/Ascinte_Seated`
  */
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 512
         height = 512

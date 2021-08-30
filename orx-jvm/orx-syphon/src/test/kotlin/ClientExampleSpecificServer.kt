@@ -5,7 +5,7 @@ import org.openrndr.extra.syphon.SyphonClient
 /**
  * This example uses After Effects and OPENRNDR connected via Syphon
  */
-suspend fun main() = application {
+fun main() = application {
     configure {
         // The maximum resolution supported by the free
         // version of AESyphon

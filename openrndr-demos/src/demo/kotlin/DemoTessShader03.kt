@@ -8,7 +8,7 @@ import org.openrndr.resourceText
 import org.openrndr.resourceUrl
 import org.openrndr.shape.Ellipse
 
-suspend fun main() {
+fun main() {
     application {
         program {
 

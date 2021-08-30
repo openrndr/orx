@@ -6,7 +6,7 @@ import org.openrndr.internal.Driver
 import org.openrndr.math.Vector3
 
 
-suspend fun main() = application {
+fun main() = application {
     program {
 
         val shader = Shader.createFromCode(vsCode =

@@ -3,7 +3,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.shapes.grid
 
-suspend fun main() {
+fun main() {
     application {
         configure {
             width = 800

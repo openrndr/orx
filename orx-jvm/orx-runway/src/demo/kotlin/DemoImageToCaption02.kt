@@ -13,7 +13,7 @@ import org.openrndr.extra.runway.runwayQuery
  */
 
 
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 768
         height = 576

@@ -18,7 +18,7 @@ import org.openrndr.shape.Rectangle
  * This example requires a `runway/DenseCap` model to be active in Runway.
  */
 
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 768
         height = 576

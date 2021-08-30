@@ -5,7 +5,7 @@ import org.openrndr.draw.loadImage
 import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extras.color.statistics.calculateHistogramRGB
 
-suspend fun main() = application {
+fun main() = application {
     program {
         // -- this block is for automation purposes only
         if (System.getProperty("takeScreenshot") == "true") {

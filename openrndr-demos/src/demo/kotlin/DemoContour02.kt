@@ -18,7 +18,7 @@ fun arc(start: Vector2, end: Vector2, radius: Double): ShapeContour {
     }
 }
 
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 800
         height = 800

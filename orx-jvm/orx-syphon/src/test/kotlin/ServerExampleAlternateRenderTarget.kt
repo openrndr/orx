@@ -5,7 +5,7 @@ import org.openrndr.draw.renderTarget
 import org.openrndr.extra.syphon.SyphonServer
 import kotlin.math.*
 
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 1000
         height = 1000

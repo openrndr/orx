@@ -3,7 +3,7 @@ import org.openrndr.draw.*
 import org.openrndr.extras.camera.Orbital
 import org.openrndr.extras.meshgenerators.boxMesh
 
-suspend fun main() = application {
+fun main() = application {
     program {
         val cubemap1 = Cubemap.fromUrl("file:demo-data/cubemaps/garage_iem.dds", null, session = Session.active)
         val cube = boxMesh()

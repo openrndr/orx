@@ -9,7 +9,7 @@ import org.openrndr.extra.runway.*
  * generated image back into the model (with an additional distortion).
  * This example requires a `runway/BigBiGAN` model to be active in Runway.
  */
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 512
         height = 512

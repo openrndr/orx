@@ -8,7 +8,7 @@ import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 import org.openrndr.extra.quadtree.Quadtree
 
-suspend fun main() {
+fun main() {
     application {
         configure {
             width = 800

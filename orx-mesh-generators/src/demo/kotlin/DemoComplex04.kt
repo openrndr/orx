@@ -8,7 +8,7 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
 
-suspend fun main() {
+fun main() {
     application {
         program {
             if (System.getProperty("takeScreenshot") == "true") {

@@ -5,7 +5,7 @@ import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.shadestyles.radialGradient
 import kotlin.math.cos
 
-suspend fun main() {
+fun main() {
     application {
         program {
             if (System.getProperty("takeScreenshot") == "true") {

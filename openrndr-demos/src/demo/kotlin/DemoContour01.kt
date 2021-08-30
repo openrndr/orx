@@ -7,7 +7,7 @@ import org.openrndr.shape.Circle
  *
  * This was made to assist in resolving https://github.com/openrndr/openrndr/issues/164
  */
-suspend fun main() = application {
+fun main() = application {
     program {
         val c = Circle(200.0, 200.0, 10.0).contour
         extend {

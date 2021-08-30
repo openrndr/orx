@@ -15,7 +15,7 @@ import kotlin.math.sin
  * uniformly between 0.0 and 1.0 and then animated towards one of
  * the ends over time using pow() and sin(seconds).
  */
-suspend fun main() {
+fun main() {
     application {
         program {
             if (System.getProperty("takeScreenshot") == "true") {

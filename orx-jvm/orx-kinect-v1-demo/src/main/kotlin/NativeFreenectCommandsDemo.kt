@@ -12,7 +12,7 @@ import java.lang.RuntimeException
  * The calls are executed in separate kinect runner thread but they will
  * block the calling thread until the result is returned.
  */
-suspend fun main() = application {
+fun main() = application {
     program {
         val kinects = getKinectsV1(this)
         // the same as calling kinects.countDevices(), here to show that any value might be returned from execute

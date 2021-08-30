@@ -13,7 +13,7 @@ import org.openrndr.extras.color.spaces.toXSLUVa
 import org.openrndr.extras.meshgenerators.sphereMesh
 import org.openrndr.math.Vector3
 
-suspend fun main() {
+fun main() {
     application {
         configure {
             width = 800

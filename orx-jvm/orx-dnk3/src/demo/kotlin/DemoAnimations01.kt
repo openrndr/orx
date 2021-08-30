@@ -11,7 +11,7 @@ import org.openrndr.math.mod_
 import org.openrndr.math.transforms.transform
 import java.io.File
 
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 1280
         height = 720

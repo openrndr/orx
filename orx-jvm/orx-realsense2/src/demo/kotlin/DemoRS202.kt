@@ -11,7 +11,7 @@ import org.openrndr.extra.realsense2.RS2Sensor
  *
  * Tested with two sensors, only uses depth stream now
  */
-suspend fun main() {
+fun main() {
     application {
         configure {
             width = 1280

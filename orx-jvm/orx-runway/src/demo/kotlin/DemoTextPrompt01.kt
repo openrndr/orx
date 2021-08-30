@@ -14,7 +14,7 @@ import java.io.File
  * This example requires a `runway/GPT-2` model to be active in Runway.
  */
 
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 768
         height = 768

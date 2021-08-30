@@ -5,7 +5,7 @@ import org.openrndr.extra.runway.*
 /**
  * This example requires a `runway/Person-Segmentation` model to be active in Runway.
  */
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 331
         height = 400

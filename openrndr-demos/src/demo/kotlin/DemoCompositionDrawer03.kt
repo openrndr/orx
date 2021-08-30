@@ -3,7 +3,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.shape.ClipMode
 import org.openrndr.shape.drawComposition
 
-suspend fun main() {
+fun main() {
     application {
         program {
             val cd = drawComposition {

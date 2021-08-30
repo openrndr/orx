@@ -13,7 +13,7 @@
 //import org.openrndr.math.Vector2
 //import kotlin.math.absoluteValue
 //
-//suspend fun main() = application {
+//fun main() = application {
 //    configure {
 //        width = 1280
 //        height = 720

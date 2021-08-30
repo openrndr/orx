@@ -7,7 +7,7 @@ import org.openrndr.extra.shapes.drawers.bezierPatch
 import org.openrndr.extras.color.spaces.toOKLABa
 import org.openrndr.shape.Circle
 
-suspend fun main() {
+fun main() {
     application {
         configure {
             width = 720

@@ -3,7 +3,7 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 
-suspend fun main() = application {
+fun main() = application {
     program {
         extend {
             drawer.clear(ColorRGBa.GRAY)

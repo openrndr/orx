@@ -10,7 +10,7 @@ import org.openrndr.extras.meshgenerators.sphereMesh
 import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
 
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 1280
         height = 720

@@ -7,7 +7,7 @@ import org.openrndr.shape.contains
 import kotlin.math.cos
 import kotlin.math.sin
 
-suspend fun main() = application {
+fun main() = application {
     program {
         // -- this block is for automation purposes only
         if (System.getProperty("takeScreenshot") == "true") {

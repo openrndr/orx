@@ -8,7 +8,7 @@ import org.openrndr.panel.elements.slider
 import org.openrndr.resourceUrl
 import java.net.URL
 
-suspend fun main() = application {
+fun main() = application {
     program {
 
         // -- replace the default clock with an offset clock

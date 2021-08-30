@@ -14,7 +14,7 @@ import org.openrndr.shape.path3D
 import org.openrndr.extra.shaderphrases.preprocessedFromUrls
 import kotlin.math.cos
 
-suspend fun main() {
+fun main() {
     application {
         program {
             extend(Orbital())

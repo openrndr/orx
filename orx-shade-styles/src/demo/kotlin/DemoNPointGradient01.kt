@@ -17,7 +17,7 @@ import kotlin.math.cos
  * on a static shape (a circle for example) or you can animate a shape
  * with a static gradient.
  */
-suspend fun main() {
+fun main() {
     application {
         program {
             if (System.getProperty("takeScreenshot") == "true") {

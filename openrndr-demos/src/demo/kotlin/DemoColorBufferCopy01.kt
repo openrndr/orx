@@ -3,7 +3,7 @@ import org.openrndr.draw.*
 import org.openrndr.extras.camera.Orbital
 import org.openrndr.extras.meshgenerators.boxMesh
 
-suspend fun main() = application {
+fun main() = application {
     program {
         val cb0 = loadImage("demo-data/images/image-001.png")
         val cb1 = cb0.createEquivalent()

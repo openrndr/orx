@@ -9,7 +9,7 @@ import org.openrndr.extras.camera.Orbital
 import org.openrndr.math.*
 import java.io.File
 
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 1280
         height = 720

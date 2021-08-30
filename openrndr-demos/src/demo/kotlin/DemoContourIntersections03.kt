@@ -8,7 +8,7 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-suspend fun main() = application {
+fun main() = application {
     program {
         val points = 200
         extend {

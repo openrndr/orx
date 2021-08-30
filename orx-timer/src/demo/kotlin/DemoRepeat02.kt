@@ -8,7 +8,7 @@ import org.openrndr.extra.timer.repeat
  * This demonstrates how to combine `repeat {}` with a postponed event to trigger drawing
  */
 
-suspend fun main() = application {
+fun main() = application {
     program {
         val event = Event<Any?>().postpone(true)
         event.listen {

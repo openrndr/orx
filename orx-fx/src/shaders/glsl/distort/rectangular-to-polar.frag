@@ -17,13 +17,14 @@ out vec4 o_color;
 uniform int angleLevels;
 uniform int radiusLevels;
 
+uniform bool logPolar;
+
 void main() {
-    vec2 uv = v_texCoord0 - origin;
+    vec2 uv = v_texCoord0;
     float arg = (uv.x-0.5) * 2 * PI;
-    float radius = (uv.y) * sqrt(0.5);
+    float radius = logPolar? (((exp(uv.y)-1.0) / (exp(1.0)-1.0)))  : uv.y;
 
-
-    vec2 sourceUV = radius * vec2(cos(arg), sin(arg)) + vec2(0.5);
+    vec2 sourceUV = (radius * sqrt(0.5) * vec2(cos(arg), sin(arg)) + vec2(0.5));
 
     #ifndef OR_GL_TEXTURE2D
     vec4 result = texture(tex0, sourceUV);

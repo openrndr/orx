@@ -8,7 +8,7 @@ import org.openrndr.extra.noise.Random
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 
-suspend fun main() = application {
+fun main() = application {
     program {
         val margin = 5.0
         val squareSize = 100.0

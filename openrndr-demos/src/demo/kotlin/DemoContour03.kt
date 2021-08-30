@@ -4,7 +4,7 @@ import org.openrndr.draw.isolated
 import org.openrndr.shape.Circle
 import org.openrndr.shape.Rectangle
 
-suspend fun main() {
+fun main() {
     application {
         configure {
             width = 720

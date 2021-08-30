@@ -59,7 +59,6 @@ kotlin {
 
     sourceSets {
         val shaderKotlin by creating {
-            //this.kotlin.srcDir("$projectDir/build/generated/shaderKotlin")
             this.kotlin.srcDir(embedShaders.outputDir)
         }
         @Suppress("UNUSED_VARIABLE")

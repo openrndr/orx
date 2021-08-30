@@ -8,7 +8,7 @@ import org.openrndr.math.Vector2
 import kotlin.math.absoluteValue
 
 
-suspend fun main() {
+fun main() {
     application {
         program {
             val cb = colorBuffer(width, height)

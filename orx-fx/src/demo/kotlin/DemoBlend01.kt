@@ -1,9 +1,9 @@
 package org.openrndr.extra.fx.demo
 
-import org.openrndr.applicationSynchronous
+import org.openrndr.application
 import org.openrndr.extra.fx.blend.*
 fun main() {
-    applicationSynchronous {
+    application {
         program {
             val add = Add()
             val colorBurn = ColorBurn()

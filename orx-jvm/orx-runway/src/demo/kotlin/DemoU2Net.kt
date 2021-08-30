@@ -5,7 +5,7 @@ import org.openrndr.extra.runway.*
 /**
  * This example requires a `runway/U-2-Net` model to be active in Runway.
  */
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 305
         height = 400

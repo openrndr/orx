@@ -9,7 +9,7 @@ import org.openrndr.extra.runway.*
  * This demonstrates the body estimation model of PoseNet
  * This example requires a `runway/PoseNet` model active in Runway.
  */
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 512
         height = 512

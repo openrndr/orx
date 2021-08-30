@@ -8,7 +8,7 @@ import org.openrndr.extra.compositor.post
 import org.openrndr.extra.fx.patterns.Checkers
 import org.openrndr.extra.jumpfill.fx.InnerGlow
 
-suspend fun main() = application {
+fun main() = application {
     program {
         if (System.getProperty("takeScreenshot") == "true") {
             extend(SingleScreenshot()) {

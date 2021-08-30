@@ -4,7 +4,7 @@ import org.openrndr.application
 import org.openrndr.math.Vector2
 import org.openrndr.shape.contour
 
-suspend fun main() = application {
+fun main() = application {
     program {
         val a = object {
             var x = 0.0

@@ -5,7 +5,7 @@ import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.parameters.*
 
 
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 800
         height = 800

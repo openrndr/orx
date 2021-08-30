@@ -5,7 +5,7 @@ import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.fx.distort.FluidDistort
 import org.openrndr.extra.fx.patterns.Checkers
 
-suspend fun main() {
+fun main() {
     application {
         program {
             val fd = FluidDistort()

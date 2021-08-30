@@ -9,7 +9,7 @@ import org.openrndr.extra.kinect.v1.getKinectsV1
  * Note: kinect depth map is stored only on the RED color channel to save
  *       space. Therefore depth map is displayed only in the red tones.
  */
-suspend fun main() = application {
+fun main() = application {
     configure { // default resolution of the Kinect v1 depth camera
         width = 640
         height = 480

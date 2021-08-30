@@ -6,7 +6,7 @@ import org.openrndr.extra.kinect.v1.getKinectsV1
 /**
  * Stream from 2 kinects side by side.
  */
-suspend fun main() = application {
+fun main() = application {
     configure {
         width  = 640 * 2
         height = 480

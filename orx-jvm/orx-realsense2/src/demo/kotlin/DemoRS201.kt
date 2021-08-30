@@ -6,7 +6,7 @@ import org.openrndr.draw.colorBuffer
 import org.openrndr.draw.tint
 import org.openrndr.extra.realsense2.RS2Sensor
 
-suspend fun main() {
+fun main() {
     application {
         program {
             val sensors = RS2Sensor.listSensors()

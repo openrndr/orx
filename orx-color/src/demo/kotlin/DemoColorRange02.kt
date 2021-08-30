@@ -9,7 +9,7 @@ import org.openrndr.extras.color.palettes.rangeTo
 import org.openrndr.extras.color.presets.CORAL
 import org.openrndr.extras.color.spaces.toHSLUVa
 
-suspend fun main() = application {
+fun main() = application {
     program {
         // -- this block is for automation purposes only
         if (System.getProperty("takeScreenshot") == "true") {

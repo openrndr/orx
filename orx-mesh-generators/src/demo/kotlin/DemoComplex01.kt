@@ -10,7 +10,7 @@ import org.openrndr.extras.meshgenerators.sphere
 import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
 
-suspend fun main() {
+fun main() {
     application {
         program {
             val m = meshGenerator {

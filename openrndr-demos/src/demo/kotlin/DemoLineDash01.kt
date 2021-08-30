@@ -4,7 +4,7 @@ import org.openrndr.draw.shadeStyle
 import org.openrndr.extensions.Screenshots
 import org.openrndr.math.Polar
 import org.openrndr.shape.contour
-suspend fun main() = application {
+fun main() = application {
     program {
         val style = shadeStyle {
             //fragmentTransform = "x_stroke.a *= step(0.5, fract(c_contourPosition / p_dashLen));"

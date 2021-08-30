@@ -5,7 +5,7 @@ import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.XYParameter
 import org.openrndr.math.Vector2
 
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 800
         height = 800

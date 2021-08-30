@@ -10,7 +10,7 @@ import org.openrndr.ffmpeg.VideoPlayerFFMPEG
 import org.openrndr.math.Vector2
 import org.openrndr.resourceUrl
 
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 768
         height = 576

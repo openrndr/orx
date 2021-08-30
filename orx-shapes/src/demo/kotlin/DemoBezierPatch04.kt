@@ -11,7 +11,7 @@ import org.openrndr.shape.Circle
  * You can think of bezierPatch.position() as requesting points
  * in a wavy flag (the bezier patch) using normalized uv coordinates.
  */
-suspend fun main() {
+fun main() {
     application {
         configure {
             width = 800

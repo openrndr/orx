@@ -5,7 +5,7 @@ import org.openrndr.extra.keyframer.KeyframerFormat
 import org.openrndr.resourceUrl
 import java.net.URL
 
-suspend fun main() = application {
+fun main() = application {
     program {
         class Animation: Keyframer() {
             val position by Vector2Channel(arrayOf("x", "y"))

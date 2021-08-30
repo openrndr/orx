@@ -16,7 +16,7 @@ import kotlin.random.Random
  * with a different amount of blur in each layer,
  * simulating depth of field
  */
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 900
         height = 900

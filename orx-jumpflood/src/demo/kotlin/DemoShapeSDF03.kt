@@ -11,7 +11,7 @@ import org.openrndr.extra.jumpfill.ops.*
 import org.openrndr.math.transforms.transform
 import org.openrndr.svg.loadSVG
 
-suspend fun main() {
+fun main() {
     application {
         configure {
             width = 1280

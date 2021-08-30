@@ -5,7 +5,7 @@ import org.openrndr.draw.loadImage
 import org.openrndr.extensions.SingleScreenshot
 
 
-suspend fun main() {
+fun main() {
     application {
         program {
             if (System.getProperty("takeScreenshot") == "true") {

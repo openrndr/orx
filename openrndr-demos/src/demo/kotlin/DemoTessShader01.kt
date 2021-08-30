@@ -5,7 +5,7 @@ import org.openrndr.math.Vector3
 import org.openrndr.resourceText
 import org.openrndr.resourceUrl
 
-suspend fun main() {
+fun main() {
     application {
         program {
             val vb = vertexBuffer(vertexFormat {

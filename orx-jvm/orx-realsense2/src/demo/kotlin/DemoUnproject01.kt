@@ -1,6 +1,6 @@
 import org.openrndr.application
 
-suspend fun main() {
+fun main() {
     application {
         program {
 

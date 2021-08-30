@@ -14,7 +14,7 @@ import org.openrndr.shape.ShapeContour
  * In this case the contours are regular stars and the bezier patch
  * is created using a circular contour with the required 4 segments.
  */
-suspend fun main() {
+fun main() {
     application {
         configure {
             width = 800

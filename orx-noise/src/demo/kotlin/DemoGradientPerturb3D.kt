@@ -7,7 +7,7 @@ import org.openrndr.extra.noise.simplex
 import org.openrndr.math.Vector3
 import kotlin.math.absoluteValue
 
-suspend fun main() {
+fun main() {
     application {
         program {
             val cb = colorBuffer(width, height)

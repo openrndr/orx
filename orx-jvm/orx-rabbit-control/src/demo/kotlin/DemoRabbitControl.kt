@@ -8,7 +8,7 @@ import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
 
 
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 800
         height = 800

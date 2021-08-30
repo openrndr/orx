@@ -7,6 +7,8 @@ varying vec2 v_texCoord0;
 uniform vec2 textureSize0;
 uniform sampler2D tex0;
 
+uniform bool logPolar;
+
 #ifndef OR_GL_FRAGCOLOR
 out vec4 o_color;
 #endif
@@ -16,8 +18,11 @@ out vec4 o_color;
 void main() {
     vec2 uv = v_texCoord0 - vec2(0.5);
     float arg = atan(uv.y, uv.x);
-    float radius = length(uv);
-    vec2 sourceUV = vec2(arg / (2*PI) + 0.5, radius/sqrt(0.5));
+
+    float bias = 0.0;
+    float radius = logPolar? log(1.0 + length(uv)*(exp(1.0)-bias)) / log(1.0+(exp(1.0)-bias)*sqrt(0.5)) : (length(uv) / sqrt(0.5));
+
+    vec2 sourceUV = vec2(arg / (2*PI) + 0.5, radius);
 
     #ifndef OR_GL_TEXTURE2D
     vec4 result = texture(tex0, sourceUV);

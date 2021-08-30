@@ -3,7 +3,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.syphon.SyphonClient
 
 
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 1000
         height = 800

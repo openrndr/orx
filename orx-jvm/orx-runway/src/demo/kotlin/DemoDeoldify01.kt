@@ -12,7 +12,7 @@ import org.openrndr.ffmpeg.VideoPlayerFFMPEG
  * This example requires a `reiinakano/DeOldify` model active in Runway.
  */
 
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 1280
         height = 360

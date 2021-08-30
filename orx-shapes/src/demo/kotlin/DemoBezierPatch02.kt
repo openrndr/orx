@@ -14,7 +14,7 @@ import org.openrndr.shape.ShapeContour
  * but one can manually create any other 4-segment closed contour
  * to use in bezier patches.
  */
-suspend fun main() {
+fun main() {
     application {
         configure {
             width = 800

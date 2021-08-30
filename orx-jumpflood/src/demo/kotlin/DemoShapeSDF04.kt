@@ -13,7 +13,7 @@ import org.openrndr.math.transforms.transform
 import org.openrndr.shape.Circle
 import org.openrndr.svg.loadSVG
 
-suspend fun main() {
+fun main() {
     application {
         configure {
             width = 1280

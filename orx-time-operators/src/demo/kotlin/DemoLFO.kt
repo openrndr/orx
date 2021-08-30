@@ -6,7 +6,7 @@ import org.openrndr.extra.timeoperators.LFO
 import org.openrndr.extra.timeoperators.LFOWave
 import org.openrndr.extra.timeoperators.TimeOperators
 
-suspend fun main() {
+fun main() {
     application {
         program {
             val size = LFO()

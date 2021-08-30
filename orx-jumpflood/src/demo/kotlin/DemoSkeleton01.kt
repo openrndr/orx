@@ -9,7 +9,7 @@ import org.openrndr.extra.jumpfill.fx.Skeleton
 import org.openrndr.extra.jumpfill.fx.StraightSkeleton
 import org.openrndr.extra.noise.simplex
 
-suspend fun main() {
+fun main() {
     application {
         configure {
             width = 1280

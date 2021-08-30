@@ -4,7 +4,7 @@ import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.shapes.RoundedRectangle
 import kotlin.math.cos
 
-suspend fun main() = application {
+fun main() = application {
     program {
         // -- this block is for automation purposes only
         if (System.getProperty("takeScreenshot") == "true") {

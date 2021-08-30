@@ -12,7 +12,7 @@ import org.openrndr.math.smoothstep
  * This example requires a `runway/BigBiGAN` model to be active in Runway.
  */
 
-suspend fun main() = application {
+fun main() = application {
     configure {
         width = 512
         height = 256

@@ -5,7 +5,7 @@ import org.openrndr.extra.shapes.bezierPatch
 import org.openrndr.extra.shapes.drawers.bezierPatch
 import org.openrndr.shape.Circle
 
-suspend fun main() {
+fun main() {
     application {
         program {
             if (System.getProperty("takeScreenshot") == "true") {
