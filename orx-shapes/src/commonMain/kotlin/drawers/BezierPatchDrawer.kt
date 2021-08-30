@@ -3,6 +3,7 @@ package org.openrndr.extra.shapes.drawers
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.extra.shapes.BezierPatchBase
+import org.openrndr.extra.shapes.BezierPatch3DBase
 import org.openrndr.internal.Driver
 import org.openrndr.math.Vector2
 
@@ -258,6 +259,97 @@ class BezierPatchDrawer {
         )
         shader.end()
     }
+
+    @JvmName("drawBezierPatch3D")
+    fun drawBezierPatches(
+        context: DrawContext,
+        drawStyle: DrawStyle,
+        bezierPatches: List<BezierPatch3DBase<ColorRGBa>>,
+        subdivisions: Int = 32
+    ) {
+        ensureVertexCount(bezierPatches.size * 16)
+        val shader = shadeStyleManager.shader(
+            drawStyle.shadeStyle,
+            listOf(vertices.vertexFormat),
+            emptyList()
+        )
+        vertices.put {
+            for (bezierPatch in bezierPatches) {
+                for (j in 0 until 4) {
+                    for (i in 0 until 4) {
+                        write(bezierPatch.points[j][i])
+                        if (bezierPatch.colors.isEmpty()) {
+                            write(ColorRGBa.WHITE)
+                        } else {
+                            write(bezierPatch.colors[j][i])
+                        }
+                        write(Vector2(i / 3.0, j / 3.0))
+                    }
+                }
+            }
+        }
+        shader.begin()
+        shader.uniform("u_subdivisions", subdivisions)
+        context.applyToShader(shader)
+        drawStyle.applyToShader(shader)
+        Driver.instance.setState(drawStyle)
+        Driver.instance.drawVertexBuffer(
+            shader,
+            listOf(vertices),
+            DrawPrimitive.PATCHES,
+            0,
+            16 * bezierPatches.size,
+            16
+        )
+        shader.end()
+    }
+
+    @JvmName("drawBezierPatch3DOKLab")
+    fun drawBezierPatches(
+        context: DrawContext,
+        drawStyle: DrawStyle,
+        bezierPatches: List<BezierPatch3DBase<ColorOKLABa>>,
+        subdivisions: Int = 32
+    ) {
+        ensureVertexCount(bezierPatches.size * 16)
+        val shader = shadeStyleManagerOKLab.shader(
+            drawStyle.shadeStyle,
+            listOf(vertices.vertexFormat),
+            emptyList()
+        )
+
+        vertices.put {
+            for(bezierPatch in bezierPatches) {
+                for (j in 0 until 4) {
+                    for (i in 0 until 4) {
+                        write(bezierPatch.points[j][i])
+                        if (bezierPatch.colors.isEmpty()) {
+                            write(ColorRGBa.WHITE)
+                        } else {
+                            write(bezierPatch.colors[j][i].let {
+                                Vector4(it.l, it.a, it.b, it.alpha)
+                            })
+                        }
+                        write(Vector2(i / 3.0, j / 3.0))
+                    }
+                }
+            }
+        }
+        shader.begin()
+        shader.uniform("u_subdivisions", subdivisions)
+        context.applyToShader(shader)
+        drawStyle.applyToShader(shader)
+        Driver.instance.setState(drawStyle)
+        Driver.instance.drawVertexBuffer(
+            shader,
+            listOf(vertices),
+            DrawPrimitive.PATCHES,
+            0,
+            16 * bezierPatches.size,
+            16
+        )
+        shader.end()
+    }
 }
 
 private val Drawer.bezierPatchDrawer: BezierPatchDrawer by lazy { BezierPatchDrawer() }
@@ -279,5 +371,25 @@ fun Drawer.bezierPatch(bezierPatch: BezierPatchBase<ColorOKLABa>, subdivisions: 
 
 @JvmName("bezierPatchesOKLAB")
 fun Drawer.bezierPatches(bezierPatch: List<BezierPatchBase<ColorOKLABa>>, subdivisions: Int = 32) {
+    bezierPatchDrawer.drawBezierPatches(context, drawStyle, bezierPatch, subdivisions)
+}
+
+@JvmName("bezierPatch3DRGBa")
+fun Drawer.bezierPatch(bezierPatch: BezierPatch3DBase<ColorRGBa>, subdivisions: Int = 32) {
+    bezierPatchDrawer.drawBezierPatches(context, drawStyle, listOf(bezierPatch), subdivisions)
+}
+
+@JvmName("bezierPatches3DRGBa")
+fun Drawer.bezierPatches(bezierPatch: List<BezierPatch3DBase<ColorRGBa>>, subdivisions: Int = 32) {
+    bezierPatchDrawer.drawBezierPatches(context, drawStyle, bezierPatch, subdivisions)
+}
+
+@JvmName("bezierPatch3DOKLAB")
+fun Drawer.bezierPatch(bezierPatch: BezierPatch3DBase<ColorOKLABa>, subdivisions: Int = 32) {
+    bezierPatchDrawer.drawBezierPatches(context, drawStyle, listOf(bezierPatch), subdivisions)
+}
+
+@JvmName("bezierPatches3DOKLAB")
+fun Drawer.bezierPatches(bezierPatch: List<BezierPatch3DBase<ColorOKLABa>>, subdivisions: Int = 32) {
     bezierPatchDrawer.drawBezierPatches(context, drawStyle, bezierPatch, subdivisions)
 }
