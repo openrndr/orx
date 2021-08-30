@@ -16,7 +16,7 @@ import kotlin.math.sin
 /**
  * BoxBlur implemented as a separable filter
  */
-@Description("Box-blur")
+@Description("Line blur")
 class LineBlur : Filter(mppFilterShader(fx_box_blur, "line-blur")) {
 
     /**
