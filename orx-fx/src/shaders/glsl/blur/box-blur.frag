@@ -14,10 +14,25 @@ uniform float gain;
 uniform vec4 subtract;
 uniform float spread;
 
+uniform bool wrapX;
+uniform bool wrapY;
+
+
 #ifndef OR_GL_FRAGCOLOR
 out vec4 o_color;
 #endif
 
+vec2 wrap(vec2 uv) {
+    vec2 res = uv;
+    if (wrapX) {
+        res.x = mod(res.x, 1.0);
+    }
+    if (wrapY) {
+        res.y = mod(res.y, 1.0);
+    }
+    return res;
+
+}
 void main() {
     vec2 s = textureSize0;
     s = vec2(1.0 / s.x, 1.0 / s.y);
@@ -37,9 +52,9 @@ void main() {
     for (int x = WS; x<= WE; ++x) {
         float lw = 1.0;
         #ifndef OR_GL_TEXTURE2D
-        sum += texture(tex0, v_texCoord0 + float(x) * blurDirection * s * spread);
+        sum += texture(tex0, wrap(v_texCoord0 + float(x) * blurDirection * s * spread));
         #else
-        sum += texture2D(tex0, v_texCoord0 + float(x) * blurDirection * s * spread);
+        sum += texture2D(tex0, wrap(v_texCoord0 + float(x) * blurDirection * s * spread));
         #endif
 
         weight += lw;

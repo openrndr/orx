@@ -3,19 +3,21 @@ package org.openrndr.extra.fx.blur
 import org.openrndr.draw.*
 import org.openrndr.extra.fx.fx_box_blur
 import org.openrndr.extra.fx.mppFilterShader
+import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
 
 import org.openrndr.math.Vector2
+import org.openrndr.math.asRadians
+import kotlin.math.cos
+import kotlin.math.sin
 
 /**
  * BoxBlur implemented as a separable filter
  */
 @Description("Box-blur")
-class BoxBlur : Filter(mppFilterShader(fx_box_blur,"box-blur")) {
-
-    data class ColorBufferDescription(val width: Int, val height: Int, val contentScale: Double, val format: ColorFormat, val type: ColorType)
+class LineBlur : Filter(mppFilterShader(fx_box_blur, "line-blur")) {
 
     /**
      * The sample window, default is 5
@@ -35,28 +37,29 @@ class BoxBlur : Filter(mppFilterShader(fx_box_blur,"box-blur")) {
     @DoubleParameter("gain", 0.0, 4.0)
     var gain: Double by parameters
 
-    private var intermediateCache = mutableMapOf<ColorBufferDescription, ColorBuffer>()
+
+    @DoubleParameter("blur angle", -180.0, 180.0)
+    var blurAngle: Double by parameters
+
+    @BooleanParameter("wrap x", order = 9)
+    var wrapX: Boolean by parameters
+
+    @BooleanParameter("wrap y", order = 10)
+    var wrapY: Boolean by parameters
+
+
 
     init {
         window = 5
         spread = 1.0
         gain = 1.0
+        blurAngle = 0.0
+        wrapX = false
+        wrapY = false
     }
 
     override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
-        val intermediateDescription = ColorBufferDescription(target[0].width, target[0].height, target[0].contentScale, target[0].format, target[0].type)
-        val intermediate = intermediateCache.getOrPut(intermediateDescription) {
-            colorBuffer(target[0].width, target[0].height, target[0].contentScale, target[0].format, target[0].type)
-        }
-
-        parameters["wrapX"] = false
-        parameters["wrapY"] = false
-        intermediate.let {
-            parameters["blurDirection"] = Vector2(1.0, 0.0)
-            super.apply(source, arrayOf(it))
-
-            parameters["blurDirection"] = Vector2(0.0, 1.0)
-            super.apply(arrayOf(it), target)
-        }
+        parameters["blurDirection"] = Vector2(cos(blurAngle.asRadians), sin(blurAngle.asRadians))
+        super.apply(source, target)
     }
 }

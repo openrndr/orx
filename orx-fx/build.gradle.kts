@@ -18,6 +18,15 @@ val openrndrVersion: String by rootProject.extra
 val openrndrOS: String by rootProject.extra
 val spekVersion: String by rootProject.extra
 
+val embedShaders = tasks.register<EmbedShadersTask>("embedShaders") {
+    inputDir.set(file("$projectDir/src/shaders/glsl"))
+    outputDir.set(file("$buildDir/generated/shaderKotlin"))
+    defaultPackage.set("org.openrndr.extra.fx")
+    defaultVisibility.set("internal")
+    namePrefix.set("fx_")
+}.get()
+
+
 kotlin {
     jvm {
         compilations {
@@ -50,7 +59,8 @@ kotlin {
 
     sourceSets {
         val shaderKotlin by creating {
-            this.kotlin.srcDir("$projectDir/build/generated/shaderKotlin")
+            //this.kotlin.srcDir("$projectDir/build/generated/shaderKotlin")
+            this.kotlin.srcDir(embedShaders.outputDir)
         }
         @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
@@ -104,16 +114,9 @@ kotlin {
     }
 }
 
-val embedShaders = tasks.register<EmbedShadersTask>("embedShaders") {
-    inputDir.set(file("$projectDir/src/shaders/glsl"))
-    outputDir.set(file("$buildDir/generated/shaderKotlin"))
-    defaultPackage.set("org.openrndr.extra.fx")
-    defaultVisibility.set("internal")
-    namePrefix.set("fx_")
-}.get()
 
-tasks.getByName("compileKotlinJvm").dependsOn(embedShaders)
-tasks.getByName("compileKotlinJs").dependsOn(embedShaders)
-tasks.getByName("compileKotlinMetadata").dependsOn(embedShaders)
-tasks.getByName("jvmSourcesJar").dependsOn(embedShaders)
-tasks.getByName("sourcesJar").dependsOn(embedShaders)
+//tasks.getByName("compileKotlinJvm").dependsOn(embedShaders)
+//tasks.getByName("compileKotlinJs").dependsOn(embedShaders)
+//tasks.getByName("compileKotlinMetadata").dependsOn(embedShaders)
+//tasks.getByName("jvmSourcesJar").dependsOn(embedShaders)
+//tasks.getByName("sourcesJar").dependsOn(embedShaders)
