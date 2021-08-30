@@ -3,8 +3,9 @@ package org.openrndr.extra.gitarchiver
 import mu.KotlinLogging
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.errors.EmptyCommitException
-import org.eclipse.jgit.internal.storage.file.FileRepository
 import org.eclipse.jgit.lib.Constants
+import org.eclipse.jgit.lib.Repository
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder
 import org.openrndr.AssetMetadata
 import org.openrndr.Extension
 import org.openrndr.Program
@@ -20,9 +21,8 @@ class GitArchiver : Extension {
 
     var autoCommitMessage = "auto commit"
 
-    private val repo = FileRepository(".git")
-    private val git = Git.open(File("."))
-
+    private val repo = FileRepositoryBuilder().setGitDir(File("./.git")).build()
+    private val git = Git(repo)
 
     fun commitChanges() {
         try {
