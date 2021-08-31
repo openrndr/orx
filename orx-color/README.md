@@ -79,16 +79,6 @@ Two color spaces are added: `ColorHSLUVa` and `ColorHPLUVa`, they are an impleme
 
 ![DemoColorRange04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorRange04Kt.png)
 
-### DemoHSLUV01
-[source code](src/demo/kotlin/DemoHSLUV01.kt)
-
-![DemoHSLUV01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHSLUV01Kt.png)
-
-### DemoHSLUV02
-[source code](src/demo/kotlin/DemoHSLUV02.kt)
-
-![DemoHSLUV02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHSLUV02Kt.png)
-
 ### DemoHistogram01
 [source code](src/demo/kotlin/DemoHistogram01.kt)
 
@@ -103,6 +93,16 @@ Two color spaces are added: `ColorHSLUVa` and `ColorHPLUVa`, they are an impleme
 [source code](src/demo/kotlin/DemoHistogram03.kt)
 
 ![DemoHistogram03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHistogram03Kt.png)
+
+### DemoHSLUV01
+[source code](src/demo/kotlin/DemoHSLUV01.kt)
+
+![DemoHSLUV01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHSLUV01Kt.png)
+
+### DemoHSLUV02
+[source code](src/demo/kotlin/DemoHSLUV02.kt)
+
+![DemoHSLUV02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHSLUV02Kt.png)
 
 ### DemoXSLUV01
 [source code](src/demo/kotlin/DemoXSLUV01.kt)

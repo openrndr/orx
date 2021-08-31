@@ -12,8 +12,8 @@ buildscript {
 
 plugins {
     // remember to update all the versions here when upgrading kotlin version
-    id 'org.jetbrains.kotlin.jvm' version '1.5.30' apply false
-    id 'org.jetbrains.kotlin.multiplatform' version '1.5.30' apply false
+    id 'org.jetbrains.kotlin.jvm' apply false
+    id 'org.jetbrains.kotlin.multiplatform'  apply false
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.5.30' apply false
 }
 
@@ -32,7 +32,6 @@ def multiplatformModules = [
     "orx-shader-phrases",
     "orx-shapes",
     "orx-quadtree",
-
 ]
 
 project.ext {
@@ -100,62 +99,6 @@ dokka {
     includes = ['Module.md']
     sourceDirs = files(subprojects.collect { p -> new File(p.projectDir, "/src/main/kotlin") })
 }
-
-//allprojects {
-//    apply plugin: 'idea'
-//    apply plugin: 'java'
-//    apply plugin: 'kotlin'
-//    apply plugin: 'nebula.release'
-//
-//    apply plugin: "com.github.ben-manes.versions"
-//
-//    group 'org.openrndr.extra'
-//
-//    repositories {
-//        if (openrndrUseSnapshot) {
-//            mavenLocal()
-//        }
-//
-//        mavenCentral()
-//        jcenter()
-//        maven {
-//            url "https://dl.bintray.com/spekframework/spek"
-//        }
-//    }
-//
-//    dependencies {
-//        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-//        implementation 'io.github.microutils:kotlin-logging-jvm:2.0.6'
-//        implementation "org.openrndr:openrndr-application:$openrndrVersion"
-//        implementation "org.openrndr:openrndr-shape:$openrndrVersion"
-//        implementation group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '1.4.3'
-//        testImplementation "org.spekframework.spek2:spek-dsl-jvm:$spekVersion"
-//        testImplementation "org.amshove.kluent:kluent:1.65"
-//        testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlinVersion"
-//        testRuntimeOnly "org.spekframework.spek2:spek-runner-junit5:$spekVersion"
-//        testRuntimeOnly "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
-//        runtimeOnly "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
-//    }
-//
-//    java {
-//        sourceCompatibility = JavaVersion.VERSION_1_8
-//        targetCompatibility = JavaVersion.VERSION_1_8
-//    }
-//    javadoc {
-//        options.addBooleanOption 'Xdoclint:none', true
-//    }
-//
-//    test {
-//        useJUnitPlatform {
-//            includeEngines 'spek2'
-//        }
-//    }
-//    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-//        kotlinOptions {
-//            jvmTarget = "1.8"
-//        }
-//    }
-//}
 
 task buildMainReadme {
     doFirst {
@@ -238,80 +181,9 @@ task buildMainReadme {
     }
 }
 
-task collectScreenshots {
-    doFirst {
-        def demoProjects = project.subprojects.findAll { it.sourceSets.hasProperty("demo") }
-        for (sub in demoProjects) {
-            if (sub.name == "openrndr-demos")
-                continue
-            if (sub.name == "orx-rabbit-control")
-                continue
-            if (sub.name == "orx-runway")
-                continue
-            if (sub.name == "orx-chataigne")
-                continue
-            if (sub.name == "orx-video-profiles")
-                continue
-            if (sub.name == "orx-realsense2")
-                continue
-            def set = sub.sourceSets.demo
-            def ucl = new URLClassLoader(set.runtimeClasspath.collect { it.toURI().toURL() } as URL[])
-
-            def runDemos = []
-
-            for (x in set.output) {
-                if (x.exists()) {
-                    for (y in x.listFiles()) {
-                        def name = y.name
-                        if (!name.contains('$') && name.contains(".class")) {
-                            def klassName = y.name.replace(".class", "")
-                            def klass = ucl.loadClass(klassName)
-                            try {
-                                def mainMethod = klass.getMethod("main")
-                                println "Collecting screenshot for ${klassName}"
-                                javaexec {
-                                    classpath += set.runtimeClasspath
-                                    classpath += set.compileClasspath
-                                    def className = y.name.replace(".class", "")
-                                    main = className
-                                    jvmArgs += "-DtakeScreenshot=true"
-                                    jvmArgs += "-DscreenshotPath=${sub.name}/images/${className}.png"
-                                    jvmArgs += "-Dorg.openrndr.exceptions=JVM"
-                                }
-                                runDemos.add(klassName)
-                            } catch (e) {
-                                e.printStackTrace()
-                            }
-                        }
-                    }
-                }
-            }
-            runDemos = runDemos.sort()
-            def readme = sub.file("README.md")
-            if (readme.exists()) {
-                def lines = readme.readLines()
-                def screenshotsLine = lines.findIndexOf { it == "<!-- __demos__ -->" }
-                if (screenshotsLine != -1) {
-                    lines = lines.subList(0, screenshotsLine)
-                }
-                lines.add("<!-- __demos__ -->")
-                lines.add("## Demos")
-                for (demo in runDemos) {
-                    lines.add("### ${demo[0..-3]}")
-                    lines.add("[source code](src/demo/kotlin/${demo[0..-3]}.kt)")
-                    lines.add("")
-                    lines.add("![${demo}](https://raw.githubusercontent.com/openrndr/orx/media/${sub.name}/images/${demo}.png)")
-                    lines.add("")
-                }
-                readme.delete()
-                readme.write(lines.join("\n"))
-            }
-        }
-    }
-}
 
 configure(allprojects.findAll { !multiplatformModules.contains(it.name) }) {
-    apply plugin: 'idea'
+//    apply plugin: 'idea'
     apply plugin: 'java'
     apply plugin: 'kotlin'
     apply plugin: 'maven-publish'
@@ -360,8 +232,6 @@ configure(allprojects.findAll { !multiplatformModules.contains(it.name) }) {
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile).all {
         kotlinOptions.freeCompilerArgs += ["-Xuse-experimental=kotlinx.coroutines.InternalCoroutinesApi"]
     }
-
-
 }
 
 configure(allprojects.findAll { it.name != "openrndr-demos" }) {
@@ -370,6 +240,6 @@ configure(allprojects.findAll { it.name != "openrndr-demos" }) {
 }
 
 
-collectScreenshots.dependsOn {
-    project.subprojects.findAll { it.sourceSets.hasProperty("demo") }.collect { it.tasks.demoClasses }
-}
+//collectScreenshots.dependsOn {
+//    project.subprojects.findAll { it.sourceSets.hasProperty("demo") }.collect { it.tasks.demoClasses }
+//}

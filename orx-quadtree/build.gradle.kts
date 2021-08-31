@@ -1,9 +1,9 @@
-import Orx_embed_shaders_gradle.EmbedShadersTask
+import Orx_collect_screenshots_gradle.ScreenshotsHelper.collectScreenshots
 
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
-    id("orx.embed-shaders")
+    id("orx.collect-screenshots")
 }
 
 val kotlinxSerializationVersion: String by rootProject.extra
@@ -33,6 +33,9 @@ kotlin {
                         runtimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
                         implementation(compilations["main"]!!.output.allOutputs)
                     }
+                }
+                collectScreenshots {
+
                 }
             }
         }

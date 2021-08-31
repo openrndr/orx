@@ -1,5 +1,3 @@
-package org.openrndr.extra.fx.demo
-
 import org.openrndr.application
 import org.openrndr.extra.fx.blend.*
 fun main() {
