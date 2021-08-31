@@ -7,17 +7,11 @@ import org.openrndr.extra.noise.simplex
 import org.openrndr.math.Vector2
 import kotlin.math.absoluteValue
 
-
 fun main() {
     application {
         program {
             val cb = colorBuffer(width, height)
             val shad = cb.shadow
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
             extend {
                 for (y in 0 until height) {
                     for (x in 0 until width) {

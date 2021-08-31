@@ -12,12 +12,6 @@ fun main() {
             height = 720
         }
         program {
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
-
             val points = MutableList(1000) {
                 Vector2(Math.random() * width, Math.random() * height)
             }

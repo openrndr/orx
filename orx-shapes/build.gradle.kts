@@ -1,8 +1,8 @@
-import Orx_collect_screenshots_gradle.ScreenshotsHelper.collectScreenshots
+import ScreenshotsHelper.collectScreenshots
+
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
-    id("orx.collect-screenshots")
 }
 
 val kotlinxSerializationVersion: String by rootProject.extra

@@ -23,12 +23,6 @@ fun main() {
             height = 800
         }
         program {
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
-
             val c0 = Circle(width / 3.0, height / 2.0, 150.0).contour
             val bp0 = bezierPatch(c0)
 

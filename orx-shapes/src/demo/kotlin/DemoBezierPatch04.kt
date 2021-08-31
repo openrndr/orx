@@ -18,12 +18,6 @@ fun main() {
             height = 800
         }
         program {
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
-
             val bp = bezierPatch(
                 Circle(drawer.bounds.center, 350.0).contour
                 //Rectangle.fromCenter(drawer.bounds.center, 550.0).contour

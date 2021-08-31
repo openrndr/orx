@@ -39,13 +39,6 @@ fun main() {
         }
 
         program {
-            // -- this block is for automation purposes only
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
-
             val arcs = (0..4).map { Arc(it * 90.0 - 45.0, 50.0, 90.0, 50.0) }.split(5)
 
             extend {

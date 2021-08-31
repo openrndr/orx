@@ -1,3 +1,12 @@
+import org.gradle.api.DefaultTask
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.FileType
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.*
+import org.gradle.work.ChangeType
+import org.gradle.work.Incremental
+import org.gradle.work.InputChanges
+import org.gradle.workers.WorkerExecutor
 import javax.inject.Inject
 
 abstract class EmbedShadersTask : DefaultTask() {
@@ -28,6 +37,7 @@ abstract class EmbedShadersTask : DefaultTask() {
 
     @TaskAction
     fun execute(inputChanges: InputChanges) {
+
         inputChanges.getFileChanges(inputDir).forEach { change ->
             if (change.fileType == FileType.DIRECTORY) return@forEach
             val name = "${namePrefix.get()}${change.file.nameWithoutExtension.replace("-", "_")}"

@@ -21,12 +21,6 @@ fun main() {
             height = 800
         }
         program {
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
-
             // helper to get screen locations using normalized uv values
             fun pos(u: Double, v: Double) = drawer.bounds.position(u, v)
             val c0 = LineSegment(pos(0.1, 0.1), pos(0.9, 0.1))

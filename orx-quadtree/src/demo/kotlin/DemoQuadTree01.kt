@@ -16,12 +16,6 @@ fun main() {
             title = "QuadTree"
         }
         program {
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
-
             val box = Rectangle.fromCenter(Vector2(400.0), 750.0)
 
             val points = (0 until 1_000).map {

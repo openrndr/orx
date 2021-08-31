@@ -11,22 +11,12 @@ import org.openrndr.extra.noise.withVector2Output
 import org.openrndr.extra.noise.gradient
 import org.openrndr.shape.contour
 
-typealias IDDD_D = ((Int, Double, Double, Double) -> Double)
 fun main() = application {
     configure {
         width = 720
         height = 720
     }
     program {
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
-
-        val c = simplex3D.perturb({v->v})::class
-        println(c)
-        println(IDDD_D::perturb)
         val n = simplex3D.withVector2Output().gradient()
         extend {
             drawer.stroke = null

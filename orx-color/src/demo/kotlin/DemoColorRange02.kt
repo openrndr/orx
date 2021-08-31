@@ -11,12 +11,6 @@ import org.openrndr.extras.color.spaces.toHSLUVa
 
 fun main() = application {
     program {
-        // -- this block is for automation purposes only
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
         extend {
             val cs = colorSequence(0.0 to ColorRGBa.PINK,
                     0.5 to ColorRGBa.BLUE,

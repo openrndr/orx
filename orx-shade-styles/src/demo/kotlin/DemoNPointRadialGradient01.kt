@@ -15,12 +15,6 @@ import kotlin.random.Random
 fun main() {
     application {
         program {
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
-
             val gradient = NPointRadialGradient(arrayOf(
                     ColorRGBa.PINK.opacify(0.0),
                     ColorRGBa.PINK, ColorRGBa.WHITE, ColorRGBa.PINK,

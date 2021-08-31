@@ -28,13 +28,6 @@ fun main() {
             multisample = WindowMultisample.SampleCount(8)
         }
         program {
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                    multisample = BufferMultisample.SampleCount(8)
-                }
-            }
-
             val c0 = Segment3D(Vector3(-5.0, 0.0, -9.0), Vector3(5.0, 0.0, -9.0))
             val c1 = Segment3D(Vector3(-5.0, -5.0, -3.0), Vector3(5.0, -5.0, -3.0))
             val c2 = Segment3D(Vector3(-5.0, 5.0, 3.0), Vector3(5.0, 5.0, 3.0))

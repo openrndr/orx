@@ -8,11 +8,6 @@ import org.openrndr.shape.Circle
 fun main() {
     application {
         program {
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
             extend {
                 drawer.clear(ColorRGBa.PINK)
                 val bp = bezierPatch(

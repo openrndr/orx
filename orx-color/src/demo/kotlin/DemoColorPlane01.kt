@@ -16,13 +16,6 @@ fun main() {
 
         }
         program {
-            // -- this block is for automation purposes only
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
-
             val mesh = sphereMesh(8, 8, radius = 0.1)
 
             val instanceData = vertexBuffer(
@@ -32,8 +25,7 @@ fun main() {
                 },
                 90 * 100
             )
-
-
+            println(extensions.size)
             extend(Orbital())
 
             extend {

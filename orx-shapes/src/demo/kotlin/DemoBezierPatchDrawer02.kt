@@ -14,11 +14,6 @@ fun main() {
             height = 720
         }
         program {
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
             extend {
                 drawer.clear(ColorRGBa.BLACK)
                 val bp2 = bezierPatch(

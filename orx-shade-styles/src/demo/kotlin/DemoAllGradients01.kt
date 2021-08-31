@@ -17,12 +17,6 @@ fun main() {
             height = 500
         }
         program {
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
-
             // Create gradients with initial colors
             val gradients = listOf(
                     RadialGradient(ColorRGBa.PINK, ColorRGBa.WHITE),

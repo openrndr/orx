@@ -9,15 +9,6 @@ import kotlin.math.sin
 fun main() {
     application {
         program {
-
-            // -- this block is for automation purposes only
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.delayFrames = 60
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
-
             // In this buffer we will draw some simple shapes
             val dry = renderTarget(width / 3, height / 3) {
                 colorBuffer()

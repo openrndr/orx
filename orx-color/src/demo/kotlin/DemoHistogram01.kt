@@ -7,12 +7,6 @@ import org.openrndr.extras.color.statistics.calculateHistogramRGB
 
 fun main() = application {
     program {
-        // -- this block is for automation purposes only
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
         val useColors = 32
         val image = loadImage("demo-data/images/image-001.png")
 

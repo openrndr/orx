@@ -190,6 +190,11 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 ![DemoPoissonDiskSamplingKt](https://github.com/openrndr/orx/blob/media/orx-noise/images/DemoPoissonDiskSamplingKt.png
 <!-- __demos__ -->
 ## Demos
+### DemoFunctionalComposition01
+[source code](src/demo/kotlin/DemoFunctionalComposition01.kt)
+
+![DemoFunctionalComposition01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoFunctionalComposition01Kt.png)
+
 ### DemoGradientPerturb2D
 [source code](src/demo/kotlin/DemoGradientPerturb2D.kt)
 

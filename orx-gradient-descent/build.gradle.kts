@@ -1,9 +1,6 @@
-import Orx_embed_shaders_gradle.EmbedShadersTask
-
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
-    id("orx.embed-shaders")
 }
 
 val kotlinxSerializationVersion: String by rootProject.extra

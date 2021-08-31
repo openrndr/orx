@@ -1,3 +1,5 @@
+import ScreenshotsHelper.collectScreenshots
+
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
@@ -28,6 +30,7 @@ kotlin {
                         implementation(compilations["main"]!!.output.allOutputs)
                     }
                 }
+                collectScreenshots {  }
             }
         }
         compilations.all {

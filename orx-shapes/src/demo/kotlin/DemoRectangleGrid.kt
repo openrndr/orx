@@ -10,11 +10,6 @@ fun main() {
             height = 800
         }
         program {
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
             extend {
                 drawer.fill = ColorRGBa.WHITE.opacify(0.25)
                 drawer.stroke = ColorRGBa.PINK

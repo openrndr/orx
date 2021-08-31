@@ -8,12 +8,6 @@ import kotlin.math.pow
 
 fun main() = application {
     program {
-        // -- this block is for automation purposes only
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
         val image = loadImage("demo-data/images/image-001.png")
         // -- here we use non-uniform weighting, such that bright colors are prioritized
         val histogram = calculateHistogramRGB(image, weighting = {
