@@ -21,14 +21,6 @@ import org.openrndr.shape.toContour
 fun main() {
     application {
         program {
-
-            // -- this block is for automation purposes only
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
-
             // Create a buffer where to draw something for boofcv
             val rt = renderTarget(width, height) {
                 colorBuffer()
