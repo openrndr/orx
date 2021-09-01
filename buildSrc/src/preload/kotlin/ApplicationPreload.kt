@@ -1,18 +1,14 @@
 package org.openrndr
 
-import org.openrndr.ApplicationPreload
 import org.openrndr.extensions.SingleScreenshot
 
+/**
+ * This [Preload] class is used by the [CollectScreenshots] task to inject the [SingleScreenshot] extension
+ */
 class Preload : ApplicationPreload() {
-    override fun onConfiguration(configuration: Configuration) {
-//        configuration.width = 1280
-//        configuration.height = 720
-    }
     override fun onProgramSetup(program: Program) {
-        println("installing single screenshot extension at 0")
-        program.extensions.add(0, SingleScreenshot().apply {
+        program.extend(SingleScreenshot()) {
             this.outputFile = System.getProperty("screenshotPath")
-            setup(program)
-        })
+        }
     }
 }

@@ -1,10 +1,14 @@
 import org.gradle.api.DefaultTask
+import org.gradle.api.Project
+import org.gradle.api.Script
+import org.gradle.api.Task
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.FileType
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.*
+import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.register
 import org.gradle.work.Incremental
 import org.gradle.work.InputChanges
@@ -102,6 +106,16 @@ object ScreenshotsHelper {
         task.dependsOn(this.compileKotlinTask)
         return task
 
+    }
+
+    fun collectScreenshots(project: Project, sourceSet: SourceSet, config: CollectScreenshotsTask.() -> Unit): CollectScreenshotsTask {
+        val task = project.tasks.register<CollectScreenshotsTask>("collectScreenshots").get()
+        task.outputDir.set(project.file(project.projectDir.toString() + "/images"))
+        task.inputDir.set(File(project.buildDir, "classes/kotlin/${sourceSet.name}"))
+        task.runtimeDependencies.set(sourceSet.runtimeClasspath)
+        task.config()
+        task.dependsOn(sourceSet.output)
+        return task
     }
 }
 

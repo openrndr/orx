@@ -4,15 +4,12 @@ plugins {
 }
 
 sourceSets {
-
     val preload by creating {
         this.java {
             srcDir("src/preload/kotlin")
         }
     }
     val main by getting {
-
-
     }
 
 }
