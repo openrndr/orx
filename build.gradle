@@ -59,12 +59,12 @@ project.ext {
     kotlinVersion = "1.5.30"
     kotlinApiVersion = "1.4"
     spekVersion = "2.0.15"
-    libfreenectVersion = "0.5.7-1.5.5"
-    librealsense2Version = "2.40.0-1.5.5"
+    libfreenectVersion = "0.5.7-1.5.4"
+    librealsense2Version = "2.29.0-1.5.4"
     gsonVersion = "2.8.6"
     antlrVersion = "4.9.2"
-    tensorflowVersion = "0.3.2"
-    mklDnnVersion = "0.21.5-1.5.5"
+    tensorflowVersion = "0.3.3"
+    mklDnnVersion = "0.21.5-1.5.4"
 }
 
 allprojects {
