@@ -28,8 +28,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Collect screenshots
-        run: xvfb-run ./gradlew collectScreenshots
+#      - name: Collect screenshots
+#        run: xvfb-run ./gradlew collectScreenshots
       - name: Build main readme
         run: xvfb-run ./gradlew buildMainReadme
       - name: Prepare media branch
