@@ -1,19 +1,28 @@
 sourceSets {
-    demo {
+    val main by getting { }
+    val demo by creating {
         java {
-            srcDirs = ["src/demo/kotlin"]
+            srcDir("src/demo/kotlin")
             compileClasspath += main.getCompileClasspath()
             runtimeClasspath += main.getRuntimeClasspath()
         }
     }
 }
 
+
+val openrndrVersion: String by rootProject.extra
+val openrndrOS: String by rootProject.extra
+
+val demoImplementation by configurations.getting {}
+val demoRuntimeOnly by configurations.getting {}
+
+
 dependencies {
-    implementation project(":orx-fx")
-    implementation project(":orx-parameters")
-    demoImplementation project(":orx-noise")
-    demoImplementation project(":orx-jvm:orx-gui")
-    demoImplementation project(":orx-compositor")
+    implementation(project(":orx-fx"))
+    implementation(project(":orx-parameters"))
+    demoImplementation(project(":orx-noise"))
+    demoImplementation(project(":orx-jvm:orx-gui"))
+    demoImplementation(project(":orx-compositor"))
     demoImplementation("org.openrndr:openrndr-application:$openrndrVersion")
     demoImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
     demoImplementation("org.openrndr:openrndr-svg:$openrndrVersion")
