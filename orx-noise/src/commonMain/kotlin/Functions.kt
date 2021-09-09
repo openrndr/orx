@@ -21,13 +21,40 @@ fun ((Int, Double, Double) -> Vector2).gradient(epsilon: Double = 1e-6): (Int, D
         dfdx + dfdy
     }
 
+fun ((Int, Double) -> Double).crossFade(
+    start: Double,
+    end: Double,
+    width: Double = 0.5
+): (Int, Double) -> Double {
+    return { seed, t ->
+        val a = t.map(start, end, 0.0, 1.0).mod_(1.0)
+        val f = (a / width).coerceAtMost(1.0)
+        val o = this(seed, a.map(0.0, 1.0, start, end)) * f
+        val s = this(seed, (a + 1.0).map(0.0, 1.0, start, end) * (1.0 - f))
+        o + s
+    }
+}
+fun ((Int, Double, Double) -> Double).crossFade(
+    start: Double,
+    end: Double,
+    width: Double = 0.5
+): (Int, Double, Double) -> Double {
+    return { seed, x, t ->
+        val a = t.map(start, end, 0.0, 1.0).mod_(1.0)
+        val f = (a / width).coerceAtMost(1.0)
+        val o = this(seed, x, a.map(0.0, 1.0, start, end)) * f
+        val s = this(seed, x, (a + 1.0).map(0.0, 1.0, start, end) * (1.0 - f))
+        o + s
+    }
+}
+
 fun ((Int, Double, Double, Double) -> Double).crossFade(
     start: Double,
     end: Double,
     width: Double = 0.5
 ): (Int, Double, Double, Double) -> Double {
-    return { seed, x, y, z ->
-        val a = z.map(start, end, 0.0, 1.0).mod_(1.0)
+    return { seed, x, y, t ->
+        val a = t.map(start, end, 0.0, 1.0).mod_(1.0)
         val f = (a / width).coerceAtMost(1.0)
         val o = this(seed, x, y, a.map(0.0, 1.0, start, end)) * f
         val s = this(seed, x, y, (a + 1.0).map(0.0, 1.0, start, end) * (1.0 - f))
