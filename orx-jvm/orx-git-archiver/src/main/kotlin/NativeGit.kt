@@ -23,7 +23,7 @@ class NativeGit : GitProvider {
     }
 
     override fun headReference(): String {
-        return "git rev-parse --short HEAD".runCommand(dir)!!.first
+        return "git rev-parse --short HEAD".runCommand(dir)!!.first.trimEnd()
     }
 }
 
