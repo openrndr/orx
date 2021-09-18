@@ -19,7 +19,6 @@ import org.openrndr.panel.ControlManager
 import org.openrndr.panel.controlManager
 import org.openrndr.panel.elements.*
 import org.openrndr.panel.style.*
-import org.openrndr.shape.Rectangle
 import java.io.File
 import kotlin.math.roundToInt
 import kotlin.reflect.KMutableProperty1
