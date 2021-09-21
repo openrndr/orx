@@ -19,6 +19,9 @@ class Perturb : Filter(mppFilterShader(fx_perturb, "perturb")) {
     @DoubleParameter("phase", -2.0, 2.0, order = 1)
     var phase: Double by parameters
 
+    @DoubleParameter("radius", 0.0, 2.0, order = 1)
+    var radius: Double by parameters
+
     /**
      * lacunarity is the amount by which scale is modulated per octave, default is Vector3(2.0, 2.0, 2.0)
      */
@@ -62,6 +65,7 @@ class Perturb : Filter(mppFilterShader(fx_perturb, "perturb")) {
         ySegments = 0
         outputUV = false
         offset = Vector2.ZERO
+        radius = 1.0
 
     }
     var bicubicFiltering = true
