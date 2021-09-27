@@ -6,9 +6,7 @@ import org.spekframework.spek2.style.specification.describe
 
 object TestFunctionNameRx : Spek({
     describe("A function name") {
-
-        //https://github.com/spekframework/spek-multiplatform-example/blob/master/jvm/src/test/kotlin/org/spekframework/spek2/SampleJvmSpec.kt
-
+        
         mapOf(
             "ivec4 aaa() {" to "aaa",
             "ivec3 bbb() {" to "bbb",
