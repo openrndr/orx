@@ -2,6 +2,7 @@ package org.openrndr.extra.shaderphrases
 
 import mu.KotlinLogging
 import org.openrndr.draw.Shader
+import org.openrndr.extra.shaderphrases.ShaderPhraseRegistry.getGLSLFunctionName
 //import org.openrndr.extra.shaderphrases.phrases.phraseTbnMatrix
 import org.openrndr.utils.url.textFromURL
 
@@ -16,16 +17,9 @@ class ShaderPhrase(val phrase: String) {
      * This will likely be called by [ShaderPhraseBook]
      */
     fun register(bookId: String? = null) {
-        val functionRex =
-            Regex("(float|int|[bi]?vec2|[bi]?vec3|[bi]?vec4|mat3|mat4)[ ]+([a-zA-Z0-9_]+)[ ]*\\(.*\\).*")
-        val defs = phrase.split("\n").filter {
-            functionRex.matches(it)
-        }.take(1).mapNotNull {
-            val m = functionRex.find(it)
-            m?.groupValues?.getOrNull(2)
-        }
-        val id = defs.firstOrNull() ?: error("no function body found in phrase")
-        ShaderPhraseRegistry.registerPhrase("${bookId?.let { "$it." } ?: ""}$id", this)
+        val id = getGLSLFunctionName(phrase)
+        val prefix = bookId?.let { "$it." } ?: ""
+        ShaderPhraseRegistry.registerPhrase("$prefix$id", this)
     }
 }
 /**
@@ -60,6 +54,22 @@ object ShaderPhraseRegistry {
             logger.warn { "no phrase found for id: \"$id\"" }
         }
         return phrase
+    }
+
+    /**
+     * Gets the first GLSL function name out of GLSL source code
+     */
+    fun getGLSLFunctionName(glsl: String): String {
+        val functionRex =
+            Regex("""\s*(float|int|[bi]?vec[234]|mat[34])\s+(\w+)\s*\(.*\).*""")
+        val defs = glsl.split("\n").filter {
+            functionRex.matches(it)
+        }.take(1).mapNotNull {
+            val m = functionRex.find(it)
+            m?.groupValues?.getOrNull(2)
+        }
+        return defs.firstOrNull()
+            ?: error("no function body found in phrase")
     }
 }
 
