@@ -84,10 +84,10 @@ fun preprocessShader(source: String, symbols: Set<String> = emptySet()): String 
     newSymbols.addAll(symbols)
 
     val lines = source.split("\n")
-    val processed = lines.mapIndexed { index, it ->
-        if (it.startsWith("#pragma import")) {
-            val tokens = it.split(" ")
-            val symbol = tokens[2].trim().replace(";", "")
+    val funcName = Regex("""^\s*#pragma\s+import\s+([a-zA-Z0-9_.]+)""")
+    val processed = lines.map { line ->
+        if (line.contains("#pragma")) {
+            val symbol = funcName.find(line)?.groupValues?.get(1) ?: return@map line
             val fullTokens = symbol.split(".")
             val fieldName = fullTokens.last().replace(";", "").trim()
             val packageClassTokens = fullTokens.dropLast(1)
@@ -100,7 +100,7 @@ fun preprocessShader(source: String, symbols: Set<String> = emptySet()): String 
                 ""
             }
         } else {
-            it
+            line
         }
     }
     return processed.joinToString("\n")

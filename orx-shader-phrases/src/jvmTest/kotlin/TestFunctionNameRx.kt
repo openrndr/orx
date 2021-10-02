@@ -22,6 +22,7 @@ object TestFunctionNameRx : Spek({
             "float lll() {" to "lll",
             "   float  mmm( )  { " to "mmm",
             "int nnn() {" to "nnn",
+            "vec2 limit(vec2 a, float b) {" to "limit",
             """
                 vec4 white() {
                     return vec4(1.0);
