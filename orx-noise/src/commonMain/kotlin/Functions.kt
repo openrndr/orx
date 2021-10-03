@@ -30,10 +30,11 @@ fun ((Int, Double) -> Double).crossFade(
         val a = t.map(start, end, 0.0, 1.0).mod_(1.0)
         val f = (a / width).coerceAtMost(1.0)
         val o = this(seed, a.map(0.0, 1.0, start, end)) * f
-        val s = this(seed, (a + 1.0).map(0.0, 1.0, start, end) * (1.0 - f))
+        val s = this(seed, (a + 1.0).map(0.0, 1.0, start, end)) * (1.0 - f)
         o + s
     }
 }
+
 fun ((Int, Double, Double) -> Double).crossFade(
     start: Double,
     end: Double,
@@ -43,7 +44,7 @@ fun ((Int, Double, Double) -> Double).crossFade(
         val a = t.map(start, end, 0.0, 1.0).mod_(1.0)
         val f = (a / width).coerceAtMost(1.0)
         val o = this(seed, x, a.map(0.0, 1.0, start, end)) * f
-        val s = this(seed, x, (a + 1.0).map(0.0, 1.0, start, end) * (1.0 - f))
+        val s = this(seed, x, (a + 1.0).map(0.0, 1.0, start, end) )* (1.0 - f)
         o + s
     }
 }
@@ -57,7 +58,7 @@ fun ((Int, Double, Double, Double) -> Double).crossFade(
         val a = t.map(start, end, 0.0, 1.0).mod_(1.0)
         val f = (a / width).coerceAtMost(1.0)
         val o = this(seed, x, y, a.map(0.0, 1.0, start, end)) * f
-        val s = this(seed, x, y, (a + 1.0).map(0.0, 1.0, start, end) * (1.0 - f))
+        val s = this(seed, x, y, (a + 1.0).map(0.0, 1.0, start, end)) * (1.0 - f)
         o + s
     }
 }
@@ -70,7 +71,54 @@ fun ((Int, Double, Double, Double) -> Vector2).gradient(epsilon: Double = 1e-2 /
     }
 
 
-fun ((Int, Double) -> Double).scaleBiasOutput(
+fun ((Int, Double) -> Double).scaleShiftInput(scaleT: Double = 1.0, shiftT: Double = 0.0) =
+    { seed: Int, t: Double -> this(seed, t * scaleT + shiftT) }
+
+fun ((Int, Double, Double) -> Double).scaleShiftInput(
+    scaleX: Double = 1.0,
+    shiftX: Double = 0.0,
+    scaleT: Double = 1.0,
+    shiftT: Double = 0.0
+) = { seed: Int, x: Double, t: Double -> this(seed, x * scaleX + shiftX, t * scaleT + shiftT) }
+
+fun ((Int, Double, Double, Double) -> Double).scaleShiftInput(
+    scaleX: Double = 1.0,
+    shiftX: Double = 0.0,
+    scaleY: Double = 1.0,
+    shiftY: Double = 0.0,
+    scaleT: Double = 1.0,
+    shiftT: Double = 0.0
+) = { seed: Int, x: Double, y: Double, t: Double ->
+    this(
+        seed,
+        x * scaleX + shiftX,
+        y * scaleY + shiftY,
+        t * scaleT + shiftT
+    )
+}
+
+fun ((Int, Double, Double, Double, Double) -> Double).scaleShiftInput(
+    scaleX: Double = 1.0,
+    shiftX: Double = 0.0,
+    scaleY: Double = 1.0,
+    shiftY: Double = 0.0,
+    scaleZ: Double = 1.0,
+    shiftZ: Double = 0.0,
+    scaleT: Double = 1.0,
+    shiftT: Double = 0.0
+) = { seed: Int, x: Double, y: Double, z: Double, t: Double ->
+    this(
+        seed,
+        x * scaleX + shiftX,
+        y * scaleY + shiftY,
+        z * scaleZ + shiftZ,
+        t * scaleT + shiftT
+    )
+}
+
+
+
+fun ((Int, Double) -> Double).scaleShiftOutput(
     scale: Double = 1.0,
     bias: Double = 0.0
 ): (Int, Double) -> Double = { seed, x ->
@@ -86,14 +134,14 @@ fun ((Int, Double, Double) -> Double).withVector2Input(): (Int, Vector2) -> Doub
 }
 
 @JvmName("scaleBiasVector2")
-fun ((Int, Vector2) -> Double).scaleBiasOutput(
+fun ((Int, Vector2) -> Double).scaleShiftOutput(
     scale: Double = 1.0,
     bias: Double = 0.0
 ): (Int, Vector2) -> Double = { seed, v ->
     this(seed, v) * scale + bias
 }
 
-fun ((Int, Double, Double) -> Double).scaleBiasOutput(
+fun ((Int, Double, Double) -> Double).scaleShiftOutput(
     scale: Double = 1.0,
     bias: Double = 0.0
 ): (Int, Double, Double) -> Double = { seed, x, y ->
