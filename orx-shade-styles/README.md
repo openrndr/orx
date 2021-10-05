@@ -13,6 +13,11 @@ Collection of shader based fills and strokes. Currently includes 4 types of grad
 
 ![DemoAllGradients01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/DemoAllGradients01Kt.png)
 
+### DemoLinearGradient
+[source code](src/demo/kotlin/DemoLinearGradient.kt)
+
+![DemoLinearGradientKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/DemoLinearGradientKt.png)
+
 ### DemoNPointGradient01
 [source code](src/demo/kotlin/DemoNPointGradient01.kt)
 

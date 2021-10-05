@@ -4,25 +4,26 @@ import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.Shader
 import org.openrndr.draw.vertexBuffer
 import org.openrndr.draw.vertexFormat
+import org.openrndr.resourceText
 import org.openrndr.resourceUrl
 import org.openrndr.shape.Ellipse
 
 fun main() {
-    application {
+   application {
         program {
-
             val ellipse = Ellipse(width/2.0, height/2.0, 100.0, 300.0).contour
 
             val vb = vertexBuffer(vertexFormat {
                 position(3)
             }, ellipse.segments.size * 4)
 
-            val shader = Shader.createFromUrls(
-                    vsUrl = resourceUrl("/shaders/ts-02.vert"),
-                    tcsUrl = resourceUrl("/shaders/ts-02.tesc"),
-                    tesUrl = resourceUrl("/shaders/ts-02.tese"),
-                    gsUrl = resourceUrl("/shaders/ts-02.geom"),
-                    fsUrl = resourceUrl("/shaders/ts-02.frag")
+            val shader = Shader.createFromCode(
+                    vsCode = resourceText("/shaders/ts-02.vert"),
+                    tcsCode = resourceText("/shaders/ts-02.tesc"),
+                    tesCode = resourceText("/shaders/ts-02.tese"),
+                    gsCode = resourceText("/shaders/ts-02.geom"),
+                    fsCode = resourceText("/shaders/ts-02.frag"),
+                    name = "x"
             )
 
             vb.put {

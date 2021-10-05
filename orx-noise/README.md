@@ -26,6 +26,27 @@ val v4ur = Vector4.uniformRing(0.5, 1.0)
 val ringSamples = List(500) { Vector2.uniformRing() }
 ```
 
+## Noise function composition
+
+Since ORX 0.4 the orx-noise module comes with functional composition tooling that allow one to create complex noise
+functions.
+
+```kotlin
+// create an FBM version of 1D linear perlin noise
+val myNoise0 = perlinLinear1D.fbm(octaves=3)
+val noiseValue0 = myNoise0(431, seconds)
+
+// create polar version of 2D simplex noise
+val myNoise1 = simplex2D.withPolarInput()
+val noiseValue1 = myNoise1(5509, Polar(seconds*60.0, 0.5))
+
+// create value linear noise with squared outputs which is then billowed
+val myNoise2 = valueLinear1D.mapOutput { it * it }.billow()
+val noiseValue2 = myNoise2(993, seconds * 0.1)
+```
+
+
+
 ## Multi-dimensional noise
 
 These are a mostly straight port from FastNoise-Java but have a slightly different interface.
@@ -169,6 +190,11 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 ![DemoPoissonDiskSamplingKt](https://github.com/openrndr/orx/blob/media/orx-noise/images/DemoPoissonDiskSamplingKt.png
 <!-- __demos__ -->
 ## Demos
+### DemoFunctionalComposition01
+[source code](src/demo/kotlin/DemoFunctionalComposition01.kt)
+
+![DemoFunctionalComposition01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoFunctionalComposition01Kt.png)
+
 ### DemoGradientPerturb2D
 [source code](src/demo/kotlin/DemoGradientPerturb2D.kt)
 

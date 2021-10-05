@@ -3,17 +3,12 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.shapes.regularStar
 import org.openrndr.math.Vector2
+import org.openrndr.shape.contains
 import kotlin.math.cos
 import kotlin.math.sin
 
 fun main() = application {
     program {
-        // -- this block is for automation purposes only
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
         extend {
             drawer.fill = ColorRGBa.PINK
             drawer.stroke = ColorRGBa.WHITE

@@ -14,12 +14,6 @@ import org.openrndr.shape.Rectangle
 fun main() {
     application {
         program {
-            // -- this block is for automation purposes only
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
             val font = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 26.0)
             extend {
                 drawer.stroke = null

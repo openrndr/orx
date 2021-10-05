@@ -1,5 +1,6 @@
 import org.openrndr.application
 import org.openrndr.draw.colorBuffer
+import org.openrndr.draw.createEquivalent
 import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.fx.distort.FluidDistort
 import org.openrndr.extra.fx.patterns.Checkers

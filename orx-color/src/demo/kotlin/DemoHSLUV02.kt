@@ -23,13 +23,6 @@ fun main() {
         }
 
         program {
-            // -- this block is for automation purposes only
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
-
             extend {
                 drawer.clear(ColorRGBa.GRAY)
                 val color = ColorRGBa.RED
