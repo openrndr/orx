@@ -18,12 +18,6 @@ import kotlin.math.sin
 fun main() {
     application {
         program {
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
-
             val numPoints = 8
             val gradient = NPointLinearGradient(Array(numPoints) {
                 ColorXSVa(it * 360.0 / numPoints, 1.0, 1.0).toRGBa()

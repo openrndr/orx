@@ -1,0 +1,25 @@
+sourceSets {
+    demo {
+        java {
+            srcDirs = ["src/demo/kotlin"]
+            compileClasspath += main.getCompileClasspath()
+            runtimeClasspath += main.getRuntimeClasspath()
+        }
+    }
+}
+
+dependencies {
+    implementation 'org.eclipse.jgit:org.eclipse.jgit:5.12.0.202106070339-r'
+
+    demoImplementation(project(":orx-camera"))
+    demoImplementation(project(":orx-mesh-generators"))
+    demoImplementation(project(":orx-noise"))
+
+    demoImplementation("org.openrndr:openrndr-application:$openrndrVersion")
+    demoImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
+    demoImplementation("org.openrndr:openrndr-ffmpeg:$openrndrVersion")
+    demoImplementation("org.openrndr:openrndr-filter:$openrndrVersion")
+    demoRuntimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
+    demoRuntimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
+    demoImplementation(sourceSets.getByName("main").output)
+}

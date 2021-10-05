@@ -6,7 +6,6 @@ import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.extra.noise.uniformRing
-import org.openrndr.extra.fx.blend.Add
 import org.openrndr.filter.color.delinearize
 import org.openrndr.filter.color.linearize
 import org.openrndr.math.Matrix44
@@ -44,12 +43,17 @@ private val add by lazy { PlainAdd() }
  * the scene as many times as you have samples.
  */
 class TemporalBlur : Extension {
+    private var oldClock: () -> Double = { 0.0 }
+    var oldClockTime = 0.0
     override var enabled: Boolean = true
 
     private var accumulator: RenderTarget? = null
     private var result: RenderTarget? = null
     private var image: RenderTarget? = null
     private var imageResolved: RenderTarget? = null
+
+    // modifier for final stage averager, higher gain results in brighter images
+    var gain = 1.0
 
     /**
      * number of samples to take, more is slower
@@ -85,6 +89,12 @@ class TemporalBlur : Extension {
      * multisampling setting
      * */
     var multisample: BufferMultisample = BufferMultisample.SampleCount(8)
+
+
+    var colorMatrix: (Double)->Matrix55 = { Matrix55.IDENTITY }
+
+
+    var beforeDrawAccumulated : TemporalBlur.() -> Unit = {}
 
     override fun beforeDraw(drawer: Drawer, program: Program) {
         val extensionOffset = program.extensions.indexOf(this)
@@ -155,12 +165,12 @@ class TemporalBlur : Extension {
                 drawer.clear(ColorRGBa.BLACK)
             }
         }
-        val oldClock = program.clock
+        oldClock = program.clock
+        oldClockTime = program.clock()
         val oldClockValue = oldClock()
 
         for (i in samples - 1 downTo 1) {
             image?.bind()
-
             drawer.clear(ColorRGBa.BLACK)
             program.clock = { oldClockValue - (i * duration) / (fps * samples) }
 
@@ -172,8 +182,10 @@ class TemporalBlur : Extension {
             drawer.drawStyle.blendMode = BlendMode.OVER
             drawer.drawStyle.colorMatrix = Matrix55.IDENTITY
             drawer.isolated {
-                val offset = Vector2.uniformRing(0.0, jitter)
-                drawer.projection = Matrix44.translate(offset.x * (1.0 / program.width), offset.y * (1.0 / program.height), 0.0) * drawer.projection
+                if (jitter > 0.0){
+                    val offset = Vector2.uniformRing(0.0, jitter)
+                    drawer.projection = Matrix44.translate(offset.x * (1.0 / program.width), offset.y * (1.0 / program.height), 0.0) * drawer.projection
+                }
 
                 for (extension in extensionTail) {
                     extension.beforeDraw(drawer, program)
@@ -192,8 +204,17 @@ class TemporalBlur : Extension {
                 }
             }
 
+            val activeColorMatrix = colorMatrix(i / (samples - 1.0))
+            if (activeColorMatrix !== Matrix55.IDENTITY) {
+                drawer.isolatedWithTarget(imageResolved!!) {
+                    drawer.drawStyle.colorMatrix = activeColorMatrix
+                    drawer.drawStyle.blendMode = BlendMode.REPLACE
+                    drawer.image(imageResolved!!.colorBuffer(0))
+                }
+            }
             add.apply(arrayOf(imageResolved!!.colorBuffer(0), accumulator!!.colorBuffer(0)), accumulator!!.colorBuffer(0))
-            program.clock = oldClock
+
+            fsf.setDouble(program, program.clock())
         }
         image?.let {
             drawer.withTarget(it) {
@@ -201,6 +222,12 @@ class TemporalBlur : Extension {
             }
         }
         image?.bind()
+
+        // restore clock
+        program.clock = oldClock
+        val fsf = Program::class.java.getDeclaredField("frameSeconds")
+        fsf.isAccessible = true
+        fsf.setDouble(program,  oldClockTime)
     }
 
     override fun afterDraw(drawer: Drawer, program: Program) {
@@ -208,7 +235,17 @@ class TemporalBlur : Extension {
         image?.unbind()
         image!!.colorBuffer(0).copyTo(imageResolved!!.colorBuffer(0))
 
+        val activeColorMatrix = colorMatrix(0.0)
+        if (activeColorMatrix !== Matrix55.IDENTITY) {
+            drawer.isolatedWithTarget(imageResolved!!) {
+                drawer.drawStyle.colorMatrix = activeColorMatrix
+                drawer.drawStyle.blendMode = BlendMode.REPLACE
+                drawer.image(imageResolved!!.colorBuffer(0))
+            }
+        }
+
         add.apply(arrayOf(imageResolved!!.colorBuffer(0), accumulator!!.colorBuffer(0)), accumulator!!.colorBuffer(0))
+        beforeDrawAccumulated()
 
         // -- render accumulated result
         drawer.isolated {
@@ -219,7 +256,7 @@ class TemporalBlur : Extension {
                 drawer.drawStyle.blendMode = BlendMode.OVER
 
                 drawer.clear(ColorRGBa.BLACK)
-                drawer.drawStyle.colorMatrix = tint(ColorRGBa.WHITE.shade(1.0 / samples))
+                drawer.drawStyle.colorMatrix = tint(ColorRGBa.WHITE.shade((1.0 / samples) * gain))
                 drawer.image(accumulator!!.colorBuffer(0))
             }
             if (delinearizeOutput) {

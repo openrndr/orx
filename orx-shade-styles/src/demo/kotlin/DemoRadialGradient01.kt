@@ -8,11 +8,6 @@ import kotlin.math.cos
 fun main() {
     application {
         program {
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
             extend {
                 drawer.shadeStyle = radialGradient(
                         ColorRGBa.PINK,

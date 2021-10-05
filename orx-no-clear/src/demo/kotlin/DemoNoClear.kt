@@ -13,14 +13,6 @@ fun main() {
         program {
             var time = 0.0
 
-            // -- this block is for automation purposes only
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.delayFrames = 120
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
-
             // ------------------------------------------------------------
             // By default OPENRNDR clears the canvas on each animation
             // frame. NoClear disables that behavior, letting you

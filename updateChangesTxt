@@ -1,0 +1,12 @@
+#!/usr/bin/bash
+
+git fetch --all
+
+hash=$(git log --no-walk --tags --pretty="%h %d" | grep 'tag: v[0-9.]\+[)]' | awk '{print $1; exit}')
+
+echo "Hash of previous release: $hash"
+
+git log $hash.. --pretty=format:"- %h %s (%an)" --no-merges | sort -k 3 | uniq -u -s 11 >changes.txt
+
+cat changes.txt
+

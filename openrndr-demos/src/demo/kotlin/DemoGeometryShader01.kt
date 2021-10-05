@@ -4,16 +4,18 @@ import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.Shader
 import org.openrndr.extras.camera.Orbital
 import org.openrndr.extras.meshgenerators.boxMesh
+import org.openrndr.resourceText
 import org.openrndr.resourceUrl
 
 fun main() {
     application {
         program {
             val vb = boxMesh()
-            val shader = Shader.Companion.createFromUrls(
-                vsUrl = resourceUrl("/shaders/gs-01.vert"),
-                gsUrl = resourceUrl("/shaders/gs-01.geom"),
-                fsUrl = resourceUrl("/shaders/gs-01.frag")
+            val shader = Shader.createFromCode(
+                vsCode = resourceText("/shaders/gs-01.vert"),
+                gsCode = resourceText("/shaders/gs-01.geom"),
+                fsCode = resourceText("/shaders/gs-01.frag"),
+                name = "x"
             )
             extend(Orbital())
             extend {

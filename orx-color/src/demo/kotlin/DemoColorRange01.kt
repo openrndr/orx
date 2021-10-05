@@ -12,12 +12,6 @@ import org.openrndr.shape.Rectangle
 
 fun main() = application {
     program {
-        // -- this block is for automation purposes only
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
         val numColors = 10
         val colorLists = listOf(
                 ColorRGBa.PINK..ColorRGBa.BLUE.toHSVa() blend numColors,

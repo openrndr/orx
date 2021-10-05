@@ -23,13 +23,6 @@ fun main() {
                 drawer.lineSegment(0.0, 40.0, 400.0, 40.0)
                 drawer.lineSegment(0.0, 20.0, 400.0, 20.0)
             }
-
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
-
             extend {
                 drawer.stroke = ColorRGBa.WHITE
 

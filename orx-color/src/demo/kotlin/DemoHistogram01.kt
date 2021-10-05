@@ -7,12 +7,6 @@ import org.openrndr.extras.color.statistics.calculateHistogramRGB
 
 fun main() = application {
     program {
-        // -- this block is for automation purposes only
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
         val useColors = 32
         val image = loadImage("demo-data/images/image-001.png")
 
@@ -30,7 +24,7 @@ fun main() = application {
         }
         println(" and sort them by luminosity.")
 
-        val topColorsFreqSum = topColors.sumByDouble { it.second }
+        val topColorsFreqSum = topColors.sumOf { it.second }
         println("\nThose top $useColors colors represent " +
                 String.format("%.02f", 100 * topColorsFreqSum) +
                 "% of the image colors.")
