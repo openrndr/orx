@@ -10,6 +10,7 @@ import org.openrndr.dialogs.openFileDialog
 import org.openrndr.dialogs.saveFileDialog
 import org.openrndr.dialogs.setDefaultPathForContext
 import org.openrndr.draw.Drawer
+import org.openrndr.exceptions.stackRootClassName
 import org.openrndr.extra.parameters.*
 import org.openrndr.internal.Driver
 import org.openrndr.math.Vector2
@@ -20,6 +21,7 @@ import org.openrndr.panel.controlManager
 import org.openrndr.panel.elements.*
 import org.openrndr.panel.style.*
 import java.io.File
+import java.nio.file.Paths
 import kotlin.math.roundToInt
 import kotlin.reflect.KMutableProperty1
 
@@ -92,6 +94,8 @@ class GUI : Extension {
 
     var compartmentsCollapsedByDefault = true
     var doubleBind = false
+    var defaultSaveFolder = "gui-parameters"
+    var persistState = true
 
     private var panel: ControlManager? = null
 
@@ -106,11 +110,16 @@ class GUI : Extension {
     val collapsed = ElementClass("collapsed")
 
     override fun setup(program: Program) {
+        if (persistState) {
+            val guiState = File(defaultSaveFolder, "latest.json")
+            if (guiState.exists()) {
+                loadParameters(guiState)
+            }
+        }
+
         program.produceAssets.listen {
             if (listenToProduceAssetsEvent) {
-                val targetDir = File("gui-parameters")
-                if (!targetDir.exists()) { targetDir.mkdir() }
-                val targetFile = File(targetDir, "${it.assetMetadata.assetBaseName}.json")
+                val targetFile = File(defaultSaveFolder, "${it.assetMetadata.assetBaseName}.json")
                 logger.info("Saving parameters to '${targetFile.absolutePath}")
                 saveParameters(targetFile)
             }
@@ -258,15 +267,14 @@ class GUI : Extension {
 
                                 if (defaultPath == null) {
                                     val local = File(".")
-                                    val data = File(local, "data")
-                                    if (data.exists() && data.isDirectory) {
-                                        val parameters = File(data, "parameters")
-                                        if (!parameters.exists()) {
-                                            if (parameters.mkdirs()) {
-                                                setDefaultPathForContext(contextID = "gui.parameters", file = parameters)
-                                            }
-                                        } else {
+                                    val parameters = File(local, defaultSaveFolder)
+                                    if (parameters.exists() && parameters.isDirectory) {
+                                        setDefaultPathForContext(contextID = "gui.parameters", file = parameters)
+                                    } else {
+                                        if (parameters.mkdirs()) {
                                             setDefaultPathForContext(contextID = "gui.parameters", file = parameters)
+                                        } else {
+                                            logger.warn { "Could not create directory ${parameters.absolutePath}" }
                                         }
                                     }
                                 }
@@ -932,6 +940,21 @@ class GUI : Extension {
     override fun afterDraw(drawer: Drawer, program: Program) {
         if (doubleBind) {
             updateControls()
+        }
+    }
+
+    override fun shutdown(program: Program) {
+        if (persistState) {
+            val folderFile = File(defaultSaveFolder)
+            if (folderFile.exists() && folderFile.isDirectory) {
+                saveParameters(File(defaultSaveFolder, "latest.json"))
+            } else {
+                if (folderFile.mkdirs()) {
+                    saveParameters(File(defaultSaveFolder, "latest.json"))
+                } else {
+                    logger.error { "Could not persist GUI state because could not create directory ${folderFile.absolutePath}" }
+                }
+            }
         }
     }
 }
