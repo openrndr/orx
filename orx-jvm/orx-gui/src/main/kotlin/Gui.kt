@@ -10,7 +10,6 @@ import org.openrndr.dialogs.openFileDialog
 import org.openrndr.dialogs.saveFileDialog
 import org.openrndr.dialogs.setDefaultPathForContext
 import org.openrndr.draw.Drawer
-import org.openrndr.exceptions.stackRootClassName
 import org.openrndr.extra.parameters.*
 import org.openrndr.internal.Driver
 import org.openrndr.math.Vector2
@@ -21,7 +20,6 @@ import org.openrndr.panel.controlManager
 import org.openrndr.panel.elements.*
 import org.openrndr.panel.style.*
 import java.io.File
-import java.nio.file.Paths
 import kotlin.math.roundToInt
 import kotlin.reflect.KMutableProperty1
 
@@ -119,9 +117,19 @@ class GUI : Extension {
 
         program.produceAssets.listen {
             if (listenToProduceAssetsEvent) {
+                val folderFile = File(defaultSaveFolder)
                 val targetFile = File(defaultSaveFolder, "${it.assetMetadata.assetBaseName}.json")
-                logger.info("Saving parameters to '${targetFile.absolutePath}")
-                saveParameters(targetFile)
+                if (folderFile.exists() && folderFile.isDirectory) {
+                    logger.info("Saving parameters to '${targetFile.absolutePath}")
+                    saveParameters(targetFile)
+                } else {
+                    if (folderFile.mkdirs()) {
+                        logger.info("Saving parameters to '${targetFile.absolutePath}")
+                        saveParameters(targetFile)
+                    } else {
+                        logger.error { "Could not save parameters because could not create directory ${folderFile.absolutePath}" }
+                    }
+                }
             }
         }
 
