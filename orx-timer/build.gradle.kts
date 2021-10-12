@@ -1,12 +1,21 @@
 sourceSets {
-    demo {
+    val main by getting { }
+    val demo by creating {
         java {
-            srcDirs = ["src/demo/kotlin"]
+            srcDir("src/demo/kotlin")
             compileClasspath += main.getCompileClasspath()
             runtimeClasspath += main.getRuntimeClasspath()
         }
     }
 }
+
+
+val openrndrVersion: String by rootProject.extra
+val openrndrOS: String by rootProject.extra
+val demoImplementation by configurations.getting {}
+val demoRuntimeOnly by configurations.getting {}
+
+
 
 dependencies {
     demoImplementation("org.openrndr:openrndr-application:$openrndrVersion")
