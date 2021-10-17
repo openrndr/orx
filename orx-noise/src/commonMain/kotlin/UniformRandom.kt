@@ -70,6 +70,14 @@ fun Vector2.Companion.uniforms(count: Int,
                                random: Random = Random.Default): List<Vector2> =
         List(count) { Vector2.uniform(rect, random) }
 
+fun Vector2.Companion.uniformSequence(rect: Rectangle,
+                               random: Random = Random.Default): Sequence<Vector2> =
+    sequence {
+        while(true) {
+            yield(uniform(rect, random))
+        }
+    }
+
 fun Vector2.Companion.uniformsRing(count: Int,
                                    innerRadius: Double = 0.0, outerRadius: Double = 1.0,
                                    random: Random = Random.Default): List<Vector2> =
