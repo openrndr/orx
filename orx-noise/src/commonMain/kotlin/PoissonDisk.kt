@@ -6,6 +6,7 @@ import org.openrndr.math.clamp
 import org.openrndr.shape.Rectangle
 import kotlin.math.ceil
 import kotlin.math.sqrt
+import kotlin.random.Random
 
 /*
 * TODO v2
@@ -24,8 +25,10 @@ internal const val epsilon = 0.0000001
  * @param height the height of the area
  * @param r the minimum distance between each point
  * @param tries number of candidates per point
- * @param boundsMapper a custom function to check if a point is within bounds
  * @param randomOnRing generate random points on a ring with an annulus from r to 2r
+ * @param random a random number generator, default value is [Random.Default]
+ * @param boundsMapper a custom function to check if a point is within bounds
+
  * @return a list of points
  */
 fun poissonDiskSampling(
@@ -34,7 +37,9 @@ fun poissonDiskSampling(
         r: Double,
         tries: Int = 30,
         randomOnRing: Boolean = false,
-        boundsMapper: ((w: Double, h: Double, v: Vector2) -> Boolean)? = null
+        random: Random = Random.Default,
+        initialPoint: Vector2 = Vector2(width/2.0, height/2.0),
+        boundsMapper: ((w: Double, h: Double, v: Vector2) -> Boolean)? = null,
 ): List<Vector2> {
     val disk = mutableListOf<Vector2>()
     val queue = mutableListOf<Int>()
@@ -46,7 +51,7 @@ fun poissonDiskSampling(
     val rows = ceil(height / cellSize).toInt()
     val cols = ceil(width / cellSize).toInt()
 
-    val grid = List(rows * cols) { -1 }.toMutableList()
+    val grid = MutableList(rows * cols) { -1 }
 
     fun addPoint(v: Vector2) {
         val x = (v.x / cellSize).fastFloor()
@@ -60,21 +65,21 @@ fun poissonDiskSampling(
         queue.add(disk.lastIndex)
     }
 
-    addPoint(Vector2(width / 2.0, height / 2.0))
+    addPoint(initialPoint)
 
     val boundsRect = Rectangle(0.0, 0.0, width, height)
 
     while (queue.isNotEmpty()) {
-        val activeIndex = Random.pick(queue)
+        val activeIndex = queue.random(random)
         val active = disk[activeIndex]
 
         var candidateAccepted = false
 
         candidateSearch@ for (l in 0 until tries) {
             val c = if (randomOnRing) {
-                active + Random.ring2d(r, 2 * r) as Vector2
+                active + Vector2.uniformRing(r, 2 * r, random)
             } else {
-                active + Polar(Random.double0(360.0), radius).cartesian
+                active + Polar(random.nextDouble(0.0, 360.0), radius).cartesian
             }
 
             if (!boundsRect.contains(c)) continue@candidateSearch
