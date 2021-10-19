@@ -27,6 +27,7 @@ internal const val epsilon = 0.0000001
  * @param tries number of candidates per point
  * @param randomOnRing generate random points on a ring with an annulus from r to 2r
  * @param random a random number generator, default value is [Random.Default]
+ * @param initialPoints a list of points in sampler space, these points will not be tested against [r]
  * @param boundsMapper a custom function to check if a point is within bounds
 
  * @return a list of points
@@ -38,7 +39,7 @@ fun poissonDiskSampling(
         tries: Int = 30,
         randomOnRing: Boolean = false,
         random: Random = Random.Default,
-        initialPoint: Vector2 = Vector2(width/2.0, height/2.0),
+        initialPoints: List<Vector2> = listOf(Vector2(width/2.0, height/2.0)),
         boundsMapper: ((w: Double, h: Double, v: Vector2) -> Boolean)? = null,
 ): List<Vector2> {
     val disk = mutableListOf<Vector2>()
@@ -51,21 +52,23 @@ fun poissonDiskSampling(
     val rows = ceil(height / cellSize).toInt()
     val cols = ceil(width / cellSize).toInt()
 
-    val grid = MutableList(rows * cols) { -1 }
+    val grid = Array(rows * cols) { -1 }
 
     fun addPoint(v: Vector2) {
         val x = (v.x / cellSize).fastFloor()
         val y = (v.y / cellSize).fastFloor()
         val index = x + y * cols
 
-        disk.add(v)
-
-        grid[index] = disk.lastIndex
-
-        queue.add(disk.lastIndex)
+        if (x >= 0 && y >= 0 && x < cols && y < rows) {
+            disk.add(v)
+            grid[index] = disk.lastIndex
+            queue.add(disk.lastIndex)
+        }
     }
 
-    addPoint(initialPoint)
+    for (initialPoint in initialPoints) {
+        addPoint(initialPoint)
+    }
 
     val boundsRect = Rectangle(0.0, 0.0, width, height)
 
@@ -81,19 +84,20 @@ fun poissonDiskSampling(
             } else {
                 active + Polar(random.nextDouble(0.0, 360.0), radius).cartesian
             }
-
             if (!boundsRect.contains(c)) continue@candidateSearch
-
-            // check if it's within bounds
-            // choose another candidate if it's not
-            if (boundsMapper != null && !boundsMapper(width, height, c)) continue@candidateSearch
 
             val x = (c.x / cellSize).fastFloor()
             val y = (c.y / cellSize).fastFloor()
 
+            // EJ: early bail-out;
+            //     if grid[y,x] is populated we know that its inhabitant is within the minimum point distance
+            if (grid[x + y * cols] != -1) {
+                continue@candidateSearch
+            }
+
             // Check closest neighbours in a 5x5 grid
-            for (ix in (-2..2)) {
-                for (iy in (-2..2)) {
+            for (iy in (-2..2)) {
+                for (ix in (-2..2)) {
                     val nx = clamp(x + ix, 0, cols - 1)
                     val ny = clamp(y + iy, 0, rows - 1)
 
@@ -109,10 +113,15 @@ fun poissonDiskSampling(
                 }
             }
 
+            // check if the candidate point is within bounds
+            // EJ: This is somewhat counter-intuitively moved to the last stage in the process;
+            //     It turns out that the above neighbour search is much more affordable than the bounds check in the
+            //     case of complex bounds (such as described by Shapes or ShapeContours). A simple benchmark shows a
+            //     speed-up of roughly 300%
+            if (boundsMapper != null && !boundsMapper(width, height, c)) continue@candidateSearch
+
             addPoint(c)
-
             candidateAccepted = true
-
             break
         }
 
@@ -121,6 +130,6 @@ fun poissonDiskSampling(
             queue.remove(activeIndex)
         }
     }
-
     return disk
 }
+
