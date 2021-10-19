@@ -88,6 +88,7 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
                 runtimeOnly("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
                 runtimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
+                runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
                 implementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
                 implementation("org.amshove.kluent:kluent:$kluentVersion")
             }
