@@ -19,7 +19,7 @@ fun ShapeProvider.uniform(distanceToEdge: Double = 0.0, random: Random = Random.
     }
 }
 
-fun ShapeProvider.poissonDiskSampling(
+fun ShapeProvider.scatter(
     pointDistance: Double,
     distanceToEdge: Double = 0.0,
     tries: Int = 30,
