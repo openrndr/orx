@@ -22,20 +22,16 @@ fun hobbyCurve(points: List<Vector2>, closed: Boolean = false, curl: Double = 0.
     val m = points.size
     val n = if (closed) m else m - 1
 
-    val diffs = arrayOfNulls<Vector2>(n)
-    val distances = arrayOfNulls<Double>(n)
-    for (i in 0 until n){
-        diffs[i] = points[(i+1) % m] - points[i]
-        distances[i] = diffs[i]!!.length
-    }
+    val diffs = Array(n) { points[(it+1) % m] - points[it] }
+    val distances = Array(n) { diffs[it].length }
 
     val gamma = arrayOfNulls<Double>(m)
     for (i in (if (closed) 0 else 1) until n){
         val k = (i + m - 1) % m
-        val n1 = diffs[k]!!.normalized
+        val n1 = diffs[k].normalized
         val s = n1.y
         val c = n1.x
-        val v = rotate(diffs[i]!!, -s, c)
+        val v = rotate(diffs[i], -s, c)
         gamma[i] = atan2(v.y, v.x)
     }
     if (!closed) gamma[n] = 0.0
@@ -49,10 +45,10 @@ fun hobbyCurve(points: List<Vector2>, closed: Boolean = false, curl: Double = 0.
         val j = (i + 1) % m
         val k = (i + m - 1) % m
 
-        a[i] = 1 / distances[k]!!
-        b[i] = (2 * distances[k]!! + 2 * distances[i]!!) / (distances[k]!! * distances[i]!!)
-        c[i] = 1 / distances[i]!!
-        d[i] = -(2 * gamma[i]!! * distances[i]!! + gamma[j]!! * distances[k]!!) / (distances[k]!! * distances[i]!!)
+        a[i] = 1 / distances[k]
+        b[i] = (2 * distances[k] + 2 * distances[i]) / (distances[k] * distances[i])
+        c[i] = 1 / distances[i]
+        d[i] = -(2 * gamma[i]!! * distances[i] + gamma[j]!! * distances[k]) / (distances[k] * distances[i])
     }
 
     lateinit var alpha: Array<Double>
@@ -91,10 +87,10 @@ fun hobbyCurve(points: List<Vector2>, closed: Boolean = false, curl: Double = 0.
     val c1s = mutableListOf<Vector2>()
     val c2s = mutableListOf<Vector2>()
     for (i in 0 until n){
-        val v1 = rotateAngle(diffs[i]!!, alpha[i]).normalized
-        val v2 = rotateAngle(diffs[i]!!, -beta[i]!!).normalized
-        c1s.add(points[i % m] + v1 * rho(alpha[i], beta[i]!!) * distances[i]!! / 3.0)
-        c2s.add(points[(i+1) % m] - v2 * rho(beta[i]!!, alpha[i]) * distances[i]!! / 3.0)
+        val v1 = rotateAngle(diffs[i], alpha[i]).normalized
+        val v2 = rotateAngle(diffs[i], -beta[i]!!).normalized
+        c1s.add(points[i % m] + v1 * rho(alpha[i], beta[i]!!) * distances[i] / 3.0)
+        c2s.add(points[(i+1) % m] - v2 * rho(beta[i]!!, alpha[i]) * distances[i] / 3.0)
     }
 
     return ShapeContour(List(n) { Segment(points[it], c1s[it], c2s[it], points[(it+1)%m]) }, closed=closed)
