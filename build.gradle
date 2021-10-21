@@ -14,7 +14,7 @@ plugins {
     // remember to update all the versions here when upgrading kotlin version
     id 'org.jetbrains.kotlin.jvm' apply false
     id 'org.jetbrains.kotlin.multiplatform'  apply false
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.5.30' apply false
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.5.31' apply false
 }
 
 def multiplatformModules = [
@@ -37,9 +37,9 @@ def multiplatformModules = [
 project.ext {
     kotlinApiVersion = '1.4'
     kotlinLanguageVersion = '1.4'
-    kotlinVersion = '1.5.30'
+    kotlinVersion = '1.5.31'
     kotlinLoggingVersion = '2.0.8'
-    kotlinxSerializationVersion = '1.1.0'
+    kotlinxSerializationVersion = '1.3.0-RC'
     spekVersion = '2.0.15'
     kluentVersion = '1.65'
     jsoupVersion = '1.13.1'
@@ -56,7 +56,7 @@ ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 project.ext {
     openrndrVersion = openrndrUseSnapshot? "0.5.1-SNAPSHOT" : "0.4.0"
     jvmTarget = "1.8"
-    kotlinVersion = "1.5.30"
+    kotlinVersion = "1.5.31"
     kotlinApiVersion = "1.4"
     spekVersion = "2.0.15"
     libfreenectVersion = "0.5.7-1.5.4"
@@ -201,7 +201,7 @@ configure(allprojects.findAll { !multiplatformModules.contains(it.name) }) {
         // Note: kotlin-logging and kotlinx-coroutines-core are loaded
         // too early and their versions cannot be parametrized
         implementation 'io.github.microutils:kotlin-logging:2.0.6'
-        implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3'
+        implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2'
 
         implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
         implementation "org.openrndr:openrndr-application:$openrndrVersion"

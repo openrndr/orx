@@ -2,6 +2,7 @@
 uniform float gain;
 uniform vec3 seed;
 uniform float phase;
+uniform float radius;
 uniform float scale;
 
 uniform float lacunarity;
@@ -141,8 +142,8 @@ void main() {
     float _gain = gain;
     float shift = 100.0;
 
-    vec3 xseed = vec3(seed.xy, seed.z+cos(phase*3.1415926535));
-    vec3 yseed = vec3(seed.yx, seed.z+sin(phase*3.1415926535));
+    vec3 xseed = vec3(seed.xy, seed.z+radius*cos(phase*3.1415926535));
+    vec3 yseed = vec3(seed.yx, seed.z+radius*sin(phase*3.1415926535));
 
     vec3 uv = vec3(v_texCoord0 + offset, 1.0) * 2.0 - 1.0;
     vec3 px = ((segment(uv, xSegments, ySegments) + xseed) * scale);

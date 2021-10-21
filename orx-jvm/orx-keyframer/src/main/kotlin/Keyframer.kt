@@ -265,7 +265,7 @@ open class Keyframer {
                 "back-in-out" -> Easing.BackInOut.function
                 "bounce-in" -> Easing.BounceIn.function
                 "bounce-out" -> Easing.BounceOut.function
-                "bounce-in-out" -> Easing.BackInOut.function
+                "bounce-in-out" -> Easing.BounceInOut.function
                 "circ-in" -> Easing.CircIn.function
                 "circ-out" -> Easing.CircOut.function
                 "circ-in-out" -> Easing.CircInOut.function

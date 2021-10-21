@@ -165,7 +165,6 @@ private fun <T> sqrDistance(left: T, right: T, dimensions: Int, mapper: (T, Int)
 fun <T> findAllNodes(root: KDTreeNode<T>): List<KDTreeNode<T>> {
     val stack = Stack<KDTreeNode<T>>()
     val all = ArrayList<KDTreeNode<T>>()
-    stack.empty()
     stack.push(root)
     while (!stack.isEmpty()) {
         val node = stack.pop()
@@ -183,6 +182,54 @@ fun <T> findAllNodes(root: KDTreeNode<T>): List<KDTreeNode<T>> {
     return all
 }
 
+
+fun <T> findKNearest(
+    root: KDTreeNode<T>,
+    item: T,
+    k: Int,
+    dimensions: Int,
+    mapper: (T, Int) -> Double
+): List<T> {
+    // max-heap with size k
+    val queue = PriorityQueue<Pair<KDTreeNode<T>, Double>>(k + 1) {
+            nodeA, nodeB -> compareValues(nodeB.second, nodeA.second)
+    }
+
+    fun nearest(node: KDTreeNode<T>?, item: T) {
+        if (node != null) {
+            val dimensionValue = mapper(item, node.dimension)
+            val route: Int = if (dimensionValue < node.median) {
+                nearest(node.children[0], item)
+                0
+            } else {
+                nearest(node.children[1], item)
+                1
+            }
+
+            val distance = sqrDistance(item, node.item
+                ?: throw IllegalStateException("item is null"), dimensions, mapper)
+
+            if (queue.size < k || distance < queue.peek().second) {
+                queue.add(Pair(node, distance))
+                if (queue.size > k) {
+                    queue.poll()
+                }
+            }
+
+            val d = abs(node.median - dimensionValue)
+            if (d * d < queue.peek().second || queue.size < k) {
+                nearest(node.children[1 - route], item)
+            }
+        }
+    }
+
+    nearest(root, item)
+
+    return generateSequence { queue.poll() }
+        .map { it.first.item }
+        .filterNotNull()
+        .toList().reversed()
+}
 
 fun <T> findNearest(root: KDTreeNode<T>, item: T, dimensions: Int, mapper: (T, Int) -> Double): T? {
     var nearest = java.lang.Double.POSITIVE_INFINITY
@@ -219,6 +266,47 @@ fun <T> findNearest(root: KDTreeNode<T>, item: T, dimensions: Int, mapper: (T, I
     }
     nearest(root, item)
     return nearestArg?.item
+}
+
+fun <T> findAllInRange(
+    root: KDTreeNode<T>,
+    item: T,
+    maxDistance: Double,
+    dimensions: Int,
+    mapper: (T, Int) -> Double
+) : List<T> {
+
+    val sqrMaxDist = maxDistance * maxDistance
+    val queue = kotlin.collections.ArrayDeque<KDTreeNode<T>?>()
+    queue.add(root)
+    val results = mutableListOf<T?>()
+
+    while (queue.isNotEmpty()) {
+        val node = queue.removeFirst()
+        if (node != null) {
+            val dimensionValue = mapper(item, node.dimension)
+            val distance = sqrDistance(item, node.item
+                ?: throw IllegalStateException("item is null"), dimensions, mapper)
+            if (distance <= sqrMaxDist) {
+                results.add(node.item)
+            }
+
+            val route: Int = if (dimensionValue < node.median) {
+                queue.add(node.children[0])
+                0
+            } else {
+                queue.add(node.children[1])
+                1
+            }
+
+            val d = abs(node.median - dimensionValue)
+            if (d * d <= sqrMaxDist) {
+                queue.add(node.children[1 - route])
+            }
+        }
+    }
+
+    return results.filterNotNull()
 }
 
 fun <T> insert(root: KDTreeNode<T>, item: T, dimensions: Int, mapper: (T, Int) -> Double): KDTreeNode<T> {

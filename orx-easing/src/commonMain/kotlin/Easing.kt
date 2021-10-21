@@ -129,7 +129,7 @@ fun easeCircInOut(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0):
     return c / 2 * (sqrt(1 - td2 * td2) + 1) + b
 }
 
-fun easeCircOut(t: Double, b: Double, c: Double, d: Double): Double {
+fun easeCircOut(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): Double {
     val td = t / d - 1
     return c * sqrt(1 - td * td) + b
 }
@@ -154,7 +154,7 @@ fun easeCubicInOut(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0)
 
 // -- elastic
 
-fun easeElasticIn(t: Double, b: Double, c: Double, d: Double): Double {
+fun easeElasticIn(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): Double {
     if (t == 0.0) {
         return b
     } else if (t / d == 1.0) {
@@ -168,7 +168,7 @@ fun easeElasticIn(t: Double, b: Double, c: Double, d: Double): Double {
     }
 }
 
-fun easeElasticInOut(t: Double, b: Double, c: Double, d: Double): Double {
+fun easeElasticInOut(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): Double {
     val td2 = t / (d / 2)
 
     if (t == 0.0)
@@ -186,7 +186,7 @@ fun easeElasticInOut(t: Double, b: Double, c: Double, d: Double): Double {
 
 }
 
-fun easeElasticOut(t: Double, b: Double, c: Double, d: Double): Double {
+fun easeElasticOut(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): Double {
     val td = t / d
     if (t == 0.0)
         return b
@@ -222,9 +222,9 @@ fun easeExpoOut(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): D
 
 // -- quad
 
-fun easeQuadIn(t: Double, b: Double, c: Double, d: Double): Double = c * (t / d) * (t / d) + b
+fun easeQuadIn(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): Double = c * (t / d) * (t / d) + b
 
-fun easeQuadInOut(t: Double, b: Double, c: Double, d: Double): Double {
+fun easeQuadInOut(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): Double {
     val td = t / (d / 2)
     return if (td < 1) {
         c / 2 * td * td + b
@@ -233,34 +233,34 @@ fun easeQuadInOut(t: Double, b: Double, c: Double, d: Double): Double {
     }
 }
 
-fun easeQuadOut(t: Double, b: Double, c: Double, d: Double): Double = -c * (t / d) * (t / d - 2) + b
+fun easeQuadOut(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): Double = -c * (t / d) * (t / d - 2) + b
 
 // -- quart
 
-fun easeQuartIn(t: Double, b: Double, c: Double, d: Double): Double {
+fun easeQuartIn(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): Double {
     val n = t / d
     return c * n * n * n * n + b
 }
 
-fun easeQuartInOut(t: Double, b: Double, c: Double, d: Double): Double {
+fun easeQuartInOut(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): Double {
     val td = t / (d / 2)
     val td2 = td - 2.0
     return if (td < 1) c / 2 * td * td * td * td + b else -c / 2 * (td2 * td2 * td2 * td2 - 2) + b
 }
 
-fun easeQuartOut(t: Double, b: Double, c: Double, d: Double): Double {
+fun easeQuartOut(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): Double {
     val td = t / d - 1
     return -c * (td * td * td * td - 1) + b
 }
 
 // -- quint
 
-fun easeQuintIn(t: Double, b: Double, c: Double, d: Double): Double {
+fun easeQuintIn(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): Double {
     val td = t / d
     return c * td * td * td * td * td + b
 }
 
-fun easeQuintInOut(t: Double, b: Double, c: Double, d: Double): Double {
+fun easeQuintInOut(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): Double {
     val t2 = t * 2.0
     val t22 = t2 - 2.0
     return if (t < 0.5) 0.5 * t2 * t2 * t2 * t2 * t2 else {
@@ -268,7 +268,7 @@ fun easeQuintInOut(t: Double, b: Double, c: Double, d: Double): Double {
     }
 }
 
-fun easeQuintOut(t: Double, b: Double, c: Double, d: Double): Double {
+fun easeQuintOut(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): Double {
     val td = t / d - 1
     return c * ((td) * td * td * td * td + 1) + b
 }
@@ -281,7 +281,7 @@ fun easeSineIn(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): Do
 fun easeSineOut(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): Double =
         c * sin(t / d * (PI / 2)) + b
 
-fun easeSineInOut(t: Double, b: Double, c: Double, d: Double): Double =
+fun easeSineInOut(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): Double =
         -c / 2 * (cos(PI * t / d) - 1) + b
 
 

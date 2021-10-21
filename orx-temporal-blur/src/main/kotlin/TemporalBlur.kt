@@ -6,7 +6,6 @@ import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.extra.noise.uniformRing
-import org.openrndr.extra.fx.blend.Add
 import org.openrndr.filter.color.delinearize
 import org.openrndr.filter.color.linearize
 import org.openrndr.math.Matrix44
@@ -45,6 +44,7 @@ private val add by lazy { PlainAdd() }
  */
 class TemporalBlur : Extension {
     private var oldClock: () -> Double = { 0.0 }
+    var oldClockTime = 0.0
     override var enabled: Boolean = true
 
     private var accumulator: RenderTarget? = null
@@ -166,6 +166,7 @@ class TemporalBlur : Extension {
             }
         }
         oldClock = program.clock
+        oldClockTime = program.clock()
         val oldClockValue = oldClock()
 
         for (i in samples - 1 downTo 1) {
@@ -221,11 +222,15 @@ class TemporalBlur : Extension {
             }
         }
         image?.bind()
+
+        // restore clock
+        program.clock = oldClock
+        val fsf = Program::class.java.getDeclaredField("frameSeconds")
+        fsf.isAccessible = true
+        fsf.setDouble(program,  oldClockTime)
     }
 
     override fun afterDraw(drawer: Drawer, program: Program) {
-        // restore clock
-        program.clock = oldClock
         // -- we receive one last frame here
         image?.unbind()
         image!!.colorBuffer(0).copyTo(imageResolved!!.colorBuffer(0))

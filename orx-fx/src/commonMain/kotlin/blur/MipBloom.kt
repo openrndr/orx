@@ -31,11 +31,13 @@ class BloomUpscale : Filter(mppFilterShader(fx_bloom_upscale, "bloom-upscale")) 
 
 class BloomCombine : Filter(mppFilterShader(fx_bloom_combine, "bloom-combine")) {
     var gain: Double by parameters
+    var pregain: Double by parameters
     var bias: ColorRGBa by parameters
 
     init {
         bias = ColorRGBa.BLACK
         gain = 1.0
+        pregain = 1.0
     }
 }
 
@@ -48,6 +50,10 @@ open class MipBloom<T : Filter>(val blur: T) : Filter(mppFilterShader(fx_bloom_c
 
     @DoubleParameter("gain", 0.0, 4.0)
     var gain: Double = 1.0
+
+    @DoubleParameter("pregain", 0.0, 4.0)
+    var pregain: Double = 1.0
+
 
     /**
      * noise gain. low noise gains will result in visible banding of the image. default value is 0.25
@@ -113,6 +119,7 @@ open class MipBloom<T : Filter>(val blur: T) : Filter(mppFilterShader(fx_bloom_c
 
         upscale.apply(intermediates.toTypedArray(), arrayOf(target[0]))
         combine.gain = gain
+        combine.pregain = pregain
         combine.apply(arrayOf(sourceCopy!!, target[0]), target)
 
         if (sRGB) {
