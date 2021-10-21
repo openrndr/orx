@@ -1,6 +1,6 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extra.noise.poissonDiskSampling
+import org.openrndr.extra.noise.scatter
 import org.openrndr.math.Vector2
 import org.openrndr.math.mod_
 import org.openrndr.shape.Circle
@@ -12,7 +12,7 @@ fun main() {
         program {
             extend {
                 val shape = Ellipse(Vector2(width/2.0, height/2.0), 200.0, 150.0 + cos(seconds)*125.0).shape
-                val points = shape.poissonDiskSampling(10.0)
+                val points = shape.scatter(10.0)
                 drawer.clear(ColorRGBa.BLACK)
                 drawer.stroke = null
                 drawer.fill = ColorRGBa.PINK
