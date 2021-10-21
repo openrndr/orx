@@ -1,7 +1,7 @@
 package org.openrndr.extras.color.palettes
 
 import org.openrndr.color.*
-import org.openrndr.extras.color.spaces.*
+import org.openrndr.extra.color.spaces.*
 
 
 fun <T> colorSequence(vararg offsets: Pair<Double, T>): ColorSequence

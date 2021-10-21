@@ -6,10 +6,10 @@ import org.openrndr.draw.loadFont
 import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extras.camera.Orbital
 import org.openrndr.extras.color.palettes.rangeTo
-import org.openrndr.extras.color.spaces.toHSLUVa
-import org.openrndr.extras.color.spaces.toOKLABa
-import org.openrndr.extras.color.spaces.toOKLCHa
-import org.openrndr.extras.color.spaces.toXSLUVa
+import org.openrndr.extra.color.spaces.toHSLUVa
+import org.openrndr.extra.color.spaces.toOKLABa
+import org.openrndr.extra.color.spaces.toOKLCHa
+import org.openrndr.extra.color.spaces.toXSLUVa
 import org.openrndr.extras.meshgenerators.sphereMesh
 import org.openrndr.math.Vector3
 

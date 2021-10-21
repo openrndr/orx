@@ -7,7 +7,7 @@ import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extras.color.palettes.colorSequence
 import org.openrndr.extras.color.palettes.rangeTo
 import org.openrndr.extras.color.presets.CORAL
-import org.openrndr.extras.color.spaces.toHSLUVa
+import org.openrndr.extra.color.spaces.toHSLUVa
 
 fun main() = application {
     program {

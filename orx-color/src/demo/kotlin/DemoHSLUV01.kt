@@ -7,7 +7,7 @@ import org.openrndr.color.rgb
 import org.openrndr.draw.isolated
 import org.openrndr.draw.loadFont
 import org.openrndr.extensions.SingleScreenshot
-import org.openrndr.extras.color.spaces.ColorHSLUVa
+import org.openrndr.extra.color.spaces.ColorHSLUVa
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 

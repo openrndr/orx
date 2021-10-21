@@ -1,4 +1,4 @@
-package org.openrndr.extras.color.spaces
+package org.openrndr.extra.color.spaces
 
 import org.openrndr.color.*
 import org.openrndr.math.mixAngle
