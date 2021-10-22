@@ -1,6 +1,7 @@
 package org.openrndr.extra.color.spaces
 
 import org.openrndr.color.*
+import org.openrndr.math.mixAngle
 import kotlin.math.*
 
 
@@ -9,6 +10,7 @@ data class ColorOKHSVa(val h: Double, val s: Double, val v: Double, val a: Doubl
     OpacifiableColor<ColorOKHSVa>,
     SaturatableColor<ColorOKHSVa>,
     ShadableColor<ColorOKHSVa>,
+    AlgebraicColor<ColorOKHSVa>,
     ConvertibleToColorRGBa {
 
     companion object {
@@ -88,12 +90,10 @@ data class ColorOKHSVa(val h: Double, val s: Double, val v: Double, val a: Doubl
         C *= scale_L;
 
         return ColorOKLABa(L, C * a_, C * b_).toRGBa().toSRGB()
-
-
     }
 
     override fun shiftHue(shiftInDegrees: Double): ColorOKHSVa {
-        val normalizedShift = shiftInDegrees/360.0
+        val normalizedShift = shiftInDegrees / 360.0
         return copy(h = h + normalizedShift)
     }
 
@@ -109,6 +109,23 @@ data class ColorOKHSVa(val h: Double, val s: Double, val v: Double, val a: Doubl
         return copy(v = v * factor)
     }
 
+    override fun minus(right: ColorOKHSVa) =
+        copy(h = h - right.h, s = s - right.s, v = v - right.v, a = a - right.a)
+
+    override fun plus(right: ColorOKHSVa) =
+        copy(h = h + right.h, s = s + right.s, v = v + right.v, a = a + right.a)
+
+    override fun times(scale: Double): ColorOKHSVa = copy(h = h * scale, s = s * scale, v = v * scale, a = a * scale)
+
+    override fun mix(other: ColorOKHSVa, factor: Double): ColorOKHSVa {
+        val sx = factor.coerceIn(0.0, 1.0)
+        return ColorOKHSVa(
+            mixAngle(h * 360.0, other.h * 360.0, sx) / 360.0,
+            (1.0 - sx) * s + sx * other.s,
+            (1.0 - sx) * v + sx * other.v,
+            (1.0 - sx) * a + sx * other.a
+        )
+    }
 }
 
-fun ColorRGBa.toOKHSVa() : ColorOKHSVa = ColorOKHSVa.fromColorRGBa(this)
+fun ColorRGBa.toOKHSVa(): ColorOKHSVa = ColorOKHSVa.fromColorRGBa(this)

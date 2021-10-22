@@ -53,6 +53,8 @@ class ColorSequence(val colors: List<Pair<Double, ConvertibleToColorRGBa>>) {
             is ColorLCHABa -> right.second.toRGBa().toLCHABa().mix(l, nt).toRGBa()
             is ColorOKLABa -> right.second.toRGBa().toOKLABa().mix(l, nt).toRGBa()
             is ColorOKLCHa -> right.second.toRGBa().toOKLCHa().mix(l, nt).toRGBa()
+            is ColorOKHSLa -> right.second.toRGBa().toOKHSLa().mix(l, nt).toRGBa()
+            is ColorOKHSVa -> right.second.toRGBa().toOKHSVa().mix(l, nt).toRGBa()
             else -> error("unsupported color space: ${l::class}")
         }.toSRGB()
     }

@@ -5,7 +5,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.color.ConvertibleToColorRGBa
 import org.openrndr.draw.ShadeStyle
 import org.openrndr.extra.parameters.Description
-import org.openrndr.extras.color.spaces.ColorOKLABa
+import org.openrndr.extra.color.spaces.ColorOKLABa
 import org.openrndr.math.CastableToVector4
 import org.openrndr.math.Vector2
 

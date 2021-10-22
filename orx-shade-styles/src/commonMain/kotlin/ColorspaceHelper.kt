@@ -1,7 +1,7 @@
 package org.openrndr.extra.shadestyles
 
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extras.color.spaces.ColorOKLABa
+import org.openrndr.extra.color.spaces.ColorOKLABa
 import kotlin.reflect.KClass
 
 internal fun generateColorTransform(kClass: KClass<*>): String {

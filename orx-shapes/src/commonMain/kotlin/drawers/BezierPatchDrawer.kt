@@ -13,7 +13,7 @@ import org.openrndr.draw.ShadeStyleGLSL.Companion.vertexMainConstants
 import org.openrndr.extra.shaderphrases.preprocess
 import org.openrndr.extra.shapes.phrases.BezierPhraseBook
 import org.openrndr.extras.color.phrases.ColorPhraseBook
-import org.openrndr.extras.color.spaces.ColorOKLABa
+import org.openrndr.extra.color.spaces.ColorOKLABa
 import org.openrndr.math.Vector4
 import kotlin.jvm.JvmName
 

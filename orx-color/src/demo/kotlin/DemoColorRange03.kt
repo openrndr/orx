@@ -2,11 +2,8 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.loadFont
 import org.openrndr.extensions.SingleScreenshot
+import org.openrndr.extra.color.spaces.*
 import org.openrndr.extras.color.palettes.rangeTo
-import org.openrndr.extra.color.spaces.toHSLUVa
-import org.openrndr.extra.color.spaces.toOKLABa
-import org.openrndr.extra.color.spaces.toOKLCHa
-import org.openrndr.extra.color.spaces.toXSLUVa
 
 fun main() {
     application {
@@ -27,6 +24,8 @@ fun main() {
                     "LCh(ab)" to (colorA.toLCHABa()..colorB.toLCHABa() blend stepCount),
                     "OKLab" to (colorA.toOKLABa()..colorB.toOKLABa() blend stepCount),
                     "OKLCh" to (colorA.toOKLCHa()..colorB.toOKLCHa() blend stepCount),
+                    "OKHSV" to (colorA.toOKHSVa()..colorB.toOKHSVa() blend stepCount),
+                    "OKHSL" to (colorA.toOKHSLa()..colorB.toOKHSLa() blend stepCount),
                     "HSLUV" to (colorA.toHSLUVa()..colorB.toHSLUVa() blend stepCount),
                     "XSLUV" to (colorA.toXSLUVa()..colorB.toXSLUVa() blend stepCount),
                 )
