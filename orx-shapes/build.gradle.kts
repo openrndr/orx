@@ -26,6 +26,7 @@ kotlin {
                     dependencies {
                         implementation(project(":orx-camera"))
                         implementation(project(":orx-color"))
+                        implementation(project(":orx-jvm:orx-triangulation"))
                         implementation("org.openrndr:openrndr-application:$openrndrVersion")
                         implementation("org.openrndr:openrndr-extensions:$openrndrVersion")
                         runtimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
@@ -64,6 +65,12 @@ kotlin {
                 implementation("org.openrndr:openrndr-filter:$openrndrVersion")
                 implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
                 implementation("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
+            }
+        }
+        @Suppress("UNUSED_VARIABLE")
+        val jvmMain by getting {
+            dependencies {
+                implementation(project(":orx-jvm:orx-triangulation"))
             }
         }
         @Suppress("UNUSED_VARIABLE")

@@ -10,6 +10,8 @@ fun main() = application {
             drawer.stroke = ColorRGBa.BLACK
             drawer.fill = ColorRGBa.PINK
             drawer.contour(hobbyCurve(points, closed=true))
+            drawer.fill = ColorRGBa.WHITE
+            drawer.circles(points, 4.0)
         }
     }
 }
