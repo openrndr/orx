@@ -6,7 +6,7 @@ import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.shapes.bezierPatch
 import org.openrndr.extra.shapes.drawers.bezierPatch
 import org.openrndr.extra.shapes.grid
-import org.openrndr.extras.color.spaces.toOKLABa
+import org.openrndr.extra.color.spaces.toOKLABa
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.min
