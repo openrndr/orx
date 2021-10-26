@@ -109,7 +109,7 @@ class GUI : Extension {
 
     override fun setup(program: Program) {
         if (persistState) {
-            val guiState = File(defaultSaveFolder, "latest.json")
+            val guiState = File(defaultSaveFolder, "${program.name}-latest.json")
             if (guiState.exists()) {
                 loadParameters(guiState)
             }
@@ -955,10 +955,10 @@ class GUI : Extension {
         if (persistState) {
             val folderFile = File(defaultSaveFolder)
             if (folderFile.exists() && folderFile.isDirectory) {
-                saveParameters(File(defaultSaveFolder, "latest.json"))
+                saveParameters(File(defaultSaveFolder, "${program.name}-latest.json"))
             } else {
                 if (folderFile.mkdirs()) {
-                    saveParameters(File(defaultSaveFolder, "latest.json"))
+                    saveParameters(File(defaultSaveFolder, "${program.name}-latest.json"))
                 } else {
                     logger.error { "Could not persist GUI state because could not create directory ${folderFile.absolutePath}" }
                 }
