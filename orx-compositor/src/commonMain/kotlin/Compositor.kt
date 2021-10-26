@@ -33,7 +33,7 @@ fun RenderTarget.deepDestroy() {
  * A single layer representation
  */
 @Description("Layer")
-open class Layer internal constructor() {
+open class Layer internal constructor(val bufferMultisample: BufferMultisample = BufferMultisample.Disabled) {
     var copyLayers: List<Layer> = listOf()
     var sourceOut = SourceOut()
     var sourceIn = SourceIn()
@@ -75,7 +75,7 @@ open class Layer internal constructor() {
         }
 
         if (shouldCreateLayerTarget(activeRenderTarget)) {
-            createLayerTarget(activeRenderTarget, drawer)
+            createLayerTarget(activeRenderTarget, drawer, bufferMultisample)
         }
 
         layerTarget?.let { target ->
@@ -87,7 +87,14 @@ open class Layer internal constructor() {
                         }
 
                         it.layerTarget?.let { copyTarget ->
-                            drawer.image(copyTarget.colorBuffer(0))
+                            if (it.bufferMultisample == BufferMultisample.Disabled){
+                                drawer.image(copyTarget.colorBuffer(0))
+                            } else {
+                                val unresolved = copyTarget.colorBuffer(0)
+                                val resolved = colorBuffer(unresolved.width, unresolved.height)
+                                unresolved.copyTo(resolved)
+                                drawer.image(resolved)
+                            }
                         }
                     }
                 }
@@ -95,7 +102,7 @@ open class Layer internal constructor() {
 
             maskLayer?.let {
                 if (it.shouldCreateLayerTarget(activeRenderTarget)) {
-                    it.createLayerTarget(activeRenderTarget, drawer)
+                    it.createLayerTarget(activeRenderTarget, drawer, it.bufferMultisample)
                 }
 
                 it.layerTarget?.let { maskRt ->
@@ -124,6 +131,14 @@ open class Layer internal constructor() {
                 }
             }
 
+            val colorBuffer = if (bufferMultisample == BufferMultisample.Disabled) {
+                target.colorBuffer(0)
+            } else {
+                val resolved = colorBuffer(target.colorBuffer(0).width, target.colorBuffer(0).height)
+                target.colorBuffer(0).copyTo(resolved)
+                resolved
+            }
+
             if (postFilters.size > 0) {
                 val sizeMismatch = if (postBufferCache.isNotEmpty()) {
                     postBufferCache[0].width != activeRenderTarget.width || postBufferCache[0].height != activeRenderTarget.height
@@ -144,7 +159,7 @@ open class Layer internal constructor() {
 
             val layerPost = postFilters.let { filters ->
                 val targets = postBufferCache
-                val result = filters.foldIndexed(target.colorBuffer(0)) { i, source, filter ->
+                val result = filters.foldIndexed(colorBuffer) { i, source, filter ->
                     val localTarget = targets[i % targets.size]
                     filter.first.apply(filter.second)
                     filter.first.apply(source, localTarget)
@@ -172,7 +187,7 @@ open class Layer internal constructor() {
                 localBlendFilter.first.apply(arrayOf(activeRenderTarget.colorBuffer(0), layerPost), activeRenderTarget.colorBuffer(0))
             }
 
-            accumulation?.copyTo(target.colorBuffer(0))
+            accumulation?.copyTo(colorBuffer)
         }
     }
 
@@ -180,9 +195,9 @@ open class Layer internal constructor() {
         return layerTarget == null || ((layerTarget?.width != activeRenderTarget.width || layerTarget?.height != activeRenderTarget.height) && activeRenderTarget.width > 0 && activeRenderTarget.height > 0)
     }
 
-    private fun createLayerTarget(activeRenderTarget: RenderTarget, drawer: Drawer) {
+    private fun createLayerTarget(activeRenderTarget: RenderTarget, drawer: Drawer, bufferMultisample: BufferMultisample) {
         layerTarget?.deepDestroy()
-        layerTarget = renderTarget(activeRenderTarget.width, activeRenderTarget.height) {
+        layerTarget = renderTarget(activeRenderTarget.width, activeRenderTarget.height, multisample=bufferMultisample) {
             colorBuffer(type = colorType)
             depthBuffer()
         }
@@ -199,6 +214,15 @@ open class Layer internal constructor() {
  */
 fun Layer.layer(function: Layer.() -> Unit): Layer {
     val layer = Layer().apply { function() }
+    children.add(layer)
+    return layer
+}
+
+/**
+ * create a layer within the composition with a custom [BufferMultisample]
+ */
+fun Layer.layer(bufferMultisample: BufferMultisample, function: Layer.() -> Unit): Layer {
+    val layer = Layer(bufferMultisample).apply { function() }
     children.add(layer)
     return layer
 }
