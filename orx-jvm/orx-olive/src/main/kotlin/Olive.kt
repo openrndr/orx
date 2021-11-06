@@ -91,6 +91,9 @@ class Olive<P : Program>(val resources: Resources? = null, private var scriptMod
 
         trackedListeners.forEach { it.saveListeners(store) }
 
+        val originalAssetMetadata = program.assetMetadata
+        val originalAssetProperties = program.assetProperties.toMutableMap()
+
         fun setupScript(scriptFile: String) {
             watcher?.stop()
             val f = File(scriptFile)
@@ -150,6 +153,8 @@ class Olive<P : Program>(val resources: Resources? = null, private var scriptMod
                         }
                         program.extensions.clear()
                         program.extensions.addAll(originalExtensions)
+                        program.assetMetadata = originalAssetMetadata
+                        program.assetProperties = originalAssetProperties
 
                         trackedListeners.forEach { l -> l.restoreListeners(store) }
                         session?.end()
