@@ -5,7 +5,10 @@ import org.openrndr.Program
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
+import kotlin.reflect.KProperty
 import kotlin.streams.toList
+
+
 
 open class OliveProgram(private val sourceLocation: String, private val scriptHost: OliveScriptHost, resources: Resources?) : Program() {
     val olive = extend(Olive<OliveProgram>(scriptMode = ScriptMode.OLIVE_PROGRAM, resources = resources)) {
@@ -13,6 +16,18 @@ open class OliveProgram(private val sourceLocation: String, private val scriptHo
         scriptHost = this@OliveProgram.scriptHost
     }
 }
+
+/**
+ * Delegate used to create instances exactly once. Instances survive a script reload.
+ */
+class Once<T:Any>(val build:() -> T) {
+    companion object {
+        private val values = mutableMapOf<String, Any>()
+    }
+    @Suppress("UNCHECKED_CAST")
+    operator fun getValue(thisRef:Any?, property:KProperty<*>) : T = values.getOrPut(property.name) { build() } as T
+}
+
 
 fun stackRootClassName(thread: Thread = Thread.currentThread(), sanitize: Boolean = true): String {
     val root = Thread.currentThread().stackTrace.last()
