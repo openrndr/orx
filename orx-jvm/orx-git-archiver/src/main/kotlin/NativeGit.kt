@@ -8,14 +8,14 @@ private val dir = File(".")
 
 class NativeGit : GitProvider {
     override fun commitChanges(commitMessage: String) {
-        val gitStatus = "git status --porcelain".runCommand(dir)!!
+        val gitStatus = listOf("git", "status", "--porcelain").runCommand(dir)!!
         if (gitStatus.first.isNotBlank()){
             if (gitStatus.first.contains("Not a git repository")){
                 logger.error { "Can't commit changes because the working directory is not a git repository" }
             } else {
-                "git add .".runCommand(dir)
-                "git commit -m \"${commitMessage}\"".runCommand(dir)
-                logger.info { "git repository is now at ${headReference()}" }
+                listOf("git", "add", ".").runCommand(dir)
+                listOf("git", "commit", "-m", commitMessage).runCommand(dir)
+                logger.info { "git repository is at ${headReference()} after commit" }
             }
         } else {
             logger.info { "no changes" }
@@ -23,19 +23,18 @@ class NativeGit : GitProvider {
     }
 
     override fun headReference(): String {
-        return "git rev-parse --short HEAD".runCommand(dir)!!.first.trimEnd()
+        return listOf("git", "rev-parse", "--short", "HEAD").runCommand(dir)!!.first.trimEnd()
     }
 }
 
 internal fun nativeGitInstalled(): Boolean {
-    return "git --version".runCommand(dir) != null
+    return listOf("git", "--version").runCommand(dir) != null
 }
 
 // Adapted from https://stackoverflow.com/questions/35421699/how-to-invoke-external-command-from-within-kotlin-code
-private fun String.runCommand(workingDir: File): Pair<String, String>? {
+private fun List<String>.runCommand(workingDir: File): Pair<String, String>? {
     try {
-        val parts = this.split("\\s".toRegex())
-        val proc = ProcessBuilder(*parts.toTypedArray())
+        val proc = ProcessBuilder(*toTypedArray())
             .directory(workingDir)
             .redirectOutput(ProcessBuilder.Redirect.PIPE)
             .redirectError(ProcessBuilder.Redirect.PIPE)
@@ -44,6 +43,8 @@ private fun String.runCommand(workingDir: File): Pair<String, String>? {
         proc.waitFor(60, TimeUnit.MINUTES)
         return Pair(proc.inputStream.bufferedReader().readText(), proc.errorStream.bufferedReader().readText())
     } catch(e: IOException) {
+        logger.error { e.message }
+        e.printStackTrace()
         return null
     }
 }

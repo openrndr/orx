@@ -7,7 +7,7 @@ import org.openrndr.Program
 
 internal interface GitProvider {
     fun commitChanges(commitMessage: String)
-    fun headReference() : String
+    fun headReference(): String
 }
 
 val logger = KotlinLogging.logger { }
@@ -23,6 +23,16 @@ class GitArchiver : Extension {
     private val git: GitProvider = if (nativeGitInstalled()) NativeGit() else JavaGit()
 
     override fun setup(program: Program) {
+        logger.info {
+            "Using ${
+                when (git) {
+                    is NativeGit -> "native Git"
+                    is JavaGit -> "Java Git"
+                    else -> "unknown Git"
+                }
+            }"
+        }
+
         val oldMetadataFunction = program.assetMetadata
         program.assetMetadata = {
             val oldMetadata = oldMetadataFunction()
