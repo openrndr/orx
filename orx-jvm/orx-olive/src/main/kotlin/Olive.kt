@@ -87,7 +87,10 @@ class Olive<P : Program>(val resources: Resources? = null, private var scriptMod
                 program.window.minimized,
                 program.window.moved,
                 program.window.sized,
-                program.window.unfocused)
+                program.window.unfocused,
+                program.requestAssets,
+                program.produceAssets
+        )
 
         trackedListeners.forEach { it.saveListeners(store) }
 

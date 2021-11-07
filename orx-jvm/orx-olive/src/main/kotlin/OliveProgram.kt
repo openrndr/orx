@@ -8,8 +8,6 @@ import java.nio.file.Paths
 import kotlin.reflect.KProperty
 import kotlin.streams.toList
 
-
-
 open class OliveProgram(private val sourceLocation: String, private val scriptHost: OliveScriptHost, resources: Resources?) : Program() {
     val olive = extend(Olive<OliveProgram>(scriptMode = ScriptMode.OLIVE_PROGRAM, resources = resources)) {
         script = sourceLocation
@@ -27,7 +25,6 @@ class Once<T:Any>(val build:() -> T) {
     @Suppress("UNCHECKED_CAST")
     operator fun getValue(thisRef:Any?, property:KProperty<*>) : T = values.getOrPut(property.name) { build() } as T
 }
-
 
 fun stackRootClassName(thread: Thread = Thread.currentThread(), sanitize: Boolean = true): String {
     val root = Thread.currentThread().stackTrace.last()
