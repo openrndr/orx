@@ -2,6 +2,8 @@ package org.openrndr.extra.noise
 
 import org.openrndr.math.*
 import kotlin.jvm.JvmName
+import kotlin.random.Random
+
 
 fun ((Double) -> Double).withSeedAsOffset(offset: Double): (Int, Double) -> Double = { seed, x ->
     this(x + seed * offset)
@@ -20,6 +22,94 @@ fun ((Int, Double, Double) -> Vector2).gradient(epsilon: Double = 1e-6): (Int, D
         val dfdy = (this(seed, x, y + epsilon) - this(seed, x, y - epsilon)) / (2 * epsilon)
         dfdx + dfdy
     }
+
+fun ((Int, Double) -> Double).unipolar(sampleCount: Int = 1000, random: Random = Random(0)): (Int, Double) -> Double {
+    val samples = (0 until sampleCount).map {
+        this(0, random.nextDouble(-1.0, 1.0))
+    }
+    val min = samples.minOrNull()!!
+    val max = samples.maxOrNull()!!
+    return { seed, t ->
+        (this(seed, t) - min) / (max - min)
+    }
+}
+
+fun ((Int, Double) -> Double).bipolar(sampleCount: Int = 1000, random: Random = Random(0)): (Int, Double) -> Double {
+    val samples = (0 until sampleCount).map {
+        this(0, random.nextDouble(-1.0, 1.0))
+    }
+    val min = samples.minOrNull()!!
+    val max = samples.maxOrNull()!!
+    return { seed, t ->
+        ((this(seed, t) - min) / (max - min)) * 2.0 - 1.0
+    }
+}
+
+fun ((Int, Double, Double) -> Double).unipolar(
+    sampleCount: Int = 1000,
+    random: Random = Random(0)
+): (Int, Double, Double) -> Double {
+    val samples = (0 until sampleCount).map {
+        this(0, random.nextDouble(-1.0, 1.0), random.nextDouble(-1.0, 1.0))
+    }
+    val min = samples.minOrNull()!!
+    val max = samples.maxOrNull()!!
+    return { seed, x, t ->
+        (this(seed, x, t) - min) / (max - min)
+    }
+}
+
+fun ((Int, Double, Double) -> Double).bipolar(
+    sampleCount: Int = 1000,
+    random: Random = Random(0)
+): (Int, Double, Double) -> Double {
+    val samples = (0 until sampleCount).map {
+        this(0, random.nextDouble(-1.0, 1.0), random.nextDouble(-1.0, 1.0))
+    }
+    val min = samples.minOrNull()!!
+    val max = samples.maxOrNull()!!
+    return { seed, x, t ->
+        ((this(seed, x, t) - min) / (max - min)) * 2.0 - 1.0
+    }
+}
+
+fun ((Int, Double, Double, Double) -> Double).unipolar(
+    sampleCount: Int = 1000,
+    random: Random = Random(0)
+): (Int, Double, Double, Double) -> Double {
+    val samples = (0 until sampleCount).map {
+        this(
+            0,
+            random.nextDouble(-1.0, 1.0),
+            random.nextDouble(-1.0, 1.0),
+            random.nextDouble(-1.0, 1.0)
+        )
+    }
+    val min = samples.minOrNull()!!
+    val max = samples.maxOrNull()!!
+    return { seed, x, y, t ->
+        (this(seed, x, y, t) - min) / (max - min)
+    }
+}
+
+fun ((Int, Double, Double, Double) -> Double).bipolar(
+    sampleCount: Int = 1000,
+    random: Random = Random(0)
+): (Int, Double, Double, Double) -> Double {
+    val samples = (0 until sampleCount).map {
+        this(
+            0,
+            random.nextDouble(-1.0, 1.0),
+            random.nextDouble(-1.0, 1.0),
+            random.nextDouble(-1.0, 1.0),
+        )
+    }
+    val min = samples.minOrNull()!!
+    val max = samples.maxOrNull()!!
+    return { seed, x, y, t ->
+        ((this(seed, x, y, t) - min) / (max - min)) * 2.0 - 1.0
+    }
+}
 
 fun ((Int, Double) -> Double).crossFade(
     start: Double,
@@ -44,7 +134,7 @@ fun ((Int, Double, Double) -> Double).crossFade(
         val a = t.map(start, end, 0.0, 1.0).mod_(1.0)
         val f = (a / width).coerceAtMost(1.0)
         val o = this(seed, x, a.map(0.0, 1.0, start, end)) * f
-        val s = this(seed, x, (a + 1.0).map(0.0, 1.0, start, end) )* (1.0 - f)
+        val s = this(seed, x, (a + 1.0).map(0.0, 1.0, start, end)) * (1.0 - f)
         o + s
     }
 }
@@ -62,6 +152,14 @@ fun ((Int, Double, Double, Double) -> Double).crossFade(
         o + s
     }
 }
+
+@JvmName("IDDD_D_Gradient")
+fun ((Int, Double, Double, Double) -> Double).gradient(epsilon: Double = 1e-2 / 2.0): (Int, Double, Double, Double) -> Double =
+    { seed, x, y, z ->
+        val dfdx = (this(seed, x + epsilon, y, z) - this(seed, x - epsilon, y, z)) / (2 * epsilon)
+        val dfdy = (this(seed, x, y + epsilon, z) - this(seed, x, y - epsilon, z)) / (2 * epsilon)
+        dfdx + dfdy
+    }
 
 fun ((Int, Double, Double, Double) -> Vector2).gradient(epsilon: Double = 1e-2 / 2.0): (Int, Double, Double, Double) -> Vector2 =
     { seed, x, y, z ->
@@ -117,7 +215,6 @@ fun ((Int, Double, Double, Double, Double) -> Double).scaleShiftInput(
 }
 
 
-
 fun ((Int, Double) -> Double).scaleShiftOutput(
     scale: Double = 1.0,
     bias: Double = 0.0
@@ -128,6 +225,22 @@ fun ((Int, Double) -> Double).scaleShiftOutput(
 fun ((Int, Double) -> Double).mapOutput(map: (Double) -> Double): (Int, Double) -> Double = { seed, x ->
     map(this(seed, x))
 }
+
+fun ((Int, Double, Double) -> Double).mapOutput(map: (Double) -> Double): (Int, Double, Double) -> Double =
+    { seed, x, t ->
+        map(this(seed, x, t))
+    }
+
+fun ((Int, Double, Double, Double) -> Double).mapOutput(map: (Double) -> Double): (Int, Double, Double, Double) -> Double =
+    { seed, x, y, t ->
+        map(this(seed, x, y, t))
+    }
+
+fun ((Int, Double, Double, Double, Double) -> Double).mapOutput(map: (Double) -> Double): (Int, Double, Double, Double, Double) -> Double =
+    { seed, x, y, z, t ->
+        map(this(seed, x, y, z, t))
+    }
+
 
 fun ((Int, Double, Double) -> Double).withVector2Input(): (Int, Vector2) -> Double = { seed, v ->
     this(seed, v.x, v.y)
