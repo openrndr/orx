@@ -6,14 +6,14 @@ import kotlin.random.Random
 
 fun main() = application {
     program {
-        val points = List(20) {
+        val points = List(40) {
             Vector2(
                 Random.nextDouble(width*0.25, width*0.75),
                 Random.nextDouble(height*0.25, height*0.75)
             )
         }
         val alphaShape = AlphaShape(points)
-        val c = alphaShape.create()
+        val c = alphaShape.createContour()
         extend {
             drawer.fill = ColorRGBa.PINK
             drawer.contour(c)

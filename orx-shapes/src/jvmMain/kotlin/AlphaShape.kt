@@ -2,9 +2,7 @@ package org.openrndr.extra.shapes
 
 import org.openrndr.extra.triangulation.Delaunay
 import org.openrndr.math.Vector2
-import org.openrndr.shape.Segment
-import org.openrndr.shape.ShapeContour
-import org.openrndr.shape.contains
+import org.openrndr.shape.*
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
@@ -20,7 +18,7 @@ private fun circumradius(p1: Vector2, p2: Vector2, p3: Vector2): Double {
 
 /**
  * Class for creating alpha shapes.
- * Use the [create] method to create an alpha shape.
+ * See the [createContour] and [createShape] methods to create an alpha shape.
  * @param points The points for which an alpha shape is calculated.
  */
 class AlphaShape(val points: List<Vector2>) {
@@ -28,15 +26,8 @@ class AlphaShape(val points: List<Vector2>) {
 
     private fun <A, B> Pair<A, B>.flip() = Pair(second, first)
 
-    /**
-     * Creates an alpha shape.
-     * @param alpha The alpha parameter from the mathematical definition of an alpha shape.
-     * If alpha is 0.0 the alpha shape consists only of the set of input points, yielding [ShapeContour.EMPTY].
-     * As alpha goes to infinity, the alpha shape becomes equal to the convex hull of the input points.
-     * @return A closed [ShapeContour] representing the outer boundary of the alpha shape.
-     */
-    fun create(alpha: Double): ShapeContour {
-        if (delaunay.points.size < 9) return ShapeContour.EMPTY
+    private fun createBase(alpha: Double): List<Pair<Int, Int>> {
+        if (delaunay.points.size < 9) return emptyList()
 
         val triangles = delaunay.triangles
         var allEdges = mutableSetOf<Pair<Int, Int>>()
@@ -63,13 +54,50 @@ class AlphaShape(val points: List<Vector2>) {
                 }
             }
         }
-        return edgesToShapeContour(perimeterEdges.toList())
+        return perimeterEdges.toList()
     }
 
     /**
-     * Returns the alpha shape with the smallest alpha such that all input points are contained in the alpha shape.
+     * Creates an alpha shape without holes
+     * @param alpha The alpha parameter from the mathematical definition of an alpha shape.
+     * If alpha is 0.0 the alpha shape consists only of the set of input points, yielding [ShapeContour.EMPTY].
+     * As alpha goes to infinity, the alpha shape becomes equal to the convex hull of the input points.
+     * @return A closed [ShapeContour] representing the alpha shape, or [ShapeContour.EMPTY] if the alpha shape
+     * cannot be represented by a closed [ShapeContour] (e.g. because it consists of multiple disconnected components).
      */
-    fun create(): ShapeContour = create(determineAlpha())
+    fun createContour(alpha: Double): ShapeContour = edgesToShapeContour(createBase(alpha))
+
+    /**
+     * Returns a closed [ShapeContour] representing an alpha shape without holes; the smallest alpha is chosen such that
+     * the corresponding alpha shape contains all input points and can be represented by a closed [ShapeContour].
+     */
+    fun createContour(): ShapeContour = createContour(determineContourAlpha())
+
+    /**
+     * Creates an alpha shape, possibly with holes
+     * @param alpha The alpha parameter from the mathematical definition of an alpha shape.
+     * If alpha is 0.0 the alpha shape consists only of the set of input points, yielding [Shape.EMPTY].
+     * As alpha goes to infinity, the alpha shape becomes equal to the convex hull of the input points.
+     * @return A [Shape] representing the alpha shape, or [Shape.EMPTY] if the alpha shape
+     * cannot be represented by a [Shape] (e.g. because it consists of multiple disconnected components).
+     */
+    fun createShape(alpha: Double): Shape = edgesToShape(createBase(alpha))
+
+    /**
+     * Returns a [Shape] representing an alpha shape; the smallest alpha is chosen such that the corresponding alpha
+     * shape contains all input points and can be represented by a [Shape] (in particular, it consists of one component).
+     */
+    fun createShape(): Shape = edgesToShape(createBase(determineShapeAlpha()))
+
+    /**
+     * Creates an alpha shape
+     * @param alpha The alpha parameter from the mathematical definition of an alpha shape.
+     * If alpha is 0.0 the alpha shape consists only of the set of input points, yielding [ShapeContour.EMPTY].
+     * As alpha goes to infinity, the alpha shape becomes equal to the convex hull of the input points.
+     * @return A list of [LineSegment]s representing the perimeter of the alpha shape.
+     */
+    fun createSegments(alpha: Double): List<LineSegment>
+            = createBase(alpha).map { LineSegment(getVec(it.first), getVec(it.second)) }
 
     private fun getVec(i: Int) = Vector2(delaunay.points[i], delaunay.points[i + 1])
 
@@ -79,22 +107,80 @@ class AlphaShape(val points: List<Vector2>) {
         val segments = mutableListOf<Segment>()
         val start = edges.first().first
         var current = start
-        repeat(edges.size) {
+        val left = edges.map { it.first }.toMutableSet()
+        for (i in edges.indices) {
             val next = mapping[current]!!
             segments.add(Segment(getVec(current), getVec(next)))
+            left.remove(current)
             current = next
+            if (current == start) break
         }
-        return if (current == start) {
-            ShapeContour(segments, closed = true)
+        return if (current == start && left.isEmpty()) {
+            ShapeContour(segments, closed = true).clockwise
         } else {
             ShapeContour.EMPTY
+        }
+    }
+
+    private fun edgesToShape(edges: List<Pair<Int, Int>>): Shape {
+        if (edges.isEmpty()) return Shape.EMPTY
+        val mapping = edges.toMap()
+        val contours = mutableListOf<ShapeContour>()
+        val contoursPoints = mutableListOf<List<Vector2>>()
+        val left = edges.map { it.first }.toMutableSet()
+
+        // Find closed loops and save them as contours
+        while (left.isNotEmpty()) {
+            val start = left.first()
+            var current = start
+            val segments = mutableListOf<Segment>()
+            val contourPoints = mutableListOf<Vector2>()
+            for (i in edges.indices) {
+                val next = mapping[current]!!
+                segments.add(Segment(getVec(current), getVec(next)))
+                contourPoints.add(getVec(current))
+                left.remove(current)
+                current = next
+                if (current == start) break
+            }
+            contourPoints.add(getVec(current))
+            contoursPoints.add(contourPoints)
+            if (current == start) contours.add(ShapeContour(segments, closed = true))
+        }
+
+        // Find contour that encloses all other contours, if it exists
+        var enclosingContour = -1
+        for (i in contours.indices){
+            var encloses = true
+            for (j in contours.indices){
+                if (i == j) continue
+                if (contoursPoints[j].any { it !in contours[i] }){
+                    encloses = false
+                }
+            }
+            if (encloses){
+                enclosingContour = i
+                break
+            }
+        }
+
+        // If an enclosing contour exists, make a shape with it being clockwise and the other contours counterclockwise
+        return if (enclosingContour < 0) {
+            Shape.EMPTY
+        } else {
+            val orientedContours = mutableListOf<ShapeContour>()
+            orientedContours.add(contours[enclosingContour].clockwise)
+            for (i in contours.indices) {
+                if (i != enclosingContour) orientedContours.add(contours[i].counterClockwise)
+            }
+            Shape(orientedContours)
         }
     }
 
     /**
      * Performs binary search to find the smallest alpha such that all points are inside the alpha shape.
      */
-    fun determineAlpha(): Double {
+    private fun determineAlphaBase(decision: (Double) -> Boolean): Double {
         // Compute bounding box to find an upper bound for the binary search
         var minX = Double.POSITIVE_INFINITY
         var minY = Double.POSITIVE_INFINITY
@@ -116,10 +202,12 @@ class AlphaShape(val points: List<Vector2>) {
 
         while(lower < upper - precision){
             val mid = (lower + upper)/2
-            val polygon = create(mid)
-            if (points.all { it in polygon }) upper = mid else lower = mid
+            if (decision(mid)) upper = mid else lower = mid
         }
 
         return upper
     }
+
+    fun determineContourAlpha(): Double = determineAlphaBase { mid -> points.all { it in createContour(mid) } }
+    fun determineShapeAlpha(): Double = determineAlphaBase { mid -> points.all { it in createShape(mid) } }
 }
