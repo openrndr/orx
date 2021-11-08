@@ -116,7 +116,7 @@ class AlphaShape(val points: List<Vector2>) {
             if (current == start) break
         }
         return if (current == start && left.isEmpty()) {
-            ShapeContour(segments, closed = true)
+            ShapeContour(segments, closed = true).clockwise
         } else {
             ShapeContour.EMPTY
         }
