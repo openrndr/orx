@@ -25,6 +25,18 @@ class NativeGit : GitProvider {
     override fun headReference(): String {
         return listOf("git", "rev-parse", "--short", "HEAD").runCommand(dir)!!.first.trimEnd()
     }
+
+    override fun logReferences(count: Int): List<String> {
+        val (out, err) = listOf("git", "log", "-$count", "--pretty=format:%h").runCommand(dir) ?: error("failed to get log references")
+        return out.split("\n").map { it.trim() }
+    }
+
+    override fun show(reference: String): String {
+        val (out, err) = listOf("git", "show", reference, "-U0").runCommand(dir) ?: error("failed to get diff")
+        return out
+    }
+
+
 }
 
 internal fun nativeGitInstalled(): Boolean {

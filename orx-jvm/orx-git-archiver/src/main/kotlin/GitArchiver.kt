@@ -5,9 +5,17 @@ import org.openrndr.AssetMetadata
 import org.openrndr.Extension
 import org.openrndr.Program
 
-internal interface GitProvider {
+interface GitProvider {
     fun commitChanges(commitMessage: String)
     fun headReference(): String
+    fun logReferences(count: Int): List<String>
+    fun show(reference: String) : String
+
+    companion object {
+        fun create() : GitProvider {
+            return if (nativeGitInstalled()) NativeGit() else JavaGit()
+        }
+    }
 }
 
 val logger = KotlinLogging.logger { }
@@ -20,7 +28,7 @@ class GitArchiver : Extension {
 
     var autoCommitMessage = "auto commit"
 
-    private val git: GitProvider = if (nativeGitInstalled()) NativeGit() else JavaGit()
+    private val git: GitProvider = GitProvider.create()
 
     override fun setup(program: Program) {
         logger.info {
@@ -32,6 +40,8 @@ class GitArchiver : Extension {
                 }
             }"
         }
+
+        autoCommitMessage = "auto commit from ${program.name}"
 
         val oldMetadataFunction = program.assetMetadata
         program.assetMetadata = {

@@ -24,13 +24,11 @@ class JavaGit : GitProvider {
         return id.name.take(7)
     }
 
-//    fun tag(name: String): Boolean {
-//        val existing = git.tagList().call().find { it.name == name }
-//        if (existing != null) {
-//            git.tag().setName(name).call()
-//        } else {
-//            logger.warn { "tag $name exists" }
-//        }
-//        return existing != null
-//    }
+    override fun logReferences(count: Int): List<String> {
+        TODO("Not yet implemented")
+    }
+
+    override fun show(reference: String): String {
+        TODO("Not yet implemented")
+    }
 }
