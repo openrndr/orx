@@ -22,7 +22,7 @@ repositories {
 
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.30")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0")
     val preloadImplementation by configurations.getting {  }
     preloadImplementation("org.openrndr:openrndr-application:0.5.1-SNAPSHOT")
     preloadImplementation("org.openrndr:openrndr-extensions:0.5.1-SNAPSHOT")
