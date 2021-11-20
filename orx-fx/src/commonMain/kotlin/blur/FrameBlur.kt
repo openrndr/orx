@@ -30,8 +30,7 @@ class FrameBlur : Filter(mppFilterShader(fx_frame_blur, "frame-blur")) {
 
             if (intermediate == null) {
                 intermediate = colorBuffer(target[0].width, target[0].height, type = ColorType.FLOAT16)
-                //intermediate?.fill(ColorRGBa.TRANSPARENT)
-                TODO("no mpp colorbuffer.fill")
+                intermediate?.fill(ColorRGBa.TRANSPARENT)
             }
 
             super.apply(arrayOf(source[0], intermediate!!), arrayOf(intermediate!!))
