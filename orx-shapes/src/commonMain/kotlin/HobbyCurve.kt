@@ -3,11 +3,24 @@ package org.openrndr.extra.shapes
 
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Segment
+import org.openrndr.shape.Shape
 import org.openrndr.shape.ShapeContour
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
+
+
+fun ShapeContour.hobbyCurve() : ShapeContour {
+    val vertices = segments.map { it.start }
+    return hobbyCurve(vertices, closed)
+}
+
+fun Shape.hobbyCurve() : Shape {
+    return Shape(contours.map {
+        it.hobbyCurve()
+    })
+}
 
 /**
  * Uses Hobby's algorithm to construct a [ShapeContour] through a given list of points.
@@ -142,3 +155,4 @@ private fun rho(a: Double, b: Double): Double {
 
 private fun rotate(v: Vector2, s: Double, c: Double) = Vector2(v.x * c - v.y * s, v.x * s + v.y * c)
 private fun rotateAngle(v: Vector2, alpha: Double) = rotate(v, sin(alpha), cos(alpha))
+
