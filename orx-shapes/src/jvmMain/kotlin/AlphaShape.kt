@@ -8,12 +8,19 @@ import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.sqrt
 
+/**
+ * Create an alpha shape from list of [Vector2]
+ */
+fun List<Vector2>.alphaShape(): Shape {
+    return AlphaShape(this).createShape()
+}
+
 private fun circumradius(p1: Vector2, p2: Vector2, p3: Vector2): Double {
     val a = (p2 - p1).length
     val b = (p3 - p2).length
     val c = (p1 - p3).length
 
-    return (a*b*c) / sqrt((a+b+c)*(b+c-a)*(c+a-b)*(a+b-c))
+    return (a * b * c) / sqrt((a + b + c) * (b + c - a) * (c + a - b) * (a + b - c))
 }
 
 /**
@@ -32,7 +39,7 @@ class AlphaShape(val points: List<Vector2>) {
         val triangles = delaunay.triangles
         var allEdges = mutableSetOf<Pair<Int, Int>>()
         var perimeterEdges = mutableSetOf<Pair<Int, Int>>()
-        for (i in triangles.indices step 3){
+        for (i in triangles.indices step 3) {
             val t0 = triangles[i] * 2
             val t1 = triangles[i + 1] * 2
             val t2 = triangles[i + 2] * 2
@@ -40,11 +47,11 @@ class AlphaShape(val points: List<Vector2>) {
             val p2 = getVec(t1)
             val p3 = getVec(t2)
             val r = circumradius(p1, p2, p3)
-            if (r < alpha){
+            if (r < alpha) {
                 val edges = listOf(Pair(t0, t1), Pair(t1, t2), Pair(t2, t0))
-                for (edge in edges){
+                for (edge in edges) {
                     val fEdge = edge.flip()
-                    if (edge !in allEdges && fEdge !in allEdges){
+                    if (edge !in allEdges && fEdge !in allEdges) {
                         allEdges.add(edge)
                         perimeterEdges.add(edge)
                     } else {
@@ -96,8 +103,8 @@ class AlphaShape(val points: List<Vector2>) {
      * As alpha goes to infinity, the alpha shape becomes equal to the convex hull of the input points.
      * @return A list of [LineSegment]s representing the perimeter of the alpha shape.
      */
-    fun createSegments(alpha: Double): List<LineSegment>
-            = createBase(alpha).map { LineSegment(getVec(it.first), getVec(it.second)) }
+    fun createSegments(alpha: Double): List<LineSegment> =
+        createBase(alpha).map { LineSegment(getVec(it.first), getVec(it.second)) }
 
     private fun getVec(i: Int) = Vector2(delaunay.points[i], delaunay.points[i + 1])
 
@@ -150,15 +157,15 @@ class AlphaShape(val points: List<Vector2>) {
 
         // Find contour that encloses all other contours, if it exists
         var enclosingContour = -1
-        for (i in contours.indices){
+        for (i in contours.indices) {
             var encloses = true
-            for (j in contours.indices){
+            for (j in contours.indices) {
                 if (i == j) continue
-                if (contoursPoints[j].any { it !in contours[i] }){
+                if (contoursPoints[j].any { it !in contours[i] }) {
                     encloses = false
                 }
             }
-            if (encloses){
+            if (encloses) {
                 enclosingContour = i
                 break
             }
@@ -186,9 +193,9 @@ class AlphaShape(val points: List<Vector2>) {
         var minY = Double.POSITIVE_INFINITY
         var maxX = Double.NEGATIVE_INFINITY
         var maxY = Double.NEGATIVE_INFINITY
-        for (i in delaunay.points.indices step 2){
+        for (i in delaunay.points.indices step 2) {
             val x = delaunay.points[i]
-            val y = delaunay.points[i+1]
+            val y = delaunay.points[i + 1]
             minX = min(minX, x)
             maxX = max(maxX, x)
             minY = min(minY, y)
@@ -200,8 +207,8 @@ class AlphaShape(val points: List<Vector2>) {
         var upper = (maxX - minX).pow(2) + (maxY - minY).pow(2)
         val precision = 0.001
 
-        while(lower < upper - precision){
-            val mid = (lower + upper)/2
+        while (lower < upper - precision) {
+            val mid = (lower + upper) / 2
             if (decision(mid)) upper = mid else lower = mid
         }
 
