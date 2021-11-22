@@ -28,6 +28,7 @@ kotlin {
                     implementation(project(":orx-camera"))
                     implementation(project(":orx-mesh-generators"))
                     implementation(project(":orx-color"))
+                    implementation(project(":orx-jvm:orx-gui"))
 
                     implementation("org.openrndr:openrndr-application:$openrndrVersion")
                     implementation("org.openrndr:openrndr-extensions:$openrndrVersion")

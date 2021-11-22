@@ -12,20 +12,21 @@ internal fun max(a: Double, b: Double, c: Double, d: Double): Double {
     return max(max(a, b), max(c, d))
 }
 
-
 fun toe(x: Double): Double {
-    val k_1 = 0.206
-    val k_2 = 0.03
-    val k_3 = (1 + k_1) / (1 + k_2)
+    val k1 = 0.206
+    val k2 = 0.03
+    val k3 = (1 + k1) / (1 + k2)
 
-    return 0.5 * (k_3 * x - k_1 + sqrt((k_3 * x - k_1) * (k_3 * x - k_1) + 4 * k_2 * k_3 * x))
+    val d = (k3 * x - k1) * (k3 * x - k1) + 4 * k2 * k3 * x
+
+    return 0.5 * (k3 * x - k1 + sqrt(d.coerceAtLeast(0.0)))
 }
 
-fun toe_inv(x: Double): Double {
-    val k_1 = 0.206
-    val k_2 = 0.03
-    val k_3 = (1 + k_1) / (1 + k_2)
-    return (x * x + k_1 * x) / (k_3 * (x + k_2))
+fun toeInv(x: Double): Double {
+    val k1 = 0.206
+    val k2 = 0.03
+    val k3 = (1 + k1) / (1 + k2)
+    return (x * x + k1 * x) / (k3 * (x + k2))
 }
 
 internal fun compute_max_saturation(a: Double, b: Double): Double {
