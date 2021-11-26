@@ -5,7 +5,7 @@ Ready-to-use visual effects or filters. Most include
 so they can be easily controlled via orx-gui.
 
 The provided filters are based on OPENRNDR's 
-[`Filter` class](https://api.openrndr.org/org.openrndr.draw/-filter/index.html) 
+[`Filter` class](https://api.openrndr.org/openrndr-draw/org.openrndr.draw/-filter/index.html)
 
 All filters provided by orx-fx assume pre-multiplied alpha inputs, which is OPENRNDR's default.
 
