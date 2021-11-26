@@ -45,6 +45,7 @@ A growing library of assorted data structures, algorithms and utilities.
 | [`orx-dnk3`](orx-jvm/orx-dnk3/) | A scene graph based 3d renderer with support for Gltf based assets |
 | [`orx-file-watcher`](orx-jvm/orx-file-watcher/) | Monitor files on disk and auto-reload them if they change. |
 | [`orx-git-archiver`](orx-jvm/orx-git-archiver/) | An extension that hooks into `Program.requestAssets` to commit changed code to Git and provide filenames based on the commit hash. |
+| [`orx-git-archiver-gradle`](orx-jvm/orx-git-archiver-gradle/) | A Gradle plugin that turns a git history and `screenshots` directory into a markdown file. |
 | [`orx-gui`](orx-jvm/orx-gui/) | Automatic UI (sliders, buttons, etc.) generated from annotated classes and properties. Uses `orx-panel` and `orx-parameters`. |
 | [`orx-keyframer`](orx-jvm/orx-keyframer/) | Create animated timelines by specifying properties and times in keyframes, then play it back at any speed (even backwards) automatically interpolating properties. Save, load, use mathematical expressions and callbacks. Powerful and highly reusable. |
 | [`orx-kinect-v1`](orx-jvm/orx-kinect-v1/) | Support for the Kinect V1 RGB+Depth camera. |
