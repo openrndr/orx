@@ -21,15 +21,13 @@ repositories {
 }
 
 
+val openrndrVersion = ((findProperty("OPENRNDR.version")?.toString())?:System.getenv("OPENRNDR_VERSION"))?.replace("v", "")  ?: "0.5.1-SNAPSHOT"
+
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0")
     val preloadImplementation by configurations.getting {  }
-    preloadImplementation("org.openrndr:openrndr-application:0.5.1-SNAPSHOT")
-    preloadImplementation("org.openrndr:openrndr-extensions:0.5.1-SNAPSHOT")
+    preloadImplementation("org.openrndr:openrndr-application:$openrndrVersion")
+    preloadImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
 }
 
-tasks.all {
-    println(this.name)
-
-}
 tasks.getByName("compileKotlin").dependsOn("compilePreloadKotlin")
