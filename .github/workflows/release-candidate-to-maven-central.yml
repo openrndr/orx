@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Get OPENRNDR release tag
         run: echo "OPENRNDR_VERSION=$(git ls-remote --refs --tags https://github.com/openrndr/openrndr | cut --delimiter='/' --fields=3 | sort --version-sort | tail --lines=1)" >> $GITHUB_ENV
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\/v/}
