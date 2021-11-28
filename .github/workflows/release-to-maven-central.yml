@@ -17,7 +17,7 @@ jobs:
         with:
           java-version: 17
       - name: Build ORX
-        run: ./gradlew -Prelease.useLastTag=true build
+        run: ./gradlew -Popenrndr.version=${{env.OPENRNDR_VERSION}} -Prelease.useLastTag=true build
       - name: Decode
         run: |
           echo "${{secrets.SIGNING_SECRET_KEY_RING_FILE}}" > ~/.gradle/secring.gpg.b64
