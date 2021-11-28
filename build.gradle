@@ -56,10 +56,8 @@ ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 def openrndrUseSnapshot = isReleaseVersion
 
-println(findProperty("OPENRNDR.version"))
-
 project.ext {
-    openrndrVersion = (findProperty("OPENRNDR.version")?.replace("v","")) ?: "0.5.1-SNAPSHOT"
+    openrndrVersion = ((findProperty("OPENRNDR.version")?:System.getenv("OPENRNDR_VERSION")) ?.replace("v","")) ?: "0.5.1-SNAPSHOT"
     jvmTarget = "1.8"
     kotlinVersion = "1.6.0"
     kotlinApiVersion = "1.4"
