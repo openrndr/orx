@@ -17,6 +17,8 @@ jobs:
         with:
           java-version: 17
       - name: Build ORX
+        env:
+          OPENRNDR_VERSION: ${{env.OPENRNDR_VERSION}}
         run: ./gradlew -POPENRNDR.version=${{env.OPENRNDR_VERSION}} -Prelease.useLastTag=true build
       - name: Decode
         run: |
