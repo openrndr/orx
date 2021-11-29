@@ -1,4 +1,4 @@
-package org.openrndr.extra.kinect.org.openrndr.extra.kinect.impl
+package org.openrndr.extra.kinect.impl
 
 import org.openrndr.Program
 import org.openrndr.draw.*
@@ -10,7 +10,6 @@ import org.openrndr.resourceUrl
 import java.nio.ByteBuffer
 import java.util.concurrent.atomic.AtomicReference
 import java.util.function.Supplier
-import kotlin.concurrent.thread
 
 class DefaultKinects<CTX>(
     private val program: Program,

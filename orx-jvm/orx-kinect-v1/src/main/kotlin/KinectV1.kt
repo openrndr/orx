@@ -8,7 +8,6 @@ import org.bytedeco.libfreenect.presets.freenect
 import org.openrndr.Program
 import org.openrndr.extra.kinect.*
 import org.openrndr.extra.kinect.impl.*
-import org.openrndr.extra.kinect.org.openrndr.extra.kinect.impl.*
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.util.*
