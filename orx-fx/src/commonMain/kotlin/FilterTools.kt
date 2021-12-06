@@ -7,7 +7,6 @@ import org.openrndr.draw.filterShaderFromCode
 import org.openrndr.internal.Driver
 import org.openrndr.resourceUrl
 
-fun mppFilterShader(code: String, name: String) : Shader =
-    filterShaderFromCode("${Driver.instance.shaderConfiguration()}\n${code}", name)
+fun mppFilterShader(code: String, name: String) : Shader = filterShaderFromCode(code, name, includeShaderConfiguration = true)
 
 internal data class ColorBufferDescription(val width: Int, val height: Int, val contentScale: Double, val format: ColorFormat, val type: ColorType)
