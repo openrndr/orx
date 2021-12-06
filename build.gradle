@@ -39,12 +39,12 @@ project.ext {
     kotlinApiVersion = '1.6'
     kotlinLanguageVersion = '1.6'
     kotlinVersion = '1.6.0'
-    kotlinLoggingVersion = '2.0.8'
+    kotlinLoggingVersion = '2.1.15'
     kotlinxSerializationVersion = '1.3.1'
     spekVersion = '2.0.15'
-    kluentVersion = '1.65'
-    jsoupVersion = '1.13.1'
-    kotestVersion = '4.4.3'
+    kluentVersion = '1.68'
+    jsoupVersion = '1.14.3'
+    kotestVersion = '5.0.1'
     junitJupiterVersion = '5.7.1'
 }
 
@@ -61,12 +61,12 @@ project.ext {
     openrndrVersion = ((findProperty("OPENRNDR.version")?:System.getenv("OPENRNDR_VERSION")) ?.replace("v","")) ?: "0.5.1-SNAPSHOT"
     jvmTarget = "1.8"
     kotlinVersion = "1.6.0"
-    kotlinApiVersion = "1.4"
+    kotlinApiVersion = "1.6"
     spekVersion = "2.0.15"
     libfreenectVersion = "0.5.7-1.5.4"
     librealsense2Version = "2.29.0-1.5.4"
-    gsonVersion = "2.8.6"
-    antlrVersion = "4.9.2"
+    gsonVersion = "2.8.9"
+    antlrVersion = "4.9.3"
     tensorflowVersion = "0.3.3"
     mklDnnVersion = "0.21.5-1.5.4"
 }
