@@ -65,7 +65,7 @@ class Quadtree<T>(val bounds: Rectangle, val maxObjects: Int = 10, val mapper: (
 
         for (interNode in intersected) {
             for (obj in interNode.objects) {
-                if (element == obj) continue
+                if (element === obj) continue
                 val p = mapper(obj)
 
                 val dist = p.squaredDistanceTo(point)
