@@ -1,4 +1,3 @@
-#version 330 core
 in vec2 v_texCoord0;
 
 uniform sampler2D tex0;

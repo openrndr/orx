@@ -1,5 +1,3 @@
-#version 330
-
 in vec2 v_texCoord0;
 uniform float iTime;
 out vec4 o_color;
