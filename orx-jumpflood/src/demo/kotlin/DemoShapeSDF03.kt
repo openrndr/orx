@@ -31,6 +31,9 @@ fun main() {
             val shapes = loadSVG("orx-jumpflood/src/demo/resources/name.svg").findShapes().map { it.shape }
             val union = SDFSmoothDifference()
 
+            sdf0.setShapes(shapes)
+            sdf1.setShapes(shapes)
+
             val strokeFill = SDFStrokeFill()
 
             if (System.getProperty("takeScreenshot") == "true") {
@@ -42,19 +45,6 @@ fun main() {
                 drawer.clear(ColorRGBa.PINK)
 
                 fd.apply(emptyArray(), uvmap)
-
-                sdf0.setShapes(shapes.mapIndexed { index, it ->
-                    it.transform(transform {
-                        translate(1280 / 2.0, 720.0 / 2)
-                        translate(-1280 / 2.0, -720.0 / 2.0)
-                    })
-                })
-                sdf1.setShapes(shapes.mapIndexed { index, it ->
-                    it.transform(transform {
-                        translate(1280 / 2.0, 720.0 / 2)
-                        translate(-1280 / 2.0, -720.0 / 2.0)
-                    })
-                })
 
                 sdf0.useUV = true
                 sdf0.apply(uvmap, df0)
