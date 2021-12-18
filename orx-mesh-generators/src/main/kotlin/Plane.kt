@@ -3,6 +3,7 @@ package org.openrndr.extras.meshgenerators
 import org.openrndr.draw.VertexBuffer
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
+import org.openrndr.shape.Rectangle
 
 fun planeMesh(center: Vector3,
               right: Vector3,
@@ -19,6 +20,18 @@ fun planeMesh(center: Vector3,
     }
     return vb
 }
+
+/**
+ * Converts a [Rectangle] to a [VertexBuffer] 2D mesh matching its location and
+ * dimensions. [resolution] specifies the size in pixels of the triangles in
+ * the mesh.
+ */
+fun Rectangle.toMesh(resolution: Double = 2.0) = planeMesh(
+    center.xy0, Vector3.UNIT_X, Vector3.UNIT_Y, Vector3.UNIT_Z,
+    width, height,
+    (width / resolution).toInt(),
+    (height / resolution).toInt()
+)
 
 /**
  * generates a finite plane with its center at (0,0,0) and spanning the xz-plane
