@@ -42,14 +42,9 @@ fun main() {
             extend {
                 drawer.clear(ColorRGBa.PINK)
 
-                sdf0.setShapes(shapes.mapIndexed { index, it ->
-                    it.transform(transform {
-                        translate(1280 / 2.0, 720.0 / 2)
-                        translate(-1280 / 2.0, -720.0 / 2.0)
-                    })
-                })
+                sdf0.setShapes(shapes)
 
-                sdf1.setShapes(shapes.mapIndexed { index, it ->
+                sdf1.setShapes(shapes.map {
                     it.transform(transform {
                         translate(1280 / 2.0, 720.0 / 2)
                         rotate(Vector3.Companion.UNIT_Z, seconds * 45.0 - 30.0)

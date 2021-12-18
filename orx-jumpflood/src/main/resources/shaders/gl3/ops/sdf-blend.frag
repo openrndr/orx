@@ -1,5 +1,3 @@
-#version 330 core
-
 uniform sampler2D tex0;// signed distance
 uniform sampler2D tex1;// signed distance
 uniform float factor;

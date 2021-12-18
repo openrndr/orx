@@ -4,9 +4,6 @@ import org.openrndr.draw.ColorType
 import org.openrndr.draw.colorBuffer
 import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.jumpfill.ShapeSDF
-import org.openrndr.math.Vector3
-import org.openrndr.math.transforms.transform
-import org.openrndr.shape.Circle
 import org.openrndr.svg.loadSVG
 
 fun main() {
@@ -20,6 +17,8 @@ fun main() {
             val df = colorBuffer(width, height, format = ColorFormat.RGBa, type = ColorType.FLOAT32)
 
             val shapes = loadSVG("orx-jumpflood/src/demo/resources/name.svg").findShapes().map { it.shape }
+            sdf.setShapes(shapes)
+            sdf.apply(emptyArray(), df)
 
             if (System.getProperty("takeScreenshot") == "true") {
                 extend(SingleScreenshot()) {
@@ -27,15 +26,10 @@ fun main() {
                 }
             }
             extend {
-                sdf.setShapes(shapes.mapIndexed { index, it ->
-                    it.transform(transform {
-                        translate(1280/2.0, 720.0/2)
-
-                        translate(-1280/2.0, -720.0/2.0)
-                    })
-                })
-                sdf.apply(emptyArray(), df)
-                drawer.image(df)
+                if(mouse.pressedButtons.isEmpty())
+                    drawer.image(df)
+                else
+                    drawer.shapes(shapes)
             }
         }
     }

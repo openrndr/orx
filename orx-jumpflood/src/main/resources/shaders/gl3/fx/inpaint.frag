@@ -1,5 +1,3 @@
-#version 330 core
-
 uniform sampler2D tex0;// image
 uniform sampler2D tex1;// distance
 

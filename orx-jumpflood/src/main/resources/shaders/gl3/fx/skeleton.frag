@@ -1,5 +1,3 @@
-#version 330 core
-
 uniform sampler2D tex0;// signed distance
 uniform vec4 skeletonColor;
 uniform vec4 backgroundColor;
