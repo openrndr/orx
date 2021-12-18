@@ -157,17 +157,13 @@ class PaletteStudio(
 
     private fun createPalette(colors: List<ColorRGBa>): Palette {
         val sortedColors = when (sortBy) {
-            SortBy.DARKEST -> {
-                val darkest = Comparator<ColorRGBa> { c1: ColorRGBa, c2: ColorRGBa -> (getLuminance(c1) - getLuminance(c2)).toInt() }
-                colors.sortedWith(darkest)
+            SortBy.DARKEST -> colors.sortedBy {
+                getLuminance(it)
             }
-            SortBy.BRIGHTEST -> {
-                val brightest = Comparator<ColorRGBa> { c1: ColorRGBa, c2: ColorRGBa -> (getLuminance(c2) - getLuminance(c1)).toInt() }
-                colors.sortedWith(brightest)
+            SortBy.BRIGHTEST -> colors.sortedByDescending {
+                getLuminance(it)
             }
-            SortBy.NO_SORTING -> {
-                colors
-            }
+            SortBy.NO_SORTING -> colors
         }
 
         return assemblePalette(sortedColors)
