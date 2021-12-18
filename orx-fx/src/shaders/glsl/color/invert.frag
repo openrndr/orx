@@ -6,7 +6,9 @@ out vec4 o_color;
 void main() {
     vec4 color = texture(tex0, v_texCoord0);
 
-    color.rgb = mix(color.rgb, 1.0 - color.rgb, amount);
+    float a = color.a;
+    vec3 rgb = a > 0.0 ? color.rgb / a : vec3(0.0);
+    rgb = mix(rgb, 1.0 - rgb, amount);
 
-    o_color = color;
+    o_color = vec4(rgb * a, a);
 }
