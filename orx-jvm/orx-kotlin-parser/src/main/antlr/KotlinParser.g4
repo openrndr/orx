@@ -65,10 +65,10 @@ declaration
 
 classDeclaration
     : modifiers? (CLASS | (FUN NL*)? INTERFACE) NL* simpleIdentifier
-    (NL* typeParameters)? (NL* primaryConstructor)?
-    (NL* COLON NL* delegationSpecifiers)?
-    (NL* typeConstraints)?
-    (NL* classBody | NL* enumClassBody)?
+      (NL* typeParameters)? (NL* primaryConstructor)?
+      (NL* COLON NL* delegationSpecifiers)?
+      (NL* typeConstraints)?
+      (NL* classBody | NL* enumClassBody)?
     ;
 
 primaryConstructor
@@ -145,9 +145,9 @@ anonymousInitializer
 
 companionObject
     : modifiers? COMPANION NL* OBJECT
-    (NL* simpleIdentifier)?
-    (NL* COLON NL* delegationSpecifiers)?
-    (NL* classBody)?
+      (NL* simpleIdentifier)?
+      (NL* COLON NL* delegationSpecifiers)?
+      (NL* classBody)?
     ;
 
 functionValueParameters
@@ -160,11 +160,11 @@ functionValueParameter
 
 functionDeclaration
     : modifiers?
-    FUN (NL* typeParameters)? (NL* receiverType NL* DOT)? NL* simpleIdentifier
-    NL* functionValueParameters
-    (NL* COLON NL* type)?
-    (NL* typeConstraints)?
-    (NL* functionBody)?
+      FUN (NL* typeParameters)? (NL* receiverType NL* DOT)? NL* simpleIdentifier
+      NL* functionValueParameters
+      (NL* COLON NL* type)?
+      (NL* typeConstraints)?
+      (NL* functionBody)?
     ;
 
 functionBody
@@ -182,12 +182,12 @@ multiVariableDeclaration
 
 propertyDeclaration
     : modifiers? (VAL | VAR)
-    (NL* typeParameters)?
-    (NL* receiverType NL* DOT)?
-    (NL* (multiVariableDeclaration | variableDeclaration))
-    (NL* typeConstraints)?
-    (NL* (ASSIGNMENT NL* expression | propertyDelegate))?
-    (NL+ SEMICOLON)? NL* (getter? (NL* semi? setter)? | setter? (NL* semi? getter)?)
+      (NL* typeParameters)?
+      (NL* receiverType NL* DOT)?
+      (NL* (multiVariableDeclaration | variableDeclaration))
+      (NL* typeConstraints)?
+      (NL* (ASSIGNMENT NL* expression | propertyDelegate))?
+      (NL+ SEMICOLON)? NL* (getter? (NL* semi? setter)? | setter? (NL* semi? getter)?)
     ;
 
 propertyDelegate
@@ -196,20 +196,24 @@ propertyDelegate
 
 getter
     : modifiers? GET
-    | modifiers? GET NL* LPAREN NL* RPAREN (NL* COLON NL* type)? NL* functionBody
+      (NL* LPAREN NL* RPAREN (NL* COLON NL* type)? NL* functionBody)?
     ;
 
 setter
     : modifiers? SET
-    | modifiers? SET NL* LPAREN NL* parameterWithOptionalType (NL* COMMA)? NL* RPAREN (NL* COLON NL* type)? NL* functionBody
+      (NL* LPAREN NL* functionValueParameterWithOptionalType (NL* COMMA)? NL* RPAREN (NL* COLON NL* type)? NL* functionBody)?
     ;
 
 parametersWithOptionalType
-    : LPAREN NL* (parameterWithOptionalType (NL* COMMA NL* parameterWithOptionalType)* (NL* COMMA)?)? NL* RPAREN
+    : LPAREN NL* (functionValueParameterWithOptionalType (NL* COMMA NL* functionValueParameterWithOptionalType)* (NL* COMMA)?)? NL* RPAREN
+    ;
+
+functionValueParameterWithOptionalType
+    : parameterModifiers? parameterWithOptionalType (NL* ASSIGNMENT NL* expression)?
     ;
 
 parameterWithOptionalType
-    : parameterModifiers? simpleIdentifier NL* (COLON NL* type)?
+    : simpleIdentifier NL* (COLON NL* type)?
     ;
 
 parameter
@@ -218,9 +222,9 @@ parameter
 
 objectDeclaration
     : modifiers? OBJECT
-    NL* simpleIdentifier
-    (NL* COLON NL* delegationSpecifiers)?
-    (NL* classBody)?
+      NL* simpleIdentifier
+      (NL* COLON NL* delegationSpecifiers)?
+      (NL* classBody)?
     ;
 
 secondaryConstructor
@@ -228,8 +232,7 @@ secondaryConstructor
     ;
 
 constructorDelegationCall
-    : THIS NL* valueArguments
-    | SUPER NL* valueArguments
+    : (THIS | SUPER) NL* valueArguments
     ;
 
 // SECTION: enumClasses
@@ -249,11 +252,7 @@ enumEntry
 // SECTION: types
 
 type
-    : typeModifiers?
-    ( parenthesizedType
-    | nullableType
-    | typeReference
-    | functionType)
+    : typeModifiers? (parenthesizedType | nullableType | typeReference | functionType)
     ;
 
 typeReference
@@ -279,7 +278,8 @@ simpleUserType
     ;
 
 typeProjection
-    : typeProjectionModifiers? type | MULT
+    : typeProjectionModifiers? type
+    | MULT
     ;
 
 typeProjectionModifiers
@@ -304,15 +304,11 @@ parenthesizedType
     ;
 
 receiverType
-    : typeModifiers?
-    ( parenthesizedType
-    | nullableType
-    | typeReference)
+    : typeModifiers? (parenthesizedType | nullableType | typeReference)
     ;
 
 parenthesizedUserType
-    : LPAREN NL* userType NL* RPAREN
-    | LPAREN NL* parenthesizedUserType NL* RPAREN
+    : LPAREN NL* (userType | parenthesizedUserType) NL* RPAREN
     ;
 
 // SECTION: statements
@@ -322,11 +318,7 @@ statements
     ;
 
 statement
-    : (label | annotation)*
-    ( declaration
-    | assignment
-    | loopStatement
-    | expression)
+    : (label | annotation)* ( declaration | assignment | loopStatement | expression)
     ;
 
 label
@@ -349,12 +341,12 @@ loopStatement
     ;
 
 forStatement
-    : FOR NL* LPAREN annotation* (variableDeclaration | multiVariableDeclaration) IN expression RPAREN NL* controlStructureBody?
+    : FOR NL* LPAREN annotation* (variableDeclaration | multiVariableDeclaration)
+      IN expression RPAREN NL* controlStructureBody?
     ;
 
 whileStatement
-    : WHILE NL* LPAREN expression RPAREN NL* controlStructureBody
-    | WHILE NL* LPAREN expression RPAREN NL* SEMICOLON
+    : WHILE NL* LPAREN expression RPAREN NL* (controlStructureBody | SEMICOLON)
     ;
 
 doWhileStatement
@@ -362,13 +354,13 @@ doWhileStatement
     ;
 
 assignment
-    : directlyAssignableExpression ASSIGNMENT NL* expression
-    | assignableExpression assignmentAndOperator NL* expression
+    : (directlyAssignableExpression ASSIGNMENT | assignableExpression assignmentAndOperator) NL* expression
     ;
 
 semi
     : (SEMICOLON | NL) NL*
-    | EOF;
+    | EOF
+    ;
 
 semis
     : (SEMICOLON | NL)+
@@ -394,7 +386,11 @@ equality
     ;
 
 comparison
-    : infixOperation (comparisonOperator NL* infixOperation)?
+    : genericCallLikeComparison (comparisonOperator NL* genericCallLikeComparison)*
+    ;
+
+genericCallLikeComparison
+    : infixOperation callSuffix*
     ;
 
 infixOperation
@@ -426,11 +422,7 @@ multiplicativeExpression
     ;
 
 asExpression
-    : comparisonWithLiteralRightSide (NL* asOperator NL* type)?
-    ;
-
-comparisonWithLiteralRightSide
-    : prefixUnaryExpression (NL* LANGLE NL* literalConstant NL* RANGLE NL* (expression | parenthesizedExpression))*
+    : prefixUnaryExpression (NL* asOperator NL* type)*
     ;
 
 prefixUnaryExpression
@@ -444,8 +436,7 @@ unaryPrefix
     ;
 
 postfixUnaryExpression
-    : primaryExpression
-    | primaryExpression postfixUnarySuffix+
+    : primaryExpression postfixUnarySuffix*
     ;
 
 postfixUnarySuffix
@@ -467,7 +458,8 @@ parenthesizedDirectlyAssignableExpression
     ;
 
 assignableExpression
-    : prefixUnaryExpression | parenthesizedAssignableExpression
+    : prefixUnaryExpression
+    | parenthesizedAssignableExpression
     ;
 
 parenthesizedAssignableExpression
@@ -485,12 +477,11 @@ indexingSuffix
     ;
 
 navigationSuffix
-    : NL* memberAccessOperator NL* (simpleIdentifier | parenthesizedExpression | CLASS)
+    : memberAccessOperator NL* (simpleIdentifier | parenthesizedExpression | CLASS)
     ;
 
 callSuffix
-    : typeArguments? valueArguments? annotatedLambda
-    | typeArguments? valueArguments
+    : typeArguments? (valueArguments? annotatedLambda | valueArguments)
     ;
 
 annotatedLambda
@@ -502,8 +493,7 @@ typeArguments
     ;
 
 valueArguments
-    : LPAREN NL* RPAREN
-    | LPAREN NL* valueArgument (NL* COMMA NL* valueArgument)* (NL* COMMA)? NL* RPAREN
+    : LPAREN NL* (valueArgument (NL* COMMA NL* valueArgument)* (NL* COMMA)? NL*)? RPAREN
     ;
 
 valueArgument
@@ -532,8 +522,7 @@ parenthesizedExpression
     ;
 
 collectionLiteral
-    : LSQUARE NL* expression (NL* COMMA NL* expression)* (NL* COMMA)? NL* RSQUARE
-    | LSQUARE NL* RSQUARE
+    : LSQUARE NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)? NL*)? RSQUARE
     ;
 
 literalConstant
@@ -568,7 +557,7 @@ lineStringContent
     ;
 
 lineStringExpression
-    : LineStrExprStart expression RCURL
+    : LineStrExprStart NL* expression NL* RCURL
     ;
 
 multiLineStringContent
@@ -582,8 +571,7 @@ multiLineStringExpression
     ;
 
 lambdaLiteral
-    : LCURL NL* statements NL* RCURL
-    | LCURL NL* lambdaParameters? NL* ARROW NL* statements NL* RCURL
+    : LCURL NL* (lambdaParameters? NL* ARROW NL*)? statements NL* RCURL
     ;
 
 lambdaParameters
@@ -597,11 +585,11 @@ lambdaParameter
 
 anonymousFunction
     : FUN
-    (NL* type NL* DOT)?
-    NL* parametersWithOptionalType
-    (NL* COLON NL* type)?
-    (NL* typeConstraints)?
-    (NL* functionBody)?
+      (NL* type NL* DOT)?
+      NL* parametersWithOptionalType
+      (NL* COLON NL* type)?
+      (NL* typeConstraints)?
+      (NL* functionBody)?
     ;
 
 functionLiteral
@@ -610,8 +598,7 @@ functionLiteral
     ;
 
 objectLiteral
-    : OBJECT NL* COLON NL* delegationSpecifiers NL* classBody
-    | OBJECT NL* classBody
+    : OBJECT (NL* COLON NL* delegationSpecifiers NL*)? (NL* classBody)?
     ;
 
 thisExpression
@@ -625,8 +612,10 @@ superExpression
     ;
 
 ifExpression
-    : IF NL* LPAREN NL* expression NL* RPAREN NL* (controlStructureBody | SEMICOLON)
-    | IF NL* LPAREN NL* expression NL* RPAREN NL* controlStructureBody? NL* SEMICOLON? NL* ELSE NL* (controlStructureBody | SEMICOLON)
+    : IF NL* LPAREN NL* expression NL* RPAREN NL*
+      ( controlStructureBody
+      | controlStructureBody? NL* SEMICOLON? NL* ELSE NL* (controlStructureBody | SEMICOLON)
+      | SEMICOLON)
     ;
 
 whenSubject
@@ -671,12 +660,14 @@ finallyBlock
 jumpExpression
     : THROW NL* expression
     | (RETURN | RETURN_AT) expression?
-    | CONTINUE | CONTINUE_AT
-    | BREAK | BREAK_AT
+    | CONTINUE
+    | CONTINUE_AT
+    | BREAK
+    | BREAK_AT
     ;
 
 callableReference
-    : (receiverType? NL* COLONCOLON NL* (simpleIdentifier | CLASS))
+    : receiverType? COLONCOLON NL* (simpleIdentifier | CLASS)
     ;
 
 assignmentAndOperator
@@ -702,15 +693,18 @@ comparisonOperator
     ;
 
 inOperator
-    : IN | NOT_IN
+    : IN
+    | NOT_IN
     ;
 
 isOperator
-    : IS | NOT_IS
+    : IS
+    | NOT_IS
     ;
 
 additiveOperator
-    : ADD | SUB
+    : ADD
+    | SUB
     ;
 
 multiplicativeOperator
@@ -744,7 +738,9 @@ excl
     ;
 
 memberAccessOperator
-    : DOT | safeNav | COLONCOLON
+    : NL* DOT
+    | NL* safeNav
+    | COLONCOLON
     ;
 
 safeNav
@@ -777,7 +773,8 @@ typeModifiers
     ;
 
 typeModifier
-    : annotation | SUSPEND NL*
+    : annotation
+    | SUSPEND NL*
     ;
 
 classModifier
@@ -786,6 +783,7 @@ classModifier
     | ANNOTATION
     | DATA
     | INNER
+    | VALUE
     ;
 
 memberModifier
@@ -856,13 +854,11 @@ annotation
     ;
 
 singleAnnotation
-    : annotationUseSiteTarget NL* unescapedAnnotation
-    | (AT_NO_WS | AT_PRE_WS) unescapedAnnotation
+    : (annotationUseSiteTarget NL* | AT_NO_WS | AT_PRE_WS) unescapedAnnotation
     ;
 
 multiAnnotation
-    : annotationUseSiteTarget NL* LSQUARE unescapedAnnotation+ RSQUARE
-    | (AT_NO_WS | AT_PRE_WS) LSQUARE unescapedAnnotation+ RSQUARE
+    : (annotationUseSiteTarget NL* | AT_NO_WS | AT_PRE_WS) LSQUARE unescapedAnnotation+ RSQUARE
     ;
 
 annotationUseSiteTarget
@@ -876,7 +872,8 @@ unescapedAnnotation
 
 // SECTION: identifiers
 
-simpleIdentifier: Identifier
+simpleIdentifier
+    : Identifier
     | ABSTRACT
     | ANNOTATION
     | BY
@@ -923,6 +920,7 @@ simpleIdentifier: Identifier
     | ACTUAL
     | CONST
     | SUSPEND
+    | VALUE
     ;
 
 identifier
