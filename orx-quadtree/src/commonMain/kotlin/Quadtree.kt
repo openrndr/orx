@@ -43,6 +43,48 @@ class Quadtree<T>(val bounds: Rectangle, val maxObjects: Int = 10, val mapper: (
     }
 
     /**
+     * Finds the nearest and neighbouring objects within a radius
+     * (needs to have a different name so there is no ambiguity when the generic object type is Vector2)
+     *
+     * @param point
+     * @param radius
+     * @return
+     */
+    fun nearestToPoint(point: Vector2, radius: Double): QuadtreeQuery<T>? {
+        if (!bounds.contains(point)) return null
+
+        val r2 = radius * radius
+
+        val scaledBounds = Rectangle.fromCenter(point, radius * 2)
+        val intersected: List<Quadtree<T>> = intersect(scaledBounds) ?: return null
+
+        var minDist = Double.MAX_VALUE
+        val nearestObjects = mutableListOf<T>()
+        var nearestObject: T? = null
+
+        for (interNode in intersected) {
+            for (obj in interNode.objects) {
+                val p = mapper(obj)
+
+                val dist = p.squaredDistanceTo(point)
+
+                if (dist < r2) {
+                    nearestObjects.add(obj)
+
+                    if (dist < minDist) {
+                        minDist = dist
+                        nearestObject = obj
+                    }
+                }
+            }
+        }
+
+        if (nearestObject == null) return null
+
+        return QuadtreeQuery(nearestObject, nearestObjects, intersected)
+    }
+
+    /**
      * Finds the nearest and neighbouring points within a radius
      *
      * @param element
