@@ -16,7 +16,7 @@ data class QuadtreeQuery<T>(val nearest: T, val neighbours: List<T>, val quads: 
  * @property maxObjects maximum number of objects per node
  * @property mapper
  */
-class Quadtree<T>(val bounds: Rectangle, val maxObjects: Int = 10, val mapper: ((T) -> Vector2)) {
+class Quadtree<T>(val bounds: Rectangle, val maxObjects: Int = 10, val mapper: ((T) -> Vector2)) : IQuadtree<T> {
     /**
      * The 4 nodes of the tree
      */
@@ -30,7 +30,7 @@ class Quadtree<T>(val bounds: Rectangle, val maxObjects: Int = 10, val mapper: (
     /**
      * Clears the whole tree
      */
-    fun clear() {
+    override fun clear() {
         objects.clear()
 
         for (i in nodes.indices) {
@@ -50,7 +50,7 @@ class Quadtree<T>(val bounds: Rectangle, val maxObjects: Int = 10, val mapper: (
      * @param radius
      * @return
      */
-    fun nearestToPoint(point: Vector2, radius: Double): QuadtreeQuery<T>? {
+    override fun nearestToPoint(point: Vector2, radius: Double): QuadtreeQuery<T>? {
         if (!bounds.contains(point)) return null
 
         val r2 = radius * radius
@@ -91,7 +91,7 @@ class Quadtree<T>(val bounds: Rectangle, val maxObjects: Int = 10, val mapper: (
      * @param radius
      * @return
      */
-    fun nearest(element: T, radius: Double): QuadtreeQuery<T>? {
+    override fun nearest(element: T, radius: Double): QuadtreeQuery<T>? {
         val point = mapper(element)
 
         if (!bounds.contains(point)) return null
@@ -134,7 +134,7 @@ class Quadtree<T>(val bounds: Rectangle, val maxObjects: Int = 10, val mapper: (
      * @param element
      * @return
      */
-    fun insert(element: T): Boolean {
+    override fun insert(element: T): Boolean {
         // only* the root needs to check this
         if (depth == 0) {
             if (!bounds.contains(mapper(element))) return false
@@ -170,7 +170,7 @@ class Quadtree<T>(val bounds: Rectangle, val maxObjects: Int = 10, val mapper: (
      * @param element
      * @return
      */
-    fun findNode(element: T): Quadtree<T>? {
+    override fun findNode(element: T): Quadtree<T>? {
         val v = mapper(element)
 
         if (!bounds.contains(v)) return null
