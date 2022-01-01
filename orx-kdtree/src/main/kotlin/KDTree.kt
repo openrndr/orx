@@ -242,7 +242,7 @@ fun <T> findKNearest(
             }
 
             val d = abs(node.median - dimensionValue)
-            if (d * d < queue.peek().second || queue.size < k) {
+            if (queue.size < k || d * d < queue.peek().second) {
                 nearest(node.children[1 - route])
             }
         }
