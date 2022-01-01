@@ -2,13 +2,13 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.kdtree.buildKDTree
 import org.openrndr.extra.kdtree.findKNearest
+import org.openrndr.extra.kdtree.kdTree
 import org.openrndr.extra.kdtree.vector2Mapper
 import org.openrndr.math.Vector2
 import org.openrndr.shape.LineSegment
 
 fun main() {
     application {
-
         configure {
             width = 1080
             height = 720
@@ -18,12 +18,12 @@ fun main() {
             val points = MutableList(1000) {
                 Vector2(Math.random() * width, Math.random() * height)
             }
-            val tree = buildKDTree(points, 2, ::vector2Mapper)
+            val tree = points.kdTree()
 
             extend {
                 drawer.circles(points, 5.0)
 
-                val kNearest = findKNearest(tree, mouse.position, k=7, dimensions = 2, ::vector2Mapper)
+                val kNearest = tree.findKNearest(mouse.position, k = 7)
                 drawer.fill = ColorRGBa.RED
                 drawer.stroke = ColorRGBa.RED
                 drawer.strokeWeight = 2.0

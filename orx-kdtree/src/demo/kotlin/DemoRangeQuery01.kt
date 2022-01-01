@@ -1,8 +1,6 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extra.kdtree.buildKDTree
-import org.openrndr.extra.kdtree.findAllInRange
-import org.openrndr.extra.kdtree.vector2Mapper
+import org.openrndr.extra.kdtree.kdTree
 import org.openrndr.math.Vector2
 
 
@@ -18,13 +16,13 @@ fun main() {
             val points = MutableList(1000) {
                 Vector2(Math.random() * width, Math.random() * height)
             }
-            val tree = buildKDTree(points, 2, ::vector2Mapper)
+            val tree = points.kdTree()
             val radius = 50.0
 
             extend {
                 drawer.circles(points, 5.0)
 
-                val allInRange = findAllInRange(tree, mouse.position, maxDistance = radius, dimensions = 2, ::vector2Mapper)
+                val allInRange = tree.findAllInRadius(mouse.position, radius = radius)
                 drawer.fill = ColorRGBa.PINK
                 drawer.stroke = ColorRGBa.PINK
                 drawer.strokeWeight = 2.0
