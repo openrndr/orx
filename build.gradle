@@ -31,6 +31,8 @@ def multiplatformModules = [
     "orx-shader-phrases",
     "orx-shapes",
     "orx-quadtree",
+    "orx-hash-grid"
+
 ]
 
 def doNotPublish = ["openrndr-demos"]
