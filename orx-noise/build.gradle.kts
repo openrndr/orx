@@ -23,6 +23,7 @@ kotlin {
                     kotlin.srcDir("src/demo")
                     dependencies {
                         implementation(project(":orx-camera"))
+                        implementation(project(":orx-hash-grid"))
                         implementation("org.openrndr:openrndr-application:$openrndrVersion")
                         implementation("org.openrndr:openrndr-extensions:$openrndrVersion")
                         runtimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
@@ -56,6 +57,8 @@ kotlin {
                 implementation("org.openrndr:openrndr-math:$openrndrVersion")
                 implementation("org.openrndr:openrndr-shape:$openrndrVersion")
                 implementation("org.openrndr:openrndr-draw:$openrndrVersion")
+                implementation(project(":orx-hash-grid"))
+
             }
         }
         @Suppress("UNUSED_VARIABLE")
