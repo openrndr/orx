@@ -13,6 +13,8 @@ A growing library of assorted data structures, algorithms and utilities.
 | [`orx-camera`](orx-camera/) | 3D camera controllable via mouse and keyboard. |
 | [`orx-color`](orx-color/) | Tools to work with color |
 | [`orx-compositor`](orx-compositor/) | Toolkit to make composite (layered) images using blend modes and filters. |
+| [`orx-compute-graph`](orx-compute-graph/) | A graph for computation. |
+| [`orx-compute-graph-nodes`](orx-compute-graph-nodes/) | A collection of nodes that can be used with orx-computer-graph. |
 | [`orx-easing`](orx-easing/) | Provides easing functions for smooth animation or non-linear interpolation. |
 | [`orx-fx`](orx-fx/) | Ready-to-use visual effects or filters. Most include [orx-parameters](https://github.com/openrndr/orx/tree/master/orx-parameters) annotations  so they can be easily controlled via orx-gui. |
 | [`orx-glslify`](orx-glslify/) | Load glslify compatible shaders from [npm](https://www.npmjs.com/search?q=glslify). |
