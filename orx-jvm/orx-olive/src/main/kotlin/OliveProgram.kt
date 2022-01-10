@@ -37,13 +37,15 @@ fun ApplicationBuilder.oliveProgram(scriptHost: OliveScriptHost = OliveScriptHos
 
     var sourceLocation = "src/main/kotlin/$rootClassName.kt"
     val candidateFile = File(sourceLocation)
+    val rootClassNameCleaned = if (rootClassName.startsWith("_")) rootClassName.drop(1) else rootClassName
+
     if (!candidateFile.exists()) {
         val otherCandidates = Files.walk(Paths.get("."))
-                .filter { Files.isRegularFile(it) && it.toString().endsWith("$rootClassName.kt") }.toList()
+                .filter { Files.isRegularFile(it) && it.toString().endsWith("$rootClassNameCleaned.kt") }.toList()
         if (otherCandidates.size == 1) {
             sourceLocation = otherCandidates.first().toString()
         } else {
-            error("multiple source candidates found: $otherCandidates")
+            error("multiple source candidates found for $rootClassName: $otherCandidates")
         }
     }
     program = object : OliveProgram(sourceLocation, scriptHost, resources) {
