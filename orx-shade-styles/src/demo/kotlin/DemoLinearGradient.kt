@@ -1,11 +1,7 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extensions.SingleScreenshot
+import org.openrndr.extra.color.spaces.toOKLABa
 import org.openrndr.extra.shadestyles.linearGradient
-
-import org.openrndr.extra.shadestyles.radialGradient
-import org.openrndr.extras.color.spaces.toOKLABa
-import kotlin.math.cos
 
 fun main() {
     application {
