@@ -54,12 +54,12 @@ fun main() {
 ```
 <!-- __demos__ -->
 ## Demos
-### DemoCompositor01
-[source code](src/demo/kotlin/DemoCompositor01.kt)
-
-![DemoCompositor01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-compositor/images/DemoCompositor01Kt.png)
-
 ### DemoUse01
 [source code](src/demo/kotlin/DemoUse01.kt)
 
 ![DemoUse01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-compositor/images/DemoUse01Kt.png)
+
+### DemoCompositor01
+[source code](src/demo/kotlin/DemoCompositor01.kt)
+
+![DemoCompositor01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-compositor/images/DemoCompositor01Kt.png)
