@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
       # Get OPENRNDR
       - name: Get OPENRNDR HEAD ref
@@ -33,15 +33,13 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 17
-      - uses: openrndr/setup-opengl@v1.1
       - name: Test glxinfo
         run: |
-          echo $LD_LIBRARY_PATH
-          export GALLIUM_DRIVER=swr
+          sudo apt install -y mesa-utils xvfb
           xvfb-run glxinfo
 
-#      - name: Collect screenshots
-#        run: xvfb-run ./gradlew collectScreenshots
+      - name: Collect screenshots
+        run: xvfb-run ./gradlew collectScreenshots
       - name: Build main readme
         run: xvfb-run ./gradlew buildMainReadme
       - name: Prepare media branch
