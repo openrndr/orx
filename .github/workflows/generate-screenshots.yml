@@ -18,7 +18,7 @@ jobs:
             ./openrndr
           key: ${{ runner.os }}--openrndr-${{ env.OPENRNDR_HEAD }}
       - uses: actions/checkout@v2.3.4
-        if: steps.cache_openrndr.outputs.cache-hit != 'true'
+        #if: steps.cache_openrndr.outputs.cache-hit != 'true'
         with:
           repository: openrndr/openrndr
           path: ./openrndr
