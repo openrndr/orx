@@ -16,19 +16,13 @@ import org.openrndr.poissonfill.PoissonFill
 import org.openrndr.shape.Rectangle
 import kotlin.math.sin
 
-data class Thing(val color: ColorRGBa, var pos: Polar, val speed: Polar)
 
 fun main() {
+    data class Thing(val color: ColorRGBa, var pos: Polar, val speed: Polar)
+
+
     application {
         program {
-
-            // -- this block is for automation purposes only
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
-
             val dry = renderTarget(width, height) {
                 colorBuffer(type = ColorType.FLOAT32)
             }
