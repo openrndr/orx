@@ -19,8 +19,6 @@ import kotlin.math.sin
 
 fun main() {
     data class Thing(val color: ColorRGBa, var pos: Polar, val speed: Polar)
-
-
     application {
         program {
             val dry = renderTarget(width, height) {

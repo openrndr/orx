@@ -44,8 +44,9 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
 
         }
         inputChanges.getFileChanges(inputDir).forEach { change ->
+            println(change)
             if (change.fileType == FileType.DIRECTORY) return@forEach
-            if (change.file.extension == "class" && !(change.file.name.contains("$"))) {
+            if (change.file.extension == "class") {
                 val klassName = change.file.nameWithoutExtension
                 if (klassName.dropLast(2) in ignore.get())
                     return@forEach
@@ -59,14 +60,17 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
                 val klass = ucl.loadClass(klassName)
                 println("Collecting screenshot for ${klassName} ${klass}")
 
-                val mainMethod = klass.getMethod("main")
-                println(mainMethod)
-                project.javaexec {
-                    this.classpath += project.files(inputDir.get().asFile, preloadClass)
-                    this.classpath += runtimeDependencies.get()
-                    this.mainClass.set(klassName)
-                    this.workingDir(project.rootProject.projectDir)
-                    jvmArgs("-DtakeScreenshot=true", "-DscreenshotPath=${outputDir.get().asFile}/$klassName.png")
+                try {
+                    val mainMethod = klass.getMethod("main")
+                    project.javaexec {
+                        this.classpath += project.files(inputDir.get().asFile, preloadClass)
+                        this.classpath += runtimeDependencies.get()
+                        this.mainClass.set(klassName)
+                        this.workingDir(project.rootProject.projectDir)
+                        jvmArgs("-DtakeScreenshot=true", "-DscreenshotPath=${outputDir.get().asFile}/$klassName.png")
+                    }
+                } catch (e: NoSuchMethodException) {
+                    // silently ignore
                 }
             }
         }

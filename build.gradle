@@ -51,6 +51,7 @@ project.ext {
     jsoupVersion = '1.14.3'
     kotestVersion = '5.0.1'
     junitJupiterVersion = '5.7.1'
+    slf4jVersion = '1.7.33'
 }
 
 
