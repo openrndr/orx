@@ -1,14 +1,11 @@
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
-import org.gradle.api.Script
-import org.gradle.api.Task
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.FileType
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.*
-import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.register
 import org.gradle.work.Incremental
 import org.gradle.work.InputChanges
@@ -88,10 +85,11 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
             lines.add("<!-- __demos__ -->")
             lines.add("## Demos")
             for (demo in runDemos) {
+                val projectPath = project.projectDir.relativeTo(project.rootDir)
                 lines.add("### ${demo.dropLast(2)}")
                 lines.add("[source code](src/demo/kotlin/${demo.dropLast(2)}.kt)")
                 lines.add("")
-                lines.add("![${demo}](https://raw.githubusercontent.com/openrndr/orx/media/${project.name}/images/${demo}.png)")
+                lines.add("![${demo}](https://raw.githubusercontent.com/openrndr/orx/media/$projectPath/images/${demo}.png)")
                 lines.add("")
             }
             readme.delete()
