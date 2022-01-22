@@ -49,6 +49,7 @@ jobs:
           git reset HEAD -- .
           (git add README.md && git commit -m "add auto-generated README" && git push origin master) || true
           (git add [a-z-]*/README.md && git commit -m "add demos to README.md" && git push origin master) || true
+          (git add orx-jvm/[a-z-]*/README.md && git commit -m "add orx-jvm demos to README.md" && git push origin master) || true
           git checkout --orphan media
           git reset HEAD -- .
           git add [a-z-]*/images/*.png
