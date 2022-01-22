@@ -27,19 +27,19 @@ this addon provides some helper functions to convert them to OPENRNDR types:
 ### DemoContours01
 [source code](src/demo/kotlin/DemoContours01.kt)
 
-![DemoContours01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-boofcv/images/DemoContours01Kt.png)
+![DemoContours01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-boofcv/images/DemoContours01Kt.png)
 
 ### DemoResize01
 [source code](src/demo/kotlin/DemoResize01.kt)
 
-![DemoResize01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-boofcv/images/DemoResize01Kt.png)
+![DemoResize01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-boofcv/images/DemoResize01Kt.png)
 
 ### DemoResize02
 [source code](src/demo/kotlin/DemoResize02.kt)
 
-![DemoResize02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-boofcv/images/DemoResize02Kt.png)
+![DemoResize02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-boofcv/images/DemoResize02Kt.png)
 
 ### DemoSimplified01
 [source code](src/demo/kotlin/DemoSimplified01.kt)
 
-![DemoSimplified01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-boofcv/images/DemoSimplified01Kt.png)
+![DemoSimplified01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-boofcv/images/DemoSimplified01Kt.png)
