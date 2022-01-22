@@ -86,6 +86,7 @@ All distortion effects are opacity preserving
  ### Edges
   - `LumaSobel` - A Sobel-kernel based luminosity edge detector
   - `EdgesWork` - An edges filter doubling as erosion
+  - `Contour` - detects multi-level contours
   
  ### Grain
   - `FilmGrain` - adds film-like grain to the source input
@@ -106,6 +107,11 @@ All distortion effects are opacity preserving
 ![DemoFluidDistort01Kt](https://github.com/openrndr/orx/blob/media/orx-fx/images/DemoFluidDistort01Kt.png
 <!-- __demos__ -->
 ## Demos
+### DemoBlur01
+[source code](src/demo/kotlin/DemoBlur01.kt)
+
+![DemoBlur01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoBlur01Kt.png)
+
 ### DemoFluidDistort01
 [source code](src/demo/kotlin/DemoFluidDistort01.kt)
 

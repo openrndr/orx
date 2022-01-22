@@ -42,8 +42,6 @@ kotlin {
                     }
                 }
                 collectScreenshots {
-                    ignore.set(listOf("DemoBlur01"))
-
                 }
             }
         }
