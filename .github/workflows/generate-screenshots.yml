@@ -52,6 +52,8 @@ jobs:
           git checkout --orphan media
           git reset HEAD -- .
           git add [a-z-]*/images/*.png
-          git add orx-jvm/[a-z-]*/images/*.png
+          cd orx-jvm
+          git add [a-z-]*/images/*.png
+          cd ..
           git commit -m "add auto-generated media"
           git push -f origin media
