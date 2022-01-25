@@ -14,7 +14,7 @@ sourceSets {
 
 val openrndrVersion: String by rootProject.extra
 val openrndrOS: String by rootProject.extra
-val boofcvVersion = "0.37"
+val boofcvVersion = "0.39"
 
 val demoImplementation by configurations.getting {}
 val demoRuntimeOnly by configurations.getting {}
