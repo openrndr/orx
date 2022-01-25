@@ -24,7 +24,7 @@ class DistanceField : Filter() {
 
     private val decodeFilter = PixelDistance()
 
-    var signedDistance = false
+    var signedDistance = true
 
     override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
         if (thresholded == null) {
