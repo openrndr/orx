@@ -177,24 +177,24 @@ import org.openrndr.extra.parameters.DoubleParameter
 ### DemoHide01
 [source code](src/demo/kotlin/DemoHide01.kt)
 
-![DemoHide01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-gui/images/DemoHide01Kt.png)
+![DemoHide01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoHide01Kt.png)
 
 ### DemoOptions01
 [source code](src/demo/kotlin/DemoOptions01.kt)
 
-![DemoOptions01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-gui/images/DemoOptions01Kt.png)
+![DemoOptions01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoOptions01Kt.png)
 
 ### DemoPresets01
 [source code](src/demo/kotlin/DemoPresets01.kt)
 
-![DemoPresets01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-gui/images/DemoPresets01Kt.png)
+![DemoPresets01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoPresets01Kt.png)
 
 ### DemoSimple01
 [source code](src/demo/kotlin/DemoSimple01.kt)
 
-![DemoSimple01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-gui/images/DemoSimple01Kt.png)
+![DemoSimple01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoSimple01Kt.png)
 
 ### DemoXYParameter
 [source code](src/demo/kotlin/DemoXYParameter.kt)
 
-![DemoXYParameterKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-gui/images/DemoXYParameterKt.png)
+![DemoXYParameterKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoXYParameterKt.png)
