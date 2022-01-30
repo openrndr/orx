@@ -164,6 +164,17 @@ class Quadtree<T>(val bounds: Rectangle, val maxObjects: Int = 10, val mapper: (
         return true
     }
 
+    override fun remove(element: T): Boolean {
+        if (isLeaf) {
+            return objects.remove(element)
+        }
+        val p = mapper(element)
+        val x = if (p.x > bounds.center.x) 1 else 0
+        val y = if (p.y > bounds.center.y) 1 else 0
+        val nodeIndex = x + y * 2
+        return nodes[nodeIndex]!!.remove(element)
+    }
+
     /**
      * Finds which node the element is within (but not necessarily belonging to)
      *
