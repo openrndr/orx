@@ -9,21 +9,24 @@ import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
+import org.openrndr.extra.parameters.IntParameter
 
 @Description("Lenses")
 class Lenses : Filter(mppFilterShader(fx_lenses, "block-repeat")) {
-    @DoubleParameter("block width", 0.0, 1.0, order = 0)
-    var blockWidth: Double by parameters
+    @IntParameter("rows", 1, 64, order = 0)
+    var rows: Int by parameters
 
-    @DoubleParameter("block height", 0.0, 1.0, order = 1)
-    var blockHeight: Double by parameters
-
+    @IntParameter("columns", 1, 64, order = 1)
+    var columns: Int by parameters
 
     @DoubleParameter("scale", 0.5, 1.5, order = 2)
     var scale: Double by parameters
 
     @DoubleParameter("rotation", -180.0, 180.0, order = 3)
     var rotation: Double by parameters
+
+    @DoubleParameter("distort", -1.0, 1.0, order = 4)
+    var distort: Double by parameters
 
     @BooleanParameter("bicubic filtering")
     var bicubicFiltering: Boolean by parameters
@@ -37,8 +40,9 @@ class Lenses : Filter(mppFilterShader(fx_lenses, "block-repeat")) {
     }
 
     init {
-        blockWidth = 0.25
-        blockHeight = 0.25
+        rows = 6
+        columns = 8
+        distort = 0.0
 
         bicubicFiltering = true
     }

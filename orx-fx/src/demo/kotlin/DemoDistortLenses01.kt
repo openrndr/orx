@@ -2,7 +2,6 @@ import org.openrndr.application
 import org.openrndr.draw.createEquivalent
 import org.openrndr.draw.loadImage
 import org.openrndr.extra.fx.distort.Lenses
-import kotlin.math.cos
 
 fun main() = application {
     configure {
@@ -16,7 +15,8 @@ fun main() = application {
         val edges = image.createEquivalent()
         extend {
             lenses.rotation = 0.0
-            lenses.scale = 1.4
+            lenses.scale = 1.5
+
             lenses.apply(image, edges)
             drawer.image(edges)
         }
