@@ -34,6 +34,8 @@ void main() {
 //    float f = smoothstep(0.0, 0.01, blockUV.x) * smoothstep(0.0, 0.01, blockUV.y);
 
     vec2 sourceOffset = vec2(sourceOffsetX, sourceOffsetY);
-    vec4 c = texture(tex0, mod(tUV + sourceOffset, vec2(1.0)));
+    vec2 gx = dFdx(tUV);
+    vec2 gy = dFdy(tUV);
+    vec4 c = textureGrad(tex0, mod(tUV + sourceOffset, vec2(1.0)), gx, gy );
     o_color = c;
 }
