@@ -117,6 +117,11 @@ All distortion effects are opacity preserving
 
 ![DemoCannyEdgeDetector01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoCannyEdgeDetector01Kt.png)
 
+### DemoDistortLenses01
+[source code](src/demo/kotlin/DemoDistortLenses01.kt)
+
+![DemoDistortLenses01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDistortLenses01Kt.png)
+
 ### DemoFluidDistort01
 [source code](src/demo/kotlin/DemoFluidDistort01.kt)
 
