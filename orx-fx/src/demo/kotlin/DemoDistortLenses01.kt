@@ -15,10 +15,9 @@ fun main() = application {
         val lenses = Lenses()
         val edges = image.createEquivalent()
         extend {
-            lenses.bicubicFiltering = false
-            lenses.apply(image, edges)
             lenses.rotation = 0.0
             lenses.scale = 1.4
+            lenses.apply(image, edges)
             drawer.image(edges)
         }
     }
