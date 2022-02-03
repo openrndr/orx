@@ -3,9 +3,9 @@ package org.openrndr.extra.osc
 import com.illposed.osc.OSCMessage
 import com.illposed.osc.OSCMessageListener
 import com.illposed.osc.messageselector.OSCPatternAddressMessageSelector
-import com.illposed.osc.transport.udp.OSCPort
-import com.illposed.osc.transport.udp.OSCPortIn
-import com.illposed.osc.transport.udp.OSCPortOut
+import com.illposed.osc.transport.OSCPort
+import com.illposed.osc.transport.OSCPortIn
+import com.illposed.osc.transport.OSCPortOut
 import mu.KotlinLogging
 import java.net.InetAddress
 import java.net.PortUnreachableException
@@ -17,9 +17,9 @@ private val logger = KotlinLogging.logger {}
 
 @Suppress("unused")
 class OSC (
-        val address: InetAddress = InetAddress.getLocalHost(),
-        val portIn: Int = OSCPort.DEFAULT_SC_OSC_PORT,
-        val portOut: Int = portIn
+    val address: InetAddress = InetAddress.getLocalHost(),
+    val portIn: Int = OSCPort.DEFAULT_SC_OSC_PORT,
+    val portOut: Int = portIn
 ) {
     private val receiver: OSCPortIn = OSCPortIn(portIn)
     private val sender: OSCPortOut = OSCPortOut(address, portOut)
@@ -39,11 +39,11 @@ class OSC (
         }
     }
 
-    fun listen(channel: String, callback: (List<Any>) -> Unit) {
+    fun listen(channel: String, callback: (String, List<Any>) -> Unit) {
         val selector = OSCPatternAddressMessageSelector(channel);
 
         val cb = OSCMessageListener {
-            callback(it.message.arguments)
+            callback(it.message.address, it.message.arguments)
         }
 
         receiver.dispatcher.addListener(selector, cb)
@@ -56,15 +56,13 @@ class OSC (
     infix fun String.bind(prop: KMutableProperty0<Double>) {
         val channel = this
 
-        listen(channel) {
+        listen(channel) { address, it ->
             when (val message = it.first()) {
                 is Double -> prop.set(message)
                 is Float -> prop.set(message.toDouble())
             }
         }
     }
-
-    fun listen(function: OSC.() -> Unit) = function()
 
     // Cannot be called inside a listener's callback
     fun removeListener(channel: String?) {

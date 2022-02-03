@@ -1,5 +1,5 @@
 dependencies {
     def withoutSlf4j = { exclude group: 'org.slf4j' }
 
-    implementation "com.illposed.osc:javaosc-core:0.6", withoutSlf4j
+    implementation "com.illposed.osc:javaosc-core:0.8", withoutSlf4j
 }

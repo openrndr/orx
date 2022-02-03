@@ -13,8 +13,8 @@ open class ChataigneOSC(
         private var currentDouble = 0.0
 
         init {
-            osc.listen(key) {
-                currentDouble = (it[0] as Float).toDouble()
+            osc.listen(key) { _, message ->
+                currentDouble = (message[0] as Float).toDouble()
             }
         }
 
@@ -28,11 +28,11 @@ open class ChataigneOSC(
         private var currentColor = ColorRGBa.BLACK
 
         init {
-            osc.listen(key) {
-                val red = it[0] as Float
-                val green = it[1] as Float
-                val blue = it[2] as Float
-                val alpha = it[3] as Float
+            osc.listen(key) { _, message ->
+                val red = message[0] as Float
+                val green = message[1] as Float
+                val blue = message[2] as Float
+                val alpha = message[3] as Float
 
                 currentColor = ColorRGBa(red.toDouble(), green.toDouble(), blue.toDouble(), alpha.toDouble())
             }
