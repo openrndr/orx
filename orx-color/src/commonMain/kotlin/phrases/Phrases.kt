@@ -70,7 +70,7 @@ object ColorPhraseBook : ShaderPhraseBook("color") {
     val phraseSRgbToLinearRgb = ShaderPhrase("""
         |vec4 srgb_to_linear_rgb(vec4 c) {
         |   const float t = 0.0404482362771082;
-        |   vec4(
+        |   return vec4(
         |       c.r <= t ? c.r / 12.92 : pow( (c.r + 0.055) / 1.055, 2.4),
         |       c.g <= t ? c.g / 12.92 : pow( (c.g + 0.055) / 1.055, 2.4),
         |       c.b <= t ? c.b / 12.92 : pow( (c.b + 0.055) / 1.055, 2.4),
