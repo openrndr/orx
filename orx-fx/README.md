@@ -125,12 +125,37 @@ All distortion effects are opacity preserving
 
 ![DemoCannyEdgeDetector01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoCannyEdgeDetector01Kt.png)
 
+### DemoColorDuotone01
+[source code](src/demo/kotlin/DemoColorDuotone01.kt)
+
+![DemoColorDuotone01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColorDuotone01Kt.png)
+
+### DemoColorDuotoneGradient01
+[source code](src/demo/kotlin/DemoColorDuotoneGradient01.kt)
+
+![DemoColorDuotoneGradient01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColorDuotoneGradient01Kt.png)
+
+### DemoColorPosterize01
+[source code](src/demo/kotlin/DemoColorPosterize01.kt)
+
+![DemoColorPosterize01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColorPosterize01Kt.png)
+
 ### DemoDistortLenses01
 [source code](src/demo/kotlin/DemoDistortLenses01.kt)
 
 ![DemoDistortLenses01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDistortLenses01Kt.png)
 
+### DemoDitherLumaHalftone01
+[source code](src/demo/kotlin/DemoDitherLumaHalftone01.kt)
+
+![DemoDitherLumaHalftone01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDitherLumaHalftone01Kt.png)
+
 ### DemoFluidDistort01
 [source code](src/demo/kotlin/DemoFluidDistort01.kt)
 
 ![DemoFluidDistort01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoFluidDistort01Kt.png)
+
+### DemoOkLab01
+[source code](src/demo/kotlin/DemoOkLab01.kt)
+
+![DemoOkLab01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoOkLab01Kt.png)
