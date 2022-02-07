@@ -63,12 +63,19 @@ Most blur effects are opacity preserving
  - `ColorCorrection`, corrections for brightness, contrast, saturation and hue
  - `ColorLookup`, Color LUT filter
  - `ColorMix`, filter implementation of OPENRNDR's color matrix mixing
+ - `Duotone`, maps luminosity to two colors, very similar to `LumaMap` but uses LAB color interpolation. 
+ - `DuotoneGradient`, a two-point gradient version of `Duotone`
  - `LumaMap`, maps luminosity to two colors
  - `LumaOpacity`, maps luminosity to opacity but retains source color
  - `LumaThreshold`, applies a treshold on the input luminosity and maps to two colors
+ - `Posterize`, a posterize effect
  - `Sepia`, applies a reddish-brown monochrome tint that imitates an old photograph
  - `SubtractConstant`, subtract a constant color from the source color
 
+### Color conversion
+ - `OkLabToRgb`
+ - `RgbToOkLab`
+ 
 ### Distortion
 
 All distortion effects are opacity preserving
@@ -82,7 +89,8 @@ All distortion effects are opacity preserving
 ### Dither
  - `ADither` - a selection of dithering effects
  - `CMYKHalftone` - a configurable CMYK halftoning effect
- 
+ - `Crosshatch` - crosshatching effect
+ - `LumaHalftone` - a halftoning effect based on luminosity
  ### Edges
   - `LumaSobel` - A Sobel-kernel based luminosity edge detector
   - `EdgesWork` - An edges filter doubling as erosion

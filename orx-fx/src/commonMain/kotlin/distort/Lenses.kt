@@ -43,7 +43,8 @@ class Lenses : Filter(mppFilterShader(fx_lenses, "block-repeat")) {
         rows = 6
         columns = 8
         distort = 0.0
-
+        scale = 1.0
+        rotation = 0.0
         bicubicFiltering = true
     }
 }

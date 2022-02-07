@@ -128,10 +128,8 @@ float snoise(vec3 v)
 }
 
 vec3 segment(vec3 t, int x, int y) {
-
     float sx = x == 0? t.x : floor(t.x * x) / x;
     float sy = y == 0? t.y : floor(t.y * y) / y;
-
     return vec3(sx,sy, t.z);
 }
 

@@ -33,6 +33,7 @@ kotlin {
                 defaultSourceSet {
                     kotlin.srcDir("src/demo")
                     dependencies {
+                        implementation(project(":orx-color"))
                         implementation(project(":orx-camera"))
                         implementation("org.openrndr:openrndr-application:$openrndrVersion")
                         implementation("org.openrndr:openrndr-extensions:$openrndrVersion")
@@ -66,6 +67,8 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(project(":orx-parameters"))
+                implementation(project(":orx-shader-phrases"))
+                implementation(project(":orx-color"))
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinxSerializationVersion")
                 implementation("org.openrndr:openrndr-application:$openrndrVersion")
                 implementation("org.openrndr:openrndr-draw:$openrndrVersion")
