@@ -23,7 +23,7 @@ fun main() {
             val circle = Circle(Vector2(400.0), 250.0)
             val frame = Rectangle.fromCenter(Vector2(400.0), 600.0, 600.0)
 
-            val points = poissonDiskSampling(width * 1.0, height * 1.0, 30.0)
+            val points = poissonDiskSampling(drawer.bounds, 30.0)
                 .filter { circle.contains(it) }
 
             val delaunay = Delaunay.from(points + circle.contour.equidistantPositions(40))
