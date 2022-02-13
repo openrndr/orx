@@ -97,7 +97,7 @@ void main() {
 
     // After this you would normally perform tone mapping,
     // apply the grain before that.
-    #ifndef OR_GL_FRACOLOR
+    #ifndef OR_GL_FRAGCOLOR
     o_output.rgb = color;
     o_output.a = 1.0;
     #else

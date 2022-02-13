@@ -1,3 +1,5 @@
+package org.openrndr.extra.fx.grain
+
 import org.openrndr.draw.Filter
 import org.openrndr.extra.fx.fx_film_grain
 import org.openrndr.extra.fx.mppFilterShader
