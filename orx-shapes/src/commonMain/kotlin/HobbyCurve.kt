@@ -11,8 +11,11 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 
-fun ShapeContour.hobbyCurve() : ShapeContour {
-    val vertices = segments.map { it.start }
+fun ShapeContour.hobbyCurve(): ShapeContour {
+    val vertices = if (closed)
+        segments.map { it.start }
+    else
+        segments.map { it.start } + segments.last().end
     return hobbyCurve(vertices, closed)
 }
 
