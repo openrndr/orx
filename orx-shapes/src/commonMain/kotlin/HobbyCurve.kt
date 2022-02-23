@@ -11,17 +11,17 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 
-fun ShapeContour.hobbyCurve(): ShapeContour {
+fun ShapeContour.hobbyCurve(curl: Double = 0.0): ShapeContour {
     val vertices = if (closed)
         segments.map { it.start }
     else
         segments.map { it.start } + segments.last().end
-    return hobbyCurve(vertices, closed)
+    return hobbyCurve(vertices, closed, curl)
 }
 
-fun Shape.hobbyCurve() : Shape {
+fun Shape.hobbyCurve(curl: Double = 0.0) : Shape {
     return Shape(contours.map {
-        it.hobbyCurve()
+        it.hobbyCurve(curl)
     })
 }
 
@@ -158,4 +158,3 @@ private fun rho(a: Double, b: Double): Double {
 
 private fun rotate(v: Vector2, s: Double, c: Double) = Vector2(v.x * c - v.y * s, v.x * s + v.y * c)
 private fun rotateAngle(v: Vector2, alpha: Double) = rotate(v, sin(alpha), cos(alpha))
-
