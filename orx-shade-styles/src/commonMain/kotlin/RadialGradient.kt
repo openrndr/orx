@@ -6,6 +6,8 @@ import org.openrndr.draw.shadeStyle
 import org.openrndr.extra.parameters.ColorParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
+import org.openrndr.extra.shaderphrases.preprocess
+import org.openrndr.extras.color.phrases.ColorPhraseBook
 import org.openrndr.extra.color.spaces.ColorOKLABa
 import org.openrndr.math.CastableToVector4
 import org.openrndr.math.Vector2
@@ -33,6 +35,7 @@ where C : ConvertibleToColorRGBa, C : AlgebraicColor<C>, C: CastableToVector4 {
     var exponent: Double by Parameter()
 
     init {
+        ColorPhraseBook.register()
         this.color0 = color0
         this.color1 = color1
         this.offset = offset
@@ -40,6 +43,9 @@ where C : ConvertibleToColorRGBa, C : AlgebraicColor<C>, C: CastableToVector4 {
         this.length = length
         this.exponent = exponent
 
+        fragmentPreamble = """
+            |#pragma import color.oklab_to_linear_rgb
+            |#pragma import color.linear_rgb_to_srgb""".trimMargin().preprocess()
         fragmentTransform = """
             vec2 coord = (c_boundsPosition.xy - 0.5 + p_offset/2.0) * 2.0;
             
