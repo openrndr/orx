@@ -1,6 +1,5 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.shapes.grid
 
 fun main() {
@@ -13,6 +12,9 @@ fun main() {
             extend {
                 drawer.fill = ColorRGBa.WHITE.opacify(0.25)
                 drawer.stroke = ColorRGBa.PINK
+
+                // Notice the negative gutter in this grid. It creates an
+                // overlap between the resulting rectangles.
                 val grid = drawer.bounds.grid(8, 4, 20.0, 20.0, -20.0, -20.0)
                 for (cell in grid.flatten()) {
                     drawer.rectangle(cell)
