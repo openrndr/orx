@@ -5,24 +5,44 @@
 ## Usage
 
 ```kotlin
-val camera = OrbitalCamera(Vector3.UNIT_Z * 1000.0, Vector3.ZERO, 90.0, 0.1, 2000.0)
-val controls = OrbitalControls(camera, keySpeed = 10.0)
+import org.openrndr.application
+import org.openrndr.color.ColorRGBa
+import org.openrndr.draw.DrawPrimitive
+import org.openrndr.extras.camera.AxisHelper
+import org.openrndr.extras.camera.GridHelper
+import org.openrndr.extras.camera.OrbitalCamera
+import org.openrndr.extras.camera.OrbitalControls
+import org.openrndr.extras.meshgenerators.boxMesh
+import org.openrndr.extras.meshgenerators.sphereMesh
+import org.openrndr.math.Vector3
 
-val debug3d = Debug3D(1000, 100)
+fun main() = application {
+    program {
+        val camera = OrbitalCamera(
+            Vector3.UNIT_Z * 90.0, Vector3.ZERO, 90.0, 0.1, 5000.0
+        )
+        val controls = OrbitalControls(camera, keySpeed = 10.0)
 
-extend(camera)
-extend(controls) // adds both mouse and keyboard bindings
-extend {
-    debug3d.draw(drawer)
+        val sphere = sphereMesh(radius = 25.0)
+        val cube = boxMesh(20.0, 20.0, 5.0, 5, 5, 2)
 
-    drawer.perspective(90.0, width*1.0 / height, 0.1, 5000.0)
-    drawer.shadeStyle = shadeStyle {
-        vertexTransform = """x_viewMatrix = p_view"""
-        parameter("view", camera.viewMatrix())
+        extend(camera)
+        extend(AxisHelper()) // shows XYZ axes as RGB lines
+        extend(GridHelper(100)) // debug ground plane
+        extend(controls) // adds both mouse and keyboard bindings
+        extend {
+            drawer.vertexBuffer(sphere, DrawPrimitive.LINE_LOOP)
+            drawer.vertexBuffer(cube, DrawPrimitive.LINE_LOOP)
+            drawer.stroke = ColorRGBa.WHITE
+            drawer.fill = null
+            repeat(10) {
+                drawer.translate(0.0, 0.0, 10.0)
+                // 2D primitives are not optimized for 3D and can
+                // occlude each other
+                drawer.circle(0.0, 0.0, 50.0)
+            }
+        }
     }
-
-    drawer.fill = ColorRGBa.PINK
-    drawer.circle(0.0, 0.0, 500.0)
 }
 ```
 
