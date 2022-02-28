@@ -5,6 +5,8 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.color.ConvertibleToColorRGBa
 import org.openrndr.draw.ShadeStyle
 import org.openrndr.extra.parameters.Description
+import org.openrndr.extra.shaderphrases.preprocess
+import org.openrndr.extras.color.phrases.ColorPhraseBook
 import org.openrndr.extra.color.spaces.ColorOKLABa
 import org.openrndr.math.CastableToVector4
 import org.openrndr.math.Vector2
@@ -16,7 +18,7 @@ open class NPointLinearGradientBase<C>(
     offset: Vector2 = Vector2.ZERO,
     rotation: Double = 0.0
 ) : ShadeStyle()
-        where C : ConvertibleToColorRGBa, C : AlgebraicColor<C>, C : CastableToVector4 {
+        where C : ConvertibleToColorRGBa, C : AlgebraicColor<C>, C: CastableToVector4 {
 
     var colors: Array<C> by Parameter()
 
@@ -26,11 +28,15 @@ open class NPointLinearGradientBase<C>(
     var rotation: Double by Parameter()
 
     init {
+        ColorPhraseBook.register()
         this.colors = colors
         this.points = points
         this.offset = offset
         this.rotation = rotation
 
+        fragmentPreamble = """
+            |#pragma import color.oklab_to_linear_rgb
+            |#pragma import color.linear_rgb_to_srgb""".trimMargin().preprocess()
         fragmentTransform = """
             vec2 coord = (c_boundsPosition.xy - 0.5 + p_offset);
             
