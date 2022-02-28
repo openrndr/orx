@@ -20,11 +20,12 @@ internal const val epsilon = 0.0000001
  * They can also be generated on a ring like in the original algorithm from Robert Bridson
  *
  * @param bounds the rectangular bounds of the area to generate points in
- * @param r the minimum distance between each point
+ * @param radius the minimum distance between each point
  * @param tries number of candidates per point
  * @param randomOnRing generate random points on a ring with an annulus from r to 2r
  * @param random a random number generator, default value is [Random.Default]
  * @param initialPoints a list of points in sampler space, these points will not be tested against [r]
+ * @param obstacleHashGrids a list of obstacles to avoid, defined by points and radii
  * @param boundsMapper a custom function to check if a point is within bounds
 
  * @return a list of points

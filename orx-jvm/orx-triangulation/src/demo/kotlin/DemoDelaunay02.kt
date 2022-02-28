@@ -21,7 +21,7 @@ fun main() {
 
             val frame = Rectangle.fromCenter(Vector2(400.0), 600.0, 600.0)
 
-            val points = poissonDiskSampling(frame.width, frame.height, 50.0).map { it + frame.corner }
+            val points = poissonDiskSampling(frame, 50.0).map { it + frame.corner }
 
             val delaunay = Delaunay.from(points)
             val halfedges = delaunay.halfedges()
