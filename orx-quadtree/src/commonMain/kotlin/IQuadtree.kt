@@ -36,6 +36,14 @@ interface IQuadtree<T> {
     fun insert(element: T): Boolean
 
     /**
+     * Remove the given element
+     *
+     * @param element
+     * @return true if the element was present
+     */
+    fun remove(element: T): Boolean
+
+    /**
      * Finds which node the element is within (but not necessarily belonging to)
      *
      * @param element

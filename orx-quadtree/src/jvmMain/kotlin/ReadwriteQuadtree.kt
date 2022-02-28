@@ -36,6 +36,12 @@ class ReadwriteQuadtree<T>(val qt: Quadtree<T>) : IQuadtree<T> {
         }
     }
 
+    override fun remove(element: T): Boolean {
+        lock.write {
+            return qt.remove(element)
+        }
+    }
+
     override fun findNode(element: T): Quadtree<T>? {
         lock.read {
             return qt.findNode(element)
