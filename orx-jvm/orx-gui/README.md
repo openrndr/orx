@@ -189,6 +189,11 @@ import org.openrndr.extra.parameters.DoubleParameter
 
 ![DemoPresets01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoPresets01Kt.png)
 
+### DemoSideCanvas01
+[source code](src/demo/kotlin/DemoSideCanvas01.kt)
+
+![DemoSideCanvas01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoSideCanvas01Kt.png)
+
 ### DemoSimple01
 [source code](src/demo/kotlin/DemoSimple01.kt)
 
