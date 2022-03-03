@@ -572,20 +572,20 @@ fun ControlManager.layout(init: Body.() -> Unit) {
 }
 
 @Deprecated("use Program.controlManager")
-fun controlManager(builder: ControlManagerBuilder.() -> Unit): ControlManager {
+fun controlManager(defaultStyles: List<StyleSheet> = defaultStyles(), builder: ControlManagerBuilder.() -> Unit): ControlManager {
     val cm = ControlManager()
     cm.fontManager.register("default", resourceUrl("/fonts/Roboto-Regular.ttf"))
-    cm.layouter.styleSheets.addAll(defaultStyles().flatMap { it.flatten() })
+    cm.layouter.styleSheets.addAll(defaultStyles.flatMap { it.flatten() })
     val cmb = ControlManagerBuilder(cm)
     cmb.builder()
     return cm
 }
 
-fun Program.controlManager(builder: ControlManagerBuilder.() -> Unit): ControlManager {
+fun Program.controlManager(defaultStyles: List<StyleSheet> = defaultStyles(), builder: ControlManagerBuilder.() -> Unit): ControlManager {
     val cm = ControlManager()
     cm.program = this
     cm.fontManager.register("default", resourceUrl("/fonts/Roboto-Regular.ttf"))
-    cm.layouter.styleSheets.addAll(defaultStyles().flatMap { it.flatten() })
+    cm.layouter.styleSheets.addAll(defaultStyles.flatMap { it.flatten() })
     val cmb = ControlManagerBuilder(cm)
     cmb.builder()
     return cm

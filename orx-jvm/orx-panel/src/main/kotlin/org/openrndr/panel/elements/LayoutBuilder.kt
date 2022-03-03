@@ -46,11 +46,12 @@ fun Canvas.draw(f: (Drawer) -> Unit) {
     this.userDraw = f
 }
 
-fun Element.canvas(vararg classes: String, init: Canvas.() -> Unit) {
+fun Element.canvas(vararg classes: String, init: Canvas.() -> Unit) : Canvas {
     val canvas = Canvas()
     classes.forEach { canvas.classes.add(ElementClass(it)) }
     canvas.init()
     append(canvas)
+    return canvas
 }
 
 fun Element.dropdownButton(vararg classes: String, id: String? = null, label: String = "button", init: DropdownButton.() -> Unit) = initElement(classes, DropdownButton().apply {
