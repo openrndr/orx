@@ -71,7 +71,7 @@ private fun <T : Any> setAndPersist(compartmentLabel: String, property: KMutable
 private val logger = KotlinLogging.logger {  }
 
 @Suppress("unused", "UNCHECKED_CAST")
-class GUI : Extension {
+class GUI(val baseColor:ColorRGBa = ColorRGBa.GRAY, val defaultStyles: List<StyleSheet> = defaultStyles()) : Extension {
     private var onChangeListener: ((name: String, value: Any?) -> Unit)? = null
     override var enabled = true
 
@@ -91,10 +91,12 @@ class GUI : Extension {
     }
 
     var compartmentsCollapsedByDefault = true
-    var doubleBind = false
+    var doubleBind = true
     var defaultSaveFolder = "gui-parameters"
     var persistState = true
+    var enableSideCanvas = false
 
+    var canvas : Canvas? = null
     private var panel: ControlManager? = null
 
     // Randomize button
@@ -151,7 +153,22 @@ class GUI : Extension {
             }
         }
 
-        panel = program.controlManager {
+        panel = program.controlManager(defaultStyles = defaultStyles) {
+            styleSheet(has class_ "fullscreen") {
+                this.width = 100.percent
+                this.height = 100.percent
+                this.flexDirection = FlexDirection.Row
+                this.display = Display.FLEX
+            }
+            styleSheet(has class_ "full-canvas") {
+                this.background = Color.RGBa(ColorRGBa.RED)
+
+                this.flexShrink = FlexGrow.Ratio(1.0)
+                this.flexGrow = FlexGrow.Ratio(1.0)
+                this.height = 100.percent
+                this.width = 100.px
+            }
+
             styleSheet(has class_ "container") {
                 this.display = Display.FLEX
                 this.flexDirection = FlexDirection.Column
@@ -164,10 +181,10 @@ class GUI : Extension {
                 this.flexDirection = FlexDirection.Column
                 this.height = 5.px
                 this.width = 100.percent
-                this.background = Color.RGBa(ColorRGBa.GRAY.shade(0.9))
+                this.background = Color.RGBa(baseColor.shade(0.9))
 
                 and(has state "hover") {
-                    this.background = Color.RGBa(ColorRGBa.GRAY.shade(1.1))
+                    this.background = Color.RGBa(baseColor.shade(1.1))
                 }
             }
 
@@ -176,7 +193,7 @@ class GUI : Extension {
                 this.width = 100.percent
                 this.display = Display.FLEX
                 this.flexDirection = FlexDirection.Row
-                this.background = Color.RGBa(ColorRGBa.GRAY.copy(a = 0.99))
+                this.background = Color.RGBa(baseColor.copy(a = 0.99))
             }
 
             styleSheet(has class_ "collapsed") {
@@ -195,7 +212,7 @@ class GUI : Extension {
                 this.paddingRight = 10.px
                 this.marginRight = 2.px
                 this.height = 100.percent
-                this.background = Color.RGBa(ColorRGBa.GRAY.copy(a = 0.99))
+                this.background = Color.RGBa(baseColor.copy(a = 0.99))
                 this.overflow = Overflow.Scroll
 
                 //<editor-fold desc="1) setup control style">
@@ -248,134 +265,144 @@ class GUI : Extension {
             styleSheet(has type "dropdown-button") {
                 this.width = 175.px
             }
-
-
             layout {
-                div("container") {
-                    id = "container"
-                    @Suppress("UNUSED_VARIABLE") val header = div("toolbar") {
-                        randomizeButton = button {
-                            label = "Randomize"
-                            clicked {
-                                randomize(strength = if (shiftDown) .75 else .05)
+                div("fullscreen") {
+                    div("container") {
+                        id = "container"
+                        @Suppress("UNUSED_VARIABLE") val header = div("toolbar") {
+                            randomizeButton = button {
+                                label = "Randomize"
+                                clicked {
+                                    randomize(strength = if (shiftDown) .75 else .05)
+                                }
                             }
-                        }
-                        button {
-                            label = "Load"
-                            clicked {
-                                openFileDialog(supportedExtensions = listOf("json"), contextID = "gui.parameters") {
-                                    loadParameters(it)
+                            button {
+                                label = "Load"
+                                clicked {
+                                    openFileDialog(supportedExtensions = listOf("json"), contextID = "gui.parameters") {
+                                        loadParameters(it)
+                                    }
+                                }
+                            }
+                            button {
+                                label = "Save"
+                                clicked {
+                                    val defaultPath = getDefaultPathForContext(contextID = "gui.parameters")
+
+                                    if (defaultPath == null) {
+                                        val local = File(".")
+                                        val parameters = File(local, defaultSaveFolder)
+                                        if (parameters.exists() && parameters.isDirectory) {
+                                            setDefaultPathForContext(contextID = "gui.parameters", file = parameters)
+                                        } else {
+                                            if (parameters.mkdirs()) {
+                                                setDefaultPathForContext(
+                                                    contextID = "gui.parameters",
+                                                    file = parameters
+                                                )
+                                            } else {
+                                                logger.warn { "Could not create directory ${parameters.absolutePath}" }
+                                            }
+                                        }
+                                    }
+
+                                    saveFileDialog(
+                                        suggestedFilename = "parameters.json",
+                                        contextID = "gui.parameters",
+                                        supportedExtensions = listOf("json")
+                                    ) {
+                                        saveParameters(it)
+                                    }
                                 }
                             }
                         }
-                        button {
-                            label = "Save"
-                            clicked {
-                                val defaultPath = getDefaultPathForContext(contextID = "gui.parameters")
+                        val collapseBorder = div("collapse-border") {
 
-                                if (defaultPath == null) {
-                                    val local = File(".")
-                                    val parameters = File(local, defaultSaveFolder)
-                                    if (parameters.exists() && parameters.isDirectory) {
-                                        setDefaultPathForContext(contextID = "gui.parameters", file = parameters)
+                        }
+
+                        val collapsibles = mutableSetOf<Div>()
+                        val sidebar = div("sidebar") {
+                            id = "sidebar"
+                            scrollTop = sidebarState().scrollTop
+                            for ((labeledObject, binding) in trackedObjects) {
+                                val (label, _) = labeledObject
+
+                                val h3Header = h3 { label }
+                                val collapsible = div("compartment") {
+                                    for (parameter in binding.parameters) {
+                                        val element = addControl(labeledObject, parameter)
+                                        binding.parameterControls[parameter] = element
+                                    }
+                                }
+                                collapsibles.add(collapsible)
+                                val collapseClass = ElementClass("collapsed")
+
+                                /* this is guaranteed to be in the dictionary after insertion through add() */
+                                val collapseState = persistentCompartmentStates[Driver.instance.contextID]!![label]!!
+                                if (collapseState.collapsed) {
+                                    collapsible.classes.add(collapseClass)
+                                }
+
+                                h3Header.mouse.pressed.listen {
+                                    it.cancelPropagation()
+                                }
+                                h3Header.mouse.clicked.listen { me ->
+
+                                    if (KeyModifier.CTRL in me.modifiers) {
+                                        collapsible.classes.remove(collapseClass)
+                                        persistentCompartmentStates[Driver.instance.contextID]!!.forEach {
+                                            it.value.collapsed = true
+                                        }
+                                        collapseState.collapsed = false
+
+                                        (collapsibles - collapsible).forEach {
+                                            it.classes.add(collapseClass)
+                                        }
                                     } else {
-                                        if (parameters.mkdirs()) {
-                                            setDefaultPathForContext(contextID = "gui.parameters", file = parameters)
+
+                                        if (collapseClass in collapsible.classes) {
+                                            collapsible.classes.remove(collapseClass)
+                                            collapseState.collapsed = false
                                         } else {
-                                            logger.warn { "Could not create directory ${parameters.absolutePath}" }
+                                            collapsible.classes.add(collapseClass)
+                                            collapseState.collapsed = true
                                         }
                                     }
                                 }
-
-                                saveFileDialog(suggestedFilename = "parameters.json", contextID = "gui.parameters", supportedExtensions = listOf("json")) {
-                                    saveParameters(it)
-                                }
                             }
                         }
+                        collapseBorder.mouse.pressed.listen {
+                            it.cancelPropagation()
+                        }
+
+                        collapseBorder.mouse.clicked.listen {
+                            val collapsed = ElementClass("collapsed")
+                            if (collapsed in sidebar.classes) {
+                                sidebar.classes.remove(collapsed)
+                                sidebarState().collapsed = false
+                            } else {
+                                sidebar.classes.add(collapsed)
+                                sidebarState().collapsed = true
+                            }
+                            it.cancelPropagation()
+                        }
+                        sidebar.mouse.scrolled.listen {
+                            sidebarState().scrollTop = sidebar.scrollTop
+                        }
+                        if (sidebarState().collapsed) {
+                            sidebar.classes.add(ElementClass("collapsed"))
+                        }
+                        sidebar.scrollTop = sidebarState().scrollTop
                     }
-                    val collapseBorder = div("collapse-border") {
-
-                    }
-
-                    val collapsibles = mutableSetOf<Div>()
-                    val sidebar = div("sidebar") {
-                        id = "sidebar"
-                        scrollTop = sidebarState().scrollTop
-                        for ((labeledObject, binding) in trackedObjects) {
-                            val (label, _) = labeledObject
-
-                            val h3Header = h3 { label }
-                            val collapsible = div("compartment") {
-                                for (parameter in binding.parameters) {
-                                    val element = addControl(labeledObject, parameter)
-                                    binding.parameterControls[parameter] = element
-                                }
-                            }
-                            collapsibles.add(collapsible)
-                            val collapseClass = ElementClass("collapsed")
-
-                            /* this is guaranteed to be in the dictionary after insertion through add() */
-                            val collapseState = persistentCompartmentStates[Driver.instance.contextID]!![label]!!
-                            if (collapseState.collapsed) {
-                                collapsible.classes.add(collapseClass)
-                            }
-
-                            h3Header.mouse.pressed.listen {
-                                it.cancelPropagation()
-                            }
-                            h3Header.mouse.clicked.listen { me ->
-
-                                if (KeyModifier.CTRL in me.modifiers) {
-                                    collapsible.classes.remove(collapseClass)
-                                    persistentCompartmentStates[Driver.instance.contextID]!!.forEach {
-                                        it.value.collapsed = true
-                                    }
-                                    collapseState.collapsed = false
-
-                                    (collapsibles - collapsible).forEach {
-                                        it.classes.add(collapseClass)
-                                    }
-                                } else {
-
-                                    if (collapseClass in collapsible.classes) {
-                                        collapsible.classes.remove(collapseClass)
-                                        collapseState.collapsed = false
-                                    } else {
-                                        collapsible.classes.add(collapseClass)
-                                        collapseState.collapsed = true
-                                    }
-                                }
-                            }
+                    if (enableSideCanvas) {
+                        canvas = canvas("full-canvas") {
                         }
                     }
-                    collapseBorder.mouse.pressed.listen {
-                        it.cancelPropagation()
-                    }
-
-                    collapseBorder.mouse.clicked.listen {
-                        val collapsed = ElementClass("collapsed")
-                        if (collapsed in sidebar.classes) {
-                            sidebar.classes.remove(collapsed)
-                            sidebarState().collapsed = false
-                        } else {
-                            sidebar.classes.add(collapsed)
-                            sidebarState().collapsed = true
-                        }
-                        it.cancelPropagation()
-                    }
-                    sidebar.mouse.scrolled.listen {
-                        sidebarState().scrollTop = sidebar.scrollTop
-                    }
-                    if (sidebarState().collapsed) {
-                        sidebar.classes.add(ElementClass("collapsed"))
-                    }
-                    sidebar.scrollTop = sidebarState().scrollTop
                 }
             }
         }
 
         visible = !sidebarState().hidden
-
 
         program.extend(panel ?: error("no panel"))
     }
