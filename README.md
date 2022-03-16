@@ -52,6 +52,7 @@ A growing library of assorted data structures, algorithms and utilities.
 | [`orx-keyframer`](orx-jvm/orx-keyframer/) | Create animated timelines by specifying properties and times in keyframes, then play it back at any speed (even backwards) automatically interpolating properties. Save, load, use mathematical expressions and callbacks. Powerful and highly reusable. |
 | [`orx-kinect-v1`](orx-jvm/orx-kinect-v1/) | Support for the Kinect V1 RGB+Depth camera. |
 | [`orx-midi`](orx-jvm/orx-midi/) | Basic MIDI support for keyboards and controllers. Send and receive note and control change events. |
+| [`orx-minim`](orx-jvm/orx-minim/) | A minimal Minim support library |
 | [`orx-olive`](orx-jvm/orx-olive/) | Provides live coding functionality: updates a running OPENRNDR program when you save your changes. |
 | [`orx-osc`](orx-jvm/orx-osc/) | Open Sound Control makes it possible to send and receive messages from other OSC enabled programs in the same or a different computer. Used to create multi-application or multi-device software. |
 | [`orx-panel`](orx-jvm/orx-panel/) | The OPENRNDR UI toolkit. Provides buttons, sliders, text, a color picker and much more. HTML/CSS-like. |
