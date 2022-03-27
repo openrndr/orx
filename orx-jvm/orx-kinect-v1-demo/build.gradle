@@ -9,5 +9,5 @@ dependencies {
     runtimeOnly project(":orx-jvm:orx-kinect-v1-natives-$openrndrOs")
     runtimeOnly "org.openrndr:openrndr-gl3:$openrndrVersion"
     runtimeOnly "org.openrndr:openrndr-gl3-natives-$openrndrOs:$openrndrVersion"
-    runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
+    runtimeOnly "ch.qos.logback:logback-classic:1.2.11"
 }
