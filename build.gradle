@@ -12,7 +12,7 @@ plugins {
     // remember to update all the versions here when upgrading kotlin version
     id 'org.jetbrains.kotlin.jvm' apply false
     id 'org.jetbrains.kotlin.multiplatform'  apply false
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.10' apply false
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.20' apply false
     id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
 }
 
@@ -66,7 +66,7 @@ def openrndrUseSnapshot = isReleaseVersion
 project.ext {
     openrndrVersion = ((findProperty("OPENRNDR.version")?:System.getenv("OPENRNDR_VERSION")) ?.replace("v","")) ?: "0.5.1-SNAPSHOT"
     jvmTarget = "1.8"
-    kotlinVersion = "1.6.10"
+    kotlinVersion = "1.6.20"
     kotlinApiVersion = "1.6"
     spekVersion = "2.0.15"
     libfreenectVersion = "0.5.7-1.5.7"
