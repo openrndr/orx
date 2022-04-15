@@ -7,6 +7,7 @@ import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.ColorParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
+import org.openrndr.extra.parameters.IntParameter
 
 @Description("Contour")
 class Contour : Filter(mppFilterShader(fx_contour, "contour")) {
@@ -25,11 +26,15 @@ class Contour : Filter(mppFilterShader(fx_contour, "contour")) {
     @ColorParameter("contour color")
     var contourColor: ColorRGBa by parameters
 
+    @IntParameter("window", 0, 10)
+    var window: Int by parameters
+
     init {
         levels = 6.0
         contourWidth = 0.4
         contourColor = ColorRGBa.BLACK
         backgroundOpacity = 1.0
         contourOpacity = 1.0
+        window = 1
     }
 }
