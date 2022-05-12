@@ -4,6 +4,15 @@ import kotlin.math.*
 
 typealias EasingFunction = (Double, Double, Double, Double) -> Double
 
+/**
+ * # Easing function arguments
+ *
+ * @param t current Time
+ * @param b Beginning value
+ * @param c Change in value (the final value is `b+c`)
+ * @param d Duration (maximum time)
+ */
+
 fun easeLinear(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0) = c * (t / d) + b
 
 // -- constant
@@ -261,11 +270,9 @@ fun easeQuintIn(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): D
 }
 
 fun easeQuintInOut(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): Double {
-    val t2 = t * 2.0
-    val t22 = t2 - 2.0
-    return if (t < 0.5) 0.5 * t2 * t2 * t2 * t2 * t2 else {
-        0.5 * (t22 * t22 * t22 * t22 * t22 + 2.0)
-    }
+    val td = t / (d / 2)
+    val td2 = td - 2.0
+    return if (td < 1) c / 2 * td * td * td * td * td + b else c / 2 * (td2 * td2 * td2 * td2 * td2 + 2) + b
 }
 
 fun easeQuintOut(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): Double {
@@ -284,7 +291,12 @@ fun easeSineOut(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): D
 fun easeSineInOut(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0): Double =
         -c / 2 * (cos(PI * t / d) - 1) + b
 
-
+/**
+ * Enum containing all easing functions
+ *
+ * Use the `Easing.values()` list to iterate over available functions,
+ * query its `.size` property or get functions by index.
+ */
 enum class Easing(val function: EasingFunction) {
     Linear(::easeLinear),
 
@@ -331,5 +343,3 @@ enum class Easing(val function: EasingFunction) {
     SineInOut(::easeSineInOut),
     SineOut(::easeSineOut),
 }
-
-
