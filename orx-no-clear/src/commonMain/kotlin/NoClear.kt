@@ -26,7 +26,7 @@ class NoClear : Extension {
                     it.detachColorAttachments()
                     it.destroy()
                 }
-                renderTarget = renderTarget(program.width, program.height) {
+                renderTarget = renderTarget(program.width, program.height, program.window.contentScale) {
                     colorBuffer()
                     depthBuffer()
                 }
