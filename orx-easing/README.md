@@ -64,14 +64,15 @@ Outputs
 ```
 
 Note how most result values are closer to 40.0 than to 10.0, due to the usage of
-an `In` easing function. `Cubic`, `Quad` and `Quintic` functions would make this even more obvious.
+an `In` easing function. `easeCubicIn`, `easeQuartIn` and `easeQuinticIn` functions would make this even more obvious.
 
 ### Default arguments
 
+When `t` is in `[0, 1]` we can omit most arguments
+
 ```kotlin
-val et = easeQuadIn(t, 0.0, 1.0, 1.0)
-// -- when t is in [0, 1] we can omit most arguments
-val et = easeQuadIn(t)
+val e0 = easeQuadIn(t, 0.0, 1.0, 1.0)
+val e1 = easeQuadIn(t)
 ```
 
 ### Using the `Easing` enumeration
@@ -82,8 +83,8 @@ The `Easing` enum contains all easing functions.
 val et = Easing.QuadIn.function(t, 0.0, 1.0, 1.0)
 
 // list all easing function names
-Easing.values().forEach {
-    println(it.name)
+Easing.values().forEach { easing ->
+    println(easing.name)
 }
 
 // find out how many easing functions are available

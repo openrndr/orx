@@ -25,6 +25,7 @@ kotlin {
                     kotlin.srcDir("src/demo")
                     dependencies {
                         implementation(project(":orx-camera"))
+                        implementation(project(":orx-shapes"))
                         implementation("org.openrndr:openrndr-application:$openrndrVersion")
                         implementation("org.openrndr:openrndr-extensions:$openrndrVersion")
                         runtimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
