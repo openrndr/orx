@@ -3,15 +3,13 @@ package org.openrndr.extra.noclear
 import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.Drawer
-import org.openrndr.draw.RenderTarget
-import org.openrndr.draw.isolated
-import org.openrndr.draw.renderTarget
+import org.openrndr.draw.*
 import org.openrndr.math.Matrix44
 
-class NoClear : Extension {
+class NoClear(val multisample: BufferMultisample = BufferMultisample.Disabled) : Extension {
     override var enabled: Boolean = true
     private var renderTarget: RenderTarget? = null
+    private var resolvedColorBuffer: ColorBuffer? = null
 
     /**
      * code-block to draw an optional custom backdrop
@@ -26,9 +24,15 @@ class NoClear : Extension {
                     it.detachColorAttachments()
                     it.destroy()
                 }
-                renderTarget = renderTarget(program.width, program.height, program.window.contentScale) {
+
+                renderTarget = renderTarget(program.width, program.height, program.window.contentScale, multisample) {
                     colorBuffer()
                     depthBuffer()
+                }
+
+                if (multisample != BufferMultisample.Disabled) {
+                    resolvedColorBuffer?.destroy()
+                    resolvedColorBuffer = colorBuffer(program.width, program.height, program.window.contentScale)
                 }
 
                 renderTarget?.let {
@@ -46,11 +50,14 @@ class NoClear : Extension {
         renderTarget?.unbind()
 
         renderTarget?.let {
+            if (multisample != BufferMultisample.Disabled) {
+                it.colorBuffer(0).copyTo(resolvedColorBuffer!!)
+            }
             drawer.isolated {
                 drawer.ortho()
                 drawer.view = Matrix44.IDENTITY
                 drawer.model = Matrix44.IDENTITY
-                drawer.image(it.colorBuffer(0))
+                drawer.image(resolvedColorBuffer ?: it.colorBuffer(0))
             }
         }
     }
