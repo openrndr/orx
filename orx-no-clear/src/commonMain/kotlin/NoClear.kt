@@ -50,14 +50,16 @@ class NoClear(val multisample: BufferMultisample = BufferMultisample.Disabled) :
         renderTarget?.unbind()
 
         renderTarget?.let {
-            if (multisample != BufferMultisample.Disabled) {
-                it.colorBuffer(0).copyTo(resolvedColorBuffer!!)
-            }
             drawer.isolated {
                 drawer.ortho()
                 drawer.view = Matrix44.IDENTITY
                 drawer.model = Matrix44.IDENTITY
-                drawer.image(resolvedColorBuffer ?: it.colorBuffer(0))
+                if (multisample != BufferMultisample.Disabled) {
+                    it.colorBuffer(0).copyTo(resolvedColorBuffer!!)
+                    drawer.image(resolvedColorBuffer!!)
+                } else {
+                    drawer.image(it.colorBuffer(0))
+                }
             }
         }
     }
