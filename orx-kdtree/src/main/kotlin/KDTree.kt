@@ -4,13 +4,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import mu.KotlinLogging
 import org.openrndr.math.*
 import java.util.*
 import kotlin.IllegalStateException
 import kotlin.math.abs
-
-val logger = KotlinLogging.logger { }
 
 /** built-in mapper for [Vector2] */
 fun vector2Mapper(v: Vector2, dimension: Int): Double {
@@ -105,7 +102,6 @@ private fun <T> insertItem(root: KDTreeNode<T>, item: T): KDTreeNode<T> {
 fun <T> buildKDTree(items: MutableList<T>, dimensions: Int, mapper: (T, Int) -> Double): KDTreeNode<T> {
     val root = KDTreeNode<T>(dimensions, mapper)
 
-    val start = System.currentTimeMillis()
     fun <T> buildTreeTask(
         scope: CoroutineScope,
         node: KDTreeNode<T>,
@@ -175,7 +171,6 @@ fun <T> buildKDTree(items: MutableList<T>, dimensions: Int, mapper: (T, Int) -> 
     runBlocking {
         job.join()
     }
-    logger.trace { "building took ${System.currentTimeMillis() - start}ms" }
     return root
 }
 
