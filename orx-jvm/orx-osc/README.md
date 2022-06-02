@@ -22,3 +22,5 @@ osc.listen("/live/track2") { addr, msg ->
 
 osc.send("/maxmsp/filter", 500, "hz")
 ```
+
+For more examples please visit the [guide](https://guide.openrndr.org/OPENRNDRExtras/osc.html).
