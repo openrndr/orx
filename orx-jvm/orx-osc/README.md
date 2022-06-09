@@ -16,9 +16,11 @@ Orx-osc is a wrapper around javaOSC
 // PORT IN and OUT: 57110
 val osc = OSC()
 
-osc.listen("/live/track2") {
+osc.listen("/live/track2") { addr, msg ->
     // do something
 }
 
 osc.send("/maxmsp/filter", 500, "hz")
 ```
+
+For more examples please visit the [guide](https://guide.openrndr.org/OPENRNDRExtras/osc.html).
