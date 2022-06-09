@@ -33,7 +33,7 @@ fun RenderTarget.deepDestroy() {
  * A single layer representation
  */
 @Description("Layer")
-open class Layer internal constructor() {
+open class Layer internal constructor(val bufferMultisample: BufferMultisample = BufferMultisample.Disabled) {
     var copyLayers: List<Layer> = listOf()
     var sourceOut = SourceOut()
     var sourceIn = SourceIn()
@@ -43,7 +43,8 @@ open class Layer internal constructor() {
     var blendFilter: Pair<Filter, Filter.() -> Unit>? = null
     val postFilters: MutableList<Pair<Filter, Filter.() -> Unit>> = mutableListOf()
     var colorType = ColorType.UINT8
-    var accumulation: ColorBuffer? = null
+    private var resolvedColorBuffer: ColorBuffer? = null
+    private var activeRenderTargetColorBuffer: ColorBuffer? = null
 
     @BooleanParameter("enabled")
     var enabled = true
@@ -68,14 +69,8 @@ open class Layer internal constructor() {
 
         val activeRenderTarget = RenderTarget.active
 
-        accumulation = if (activeRenderTarget !is ProgramRenderTarget) {
-            activeRenderTarget.colorBuffer(0)
-        } else {
-            null
-        }
-
         if (shouldCreateLayerTarget(activeRenderTarget)) {
-            createLayerTarget(activeRenderTarget, drawer)
+            createLayerTarget(activeRenderTarget, drawer, bufferMultisample)
         }
 
         layerTarget?.let { target ->
@@ -87,7 +82,12 @@ open class Layer internal constructor() {
                         }
 
                         it.layerTarget?.let { copyTarget ->
-                            drawer.image(copyTarget.colorBuffer(0))
+                            if (it.bufferMultisample == BufferMultisample.Disabled) {
+                                drawer.image(copyTarget.colorBuffer(0))
+                            } else {
+                                copyTarget.colorBuffer(0).copyTo(it.resolvedColorBuffer!!)
+                                drawer.image(it.resolvedColorBuffer!!)
+                            }
                         }
                     }
                 }
@@ -95,7 +95,7 @@ open class Layer internal constructor() {
 
             maskLayer?.let {
                 if (it.shouldCreateLayerTarget(activeRenderTarget)) {
-                    it.createLayerTarget(activeRenderTarget, drawer)
+                    it.createLayerTarget(activeRenderTarget, drawer, it.bufferMultisample)
                 }
 
                 it.layerTarget?.let { maskRt ->
@@ -125,11 +125,9 @@ open class Layer internal constructor() {
             }
 
             if (postFilters.size > 0) {
-                val sizeMismatch = if (postBufferCache.isNotEmpty()) {
-                    postBufferCache[0].width != activeRenderTarget.width || postBufferCache[0].height != activeRenderTarget.height
-                } else {
-                    false
-                }
+                val sizeMismatch = postBufferCache.isNotEmpty()
+                                   && (postBufferCache[0].width != activeRenderTarget.width
+                                       || postBufferCache[0].height != activeRenderTarget.height)
 
                 if (sizeMismatch) {
                     postBufferCache.forEach { it.destroy() }
@@ -137,8 +135,14 @@ open class Layer internal constructor() {
                 }
 
                 if (postBufferCache.isEmpty()) {
-                    postBufferCache += persistent { colorBuffer(activeRenderTarget.width, activeRenderTarget.height, type = colorType) }
-                    postBufferCache += persistent { colorBuffer(activeRenderTarget.width, activeRenderTarget.height, type = colorType) }
+                    postBufferCache += persistent {
+                        colorBuffer(activeRenderTarget.width, activeRenderTarget.height,
+                            activeRenderTarget.contentScale, type = colorType)
+                    }
+                    postBufferCache += persistent {
+                        colorBuffer(activeRenderTarget.width, activeRenderTarget.height,
+                            activeRenderTarget.contentScale, type = colorType)
+                    }
                 }
             }
 
@@ -155,7 +159,6 @@ open class Layer internal constructor() {
 
             maskLayer?.let {
                 val maskFilter = if (invertMask) sourceOut else sourceIn
-
                 maskFilter.apply(arrayOf(layerPost, it.layerTarget!!.colorBuffer(0)), layerPost)
             }
 
@@ -165,27 +168,56 @@ open class Layer internal constructor() {
                     drawer.ortho()
                     drawer.view = Matrix44.IDENTITY
                     drawer.model = Matrix44.IDENTITY
-                    drawer.image(layerPost, layerPost.bounds, drawer.bounds)
+                    if (bufferMultisample == BufferMultisample.Disabled) {
+                        drawer.image(layerPost, layerPost.bounds, drawer.bounds)
+                    } else {
+                        layerPost.copyTo(resolvedColorBuffer!!)
+                        drawer.image(resolvedColorBuffer!!, layerPost.bounds, drawer.bounds)
+                    }
                 }
             } else {
                 localBlendFilter.first.apply(localBlendFilter.second)
-                localBlendFilter.first.apply(arrayOf(activeRenderTarget.colorBuffer(0), layerPost), activeRenderTarget.colorBuffer(0))
-            }
+                activeRenderTarget.colorBuffer(0).copyTo(activeRenderTargetColorBuffer!!)
+                if (bufferMultisample == BufferMultisample.Disabled) {
+                    localBlendFilter.first.apply(arrayOf(activeRenderTargetColorBuffer!!, layerPost),
+                        activeRenderTargetColorBuffer!!)
+                } else {
+                    layerPost.copyTo(resolvedColorBuffer!!)
+                    localBlendFilter.first.apply(arrayOf(activeRenderTargetColorBuffer!!, resolvedColorBuffer!!),
+                        activeRenderTargetColorBuffer!!)
+                }
 
-            accumulation?.copyTo(target.colorBuffer(0))
+                if (activeRenderTarget !is ProgramRenderTarget) {
+                    activeRenderTargetColorBuffer!!.copyTo(target.colorBuffer(0))
+                }
+                activeRenderTargetColorBuffer!!.copyTo(activeRenderTarget.colorBuffer(0))
+            }
         }
     }
 
     private fun shouldCreateLayerTarget(activeRenderTarget: RenderTarget): Boolean {
-        return layerTarget == null || ((layerTarget?.width != activeRenderTarget.width || layerTarget?.height != activeRenderTarget.height) && activeRenderTarget.width > 0 && activeRenderTarget.height > 0)
+        return layerTarget == null
+               || ((layerTarget?.width != activeRenderTarget.width || layerTarget?.height != activeRenderTarget.height)
+                   && activeRenderTarget.width > 0 && activeRenderTarget.height > 0)
     }
 
-    private fun createLayerTarget(activeRenderTarget: RenderTarget, drawer: Drawer) {
+    private fun createLayerTarget(
+        activeRenderTarget: RenderTarget, drawer: Drawer, bufferMultisample: BufferMultisample
+    ) {
         layerTarget?.deepDestroy()
-        layerTarget = renderTarget(activeRenderTarget.width, activeRenderTarget.height) {
+        layerTarget = renderTarget(activeRenderTarget.width, activeRenderTarget.height,
+            activeRenderTarget.contentScale, bufferMultisample) {
             colorBuffer(type = colorType)
             depthBuffer()
         }
+        if (bufferMultisample != BufferMultisample.Disabled) {
+            resolvedColorBuffer?.destroy()
+            resolvedColorBuffer = colorBuffer(activeRenderTarget.width, activeRenderTarget.height,
+                activeRenderTarget.contentScale, type = colorType)
+        }
+        activeRenderTargetColorBuffer?.destroy()
+        activeRenderTargetColorBuffer = colorBuffer(activeRenderTarget.width, activeRenderTarget.height,
+            activeRenderTarget.contentScale, type = colorType)
         layerTarget?.let {
             drawer.withTarget(it) {
                 drawer.clear(ColorRGBa.TRANSPARENT)
@@ -199,6 +231,15 @@ open class Layer internal constructor() {
  */
 fun Layer.layer(function: Layer.() -> Unit): Layer {
     val layer = Layer().apply { function() }
+    children.add(layer)
+    return layer
+}
+
+/**
+ * create a layer within the composition with a custom [BufferMultisample]
+ */
+fun Layer.layer(bufferMultisample: BufferMultisample, function: Layer.() -> Unit): Layer {
+    val layer = Layer(bufferMultisample).apply { function() }
     children.add(layer)
     return layer
 }
