@@ -52,6 +52,8 @@ class TemporalBlur : Extension {
     private var image: RenderTarget? = null
     private var imageResolved: RenderTarget? = null
 
+    var contentScale : Double? = null
+
     // modifier for final stage averager, higher gain results in brighter images
     var gain = 1.0
 
@@ -134,27 +136,29 @@ class TemporalBlur : Extension {
             }
         }
 
+        val resolvedContentScale = contentScale ?: 1.0
+
         if (accumulator == null) {
-            accumulator = renderTarget(program.width, program.height) {
+            accumulator = renderTarget(program.width, program.height, contentScale = resolvedContentScale) {
                 colorBuffer(type = ColorType.FLOAT32)
             }
         }
 
         if (result == null) {
-            result = renderTarget(program.width, program.height) {
+            result = renderTarget(program.width, program.height, contentScale = resolvedContentScale) {
                 colorBuffer(type = ColorType.FLOAT32)
             }
         }
 
         if (image == null) {
-            image = renderTarget(program.width, program.height, multisample = multisample) {
+            image = renderTarget(program.width, program.height, multisample = multisample, contentScale = resolvedContentScale) {
                 depthBuffer()
                 colorBuffer(type = ColorType.FLOAT32)
             }
         }
 
         if (imageResolved == null) {
-            imageResolved = renderTarget(program.width, program.height) {
+            imageResolved = renderTarget(program.width, program.height, contentScale = resolvedContentScale) {
                 depthBuffer()
                 colorBuffer(type = ColorType.FLOAT32)
             }
