@@ -102,7 +102,6 @@ private fun <T> insertItem(root: KDTreeNode<T>, item: T): KDTreeNode<T> {
 fun <T> buildKDTree(items: MutableList<T>, dimensions: Int, mapper: (T, Int) -> Double): KDTreeNode<T> {
     val root = KDTreeNode<T>(dimensions, mapper)
 
-    val start = System.currentTimeMillis()
     fun <T> buildTreeTask(
         scope: CoroutineScope,
         node: KDTreeNode<T>,
@@ -172,7 +171,6 @@ fun <T> buildKDTree(items: MutableList<T>, dimensions: Int, mapper: (T, Int) -> 
     runBlocking {
         job.join()
     }
-    println("building took ${System.currentTimeMillis() - start}ms")
     return root
 }
 

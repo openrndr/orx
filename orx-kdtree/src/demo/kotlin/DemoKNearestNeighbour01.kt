@@ -1,9 +1,6 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extra.kdtree.buildKDTree
-import org.openrndr.extra.kdtree.findKNearest
 import org.openrndr.extra.kdtree.kdTree
-import org.openrndr.extra.kdtree.vector2Mapper
 import org.openrndr.math.Vector2
 import org.openrndr.shape.LineSegment
 
