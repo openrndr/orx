@@ -59,6 +59,11 @@ fun main() {
 
 ![DemoCompositor01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-compositor/images/DemoCompositor01Kt.png)
 
+### DemoCompositor02
+[source code](src/demo/kotlin/DemoCompositor02.kt)
+
+![DemoCompositor02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-compositor/images/DemoCompositor02Kt.png)
+
 ### DemoUse01
 [source code](src/demo/kotlin/DemoUse01.kt)
 
