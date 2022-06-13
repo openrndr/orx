@@ -40,10 +40,10 @@ def multiplatformModules = [
 def doNotPublish = ["openrndr-demos"]
 
 project.ext {
-    kotlinApiVersion = '1.7'
-    kotlinLanguageVersion = '1.7'
-    kotlinVersion = '1.7.0'
-    kotlinxCoroutinesVersion = '1.6.1'
+    kotlinApiVersion = '1.6'
+    kotlinLanguageVersion = '1.6'
+    kotlinVersion = '1.6.20'
+    kotlinxCoroutinesVersion = '1.6.0'
     kotlinLoggingVersion = '2.1.21'
     kotlinxSerializationVersion = '1.3.2'
     spekVersion = '2.0.15'
@@ -66,8 +66,8 @@ def openrndrUseSnapshot = isReleaseVersion
 project.ext {
     openrndrVersion = ((findProperty("OPENRNDR.version")?:System.getenv("OPENRNDR_VERSION")) ?.replace("v","")) ?: "0.5.1-SNAPSHOT"
     jvmTarget = "1.8"
-    kotlinVersion = "1.7.0"
-    kotlinApiVersion = "1.7"
+    kotlinVersion = "1.6.20"
+    kotlinApiVersion = "1.6"
     spekVersion = "2.0.15"
     libfreenectVersion = "0.5.7-1.5.7"
     librealsense2Version = "2.50.0-1.5.7"
