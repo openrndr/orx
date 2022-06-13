@@ -31,3 +31,10 @@ dependencies {
 }
 
 tasks.getByName("compileKotlin").dependsOn("compilePreloadKotlin")
+
+// Here we deal with Gradle 7.4.2 using Kotlin 1.5 while OPENRNDR is compiled using Kotlin 1.7
+// This seems to work at this point in time but may cause serious problems in future scenarios in which either Kotlin,
+// Gradle or OPENRNDR are upgraded.
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions.freeCompilerArgs = listOf("-Xskip-metadata-version-check")
+}
