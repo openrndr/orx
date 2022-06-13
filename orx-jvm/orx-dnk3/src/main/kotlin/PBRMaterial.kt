@@ -598,6 +598,7 @@ class PBRMaterial : Material {
                             shadeStyle.parameter("textureNoise", noise128)
                         }
                     }
+                    else -> {}
                 }
                 when (val source = texture.source) {
                     is Triplanar -> {
@@ -605,6 +606,7 @@ class PBRMaterial : Material {
                         shadeStyle.parameter("textureTriplanarScale$index", source.scale)
                         shadeStyle.parameter("textureTriplanarOffset$index", source.offset)
                     }
+                    else -> {}
                 }
                 if (texture.target is TextureTarget.Height) {
                     val target = texture.target as TextureTarget.Height
@@ -691,6 +693,7 @@ class PBRMaterial : Material {
                 if (texture.target is TextureTarget.Height) {
                     when (val source = texture.source) {
                         is TextureFromColorBuffer -> shadeStyle.parameter("texture$index", source.texture)
+                        else -> {}
                     }
                     when (val source = texture.source) {
                         is Triplanar -> {
@@ -698,6 +701,7 @@ class PBRMaterial : Material {
                             shadeStyle.parameter("textureTriplanarScale$index", source.scale)
                             shadeStyle.parameter("textureTriplanarOffset$index", source.offset)
                         }
+                        else -> {}
                     }
                     val target = texture.target as TextureTarget.Height
                     shadeStyle.parameter("textureHeightScale$index", target.scale)

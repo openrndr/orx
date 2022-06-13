@@ -1,14 +1,12 @@
 package org.openrndr.panel.elements
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.FontImageMap
 import org.openrndr.draw.LineCap
 import org.openrndr.panel.style.*
 import org.openrndr.shape.Rectangle
 
-import kotlinx.coroutines.yield
 import org.openrndr.draw.Writer
 import org.openrndr.events.Event
 import org.openrndr.launch
@@ -100,6 +98,7 @@ class Toggle : Element(ElementType("toggle")), DisposableElement {
     }
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 fun Toggle.bind(property: KMutableProperty0<Boolean>) {
     var currentValue = property.get()
     value = currentValue

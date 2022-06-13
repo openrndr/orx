@@ -1,13 +1,11 @@
 package org.openrndr.panel.elements
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.openrndr.KEY_BACKSPACE
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.LineCap
 import org.openrndr.panel.style.*
-import kotlinx.coroutines.yield
 import org.openrndr.KeyModifier
 import org.openrndr.draw.Cursor
 import org.openrndr.draw.writer
@@ -138,6 +136,7 @@ class Textfield : Element(ElementType("textfield")), DisposableElement {
     override var disposed: Boolean = false
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 fun Textfield.bind(property: KMutableProperty0<String>) {
     GlobalScope.launch {
         install@ while (!disposed) {

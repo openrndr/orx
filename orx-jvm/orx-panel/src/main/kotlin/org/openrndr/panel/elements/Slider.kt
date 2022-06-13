@@ -1,8 +1,6 @@
 package org.openrndr.panel.elements
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.yield
+import kotlinx.coroutines.*
 import mu.KotlinLogging
 import org.openrndr.*
 import org.openrndr.draw.Cursor
@@ -291,6 +289,7 @@ class Slider : Element(ElementType("slider")), DisposableElement {
     }
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 fun Slider.bind(property: KMutableProperty0<Double>) {
     var currentValue: Double? = null
 
@@ -323,6 +322,7 @@ fun Slider.bind(property: KMutableProperty0<Double>) {
     }
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 @JvmName("bindInt")
 fun Slider.bind(property: KMutableProperty0<Int>) {
     var currentValue: Int? = null
