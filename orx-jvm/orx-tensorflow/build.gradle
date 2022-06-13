@@ -32,19 +32,20 @@ compileWrapgenKotlin {
 
 
 dependencies {
-    implementation "com.google.code.gson:gson:$gsonVersion"
-    demoImplementation("org.openrndr:openrndr-application:$openrndrVersion")
+    implementation libs.gson
+    demoImplementation(libs.openrndr.application)
 
 
-    demoRuntimeOnly(project(":orx-jvm:orx-tensorflow-natives-$openrndrOS"))
-    demoRuntimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
-    demoRuntimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
-    demoRuntimeOnly("org.openrndr:openrndr-extensions:$openrndrVersion")
-    demoImplementation("org.openrndr:openrndr-ffmpeg:$openrndrVersion")
-    demoRuntimeOnly("org.openrndr:openrndr-ffmpeg-natives-$openrndrOS:$openrndrVersion")
+    demoRuntimeOnly(project(":orx-jvm:orx-tensorflow-natives-${gradle.ext.openrndrOS}"))
+
+    demoRuntimeOnly(libs.openrndr.gl3)
+    demoRuntimeOnly(libs.openrndr.gl3.natives)
+    demoRuntimeOnly(libs.openrndr.extensions)
+    demoImplementation(libs.openrndr.ffmpeg)
+    demoRuntimeOnly(libs.openrndr.ffmpeg.natives)
     demoImplementation(project(":orx-fx"))
     demoImplementation(sourceSets.getByName("main").output)
-    api("org.tensorflow:tensorflow-core-api:$tensorflowVersion")
+    api(libs.tensorflow)
 
     // -- wrapgen
     wrapgenImplementation 'com.github.javaparser:javaparser-core:3.15.21'

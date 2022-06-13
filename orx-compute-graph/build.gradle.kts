@@ -5,19 +5,6 @@ plugins {
     kotlin("plugin.serialization")
 }
 
-val kotlinxSerializationVersion: String by rootProject.extra
-val kotlinxCoroutinesVersion: String by rootProject.extra
-val kotestVersion: String by rootProject.extra
-val junitJupiterVersion: String by rootProject.extra
-val jvmTarget: String by rootProject.extra
-val kotlinApiVersion: String by rootProject.extra
-val kotlinVersion: String by rootProject.extra
-val kotlinLoggingVersion: String by rootProject.extra
-val kluentVersion: String by rootProject.extra
-val openrndrVersion: String by rootProject.extra
-val openrndrOS: String by rootProject.extra
-val spekVersion: String by rootProject.extra
-
 kotlin {
     jvm {
         compilations {
@@ -26,18 +13,18 @@ kotlin {
                     kotlin.srcDir("src/demo")
                     dependencies {
                         implementation(project(":orx-camera"))
-                        implementation("org.openrndr:openrndr-application:$openrndrVersion")
-                        implementation("org.openrndr:openrndr-extensions:$openrndrVersion")
-                        runtimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
-                        runtimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
+                        implementation(libs.openrndr.application)
+                        implementation(libs.openrndr.extensions)
+                        runtimeOnly(libs.openrndr.gl3)
+                        runtimeOnly(libs.openrndr.gl3.natives)
                         implementation(compilations["main"]!!.output.allOutputs)
                     }
                 }
             }
         }
         compilations.all {
-            kotlinOptions.jvmTarget = jvmTarget
-            kotlinOptions.apiVersion = kotlinApiVersion
+            kotlinOptions.jvmTarget = libs.versions.jvmTarget.get()
+            kotlinOptions.apiVersion = libs.versions.kotlinApi.get()
         }
         testRuns["test"].executionTask.configure {
             useJUnitPlatform()
@@ -52,18 +39,20 @@ kotlin {
         @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
-                api("org.openrndr:openrndr-event:$openrndrVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
-                implementation("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
+                api(libs.openrndr.event)
+                implementation(libs.kotlin.coroutines)
+                implementation(libs.kotlin.logging)
             }
         }
+
         @Suppress("UNUSED_VARIABLE")
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
-                implementation("io.kotest:kotest-assertions-core:$kotestVersion")
+
+                implementation(libs.kotlin.serialization.json)
+                implementation(libs.kotest)
             }
         }
 
@@ -73,11 +62,10 @@ kotlin {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
                 implementation(kotlin("test-junit5"))
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
-                runtimeOnly("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
-                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
-                implementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
-                implementation("org.amshove.kluent:kluent:$kluentVersion")
+                implementation(libs.kotlin.serialization.json)
+                runtimeOnly(libs.bundles.jupiter)
+                implementation(libs.spek.dsl)
+                implementation(libs.kluent)
             }
         }
 

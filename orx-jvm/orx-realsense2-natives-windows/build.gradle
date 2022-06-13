@@ -1,4 +1,4 @@
 
 dependencies {
-    runtimeOnly "org.bytedeco:librealsense2:$librealsense2Version:windows-x86_64"
+    runtimeOnly(variantOf(libs.librealsense) { classifier("windows-x86_64") })
 }

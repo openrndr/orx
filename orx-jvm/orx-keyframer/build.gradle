@@ -31,20 +31,21 @@ generateGrammarSource {
 }
 
 dependencies {
-    antlr("org.antlr:antlr4:$antlrVersion")
-    implementation("org.antlr:antlr4-runtime:$antlrVersion")
+    antlr(libs.antlr)
+    implementation(libs.antlrRuntime)
     implementation(project(":orx-noise"))
     implementation(project(":orx-easing"))
-    implementation "com.google.code.gson:gson:$gsonVersion"
-    implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+    implementation libs.gson
+    implementation(libs.kotlin.reflect)
 
     demoImplementation(project(":orx-camera"))
-
     demoImplementation(project(":orx-jvm:orx-panel"))
-    demoImplementation("org.openrndr:openrndr-application:$openrndrVersion")
-    demoImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
-    demoRuntimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
-    demoRuntimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
+
+    demoImplementation(libs.openrndr.application)
+    demoImplementation(libs.openrndr.extensions)
+    demoRuntimeOnly(libs.openrndr.gl3)
+    demoRuntimeOnly(libs.openrndr.gl3.natives)
+
     demoImplementation(sourceSets.getByName("main").output)
 }
 

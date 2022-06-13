@@ -12,21 +12,17 @@ sourceSets {
     collectScreenshots(project, demo) { }
 }
 
-val openrndrVersion: String by rootProject.extra
-val openrndrOS: String by rootProject.extra
-val slf4jVersion:String by rootProject.extra
-
 val demoImplementation by configurations.getting {}
 val demoRuntimeOnly by configurations.getting {}
 
 dependencies {
     implementation(project(":orx-fx"))
     implementation(project(":orx-noise"))
-    implementation("org.openrndr:openrndr-filter:$openrndrVersion")
-    demoImplementation("org.openrndr:openrndr-application:$openrndrVersion")
-    demoImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
-    demoRuntimeOnly("org.slf4j:slf4j-simple:$slf4jVersion")
-    demoRuntimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
-    demoRuntimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
+    implementation(libs.openrndr.filter)
+    demoImplementation(libs.openrndr.application)
+    demoImplementation(libs.openrndr.extensions)
+    demoRuntimeOnly(libs.slf4j.simple)
+    demoRuntimeOnly(libs.openrndr.gl3)
+    demoRuntimeOnly(libs.openrndr.gl3.natives)
     demoImplementation(sourceSets.getByName("main").output)
 }

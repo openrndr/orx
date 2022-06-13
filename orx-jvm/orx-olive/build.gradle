@@ -12,16 +12,17 @@ dependencies {
     implementation project(":orx-jvm:orx-file-watcher")
     implementation project(":orx-jvm:orx-kotlin-parser")
     
-    implementation "org.jetbrains.kotlin:kotlin-scripting-jvm:$kotlinVersion"
-    implementation "org.jetbrains.kotlin:kotlin-scripting-jvm-host:$kotlinVersion"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
-    implementation "org.jetbrains.kotlin:kotlin-scripting-jsr223:$kotlinVersion"
-
+    implementation libs.kotlin.scriptingJvm
+    implementation libs.kotlin.scriptingJvmHost
+    implementation libs.kotlin.reflect
+    implementation libs.kotlin.scriptingJSR223
 
     demoImplementation(project(":orx-camera"))
-    demoImplementation("org.openrndr:openrndr-application:$openrndrVersion")
-    demoImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
-    demoRuntimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
-    demoRuntimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
+
+    demoImplementation(libs.openrndr.application)
+    demoImplementation(libs.openrndr.extensions)
+    demoRuntimeOnly(libs.openrndr.gl3)
+    demoRuntimeOnly(libs.openrndr.gl3.natives)
+
     demoImplementation(sourceSets.getByName("main").output)
 }

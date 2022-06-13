@@ -9,7 +9,7 @@ sourceSets {
 }
 
 dependencies {
-    implementation "com.google.code.gson:gson:$gsonVersion"
+    implementation libs.gson
     implementation(project(":orx-fx"))
     implementation(project(":orx-jvm:orx-keyframer"))
     implementation(project(":orx-easing"))
@@ -20,11 +20,11 @@ dependencies {
     demoImplementation(project(":orx-mesh-generators"))
     demoImplementation(project(":orx-noise"))
 
-    demoImplementation("org.openrndr:openrndr-application:$openrndrVersion")
-    demoImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
-    demoImplementation("org.openrndr:openrndr-ffmpeg:$openrndrVersion")
-    demoImplementation("org.openrndr:openrndr-filter:$openrndrVersion")
-    demoRuntimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
-    demoRuntimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
+    demoImplementation(libs.openrndr.application)
+    demoImplementation(libs.openrndr.extensions)
+    demoImplementation(libs.openrndr.ffmpeg)
+    demoImplementation(libs.openrndr.filter)
+    demoRuntimeOnly(libs.openrndr.gl3)
+    demoRuntimeOnly(libs.openrndr.gl3.natives)
     demoImplementation(sourceSets.getByName("main").output)
 }

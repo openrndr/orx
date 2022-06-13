@@ -1,5 +1,5 @@
 dependencies {
-    implementation "org.openrndr:openrndr-application:$openrndrVersion"
-    implementation "org.openrndr:openrndr-gl3:$openrndrVersion"
-    implementation "org.openrndr:openrndr-gl3-natives-macos:$openrndrVersion"
+    implementation libs.openrndr.application
+    implementation libs.openrndr.gl3
+    implementation libs.openrndr.gl3.natives
 }

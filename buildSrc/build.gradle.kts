@@ -1,4 +1,3 @@
-
 plugins {
     `kotlin-dsl`
 }
@@ -9,9 +8,7 @@ sourceSets {
             srcDir("src/preload/kotlin")
         }
     }
-    val main by getting {
-    }
-
+    val main by getting
 }
 
 repositories {
@@ -20,12 +17,14 @@ repositories {
     gradlePluginPortal()
 }
 
-
-val openrndrVersion = ((findProperty("OPENRNDR.version")?.toString())?:System.getenv("OPENRNDR_VERSION"))?.replace("v", "")  ?: "0.5.1-SNAPSHOT"
+val openrndrVersion =
+    (findProperty("OPENRNDR.version")?.toString() ?: System.getenv("OPENRNDR_VERSION"))?.replace("v", "")
+        ?: "0.5.1-SNAPSHOT"
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.20")
-    val preloadImplementation by configurations.getting {  }
+    implementation("org.jetbrains.kotlin:kotlin-serialization:1.6.20")
+    val preloadImplementation by configurations.getting
     preloadImplementation("org.openrndr:openrndr-application:$openrndrVersion")
     preloadImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
 }

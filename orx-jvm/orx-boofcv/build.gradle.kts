@@ -12,18 +12,14 @@ sourceSets {
     collectScreenshots(project, demo) { }
 }
 
-val openrndrVersion: String by rootProject.extra
-val openrndrOS: String by rootProject.extra
-val boofcvVersion = "0.39"
-
 val demoImplementation by configurations.getting {}
 val demoRuntimeOnly by configurations.getting {}
 
 dependencies {
-    api("org.boofcv:boofcv-core:$boofcvVersion")
-    demoImplementation("org.openrndr:openrndr-application:$openrndrVersion")
-    demoImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
-    demoRuntimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
-    demoRuntimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
+    api(libs.boofcv)
+    demoImplementation(libs.openrndr.application)
+    demoImplementation(libs.openrndr.extensions)
+    demoRuntimeOnly(libs.openrndr.gl3)
+    demoRuntimeOnly(libs.openrndr.gl3.natives)
     demoImplementation(sourceSets.getByName("main").output)
 }
