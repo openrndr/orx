@@ -43,8 +43,8 @@ open class Layer internal constructor(val bufferMultisample: BufferMultisample =
     var blendFilter: Pair<Filter, Filter.() -> Unit>? = null
     val postFilters: MutableList<Pair<Filter, Filter.() -> Unit>> = mutableListOf()
     var colorType = ColorType.UINT8
-    private var resolvedColorBuffer: ColorBuffer? = null
-    private var activeRenderTargetColorBuffer: ColorBuffer? = null
+    private var unresolvedAccumulation: ColorBuffer? = null
+    var accumulation: ColorBuffer? = null
 
     @BooleanParameter("enabled")
     var enabled = true
@@ -85,8 +85,8 @@ open class Layer internal constructor(val bufferMultisample: BufferMultisample =
                             if (it.bufferMultisample == BufferMultisample.Disabled) {
                                 drawer.image(copyTarget.colorBuffer(0))
                             } else {
-                                copyTarget.colorBuffer(0).copyTo(it.resolvedColorBuffer!!)
-                                drawer.image(it.resolvedColorBuffer!!)
+                                copyTarget.colorBuffer(0).copyTo(it.accumulation!!)
+                                drawer.image(it.accumulation!!)
                             }
                         }
                     }
@@ -171,26 +171,24 @@ open class Layer internal constructor(val bufferMultisample: BufferMultisample =
                     if (bufferMultisample == BufferMultisample.Disabled) {
                         drawer.image(layerPost, layerPost.bounds, drawer.bounds)
                     } else {
-                        layerPost.copyTo(resolvedColorBuffer!!)
-                        drawer.image(resolvedColorBuffer!!, layerPost.bounds, drawer.bounds)
+                        layerPost.copyTo(accumulation!!)
+                        drawer.image(accumulation!!, layerPost.bounds, drawer.bounds)
                     }
                 }
             } else {
                 localBlendFilter.first.apply(localBlendFilter.second)
-                activeRenderTarget.colorBuffer(0).copyTo(activeRenderTargetColorBuffer!!)
+                activeRenderTarget.colorBuffer(0).copyTo(unresolvedAccumulation!!)
                 if (bufferMultisample == BufferMultisample.Disabled) {
-                    localBlendFilter.first.apply(arrayOf(activeRenderTargetColorBuffer!!, layerPost),
-                        activeRenderTargetColorBuffer!!)
+                    localBlendFilter.first.apply(arrayOf(unresolvedAccumulation!!, layerPost), unresolvedAccumulation!!)
                 } else {
-                    layerPost.copyTo(resolvedColorBuffer!!)
-                    localBlendFilter.first.apply(arrayOf(activeRenderTargetColorBuffer!!, resolvedColorBuffer!!),
-                        activeRenderTargetColorBuffer!!)
+                    layerPost.copyTo(accumulation!!)
+                    localBlendFilter.first.apply(arrayOf(unresolvedAccumulation!!, accumulation!!), unresolvedAccumulation!!)
                 }
 
                 if (activeRenderTarget !is ProgramRenderTarget) {
-                    activeRenderTargetColorBuffer!!.copyTo(target.colorBuffer(0))
+                    unresolvedAccumulation!!.copyTo(target.colorBuffer(0))
                 }
-                activeRenderTargetColorBuffer!!.copyTo(activeRenderTarget.colorBuffer(0))
+                unresolvedAccumulation!!.copyTo(activeRenderTarget.colorBuffer(0))
             }
         }
     }
@@ -205,19 +203,25 @@ open class Layer internal constructor(val bufferMultisample: BufferMultisample =
         activeRenderTarget: RenderTarget, drawer: Drawer, bufferMultisample: BufferMultisample
     ) {
         layerTarget?.deepDestroy()
-        layerTarget = renderTarget(activeRenderTarget.width, activeRenderTarget.height,
-            activeRenderTarget.contentScale, bufferMultisample) {
+        layerTarget = renderTarget(
+            activeRenderTarget.width, activeRenderTarget.height,
+            activeRenderTarget.contentScale, bufferMultisample
+        ) {
             colorBuffer(type = colorType)
             depthBuffer()
         }
         if (bufferMultisample != BufferMultisample.Disabled) {
-            resolvedColorBuffer?.destroy()
-            resolvedColorBuffer = colorBuffer(activeRenderTarget.width, activeRenderTarget.height,
-                activeRenderTarget.contentScale, type = colorType)
+            accumulation?.destroy()
+            accumulation = colorBuffer(
+                activeRenderTarget.width, activeRenderTarget.height,
+                activeRenderTarget.contentScale, type = colorType
+            )
         }
-        activeRenderTargetColorBuffer?.destroy()
-        activeRenderTargetColorBuffer = colorBuffer(activeRenderTarget.width, activeRenderTarget.height,
-            activeRenderTarget.contentScale, type = colorType)
+        unresolvedAccumulation?.destroy()
+        unresolvedAccumulation = colorBuffer(
+            activeRenderTarget.width, activeRenderTarget.height,
+            activeRenderTarget.contentScale, type = colorType
+        )
         layerTarget?.let {
             drawer.withTarget(it) {
                 drawer.clear(ColorRGBa.TRANSPARENT)
