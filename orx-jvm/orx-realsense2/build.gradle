@@ -11,13 +11,12 @@ sourceSets {
 
 
 dependencies {
-    api "org.bytedeco:librealsense2:$librealsense2Version"
-
-    demoImplementation("org.openrndr:openrndr-application:$openrndrVersion")
-    demoImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
-    demoRuntimeOnly(project(":orx-jvm:orx-realsense2-natives-$openrndrOS"))
-    demoRuntimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
-    demoRuntimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
+    api libs.librealsense
+    demoImplementation(libs.openrndr.application)
+    demoImplementation(libs.openrndr.extensions)
+    demoRuntimeOnly(project(":orx-jvm:orx-realsense2-natives-${gradle.ext.openrndrOS}"))
+    demoRuntimeOnly(libs.openrndr.gl3)
+    demoRuntimeOnly(libs.openrndr.gl3.natives)
     demoImplementation(sourceSets.getByName("main").output)
 
 }

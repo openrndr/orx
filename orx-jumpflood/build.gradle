@@ -14,11 +14,13 @@ dependencies {
     demoImplementation project(":orx-noise")
     demoImplementation project(":orx-jvm:orx-gui")
     demoImplementation project(":orx-compositor")
-    demoImplementation("org.openrndr:openrndr-application:$openrndrVersion")
-    demoImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
-    demoImplementation("org.openrndr:openrndr-svg:$openrndrVersion")
-    demoImplementation("org.openrndr:openrndr-ffmpeg:$openrndrVersion")
-    demoRuntimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
-    demoRuntimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
+
+    demoImplementation(libs.openrndr.application)
+    demoImplementation(libs.openrndr.extensions)
+    demoImplementation(libs.openrndr.svg)
+    demoImplementation(libs.openrndr.ffmpeg)
+    demoRuntimeOnly(libs.openrndr.gl3)
+    demoRuntimeOnly(libs.openrndr.gl3.natives)
+
     demoImplementation(sourceSets.getByName("main").output)
 }

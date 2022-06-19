@@ -1,9 +1,6 @@
 package org.openrndr.extra.kdtree
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import org.openrndr.math.*
 import java.util.*
 import kotlin.IllegalStateException
@@ -99,6 +96,7 @@ private fun <T> insertItem(root: KDTreeNode<T>, item: T): KDTreeNode<T> {
 }
 
 
+@OptIn(DelicateCoroutinesApi::class)
 fun <T> buildKDTree(items: MutableList<T>, dimensions: Int, mapper: (T, Int) -> Double): KDTreeNode<T> {
     val root = KDTreeNode<T>(dimensions, mapper)
 

@@ -107,6 +107,7 @@ class SceneRenderer {
                         blur.spread = 1.0
                         blur.apply(target.colorBuffer(0), target.colorBuffer(0))
                     }
+                    else -> {}
                 }
             }
         }

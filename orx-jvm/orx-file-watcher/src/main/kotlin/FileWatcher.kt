@@ -1,10 +1,7 @@
 package org.operndr.extras.filewatcher
 
 import com.sun.nio.file.SensitivityWatchEventModifier
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import mu.KotlinLogging
 import org.openrndr.Program
 import org.openrndr.launch
@@ -116,6 +113,7 @@ private val watchService by lazy {
     FileSystems.getDefault().newWatchService()
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 private val watchThread by lazy {
     thread(isDaemon = true) {
         while (true) {

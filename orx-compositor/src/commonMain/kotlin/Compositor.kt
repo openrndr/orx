@@ -23,6 +23,7 @@ fun RenderTarget.deepDestroy() {
             is CubemapAttachment -> it.cubemap.destroy()
             is ArrayTextureAttachment -> it.arrayTexture.destroy()
             is ArrayCubemapAttachment -> it.arrayCubemap.destroy()
+            else -> {}
         }
     }
     dbcopy?.destroy()

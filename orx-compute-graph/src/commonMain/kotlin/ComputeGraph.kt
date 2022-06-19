@@ -84,6 +84,7 @@ class ComputeGraph {
      *
      * Eventually we likely want to separate compute-graph definitions from the compute-graph processor.
      */
+    @OptIn(DelicateCoroutinesApi::class)
     fun dispatch(context: CoroutineDispatcher, delayBeforeCompute: Long = 500) {
         var firstRodeo = true
         GlobalScope.launch(context, CoroutineStart.DEFAULT) {

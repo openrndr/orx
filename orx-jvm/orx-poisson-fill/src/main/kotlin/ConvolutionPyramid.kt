@@ -130,6 +130,7 @@ internal class ConvolutionPyramid(width: Int, height: Int,
                     is CubemapAttachment -> it.cubemap.destroy()
                     is ArrayTextureAttachment -> it.arrayTexture.destroy()
                     is ArrayCubemapAttachment -> it.arrayCubemap.destroy()
+                    else -> {}
                 }
             }
             it.detachColorAttachments()

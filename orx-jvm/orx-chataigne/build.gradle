@@ -10,14 +10,15 @@ sourceSets {
 dependencies {
     api project(":orx-jvm:orx-osc")
 
-    implementation "com.google.code.gson:gson:$gsonVersion"
-    demoImplementation("org.openrndr:openrndr-application:$openrndrVersion")
+    implementation libs.gson
+    demoImplementation(libs.openrndr.application)
 
-    demoRuntimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
-    demoRuntimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
-    demoRuntimeOnly("org.openrndr:openrndr-extensions:$openrndrVersion")
-    demoImplementation("org.openrndr:openrndr-ffmpeg:$openrndrVersion")
-    demoRuntimeOnly("org.openrndr:openrndr-ffmpeg-natives-$openrndrOS:$openrndrVersion")
+    demoRuntimeOnly(libs.openrndr.gl3)
+    demoRuntimeOnly(libs.openrndr.gl3.natives)
+    demoRuntimeOnly(libs.openrndr.extensions)
+    demoImplementation(libs.openrndr.ffmpeg)
+    demoRuntimeOnly(libs.openrndr.ffmpeg.natives)
+
     demoImplementation(project(":orx-fx"))
 //    demoImplementation(project(":orx-osc"))
 

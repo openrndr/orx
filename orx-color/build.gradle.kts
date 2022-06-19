@@ -5,18 +5,6 @@ plugins {
     kotlin("plugin.serialization")
 }
 
-val kotlinxSerializationVersion: String by rootProject.extra
-val kotestVersion: String by rootProject.extra
-val junitJupiterVersion: String by rootProject.extra
-val jvmTarget: String by rootProject.extra
-val kotlinApiVersion: String by rootProject.extra
-val kotlinVersion: String by rootProject.extra
-val kotlinLoggingVersion: String by rootProject.extra
-val kluentVersion: String by rootProject.extra
-val openrndrVersion: String by rootProject.extra
-val openrndrOS: String by rootProject.extra
-val spekVersion: String by rootProject.extra
-
 kotlin {
     jvm {
         compilations {
@@ -29,19 +17,18 @@ kotlin {
                     implementation(project(":orx-mesh-generators"))
                     implementation(project(":orx-color"))
                     implementation(project(":orx-jvm:orx-gui"))
-
-                    implementation("org.openrndr:openrndr-application:$openrndrVersion")
-                    implementation("org.openrndr:openrndr-extensions:$openrndrVersion")
-                    runtimeOnly("org.openrndr:openrndr-gl3:$openrndrVersion")
-                    runtimeOnly("org.openrndr:openrndr-gl3-natives-$openrndrOS:$openrndrVersion")
+                    implementation(libs.openrndr.application)
+                    implementation(libs.openrndr.extensions)
+                    runtimeOnly(libs.openrndr.gl3)
+                    runtimeOnly(libs.openrndr.gl3.natives)
                     implementation(compilations["main"]!!.output.allOutputs)
                 }
                 collectScreenshots { }
             }
         }
         compilations.all {
-            kotlinOptions.jvmTarget = jvmTarget
-            kotlinOptions.apiVersion = kotlinApiVersion
+            kotlinOptions.jvmTarget = libs.versions.jvmTarget.get()
+            kotlinOptions.apiVersion = libs.versions.kotlinApi.get()
         }
         testRuns["test"].executionTask.configure {
             useJUnitPlatform()
@@ -58,12 +45,12 @@ kotlin {
             dependencies {
                 implementation(project(":orx-parameters"))
                 implementation(project(":orx-shader-phrases"))
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinxSerializationVersion")
-                implementation("org.openrndr:openrndr-application:$openrndrVersion")
-                implementation("org.openrndr:openrndr-draw:$openrndrVersion")
-                implementation("org.openrndr:openrndr-filter:$openrndrVersion")
-                implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
-                implementation("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
+                implementation(libs.kotlin.serialization.core)
+                implementation(libs.openrndr.application)
+                implementation(libs.openrndr.draw)
+                implementation(libs.openrndr.filter)
+                implementation(libs.kotlin.reflect)
+                implementation(libs.kotlin.logging)
             }
         }
 
@@ -72,13 +59,12 @@ kotlin {
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
-                implementation("io.kotest:kotest-assertions-core:$kotestVersion")
+                implementation(libs.kotlin.serialization.json)
+                implementation(libs.kotest)
             }
         }
 
-        val jvmMain by getting {}
-
+        val jvmMain by getting
 
         @Suppress("UNUSED_VARIABLE")
         val jvmTest by getting {
@@ -86,11 +72,10 @@ kotlin {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
                 implementation(kotlin("test-junit5"))
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
-                runtimeOnly("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
-                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
-                implementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
-                implementation("org.amshove.kluent:kluent:$kluentVersion")
+                implementation(libs.kotlin.serialization.json)
+                runtimeOnly(libs.bundles.jupiter)
+                implementation(libs.spek.dsl)
+                implementation(libs.kluent)
             }
         }
 

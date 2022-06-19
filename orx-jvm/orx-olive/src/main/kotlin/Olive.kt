@@ -1,5 +1,6 @@
 package org.openrndr.extra.olive
 
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import mu.KotlinLogging
@@ -67,6 +68,7 @@ class Olive<P : Program>(val resources: Resources? = null, private var scriptMod
 
     private var watcher: (() -> Unit)? = null
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun setup(program: Program) {
         System.setProperty("idea.io.use.fallback", "true")
         System.setProperty("org.openrndr.ignoreShadeStyleErrors", "true")
@@ -74,22 +76,22 @@ class Olive<P : Program>(val resources: Resources? = null, private var scriptMod
         val store = mutableMapOf<Event<*>, List<(Any) -> Unit>>()
         val originalExtensions = program.extensions.map { it }
         val trackedListeners = listOf<Event<*>>(program.mouse.buttonDown,
-                program.mouse.buttonUp,
-                program.mouse.clicked,
-                program.mouse.dragged,
-                program.mouse.moved,
-                program.mouse.scrolled,
-                program.keyboard.keyUp,
-                program.keyboard.keyDown,
-                program.keyboard.keyRepeat,
-                program.window.drop,
-                program.window.focused,
-                program.window.minimized,
-                program.window.moved,
-                program.window.sized,
-                program.window.unfocused,
-                program.requestAssets,
-                program.produceAssets
+            program.mouse.buttonUp,
+            program.mouse.clicked,
+            program.mouse.dragged,
+            program.mouse.moved,
+            program.mouse.scrolled,
+            program.keyboard.keyUp,
+            program.keyboard.keyDown,
+            program.keyboard.keyRepeat,
+            program.window.drop,
+            program.window.focused,
+            program.window.minimized,
+            program.window.moved,
+            program.window.sized,
+            program.window.unfocused,
+            program.requestAssets,
+            program.produceAssets
         )
 
         trackedListeners.forEach { it.saveListeners(store) }

@@ -1,4 +1,4 @@
 dependencies {
     api project(":orx-jvm:orx-kinect-common")
-    api "org.bytedeco:libfreenect:$libfreenectVersion"
+    api libs.libfreenect
 }

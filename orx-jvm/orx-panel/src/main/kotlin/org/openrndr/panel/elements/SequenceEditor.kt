@@ -41,6 +41,7 @@ class SequenceEditor : SequenceEditorBase("sequence-editor") {
     }
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(ElementType(type)), DisposableElement {
     override var disposed = false
 
@@ -57,8 +58,8 @@ open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(E
     private val footerHeight = 20.0
 
     internal class ValueChangedEvent(val source: SequenceEditorBase,
-                                     val oldValue: List<Double>,
-                                     val newValue: List<Double>)
+        val oldValue: List<Double>,
+        val newValue: List<Double>)
 
     internal class Events {
         val valueChanged = Event<ValueChangedEvent>("sequence-editor-base-value-changed")
