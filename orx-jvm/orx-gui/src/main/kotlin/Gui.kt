@@ -19,6 +19,7 @@ import org.openrndr.panel.ControlManager
 import org.openrndr.panel.controlManager
 import org.openrndr.panel.elements.*
 import org.openrndr.panel.style.*
+import org.openrndr.panel.style.Display
 import java.io.File
 import kotlin.math.roundToInt
 import kotlin.reflect.KMutableProperty1

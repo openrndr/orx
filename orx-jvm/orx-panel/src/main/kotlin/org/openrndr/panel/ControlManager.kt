@@ -10,8 +10,8 @@ import org.openrndr.math.mod_
 import org.openrndr.panel.elements.*
 import org.openrndr.panel.layout.Layouter
 import org.openrndr.panel.style.*
+import org.openrndr.panel.style.Display
 import org.openrndr.shape.Rectangle
-import org.openrndr.shape.intersects
 
 //class SurfaceCache(val width: Int, val height: Int, val contentScale:Double) {
 //    val cache = renderTarget(width, height, contentScale) {
