@@ -11,7 +11,7 @@ dependencies {
     implementation(libs.gson)
     demoImplementation(libs.openrndr.application)
 
-    demoRuntimeOnly(libs.openrndr.gl3)
+    demoRuntimeOnly(libs.openrndr.gl3.core)
     demoRuntimeOnly(libs.openrndr.gl3.natives)
     demoRuntimeOnly(libs.openrndr.extensions)
     demoImplementation(libs.openrndr.ffmpeg)

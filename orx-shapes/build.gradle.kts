@@ -17,7 +17,7 @@ kotlin {
                         implementation(project(":orx-jvm:orx-triangulation"))
                         implementation(libs.openrndr.application)
                         implementation(libs.openrndr.extensions)
-                        runtimeOnly(libs.openrndr.gl3)
+                        runtimeOnly(libs.openrndr.gl3.core)
                         runtimeOnly(libs.openrndr.gl3.natives)
                         implementation(compilations["main"]!!.output.allOutputs)
                     }

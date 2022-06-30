@@ -19,7 +19,7 @@ dependencies {
     api(libs.boofcv)
     demoImplementation(libs.openrndr.application)
     demoImplementation(libs.openrndr.extensions)
-    demoRuntimeOnly(libs.openrndr.gl3)
+    demoRuntimeOnly(libs.openrndr.gl3.core)
     demoRuntimeOnly(libs.openrndr.gl3.natives)
     demoImplementation(sourceSets.getByName("main").output)
 }

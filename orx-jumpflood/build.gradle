@@ -19,7 +19,7 @@ dependencies {
     demoImplementation(libs.openrndr.extensions)
     demoImplementation(libs.openrndr.svg)
     demoImplementation(libs.openrndr.ffmpeg)
-    demoRuntimeOnly(libs.openrndr.gl3)
+    demoRuntimeOnly(libs.openrndr.gl3.core)
     demoRuntimeOnly(libs.openrndr.gl3.natives)
 
     demoImplementation(sourceSets.getByName("main").output)
