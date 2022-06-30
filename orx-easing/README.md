@@ -93,3 +93,7 @@ println(Easing.values().size)
 
 <!-- __demos__ -->
 ## Demos
+### DemoEasings01
+[source code](src/demo/kotlin/DemoEasings01.kt)
+
+![DemoEasings01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-easing/images/DemoEasings01Kt.png)

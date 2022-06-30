@@ -22,3 +22,12 @@ val nearestQuery = quadTree.nearest(points[4], 20.0)
 Ricardo Matias / [@ricardomatias](https://github.com/ricardomatias)
 <!-- __demos__ -->
 ## Demos
+### DemoQuadTree01
+[source code](src/demo/kotlin/DemoQuadTree01.kt)
+
+![DemoQuadTree01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-quadtree/images/DemoQuadTree01Kt.png)
+
+### DemoQuadTree02
+[source code](src/demo/kotlin/DemoQuadTree02.kt)
+
+![DemoQuadTree02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-quadtree/images/DemoQuadTree02Kt.png)
