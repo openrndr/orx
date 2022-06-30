@@ -64,12 +64,10 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
                         this.classpath += runtimeDependencies.get()
                         this.mainClass.set(klassName)
                         this.workingDir(project.rootProject.projectDir)
-                        jvmArgs("-DtakeScreenshot=true", "-DscreenshotPath=${outputDir.get().asFile}/$klassName.png -Dorg.openrndr.exceptions=JVM")
+                        jvmArgs("-DtakeScreenshot=true", "-DscreenshotPath=${outputDir.get().asFile}/$klassName.png", "-Dorg.openrndr.exceptions=JVM")
                     }
                 } catch (e: NoSuchMethodException) {
                     // silently ignore
-                } catch (e: Throwable) {
-                    e.printStackTrace()
                 }
             }
         }
