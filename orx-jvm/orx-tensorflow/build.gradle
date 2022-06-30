@@ -36,7 +36,7 @@ dependencies {
 
     demoRuntimeOnly(project(":orx-jvm:orx-tensorflow-${gradle.ext.openrndrClassifier}"))
 
-    demoRuntimeOnly(libs.openrndr.gl3)
+    demoRuntimeOnly(libs.openrndr.gl3.core)
     demoRuntimeOnly(libs.openrndr.gl3.natives)
     demoRuntimeOnly(libs.openrndr.extensions)
     demoImplementation(libs.openrndr.ffmpeg)

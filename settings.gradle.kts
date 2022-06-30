@@ -51,7 +51,7 @@ dependencyResolutionManagement {
             library("openrndr-ffmpeg", "org.openrndr", "openrndr-ffmpeg").versionRef("openrndr")
             library("openrndr-ffmpeg-natives", "org.openrndr", "openrndr-ffmpeg-$openrndrClassifier").versionRef("openrndr")
             library("openrndr-svg", "org.openrndr", "openrndr-svg").versionRef("openrndr")
-            library("openrndr-gl3", "org.openrndr", "openrndr-gl3").versionRef("openrndr")
+            library("openrndr-gl3-core", "org.openrndr", "openrndr-gl3").versionRef("openrndr")
             library("openrndr-gl3-natives", "org.openrndr", "openrndr-gl3-$openrndrClassifier").versionRef("openrndr")
 
             library("tensorflow", "org.tensorflow", "tensorflow-core-api").versionRef("tensorflow")
