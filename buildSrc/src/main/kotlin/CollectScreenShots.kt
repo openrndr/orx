@@ -64,14 +64,16 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
                         this.classpath += runtimeDependencies.get()
                         this.mainClass.set(klassName)
                         this.workingDir(project.rootProject.projectDir)
-                        jvmArgs("-DtakeScreenshot=true", "-DscreenshotPath=${outputDir.get().asFile}/$klassName.png")
+                        jvmArgs("-DtakeScreenshot=true", "-DscreenshotPath=${outputDir.get().asFile}/$klassName.png -Dorg.openrndr.exceptions=JVM")
                     }
                 } catch (e: NoSuchMethodException) {
                     // silently ignore
+                } catch (e: Throwable) {
+                    e.printStackTrace()
                 }
             }
         }
-        // this is only executed if there are chances in the inputDir
+        // this is only executed if there are changes in the inputDir
         val runDemos = outputDir.get().asFile.listFiles { file: File ->
             file.extension == "png"
         }.map { it.nameWithoutExtension }.sorted()
