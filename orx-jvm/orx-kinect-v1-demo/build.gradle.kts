@@ -3,5 +3,5 @@ dependencies {
     runtimeOnly(project(":orx-jvm:orx-kinect-v1-${(gradle as ExtensionAware).extra["openrndrClassifier"]}"))
     runtimeOnly(libs.openrndr.gl3.core)
     runtimeOnly(libs.openrndr.gl3.natives)
-    runtimeOnly("ch.qos.logback:logback-classic:1.2.11")
+    runtimeOnly(libs.logback.classic)
 }

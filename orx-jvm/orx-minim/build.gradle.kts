@@ -16,7 +16,7 @@ dependencies {
     api(project(":orx-parameters"))
     api(project(":orx-jvm:orx-panel"))
 
-    api("net.compartmental.code:minim:2.2.2") {
+    api(libs.minim) {
         exclude(group = "org.apache.maven.plugins", module = "maven-javadoc-plugin")
     }
     implementation(libs.kotlin.reflect)
