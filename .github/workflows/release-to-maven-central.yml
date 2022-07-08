@@ -3,13 +3,13 @@ on:
   push:
     tags:
       - v[0-9].[0-9]+.[0-9]+
-      - v[0-9].[0-9]+.[0-9]+.[0-9]+
+      - v[0-9].[0-9]+.[0-9]+-[0-9]+
 jobs:
   build:
     runs-on: ubuntu-18.04
     steps:
       - name: Get OPENRNDR release tag
-        run: echo "OPENRNDR_VERSION=$(git ls-remote --refs --tags https://github.com/openrndr/openrndr | cut --delimiter='/' --fields=3 | sort --version-sort | tail --lines=1)" >> $GITHUB_ENV
+        run: echo "OPENRNDR_VERSION=$(git -c 'versionsort.suffix=-' ls-remote --tags --sort='v:refname' https://github.com/openrndr/openrndr | cut --delimiter='/' --fields=3 | tail --lines=1)" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - name: Get the version
         id: get_version
