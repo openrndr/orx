@@ -1,7 +1,6 @@
 package org.openrndr.extra.color.spaces
 
 import org.openrndr.color.*
-import org.openrndr.math.CastableToVector4
 import org.openrndr.math.Vector4
 import kotlin.math.pow
 
@@ -11,11 +10,9 @@ import kotlin.math.pow
  * [a] = red (-1.0) to green (1.0),
  * [b] = yellow (-1.0) to blue (1.0).
  */
-data class ColorOKLABa(val l: Double, val a: Double, val b: Double, val alpha: Double = 1.0) :
-    ConvertibleToColorRGBa,
-    CastableToVector4,
+data class ColorOKLABa(val l: Double, val a: Double, val b: Double, override val alpha: Double = 1.0) :
+    ColorModel<ColorOKLABa>,
     ShadableColor<ColorOKLABa>,
-    OpacifiableColor<ColorOKLABa>,
     AlgebraicColor<ColorOKLABa> {
 
     companion object {

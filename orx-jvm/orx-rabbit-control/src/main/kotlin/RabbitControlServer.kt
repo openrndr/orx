@@ -217,7 +217,7 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
                 ParameterType.Color -> {
                     val param = rabbitServer.createRGBAParameter(it.label)
                     val c = (it.property as KMutableProperty1<Any, ColorRGBa>).get(objectWithParameters)
-                    param.value = Color(c.r.toFloat(), c.g.toFloat(), c.b.toFloat(), c.a.toFloat())
+                    param.value = Color(c.r.toFloat(), c.g.toFloat(), c.b.toFloat(), c.alpha.toFloat())
                     param
                 }
                 ParameterType.Vector2 -> {
