@@ -86,7 +86,7 @@ open class Keyframer {
     }
 
     inner class RGBaChannel(keys: Array<String>, defaultValue: ColorRGBa = ColorRGBa.WHITE) :
-            CompoundChannel(keys, arrayOf(defaultValue.r, defaultValue.g, defaultValue.b, defaultValue.a)) {
+            CompoundChannel(keys, arrayOf(defaultValue.r, defaultValue.g, defaultValue.b, defaultValue.alpha)) {
         operator fun getValue(keyframer: Keyframer, property: KProperty<*>): ColorRGBa =
                 ColorRGBa(getValue(0), getValue(1), getValue(2), getValue(3))
     }

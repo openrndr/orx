@@ -194,7 +194,7 @@ class GUI(val baseColor:ColorRGBa = ColorRGBa.GRAY, val defaultStyles: List<Styl
                 this.width = 100.percent
                 this.display = Display.FLEX
                 this.flexDirection = FlexDirection.Row
-                this.background = Color.RGBa(baseColor.copy(a = 0.99))
+                this.background = Color.RGBa(baseColor.copy(alpha = 0.99))
             }
 
             styleSheet(has class_ "collapsed") {
@@ -213,7 +213,7 @@ class GUI(val baseColor:ColorRGBa = ColorRGBa.GRAY, val defaultStyles: List<Styl
                 this.paddingRight = 10.px
                 this.marginRight = 2.px
                 this.height = 100.percent
-                this.background = Color.RGBa(baseColor.copy(a = 0.99))
+                this.background = Color.RGBa(baseColor.copy(alpha = 0.99))
                 this.overflow = Overflow.Scroll
 
                 //<editor-fold desc="1) setup control style">
@@ -881,7 +881,7 @@ class GUI(val baseColor:ColorRGBa = ColorRGBa.GRAY, val defaultStyles: List<Styl
                     }
                     ParameterType.Color -> {
                         val currentValue = (parameter.property as KMutableProperty1<Any, ColorRGBa>).get(labeledObject.obj)
-                        val randomValue = ColorRGBa(Math.random(), Math.random(), Math.random(), currentValue.a)
+                        val randomValue = ColorRGBa(Math.random(), Math.random(), Math.random(), currentValue.alpha)
                         val newValue = ColorRGBa((1.0 - strength) * currentValue.r + randomValue.r * strength,
                                 (1.0 - strength) * currentValue.g + randomValue.g * strength,
                                 (1.0 - strength) * currentValue.b + randomValue.b * strength)

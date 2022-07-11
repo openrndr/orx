@@ -1,16 +1,16 @@
 package org.openrndr.extra.color.spaces
 
 import org.openrndr.color.*
+import org.openrndr.math.Vector4
 import org.openrndr.math.mixAngle
 import kotlin.math.*
 
-data class ColorOKHSLa(val h: Double, val s: Double, val l: Double, val a: Double = 1.0) :
+data class ColorOKHSLa(val h: Double, val s: Double, val l: Double, override val alpha: Double = 1.0) :
+    ColorModel<ColorOKHSLa>,
     HueShiftableColor<ColorOKHSLa>,
-    OpacifiableColor<ColorOKHSLa>,
     SaturatableColor<ColorOKHSLa>,
     ShadableColor<ColorOKHSLa>,
-    AlgebraicColor<ColorOKHSLa>,
-    ConvertibleToColorRGBa {
+    AlgebraicColor<ColorOKHSLa> {
 
     companion object {
         fun fromColorRGBa(c: ColorRGBa): ColorOKHSLa {
@@ -48,11 +48,14 @@ data class ColorOKHSLa(val h: Double, val s: Double, val l: Double, val a: Doubl
         }
     }
 
+    @Deprecated("Legacy alpha parameter name", ReplaceWith("alpha"))
+    val a = alpha
+
     override fun toRGBa(): ColorRGBa {
         if (l == 1.0) {
-            ColorRGBa(1.0, 1.0, 1.0, a)
+            ColorRGBa(1.0, 1.0, 1.0, alpha)
         } else if (l == 0.0) {
-            ColorRGBa(0.0, 0.0, 0.0, a)
+            ColorRGBa(0.0, 0.0, 0.0, alpha)
         }
         val a_ = cos(2 * PI * h / 360.0);
         val b_ = sin(2 * PI * h / 360.0);
@@ -97,29 +100,21 @@ data class ColorOKHSLa(val h: Double, val s: Double, val l: Double, val a: Doubl
         return ColorOKLABa(if (L == L) L else 0.0, if (C == C) C * a_ else 0.0, if (C == C) C * b_ else 0.0).toRGBa().toSRGB()
     }
 
-    override fun shiftHue(shiftInDegrees: Double): ColorOKHSLa {
-        return copy(h = h + shiftInDegrees)
-    }
+    override fun shiftHue(shiftInDegrees: Double): ColorOKHSLa = copy(h = h + shiftInDegrees)
 
-    override fun opacify(factor: Double): ColorOKHSLa {
-        return copy(a = a * factor)
-    }
+    override fun opacify(factor: Double): ColorOKHSLa = copy(alpha = alpha * factor)
 
-    override fun saturate(factor: Double): ColorOKHSLa {
-        return copy(s = s * factor)
-    }
+    override fun saturate(factor: Double): ColorOKHSLa = copy(s = s * factor)
 
-    override fun shade(factor: Double): ColorOKHSLa {
-        return copy(l = l * factor)
-    }
+    override fun shade(factor: Double): ColorOKHSLa = copy(l = l * factor)
 
     override fun minus(right: ColorOKHSLa) =
-        copy(h = h - right.h, s = s - right.s, l = l - right.l, a = a - right.a)
+        copy(h = h - right.h, s = s - right.s, l = l - right.l, alpha = alpha - right.alpha)
 
     override fun plus(right: ColorOKHSLa) =
-        copy(h = h + right.h, s = s + right.s, l = l + right.l, a = a + right.a)
+        copy(h = h + right.h, s = s + right.s, l = l + right.l, alpha = alpha + right.alpha)
 
-    override fun times(scale: Double): ColorOKHSLa = copy(h = h * scale, s = s * scale, l = l * scale, a = a * scale)
+    override fun times(scale: Double): ColorOKHSLa = copy(h = h * scale, s = s * scale, l = l * scale, alpha = alpha * scale)
 
     override fun mix(other: ColorOKHSLa, factor: Double): ColorOKHSLa {
         val sx = factor.coerceIn(0.0, 1.0)
@@ -127,10 +122,11 @@ data class ColorOKHSLa(val h: Double, val s: Double, val l: Double, val a: Doubl
             mixAngle(h, other.h, sx) / 360.0,
             (1.0 - sx) * s + sx * other.s,
             (1.0 - sx) * l + sx * other.l,
-            (1.0 - sx) * a + sx * other.a
+            (1.0 - sx) * alpha + sx * other.alpha
         )
     }
 
+    override fun toVector4(): Vector4 = Vector4(h, s, l, alpha)
 }
 
 fun ColorRGBa.toOKHSLa(): ColorOKHSLa = ColorOKHSLa.fromColorRGBa(this)

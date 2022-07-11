@@ -1,16 +1,14 @@
 package org.openrndr.extra.color.spaces
 
 import org.openrndr.color.*
-import org.openrndr.math.asDegrees
-import org.openrndr.math.asRadians
-import org.openrndr.math.mixAngle
+import org.openrndr.math.*
 import kotlin.math.*
 
 /**
  * Color in cylindrical OKLab space
  */
-data class ColorOKLCHa(val l: Double, val c: Double, val h: Double, val a: Double = 1.0) : ConvertibleToColorRGBa,
-    OpacifiableColor<ColorOKLCHa>,
+data class ColorOKLCHa(val l: Double, val c: Double, val h: Double, override val alpha: Double = 1.0) :
+    ColorModel<ColorOKLCHa>,
     ShadableColor<ColorOKLCHa>,
     HueShiftableColor<ColorOKLCHa>,
     SaturatableColor<ColorOKLCHa>,
@@ -30,14 +28,17 @@ data class ColorOKLCHa(val l: Double, val c: Double, val h: Double, val a: Doubl
         }
     }
 
-    override fun opacify(factor: Double) = copy(a = a * factor)
+    @Deprecated("Legacy alpha parameter name", ReplaceWith("alpha"))
+    val a = alpha
+
+    override fun opacify(factor: Double) = copy(alpha = a * factor)
     override fun shade(factor: Double) = copy(l = l * factor)
     override fun shiftHue(shiftInDegrees: Double) = copy(h = h + shiftInDegrees)
     override fun saturate(factor: Double) = copy(c = c * factor)
 
-    override fun plus(right: ColorOKLCHa) = copy(l = l + right.l, c = c + right.c, h = h + right.h, a = a + right.a)
-    override fun minus(right: ColorOKLCHa) = copy(l = l - right.l, c = c - right.c, h = h - right.h, a = a - right.a)
-    override fun times(scale: Double) = copy(l = l * scale, c = c * scale, h = h * scale, a = a * scale)
+    override fun plus(right: ColorOKLCHa) = copy(l = l + right.l, c = c + right.c, h = h + right.h, alpha = a + right.a)
+    override fun minus(right: ColorOKLCHa) = copy(l = l - right.l, c = c - right.c, h = h - right.h, alpha = a - right.a)
+    override fun times(scale: Double) = copy(l = l * scale, c = c * scale, h = h * scale, alpha = a * scale)
     override fun mix(other: ColorOKLCHa, factor: Double) = mix(this, other, factor)
 
     fun toOKLABa(): ColorOKLABa {
@@ -46,7 +47,8 @@ data class ColorOKLCHa(val l: Double, val c: Double, val h: Double, val a: Doubl
         return ColorOKLABa(l, a, b, alpha = this.a)
     }
 
-    override fun toRGBa() = toOKLABa().toRGBa()
+    override fun toRGBa(): ColorRGBa = toOKLABa().toRGBa()
+    override fun toVector4(): Vector4 = Vector4(l, c, h, alpha)
 }
 
 fun mix(left: ColorOKLCHa, right: ColorOKLCHa, x: Double): ColorOKLCHa {

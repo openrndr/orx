@@ -1,6 +1,8 @@
 package org.openrndr.extra.color.spaces
 
 import org.openrndr.color.*
+import org.openrndr.math.Vector4
+import org.openrndr.math.map
 import org.openrndr.math.mixAngle
 import kotlin.math.*
 
@@ -9,10 +11,10 @@ private val m = arrayOf(
         doubleArrayOf(-0.96924363628087, 1.87596750150772, 0.041555057407175),
         doubleArrayOf(0.055630079696993, -0.20397695888897, 1.056971514242878))
 
-private val kappa = 903.2962962
-private val epsilon = 0.0088564516
+private const val kappa = 903.2962962
+private const val epsilon = 0.0088564516
 
-private fun getBounds(L: Double): List<DoubleArray>? {
+private fun getBounds(L: Double): List<DoubleArray> {
     val result = ArrayList<DoubleArray>()
     val sub1 = (L + 16).pow(3.0) / 1560896
     val sub2 = if (sub1 > epsilon) sub1 else L / kappa
@@ -47,11 +49,11 @@ private class Length(val length: Double) {
     val greaterEqualZero: Boolean = length >= 0
 }
 
-private fun maxSafeChromaForL(L100: Double): Double {
+internal fun maxSafeChromaForL(L100: Double): Double {
     val bounds = getBounds(L100)
     var min = Double.MAX_VALUE
     for (i in 0..1) {
-        val m1 = bounds!![i][0]
+        val m1 = bounds[i][0]
         val b1 = bounds[i][1]
         val line = doubleArrayOf(m1, b1)
         val x = intersectLineLine(line, doubleArrayOf(-1 / m1, 0.0))
@@ -61,11 +63,11 @@ private fun maxSafeChromaForL(L100: Double): Double {
     return min
 }
 
-fun maxChromaForLH(L100: Double, H: Double): Double {
+private fun maxChromaForLH(L100: Double, H: Double): Double {
     val hrad = H / 360 * PI * 2
     val bounds = getBounds(L100)
     var min = Double.MAX_VALUE
-    for (bound in bounds!!) {
+    for (bound in bounds) {
         val length: Length = lengthOfRayUntilIntersect(hrad, bound)
         if (length.greaterEqualZero) {
             min = min(min, length.length)
@@ -77,13 +79,15 @@ fun maxChromaForLH(L100: Double, H: Double): Double {
 /**
  * HSLUV color space
  */
-data class ColorHSLUVa(val h: Double, val s: Double, val l: Double, val a: Double = 1.0) :
-        ConvertibleToColorRGBa,
+data class ColorHSLUVa(val h: Double, val s: Double, val l: Double, override val alpha: Double = 1.0) :
+        ColorModel<ColorHSLUVa>,
         HueShiftableColor<ColorHSLUVa>,
         SaturatableColor<ColorHSLUVa>,
         ShadableColor<ColorHSLUVa>,
-        OpacifiableColor<ColorHSLUVa>,
         AlgebraicColor<ColorHSLUVa> {
+
+    @Deprecated("Legacy alpha parameter name", ReplaceWith("alpha"))
+    val a = alpha
 
     fun toLCHUVa(): ColorLCHUVa {
 
@@ -91,21 +95,21 @@ data class ColorHSLUVa(val h: Double, val s: Double, val l: Double, val a: Doubl
         val s100 = s * 100.0
 
         if (l100 > 99.9999999) {
-            ColorLCHUVa(100.0, 0.0, h, a)
+            ColorLCHUVa(100.0, 0.0, h, alpha)
         }
 
         if (l100 < 0.00000001) {
-            ColorLCHUVa(0.0, 0.0, h, a)
+            ColorLCHUVa(0.0, 0.0, h, alpha)
         }
         val max100 = maxChromaForLH(l100, h)
 
         val c: Double = max100 / 100 * s100
 
-        return ColorLCHUVa(l100, c, h, a)
+        return ColorLCHUVa(l100, c, h, alpha)
     }
 
     fun toXSLUVa() : ColorXSLUVa {
-        return ColorXSLUVa(hueToX(h), s, l, a)
+        return ColorXSLUVa(hueToX(h), s, l, alpha)
     }
 
     override fun shiftHue(shiftInDegrees: Double) = copy(h = h + (shiftInDegrees))
@@ -118,15 +122,17 @@ data class ColorHSLUVa(val h: Double, val s: Double, val l: Double, val a: Doubl
         return toLCHUVa().toRGBa()
     }
 
-    override fun opacify(factor: Double) = copy(a = a * factor)
+    override fun opacify(factor: Double) = copy(alpha = alpha * factor)
 
-    override fun minus(right: ColorHSLUVa) = copy(h = h - right.h, s = s - right.s, l = l - right.l, a = a - right.a)
+    override fun minus(right: ColorHSLUVa) = copy(h = h - right.h, s = s - right.s, l = l - right.l, alpha = alpha - right.alpha)
 
-    override fun plus(right: ColorHSLUVa) = copy(h = h + right.h, s = s + right.s, l = l + right.l, a = a + right.a)
+    override fun plus(right: ColorHSLUVa) = copy(h = h + right.h, s = s + right.s, l = l + right.l, alpha = alpha + right.alpha)
 
-    override fun times(scale: Double) = copy(h = h * scale, s = s * scale, l = l * scale, a = a * scale)
+    override fun times(scale: Double) = copy(h = h * scale, s = s * scale, l = l * scale, alpha = alpha * scale)
 
     override fun mix(other: ColorHSLUVa, factor: Double) = mix(this, other, factor)
+
+    override fun toVector4(): Vector4 = Vector4(h, s, l, alpha)
 
 }
 
@@ -136,51 +142,10 @@ fun mix(left: ColorHSLUVa, right: ColorHSLUVa, x: Double): ColorHSLUVa {
             mixAngle(left.h, right.h, sx),
             (1.0 - sx) * left.s + sx * right.s,
             (1.0 - sx) * left.l + sx * right.l,
-            (1.0 - sx) * left.a + sx * right.a)
+            (1.0 - sx) * left.alpha + sx * right.alpha)
 }
 
-data class ColorXSLUVa(val x: Double, val s: Double, val l: Double, val a: Double):
-        ConvertibleToColorRGBa,
-        HueShiftableColor<ColorXSLUVa>,
-        SaturatableColor<ColorXSLUVa>,
-        ShadableColor<ColorXSLUVa>,
-        OpacifiableColor<ColorXSLUVa>,
-        AlgebraicColor<ColorXSLUVa> {
-    override fun shiftHue(shiftInDegrees: Double) = copy(x = x + (shiftInDegrees))
-
-    override fun shade(factor: Double) = copy(l = l * factor)
-
-    override fun saturate(factor: Double) = copy(s = s * factor)
-
-    override fun toRGBa(): ColorRGBa {
-        return toHSLUVa().toRGBa()
-    }
-
-    fun toHSLUVa(): ColorHSLUVa = ColorHSLUVa(xToHue(x), s, l, a)
-
-    override fun opacify(factor: Double) = copy(a = a * factor)
-
-    override fun minus(right: ColorXSLUVa) = copy(x = x - right.x, s = s - right.s, l = l - right.l, a = a - right.a)
-
-    override fun plus(right: ColorXSLUVa) = copy(x = x + right.x, s = s + right.s, l = l + right.l, a = a + right.a)
-
-    override fun times(scale: Double) = copy(x = x * scale, s = s * scale, l = l * scale, a = a * scale)
-
-    override fun mix(other: ColorXSLUVa, factor: Double) = mix(this, other, factor)
-}
-
-fun ColorRGBa.toXSLUVa() = toHSLUVa().toXSLUVa()
-
-fun mix(left: ColorXSLUVa, right: ColorXSLUVa, x: Double): ColorXSLUVa {
-    val sx = x.coerceIn(0.0, 1.0)
-    return ColorXSLUVa(
-            mixAngle(left.x, right.x, sx),
-            (1.0 - sx) * left.s + sx * right.s,
-            (1.0 - sx) * left.l + sx * right.l,
-            (1.0 - sx) * left.a + sx * right.a)
-}
-
-private fun map(x: Double, a: Double, b: Double, c: Double, d: Double): Double {
+internal fun map(x: Double, a: Double, b: Double, c: Double, d: Double): Double {
     return ((x - a) / (b - a)) * (d - c) + c
 }
 
@@ -201,90 +166,6 @@ private fun hueToX(hue:Double): Double {
     }
 }
 
-private fun xToHue(x:Double) : Double {
-    val x = x % 360.0
-    return if (0.0 <= x && x < 60.0) {
-        map(x, 0.0, 60.0, 0.0, 35.0)
-    } else if (60.0 <= x && x < 120.0) {
-        map(x, 60.0, 120.0, 35.0, 60.0)
-    } else if (120.0 <= x && x < 180.0) {
-        map(x, 120.0, 180.0, 60.0, 135.0)
-    } else if (180.0 <= x && x < 240.0) {
-        map(x, 180.0, 240.0, 135.0, 225.0)
-    } else if (240.0 <= x && x < 300.0) {
-        map(x, 240.0, 300.0, 225.0, 275.0)
-    } else {
-        map(x, 300.0, 360.0, 276.0, 360.0)
-    }
-}
-
-data class ColorHPLUVa(val h: Double, val s: Double, val l: Double, val a: Double = 1.0) :
-        ConvertibleToColorRGBa,
-        HueShiftableColor<ColorHPLUVa>,
-        SaturatableColor<ColorHPLUVa>,
-        ShadableColor<ColorHPLUVa>,
-        OpacifiableColor<ColorHPLUVa>,
-        AlgebraicColor<ColorHPLUVa> {
-    fun toLCHUVa(): ColorLCHUVa {
-        val l1 = l
-        if (l1 > 0.9999999) {
-            return ColorLCHUVa(100.0, 0.0, h)
-        }
-        if (l1 < 0.00000001) {
-            return ColorLCHUVa(0.0, 0.0, h)
-        }
-        val l100 = l1 * 100.0
-        val max100 = maxSafeChromaForL(l100)
-        val c100 = max100 * s
-        return ColorLCHUVa(l100, c100, h)
-    }
-
-    override fun shiftHue(shiftInDegrees: Double): ColorHPLUVa {
-        return copy(h = h + (shiftInDegrees))
-    }
-
-    override fun shade(factor: Double): ColorHPLUVa = copy(l = l * factor)
-
-    override fun saturate(factor: Double): ColorHPLUVa = copy(s = s * factor)
-
-    override fun toRGBa(): ColorRGBa = toLCHUVa().toRGBa()
-
-    override fun opacify(factor: Double) = copy(a = a * factor)
-
-    override fun minus(right: ColorHPLUVa) = copy(h = h - right.h, s = s - right.s, l = l - right.l, a = a - right.a)
-
-    override fun plus(right: ColorHPLUVa) = copy(h = h + right.h, s = s + right.s, l = l + right.l, a = a + right.a)
-
-    override fun times(scale: Double) = copy(h = h * scale, s = s * scale, l = l * scale, a = a * scale)
-
-    override fun mix(other: ColorHPLUVa, factor: Double) = mix(this, other, factor)
-
-}
-
-fun mix(left: ColorHPLUVa, right: ColorHPLUVa, x: Double): ColorHPLUVa {
-    val sx = x.coerceIn(0.0, 1.0)
-    return ColorHPLUVa(
-            mixAngle(left.h, right.h, sx),
-            (1.0 - sx) * left.s + sx * right.s,
-            (1.0 - sx) * left.l + sx * right.l,
-            (1.0 - sx) * left.a + sx * right.a)
-}
-
-
-fun ColorLCHUVa.toHPLUVa(): ColorHPLUVa {
-    val l100 = l
-    if (l100 > 99.9999999) {
-        return ColorHPLUVa(h, 0.0, 1.0)
-    }
-    if (l100 < 0.00000001) {
-        return ColorHPLUVa(h, 0.0, 0.0)
-
-    }
-    val max100 = maxSafeChromaForL(l)
-    val s1 = c / max100
-    return ColorHPLUVa(h, s1, l100 / 100.0)
-}
-
 fun ColorLCHUVa.toHSLUVa(): ColorHSLUVa {
     val l100 = l
 
@@ -301,4 +182,3 @@ fun ColorLCHUVa.toHSLUVa(): ColorHSLUVa {
 }
 
 fun ColorRGBa.toHSLUVa(): ColorHSLUVa = toLCHUVa().toHSLUVa()
-fun ColorRGBa.toHPLUVa(): ColorHPLUVa = toLCHUVa().toHPLUVa()
