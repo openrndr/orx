@@ -15,7 +15,7 @@ import org.openrndr.ffmpeg.ScreenRecorder
 fun main() = application {
     program {
         extend(ScreenRecorder()) {
-            profile = GIFProfile()
+            gif()
         }
         extend {
             drawer.clear(ColorRGBa.GREEN)
@@ -38,7 +38,7 @@ This profile requires specifying a file name: `outputFile = "frame-%05d.png"`,
 where `%05d` means "zero-padded five-digit frame number".
 The frame number format is not optional.
 
-```
+```kotlin
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.videoprofiles.*
@@ -47,7 +47,7 @@ import org.openrndr.ffmpeg.ScreenRecorder
 fun main() = application {
     program {
         extend(ScreenRecorder()) {
-            profile = PNGProfile()
+            pngSequence()
             outputFile = "frame-%05d.png"
         }
         extend {
@@ -59,7 +59,7 @@ fun main() = application {
 
 ### Animated Webp
 
-```
+```kotlin
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.videoprofiles.*
@@ -68,7 +68,7 @@ import org.openrndr.ffmpeg.ScreenRecorder
 fun main() = application {
     program {
         extend(ScreenRecorder()) {
-            profile = WebpProfile()
+            webp()
         }
         extend {
             drawer.clear(ColorRGBa.GREEN)
@@ -80,7 +80,7 @@ fun main() = application {
 
 ### Prores (large file, high quality video)
 
-```
+```kotlin
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.videoprofiles.*
@@ -89,10 +89,8 @@ import org.openrndr.ffmpeg.ScreenRecorder
 fun main() = application {
     program {
         extend(ScreenRecorder()) {
-            // .apply is optional, for further configuration
-            profile = ProresProfile().apply {
+            prores {
                 profile = ProresProfile.Profile.HQ4444
-                codec = "prores_ks"
             }
         }
         extend {
@@ -102,9 +100,9 @@ fun main() = application {
 }
 ```
 
-### X265
+### H265
 
-```
+```kotlin
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.videoprofiles.*
@@ -113,11 +111,8 @@ import org.openrndr.ffmpeg.ScreenRecorder
 fun main() = application {
     program {
         extend(ScreenRecorder()) {
-            // .apply is optional, for further configuration
-            profile = X265Profile().apply {
-                mode(X265Profile.WriterMode.Lossless)
+            h265 {
                 constantRateFactor(23)
-                hlg = true
             }
         }
         extend {

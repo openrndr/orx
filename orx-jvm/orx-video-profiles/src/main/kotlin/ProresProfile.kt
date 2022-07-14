@@ -1,5 +1,6 @@
 package org.openrndr.extra.videoprofiles
 
+import org.openrndr.ffmpeg.ScreenRecorder
 import org.openrndr.ffmpeg.VideoWriterProfile
 
 class ProresProfile : VideoWriterProfile() {
@@ -22,4 +23,11 @@ class ProresProfile : VideoWriterProfile() {
         val audio = arrayOf("-an")
         return vcodec + profile + filters + audio
     }
+}
+
+/**
+ * Configure a Prores video profile
+ */
+fun ScreenRecorder.prores(configure : ProresProfile.() -> Unit = {}) {
+    profile = ProresProfile().apply(configure)
 }

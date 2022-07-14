@@ -1,4 +1,5 @@
 package org.openrndr.extra.videoprofiles
+import org.openrndr.ffmpeg.ScreenRecorder
 import org.openrndr.ffmpeg.VideoWriterProfile
 
 /**
@@ -13,4 +14,11 @@ class PNGProfile : VideoWriterProfile() {
     override fun arguments(): Array<String> {
         return arrayOf("-vf", "vflip")
     }
+}
+
+/**
+ * Configure a png sequence profile
+ */
+fun ScreenRecorder.pngSequence(configure : PNGProfile.() -> Unit = {}) {
+    profile = PNGProfile().apply(configure)
 }

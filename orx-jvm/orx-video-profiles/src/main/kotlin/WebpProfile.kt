@@ -1,4 +1,5 @@
 package org.openrndr.extra.videoprofiles
+import org.openrndr.ffmpeg.ScreenRecorder
 import org.openrndr.ffmpeg.VideoWriterProfile
 
 class WebpProfile : VideoWriterProfile() {
@@ -8,3 +9,11 @@ class WebpProfile : VideoWriterProfile() {
         return arrayOf("-vf", "vflip")
     }
 }
+
+/**
+ * Configure a webp video profile
+ */
+fun ScreenRecorder.webp(configure : WebpProfile.() -> Unit) {
+    profile = WebpProfile().apply(configure)
+}
+

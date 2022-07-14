@@ -1,7 +1,11 @@
 package org.openrndr.extra.videoprofiles
+import org.openrndr.ffmpeg.ScreenRecorder
 import org.openrndr.ffmpeg.VideoWriterProfile
 
-class X265Profile : VideoWriterProfile() {
+@Deprecated("use h265 profile", replaceWith = ReplaceWith("H265Profile"))
+typealias X265Profile = H265Profile
+
+class H265Profile : VideoWriterProfile() {
     internal var mode = WriterMode.Normal
     internal var constantRateFactor = 28
     var hlg = false
@@ -57,4 +61,11 @@ class X265Profile : VideoWriterProfile() {
             }
         }
     }
+}
+
+/**
+ * Configure a h265 video profile
+ */
+fun ScreenRecorder.h265(configure : H265Profile.() -> Unit = {}) {
+    profile = H265Profile().apply(configure)
 }
