@@ -22,9 +22,9 @@ dependencyResolutionManagement {
         create("libs") {
             version("kotlinApi", "1.6")
             version("kotlinLanguage", "1.6")
-            version("kotlin", "1.6.20")
+            version("kotlin", "1.6.21")
             version("jvmTarget", "1.8")
-            version("kotlinxCoroutines", "1.6.3")
+            version("kotlinxCoroutines", "1.6.4")
             version("kotlinLogging", "2.1.23")
             version("kotlinxSerialization", "1.3.2")
             version("spek", "2.0.18")
