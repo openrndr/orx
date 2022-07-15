@@ -5,7 +5,6 @@ import org.openrndr.shape.Rectangle
 import org.openrndr.shape.Triangle
 import org.openrndr.shape.contour
 import org.openrndr.shape.contours
-import com.github.ricardomatias.Delaunator
 import kotlin.math.pow
 
 /*
