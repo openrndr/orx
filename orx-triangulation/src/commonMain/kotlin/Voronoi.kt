@@ -4,7 +4,6 @@ import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 import org.openrndr.shape.ShapeContour
 import kotlin.math.abs
-import kotlin.math.floor
 import kotlin.math.sign
 
 /*

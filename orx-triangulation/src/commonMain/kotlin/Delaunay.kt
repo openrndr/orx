@@ -5,6 +5,7 @@ import org.openrndr.shape.Rectangle
 import org.openrndr.shape.Triangle
 import org.openrndr.shape.contour
 import org.openrndr.shape.contours
+import kotlin.js.JsName
 import kotlin.math.cos
 import kotlin.math.pow
 import kotlin.math.sin
@@ -128,6 +129,7 @@ class Delaunay(val points: DoubleArray) {
         }
     }
 
+    @JsName("triangleFun")
     fun triangles(): List<Triangle> {
         val list = mutableListOf<Triangle>()
 
@@ -148,6 +150,7 @@ class Delaunay(val points: DoubleArray) {
     }
 
     // Inner edges of the delaunay triangulation (without hull)
+    @JsName("halfedgesFun")
     fun halfedges() = contours {
         for (i in halfedges.indices) {
             val j = halfedges[i]
@@ -161,6 +164,7 @@ class Delaunay(val points: DoubleArray) {
         }
     }
 
+    @JsName("hullFun")
     fun hull() = contour {
         for (h in hull) {
             moveOrLineTo(points[2 * h], points[2 * h + 1])

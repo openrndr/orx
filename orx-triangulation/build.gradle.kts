@@ -12,10 +12,11 @@ kotlin {
                 defaultSourceSet {
                     kotlin.srcDir("src/demo")
                     dependencies {
-                        implementation(project(":orx-camera"))
-                        implementation(project(":orx-color"))
+                        implementation(project(":orx-shapes"))
+                        implementation(project(":orx-noise"))
                         implementation(project(":orx-triangulation"))
                         implementation(libs.openrndr.application)
+                        implementation(libs.openrndr.shape)
                         implementation(libs.openrndr.extensions)
                         runtimeOnly(libs.openrndr.gl3.core)
                         runtimeOnly(libs.openrndr.gl3.natives)
@@ -44,23 +45,13 @@ kotlin {
         @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
-                implementation(project(":orx-parameters"))
-                implementation(project(":orx-shader-phrases"))
-                implementation(project(":orx-color"))
-                implementation(libs.kotlin.serialization.core)
-                implementation(libs.openrndr.application)
-                implementation(libs.openrndr.draw)
-                implementation(libs.openrndr.filter)
-                implementation(libs.kotlin.reflect)
-                implementation(libs.kotlin.logging)
+                api(libs.openrndr.math)
+                api(libs.openrndr.shape)
             }
         }
 
         @Suppress("UNUSED_VARIABLE")
         val jvmMain by getting {
-            dependencies {
-                implementation(project(":orx-triangulation"))
-            }
         }
 
         @Suppress("UNUSED_VARIABLE")

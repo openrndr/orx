@@ -258,23 +258,3 @@ fun orient2drp(pb0: Double, pb1: Double, pa0: Double, pa1: Double, pc0: Double, 
 
     return w[wlength - 1]
 }
-
-
-fun orient2dbd(pb0: Double, pb1: Double, pa0: Double, pa1: Double, pc0: Double, pc1: Double): Double {
-    val bx = pb0.toBigDecimal()
-    val by = pb1.toBigDecimal()
-
-    val ax = pa0.toBigDecimal()
-    val ay = pa1.toBigDecimal()
-
-    val cx = pc0.toBigDecimal()
-    val cy = pc1.toBigDecimal()
-
-    val axcx = ax - cx
-    val aycy = ay - cy
-    val bxcx = bx - cx
-    val bycy = by - cy
-
-    return (axcx * bycy - aycy * bxcx).toDouble()
-
-}
