@@ -37,7 +37,7 @@ dependencyResolutionManagement {
             version("libfreenect", "0.5.7-1.5.7")
             version("librealsense", "2.50.0-1.5.7")
             version("gson", "2.9.0")
-            version("antlr", "4.9.3")
+            version("antlr", "4.10.1")
             version("tensorflow", "0.4.0")
             version("jarchivelib", "1.0.0")
             version("logbackClassic", "1.2.11")

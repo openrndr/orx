@@ -87,6 +87,7 @@ AS_SAFE: 'as?';
 EQEQ: '==';
 EQEQEQ: '===';
 SINGLE_QUOTE: '\'';
+AMP: '&';
 
 // SECTION: keywords
 
@@ -323,12 +324,11 @@ fragment EscapeSeq
 // SECTION: characters
 
 fragment Letter
-    : UNICODE_CLASS_LL
+    : UNICODE_CLASS_LU
+    | UNICODE_CLASS_LL
+    | UNICODE_CLASS_LT
     | UNICODE_CLASS_LM
     | UNICODE_CLASS_LO
-    | UNICODE_CLASS_LT
-    | UNICODE_CLASS_LU
-    | UNICODE_CLASS_NL
     ;
 
 // SECTION: strings
@@ -441,6 +441,7 @@ Inside_AS_SAFE: AS_SAFE  -> type(AS_SAFE);
 Inside_EQEQ: EQEQ  -> type(EQEQ);
 Inside_EQEQEQ: EQEQEQ  -> type(EQEQEQ);
 Inside_SINGLE_QUOTE: SINGLE_QUOTE  -> type(SINGLE_QUOTE);
+Inside_AMP: AMP  -> type(AMP);
 Inside_QUOTE_OPEN: QUOTE_OPEN -> pushMode(LineString), type(QUOTE_OPEN);
 Inside_TRIPLE_QUOTE_OPEN: TRIPLE_QUOTE_OPEN -> pushMode(MultiLineString), type(TRIPLE_QUOTE_OPEN);
 
