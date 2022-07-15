@@ -5,7 +5,9 @@ import org.openrndr.shape.Rectangle
 import org.openrndr.shape.Triangle
 import org.openrndr.shape.contour
 import org.openrndr.shape.contours
+import kotlin.math.cos
 import kotlin.math.pow
+import kotlin.math.sin
 
 /*
 ISC License
@@ -74,11 +76,28 @@ class Delaunay(val points: DoubleArray) {
         init()
     }
 
+    fun collinear(): Boolean {
+        for (i in 0 until triangles.size step 3) {
+            val a = 2 * triangles[i]
+            val b = 2 * triangles[i + 1]
+            val c =  2 * triangles[i + 2]
+            val coords = points
+            val cross = (coords[c] - coords[a]) * (coords[b + 1] - coords[a + 1])
+            - (coords[b] - coords[a]) * (coords[c + 1] - coords[a + 1])
+            if (cross > 1e-10) return false;
+        }
+        return true
+    }
+    private fun jitter(x:Double, y:Double, r:Double): DoubleArray {
+        return doubleArrayOf(x + sin(x+y) * r, y + cos(x-y)*r)
+    }
     fun init() {
         halfedges = delaunator.halfedges
         hull = delaunator.hull
         triangles = delaunator.triangles
-
+        if (hull.size > 2 && collinear()) {
+            error("collinear")
+        }
         inedges.fill(-1)
         hullIndex.fill(-1)
 
@@ -100,10 +119,12 @@ class Delaunay(val points: DoubleArray) {
             triangles = IntArray(3) { -1 }
             halfedges = IntArray(3) { -1 }
             triangles[0] = hull[0]
-            triangles[1] = hull[1]
-            triangles[2] = hull[1]
             inedges[hull[0]] = 1
-            if (hull.size == 2) inedges[hull[1]] = 0
+            if (hull.size == 2) {
+                inedges[hull[1]] = 0
+                triangles[1] = hull[1]
+                triangles[2] = hull[1]
+            }
         }
     }
 
@@ -177,9 +198,9 @@ class Delaunay(val points: DoubleArray) {
                 c = t
             }
 
-            e = nextHalfedge(e)
+            e = if (e % 3 == 2) e - 2 else e + 1
 
-            if (triangles[e] != i) break // bad triangulation
+            if (triangles[e] != i) error("bad triangulation") // bad triangulation
 
             e = halfedges[e]
 

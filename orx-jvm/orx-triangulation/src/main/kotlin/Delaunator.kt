@@ -3,7 +3,6 @@ package org.openrndr.extra.triangulation
 import kotlin.math.*
 
 val EPSILON: Double = 2.0.pow(-52)
-val EDGE_STACK = IntArray(512)
 
 /**
  * A Kotlin port of Mapbox's Delaunator incredibly fast JavaScript library for Delaunay triangulation of 2D points.
@@ -16,6 +15,8 @@ val EDGE_STACK = IntArray(512)
  */
 @Suppress("unused")
 class Delaunator(val coords: DoubleArray) {
+    val EDGE_STACK = IntArray(512)
+
     private var count = coords.size shr 1
 
     // arrays that will store the triangulation graph
@@ -156,7 +157,7 @@ class Delaunator(val coords: DoubleArray) {
         var i2y = coords[2 * i2 + 1]
 
         // swap the order of the seed points for counter-clockwise orientation
-        if (orient(i0x, i0y, i1x, i1y, i2x, i2y) < 0.0) {
+        if (orient2d(i0x, i0y, i1x, i1y, i2x, i2y) < 0.0) {
             val i = i1
             val x = i1x
             val y = i1y
@@ -237,7 +238,7 @@ class Delaunator(val coords: DoubleArray) {
             var e = start
             var q = hullNext[e]
 
-            while (orient(x, y, coords[2 * e], coords[2 * e + 1], coords[2 * q], coords[2 * q + 1]) >= 0.0) {
+            while (orient2d(x, y, coords[2 * e], coords[2 * e + 1], coords[2 * q], coords[2 * q + 1]) >= 0.0) {
                 e = q
 
                 if (e == start) {
@@ -262,7 +263,7 @@ class Delaunator(val coords: DoubleArray) {
             var next = hullNext[e]
             q = hullNext[next]
 
-            while (orient(x, y, coords[2 * next], coords[2 * next + 1], coords[2 * q], coords[2 * q + 1]) < 0.0) {
+            while (orient2d(x, y, coords[2 * next], coords[2 * next + 1], coords[2 * q], coords[2 * q + 1]) < 0.0) {
                 t = addTriangle(next, i, q, hullTri[i], -1, hullTri[next])
                 hullTri[i] = legalize(t + 2)
                 hullNext[next] = next // mark as removed
@@ -276,7 +277,7 @@ class Delaunator(val coords: DoubleArray) {
             if (e == start) {
                 q = hullPrev[e]
 
-                while (orient(x, y, coords[2 * q], coords[2 * q + 1], coords[2 * e], coords[2 * e + 1]) < 0.0) {
+                while (orient2d(x, y, coords[2 * q], coords[2 * q + 1], coords[2 * e], coords[2 * e + 1]) < 0.0) {
                     t = addTriangle(q, i, e, -1, hullTri[e], hullTri[q])
                     legalize(t + 2)
                     hullTri[q] = t
@@ -512,30 +513,6 @@ private fun swap(arr: IntArray, i: Int, j: Int) {
     arr[j] = tmp
 }
 
-// return 2d orientation sign if we're confident in it through J. Shewchuk's error bound check
-private fun orientIfSure(px: Double, py: Double, rx: Double, ry: Double, qx: Double, qy: Double): Double {
-    val l = (ry - py) * (qx - px)
-    val r = (rx - px) * (qy - py)
-    return if (abs(l - r) >= (3.3306690738754716e-16 * abs(l + r))) l - r else 0.0
-}
-
-// a more robust orientation test that's stable in a given triangle (to fix robustness issues)
-private fun orient(rx: Double, ry: Double, qx: Double, qy: Double, px: Double, py: Double): Double {
-    val a = orientIfSure(px, py, rx, ry, qx, qy)
-    val b = orientIfSure(rx, ry, qx, qy, px, py)
-    val c = orientIfSure(qx, qy, px, py, rx, ry)
-
-    return if (!a.isFalsy()) {
-        a
-    } else {
-        if (!b.isFalsy()) {
-            b
-        } else {
-            c
-        }
-    }
-}
-
 // monotonically increases with real angle, but doesn't need expensive trigonometry
 private fun pseudoAngle(dx: Double, dy: Double): Double {
     val p = dx / (abs(dx) + abs(dy))
@@ -569,5 +546,3 @@ private fun dist(ax: Double, ay: Double, bx: Double, by: Double): Double {
     val dy = ay - by
     return dx * dx + dy * dy
 }
-
-private fun Double?.isFalsy() = this == null || this == -0.0 || this == 0.0 || isNaN()
