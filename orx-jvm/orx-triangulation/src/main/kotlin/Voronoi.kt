@@ -85,7 +85,6 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
             val ab = (dx * ey - dy * ex) * 2
 
             if (abs(ab) < 1e-9) {
-                println("oh no")
                 var a = 1e9
                 val r = triangles[0] * 2
                 a *= sign((points[r]  - x1) * ey - (points[r+1] - y1) * ex)

@@ -9,11 +9,10 @@ sourceSets {
 }
 
 def useSnapshot = false
-def delaunatorVersion = (useSnapshot) ? "0.4.0-SNAPSHOT" : "1.0.2"
 
 dependencies {
-    api project(":orx-noise")
-
+    demoImplementation(project(":orx-noise"))
+    demoImplementation(project(":orx-shapes"))
     demoImplementation(libs.openrndr.application)
     demoImplementation(libs.openrndr.extensions)
     demoRuntimeOnly(libs.openrndr.gl3.core)
