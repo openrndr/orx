@@ -238,7 +238,7 @@ class Delaunator(val coords: DoubleArray) {
             var e = start
             var q = hullNext[e]
 
-            while (orient2d(x, y, coords[2 * e], coords[2 * e + 1], coords[2 * q], coords[2 * q + 1]) >= 0.0) {
+            while (orient2d(x, y, coords[2 * e], coords[2 * e + 1], coords[2 * q], coords[2 * q + 1]) >= 0) {
                 e = q
 
                 if (e == start) {
@@ -263,7 +263,7 @@ class Delaunator(val coords: DoubleArray) {
             var next = hullNext[e]
             q = hullNext[next]
 
-            while (orient2d(x, y, coords[2 * next], coords[2 * next + 1], coords[2 * q], coords[2 * q + 1]) < 0.0) {
+            while (orient2d(x, y, coords[2 * next], coords[2 * next + 1], coords[2 * q], coords[2 * q + 1]) < 0) {
                 t = addTriangle(next, i, q, hullTri[i], -1, hullTri[next])
                 hullTri[i] = legalize(t + 2)
                 hullNext[next] = next // mark as removed
@@ -277,9 +277,7 @@ class Delaunator(val coords: DoubleArray) {
             if (e == start) {
                 q = hullPrev[e]
 
-                // Add a 1E-10 bias here to fix our problems. The javascript delaunator doesn't seem to need this,
-                // so adding this bias makes me very nervous.
-                while (1E-10 + orient2d(x, y, coords[2 * q], coords[2 * q + 1], coords[2 * e], coords[2 * e + 1]) < 0) {
+                while (orient2d(x, y, coords[2 * q], coords[2 * q + 1], coords[2 * e], coords[2 * e + 1]) < 0) {
                     t = addTriangle(q, i, e, -1, hullTri[e], hullTri[q])
                     legalize(t + 2)
                     hullTri[q] = t
@@ -360,7 +358,7 @@ class Delaunator(val coords: DoubleArray) {
             val pl = _triangles[al]
             val p1 = _triangles[bl]
 
-            val illegal = inCircle(
+            val illegal = inCircleRobust(
                 coords[2 * p0], coords[2 * p0 + 1],
                 coords[2 * pr], coords[2 * pr + 1],
                 coords[2 * pl], coords[2 * pl + 1],
@@ -542,6 +540,37 @@ private fun inCircle(ax: Double, ay: Double,
             dy * (ex * cp - bp * fx) +
             ap * (ex * fy - ey * fx) < 0
 }
+
+
+private fun inCircleRobust(
+    ax: Double, ay: Double,
+    bx: Double, by: Double,
+    cx: Double, cy: Double,
+    px: Double, py: Double
+): Boolean {
+
+    val dx = twoDiff(ax, px)
+    val dy = twoDiff(ay, py)
+    val ex = twoDiff(bx, px)
+    val ey = twoDiff(by, py)
+    val fx = twoDiff(cx, px)
+    val fy = twoDiff(cy, py)
+
+    val ap = ddAddDd(ddMultDd(dx, dx), ddMultDd(dy, dy))
+    val bp = ddAddDd(ddMultDd(ex, ex), ddMultDd(ey, ey))
+    val cp = ddAddDd(ddMultDd(fx, fx), ddMultDd(fy, fy))
+
+    val dd = ddAddDd(
+        ddDiffDd(
+            ddMultDd(dx, ddDiffDd(ddMultDd(ey, cp), ddMultDd(bp, fy))),
+            ddMultDd(dy, ddDiffDd(ddMultDd(ex, cp), ddMultDd(bp, fx)))
+        ),
+        ddMultDd(ap, ddDiffDd(ddMultDd(ex, fy), ddMultDd(ey, fx)))
+    )
+
+    return (dd[1]) < 0.0
+}
+
 
 private fun dist(ax: Double, ay: Double, bx: Double, by: Double): Double {
     val dx = ax - bx

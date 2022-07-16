@@ -16,8 +16,8 @@ fun orient2d(bx: Double, by:Double, ax:Double, ay:Double, cx:Double, cy:Double) 
     val c = bx - cx
     val d = by - cy
 
-    val determinant = ddDiffDD(twoProduct(a, d), twoProduct(b, c))
+    val determinant = ddDiffDd(twoProduct(a, d), twoProduct(b, c))
 
-    return determinant[0] + determinant[1]
+    return  determinant[1]
 
 }

@@ -193,7 +193,7 @@ fun twoSum(a: Double, b: Double): DoubleArray {
  * @param x a double-double precision floating point number
  * @param y another double-double precision floating point number
  */
-fun ddDiffDD(x: DoubleArray, y: DoubleArray): DoubleArray {
+fun ddDiffDd(x: DoubleArray, y: DoubleArray): DoubleArray {
     val xl = x[0];
     val xh = x[1];
     val yl = y[0];
@@ -208,6 +208,73 @@ fun ddDiffDD(x: DoubleArray, y: DoubleArray): DoubleArray {
     val vh = sh + c; val vl = c - (vh - sh);
     val w = tl + vl
     //const [zl,zh] = fastTwoSum(vh,w)
+    val zh = vh + w; val zl = w - (zh - vh);
+
+    return doubleArrayOf(zl, zh)
+}
+
+/**
+ * Returns the product of two double-double-precision floating point numbers.
+ *
+ * * relative error bound: 7u^2, i.e. fl(a+b) = (a+b)(1+ϵ),
+ * where ϵ <= 7u^2, u = 0.5 * Number.EPSILON
+ * the error bound is not sharp - the worst case that could be found by the
+ * authors were 5u^2
+ *
+ * * ALGORITHM 10 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
+ * @param x a double-double precision floating point number
+ * @param y another double-double precision floating point number
+ */
+fun ddMultDd(x: DoubleArray, y: DoubleArray): DoubleArray {
+
+
+    //const xl = x[0];
+    val xh = x[1];
+    //const yl = y[0];
+    val yh = y[1];
+
+    //const [cl1,ch] = twoProduct(xh,yh);
+    val ch = xh*yh;
+    val c = f * xh; val ah = c - (c - xh); val al = xh - ah;
+    val d = f * yh; val bh = d - (d - yh); val bl = yh - bh;
+    val cl1 = (al*bl) - ((ch - (ah*bh)) - (al*bh) - (ah*bl));
+
+    //return fastTwoSum(ch,cl1 + (xh*yl + xl*yh));
+    val b = cl1 + (xh*y[0] + x[0]*yh);
+    val xx = ch + b;
+
+    return doubleArrayOf(b - (xx - ch), xx)
+}
+
+
+/**
+ * Returns the result of adding two double-double-precision floating point
+ * numbers.
+ *
+ * * relative error bound: 3u^2 + 13u^3, i.e. fl(a+b) = (a+b)(1+ϵ),
+ * where ϵ <= 3u^2 + 13u^3, u = 0.5 * Number.EPSILON
+ * * the error bound is not sharp - the worst case that could be found by the
+ * authors were 2.25u^2
+ *
+ * ALGORITHM 6 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
+ * @param x a double-double precision floating point number
+ * @param y another double-double precision floating point number
+ */
+fun ddAddDd(x: DoubleArray, y: DoubleArray): DoubleArray {
+    val xl = x[0];
+    val xh = x[1];
+    val yl = y[0];
+    val yh = y[1];
+
+    //const [sl,sh] = twoSum(xh,yh);
+    val sh = xh + yh; val _1 = sh - xh; val sl = (xh - (sh - _1)) + (yh - _1);
+    //val [tl,th] = twoSum(xl,yl);
+    val th = xl + yl; val _2 = th - xl; val tl = (xl - (th - _2)) + (yl - _2);
+    val c = sl + th;
+    //val [vl,vh] = fastTwoSum(sh,c)
+    val vh = sh + c; val vl = c - (vh - sh);
+    val w = tl + vl
+    //val [zl,zh] = fastTwoSum(vh,w)
     val zh = vh + w; val zl = w - (zh - vh);
 
     return doubleArrayOf(zl, zh)
