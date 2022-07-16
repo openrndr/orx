@@ -277,7 +277,9 @@ class Delaunator(val coords: DoubleArray) {
             if (e == start) {
                 q = hullPrev[e]
 
-                while (orient2d(x, y, coords[2 * q], coords[2 * q + 1], coords[2 * e], coords[2 * e + 1]) < 0.0) {
+                // Add a 1E-10 bias here to fix our problems. The javascript delaunator doesn't seem to need this,
+                // so adding this bias makes me very nervous.
+                while (1E-10 + orient2d(x, y, coords[2 * q], coords[2 * q + 1], coords[2 * e], coords[2 * e + 1]) < 0) {
                     t = addTriangle(q, i, e, -1, hullTri[e], hullTri[q])
                     legalize(t + 2)
                     hullTri[q] = t
