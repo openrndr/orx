@@ -541,7 +541,6 @@ private fun inCircle(ax: Double, ay: Double,
             ap * (ex * fy - ey * fx) < 0
 }
 
-
 private fun inCircleRobust(
     ax: Double, ay: Double,
     bx: Double, by: Double,
@@ -567,13 +566,24 @@ private fun inCircleRobust(
         ),
         ddMultDd(ap, ddDiffDd(ddMultDd(ex, fy), ddMultDd(ey, fx)))
     )
-
-    return (dd[1]) < 0.0
+    // add a small bias here, it seems to help
+    return (dd[1]) <= 1E-8
 }
 
 
 private fun dist(ax: Double, ay: Double, bx: Double, by: Double): Double {
-    val dx = ax - bx
-    val dy = ay - by
-    return dx * dx + dy * dy
+    //val dx = ax - bx
+    //val dy = ay - by
+    //return dx * dx + dy * dy
+
+    // double-double implementation but I think it is overkill.
+
+    val dx = twoDiff(ax, bx)
+    val dy = twoDiff(ay, by)
+    val dx2 = ddMultDd(dx, dx)
+    val dy2 = ddMultDd(dy, dy)
+    val d2 = ddAddDd(dx2, dy2)
+
+    return d2[0] + d2[1]
+
 }

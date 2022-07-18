@@ -279,3 +279,42 @@ fun ddAddDd(x: DoubleArray, y: DoubleArray): DoubleArray {
 
     return doubleArrayOf(zl, zh)
 }
+
+
+/**
+ * Returns the product of a double-double-precision floating point number and a
+ * double.
+ *
+ * * slower than ALGORITHM 8 (one call to fastTwoSum more) but about 2x more
+ * accurate
+ * * relative error bound: 1.5u^2 + 4u^3, i.e. fl(a+b) = (a+b)(1+ϵ),
+ * where ϵ <= 1.5u^2 + 4u^3, u = 0.5 * Number.EPSILON
+ * * the bound is very sharp
+ * * probably prefer `ddMultDouble2` due to extra speed
+ *
+ * * ALGORITHM 7 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
+ * @param y a double
+ * @param x a double-double precision floating point number
+ */
+fun ddMultDouble1(y: Double, x: DoubleArray): DoubleArray {
+    val xl = x[0];
+    val xh = x[1];
+
+    //val [cl1,ch] = twoProduct(xh,y);
+    val ch = xh*y;
+    val c = f * xh; val ah = c - (c - xh); val al = xh - ah;
+    val d = f * y; val bh = d - (d - y); val bl = y - bh;
+    val cl1 = (al*bl) - ((ch - (ah*bh)) - (al*bh) - (ah*bl));
+
+    val cl2 = xl*y;
+    //val [tl1,th] = fastTwoSum(ch,cl2);
+    val th = ch + cl2;
+    val tl1 = cl2 - (th - ch);
+
+    val tl2 = tl1 + cl1;
+    //val [zl,zh] = fastTwoSum(th,tl2);
+    val zh = th + tl2;
+    val zl = tl2 - (zh - th);
+
+    return doubleArrayOf(zl,zh);
+}
