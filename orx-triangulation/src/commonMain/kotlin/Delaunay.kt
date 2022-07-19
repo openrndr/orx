@@ -77,6 +77,33 @@ class Delaunay(val points: DoubleArray) {
         init()
     }
 
+    fun neighbors(i:Int) = sequence<Int> {
+        val e0 = inedges[i]
+        if (e0 != -1) {
+
+
+            var e = e0
+            var p0 = -1
+
+            do {
+                p0 = triangles[e]
+                yield(p0)
+                e = if (e % 3 == 2) e - 2 else e + 1
+                if (triangles[e] != i) error("bad triangulation")
+                e = halfedges[e]
+
+                if (e == -1) {
+                    val p = hull[(hullIndex[i] + 1) % hull.size]
+                    if (p != p0) {
+                        yield(p)
+                        break
+                    }
+                }
+
+            } while (e != e0)
+        }
+    }
+
     fun collinear(): Boolean {
         for (i in 0 until triangles.size step 3) {
             val a = 2 * triangles[i]
@@ -129,48 +156,6 @@ class Delaunay(val points: DoubleArray) {
         }
     }
 
-    @JsName("triangleFun")
-    fun triangles(): List<Triangle> {
-        val list = mutableListOf<Triangle>()
-
-        for (i in triangles.indices step 3 ) {
-            val t0 = triangles[i] * 2
-            val t1 = triangles[i + 1] * 2
-            val t2 = triangles[i + 2] * 2
-
-            val p1 = Vector2(points[t0], points[t0 + 1])
-            val p2 = Vector2(points[t1], points[t1 + 1])
-            val p3 = Vector2(points[t2], points[t2 + 1])
-
-            // originally they are defined *counterclockwise*
-            list.add(Triangle(p3,  p2, p1))
-        }
-
-        return list
-    }
-
-    // Inner edges of the delaunay triangulation (without hull)
-    @JsName("halfedgesFun")
-    fun halfedges() = contours {
-        for (i in halfedges.indices) {
-            val j = halfedges[i]
-
-            if (j < i) continue
-            val ti = triangles[i] * 2
-            val tj = triangles[j] * 2
-
-            moveTo(points[ti], points[ti + 1])
-            lineTo(points[tj], points[tj + 1])
-        }
-    }
-
-    @JsName("hullFun")
-    fun hull() = contour {
-        for (h in hull) {
-            moveOrLineTo(points[2 * h], points[2 * h + 1])
-        }
-        close()
-    }
 
     fun find(x: Double, y: Double, i: Int = 0): Int {
         var i1 = i
@@ -222,3 +207,4 @@ class Delaunay(val points: DoubleArray) {
 
     fun voronoi(bounds: Rectangle): Voronoi = Voronoi(this, bounds)
 }
+

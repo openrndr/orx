@@ -2,7 +2,7 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.noise.poissonDiskSampling
-import org.openrndr.extra.triangulation.Delaunay
+import org.openrndr.extra.triangulation.delaunayTriangulation
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
 import org.openrndr.shape.Rectangle
@@ -26,10 +26,10 @@ fun main() {
             val points = poissonDiskSampling(drawer.bounds, 30.0)
                 .filter { circle.contains(it) }
 
-            val delaunay = Delaunay.from(points + circle.contour.equidistantPositions(40))
-            val voronoi = delaunay.voronoi(frame)
+            val delaunay = (points + circle.contour.equidistantPositions(40)).delaunayTriangulation()
+            val voronoi = delaunay.voronoiDiagram(frame)
 
-            val cells = voronoi.cellsPolygons()
+            val cells = voronoi.cellPolygons()
 
             extend {
                 drawer.clear(ColorRGBa.BLACK)

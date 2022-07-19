@@ -3,6 +3,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.noise.poissonDiskSampling
 import org.openrndr.extra.triangulation.Delaunay
+import org.openrndr.extra.triangulation.delaunayTriangulation
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 
@@ -23,7 +24,7 @@ fun main() {
 
             val points = poissonDiskSampling(frame, 50.0).map { it + frame.corner }
 
-            val delaunay = Delaunay.from(points)
+            val delaunay = points.delaunayTriangulation()
             val halfedges = delaunay.halfedges()
             val hull = delaunay.hull()
 
