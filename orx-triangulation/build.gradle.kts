@@ -61,6 +61,8 @@ kotlin {
                 implementation(kotlin("test-annotations-common"))
                 implementation(libs.kotlin.serialization.json)
                 implementation(libs.kotest)
+                implementation(libs.openrndr.shape)
+                implementation(libs.openrndr.math)
             }
         }
 

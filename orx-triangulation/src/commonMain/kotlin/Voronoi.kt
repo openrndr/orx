@@ -58,8 +58,20 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
 
     fun init() {
         val points = delaunay.points
+
+        if (delaunay.points.isEmpty()) {
+            return
+        }
+
         val triangles = delaunay.triangles
         val hull = delaunay.hull
+
+        if (points.size == 2) {
+            _circumcenters[0] = points[0]
+            _circumcenters[1] = points[1]
+            circumcenters = _circumcenters
+            return
+        }
 
         circumcenters = _circumcenters.copyOf(delaunay.triangles.size / 3 * 2)
 
@@ -144,6 +156,9 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
 
 
     private fun cell(i: Int): MutableList<Double>? {
+
+
+
         val inedges = delaunay.inedges
         val halfedges = delaunay.halfedges
         val triangles = delaunay.triangles
@@ -199,7 +214,7 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
 
     internal fun clip(i: Int): List<Double>? {
         // degenerate case (1 valid point: return the box)
-        if (i == 0 && delaunay.hull.size == 1) {
+        if (i == 0 && delaunay.points.size == 2) {
             return listOf(
                 bounds.xmax,
                 bounds.ymin,

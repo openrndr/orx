@@ -51,6 +51,14 @@ class Delaunator(val coords: DoubleArray) {
     }
 
     fun update() {
+        if (coords.size <= 2) {
+            halfedges = IntArray(0)
+            triangles = IntArray(0)
+            hull = IntArray(0)
+            return
+        }
+
+
         // populate an array of point indices calculate input data bbox
         var minX = Double.POSITIVE_INFINITY
         var minY = Double.POSITIVE_INFINITY

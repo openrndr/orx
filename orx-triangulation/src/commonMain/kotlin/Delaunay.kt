@@ -59,14 +59,14 @@ class Delaunay(val points: DoubleArray) {
         }
     }
 
-    private var delaunator = Delaunator(points)
+    private var delaunator: Delaunator = Delaunator(points)
 
     val inedges = IntArray(points.size / 2)
     private val hullIndex = IntArray(points.size / 2)
 
-    var halfedges = delaunator.halfedges
-    var hull = delaunator.hull
-    var triangles = delaunator.triangles
+    var halfedges: IntArray = delaunator.halfedges
+    var hull: IntArray = delaunator.hull
+    var triangles: IntArray = delaunator.triangles
 
     init {
         init()
@@ -80,26 +80,30 @@ class Delaunay(val points: DoubleArray) {
     fun neighbors(i:Int) = sequence<Int> {
         val e0 = inedges[i]
         if (e0 != -1) {
-
-
             var e = e0
             var p0 = -1
 
-            do {
+            loop@do {
                 p0 = triangles[e]
                 yield(p0)
                 e = if (e % 3 == 2) e - 2 else e + 1
-                if (triangles[e] != i) error("bad triangulation")
+                if (e == -1) {
+                    break@loop
+                }
+
+                if (triangles[e] != i) {
+                    break@loop
+                    //error("bad triangulation")
+                }
                 e = halfedges[e]
 
                 if (e == -1) {
                     val p = hull[(hullIndex[i] + 1) % hull.size]
                     if (p != p0) {
                         yield(p)
-                        break
                     }
+                    break@loop
                 }
-
             } while (e != e0)
         }
     }
@@ -120,12 +124,25 @@ class Delaunay(val points: DoubleArray) {
         return doubleArrayOf(x + sin(x+y) * r, y + cos(x-y)*r)
     }
     fun init() {
-        halfedges = delaunator.halfedges
-        hull = delaunator.hull
-        triangles = delaunator.triangles
+
         if (hull.size > 2 && collinear()) {
-            error("collinear")
+            println("warning: triangulation is collinear")
+            val r = 1E-8
+            for (i in 0 until points.size step 2) {
+                val p = jitter(points[i], points[i+1], r)
+                points[i] = p[0]
+                points[i+1] = p[1]
+            }
+
+            delaunator = Delaunator(points)
+            halfedges = delaunator.halfedges
+            hull = delaunator.hull
+            triangles = delaunator.triangles
+
         }
+
+
+
         inedges.fill(-1)
         hullIndex.fill(-1)
 
@@ -189,7 +206,10 @@ class Delaunay(val points: DoubleArray) {
 
             e = if (e % 3 == 2) e - 2 else e + 1
 
-            if (triangles[e] != i) error("bad triangulation") // bad triangulation
+            if (triangles[e] != i) {
+                //error("bad triangulation")
+                break
+            } // bad triangulation
 
             e = halfedges[e]
 
