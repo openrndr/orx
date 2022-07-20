@@ -20,7 +20,6 @@ class VoronoiDiagram(val delaunayTriangulation: DelaunayTriangulation, val bound
         }
     }
 
-
     fun cellPolygon(i: Int): ShapeContour {
         val points = voronoi.clip(i)
 

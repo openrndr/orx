@@ -1,5 +1,4 @@
 import org.openrndr.extra.triangulation.Delaunay
-import org.openrndr.extra.triangulation.DelaunayTriangulation
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
 import kotlin.test.Test
@@ -55,6 +54,7 @@ class TestDelaunay {
     fun testThreePointsCollinear() {
         val points = listOf(Vector2(100.0, 100.0), Vector2(200.0, 100.0), Vector2(300.0, 100.0))
         val d = Delaunay.from(points)
+        assertEquals(3, d.triangles.size)
     }
 
     @Test

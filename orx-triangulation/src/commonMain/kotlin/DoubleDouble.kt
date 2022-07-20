@@ -16,7 +16,7 @@ import kotlin.math.pow
  *
  * See https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
  */
-fun fastTwoDiff(a: Double, b: Double): DoubleArray {
+internal fun fastTwoDiff(a: Double, b: Double): DoubleArray {
     val x = a - b;
     val y = (a - x) - b;
 
@@ -33,7 +33,7 @@ fun fastTwoDiff(a: Double, b: Double): DoubleArray {
  *
  * See https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
  */
-fun fastTwoSum(a: Double, b: Double): DoubleArray {
+internal fun fastTwoSum(a: Double, b: Double): DoubleArray {
     val x = a + b;
 
     return doubleArrayOf(b - (x - a), x)
@@ -55,7 +55,7 @@ fun fastTwoSum(a: Double, b: Double): DoubleArray {
  * @param a a double
  * @param bits the number of significand bits to leave intact
  */
-fun reduceSignificand(
+internal fun reduceSignificand(
     a: Double,
     bits: Int
 ): Double {
@@ -74,7 +74,7 @@ fun reduceSignificand(
  * === 2^Math.ceil(p/2) + 1 where p is the # of significand bits in a double === 53.
  * @internal
  */
-const val f = 134217729;  // 2**27 + 1;
+private const val f = 134217729;  // 2**27 + 1;
 
 
 /**
@@ -89,7 +89,7 @@ const val f = 134217729;  // 2**27 + 1;
  * see e.g. [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
  * @param a A double floating point number
  */
-fun split(a: Double): DoubleArray {
+private fun split(a: Double): DoubleArray {
     val c = f * a;
     val a_h = c - (c - a);
     val a_l = a - a_h;
@@ -103,7 +103,7 @@ fun split(a: Double): DoubleArray {
  * @param a minuend - a double-double precision floating point number
  * @param b subtrahend - a double-double precision floating point number
  */
-fun twoDiff(a: Double, b: Double): DoubleArray {
+internal fun twoDiff(a: Double, b: Double): DoubleArray {
     val x = a - b;
     val bvirt = a - x;
     val y = (a - (x + bvirt)) + (bvirt - b);
@@ -126,7 +126,7 @@ fun twoDiff(a: Double, b: Double): DoubleArray {
  * @param a A double
  * @param b Another double
  */
-fun twoProduct(a: Double, b: Double): DoubleArray {
+internal fun twoProduct(a: Double, b: Double): DoubleArray {
     val x = a * b;
 
     //const [ah, al] = split(a);
@@ -148,7 +148,7 @@ fun twoProduct(a: Double, b: Double): DoubleArray {
     return doubleArrayOf(y, x)
 }
 
-fun twoSquare(a: Double): DoubleArray {
+internal fun twoSquare(a: Double): DoubleArray {
     val x = a * a;
 
     //const [ah, al] = split(a);
@@ -173,7 +173,7 @@ fun twoSquare(a: Double): DoubleArray {
  *
  * See https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
  */
-fun twoSum(a: Double, b: Double): DoubleArray {
+internal fun twoSum(a: Double, b: Double): DoubleArray {
     val x = a + b;
     val bv = x - a;
 
@@ -193,7 +193,7 @@ fun twoSum(a: Double, b: Double): DoubleArray {
  * @param x a double-double precision floating point number
  * @param y another double-double precision floating point number
  */
-fun ddDiffDd(x: DoubleArray, y: DoubleArray): DoubleArray {
+internal fun ddDiffDd(x: DoubleArray, y: DoubleArray): DoubleArray {
     val xl = x[0];
     val xh = x[1];
     val yl = y[0];
@@ -225,7 +225,7 @@ fun ddDiffDd(x: DoubleArray, y: DoubleArray): DoubleArray {
  * @param x a double-double precision floating point number
  * @param y another double-double precision floating point number
  */
-fun ddMultDd(x: DoubleArray, y: DoubleArray): DoubleArray {
+internal fun ddMultDd(x: DoubleArray, y: DoubleArray): DoubleArray {
 
 
     //const xl = x[0];
@@ -260,7 +260,7 @@ fun ddMultDd(x: DoubleArray, y: DoubleArray): DoubleArray {
  * @param x a double-double precision floating point number
  * @param y another double-double precision floating point number
  */
-fun ddAddDd(x: DoubleArray, y: DoubleArray): DoubleArray {
+internal fun ddAddDd(x: DoubleArray, y: DoubleArray): DoubleArray {
     val xl = x[0];
     val xh = x[1];
     val yl = y[0];
@@ -296,7 +296,7 @@ fun ddAddDd(x: DoubleArray, y: DoubleArray): DoubleArray {
  * @param y a double
  * @param x a double-double precision floating point number
  */
-fun ddMultDouble1(y: Double, x: DoubleArray): DoubleArray {
+internal fun ddMultDouble1(y: Double, x: DoubleArray): DoubleArray {
     val xl = x[0];
     val xh = x[1];
 

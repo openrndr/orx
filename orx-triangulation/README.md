@@ -51,7 +51,7 @@ This is how you retrieve th results:
 ```kotlin
 val cells: List<ShapeContour> = voronoi.cellPolygons()
 val cell: ShapeContour = voronoi.cellPolygon(int) // index
-val circumcenters: List<Vector2> = voronoi.circumcenter
+val circumcenters: List<Vector2> = voronoi.circumcenters
 
 // Returns true if the cell with the specified index i contains the specified vector
 val containsVector = voronoi.contains(int, Vector2)

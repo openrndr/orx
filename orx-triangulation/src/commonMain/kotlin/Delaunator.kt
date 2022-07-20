@@ -2,7 +2,7 @@ package org.openrndr.extra.triangulation
 
 import kotlin.math.*
 
-val EPSILON: Double = 2.0.pow(-52)
+private val EPSILON: Double = 2.0.pow(-52)
 
 /**
  * A Kotlin port of Mapbox's Delaunator incredibly fast JavaScript library for Delaunay triangulation of 2D points.
@@ -14,8 +14,8 @@ val EPSILON: Double = 2.0.pow(-52)
  * @author Ricardo Matias
  */
 @Suppress("unused")
-class Delaunator(val coords: DoubleArray) {
-    val EDGE_STACK = IntArray(512)
+internal class Delaunator(val coords: DoubleArray) {
+    private val EDGE_STACK = IntArray(512)
 
     private var count = coords.size shr 1
 
@@ -366,7 +366,7 @@ class Delaunator(val coords: DoubleArray) {
             val pl = _triangles[al]
             val p1 = _triangles[bl]
 
-            val illegal = inCircleRobust(
+            val illegal = inCircle(
                 coords[2 * p0], coords[2 * p0 + 1],
                 coords[2 * pr], coords[2 * pr + 1],
                 coords[2 * pl], coords[2 * pl + 1],
@@ -528,7 +528,7 @@ private fun pseudoAngle(dx: Double, dy: Double): Double {
 
     return a / 4.0 // [0..1]
 }
-
+/*
 private fun inCircle(ax: Double, ay: Double,
                      bx: Double, by: Double,
                      cx: Double, cy: Double,
@@ -547,9 +547,9 @@ private fun inCircle(ax: Double, ay: Double,
     return dx * (ey * cp - bp * fy) -
             dy * (ex * cp - bp * fx) +
             ap * (ex * fy - ey * fx) < 0
-}
+}*/
 
-private fun inCircleRobust(
+private fun inCircle(
     ax: Double, ay: Double,
     bx: Double, by: Double,
     cx: Double, cy: Double,

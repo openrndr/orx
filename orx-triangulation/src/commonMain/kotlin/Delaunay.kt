@@ -141,8 +141,6 @@ class Delaunay(val points: DoubleArray) {
 
         }
 
-
-
         inedges.fill(-1)
         hullIndex.fill(-1)
 
