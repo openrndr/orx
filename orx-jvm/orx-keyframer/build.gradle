@@ -38,6 +38,8 @@ dependencies {
     implementation libs.gson
     implementation(libs.kotlin.reflect)
 
+    testImplementation(libs.kotlin.test)
+
     demoImplementation(project(":orx-camera"))
     demoImplementation(project(":orx-jvm:orx-panel"))
 
@@ -51,3 +53,7 @@ dependencies {
 
 tasks.getByName("compileKotlin").dependsOn("generateGrammarSource")
 tasks.getByName("compileTestKotlin").dependsOn("generateTestGrammarSource")
+
+test {
+    useJUnitPlatform()
+}

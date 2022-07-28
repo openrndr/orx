@@ -7,7 +7,7 @@ package org.openrndr.extra.keyframer.antlr;
 
 options { tokenVocab=KeyLangLexer; }
 
-miniCalcFile : lines=line+ ;
+keyLangFile : lines=line+ ;
 
 line      : statement (NEWLINE | EOF) ;
 
