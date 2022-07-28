@@ -1,5 +1,5 @@
 @file:JvmName("HistogramJvm")
-package org.openrndr.extras.color.statistics
+package org.openrndr.extra.color.statistics
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ColorBuffer

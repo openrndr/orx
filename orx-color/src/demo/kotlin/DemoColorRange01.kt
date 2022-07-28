@@ -4,7 +4,7 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extensions.SingleScreenshot
-import org.openrndr.extras.color.palettes.rangeTo
+import org.openrndr.extra.color.palettes.rangeTo
 import org.openrndr.extra.color.spaces.toHSLUVa
 import org.openrndr.math.Vector2
 import org.openrndr.math.map

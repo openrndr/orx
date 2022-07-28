@@ -2,7 +2,7 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.loadFont
 import org.openrndr.extra.shapes.grid
-import org.openrndr.extras.easing.Easing
+import org.openrndr.extra.easing.Easing
 import org.openrndr.math.Vector2
 import org.openrndr.math.map
 

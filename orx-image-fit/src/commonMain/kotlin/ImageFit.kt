@@ -1,4 +1,4 @@
-package org.openrndr.extras.imageFit
+package org.openrndr.extra.imageFit
 
 import org.openrndr.draw.ColorBuffer
 import org.openrndr.draw.Drawer

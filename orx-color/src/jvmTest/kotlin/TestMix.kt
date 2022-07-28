@@ -1,7 +1,7 @@
 import org.amshove.kluent.`should be equal to`
 import org.openrndr.color.ColorRGBa
 import org.openrndr.color.Linearity
-import org.openrndr.extras.color.palettes.rangeTo
+import org.openrndr.extra.color.palettes.rangeTo
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 

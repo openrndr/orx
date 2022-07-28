@@ -4,8 +4,8 @@ import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extras.easing.Easing
-import org.openrndr.extras.easing.EasingFunction
+import org.openrndr.extra.easing.Easing
+import org.openrndr.extra.easing.EasingFunction
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4

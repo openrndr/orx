@@ -1,7 +1,7 @@
 package org.openrndr.extra.keyframer
 
-import org.openrndr.extras.easing.Easing
-import org.openrndr.extras.easing.EasingFunction
+import org.openrndr.extra.easing.Easing
+import org.openrndr.extra.easing.EasingFunction
 import org.openrndr.math.Vector3
 
 class KeyVector3(val time: Double, val value: Vector3, val easing: EasingFunction)

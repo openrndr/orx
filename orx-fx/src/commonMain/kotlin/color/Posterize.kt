@@ -11,10 +11,10 @@ import org.openrndr.extra.parameters.ColorParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.IntParameter
 import org.openrndr.extra.shaderphrases.preprocess
-import org.openrndr.extras.color.phrases.ColorPhraseBook
-import org.openrndr.extras.color.presets.CORAL
-import org.openrndr.extras.color.presets.DARK_GRAY
-import org.openrndr.extras.color.presets.NAVY
+import org.openrndr.extra.color.phrases.ColorPhraseBook
+import org.openrndr.extra.color.presets.CORAL
+import org.openrndr.extra.color.presets.DARK_GRAY
+import org.openrndr.extra.color.presets.NAVY
 
 @Description("Posterize")
 class Posterize : Filter(filterShaderFromCode(fx_posterize, "posterize")) {

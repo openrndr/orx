@@ -1,4 +1,4 @@
-package org.operndr.extras.filewatcher
+package org.openrndr.extra.filewatcher
 
 import com.sun.nio.file.SensitivityWatchEventModifier
 import kotlinx.coroutines.*

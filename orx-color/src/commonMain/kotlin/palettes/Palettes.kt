@@ -1,4 +1,4 @@
-package org.openrndr.extras.color.palettes
+package org.openrndr.extra.color.palettes
 
 import org.openrndr.color.*
 import org.openrndr.extra.color.spaces.*

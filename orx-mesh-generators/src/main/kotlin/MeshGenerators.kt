@@ -1,4 +1,4 @@
-package org.openrndr.extras.meshgenerators
+package org.openrndr.extra.meshgenerators
 
 import org.openrndr.draw.BufferWriter
 import org.openrndr.draw.VertexBuffer

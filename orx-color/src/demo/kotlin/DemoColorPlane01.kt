@@ -2,9 +2,9 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.extensions.SingleScreenshot
-import org.openrndr.extras.camera.Orbital
+import org.openrndr.extra.camera.Orbital
 import org.openrndr.extra.color.spaces.ColorOKLCHa
-import org.openrndr.extras.meshgenerators.sphereMesh
+import org.openrndr.extra.meshgenerators.sphereMesh
 import org.openrndr.math.Vector3
 import kotlin.math.cos
 

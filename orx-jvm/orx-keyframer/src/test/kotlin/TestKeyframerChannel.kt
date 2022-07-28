@@ -1,7 +1,7 @@
 import org.amshove.kluent.`should be`
 import org.amshove.kluent.shouldBeNear
 import org.openrndr.extra.keyframer.KeyframerChannel
-import org.openrndr.extras.easing.Easing
+import org.openrndr.extra.easing.Easing
 
 import kotlin.test.Test
 

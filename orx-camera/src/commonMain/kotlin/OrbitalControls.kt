@@ -1,4 +1,4 @@
-package org.openrndr.extras.camera
+package org.openrndr.extra.camera
 
 import org.openrndr.*
 import org.openrndr.math.Vector2

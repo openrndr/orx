@@ -6,7 +6,7 @@ import org.openrndr.color.ConvertibleToColorRGBa
 import org.openrndr.draw.ShadeStyle
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.shaderphrases.preprocess
-import org.openrndr.extras.color.phrases.ColorPhraseBook
+import org.openrndr.extra.color.phrases.ColorPhraseBook
 import org.openrndr.extra.color.spaces.ColorOKLABa
 import org.openrndr.math.CastableToVector4
 import org.openrndr.math.Vector2

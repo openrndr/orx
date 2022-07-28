@@ -4,8 +4,8 @@ import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.colorBuffer
 import org.openrndr.draw.shadeStyle
 import org.openrndr.extensions.SingleScreenshot
-import org.openrndr.extras.camera.Orbital
-import org.openrndr.extras.meshgenerators.boxMesh
+import org.openrndr.extra.camera.Orbital
+import org.openrndr.extra.meshgenerators.boxMesh
 import org.openrndr.math.Vector3
 
 fun main() {

@@ -1,4 +1,4 @@
-package org.openrndr.extras.color.phrases
+package org.openrndr.extra.color.phrases
 
 import org.openrndr.extra.shaderphrases.ShaderPhrase
 import org.openrndr.extra.shaderphrases.ShaderPhraseBook
