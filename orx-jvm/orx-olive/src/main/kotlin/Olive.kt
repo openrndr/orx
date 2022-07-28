@@ -11,9 +11,9 @@ import org.openrndr.events.Event
 import org.openrndr.exceptions.stackRootClassName
 import org.openrndr.extra.kotlinparser.extractProgram
 import org.openrndr.launch
-import org.operndr.extras.filewatcher.stop
-import org.operndr.extras.filewatcher.triggerChange
-import org.operndr.extras.filewatcher.watchFile
+import org.openrndr.extra.filewatcher.stop
+import org.openrndr.extra.filewatcher.triggerChange
+import org.openrndr.extra.filewatcher.watchFile
 import java.io.File
 
 private val logger = KotlinLogging.logger {}

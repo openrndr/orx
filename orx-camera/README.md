@@ -8,12 +8,12 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.DrawPrimitive
-import org.openrndr.extras.camera.AxisHelper
-import org.openrndr.extras.camera.GridHelper
-import org.openrndr.extras.camera.OrbitalCamera
-import org.openrndr.extras.camera.OrbitalControls
-import org.openrndr.extras.meshgenerators.boxMesh
-import org.openrndr.extras.meshgenerators.sphereMesh
+import org.openrndr.extra.camera.AxisHelper
+import org.openrndr.extra.camera.GridHelper
+import org.openrndr.extra.camera.OrbitalCamera
+import org.openrndr.extra.camera.OrbitalControls
+import org.openrndr.extra.meshgenerators.boxMesh
+import org.openrndr.extra.meshgenerators.sphereMesh
 import org.openrndr.math.Vector3
 
 fun main() = application {

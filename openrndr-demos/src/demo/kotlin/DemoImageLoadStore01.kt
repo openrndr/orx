@@ -1,7 +1,7 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
-import org.openrndr.extras.meshgenerators.planeMesh
+import org.openrndr.extra.meshgenerators.planeMesh
 import org.openrndr.internal.Driver
 import org.openrndr.math.Vector3
 

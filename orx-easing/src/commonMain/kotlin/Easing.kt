@@ -1,4 +1,4 @@
-package org.openrndr.extras.easing
+package org.openrndr.extra.easing
 
 import kotlin.math.*
 

@@ -15,8 +15,8 @@ import org.openrndr.extra.dnk3.post.ScreenspaceReflections
 import org.openrndr.extra.dnk3.post.VolumetricIrradiance
 import org.openrndr.extra.dnk3.renderers.postRenderer
 import org.openrndr.extra.shaderphrases.annotations.ShaderPhrases
-import org.openrndr.extras.camera.Orbital
-import org.openrndr.extras.meshgenerators.sphereMesh
+import org.openrndr.extra.camera.Orbital
+import org.openrndr.extra.meshgenerators.sphereMesh
 import org.openrndr.ffmpeg.ScreenRecorder
 import org.openrndr.filter.color.Delinearize
 import org.openrndr.math.Matrix44

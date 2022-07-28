@@ -3,7 +3,7 @@ import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.shadeStyle
 import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.dnk3.gltf.loadGltfFromFile
-import org.openrndr.extras.camera.Orbital
+import org.openrndr.extra.camera.Orbital
 import org.openrndr.math.Vector3
 import java.io.File
 

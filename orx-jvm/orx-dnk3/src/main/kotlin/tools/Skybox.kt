@@ -2,7 +2,7 @@ package org.openrndr.extra.dnk3.tools
 
 import org.openrndr.draw.*
 import org.openrndr.extra.dnk3.*
-import org.openrndr.extras.meshgenerators.boxMesh
+import org.openrndr.extra.meshgenerators.boxMesh
 
 
 data class SkyboxMaterial(val cubemap: Cubemap, val intensity: Double = 0.0) : Material {

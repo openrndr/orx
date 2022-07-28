@@ -5,8 +5,8 @@ import org.openrndr.extra.dnk3.dsl.*
 import org.openrndr.extra.dnk3.renderers.dryRenderer
 import org.openrndr.extra.dnk3.tools.addSkybox
 import org.openrndr.extra.noise.simplex
-import org.openrndr.extras.camera.Orbital
-import org.openrndr.extras.meshgenerators.groundPlaneMesh
+import org.openrndr.extra.camera.Orbital
+import org.openrndr.extra.meshgenerators.groundPlaneMesh
 import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
 import org.openrndr.shape.path3D

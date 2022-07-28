@@ -5,7 +5,7 @@ import org.openrndr.draw.BufferMultisample
 import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.shapes.bezierPatch
 import org.openrndr.extra.shapes.drawers.bezierPatch
-import org.openrndr.extras.camera.Orbital
+import org.openrndr.extra.camera.Orbital
 import org.openrndr.math.Vector3
 import org.openrndr.shape.Segment3D
 

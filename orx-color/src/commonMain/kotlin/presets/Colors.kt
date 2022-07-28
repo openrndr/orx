@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package org.openrndr.extras.color.presets
+package org.openrndr.extra.color.presets
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.color.rgb
