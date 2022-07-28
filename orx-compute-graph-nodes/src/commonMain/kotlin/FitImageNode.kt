@@ -7,7 +7,7 @@ import org.openrndr.draw.renderTarget
 import org.openrndr.extra.computegraph.ComputeGraph
 import org.openrndr.extra.computegraph.ComputeNode
 import org.openrndr.extra.computegraph.withKey
-import org.openrndr.extras.imageFit.imageFit
+import org.openrndr.extra.imageFit.imageFit
 
 fun ComputeGraph.fitImageNode(program: Program, input: ComputeNode) : ComputeNode {
     return node {

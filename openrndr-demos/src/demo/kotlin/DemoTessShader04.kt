@@ -3,9 +3,9 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.extra.noise.uniform
 import org.openrndr.extra.noise.uniformRing
-import org.openrndr.extras.camera.Orbital
-import org.openrndr.extras.camera.OrbitalCamera
-import org.openrndr.extras.meshgenerators.sphereMesh
+import org.openrndr.extra.camera.Orbital
+import org.openrndr.extra.camera.OrbitalCamera
+import org.openrndr.extra.meshgenerators.sphereMesh
 import org.openrndr.math.Vector3
 import org.openrndr.resourceUrl
 import org.openrndr.shape.Ellipse

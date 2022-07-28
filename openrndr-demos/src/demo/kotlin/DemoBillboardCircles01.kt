@@ -5,7 +5,7 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.extra.noise.uniformRing
-import org.openrndr.extras.camera.Orbital
+import org.openrndr.extra.camera.Orbital
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 

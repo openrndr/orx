@@ -3,8 +3,8 @@ import org.openrndr.draw.Cubemap
 import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.Session
 import org.openrndr.draw.shadeStyle
-import org.openrndr.extras.camera.Orbital
-import org.openrndr.extras.meshgenerators.boxMesh
+import org.openrndr.extra.camera.Orbital
+import org.openrndr.extra.meshgenerators.boxMesh
 
 fun main() = application {
     program {

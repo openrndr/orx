@@ -5,8 +5,8 @@ import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.dnk3.*
 
 import org.openrndr.extra.dnk3.renderers.dryRenderer
-import org.openrndr.extras.camera.Orbital
-import org.openrndr.extras.meshgenerators.sphereMesh
+import org.openrndr.extra.camera.Orbital
+import org.openrndr.extra.meshgenerators.sphereMesh
 import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
 

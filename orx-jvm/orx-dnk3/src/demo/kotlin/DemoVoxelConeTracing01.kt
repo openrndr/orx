@@ -8,8 +8,8 @@ import org.openrndr.extra.dnk3.features.addVoxelConeTracing
 import org.openrndr.extra.dnk3.gltf.buildSceneNodes
 import org.openrndr.extra.dnk3.gltf.loadGltfFromFile
 import org.openrndr.extra.dnk3.renderers.postRenderer
-import org.openrndr.extras.camera.Orbital
-import org.openrndr.extras.meshgenerators.sphereMesh
+import org.openrndr.extra.camera.Orbital
+import org.openrndr.extra.meshgenerators.sphereMesh
 import org.openrndr.filter.color.Delinearize
 import org.openrndr.math.Spherical
 import org.openrndr.math.Vector3

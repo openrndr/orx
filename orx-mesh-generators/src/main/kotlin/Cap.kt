@@ -1,4 +1,4 @@
-package org.openrndr.extras.meshgenerators
+package org.openrndr.extra.meshgenerators
 
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2

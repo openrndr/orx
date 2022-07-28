@@ -3,7 +3,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.loadFont
 import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.color.spaces.*
-import org.openrndr.extras.color.palettes.rangeTo
+import org.openrndr.extra.color.palettes.rangeTo
 
 fun main() {
     application {

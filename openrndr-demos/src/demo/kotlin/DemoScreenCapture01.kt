@@ -4,7 +4,7 @@ import org.openrndr.draw.DepthTestPass
 import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.isolated
 import org.openrndr.draw.shadeStyle
-import org.openrndr.extras.meshgenerators.boxMesh
+import org.openrndr.extra.meshgenerators.boxMesh
 import org.openrndr.ffmpeg.VideoPlayerFFMPEG
 import org.openrndr.math.Vector3
 
