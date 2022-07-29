@@ -1,40 +1,53 @@
 name: Build
 on:
-  push:
-    branches:
-      - master
+  # Trigger the workflow on any pull request
+  pull_request:
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: ./orx
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
-      - uses:   actions/checkout@v2.3.4
+      - name: Checkout current repository
+        uses: actions/checkout@v3
         with:
+          path: ./orx
+
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1.0.4
+
+      - name: Checkout OPENRNDR repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
           repository: openrndr/openrndr
           path: ./openrndr
           ref: master
-      - uses: actions/checkout@v2.3.4
-        with:
-          path: orx
+
+      - name: Test glxinfo
+        run: |
+          sudo apt-get install -y mesa-utils xvfb
+          xvfb-run glxinfo
+
       - uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
-          java-version: '16'
-      - uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          distribution: temurin
+          java-version: 17
+          cache: gradle
 
-      - name: Build OPENRNDR snapshot
-        run: |
-          cd ./openrndr
-          ./gradlew publishToMavenLocal -Prelease.version=0.5.1-SNAPSHOT
-          cd ..
+      - name: Build OPENRNDR
+        working-directory: ./openrndr
+        run: ./gradlew build -Prelease.version=0.5.1-SNAPSHOT publishToMavenLocal
+
       - name: Build ORX
-        run: |
-          cd ./orx
-          ./gradlew build
+        run: ./gradlew build
+
+      - name: Collect screenshots without errors
+        run: xvfb-run ./gradlew collectScreenshots
