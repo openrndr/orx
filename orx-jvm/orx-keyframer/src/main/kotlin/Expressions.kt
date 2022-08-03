@@ -285,6 +285,7 @@ internal class ExpressionListener(val functions: FunctionExtensions = FunctionEx
                                 "exp" -> { x -> exp(x[0]) }
                                 "abs" -> { x -> abs(x[0]) }
                                 "floor" -> { x -> floor(x[0]) }
+                                "round" -> { x -> round(x[0]) }
                                 "ceil" -> { x -> ceil(x[0]) }
                                 "saturate" -> { x -> x[0].coerceIn(0.0, 1.0) }
                                 else -> functions.functions1[name]?.let { { x: DoubleArray -> it.invoke(x[0]) } }
@@ -300,6 +301,7 @@ internal class ExpressionListener(val functions: FunctionExtensions = FunctionEx
                                 "max" -> { x -> max(x[0], x[1]) }
                                 "min" -> { x -> min(x[0], x[1]) }
                                 "pow" -> { x -> x[0].pow(x[1]) }
+                                "mod" -> { x -> x[0].mod(x[1]) }
                                 "atan2" -> { x -> atan2(x[0], x[1]) }
                                 "random" -> { x -> Double.uniform(x[0], x[1]) }
                                 "length" -> { x -> Vector2(x[0], x[1]).length }
