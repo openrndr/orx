@@ -6,7 +6,6 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.normalMatrix
 import org.openrndr.math.transforms.rotate
-import org.openrndr.math.transforms.transform
 import org.openrndr.shape.Shape
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -119,6 +118,10 @@ fun GeneratorBuffer.box(width: Double, height: Double, depth: Double, widthSegme
 
 fun GeneratorBuffer.cylinder(sides: Int, segments: Int, radius: Double, length: Double, invert: Boolean = false) {
     generateCylinder(sides, segments, radius, length, invert, this::write)
+}
+
+fun GeneratorBuffer.dodecahedron(radius: Double) {
+    generateDodecahedron(radius, this::write)
 }
 
 fun GeneratorBuffer.taperedCylinder(sides: Int, segments: Int, startRadius: Double, endRadius: Double, length: Double, invert: Boolean = false) {
