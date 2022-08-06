@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 // root build.gradle
 buildscript {
     repositories {
@@ -12,28 +14,28 @@ buildscript {
 plugins {
     // remember to update all the versions here when upgrading kotlin version
     id 'org.jetbrains.kotlin.jvm' apply false
-    id 'org.jetbrains.kotlin.multiplatform'  apply false
+    id 'org.jetbrains.kotlin.multiplatform' apply false
     id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
 }
 
 def multiplatformModules = [
-    "orx-camera",
-    "orx-color",
-    "orx-compositor",
-    "orx-compute-graph",
-    "orx-compute-graph-nodes",
-    "orx-easing",
-    "orx-fx",
-    "orx-gradient-descent",
-    "orx-image-fit",
-    "orx-no-clear",
-    "orx-noise",
-    "orx-parameters",
-    "orx-shade-styles",
-    "orx-shader-phrases",
-    "orx-shapes",
-    "orx-quadtree",
-    "orx-hash-grid"
+        "orx-camera",
+        "orx-color",
+        "orx-compositor",
+        "orx-compute-graph",
+        "orx-compute-graph-nodes",
+        "orx-easing",
+        "orx-fx",
+        "orx-gradient-descent",
+        "orx-image-fit",
+        "orx-no-clear",
+        "orx-noise",
+        "orx-parameters",
+        "orx-shade-styles",
+        "orx-shader-phrases",
+        "orx-shapes",
+        "orx-quadtree",
+        "orx-hash-grid"
 
 ]
 
@@ -305,11 +307,6 @@ configure(allprojects.findAll { !doNotPublish.contains(it.name) && !multiplatfor
         }
     }
 
-    java {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
     javadoc {
         options.addBooleanOption 'Xdoclint:none', true
     }
@@ -323,7 +320,7 @@ group = "org.openrndr"
 nexusPublishing {
     repositories {
         sonatype {
-            username.set( findProperty("ossrhUsername") ?: System.getenv("OSSRH_USERNAME"))
+            username.set(findProperty("ossrhUsername") ?: System.getenv("OSSRH_USERNAME"))
             password.set(findProperty("ossrhPassword") ?: System.getenv("OSSRH_PASSWORD"))
             nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
             snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots"))
@@ -336,6 +333,17 @@ subprojects {
     tasks.register("dependenciesAll", DependencyReportTask) {
         group = "help"
         description = "Displays all dependencies, including subprojects."
+    }
+
+    kotlin {
+        // https://youtrack.jetbrains.com/issue/KT-43095/Add-support-for-Java-Toolchain-to-the-Gradle-plugin#focus=Comments-27-5192573.0-0
+        jvmToolchain { toolchain ->
+            (toolchain as JavaToolchainSpec).languageVersion.set(JavaLanguageVersion.of(libs.versions.jvmTarget.get()))
+        }
+        tasks.withType(KotlinCompile).configureEach {
+            kotlinOptions.jvmTarget = libs.versions.jvmTarget.get()
+            kotlinOptions.apiVersion = libs.versions.kotlinApi.get()
+        }
     }
 }
 
