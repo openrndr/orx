@@ -331,7 +331,13 @@ nexusPublishing {
     }
 }
 
-
+subprojects {
+    // Equivalent Kotlin is: tasks.register<DependencyReportTask>("dependenciesAll") { ...
+    tasks.register("dependenciesAll", DependencyReportTask) {
+        group = "help"
+        description = "Displays all dependencies, including subprojects."
+    }
+}
 
 
 //configure(allprojects.findAll { it.name != "openrndr-demos" }) {
