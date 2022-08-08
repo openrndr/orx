@@ -183,15 +183,15 @@ configure(allprojects.findAll { !doNotPublish.contains(it.name) && (multiplatfor
                         licenses {
                             license {
                                 name = 'BSD-2-Clause'
-                                url = 'https://github.com/openrndr/openrndr/blob/master/LICENSE'
+                                url = 'https://github.com/openrndr/orx/blob/master/LICENSE'
                                 distribution = 'repo'
                             }
                         }
                     }
                     scm {
-                        connection = "scm:git:git@github.com:openrndr/openrndr.git"
-                        developerConnection = "scm:git:ssh://github.com/openrndr/openrndr.git"
-                        url = "https://github.com/openrndr/openrndr"
+                        connection = "scm:git:git@github.com:openrndr/orx.git"
+                        developerConnection = "scm:git:ssh://github.com/openrndr/orx.git"
+                        url = "https://github.com/openrndr/orx"
                     }
                 }
             }
