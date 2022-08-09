@@ -11,7 +11,7 @@ All filters provided by orx-fx assume pre-multiplied alpha inputs, which is OPEN
 
 ## Effects index
 
-Here's a (potentially incomplete) list of the effects provded by orx-fx.
+Here's a (potentially incomplete) list of the effects provided by orx-fx.
 
 ### Anti-alias
 
@@ -107,8 +107,26 @@ All distortion effects are opacity preserving
  
  ### Transform
   - `FlipVertically` - flips the source input vertically.
- 
- 
+
+### Colormap
+
+Colormap filters operate only on the RED color channel. For example
+depth maps from
+[orx-depth-camera](https://github.com/openrndr/orx/tree/master/orx-depth-camera).
+
+They allow selection of `min` / `max` value range and applying exponential
+shaping `curve` within this range:
+
+ - `GrayscaleColormap` - maps to gray tones
+ - `SpectralZucconiColormap` - maps to natural light dispersion spectrum as described
+   by Alan Zucconi in the
+   [Improving the Rainbow](https://www.alanzucconi.com/2017/07/15/improving-the-rainbow/)
+   article.
+ - `TurboColormap` - maps to Turbo Colormap according to
+   [Turbo, An Improved Rainbow Colormap for Visualization](https://ai.googleblog.com/2019/08/turbo-improved-rainbow-colormap-for.html)
+   by Google.
+
+
 <!-- __demos__ >
 # Demos
 [DemoFluidDistort01Kt](src/demo/kotlin/DemoFluidDistort01Kt.kt
