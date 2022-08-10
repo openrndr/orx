@@ -9,20 +9,15 @@ sourceSets {
 }
 
 dependencies {
-
     implementation(project(":orx-parameters"))
     implementation(project(":orx-compositor"))
     implementation(project(":orx-image-fit"))
     implementation(project(":orx-fx"))
 
-    // rabbit control 0.3.26 depends on libs with vulnerabilities
-    implementation(libs.snakeyaml)
-    implementation(libs.netty.all)
-
     implementation(libs.rabbitcontrol.rcp)
-
+    implementation(libs.netty.all)
     implementation(libs.zxing.core)
-    implementation(libs.zxing.javase)
+    implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.netty)
 
     demoImplementation(libs.openrndr.extensions)
