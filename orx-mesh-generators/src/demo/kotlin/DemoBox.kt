@@ -12,6 +12,7 @@ fun main() {
     application {
         program {
             val box = boxMesh(1.0, 1.0, 1.0)
+
             val texture = colorBuffer(256, 256)
             val s = texture.shadow
             for (y in 0 until 256) {
@@ -20,6 +21,7 @@ fun main() {
                 }
             }
             s.upload()
+
             if (System.getProperty("takeScreenshot") == "true") {
                 extend(SingleScreenshot()) {
                     this.outputFile = System.getProperty("screenshotPath")
