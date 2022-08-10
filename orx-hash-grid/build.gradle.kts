@@ -20,10 +20,6 @@ kotlin {
                 }
             }
         }
-        compilations.all {
-            kotlinOptions.jvmTarget = libs.versions.jvmTarget.get()
-            kotlinOptions.apiVersion = libs.versions.kotlinApi.get()
-        }
         testRuns["test"].executionTask.configure {
             useJUnitPlatform()
         }
