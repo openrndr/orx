@@ -1,7 +1,3 @@
-java {
-    sourceCompatibility = libs.versions.jvmTarget.get()
-    targetCompatibility = libs.versions.jvmTarget.get()
-}
 sourceSets {
     demo {
         java {
@@ -19,16 +15,7 @@ sourceSets {
     }
 }
 
-compileWrapgenKotlin {
-    sourceCompatibility = libs.versions.jvmTarget.get()
-    targetCompatibility = libs.versions.jvmTarget.get()
-
-    kotlinOptions {
-        jvmTarget = libs.versions.jvmTarget.get()
-        apiVersion = libs.versions.kotlinApi.get()
-        languageVersion = libs.versions.kotlinLanguage.get()
-    }
-}
+compileWrapgenKotlin {}
 
 dependencies {
     implementation(libs.gson)

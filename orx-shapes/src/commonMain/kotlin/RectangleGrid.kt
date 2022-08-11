@@ -1,6 +1,7 @@
 package org.openrndr.extra.shapes
 
 import org.openrndr.shape.Rectangle
+import kotlin.math.round
 
 /**
  * Splits [Rectangle] into a grid of [Rectangle]s
@@ -51,8 +52,8 @@ fun Rectangle.grid(
     val cellSpaceX = cellWidth + gutterX
     val cellSpaceY = cellHeight + gutterY
 
-    val columns = ((availableWidth + gutterX) / cellSpaceX).toInt()
-    val rows = ((availableHeight + gutterY) / cellSpaceY).toInt()
+    val columns = round((availableWidth + gutterX) / cellSpaceX).toInt()
+    val rows = round((availableHeight + gutterY) / cellSpaceY).toInt()
 
     if (columns == 0 || rows == 0) {
         return emptyList()
