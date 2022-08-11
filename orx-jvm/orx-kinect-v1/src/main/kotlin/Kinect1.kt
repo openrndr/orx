@@ -6,7 +6,6 @@ import mu.KotlinLogging
 import org.bytedeco.javacpp.Pointer
 import org.bytedeco.libfreenect.*
 import org.bytedeco.libfreenect.global.freenect.*
-import org.bytedeco.libfreenect.presets.freenect
 import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.draw.*
@@ -16,7 +15,6 @@ import org.openrndr.launch
 import org.openrndr.math.IntVector2
 import java.util.*
 import java.util.concurrent.*
-import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.concurrent.thread
 
 class Kinect1Exception(msg: String) : KinectException(msg)
@@ -24,6 +22,16 @@ class Kinect1Exception(msg: String) : KinectException(msg)
 class Kinect1 : Kinect, Extension {
 
     override var enabled: Boolean = true
+
+    /**
+     * Without the delay between starting depth camera and
+     * registering depth callback, no frames are transferred
+     * at all. However this problem happens only on the first
+     * try with freshly connected kinect.
+     * Subsequent runs of the same program don't require
+     * this delay at all.
+     */
+    private var cameraInitializationDelay: Long = 100
 
     class DeviceInfo(
         override val serialNumber: String,
@@ -179,7 +187,9 @@ class Kinect1 : Kinect, Extension {
             override val resolution: IntVector2,
         ) : KinectDepthCamera {
 
-            private val enabledState = AtomicBoolean(false)
+            private var firstStart = true
+            private var started = false
+            private var mutableEnabled: Boolean = false
 
             private var bytesFront = kinectRawDepthByteBuffer(resolution)
             private var bytesBack = kinectRawDepthByteBuffer(resolution)
@@ -213,7 +223,8 @@ class Kinect1 : Kinect, Extension {
 
             private var onFrameReceived: (frame: ColorBuffer) -> Unit = {}
 
-            private val frameEmitterJob: Job = program.launch {
+            // working on rendering thread
+            private val frameReceiverJob: Job = program.launch {
                 bytesFlow.collect { bytes ->
                     rawBuffer.write(bytes)
                     depthMappers.mapper?.apply(rawBuffer, processedFrameBuffer)
@@ -238,14 +249,16 @@ class Kinect1 : Kinect, Extension {
             }
 
             override var enabled: Boolean
-                get() = enabledState.get()
+                get() = mutableEnabled
                 set(value) {
+                    logger.debug { "$info.enabled = $value" }
+                    if (value == mutableEnabled) {
+                        logger.debug { "$info.enabled: doing nothing, already in state: $value" }
+                        return
+                    }
+                    mutableEnabled = value
                     freenect.call("$info.enabled = $value") { _, _ ->
-                        freenect.expectingEvents = value
-                        if (enabledState.get() != value) {
-                            if (value) start() else stop()
-                            enabledState.set(value)
-                        }
+                        if (value) start() else stop()
                     }
                 }
 
@@ -275,21 +288,33 @@ class Kinect1 : Kinect, Extension {
 
             private fun start() {
                 logger.info { "$info.start()" }
-                freenect_set_depth_callback(dev, freenectDepthCallback)
                 freenect.checkReturn(freenect_set_depth_mode(
                     dev, freenect_find_depth_mode(FREENECT_RESOLUTION_MEDIUM, FREENECT_DEPTH_11BIT))
                 )
                 freenect.checkReturn(freenect_set_depth_buffer(dev, Pointer(bytesFront)))
                 freenect.checkReturn(freenect_start_depth(dev))
+                if (firstStart) { // workaround, see comments above
+                    Thread.sleep(cameraInitializationDelay)
+                    firstStart = false
+                }
+                freenect_set_depth_callback(dev, freenectDepthCallback)
+                started = true
+                freenect.expectingEvents = true
             }
 
-            private fun stop() {
+            internal fun stop() {
                 logger.info { "$info.stop()" }
-                freenect.checkReturn(freenect_stop_depth(dev))
+                if (started) {
+                    freenect.expectingEvents = false
+                    freenect.checkReturn(freenect_stop_depth(dev))
+                    started = false
+                } else {
+                    logger.warn { "$info.stop(): cannot stop already stopped depth camera" }
+                }
             }
 
             internal fun close() {
-                frameEmitterJob.cancel()
+                frameReceiverJob.cancel()
             }
 
             override fun onFrameReceived(block: (frame: ColorBuffer) -> Unit) {
@@ -321,8 +346,8 @@ class Kinect1 : Kinect, Extension {
 
         override fun close() {
             logger.info { "$info.close()" }
-            depthCamera.enabled = false
             freenect.callBlocking("$info.closeDevice") { _, _ ->
+                depthCamera.stop()
                 freenect.checkReturn(freenect_close_device(dev))
                 mutableActiveDevices.remove(this)
             }
@@ -340,19 +365,19 @@ class Kinect1 : Kinect, Extension {
  *
  * @param initialLogLevel the log level to use when freenect is initialized.
  */
-class Freenect(initialLogLevel: Kinect1.LogLevel) {
+class Freenect(private val initialLogLevel: Kinect1.LogLevel) {
 
-    private var currentLogLevel = initialLogLevel
+    private var mutableLogLevel = initialLogLevel
 
     private val logger = KotlinLogging.logger {}
 
     var logLevel: Kinect1.LogLevel
-        get() = currentLogLevel
+        get() = mutableLogLevel
         set(value) {
             call("logLevel[$value]") { ctx, _ ->
                 freenect_set_log_level(ctx, value.code)
             }
-            currentLogLevel = value
+            mutableLogLevel = value
         }
 
     var expectingEvents: Boolean = false
@@ -363,7 +388,7 @@ class Freenect(initialLogLevel: Kinect1.LogLevel) {
 
     private var running: Boolean = true
 
-    private val runner = thread(name = "kinect1", start = true, isDaemon = true) {
+    private val runner = thread(name = "kinect1", start = true) {
         logger.info("Starting Kinect1 thread")
         checkReturn(freenect_init(ctx, usbCtx))
         val num = checkReturn(freenect_num_devices(ctx))
@@ -377,8 +402,6 @@ class Freenect(initialLogLevel: Kinect1.LogLevel) {
             }
         }
 
-        val timeout = freenect.timeval()
-        timeout.tv_sec(1)
         while (running) {
             if (expectingEvents) {
                 val ret = freenect_process_events(ctx)
