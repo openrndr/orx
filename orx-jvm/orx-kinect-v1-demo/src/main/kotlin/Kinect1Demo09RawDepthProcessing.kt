@@ -6,7 +6,6 @@ import org.openrndr.draw.colorBuffer
 import org.openrndr.draw.filterShaderFromCode
 import org.openrndr.extra.depth.camera.DepthMeasurement
 import org.openrndr.extra.kinect.v1.Kinect1
-import org.openrndr.launch
 
 /**
  * It is possible to rewrite raw kinect value interpretation completely
@@ -39,10 +38,8 @@ fun main() = application {
             """.trimIndent(),
             "raw filter")
         )
-        launch {
-            device.depthCamera.frameFlow.collect { frame ->
-                filter.apply(frame, outputBuffer)
-            }
+        camera.onFrameReceived { frame ->
+            filter.apply(frame, outputBuffer)
         }
         device.depthCamera.enabled = true
         extend {

@@ -2,7 +2,6 @@ package org.openrndr.extra.kinect.v1
 
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.flow.Flow
 import mu.KotlinLogging
 import org.bytedeco.javacpp.Pointer
 import org.bytedeco.libfreenect.*
@@ -83,7 +82,6 @@ class Kinect1 : Kinect, Extension {
     private lateinit var program: Program
 
     private lateinit var freenect: Freenect
-
 
     override fun setup(program: Program) {
         if (!enabled) { return }
@@ -211,17 +209,15 @@ class Kinect1 : Kinect, Extension {
                 update(resolution)
             }
 
-            private val mutableFrameFlow = MutableSharedFlow<ColorBuffer>()
-
             override val currentFrame get() = mutableCurrentFrame
 
-            override val frameFlow: Flow<ColorBuffer> = mutableFrameFlow
+            private var onFrameReceived: (frame: ColorBuffer) -> Unit = {}
 
             private val frameEmitterJob: Job = program.launch {
                 bytesFlow.collect { bytes ->
                     rawBuffer.write(bytes)
                     depthMappers.mapper?.apply(rawBuffer, processedFrameBuffer)
-                    mutableFrameFlow.emit(mutableCurrentFrame)
+                    onFrameReceived(mutableCurrentFrame)
                 }
             }
 
@@ -294,6 +290,10 @@ class Kinect1 : Kinect, Extension {
 
             internal fun close() {
                 frameEmitterJob.cancel()
+            }
+
+            override fun onFrameReceived(block: (frame: ColorBuffer) -> Unit) {
+                onFrameReceived = block
             }
 
         }

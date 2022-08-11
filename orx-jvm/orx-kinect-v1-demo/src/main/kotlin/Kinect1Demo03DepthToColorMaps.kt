@@ -9,7 +9,6 @@ import org.openrndr.extra.fx.colormap.TurboColormap
 import org.openrndr.extra.gui.GUI
 import org.openrndr.extra.kinect.v1.Kinect1
 import org.openrndr.extra.parameters.BooleanParameter
-import org.openrndr.launch
 import org.openrndr.math.Vector2
 
 /**
@@ -39,7 +38,6 @@ fun main() = application {
     program {
         val kinect = extend(Kinect1())
         val device = kinect.openDevice()
-        device.depthCamera.enabled = true
         val camera = device.depthCamera
         fun outputBuffer() = colorBuffer(
             camera.resolution.x,
@@ -52,6 +50,7 @@ fun main() = application {
         val grayscaleBuffer = outputBuffer()
         val zucconiBuffer = outputBuffer()
         val turboBuffer = outputBuffer()
+        @Suppress("unused")
         val settings = object {
 
             @BooleanParameter(label = "enabled", order = 0)
@@ -70,13 +69,12 @@ fun main() = application {
                 set(value) { camera.flipV = value }
 
         }
-        launch {
-            camera.frameFlow.collect { frame ->
-                grayscaleColormap.apply(frame, grayscaleBuffer)
-                spectralZucconiColormap.apply(frame, zucconiBuffer)
-                turboColormap.apply(frame, turboBuffer)
-            }
+        camera.onFrameReceived { frame ->
+            grayscaleColormap.apply(frame, grayscaleBuffer)
+            spectralZucconiColormap.apply(frame, zucconiBuffer)
+            turboColormap.apply(frame, turboBuffer)
         }
+        camera.enabled = true
         extend(GUI()) {
             persistState = false
             compartmentsCollapsedByDefault = false

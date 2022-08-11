@@ -1,6 +1,5 @@
 package org.openrndr.extra.depth.camera
 
-import kotlinx.coroutines.flow.Flow
 import org.openrndr.draw.ColorBuffer
 import org.openrndr.math.IntVector2
 
@@ -32,11 +31,42 @@ enum class DepthMeasurement {
 
 }
 
+/**
+ * General API of any depth camera.
+ */
 interface DepthCamera {
+
+    /**
+     * Current operating resolution.
+     */
     val resolution: IntVector2
+
+    /**
+     * The units/mapping in which depth is expressed on received frames.
+     */
     var depthMeasurement: DepthMeasurement
+
+    /**
+     * Flips source depth data image in horizontal axis (mirror).
+     */
     var flipH: Boolean
+
+    /**
+     * Flips source depth data image in vertical axis (upside-down).
+     */
     var flipV: Boolean
+
+    /**
+     * The most recent frame received from the depth camera.
+     */
     val currentFrame: ColorBuffer
-    val frameFlow: Flow<ColorBuffer>
+
+    /**
+     * Will execute the supplied block of code with each most recent frame
+     * from the depth camera as an input.
+     *
+     * @param block the code to execute when the new frame is received.
+     */
+    fun onFrameReceived(block: (frame: ColorBuffer) -> Unit)
+
 }

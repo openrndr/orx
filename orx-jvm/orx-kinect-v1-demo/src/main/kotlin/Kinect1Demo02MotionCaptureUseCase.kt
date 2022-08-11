@@ -8,7 +8,6 @@ import org.openrndr.extra.gui.GUI
 import org.openrndr.extra.kinect.v1.Kinect1
 import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.DoubleParameter
-import org.openrndr.launch
 
 /**
  * A use case where "virtual walls" can be established within certain
@@ -36,25 +35,22 @@ fun main() = application {
             camera.resolution.x,
             camera.resolution.y
         )
-        device.depthCamera.enabled = true
 
         /*
-         * Note: the frameFlow will deliver new frames as soon as they
-         * arrive from kinect, therefore some rendering can be already
-         * performed when GPU is idle.
+         * Note: the code specified in onFrameReceived  will be executed as soon as
+         * possible, also when GPU is idle.
          *
-         * Also the filters are being applied only if the actual new frame
-         * from kinect was received. Kinect has different refresh rate (30 fps)
-         * than usual display will have.
-         *
-         * We are dispatching coroutine here, for details check:
-         * https://guide.openrndr.org/advancedDrawing/concurrencyAndMultithreading.html
+         * Also TurboColormap filter will be applied only after actual new frame
+         * from kinect is received instead of being applied for each
+         * program frame. Kinect has different refresh rate (30 fps) than usual
+         * display.
          */
-        launch {
-            device.depthCamera.frameFlow.collect { frame ->
-                turboColormap.apply(frame, outputBuffer)
-            }
+        camera.onFrameReceived { frame ->
+            turboColormap.apply(frame, outputBuffer)
         }
+        camera.enabled = true
+
+        @Suppress("unused")
         val settings = object {
 
             @BooleanParameter(label = "enabled", order = 0)
@@ -78,9 +74,11 @@ fun main() = application {
                     camera.flipV = value
                 }
 
-            // Note: we could use turboColormap parameters directly in the GUI, however the
-            // high range is cap to 1.0 there, and we want to use calibration in meters.
-            // Increase 5.0 to something higher if you are calibrating for a bigger space.
+            /*
+             Note: we could use turboColormap parameters directly in the GUI, however the
+             high range is cap to 1.0 there, and we want to use calibration in meters.
+             Increase 5.0 to something higher if you are calibrating for a bigger space.
+             */
             @DoubleParameter(label = "min distance", order = 3, low = 0.2, high = 5.0)
             var minDistance: Double
                 get() = turboColormap.minValue
