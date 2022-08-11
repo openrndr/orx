@@ -28,7 +28,7 @@ dependencyResolutionManagement {
             version("kotlinLogging", "2.1.23")
             version("kotlinxSerialization", "1.3.2")
             version("spek", "2.0.18")
-            version("boofcv", "0.39")
+            version("boofcv", "0.40.1")
             version("kluent", "1.68")
             version("kotest", "5.3.2")
             version("junitJupiter", "5.8.2")
