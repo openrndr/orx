@@ -38,7 +38,7 @@ dependencyResolutionManagement {
             version("librealsense", "2.50.0-1.5.7")
             version("gson", "2.9.0")
             version("antlr", "4.10.1")
-            version("tensorflow", "0.4.0")
+            version("tensorflow", "0.4.1")
             version("jarchivelib", "1.2.0")
             version("logbackClassic", "1.2.11")
             version("minim", "2.2.2")
