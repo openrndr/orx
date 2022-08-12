@@ -189,7 +189,6 @@ class Kinect1 : Kinect, Extension {
 
             private var firstStart = true
             private var started = false
-            private var mutableEnabled: Boolean = false
 
             private var bytesFront = kinectRawDepthByteBuffer(resolution)
             private var bytesBack = kinectRawDepthByteBuffer(resolution)
@@ -248,15 +247,14 @@ class Kinect1 : Kinect, Extension {
                 }
             }
 
-            override var enabled: Boolean
-                get() = mutableEnabled
+            override var enabled: Boolean = false
                 set(value) {
                     logger.debug { "$info.enabled = $value" }
-                    if (value == mutableEnabled) {
+                    if (value == field) {
                         logger.debug { "$info.enabled: doing nothing, already in state: $value" }
                         return
                     }
-                    mutableEnabled = value
+                    field = value
                     freenect.call("$info.enabled = $value") { _, _ ->
                         if (value) start() else stop()
                     }
@@ -367,20 +365,17 @@ class Kinect1 : Kinect, Extension {
  */
 class Freenect(private val initialLogLevel: Kinect1.LogLevel) {
 
-    private var mutableLogLevel = initialLogLevel
-
     private val logger = KotlinLogging.logger {}
 
-    var logLevel: Kinect1.LogLevel
-        get() = mutableLogLevel
+    var logLevel: Kinect1.LogLevel = initialLogLevel
         set(value) {
             call("logLevel[$value]") { ctx, _ ->
                 freenect_set_log_level(ctx, value.code)
             }
-            mutableLogLevel = value
+            field = value
         }
 
-    var expectingEvents: Boolean = false
+    internal var expectingEvents: Boolean = false
 
     private val ctx = freenect_context()
 
@@ -391,6 +386,7 @@ class Freenect(private val initialLogLevel: Kinect1.LogLevel) {
     private val runner = thread(name = "kinect1", start = true) {
         logger.info("Starting Kinect1 thread")
         checkReturn(freenect_init(ctx, usbCtx))
+        freenect_set_log_level(ctx, logLevel.code)
         val num = checkReturn(freenect_num_devices(ctx))
         if (num == 0) {
             logger.warn { "Could not find any Kinect1 devices, calling openDevice() will throw exception" }
@@ -511,10 +507,6 @@ internal val KINECT1_DEPTH_RESOLUTION: IntVector2 = IntVector2(640, 480)
 
 internal class Kinect1DepthMappers {
 
-    private var depthMeasurementState: DepthMeasurement = DepthMeasurement.RAW_NORMALIZED
-    private var flipHState: Boolean = false
-    private var flipVState: Boolean = false
-
     private val depthToRawNormalized = depthToRawNormalizedMappers().apply {
         forEach {
             it.parameters["maxDepthValue"] = KINECT1_MAX_DEPTH_VALUE
@@ -526,24 +518,21 @@ internal class Kinect1DepthMappers {
         Kinect1::class
     )
 
-    var depthMeasurement: DepthMeasurement
-        get() = depthMeasurementState
+    var depthMeasurement: DepthMeasurement = DepthMeasurement.RAW_NORMALIZED
         set(value) {
-            depthMeasurementState = value
+            field = value
             selectMapper()
         }
 
-    var flipH: Boolean
-        get() = flipHState
+    var flipH: Boolean = false
         set(value) {
-            flipHState = value
+            field = value
             selectMapper()
         }
 
-    var flipV: Boolean
-        get() = flipVState
+    var flipV: Boolean = false
         set(value) {
-            flipVState = value
+            field = value
             selectMapper()
         }
 
@@ -559,13 +548,13 @@ internal class Kinect1DepthMappers {
     }
 
     private fun selectMapper() {
-        mapperState = when (depthMeasurementState) {
+        mapperState = when (depthMeasurement) {
             DepthMeasurement.RAW -> null
             DepthMeasurement.RAW_NORMALIZED -> {
-                depthToRawNormalized.select(flipHState, flipVState)
+                depthToRawNormalized.select(flipH, flipV)
             }
             DepthMeasurement.METERS -> {
-                depthToMeters.select(flipHState, flipVState)
+                depthToMeters.select(flipH, flipV)
             }
         }
     }
