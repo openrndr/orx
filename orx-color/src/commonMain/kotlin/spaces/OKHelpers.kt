@@ -1,3 +1,5 @@
+@file:Suppress("FunctionName", "LocalVariableName")
+
 package org.openrndr.extra.color.spaces
 
 

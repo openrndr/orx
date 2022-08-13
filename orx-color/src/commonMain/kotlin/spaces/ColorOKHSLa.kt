@@ -5,6 +5,7 @@ import org.openrndr.math.Vector4
 import org.openrndr.math.mixAngle
 import kotlin.math.*
 
+@Suppress("LocalVariableName")
 data class ColorOKHSLa(val h: Double, val s: Double, val l: Double, override val alpha: Double = 1.0) :
     ColorModel<ColorOKHSLa>,
     HueShiftableColor<ColorOKHSLa>,
@@ -15,36 +16,37 @@ data class ColorOKHSLa(val h: Double, val s: Double, val l: Double, override val
     companion object {
         fun fromColorRGBa(c: ColorRGBa): ColorOKHSLa {
             val lab = c.toOKLABa()
-            val C = sqrt(lab.a * lab.a + lab.b * lab.b);
-            val a_ = lab.a / C;
-            val b_ = lab.b / C;
+            val C = sqrt(lab.a * lab.a + lab.b * lab.b)
+            val a_ = lab.a / C
+            val b_ = lab.b / C
 
             val L = lab.l
-            val h = 0.5 + 0.5 * atan2(-lab.b, -lab.a) / PI;
+            val h = 0.5 + 0.5 * atan2(-lab.b, -lab.a) / PI
 
-            val cs = get_Cs(L, a_, b_)
-            val c0 = cs[0];
-            val cMid = cs[1];
-            val cMax = cs[2];
-
+            val (c0, cMid, cMax) = get_Cs(L, a_, b_)
 
             val s = if (C < cMid) {
-                val k0 = 0;
-                val k1 = 0.8 * c0;
-                val k2 = (1 - k1 / cMid);
+                val k0 = 0
+                val k1 = 0.8 * c0
+                val k2 = (1 - k1 / cMid)
 
-                val t = (C - k0) / (k1 + k2 * (C - k0));
-                t * 0.8;
+                val t = (C - k0) / (k1 + k2 * (C - k0))
+                t * 0.8
             } else {
-                val k0 = cMid;
-                val k1 = 0.2 * cMid * cMid * 1.25 * 1.25 / c0;
-                val k2 = (1 - (k1) / (cMax - cMid));
+                val k0 = cMid
+                val k1 = 0.2 * cMid * cMid * 1.25 * 1.25 / c0
+                val k2 = (1 - (k1) / (cMax - cMid))
 
-                val t = (C - k0) / (k1 + k2 * (C - k0));
-                0.8 + 0.2 * t;
+                val t = (C - k0) / (k1 + k2 * (C - k0))
+                0.8 + 0.2 * t
             }
-            val l = toe(L);
-            return ColorOKHSLa(h * 360.0, if (s == s) s else 0.0, if (l == l) l else 0.0, c.a)
+            val l = toe(L)
+            return ColorOKHSLa(
+                h * 360.0,
+                if (s == s) s else 0.0,
+                if (l == l) l else 0.0,
+                c.alpha
+            )
         }
     }
 
@@ -52,52 +54,43 @@ data class ColorOKHSLa(val h: Double, val s: Double, val l: Double, override val
     val a = alpha
 
     override fun toRGBa(): ColorRGBa {
-        if (l == 1.0) {
-            ColorRGBa(1.0, 1.0, 1.0, alpha)
-        } else if (l == 0.0) {
-            ColorRGBa(0.0, 0.0, 0.0, alpha)
+        if (l == 0.0 || l == 1.0) {
+            return ColorRGBa(l, l, l, alpha, Linearity.SRGB)
         }
-        val a_ = cos(2 * PI * h / 360.0);
-        val b_ = sin(2 * PI * h / 360.0);
-        val L = toeInv(l);
+        val a_ = cos(2 * PI * h / 360.0)
+        val b_ = sin(2 * PI * h / 360.0)
+        val L = toeInv(l)
 
-        val Cs = get_Cs(L, a_, b_);
-        val C_0 = Cs[0];
-        val C_mid = Cs[1];
-        val C_max = Cs[2];
+        val Cs = get_Cs(L, a_, b_)
+        val C_0 = Cs[0]
+        val C_mid = Cs[1]
+        val C_max = Cs[2]
 
-        //let C, t, k_0, k_1, k_2;
-        val C: Double
-        val t: Double
-        val k_0: Double
-        val k_1: Double
-        val k_2: Double
-        if (s < 0.8) {
-            t = 1.25 * s;
-            k_0 = 0.0
-            k_1 = 0.8 * C_0;
-            k_2 = (1 - k_1 / C_mid);
+        val C = if (s < 0.8) {
+            val t = 1.25 * s
+            val k_0 = 0.0
+            val k_1 = 0.8 * C_0
+            val k_2 = (1 - k_1 / C_mid)
+            k_0 + t * k_1 / (1 - k_2 * t)
         } else {
-            t = 5 * (s - 0.8);
-            k_0 = C_mid;
-            k_1 = 0.2 * C_mid * C_mid * 1.25 * 1.25 / C_0;
-            k_2 = (1 - (k_1) / (C_max - C_mid));
+            val t = 5 * (s - 0.8)
+            val k_0 = C_mid
+            val k_1 = 0.2 * C_mid * C_mid * 1.25 * 1.25 / C_0
+            val k_2 = (1 - (k_1) / (C_max - C_mid))
+            k_0 + t * k_1 / (1 - k_2 * t)
         }
-
-        C = k_0 + t * k_1 / (1 - k_2 * t);
 
         // If we would only use one of the Cs:
         //C = s*C_0;
         //C = s*1.25*C_mid;
         //C = s*C_max;
 
-//        let rgb = oklab_to_linear_srgb(L, C*a_, C*b_);
-//        return [
-//            255*srgb_transfer_function(rgb[0]),
-//            255*srgb_transfer_function(rgb[1]),
-//            255*srgb_transfer_function(rgb[2]),
-//        ]
-        return ColorOKLABa(if (L == L) L else 0.0, if (C == C) C * a_ else 0.0, if (C == C) C * b_ else 0.0).toRGBa().toSRGB()
+        return ColorOKLABa(
+            if (L == L) L else 0.0,
+            if (C == C) C * a_ else 0.0,
+            if (C == C) C * b_ else 0.0,
+            alpha
+        ).toRGBa().toSRGB()
     }
 
     override fun shiftHue(shiftInDegrees: Double): ColorOKHSLa = copy(h = h + shiftInDegrees)
@@ -114,7 +107,8 @@ data class ColorOKHSLa(val h: Double, val s: Double, val l: Double, override val
     override fun plus(right: ColorOKHSLa) =
         copy(h = h + right.h, s = s + right.s, l = l + right.l, alpha = alpha + right.alpha)
 
-    override fun times(scale: Double): ColorOKHSLa = copy(h = h * scale, s = s * scale, l = l * scale, alpha = alpha * scale)
+    override fun times(scale: Double): ColorOKHSLa =
+        copy(h = h * scale, s = s * scale, l = l * scale, alpha = alpha * scale)
 
     override fun mix(other: ColorOKHSLa, factor: Double): ColorOKHSLa {
         val sx = factor.coerceIn(0.0, 1.0)
