@@ -10,6 +10,7 @@ import kotlin.math.pow
  * [a] = red (-1.0) to green (1.0),
  * [b] = yellow (-1.0) to blue (1.0).
  */
+@Suppress("LocalVariableName")
 data class ColorOKLABa(val l: Double, val a: Double, val b: Double, override val alpha: Double = 1.0) :
     ColorModel<ColorOKLABa>,
     ShadableColor<ColorOKLABa>,
@@ -19,19 +20,19 @@ data class ColorOKLABa(val l: Double, val a: Double, val b: Double, override val
         fun fromRGBa(rgba: ColorRGBa): ColorOKLABa {
             // based on https://bottosson.github.io/posts/oklab/
             val c = rgba.toLinear()
-            val l = 0.4122214708 * c.r + 0.5363325363 * c.g + 0.0514459929f * c.b
-            val m = 0.2119034982 * c.r + 0.6806995451 * c.g + 0.1073969566f * c.b
-            val s = 0.0883024619 * c.r + 0.2817188376 * c.g + 0.6299787005f * c.b
+            val l = 0.4122214708 * c.r + 0.5363325363 * c.g + 0.0514459929 * c.b
+            val m = 0.2119034982 * c.r + 0.6806995451 * c.g + 0.1073969566 * c.b
+            val s = 0.0883024619 * c.r + 0.2817188376 * c.g + 0.6299787005 * c.b
 
             val lnl = l.pow(1.0 / 3.0)
             val mnl = m.pow(1.0 / 3.0)
             val snl = s.pow(1.0 / 3.0)
 
-            val L = 0.2104542553f * lnl + 0.7936177850f * mnl - 0.0040720468f * snl
-            val a = 1.9779984951f * lnl - 2.4285922050f * mnl + 0.4505937099f * snl
-            val b = 0.0259040371f * lnl + 0.7827717662f * mnl - 0.8086757660f * snl
+            val L = 0.2104542553 * lnl + 0.7936177850 * mnl - 0.0040720468 * snl
+            val a = 1.9779984951 * lnl - 2.4285922050 * mnl + 0.4505937099 * snl
+            val b = 0.0259040371 * lnl + 0.7827717662 * mnl - 0.8086757660 * snl
 
-            return ColorOKLABa(L, a, b, alpha = c.a)
+            return ColorOKLABa(L, a, b, c.alpha)
         }
     }
 
@@ -46,10 +47,11 @@ data class ColorOKLABa(val l: Double, val a: Double, val b: Double, override val
         val s = snl * snl * snl
 
         return ColorRGBa(
-            4.0767416621 * l - 3.3077115913 * m + 0.2309699292f * s,
-            -1.2684380046 * l + 2.6097574011 * m - 0.3413193965f * s,
-            -0.0041960863 * l - 0.7034186147 * m + 1.7076147010f * s,
-            alpha, linearity = Linearity.LINEAR
+            4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+            -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+            -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s,
+            alpha,
+            Linearity.LINEAR
         )
     }
 
