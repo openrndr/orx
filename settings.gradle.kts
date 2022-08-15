@@ -179,6 +179,7 @@ include(
         "orx-jvm:orx-kinect-v1-natives-windows",
         "orx-jvm:orx-kinect-v1-demo",
         "orx-jvm:orx-video-profiles",
-        "orx-depth-camera"
+        "orx-depth-camera",
+        "orx-jvm:orx-depth-camera-calibrator"
     )
 )
