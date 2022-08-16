@@ -1,3 +1,4 @@
+import org.openrndr.WindowMultisample
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
@@ -9,6 +10,9 @@ import org.openrndr.shape.Rectangle
 
 fun main() {
     application {
+        configure {
+            multisample = WindowMultisample.SampleCount(8)
+        }
         program {
             val meshes = listOf(
                 boxMesh(1.0, 1.0, 1.0),

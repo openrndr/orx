@@ -38,6 +38,16 @@ fun meshVertexBuffer(size: Int): VertexBuffer {
     }, size)
 }
 
+fun meshVertexBufferWithColor(size: Int): VertexBuffer {
+    return vertexBuffer(vertexFormat {
+        position(3)
+        normal(3)
+        textureCoordinate(2)
+        color(4)
+    }, size)
+}
+
+
 @Deprecated("binary compatibility only")
 fun extrudeShape(shape: Shape, front: Double, back: Double, distanceTolerance: Double = 0.5, writer: VertexWriter) {
     extrudeShape(shape, front, back, distanceTolerance = distanceTolerance, flipNormals = false, writer = writer)
