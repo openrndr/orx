@@ -19,24 +19,24 @@ plugins {
 }
 
 def multiplatformModules = [
-    "orx-camera",
-    "orx-color",
-    "orx-compositor",
-    "orx-compute-graph",
-    "orx-compute-graph-nodes",
-    "orx-easing",
-    "orx-fx",
-    "orx-gradient-descent",
-    "orx-image-fit",
-    "orx-no-clear",
-    "orx-noise",
-    "orx-parameters",
-    "orx-shade-styles",
-    "orx-shader-phrases",
-    "orx-shapes",
-    "orx-quadtree",
-    "orx-hash-grid",
-    "orx-triangulation"
+        "orx-camera",
+        "orx-color",
+        "orx-compositor",
+        "orx-compute-graph",
+        "orx-compute-graph-nodes",
+        "orx-easing",
+        "orx-fx",
+        "orx-gradient-descent",
+        "orx-image-fit",
+        "orx-no-clear",
+        "orx-noise",
+        "orx-parameters",
+        "orx-shade-styles",
+        "orx-shader-phrases",
+        "orx-shapes",
+        "orx-quadtree",
+        "orx-hash-grid",
+        "orx-triangulation"
 ]
 
 def doNotPublish = ["openrndr-demos"]
