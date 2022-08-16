@@ -1,15 +1,18 @@
+import org.openrndr.WindowMultisample
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.colorBuffer
 import org.openrndr.draw.shadeStyle
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.camera.Orbital
 import org.openrndr.extra.meshgenerators.boxMesh
 import org.openrndr.math.Vector3
 
 fun main() {
     application {
+        configure {
+            multisample = WindowMultisample.SampleCount(8)
+        }
         program {
             val box = boxMesh(1.0, 1.0, 1.0)
 
@@ -22,11 +25,6 @@ fun main() {
             }
             s.upload()
 
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
             extend(Orbital()) {
                 eye = Vector3(1.0, 1.0, 1.0)
             }

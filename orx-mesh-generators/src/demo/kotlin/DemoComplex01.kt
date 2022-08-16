@@ -1,4 +1,6 @@
+import org.openrndr.WindowMultisample
 import org.openrndr.application
+import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.shadeStyle
 import org.openrndr.extensions.SingleScreenshot
@@ -12,21 +14,22 @@ import org.openrndr.math.transforms.transform
 
 fun main() {
     application {
+        configure {
+            width = 800
+            height = 800
+            multisample = WindowMultisample.SampleCount(8)
+        }
         program {
             val m = meshGenerator {
+                color = ColorRGBa.PINK
                 sphere(32, 32, 1.0)
-                group {
-                    box(4.0, 4.0, 4.0)
-                    transform(transform {
-                        translate(0.0, -2.0, 0.0)
-                    })
-                }
+
+                color = ColorRGBa.WHITE
+                translate(0.0, -2.0, 0.0)
+                box(4.0, 4.0, 4.0)
+
             }
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
+
             extend(Orbital()) {
                 this.eye = Vector3(0.0, 3.0, 7.0)
                 this.lookAt = Vector3(0.0, 2.0, 0.0)
@@ -35,6 +38,7 @@ fun main() {
             extend {
                 drawer.shadeStyle = shadeStyle {
                     fragmentTransform = """
+                        x_fill = va_color;
                         x_fill.rgb *= v_viewNormal.z;
                     """.trimIndent()
                 }
