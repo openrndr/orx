@@ -28,6 +28,7 @@ def multiplatformModules = [
         "orx-fx",
         "orx-gradient-descent",
         "orx-image-fit",
+        "orx-mesh-generators",
         "orx-no-clear",
         "orx-noise",
         "orx-parameters",
