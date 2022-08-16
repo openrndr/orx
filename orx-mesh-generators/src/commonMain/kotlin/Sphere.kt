@@ -3,9 +3,10 @@ package org.openrndr.extra.meshgenerators
 import org.openrndr.draw.VertexBuffer
 import org.openrndr.math.Spherical
 import org.openrndr.math.Vector2
+import kotlin.math.max
 
 fun sphereMesh(sides: Int = 16, segments: Int = 16, radius: Double = 1.0, invert: Boolean = false): VertexBuffer {
-    val vertexCount = 2 * sides * 3 + Math.max(0, (segments - 2)) * sides * 6
+    val vertexCount = 2 * sides * 3 + max(0, (segments - 2)) * sides * 6
     val vb = meshVertexBuffer(vertexCount)
     vb.put {
         generateSphere(sides, segments, radius, invert, bufferWriter(this))

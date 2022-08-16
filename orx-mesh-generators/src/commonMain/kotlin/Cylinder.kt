@@ -6,6 +6,9 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.mix
 import org.openrndr.math.transforms.rotateZ
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
 
 fun cylinderMesh(sides: Int = 16, segments: Int = 16, radius: Double = 1.0, length: Double, invert: Boolean = false): VertexBuffer {
     val vertexCount = 6 * sides * segments
@@ -21,7 +24,7 @@ fun generateCylinder(sides: Int, segments: Int, radius: Double, length: Double, 
 }
 
 fun generateTaperedCylinder(sides: Int, segments: Int, radiusStart: Double, radiusEnd:Double, length: Double, invert: Boolean = false, vertexWriter: VertexWriter) {
-    val dphi = (Math.PI * 2) / sides
+    val dphi = (PI * 2) / sides
     val ddeg = (360.0) / sides
 
     val invertFactor = if (invert) 1.0 else -1.0
@@ -40,15 +43,15 @@ fun generateTaperedCylinder(sides: Int, segments: Int, radiusStart: Double, radi
 
 
         for (side in 0 until sides) {
-            val x00 = Math.cos(side * dphi) * radius0
-            val x10 = Math.cos(side * dphi + dphi) * radius0
-            val y00 = Math.sin(side * dphi) * radius0
-            val y10 = Math.sin(side * dphi + dphi) * radius0
+            val x00 = cos(side * dphi) * radius0
+            val x10 = cos(side * dphi + dphi) * radius0
+            val y00 = sin(side * dphi) * radius0
+            val y10 = sin(side * dphi + dphi) * radius0
 
-            val x01 = Math.cos(side * dphi) * radius1
-            val x11 = Math.cos(side * dphi + dphi) * radius1
-            val y01 = Math.sin(side * dphi) * radius1
-            val y11 = Math.sin(side * dphi + dphi) * radius1
+            val x01 = cos(side * dphi) * radius1
+            val x11 = cos(side * dphi + dphi) * radius1
+            val y01 = sin(side * dphi) * radius1
+            val y11 = sin(side * dphi + dphi) * radius1
 
 
             val u0 = (segment + 0.0) / segments

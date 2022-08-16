@@ -11,8 +11,7 @@ import org.openrndr.math.transforms.buildTransform
 import org.openrndr.math.transforms.normalMatrix
 import org.openrndr.math.transforms.rotate
 import org.openrndr.shape.Shape
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
+import org.openrndr.utils.buffer.MPPBuffer
 
 class GeneratorBuffer {
     var transform = Matrix44.IDENTITY
@@ -71,9 +70,11 @@ class GeneratorBuffer {
         data.addAll(other.data)
     }
 
-    fun toByteBuffer(): ByteBuffer {
-        val bb = ByteBuffer.allocateDirect(data.size * (3 * 4 + 3 * 4 + 2 * 4 + 4 * 4))
-        bb.order(ByteOrder.nativeOrder())
+    fun toByteBuffer(): MPPBuffer {
+        //val bb = ByteBuffer.allocateDirect(data.size * (3 * 4 + 3 * 4 + 2 * 4 + 4 * 4))
+        val bb = MPPBuffer.allocate(data.size * (3 * 4 + 3 * 4 + 2 * 4 + 4 * 4))
+
+        //bb.order(ByteOrder.nativeOrder())
         bb.rewind()
         for (d in data) {
             bb.putFloat(d.position.x.toFloat())
@@ -92,6 +93,7 @@ class GeneratorBuffer {
             bb.putFloat(d.color.b.toFloat())
             bb.putFloat(d.color.alpha.toFloat())
         }
+        bb.rewind()
         return bb
     }
 }
