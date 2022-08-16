@@ -2,11 +2,11 @@ import org.openrndr.WindowMultisample
 import org.openrndr.application
 import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.shadeStyle
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.camera.Orbital
-import org.openrndr.extra.meshgenerators.*
+import org.openrndr.extra.meshgenerators.cylinder
+import org.openrndr.extra.meshgenerators.hemisphere
+import org.openrndr.extra.meshgenerators.meshGenerator
 import org.openrndr.math.Vector3
-import org.openrndr.math.transforms.transform
 
 fun main() {
     application {
