@@ -215,15 +215,12 @@ configure(allprojects.findAll { !doNotPublish.contains(it.name) && (multiplatfor
 
 // publishable && JVM only
 configure(allprojects.findAll { !doNotPublish.contains(it.name) && !multiplatformModules.contains(it.name) }) {
-//    apply plugin: 'idea'
     apply plugin: 'java'
     apply plugin: 'kotlin'
     apply plugin: 'maven-publish'
     apply plugin: 'nebula.release'
     apply plugin: 'signing'
 
-    def proj = it
-    println proj
     java {
         withJavadocJar()
         withSourcesJar()
@@ -302,17 +299,10 @@ configure(allprojects.findAll { !doNotPublish.contains(it.name) && !multiplatfor
             includeEngines 'spek2'
         }
     }
-
-    javadoc {
-        options.addBooleanOption 'Xdoclint:none', true
-    }
-
-    tasks.withType(org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile).all {
-        kotlinOptions.freeCompilerArgs += ["-Xuse-experimental=kotlinx.coroutines.InternalCoroutinesApi"]
-    }
 }
 
 group = "org.openrndr"
+
 nexusPublishing {
     repositories {
         sonatype {
@@ -330,27 +320,4 @@ subprojects {
         group = "help"
         description = "Displays all dependencies, including subprojects."
     }
-
-    kotlin {
-        // https://youtrack.jetbrains.com/issue/KT-43095/Add-support-for-Java-Toolchain-to-the-Gradle-plugin#focus=Comments-27-5192573.0-0
-        jvmToolchain { toolchain ->
-            (toolchain as JavaToolchainSpec).languageVersion.set(JavaLanguageVersion.of(libs.versions.jvmTarget.get()))
-        }
-        tasks.withType(KotlinCompile).configureEach {
-            kotlinOptions.jvmTarget = libs.versions.jvmTarget.get()
-            kotlinOptions.apiVersion = libs.versions.kotlinApi.get()
-            kotlinOptions.languageVersion = libs.versions.kotlinLanguage.get()
-        }
-    }
 }
-
-
-//configure(allprojects.findAll { it.name != "openrndr-demos" }) {
-//    apply plugin: 'maven-publish'
-//    apply plugin: 'nebula.release'
-//}
-
-
-//collectScreenshots.dependsOn {
-//    project.subprojects.findAll { it.sourceSets.hasProperty("demo") }.collect { it.tasks.demoClasses }
-//}

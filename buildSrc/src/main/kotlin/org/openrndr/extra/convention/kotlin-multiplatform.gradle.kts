@@ -1,4 +1,4 @@
-package org.openrndr.convention
+package org.openrndr.extra.convention
 
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -8,15 +8,15 @@ val libs = the<LibrariesForLibs>()
 plugins {
     kotlin("multiplatform")
     id("maven-publish")
-    id("org.openrndr.convention.component-metadata-rule")
-    id("org.openrndr.convention.dokka")
+    id("org.openrndr.extra.convention.component-metadata-rule")
+    id("org.openrndr.extra.convention.dokka")
 }
 
 repositories {
     mavenCentral()
 }
 
-group = "org.openrndr"
+group = "org.openrndr.extra"
 
 tasks.withType<KotlinCompile>() {
     kotlinOptions.apiVersion = libs.versions.kotlinApi.get()

@@ -1,4 +1,4 @@
-package org.openrndr.convention
+package org.openrndr.extra.convention
 
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -9,16 +9,15 @@ plugins {
     java
     kotlin("jvm")
     id("maven-publish")
-    id("org.openrndr.convention.component-metadata-rule")
-    id("org.openrndr.convention.dokka")
+    id("org.openrndr.extra.convention.component-metadata-rule")
+    id("org.openrndr.extra.convention.dokka")
 }
 
 repositories {
     mavenCentral()
 }
 
-group = "org.openrndr"
-
+group = "org.openrndr.extra"
 
 val main by sourceSets.getting
 @Suppress("UNUSED_VARIABLE")
@@ -37,7 +36,6 @@ kotlin {
         languageVersion.set(JavaLanguageVersion.of(libs.versions.jvmTarget.get()))
     }
 }
-
 
 tasks {
     @Suppress("UNUSED_VARIABLE")

@@ -1,4 +1,4 @@
-package org.openrndr.convention
+package org.openrndr.extra.convention
 
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
 import java.net.URL

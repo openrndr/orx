@@ -1,7 +1,7 @@
 import ScreenshotsHelper.collectScreenshots
 
 plugins {
-    org.openrndr.convention.`kotlin-multiplatform`
+    org.openrndr.extra.convention.`kotlin-multiplatform`
     kotlin("plugin.serialization")
 }
 

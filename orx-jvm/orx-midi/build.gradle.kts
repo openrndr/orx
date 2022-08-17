@@ -1,3 +1,3 @@
 plugins {
-    org.openrndr.convention.`kotlin-jvm`
+    org.openrndr.extra.convention.`kotlin-jvm`
 }
