@@ -31,15 +31,14 @@ kotlin {
         }
         compilations {
             val main by getting
-
             @Suppress("UNUSED_VARIABLE")
             val demo by creating {
                 dependencies {
-                    implementation(main.compileDependencyFiles + main.output.classesDirs)
+                    implementation(main.runtimeDependencyFiles + main.output.classesDirs)
                 }
             }
         }
-        testRuns["test"].executionTask.configure {
+        testRuns["test"].executionTask {
             useJUnitPlatform()
         }
     }

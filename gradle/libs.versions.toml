@@ -11,7 +11,6 @@ nebulaRelease = "15.3.1"
 spek = "2.0.18"
 boofcv = "0.40.1"
 kluent = "1.68"
-kotest = "5.3.2"
 junitJupiter = "5.8.2"
 slf4j = "1.7.36"
 libfreenect = "0.5.7-1.5.7"
@@ -71,7 +70,6 @@ jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", v
 spek-dsl = { group = "org.spekframework.spek2", name = "spek-dsl-jvm", version.ref = "spek" }
 spek-junit5 = { group = "org.spekframework.spek2", name = "spek-runner-junit5", version.ref = "spek" }
 kluent = { group = "org.amshove.kluent", name = "kluent", version.ref = "kluent" }
-kotest = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
 slf4j-simple = { group = "org.slf4j", name = "slf4j-simple", version.ref = "slf4j" }
 
 [plugins]

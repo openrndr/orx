@@ -15,6 +15,11 @@ kotlin {
             }
             collectScreenshots {  }
         }
+        testRuns["test"].executionTask {
+            useJUnitPlatform {
+                includeEngines("spek2")
+            }
+        }
     }
 
     sourceSets {
@@ -35,7 +40,6 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(libs.kotlin.serialization.json)
-                implementation(libs.kotest)
             }
         }
 
@@ -43,8 +47,9 @@ kotlin {
         val jvmTest by getting {
             dependencies {
                 implementation(libs.kotlin.serialization.json)
-                implementation(libs.spek.dsl)
                 implementation(libs.kluent)
+                implementation(libs.spek.dsl)
+                runtimeOnly(libs.spek.junit5)
             }
         }
 

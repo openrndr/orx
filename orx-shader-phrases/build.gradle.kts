@@ -10,6 +10,13 @@ val embedShaders = tasks.register<EmbedShadersTask>("embedShaders") {
 }.get()
 
 kotlin {
+    jvm {
+        testRuns["test"].executionTask {
+            useJUnitPlatform {
+                includeEngines("spek2")
+            }
+        }
+    }
     sourceSets {
         val shaderKotlin by creating {
             this.kotlin.srcDir(embedShaders.outputDir)
@@ -31,7 +38,6 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(libs.kotlin.serialization.json)
-                implementation(libs.kotest)
             }
         }
 
@@ -40,8 +46,9 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.serialization.json)
                 runtimeOnly(libs.slf4j.simple)
-                implementation(libs.spek.dsl)
                 implementation(libs.kluent)
+                implementation(libs.spek.dsl)
+                runtimeOnly(libs.spek.junit5)
             }
         }
 

@@ -36,7 +36,6 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(libs.kotlin.serialization.json)
-                implementation(libs.kotest)
             }
         }
 
