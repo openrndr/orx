@@ -8,13 +8,11 @@ sourceSets {
             srcDir("src/preload/kotlin")
         }
     }
-    val main by getting
 }
 
 repositories {
     mavenCentral()
     mavenLocal()
-    gradlePluginPortal()
 }
 
 val openrndrVersion =
@@ -22,8 +20,11 @@ val openrndrVersion =
         ?: "0.5.1-SNAPSHOT"
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.20")
-    implementation("org.jetbrains.kotlin:kotlin-serialization:1.6.20")
+    implementation(libs.kotlin.gradle.plugin)
+    implementation(libs.dokka.gradle.plugin)
+    implementation(libs.kotlin.serialization.gradle.plugin)
+    // https://github.com/gradle/gradle/issues/15383#issuecomment-779893192
+    implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
     val preloadImplementation by configurations.getting
     preloadImplementation("org.openrndr:openrndr-application:$openrndrVersion")
     preloadImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")

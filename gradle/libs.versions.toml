@@ -1,0 +1,80 @@
+[versions]
+kotlinApi = "1.6"
+kotlinLanguage = "1.6"
+kotlin = "1.6.21"
+jvmTarget = "11"
+kotlinxCoroutines = "1.6.4"
+kotlinLogging = "2.1.23"
+kotlinxSerialization = "1.3.2"
+dokka = "1.7.10"
+nebulaRelease = "15.3.1"
+spek = "2.0.18"
+boofcv = "0.40.1"
+kluent = "1.68"
+kotest = "5.3.2"
+junitJupiter = "5.8.2"
+slf4j = "1.7.36"
+libfreenect = "0.5.7-1.5.7"
+librealsense = "2.50.0-1.5.7"
+gson = "2.9.0"
+antlr = "4.10.1"
+tensorflow = "0.4.1"
+jarchivelib = "1.2.0"
+logbackClassic = "1.2.11"
+minim = "2.2.2"
+netty = "4.1.79.Final"
+rabbitcontrol = "0.3.29"
+zxing = "3.5.0"
+ktor = "2.0.3"
+jgit = "5.12.0.202106070339-r"
+javaosc = "0.8"
+javaparser = "3.15.21"
+
+[libraries]
+kotlin-logging = { group = "io.github.microutils", name = "kotlin-logging", version.ref = "kotlinLogging" }
+kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+kotlin-serialization-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version.ref = "kotlinxSerialization" }
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
+kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
+kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
+kotlin-scriptingJvm = { group = "org.jetbrains.kotlin", name = "kotlin-scripting-jvm", version.ref = "kotlin" }
+kotlin-scriptingJvmHost = { group = "org.jetbrains.kotlin", name = "kotlin-scripting-jvm-host", version.ref = "kotlin" }
+kotlin-scriptingJSR223 = { group = "org.jetbrains.kotlin", name = "kotlin-scripting-jsr223", version.ref = "kotlin" }
+kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-serialization-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-serialization", version.ref = "kotlin" }
+dokka-gradle-plugin = { group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version.ref = "dokka" }
+
+tensorflow = { group = "org.tensorflow", name = "tensorflow-core-api", version.ref = "tensorflow" }
+boofcv = { group = "org.boofcv", name = "boofcv-core", version.ref = "boofcv" }
+libfreenect = { group = "org.bytedeco", name = "libfreenect", version.ref = "libfreenect" }
+librealsense = { group = "org.bytedeco", name = "librealsense2", version.ref = "librealsense" }
+jarchivelib = { group = "org.rauschig", name = "jarchivelib", version.ref = "jarchivelib" }
+logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logbackClassic" }
+minim = { group = "net.compartmental.code", name = "minim", version.ref = "minim" }
+netty-all = { group = "io.netty", name = "netty-all", version.ref = "netty" }
+rabbitcontrol-rcp = { group = "cc.rabbitcontrol", name = "rcp", version.ref = "rabbitcontrol" }
+zxing-core = { group = "com.google.zxing", name = "core", version.ref = "zxing" }
+ktor-server-core = { group = "io.ktor", name = "ktor-server-core", version.ref = "ktor" }
+ktor-server-netty = { group = "io.ktor", name = "ktor-server-netty", version.ref = "ktor" }
+jgit = { group = "org.eclipse.jgit", name = "org.eclipse.jgit", version.ref = "jgit" }
+javaosc-core = { group = "com.illposed.osc", name = "javaosc-core", version.ref = "javaosc" }
+javaparser-core = { group = "com.github.javaparser", name = "javaparser-core", version.ref = "javaparser" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+antlr = { group = "org.antlr", name = "antlr4", version.ref = "antlr" }
+antlrRuntime = { group = "org.antlr", name = "antlr4-runtime", version.ref = "antlr" }
+
+jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junitJupiter" }
+jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junitJupiter" }
+spek-dsl = { group = "org.spekframework.spek2", name = "spek-dsl-jvm", version.ref = "spek" }
+spek-junit5 = { group = "org.spekframework.spek2", name = "spek-runner-junit5", version.ref = "spek" }
+kluent = { group = "org.amshove.kluent", name = "kluent", version.ref = "kluent" }
+kotest = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
+slf4j-simple = { group = "org.slf4j", name = "slf4j-simple", version.ref = "slf4j" }
+
+[plugins]
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+nebula-release = { id = "nebula.release", version.ref = "nebulaRelease" }
+
+[bundles]
+jupiter = ["jupiter-api", "jupiter-engine"]

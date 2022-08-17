@@ -20,8 +20,8 @@ dependencies {
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.netty)
 
-    demoImplementation(libs.openrndr.extensions)
-    demoRuntimeOnly(libs.openrndr.gl3.core)
-    demoRuntimeOnly(libs.openrndr.gl3.natives)
+    demoImplementation(openrndrLibs.openrndr.extensions)
+    demoRuntimeOnly(openrndrLibs.openrndr.gl3.core)
+    // FIXME!!! demoRuntimeOnly(openrndrLibs.openrndr.gl3.natives)
     demoImplementation(sourceSets.getByName("main").output)
 }

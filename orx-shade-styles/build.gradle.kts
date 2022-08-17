@@ -1,35 +1,20 @@
 import ScreenshotsHelper.collectScreenshots
 
 plugins {
-    kotlin("multiplatform")
+    org.openrndr.convention.`kotlin-multiplatform`
     kotlin("plugin.serialization")
 }
 
 kotlin {
     jvm {
-        compilations {
-            val demo by creating {
-                defaultSourceSet {
-                    kotlin.srcDir("src/demo")
-                    dependencies {
-                        implementation(project(":orx-color"))
-                        implementation(libs.openrndr.application)
-                        implementation(libs.openrndr.extensions)
-                        runtimeOnly(libs.openrndr.gl3.core)
-                        runtimeOnly(libs.openrndr.gl3.natives)
-                        implementation(compilations["main"]!!.output.allOutputs)
-                    }
-                    collectScreenshots { }
-                }
+        @Suppress("UNUSED_VARIABLE")
+        val demo by compilations.getting {
+            // TODO: Move demos to /jvmDemo
+            defaultSourceSet {
+                kotlin.srcDir("src/demo/kotlin")
             }
+            collectScreenshots { }
         }
-        testRuns["test"].executionTask.configure {
-            useJUnitPlatform()
-        }
-    }
-    js(IR) {
-        browser()
-        nodejs()
     }
 
     sourceSets {
@@ -40,41 +25,28 @@ kotlin {
                 implementation(project(":orx-shader-phrases"))
                 implementation(project(":orx-color"))
                 implementation(libs.kotlin.serialization.core)
-                implementation(libs.openrndr.application)
-                implementation(libs.openrndr.draw)
-                implementation(libs.openrndr.filter)
+                implementation(openrndrLibs.openrndr.application)
+                implementation(openrndrLibs.openrndr.draw)
+                implementation(openrndrLibs.openrndr.filter)
                 implementation(libs.kotlin.reflect)
-                implementation(libs.kotlin.logging)
             }
         }
 
         @Suppress("UNUSED_VARIABLE")
         val commonTest by getting {
             dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
                 implementation(libs.kotlin.serialization.json)
                 implementation(libs.kotest)
             }
         }
 
         @Suppress("UNUSED_VARIABLE")
-        val jvmTest by getting {
+        val jvmDemo by getting {
             dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
-                implementation(kotlin("test-junit5"))
-                implementation(libs.kotlin.serialization.json)
-                runtimeOnly(libs.bundles.jupiter)
-                implementation(libs.spek.dsl)
-                implementation(libs.kluent)
-            }
-        }
-
-        @Suppress("UNUSED_VARIABLE")
-        val jsTest by getting {
-            dependencies {
-                implementation(kotlin("test-js"))
+                implementation(project(":orx-color"))
+                implementation(openrndrLibs.openrndr.application)
+                implementation(openrndrLibs.openrndr.extensions)
+                runtimeOnly(openrndrLibs.openrndr.gl3.core)
             }
         }
     }

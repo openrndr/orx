@@ -1,5 +1,5 @@
 dependencies {
-    implementation(libs.openrndr.application)
-    implementation(libs.openrndr.gl3.core)
-    implementation(libs.openrndr.gl3.natives)
+    implementation(openrndrLibs.openrndr.application)
+    implementation(openrndrLibs.openrndr.gl3.core)
+    /// FIXME??? implementation(openrndrLibs.openrndr.gl3.natives)
 }

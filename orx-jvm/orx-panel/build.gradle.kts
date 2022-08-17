@@ -18,10 +18,10 @@ val demoRuntimeOnly by configurations.getting {}
 
 dependencies {
     implementation(libs.kotlin.reflect)
-    demoImplementation(libs.openrndr.extensions)
-    demoImplementation(libs.openrndr.dialogs)
+    demoImplementation(openrndrLibs.openrndr.extensions)
+    demoImplementation(openrndrLibs.openrndr.dialogs)
     demoImplementation(libs.gson)
-    demoRuntimeOnly(libs.openrndr.gl3.core)
-    demoRuntimeOnly(libs.openrndr.gl3.natives)
+    demoRuntimeOnly(openrndrLibs.openrndr.gl3.core)
+    // FIXME!!! demoRuntimeOnly(openrndrLibs.openrndr.gl3.natives)
     demoImplementation(sourceSets.getByName("main").output)
 }

@@ -9,11 +9,11 @@ sourceSets {
 }
 
 dependencies {
-    demoImplementation(libs.openrndr.application)
-    demoImplementation(libs.openrndr.extensions)
-    demoImplementation(libs.openrndr.ffmpeg)
-    demoRuntimeOnly(libs.openrndr.gl3.core)
-    demoRuntimeOnly(libs.openrndr.gl3.natives)
-    implementation(libs.openrndr.ffmpeg)
+    demoImplementation(openrndrLibs.openrndr.application)
+    demoImplementation(openrndrLibs.openrndr.extensions)
+    demoImplementation(openrndrLibs.openrndr.ffmpeg)
+    demoRuntimeOnly(openrndrLibs.openrndr.gl3.core)
+    // FIXME!!! demoRuntimeOnly(openrndrLibs.openrndr.gl3.natives)
+    implementation(openrndrLibs.openrndr.ffmpeg)
     demoImplementation(sourceSets.getByName("main").output)
 }

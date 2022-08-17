@@ -18,11 +18,11 @@ val demoRuntimeOnly by configurations.getting {}
 dependencies {
     implementation(project(":orx-fx"))
     implementation(project(":orx-noise"))
-    implementation(libs.openrndr.filter)
-    demoImplementation(libs.openrndr.application)
-    demoImplementation(libs.openrndr.extensions)
+    implementation(openrndrLibs.openrndr.filter)
+    demoImplementation(openrndrLibs.openrndr.application)
+    demoImplementation(openrndrLibs.openrndr.extensions)
     demoRuntimeOnly(libs.slf4j.simple)
-    demoRuntimeOnly(libs.openrndr.gl3.core)
-    demoRuntimeOnly(libs.openrndr.gl3.natives)
+    demoRuntimeOnly(openrndrLibs.openrndr.gl3.core)
+    // FIXME!!! demoRuntimeOnly(openrndrLibs.openrndr.gl3.natives)
     demoImplementation(sourceSets.getByName("main").output)
 }

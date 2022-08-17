@@ -18,6 +18,10 @@ plugins {
     id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
 }
 
+repositories {
+    mavenCentral()
+}
+
 def multiplatformModules = [
         "orx-camera",
         "orx-color",
@@ -59,14 +63,6 @@ allprojects {
         }
     }
 
-}
-
-dokka {
-    moduleName = "$rootProject.name"
-    outputDirectory = "$buildDir/docs"
-    outputFormat = "html"
-    includes = ['Module.md']
-    sourceDirs = files(subprojects.collect { p -> new File(p.projectDir, "/src/main/kotlin") })
 }
 
 task buildMainReadme {
@@ -291,8 +287,8 @@ configure(allprojects.findAll { !doNotPublish.contains(it.name) && !multiplatfor
         implementation libs.kotlin.logging
         implementation libs.kotlin.coroutines
         implementation libs.kotlin.stdlib
-        implementation libs.openrndr.application
-        implementation libs.openrndr.math
+        implementation openrndrLibs.openrndr.application
+        implementation openrndrLibs.openrndr.math
         testImplementation libs.spek.dsl
         testImplementation libs.kluent
         testImplementation libs.kotlin.test
@@ -343,6 +339,7 @@ subprojects {
         tasks.withType(KotlinCompile).configureEach {
             kotlinOptions.jvmTarget = libs.versions.jvmTarget.get()
             kotlinOptions.apiVersion = libs.versions.kotlinApi.get()
+            kotlinOptions.languageVersion = libs.versions.kotlinLanguage.get()
         }
     }
 }

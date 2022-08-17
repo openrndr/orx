@@ -17,9 +17,9 @@ val demoRuntimeOnly by configurations.getting {}
 
 dependencies {
     api(libs.boofcv)
-    demoImplementation(libs.openrndr.application)
-    demoImplementation(libs.openrndr.extensions)
-    demoRuntimeOnly(libs.openrndr.gl3.core)
-    demoRuntimeOnly(libs.openrndr.gl3.natives)
+    demoImplementation(openrndrLibs.openrndr.application)
+    demoImplementation(openrndrLibs.openrndr.extensions)
+    demoRuntimeOnly(openrndrLibs.openrndr.gl3.core)
+    // FIXME!!! demoRuntimeOnly(openrndrLibs.openrndr.gl3.natives)
     demoImplementation(sourceSets.getByName("main").output)
 }
