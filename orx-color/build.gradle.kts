@@ -44,6 +44,7 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.serialization.json)
                 implementation(libs.spek.dsl)
+                implementation(libs.kluent)
             }
         }
 

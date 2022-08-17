@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation (libs.gson)
+    implementation(libs.gson)
     implementation(project(":orx-fx"))
     implementation(project(":orx-jvm:orx-keyframer"))
     implementation(project(":orx-easing"))

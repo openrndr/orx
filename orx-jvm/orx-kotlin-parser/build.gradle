@@ -6,8 +6,6 @@ plugins {
 sourceSets {
     main {
         java {
-            srcDir("src/main/java")
-            srcDir("src/main/kotlin")
             srcDir("build/generated-src/antlr")
         }
     }
@@ -22,11 +20,6 @@ generateGrammarSource {
 dependencies {
     antlr(libs.antlr.core)
     implementation(libs.antlr.runtime)
-    demoImplementation(project(":orx-camera"))
-    demoImplementation(project(":orx-jvm:orx-panel"))
-    demoImplementation(openrndrLibs.openrndr.application)
-    demoImplementation(openrndrLibs.openrndr.extensions)
-    demoRuntimeOnly(openrndrLibs.openrndr.gl3.core)
 }
 
 tasks.getByName("compileKotlin").dependsOn("generateGrammarSource")

@@ -1,33 +1,20 @@
-//plugins {
-//    id 'antlr'
-//}
-
-apply plugin: 'antlr'
+plugins {
+    id("org.openrndr.extra.convention.kotlin-jvm")
+    id("antlr")
+}
 
 sourceSets {
-    demo {
-        java {
-            srcDirs = ["src/demo/kotlin"]
-            compileClasspath += main.getCompileClasspath()
-            runtimeClasspath += main.getRuntimeClasspath()
-        }
-    }
     main {
         java {
-            srcDir("src/main/java")
-            srcDir("src/main/kotlin")
             srcDir("build/generated-src/antlr")
         }
     }
 }
 
-
-
 generateGrammarSource {
     maxHeapSize = "64m"
     arguments += ["-visitor", "-long-messages"]
     outputDirectory = file("${project.buildDir}/generated-src/antlr/org/openrndr/extra/keyframer/antlr".toString())
-
 }
 
 dependencies {
@@ -37,23 +24,12 @@ dependencies {
     implementation(project(":orx-easing"))
     implementation(libs.gson)
     implementation(libs.kotlin.reflect)
-
-    testImplementation(libs.kotlin.test)
-
     demoImplementation(project(":orx-camera"))
     demoImplementation(project(":orx-jvm:orx-panel"))
-
     demoImplementation(openrndrLibs.openrndr.application)
     demoImplementation(openrndrLibs.openrndr.extensions)
     demoRuntimeOnly(openrndrLibs.openrndr.gl3.core)
-    // FIXME!!! demoRuntimeOnly(openrndrLibs.openrndr.gl3.natives)
-
-    demoImplementation(sourceSets.getByName("main").output)
 }
 
 tasks.getByName("compileKotlin").dependsOn("generateGrammarSource")
 tasks.getByName("compileTestKotlin").dependsOn("generateTestGrammarSource")
-
-test {
-    useJUnitPlatform()
-}
