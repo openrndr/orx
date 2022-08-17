@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm")
+    org.openrndr.convention.`kotlin-jvm`
     `java-gradle-plugin`
 }
 

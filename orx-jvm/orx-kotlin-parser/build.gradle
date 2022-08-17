@@ -31,8 +31,8 @@ generateGrammarSource {
 }
 
 dependencies {
-    antlr(libs.antlr)
-    implementation(libs.antlrRuntime)
+    antlr(libs.antlr.core)
+    implementation(libs.antlr.runtime)
 
     demoImplementation(project(":orx-camera"))
     demoImplementation(project(":orx-jvm:orx-panel"))

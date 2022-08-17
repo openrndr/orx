@@ -29,6 +29,7 @@ ktor = "2.0.3"
 jgit = "5.12.0.202106070339-r"
 javaosc = "0.8"
 javaparser = "3.15.21"
+delaunator = "1.0.2"
 
 [libraries]
 kotlin-logging = { group = "io.github.microutils", name = "kotlin-logging", version.ref = "kotlinLogging" }
@@ -61,8 +62,9 @@ jgit = { group = "org.eclipse.jgit", name = "org.eclipse.jgit", version.ref = "j
 javaosc-core = { group = "com.illposed.osc", name = "javaosc-core", version.ref = "javaosc" }
 javaparser-core = { group = "com.github.javaparser", name = "javaparser-core", version.ref = "javaparser" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
-antlr = { group = "org.antlr", name = "antlr4", version.ref = "antlr" }
-antlrRuntime = { group = "org.antlr", name = "antlr4-runtime", version.ref = "antlr" }
+antlr-core = { group = "org.antlr", name = "antlr4", version.ref = "antlr" }
+antlr-runtime = { group = "org.antlr", name = "antlr4-runtime", version.ref = "antlr" }
+delaunator = { group = "com.github.ricardomatias", name = "delaunator", version.ref = "delaunator" }
 
 jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junitJupiter" }
 jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junitJupiter" }

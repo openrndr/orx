@@ -1,11 +1,8 @@
+plugins {
+    id("org.openrndr.convention.kotlin-jvm")
+}
+
 sourceSets {
-    demo {
-        java {
-            srcDirs = ["src/demo/kotlin"]
-            compileClasspath += main.getCompileClasspath()
-            runtimeClasspath += main.getRuntimeClasspath()
-        }
-    }
     wrapgen {
         java {
             srcDirs = ["src/wrapgen/kotlin"]
@@ -20,18 +17,12 @@ compileWrapgenKotlin {}
 dependencies {
     implementation(libs.gson)
     demoImplementation(openrndrLibs.openrndr.application)
-
     demoRuntimeOnly(project(":orx-jvm:orx-tensorflow-${gradle.ext.openrndrClassifier}"))
-
     demoRuntimeOnly(openrndrLibs.openrndr.gl3.core)
-    // FIXME!!! demoRuntimeOnly(openrndrLibs.openrndr.gl3.natives)
     demoRuntimeOnly(openrndrLibs.openrndr.extensions)
     demoImplementation(openrndrLibs.openrndr.ffmpeg)
-    // FIXME!!! demoRuntimeOnly(openrndrLibs.openrndr.ffmpeg.natives)
     demoImplementation(project(":orx-fx"))
-    demoImplementation(sourceSets.getByName("main").output)
     api(libs.tensorflow)
-
     // -- wrapgen
     wrapgenImplementation(libs.javaparser.core)
 }

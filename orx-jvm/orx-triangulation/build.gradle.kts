@@ -1,16 +1,10 @@
-import ScreenshotsHelper.collectScreenshots
-
 plugins {
     org.openrndr.convention.`kotlin-jvm`
 }
 
-sourceSets {
-    val demo by getting
-    collectScreenshots(project, demo) { }
-}
-
 dependencies {
-    api(libs.boofcv)
+    api(project(":orx-noise"))
+    implementation(libs.delaunator)
     demoImplementation(openrndrLibs.openrndr.application)
     demoImplementation(openrndrLibs.openrndr.extensions)
     demoRuntimeOnly(openrndrLibs.openrndr.gl3.core)

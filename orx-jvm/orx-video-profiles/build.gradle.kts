@@ -1,17 +1,11 @@
-import ScreenshotsHelper.collectScreenshots
-
 plugins {
     org.openrndr.convention.`kotlin-jvm`
 }
 
-sourceSets {
-    val demo by getting
-    collectScreenshots(project, demo) { }
-}
-
 dependencies {
-    api(libs.boofcv)
+    implementation(openrndrLibs.openrndr.ffmpeg)
     demoImplementation(openrndrLibs.openrndr.application)
     demoImplementation(openrndrLibs.openrndr.extensions)
+    demoImplementation(openrndrLibs.openrndr.ffmpeg)
     demoRuntimeOnly(openrndrLibs.openrndr.gl3.core)
 }

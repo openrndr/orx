@@ -1,11 +1,5 @@
-sourceSets {
-    demo {
-        java {
-            srcDirs = ["src/demo/kotlin"]
-            compileClasspath += main.getCompileClasspath()
-            runtimeClasspath += main.getRuntimeClasspath()
-        }
-    }
+plugins {
+    org.openrndr.convention.`kotlin-jvm`
 }
 
 dependencies {
@@ -13,15 +7,11 @@ dependencies {
     implementation(project(":orx-compositor"))
     implementation(project(":orx-image-fit"))
     implementation(project(":orx-fx"))
-
     implementation(libs.rabbitcontrol.rcp)
     implementation(libs.netty.all)
     implementation(libs.zxing.core)
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.netty)
-
     demoImplementation(openrndrLibs.openrndr.extensions)
     demoRuntimeOnly(openrndrLibs.openrndr.gl3.core)
-    // FIXME!!! demoRuntimeOnly(openrndrLibs.openrndr.gl3.natives)
-    demoImplementation(sourceSets.getByName("main").output)
 }

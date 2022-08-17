@@ -31,11 +31,11 @@ generateGrammarSource {
 }
 
 dependencies {
-    antlr(libs.antlr)
-    implementation(libs.antlrRuntime)
+    antlr(libs.antlr.core)
+    implementation(libs.antlr.runtime)
     implementation(project(":orx-noise"))
     implementation(project(":orx-easing"))
-    implementation libs.gson
+    implementation(libs.gson)
     implementation(libs.kotlin.reflect)
 
     testImplementation(libs.kotlin.test)
