@@ -38,6 +38,7 @@ kotlin {
             dependencies {
                 implementation(libs.spek.dsl)
                 runtimeOnly(libs.spek.junit5)
+                runtimeOnly(libs.kotlin.reflect)
             }
         }
 

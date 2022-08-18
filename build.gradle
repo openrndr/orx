@@ -1,20 +1,7 @@
-// root build.gradle
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
-        classpath "com.netflix.nebula:nebula-release-plugin:16.0.0"
-    }
-}
-
 plugins {
-    // remember to update all the versions here when upgrading kotlin version
-    id 'org.jetbrains.kotlin.jvm' apply false
-    id 'org.jetbrains.kotlin.multiplatform' apply false
+    alias(libs.plugins.nebula.release) apply false
+    id("org.openrndr.extra.convention.dokka")
     id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
-    id("org.openrndr.extra.convention.component-metadata-rule")
 }
 
 repositories {
@@ -44,25 +31,7 @@ def multiplatformModules = [
 
 def doNotPublish = ["openrndr-demos"]
 
-apply plugin: 'org.jetbrains.dokka'
-
-ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
-
-def openrndrUseSnapshot = isReleaseVersion
-
-allprojects {
-    group 'org.openrndr.extra'
-    repositories {
-        mavenCentral()
-        if (openrndrUseSnapshot) {
-            mavenLocal()
-        }
-        maven {
-            url = "https://maven.openrndr.org"
-        }
-    }
-
-}
+def isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 task buildMainReadme {
     doFirst {
@@ -154,7 +123,6 @@ configure(allprojects.findAll { !doNotPublish.contains(it.name) && (multiplatfor
         archiveClassifier = "javadoc"
     }
 
-
     publishing {
         publications {
             matching { it.name == "jvm" }.all { p ->
@@ -214,13 +182,11 @@ configure(allprojects.findAll { !doNotPublish.contains(it.name) && (multiplatfor
         required { isReleaseVersion && gradle.taskGraph.hasTask("publish") }
         sign publishing.publications
     }
-
 }
 
 // publishable && JVM only
 configure(allprojects.findAll { !doNotPublish.contains(it.name) && !multiplatformModules.contains(it.name) }) {
     apply plugin: 'java'
-    apply plugin: 'kotlin'
     apply plugin: 'maven-publish'
     apply plugin: 'nebula.release'
     apply plugin: 'signing'
@@ -288,27 +254,9 @@ configure(allprojects.findAll { !doNotPublish.contains(it.name) && !multiplatfor
         required { isReleaseVersion && gradle.taskGraph.hasTask("publish") }
         sign publishing.publications
     }
-
-    dependencies {
-        implementation libs.kotlin.logging
-        implementation libs.kotlin.coroutines
-        implementation libs.kotlin.stdlib
-        testImplementation libs.spek.dsl
-        testImplementation libs.kluent
-        testImplementation libs.kotlin.test
-        testRuntimeOnly libs.spek.junit5
-        testRuntimeOnly libs.kotlin.reflect
-    }
-
-
-    test {
-        useJUnitPlatform {
-            includeEngines 'spek2'
-        }
-    }
 }
 
-group = "org.openrndr"
+group = "org.openrndr.extra"
 
 nexusPublishing {
     repositories {
@@ -324,7 +272,7 @@ nexusPublishing {
 subprojects {
     // Equivalent Kotlin is: tasks.register<DependencyReportTask>("dependenciesAll") { ...
     tasks.register("dependenciesAll", DependencyReportTask) {
-        group = "help"
+        group = HelpTasksPlugin.HELP_GROUP
         description = "Displays all dependencies, including subprojects."
     }
 }

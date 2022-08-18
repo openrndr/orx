@@ -2,6 +2,7 @@ package org.openrndr.extra.convention
 
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.net.URI
 
 val libs = the<LibrariesForLibs>()
 
@@ -15,11 +16,17 @@ plugins {
 
 repositories {
     mavenCentral()
+    maven {
+        // This is needed to resolve `com.github.ricardomatias:delaunator`
+        url = URI("https://maven.openrndr.org")
+    }
+    mavenLocal()
 }
 
 group = "org.openrndr.extra"
 
 val main by sourceSets.getting
+
 @Suppress("UNUSED_VARIABLE")
 val demo by sourceSets.creating
 
@@ -45,6 +52,7 @@ tasks {
     val test by getting(Test::class) {
         useJUnitPlatform()
     }
+
     @Suppress("UNUSED_VARIABLE")
     val javadoc by getting(Javadoc::class) {
         options {

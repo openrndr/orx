@@ -11,6 +11,12 @@ sourceSets {
     }
 }
 
+tasks.test {
+    useJUnitPlatform {
+        includeEngines("spek2")
+    }
+}
+
 generateGrammarSource {
     maxHeapSize = "64m"
     arguments += ["-visitor", "-long-messages"]
@@ -26,6 +32,10 @@ dependencies {
     implementation(libs.openrndr.math)
     implementation(libs.gson)
     implementation(libs.kotlin.reflect)
+    testImplementation(libs.kluent)
+    testImplementation(libs.spek.dsl)
+    testRuntimeOnly(libs.spek.junit5)
+    testRuntimeOnly(libs.kotlin.reflect)
     demoImplementation(project(":orx-jvm:orx-panel"))
 }
 

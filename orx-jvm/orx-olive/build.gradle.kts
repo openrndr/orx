@@ -23,7 +23,9 @@ dependencies {
     implementation(libs.kotlin.scriptingJvmHost)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.scriptingJSR223)
+    implementation(libs.kotlin.coroutines)
     testImplementation(libs.kluent)
     testImplementation(libs.spek.dsl)
     testRuntimeOnly(libs.spek.junit5)
+    testRuntimeOnly(libs.kotlin.reflect)
 }

@@ -2,6 +2,7 @@ package org.openrndr.extra.convention
 
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.net.URI
 
 val libs = the<LibrariesForLibs>()
 
@@ -14,6 +15,11 @@ plugins {
 
 repositories {
     mavenCentral()
+    maven {
+        // This is needed to resolve `com.github.ricardomatias:delaunator`
+        url = URI("https://maven.openrndr.org")
+    }
+    mavenLocal()
 }
 
 group = "org.openrndr.extra"

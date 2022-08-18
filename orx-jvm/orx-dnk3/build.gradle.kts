@@ -11,6 +11,7 @@ dependencies {
     implementation(project(":orx-mesh-generators"))
     implementation(libs.openrndr.application)
     implementation(libs.openrndr.math)
+    implementation(libs.kotlin.coroutines)
     demoImplementation(project(":orx-mesh-generators"))
     demoImplementation(project(":orx-noise"))
     demoImplementation(libs.openrndr.ffmpeg)
