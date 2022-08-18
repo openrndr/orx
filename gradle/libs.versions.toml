@@ -3,6 +3,7 @@ kotlinApi = "1.6"
 kotlinLanguage = "1.6"
 kotlin = "1.6.21"
 jvmTarget = "11"
+openrndr = "0.0.0"
 kotlinxCoroutines = "1.6.4"
 kotlinLogging = "2.1.23"
 kotlinxSerialization = "1.3.2"
@@ -44,6 +45,18 @@ kotlin-scriptingJSR223 = { group = "org.jetbrains.kotlin", name = "kotlin-script
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-serialization-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-serialization", version.ref = "kotlin" }
 dokka-gradle-plugin = { group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version.ref = "dokka" }
+
+openrndr-application = { group = "org.openrndr", name = "openrndr-application", version.ref = "openrndr" }
+openrndr-extensions = { group = "org.openrndr", name = "openrndr-extensions", version.ref = "openrndr" }
+openrndr-math = { group = "org.openrndr", name = "openrndr-math", version.ref = "openrndr" }
+openrndr-shape = { group = "org.openrndr", name = "openrndr-shape", version.ref = "openrndr" }
+openrndr-draw = { group = "org.openrndr", name = "openrndr-draw", version.ref = "openrndr" }
+openrndr-event = { group = "org.openrndr", name = "openrndr-event", version.ref = "openrndr" }
+openrndr-filter = { group = "org.openrndr", name = "openrndr-filter", version.ref = "openrndr" }
+openrndr-dialogs = { group = "org.openrndr", name = "openrndr-dialogs", version.ref = "openrndr" }
+openrndr-ffmpeg = { group = "org.openrndr", name = "openrndr-ffmpeg", version.ref = "openrndr" }
+openrndr-svg = { group = "org.openrndr", name = "openrndr-svg", version.ref = "openrndr" }
+openrndr-gl3-core = { group = "org.openrndr", name = "openrndr-gl3", version.ref = "openrndr" }
 
 tensorflow = { group = "org.tensorflow", name = "tensorflow-core-api", version.ref = "tensorflow" }
 boofcv = { group = "org.boofcv", name = "boofcv-core", version.ref = "boofcv" }

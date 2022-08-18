@@ -21,11 +21,13 @@ sourceSets {
 }
 
 dependencies {
+    implementation(libs.openrndr.application)
+    implementation(libs.openrndr.math)
     implementation(libs.kotlin.reflect)
     testImplementation(libs.spek.dsl)
     testRuntimeOnly(libs.spek.junit5)
-    demoImplementation(openrndrLibs.openrndr.extensions)
-    demoImplementation(openrndrLibs.openrndr.dialogs)
+    demoImplementation(libs.openrndr.extensions)
+    demoImplementation(libs.openrndr.dialogs)
     demoImplementation(libs.gson)
-    demoRuntimeOnly(openrndrLibs.openrndr.gl3.core)
+    demoRuntimeOnly(libs.openrndr.gl3.core)
 }

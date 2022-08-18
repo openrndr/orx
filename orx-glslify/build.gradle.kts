@@ -3,6 +3,8 @@ plugins {
 }
 
 dependencies {
+    implementation(libs.openrndr.application)
+    implementation(libs.openrndr.math)
     implementation(libs.gson)
     implementation(libs.jarchivelib)
     implementation(project(":orx-noise"))

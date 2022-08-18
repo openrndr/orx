@@ -22,9 +22,9 @@ kotlin {
             dependencies {
                 implementation(project(":orx-parameters"))
                 implementation(project(":orx-shader-phrases"))
-                implementation(openrndrLibs.openrndr.application)
-                implementation(openrndrLibs.openrndr.draw)
-                implementation(openrndrLibs.openrndr.filter)
+                implementation(libs.openrndr.application)
+                implementation(libs.openrndr.draw)
+                implementation(libs.openrndr.filter)
                 implementation(libs.kotlin.reflect)
             }
         }
@@ -34,9 +34,9 @@ kotlin {
             dependencies {
                 implementation(project(":orx-camera"))
                 implementation(project(":orx-noise"))
-                implementation(openrndrLibs.openrndr.application)
-                implementation(openrndrLibs.openrndr.extensions)
-                runtimeOnly(openrndrLibs.openrndr.gl3.core)
+                implementation(libs.openrndr.application)
+                implementation(libs.openrndr.extensions)
+                runtimeOnly(libs.openrndr.gl3.core)
             }
         }
     }

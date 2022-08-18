@@ -16,11 +16,13 @@ compileWrapgenKotlin {}
 
 dependencies {
     implementation(libs.gson)
-    demoImplementation(openrndrLibs.openrndr.application)
+    implementation(libs.openrndr.application)
+    implementation(libs.openrndr.math)
+    demoImplementation(libs.openrndr.application)
     demoRuntimeOnly(project(":orx-jvm:orx-tensorflow-${gradle.ext.openrndrClassifier}"))
-    demoRuntimeOnly(openrndrLibs.openrndr.gl3.core)
-    demoRuntimeOnly(openrndrLibs.openrndr.extensions)
-    demoImplementation(openrndrLibs.openrndr.ffmpeg)
+    demoRuntimeOnly(libs.openrndr.gl3.core)
+    demoRuntimeOnly(libs.openrndr.extensions)
+    demoImplementation(libs.openrndr.ffmpeg)
     demoImplementation(project(":orx-fx"))
     api(libs.tensorflow)
     // -- wrapgen

@@ -38,9 +38,9 @@ kotlin {
                 implementation(project(":orx-shader-phrases"))
                 implementation(project(":orx-color"))
                 implementation(libs.kotlin.serialization.core)
-                implementation(openrndrLibs.openrndr.application)
-                implementation(openrndrLibs.openrndr.draw)
-                implementation(openrndrLibs.openrndr.filter)
+                implementation(libs.openrndr.application)
+                implementation(libs.openrndr.draw)
+                implementation(libs.openrndr.filter)
                 implementation(libs.kotlin.reflect)
                 api(shaderKotlin.kotlin)
             }
@@ -69,9 +69,9 @@ kotlin {
                 implementation(project(":orx-color"))
                 implementation(project(":orx-camera"))
                 implementation(project(":orx-fx"))
-                implementation(openrndrLibs.openrndr.application)
-                implementation(openrndrLibs.openrndr.extensions)
-                runtimeOnly(openrndrLibs.openrndr.gl3.core)
+                implementation(libs.openrndr.application)
+                implementation(libs.openrndr.extensions)
+                runtimeOnly(libs.openrndr.gl3.core)
             }
         }
     }

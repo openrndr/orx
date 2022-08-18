@@ -10,11 +10,13 @@ sourceSets {
 }
 
 dependencies {
+    implementation(libs.openrndr.application)
+    implementation(libs.openrndr.math)
     implementation(project(":orx-fx"))
     implementation(project(":orx-noise"))
-    implementation(openrndrLibs.openrndr.filter)
-    demoImplementation(openrndrLibs.openrndr.application)
-    demoImplementation(openrndrLibs.openrndr.extensions)
+    implementation(libs.openrndr.filter)
+    demoImplementation(libs.openrndr.application)
+    demoImplementation(libs.openrndr.extensions)
     demoRuntimeOnly(libs.slf4j.simple)
-    demoRuntimeOnly(openrndrLibs.openrndr.gl3.core)
+    demoRuntimeOnly(libs.openrndr.gl3.core)
 }

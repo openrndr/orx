@@ -13,30 +13,6 @@ val openrndrClassifier: String by (gradle as ExtensionAware).extra(
     }
 )
 
-val openrndrVersion =
-    (extra.properties["OPENRNDR.version"] as String? ?: System.getenv("OPENRNDR_VERSION"))?.replace("v", "")
-        ?: "0.5.1-SNAPSHOT"
-
-dependencyResolutionManagement {
-    versionCatalogs {
-        create("openrndrLibs") {
-            version("openrndr", openrndrVersion)
-
-            library("openrndr-application", "org.openrndr", "openrndr-application").versionRef("openrndr")
-            library("openrndr-extensions", "org.openrndr", "openrndr-extensions").versionRef("openrndr")
-            library("openrndr-math", "org.openrndr", "openrndr-math").versionRef("openrndr")
-            library("openrndr-shape", "org.openrndr", "openrndr-shape").versionRef("openrndr")
-            library("openrndr-draw", "org.openrndr", "openrndr-draw").versionRef("openrndr")
-            library("openrndr-event", "org.openrndr", "openrndr-event").versionRef("openrndr")
-            library("openrndr-filter", "org.openrndr", "openrndr-filter").versionRef("openrndr")
-            library("openrndr-dialogs", "org.openrndr", "openrndr-dialogs").versionRef("openrndr")
-            library("openrndr-ffmpeg", "org.openrndr", "openrndr-ffmpeg").versionRef("openrndr")
-            library("openrndr-svg", "org.openrndr", "openrndr-svg").versionRef("openrndr")
-            library("openrndr-gl3-core", "org.openrndr", "openrndr-gl3").versionRef("openrndr")
-        }
-    }
-}
-
 include(
     listOf(
         "openrndr-demos",

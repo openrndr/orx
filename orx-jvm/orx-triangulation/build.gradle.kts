@@ -4,8 +4,10 @@ plugins {
 
 dependencies {
     api(project(":orx-noise"))
+    implementation(libs.openrndr.shape)
+    implementation(libs.openrndr.math)
     implementation(libs.delaunator)
-    demoImplementation(openrndrLibs.openrndr.application)
-    demoImplementation(openrndrLibs.openrndr.extensions)
-    demoRuntimeOnly(openrndrLibs.openrndr.gl3.core)
+    demoImplementation(libs.openrndr.application)
+    demoImplementation(libs.openrndr.extensions)
+    demoRuntimeOnly(libs.openrndr.gl3.core)
 }

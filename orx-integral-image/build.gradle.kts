@@ -4,4 +4,6 @@ plugins {
 
 dependencies {
     implementation(project(":orx-fx"))
+    implementation(libs.openrndr.application)
+    implementation(libs.openrndr.math)
 }

@@ -27,9 +27,9 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.kotlin.serialization.core)
-                implementation(openrndrLibs.openrndr.math)
-                implementation(openrndrLibs.openrndr.shape)
-                implementation(openrndrLibs.openrndr.draw)
+                implementation(libs.openrndr.math)
+                implementation(libs.openrndr.shape)
+                implementation(libs.openrndr.draw)
                 implementation(project(":orx-hash-grid"))
             }
         }
@@ -55,9 +55,9 @@ kotlin {
             dependencies {
                 implementation(project(":orx-camera"))
                 implementation(project(":orx-hash-grid"))
-                implementation(openrndrLibs.openrndr.application)
-                implementation(openrndrLibs.openrndr.extensions)
-                runtimeOnly(openrndrLibs.openrndr.gl3.core)
+                implementation(libs.openrndr.application)
+                implementation(libs.openrndr.extensions)
+                runtimeOnly(libs.openrndr.gl3.core)
             }
         }
     }

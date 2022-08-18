@@ -3,13 +3,15 @@ plugins {
 }
 
 dependencies {
+    implementation(libs.openrndr.application)
+    implementation(libs.openrndr.math)
     implementation(libs.jgit)
     demoImplementation(project(":orx-camera"))
     demoImplementation(project(":orx-mesh-generators"))
     demoImplementation(project(":orx-noise"))
-    demoImplementation(openrndrLibs.openrndr.application)
-    demoImplementation(openrndrLibs.openrndr.extensions)
-    demoImplementation(openrndrLibs.openrndr.ffmpeg)
-    demoImplementation(openrndrLibs.openrndr.filter)
-    demoRuntimeOnly(openrndrLibs.openrndr.gl3.core)
+    demoImplementation(libs.openrndr.application)
+    demoImplementation(libs.openrndr.extensions)
+    demoImplementation(libs.openrndr.ffmpeg)
+    demoImplementation(libs.openrndr.filter)
+    demoRuntimeOnly(libs.openrndr.gl3.core)
 }

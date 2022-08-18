@@ -9,7 +9,9 @@ tasks.withType<KotlinCompile> {
 }
 
 dependencies {
-    demoImplementation(openrndrLibs.openrndr.application)
-    demoImplementation(openrndrLibs.openrndr.extensions)
-    demoRuntimeOnly(openrndrLibs.openrndr.gl3.core)
+    implementation(libs.openrndr.application)
+    implementation(libs.openrndr.math)
+    demoImplementation(libs.openrndr.application)
+    demoImplementation(libs.openrndr.extensions)
+    demoRuntimeOnly(libs.openrndr.gl3.core)
 }

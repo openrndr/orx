@@ -9,9 +9,9 @@ kotlin {
             dependencies {
                 implementation(project(":orx-parameters"))
                 implementation(project(":orx-shader-phrases"))
-                implementation(openrndrLibs.openrndr.application)
-                implementation(openrndrLibs.openrndr.draw)
-                implementation(openrndrLibs.openrndr.filter)
+                implementation(libs.openrndr.application)
+                implementation(libs.openrndr.draw)
+                implementation(libs.openrndr.filter)
                 implementation(libs.kotlin.reflect)
             }
         }

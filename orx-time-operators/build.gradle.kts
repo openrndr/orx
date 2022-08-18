@@ -3,9 +3,11 @@ plugins {
 }
 
 dependencies {
+    implementation(libs.openrndr.application)
+    implementation(libs.openrndr.math)
     implementation(project(":orx-parameters"))
     demoImplementation(project(":orx-camera"))
-    demoImplementation(openrndrLibs.openrndr.application)
-    demoImplementation(openrndrLibs.openrndr.extensions)
-    demoRuntimeOnly(openrndrLibs.openrndr.gl3.core)
+    demoImplementation(libs.openrndr.application)
+    demoImplementation(libs.openrndr.extensions)
+    demoRuntimeOnly(libs.openrndr.gl3.core)
 }

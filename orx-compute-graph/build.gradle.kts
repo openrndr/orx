@@ -13,7 +13,7 @@ kotlin {
         @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
-                api(openrndrLibs.openrndr.event)
+                api(libs.openrndr.event)
                 implementation(libs.kotlin.coroutines)
             }
         }

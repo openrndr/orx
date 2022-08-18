@@ -17,6 +17,8 @@ tasks.test {
 dependencies {
     implementation(project(":orx-jvm:orx-file-watcher"))
     implementation(project(":orx-jvm:orx-kotlin-parser"))
+    implementation(libs.openrndr.application)
+    implementation(libs.openrndr.math)
     implementation(libs.kotlin.scriptingJvm)
     implementation(libs.kotlin.scriptingJvmHost)
     implementation(libs.kotlin.reflect)
@@ -25,7 +27,7 @@ dependencies {
     testImplementation(libs.spek.dsl)
     testRuntimeOnly(libs.spek.junit5)
     demoImplementation(project(":orx-camera"))
-    demoImplementation(openrndrLibs.openrndr.application)
-    demoImplementation(openrndrLibs.openrndr.extensions)
-    demoRuntimeOnly(openrndrLibs.openrndr.gl3.core)
+    demoImplementation(libs.openrndr.application)
+    demoImplementation(libs.openrndr.extensions)
+    demoRuntimeOnly(libs.openrndr.gl3.core)
 }

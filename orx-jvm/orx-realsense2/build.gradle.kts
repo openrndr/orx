@@ -3,9 +3,11 @@ plugins {
 }
 
 dependencies {
+    implementation(libs.openrndr.application)
+    implementation(libs.openrndr.math)
     api(libs.librealsense)
-    demoImplementation(openrndrLibs.openrndr.application)
-    demoImplementation(openrndrLibs.openrndr.extensions)
+    demoImplementation(libs.openrndr.application)
+    demoImplementation(libs.openrndr.extensions)
     demoRuntimeOnly(project(":orx-jvm:orx-realsense2-${(gradle as ExtensionAware).extra["openrndrClassifier"]}"))
-    demoRuntimeOnly(openrndrLibs.openrndr.gl3.core)
+    demoRuntimeOnly(libs.openrndr.gl3.core)
 }

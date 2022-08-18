@@ -5,4 +5,6 @@ plugins {
 dependencies {
     implementation(libs.gson)
     implementation(project(":orx-noise"))
+    implementation(libs.openrndr.application)
+    implementation(libs.openrndr.math)
 }

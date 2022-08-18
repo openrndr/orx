@@ -22,13 +22,15 @@ dependencies {
     implementation(libs.antlr.runtime)
     implementation(project(":orx-noise"))
     implementation(project(":orx-easing"))
+    implementation(libs.openrndr.application)
+    implementation(libs.openrndr.math)
     implementation(libs.gson)
     implementation(libs.kotlin.reflect)
     demoImplementation(project(":orx-camera"))
     demoImplementation(project(":orx-jvm:orx-panel"))
-    demoImplementation(openrndrLibs.openrndr.application)
-    demoImplementation(openrndrLibs.openrndr.extensions)
-    demoRuntimeOnly(openrndrLibs.openrndr.gl3.core)
+    demoImplementation(libs.openrndr.application)
+    demoImplementation(libs.openrndr.extensions)
+    demoRuntimeOnly(libs.openrndr.gl3.core)
 }
 
 tasks.getByName("compileKotlin").dependsOn("generateGrammarSource")

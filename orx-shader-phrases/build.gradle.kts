@@ -26,8 +26,8 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.kotlin.serialization.core)
-                implementation(openrndrLibs.openrndr.application)
-                implementation(openrndrLibs.openrndr.draw)
+                implementation(libs.openrndr.application)
+                implementation(libs.openrndr.draw)
                 implementation(libs.kotlin.reflect)
                 api(shaderKotlin.kotlin)
             }
@@ -56,9 +56,9 @@ kotlin {
         val jvmDemo by getting {
             dependencies {
                 implementation(project(":orx-camera"))
-                implementation(openrndrLibs.openrndr.application)
-                implementation(openrndrLibs.openrndr.extensions)
-                runtimeOnly(openrndrLibs.openrndr.gl3.core)
+                implementation(libs.openrndr.application)
+                implementation(libs.openrndr.extensions)
+                runtimeOnly(libs.openrndr.gl3.core)
             }
         }
     }

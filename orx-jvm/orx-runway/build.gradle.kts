@@ -3,10 +3,12 @@ plugins {
 }
 
 dependencies {
+    implementation(libs.openrndr.application)
+    implementation(libs.openrndr.math)
     implementation(libs.gson)
-    demoImplementation(openrndrLibs.openrndr.application)
-    demoRuntimeOnly(openrndrLibs.openrndr.gl3.core)
-    demoRuntimeOnly(openrndrLibs.openrndr.extensions)
-    demoImplementation(openrndrLibs.openrndr.ffmpeg)
+    demoImplementation(libs.openrndr.application)
+    demoRuntimeOnly(libs.openrndr.gl3.core)
+    demoRuntimeOnly(libs.openrndr.extensions)
+    demoImplementation(libs.openrndr.ffmpeg)
     demoImplementation(project(":orx-fx"))
 }
