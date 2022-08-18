@@ -2,22 +2,22 @@ plugins {
     `kotlin-dsl`
 }
 
-sourceSets {
-    val preload by creating {
-        this.java {
-            srcDir("src/preload/kotlin")
-        }
-    }
-}
+val preload: SourceSet by sourceSets.creating
 
 repositories {
     mavenCentral()
     mavenLocal()
 }
 
-val openrndrVersion =
-    (findProperty("OPENRNDR.version")?.toString() ?: System.getenv("OPENRNDR_VERSION"))?.replace("v", "")
+val openrndrVersion: String =
+    (extra.properties["OPENRNDR.version"] as String? ?: System.getenv("OPENRNDR_VERSION"))?.removePrefix("v")
         ?: "0.5.1-SNAPSHOT"
+
+configurations.all {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "org.openrndr") useVersion(openrndrVersion)
+    }
+}
 
 dependencies {
     implementation(libs.kotlin.gradle.plugin)
@@ -25,9 +25,8 @@ dependencies {
     implementation(libs.kotlin.serialization.gradle.plugin)
     // https://github.com/gradle/gradle/issues/15383#issuecomment-779893192
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
-    val preloadImplementation by configurations.getting
-    preloadImplementation("org.openrndr:openrndr-application:$openrndrVersion")
-    preloadImplementation("org.openrndr:openrndr-extensions:$openrndrVersion")
+    "preloadImplementation"(libs.openrndr.application)
+    "preloadImplementation"(libs.openrndr.extensions)
 }
 
 tasks.getByName("compileKotlin").dependsOn("compilePreloadKotlin")
