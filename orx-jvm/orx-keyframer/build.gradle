@@ -26,7 +26,6 @@ dependencies {
     implementation(libs.openrndr.math)
     implementation(libs.gson)
     implementation(libs.kotlin.reflect)
-    demoImplementation(project(":orx-camera"))
     demoImplementation(project(":orx-jvm:orx-panel"))
 }
 

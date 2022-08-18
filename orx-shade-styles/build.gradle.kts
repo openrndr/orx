@@ -2,7 +2,6 @@ import ScreenshotsHelper.collectScreenshots
 
 plugins {
     org.openrndr.extra.convention.`kotlin-multiplatform`
-    kotlin("plugin.serialization")
 }
 
 kotlin {
@@ -24,7 +23,6 @@ kotlin {
                 implementation(project(":orx-parameters"))
                 implementation(project(":orx-shader-phrases"))
                 implementation(project(":orx-color"))
-                implementation(libs.kotlin.serialization.core)
                 implementation(libs.openrndr.application)
                 implementation(libs.openrndr.draw)
                 implementation(libs.openrndr.filter)
@@ -32,12 +30,6 @@ kotlin {
             }
         }
 
-        @Suppress("UNUSED_VARIABLE")
-        val commonTest by getting {
-            dependencies {
-                implementation(libs.kotlin.serialization.json)
-            }
-        }
 
         @Suppress("UNUSED_VARIABLE")
         val jvmDemo by getting {

@@ -1,6 +1,5 @@
 plugins {
     org.openrndr.extra.convention.`kotlin-multiplatform`
-    kotlin("plugin.serialization")
 }
 
 kotlin {
@@ -21,17 +20,10 @@ kotlin {
             }
         }
 
-        @Suppress("UNUSED_VARIABLE")
-        val commonTest by getting {
-            dependencies {
-                implementation(libs.kotlin.serialization.json)
-            }
-        }
 
         @Suppress("UNUSED_VARIABLE")
         val jvmTest by getting {
             dependencies {
-                implementation(libs.kotlin.serialization.json)
                 implementation(libs.kluent)
                 implementation(libs.spek.dsl)
                 runtimeOnly(libs.spek.junit5)

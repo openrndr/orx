@@ -46,7 +46,6 @@ kotlin {
         @Suppress("UNUSED_VARIABLE")
         val jvmTest by getting {
             dependencies {
-                implementation(libs.kotlin.serialization.json)
                 implementation(libs.kluent)
                 implementation(libs.spek.dsl)
                 runtimeOnly(libs.spek.junit5)

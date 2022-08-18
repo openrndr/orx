@@ -1,6 +1,5 @@
 plugins {
     org.openrndr.extra.convention.`kotlin-multiplatform`
-    kotlin("plugin.serialization")
 }
 
 kotlin {

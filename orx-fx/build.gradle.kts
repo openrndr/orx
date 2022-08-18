@@ -2,7 +2,6 @@ import ScreenshotsHelper.collectScreenshots
 
 plugins {
     org.openrndr.extra.convention.`kotlin-multiplatform`
-    kotlin("plugin.serialization")
 }
 
 val embedShaders = tasks.register<EmbedShadersTask>("embedShaders") {
@@ -37,7 +36,6 @@ kotlin {
                 implementation(project(":orx-parameters"))
                 implementation(project(":orx-shader-phrases"))
                 implementation(project(":orx-color"))
-                implementation(libs.kotlin.serialization.core)
                 implementation(libs.openrndr.application)
                 implementation(libs.openrndr.draw)
                 implementation(libs.openrndr.filter)
@@ -47,17 +45,10 @@ kotlin {
             dependsOn(shaderKotlin)
         }
 
-        @Suppress("UNUSED_VARIABLE")
-        val commonTest by getting {
-            dependencies {
-                implementation(libs.kotlin.serialization.json)
-            }
-        }
 
         @Suppress("UNUSED_VARIABLE")
         val jvmTest by getting {
             dependencies {
-                implementation(libs.kotlin.serialization.json)
                 implementation(libs.spek.dsl)
                 implementation(libs.kluent)
             }
@@ -67,7 +58,6 @@ kotlin {
         val jvmDemo by getting {
             dependencies {
                 implementation(project(":orx-color"))
-                implementation(project(":orx-camera"))
                 implementation(project(":orx-fx"))
             }
         }

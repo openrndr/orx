@@ -26,5 +26,4 @@ dependencies {
     testImplementation(libs.kluent)
     testImplementation(libs.spek.dsl)
     testRuntimeOnly(libs.spek.junit5)
-    demoImplementation(project(":orx-camera"))
 }

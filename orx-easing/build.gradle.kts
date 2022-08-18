@@ -2,7 +2,6 @@ import ScreenshotsHelper.collectScreenshots
 
 plugins {
     org.openrndr.extra.convention.`kotlin-multiplatform`
-    kotlin("plugin.serialization")
 }
 
 kotlin {
@@ -22,7 +21,6 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(project(":orx-parameters"))
-                implementation(libs.kotlin.serialization.core)
                 implementation(libs.openrndr.application)
                 implementation(libs.openrndr.draw)
                 implementation(libs.openrndr.filter)
@@ -33,7 +31,6 @@ kotlin {
         @Suppress("UNUSED_VARIABLE")
         val jvmDemo by getting {
             dependencies {
-                implementation(project(":orx-camera"))
                 implementation(project(":orx-shapes"))
             }
         }

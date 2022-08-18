@@ -4,7 +4,6 @@ plugins {
 
 dependencies {
     demoImplementation(project(":orx-mesh-generators"))
-    demoImplementation(project(":orx-camera"))
     demoImplementation(project(":orx-parameters"))
     demoImplementation(project(":orx-noise"))
     demoImplementation(project(":orx-jvm:orx-gui"))

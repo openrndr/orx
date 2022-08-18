@@ -1,6 +1,5 @@
 plugins {
     org.openrndr.extra.convention.`kotlin-multiplatform`
-    kotlin("plugin.serialization")
 }
 
 kotlin {
@@ -12,7 +11,6 @@ kotlin {
                 implementation(project(":orx-shader-phrases"))
                 implementation(project(":orx-compute-graph"))
                 implementation(project(":orx-image-fit"))
-                implementation(libs.kotlin.serialization.core)
                 implementation(libs.openrndr.application)
                 implementation(libs.openrndr.draw)
                 implementation(libs.openrndr.filter)

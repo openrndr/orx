@@ -2,7 +2,6 @@ import ScreenshotsHelper.collectScreenshots
 
 plugins {
     org.openrndr.extra.convention.`kotlin-multiplatform`
-    kotlin("plugin.serialization")
 }
 
 kotlin {
@@ -26,7 +25,6 @@ kotlin {
         @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
-                implementation(libs.kotlin.serialization.core)
                 implementation(libs.openrndr.math)
                 implementation(libs.openrndr.shape)
                 implementation(libs.openrndr.draw)
@@ -34,17 +32,10 @@ kotlin {
             }
         }
 
-        @Suppress("UNUSED_VARIABLE")
-        val commonTest by getting {
-            dependencies {
-                implementation(libs.kotlin.serialization.json)
-            }
-        }
 
         @Suppress("UNUSED_VARIABLE")
         val jvmTest by getting {
             dependencies {
-                implementation(libs.kotlin.serialization.json)
                 implementation(libs.spek.dsl)
                 runtimeOnly(libs.spek.junit5)
             }
@@ -53,7 +44,6 @@ kotlin {
         @Suppress("UNUSED_VARIABLE")
         val jvmDemo by getting {
             dependencies {
-                implementation(project(":orx-camera"))
                 implementation(project(":orx-hash-grid"))
             }
         }

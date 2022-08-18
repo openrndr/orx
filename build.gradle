@@ -165,7 +165,7 @@ configure(allprojects.findAll { !doNotPublish.contains(it.name) && (multiplatfor
             all {
                 versionMapping {
                     allVariants {
-                        fromResolutionOf("default")
+                        fromResolutionOf("allSourceSetsRuntimeDependenciesMetadata")
                     }
                 }
                 pom {

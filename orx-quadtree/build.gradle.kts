@@ -32,7 +32,6 @@ kotlin {
         @Suppress("UNUSED_VARIABLE")
         val jvmDemo by getting {
             dependencies {
-                implementation(project(":orx-camera"))
                 implementation(project(":orx-noise"))
             }
         }
