@@ -13,7 +13,7 @@ kotlin {
             defaultSourceSet {
                 kotlin.srcDir("src/demo/kotlin")
             }
-            collectScreenshots {  }
+            collectScreenshots { }
         }
     }
 
@@ -53,9 +53,6 @@ kotlin {
             dependencies {
                 implementation(project(":orx-fx"))
                 implementation(project(":orx-camera"))
-                implementation(libs.openrndr.application)
-                implementation(libs.openrndr.extensions)
-                runtimeOnly(libs.openrndr.gl3.core)
             }
         }
     }

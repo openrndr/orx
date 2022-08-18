@@ -13,7 +13,4 @@ dependencies {
     implementation(libs.openrndr.application)
     implementation(libs.openrndr.math)
     api(libs.boofcv)
-    demoImplementation(libs.openrndr.application)
-    demoImplementation(libs.openrndr.extensions)
-    demoRuntimeOnly(libs.openrndr.gl3.core)
 }

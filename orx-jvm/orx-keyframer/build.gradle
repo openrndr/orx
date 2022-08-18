@@ -28,9 +28,6 @@ dependencies {
     implementation(libs.kotlin.reflect)
     demoImplementation(project(":orx-camera"))
     demoImplementation(project(":orx-jvm:orx-panel"))
-    demoImplementation(libs.openrndr.application)
-    demoImplementation(libs.openrndr.extensions)
-    demoRuntimeOnly(libs.openrndr.gl3.core)
 }
 
 tasks.getByName("compileKotlin").dependsOn("generateGrammarSource")

@@ -10,9 +10,6 @@ dependencies {
     demoImplementation(project(":orx-noise"))
     demoImplementation(project(":orx-jvm:orx-gui"))
     demoImplementation(project(":orx-compositor"))
-    demoImplementation(libs.openrndr.application)
-    demoImplementation(libs.openrndr.extensions)
     demoImplementation(libs.openrndr.svg)
     demoImplementation(libs.openrndr.ffmpeg)
-    demoRuntimeOnly(libs.openrndr.gl3.core)
 }

@@ -19,8 +19,5 @@ dependencies {
     implementation(libs.openrndr.dialogs)
     implementation(libs.gson)
     implementation(libs.kotlin.reflect)
-    demoImplementation(libs.openrndr.application)
-    demoImplementation(libs.openrndr.extensions)
     demoRuntimeOnly(libs.slf4j.simple)
-    demoRuntimeOnly(libs.openrndr.gl3.core)
 }

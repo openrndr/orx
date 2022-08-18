@@ -6,9 +6,6 @@ dependencies {
     implementation(libs.openrndr.application)
     implementation(libs.openrndr.math)
     implementation(libs.gson)
-    demoImplementation(libs.openrndr.application)
-    demoRuntimeOnly(libs.openrndr.gl3.core)
-    demoRuntimeOnly(libs.openrndr.extensions)
     demoImplementation(libs.openrndr.ffmpeg)
     demoImplementation(project(":orx-fx"))
 }

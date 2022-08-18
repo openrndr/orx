@@ -10,9 +10,6 @@ dependencies {
     demoImplementation(project(":orx-jvm:orx-gui"))
     demoImplementation(project(":orx-shader-phrases"))
     demoImplementation(libs.slf4j.simple)
-    demoImplementation(libs.openrndr.application)
-    demoImplementation(libs.openrndr.extensions)
     demoImplementation(libs.openrndr.ffmpeg)
     demoImplementation(libs.openrndr.svg)
-    demoRuntimeOnly(libs.openrndr.gl3.core)
 }

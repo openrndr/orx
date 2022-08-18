@@ -56,9 +56,6 @@ kotlin {
         val jvmDemo by getting {
             dependencies {
                 implementation(project(":orx-camera"))
-                implementation(libs.openrndr.application)
-                implementation(libs.openrndr.extensions)
-                runtimeOnly(libs.openrndr.gl3.core)
             }
         }
     }

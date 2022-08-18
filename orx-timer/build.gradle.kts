@@ -5,7 +5,4 @@ plugins {
 dependencies {
     implementation(libs.openrndr.application)
     implementation(libs.openrndr.math)
-    demoImplementation(libs.openrndr.application)
-    demoImplementation(libs.openrndr.extensions)
-    demoRuntimeOnly(libs.openrndr.gl3.core)
 }

@@ -26,8 +26,6 @@ dependencies {
     implementation(libs.kotlin.reflect)
     testImplementation(libs.spek.dsl)
     testRuntimeOnly(libs.spek.junit5)
-    demoImplementation(libs.openrndr.extensions)
     demoImplementation(libs.openrndr.dialogs)
     demoImplementation(libs.gson)
-    demoRuntimeOnly(libs.openrndr.gl3.core)
 }

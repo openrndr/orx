@@ -34,9 +34,6 @@ kotlin {
             dependencies {
                 implementation(project(":orx-camera"))
                 implementation(project(":orx-noise"))
-                implementation(libs.openrndr.application)
-                implementation(libs.openrndr.extensions)
-                runtimeOnly(libs.openrndr.gl3.core)
             }
         }
     }

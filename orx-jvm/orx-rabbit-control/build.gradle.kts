@@ -14,6 +14,4 @@ dependencies {
     implementation(libs.zxing.core)
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.netty)
-    demoImplementation(libs.openrndr.extensions)
-    demoRuntimeOnly(libs.openrndr.gl3.core)
 }

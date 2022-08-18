@@ -1,14 +1,12 @@
 package org.openrndr.extra.convention
 
-import org.gradle.internal.component.external.model.DefaultModuleComponentSelector
-
 addHostMachineAttributesToRuntimeConfigurations()
 
 val openrndrVersion: String =
     (extra.properties["OPENRNDR.version"] as String? ?: System.getenv("OPENRNDR_VERSION"))?.removePrefix("v")
         ?: "0.5.1-SNAPSHOT"
 
- val openrndrModules = listOf(
+val openrndrModules = arrayOf(
     "openrndr-application",
     "openrndr-extensions",
     "openrndr-math",
@@ -20,12 +18,10 @@ val openrndrVersion: String =
     "openrndr-ffmpeg",
     "openrndr-svg",
     "openrndr-gl3"
-)
+).map { "org.openrndr:$it:$openrndrVersion" }.toTypedArray()
 
 configurations.all {
-    for (module in openrndrModules) {
-        resolutionStrategy.force("org.openrndr:$module:$openrndrVersion")
-    }
+    resolutionStrategy.force(*openrndrModules)
 }
 
 dependencies {

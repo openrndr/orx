@@ -11,8 +11,5 @@ dependencies {
     implementation(libs.openrndr.application)
     implementation(libs.openrndr.math)
     implementation(libs.kotlin.reflect)
-    demoImplementation(libs.openrndr.application)
-    demoImplementation(libs.openrndr.extensions)
     demoRuntimeOnly(libs.slf4j.simple)
-    demoRuntimeOnly(libs.openrndr.gl3.core)
 }

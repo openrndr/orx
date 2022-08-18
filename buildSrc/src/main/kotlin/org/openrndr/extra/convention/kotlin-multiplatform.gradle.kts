@@ -72,5 +72,14 @@ kotlin {
                 runtimeOnly(libs.bundles.jupiter)
             }
         }
+
+        @Suppress("UNUSED_VARIABLE")
+        val jvmDemo by getting {
+            dependencies {
+                implementation(libs.openrndr.application)
+                implementation(libs.openrndr.extensions)
+                runtimeOnly(libs.openrndr.gl3.core)
+            }
+        }
     }
 }

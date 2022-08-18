@@ -7,7 +7,4 @@ dependencies {
     implementation(libs.openrndr.math)
     implementation(project(":orx-parameters"))
     demoImplementation(project(":orx-camera"))
-    demoImplementation(libs.openrndr.application)
-    demoImplementation(libs.openrndr.extensions)
-    demoRuntimeOnly(libs.openrndr.gl3.core)
 }

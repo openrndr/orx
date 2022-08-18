@@ -36,9 +36,6 @@ kotlin {
             dependencies {
                 implementation(project(":orx-shapes"))
                 implementation(project(":orx-image-fit"))
-                implementation(libs.openrndr.application)
-                implementation(libs.openrndr.extensions)
-                runtimeOnly(libs.openrndr.gl3.core)
             }
         }
     }

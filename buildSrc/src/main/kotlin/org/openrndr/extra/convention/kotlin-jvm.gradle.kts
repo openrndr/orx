@@ -28,6 +28,9 @@ dependencies {
     implementation(libs.kotlin.logging)
     testImplementation(libs.kotlin.test)
     "demoImplementation"(main.output.classesDirs + main.runtimeClasspath)
+    "demoImplementation"(libs.openrndr.application)
+    "demoImplementation"(libs.openrndr.extensions)
+    "demoRuntimeOnly"(libs.openrndr.gl3.core)
 }
 
 kotlin {

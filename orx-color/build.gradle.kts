@@ -13,7 +13,7 @@ kotlin {
             defaultSourceSet {
                 kotlin.srcDir("src/demo/kotlin")
             }
-            collectScreenshots {  }
+            collectScreenshots { }
         }
         testRuns["test"].executionTask {
             useJUnitPlatform {
@@ -60,9 +60,6 @@ kotlin {
                 implementation(project(":orx-mesh-generators"))
                 implementation(project(":orx-color"))
                 implementation(project(":orx-jvm:orx-gui"))
-                implementation(libs.openrndr.application)
-                implementation(libs.openrndr.extensions)
-                runtimeOnly(libs.openrndr.gl3.core)
             }
         }
     }

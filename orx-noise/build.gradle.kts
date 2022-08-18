@@ -13,7 +13,7 @@ kotlin {
             defaultSourceSet {
                 kotlin.srcDir("src/demo/kotlin")
             }
-            collectScreenshots {  }
+            collectScreenshots { }
         }
         testRuns["test"].executionTask {
             useJUnitPlatform {
@@ -55,9 +55,6 @@ kotlin {
             dependencies {
                 implementation(project(":orx-camera"))
                 implementation(project(":orx-hash-grid"))
-                implementation(libs.openrndr.application)
-                implementation(libs.openrndr.extensions)
-                runtimeOnly(libs.openrndr.gl3.core)
             }
         }
     }

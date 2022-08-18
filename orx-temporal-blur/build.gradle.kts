@@ -8,7 +8,4 @@ dependencies {
     implementation(project(":orx-noise"))
     implementation(project(":orx-fx"))
     implementation(libs.openrndr.filter)
-    demoImplementation(libs.openrndr.application)
-    demoImplementation(libs.openrndr.extensions)
-    demoRuntimeOnly(libs.openrndr.gl3.core)
 }
