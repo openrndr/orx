@@ -2,7 +2,6 @@ import ScreenshotsHelper.collectScreenshots
 
 plugins {
     org.openrndr.extra.convention.`kotlin-multiplatform`
-    kotlin("plugin.serialization")
 }
 
 kotlin {
@@ -23,7 +22,6 @@ kotlin {
             dependencies {
                 implementation(project(":orx-parameters"))
                 implementation(project(":orx-shader-phrases"))
-                implementation(libs.kotlin.serialization.core)
                 implementation(openrndrLibs.openrndr.application)
                 implementation(openrndrLibs.openrndr.draw)
                 implementation(openrndrLibs.openrndr.filter)

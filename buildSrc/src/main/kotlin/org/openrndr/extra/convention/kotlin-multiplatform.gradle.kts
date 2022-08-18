@@ -33,8 +33,10 @@ kotlin {
             val main by getting
             @Suppress("UNUSED_VARIABLE")
             val demo by creating {
-                dependencies {
-                    implementation(main.runtimeDependencyFiles + main.output.classesDirs)
+                defaultSourceSet {
+                    dependencies {
+                        implementation(main.output.allOutputs)
+                    }
                 }
             }
         }
@@ -65,18 +67,10 @@ kotlin {
         }
 
         @Suppress("UNUSED_VARIABLE")
-        val jvmMain by getting
-
-        @Suppress("UNUSED_VARIABLE")
         val jvmTest by getting {
             dependencies {
                 runtimeOnly(libs.bundles.jupiter)
             }
-        }
-
-        @Suppress("UNUSED_VARIABLE")
-        val jvmDemo by getting {
-            dependsOn(jvmMain)
         }
     }
 }
