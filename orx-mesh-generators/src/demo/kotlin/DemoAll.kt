@@ -18,7 +18,7 @@ fun main() {
                 boxMesh(1.0, 1.0, 1.0),
                 sphereMesh(radius = 0.5),
                 dodecahedronMesh(0.5),
-                cylinderMesh(radius = 0.5, length = 1.0),
+                cylinderMesh(radius = 0.5, length = 1.0, center = true),
                 planeMesh(Vector3.ZERO, Vector3.UNIT_X, Vector3.UNIT_Y),
                 capMesh(
                     15, 0.5,

@@ -15,7 +15,7 @@ dependencies {
     api project(":orx-noise")
 
     implementation("com.github.ricardomatias:delaunator:$delaunatorVersion")
-
+    demoImplementation project(":orx-shapes")
     demoImplementation(libs.openrndr.application)
     demoImplementation(libs.openrndr.extensions)
     demoRuntimeOnly(libs.openrndr.gl3.core)

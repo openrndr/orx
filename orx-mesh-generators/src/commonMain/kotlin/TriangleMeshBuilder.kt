@@ -13,7 +13,7 @@ import org.openrndr.math.transforms.rotate
 import org.openrndr.shape.Shape
 import org.openrndr.utils.buffer.MPPBuffer
 
-class GeneratorBuffer {
+class TriangleMeshBuilder {
     var transform = Matrix44.IDENTITY
         set(value) {
             field = value
@@ -48,14 +48,14 @@ class GeneratorBuffer {
         transform = transformStack.pop()
     }
 
-    fun isolated(builder: GeneratorBuffer.() -> Unit) {
+    fun isolated(builder: TriangleMeshBuilder.() -> Unit) {
         pushTransform()
         builder()
         popTransform()
     }
 
     class VertexData(val position: Vector3, val normal: Vector3, val texCoord: Vector2, val color: ColorRGBa) {
-        fun transform(transform: Matrix44, normalTransform: Matrix44) : VertexData {
+        fun transform(transform: Matrix44, normalTransform: Matrix44): VertexData {
             return VertexData((transform * position.xyz1).xyz, (normalTransform * normal.xyz0).xyz, texCoord, color)
         }
     }
@@ -66,7 +66,7 @@ class GeneratorBuffer {
         data.add(VertexData(position, normal, texCoord, color).transform(transform, normalTransform))
     }
 
-    fun concat(other: GeneratorBuffer) {
+    fun concat(other: TriangleMeshBuilder) {
         data.addAll(other.data)
     }
 
@@ -98,11 +98,11 @@ class GeneratorBuffer {
     }
 }
 
-fun GeneratorBuffer.sphere(sides: Int, segments: Int, radius: Double, invert: Boolean = false) {
+fun TriangleMeshBuilder.sphere(sides: Int, segments: Int, radius: Double, invert: Boolean = false) {
     generateSphere(sides, segments, radius, invert, this::write)
 }
 
-fun GeneratorBuffer.hemisphere(sides: Int, segments: Int, radius: Double, invert: Boolean = false) {
+fun TriangleMeshBuilder.hemisphere(sides: Int, segments: Int, radius: Double, invert: Boolean = false) {
     generateHemisphere(sides, segments, radius, invert, this::write)
 }
 
@@ -112,11 +112,11 @@ enum class GridCoordinates {
     BIPOLAR,
 }
 
-fun GeneratorBuffer.grid(
+fun TriangleMeshBuilder.grid(
     width: Int,
     height: Int,
     coordinates: GridCoordinates = GridCoordinates.BIPOLAR,
-    builder: GeneratorBuffer.(u: Double, v: Double) -> Unit
+    builder: TriangleMeshBuilder.(u: Double, v: Double) -> Unit
 ) {
     for (v in 0 until height) {
         for (u in 0 until width) {
@@ -127,6 +127,7 @@ fun GeneratorBuffer.grid(
                         2 * u / (width - 1.0) - 1,
                         2 * v / (height - 1.0) - 1
                     )
+
                     GridCoordinates.UNIPOLAR -> this.builder(u / (width - 1.0), v / (height - 1.0))
                 }
             }
@@ -134,23 +135,23 @@ fun GeneratorBuffer.grid(
     }
 }
 
-fun GeneratorBuffer.twist(degreesPerUnit: Double, start: Double, axis: Vector3 = Vector3.UNIT_Y) {
+fun TriangleMeshBuilder.twist(degreesPerUnit: Double, start: Double, axis: Vector3 = Vector3.UNIT_Y) {
     data = data.map {
         val p = it.position.projectedOn(axis)
         val t =
             if (axis.x != 0.0) p.x / axis.x else if (axis.y != 0.0) p.y / axis.y else if (axis.z != 0.0) p.z / axis.z else
                 throw IllegalArgumentException("0 axis")
         val r = Matrix44.rotate(axis, t * degreesPerUnit)
-        GeneratorBuffer.VertexData((r * it.position.xyz1).xyz, (r * it.normal.xyz0).xyz, it.texCoord, this@twist.color)
+        TriangleMeshBuilder.VertexData((r * it.position.xyz1).xyz, (r * it.normal.xyz0).xyz, it.texCoord, this@twist.color)
     }.toMutableList()
 }
 
-fun GeneratorBuffer.grid(
+fun TriangleMeshBuilder.grid(
     width: Int,
     height: Int,
     depth: Int,
     coordinates: GridCoordinates = GridCoordinates.BIPOLAR,
-    builder: GeneratorBuffer.(u: Double, v: Double, w: Double) -> Unit
+    builder: TriangleMeshBuilder.(u: Double, v: Double, w: Double) -> Unit
 ) {
     for (w in 0 until depth) {
         for (v in 0 until height) {
@@ -162,6 +163,7 @@ fun GeneratorBuffer.grid(
                             2 * u / (width - 1.0) - 1,
                             2 * v / (height - 1.0) - 1, 2 * w / (depth - 1.0) - 1
                         )
+
                         GridCoordinates.UNIPOLAR -> this.builder(
                             u / (width - 1.0),
                             v / (height - 1.0),
@@ -174,7 +176,7 @@ fun GeneratorBuffer.grid(
     }
 }
 
-fun GeneratorBuffer.box(
+fun TriangleMeshBuilder.box(
     width: Double,
     height: Double,
     depth: Double,
@@ -186,41 +188,49 @@ fun GeneratorBuffer.box(
     generateBox(width, height, depth, widthSegments, heightSegments, depthSegments, invert, this::write)
 }
 
-fun GeneratorBuffer.cylinder(sides: Int, segments: Int, radius: Double, length: Double, invert: Boolean = false) {
-    generateCylinder(sides, segments, radius, length, invert, this::write)
+fun TriangleMeshBuilder.cylinder(
+    sides: Int,
+    segments: Int,
+    radius: Double,
+    length: Double,
+    invert: Boolean = false,
+    center: Boolean = false
+) {
+    generateCylinder(sides, segments, radius, length, invert, center, this::write)
 }
 
-fun GeneratorBuffer.dodecahedron(radius: Double) {
+fun TriangleMeshBuilder.dodecahedron(radius: Double) {
     generateDodecahedron(radius, this::write)
 }
 
-fun GeneratorBuffer.taperedCylinder(
+fun TriangleMeshBuilder.taperedCylinder(
     sides: Int,
     segments: Int,
     startRadius: Double,
     endRadius: Double,
     length: Double,
-    invert: Boolean = false
+    invert: Boolean = false,
+    center: Boolean = false
 ) {
-    generateTaperedCylinder(sides, segments, startRadius, endRadius, length, invert, this::write)
+    generateTaperedCylinder(sides, segments, startRadius, endRadius, length, invert, center, this::write)
 }
 
-fun GeneratorBuffer.cap(sides: Int, radius: Double, envelope: List<Vector2>) {
+fun TriangleMeshBuilder.cap(sides: Int, radius: Double, envelope: List<Vector2>) {
     generateCap(sides, radius, envelope, this::write)
 }
 
-fun GeneratorBuffer.revolve(sides: Int, length: Double, envelope: List<Vector2>) {
+fun TriangleMeshBuilder.revolve(sides: Int, length: Double, envelope: List<Vector2>) {
     generateRevolve(sides, length, envelope, this::write)
 }
 
-fun GeneratorBuffer.plane(
+fun TriangleMeshBuilder.plane(
     center: Vector3, right: Vector3, forward: Vector3, up: Vector3, width: Double = 1.0, height: Double = 1.0,
     widthSegments: Int = 1, heightSegments: Int = 1
 ) =
     generatePlane(center, right, forward, up, width, height, widthSegments, heightSegments, this::write)
 
 
-fun GeneratorBuffer.extrudeShape(
+fun TriangleMeshBuilder.extrudeShape(
     baseTriangles: List<Vector2>,
     contours: List<List<Vector2>>,
     length: Double,
@@ -244,7 +254,7 @@ fun GeneratorBuffer.extrudeShape(
     )
 }
 
-fun GeneratorBuffer.extrudeShape(
+fun TriangleMeshBuilder.extrudeShape(
     shape: Shape,
     length: Double,
     scale: Double = 1.0,
@@ -268,7 +278,7 @@ fun GeneratorBuffer.extrudeShape(
     )
 }
 
-fun GeneratorBuffer.extrudeShapes(
+fun TriangleMeshBuilder.extrudeShapes(
     shapes: List<Shape>,
     length: Double,
     scale: Double = 1.0,
@@ -289,8 +299,8 @@ fun GeneratorBuffer.extrudeShapes(
     )
 }
 
-fun meshGenerator(vertexBuffer: VertexBuffer? = null, builder: GeneratorBuffer.() -> Unit): VertexBuffer {
-    val gb = GeneratorBuffer()
+fun buildTriangleMesh(vertexBuffer: VertexBuffer? = null, builder: TriangleMeshBuilder.() -> Unit): VertexBuffer {
+    val gb = TriangleMeshBuilder()
     gb.builder()
 
     val vb = vertexBuffer ?: meshVertexBufferWithColor(gb.data.size)
@@ -301,14 +311,14 @@ fun meshGenerator(vertexBuffer: VertexBuffer? = null, builder: GeneratorBuffer.(
     return vb
 }
 
-fun generator(builder: GeneratorBuffer.() -> Unit): GeneratorBuffer {
-    val gb = GeneratorBuffer()
+fun generator(builder: TriangleMeshBuilder.() -> Unit): TriangleMeshBuilder {
+    val gb = TriangleMeshBuilder()
     gb.builder()
     return gb
 }
 
-fun GeneratorBuffer.group(builder: GeneratorBuffer.() -> Unit) {
-    val gb = GeneratorBuffer()
+fun TriangleMeshBuilder.group(builder: TriangleMeshBuilder.() -> Unit) {
+    val gb = TriangleMeshBuilder()
     gb.builder()
     this.concat(gb)
 }

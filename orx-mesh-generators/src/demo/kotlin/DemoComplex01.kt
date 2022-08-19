@@ -3,14 +3,11 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.shadeStyle
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.camera.Orbital
 import org.openrndr.extra.meshgenerators.box
-import org.openrndr.extra.meshgenerators.group
-import org.openrndr.extra.meshgenerators.meshGenerator
+import org.openrndr.extra.meshgenerators.buildTriangleMesh
 import org.openrndr.extra.meshgenerators.sphere
 import org.openrndr.math.Vector3
-import org.openrndr.math.transforms.transform
 
 fun main() {
     application {
@@ -20,7 +17,7 @@ fun main() {
             multisample = WindowMultisample.SampleCount(8)
         }
         program {
-            val m = meshGenerator {
+            val m = buildTriangleMesh {
                 color = ColorRGBa.PINK
                 sphere(32, 32, 1.0)
 
