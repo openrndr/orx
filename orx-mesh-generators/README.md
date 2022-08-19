@@ -2,7 +2,7 @@
 
 Generates 3D meshes: sphere, box, cylinder, plane, dodecahedron.
 
-##### usage
+## Simple usage
 
 ```kotlin
 val sphere = sphereMesh(32, 32, 4.0)
@@ -10,14 +10,29 @@ val unitSphere = sphereMesh()
 val cube = boxMesh()
 val box = boxMesh(2.0, 4.0, 2.0)
 
-...
-
 drawer.vertexBuffer(sphere, DrawPrimitive.TRIANGLES)
 drawer.vertexBuffer(unitSphere, DrawPrimitive.TRIANGLES)
 drawer.vertexBuffer(cube, DrawPrimitive.TRIANGLES)
 drawer.vertexBuffer(box, DrawPrimitive.TRIANGLES)
+```
+
+## Complex triangular mesh generation
+
+`orx-mesh-generators` comes with `buildTriangleMesh` 
+
+```kotlin
+buildTriangleMesh {
+    rotate(Vector3.UNIT_Z, 45.0)
+    box()
+}
 
 ```
+
+
+
+
+
+
 
 ## API
 

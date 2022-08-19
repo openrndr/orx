@@ -18,7 +18,7 @@ fun main() {
             extend(Orbital()) {
                 this.eye = Vector3(0.0, 30.0, 50.0)
             }
-            val m = meshGenerator {
+            val m = buildTriangleMesh {
                 grid(5,5, 5) { u, v, w ->
                     isolated {
                         translate(u * 20.0, v * 20.0, w * 20.0)

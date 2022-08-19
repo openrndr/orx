@@ -18,7 +18,7 @@ fun main() {
                 this.eye = Vector3(0.0, 10.0, 20.0)
                 this.lookAt = Vector3(0.0, 5.0, 0.0)
             }
-            val m = meshGenerator {
+            val m = buildTriangleMesh {
                 isolated {
                     translate(0.0, 12.0, 0.0)
                     hemisphere(32, 16, 5.0)
@@ -35,7 +35,7 @@ fun main() {
                             ridgeLength/4.0  + r * ridgeLength + 6.0,
                             0.0)
                         rotate(Vector3.UNIT_X, 270.0)
-                        taperedCylinder(32, 1, 5.0, ridgeRadius, ridgeLength/ 2.0)
+                        taperedCylinder(32, 1, 5.0, ridgeRadius, ridgeLength/ 2.0, center = true)
                     }
 
                     isolated {
@@ -43,7 +43,7 @@ fun main() {
                             ridgeLength/4.0 + ridgeLength/2.0 + r * ridgeLength + 6.0,
                             0.0)
                         rotate(Vector3.UNIT_X, 270.0)
-                        taperedCylinder(32, 1, ridgeRadius, 5.0, ridgeLength/2.0)
+                        taperedCylinder(32, 1, ridgeRadius, 5.0, ridgeLength/2.0, center = true)
                     }
                 }
                 isolated {
@@ -64,7 +64,7 @@ fun main() {
                             rotate(Vector3.UNIT_Z, -15.0)
                             translate(0.0, legLength/2.0, 0.0)
                             rotate(Vector3.UNIT_X, 90.0)
-                            cylinder(32, 1, legRadius, legLength)
+                            cylinder(32, 1, legRadius, legLength, center = true)
                         }
                     }
                 }

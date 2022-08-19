@@ -10,20 +10,64 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-fun cylinderMesh(sides: Int = 16, segments: Int = 16, radius: Double = 1.0, length: Double, invert: Boolean = false): VertexBuffer {
+fun cylinderMesh(
+    sides: Int = 16,
+    segments: Int = 16,
+    radius: Double = 1.0,
+    length: Double,
+    invert: Boolean = false,
+    center: Boolean = false,
+): VertexBuffer {
     val vertexCount = 6 * sides * segments
     val vb = meshVertexBuffer(vertexCount)
     vb.put {
-        generateCylinder(sides, segments, radius, length, invert, bufferWriter(this))
+        generateCylinder(sides, segments, radius, length, invert, center, bufferWriter(this))
     }
     return vb
 }
 
-fun generateCylinder(sides: Int, segments: Int, radius: Double, length: Double, invert: Boolean = false, vertexWriter: VertexWriter) {
-    return generateTaperedCylinder(sides, segments, radius, radius, length, invert, vertexWriter)
-}
+/**
+ * Generate a cylinder along the z-axis
+ * @param sides the number of sides of the cylinder
+ * @param segments the number of segments along the z-axis
+ * @param radius the radius of the cylinder
+ * @param length the length of the cylinder
+ * @param invert generates inside-out geometry if true
+ * @param center
+ * @param vertexWriter the vertex writer function
+ */
 
-fun generateTaperedCylinder(sides: Int, segments: Int, radiusStart: Double, radiusEnd:Double, length: Double, invert: Boolean = false, vertexWriter: VertexWriter) {
+fun generateCylinder(
+    sides: Int,
+    segments: Int,
+    radius: Double,
+    length: Double,
+    invert: Boolean = false,
+    center: Boolean = false,
+    vertexWriter: VertexWriter
+) = generateTaperedCylinder(sides, segments, radius, radius, length, invert, center, vertexWriter)
+
+/**
+ * Generate a tapered cylinder along the z-axis
+ * @param sides the number of sides of the tapered cylinder
+ * @param segments the number of segments along the z-axis
+ * @param radiusStart the start radius of the tapered cylinder
+ * @param radiusEnd the end radius of the tapered cylinder
+ * @param length the length of the tapered cylinder
+ * @param invert generates inside-out geometry if true
+ * @param center
+ * @param vertexWriter the vertex writer function
+ */
+fun generateTaperedCylinder(
+    sides: Int,
+    segments: Int,
+    radiusStart: Double,
+    radiusEnd: Double,
+    length: Double,
+    invert: Boolean = false,
+    center: Boolean = false,
+    vertexWriter: VertexWriter
+) {
     val dphi = (PI * 2) / sides
     val ddeg = (360.0) / sides
 
@@ -31,15 +75,16 @@ fun generateTaperedCylinder(sides: Int, segments: Int, radiusStart: Double, radi
 
     val dr = radiusEnd - radiusStart
 
-    val baseNormal = Vector2(length, dr).normalized.perpendicular().let { Vector3(x=it.y, y=0.0, z=it.x)}
-    //val baseNormal = Vector3(1.0, 0.0, 0.0)
+    val baseNormal = Vector2(length, dr).normalized.perpendicular().let { Vector3(x = it.y, y = 0.0, z = it.x) }
+
+    val zOffset = if (center) -length / 2.0 else 0.0
+
 
     for (segment in 0 until segments) {
-
-        val radius0 = mix(radiusStart, radiusEnd, segment*1.0/segments)
-        val radius1 = mix(radiusStart, radiusEnd, (segment+1)*1.0/segments)
-        val z0 = (length / segments) * segment - length/2.0
-        val z1 = (length / segments) * (segment + 1) - length/2.0
+        val radius0 = mix(radiusStart, radiusEnd, segment * 1.0 / segments)
+        val radius1 = mix(radiusStart, radiusEnd, (segment + 1) * 1.0 / segments)
+        val z0 = (length / segments) * segment + zOffset
+        val z1 = (length / segments) * (segment + 1) + zOffset
 
 
         for (side in 0 until sides) {
@@ -61,7 +106,7 @@ fun generateTaperedCylinder(sides: Int, segments: Int, radiusStart: Double, radi
 
 
             val n0 = (Matrix44.rotateZ(side * ddeg) * baseNormal.xyz0).xyz.normalized * invertFactor
-            val n1 = (Matrix44.rotateZ((side+1) * ddeg) * baseNormal.xyz0).xyz.normalized * invertFactor
+            val n1 = (Matrix44.rotateZ((side + 1) * ddeg) * baseNormal.xyz0).xyz.normalized * invertFactor
 
 
             if (invert) {
