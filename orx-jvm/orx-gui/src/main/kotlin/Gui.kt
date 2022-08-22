@@ -693,9 +693,11 @@ class GUI(val baseColor:ColorRGBa = ColorRGBa.GRAY, val defaultStyles: List<Styl
                          var vector4Value: Vector4? = null,
                          var doubleListValue: MutableList<Double>? = null,
                          var textValue: String? = null,
-                         var optionValue: String? = null
-
+                         var optionValue: String? = null,
+                         var minValue: Double? = null,
+                         var maxValue: Double? = null
     )
+
 
     /**
      * Can be called by the user to obtain an object to be serialized
@@ -712,17 +714,43 @@ class GUI(val baseColor:ColorRGBa = ColorRGBa.GRAY, val defaultStyles: List<Styl
                 Pair(k.property?.name ?: k.function?.name
                 ?: error("no name"), when (k.parameterType) {
                     /* 3) setup serializers */
-                    ParameterType.Double -> ParameterValue(doubleValue = k.property.qget(lo.obj) as Double)
-                    ParameterType.Int -> ParameterValue(intValue = k.property.qget(lo.obj) as Int)
+                    ParameterType.Double -> ParameterValue(
+                        doubleValue = k.property.qget(lo.obj) as Double,
+                        minValue = k.doubleRange?.start,
+                        maxValue = k.doubleRange?.endInclusive
+                    )
+
+                    ParameterType.Int -> ParameterValue(
+                        intValue = k.property.qget(lo.obj) as Int,
+                        minValue = k.intRange?.start?.toDouble(),
+                        maxValue = k.intRange?.endInclusive?.toDouble()
+                    )
                     ParameterType.Action -> ParameterValue()
                     ParameterType.Color -> ParameterValue(colorValue = k.property.qget(lo.obj) as ColorRGBa)
                     ParameterType.Text -> ParameterValue(textValue = k.property.qget(lo.obj) as String)
                     ParameterType.Boolean -> ParameterValue(booleanValue = k.property.qget(lo.obj) as Boolean)
                     ParameterType.XY -> ParameterValue(vector2Value = k.property.qget(lo.obj) as Vector2)
-                    ParameterType.DoubleList -> ParameterValue(doubleListValue = k.property.qget(lo.obj) as MutableList<Double>)
-                    ParameterType.Vector2 -> ParameterValue(vector2Value = k.property.qget(lo.obj) as Vector2)
-                    ParameterType.Vector3 -> ParameterValue(vector3Value = k.property.qget(lo.obj) as Vector3)
-                    ParameterType.Vector4 -> ParameterValue(vector4Value = k.property.qget(lo.obj) as Vector4)
+                    ParameterType.DoubleList -> ParameterValue(doubleListValue = k.property.qget(
+                        lo.obj) as MutableList<Double>,
+                        minValue = k.doubleRange?.start,
+                        maxValue = k.doubleRange?.endInclusive
+                    )
+
+                    ParameterType.Vector2 -> ParameterValue(
+                        vector2Value = k.property.qget(lo.obj) as Vector2,
+                        minValue = k.doubleRange?.start,
+                        maxValue = k.doubleRange?.endInclusive
+                    )
+                    ParameterType.Vector3 -> ParameterValue(
+                        vector3Value = k.property.qget(lo.obj) as Vector3,
+                        minValue = k.doubleRange?.start,
+                        maxValue = k.doubleRange?.endInclusive
+                    )
+                    ParameterType.Vector4 -> ParameterValue(
+                        vector4Value = k.property.qget(lo.obj) as Vector4,
+                        minValue = k.doubleRange?.start,
+                        maxValue = k.doubleRange?.endInclusive
+                    )
                     ParameterType.Option -> ParameterValue(optionValue = (k.property.qget(lo.obj) as Enum<*>).name)
                 })
             })
