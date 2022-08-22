@@ -12,14 +12,14 @@ import org.openrndr.math.transforms.rotateY
 fun capMesh(
     sides: Int,
     radius: Double,
-    enveloppe: List<Vector2> = listOf(
+    envelope: List<Vector2> = listOf(
         Vector2(0.0, 0.0),
         Vector2(1.0, 0.0)
     )
 ): VertexBuffer {
-    val vb = meshVertexBuffer(6 * sides * (enveloppe.size - 1))
+    val vb = meshVertexBuffer(6 * sides * (envelope.size - 1))
     vb.put {
-        generateCap(sides, radius, enveloppe, bufferWriter(this))
+        generateCap(sides, radius, envelope, bufferWriter(this))
     }
     return vb
 }

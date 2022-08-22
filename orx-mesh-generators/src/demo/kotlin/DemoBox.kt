@@ -1,6 +1,7 @@
 import org.openrndr.WindowMultisample
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
+import org.openrndr.draw.CullTestPass
 import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.colorBuffer
 import org.openrndr.draw.shadeStyle
@@ -36,6 +37,7 @@ fun main() {
                     """.trimIndent()
                     parameter("texture", texture)
                 }
+                drawer.drawStyle.cullTestPass = CullTestPass.FRONT
                 drawer.vertexBuffer(box, DrawPrimitive.TRIANGLES)
             }
         }

@@ -1,5 +1,6 @@
 import org.openrndr.WindowMultisample
 import org.openrndr.application
+import org.openrndr.draw.CullTestPass
 import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.shadeStyle
 import org.openrndr.extra.camera.Orbital
@@ -36,6 +37,7 @@ fun main() {
                         x_fill.rgb *= v_viewNormal.z;
                     """.trimIndent()
                 }
+                drawer.drawStyle.cullTestPass = CullTestPass.FRONT
                 drawer.vertexBuffer(m, DrawPrimitive.TRIANGLES)
             }
         }
