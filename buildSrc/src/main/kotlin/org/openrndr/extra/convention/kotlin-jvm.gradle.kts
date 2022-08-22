@@ -1,6 +1,7 @@
 package org.openrndr.extra.convention
 
 import org.gradle.accessors.dm.LibrariesForLibs
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URI
 
@@ -51,6 +52,7 @@ tasks {
     @Suppress("UNUSED_VARIABLE")
     val test by getting(Test::class) {
         useJUnitPlatform()
+        testLogging.exceptionFormat = TestExceptionFormat.FULL
     }
 
     @Suppress("UNUSED_VARIABLE")

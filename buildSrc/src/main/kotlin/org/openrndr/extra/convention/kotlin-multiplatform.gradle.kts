@@ -1,6 +1,7 @@
 package org.openrndr.extra.convention
 
 import org.gradle.accessors.dm.LibrariesForLibs
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URI
 
@@ -48,6 +49,7 @@ kotlin {
         }
         testRuns["test"].executionTask {
             useJUnitPlatform()
+            testLogging.exceptionFormat = TestExceptionFormat.FULL
         }
     }
 
