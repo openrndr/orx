@@ -11,17 +11,18 @@ All filters provided by orx-fx assume pre-multiplied alpha inputs, which is OPEN
 
 ## Effects index
 
-Here's a (potentially incomplete) list of the effects provded by orx-fx.
+Here's a (potentially incomplete) list of the effects provided by orx-fx. Explore [the source](https://github.com/openrndr/orx/tree/master/orx-fx/src/commonMain/kotlin) for an up-to-date list.
 
 ### Anti-alias
 
- * `FXAA`, fast approximate anti-aliasing.
+ - `FXAA`, fast approximate anti-aliasing.
  
 ### Blends
 
 Blend filters take two inputs ("source" and "destination"), they are intended to be used in `orx-compositor`'s layer blend. All blend filters are opacity preserving.
 
 #### Photoshop-style blends
+
  - `ColorBurn`
  - `ColorDodge`
  - `Darken`
@@ -35,6 +36,7 @@ Blend filters take two inputs ("source" and "destination"), they are intended to
  - `Subtract`, substract destination color from source color
 
 #### Porter-Duff blends
+
  - `SourceIn`, Porter-Duff source-in blend, intersect source and destination opacity and keep source colors
  - `SourceOut`, Porter-Duff source-out blend, subtract destination from source opacity and keep source colors
  - `SourceAtop`, Porter-Duff source-atop blend, uses destination opacity, layers source on top and keeps both colors
@@ -44,6 +46,7 @@ Blend filters take two inputs ("source" and "destination"), they are intended to
  - `Xor`, Porter-Duff xor blend, picks colors from input with highest opacity or none with opacities are equal
 
 #### Various blends
+
  - `Passthrough`, pass source color and opacity.
  
 ### Blurs
@@ -53,26 +56,34 @@ Most blur effects are opacity preserving
  - `ApproximateGaussianBlur`, a somewhat faster but less precise implementation of `GaussianBlur`
  - `Bloom`, a multi-pass bloom/glow effect
  - `BoxBlur`, a simple but fast box blur
+ - `FrameBlur`
  - `GaussianBlur`, a slow but precise Gaussian blur
  - `HashBlur`, a noisy blur effect
+ - `LaserBlur`
+ - `LineBlur`
+ - `MipBloom`
  - `ZoomBlur`, a directional blur with a zooming effect
 
 
 ### Color
+
  - `ChromaticAberration`, a chromatic aberration effect based on RGB color separation
  - `ColorCorrection`, corrections for brightness, contrast, saturation and hue
  - `ColorLookup`, Color LUT filter
  - `ColorMix`, filter implementation of OPENRNDR's color matrix mixing
  - `Duotone`, maps luminosity to two colors, very similar to `LumaMap` but uses LAB color interpolation. 
  - `DuotoneGradient`, a two-point gradient version of `Duotone`
+ - `Invert`
  - `LumaMap`, maps luminosity to two colors
  - `LumaOpacity`, maps luminosity to opacity but retains source color
  - `LumaThreshold`, applies a treshold on the input luminosity and maps to two colors
  - `Posterize`, a posterize effect
  - `Sepia`, applies a reddish-brown monochrome tint that imitates an old photograph
+ - `SetBackground`
  - `SubtractConstant`, subtract a constant color from the source color
 
 ### Color conversion
+
  - `OkLabToRgb`
  - `RgbToOkLab`
  
@@ -81,31 +92,50 @@ Most blur effects are opacity preserving
 All distortion effects are opacity preserving
 
  - `BlockRepeat` - repeats a single configurable block of the source input
- - `StackRepeat` - repeats the source input in a stack fashion
+ - `DisplaceBlend`
+ - `Fisheye`
+ - `FluidDistort`
+ - `Lenses`
  - `HorizontalWave` - applies a horizontal wave effect on the source input
  - `VerticalWave` - applies a vertical wave effect on the source input
  - `PerspectivePlane` - applies a planar perspective distortion on the source input
+ - `Perturb`
+ - `PolarToRectangular`
+ - `RectangularToPolar`
+ - `StackRepeat` - repeats the source input in a stack fashion
+ - `StretchWaves`
+ - `TapeNoise`
+ - `Tiles`
+ - `VideoGlitch`
  
 ### Dither
+
  - `ADither` - a selection of dithering effects
  - `CMYKHalftone` - a configurable CMYK halftoning effect
  - `Crosshatch` - crosshatching effect
  - `LumaHalftone` - a halftoning effect based on luminosity
- ### Edges
+ 
+### Edges
+ 
   - `LumaSobel` - A Sobel-kernel based luminosity edge detector
   - `EdgesWork` - An edges filter doubling as erosion
   - `Contour` - detects multi-level contours
+  - New: `CannyEdgeDetector`
   
- ### Grain
+### Grain
+ 
   - `FilmGrain` - adds film-like grain to the source input
-  
- ### Shadow
+ 
+### Shadow
+ 
   - `DropShadow` - adds a drop shadow based on the opacity in the input image
   
- ### Tonemap
+### Tonemap
+ 
   - `Uncharted2Tonemap` - implements the Uncharted2 tonemapper
  
- ### Transform
+### Transform
+ 
   - `FlipVertically` - flips the source input vertically.
  
 ## `Post` extension
