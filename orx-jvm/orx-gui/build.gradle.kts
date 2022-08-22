@@ -18,6 +18,7 @@ val demoRuntimeOnly by configurations.getting {}
 dependencies {
     api(project(":orx-parameters"))
     api(project(":orx-jvm:orx-panel"))
+    api(project(":orx-noise"))
     implementation(libs.openrndr.filter)
     implementation(libs.openrndr.dialogs)
     implementation(libs.gson)
