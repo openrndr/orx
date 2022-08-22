@@ -9,6 +9,7 @@ kotlinLogging = "2.1.23"
 kotlinxSerialization = "1.3.2"
 dokka = "1.7.10"
 nebulaRelease = "15.3.1"
+gradleNexusPublish = "1.1.0"
 spek = "2.0.18"
 boofcv = "0.40.1"
 kluent = "1.68"
@@ -88,6 +89,7 @@ slf4j-simple = { group = "org.slf4j", name = "slf4j-simple", version.ref = "slf4
 [plugins]
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 nebula-release = { id = "nebula.release", version.ref = "nebulaRelease" }
+gradle-nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "gradleNexusPublish" }
 
 [bundles]
 jupiter = ["jupiter-api", "jupiter-engine"]

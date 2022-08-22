@@ -1,8 +1,12 @@
 import ScreenshotsHelper.collectScreenshots
 
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     org.openrndr.extra.convention.`kotlin-multiplatform`
-    kotlin("plugin.serialization")
+    // kotlinx-serialization ends up on the classpath through openrndr-math and Gradle doesn't know which
+    // version was used. If openrndr were an included build, we probably wouldn't need to do this.
+    // https://github.com/gradle/gradle/issues/20084
+    id(libs.plugins.kotlin.serialization.get().pluginId)
 }
 
 kotlin {

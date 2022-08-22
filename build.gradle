@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.nebula.release) apply false
+    alias(libs.plugins.gradle.nexus.publish)
     id("org.openrndr.extra.convention.dokka")
-    id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
 }
 
 repositories {
