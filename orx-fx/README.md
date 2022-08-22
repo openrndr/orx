@@ -108,7 +108,36 @@ All distortion effects are opacity preserving
  ### Transform
   - `FlipVertically` - flips the source input vertically.
  
- 
+## `Post` extension
+
+The `Post` extension provides an easy way to apply filters to your drawings. Allocating
+and resizing color buffers is all taken care of by `Post`.
+
+To get additional intermediate color buffers one can access `intermediate[x]`
+```kotlin
+fun main() = application {
+    configure {
+        windowResizable = true
+    }
+    program {
+        extend(Post()) {
+            val blur = ApproximateGaussianBlur()
+            val add = Add()
+            post { input, output ->
+                blur.window = 50
+                blur.sigma = 50.0
+                blur.apply(input, intermediate[0])
+                add.apply(arrayOf(input, intermediate[0]), output)
+            }
+        }
+        extend {
+            drawer.circle(width / 2.0, height / 2.0, 100.0)
+        }
+    }
+}
+```
+
+
 <!-- __demos__ >
 # Demos
 [DemoFluidDistort01Kt](src/demo/kotlin/DemoFluidDistort01Kt.kt
