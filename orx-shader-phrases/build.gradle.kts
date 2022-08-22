@@ -43,11 +43,5 @@ kotlin {
                 runtimeOnly(libs.kotlin.reflect)
             }
         }
-
-        @Suppress("UNUSED_VARIABLE")
-        val jvmDemo by getting {
-            dependencies {
-            }
-        }
     }
 }

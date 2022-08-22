@@ -23,11 +23,5 @@ kotlin {
                 implementation(libs.openrndr.draw)
             }
         }
-
-        @Suppress("UNUSED_VARIABLE")
-        val jvmDemo by getting {
-            dependencies {
-            }
-        }
     }
 }
