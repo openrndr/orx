@@ -24,29 +24,48 @@ fun ((Int, Double, Double) -> Vector2).gradient(epsilon: Double = 1e-6): (Int, D
         dfdx + dfdy
     }
 
-fun ((Int, Double) -> Double).minMax(sampleCount: Int = 1000, random: Random = Random(0)): Pair<Double, Double> {
+private fun List<Double>.minMax(percentile: Double) : Pair<Double, Double> {
+    return if (percentile == 1.0) {
+        Pair(this.minOrNull()!!, this.maxOrNull()!!)
+    } else {
+        val sorted = this.sorted()
+        @Suppress("NAME_SHADOWING") val percentile = percentile.coerceIn(0.0..1.0)
+        val minIndex = ((size-1) * (0.5 - percentile/2.0)).toInt()
+        val maxIndex = ((size-1) * (0.5 + percentile/2.0)).toInt()
+        Pair(sorted[minIndex], sorted[maxIndex])
+    }
+}
+
+fun ((Int, Double) -> Double).minMax(
+    sampleCount: Int = 1000,
+    percentile: Double,
+    random: Random = Random(0)
+): Pair<Double, Double> {
     val nmin: Double
     val nmax: Double
-    when {
-        this === simplex1D -> {
-            nmin = -0.7127777710564248
-            nmax = 0.7127779539425915
+    if (percentile != 1.0) {
+        when {
+            this === simplex1D -> {
+                nmin = -0.7127777710564248
+                nmax = 0.7127779539425915
+            }
+            this === valueLinear1D || this === valueHermite1D || this == valueQuintic1D -> {
+                nmin = -1.0
+                nmax = 1.0
+            }
+            this === perlin1D -> {
+                nmin = -0.5
+                nmax = 0.5
+            }
+            else -> {
+                nmin = Double.POSITIVE_INFINITY
+                nmax = Double.NEGATIVE_INFINITY
+            }
         }
+    } else {
+        nmin = Double.POSITIVE_INFINITY
+        nmax = Double.NEGATIVE_INFINITY
 
-        this === valueLinear1D || this === valueHermite1D || this == valueQuintic1D -> {
-            nmin = -1.0
-            nmax = 1.0
-        }
-
-        this === perlin1D -> {
-            nmin = -0.5
-            nmax = 0.5
-        }
-
-        else -> {
-            nmin = Double.POSITIVE_INFINITY
-            nmax = Double.NEGATIVE_INFINITY
-        }
     }
 
     val min: Double
@@ -55,8 +74,9 @@ fun ((Int, Double) -> Double).minMax(sampleCount: Int = 1000, random: Random = R
         val samples = (0 until sampleCount).map {
             this(random.nextInt(0, 16384), random.nextDouble(PI * 2.0, PI * 8.0))
         }
-        min = samples.minOrNull()!!
-        max = samples.maxOrNull()!!
+        val minMax = samples.minMax(percentile)
+        min = minMax.first
+        max = minMax.second
     } else {
         min = nmin
         max = nmax
@@ -65,8 +85,8 @@ fun ((Int, Double) -> Double).minMax(sampleCount: Int = 1000, random: Random = R
 }
 
 
-fun ((Int, Double) -> Double).unipolar(sampleCount: Int = 1000, random: Random = Random(0)): (Int, Double) -> Double {
-    val (min, max) = this.minMax(sampleCount, random)
+fun ((Int, Double) -> Double).unipolar(sampleCount: Int = 1000, percentile: Double = 1.0, random: Random = Random(0)): (Int, Double) -> Double {
+    val (min, max) = this.minMax(sampleCount, percentile, random)
     return { seed, t ->
         (this(seed, t) - min) / (max - min)
     }
@@ -75,8 +95,8 @@ fun ((seed: Int, t: Double) -> Double).clamp(min: Double, max: Double): (Int, Do
     this(seed, t).coerceIn(min, max)
 }
 
-fun ((Int, Double) -> Double).bipolar(sampleCount: Int = 1000, random: Random = Random(0)): (Int, Double) -> Double {
-    val (min, max) = this.minMax(sampleCount, random)
+fun ((Int, Double) -> Double).bipolar(sampleCount: Int = 1000, percentile: Double = 1.0, random: Random = Random(0)): (Int, Double) -> Double {
+    val (min, max) = this.minMax(sampleCount, percentile, random)
     return { seed, t ->
         ((this(seed, t) - min) / (max - min)) * 2.0 - 1.0
     }
@@ -84,30 +104,36 @@ fun ((Int, Double) -> Double).bipolar(sampleCount: Int = 1000, random: Random = 
 
 fun ((Int, Double, Double) -> Double).minMax(
     sampleCount: Int = 1000,
+    percentile: Double,
     random: Random = Random(0)
 ): Pair<Double, Double> {
     val nmin: Double
     val nmax: Double
-    when {
-        this === simplex2D -> {
-            nmin = -0.7127777710564248
-            nmax = 0.7127779539425915
-        }
+    if (percentile != 0.0) {
+        when {
+            this === simplex2D -> {
+                nmin = -0.7127777710564248
+                nmax = 0.7127779539425915
+            }
 
-        this === valueLinear2D || this === valueHermite2D || this == valueQuintic2D -> {
-            nmin = -1.0
-            nmax = 1.0
-        }
+            this === valueLinear2D || this === valueHermite2D || this == valueQuintic2D -> {
+                nmin = -1.0
+                nmax = 1.0
+            }
 
-        this === perlin2D -> {
-            nmin = -1.0
-            nmax = 1.0
-        }
+            this === perlin2D -> {
+                nmin = -1.0
+                nmax = 1.0
+            }
 
-        else -> {
-            nmin = Double.POSITIVE_INFINITY
-            nmax = Double.NEGATIVE_INFINITY
+            else -> {
+                nmin = Double.POSITIVE_INFINITY
+                nmax = Double.NEGATIVE_INFINITY
+            }
         }
+    }  else {
+        nmin = Double.POSITIVE_INFINITY
+        nmax = Double.NEGATIVE_INFINITY
     }
     val min: Double
     val max: Double
@@ -116,8 +142,9 @@ fun ((Int, Double, Double) -> Double).minMax(
         val samples = (0 until sampleCount).map {
             this(random.nextInt(0, 16384), random.nextDouble(PI * 2.0, PI * 8.0), random.nextDouble(PI * 2.0, PI * 8.0))
         }
-        min = samples.minOrNull()!!
-        max = samples.maxOrNull()!!
+        val minMax = samples.minMax(percentile)
+        min = minMax.first
+        max = minMax.second
     } else {
         min = nmin
         max = nmax
@@ -127,11 +154,23 @@ fun ((Int, Double, Double) -> Double).minMax(
 
 fun ((Int, Double, Double) -> Double).unipolar(
     sampleCount: Int = 1000,
+    percentile: Double = 1.0,
     random: Random = Random(0)
 ): (Int, Double, Double) -> Double {
-    val (min, max) = this.minMax(sampleCount, random)
+    val (min, max) = this.minMax(sampleCount, percentile, random)
     return { seed, x, t ->
         (this(seed, x, t) - min) / (max - min)
+    }
+}
+
+fun ((Int, Double, Double) -> Double).bipolar(
+    sampleCount: Int = 1000,
+    percentile: Double = 1.0,
+    random: Random = Random(0)
+): (Int, Double, Double) -> Double {
+    val (min, max) = this.minMax(sampleCount, percentile, random)
+    return { seed, x, t ->
+        ((this(seed, x, t) - min) / (max - min)) * 2.0 - 1.0
     }
 }
 
@@ -142,30 +181,36 @@ fun ((seed: Int, x: Double, t: Double) -> Double).clamp(min: Double, max: Double
 
 fun ((Int, Double, Double, Double) -> Double).minMax(
     sampleCount: Int = 1000,
+    percentile: Double = 1.0,
     random: Random = Random(0)
 ): Pair<Double, Double> {
     val nmin: Double
     val nmax: Double
-    when {
-        this === simplex3D -> {
-            nmin = -0.9777
-            nmax = 0.9777
-        }
+    if (percentile == 1.0) {
+        when {
+            this === simplex3D -> {
+                nmin = -0.9777
+                nmax = 0.9777
+            }
 
-        this === valueLinear3D || this === valueHermite3D || this == valueQuintic3D -> {
-            nmin = -1.0
-            nmax = 1.0
-        }
+            this === valueLinear3D || this === valueHermite3D || this == valueQuintic3D -> {
+                nmin = -1.0
+                nmax = 1.0
+            }
 
-        this === perlin3D -> {
-            nmin = -1.0
-            nmax = 1.0
-        }
+            this === perlin3D -> {
+                nmin = -1.0
+                nmax = 1.0
+            }
 
-        else -> {
-            nmin = Double.POSITIVE_INFINITY
-            nmax = Double.NEGATIVE_INFINITY
+            else -> {
+                nmin = Double.POSITIVE_INFINITY
+                nmax = Double.NEGATIVE_INFINITY
+            }
         }
+    } else {
+        nmin = Double.POSITIVE_INFINITY
+        nmax = Double.NEGATIVE_INFINITY
     }
     val min: Double
     val max: Double
@@ -179,8 +224,9 @@ fun ((Int, Double, Double, Double) -> Double).minMax(
                 random.nextDouble(PI * 2.0, PI * 8.0)
             )
         }
-        min = samples.minOrNull()!!
-        max = samples.maxOrNull()!!
+        val minMax = samples.minMax(percentile)
+        min = minMax.first
+        max = minMax.second
     } else {
         min = nmin
         max = nmax
@@ -188,15 +234,6 @@ fun ((Int, Double, Double, Double) -> Double).minMax(
     return Pair(min, max)
 }
 
-fun ((Int, Double, Double) -> Double).bipolar(
-    sampleCount: Int = 1000,
-    random: Random = Random(0)
-): (Int, Double, Double) -> Double {
-    val (min, max) = this.minMax(sampleCount, random)
-    return { seed, x, t ->
-        ((this(seed, x, t) - min) / (max - min)) * 2.0 - 1.0
-    }
-}
 
 fun ((seed: Int, x: Double, y:Double, t: Double) -> Double).clamp(min: Double, max: Double): (Int, Double, Double, Double) -> Double = { seed, x, y, t ->
     this(seed, x, y, t).coerceIn(min, max)
@@ -204,9 +241,10 @@ fun ((seed: Int, x: Double, y:Double, t: Double) -> Double).clamp(min: Double, m
 
 fun ((Int, Double, Double, Double) -> Double).unipolar(
     sampleCount: Int = 1000,
+    percentile: Double = 1.0,
     random: Random = Random(0)
 ): (Int, Double, Double, Double) -> Double {
-    val (min, max) = this.minMax(sampleCount, random)
+    val (min, max) = this.minMax(sampleCount, percentile, random)
     return { seed, x, y, t ->
         (this(seed, x, y, t) - min) / (max - min)
     }
@@ -214,9 +252,10 @@ fun ((Int, Double, Double, Double) -> Double).unipolar(
 
 fun ((Int, Double, Double, Double) -> Double).bipolar(
     sampleCount: Int = 1000,
+    percentile: Double = 1.0,
     random: Random = Random(0)
 ): (Int, Double, Double, Double) -> Double {
-    val (min, max) = this.minMax(sampleCount, random)
+    val (min, max) = this.minMax(sampleCount, percentile, random)
     return { seed, x, y, t ->
         ((this(seed, x, y, t) - min) / (max - min)) * 2.0 - 1.0
     }
