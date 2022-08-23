@@ -3,6 +3,8 @@ import org.openrndr.application
 import org.openrndr.extra.fx.Post
 import org.openrndr.extra.fx.blend.Add
 import org.openrndr.extra.fx.blur.ApproximateGaussianBlur
+import org.openrndr.shape.Circle
+import kotlin.math.cos
 
 fun main() = application {
     configure {
@@ -14,7 +16,7 @@ fun main() = application {
             val add = Add()
             post { input, output ->
                 blur.window = 50
-                blur.sigma = 50.0
+                blur.sigma = 50.0 * (cos(seconds) * 0.5 + 0.5)
                 blur.apply(input, intermediate[0])
                 add.apply(arrayOf(input, intermediate[0]), output)
             }

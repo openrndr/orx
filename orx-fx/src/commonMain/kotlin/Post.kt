@@ -2,6 +2,7 @@ package org.openrndr.extra.fx
 
 import org.openrndr.Extension
 import org.openrndr.Program
+import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 
 class Post : Extension {
@@ -24,6 +25,11 @@ class Post : Extension {
      * The color type to use for the input buffer
      */
     var inputType = ColorType.UINT8
+
+    /**
+     * The depth format to use for the input buffer
+     */
+    var inputDepthFormat = DepthFormat.DEPTH_STENCIL
 
     private var output: ColorBuffer? = null
     private var postFunction = { input: ColorBuffer, output: ColorBuffer -> input.copyTo(output) }
@@ -77,6 +83,7 @@ class Post : Extension {
             // create new targets and buffers
             inputTarget = renderTarget(art.width, art.height, art.contentScale, multisample = art.multisample) {
                 colorBuffer(type = inputType)
+                depthBuffer(format = inputDepthFormat)
             }
             if (art.multisample != BufferMultisample.Disabled) {
                 resolved = colorBuffer(art.width, art.height, art.contentScale)
@@ -85,6 +92,7 @@ class Post : Extension {
         }
         // bind input target, the next extensions will draw into it
         inputTarget!!.bind()
+        drawer.clear(ColorRGBa.TRANSPARENT)
     }
 
     override fun afterDraw(drawer: Drawer, program: Program) {
