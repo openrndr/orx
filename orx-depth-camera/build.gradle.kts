@@ -1,18 +1,8 @@
 plugins {
-    kotlin("multiplatform")
+    org.openrndr.extra.convention.`kotlin-multiplatform`
 }
 
 kotlin {
-    jvm {
-        testRuns["test"].executionTask.configure {
-            useJUnitPlatform()
-        }
-    }
-    js(IR) {
-        browser()
-        nodejs()
-    }
-
     sourceSets {
         @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
@@ -22,5 +12,4 @@ kotlin {
             }
         }
     }
-
 }
