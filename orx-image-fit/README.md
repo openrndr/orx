@@ -2,27 +2,44 @@
 
 Draws the given image making sure it fits (`contain`) or it covers (`cover`) the specified area.
 
-Similar to CSS object-fit (https://www.w3schools.com/css/css3_object-fit.asp)
+Similar to CSS object-fit (https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit)
 
-`orx-image-fit` provides an extension function `imageFit` for `Drawer`.
+`orx-image-fit` provides the `Drawer.imageFit` extension function.
 
 ## Usage
 
-`imageFit(img: ColorBuffer, x: Double, y: Double, w: Double, h: Double, fitMethod, horizontalPosition:Double, verticalPosition:Double)`
+```
+drawer.imageFit(
+  img: ColorBuffer, 
+  x: Double, y: Double, w: Double, h: Double, 
+  fitMethod: FitMethod, 
+  horizontalPosition: Double, 
+  verticalPosition: Double)
+```
 
-fitMethod
- - `contain`
- - `cover`
- 
-horizontal values
- - left ... right
- - `-1.0` ... `1.0`
- 
- vertical values
- - top ... bottom
- - `-1.0` ... `1.0`
- 
-## Example 
+or 
+
+```
+drawer.imageFit(
+  img: ColorBuffer, 
+  bounds: Rectangle, 
+  fitMethod: FitMethod, 
+  horizontalPosition: Double, 
+  verticalPosition: Double)
+```
+
+- `img`: the image to draw 
+- `x`, `y`, `w`, `h` or `bounds`: the target area where to draw the image
+- `fitMethod`: 
+  - `FitMethod.Contain`: fits `img` in the target area. If the aspect ratio of `img` and `bounds` differ it leaves blank horizontal or vertical margins to avoid deforming the image.
+  - `FitMethod.Cover`: covers the target area. . If the aspect ratio of `img` and `bounds` differ part of the image will be cropped away.
+  - `FitMethod.Fill`: deforms the image to exactly match the target area.
+  - `FitMethod.None`: draws the image on the target area without scaling it.
+- `horizontalPosition` and `verticalPosition`: controls which part of the image is visible (`Cover`, `None`) or the alignment of the image (`Contain`). 
+  - `horizontalPosition`: `-1.0` = left, `0.0` = center, `1.0` = right.
+  - `verticalPosition`: `-1.0` = top, `0.0` = center, `1.0` = bottom.
+
+## Examples
  
 A quick example that fits an image to the window rectangle with a 10 pixel margin. By default
 `imageFit` uses the cover mode, which fills the target rectangle with an image.
@@ -37,4 +54,22 @@ fun main() = application {
     }
 }
 ``` 
- 
+
+or
+
+```kotlin
+fun main() = application {
+    program {
+        val image = loadImage("data/images/pm5544.png")
+        extend {
+            drawer.imageFit(image, drawer.bounds.offsetEdges(-10.0))
+        }
+    }
+}
+``` 
+<!-- __demos__ -->
+## Demos
+### DemoImageFit01
+[source code](src/demo/kotlin/DemoImageFit01.kt)
+
+![DemoImageFit01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-image-fit/images/DemoImageFit01Kt.png)

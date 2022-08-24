@@ -1,3 +1,5 @@
+import ScreenshotsHelper.collectScreenshots
+
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
@@ -9,15 +11,18 @@ kotlin {
             val demo by creating {
                 defaultSourceSet {
                     kotlin.srcDir("src/demo")
-                    dependencies {
-                        implementation(project(":orx-camera"))
-                        implementation(libs.openrndr.application)
-                        implementation(libs.openrndr.extensions)
-                        runtimeOnly(libs.openrndr.gl3.core)
-                        runtimeOnly(libs.openrndr.gl3.natives)
-                        implementation(compilations["main"]!!.output.allOutputs)
-                    }
+
                 }
+                dependencies {
+                    implementation(project(":orx-shapes"))
+                    implementation(project(":orx-image-fit"))
+                    implementation(libs.openrndr.application)
+                    implementation(libs.openrndr.extensions)
+                    runtimeOnly(libs.openrndr.gl3.core)
+                    runtimeOnly(libs.openrndr.gl3.natives)
+                    implementation(compilations["main"]!!.output.allOutputs)
+                }
+                collectScreenshots { }
             }
         }
         testRuns["test"].executionTask.configure {

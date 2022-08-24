@@ -10,11 +10,12 @@ import org.openrndr.dialogs.openFileDialog
 import org.openrndr.dialogs.saveFileDialog
 import org.openrndr.dialogs.setDefaultPathForContext
 import org.openrndr.draw.Drawer
+import org.openrndr.extra.noise.Random
+import org.openrndr.extra.noise.random
+import org.openrndr.extra.noise.uniform
 import org.openrndr.extra.parameters.*
 import org.openrndr.internal.Driver
-import org.openrndr.math.Vector2
-import org.openrndr.math.Vector3
-import org.openrndr.math.Vector4
+import org.openrndr.math.*
 import org.openrndr.panel.ControlManager
 import org.openrndr.panel.controlManager
 import org.openrndr.panel.elements.*
@@ -692,9 +693,11 @@ class GUI(val baseColor:ColorRGBa = ColorRGBa.GRAY, val defaultStyles: List<Styl
                          var vector4Value: Vector4? = null,
                          var doubleListValue: MutableList<Double>? = null,
                          var textValue: String? = null,
-                         var optionValue: String? = null
-
+                         var optionValue: String? = null,
+                         var minValue: Double? = null,
+                         var maxValue: Double? = null
     )
+
 
     /**
      * Can be called by the user to obtain an object to be serialized
@@ -711,17 +714,43 @@ class GUI(val baseColor:ColorRGBa = ColorRGBa.GRAY, val defaultStyles: List<Styl
                 Pair(k.property?.name ?: k.function?.name
                 ?: error("no name"), when (k.parameterType) {
                     /* 3) setup serializers */
-                    ParameterType.Double -> ParameterValue(doubleValue = k.property.qget(lo.obj) as Double)
-                    ParameterType.Int -> ParameterValue(intValue = k.property.qget(lo.obj) as Int)
+                    ParameterType.Double -> ParameterValue(
+                        doubleValue = k.property.qget(lo.obj) as Double,
+                        minValue = k.doubleRange?.start,
+                        maxValue = k.doubleRange?.endInclusive
+                    )
+
+                    ParameterType.Int -> ParameterValue(
+                        intValue = k.property.qget(lo.obj) as Int,
+                        minValue = k.intRange?.start?.toDouble(),
+                        maxValue = k.intRange?.endInclusive?.toDouble()
+                    )
                     ParameterType.Action -> ParameterValue()
                     ParameterType.Color -> ParameterValue(colorValue = k.property.qget(lo.obj) as ColorRGBa)
                     ParameterType.Text -> ParameterValue(textValue = k.property.qget(lo.obj) as String)
                     ParameterType.Boolean -> ParameterValue(booleanValue = k.property.qget(lo.obj) as Boolean)
                     ParameterType.XY -> ParameterValue(vector2Value = k.property.qget(lo.obj) as Vector2)
-                    ParameterType.DoubleList -> ParameterValue(doubleListValue = k.property.qget(lo.obj) as MutableList<Double>)
-                    ParameterType.Vector2 -> ParameterValue(vector2Value = k.property.qget(lo.obj) as Vector2)
-                    ParameterType.Vector3 -> ParameterValue(vector3Value = k.property.qget(lo.obj) as Vector3)
-                    ParameterType.Vector4 -> ParameterValue(vector4Value = k.property.qget(lo.obj) as Vector4)
+                    ParameterType.DoubleList -> ParameterValue(doubleListValue = k.property.qget(
+                        lo.obj) as MutableList<Double>,
+                        minValue = k.doubleRange?.start,
+                        maxValue = k.doubleRange?.endInclusive
+                    )
+
+                    ParameterType.Vector2 -> ParameterValue(
+                        vector2Value = k.property.qget(lo.obj) as Vector2,
+                        minValue = k.doubleRange?.start,
+                        maxValue = k.doubleRange?.endInclusive
+                    )
+                    ParameterType.Vector3 -> ParameterValue(
+                        vector3Value = k.property.qget(lo.obj) as Vector3,
+                        minValue = k.doubleRange?.start,
+                        maxValue = k.doubleRange?.endInclusive
+                    )
+                    ParameterType.Vector4 -> ParameterValue(
+                        vector4Value = k.property.qget(lo.obj) as Vector4,
+                        minValue = k.doubleRange?.start,
+                        maxValue = k.doubleRange?.endInclusive
+                    )
                     ParameterType.Option -> ParameterValue(optionValue = (k.property.qget(lo.obj) as Enum<*>).name)
                 })
             })
@@ -863,16 +892,16 @@ class GUI(val baseColor:ColorRGBa = ColorRGBa.GRAY, val defaultStyles: List<Styl
                         val min = parameter.doubleRange!!.start
                         val max = parameter.doubleRange!!.endInclusive
                         val currentValue = (parameter.property as KMutableProperty1<Any, Double>).get(labeledObject.obj)
-                        val randomValue = Math.random() * (max - min) + min
-                        val newValue = (1.0 - strength) * currentValue + randomValue * strength
+                        val randomValue = random(min, max)
+                        val newValue = mix(currentValue, randomValue, strength)
                         (parameter.property as KMutableProperty1<Any, Double>).set(labeledObject.obj, newValue)
                     }
                     ParameterType.Int -> {
                         val min = parameter.intRange!!.first
                         val max = parameter.intRange!!.last
                         val currentValue = (parameter.property as KMutableProperty1<Any, Int>).get(labeledObject.obj)
-                        val randomValue = Math.random() * (max - min) + min
-                        val newValue = ((1.0 - strength) * currentValue + randomValue * strength).roundToInt()
+                        val randomValue = random(min.toDouble(), max.toDouble())
+                        val newValue = mix(currentValue.toDouble(), randomValue, strength).roundToInt()
                         (parameter.property as KMutableProperty1<Any, Int>).set(labeledObject.obj, newValue)
                     }
                     ParameterType.Boolean -> {
@@ -881,43 +910,40 @@ class GUI(val baseColor:ColorRGBa = ColorRGBa.GRAY, val defaultStyles: List<Styl
                     }
                     ParameterType.Color -> {
                         val currentValue = (parameter.property as KMutableProperty1<Any, ColorRGBa>).get(labeledObject.obj)
-                        val randomValue = ColorRGBa(Math.random(), Math.random(), Math.random(), currentValue.alpha)
-                        val newValue = ColorRGBa((1.0 - strength) * currentValue.r + randomValue.r * strength,
-                                (1.0 - strength) * currentValue.g + randomValue.g * strength,
-                                (1.0 - strength) * currentValue.b + randomValue.b * strength)
-
+                        val randomValue = ColorRGBa.fromVector(Random.vector3(0.0, 1.0), currentValue.alpha, currentValue.linearity)
+                        val newValue = currentValue.mix(randomValue, strength)
                         (parameter.property as KMutableProperty1<Any, ColorRGBa>).set(labeledObject.obj, newValue)
                     }
                     ParameterType.Vector2 -> {
                         val min = parameter.doubleRange!!.start
                         val max = parameter.doubleRange!!.endInclusive
                         val currentValue = (parameter.property as KMutableProperty1<Any, Vector2>).get(labeledObject.obj)
-                        val randomValue = Vector2(Math.random(), Math.random()) * (max - min) + min
-                        val newValue = currentValue * (1.0 - strength) + randomValue * strength
+                        val randomValue = Random.vector2(min, max)
+                        val newValue = currentValue.mix(randomValue, strength)
                         (parameter.property as KMutableProperty1<Any, Vector2>).set(labeledObject.obj, newValue)
                     }
                     ParameterType.XY -> {
                         val min = parameter.vectorRange!!.first
                         val max = parameter.vectorRange!!.second
                         val currentValue = (parameter.property as KMutableProperty1<Any, Vector2>).get(labeledObject.obj)
-                        val randomValue = Vector2(Math.random() * (max.x - min.x) + min.x, Math.random() * (max.y - min.y) + min.y)
-                        val newValue = currentValue * (1.0 - strength) + randomValue * strength
+                        val randomValue = Vector2.uniform(min, max)
+                        val newValue = currentValue.mix(randomValue, strength)
                         (parameter.property as KMutableProperty1<Any, Vector2>).set(labeledObject.obj, newValue)
                     }
                     ParameterType.Vector3 -> {
                         val min = parameter.doubleRange!!.start
                         val max = parameter.doubleRange!!.endInclusive
                         val currentValue = (parameter.property as KMutableProperty1<Any, Vector3>).get(labeledObject.obj)
-                        val randomValue = Vector3(Math.random(), Math.random(), Math.random()) * (max - min) + min
-                        val newValue = currentValue * (1.0 - strength) + randomValue * strength
+                        val randomValue = Random.vector3(min, max)
+                        val newValue = currentValue.mix(randomValue, strength)
                         (parameter.property as KMutableProperty1<Any, Vector3>).set(labeledObject.obj, newValue)
                     }
                     ParameterType.Vector4 -> {
                         val min = parameter.doubleRange!!.start
                         val max = parameter.doubleRange!!.endInclusive
                         val currentValue = (parameter.property as KMutableProperty1<Any, Vector4>).get(labeledObject.obj)
-                        val randomValue = Vector4(Math.random(), Math.random(), Math.random(), Math.random()) * (max - min) + min
-                        val newValue = currentValue * (1.0 - strength) + randomValue * strength
+                        val randomValue = Random.vector4(min, max)
+                        val newValue = currentValue.mix(randomValue, strength)
                         (parameter.property as KMutableProperty1<Any, Vector4>).set(labeledObject.obj, newValue)
                     }
                     else -> {

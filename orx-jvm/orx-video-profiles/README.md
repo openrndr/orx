@@ -57,6 +57,35 @@ fun main() = application {
 }
 ```
 
+### TIFF sequence
+
+TIFF images are lossless and they can be faster to write than other formats. You will probably need to convert
+them later to a more common format or combine them into a video file.
+
+This profile requires specifying a file name: `outputFile = "frame-%05d.tif"`,
+where `%05d` means "zero-padded five-digit frame number".
+The frame number format is not optional.
+
+```kotlin
+import org.openrndr.application
+import org.openrndr.color.ColorRGBa
+import org.openrndr.extra.videoprofiles.*
+import org.openrndr.ffmpeg.ScreenRecorder
+
+fun main() = application {
+    program {
+        extend(ScreenRecorder()) {
+            tiffSequence()
+            outputFile = "frame-%05d.tif"
+        }
+        extend {
+            drawer.clear(ColorRGBa.GREEN)
+        }
+    }
+}
+```
+
+
 ### Animated Webp
 
 ```kotlin

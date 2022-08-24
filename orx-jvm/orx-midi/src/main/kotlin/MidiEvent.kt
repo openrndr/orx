@@ -4,7 +4,9 @@ enum class MidiEventType {
     NOTE_ON,
     NOTE_OFF,
     CONTROL_CHANGED,
-    PROGRAM_CHANGE
+    PROGRAM_CHANGE,
+    CHANNEL_PRESSURE,
+    PITCH_BEND
 }
 
 class MidiEvent(val eventType: MidiEventType) {
@@ -13,6 +15,8 @@ class MidiEvent(val eventType: MidiEventType) {
     var program: Int = 0
     var note: Int = 0
     var channel: Int = 0
+    var pitchBend: Int = 0
+    var pressure: Int = 0
     var value: Int = 0
     var velocity: Int = 0
 
@@ -51,9 +55,32 @@ class MidiEvent(val eventType: MidiEventType) {
             midiEvent.program = program
             return midiEvent
         }
+
+        fun channelPressure(channel:Int, pressure: Int): MidiEvent {
+            val midiEvent = MidiEvent(MidiEventType.CHANNEL_PRESSURE)
+            midiEvent.channel = channel
+            midiEvent.pressure = pressure
+            return midiEvent
+        }
+
+        fun pitchBend(channel:Int, pitchBend: Int): MidiEvent {
+            val midiEvent = MidiEvent(MidiEventType.PITCH_BEND)
+            midiEvent.channel = channel
+            midiEvent.pitchBend = pitchBend
+            return midiEvent
+        }
     }
 
     override fun toString(): String {
-        return "MidiEvent(eventType=$eventType, origin=$origin, program=$program, control=$control, note=$note, channel=$channel, value=$value, velocity=$velocity)"
+        return "MidiEvent(eventType=$eventType, " +
+                "origin=$origin, " +
+                "program=$program, " +
+                "control=$control, " +
+                "note=$note, " +
+                "channel=$channel, " +
+                "pitchBend=$pitchBend, " +
+                "pressure=$pressure, " +
+                "value=$value, " +
+                "velocity=$velocity)"
     }
 }
