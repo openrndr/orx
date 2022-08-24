@@ -1,105 +1,140 @@
 package org.openrndr.extra.kinect
 
-import org.openrndr.Extension
 import org.openrndr.draw.*
+import org.openrndr.extra.depth.camera.DepthCamera
+import org.openrndr.math.IntVector2
 import org.openrndr.resourceUrl
 import java.lang.RuntimeException
+import java.net.URL
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
+import kotlin.reflect.KClass
 
 /**
- * Represents all the accessible kinects handled by a specific driver (V1, V2).
- *
- * @param <CTX> data needed to make low level kinect support calls.
+ * Represents all the accessible kinects handled by a specific driver (V1, V2, etc.).
  */
-interface Kinects<CTX> {
-
-    fun countDevices(): Int
+interface Kinect {
 
     /**
-     * Starts kinect device of a given number.
+     * Lists available kinect devices.
+     */
+    fun listDevices(): List<Device.Info>
+
+    /**
+     * Opens kinect device of a given index.
      *
-     * @param num the kinect device index (starts with 0). If no value specified,
+     * @param index the kinect device index (starts with 0). If no value specified,
      *          it will default to 0.
-     * @throws KinectException if device of such a number does not exist
-     *          (better to count them first), or it was already started.
-     * @see countDevices
+     * @throws KinectException if device of such an index does not exist,
+     *          or it was already started.
+     * @see listDevices
      */
-    fun startDevice(num: Int = 0): KinectDevice<CTX>
+    fun openDevice(index: Int = 0): Device
 
     /**
-     * Executes low level Kinect commands in the kinect thread.
+     * Opens kinect device of a given serial number.
+     *
+     * @param serialNumber the kinect device serialNumber.
+     * @throws KinectException if device of such a serial number does not exist
+     *          , or it was already started.
+     * @see listDevices
      */
-    fun <T> execute(commands: (CTX) -> T) : T
+    fun openDevice(serialNumber: String): Device
+
+    /**
+     * The list of kinect devices which are already opened and haven't been closed.
+     */
+    val activeDevices: List<Device>
+
+    /**
+     * Represents physical kinect device.
+     */
+    interface Device {
+
+        /**
+         * Provides information about kinect device.
+         *
+         * Note: in implementation it can be extended with any
+         * additional information next to the serial number.
+         */
+        interface Info {
+            val serialNumber: String
+        }
+
+        val info: Info
+
+        val depthCamera: KinectDepthCamera
+
+        fun close()
+
+    }
 
 }
 
 /**
- * Represents specific device.
- *
- * @param CTX type of data needed to make low level kinect support calls (e.g. freenect contexts).
+ * Generic interface for all the kinect cameras.
  */
-interface KinectDevice<CTX> : Extension {
-
-    val depthCamera: KinectDepthCamera
-
-    /**
-     * Executes low level Kinect commands in the kinect thread in the context of this device.
-     */
-    fun <T> execute(commands: (CTX) -> T): T
-
-}
-
 interface KinectCamera {
+
     var enabled: Boolean
-    val width: Int
-    val height: Int
-    var mirror: Boolean
-    val currentFrame: ColorBuffer
-    /**
-     * Returns the latest frame, but only once. Useful for the scenarios
-     * where each new frame triggers extra computation. Therefore the same
-     * expensive operation might happen only once, especially when the refresh
-     * rate of the target screen is higher than kinect's 30 fps.
-     * <p>
-     * Example usage:
-     * <pre>
-     * kinect.depthCamera.getLatestFrame()?.let { frame ->
-     *     grayscaleFilter.apply(frame, grayscaleBuffer)
-     * }
-     * </pre>
-     */
-    fun getLatestFrame(): ColorBuffer?
+
 }
 
-interface KinectDepthCamera : KinectCamera {
+interface KinectDepthCamera : KinectCamera, DepthCamera {
     /* no special attributes at the moment */
 }
 
-class KinectException(msg: String) : RuntimeException(msg)
+open class KinectException(msg: String) : RuntimeException(msg)
 
-/**
- * Maps depth values to grayscale.
- */
-class DepthToGrayscaleMapper : Filter(
-        filterShaderFromUrl(resourceUrl("depth-to-grayscale.frag", Kinects::class))
-)
+fun kinectRawDepthByteBuffer(resolution: IntVector2): ByteBuffer =
+    ByteBuffer.allocateDirect(
+        resolution.x * resolution.y * 2
+    ).also {
+        it.order(ByteOrder.nativeOrder())
+    }
 
-/**
- * Maps depth values to color map according to natural light dispersion as described
- * by Alan Zucconi in the
- * <a href="https://www.alanzucconi.com/2017/07/15/improving-the-rainbow/">Improving the Rainbow</a>
- * article.
- */
-class DepthToColorsZucconi6Mapper : Filter(
-        filterShaderFromUrl(resourceUrl("depth-to-colors-zucconi6.frag", Kinects::class))
-)
+fun <T : Kinect> KClass<T>.filterFrom(resource: String, flipH: Boolean, flipV: Boolean): Filter {
+    val url = resourceUrl(resource, this)
+    val preamble =
+        (if (flipH) "#define KINECT_FLIPH\n" else "") +
+        (if (flipV) "#define KINECT_FLIPV\n" else "")
+    return Filter(
+        filterShaderFromCode(
+            "$preamble\n${URL(url).readText()}",
+            "kinect-shader: $url + flipH: $flipH, flipV: $flipV"
+        )
+    )
+}
 
-/**
- * Maps depth values to color map according to
- * <a href="https://ai.googleblog.com/2019/08/turbo-improved-rainbow-colormap-for.html">
- *     Turbo, An Improved Rainbow Colormap for Visualization
- * </a>
- * by Google.
- */
-class DepthToColorsTurboMapper : Filter(
-        filterShaderFromUrl(resourceUrl("depth-to-colors-turbo.frag", Kinects::class))
-)
+class KinectDepthMappers<T : Kinect>(resource: String, `class`: KClass<T>) {
+
+    private val flipHFalseVFalse = `class`.filterFrom(resource, flipH = false, flipV = false)
+    private val flipHFalseVTrue = `class`.filterFrom(resource, flipH = false, flipV = true)
+    private val flipHTrueVFalse = `class`.filterFrom(resource, flipH = true, flipV = false)
+    private val flipHTrueVTrue = `class`.filterFrom(resource, flipH = true, flipV = true)
+
+    fun select(flipH: Boolean, flipV: Boolean): Filter =
+        if (flipH) {
+            if (flipV) flipHTrueVTrue
+            else flipHTrueVFalse
+        } else {
+            if (flipV) flipHFalseVTrue
+            else flipHFalseVFalse
+        }
+
+    fun update(resolution: IntVector2) {
+        val resolutionXMinus1 = resolution.x - 1
+        flipHTrueVFalse.parameters["resolutionXMinus1"] = resolutionXMinus1
+        flipHTrueVTrue.parameters["resolutionXMinus1"] = resolutionXMinus1
+    }
+
+    fun forEach(block: (filter: Filter) -> Unit) {
+        block(flipHFalseVFalse)
+        block(flipHFalseVTrue)
+        block(flipHTrueVFalse)
+        block(flipHTrueVTrue)
+    }
+
+}
+
+fun depthToRawNormalizedMappers() = KinectDepthMappers("depth-to-raw-normalized.frag", Kinect::class)
