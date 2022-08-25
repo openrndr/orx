@@ -1,25 +1,16 @@
 import ScreenshotsHelper.collectScreenshots
 
+plugins {
+    org.openrndr.extra.convention.`kotlin-jvm`
+}
+
 sourceSets {
-    val main by getting { }
-    val demo by creating {
-        java {
-            srcDir("src/demo/kotlin")
-            compileClasspath += main.getCompileClasspath()
-            runtimeClasspath += main.getRuntimeClasspath()
-        }
-    }
+    val demo by getting
     collectScreenshots(project, demo) { }
 }
 
-val demoImplementation by configurations.getting {}
-val demoRuntimeOnly by configurations.getting {}
-
 dependencies {
+    implementation(libs.openrndr.application)
+    implementation(libs.openrndr.math)
     api(libs.boofcv)
-    demoImplementation(libs.openrndr.application)
-    demoImplementation(libs.openrndr.extensions)
-    demoRuntimeOnly(libs.openrndr.gl3.core)
-    demoRuntimeOnly(libs.openrndr.gl3.natives)
-    demoImplementation(sourceSets.getByName("main").output)
 }

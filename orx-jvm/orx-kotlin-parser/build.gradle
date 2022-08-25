@@ -1,48 +1,25 @@
-//plugins {
-//    id 'antlr'
-//}
-
-apply plugin: 'antlr'
+plugins {
+    id("org.openrndr.extra.convention.kotlin-jvm")
+    id("antlr")
+}
 
 sourceSets {
-    demo {
-        java {
-            srcDirs = ["src/demo/kotlin"]
-            compileClasspath += main.getCompileClasspath()
-            runtimeClasspath += main.getRuntimeClasspath()
-        }
-    }
     main {
         java {
-            srcDir("src/main/java")
-            srcDir("src/main/kotlin")
             srcDir("build/generated-src/antlr")
         }
     }
 }
 
-
-
 generateGrammarSource {
     maxHeapSize = "64m"
     arguments += ["-visitor", "-long-messages"]
     outputDirectory = file("${project.buildDir}/generated-src/antlr/org/openrndr/extra/kotlin/antlr".toString())
-
 }
 
 dependencies {
-    antlr(libs.antlr)
-    implementation(libs.antlrRuntime)
-
-    demoImplementation(project(":orx-camera"))
-    demoImplementation(project(":orx-jvm:orx-panel"))
-
-    demoImplementation(libs.openrndr.application)
-    demoImplementation(libs.openrndr.extensions)
-    demoRuntimeOnly(libs.openrndr.gl3.core)
-    demoRuntimeOnly(libs.openrndr.gl3.natives)
-
-    demoImplementation(sourceSets.getByName("main").output)
+    antlr(libs.antlr.core)
+    implementation(libs.antlr.runtime)
 }
 
 tasks.getByName("compileKotlin").dependsOn("generateGrammarSource")

@@ -1,38 +1,29 @@
 import ScreenshotsHelper.collectScreenshots
 
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    kotlin("multiplatform")
-    kotlin("plugin.serialization")
+    org.openrndr.extra.convention.`kotlin-multiplatform`
+    // kotlinx-serialization ends up on the classpath through openrndr-math and Gradle doesn't know which
+    // version was used. If openrndr were an included build, we probably wouldn't need to do this.
+    // https://github.com/gradle/gradle/issues/20084
+    id(libs.plugins.kotlin.serialization.get().pluginId)
 }
 
 kotlin {
     jvm {
-        compilations {
-            val demo by creating {
-                defaultSourceSet {
-                    kotlin.srcDir("src/demo")
-                }
-                dependencies {
-                    implementation(project(":orx-camera"))
-                    implementation(project(":orx-mesh-generators"))
-                    implementation(project(":orx-color"))
-                    implementation(project(":orx-jvm:orx-gui"))
-                    implementation(libs.openrndr.application)
-                    implementation(libs.openrndr.extensions)
-                    runtimeOnly(libs.openrndr.gl3.core)
-                    runtimeOnly(libs.openrndr.gl3.natives)
-                    implementation(compilations["main"]!!.output.allOutputs)
-                }
-                collectScreenshots { }
+        @Suppress("UNUSED_VARIABLE")
+        val demo by compilations.getting {
+            // TODO: Move demos to /jvmDemo
+            defaultSourceSet {
+                kotlin.srcDir("src/demo/kotlin")
+            }
+            collectScreenshots { }
+        }
+        testRuns["test"].executionTask {
+            useJUnitPlatform {
+                includeEngines("spek2")
             }
         }
-        testRuns["test"].executionTask.configure {
-            useJUnitPlatform()
-        }
-    }
-    js(IR) {
-        browser()
-        nodejs()
     }
 
     sourceSets {
@@ -46,39 +37,33 @@ kotlin {
                 implementation(libs.openrndr.draw)
                 implementation(libs.openrndr.filter)
                 implementation(libs.kotlin.reflect)
-                implementation(libs.kotlin.logging)
             }
         }
 
         @Suppress("UNUSED_VARIABLE")
         val commonTest by getting {
             dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
                 implementation(libs.kotlin.serialization.json)
-                implementation(libs.kotest)
             }
         }
-
-        val jvmMain by getting
 
         @Suppress("UNUSED_VARIABLE")
         val jvmTest by getting {
             dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
-                implementation(kotlin("test-junit5"))
-                implementation(libs.kotlin.serialization.json)
-                runtimeOnly(libs.bundles.jupiter)
-                implementation(libs.spek.dsl)
                 implementation(libs.kluent)
+                implementation(libs.spek.dsl)
+                runtimeOnly(libs.spek.junit5)
+                runtimeOnly(libs.kotlin.reflect)
             }
         }
 
         @Suppress("UNUSED_VARIABLE")
-        val jsTest by getting {
+        val jvmDemo by getting {
             dependencies {
-                implementation(kotlin("test-js"))
+                implementation(project(":orx-camera"))
+                implementation(project(":orx-mesh-generators"))
+                implementation(project(":orx-color"))
+                implementation(project(":orx-jvm:orx-gui"))
             }
         }
     }
