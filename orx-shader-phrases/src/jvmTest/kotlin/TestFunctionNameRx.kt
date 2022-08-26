@@ -17,6 +17,7 @@ object TestFunctionNameRx : Spek({
             "vec4 ggg() {" to "ggg",
             "vec3 hhh() {" to "hhh",
             "vec2 iii() {" to "iii",
+            "mat2 ii2() {" to "ii2",
             "mat3 jjj() {" to "jjj",
             "mat4 kkk() {" to "kkk",
             "float lll() {" to "lll",
