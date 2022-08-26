@@ -56,7 +56,7 @@ fun poissonDiskSampling(
 
     for (ohg in obstacleHashGrids) {
         for (point in ohg.points()) {
-            queue.add(Pair(point, ohg.radius))
+            queue.add(Pair(point.first, ohg.radius))
         }
     }
 

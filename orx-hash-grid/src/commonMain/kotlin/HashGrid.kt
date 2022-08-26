@@ -21,9 +21,9 @@ private class Cell(
     var yMin: Double = Double.POSITIVE_INFINITY,
     var yMax: Double = Double.NEGATIVE_INFINITY,
 ) {
-    val points = mutableListOf<Vector2>()
-    fun insert(point: Vector2) {
-        points.add(point)
+    val points = mutableListOf<Pair<Vector2, Any?>>()
+    fun insert(point: Vector2, owner: Any?) {
+        points.add(Pair(point, owner))
         xMin = min(xMin, point.x)
         xMax = max(xMax, point.x)
         yMin = min(yMin, point.y)
@@ -59,16 +59,16 @@ class HashGrid(val radius: Double) {
     }
 
     fun random(random: Random = Random.Default) : Vector2 {
-        return cells.values.random(random).points.random()
+        return cells.values.random(random).points.random().first
     }
 
-    fun insert(point: Vector2) {
+    fun insert(point: Vector2, owner:Any? = null) {
         val gc = coords(point)
         val cell = cells.getOrPut(gc) { Cell() }
-        cell.insert(point)
+        cell.insert(point, owner)
     }
 
-    fun isFree(query: Vector2): Boolean {
+    fun isFree(query: Vector2, ignoreOwners:Set<Any> = emptySet()): Boolean {
         val c = coords(query)
         if (cells[c] == null) {
             for (j in -2..2) {
@@ -80,8 +80,11 @@ class HashGrid(val radius: Double) {
                     val nc = cells[n]
                     if (nc != null && nc.squaredDistanceTo(query) <= radius * radius) {
                         for (p in nc.points) {
-                            if (p.squaredDistanceTo(query) <= radius * radius) {
-                                return false
+
+                            if (p.second == null || p.second !in ignoreOwners) {
+                                if (p.first.squaredDistanceTo(query) <= radius * radius) {
+                                    return false
+                                }
                             }
                         }
                     }
@@ -89,7 +92,7 @@ class HashGrid(val radius: Double) {
             }
             return true
         } else {
-            return false
+            return cells[c]!!.points.all { it.second != null && it.second in ignoreOwners }
         }
     }
 }
