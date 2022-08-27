@@ -25,7 +25,7 @@ fun main() = application {
         val settings = @Description("Settings") object {
             @XYParameter("Position", 0.0, 800.0, 0.0, 800.0,
                     precision = 2,
-                    invertY = true,
+                    invertY = false,
                     showVector = true)
             var position: Vector2 = Vector2(0.0,0.0)
         }

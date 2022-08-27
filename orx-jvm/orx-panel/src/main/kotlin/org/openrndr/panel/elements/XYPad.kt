@@ -11,6 +11,7 @@ import org.openrndr.math.clamp
 import org.openrndr.math.map
 import org.openrndr.panel.style.Color
 import org.openrndr.panel.style.color
+import org.openrndr.shape.LineSegment
 import kotlin.math.pow
 import kotlin.math.round
 import kotlin.reflect.KMutableProperty0
@@ -155,38 +156,43 @@ class XYPad : Element(ElementType("xy-pad")) {
                 }
         )
 
+    private val grid = mutableListOf<LineSegment>()
+
     override fun draw(drawer: Drawer) {
+        if(grid.isEmpty()) {
+            repeat(21) { n ->
+                grid.add(
+                    LineSegment(
+                        0.0,
+                        layout.screenHeight / 20 * n,
+                        layout.screenWidth - 1.0,
+                        layout.screenHeight / 20 * n
+                    )
+                )
+                grid.add(
+                    LineSegment(
+                        layout.screenWidth / 20 * n,
+                        0.0,
+                        layout.screenWidth / 20 * n,
+                        layout.screenHeight - 1.0
+                    )
+                )
+            }
+
+        }
         computedStyle.let {
             drawer.pushTransforms()
             drawer.pushStyle()
+
             drawer.fill = ColorRGBa.GRAY
             drawer.stroke = null
             drawer.strokeWeight = 0.0
-
             drawer.rectangle(0.0, 0.0, layout.screenWidth, layout.screenHeight)
 
-
             // lines grid
-            drawer.stroke = ColorRGBa.GRAY.shade(1.2)
+            drawer.stroke = ColorRGBa.GRAY.shade(1.1)
             drawer.strokeWeight = 1.0
-
-            for (y in 0 until 21) {
-                drawer.lineSegment(
-                        0.0,
-                        layout.screenHeight / 20 * y,
-                        layout.screenWidth - 1.0,
-                        layout.screenHeight / 20 * y
-                )
-            }
-
-            for (x in 0 until 21) {
-                drawer.lineSegment(
-                        layout.screenWidth / 20 * x,
-                        0.0,
-                        layout.screenWidth / 20 * x,
-                        layout.screenHeight - 1.0
-                )
-            }
+            drawer.lineSegments(grid)
 
             // cross
             drawer.stroke = ColorRGBa.GRAY.shade(1.6)
@@ -206,19 +212,16 @@ class XYPad : Element(ElementType("xy-pad")) {
             val valueLabel = "${String.format("%.0${precision}f", value.x)}, ${String.format("%.0${precision}f", value.y)}"
 
             (root() as? Body)?.controlManager?.fontManager?.let {
-                val font = it.font(computedStyle)
                 val writer = Writer(drawer)
-                drawer.fontMap = (font)
+                drawer.fontMap = it.font(computedStyle)
                 val textWidth = writer.textWidth(valueLabel)
-                val textHeight = font.ascenderLength
 
                 drawer.fill = ((computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE).opacify(
                         if (disabled in pseudoClasses) 0.25 else 1.0
                 )
 
-
-                drawer.text(label, Vector2(4.0, 14.0))
-                drawer.text(valueLabel, Vector2(layout.screenWidth - textWidth - 4.0, layout.screenHeight - textHeight + 6.0))
+                drawer.text(valueLabel,layout.screenWidth - textWidth - 4.0, layout.screenHeight - 4.0)
+                drawer.text(label, 0.0, layout.screenHeight + 18.0)
             }
 
             drawer.popStyle()
