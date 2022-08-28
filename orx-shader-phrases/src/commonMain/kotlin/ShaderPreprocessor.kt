@@ -61,7 +61,7 @@ object ShaderPhraseRegistry {
      */
     fun getGLSLFunctionName(glsl: String): String {
         val functionRex =
-            Regex("""\s*(float|int|[bi]?vec[234]|mat[34])\s+(\w+)\s*\(.*\).*""")
+            Regex("""\s*(float|int|[bi]?vec[234]|mat[234])\s+(\w+)\s*\(.*\).*""")
         val defs = glsl.split("\n").filter {
             functionRex.matches(it)
         }.take(1).mapNotNull {
