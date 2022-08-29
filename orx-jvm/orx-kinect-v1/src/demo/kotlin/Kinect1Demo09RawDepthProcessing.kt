@@ -1,5 +1,3 @@
-package org.openrndr.extra.kinect.v1.demo
-
 import org.openrndr.application
 import org.openrndr.draw.Filter
 import org.openrndr.draw.colorBuffer
