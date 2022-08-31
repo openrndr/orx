@@ -12,9 +12,9 @@ import javax.inject.Inject
 @CacheableRule
 abstract class LwjglRule : ComponentMetadataRule {
     val jvmNativeVariants: List<JvmNativeVariant> = listOf(
-        JvmNativeVariant("natives-linux-arm64", OperatingSystemFamily.LINUX, "arm64"),
+        JvmNativeVariant("natives-linux-arm64", OperatingSystemFamily.LINUX, "aarch64"),
         JvmNativeVariant("natives-linux", OperatingSystemFamily.LINUX, "x86-64"),
-        JvmNativeVariant("natives-macos-arm64", OperatingSystemFamily.MACOS, "arm64"),
+        JvmNativeVariant("natives-macos-arm64", OperatingSystemFamily.MACOS, "aarch64"),
         JvmNativeVariant("natives-macos", OperatingSystemFamily.MACOS, "x86-64"),
         JvmNativeVariant("natives-windows", OperatingSystemFamily.WINDOWS, "x86-64")
     )

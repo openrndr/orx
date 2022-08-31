@@ -12,9 +12,9 @@ import javax.inject.Inject
 @CacheableRule
 abstract class FFmpegRule : ComponentMetadataRule {
     val jvmNativeVariants: List<JvmNativeVariant> = listOf(
-        JvmNativeVariant("linux-arm64", OperatingSystemFamily.LINUX, "arm64"),
+        JvmNativeVariant("linux-arm64", OperatingSystemFamily.LINUX, "aarch64"),
         JvmNativeVariant("linux-x86_64", OperatingSystemFamily.LINUX, "x86-64"),
-        JvmNativeVariant("macosx-arm64", OperatingSystemFamily.MACOS, "arm64"),
+        JvmNativeVariant("macosx-arm64", OperatingSystemFamily.MACOS, "aarch64"),
         JvmNativeVariant("macosx-x86_64", OperatingSystemFamily.MACOS, "x86-64"),
         JvmNativeVariant("windows-x86_64", OperatingSystemFamily.WINDOWS, "x86-64")
     )
