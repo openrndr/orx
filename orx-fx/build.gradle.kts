@@ -59,6 +59,7 @@ kotlin {
             dependencies {
                 implementation(project(":orx-color"))
                 implementation(project(":orx-fx"))
+                implementation(project(":orx-noise"))
             }
         }
     }
