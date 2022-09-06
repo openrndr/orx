@@ -38,6 +38,7 @@ kotlin {
         val jvmDemo by getting {
             dependencies {
                 implementation(project(":orx-camera"))
+                implementation(project(":orx-mesh-generators"))
             }
         }
     }
