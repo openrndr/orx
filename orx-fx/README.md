@@ -218,6 +218,16 @@ shaping `curve` within this range:
 
 ![DemoColorPosterize01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColorPosterize01Kt.png)
 
+### DemoCompositeFilter01
+[source code](src/demo/kotlin/DemoCompositeFilter01.kt)
+
+![DemoCompositeFilter01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoCompositeFilter01Kt.png)
+
+### DemoDirectionalBlur01
+[source code](src/demo/kotlin/DemoDirectionalBlur01.kt)
+
+![DemoDirectionalBlur01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDirectionalBlur01Kt.png)
+
 ### DemoDistortLenses01
 [source code](src/demo/kotlin/DemoDistortLenses01.kt)
 
