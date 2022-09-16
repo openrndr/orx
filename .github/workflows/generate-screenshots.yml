@@ -40,7 +40,7 @@ jobs:
 
       - name: Build OPENRNDR
         working-directory: ./openrndr
-        run: ./gradlew build -Prelease.version=0.5.1-SNAPSHOT publishToMavenLocal
+        run: ./gradlew publishToMavenLocal -Prelease.version=0.5.1-SNAPSHOT
 
       - name: Build ORX
         run: ./gradlew build
