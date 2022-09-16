@@ -56,3 +56,9 @@ fun main() = application {
 * `Down` or `q` -  move up (-y)
 * `Page Up` -  zoom in
 * `Page Down` -  zoom out
+<!-- __demos__ -->
+## Demos
+### DemoCamera2D
+[source code](src/demo/kotlin/DemoCamera2D.kt)
+
+![DemoCamera2DKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoCamera2DKt.png)
