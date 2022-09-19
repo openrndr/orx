@@ -29,6 +29,7 @@ kotlin {
                 implementation(libs.openrndr.shape)
                 implementation(libs.openrndr.draw)
                 implementation(project(":orx-hash-grid"))
+                implementation(project(":orx-parameters"))
             }
         }
 
@@ -46,6 +47,7 @@ kotlin {
         val jvmDemo by getting {
             dependencies {
                 implementation(project(":orx-hash-grid"))
+                implementation(project(":orx-noise"))
             }
         }
     }
