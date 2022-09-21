@@ -18,11 +18,13 @@ class HashNoise : Filter(filterShaderFromCode(run {
     /**
      * noise gain per channel, default is Vector4(1.0, 1.0, 1.0, 0.0)
      */
+    @Vector4Parameter("Gain")
     var gain: Vector4 by parameters
 
     /**
      * noise bias per channel, default is Vector4(0.0, 0.0, 0.0, 1.0)
      */
+    @Vector4Parameter("Bias")
     var bias: Vector4 by parameters
 
     /**
@@ -34,7 +36,7 @@ class HashNoise : Filter(filterShaderFromCode(run {
     /**
      * noise seed, feed it with time to animate
      */
-    @DoubleParameter("Seed", 0.0, 10000.0)
+    @DoubleParameter("Seed", 0.0, 1000.0)
     var seed: Double by parameters
 
     init {
@@ -48,6 +50,7 @@ class HashNoise : Filter(filterShaderFromCode(run {
 /**
  * Speckle noise filter
  */
+@Description("Speckle Noise")
 class SpeckleNoise : Filter(filterShaderFromCode(run {
         noise_speckle.preprocess()
 }, "speckle-noise")) {
@@ -64,7 +67,6 @@ class SpeckleNoise : Filter(filterShaderFromCode(run {
     @DoubleParameter("Density", 0.0, 1.0)
     var density: Double by parameters
 
-
     /**
      * Noisiness of the generated speckles, default is 0.0, min is 0.0, max is 1.0
      */
@@ -79,7 +81,7 @@ class SpeckleNoise : Filter(filterShaderFromCode(run {
     /**
      * noise seed, feed it with time to animate
      */
-    @DoubleParameter("Seed", 0.0, 10000.0)
+    @DoubleParameter("Seed", 0.0, 1000.0)
     var seed: Double by parameters
 
     init {
@@ -98,26 +100,31 @@ class SpeckleNoise : Filter(filterShaderFromCode(run {
 class CellNoise : Filter(filterShaderFromCode(run {
     noise_cell.preprocess()
 }, "cell-noise")) {
+    @Vector2Parameter("Seed", -10.0, 10.0)
     var seed: Vector2 by parameters
 
     /**
      * base noise scale, default is Vector2(1.0, 1.0)
      */
+    @Vector2Parameter("Scale", 0.01, 10.0)
     var scale: Vector2 by parameters
 
     /**
      * lacunarity is the amount by which scale is modulated per octave, default is Vector2(2.0, 2.0)
      */
+    @Vector2Parameter("Lacunarity", 0.1, 5.0)
     var lacunarity: Vector2 by parameters
 
     /**
      * gain is the base intensity per channel, default is Vector2(1.0, 1.0, 1.0, 1.0)
      */
+    @Vector4Parameter("Gain", 0.0, 1.0)
     var gain: Vector4 by parameters
 
     /**
      * decay is the amount by which gain is modulated per octave, default is Vector4(0.5, 0.5, 0.5, 0.5)
      */
+    @Vector4Parameter("Decay", 0.0, 1.0)
     var decay: Vector4 by parameters
 
     /**
@@ -129,6 +136,7 @@ class CellNoise : Filter(filterShaderFromCode(run {
     /**
      * the value to add to the resulting noise
      */
+    @Vector4Parameter("Bias", -1.0, 1.0)
     var bias: Vector4 by parameters
 
     /**
@@ -155,27 +163,31 @@ class CellNoise : Filter(filterShaderFromCode(run {
 class ValueNoise : Filter(filterShaderFromCode(run {
     noise_value.preprocess()
 },  "value-noise")) {
-    @DoubleParameter("Seed", 0.0, 10000.0)
+    @Vector2Parameter("Seed", 0.0, 10000.0)
     var seed: Vector2 by parameters
 
     /**
      * base noise scale, default is Vector2(1.0, 1.0)
      */
+    @Vector2Parameter("Scale", 0.0, 5.0)
     var scale: Vector2 by parameters
 
     /**
      * lacunarity is the amount by which scale is modulated per octave, default is Vector2(2.0, 2.0)
      */
+    @Vector2Parameter("Lacunarity", 0.0, 5.0)
     var lacunarity: Vector2 by parameters
 
     /**
      * gain is the base intensity per channel, default is Vector2(1.0, 1.0, 1.0, 1.0)
      */
+    @Vector4Parameter("Gain", 0.0, 1.0)
     var gain: Vector4 by parameters
 
     /**
      * decay is the amount by which gain is modulated per octave, default is Vector4(0.5, 0.5, 0.5, 0.5)
      */
+    @Vector4Parameter("Decay", 0.0, 1.0)
     var decay: Vector4 by parameters
 
     /**
@@ -187,6 +199,7 @@ class ValueNoise : Filter(filterShaderFromCode(run {
     /**
      * the value to add to the resulting noise
      */
+    @Vector4Parameter("Bias", -1.0, 1.0)
     var bias: Vector4 by parameters
 
     /**
@@ -218,21 +231,25 @@ class SimplexNoise3D : Filter(filterShaderFromCode(run {
     /**
      * base noise scale, default is Vector3(1.0, 1.0, 1.0)
      */
+    @Vector3Parameter("Scale", 0.0, 5.0)
     var scale: Vector3 by parameters
 
     /**
      * lacunarity is the amount by which scale is modulated per octave, default is Vector3(2.0, 2.0, 2.0)
      */
+    @Vector3Parameter("Lacunarity", 0.0, 5.0)
     var lacunarity: Vector3 by parameters
 
     /**
      * gain is the base intensity per channel, default is Vector2(1.0, 1.0, 1.0, 1.0)
      */
+    @Vector4Parameter("Gain", 0.0, 1.0)
     var gain: Vector4 by parameters
 
     /**
      * decay is the amount by which gain is modulated per octave, default is Vector4(0.5, 0.5, 0.5, 0.5)
      */
+    @Vector4Parameter("Decay", 0.0, 1.0)
     var decay: Vector4 by parameters
 
     /**
@@ -244,6 +261,7 @@ class SimplexNoise3D : Filter(filterShaderFromCode(run {
     /**
      * the value to add to the resulting noise
      */
+    @Vector4Parameter("Bias", -1.0, 1.0)
     var bias: Vector4 by parameters
 
     /**

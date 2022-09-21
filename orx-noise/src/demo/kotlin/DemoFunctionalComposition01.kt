@@ -1,15 +1,9 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.LineJoin
-import org.openrndr.extensions.SingleScreenshot
-import org.openrndr.extra.noise.perturb
-import org.openrndr.extra.noise.simplex
-import org.openrndr.extra.noise.simplex1D
-import org.openrndr.extra.noise.simplex2D
+import org.openrndr.extra.noise.gradient
 import org.openrndr.extra.noise.simplex3D
 import org.openrndr.extra.noise.withVector2Output
-import org.openrndr.extra.noise.gradient
-import org.openrndr.shape.contour
 
 fun main() = application {
     configure {

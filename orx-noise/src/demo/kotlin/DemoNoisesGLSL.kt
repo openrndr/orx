@@ -1,5 +1,5 @@
 import org.openrndr.application
-import org.openrndr.draw.renderTarget
+import org.openrndr.draw.colorBuffer
 import org.openrndr.extra.noise.filters.*
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
@@ -8,7 +8,7 @@ import kotlin.math.sin
 
 /**
  * Render existing GLSL noise algorithms side by side.
- * Re-use the same render target for the rendering.
+ * Re-use the same color buffer for the rendering.
  * Not all noise properties are used. Explore each noise class
  * to find out more adjustable properties.
  * The noise color can be set using a `color` or a `gain` property.
@@ -20,10 +20,8 @@ fun main() = application {
             ValueNoise(), SimplexNoise3D(), WorleyNoise()
         )
 
-        val rt = renderTarget(width / noises.size, height * 8 / 10) {
-            colorBuffer()
-        }
-        val img = rt.colorBuffer(0)
+        val img = colorBuffer(width / noises.size, height * 8 / 10)
+
         extend {
             val seed = seconds * 0.1
             val scale = 1.0 + sin(seed) * 0.5

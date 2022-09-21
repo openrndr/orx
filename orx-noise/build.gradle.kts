@@ -63,6 +63,7 @@ kotlin {
             dependencies {
                 implementation(project(":orx-hash-grid"))
                 implementation(project(":orx-noise"))
+                implementation(project(":orx-jvm:orx-gui"))
             }
         }
     }
