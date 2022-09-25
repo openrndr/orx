@@ -22,11 +22,13 @@ class ShaderPhrase(val phrase: String) {
         ShaderPhraseRegistry.registerPhrase("$prefix$id", this)
     }
 }
+
 /**
  * A book of shader phrases.
  */
 expect open class ShaderPhraseBook(bookId: String) {
     val bookId: String
+
     /**
      * Registers all known shader phrases
      */
@@ -39,12 +41,14 @@ expect open class ShaderPhraseBook(bookId: String) {
  */
 object ShaderPhraseRegistry {
     private val phrases = mutableMapOf<String, ShaderPhrase>()
+
     /**
      * Registers a [phrase] with [id]
      */
     fun registerPhrase(id: String, phrase: ShaderPhrase) {
         phrases[id] = phrase
     }
+
     /**
      * Finds a phrase for [id], returns null when no phrase found
      */
@@ -79,10 +83,7 @@ object ShaderPhraseRegistry {
  * @param source GLSL source code encoded as string
  * @return GLSL source code with injected shader phrases
  */
-fun preprocessShader(source: String, symbols: Set<String> = emptySet()): String {
-    val newSymbols = mutableSetOf<String>()
-    newSymbols.addAll(symbols)
-
+fun preprocessShader(source: String, symbols: MutableSet<String> = mutableSetOf()): String {
     val lines = source.split("\n")
     val funcName = Regex("""^\s*#pragma\s+import\s+([a-zA-Z0-9_.]+)""")
     val processed = lines.map { line ->
@@ -92,10 +93,10 @@ fun preprocessShader(source: String, symbols: Set<String> = emptySet()): String 
             val fieldName = fullTokens.last().replace(";", "").trim()
             val packageClassTokens = fullTokens.dropLast(1)
             val packageClass = packageClassTokens.joinToString(".")
-            if (symbol !in newSymbols) {
-                newSymbols.add(symbol)
+            if (symbol !in symbols) {
+                symbols.add(symbol)
                 val registryPhrase = ShaderPhraseRegistry.findPhrase(symbol)
-                registryPhrase?.let { preprocessShader(it.phrase, newSymbols) }
+                registryPhrase?.let { preprocessShader(it.phrase, symbols) }
             } else {
                 ""
             }
@@ -114,7 +115,7 @@ fun String.preprocess() = preprocessShader(this)
  * @param url url pointing to GLSL shader source
  * @return GLSL source code with injected shader phrases
  */
-fun preprocessShaderFromUrl(url: String, symbols: Set<String> = emptySet()): String {
+fun preprocessShaderFromUrl(url: String, symbols: MutableSet<String> = mutableSetOf()): String {
     return preprocessShader(textFromURL(url), symbols)
 }
 
