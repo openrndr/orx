@@ -2,16 +2,15 @@ package org.openrndr.panel.elements
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
-import org.openrndr.panel.style.Color
-import org.openrndr.panel.style.Overflow
-import org.openrndr.panel.style.background
-import org.openrndr.panel.style.overflow
+import org.openrndr.panel.style.*
 import kotlin.math.max
 
 open class Div : TextElement(ElementType("div")) {
     init {
         mouse.pressed.listen {
-            it.cancelPropagation()
+            if (computedStyle.effectiveBackground?.alpha?:0.0 > 0.0) {
+                it.cancelPropagation()
+            }
         }
         mouse.scrolled.listen {
             computedStyle.let { cs ->
