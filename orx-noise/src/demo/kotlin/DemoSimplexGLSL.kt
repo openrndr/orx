@@ -39,7 +39,7 @@ fun main() = application {
             noise.octaves = 4
             noise.bias = Vector4(wav[17](), wav[18](), wav[19](), wav[20]())
 
-            noise.apply(img, img)
+            noise.apply(emptyArray(), img)
             drawer.clear(rgb(0.20, 0.18, 0.16))
             drawer.image(img)
         }

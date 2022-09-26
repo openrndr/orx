@@ -26,7 +26,7 @@ fun main() = application {
 
         extend {
             noises.forEachIndexed { i, noise ->
-                noise.apply(img, img)
+                noise.apply(emptyArray(), img)
                 drawer.image(img, 200.0 + i * 200.0, 20.0)
             }
         }

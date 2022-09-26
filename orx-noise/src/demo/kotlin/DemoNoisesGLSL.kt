@@ -54,7 +54,7 @@ fun main() = application {
                         noise.offset = Vector2(seed)
                     }
                 }
-                noise.apply(img, img)
+                noise.apply(emptyArray(), img)
                 drawer.image(img)
                 drawer.translate(
                     width / noises.size * 1.0,
