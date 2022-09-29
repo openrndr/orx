@@ -1,26 +1,27 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
+import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.gui.GUI
 import org.openrndr.extra.gui.GUIAppearance
 import org.openrndr.extra.parameters.*
 import org.openrndr.math.Vector2
-import org.openrndr.panel.elements.draw
-
+import org.openrndr.shape.Circle
 
 /**
  * A simple demonstration of a GUI for drawing some circles
  */
 fun main() = application {
-    configure {
-        width = 800
-        height = 800
-        windowResizable = true
-    }
-
     program {
-        val gui = GUI(GUIAppearance(baseColor = ColorRGBa.GRAY.shade(0.25)))
+        // -- this block is for automation purposes only
+        if (System.getProperty("takeScreenshot") == "true") {
+            extend(SingleScreenshot()) {
+                this.outputFile = System.getProperty("screenshotPath")
+            }
+        }
+
+        val gui = GUI(GUIAppearance(barWidth = 400))
         gui.compartmentsCollapsedByDefault = false
-        gui.enableSideCanvas = true
+
 
         val settings = @Description("Settings") object {
             @DoubleParameter("radius", 0.0, 100.0)
@@ -38,11 +39,20 @@ fun main() = application {
         gui.add(settings)
         extend(gui)
 
-        gui.canvas?.draw {
-            val width = drawer.width
-            val height = drawer.height
+        // note we can only change the visibility after the extend
+        gui.visible = true
+
+        extend {
+            // determine visibility through mouse x-coordinate
+            //gui.visible = mouse.position.x < gui.appearance.barWidth
+
             drawer.fill = settings.color
-            drawer.circle(width/2.0, height/2.0, 100.0)
+            drawer.circle(settings.position * drawer.bounds.position(1.0, 1.0), settings.radius)
+            drawer.circles(
+                    settings.radii.mapIndexed { i, radius ->
+                        Circle(width - 50.0, 60.0 + i * 70.0, radius)
+                    }
+            )
         }
     }
 }

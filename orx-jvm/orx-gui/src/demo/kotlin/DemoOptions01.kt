@@ -16,13 +16,6 @@ enum class BackgroundColors {
 
 fun main() = application {
     program {
-        // -- this block is for automation purposes only
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
-
         val gui = GUI()
         gui.compartmentsCollapsedByDefault = false
         val settings = @Description("Settings") object {
@@ -33,7 +26,7 @@ fun main() = application {
         gui.add(settings)
         extend(gui)
         extend {
-            when(settings.option) {
+            when (settings.option) {
                 BackgroundColors.Pink -> drawer.clear(ColorRGBa.PINK)
                 BackgroundColors.Black -> drawer.clear(ColorRGBa.BLACK)
                 BackgroundColors.Yellow -> drawer.clear(ColorRGBa.YELLOW)

@@ -72,8 +72,12 @@ private fun <T : Any> setAndPersist(compartmentLabel: String, property: KMutable
 
 private val logger = KotlinLogging.logger {  }
 
+
+class GUIAppearance(val baseColor: ColorRGBa = ColorRGBa.GRAY, val barWidth:Int = 200)
+
 @Suppress("unused", "UNCHECKED_CAST")
-class GUI(val baseColor:ColorRGBa = ColorRGBa.GRAY, val defaultStyles: List<StyleSheet> = defaultStyles()) : Extension {
+class GUI(val appearance: GUIAppearance = GUIAppearance(),
+          val defaultStyles: List<StyleSheet> = defaultStyles()) : Extension {
     private var onChangeListener: ((name: String, value: Any?) -> Unit)? = null
     override var enabled = true
 
@@ -174,7 +178,7 @@ class GUI(val baseColor:ColorRGBa = ColorRGBa.GRAY, val defaultStyles: List<Styl
             styleSheet(has class_ "container") {
                 this.display = Display.FLEX
                 this.flexDirection = FlexDirection.Column
-                this.width = 200.px
+                this.width = appearance.barWidth.px
                 this.height = 100.percent
             }
 
@@ -183,10 +187,10 @@ class GUI(val baseColor:ColorRGBa = ColorRGBa.GRAY, val defaultStyles: List<Styl
                 this.flexDirection = FlexDirection.Column
                 this.height = 5.px
                 this.width = 100.percent
-                this.background = Color.RGBa(baseColor.shade(0.9))
+                this.background = Color.RGBa(appearance.baseColor.shade(0.9))
 
                 and(has state "hover") {
-                    this.background = Color.RGBa(baseColor.shade(1.1))
+                    this.background = Color.RGBa(appearance.baseColor.shade(1.1))
                 }
             }
 
@@ -195,7 +199,7 @@ class GUI(val baseColor:ColorRGBa = ColorRGBa.GRAY, val defaultStyles: List<Styl
                 this.width = 100.percent
                 this.display = Display.FLEX
                 this.flexDirection = FlexDirection.Row
-                this.background = Color.RGBa(baseColor.copy(alpha = 0.99))
+                this.background = Color.RGBa(appearance.baseColor.copy(alpha = 0.99))
             }
 
             styleSheet(has class_ "collapsed") {
@@ -207,40 +211,40 @@ class GUI(val baseColor:ColorRGBa = ColorRGBa.GRAY, val defaultStyles: List<Styl
             }
 
             styleSheet(has class_ "sidebar") {
-                this.width = 200.px
+                this.width = appearance.barWidth.px
                 this.paddingBottom = 20.px
                 this.paddingTop = 10.px
                 this.paddingLeft = 10.px
                 this.paddingRight = 10.px
                 this.marginRight = 2.px
                 this.height = 100.percent
-                this.background = Color.RGBa(baseColor.copy(alpha = 0.99))
+                this.background = Color.RGBa(appearance.baseColor.copy(alpha = 0.99))
                 this.overflow = Overflow.Scroll
 
                 //<editor-fold desc="1) setup control style">
                 descendant(has type "colorpicker-button") {
-                    this.width = 175.px
+                    this.width = (appearance.barWidth-25).px
                 }
 
                 descendant(has type "slider") {
-                    this.width = 175.px
+                    this.width = (appearance.barWidth-25).px
                 }
 
                 descendant(has type "button") {
-                    this.width = 175.px
+                    this.width = (appearance.barWidth-25).px
                 }
 
                 descendant(has type "textfield") {
-                    this.width = 175.px
+                    this.width = (appearance.barWidth-25).px
                 }
 
                 descendant(has type "toggle") {
-                    this.width = 175.px
+                    this.width = (appearance.barWidth-25).px
                 }
 
                 descendant(has type "xy-pad") {
-                    this.width = 175.px
-                    this.height = 175.px
+                    this.width = (appearance.barWidth-25).px
+                    this.height = (appearance.barWidth-25).px
                 }
 
                 descendant(has type listOf(
@@ -249,7 +253,7 @@ class GUI(val baseColor:ColorRGBa = ColorRGBa.GRAY, val defaultStyles: List<Styl
                         "sliders-vector3",
                         "sliders-vector4"
                 )) {
-                    this.width = 175.px
+                    this.width = (appearance.barWidth-25).px
                     this.height = 100.px
                 }
                 //</editor-fold>

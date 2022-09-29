@@ -12,22 +12,17 @@ fun main() = application {
     }
 
     program {
-        // -- this block is for automation purposes only
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
-
         val gui = GUI()
         gui.compartmentsCollapsedByDefault = false
 
         val settings = @Description("Settings") object {
-            @XYParameter("Position", 0.0, 800.0, 0.0, 800.0,
-                    precision = 2,
-                    invertY = false,
-                    showVector = true)
-            var position: Vector2 = Vector2(0.0,0.0)
+            @XYParameter(
+                "Position", 0.0, 800.0, 0.0, 800.0,
+                precision = 2,
+                invertY = false,
+                showVector = true
+            )
+            var position: Vector2 = Vector2(0.0, 0.0)
         }
 
         gui.add(settings)

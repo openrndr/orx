@@ -13,13 +13,6 @@ import org.openrndr.extra.parameters.*
  */
 fun main() = application {
     program {
-        // -- this block is for automation purposes only
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
-
         val gui = GUI()
         gui.compartmentsCollapsedByDefault = false
 
@@ -47,8 +40,8 @@ fun main() = application {
             drawer.stroke = settings.background
             drawer.fill = settings.foreground
             // Draw a pattern based on modulo
-            for(i in 0 until 100) {
-                if(i % settings.a == 0 || i % settings.b == 0) {
+            for (i in 0 until 100) {
+                if (i % settings.a == 0 || i % settings.b == 0) {
                     val x = (i % 10) * 64.0
                     val y = (i / 10) * 48.0
                     drawer.rectangle(x, y, 64.0, 48.0)
@@ -57,8 +50,8 @@ fun main() = application {
         }
         keyboard.keyDown.listen {
             when (it.name) {
-                in "0" .. "9" -> {
-                    if(keyboard.pressedKeys.contains("left-shift")) {
+                in "0".."9" -> {
+                    if (keyboard.pressedKeys.contains("left-shift")) {
                         // 1. Get the current gui state, store it in a list
                         presets[it.name.toInt()] = gui.toObject()
                     } else {

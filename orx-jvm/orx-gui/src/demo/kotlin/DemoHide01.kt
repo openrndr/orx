@@ -11,16 +11,8 @@ import org.openrndr.shape.Circle
  */
 fun main() = application {
     program {
-        // -- this block is for automation purposes only
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
-
         val gui = GUI()
         gui.compartmentsCollapsedByDefault = false
-
 
         val settings = @Description("Settings") object {
             @DoubleParameter("radius", 0.0, 100.0)
@@ -48,9 +40,9 @@ fun main() = application {
             drawer.fill = settings.color
             drawer.circle(settings.position * drawer.bounds.position(1.0, 1.0), settings.radius)
             drawer.circles(
-                    settings.radii.mapIndexed { i, radius ->
-                        Circle(width - 50.0, 60.0 + i * 70.0, radius)
-                    }
+                settings.radii.mapIndexed { i, radius ->
+                    Circle(width - 50.0, 60.0 + i * 70.0, radius)
+                }
             )
         }
     }

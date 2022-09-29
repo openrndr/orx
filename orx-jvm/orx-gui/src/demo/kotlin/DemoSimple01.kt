@@ -40,9 +40,9 @@ fun main() = application {
             drawer.fill = settings.color
             drawer.circle(settings.position * drawer.bounds.position(1.0, 1.0), settings.radius)
             drawer.circles(
-                    settings.radii.mapIndexed { i, radius ->
-                        Circle(width - 50.0, 60.0 + i * 70.0, radius)
-                    }
+                settings.radii.mapIndexed { i, radius ->
+                    Circle(width - 50.0, 60.0 + i * 70.0, radius)
+                }
             )
         }
     }
