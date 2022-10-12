@@ -32,10 +32,7 @@ tasks.withType<KotlinCompile>() {
 
 kotlin {
     jvm {
-        jvmToolchain {
-            this as JavaToolchainSpec
-            languageVersion.set(JavaLanguageVersion.of(libs.versions.jvmTarget.get()))
-        }
+        jvmToolchain(libs.versions.jvmTarget.get().toInt())
         compilations {
             val main by getting
             @Suppress("UNUSED_VARIABLE")
