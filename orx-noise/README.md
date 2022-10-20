@@ -205,6 +205,16 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 
 ![DemoGradientPerturb3DKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoGradientPerturb3DKt.png)
 
+### DemoNoisesGLSLGui
+[source code](src/demo/kotlin/DemoNoisesGLSLGui.kt)
+
+![DemoNoisesGLSLGuiKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoNoisesGLSLGuiKt.png)
+
+### DemoNoisesGLSL
+[source code](src/demo/kotlin/DemoNoisesGLSL.kt)
+
+![DemoNoisesGLSLKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoNoisesGLSLKt.png)
+
 ### DemoScatter01
 [source code](src/demo/kotlin/DemoScatter01.kt)
 
@@ -214,3 +224,8 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 [source code](src/demo/kotlin/DemoSimplex01.kt)
 
 ![DemoSimplex01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoSimplex01Kt.png)
+
+### DemoSimplexGLSL
+[source code](src/demo/kotlin/DemoSimplexGLSL.kt)
+
+![DemoSimplexGLSLKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoSimplexGLSLKt.png)
