@@ -42,10 +42,7 @@ dependencies {
 }
 
 kotlin {
-    jvmToolchain {
-        this as JavaToolchainSpec
-        languageVersion.set(JavaLanguageVersion.of(libs.versions.jvmTarget.get()))
-    }
+    jvmToolchain(libs.versions.jvmTarget.get().toInt())
 }
 
 tasks {
