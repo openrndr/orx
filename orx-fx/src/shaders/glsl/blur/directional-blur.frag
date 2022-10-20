@@ -9,9 +9,7 @@ uniform sampler2D tex1; // blurDirection
 uniform vec2 textureSize0;
 
 uniform int window;
-uniform float sigma;
 uniform float gain;
-uniform vec4 subtract;
 uniform float spread;
 
 uniform bool wrapX;
