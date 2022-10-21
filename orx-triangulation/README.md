@@ -78,3 +78,13 @@ Edwin Jakobs / [@edwinRNDR](https://github.com/edwinRNDR)
 [source code](src/demo/kotlin/DemoVoronoi01.kt)
 
 ![DemoVoronoi01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoVoronoi01Kt.png)
+
+### DemoVoronoi02
+[source code](src/demo/kotlin/DemoVoronoi02.kt)
+
+![DemoVoronoi02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoVoronoi02Kt.png)
+
+### DemoVoronoi03
+[source code](src/demo/kotlin/DemoVoronoi03.kt)
+
+![DemoVoronoi03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoVoronoi03Kt.png)

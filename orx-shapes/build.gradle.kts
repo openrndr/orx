@@ -59,6 +59,8 @@ kotlin {
                 implementation(project(":orx-camera"))
                 implementation(project(":orx-color"))
                 implementation(project(":orx-triangulation"))
+                implementation(project(":orx-shapes"))
+                implementation(project(":orx-noise"))
             }
         }
     }
