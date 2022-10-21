@@ -5,8 +5,10 @@ import org.openrndr.shape.Rectangle
 import org.openrndr.shape.Triangle
 import org.openrndr.shape.contour
 import org.openrndr.shape.contours
-import com.github.ricardomatias.Delaunator
+import kotlin.js.JsName
+import kotlin.math.cos
 import kotlin.math.pow
+import kotlin.math.sin
 
 /*
 ISC License
@@ -57,14 +59,14 @@ class Delaunay(val points: DoubleArray) {
         }
     }
 
-    private var delaunator = Delaunator(points)
+    private var delaunator: Delaunator = Delaunator(points)
 
     val inedges = IntArray(points.size / 2)
     private val hullIndex = IntArray(points.size / 2)
 
-    var halfedges = delaunator.halfedges
-    var hull = delaunator.hull
-    var triangles = delaunator.triangles
+    var halfedges: IntArray = delaunator.halfedges
+    var hull: IntArray = delaunator.hull
+    var triangles: IntArray = delaunator.triangles
 
     init {
         init()
@@ -75,10 +77,69 @@ class Delaunay(val points: DoubleArray) {
         init()
     }
 
+    fun neighbors(i:Int) = sequence<Int> {
+        val e0 = inedges.getOrNull(i) ?: return@sequence
+        if (e0 != -1) {
+            var e = e0
+            var p0 = -1
+
+            loop@do {
+                p0 = triangles[e]
+                yield(p0)
+                e = if (e % 3 == 2) e - 2 else e + 1
+                if (e == -1) {
+                    break@loop
+                }
+
+                if (triangles[e] != i) {
+                    break@loop
+                    //error("bad triangulation")
+                }
+                e = halfedges[e]
+
+                if (e == -1) {
+                    val p = hull[(hullIndex[i] + 1) % hull.size]
+                    if (p != p0) {
+                        yield(p)
+                    }
+                    break@loop
+                }
+            } while (e != e0)
+        }
+    }
+
+    fun collinear(): Boolean {
+        for (i in 0 until triangles.size step 3) {
+            val a = 2 * triangles[i]
+            val b = 2 * triangles[i + 1]
+            val c =  2 * triangles[i + 2]
+            val coords = points
+            val cross = (coords[c] - coords[a]) * (coords[b + 1] - coords[a + 1])
+            - (coords[b] - coords[a]) * (coords[c + 1] - coords[a + 1])
+            if (cross > 1e-10) return false;
+        }
+        return true
+    }
+    private fun jitter(x:Double, y:Double, r:Double): DoubleArray {
+        return doubleArrayOf(x + sin(x+y) * r, y + cos(x-y)*r)
+    }
     fun init() {
-        halfedges = delaunator.halfedges
-        hull = delaunator.hull
-        triangles = delaunator.triangles
+
+        if (hull.size > 2 && collinear()) {
+            println("warning: triangulation is collinear")
+            val r = 1E-8
+            for (i in 0 until points.size step 2) {
+                val p = jitter(points[i], points[i+1], r)
+                points[i] = p[0]
+                points[i+1] = p[1]
+            }
+
+            delaunator = Delaunator(points)
+            halfedges = delaunator.halfedges
+            hull = delaunator.hull
+            triangles = delaunator.triangles
+
+        }
 
         inedges.fill(-1)
         hullIndex.fill(-1)
@@ -101,52 +162,15 @@ class Delaunay(val points: DoubleArray) {
             triangles = IntArray(3) { -1 }
             halfedges = IntArray(3) { -1 }
             triangles[0] = hull[0]
-            triangles[1] = hull[1]
-            triangles[2] = hull[1]
             inedges[hull[0]] = 1
-            if (hull.size == 2) inedges[hull[1]] = 0
+            if (hull.size == 2) {
+                inedges[hull[1]] = 0
+                triangles[1] = hull[1]
+                triangles[2] = hull[1]
+            }
         }
     }
 
-    fun triangles(): List<Triangle> {
-        val list = mutableListOf<Triangle>()
-
-        for (i in triangles.indices step 3 ) {
-            val t0 = triangles[i] * 2
-            val t1 = triangles[i + 1] * 2
-            val t2 = triangles[i + 2] * 2
-
-            val p1 = Vector2(points[t0], points[t0 + 1])
-            val p2 = Vector2(points[t1], points[t1 + 1])
-            val p3 = Vector2(points[t2], points[t2 + 1])
-
-            // originally they are defined *counterclockwise*
-            list.add(Triangle(p3,  p2, p1))
-        }
-
-        return list
-    }
-
-    // Inner edges of the delaunay triangulation (without hull)
-    fun halfedges() = contours {
-        for (i in halfedges.indices) {
-            val j = halfedges[i]
-
-            if (j < i) continue
-            val ti = triangles[i] * 2
-            val tj = triangles[j] * 2
-
-            moveTo(points[ti], points[ti + 1])
-            lineTo(points[tj], points[tj + 1])
-        }
-    }
-
-    fun hull() = contour {
-        for (h in hull) {
-            moveOrLineTo(points[2 * h], points[2 * h + 1])
-        }
-        close()
-    }
 
     fun find(x: Double, y: Double, i: Int = 0): Int {
         var i1 = i
@@ -178,9 +202,12 @@ class Delaunay(val points: DoubleArray) {
                 c = t
             }
 
-            e = nextHalfedge(e)
+            e = if (e % 3 == 2) e - 2 else e + 1
 
-            if (triangles[e] != i) break // bad triangulation
+            if (triangles[e] != i) {
+                //error("bad triangulation")
+                break
+            } // bad triangulation
 
             e = halfedges[e]
 
@@ -198,3 +225,4 @@ class Delaunay(val points: DoubleArray) {
 
     fun voronoi(bounds: Rectangle): Voronoi = Voronoi(this, bounds)
 }
+

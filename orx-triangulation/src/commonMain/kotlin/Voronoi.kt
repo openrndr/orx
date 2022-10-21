@@ -2,8 +2,13 @@ package org.openrndr.extra.triangulation
 
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
+import org.openrndr.shape.Shape
 import org.openrndr.shape.ShapeContour
+import org.openrndr.shape.bounds
+import kotlin.js.JsName
 import kotlin.math.abs
+import kotlin.math.floor
+import kotlin.math.sign
 
 /*
 ISC License
@@ -38,7 +43,7 @@ THIS SOFTWARE.
 class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
     private val _circumcenters = DoubleArray(delaunay.points.size * 2)
     lateinit var circumcenters: DoubleArray
-    private set
+        private set
 
     val vectors = DoubleArray(delaunay.points.size * 2)
 
@@ -53,8 +58,20 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
 
     fun init() {
         val points = delaunay.points
+
+        if (delaunay.points.isEmpty()) {
+            return
+        }
+
         val triangles = delaunay.triangles
         val hull = delaunay.hull
+
+        if (points.size == 2) {
+            _circumcenters[0] = points[0]
+            _circumcenters[1] = points[1]
+            circumcenters = _circumcenters
+            return
+        }
 
         circumcenters = _circumcenters.copyOf(delaunay.triangles.size / 3 * 2)
 
@@ -80,26 +97,20 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
             val dy = y2 - y1
             val ex = x3 - x1
             val ey = y3 - y1
-            val bl = dx * dx + dy * dy
-            val cl = ex * ex + ey * ey
             val ab = (dx * ey - dy * ex) * 2
 
-            when {
-                ab == 0.0 -> {
-                    // degenerate case (collinear diagram)
-                    x = (x1 + x3) / 2 - 1e8 * ey
-                    y = (y1 + y3) / 2 + 1e8 * ex
-                }
-                abs(ab) < 1e-8 -> {
-                    // almost equal points (degenerate triangle)
-                    x = (x1 + x3) / 2
-                    y = (y1 + y3) / 2
-                }
-                else -> {
-                    val d = 1 / ab
-                    x = x1 + (ey * bl - dy * cl) * d
-                    y = y1 + (dx * cl - ex * bl) * d
-                }
+            if (abs(ab) < 1e-9) {
+                var a = 1e9
+                val r = triangles[0] * 2
+                a *= sign((points[r] - x1) * ey - (points[r + 1] - y1) * ex)
+                x = (x1 + x3) / 2 - a * ey
+                y = (y1 + y3) / 2 + a * ex
+            } else {
+                val d = 1 / ab
+                val bl = dx * dx + dy * dy
+                val cl = ex * ex + ey * ey
+                x = x1 + (ey * bl - dy * cl) * d
+                y = y1 + (dx * cl - ex * bl) * d
             }
 
             circumcenters[j] = x
@@ -142,47 +153,12 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
 
     }
 
-    fun cellsPolygons(): List<ShapeContour> {
-        val points = delaunay.points
-        val cells = mutableListOf<ShapeContour>()
 
-        for (i in 0 until (points.size / 2)) {
-            cellPolygon(i)?.let {
-                cells.add(it)
-            }
-        }
-
-        return cells
-    }
-
-    fun cellPolygon(i: Int): ShapeContour? {
-        val points = clip(i)
-
-        if (points == null || points.isEmpty()) return null
-
-        val polygon = mutableListOf(Vector2(points[0], points[1]))
-        var n = points.size
-
-        while (n > 1 && points[0] == points[n - 2] && points[1] == points[n - 1]) n -= 2
-
-        for (idx in 2 until n step 2) {
-            if (points[idx] != points[idx - 2] || points[idx + 1] != points[idx - 1]) {
-                polygon.add(Vector2(points[idx], points[idx + 1]))
-            }
-        }
-
-        return ShapeContour.fromPoints(polygon, true)
-    }
-
-    fun circumcenters() = circumcenters.toList().windowed(2, 2).map {
-        Vector2(it[0], it[1])
-    }
-
-    fun contains(i: Int, v: Vector2): Boolean {
-        return contains(i, v.x, v.y)
-    }
 
     private fun cell(i: Int): MutableList<Double>? {
+
+
+
         val inedges = delaunay.inedges
         val halfedges = delaunay.halfedges
         val triangles = delaunay.triangles
@@ -196,7 +172,7 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
         var e = e0
 
         do {
-            val t = Math.floorDiv(e, 3) // triangle of edge
+            val t = floor(e / 3.0).toInt()
 
             points.add(circumcenters[t * 2])
             points.add(circumcenters[t * 2 + 1])
@@ -211,10 +187,44 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
         return points
     }
 
-    private fun clip(i: Int): List<Double>? {
+    fun neighbors(i: Int) = sequence {
+        val ci = clip(i)
+        if (ci != null) {
+            for (j in delaunay.neighbors(i)) {
+                val cj = clip(j)
+                if (cj != null) {
+                    val li = ci.size
+                    val lj = cj.size
+                    loop@ for (ai in 0 until ci.size step 2) {
+                        for (aj in 0 until cj.size step 2) {
+                            if (ci[ai] == cj[aj]
+                                && ci[ai + 1] == cj[aj + 1]
+                                && ci[(ai + 2) % li] == cj[(aj + lj - 2) % lj]
+                                && ci[(ai + 3) % li] == cj[(aj + lj - 1) % lj]
+                            ) {
+                                yield(j)
+                                break@loop
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    internal fun clip(i: Int): List<Double>? {
         // degenerate case (1 valid point: return the box)
-        if (i == 0 && delaunay.hull.size == 1) {
-            return listOf(bounds.xmax, bounds.ymin, bounds.xmax, bounds.ymax, bounds.xmin, bounds.ymax, bounds.xmin, bounds.ymin)
+        if (i == 0 && delaunay.points.size == 2) {
+            return listOf(
+                bounds.xmax,
+                bounds.ymin,
+                bounds.xmax,
+                bounds.ymax,
+                bounds.xmin,
+                bounds.ymax,
+                bounds.xmin,
+                bounds.ymin
+            )
         }
 
         val points = cell(i) ?: return null
@@ -226,7 +236,7 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
         val b = !clipVectors[v + 1].isFalsy()
 
         return if (a || b) {
-            this.clipInfinite(i, points, clipVectors[v], clipVectors[v +1], clipVectors[v + 2], clipVectors[v + 3])
+            this.clipInfinite(i, points, clipVectors[v], clipVectors[v + 1], clipVectors[v + 2], clipVectors[v + 3])
         } else {
             this.clipFinite(i, points)
         }
@@ -240,40 +250,41 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
         vxn: Double,
         vyn: Double
     ): List<Double>? {
-        var P: MutableList<Double>? = points.mutableCopyOf().also { list ->
-            // SHAKY
-            this.project(list[0], list[1], vx0, vy0)?.also {
-                list.addAll(0, listOf(it.x, it.y))
-            }
+        var P: MutableList<Double>? = points.mutableCopyOf()
 
-            this.project(list[list.size - 2], list[list.size - 1], vxn, vyn)?.also {
-                list.addAll(0, listOf(it.x, it.y))
-            }
-        }
+        P!!
+        project(P[0], P[1], vx0, vy0)?.let { p -> P!!.add(0, p[1]); P!!.add(0, p[0]) }
+        project(P[P.size - 2], P[P.size - 1], vxn, vyn)?.let { p -> P!!.add(p[0]); P!!.add(p[1]) }
 
-        P = clipFinite(i, P!!)
-
+        P = this.clipFinite(i, P!!)
+        var n = 0
         if (P != null) {
-            var n = P.size
-            var c0: Int?
+            n = P!!.size
+            var c0 = -1
             var c1 = edgeCode(P[n - 2], P[n - 1])
             var j = 0
-
+            var n = P.size
             while (j < n) {
                 c0 = c1
                 c1 = edgeCode(P[j], P[j + 1])
-
-                if ((c0 and c1) != 0) {
+                if (c0 != 0 && c1 != 0) {
                     j = edge(i, c0, c1, P, j)
                     n = P.size
                 }
-
                 j += 2
             }
-        } else if (contains(i, (bounds.xmin + bounds.xmax) / 2, (bounds.ymin + bounds.ymax) / 2)) {
-            P = mutableListOf(bounds.xmin, bounds.ymin, bounds.xmax, bounds.ymin, bounds.xmax, bounds.ymax, bounds.xmin, bounds.ymax)
+        } else if (this.contains(i, (bounds.xmin + bounds.xmax) / 2.0, (bounds.ymin + bounds.ymax) / 2.0)) {
+            P = mutableListOf(
+                bounds.xmin,
+                bounds.ymin,
+                bounds.xmax,
+                bounds.ymin,
+                bounds.xmax,
+                bounds.ymax,
+                bounds.xmin,
+                bounds.ymax
+            )
         }
-
         return P
     }
 
@@ -283,12 +294,12 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
         val P = mutableListOf<Double>()
         var x0: Double
         var y0: Double
-        var x1= points[n - 2]
-        var y1= points[n - 1]
+        var x1 = points[n - 2]
+        var y1 = points[n - 1]
         var c0: Int
         var c1: Int = regionCode(x1, y1)
         var e0: Int? = null
-        var e1: Int? = null
+        var e1: Int? = 0
 
         for (j in 0 until n step 2) {
             x0 = x1
@@ -314,8 +325,8 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
                 if (c0 == 0) {
                     S = clipSegment(x0, y0, x1, y1, c0, c1)
                     if (S == null) continue
-//                    sx0 = S[0]
-//                    sy0 = S[1]
+                    sx0 = S[0]
+                    sy0 = S[1]
                     sx1 = S[2]
                     sy1 = S[3]
                 } else {
@@ -329,7 +340,7 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
                     e0 = e1
                     e1 = this.edgeCode(sx0, sy0)
 
-                    if (e0.isTruthy() && e1.isTruthy()) this.edge(i, e0!!, e1, P, P.size)
+                    if (e0 != 0 && e1 != 0) this.edge(i, e0!!, e1, P, P.size)
 
                     P.add(sx0)
                     P.add(sy0)
@@ -351,11 +362,19 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
 
             if (e0.isTruthy() && e1.isTruthy()) this.edge(i, e0!!, e1!!, P, P.size);
         } else if (this.contains(i, (bounds.xmin + bounds.xmax) / 2, (bounds.ymin + bounds.ymax) / 2)) {
-            return mutableListOf(bounds.xmax, bounds.ymin, bounds.xmax, bounds.ymax, bounds.xmin, bounds.ymax, bounds.xmin, bounds.ymin)
+            return mutableListOf(
+                bounds.xmax,
+                bounds.ymin,
+                bounds.xmax,
+                bounds.ymax,
+                bounds.xmin,
+                bounds.ymax,
+                bounds.xmin,
+                bounds.ymin
+            )
         } else {
             return null
         }
-
         return P
     }
 
@@ -367,7 +386,7 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
         var nc0: Int = c0
         var nc1: Int = c1
 
-        while(true) {
+        while (true) {
             if (nc0 == 0 && nc1 == 0) return doubleArrayOf(nx0, ny0, nx1, ny1)
             // SHAKY STUFF
             if ((nc0 and nc1) != 0) return null
@@ -408,96 +427,102 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
     }
 
     private fun regionCode(x: Double, y: Double): Int {
-        val code = when {
+        val xcode = when {
             x < bounds.xmin -> 0b0001
             x > bounds.xmax -> 0b0010
             else -> 0b0000
         }
-        return code or when {
+        val ycode = when {
             y < bounds.ymin -> 0b0100
             y > bounds.ymax -> 0b1000
             else -> 0b0000
         }
+        return xcode or ycode
     }
 
 
     private fun contains(i: Int, x: Double, y: Double): Boolean {
-//        if ((x = +x, x !== x) || (y = +y, y !== y)) return false;
+        if (x.isNaN() || y.isNaN()) return false
         return this.delaunay.step(i, x, y) == i;
     }
 
     private fun edge(i: Int, e0: Int, e1: Int, p: MutableList<Double>, j: Int): Int {
         var j = j
         var e = e0
-        while(e != e1) {
+        loop@ while (e != e1) {
             var x: Double = Double.NaN
             var y: Double = Double.NaN
 
-            when(e) {
+            when (e) {
                 0b0101 -> { // top-left
                     e = 0b0100
-                    continue
+                    continue@loop
                 }
                 0b0100 -> { // top
                     e = 0b0110
                     x = bounds.xmax
                     y = bounds.ymin
-                    break
                 }
                 0b0110 -> { // top-right
                     e = 0b0010
-                    continue
+                    continue@loop
                 }
                 0b0010 -> { // right
                     e = 0b1010
                     x = bounds.xmax
                     y = bounds.ymax
-                    break
                 }
                 0b1010 -> { // bottom-right
                     e = 0b1000
-                    continue
+                    continue@loop
                 }
                 0b1000 -> { // bottom
-                    e = 0b0001
+                    e = 0b1001
                     x = bounds.xmin
                     y = bounds.ymax
-                    break
                 }
                 0b1001 -> { // bottom-left
                     e = 0b0001
-                    continue
+                    continue@loop
                 }
                 0b0001 -> { // left
                     e = 0b0101
                     x = bounds.xmin
                     y = bounds.ymin
-                    break
                 }
             }
 
-            if ((p[j] != x || p[j + 1] != y) && contains(i, x, y)) {
+            if (((j < p.size && (p[j] != x)) || ((j + 1) < p.size && p[j + 1] != y)) && contains(i, x, y)) {
+                require(!x.isNaN())
+                require(!y.isNaN())
                 p.add(j, y)
                 p.add(j, x)
+                j += 2
+            } else if (j >= p.size && contains(i, x, y)) {
+                require(!x.isNaN())
+                require(!y.isNaN())
+                p.add(x)
+                p.add(y)
                 j += 2
             }
         }
 
         if (p.size > 4) {
             var idx = 0
-
-            while (idx < p.size) {
+            var n = p.size
+            while (idx < n) {
                 val j = (idx + 2) % p.size
                 val k = (idx + 4) % p.size
 
-                if (p[idx] == p[j] && p[j] == p[k]
-                    || p[idx + 1] == p[j + 1] && p[j + 1] == p[k + 1]) {
+                if ((p[idx] == p[j] && p[j] == p[k])
+                    || (p[idx + 1] == p[j + 1] && p[j + 1] == p[k + 1])
+                ) {
                     // SHAKY
                     p.removeAt(j)
                     p.removeAt(j)
                     idx -= 2
+                    n -= 2
                 }
-
                 idx += 2
             }
         }
@@ -511,27 +536,25 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
         var y = Double.NaN
 
         // top
-        if(vy < 0) {
+        if (vy < 0) {
             if (y0 <= bounds.ymin) return null
             c = (bounds.ymin - y0) / vy
 
-            if(c < t) {
+            if (c < t) {
                 t = c
 
                 y = bounds.ymin
-                x = x0 + c * vx
+                x = x0 + t * vx
             }
-        }
-        // bottom
-        else if (vy > 0) {
+        } else if (vy > 0) {    // bottom
             if (y0 >= bounds.ymax) return null
             c = (bounds.ymax - y0) / vy
 
-            if( c < t) {
+            if (c < t) {
                 t = c
 
                 y = bounds.ymax
-                x = x0 + c * vx
+                x = x0 + t * vx
             }
         }
         // right
@@ -545,8 +568,7 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
                 x = bounds.xmax
                 y = y0 + t * vy
             }
-            // left
-        } else if (vx < 0) {
+        } else if (vx < 0) { // left
             if (x0 <= bounds.xmin) return null
             c = (bounds.xmin - x0) / vx
 
@@ -558,23 +580,23 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
             }
         }
 
-        if(x.isNaN() || y.isNaN()) return null
+        if (x.isNaN() || y.isNaN()) return null
 
         return Vector2(x, y)
     }
 
     private fun edgeCode(x: Double, y: Double): Int {
-        val code = when (x) {
+        val xcode = when (x) {
             bounds.xmin -> 0b0001
             bounds.xmax -> 0b0010
             else -> 0b0000
         }
-
-        return code or when (y) {
+        val ycode = when (y) {
             bounds.ymin -> 0b0100
             bounds.ymax -> 0b1000
             else -> 0b0000
         }
+        return xcode or ycode
     }
 
 }
@@ -592,7 +614,7 @@ private val Rectangle.xmin: Double
     get() = this.corner.x
 
 private val Rectangle.xmax: Double
-    get() =  this.corner.x + width
+    get() = this.corner.x + width
 
 private val Rectangle.ymin: Double
     get() = this.corner.y
@@ -601,3 +623,5 @@ private val Rectangle.ymax: Double
     get() = this.corner.y + height
 
 private fun Double?.isFalsy() = this == null || this == -0.0 || this == 0.0 || isNaN()
+
+

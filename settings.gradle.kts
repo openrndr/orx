@@ -72,7 +72,7 @@ include(
         "orx-jvm:orx-tensorflow-natives-windows",
         "orx-timer",
         "orx-time-operators",
-        "orx-jvm:orx-triangulation",
+        "orx-triangulation",
         "orx-jvm:orx-kinect-common",
         "orx-jvm:orx-kinect-v1",
         "orx-jvm:orx-kinect-v1-natives-linux-arm64",

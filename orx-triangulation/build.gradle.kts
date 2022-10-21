@@ -14,51 +14,58 @@ kotlin {
             }
             collectScreenshots { }
         }
-        testRuns["test"].executionTask {
-            useJUnitPlatform {
-                includeEngines("spek2")
-            }
+        compilations.all {
+            kotlinOptions.jvmTarget = libs.versions.jvmTarget.get()
+            kotlinOptions.apiVersion = libs.versions.kotlinApi.get()
         }
+        testRuns["test"].executionTask.configure {
+            useJUnitPlatform()
+        }
+    }
+    js(IR) {
+        browser()
+        nodejs()
     }
 
     sourceSets {
         @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
-                implementation(project(":orx-parameters"))
-                implementation(project(":orx-shader-phrases"))
-                implementation(project(":orx-color"))
-                implementation(libs.openrndr.application)
-                implementation(libs.openrndr.draw)
-                implementation(libs.openrndr.filter)
-                implementation(libs.kotlin.reflect)
+                api(libs.openrndr.math)
+                api(libs.openrndr.shape)
             }
         }
 
         @Suppress("UNUSED_VARIABLE")
         val jvmMain by getting {
-            dependencies {
-                implementation(project(":orx-triangulation"))
-            }
-        }
-
-
-        @Suppress("UNUSED_VARIABLE")
-        val jvmTest by getting {
-            dependencies {
-                implementation(libs.kluent)
-                implementation(libs.spek.dsl)
-                runtimeOnly(libs.spek.junit5)
-                runtimeOnly(libs.kotlin.reflect)
-            }
         }
 
         @Suppress("UNUSED_VARIABLE")
         val jvmDemo by getting {
             dependencies {
-                implementation(project(":orx-camera"))
-                implementation(project(":orx-color"))
+                implementation(project(":orx-shapes"))
                 implementation(project(":orx-triangulation"))
+                implementation(project(":orx-noise"))
+            }
+        }
+
+        @Suppress("UNUSED_VARIABLE")
+        val jvmTest by getting {
+            dependencies {
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
+                implementation(kotlin("test-junit5"))
+                implementation(libs.kotlin.serialization.json)
+                runtimeOnly(libs.bundles.jupiter)
+                implementation(libs.spek.dsl)
+                implementation(libs.kluent)
+            }
+        }
+
+        @Suppress("UNUSED_VARIABLE")
+        val jsTest by getting {
+            dependencies {
+                implementation(kotlin("test-js"))
             }
         }
     }
