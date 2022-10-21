@@ -37,6 +37,7 @@ A growing library of assorted data structures, algorithms and utilities.
 | [`orx-temporal-blur`](orx-temporal-blur/) | Post-processing temporal-blur video effect. CPU intense, therefore not intended  for use with the `ScreenRecorder` extension or other real-time uses. |
 | [`orx-time-operators`](orx-time-operators/) | A collection of time-sensitive functions aimed at controlling raw data over-time,  such as Envelope and LFO. |
 | [`orx-timer`](orx-timer/) | Simple timer functionality providing `repeat`, to run code with a given interval and `timeOut`, to run code once after a given delay. |
+| [`orx-triangulation`](orx-triangulation/) | An extension for triangulating a set of points using the **Delaunay** triangulation method. From that triangulation we can also derive a **Voronoi** diagram. |
 
 ## JVM only
 
@@ -60,7 +61,6 @@ A growing library of assorted data structures, algorithms and utilities.
 | [`orx-rabbit-control`](orx-jvm/orx-rabbit-control/) | Automatically creates a remote UI to control your OPENRNDR program from a mobile device or a different computer. Alternative to `orx-gui`. |
 | [`orx-runway`](orx-jvm/orx-runway/) | Interfaces with the RunwayML machine learning library that provides features like motion capture, image synthesis, object recognition, style transfer and more. More info at [runwayml.com](https://runwayml.com/). |
 | [`orx-syphon`](orx-jvm/orx-syphon/) | Send frames to- and from OPENRNDR to other applications in real time using _Syphon_ for Mac. |
-| [`orx-triangulation`](orx-jvm/orx-triangulation/) | An extension for triangulating a set of points using the **Delaunay** triangulation method. From that triangulation we can also derive a **Voronoi** diagram. |
 | [`orx-video-profiles`](orx-jvm/orx-video-profiles/) | A collection of `VideoWriterProfile` implementations that can be used with `ScreenRecorder` and `VideoWriter` |
 <!-- __orxListEnd__ -->
 
