@@ -1,6 +1,7 @@
 package org.openrndr.extra.camera
 
 import org.openrndr.Extension
+import org.openrndr.MouseEvents
 import org.openrndr.Program
 import org.openrndr.draw.Drawer
 import org.openrndr.math.Matrix44
@@ -16,11 +17,12 @@ import org.openrndr.math.transforms.buildTransform
 class Camera2D : Extension {
     override var enabled = true
     var view = Matrix44.IDENTITY
-    override fun setup(program: Program) {
-        program.mouse.dragged.listen {
+
+    fun setupMouseEvents(mouse: MouseEvents) {
+        mouse.dragged.listen {
             view = buildTransform { translate(it.dragDisplacement) } * view
         }
-        program.mouse.scrolled.listen {
+        mouse.scrolled.listen {
             val scaleFactor = 1.0 - it.rotation.y * 0.03
             view = buildTransform {
                 translate(it.position)
@@ -28,6 +30,9 @@ class Camera2D : Extension {
                 translate(-it.position)
             } * view
         }
+    }
+    override fun setup(program: Program) {
+        setupMouseEvents(program.mouse)
     }
 
     override fun beforeDraw(drawer: Drawer, program: Program) {
