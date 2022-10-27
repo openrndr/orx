@@ -56,7 +56,7 @@ class OrbitalControls(
                 val offset = Vector3.fromSpherical(orbitalCamera.spherical) - orbitalCamera.lookAt
 
                 // half of the fov is center to top of screen
-                val targetDistance = offset.length * tan(fov / 2).asRadians
+                val targetDistance = offset.length * tan(fov.asRadians / 2)
                 val panX = (2 * delta.x * targetDistance / program.window.size.x)
                 val panY = (2 * delta.y * targetDistance / program.window.size.y)
 
