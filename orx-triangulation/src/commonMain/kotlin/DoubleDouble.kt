@@ -17,8 +17,8 @@ import kotlin.math.pow
  * See https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
  */
 internal fun fastTwoDiff(a: Double, b: Double): DoubleArray {
-    val x = a - b;
-    val y = (a - x) - b;
+    val x = a - b
+    val y = (a - x) - b
 
     return doubleArrayOf(y, x)
 }
@@ -60,11 +60,11 @@ internal fun reduceSignificand(
     bits: Int
 ): Double {
 
-    val s = 53 - bits;
-    val f = 2.0.pow(s) + 1;
+    val s = 53 - bits
+    val f = 2.0.pow(s) + 1
 
-    val c = f * a;
-    val r = c - (c - a);
+    val c = f * a
+    val r = c - (c - a)
 
     return r;
 }
@@ -74,7 +74,7 @@ internal fun reduceSignificand(
  * === 2^Math.ceil(p/2) + 1 where p is the # of significand bits in a double === 53.
  * @internal
  */
-private const val f = 134217729;  // 2**27 + 1;
+private const val f = 134217729  // 2**27 + 1;
 
 
 /**
@@ -90,9 +90,9 @@ private const val f = 134217729;  // 2**27 + 1;
  * @param a A double floating point number
  */
 private fun split(a: Double): DoubleArray {
-    val c = f * a;
-    val a_h = c - (c - a);
-    val a_l = a - a_h;
+    val c = f * a
+    val a_h = c - (c - a)
+    val a_l = a - a_h
 
     return doubleArrayOf(a_h, a_l)
 }
@@ -104,9 +104,9 @@ private fun split(a: Double): DoubleArray {
  * @param b subtrahend - a double-double precision floating point number
  */
 internal fun twoDiff(a: Double, b: Double): DoubleArray {
-    val x = a - b;
-    val bvirt = a - x;
-    val y = (a - (x + bvirt)) + (bvirt - b);
+    val x = a - b
+    val bvirt = a - x
+    val y = (a - (x + bvirt)) + (bvirt - b)
 
     return doubleArrayOf(y, x)
 }
@@ -130,15 +130,15 @@ internal fun twoProduct(a: Double, b: Double): DoubleArray {
     val x = a * b;
 
     //const [ah, al] = split(a);
-    val c = f * a;
-    val ah = c - (c - a);
-    val al = a - ah;
+    val c = f * a
+    val ah = c - (c - a)
+    val al = a - ah
     //const [bh, bl] = split(b);
-    val d = f * b;
-    val bh = d - (d - b);
-    val bl = b - bh;
+    val d = f * b
+    val bh = d - (d - b)
+    val bl = b - bh
 
-    val y = (al * bl) - ((x - (ah * bh)) - (al * bh) - (ah * bl));
+    val y = (al * bl) - ((x - (ah * bh)) - (al * bh) - (ah * bl))
 
     //const err1 = x - (ah * bh);
     //const err2 = err1 - (al * bh);
@@ -149,14 +149,14 @@ internal fun twoProduct(a: Double, b: Double): DoubleArray {
 }
 
 internal fun twoSquare(a: Double): DoubleArray {
-    val x = a * a;
+    val x = a * a
 
     //const [ah, al] = split(a);
-    val c = f * a;
-    val ah = c - (c - a);
-    val al = a - ah;
+    val c = f * a
+    val ah = c - (c - a)
+    val al = a - ah
 
-    val y = (al * al) - ((x - (ah * ah)) - 2 * (ah * al));
+    val y = (al * al) - ((x - (ah * ah)) - 2 * (ah * al))
 
     return doubleArrayOf(y, x)
 }
@@ -174,8 +174,8 @@ internal fun twoSquare(a: Double): DoubleArray {
  * See https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
  */
 internal fun twoSum(a: Double, b: Double): DoubleArray {
-    val x = a + b;
-    val bv = x - a;
+    val x = a + b
+    val bv = x - a
 
     return doubleArrayOf((a - (x - bv)) + (b - bv), x)
 }
@@ -194,21 +194,21 @@ internal fun twoSum(a: Double, b: Double): DoubleArray {
  * @param y another double-double precision floating point number
  */
 internal fun ddDiffDd(x: DoubleArray, y: DoubleArray): DoubleArray {
-    val xl = x[0];
-    val xh = x[1];
-    val yl = y[0];
-    val yh = y[1];
+    val xl = x[0]
+    val xh = x[1]
+    val yl = y[0]
+    val yh = y[1]
 
     //const [sl,sh] = twoSum(xh,yh);
-    val sh = xh - yh; val _1 = sh - xh; val sl = (xh - (sh - _1)) + (-yh - _1);
+    val sh = xh - yh; val _1 = sh - xh; val sl = (xh - (sh - _1)) + (-yh - _1)
     //const [tl,th] = twoSum(xl,yl);
-    val th = xl - yl; val _2 = th - xl; val tl = (xl - (th - _2)) + (-yl - _2);
-    val c = sl + th;
+    val th = xl - yl; val _2 = th - xl; val tl = (xl - (th - _2)) + (-yl - _2)
+    val c = sl + th
     //const [vl,vh] = fastTwoSum(sh,c)
-    val vh = sh + c; val vl = c - (vh - sh);
+    val vh = sh + c; val vl = c - (vh - sh)
     val w = tl + vl
     //const [zl,zh] = fastTwoSum(vh,w)
-    val zh = vh + w; val zl = w - (zh - vh);
+    val zh = vh + w; val zl = w - (zh - vh)
 
     return doubleArrayOf(zl, zh)
 }
@@ -229,19 +229,19 @@ internal fun ddMultDd(x: DoubleArray, y: DoubleArray): DoubleArray {
 
 
     //const xl = x[0];
-    val xh = x[1];
+    val xh = x[1]
     //const yl = y[0];
-    val yh = y[1];
+    val yh = y[1]
 
     //const [cl1,ch] = twoProduct(xh,yh);
-    val ch = xh*yh;
-    val c = f * xh; val ah = c - (c - xh); val al = xh - ah;
-    val d = f * yh; val bh = d - (d - yh); val bl = yh - bh;
-    val cl1 = (al*bl) - ((ch - (ah*bh)) - (al*bh) - (ah*bl));
+    val ch = xh*yh
+    val c = f * xh; val ah = c - (c - xh); val al = xh - ah
+    val d = f * yh; val bh = d - (d - yh); val bl = yh - bh
+    val cl1 = (al*bl) - ((ch - (ah*bh)) - (al*bh) - (ah*bl))
 
     //return fastTwoSum(ch,cl1 + (xh*yl + xl*yh));
-    val b = cl1 + (xh*y[0] + x[0]*yh);
-    val xx = ch + b;
+    val b = cl1 + (xh*y[0] + x[0]*yh)
+    val xx = ch + b
 
     return doubleArrayOf(b - (xx - ch), xx)
 }
@@ -261,21 +261,21 @@ internal fun ddMultDd(x: DoubleArray, y: DoubleArray): DoubleArray {
  * @param y another double-double precision floating point number
  */
 internal fun ddAddDd(x: DoubleArray, y: DoubleArray): DoubleArray {
-    val xl = x[0];
-    val xh = x[1];
-    val yl = y[0];
-    val yh = y[1];
+    val xl = x[0]
+    val xh = x[1]
+    val yl = y[0]
+    val yh = y[1]
 
     //const [sl,sh] = twoSum(xh,yh);
-    val sh = xh + yh; val _1 = sh - xh; val sl = (xh - (sh - _1)) + (yh - _1);
+    val sh = xh + yh; val _1 = sh - xh; val sl = (xh - (sh - _1)) + (yh - _1)
     //val [tl,th] = twoSum(xl,yl);
-    val th = xl + yl; val _2 = th - xl; val tl = (xl - (th - _2)) + (yl - _2);
-    val c = sl + th;
+    val th = xl + yl; val _2 = th - xl; val tl = (xl - (th - _2)) + (yl - _2)
+    val c = sl + th
     //val [vl,vh] = fastTwoSum(sh,c)
-    val vh = sh + c; val vl = c - (vh - sh);
+    val vh = sh + c; val vl = c - (vh - sh)
     val w = tl + vl
     //val [zl,zh] = fastTwoSum(vh,w)
-    val zh = vh + w; val zl = w - (zh - vh);
+    val zh = vh + w; val zl = w - (zh - vh)
 
     return doubleArrayOf(zl, zh)
 }
@@ -297,24 +297,24 @@ internal fun ddAddDd(x: DoubleArray, y: DoubleArray): DoubleArray {
  * @param x a double-double precision floating point number
  */
 internal fun ddMultDouble1(y: Double, x: DoubleArray): DoubleArray {
-    val xl = x[0];
-    val xh = x[1];
+    val xl = x[0]
+    val xh = x[1]
 
     //val [cl1,ch] = twoProduct(xh,y);
-    val ch = xh*y;
-    val c = f * xh; val ah = c - (c - xh); val al = xh - ah;
-    val d = f * y; val bh = d - (d - y); val bl = y - bh;
-    val cl1 = (al*bl) - ((ch - (ah*bh)) - (al*bh) - (ah*bl));
+    val ch = xh*y
+    val c = f * xh; val ah = c - (c - xh); val al = xh - ah
+    val d = f * y; val bh = d - (d - y); val bl = y - bh
+    val cl1 = (al*bl) - ((ch - (ah*bh)) - (al*bh) - (ah*bl))
 
-    val cl2 = xl*y;
+    val cl2 = xl*y
     //val [tl1,th] = fastTwoSum(ch,cl2);
-    val th = ch + cl2;
-    val tl1 = cl2 - (th - ch);
+    val th = ch + cl2
+    val tl1 = cl2 - (th - ch)
 
-    val tl2 = tl1 + cl1;
+    val tl2 = tl1 + cl1
     //val [zl,zh] = fastTwoSum(th,tl2);
-    val zh = th + tl2;
-    val zl = tl2 - (zh - th);
+    val zh = th + tl2
+    val zl = tl2 - (zh - th)
 
-    return doubleArrayOf(zl,zh);
+    return doubleArrayOf(zl,zh)
 }

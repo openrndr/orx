@@ -20,6 +20,37 @@ class VoronoiDiagram(val delaunayTriangulation: DelaunayTriangulation, val bound
         }
     }
 
+    fun cellArea(i: Int, contour: ShapeContour = cellPolygon(i)): Double {
+        val segments = contour.segments
+        var sum = 0.0
+        for (j in segments.indices) {
+            val v0 = segments[j].start
+            val v1 = segments[(j + 1).mod(segments.size)].start
+            sum += v0.x * v1.y - v1.x * v0.y
+        }
+        return sum / 2.0
+    }
+
+    fun cellCentroid(i: Int, contour: ShapeContour = cellPolygon(i)): Vector2 {
+        val segments = cellPolygon(i).segments
+        var cx = 0.0
+        var cy = 0.0
+        for (j in segments.indices) {
+            val v0 = segments[j].start
+            val v1 = segments[(j + 1).mod(segments.size)].start
+            cx += (v0.x + v1.x) * (v0.x * v1.y - v1.x * v0.y)
+            cy += (v0.y + v1.y) * (v0.x * v1.y - v1.x * v0.y)
+        }
+        val a = cellArea(i, contour) * 6.0
+        cx /= a
+        cy /= a
+        return Vector2(cx, cy)
+    }
+
+    fun cellCentroids() = (delaunayTriangulation.points.indices).map {
+        cellCentroid(it)
+    }
+
     fun cellPolygon(i: Int): ShapeContour {
         val points = voronoi.clip(i)
 

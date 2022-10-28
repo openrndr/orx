@@ -154,11 +154,7 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
     }
 
 
-
     private fun cell(i: Int): MutableList<Double>? {
-
-
-
         val inedges = delaunay.inedges
         val halfedges = delaunay.halfedges
         val triangles = delaunay.triangles
@@ -195,8 +191,8 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
                 if (cj != null) {
                     val li = ci.size
                     val lj = cj.size
-                    loop@ for (ai in 0 until ci.size step 2) {
-                        for (aj in 0 until cj.size step 2) {
+                    loop@ for (ai in ci.indices step 2) {
+                        for (aj in cj.indices step 2) {
                             if (ci[ai] == cj[aj]
                                 && ci[ai + 1] == cj[aj + 1]
                                 && ci[(ai + 2) % li] == cj[(aj + lj - 2) % lj]
@@ -256,10 +252,10 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
         project(P[0], P[1], vx0, vy0)?.let { p -> P!!.add(0, p[1]); P!!.add(0, p[0]) }
         project(P[P.size - 2], P[P.size - 1], vxn, vyn)?.let { p -> P!!.add(p[0]); P!!.add(p[1]) }
 
-        P = this.clipFinite(i, P!!)
+        P = this.clipFinite(i, P)
         var n = 0
         if (P != null) {
-            n = P!!.size
+            n = P.size
             var c0 = -1
             var c1 = edgeCode(P[n - 2], P[n - 1])
             var j = 0
@@ -298,7 +294,7 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
         var y1 = points[n - 1]
         var c0: Int
         var c1: Int = regionCode(x1, y1)
-        var e0: Int? = null
+        var e0: Int?
         var e1: Int? = 0
 
         for (j in 0 until n step 2) {
@@ -360,7 +356,7 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
             e0 = e1
             e1 = this.edgeCode(P[0], P[1])
 
-            if (e0.isTruthy() && e1.isTruthy()) this.edge(i, e0!!, e1!!, P, P.size);
+            if (e0.isTruthy() && e1.isTruthy()) this.edge(i, e0!!, e1, P, P.size);
         } else if (this.contains(i, (bounds.xmin + bounds.xmax) / 2, (bounds.ymin + bounds.ymax) / 2)) {
             return mutableListOf(
                 bounds.xmax,
@@ -398,19 +394,22 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
             when {
                 (c and 0b1000) != 0 -> {
                     x = nx0 + (nx1 - nx0) * (bounds.ymax - ny0) / (ny1 - ny0)
-                    y = bounds.ymax;
+                    y = bounds.ymax
                 }
+
                 (c and 0b0100) != 0 -> {
                     x = nx0 + (nx1 - nx0) * (bounds.ymin - ny0) / (ny1 - ny0)
                     y = bounds.ymin
                 }
+
                 (c and 0b0010) != 0 -> {
                     y = ny0 + (ny1 - ny0) * (bounds.xmax - nx0) / (nx1 - nx0)
                     x = bounds.xmax
                 }
+
                 else -> {
                     y = ny0 + (ny1 - ny0) * (bounds.xmin - nx0) / (nx1 - nx0)
-                    x = bounds.xmin;
+                    x = bounds.xmin
                 }
             }
 
@@ -458,33 +457,40 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
                     e = 0b0100
                     continue@loop
                 }
+
                 0b0100 -> { // top
                     e = 0b0110
                     x = bounds.xmax
                     y = bounds.ymin
                 }
+
                 0b0110 -> { // top-right
                     e = 0b0010
                     continue@loop
                 }
+
                 0b0010 -> { // right
                     e = 0b1010
                     x = bounds.xmax
                     y = bounds.ymax
                 }
+
                 0b1010 -> { // bottom-right
                     e = 0b1000
                     continue@loop
                 }
+
                 0b1000 -> { // bottom
                     e = 0b1001
                     x = bounds.xmin
                     y = bounds.ymax
                 }
+
                 0b1001 -> { // bottom-left
                     e = 0b0001
                     continue@loop
                 }
+
                 0b0001 -> { // left
                     e = 0b0101
                     x = bounds.xmin

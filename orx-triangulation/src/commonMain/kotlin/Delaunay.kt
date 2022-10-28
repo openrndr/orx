@@ -2,10 +2,6 @@ package org.openrndr.extra.triangulation
 
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
-import org.openrndr.shape.Triangle
-import org.openrndr.shape.contour
-import org.openrndr.shape.contours
-import kotlin.js.JsName
 import kotlin.math.cos
 import kotlin.math.pow
 import kotlin.math.sin
@@ -77,13 +73,13 @@ class Delaunay(val points: DoubleArray) {
         init()
     }
 
-    fun neighbors(i:Int) = sequence<Int> {
+    fun neighbors(i: Int) = sequence {
         val e0 = inedges.getOrNull(i) ?: return@sequence
         if (e0 != -1) {
             var e = e0
-            var p0 = -1
+            var p0 : Int
 
-            loop@do {
+            loop@ do {
                 p0 = triangles[e]
                 yield(p0)
                 e = if (e % 3 == 2) e - 2 else e + 1
@@ -109,29 +105,31 @@ class Delaunay(val points: DoubleArray) {
     }
 
     fun collinear(): Boolean {
-        for (i in 0 until triangles.size step 3) {
+        for (i in triangles.indices step 3) {
             val a = 2 * triangles[i]
             val b = 2 * triangles[i + 1]
-            val c =  2 * triangles[i + 2]
+            val c = 2 * triangles[i + 2]
             val coords = points
             val cross = (coords[c] - coords[a]) * (coords[b + 1] - coords[a + 1])
-            - (coords[b] - coords[a]) * (coords[c + 1] - coords[a + 1])
-            if (cross > 1e-10) return false;
+            -(coords[b] - coords[a]) * (coords[c + 1] - coords[a + 1])
+            if (cross > 1e-10) return false
         }
         return true
     }
-    private fun jitter(x:Double, y:Double, r:Double): DoubleArray {
-        return doubleArrayOf(x + sin(x+y) * r, y + cos(x-y)*r)
+
+    private fun jitter(x: Double, y: Double, r: Double): DoubleArray {
+        return doubleArrayOf(x + sin(x + y) * r, y + cos(x - y) * r)
     }
+
     fun init() {
 
         if (hull.size > 2 && collinear()) {
             println("warning: triangulation is collinear")
             val r = 1E-8
-            for (i in 0 until points.size step 2) {
-                val p = jitter(points[i], points[i+1], r)
+            for (i in points.indices step 2) {
+                val p = jitter(points[i], points[i + 1], r)
                 points[i] = p[0]
-                points[i+1] = p[1]
+                points[i + 1] = p[1]
             }
 
             delaunator = Delaunator(points)

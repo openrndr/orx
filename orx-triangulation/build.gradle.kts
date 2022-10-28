@@ -33,6 +33,7 @@ kotlin {
             dependencies {
                 api(libs.openrndr.math)
                 api(libs.openrndr.shape)
+                implementation(project(":orx-noise"))
             }
         }
 
