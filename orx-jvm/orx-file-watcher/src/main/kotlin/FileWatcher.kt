@@ -138,16 +138,3 @@ private val watchThread by lazy {
         }
     }
 }
-
-fun main() {
-    val a = watchFile(Program(), File("README.md")) {
-        it.readText()
-    }
-    a.stop()
-    a.triggerChange()
-    while (true) {
-        println(a())
-        Thread.sleep(2000)
-    }
-}
-

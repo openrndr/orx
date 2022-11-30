@@ -4,6 +4,7 @@ import org.openrndr.Extension
 import org.openrndr.MouseEvents
 import org.openrndr.Program
 import org.openrndr.draw.Drawer
+import org.openrndr.draw.RenderTarget
 import org.openrndr.math.Matrix44
 import org.openrndr.math.transforms.buildTransform
 
@@ -36,6 +37,14 @@ class Camera2D : Extension {
     }
 
     override fun beforeDraw(drawer: Drawer, program: Program) {
+        drawer.pushTransforms()
+        drawer.ortho(RenderTarget.active)
         drawer.view = view
     }
+
+    override fun afterDraw(drawer: Drawer, program: Program) {
+        drawer.popTransforms()
+    }
 }
+
+

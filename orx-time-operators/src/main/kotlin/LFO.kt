@@ -28,7 +28,8 @@ class LFO(wave: LFOWave = LFOWave.Saw) : TimeTools {
     private var time = 0.0
 
     override fun tick(seconds: Double, deltaTime: Double, frameCount: Int) {
-        time += deltaTime
+        //time += deltaTime
+        time = seconds
     }
 
     fun sample(frequency: Double = 1.0, phase: Double = 0.0): Double {

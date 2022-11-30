@@ -3,9 +3,7 @@ package org.openrndr.extra.palette
 import mu.KotlinLogging
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParseException
-import org.openrndr.Extension
-import org.openrndr.Keyboard
-import org.openrndr.Program
+import org.openrndr.*
 import org.openrndr.extra.noise.Random
 import org.openrndr.color.ColorRGBa
 import org.openrndr.color.ColorRGBa.Companion.BLACK
@@ -14,7 +12,6 @@ import org.openrndr.color.ColorRGBa.Companion.PINK
 import org.openrndr.color.ColorRGBa.Companion.RED
 import org.openrndr.color.ColorRGBa.Companion.YELLOW
 import org.openrndr.color.ColorRGBa.Companion.fromHex
-import org.openrndr.resourceUrl
 import java.io.File
 import java.net.URL
 import kotlin.math.max
@@ -232,7 +229,7 @@ class PaletteStudio(
         palettes.clear()
     }
 
-    private fun registerKeybindings(keyboard: Keyboard) {
+    private fun registerKeybindings(keyboard: KeyEvents) {
         keyboard.keyDown.listen {
             if (!it.propagationCancelled) {
                 if (it.name == "$randomPaletteKey") {

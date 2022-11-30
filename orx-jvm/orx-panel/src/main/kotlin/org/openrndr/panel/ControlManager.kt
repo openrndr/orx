@@ -73,7 +73,7 @@ class ControlManager : Extension {
     var body: Element? = null
     val layouter = Layouter()
     val fontManager = FontManager()
-    lateinit var window: Program.Window
+    lateinit var window: Window
     private val renderTargetCache = HashMap<Element, RenderTarget>()
 
     lateinit var program: Program
@@ -524,7 +524,7 @@ class ControlManager : Extension {
                 }
 
                 profile("draw image") {
-                    drawer.ortho()
+                    drawer.ortho(RenderTarget.active)
                     drawer.view = Matrix44.IDENTITY
                     drawer.defaults()
                     program.drawer.image(renderTarget.colorBuffer(0), 0.0, 0.0)

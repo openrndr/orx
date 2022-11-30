@@ -77,7 +77,6 @@ class Olive<P : Program>(val resources: Resources? = null, private var scriptMod
         val originalExtensions = program.extensions.map { it }
         val trackedListeners = listOf<Event<*>>(program.mouse.buttonDown,
             program.mouse.buttonUp,
-            program.mouse.clicked,
             program.mouse.dragged,
             program.mouse.moved,
             program.mouse.scrolled,

@@ -168,6 +168,9 @@ class OrbitalCamera(eye: Vector3 = Vector3.ZERO, lookAt: Vector3 = Vector3.UNIT_
     override var enabled: Boolean = true
 
     override fun beforeDraw(drawer: Drawer, program: Program) {
+
+        drawer.pushTransforms()
+
         if (lastSeconds == -1.0) lastSeconds = program.seconds
 
         val delta = program.seconds - lastSeconds
@@ -178,8 +181,7 @@ class OrbitalCamera(eye: Vector3 = Vector3.ZERO, lookAt: Vector3 = Vector3.UNIT_
     }
 
     override fun afterDraw(drawer: Drawer, program: Program) {
-        drawer.view = Matrix44.IDENTITY
-        drawer.ortho()
+        drawer.popTransforms()
     }
 }
 
@@ -206,7 +208,6 @@ fun OrbitalCamera.isolated(drawer: Drawer, function: Drawer.() -> Unit) {
  * if you don't need to revert back to the orthographic projection.
  */
 fun OrbitalCamera.applyTo(drawer: Drawer) {
-
     if (projectionType == ProjectionType.PERSPECTIVE) {
         drawer.perspective(fov, drawer.width.toDouble() / drawer.height, near, far)
     } else {

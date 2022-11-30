@@ -57,14 +57,14 @@ class OrbitalControls(
 
                 // half of the fov is center to top of screen
                 val targetDistance = offset.length * tan(fov.asRadians / 2)
-                val panX = (2 * delta.x * targetDistance / program.window.size.x)
-                val panY = (2 * delta.y * targetDistance / program.window.size.y)
+                val panX = (2 * delta.x * targetDistance / program.width)
+                val panY = (2 * delta.y * targetDistance / program.height)
 
                 orbitalCamera.pan(panX, -panY, 0.0)
 
             } else {
-                val rotX = 360.0 * delta.x / program.window.size.x
-                val rotY = 360.0 * delta.y / program.window.size.y
+                val rotX = 360.0 * delta.x / program.width
+                val rotY = 360.0 * delta.y / program.height
                 orbitalCamera.rotate(rotX, rotY)
             }
         }

@@ -18,6 +18,6 @@ class TimeOperators : Extension {
     }
 
     override fun beforeDraw(drawer: Drawer, program: Program) {
-        operators.forEach { it.tick(program.seconds, program.deltaTime, program.frameCount) }
+        operators.forEach { it.tick(program.seconds, 0.0, 0) }
     }
 }

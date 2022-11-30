@@ -2,13 +2,14 @@ package org.openrndr.extra.olive
 
 import org.openrndr.ApplicationBuilder
 import org.openrndr.Program
+import org.openrndr.ProgramImplementation
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.reflect.KProperty
 import kotlin.streams.toList
 
-open class OliveProgram(private val sourceLocation: String, private val scriptHost: OliveScriptHost, resources: Resources?) : Program() {
+open class OliveProgram(private val sourceLocation: String, private val scriptHost: OliveScriptHost, resources: Resources?) : ProgramImplementation() {
     val olive = extend(Olive<OliveProgram>(scriptMode = ScriptMode.OLIVE_PROGRAM, resources = resources)) {
         script = sourceLocation
         scriptHost = this@OliveProgram.scriptHost
