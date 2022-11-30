@@ -1,3 +1,4 @@
+import org.openrndr.KeyModifier
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.color.mix
@@ -51,7 +52,7 @@ fun main() = application {
         keyboard.keyDown.listen {
             when (it.name) {
                 in "0".."9" -> {
-                    if (keyboard.pressedKeys.contains("left-shift")) {
+                    if (KeyModifier.SHIFT in it.modifiers) {
                         // 1. Get the current gui state, store it in a list
                         presets[it.name.toInt()] = gui.toObject()
                     } else {
