@@ -9,7 +9,12 @@ import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 import kotlin.math.ceil
 
-class ViewBox(override val program: Program, var clientArea: Rectangle) : Program by program {
+class ViewBox(
+    override val program: Program, var clientArea: Rectangle,
+    translateMouse: Boolean = true,
+    translateKeyboard: Boolean = true,
+
+    ) : Program by program {
 
     override var width: Int
         get() {
@@ -26,92 +31,106 @@ class ViewBox(override val program: Program, var clientArea: Rectangle) : Progra
 
     override val extensions: MutableList<Extension> = mutableListOf<Extension>()
 
-    override val mouse: MouseEvents = object :MouseEvents{
+    inner class TranslatedMouseEvents: MouseEvents {
         override val buttonDown = Event<MouseEvent>()
         override val buttonUp = Event<MouseEvent>()
-        override val dragged  = Event<MouseEvent>()
+        override val dragged = Event<MouseEvent>()
         override val entered = Event<MouseEvent>()
         override val exited = Event<MouseEvent>()
         override val moved = Event<MouseEvent>()
-        override val position: Vector2
-            get() = TODO("Not yet implemented")
+        override var position: Vector2 = -clientArea.corner
+
         override val pressedButtons: MutableSet<MouseButton>
             get() = TODO("Not yet implemented")
-        override val scrolled =  Event<MouseEvent>()
+        override val scrolled = Event<MouseEvent>()
     }
 
-    override val keyboard: KeyEvents = object: KeyEvents {
+    override val mouse: MouseEvents = if (translateMouse)  {
+        TranslatedMouseEvents()
+    } else {
+        program.mouse
+    }
+
+    override val keyboard: KeyEvents = if (translateKeyboard) object : KeyEvents {
         override val character: Event<CharacterEvent> = Event<CharacterEvent>()
         override val keyDown: Event<KeyEvent> = Event<KeyEvent>()
         override val keyRepeat: Event<KeyEvent> = Event<KeyEvent>()
-        override val keyUp: Event<KeyEvent> =  Event<KeyEvent>()
+        override val keyUp: Event<KeyEvent> = Event<KeyEvent>()
+    } else {
+        program.keyboard
     }
 
     override val pointers: Pointers by lazy { program.pointers }
 
     var hasInputFocus = false
+
     init {
-        program.mouse.moved.listen {
-            if (it.position in clientArea && !it.propagationCancelled) {
-                hasInputFocus = true
-                mouse.moved.trigger(it.copy(position = it.position - clientArea.corner))
-                it.cancelPropagation()
-            } else if (it.position !in clientArea) {
-                hasInputFocus = false
+        if (translateMouse) {
+            program.mouse.moved.listen {
+                mouse as TranslatedMouseEvents
+                mouse.position = it.position - clientArea.corner
+                if (it.position in clientArea && !it.propagationCancelled) {
+                    hasInputFocus = true
+                    mouse.moved.trigger(it.copy(position = it.position - clientArea.corner))
+                    it.cancelPropagation()
+                } else if (it.position !in clientArea) {
+                    hasInputFocus = false
+                }
             }
-        }
 
-        program.mouse.buttonUp.listen {
-            if (it.position in clientArea && !it.propagationCancelled) {
-                mouse.buttonUp.trigger(it.copy(position = it.position - clientArea.corner))
-                it.cancelPropagation()
+            program.mouse.buttonUp.listen {
+                if (it.position in clientArea && !it.propagationCancelled) {
+                    mouse.buttonUp.trigger(it.copy(position = it.position - clientArea.corner))
+                    it.cancelPropagation()
+                }
             }
-        }
-        program.mouse.dragged.listen {
-            if (it.position in clientArea && !it.propagationCancelled) {
-                mouse.dragged.trigger(it.copy(position = it.position - clientArea.corner))
-                it.cancelPropagation()
+            program.mouse.dragged.listen {
+                if (it.position in clientArea && !it.propagationCancelled) {
+                    mouse.dragged.trigger(it.copy(position = it.position - clientArea.corner))
+                    it.cancelPropagation()
+                }
             }
-        }
-        program.mouse.buttonDown.listen {
-            if (it.position in clientArea && !it.propagationCancelled) {
-                mouse.buttonDown.trigger(it.copy(position = it.position - clientArea.corner))
-                it.cancelPropagation()
+            program.mouse.buttonDown.listen {
+                if (it.position in clientArea && !it.propagationCancelled) {
+                    mouse.buttonDown.trigger(it.copy(position = it.position - clientArea.corner))
+                    it.cancelPropagation()
+                }
             }
-        }
 
-        program.mouse.scrolled.listen {
-            if (it.position in clientArea && !it.propagationCancelled) {
-                mouse.scrolled.trigger(it.copy(position = it.position - clientArea.corner))
-                it.cancelPropagation()
+            program.mouse.scrolled.listen {
+                if (it.position in clientArea && !it.propagationCancelled) {
+                    mouse.scrolled.trigger(it.copy(position = it.position - clientArea.corner))
+                    it.cancelPropagation()
+                }
             }
         }
-
-        program.keyboard.keyDown.listen {
-            if (hasInputFocus && !it.propagationCancelled) {
-                keyboard.keyDown.trigger(it)
-                it.cancelPropagation()
+        if (translateKeyboard) {
+            program.keyboard.keyDown.listen {
+                if (hasInputFocus && !it.propagationCancelled) {
+                    keyboard.keyDown.trigger(it)
+                    it.cancelPropagation()
+                }
             }
-        }
 
-        program.keyboard.keyUp.listen {
-            if (hasInputFocus && !it.propagationCancelled) {
-                keyboard.keyUp.trigger(it)
-                it.cancelPropagation()
+            program.keyboard.keyUp.listen {
+                if (hasInputFocus && !it.propagationCancelled) {
+                    keyboard.keyUp.trigger(it)
+                    it.cancelPropagation()
+                }
             }
-        }
 
-        program.keyboard.keyRepeat.listen {
-            if (hasInputFocus && !it.propagationCancelled) {
-                keyboard.keyRepeat.trigger(it)
-                it.cancelPropagation()
+            program.keyboard.keyRepeat.listen {
+                if (hasInputFocus && !it.propagationCancelled) {
+                    keyboard.keyRepeat.trigger(it)
+                    it.cancelPropagation()
+                }
             }
-        }
 
-        program.keyboard.character.listen {
-            if (hasInputFocus && !it.propagationCancelled) {
-                keyboard.character.trigger(it)
-                it.cancelPropagation()
+            program.keyboard.character.listen {
+                if (hasInputFocus && !it.propagationCancelled) {
+                    keyboard.character.trigger(it)
+                    it.cancelPropagation()
+                }
             }
         }
     }
@@ -138,6 +157,7 @@ class ViewBox(override val program: Program, var clientArea: Rectangle) : Progra
                         program.userDraw()
                     }
                 }
+
             ExtensionStage.BEFORE_DRAW ->
                 object : Extension {
                     override var enabled: Boolean = true
@@ -145,6 +165,7 @@ class ViewBox(override val program: Program, var clientArea: Rectangle) : Progra
                         program.userDraw()
                     }
                 }
+
             ExtensionStage.AFTER_DRAW ->
                 object : Extension {
                     override var enabled: Boolean = true
@@ -206,8 +227,19 @@ class ViewBox(override val program: Program, var clientArea: Rectangle) : Progra
     }
 }
 
-fun Program.viewBox(area: Rectangle, f: ViewBox.() -> Unit): ViewBox {
-    val viewBox = ViewBox(this, area)
+/**
+ * Create a [ViewBox]
+ * @param area a [Rectangle] that indicates the position and size of the view box
+ * @param translateMouse should the view box translate mouse events? default is true
+ * @param translateKeyboard should the view box translate keyboard events? default is true
+ * @param f [ViewBox] configuration function
+ * @return a newly created [ViewBox]
+ */
+fun Program.viewBox(area: Rectangle,
+                    translateMouse: Boolean = true,
+                    translateKeyboard: Boolean = true,
+                    f: ViewBox.() -> Unit): ViewBox {
+    val viewBox = ViewBox(this, area, translateMouse, translateKeyboard)
     viewBox.f()
     return viewBox
 }

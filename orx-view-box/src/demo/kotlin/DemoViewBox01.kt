@@ -37,6 +37,7 @@ fun main() {
                 extend(Camera2D())
                 extend {
                     drawer.rectangle(20.0, 20.0, 100.0, 100.0)
+                    drawer.circle(mouse.position, 10.0)
                 }
             }
 
