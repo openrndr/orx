@@ -31,7 +31,7 @@ class ViewBox(
 
     override val extensions: MutableList<Extension> = mutableListOf<Extension>()
 
-    inner class TranslatedMouseEvents: MouseEvents {
+    inner class TranslatedMouseEvents : MouseEvents {
         override val buttonDown = Event<MouseEvent>()
         override val buttonUp = Event<MouseEvent>()
         override val dragged = Event<MouseEvent>()
@@ -45,7 +45,7 @@ class ViewBox(
         override val scrolled = Event<MouseEvent>()
     }
 
-    override val mouse: MouseEvents = if (translateMouse)  {
+    override val mouse: MouseEvents = if (translateMouse) {
         TranslatedMouseEvents()
     } else {
         program.mouse
@@ -235,10 +235,12 @@ class ViewBox(
  * @param f [ViewBox] configuration function
  * @return a newly created [ViewBox]
  */
-fun Program.viewBox(area: Rectangle,
-                    translateMouse: Boolean = true,
-                    translateKeyboard: Boolean = true,
-                    f: ViewBox.() -> Unit): ViewBox {
+fun Program.viewBox(
+    area: Rectangle,
+    translateMouse: Boolean = true,
+    translateKeyboard: Boolean = true,
+    f: ViewBox.() -> Unit = {}
+): ViewBox {
     val viewBox = ViewBox(this, area, translateMouse, translateKeyboard)
     viewBox.f()
     return viewBox
