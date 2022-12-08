@@ -4,6 +4,11 @@ Tools to provide view box support
 
 <!-- __demos__ -->
 ## Demos
+### DemoProxyProgram01
+[source code](src/demo/kotlin/DemoProxyProgram01.kt)
+
+![DemoProxyProgram01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-view-box/images/DemoProxyProgram01Kt.png)
+
 ### DemoViewBox01
 [source code](src/demo/kotlin/DemoViewBox01.kt)
 
