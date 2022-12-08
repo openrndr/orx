@@ -35,6 +35,9 @@ kotlin {
         val jvmDemo by getting {
             dependencies {
                 implementation(project(":orx-color"))
+                implementation(project(":orx-shade-styles"))
+                implementation(project(":orx-noise"))
+                implementation(project(":orx-shapes"))
             }
         }
     }
