@@ -39,6 +39,7 @@ kotlin {
             dependencies {
                 implementation(project(":orx-camera"))
                 implementation(project(":orx-mesh-generators"))
+                implementation(project(":orx-jvm:orx-gui"))
             }
         }
     }
