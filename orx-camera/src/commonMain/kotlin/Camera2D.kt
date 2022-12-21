@@ -5,6 +5,7 @@ import org.openrndr.MouseEvents
 import org.openrndr.Program
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.RenderTarget
+import org.openrndr.events.Event
 import org.openrndr.math.Matrix44
 import org.openrndr.math.transforms.buildTransform
 
@@ -15,13 +16,27 @@ import org.openrndr.math.transforms.buildTransform
  *
  * Usage: `extend(Camera2D())`
  */
-class Camera2D : Extension {
+class Camera2D : Extension, ChangeEvents {
     override var enabled = true
+
     var view = Matrix44.IDENTITY
+
+    override val changed = Event<Unit>()
+
+    private var dirty = true
+        set(value) {
+            if (value && !field) {
+                changed.trigger(Unit)
+            }
+            field = value
+        }
+    override val hasChanged: Boolean
+        get() = dirty
 
     fun setupMouseEvents(mouse: MouseEvents) {
         mouse.dragged.listen {
             view = buildTransform { translate(it.dragDisplacement) } * view
+            dirty = true
         }
         mouse.scrolled.listen {
             val scaleFactor = 1.0 - it.rotation.y * 0.03
@@ -30,6 +45,7 @@ class Camera2D : Extension {
                 scale(scaleFactor)
                 translate(-it.position)
             } * view
+            dirty = true
         }
     }
     override fun setup(program: Program) {
@@ -43,6 +59,7 @@ class Camera2D : Extension {
     }
 
     override fun afterDraw(drawer: Drawer, program: Program) {
+        dirty = false
         drawer.popTransforms()
     }
 }
