@@ -13,8 +13,14 @@ class ViewBox(
     override val program: Program, var clientArea: Rectangle,
     translateMouse: Boolean = true,
     translateKeyboard: Boolean = true,
+    val contentScale: Double? = null,
+    val multisample: BufferMultisample? = null
 
-    ) : Program by program {
+) : Program by program {
+    var viewBoxReconfigured: Boolean = false
+        private set
+
+    var shouldDraw: () -> Boolean = { true }
 
     override var width: Int
         get() {
@@ -52,10 +58,10 @@ class ViewBox(
     }
 
     override val keyboard: KeyEvents = if (translateKeyboard) object : KeyEvents {
-        override val character: Event<CharacterEvent> = Event<CharacterEvent>()
-        override val keyDown: Event<KeyEvent> = Event<KeyEvent>()
-        override val keyRepeat: Event<KeyEvent> = Event<KeyEvent>()
-        override val keyUp: Event<KeyEvent> = Event<KeyEvent>()
+        override val character: Event<CharacterEvent> = Event()
+        override val keyDown: Event<KeyEvent> = Event()
+        override val keyRepeat: Event<KeyEvent> = Event()
+        override val keyUp: Event<KeyEvent> = Event()
     } else {
         program.keyboard
     }
@@ -178,7 +184,6 @@ class ViewBox(
     }
 
     override fun draw() {
-
         val widthCeil = ceil(clientArea.width).toInt()
         val heightCeil = ceil(clientArea.height).toInt()
 
@@ -195,34 +200,48 @@ class ViewBox(
                 resolved?.destroy()
                 resolved = null
             }
-
         }
 
         if (renderTarget == null) {
+            viewBoxReconfigured = true
             val art = RenderTarget.active
-            renderTarget = renderTarget(widthCeil, heightCeil, art.contentScale, art.multisample) {
-                colorBuffer()
-                depthBuffer()
-            }
-            if (art.multisample != BufferMultisample.Disabled) {
-                resolved = colorBuffer(widthCeil, heightCeil, art.contentScale, multisample = art.multisample)
+            renderTarget =
+                renderTarget(widthCeil, heightCeil, contentScale ?: art.contentScale, multisample ?: art.multisample) {
+                    colorBuffer()
+                    depthBuffer()
+                }
+            if ((multisample ?: art.multisample) != BufferMultisample.Disabled) {
+                resolved = colorBuffer(
+                    widthCeil,
+                    heightCeil,
+                    contentScale ?: art.contentScale
+                )
             }
         }
 
-        program.drawer.isolatedWithTarget(renderTarget!!) {
-            drawer.clear(ColorRGBa.BLACK)
-            drawer.defaults()
-            drawer.ortho(renderTarget!!)
-            for (extension in extensions) {
-                extension.beforeDraw(program.drawer, this@ViewBox)
+        if (viewBoxReconfigured || shouldDraw()) {
+            program.drawer.isolatedWithTarget(renderTarget!!) {
+                drawer.clear(ColorRGBa.BLACK)
+                drawer.defaults()
+                drawer.ortho(renderTarget!!)
+                for (extension in extensions) {
+                    extension.beforeDraw(program.drawer, this@ViewBox)
+                }
+                for (extension in extensions.reversed()) {
+                    extension.afterDraw(program.drawer, this@ViewBox)
+                }
+                program.drawer.defaults()
+
+                viewBoxReconfigured = false
             }
-            for (extension in extensions.reversed()) {
-                extension.afterDraw(program.drawer, this@ViewBox)
-            }
-            program.drawer.defaults()
         }
         program.drawer.isolated {
-            program.drawer.image(renderTarget!!.colorBuffer(0), clientArea.corner)
+            if (resolved == null) {
+                program.drawer.image(renderTarget!!.colorBuffer(0), clientArea.corner)
+            } else {
+                renderTarget!!.colorBuffer(0).copyTo(resolved!!)
+                program.drawer.image(resolved!!, clientArea.corner)
+            }
         }
     }
 }
@@ -239,9 +258,11 @@ fun Program.viewBox(
     area: Rectangle,
     translateMouse: Boolean = true,
     translateKeyboard: Boolean = true,
+    contentScale: Double? = null,
+    multisample: BufferMultisample? = null,
     f: ViewBox.() -> Unit = {}
 ): ViewBox {
-    val viewBox = ViewBox(this, area, translateMouse, translateKeyboard)
+    val viewBox = ViewBox(this, area, translateMouse, translateKeyboard, contentScale, multisample)
     viewBox.f()
     return viewBox
 }
