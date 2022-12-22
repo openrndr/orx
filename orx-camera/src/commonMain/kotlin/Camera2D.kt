@@ -1,18 +1,22 @@
 package org.openrndr.extra.camera
 
 import org.openrndr.Extension
+import org.openrndr.MouseButton
 import org.openrndr.MouseEvents
 import org.openrndr.Program
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.RenderTarget
 import org.openrndr.events.Event
 import org.openrndr.math.Matrix44
+import org.openrndr.math.Vector2
 import org.openrndr.math.transforms.buildTransform
 
 /**
- * The [Camera2D] extension enables:
- * - **panning** the view by moving the mouse while a mouse button is pressed
- * - **zooming** in and out by using the mouse wheel
+ * The [Camera2D] extension enables panning, rotating and zooming the view
+ * with the mouse:
+ * - left click and drag to **pan**
+ * - right click and drag to **rotate**
+ * - use the mouse wheel to **zoom** in and out
  *
  * Usage: `extend(Camera2D())`
  */
@@ -20,6 +24,7 @@ class Camera2D : Extension, ChangeEvents {
     override var enabled = true
 
     var view = Matrix44.IDENTITY
+    var rotationCenter = Vector2.ZERO
 
     override val changed = Event<Unit>()
 
@@ -34,8 +39,23 @@ class Camera2D : Extension, ChangeEvents {
         get() = dirty
 
     fun setupMouseEvents(mouse: MouseEvents) {
+        mouse.buttonDown.listen {
+            rotationCenter = it.position
+        }
         mouse.dragged.listen {
-            view = buildTransform { translate(it.dragDisplacement) } * view
+            when (it.button) {
+                MouseButton.LEFT -> view = buildTransform {
+                    translate(it.dragDisplacement)
+                } * view
+
+                MouseButton.RIGHT -> view = buildTransform {
+                    translate(rotationCenter)
+                    rotate(it.dragDisplacement.x + it.dragDisplacement.y)
+                    translate(-rotationCenter)
+                } * view
+
+                else -> Unit
+            }
             dirty = true
         }
         mouse.scrolled.listen {
@@ -48,6 +68,7 @@ class Camera2D : Extension, ChangeEvents {
             dirty = true
         }
     }
+
     override fun setup(program: Program) {
         setupMouseEvents(program.mouse)
     }
