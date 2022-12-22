@@ -4,6 +4,7 @@ import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.draw.DepthTestPass
 import org.openrndr.draw.Drawer
+import org.openrndr.events.Event
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Spherical
 import org.openrndr.math.Vector3
@@ -17,7 +18,21 @@ enum class ProjectionType {
 }
 
 
-class OrbitalCamera(eye: Vector3 = Vector3.ZERO, lookAt: Vector3 = Vector3.UNIT_Z, var fov: Double = 90.0, var near: Double = 0.1, var far: Double = 1000.0, var projectionType: ProjectionType = ProjectionType.PERSPECTIVE) : Extension {
+class OrbitalCamera(
+    eye: Vector3 = Vector3.ZERO,
+    lookAt: Vector3 = Vector3.UNIT_Z,
+    var fov: Double = 90.0,
+    var near: Double = 0.1,
+    var far: Double = 1000.0,
+    var projectionType: ProjectionType = ProjectionType.PERSPECTIVE
+) : Extension, ChangeEvents {
+
+    override val changed = Event<Unit>()
+
+    override val hasChanged: Boolean
+        get() = dirty
+
+
     // current position in spherical coordinates
     var spherical = Spherical.fromVector(eye)
         private set
@@ -32,6 +47,12 @@ class OrbitalCamera(eye: Vector3 = Vector3.ZERO, lookAt: Vector3 = Vector3.UNIT_
     private var sphericalEnd = Spherical.fromVector(eye)
     private var lookAtEnd = lookAt
     private var dirty: Boolean = true
+        set(value) {
+            if (value && !field) {
+                changed.trigger(Unit)
+            }
+            field = value
+        }
     private var lastSeconds: Double = -1.0
 
     var fovEnd = fov
@@ -127,19 +148,21 @@ class OrbitalCamera(eye: Vector3 = Vector3.ZERO, lookAt: Vector3 = Vector3.UNIT_
         if (!dirty) return
         dirty = false
 
-        val dampingFactor = if (dampingFactor > 0.0) { dampingFactor * timeDelta / 0.0060 } else 1.0
+        val dampingFactor = if (dampingFactor > 0.0) {
+            dampingFactor * timeDelta / 0.0060
+        } else 1.0
         val sphericalDelta = sphericalEnd - spherical
         val lookAtDelta = lookAtEnd - lookAt
         val fovDelta = fovEnd - fov
         val magnitudeDelta = magnitudeEnd - magnitude
         if (
-                abs(sphericalDelta.radius) > EPSILON ||
-                abs(sphericalDelta.theta) > EPSILON ||
-                abs(sphericalDelta.phi) > EPSILON ||
-                abs(lookAtDelta.x) > EPSILON ||
-                abs(lookAtDelta.y) > EPSILON ||
-                abs(lookAtDelta.z) > EPSILON ||
-                abs(fovDelta) > EPSILON
+            abs(sphericalDelta.radius) > EPSILON ||
+            abs(sphericalDelta.theta) > EPSILON ||
+            abs(sphericalDelta.phi) > EPSILON ||
+            abs(lookAtDelta.x) > EPSILON ||
+            abs(lookAtDelta.y) > EPSILON ||
+            abs(lookAtDelta.z) > EPSILON ||
+            abs(fovDelta) > EPSILON
         ) {
             fov += (fovDelta * dampingFactor)
             spherical += (sphericalDelta * dampingFactor)
@@ -222,4 +245,4 @@ fun OrbitalCamera.applyTo(drawer: Drawer) {
     }
 }
 
-private fun pow(a:Double, x:Double): Double = a.pow(x)
+private fun pow(a: Double, x: Double): Double = a.pow(x)

@@ -3,13 +3,21 @@ package org.openrndr.extra.camera
 import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.draw.Drawer
+import org.openrndr.events.Event
 import org.openrndr.math.Vector3
 
 /**
  * Extension that provides orbital camera view and controls.
  */
-class Orbital : Extension {
+class Orbital : Extension, ChangeEvents {
     override var enabled: Boolean = true
+
+    override val changed = Event<Unit>()
+    override val hasChanged: Boolean
+        get() {
+            return camera.hasChanged
+        }
+
 
     var eye = Vector3.UNIT_Z * 10.0
     var lookAt = Vector3.ZERO
@@ -28,6 +36,7 @@ class Orbital : Extension {
     val camera by lazy {
         OrbitalCamera(eye, lookAt, fov, near, far, projectionType).apply {
             dampingFactor = this@Orbital.dampingFactor
+            this.changed.listen(this@Orbital.changed)
         }
     }
     val controls by lazy { OrbitalControls(camera, userInteraction, keySpeed) }
