@@ -9,7 +9,7 @@ internal class PassthroughNoAlpha : Filter(filterShaderFromUrl(resourceUrl("/sha
 /**
  * Laplacian filter
  */
-class Laplacian : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/poisson/laplacian.frag")))
+class Laplacian : Filter1to1(filterShaderFromUrl(resourceUrl("/shaders/gl3/poisson/laplacian.frag")))
 
 class LaplacianIntegrator(width: Int, height: Int, downscaling: Int = 1, type: ColorType = ColorType.FLOAT32) {
     private val pyramid = ConvolutionPyramid(2 + width / downscaling, 2 + height / downscaling, type = type)

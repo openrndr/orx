@@ -39,7 +39,7 @@ class PoissonFiller(val width: Int, val height: Int, type: ColorType = ColorType
 /**
  * Poison filling as a filter
  */
-class PoissonFill : Filter() {
+class PoissonFill : Filter1to1() {
     private var filler: PoissonFiller? = null
     override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
         if (target.isNotEmpty()) {
