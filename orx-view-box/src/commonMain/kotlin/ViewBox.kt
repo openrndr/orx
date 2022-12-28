@@ -207,7 +207,7 @@ class ViewBox(
             val art = RenderTarget.active
             renderTarget =
                 renderTarget(widthCeil, heightCeil, contentScale ?: art.contentScale, multisample ?: art.multisample) {
-                    colorBuffer()
+                    colorBuffer(type = art.colorBuffer(0).type)
                     depthBuffer()
                 }
             if ((multisample ?: art.multisample) != BufferMultisample.Disabled) {
