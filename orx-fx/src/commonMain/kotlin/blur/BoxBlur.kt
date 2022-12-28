@@ -13,7 +13,7 @@ import org.openrndr.math.Vector2
  * BoxBlur implemented as a separable filter
  */
 @Description("Box-blur")
-class BoxBlur : Filter(mppFilterShader(fx_box_blur,"box-blur")) {
+class BoxBlur : Filter1to1(mppFilterShader(fx_box_blur,"box-blur")) {
 
     data class ColorBufferDescription(val width: Int, val height: Int, val contentScale: Double, val format: ColorFormat, val type: ColorType)
 

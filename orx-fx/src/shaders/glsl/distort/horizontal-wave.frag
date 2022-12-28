@@ -1,5 +1,5 @@
 in vec2 v_texCoord0;
-uniform sampler2D tex0; // input
+uniform sampler2D tex0;// input
 uniform float phase;
 uniform float amplitude;
 uniform float frequency;
@@ -11,7 +11,7 @@ float truncate(float x, int segments)  {
     if (segments == 0) {
         return x;
     } else {
-        return floor(x*segments) / segments;
+        return floor(x * float(segments)) / float(segments);
     }
 }
 

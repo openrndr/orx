@@ -4,7 +4,7 @@ import org.openrndr.draw.*
 import org.openrndr.extra.fx.fx_color_lookup
 import org.openrndr.extra.fx.mppFilterShader
 
-class ColorLookup(lookup: ColorBuffer) : Filter(mppFilterShader(fx_color_lookup, "color-lookup")) {
+class ColorLookup(lookup: ColorBuffer) : Filter1to1(mppFilterShader(fx_color_lookup, "color-lookup")) {
     /** a color look-up texture */
     var lookup: ColorBuffer by parameters
 

@@ -1,13 +1,14 @@
 package org.openrndr.extra.fx.dither
 
 import org.openrndr.draw.Filter
+import org.openrndr.draw.Filter1to1
 import org.openrndr.extra.fx.fx_cmyk_halftone
 import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 
 @Description("CMYK Halftone")
-class CMYKHalftone: Filter(mppFilterShader(fx_cmyk_halftone, "cmyk-halftone")) {
+class CMYKHalftone: Filter1to1(mppFilterShader(fx_cmyk_halftone, "cmyk-halftone")) {
     @DoubleParameter("scale", 1.0, 30.0, precision = 4)
     var scale: Double by parameters
 

@@ -2,6 +2,7 @@ package org.openrndr.extra.fx.color
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Filter
+import org.openrndr.draw.Filter1to1
 import org.openrndr.draw.filterShaderFromCode
 import org.openrndr.extra.fx.fx_duotone_gradient
 import org.openrndr.extra.parameters.BooleanParameter
@@ -15,7 +16,7 @@ import org.openrndr.extra.color.presets.CORAL
 import org.openrndr.extra.color.presets.NAVY
 
 @Description("Duotone Gradient")
-class DuotoneGradient : Filter(filterShaderFromCode(run {
+class DuotoneGradient : Filter1to1(filterShaderFromCode(run {
     ColorPhraseBook.register()
     fx_duotone_gradient.preprocess()
 }, "duotone-gradient")) {

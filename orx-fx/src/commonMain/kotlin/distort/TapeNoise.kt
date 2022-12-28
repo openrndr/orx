@@ -2,6 +2,7 @@ package org.openrndr.extra.fx.distort
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Filter
+import org.openrndr.draw.Filter1to1
 import org.openrndr.extra.fx.fx_tape_noise
 import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.BooleanParameter
@@ -10,7 +11,7 @@ import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 
 @Description("Tape noise")
-class TapeNoise : Filter(mppFilterShader(fx_tape_noise, "tape-noise")) {
+class TapeNoise : Filter1to1(mppFilterShader(fx_tape_noise, "tape-noise")) {
     var time: Double by parameters
 
     @DoubleParameter("gain", 0.0, 1.0)

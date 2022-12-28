@@ -1,9 +1,6 @@
 package org.openrndr.extra.fx.distort
 
-import org.openrndr.draw.ColorBuffer
-import org.openrndr.draw.Filter
-import org.openrndr.draw.createEquivalent
-import org.openrndr.draw.isEquivalentTo
+import org.openrndr.draw.*
 import org.openrndr.extra.fx.fx_fluid_distort
 import org.openrndr.extra.fx.fx_uvmap
 import org.openrndr.extra.fx.mppFilterShader
@@ -20,7 +17,7 @@ private class FluidDistortFilter : Filter(mppFilterShader(fx_fluid_distort, "flu
     }
 }
 
-class FluidDistort : Filter() {
+class FluidDistort : Filter1to1() {
     var blend: Double = 1.0
 
     var outputUV = false

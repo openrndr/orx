@@ -7,7 +7,7 @@ import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 
 @Description("Fisheye")
-class Fisheye : Filter(mppFilterShader(fx_fisheye, "fisheye")) {
+class Fisheye : Filter1to1(mppFilterShader(fx_fisheye, "fisheye")) {
     @DoubleParameter("strength", -1.0, 1.0, order = 0)
     var strength: Double by parameters
 

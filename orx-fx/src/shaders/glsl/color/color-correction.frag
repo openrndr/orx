@@ -58,7 +58,7 @@ void main() {
     vec4 nc = (color.a == 0.0) ? vec4(0.0) : vec4(color.rgb / color.a, color.a);
     nc.rgb = pow(nc.rgb, vec3(gamma));
     nc.rgb = shiftHue(nc.rgb, (hueShift/360.0));
-    vec4 cc = brightnessMatrix(brightness) * contrastMatrix((contrast + 1)) * saturationMatrix(saturation + 1) * nc;
+    vec4 cc = brightnessMatrix(brightness) * contrastMatrix((contrast + 1.0)) * saturationMatrix(saturation + 1.0) * nc;
     if(clamped) {
         o_color = clamp(vec4(cc.rgb, 1.0) * color.a * opacity, 0.0, 1.0);
     } else {

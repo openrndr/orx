@@ -1,6 +1,7 @@
 package org.openrndr.extra.fx.dither
 
 import org.openrndr.draw.Filter
+import org.openrndr.draw.Filter1to1
 import org.openrndr.draw.filterShaderFromCode
 import org.openrndr.extra.fx.fx_luma_halftone
 import org.openrndr.extra.parameters.BooleanParameter
@@ -9,7 +10,7 @@ import org.openrndr.extra.parameters.DoubleParameter
 
 
 @Description("Luma Halftone")
-class LumaHalftone: Filter(filterShaderFromCode(fx_luma_halftone, "luma-halftone")) {
+class LumaHalftone: Filter1to1(filterShaderFromCode(fx_luma_halftone, "luma-halftone")) {
     @DoubleParameter("scale", 1.0, 30.0, precision = 4)
     var scale: Double by parameters
 

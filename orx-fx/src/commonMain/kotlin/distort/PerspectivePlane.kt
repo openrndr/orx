@@ -10,7 +10,7 @@ import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
 
 @Description("Perspective plane")
-class PerspectivePlane : Filter(mppFilterShader(fx_perspective_plane, "perspective-plane")) {
+class PerspectivePlane : Filter1to1(mppFilterShader(fx_perspective_plane, "perspective-plane")) {
     //    @DoubleParameter("camera x", -1.0, 1.0, order = 0)
     var cameraX: Double = 0.0
     //    @DoubleParameter("camera y", -1.0, 1.0, order = 1)

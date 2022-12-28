@@ -14,7 +14,7 @@ import org.openrndr.math.Vector2
  * Approximate separated Gaussian blur
  */
 @Description("Approximate Gaussian blur")
-class ApproximateGaussianBlur : Filter(mppFilterShader(fx_approximate_gaussian_blur, "approximate gaussian blur")) {
+class ApproximateGaussianBlur : Filter1to1(mppFilterShader(fx_approximate_gaussian_blur, "approximate gaussian blur")) {
     /**
      * blur sample window, default value is 5
      */

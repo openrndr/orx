@@ -21,7 +21,7 @@ uniform bool logPolar;
 
 void main() {
     vec2 uv = v_texCoord0;
-    float arg = (uv.x-0.5) * 2 * PI;
+    float arg = (uv.x-0.5) * 2.0 * PI;
     float radius = logPolar? (((exp(uv.y)-1.0) / (exp(1.0)-1.0)))  : uv.y;
 
     vec2 sourceUV = (radius * sqrt(0.5) * vec2(cos(arg), sin(arg)) + vec2(0.5));

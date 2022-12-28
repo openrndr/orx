@@ -6,7 +6,7 @@ uniform float spread;
 
 void main() {
     ivec2 size = textureSize(tex0, 0);
-    vec2 pixelSize = vec2(1.0/size.x, 1.0/size.y);
+    vec2 pixelSize = vec2(1.0/float(size.x), 1.0/float(size.y));
     vec2 halfPixelSize = pixelSize / 2.0f;
     vec2 d = (pixelSize.xy * vec2(iteration, iteration)) + halfPixelSize.xy;
     d *= spread;

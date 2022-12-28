@@ -8,7 +8,7 @@ import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
 
 @Description("Stack repeat")
-class StackRepeat : Filter(mppFilterShader(fx_stack_repeat, "stack-repeat")) {
+class StackRepeat : Filter1to1(mppFilterShader(fx_stack_repeat, "stack-repeat")) {
     @DoubleParameter("zoom", -1.0, 1.0, order = 0)
     var zoom: Double by parameters
 

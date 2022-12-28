@@ -2,6 +2,7 @@ package org.openrndr.extra.fx.color
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Filter
+import org.openrndr.draw.Filter1to1
 import org.openrndr.draw.filterShaderFromCode
 import org.openrndr.extra.fx.fx_duotone
 import org.openrndr.extra.fx.fx_posterize
@@ -17,7 +18,7 @@ import org.openrndr.extra.color.presets.DARK_GRAY
 import org.openrndr.extra.color.presets.NAVY
 
 @Description("Posterize")
-class Posterize : Filter(filterShaderFromCode(fx_posterize, "posterize")) {
+class Posterize : Filter1to1(filterShaderFromCode(fx_posterize, "posterize")) {
 
     @IntParameter("levels", 2, 32, order = 0)
     var levels: Int by parameters

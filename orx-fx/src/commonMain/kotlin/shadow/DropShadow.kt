@@ -16,7 +16,7 @@ private class Blend : Filter(mppFilterShader(fx_dropshadow_blend, "dropshadow-bl
 }
 
 @Description("Drop shadow")
-class DropShadow : Filter(mppFilterShader(fx_dropshadow_blur, "dropshadow-blur")) {
+class DropShadow : Filter1to1(mppFilterShader(fx_dropshadow_blur, "dropshadow-blur")) {
     @IntParameter("blur window", 1, 25)
     var window: Int by parameters
     var spread: Double by parameters

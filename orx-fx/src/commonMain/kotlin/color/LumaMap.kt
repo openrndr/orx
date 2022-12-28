@@ -2,6 +2,7 @@ package org.openrndr.extra.fx.color
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Filter
+import org.openrndr.draw.Filter1to1
 import org.openrndr.extra.fx.fx_luma_map
 import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.ColorParameter
@@ -9,7 +10,7 @@ import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 
 @Description("Luma map ")
-class LumaMap : Filter(mppFilterShader(fx_luma_map, "luma-map")) {
+class LumaMap : Filter1to1(mppFilterShader(fx_luma_map, "luma-map")) {
     @ColorParameter("foreground color")
     var foreground: ColorRGBa by parameters
 

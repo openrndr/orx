@@ -1,13 +1,14 @@
 package org.openrndr.extra.fx.dither
 
 import org.openrndr.draw.Filter
+import org.openrndr.draw.Filter1to1
 import org.openrndr.extra.fx.fx_crosshatch
 import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 
 @Description("Crosshatch")
-class Crosshatch : Filter(mppFilterShader(fx_crosshatch, "crosshatch")) {
+class Crosshatch : Filter1to1(mppFilterShader(fx_crosshatch, "crosshatch")) {
     @DoubleParameter("threshold 1", 0.0, 1.0)
     var t1: Double by parameters
 

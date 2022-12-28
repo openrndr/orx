@@ -8,7 +8,7 @@ import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 
 @Description("Frame blur")
-class FrameBlur : Filter(mppFilterShader(fx_frame_blur, "frame-blur")) {
+class FrameBlur : Filter1to1(mppFilterShader(fx_frame_blur, "frame-blur")) {
 
     @DoubleParameter("blend", 0.0, 1.0)
     var blend: Double by parameters

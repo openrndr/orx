@@ -1,6 +1,7 @@
 package org.openrndr.extra.fx.distort
 
 import org.openrndr.draw.Filter
+import org.openrndr.draw.Filter1to1
 import org.openrndr.extra.fx.fx_video_glitch
 import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.BooleanParameter
@@ -8,7 +9,7 @@ import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 
 @Description("Video glitch")
-class VideoGlitch : Filter(mppFilterShader(fx_video_glitch, "video-glitch")) {
+class VideoGlitch : Filter1to1(mppFilterShader(fx_video_glitch, "video-glitch")) {
     var time: Double by parameters
 
     @DoubleParameter("amplitude", 0.0, 10.0)

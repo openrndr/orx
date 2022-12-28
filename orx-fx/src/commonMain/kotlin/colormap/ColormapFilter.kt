@@ -1,10 +1,11 @@
 package org.openrndr.extra.fx.colormap
 
 import org.openrndr.draw.Filter
+import org.openrndr.draw.Filter1to1
 import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.DoubleParameter
 
-abstract class ColormapFilter(code: String, name: String) : Filter(mppFilterShader(code, name)) {
+abstract class ColormapFilter(code: String, name: String) : Filter1to1(mppFilterShader(code, name)) {
 
     @DoubleParameter(label = "min value", low = 0.0, high = 1.0, order = 0)
     var minValue: Double by parameters

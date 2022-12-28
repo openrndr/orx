@@ -1,9 +1,6 @@
 package org.openrndr.extra.fx.distort
 
-import org.openrndr.draw.ColorBuffer
-import org.openrndr.draw.Filter
-import org.openrndr.draw.MagnifyingFilter
-import org.openrndr.draw.MinifyingFilter
+import org.openrndr.draw.*
 import org.openrndr.extra.fx.fx_block_repeat
 import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.BooleanParameter
@@ -11,7 +8,7 @@ import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 
 @Description("Block repeat")
-class BlockRepeat : Filter(mppFilterShader(fx_block_repeat, "block-repeat")) {
+class BlockRepeat : Filter1to1(mppFilterShader(fx_block_repeat, "block-repeat")) {
     @DoubleParameter("block width", 0.0, 1.0, order = 0)
     var blockWidth: Double by parameters
 

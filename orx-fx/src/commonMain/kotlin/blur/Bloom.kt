@@ -9,7 +9,7 @@ import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
 
 @Description("Bloom")
-class Bloom(blur: Filter = ApproximateGaussianBlur()) : Filter(mppFilterShader(fx_bloom, "bloom")) {
+class Bloom(blur: Filter = ApproximateGaussianBlur()) : Filter1to1(mppFilterShader(fx_bloom, "bloom")) {
     /**
      * the blur filter to use for the bloom, default is Approximate Gaussian Blur
      */

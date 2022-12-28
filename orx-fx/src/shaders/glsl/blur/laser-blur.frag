@@ -18,7 +18,7 @@ void main() {
     }
     vec2 vt = (v_texCoord0 - vec2(0.5, 0.5) + center) * radius + vec2(0.5, 0.5) - center;
 
-    vec2 size = textureSize(tex0, 0);
+    vec2 size = vec2(textureSize(tex0, 0));
     vec2 l = (v_texCoord0 - vec2(0.5, 0.5) + center) * vec2(1.0, size.y/size.x);
     float d = length(l);
 
@@ -31,7 +31,7 @@ void main() {
         i1g.rgb = i1g.a > 0.0 ? i1g.rgb / i1g.a : vec3(0.0);
         i1b.rgb = i1b.a > 0.0 ? i1b.rgb / i1b.a : vec3(0.0);
 
-        vec4 i1 = vec4(i1r.r, i1g.g, i1b.b, 1.0) *  (i1r.a + i1g.a + i1b.a)/3.0;
+        vec4 i1 = vec4(i1r.r, i1g.g, i1b.b, 1.0) *  (i1r.a + i1g.a + i1b.a) / 3.0;
         if (!linearInput) {
             i1.rgb = pow(i1.rgb, vec3(2.2));
         }
@@ -44,6 +44,4 @@ void main() {
     if (!linearOutput) {
         o_output.rgb = pow(o_output.rgb, vec3(1.0 / 2.2));
     }
-
-
 }

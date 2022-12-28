@@ -8,7 +8,7 @@ import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.math.Vector2
 
 @Description("Chromatic Aberration")
-class ChromaticAberration : Filter(mppFilterShader(fx_chromatic_aberration, "chromatic-aberration")) {
+class ChromaticAberration : Filter1to1(mppFilterShader(fx_chromatic_aberration, "chromatic-aberration")) {
     /**
      * aberration factor, default value is 8.0
      */

@@ -1,10 +1,12 @@
 package org.openrndr.extra.fx.blend
 
 import org.openrndr.draw.Filter
+import org.openrndr.draw.Filter1to1
+import org.openrndr.draw.Filter2to1
 import org.openrndr.extra.fx.*
 import org.openrndr.extra.parameters.BooleanParameter
 
-class ColorBurn : Filter(mppFilterShader(fx_color_burn, "color-burn")) {
+class ColorBurn : Filter2to1(mppFilterShader(fx_color_burn, "color-burn")) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 
@@ -13,7 +15,7 @@ class ColorBurn : Filter(mppFilterShader(fx_color_burn, "color-burn")) {
     }
 }
 
-class ColorDodge : Filter(mppFilterShader(fx_color_dodge, "color-dodge")) {
+class ColorDodge : Filter2to1(mppFilterShader(fx_color_dodge, "color-dodge")) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 
@@ -22,7 +24,7 @@ class ColorDodge : Filter(mppFilterShader(fx_color_dodge, "color-dodge")) {
     }
 }
 
-class Darken : Filter(mppFilterShader(fx_darken, "darken")) {
+class Darken : Filter2to1(mppFilterShader(fx_darken, "darken")) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 
@@ -31,7 +33,7 @@ class Darken : Filter(mppFilterShader(fx_darken, "darken")) {
     }
 }
 
-class HardLight : Filter(mppFilterShader(fx_hard_light, "hard-light")) {
+class HardLight : Filter2to1(mppFilterShader(fx_hard_light, "hard-light")) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 
@@ -40,7 +42,7 @@ class HardLight : Filter(mppFilterShader(fx_hard_light, "hard-light")) {
     }
 }
 
-class Lighten : Filter(mppFilterShader(fx_lighten, "lighten")) {
+class Lighten : Filter2to1(mppFilterShader(fx_lighten, "lighten")) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 
@@ -49,7 +51,7 @@ class Lighten : Filter(mppFilterShader(fx_lighten, "lighten")) {
     }
 }
 
-class Multiply : Filter(mppFilterShader(fx_multiply,"multiply")) {
+class Multiply : Filter2to1(mppFilterShader(fx_multiply,"multiply")) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 
@@ -58,7 +60,7 @@ class Multiply : Filter(mppFilterShader(fx_multiply,"multiply")) {
     }
 }
 
-class Normal : Filter(mppFilterShader(fx_normal, "normal")) {
+class Normal : Filter2to1(mppFilterShader(fx_normal, "normal")) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 
@@ -67,7 +69,7 @@ class Normal : Filter(mppFilterShader(fx_normal, "normal")) {
     }
 }
 
-class Overlay : Filter(mppFilterShader(fx_overlay, "overlay")) {
+class Overlay : Filter2to1(mppFilterShader(fx_overlay, "overlay")) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 
@@ -76,7 +78,7 @@ class Overlay : Filter(mppFilterShader(fx_overlay, "overlay")) {
     }
 }
 
-class Screen : Filter(mppFilterShader(fx_screen, "screen")) {
+class Screen : Filter2to1(mppFilterShader(fx_screen, "screen")) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 
@@ -86,18 +88,18 @@ class Screen : Filter(mppFilterShader(fx_screen, "screen")) {
 }
 
 
-class SourceIn : Filter(mppFilterShader(fx_source_in, "source-in"))
-class SourceOut : Filter(mppFilterShader(fx_source_out,"source-out"))
-class SourceAtop : Filter(mppFilterShader(fx_source_atop, "source-atop"))
-class DestinationIn : Filter(mppFilterShader(fx_destination_in, "destination-in"))
-class DestinationOut : Filter(mppFilterShader(fx_destination_out, "destination-out"))
-class DestinationAtop : Filter(mppFilterShader(fx_destination_atop, "destination-atop"))
-class Xor : Filter(mppFilterShader(fx_xor, "xor"))
+class SourceIn : Filter2to1(mppFilterShader(fx_source_in, "source-in"))
+class SourceOut : Filter2to1(mppFilterShader(fx_source_out,"source-out"))
+class SourceAtop : Filter2to1(mppFilterShader(fx_source_atop, "source-atop"))
+class DestinationIn : Filter2to1(mppFilterShader(fx_destination_in, "destination-in"))
+class DestinationOut : Filter2to1(mppFilterShader(fx_destination_out, "destination-out"))
+class DestinationAtop : Filter2to1(mppFilterShader(fx_destination_atop, "destination-atop"))
+class Xor : Filter2to1(mppFilterShader(fx_xor, "xor"))
 
-class MultiplyContrast : Filter(mppFilterShader(fx_multiply_contrast, "multiply-contrast"))
+class MultiplyContrast : Filter2to1(mppFilterShader(fx_multiply_contrast, "multiply-contrast"))
 
-class Passthrough : Filter(mppFilterShader(fx_passthrough, "passthrough"))
-class Add : Filter(mppFilterShader(fx_add, "add")) {
+class Passthrough : Filter1to1(mppFilterShader(fx_passthrough, "passthrough"))
+class Add : Filter2to1(mppFilterShader(fx_add, "add")) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 
@@ -105,7 +107,7 @@ class Add : Filter(mppFilterShader(fx_add, "add")) {
         clip = false
     }
 }
-class Subtract : Filter(mppFilterShader(fx_subtract,"subtract")) {
+class Subtract : Filter2to1(mppFilterShader(fx_subtract,"subtract")) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 

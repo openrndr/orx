@@ -1,24 +1,25 @@
 // based on Hashed blur by David Hoskins.
 // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
 
-#ifdef OR_IN_OUT
 in vec2 v_texCoord0;
-#else
-varying vec2 v_texCoord0;
+
+layout(binding = 0) uniform sampler2D tex0;
+layout(binding = 1) uniform sampler2D tex1;
+
+#ifdef RADIUS_FROM_TEXTURE
+layout(binding = 2) uniform sampler2D tex2;
 #endif
 
-uniform sampler2D tex0;
-uniform sampler2D tex1;
+
 uniform vec2 textureSize0;
 uniform float radius;
+uniform float spread;
+
 uniform float time;
 uniform int samples;
 uniform float gain;
-uniform bool dynamic;
 
-#ifndef OR_GL_FRAGCOLOR
 out vec4 o_color;
-#endif
 
 #define TAU 6.28318530718
 
@@ -30,27 +31,37 @@ vec2 hash22(vec2 p) {
 	return fract(vec2((p3.x + p3.y)*p3.z, (p3.x+p3.z)*p3.y));
 }
 
-vec2 sampleTexture(inout vec2 r) {
+
+vec2 sampleOffset(inout vec2 r, vec2 direction) {
 	r = fract(r * vec2(33.3983, 43.4427));
-	//return r-.5;
+	return (r.x+.001) * direction;
+}
+
+vec2 sampleCircle(inout vec2 r) {
+	r = fract(r * vec2(33.3983, 43.4427));
 	return sqrt(r.x+.001) * vec2(sin(r.y * TAU), cos(r.y * TAU))*.5; // <<=== circular sampling.
 }
 
 
 //-------------------------------------------------------------------------------------------
-vec4 blur(vec2 uv, float radius) {
-	float r = radius;
-	if (dynamic) {
-		r *= texture(tex1, uv).r;
-	}
+vec4 blur(vec2 uv, float r) {
+	float radius = r;
+	#ifdef RADIUS_FROM_TEXTURE
+	radius *= texture(tex2, uv).r;
+	#endif
+	vec2 direction =  texture(tex1, uv).xy;
 
-	vec2 circle = vec2(r) * (vec2(1.0) / textureSize0);
-	vec2 random = hash22(uv + vec2(time));
+	vec2 line = vec2(spread) * (vec2(1.0) / textureSize0);
+	vec2 circle = vec2(radius) * (vec2(1.0) / textureSize0);
+	vec2 randomL = hash22(uv + vec2(time));
+	vec2 randomC = hash22(uv + vec2(time));
 
 	vec4 acc = vec4(0.0);
 
 	for (int i = 0; i < samples; i++) {
-		acc += texture(tex0, uv + circle * sampleTexture(random));
+		vec2 lineOffset = line * sampleOffset(randomL, direction);
+		vec2 circleOffset = circle * sampleCircle(randomC);
+		acc += textureLod(tex0, uv + circleOffset + lineOffset, 0 );
 	}
 	return acc / float(samples);
 }
@@ -63,9 +74,6 @@ void main() {
 	vec4 result = blur(uv, radiusSqr);
 	result.rgb *= gain;
 
-	#ifdef OR_GL_FRAGCOLOR
-	gl_FragColor = result;
-	#else
+
 	o_color = result;
-	#endif
 }

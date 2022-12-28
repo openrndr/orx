@@ -8,7 +8,7 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 
 @Description("Perturb")
-class Perturb : Filter(mppFilterShader(fx_perturb, "perturb")) {
+class Perturb : Filter1to1(mppFilterShader(fx_perturb, "perturb")) {
     var seed: Vector3 by parameters
     /**
      * base noise scale, default is Vector3(1.0, 1.0, 1.0)

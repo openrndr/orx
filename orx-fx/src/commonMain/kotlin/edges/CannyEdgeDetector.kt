@@ -2,6 +2,7 @@ package org.openrndr.extra.fx.edges
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Filter
+import org.openrndr.draw.Filter1to1
 import org.openrndr.draw.filterShaderFromCode
 import org.openrndr.extra.fx.fx_canny_edge_detector
 import org.openrndr.extra.parameters.ColorParameter
@@ -9,7 +10,7 @@ import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 
 @Description("Canny Edge Detector")
-class CannyEdgeDetector : Filter(
+class CannyEdgeDetector : Filter1to1(
     filterShaderFromCode(fx_canny_edge_detector, "canny-edge-detector")
 ) {
 

@@ -18,7 +18,7 @@ internal class EdgesWork1 : Filter(mppFilterShader(fx_edges_work_1, "edges-work-
 }
 
 @Description("Edges Work")
-open class EdgesWork : Filter(mppFilterShader(fx_edges_work_2, "edges-work-2")) {
+open class EdgesWork : Filter1to1(mppFilterShader(fx_edges_work_2, "edges-work-2")) {
     /**
      * radius, default value is 1.0
      */

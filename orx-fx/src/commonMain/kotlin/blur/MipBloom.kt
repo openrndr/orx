@@ -42,7 +42,7 @@ class BloomCombine : Filter(mppFilterShader(fx_bloom_combine, "bloom-combine")) 
 }
 
 @Description("MipBloom")
-open class MipBloom<T : Filter>(val blur: T) : Filter(mppFilterShader(fx_bloom_combine, "bloom-combine")) {
+open class MipBloom<T : Filter>(val blur: T) : Filter1to1(mppFilterShader(fx_bloom_combine, "bloom-combine")) {
     var passes = 6
 
     @DoubleParameter("shape", 0.0, 4.0)

@@ -1,9 +1,6 @@
 package org.openrndr.extra.fx.distort
 
-import org.openrndr.draw.ColorBuffer
-import org.openrndr.draw.Filter
-import org.openrndr.draw.MagnifyingFilter
-import org.openrndr.draw.MinifyingFilter
+import org.openrndr.draw.*
 import org.openrndr.extra.fx.fx_lenses
 import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.BooleanParameter
@@ -12,7 +9,7 @@ import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
 
 @Description("Lenses")
-class Lenses : Filter(mppFilterShader(fx_lenses, "block-repeat")) {
+class Lenses : Filter1to1(mppFilterShader(fx_lenses, "block-repeat")) {
     @IntParameter("rows", 1, 64, order = 0)
     var rows: Int by parameters
 

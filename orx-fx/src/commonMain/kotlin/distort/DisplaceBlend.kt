@@ -8,7 +8,7 @@ import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.math.Vector3
 
 @Description("Displace blend")
-class DisplaceBlend : Filter(mppFilterShader(fx_displace_blend, "displace-blend")) {
+class DisplaceBlend : Filter2to1(mppFilterShader(fx_displace_blend, "displace-blend")) {
     var seed: Vector3 by parameters
 
     @DoubleParameter("offset", -1.0, 1.0)

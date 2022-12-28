@@ -8,7 +8,7 @@ import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
 
 @Description("Tiles")
-class Tiles : Filter(mppFilterShader(fx_tiles, "tiles")) {
+class Tiles : Filter1to1(mppFilterShader(fx_tiles, "tiles")) {
     @DoubleParameter("rotation", -180.0, 180.0, order = 2)
     var rotation: Double by parameters
 

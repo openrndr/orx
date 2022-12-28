@@ -49,7 +49,7 @@ float modulated(vec2 xy, float sinwt, float coswt) {
 }
 
 vec2 modem_uv(vec2 xy, int ofs) {
-    float t = (xy.x + float(ofs) * invx) * textureSize(tex0, 0).x;
+    float t = (xy.x + float(ofs) * invx) * float(textureSize(tex0, 0).x);
     float wt = t * 2.0 * PI / width_ratio;
 
     float sinwt = sin(wt);
@@ -90,8 +90,8 @@ vec3 shadow_mask(vec2 pos){
 void main() {
     // vec2 xy = fragCoord.st / iResolution.xy;
     vec2 xy = v_texCoord0;
-    width_ratio = textureSize(tex0, 0).x / (float(FSC) / float(FLINE));
-    height_ratio = textureSize(tex0, 0).y / float(VISIBLELINES);
+    width_ratio = float(textureSize(tex0, 0).x) / (float(FSC) / float(FLINE));
+    height_ratio = float(textureSize(tex0, 0).y) / float(VISIBLELINES);
     altv = mod(floor(xy.y * float(VISIBLELINES) + 0.5), 2.0) * PI;
     invx = 0.25 / (float(FSC)/float(FLINE)); // equals 4 samples per Fsc period
 
@@ -102,7 +102,7 @@ void main() {
         filtered += FIR_GAIN * uv * FIR[i];
     }
 
-    float t = xy.x * textureSize(tex0, 0).x;
+    float t = xy.x * float(textureSize(tex0, 0).x);
     float wt = t * 2.0 * PI / width_ratio;
 
     float sinwt = sin(wt);
@@ -111,7 +111,7 @@ void main() {
     float luma = modulated(xy, sinwt, coswt) - FIR_INVGAIN * (filtered.x * sinwt + filtered.y * coswt);
     vec3 yuv_result = vec3(luma, filtered.x, filtered.y);
 
-    vec3 rgbmask = shadow_mask( xy * vec2(1.0, textureSize(tex0,0).x / textureSize(tex0,0).y) ); // needs anisotropy like: fragCoord.st/ iResolution.y );
+    vec3 rgbmask = shadow_mask( xy * vec2(1.0, float(textureSize(tex0,0).x) / float(textureSize(tex0,0).y)) ); // needs anisotropy like: fragCoord.st/ iResolution.y );
     rgbmask = vec3(1.0,1.0,1.0) * (1.0-pixelation) + rgbmask * pixelation;
     o_color =  texture(tex0,xy) * (1.0-amount) + amount * vec4(rgbmask * ( YUV_to_RGB * yuv_result ), 1.0);
 

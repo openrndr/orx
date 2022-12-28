@@ -12,7 +12,13 @@ import org.openrndr.extra.parameters.IntParameter
  * Directional blur filter. Takes source image and direction buffer inputs
  */
 @Description("Directional blur")
-class DirectionalBlur : Filter(mppFilterShader(fx_directional_blur, "directional-blur")) {
+class DirectionalBlur : Filter2to1(mppFilterShader(fx_directional_blur, "directional-blur")) {
+
+    /**
+     * Should the blur window be centered, default is false
+     */
+    @BooleanParameter("center window")
+    var centerWindow: Boolean by parameters
 
     /**
      * The sample window, default is 5
@@ -38,11 +44,14 @@ class DirectionalBlur : Filter(mppFilterShader(fx_directional_blur, "directional
     @BooleanParameter("perpendicular")
     var perpendicular: Boolean by parameters
 
+
+
     init {
         window = 5
         spread = 1.0
         gain = 1.0
         perpendicular = false
+        centerWindow = false
     }
 
     override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {

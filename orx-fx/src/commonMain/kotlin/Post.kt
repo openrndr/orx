@@ -36,7 +36,7 @@ class Post : Extension {
 
     inner class IntermediateBuffers {
         internal val buffers = mutableMapOf<Int, ColorBuffer>()
-        operator fun get(index: Int) : ColorBuffer {
+        operator fun get(index: Int): ColorBuffer {
             return buffers.getOrPut(index) {
                 colorBuffer(output!!.width, output!!.height, output!!.contentScale, type = intermediateType)
             }
@@ -63,6 +63,8 @@ class Post : Extension {
             // in case the attributes of the existing buffers no longer match those of the active render target
             if (lit.width != art.width || lit.height != art.height || lit.contentScale != art.contentScale || lit.multisample != art.multisample) {
                 lit.colorBuffer(0).destroy()
+                lit.depthBuffer?.destroy()
+                lit.detachDepthBuffer()
                 lit.detachColorAttachments()
                 lit.destroy()
                 inputTarget = null

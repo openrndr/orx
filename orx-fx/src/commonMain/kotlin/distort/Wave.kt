@@ -9,7 +9,7 @@ import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
 
 @Description("Horizontal wave")
-class HorizontalWave : Filter(mppFilterShader(fx_horizontal_wave, "horizontal-wave")) {
+class HorizontalWave : Filter1to1(mppFilterShader(fx_horizontal_wave, "horizontal-wave")) {
     @DoubleParameter("frequency", 0.0, 64.0, order = 1)
     var frequency: Double by parameters
 

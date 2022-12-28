@@ -1,6 +1,7 @@
 package org.openrndr.extra.fx.antialias
 
 import org.openrndr.draw.Filter
+import org.openrndr.draw.Filter1to1
 import org.openrndr.extra.fx.fx_fxaa
 import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.Description
@@ -10,7 +11,7 @@ import org.openrndr.extra.parameters.DoubleParameter
  * FXAA approximate antialiasing filter. Only works on LDR inputs
  */
 @Description("FXAA")
-class FXAA : Filter( mppFilterShader(fx_fxaa, "fxaa")) {
+class FXAA : Filter1to1( mppFilterShader(fx_fxaa, "fxaa")) {
     /**
      * luma threshold, default value is 0.5
      */

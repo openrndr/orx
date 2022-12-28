@@ -32,7 +32,7 @@ private class LaserBlurPass : Filter(mppFilterShader(fx_laser_blur, "laser-blur"
 }
 
 @Description("Laser blur")
-class LaserBlur : Filter() {
+class LaserBlur : Filter1to1() {
     @Vector2Parameter("center", order = 0)
     var center = Vector2.ZERO
 

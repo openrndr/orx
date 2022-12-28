@@ -22,7 +22,7 @@ void main() {
     float bias = 0.0;
     float radius = logPolar? log(1.0 + length(uv)*(exp(1.0)-bias)) / log(1.0+(exp(1.0)-bias)*sqrt(0.5)) : (length(uv) / sqrt(0.5));
 
-    vec2 sourceUV = vec2(arg / (2*PI) + 0.5, radius);
+    vec2 sourceUV = vec2(arg / (2.0 * PI) + 0.5, radius);
 
     #ifndef OR_GL_TEXTURE2D
     vec4 result = texture(tex0, sourceUV);

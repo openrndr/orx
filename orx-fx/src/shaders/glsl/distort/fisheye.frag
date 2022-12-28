@@ -8,21 +8,19 @@ out vec4 o_color;
 
 void main() {
     vec2 uv = v_texCoord0;
-    vec2 ts = textureSize(tex0, 0);
+    vec2 ts = vec2(textureSize(tex0, 0));
     vec2 step = 1.0 / ts;
 
     float phi = radians(rotation);
     float cp = cos(phi);
     float sp = sin(phi);
-    mat2 rm = mat2(vec2(cp,sp), vec2(-sp,cp));
-
+    mat2 rm = mat2(vec2(cp, sp), vec2(-sp, cp));
 
     float aspectRatio = ts.y / ts.x;
     step.y /= aspectRatio;
     step *= feather;
 
-    vec2 intensity = vec2(strength,
-    strength);
+    vec2 intensity = vec2(strength, strength);
 
     vec2 coords = uv;
     coords = (coords - 0.5) * 2.0;

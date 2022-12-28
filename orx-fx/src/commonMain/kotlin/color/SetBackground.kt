@@ -2,6 +2,7 @@ package org.openrndr.extra.fx.color
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Filter
+import org.openrndr.draw.Filter1to1
 import org.openrndr.extra.fx.fx_set_background
 import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.ColorParameter
@@ -9,7 +10,7 @@ import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 
 @Description("Set background")
-class SetBackground : Filter(mppFilterShader(fx_set_background, "set-background")) {
+class SetBackground : Filter1to1(mppFilterShader(fx_set_background, "set-background")) {
     @ColorParameter("background color")
     var background: ColorRGBa by parameters
 

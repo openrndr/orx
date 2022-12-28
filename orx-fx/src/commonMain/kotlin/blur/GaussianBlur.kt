@@ -1,6 +1,6 @@
 package org.openrndr.extra.fx.blur
 
-import org.openrndr.draw.Filter
+import org.openrndr.draw.Filter1to1
 import org.openrndr.extra.fx.fx_gaussian_blur
 import org.openrndr.extra.fx.mppFilterShader
 
@@ -12,7 +12,7 @@ import org.openrndr.extra.parameters.IntParameter
  * Exact Gaussian blur, implemented as a single pass filter
  */
 @Description("Gaussian blur")
-class GaussianBlur : Filter(mppFilterShader(fx_gaussian_blur,"gaussian-blur")) {
+class GaussianBlur : Filter1to1(mppFilterShader(fx_gaussian_blur,"gaussian-blur")) {
 
     /**
      * The sample window, default value is 5

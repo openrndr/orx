@@ -1,13 +1,14 @@
 package org.openrndr.extra.fx.color
 
 import org.openrndr.draw.Filter
+import org.openrndr.draw.Filter1to1
 import org.openrndr.extra.fx.fx_pal
 import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 
 @Description("Pal TV Effect")
-class Pal : Filter(mppFilterShader(fx_pal,"pal")) {
+class Pal : Filter1to1(mppFilterShader(fx_pal,"pal")) {
     @DoubleParameter("amount", 0.0, 1.0)
     var amount: Double by parameters
     @DoubleParameter("pixelation", 0.0, 1.0)

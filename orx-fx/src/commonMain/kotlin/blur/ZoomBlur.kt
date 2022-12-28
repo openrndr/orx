@@ -8,7 +8,7 @@ import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.math.Vector2
 
 @Description("Zoom Blur")
-class ZoomBlur : Filter(mppFilterShader(fx_zoom_blur, "zoom-blur")) {
+class ZoomBlur : Filter1to1(mppFilterShader(fx_zoom_blur, "zoom-blur")) {
     var center: Vector2 by parameters
 
     @DoubleParameter("strength", 0.0, 1.0)

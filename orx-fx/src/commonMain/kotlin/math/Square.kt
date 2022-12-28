@@ -1,4 +1,5 @@
 import org.openrndr.draw.Filter
+import org.openrndr.draw.Filter1to1
 import org.openrndr.draw.filterShaderFromCode
 import org.openrndr.extra.fx.fx_square
 import org.openrndr.extra.parameters.Description
@@ -6,5 +7,5 @@ import org.openrndr.extra.parameters.Description
  * Square input texture values
  */
 @Description("square")
-class Square : Filter(filterShaderFromCode(fx_square, "square")) {
+class Square : Filter1to1(filterShaderFromCode(fx_square, "square")) {
 }

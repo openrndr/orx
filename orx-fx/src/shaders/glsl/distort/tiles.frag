@@ -11,7 +11,7 @@ float truncate(float x, int segments)  {
     if (segments == 0) {
         return x;
     } else {
-        return floor(x*segments) / segments;
+        return floor(x * float(segments)) / float(segments);
     }
 }
 
@@ -23,7 +23,7 @@ void main() {
     mat2 rm =  mat2(cr, -sr, sr, cr);
 
     vec2 ruv = rm * uv;
-    vec2 truv = vec2( truncate(ruv.x, xSegments), truncate(ruv.y, ySegments));
+    vec2 truv = vec2(truncate(ruv.x, xSegments), truncate(ruv.y, ySegments));
     vec2 tuv = transpose(rm) * truv + vec2(0.5);
 
     vec4 c = vec4(0.0);

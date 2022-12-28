@@ -1,9 +1,6 @@
 package org.openrndr.extra.fx.distort
 
-import org.openrndr.draw.ColorBuffer
-import org.openrndr.draw.Filter
-import org.openrndr.draw.MagnifyingFilter
-import org.openrndr.draw.MinifyingFilter
+import org.openrndr.draw.*
 import org.openrndr.extra.fx.fx_rectangular_to_polar
 import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.BooleanParameter
@@ -13,7 +10,7 @@ import org.openrndr.math.Vector2
 import kotlin.math.log
 
 @Description("Rectangular to polar")
-class RectangularToPolar : Filter(mppFilterShader(fx_rectangular_to_polar, "rectangular-to-polar")) {
+class RectangularToPolar : Filter1to1(mppFilterShader(fx_rectangular_to_polar, "rectangular-to-polar")) {
 
     @BooleanParameter("log polar")
     var logPolar:Boolean by parameters

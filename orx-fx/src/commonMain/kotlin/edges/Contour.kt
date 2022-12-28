@@ -2,6 +2,7 @@ package org.openrndr.extra.fx.edges
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Filter
+import org.openrndr.draw.Filter1to1
 import org.openrndr.extra.fx.fx_contour
 import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.ColorParameter
@@ -10,7 +11,7 @@ import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
 
 @Description("Contour")
-class Contour : Filter(mppFilterShader(fx_contour, "contour")) {
+class Contour : Filter1to1(mppFilterShader(fx_contour, "contour")) {
     @DoubleParameter("levels", 1.0, 16.0)
     var levels: Double by parameters
 

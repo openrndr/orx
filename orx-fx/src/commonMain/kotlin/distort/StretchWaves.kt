@@ -7,7 +7,7 @@ import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 
 @Description("Stretch waves")
-class StretchWaves : Filter(mppFilterShader(fx_stretch_waves, "stretch-waves")) {
+class StretchWaves : Filter1to1(mppFilterShader(fx_stretch_waves, "stretch-waves")) {
     @DoubleParameter("distortion", -0.0,1.0, 1)
     var distortion: Double by parameters
 

@@ -16,7 +16,7 @@ void main() {
     vec2 blockCoord = uv / blockSize + blockOffset;
 
     ivec2 blockIndex = ivec2(blockCoord);
-    vec2 blockUV = mod(blockCoord - blockIndex, vec2(1.0));
+    vec2 blockUV = mod(blockCoord - vec2(blockIndex), vec2(1.0));
     vec2 blockAspect = vec2(1.0);
 
 
