@@ -21,7 +21,7 @@ fun main() = application {
 
     program {
         val layers = compose {
-            layer(BufferMultisample.SampleCount(16)) {
+            layer(multisample = BufferMultisample.SampleCount(16)) {
                 draw {
                     drawer.translate(drawer.bounds.center)
                     drawer.rotate(seconds)
@@ -29,7 +29,7 @@ fun main() = application {
                     drawer.rectangle(Rectangle.fromCenter(Vector2.ZERO, 200.0))
                 }
 
-                layer() {
+                layer {
                     blend(Normal()) {
                         clip = true
                     }

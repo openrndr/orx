@@ -23,13 +23,6 @@ fun main() = application {
     }
 
     program {
-        // -- this block is for automation purposes only
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
-
         data class Item(var pos: Vector3, val color: ColorRGBa) {
             fun draw(drawer: Drawer) {
                 pos -= Vector3(pos.z * 3.0, 0.0, 0.0)

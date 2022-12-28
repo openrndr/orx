@@ -43,6 +43,7 @@ kotlin {
         val jvmDemo by getting {
             dependencies {
                 implementation(project(":orx-fx"))
+                implementation(project(":orx-compositor"))
             }
         }
     }
