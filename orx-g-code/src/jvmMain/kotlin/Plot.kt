@@ -190,10 +190,12 @@ class Plot(
                 translate(0.0, scaled(docBounds.height))
                 scale(scale, -scale)
             }
+
             Origin.TOP_LEFT -> {
                 // Scale to fit screen
                 scale(scale, scale)
             }
+
             Origin.CENTER -> {
                 translate(.5 * scaled(docBounds.width), .5 * scaled(docBounds.height))
                 scale(scale, -scale)
@@ -210,11 +212,10 @@ class Plot(
     /**
      * Converts all layers to a single g-code string in the order they were added.
      */
-    fun toCombinedGcode(): String =
-        order.flatMap { l -> layers[l]?.toCommands(generator, distanceTolerance) ?: emptyList() }
-            .let { commands -> (generator.setup + commands + generator.end) }
-            .withoutDuplicates()
-            .toGcode()
+    fun toCombinedGcode(): String = order
+        .mapNotNull { l -> layers[l] }
+        .toCommands(generator, distanceTolerance).withoutDuplicates()
+        .toGcode()
 
     /**
      * Converts each layer to a g-code string.

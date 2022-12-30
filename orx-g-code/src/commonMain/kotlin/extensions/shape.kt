@@ -7,6 +7,10 @@ import org.openrndr.shape.Composition
 import org.openrndr.shape.Segment
 import org.openrndr.shape.ShapeContour
 
+fun List<Composition>.toCommands(generator: Generator, distanceTolerance: Double): Commands = this
+    .flatMap {it.toCommands(generator, distanceTolerance) }
+    .let { commands -> (generator.setup + commands + generator.end) }
+
 fun Composition.toCommands(generator: Generator, distanceTolerance: Double): Commands {
 
     val sequence = generator.comment("begin composition").toMutableList()
