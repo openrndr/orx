@@ -43,6 +43,7 @@ typealias DrawFunction = CompositionDrawer.() -> Unit
 class Plot(
     // Document
     dimensions: Vector2, // Document size in mm
+    var name: String? = null,
     var origin: Origin = Origin.BOTTOM_LEFT,
 
     // G-code
@@ -83,11 +84,15 @@ class Plot(
 
     private var program: Program? = null
 
+
     override fun setup(program: Program) {
         this.program = program
-
         // Scale to fit in viewport
         scale = min(program.width / docBounds.width, program.height / docBounds.height)
+
+        if (name == null ) {
+            name = program.name
+        }
 
         if (!enabled) {
             return
@@ -107,12 +112,12 @@ class Plot(
             if (gCodeBind != null && event.name == gCodeBind) {
                 when (layerMode) {
                     LayerMode.SINGLE_FILE -> {
-                        writeFile("plot", toCombinedGcode())
+                        writeFile(name ?: "plot", toCombinedGcode())
                     }
 
                     LayerMode.MULTI_FILE -> {
                         toSplitGcode().forEach {
-                            writeFile(it.key, it.value)
+                            writeFile("${name?:""}-${it.key}", it.value)
                         }
                     }
                 }
@@ -229,7 +234,7 @@ class Plot(
      * Writes [content] to file "[folder]/timestamp-[name].[extension]"
      */
     fun writeFile(name: String, content: String, extension: String = "gcode") {
-        val formatter = DateTimeFormatter.ofPattern("yyyyMMdd-HH-mm-SS")
+        val formatter = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmSS")
         val timestamp = formatter.format(LocalDateTime.now())
         val fileName = "$timestamp-$name.$extension"
 
