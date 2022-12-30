@@ -48,35 +48,34 @@ fun Double.roundedTo(decimals: Int = 3): String {
 
 /**
  * Generates g-code for defined operations.
- * All operations are empty command lists on default and have to be defined explicitly.
  */
 data class Generator(
 
     /**
      * Setup code at the beginning of a file.
      */
-    val setup: Commands = emptyList(),
+    val setup: Commands,
 
     /**
      * A move operation to the given location.
      */
-    val moveTo: (Vector2) -> Commands = { emptyList() },
+    val moveTo: (Vector2) -> Commands,
 
     /**
-     * Start drawing sequence. Pen down, laser on etc.
+     * Start drawing sequence. Pen down, laser on, etc.
      */
-    val preDraw: Commands = emptyList(),
+    val preDraw: Commands,
 
     /**
      * A draw operation to the given location.
      */
-    val drawTo: (Vector2) -> Commands = { emptyList() },
+    val drawTo: (Vector2) -> Commands,
 
     /**
-     * End draw sequence. Lift pen, turn laser off.
+     * End draw sequence. Lift pen, turn laser off, etc.
      * Called after a draw action before a move is performed.
      */
-    val postDraw: Commands = emptyList(),
+    val postDraw: Commands,
 
     /**
      * End of file sequence.
@@ -86,8 +85,19 @@ data class Generator(
     /**
      * Insert a comment.
      */
-    val comment: (String) -> Commands = { _ -> emptyList() }
+    val comment: (String) -> Commands
 )
+
+/**
+ * All operations are empty command lists on default and have to be defined explicitly.
+ */
+fun noopGenerator() = Generator(
+    setup = emptyList(),
+    moveTo = { _ -> emptyList() },
+    preDraw = emptyList(),
+    drawTo = { _ -> emptyList() },
+    postDraw = emptyList(),
+) { _ -> emptyList() }
 
 /**
  * Creates a [Generator] to be used by grbl controlled pen plotters.

@@ -47,7 +47,7 @@ class Plot(
     var origin: Origin = Origin.BOTTOM_LEFT,
 
     // G-code
-    var generator: Generator = Generator(),
+    var generator: Generator = noopGenerator(),
     var distanceTolerance: Double = 0.5,
     var layerMode: LayerMode = LayerMode.SINGLE_FILE,
 
@@ -159,7 +159,7 @@ class Plot(
             this.composition.clear()
             // Set default
             fill = ColorRGBa.TRANSPARENT
-            strokeWeight = scaled(defaultPenWeight)
+            strokeWeight = defaultPenWeight
             stroke = defaultDrawColor
             drawFunction(this)
         }
@@ -210,9 +210,14 @@ class Plot(
     }
 
     /**
-     * Double [v] scaled from screen space to document space.
+     * Double [v] scaled from document space to screen space.
      */
     fun scaled(v: Double) = v.times(scale)
+
+    /**
+     * Scale from document space to screen space.
+     */
+    fun scale() = scale
 
     /**
      * Converts all layers to a single g-code string in the order they were added.
