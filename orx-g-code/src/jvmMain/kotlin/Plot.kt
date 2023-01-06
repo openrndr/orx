@@ -39,12 +39,14 @@ typealias DrawFunction = CompositionDrawer.() -> Unit
  * Configuration:
  * When [manualRedraw] is true, the programs presentation mode is set to Manual on startup.
  * "r" to trigger redraw.
+ * When [renderMode] is set to manual, the plot will not be rendered to the programms drawer.
+ * Then [render] has to be called to draw the plot. [origin]
  */
 class Plot(
     // Document
     dimensions: Vector2, // Document size in mm
     var name: String? = null,
-    var origin: Origin = Origin.BOTTOM_LEFT,
+    val origin: Origin = Origin.BOTTOM_LEFT,
 
     // G-code
     var generator: Generator = noopGenerator(),
@@ -75,7 +77,11 @@ class Plot(
 
     override var enabled: Boolean = true
 
-    val docBounds = Rectangle(0.0, 0.0, dimensions.x, dimensions.y)
+    val docBounds = when (origin) {
+        Origin.CENTER -> Rectangle(-dimensions.times(.5), dimensions.x, dimensions.y)
+        Origin.BOTTOM_LEFT,
+        Origin.TOP_LEFT -> Rectangle(0.0, 0.0, dimensions.x, dimensions.y)
+    }
 
     val layers: MutableMap<String, Composition> = mutableMapOf()
     private var order: List<String> = listOf()
@@ -174,10 +180,7 @@ class Plot(
         drawer.isolated {
             strokeWeight = 0.0
             fill = backgroundColor
-            when (origin) {
-                Origin.CENTER -> rectangle(docBounds.dimensions * -.5, docBounds.width, docBounds.height)
-                else -> rectangle(0.0, 0.0, docBounds.width, docBounds.height)
-            }
+            rectangle(docBounds)
         }
 
         // Layers
@@ -186,7 +189,7 @@ class Plot(
     }
 
     /**
-     * Drawer scaled to document space.
+     * Drawer scaled to document space, to fit to the window.
      */
     fun scaled(drawer: Drawer, drawFunction: (Drawer) -> Unit) = drawer.isolated {
         when (origin) {
@@ -210,9 +213,22 @@ class Plot(
     }
 
     /**
+     * Scales and translates the given position from screen space to document space.
+     * Can be used to translate mouse events to draw to the plot.
+     */
+    fun toDocumentSpace(p: Vector2): Vector2 {
+        val s = 1.0 / scale
+        return when (origin) {
+            Origin.BOTTOM_LEFT -> Vector2(p.x * s, docBounds.height - p.y * s)
+            Origin.TOP_LEFT -> p.times(s)
+            Origin.CENTER -> p.times(Vector2(s,-s)).plus(Vector2(-docBounds.width, docBounds.height) *.5)
+        }
+    }
+
+    /**
      * Double [v] scaled from document space to screen space.
      */
-    fun scaled(v: Double) = v.times(scale)
+    fun scaled(v: Double) = v * scale
 
     /**
      * Scale from document space to screen space.

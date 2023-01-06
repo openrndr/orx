@@ -1,6 +1,6 @@
-import org.openrndr.MouseEvent
 import org.openrndr.application
 import org.openrndr.extensions.Screenshots
+import org.openrndr.extra.gcode.Origin
 import org.openrndr.extra.gcode.Plot
 import org.openrndr.extra.gcode.basicGrblSetup
 import org.openrndr.math.Vector2
@@ -15,29 +15,31 @@ fun main() = application {
     program {
         extend(Screenshots())
 
-        val plot = Plot(dimensions = Vector2(210.0, 297.0), manualRedraw = false)
+        val plot = Plot(
+            dimensions = Vector2(210.0, 297.0),
+            manualRedraw = false,
+            origin = Origin.CENTER
+        )
         extend(plot) {
             generator = basicGrblSetup()
 
             // Set output files to be exported to tmp
             // "g" to export g-code.
             folder = "/tmp"
+
+            draw {
+                rectangle(docBounds.offsetEdges(-9.0))
+                println(docBounds)
+            }
         }
 
         val drawingArea = plot.docBounds.offsetEdges(-10.0)
-
-        // Converts mouse events position to document space
-        fun MouseEvent.documentPosition(): Vector2 {
-            val s = 1 / plot.scale()
-            return Vector2(position.x * s, plot.docBounds.height - position.y * s)
-        }
-
 
         val cb = ContourBuilder(true)
 
         // Handle mouse events and restrict drawing to drawing area
         mouse.buttonDown.listen {
-            val p = it.documentPosition()
+            val p = plot.toDocumentSpace(it.position)
             if (drawingArea.contains(p)) {
                 cb.moveTo(p)
             } else {
@@ -45,7 +47,7 @@ fun main() = application {
             }
         }
         mouse.dragged.listen {
-            val p = it.documentPosition()
+            val p = plot.toDocumentSpace(it.position)
             if (drawingArea.contains(p)) {
                 cb.moveOrLineTo(p)
             } else {
