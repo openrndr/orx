@@ -40,11 +40,6 @@ fun main() {
             val strokeFill = SDFStrokeFill()
 
             gui.add(perturb)
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
             extend(gui)
             extend {
                 drawer.clear(ColorRGBa.PINK)

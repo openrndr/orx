@@ -20,11 +20,6 @@ fun main() {
             sdf.setShapes(shapes)
             sdf.apply(emptyArray(), df)
 
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
             extend {
                 if(mouse.pressedButtons.isEmpty())
                     drawer.image(df)

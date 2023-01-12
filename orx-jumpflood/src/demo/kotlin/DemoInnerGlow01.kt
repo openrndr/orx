@@ -1,6 +1,5 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.compositor.compose
 import org.openrndr.extra.compositor.draw
 import org.openrndr.extra.compositor.layer
@@ -10,11 +9,6 @@ import org.openrndr.extra.jumpfill.fx.InnerGlow
 
 fun main() = application {
     program {
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
         val c = compose {
             layer {
                 post(Checkers())

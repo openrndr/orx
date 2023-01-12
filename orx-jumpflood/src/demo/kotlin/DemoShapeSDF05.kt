@@ -3,7 +3,6 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ColorFormat
 import org.openrndr.draw.ColorType
 import org.openrndr.draw.colorBuffer
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.fx.distort.Perturb
 import org.openrndr.extra.gui.GUI
 import org.openrndr.extra.jumpfill.ShapeSDF
@@ -48,12 +47,6 @@ fun main() {
             gui.add(perturb)
             gui.add(strokeFill)
             gui.add(difference)
-
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
 
             extend(gui)
             extend {

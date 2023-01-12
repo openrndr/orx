@@ -10,11 +10,6 @@ import org.openrndr.extra.jumpfill.fx.InnerGlow
 
 fun main() = application {
     program {
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
         val c = compose {
             layer {
                 post(Checkers())

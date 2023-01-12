@@ -22,11 +22,6 @@ fun main() {
                 colorBuffer()
             }
             val field = input.colorBuffer(0).createEquivalent(type = ColorType.FLOAT32)
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
             extend {
                 drawer.isolatedWithTarget(input) {
                     // -- draw something interesting

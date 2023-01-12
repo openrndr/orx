@@ -8,7 +8,6 @@ import org.openrndr.extra.fx.distort.FluidDistort
 import org.openrndr.extra.jumpfill.ShapeSDF
 import org.openrndr.extra.jumpfill.draw.SDFStrokeFill
 import org.openrndr.extra.jumpfill.ops.*
-import org.openrndr.math.transforms.transform
 import org.openrndr.svg.loadSVG
 
 fun main() {
@@ -36,11 +35,6 @@ fun main() {
 
             val strokeFill = SDFStrokeFill()
 
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
             extend {
                 drawer.clear(ColorRGBa.PINK)
 

@@ -5,7 +5,6 @@ import org.openrndr.draw.createEquivalent
 
 import org.openrndr.draw.isolatedWithTarget
 import org.openrndr.draw.renderTarget
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.jumpfill.fx.StraightSkeleton
 import org.openrndr.extra.noise.simplex
 
@@ -16,12 +15,6 @@ fun main() {
             height = 720
         }
         program {
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
-
             val straightSkeleton = StraightSkeleton()
             val input = renderTarget(width, height) {
                 colorBuffer()
