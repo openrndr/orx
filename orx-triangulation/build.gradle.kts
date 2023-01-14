@@ -8,10 +8,6 @@ kotlin {
     jvm {
         @Suppress("UNUSED_VARIABLE")
         val demo by compilations.getting {
-            // TODO: Move demos to /jvmDemo
-            defaultSourceSet {
-                kotlin.srcDir("src/demo/kotlin")
-            }
             collectScreenshots { }
         }
         compilations.all {
