@@ -56,7 +56,6 @@ kotlin {
     }
 
     sourceSets {
-        @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
                 implementation(libs.kotlin.stdlib)
@@ -80,6 +79,7 @@ kotlin {
 
         @Suppress("UNUSED_VARIABLE")
         val jvmDemo by getting {
+                            dependsOn(commonMain)
             dependencies {
                 implementation(libs.openrndr.application)
                 implementation(libs.openrndr.extensions)
