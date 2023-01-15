@@ -1,5 +1,3 @@
-import ScreenshotsHelper.collectScreenshots
-
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     org.openrndr.extra.convention.`kotlin-multiplatform`
@@ -11,10 +9,6 @@ plugins {
 
 kotlin {
     jvm {
-        @Suppress("UNUSED_VARIABLE")
-        val demo by compilations.getting {
-            collectScreenshots { }
-        }
         testRuns["test"].executionTask {
             useJUnitPlatform {
                 includeEngines("spek2")

@@ -1,28 +1,8 @@
-import ScreenshotsHelper.collectScreenshots
-
 plugins {
     org.openrndr.extra.convention.`kotlin-multiplatform`
 }
 
 kotlin {
-    jvm {
-        @Suppress("UNUSED_VARIABLE")
-        val demo by compilations.getting {
-            collectScreenshots { }
-        }
-        compilations.all {
-            kotlinOptions.jvmTarget = libs.versions.jvmTarget.get()
-            kotlinOptions.apiVersion = libs.versions.kotlinApi.get()
-        }
-        testRuns["test"].executionTask.configure {
-            useJUnitPlatform()
-        }
-    }
-    js(IR) {
-        browser()
-        nodejs()
-    }
-
     sourceSets {
         @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
@@ -34,14 +14,9 @@ kotlin {
         }
 
         @Suppress("UNUSED_VARIABLE")
-        val jvmMain by getting {
-        }
-
-        @Suppress("UNUSED_VARIABLE")
         val jvmDemo by getting {
             dependencies {
                 implementation(project(":orx-shapes"))
-                implementation(project(":orx-triangulation"))
                 implementation(project(":orx-noise"))
             }
         }
@@ -56,13 +31,6 @@ kotlin {
                 runtimeOnly(libs.bundles.jupiter)
                 implementation(libs.spek.dsl)
                 implementation(libs.kluent)
-            }
-        }
-
-        @Suppress("UNUSED_VARIABLE")
-        val jsTest by getting {
-            dependencies {
-                implementation(kotlin("test-js"))
             }
         }
     }
