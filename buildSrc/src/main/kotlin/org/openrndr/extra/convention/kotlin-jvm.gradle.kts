@@ -17,10 +17,6 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven {
-        // This is needed to resolve `com.github.ricardomatias:delaunator`
-        url = URI("https://maven.openrndr.org")
-    }
     mavenLocal()
 }
 
