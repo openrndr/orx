@@ -10,7 +10,6 @@ import org.gradle.kotlin.dsl.register
 import org.gradle.process.ExecOperations
 import org.gradle.work.Incremental
 import org.gradle.work.InputChanges
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmCompilation
 import java.io.File
 import java.net.URLClassLoader
 import javax.inject.Inject
@@ -68,7 +67,7 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
                     this.classpath += project.files(inputDir.get().asFile, preloadClass)
                     this.classpath += runtimeDependencies.get()
                     this.mainClass.set(klassName)
-                        this.workingDir(project.rootProject.projectDir)
+                    this.workingDir(project.rootProject.projectDir)
                     this.jvmArgs(
                         "-DtakeScreenshot=true",
                         "-DscreenshotPath=${outputDir.get().asFile}/$klassName.png",
@@ -90,10 +89,18 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
             }
             lines.add("<!-- __demos__ -->")
             lines.add("## Demos")
+
+            // Find out if current project is MPP
+            val demoModuleName = if (project.plugins.hasPlugin("org.jetbrains.kotlin.multiplatform")) {
+                "jvmDemo"
+            } else {
+                "demo"
+            }
+
             for (demo in runDemos) {
                 val projectPath = project.projectDir.relativeTo(project.rootDir)
                 lines.add("### ${demo.dropLast(2)}")
-                lines.add("[source code](src/jvmDemo/kotlin/${demo.dropLast(2)}.kt)")
+                lines.add("[source code](src/${demoModuleName}/kotlin/${demo.dropLast(2)}.kt)")
                 lines.add("")
                 lines.add("![${demo}](https://raw.githubusercontent.com/openrndr/orx/media/$projectPath/images/${demo}.png)")
                 lines.add("")
