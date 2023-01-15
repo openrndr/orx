@@ -36,7 +36,7 @@ kotlin {
                 tasks.register<CollectScreenshotsTask>("collectScreenshots") {
                     inputDir.set(output.classesDirs.first())
                     runtimeDependencies.set(runtimeDependencyFiles)
-                    outputDir.set(file("/images"))
+                    outputDir.set(project.file(project.projectDir.toString() + "/images"))
                     dependsOn(compileKotlinTask)
                 }
             }
