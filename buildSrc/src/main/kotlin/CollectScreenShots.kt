@@ -15,9 +15,9 @@ import java.net.URLClassLoader
 import javax.inject.Inject
 
 abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
-    @get:Incremental
-    @get:PathSensitive(PathSensitivity.NAME_ONLY)
     @get:InputDirectory
+    @get:PathSensitive(PathSensitivity.NAME_ONLY)
+    @get:SkipWhenEmpty
     abstract val inputDir: DirectoryProperty
 
     @get:Input
@@ -27,14 +27,11 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
     abstract val outputDir: DirectoryProperty
 
     @get:Input
+    @get:Optional
     abstract val ignore: ListProperty<String>
 
     @get:Inject
     abstract val execOperations: ExecOperations
-
-    init {
-        ignore.convention(emptyList())
-    }
 
     @TaskAction
     fun execute(inputChanges: InputChanges) {
@@ -46,18 +43,17 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
             if (change.fileType == FileType.DIRECTORY) return@forEach
             if (change.file.extension == "class") {
                 val klassName = change.file.nameWithoutExtension
-                if (klassName.dropLast(2) in ignore.get())
+                if (klassName.dropLast(2) in ignore.get()) {
                     return@forEach
+                }
 
                 try {
                     val cp = (runtimeDependencies.get().map { it.toURI().toURL() } + inputDir.get().asFile.toURI()
                         .toURL()).toTypedArray()
                     val ucl = URLClassLoader(cp)
                     val klass = ucl.loadClass(klassName)
-                    val mainMethod = klass.getMethod("main")
+                    klass.getMethod("main")
                 } catch (e: NoSuchMethodException) {
-                    return@forEach
-                } catch (e: ClassNotFoundException) {
                     return@forEach
                 }
 
@@ -79,7 +75,7 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
         // this is only executed if there are changes in the inputDir
         val runDemos = outputDir.get().asFile.listFiles { file: File ->
             file.extension == "png"
-        }.map { it.nameWithoutExtension }.sorted()
+        }!!.map { it.nameWithoutExtension }.sorted()
         val readme = File(project.projectDir, "README.md")
         if (readme.exists()) {
             var lines = readme.readLines().toMutableList()

@@ -31,10 +31,12 @@ kotlin {
     jvm {
         jvmToolchain(libs.versions.jvmTarget.get().toInt())
         compilations {
+                        val main by getting
             @Suppress("UNUSED_VARIABLE")
             val demo by creating {
+                associateWith(main)
                 tasks.register<CollectScreenshotsTask>("collectScreenshots") {
-                    inputDir.set(output.classesDirs.first())
+                    inputDir.set(output.classesDirs.singleFile)
                     runtimeDependencies.set(runtimeDependencyFiles)
                     outputDir.set(project.file(project.projectDir.toString() + "/images"))
                     dependsOn(compileKotlinTask)
@@ -68,8 +70,6 @@ kotlin {
             }
         }
 
-        val jvmMain by getting
-
         @Suppress("UNUSED_VARIABLE")
         val jvmTest by getting {
             dependencies {
@@ -79,11 +79,11 @@ kotlin {
 
         @Suppress("UNUSED_VARIABLE")
         val jvmDemo by getting {
-            dependsOn(jvmMain)
             dependencies {
                 implementation(libs.openrndr.application)
                 implementation(libs.openrndr.extensions)
                 runtimeOnly(libs.openrndr.gl3.core)
+                runtimeOnly(libs.slf4j.simple)
             }
         }
     }

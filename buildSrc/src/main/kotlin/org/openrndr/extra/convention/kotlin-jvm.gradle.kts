@@ -35,6 +35,7 @@ dependencies {
     "demoImplementation"(libs.openrndr.application)
     "demoImplementation"(libs.openrndr.extensions)
     "demoRuntimeOnly"(libs.openrndr.gl3.core)
+    "demoRuntimeOnly"(libs.slf4j.simple)
 }
 
 kotlin {
