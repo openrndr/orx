@@ -33,6 +33,7 @@ jobs:
 
       - name: Test glxinfo
         run: |
+          sudo apt-get update
           sudo apt-get install -y mesa-utils xvfb
           xvfb-run glxinfo
 
