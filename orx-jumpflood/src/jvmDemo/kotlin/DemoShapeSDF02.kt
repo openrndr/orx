@@ -3,10 +3,10 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ColorFormat
 import org.openrndr.draw.ColorType
 import org.openrndr.draw.colorBuffer
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.jumpfill.ShapeSDF
 import org.openrndr.extra.jumpfill.draw.SDFStrokeFill
-import org.openrndr.extra.jumpfill.ops.*
+import org.openrndr.extra.jumpfill.ops.SDFOnion
+import org.openrndr.extra.jumpfill.ops.SDFSmoothIntersection
 import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
 import org.openrndr.svg.loadSVG
@@ -25,7 +25,7 @@ fun main() {
             val sdf1 = ShapeSDF()
             val df1 = colorBuffer(width, height, format = ColorFormat.RGBa, type = ColorType.FLOAT32)
 
-            val shapes = loadSVG("orx-jumpflood/src/demo/resources/name.svg").findShapes().map { it.shape }
+            val shapes = loadSVG("orx-jumpflood/src/jvmDemo/resources/name.svg").findShapes().map { it.shape }
 
             val union = SDFSmoothIntersection()
             val onion = SDFOnion()
@@ -53,7 +53,7 @@ fun main() {
                 onion.radius = 20.0
                 onion.apply(df0, df0)
                 strokeFill.strokeWeight = 2.0
-                strokeFill.apply(df0, df0);
+                strokeFill.apply(df0, df0)
                 drawer.image(df0)
             }
         }

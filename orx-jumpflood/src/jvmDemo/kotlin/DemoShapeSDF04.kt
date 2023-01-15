@@ -3,12 +3,11 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ColorFormat
 import org.openrndr.draw.ColorType
 import org.openrndr.draw.colorBuffer
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.fx.distort.Perturb
 import org.openrndr.extra.gui.GUI
 import org.openrndr.extra.jumpfill.ShapeSDF
 import org.openrndr.extra.jumpfill.draw.SDFStrokeFill
-import org.openrndr.extra.jumpfill.ops.*
+import org.openrndr.extra.jumpfill.ops.SDFSmoothDifference
 import org.openrndr.shape.Circle
 import org.openrndr.svg.loadSVG
 
@@ -31,7 +30,7 @@ fun main() {
             val uvmap = colorBuffer(width, height, type = ColorType.FLOAT16)
 
             val circleShapes = List(1) { Circle(width/2.0, height/2.0, 200.0).shape}
-            val shapes = loadSVG("orx-jumpflood/src/demo/resources/name.svg").findShapes().map { it.shape }
+            val shapes = loadSVG("orx-jumpflood/src/jvmDemo/resources/name.svg").findShapes().map { it.shape }
 
             sdf0.setShapes(circleShapes)
             sdf1.setShapes(shapes)
@@ -54,7 +53,7 @@ fun main() {
                 difference.apply(arrayOf(df0, df1), df0)
 
                 strokeFill.strokeWeight = 10.0
-                strokeFill.apply(df0, df0);
+                strokeFill.apply(df0, df0)
                 drawer.image(df0)
             }
         }

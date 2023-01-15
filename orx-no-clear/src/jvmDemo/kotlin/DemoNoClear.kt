@@ -2,7 +2,6 @@ import org.openrndr.application
 import org.openrndr.color.ColorHSLa
 import org.openrndr.color.rgb
 import org.openrndr.draw.isolated
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.noclear.NoClear
 import org.openrndr.math.Polar
 import org.openrndr.shape.contour

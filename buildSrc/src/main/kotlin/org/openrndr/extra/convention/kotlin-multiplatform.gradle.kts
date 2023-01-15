@@ -1,5 +1,6 @@
 package org.openrndr.extra.convention
 
+import CollectScreenshotsTask
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -16,10 +17,6 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven {
-        // This is needed to resolve `com.github.ricardomatias:delaunator`
-        url = URI("https://maven.openrndr.org")
-    }
     mavenLocal()
 }
 
@@ -34,13 +31,15 @@ kotlin {
     jvm {
         jvmToolchain(libs.versions.jvmTarget.get().toInt())
         compilations {
-            val main by getting
+                        val main by getting
             @Suppress("UNUSED_VARIABLE")
             val demo by creating {
-                defaultSourceSet {
-                    dependencies {
-                        implementation(main.output.allOutputs)
-                    }
+                associateWith(main)
+                tasks.register<CollectScreenshotsTask>("collectScreenshots") {
+                    inputDir.set(output.classesDirs.singleFile)
+                    runtimeDependencies.set(runtimeDependencyFiles)
+                    outputDir.set(project.file(project.projectDir.toString() + "/images"))
+                    dependsOn(compileKotlinTask)
                 }
             }
         }
@@ -84,6 +83,7 @@ kotlin {
                 implementation(libs.openrndr.application)
                 implementation(libs.openrndr.extensions)
                 runtimeOnly(libs.openrndr.gl3.core)
+                runtimeOnly(libs.slf4j.simple)
             }
         }
     }

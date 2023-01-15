@@ -1,5 +1,3 @@
-import ScreenshotsHelper.collectScreenshots
-
 plugins {
     org.openrndr.extra.convention.`kotlin-multiplatform`
 }
@@ -14,17 +12,6 @@ val embedShaders = tasks.register<EmbedShadersTask>("embedShaders") {
 
 
 kotlin {
-    jvm {
-        @Suppress("UNUSED_VARIABLE")
-        val demo by compilations.getting {
-            // TODO: Move demos to /jvmDemo
-            defaultSourceSet {
-                kotlin.srcDir("src/demo/kotlin")
-            }
-            collectScreenshots { }
-        }
-    }
-
     sourceSets {
         val shaderKotlin by creating {
             this.kotlin.srcDir(embedShaders.outputDir)
@@ -43,15 +30,6 @@ kotlin {
                 api(shaderKotlin.kotlin)
             }
             dependsOn(shaderKotlin)
-        }
-
-
-        @Suppress("UNUSED_VARIABLE")
-        val jvmTest by getting {
-            dependencies {
-                implementation(libs.spek.dsl)
-                implementation(libs.kluent)
-            }
         }
 
         @Suppress("UNUSED_VARIABLE")

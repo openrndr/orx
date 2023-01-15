@@ -17,10 +17,6 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven {
-        // This is needed to resolve `com.github.ricardomatias:delaunator`
-        url = URI("https://maven.openrndr.org")
-    }
     mavenLocal()
 }
 
@@ -39,6 +35,7 @@ dependencies {
     "demoImplementation"(libs.openrndr.application)
     "demoImplementation"(libs.openrndr.extensions)
     "demoRuntimeOnly"(libs.openrndr.gl3.core)
+    "demoRuntimeOnly"(libs.slf4j.simple)
 }
 
 kotlin {

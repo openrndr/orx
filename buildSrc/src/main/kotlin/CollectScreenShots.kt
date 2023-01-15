@@ -7,17 +7,17 @@ import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.*
 import org.gradle.kotlin.dsl.register
+import org.gradle.process.ExecOperations
 import org.gradle.work.Incremental
 import org.gradle.work.InputChanges
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmCompilation
 import java.io.File
 import java.net.URLClassLoader
 import javax.inject.Inject
 
 abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
-    @get:Incremental
-    @get:PathSensitive(PathSensitivity.NAME_ONLY)
     @get:InputDirectory
+    @get:PathSensitive(PathSensitivity.NAME_ONLY)
+    @get:SkipWhenEmpty
     abstract val inputDir: DirectoryProperty
 
     @get:Input
@@ -27,54 +27,55 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
     abstract val outputDir: DirectoryProperty
 
     @get:Input
+    @get:Optional
     abstract val ignore: ListProperty<String>
 
+    @get:Inject
+    abstract val execOperations: ExecOperations
 
-    init {
-        ignore.set(emptyList())
-    }
     @TaskAction
     fun execute(inputChanges: InputChanges) {
         val preloadClass = File(project.rootProject.projectDir, "buildSrc/build/classes/kotlin/preload")
         require(preloadClass.exists()) {
             "preload class not found: '${preloadClass.absolutePath}'"
-
         }
         inputChanges.getFileChanges(inputDir).forEach { change ->
-            println(change)
             if (change.fileType == FileType.DIRECTORY) return@forEach
             if (change.file.extension == "class") {
                 val klassName = change.file.nameWithoutExtension
-                if (klassName.dropLast(2) in ignore.get())
+                if (klassName.dropLast(2) in ignore.get()) {
                     return@forEach
-
-                val cp = (runtimeDependencies.get().map { it.toURI().toURL() } +
-                        inputDir.get().asFile.toURI().toURL()
-                        )
-                    .toTypedArray()
-
-                val ucl = URLClassLoader(cp)
-                val klass = ucl.loadClass(klassName)
-                println("Collecting screenshot for ${klassName} ${klass}")
+                }
 
                 try {
-                    val mainMethod = klass.getMethod("main")
-                    project.javaexec {
-                        this.classpath += project.files(inputDir.get().asFile, preloadClass)
-                        this.classpath += runtimeDependencies.get()
-                        this.mainClass.set(klassName)
-                        this.workingDir(project.rootProject.projectDir)
-                        jvmArgs("-DtakeScreenshot=true", "-DscreenshotPath=${outputDir.get().asFile}/$klassName.png", "-Dorg.openrndr.exceptions=JVM")
-                    }
+                    val cp = (runtimeDependencies.get().map { it.toURI().toURL() } + inputDir.get().asFile.toURI()
+                        .toURL()).toTypedArray()
+                    val ucl = URLClassLoader(cp)
+                    val klass = ucl.loadClass(klassName)
+                    klass.getMethod("main")
                 } catch (e: NoSuchMethodException) {
-                    // silently ignore
+                    return@forEach
+                }
+
+                println("Collecting screenshot for ${klassName}")
+
+                execOperations.javaexec {
+                    this.classpath += project.files(inputDir.get().asFile, preloadClass)
+                    this.classpath += runtimeDependencies.get()
+                    this.mainClass.set(klassName)
+                    this.workingDir(project.rootProject.projectDir)
+                    this.jvmArgs(
+                        "-DtakeScreenshot=true",
+                        "-DscreenshotPath=${outputDir.get().asFile}/$klassName.png",
+                        "-Dorg.openrndr.exceptions=JVM"
+                    )
                 }
             }
         }
         // this is only executed if there are changes in the inputDir
         val runDemos = outputDir.get().asFile.listFiles { file: File ->
             file.extension == "png"
-        }.map { it.nameWithoutExtension }.sorted()
+        }!!.map { it.nameWithoutExtension }.sorted()
         val readme = File(project.projectDir, "README.md")
         if (readme.exists()) {
             var lines = readme.readLines().toMutableList()
@@ -84,10 +85,18 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
             }
             lines.add("<!-- __demos__ -->")
             lines.add("## Demos")
+
+            // Find out if current project is MPP
+            val demoModuleName = if (project.plugins.hasPlugin("org.jetbrains.kotlin.multiplatform")) {
+                "jvmDemo"
+            } else {
+                "demo"
+            }
+
             for (demo in runDemos) {
                 val projectPath = project.projectDir.relativeTo(project.rootDir)
                 lines.add("### ${demo.dropLast(2)}")
-                lines.add("[source code](src/demo/kotlin/${demo.dropLast(2)}.kt)")
+                lines.add("[source code](src/${demoModuleName}/kotlin/${demo.dropLast(2)}.kt)")
                 lines.add("")
                 lines.add("![${demo}](https://raw.githubusercontent.com/openrndr/orx/media/$projectPath/images/${demo}.png)")
                 lines.add("")
@@ -99,18 +108,11 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
 }
 
 object ScreenshotsHelper {
-    fun KotlinJvmCompilation.collectScreenshots(config: CollectScreenshotsTask.() -> Unit): CollectScreenshotsTask {
-        val task = this.project.tasks.register<CollectScreenshotsTask>("collectScreenshots").get()
-        task.outputDir.set(project.file(project.projectDir.toString() + "/images"))
-        task.inputDir.set(output.classesDirs.first())
-        task.runtimeDependencies.set(runtimeDependencyFiles)
-        task.config()
-        task.dependsOn(this.compileKotlinTask)
-        return task
-
-    }
-
-    fun collectScreenshots(project: Project, sourceSet: SourceSet, config: CollectScreenshotsTask.() -> Unit): CollectScreenshotsTask {
+    fun collectScreenshots(
+        project: Project,
+        sourceSet: SourceSet,
+        config: CollectScreenshotsTask.() -> Unit
+    ): CollectScreenshotsTask {
         val task = project.tasks.register<CollectScreenshotsTask>("collectScreenshots").get()
         task.outputDir.set(project.file(project.projectDir.toString() + "/images"))
         task.inputDir.set(File(project.buildDir, "classes/kotlin/${sourceSet.name}"))

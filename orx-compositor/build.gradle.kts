@@ -1,21 +1,8 @@
-import ScreenshotsHelper.collectScreenshots
-
 plugins {
     org.openrndr.extra.convention.`kotlin-multiplatform`
 }
 
 kotlin {
-    jvm {
-        @Suppress("UNUSED_VARIABLE")
-        val demo by compilations.getting {
-            // TODO: Move demos to /jvmDemo
-            defaultSourceSet {
-                kotlin.srcDir("src/demo/kotlin")
-            }
-            collectScreenshots { }
-        }
-    }
-
     sourceSets {
         @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
@@ -27,15 +14,6 @@ kotlin {
                 implementation(libs.openrndr.draw)
                 implementation(libs.openrndr.filter)
                 implementation(libs.kotlin.reflect)
-            }
-        }
-
-
-        @Suppress("UNUSED_VARIABLE")
-        val jvmTest by getting {
-            dependencies {
-                implementation(libs.spek.dsl)
-                implementation(libs.kluent)
             }
         }
 

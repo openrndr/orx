@@ -1,5 +1,3 @@
-import ScreenshotsHelper.collectScreenshots
-
 plugins {
     org.openrndr.extra.convention.`kotlin-multiplatform`
 }
@@ -14,14 +12,6 @@ val embedShaders = tasks.register<EmbedShadersTask>("embedShaders") {
 
 kotlin {
     jvm {
-        @Suppress("UNUSED_VARIABLE")
-        val demo by compilations.getting {
-            // TODO: Move demos to /jvmDemo
-            defaultSourceSet {
-                kotlin.srcDir("src/demo/kotlin")
-            }
-            collectScreenshots { }
-        }
         testRuns["test"].executionTask {
             useJUnitPlatform {
                 includeEngines("spek2")

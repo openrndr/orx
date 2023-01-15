@@ -21,7 +21,7 @@ jobs:
           path: ./orx
 
       - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@v1.0.4
+        uses: gradle/wrapper-validation-action@v1.0.5
 
       - name: Checkout OPENRNDR repository
         uses: actions/checkout@v3
@@ -33,10 +33,11 @@ jobs:
 
       - name: Test glxinfo
         run: |
+          sudo apt-get update
           sudo apt-get install -y mesa-utils xvfb
           xvfb-run glxinfo
 
-      - uses: actions/setup-java@v2
+      - uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: 17
