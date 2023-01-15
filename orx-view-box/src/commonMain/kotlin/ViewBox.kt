@@ -13,6 +13,7 @@ class ViewBox(
     override val program: Program, var clientArea: Rectangle,
     translateMouse: Boolean = true,
     translateKeyboard: Boolean = true,
+    val colorType: ColorType? = null,
     val contentScale: Double? = null,
     val multisample: BufferMultisample? = null
 
@@ -207,7 +208,13 @@ class ViewBox(
             val art = RenderTarget.active
             renderTarget =
                 renderTarget(widthCeil, heightCeil, contentScale ?: art.contentScale, multisample ?: art.multisample) {
-                    colorBuffer(type = art.colorBuffer(0).type)
+                    colorBuffer(
+                        type = colorType ?: if (art !is ProgramRenderTarget) {
+                            art.colorBuffer(0).type
+                        } else {
+                            ColorType.UINT8
+                        }
+                    )
                     depthBuffer()
                 }
             if ((multisample ?: art.multisample) != BufferMultisample.Disabled) {
@@ -258,11 +265,12 @@ fun Program.viewBox(
     area: Rectangle,
     translateMouse: Boolean = true,
     translateKeyboard: Boolean = true,
+    colorType: ColorType? = null,
     contentScale: Double? = null,
     multisample: BufferMultisample? = null,
     f: ViewBox.() -> Unit = {}
 ): ViewBox {
-    val viewBox = ViewBox(this, area, translateMouse, translateKeyboard, contentScale, multisample)
+    val viewBox = ViewBox(this, area, translateMouse, translateKeyboard, colorType, contentScale, multisample)
     viewBox.f()
     return viewBox
 }
