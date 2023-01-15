@@ -32,15 +32,6 @@ kotlin {
             dependsOn(shaderKotlin)
         }
 
-
-        @Suppress("UNUSED_VARIABLE")
-        val jvmTest by getting {
-            dependencies {
-                implementation(libs.spek.dsl)
-                implementation(libs.kluent)
-            }
-        }
-
         @Suppress("UNUSED_VARIABLE")
         val jvmDemo by getting {
             dependencies {

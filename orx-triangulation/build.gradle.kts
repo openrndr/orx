@@ -20,18 +20,5 @@ kotlin {
                 implementation(project(":orx-noise"))
             }
         }
-
-        @Suppress("UNUSED_VARIABLE")
-        val jvmTest by getting {
-            dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
-                implementation(kotlin("test-junit5"))
-                implementation(libs.kotlin.serialization.json)
-                runtimeOnly(libs.bundles.jupiter)
-                implementation(libs.spek.dsl)
-                implementation(libs.kluent)
-            }
-        }
     }
 }
