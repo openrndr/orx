@@ -191,41 +191,41 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 <!-- __demos__ -->
 ## Demos
 ### DemoFunctionalComposition01
-[source code](src/demo/kotlin/DemoFunctionalComposition01.kt)
+[source code](src/jvmDemo/kotlin/DemoFunctionalComposition01.kt)
 
 ![DemoFunctionalComposition01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoFunctionalComposition01Kt.png)
 
 ### DemoGradientPerturb2D
-[source code](src/demo/kotlin/DemoGradientPerturb2D.kt)
+[source code](src/jvmDemo/kotlin/DemoGradientPerturb2D.kt)
 
 ![DemoGradientPerturb2DKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoGradientPerturb2DKt.png)
 
 ### DemoGradientPerturb3D
-[source code](src/demo/kotlin/DemoGradientPerturb3D.kt)
+[source code](src/jvmDemo/kotlin/DemoGradientPerturb3D.kt)
 
 ![DemoGradientPerturb3DKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoGradientPerturb3DKt.png)
 
 ### DemoNoisesGLSLGui
-[source code](src/demo/kotlin/DemoNoisesGLSLGui.kt)
+[source code](src/jvmDemo/kotlin/DemoNoisesGLSLGui.kt)
 
 ![DemoNoisesGLSLGuiKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoNoisesGLSLGuiKt.png)
 
 ### DemoNoisesGLSL
-[source code](src/demo/kotlin/DemoNoisesGLSL.kt)
+[source code](src/jvmDemo/kotlin/DemoNoisesGLSL.kt)
 
 ![DemoNoisesGLSLKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoNoisesGLSLKt.png)
 
 ### DemoScatter01
-[source code](src/demo/kotlin/DemoScatter01.kt)
+[source code](src/jvmDemo/kotlin/DemoScatter01.kt)
 
 ![DemoScatter01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoScatter01Kt.png)
 
 ### DemoSimplex01
-[source code](src/demo/kotlin/DemoSimplex01.kt)
+[source code](src/jvmDemo/kotlin/DemoSimplex01.kt)
 
 ![DemoSimplex01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoSimplex01Kt.png)
 
 ### DemoSimplexGLSL
-[source code](src/demo/kotlin/DemoSimplexGLSL.kt)
+[source code](src/jvmDemo/kotlin/DemoSimplexGLSL.kt)
 
 ![DemoSimplexGLSLKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoSimplexGLSLKt.png)

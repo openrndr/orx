@@ -50,76 +50,76 @@ Two color spaces are added: `ColorHSLUVa` and `ColorHPLUVa`, they are an impleme
 <!-- __demos__ -->
 ## Demos
 ### DemoColorPlane01
-[source code](src/demo/kotlin/DemoColorPlane01.kt)
+[source code](src/jvmDemo/kotlin/DemoColorPlane01.kt)
 
 ![DemoColorPlane01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorPlane01Kt.png)
 
 ### DemoColorPlane02
-[source code](src/demo/kotlin/DemoColorPlane02.kt)
+[source code](src/jvmDemo/kotlin/DemoColorPlane02.kt)
 
 ![DemoColorPlane02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorPlane02Kt.png)
 
 ### DemoColorRange01
-[source code](src/demo/kotlin/DemoColorRange01.kt)
+[source code](src/jvmDemo/kotlin/DemoColorRange01.kt)
 
 ![DemoColorRange01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorRange01Kt.png)
 
 ### DemoColorRange02
-[source code](src/demo/kotlin/DemoColorRange02.kt)
+[source code](src/jvmDemo/kotlin/DemoColorRange02.kt)
 
 ![DemoColorRange02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorRange02Kt.png)
 
 ### DemoColorRange03
-[source code](src/demo/kotlin/DemoColorRange03.kt)
+[source code](src/jvmDemo/kotlin/DemoColorRange03.kt)
 
 ![DemoColorRange03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorRange03Kt.png)
 
 ### DemoColorRange04
-[source code](src/demo/kotlin/DemoColorRange04.kt)
+[source code](src/jvmDemo/kotlin/DemoColorRange04.kt)
 
 ![DemoColorRange04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorRange04Kt.png)
 
 ### DemoFettePalette01
-[source code](src/demo/kotlin/DemoFettePalette01.kt)
+[source code](src/jvmDemo/kotlin/DemoFettePalette01.kt)
 
 ![DemoFettePalette01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoFettePalette01Kt.png)
 
 ### DemoFettePalette02
-[source code](src/demo/kotlin/DemoFettePalette02.kt)
+[source code](src/jvmDemo/kotlin/DemoFettePalette02.kt)
 
 ![DemoFettePalette02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoFettePalette02Kt.png)
 
 ### DemoHSLUV01
-[source code](src/demo/kotlin/DemoHSLUV01.kt)
+[source code](src/jvmDemo/kotlin/DemoHSLUV01.kt)
 
 ![DemoHSLUV01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHSLUV01Kt.png)
 
 ### DemoHSLUV02
-[source code](src/demo/kotlin/DemoHSLUV02.kt)
+[source code](src/jvmDemo/kotlin/DemoHSLUV02.kt)
 
 ![DemoHSLUV02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHSLUV02Kt.png)
 
 ### DemoHistogram01
-[source code](src/demo/kotlin/DemoHistogram01.kt)
+[source code](src/jvmDemo/kotlin/DemoHistogram01.kt)
 
 ![DemoHistogram01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHistogram01Kt.png)
 
 ### DemoHistogram02
-[source code](src/demo/kotlin/DemoHistogram02.kt)
+[source code](src/jvmDemo/kotlin/DemoHistogram02.kt)
 
 ![DemoHistogram02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHistogram02Kt.png)
 
 ### DemoHistogram03
-[source code](src/demo/kotlin/DemoHistogram03.kt)
+[source code](src/jvmDemo/kotlin/DemoHistogram03.kt)
 
 ![DemoHistogram03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHistogram03Kt.png)
 
 ### DemoOKHSV01
-[source code](src/demo/kotlin/DemoOKHSV01.kt)
+[source code](src/jvmDemo/kotlin/DemoOKHSV01.kt)
 
 ![DemoOKHSV01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoOKHSV01Kt.png)
 
 ### DemoXSLUV01
-[source code](src/demo/kotlin/DemoXSLUV01.kt)
+[source code](src/jvmDemo/kotlin/DemoXSLUV01.kt)
 
 ![DemoXSLUV01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoXSLUV01Kt.png)

@@ -70,6 +70,6 @@ fun main() = application {
 <!-- __demos__ -->
 ## Demos
 ### DemoImageFit01
-[source code](src/demo/kotlin/DemoImageFit01.kt)
+[source code](src/jvmDemo/kotlin/DemoImageFit01.kt)
 
 ![DemoImageFit01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-image-fit/images/DemoImageFit01Kt.png)

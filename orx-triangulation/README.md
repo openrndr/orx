@@ -65,26 +65,26 @@ Edwin Jakobs / [@edwinRNDR](https://github.com/edwinRNDR)
 <!-- __demos__ -->
 ## Demos
 ### DemoDelaunay01
-[source code](src/demo/kotlin/DemoDelaunay01.kt)
+[source code](src/jvmDemo/kotlin/DemoDelaunay01.kt)
 
 ![DemoDelaunay01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoDelaunay01Kt.png)
 
 ### DemoDelaunay02
-[source code](src/demo/kotlin/DemoDelaunay02.kt)
+[source code](src/jvmDemo/kotlin/DemoDelaunay02.kt)
 
 ![DemoDelaunay02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoDelaunay02Kt.png)
 
 ### DemoVoronoi01
-[source code](src/demo/kotlin/DemoVoronoi01.kt)
+[source code](src/jvmDemo/kotlin/DemoVoronoi01.kt)
 
 ![DemoVoronoi01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoVoronoi01Kt.png)
 
 ### DemoVoronoi02
-[source code](src/demo/kotlin/DemoVoronoi02.kt)
+[source code](src/jvmDemo/kotlin/DemoVoronoi02.kt)
 
 ![DemoVoronoi02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoVoronoi02Kt.png)
 
 ### DemoVoronoi03
-[source code](src/demo/kotlin/DemoVoronoi03.kt)
+[source code](src/jvmDemo/kotlin/DemoVoronoi03.kt)
 
 ![DemoVoronoi03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoVoronoi03Kt.png)

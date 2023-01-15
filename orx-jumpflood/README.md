@@ -153,47 +153,72 @@ fun main() = application {
 ```
 <!-- __demos__ -->
 ## Demos
+### DemoDirectionField01
+[source code](src/jvmDemo/kotlin/DemoDirectionField01.kt)
+
+![DemoDirectionField01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoDirectionField01Kt.png)
+
+### DemoDistanceField01
+[source code](src/jvmDemo/kotlin/DemoDistanceField01.kt)
+
+![DemoDistanceField01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoDistanceField01Kt.png)
+
 ### DemoInnerGlow01
-[source code](src/demo/kotlin/DemoInnerGlow01.kt)
+[source code](src/jvmDemo/kotlin/DemoInnerGlow01.kt)
 
 ![DemoInnerGlow01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoInnerGlow01Kt.png)
 
 ### DemoInnerGlow02
-[source code](src/demo/kotlin/DemoInnerGlow02.kt)
+[source code](src/jvmDemo/kotlin/DemoInnerGlow02.kt)
 
 ![DemoInnerGlow02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoInnerGlow02Kt.png)
 
 ### DemoShapeSDF01
-[source code](src/demo/kotlin/DemoShapeSDF01.kt)
+[source code](src/jvmDemo/kotlin/DemoShapeSDF01.kt)
 
 ![DemoShapeSDF01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF01Kt.png)
 
 ### DemoShapeSDF02
-[source code](src/demo/kotlin/DemoShapeSDF02.kt)
+[source code](src/jvmDemo/kotlin/DemoShapeSDF02.kt)
 
 ![DemoShapeSDF02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF02Kt.png)
 
 ### DemoShapeSDF03
-[source code](src/demo/kotlin/DemoShapeSDF03.kt)
+[source code](src/jvmDemo/kotlin/DemoShapeSDF03.kt)
 
 ![DemoShapeSDF03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF03Kt.png)
 
 ### DemoShapeSDF04
-[source code](src/demo/kotlin/DemoShapeSDF04.kt)
+[source code](src/jvmDemo/kotlin/DemoShapeSDF04.kt)
 
 ![DemoShapeSDF04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF04Kt.png)
 
 ### DemoShapeSDF05
-[source code](src/demo/kotlin/DemoShapeSDF05.kt)
+[source code](src/jvmDemo/kotlin/DemoShapeSDF05.kt)
 
 ![DemoShapeSDF05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF05Kt.png)
 
 ### DemoSkeleton01
-[source code](src/demo/kotlin/DemoSkeleton01.kt)
+[source code](src/jvmDemo/kotlin/DemoSkeleton01.kt)
 
 ![DemoSkeleton01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoSkeleton01Kt.png)
 
 ### DemoStraightSkeleton01
-[source code](src/demo/kotlin/DemoStraightSkeleton01.kt)
+[source code](src/jvmDemo/kotlin/DemoStraightSkeleton01.kt)
 
 ![DemoStraightSkeleton01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoStraightSkeleton01Kt.png)
+
+### DemoVoronoi01
+[source code](src/jvmDemo/kotlin/DemoVoronoi01.kt)
+
+![DemoVoronoi01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoVoronoi01Kt.png)
+
+### DemoVoronoi02
+[source code](src/jvmDemo/kotlin/DemoVoronoi02.kt)
+
+![DemoVoronoi02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoVoronoi02Kt.png)
+
+### DemoVoronoi03
+[source code](src/jvmDemo/kotlin/DemoVoronoi03.kt)
+
+![DemoVoronoi03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoVoronoi03Kt.png)

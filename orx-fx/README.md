@@ -194,61 +194,61 @@ shaping `curve` within this range:
 <!-- __demos__ -->
 ## Demos
 ### DemoBlur01
-[source code](src/demo/kotlin/DemoBlur01.kt)
+[source code](src/jvmDemo/kotlin/DemoBlur01.kt)
 
 ![DemoBlur01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoBlur01Kt.png)
 
 ### DemoCannyEdgeDetector01
-[source code](src/demo/kotlin/DemoCannyEdgeDetector01.kt)
+[source code](src/jvmDemo/kotlin/DemoCannyEdgeDetector01.kt)
 
 ![DemoCannyEdgeDetector01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoCannyEdgeDetector01Kt.png)
 
 ### DemoColorDuotone01
-[source code](src/demo/kotlin/DemoColorDuotone01.kt)
+[source code](src/jvmDemo/kotlin/DemoColorDuotone01.kt)
 
 ![DemoColorDuotone01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColorDuotone01Kt.png)
 
 ### DemoColorDuotoneGradient01
-[source code](src/demo/kotlin/DemoColorDuotoneGradient01.kt)
+[source code](src/jvmDemo/kotlin/DemoColorDuotoneGradient01.kt)
 
 ![DemoColorDuotoneGradient01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColorDuotoneGradient01Kt.png)
 
 ### DemoColorPosterize01
-[source code](src/demo/kotlin/DemoColorPosterize01.kt)
+[source code](src/jvmDemo/kotlin/DemoColorPosterize01.kt)
 
 ![DemoColorPosterize01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColorPosterize01Kt.png)
 
 ### DemoCompositeFilter01
-[source code](src/demo/kotlin/DemoCompositeFilter01.kt)
+[source code](src/jvmDemo/kotlin/DemoCompositeFilter01.kt)
 
 ![DemoCompositeFilter01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoCompositeFilter01Kt.png)
 
 ### DemoDirectionalBlur01
-[source code](src/demo/kotlin/DemoDirectionalBlur01.kt)
+[source code](src/jvmDemo/kotlin/DemoDirectionalBlur01.kt)
 
 ![DemoDirectionalBlur01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDirectionalBlur01Kt.png)
 
 ### DemoDistortLenses01
-[source code](src/demo/kotlin/DemoDistortLenses01.kt)
+[source code](src/jvmDemo/kotlin/DemoDistortLenses01.kt)
 
 ![DemoDistortLenses01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDistortLenses01Kt.png)
 
 ### DemoDitherLumaHalftone01
-[source code](src/demo/kotlin/DemoDitherLumaHalftone01.kt)
+[source code](src/jvmDemo/kotlin/DemoDitherLumaHalftone01.kt)
 
 ![DemoDitherLumaHalftone01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDitherLumaHalftone01Kt.png)
 
 ### DemoFluidDistort01
-[source code](src/demo/kotlin/DemoFluidDistort01.kt)
+[source code](src/jvmDemo/kotlin/DemoFluidDistort01.kt)
 
 ![DemoFluidDistort01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoFluidDistort01Kt.png)
 
 ### DemoOkLab01
-[source code](src/demo/kotlin/DemoOkLab01.kt)
+[source code](src/jvmDemo/kotlin/DemoOkLab01.kt)
 
 ![DemoOkLab01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoOkLab01Kt.png)
 
 ### DemoPost01
-[source code](src/demo/kotlin/DemoPost01.kt)
+[source code](src/jvmDemo/kotlin/DemoPost01.kt)
 
 ![DemoPost01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoPost01Kt.png)
