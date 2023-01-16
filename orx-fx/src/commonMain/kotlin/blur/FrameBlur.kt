@@ -8,7 +8,8 @@ import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 
 @Description("Frame blur")
-class FrameBlur : Filter1to1(mppFilterShader(fx_frame_blur, "frame-blur")) {
+class FrameBlur(val colorType: ColorType = ColorType.FLOAT16) :
+    Filter1to1(mppFilterShader(fx_frame_blur, "frame-blur")) {
 
     @DoubleParameter("blend", 0.0, 1.0)
     var blend: Double by parameters
@@ -20,16 +21,16 @@ class FrameBlur : Filter1to1(mppFilterShader(fx_frame_blur, "frame-blur")) {
     }
 
     override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
-        if (target.isNotEmpty()) {
+        if (source.isNotEmpty() && target.isNotEmpty()) {
             intermediate?.let {
-                if (it.width != target[0].width || it.height != target[0].height) {
+                if (it.isEquivalentTo(target[0], ignoreFormat = true, ignoreLevels = true)) {
                     it.destroy()
                     intermediate = null
                 }
             }
 
             if (intermediate == null) {
-                intermediate = colorBuffer(target[0].width, target[0].height, type = ColorType.FLOAT16)
+                intermediate = target[0].createEquivalent(type = colorType)
                 intermediate?.fill(ColorRGBa.TRANSPARENT)
             }
 
