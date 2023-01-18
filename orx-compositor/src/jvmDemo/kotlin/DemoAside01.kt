@@ -2,7 +2,6 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ColorType
 import org.openrndr.extra.compositor.*
-import org.openrndr.extra.fx.blur.DirectionalBlur
 import org.openrndr.extra.fx.blur.HashBlurDynamic
 import org.openrndr.extra.fx.patterns.Checkers
 import kotlin.math.cos
@@ -32,6 +31,4 @@ fun main() {
             }
         }
     }
-
-
 }

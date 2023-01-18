@@ -8,8 +8,6 @@ import org.openrndr.extra.fx.blend.SourceIn
 import org.openrndr.extra.fx.blend.SourceOut
 import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.Description
-import org.openrndr.math.Matrix44
-
 
 fun RenderTarget.deepDestroy() {
     val cbcopy = colorAttachments.map { it }
@@ -34,16 +32,17 @@ enum class LayerType {
     ASIDE
 }
 
+private val sourceOut = persistent { SourceOut() }
+private val sourceIn = persistent { SourceIn() }
+
 /**
  * A single layer representation
  */
 @Description("Layer")
 open class Layer internal constructor(
     val type: LayerType,
-    val bufferMultisample: BufferMultisample = BufferMultisample.Disabled
+    private val bufferMultisample: BufferMultisample = BufferMultisample.Disabled
 ) {
-    var sourceOut = SourceOut()
-    var sourceIn = SourceIn()
     var maskLayer: Layer? = null
     var drawFunc: () -> Unit = {}
     val children: MutableList<Layer> = mutableListOf()
@@ -61,9 +60,9 @@ open class Layer internal constructor(
     var clearColor: ColorRGBa? = ColorRGBa.TRANSPARENT
     private var layerTarget: RenderTarget? = null
 
-    val result: ColorBuffer?
+    val result: ColorBuffer
         get() {
-            return layerTarget?.colorBuffer(0)
+            return layerTarget?.colorBuffer(0) ?: error("layer result not ready")
         }
 
     /**
@@ -90,6 +89,7 @@ open class Layer internal constructor(
                     drawer.isolatedWithTarget(maskRt) {
                         drawer.fill = ColorRGBa.WHITE
                         drawer.stroke = ColorRGBa.WHITE
+                        drawer.clear(ColorRGBa.TRANSPARENT)
                         it.drawFunc()
                     }
                 }
@@ -118,7 +118,7 @@ open class Layer internal constructor(
                 for ((i, filter) in filters.withIndex()) {
                     filter.first.apply(filter.third)
                     val sources =
-                        arrayOf(localSource) + filter.second.map { it.result ?: error("no result for layer $it") }
+                        arrayOf(localSource) + filter.second.map { it.result }
                             .toTypedArray()
                     filter.first.apply(sources, arrayOf(targets[i % targets.size]))
                     localSource = targets[i % targets.size]
@@ -134,7 +134,7 @@ open class Layer internal constructor(
             if (type == LayerType.ASIDE) {
                 if (postFilters.isNotEmpty()) {
                     require(layerPost != result)
-                    layerPost.copyTo(result ?: error("no result"))
+                    layerPost.copyTo(result)
                 }
             } else if (type == LayerType.LAYER) {
                 val localBlendFilter = blendFilter
@@ -211,9 +211,7 @@ open class Layer internal constructor(
 
     fun Drawer.image(layer: Layer) {
         val cb = layer.result
-        if (cb != null) {
-            image(cb)
-        }
+        image(cb)
     }
 }
 
@@ -249,8 +247,7 @@ fun <T : Filter1to1> Layer.apply(drawer: Drawer,
     val layer = Layer(LayerType.ASIDE)
     layer.colorType = colorType
     layer.draw {
-        drawer.image(source.result!!)
-        //source.result!!.copyTo(result!!)
+        drawer.image(source.result)
     }
     layer.post(filter, function)
     children.add(layer)
@@ -264,14 +261,12 @@ fun <T : Filter2to1> Layer.apply(drawer: Drawer,
     val layer = Layer(LayerType.ASIDE)
     layer.colorType = colorType
     layer.draw {
-        //source0.result!!.copyTo(result!!)
-        drawer.image(source0.result!!)
+        drawer.image(source0.result)
     }
     layer.post(filter, source1, function)
     children.add(layer)
     return layer
 }
-
 
 
 /**
@@ -347,7 +342,6 @@ class ColorBufferCache(val width: Int, val height: Int) {
             it.value.forEach { cb -> cb.destroy() }
         }
     }
-
 }
 
 class Composite : Layer(LayerType.LAYER) {
@@ -372,9 +366,6 @@ fun compose(function: Layer.() -> Unit): Composite {
     root.function()
     return root
 }
-
-
-
 
 class Compositor : Extension {
     override var enabled: Boolean = true
