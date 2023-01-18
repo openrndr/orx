@@ -1,18 +1,12 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.tint
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.temporalblur.TemporalBlur
 import org.openrndr.math.Polar
 import kotlin.math.cos
 
 fun main() = application {
     program {
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
         extend(TemporalBlur()) {
             samples = 100
             duration = 10.0
