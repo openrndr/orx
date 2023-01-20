@@ -184,7 +184,7 @@ class ViewBox(
         extensions.add(functionExtension)
     }
 
-    override fun draw() {
+    fun configureRenderTarget(): RenderTarget {
         val widthCeil = ceil(clientArea.width).toInt()
         val heightCeil = ceil(clientArea.height).toInt()
 
@@ -225,6 +225,11 @@ class ViewBox(
                 )
             }
         }
+        return renderTarget ?: error("could not create a render target")
+    }
+
+    override fun draw() {
+        configureRenderTarget()
 
         if (viewBoxReconfigured || shouldDraw()) {
             program.drawer.isolatedWithTarget(renderTarget!!) {
@@ -271,6 +276,9 @@ fun Program.viewBox(
     f: ViewBox.() -> Unit = {}
 ): ViewBox {
     val viewBox = ViewBox(this, area, translateMouse, translateKeyboard, colorType, contentScale, multisample)
-    viewBox.f()
+    val rt = viewBox.configureRenderTarget()
+    drawer.isolatedWithTarget(rt) {
+        viewBox.f()
+    }
     return viewBox
 }
