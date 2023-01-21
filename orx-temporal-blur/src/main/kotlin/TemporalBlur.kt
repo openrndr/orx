@@ -137,7 +137,7 @@ class TemporalBlur : Extension {
             }
         }
 
-        val resolvedContentScale = contentScale ?: 1.0
+        val resolvedContentScale = contentScale ?: RenderTarget.active.contentScale
 
         if (accumulator == null) {
             accumulator = renderTarget(program.width, program.height, contentScale = resolvedContentScale) {
