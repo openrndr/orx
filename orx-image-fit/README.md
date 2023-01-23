@@ -12,9 +12,9 @@ Similar to CSS object-fit (https://developer.mozilla.org/en-US/docs/Web/CSS/obje
 drawer.imageFit(
   img: ColorBuffer, 
   x: Double, y: Double, w: Double, h: Double, 
-  fitMethod: FitMethod, 
   horizontalPosition: Double, 
-  verticalPosition: Double)
+  verticalPosition: Double,
+  fitMethod: FitMethod)
 ```
 
 or 
@@ -23,9 +23,9 @@ or
 drawer.imageFit(
   img: ColorBuffer, 
   bounds: Rectangle, 
-  fitMethod: FitMethod, 
   horizontalPosition: Double, 
-  verticalPosition: Double)
+  verticalPosition: Double,
+  fitMethod: FitMethod)
 ```
 
 - `img`: the image to draw 
