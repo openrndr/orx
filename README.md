@@ -19,6 +19,7 @@ A growing library of assorted data structures, algorithms and utilities.
 | [`orx-fx`](orx-fx/) | Ready-to-use visual effects or filters. Most include [orx-parameters](https://github.com/openrndr/orx/tree/master/orx-parameters) annotations  so they can be easily controlled via orx-gui. |
 | [`orx-glslify`](orx-glslify/) | Load glslify compatible shaders from [npm](https://www.npmjs.com/search?q=glslify). |
 | [`orx-gradient-descent`](orx-gradient-descent/) | Finds equation inputs that output a minimum value: easy to use gradient descent based minimizer. |
+| [`orx-hash-grid`](orx-hash-grid/) | A 2D space partitioning for points. |
 | [`orx-image-fit`](orx-image-fit/) | Draws the given image making sure it fits (`contain`) or it covers (`cover`) the specified area. |
 | [`orx-integral-image`](orx-integral-image/) | CPU and GPU-based implementation for integral images (summed area tables) |
 | [`orx-interval-tree`](orx-interval-tree/) | For querying a data set containing time segments (start time and end time) when we need all entries containing a specific time value. Useful when creating a timeline. |
