@@ -27,3 +27,14 @@ for (point in grid.points()) {
     // do something with point
 }
 ```
+<!-- __demos__ -->
+## Demos
+### DemoFilter01
+[source code](src/jvmDemo/kotlin/DemoFilter01.kt)
+
+![DemoFilter01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-hash-grid/images/DemoFilter01Kt.png)
+
+### DemoHashGrid01
+[source code](src/jvmDemo/kotlin/DemoHashGrid01.kt)
+
+![DemoHashGrid01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-hash-grid/images/DemoHashGrid01Kt.png)
