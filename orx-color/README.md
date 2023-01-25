@@ -79,6 +79,11 @@ Two color spaces are added: `ColorHSLUVa` and `ColorHPLUVa`, they are an impleme
 
 ![DemoColorRange04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorRange04Kt.png)
 
+### DemoDeltaE
+[source code](src/jvmDemo/kotlin/DemoDeltaE.kt)
+
+![DemoDeltaEKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoDeltaEKt.png)
+
 ### DemoFettePalette01
 [source code](src/jvmDemo/kotlin/DemoFettePalette01.kt)
 
