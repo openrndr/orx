@@ -193,7 +193,7 @@ fun generateColorRamp(
             hslLight as ColorOKHSLa
             lightColors.add(
                 ColorOKHSLa(
-                    (hslLight.h + 360.0 * tintShadeHueShift).mod_(360.0),
+                    (hslLight.h + 360.0 * tintShadeHueShift).mod(360.0),
                     (hslLight.s - offsetTint).clamp(0.0, 1.0),
                     (hslLight.l + offsetTint).clamp(0.0, 1.0)
                 ).toRGBa().toSRGB()
@@ -202,7 +202,7 @@ fun generateColorRamp(
             hslLight as ColorHSLa
             lightColors.add(
                 ColorHSLa(
-                    (hslLight.h + 360.0 * tintShadeHueShift).mod_(360.0),
+                    (hslLight.h + 360.0 * tintShadeHueShift).mod(360.0),
                     (hslLight.s - offsetTint).clamp(0.0, 1.0),
                     (hslLight.l + offsetTint).clamp(0.0, 1.0)
                 ).toRGBa().toSRGB()
@@ -221,7 +221,7 @@ fun generateColorRamp(
             hslDark as ColorOKHSLa
             darkColors.add(
                 ColorOKHSLa(
-                    (hslDark.h - 360.0 * tintShadeHueShift).mod_(360.0),
+                    (hslDark.h - 360.0 * tintShadeHueShift).mod(360.0),
                     (hslDark.s - offsetShade).clamp(0.0, 1.0),
                     (hslDark.l - offsetShade).clamp(0.0, 1.0)
                 ).toRGBa().toSRGB()
@@ -230,7 +230,7 @@ fun generateColorRamp(
             hslDark as ColorHSLa
             darkColors.add(
                 ColorHSLa(
-                    (hslDark.h - 360.0 * tintShadeHueShift).mod_(360.0),
+                    (hslDark.h - 360.0 * tintShadeHueShift).mod(360.0),
                     (hslDark.s - offsetShade).clamp(0.0, 1.0),
                     (hslDark.l - offsetShade).clamp(0.0, 1.0)
                 ).toRGBa().toSRGB()
