@@ -16,10 +16,12 @@ class ProresProfile : VideoWriterProfile() {
     var profile = Profile.SQ
     var codec = "prores_ks"
 
+    val filters = mutableListOf("vflip")
+
     override fun arguments(): Array<String> {
         val vcodec = arrayOf("-vcodec", codec)
         val profile = arrayOf("-profile:v", profile.argument)
-        val filters = arrayOf("-vf", "vflip")
+        val filters = arrayOf("-vf", filters.joinToString(","))
         val audio = arrayOf("-an")
         return vcodec + profile + filters + audio
     }

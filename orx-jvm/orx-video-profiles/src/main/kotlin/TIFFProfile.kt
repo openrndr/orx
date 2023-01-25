@@ -11,8 +11,9 @@ import org.openrndr.ffmpeg.VideoWriterProfile
 class TIFFProfile : VideoWriterProfile() {
     override val fileExtension = "tif"
 
+    val filters = mutableListOf("vflip")
     override fun arguments(): Array<String> {
-        return arrayOf("-vf", "vflip")
+        return arrayOf("-vf", filters.joinToString(","))
     }
 }
 

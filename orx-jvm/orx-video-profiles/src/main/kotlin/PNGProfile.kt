@@ -11,8 +11,10 @@ import org.openrndr.ffmpeg.VideoWriterProfile
 class PNGProfile : VideoWriterProfile() {
     override val fileExtension = "png"
 
+    val filters = mutableListOf("vflip")
+
     override fun arguments(): Array<String> {
-        return arrayOf("-vf", "vflip")
+        return arrayOf("-vf", filters.joinToString(","))
     }
 }
 

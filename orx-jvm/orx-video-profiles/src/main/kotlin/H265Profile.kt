@@ -5,61 +5,64 @@ import org.openrndr.ffmpeg.VideoWriterProfile
 @Deprecated("use h265 profile", replaceWith = ReplaceWith("H265Profile"))
 typealias X265Profile = H265Profile
 
+
 class H265Profile : VideoWriterProfile() {
-    internal var mode = WriterMode.Normal
-    internal var constantRateFactor = 28
-    var hlg = false
-
-    enum class WriterMode {
-        Normal,
-        Lossless
-    }
-
-    fun mode(mode: WriterMode): X265Profile {
-        this.mode = mode
-        return this
-    }
 
     /**
-     * Sets the constant rate factor
-     * @param constantRateFactor the constant rate factor (default is 28)
-     * @return
+     * constant rate factor (default is 23)
      */
-    fun constantRateFactor(constantRateFactor: Int): X265Profile {
-        this.constantRateFactor = constantRateFactor
-        return this
+    var constantRateFactor = null as Int?
+
+    @Deprecated("Use constantRateFactor property")
+    fun constantRateFactor(factor: Int) {
+        constantRateFactor = factor
     }
 
-    override val fileExtension = "mp4"
+    override var fileExtension = "mp4"
 
+    var highPrecisionChroma = true
+
+    val CODEC_LIBX265 = "libx265"
+
+
+    var videoCodec = CODEC_LIBX265 as String?
+    var hwaccel = null as String?
+    var preset = null as String?
+
+
+    var pixelFormat = "yuv420p" as String?
+    var userArguments = emptyArray<String>()
+
+    val filters = mutableListOf("vflip")
 
     override fun arguments(): Array<String> {
-        when (mode) {
-            WriterMode.Normal -> {
-                return if (!hlg) {
-                    arrayOf("-pix_fmt", "yuv420p", // this will produce videos that are playable by quicktime
-                            "-vf", "vflip",
-                            "-an", "-vcodec", "libx265", "-crf", "" + constantRateFactor)
-                } else {
-                    arrayOf( // this will produce videos that are playable by quicktime
-                            "-an", "" +
-                            "-vcodec", "libx265",
-                            "-pix_fmt", "yuv420p10le",
-                            "-color_primaries", "bt2020",
-                            "-colorspace", "bt2020_ncl",
-                            "-color_trc", "arib-std-b67",
-                            "-crf", "" + constantRateFactor)
-                    // transfer=arib-std-b67
-                }
-            }
-            WriterMode.Lossless -> {
-                return arrayOf("-pix_fmt", "yuv420p10", // this will produce videos that are playable by quicktime
-                        "-an", "-vcodec", "libx265", "-preset", "ultrafast")
-            }
-            else -> {
-                throw RuntimeException("unsupported write mode")
-            }
+        val chromaArguments = if (highPrecisionChroma) {
+            arrayOf(
+                "-sws_flags", "spline+accurate_rnd+full_chroma_int",
+                "-color_range", "1",
+                "-colorspace", "1",
+                "-color_primaries","1",
+                "-color_trc", "1"
+            )
+        } else {
+            emptyArray()
         }
+
+        if (highPrecisionChroma) {
+            filters.add("colorspace=bt709:iall=bt601-6-625:fast=1")
+        }
+
+        val hwaccelArguments = hwaccel?.let { arrayOf("-hwaccel", it) } ?: emptyArray()
+        val pixelFormatArguments = pixelFormat?.let { arrayOf("-pix_fmt", it) } ?: emptyArray()
+        val constantRateArguments = constantRateFactor?.let { arrayOf("-crf", it.toString()) } ?: emptyArray()
+        val presetArguments = preset?.let { arrayOf("-preset", it) } ?: emptyArray()
+        val videoCodecArguments = videoCodec?.let { arrayOf("-vcodec", it) } ?: emptyArray()
+        val filterArguments = arrayOf("-vf", filters.joinToString(","))
+
+        val arguments =
+            hwaccelArguments + pixelFormatArguments + chromaArguments + filterArguments + videoCodecArguments + constantRateArguments + presetArguments + userArguments
+
+        return arguments
     }
 }
 
