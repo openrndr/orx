@@ -38,6 +38,15 @@ class ViewBox(
 
     override val extensions: MutableList<Extension> = mutableListOf<Extension>()
 
+    val result: ColorBuffer
+        get() {
+            return if (resolved == null) {
+                renderTarget?.colorBuffer(0) ?: error("no result available")
+            } else {
+                return resolved ?: error("no result available")
+            }
+        }
+
     inner class TranslatedMouseEvents : MouseEvents {
         override val buttonDown = Event<MouseEvent>()
         override val buttonUp = Event<MouseEvent>()
@@ -229,8 +238,21 @@ class ViewBox(
     }
 
     override fun draw() {
-        configureRenderTarget()
+        update()
+        program.drawer.isolated {
+            if (resolved == null) {
+                program.drawer.image(renderTarget!!.colorBuffer(0), clientArea.corner)
+            } else {
+                program.drawer.image(resolved!!, clientArea.corner)
+            }
+        }
+    }
 
+    /**
+     * Updates the view box by executing all the extension draw stages. [Update] will not visualize the results
+     */
+    fun update() {
+        configureRenderTarget()
         if (viewBoxReconfigured || shouldDraw()) {
             program.drawer.isolatedWithTarget(renderTarget!!) {
                 drawer.clear(ColorRGBa.BLACK)
@@ -246,13 +268,8 @@ class ViewBox(
 
                 viewBoxReconfigured = false
             }
-        }
-        program.drawer.isolated {
-            if (resolved == null) {
-                program.drawer.image(renderTarget!!.colorBuffer(0), clientArea.corner)
-            } else {
+            if (resolved != null) {
                 renderTarget!!.colorBuffer(0).copyTo(resolved!!)
-                program.drawer.image(resolved!!, clientArea.corner)
             }
         }
     }
