@@ -38,17 +38,13 @@ kotlin {
         @Suppress("UNUSED_VARIABLE")
         val jvmTest by getting {
             dependencies {
-                implementation(libs.kluent)
-                implementation(libs.spek.dsl)
-                runtimeOnly(libs.spek.junit5)
-                runtimeOnly(libs.kotlin.reflect)
+                runtimeOnly(libs.slf4j.simple)
             }
         }
 
         @Suppress("UNUSED_VARIABLE")
         val jvmDemo by getting {
             dependencies {
-                implementation(project(":orx-g-code"))
                 runtimeOnly(libs.slf4j.simple)
             }
         }
