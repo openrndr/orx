@@ -8,13 +8,8 @@ plugins {
 kotlin {
     jvm {
         @Suppress("UNUSED_VARIABLE")
-        val demo by compilations.getting {
-            collectScreenshots { }
-        }
-        testRuns["test"].executionTask {
-            useJUnitPlatform {
-                includeEngines("spek2")
-            }
+        testRuns["test"].executionTask.configure {
+            useJUnitPlatform()
         }
     }
 
