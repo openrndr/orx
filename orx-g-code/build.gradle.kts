@@ -25,12 +25,6 @@ kotlin {
         }
 
         @Suppress("UNUSED_VARIABLE")
-        val commonTest by getting {
-            dependencies {
-            }
-        }
-
-        @Suppress("UNUSED_VARIABLE")
         val jvmTest by getting {
             dependencies {
                 runtimeOnly(libs.slf4j.simple)
