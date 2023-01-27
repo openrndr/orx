@@ -13,7 +13,8 @@ fun ShapeProvider.uniform(distanceToEdge: Double = 0.0, random: Random = Random.
     val shape = shape
     require(!shape.empty)
     var attempts = 0
-    return Vector2.uniformSequence(shape.bounds, random).first {
+    val innerBounds = shape.bounds.offsetEdges(-distanceToEdge.coerceAtLeast(0.0))
+    return Vector2.uniformSequence(innerBounds, random).first {
         attempts++
         require(attempts < 100)
         if (distanceToEdge == 0.0) {
