@@ -40,7 +40,7 @@ class HorizontalWave : Filter1to1(mppFilterShader(fx_horizontal_wave, "horizonta
 }
 
 @Description("Vertical wave")
-class VerticalWave : Filter(mppFilterShader(fx_vertical_wave, "vertical-wave")) {
+class VerticalWave : Filter1to1(mppFilterShader(fx_vertical_wave, "vertical-wave")) {
     @DoubleParameter("frequency", 0.0, 64.0, order = 1)
     var frequency: Double by parameters
 
