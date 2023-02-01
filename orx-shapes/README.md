@@ -74,6 +74,16 @@ Collection of 2D shape generators (polygon, star, rounded rectangle) and shape m
 
 ![DemoRectangleGrid02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoRectangleGrid02Kt.png)
 
+### DemoRectifiedContour01
+[source code](src/jvmDemo/kotlin/DemoRectifiedContour01.kt)
+
+![DemoRectifiedContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoRectifiedContour01Kt.png)
+
+### DemoRectifiedContour02
+[source code](src/jvmDemo/kotlin/DemoRectifiedContour02.kt)
+
+![DemoRectifiedContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoRectifiedContour02Kt.png)
+
 ### DemoRegularPolygon
 [source code](src/jvmDemo/kotlin/DemoRegularPolygon.kt)
 
