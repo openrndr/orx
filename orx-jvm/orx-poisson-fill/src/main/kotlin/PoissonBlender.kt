@@ -65,7 +65,7 @@ class PoissonBlender(val width: Int, val height: Int, type: ColorType = ColorTyp
 
 }
 
-class PoissonBlend: Filter() {
+class PoissonBlend: Filter2to1() {
     private var blender: PoissonBlender? = null
 
     val alphaToBitmap = AlphaToBitmap()
