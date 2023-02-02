@@ -83,6 +83,7 @@ include(
         "orx-jvm:orx-video-profiles",
         "orx-depth-camera",
         "orx-jvm:orx-depth-camera-calibrator",
-        "orx-view-box"
+        "orx-view-box",
+        "orx-turtle"
     )
 )
