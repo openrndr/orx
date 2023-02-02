@@ -9,6 +9,11 @@ Collection of 2D shape generators (polygon, star, rounded rectangle) and shape m
 
 ![DemoAlphaShapeKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoAlphaShapeKt.png)
 
+### DemoArc01
+[source code](src/jvmDemo/kotlin/DemoArc01.kt)
+
+![DemoArc01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoArc01Kt.png)
+
 ### DemoBezierPatch01
 [source code](src/jvmDemo/kotlin/DemoBezierPatch01.kt)
 
@@ -64,6 +69,11 @@ Collection of 2D shape generators (polygon, star, rounded rectangle) and shape m
 
 ![DemoHobbyCurve02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoHobbyCurve02Kt.png)
 
+### DemoPulley01
+[source code](src/jvmDemo/kotlin/DemoPulley01.kt)
+
+![DemoPulley01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoPulley01Kt.png)
+
 ### DemoRectangleGrid01
 [source code](src/jvmDemo/kotlin/DemoRectangleGrid01.kt)
 
@@ -103,3 +113,8 @@ Collection of 2D shape generators (polygon, star, rounded rectangle) and shape m
 [source code](src/jvmDemo/kotlin/DemoRoundedRectangle.kt)
 
 ![DemoRoundedRectangleKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoRoundedRectangleKt.png)
+
+### DemoTear01
+[source code](src/jvmDemo/kotlin/DemoTear01.kt)
+
+![DemoTear01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoTear01Kt.png)
