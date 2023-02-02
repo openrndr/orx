@@ -16,14 +16,13 @@ fun main() {
             extend {
                 drawer.clear(ColorRGBa.BLACK)
                 drawer.stroke = ColorRGBa.PINK
+                drawer.fill = null
                 fun f(v: Vector2): Double {
-
                     val p = v + Vector2(cos(v.y * 0.1 + seconds) * 40.0, sin(v.x * 0.1 + seconds) * 40.0)
-                    return cos((p.distanceTo(drawer.bounds.center) / 720.0) * 6 * PI)
+                    return cos((p.distanceTo(drawer.bounds.center) / 720.0) * 12 * PI)
                 }
-
-                val segments = findContours(::f, drawer.bounds.offsetEdges(32.0), 4.0)
-                drawer.lineSegments(segments)
+                val contours = findContours(::f, drawer.bounds.offsetEdges(-2.0), 4.0)
+                drawer.contours(contours)
             }
         }
     }

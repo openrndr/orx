@@ -16,8 +16,9 @@ fun main() {
                 drawer.clear(ColorRGBa.BLACK)
                 drawer.stroke = ColorRGBa.PINK
                 fun f(v: Vector2) = cos((v.distanceTo(drawer.bounds.center) / 100.0) * 2 * PI)
-                val segments = findContours(::f, drawer.bounds.offsetEdges(32.0), 16.0)
-                drawer.lineSegments(segments)
+                val contours = findContours(::f, drawer.bounds.offsetEdges(-24.0), 16.0)
+                drawer.fill = null
+                drawer.contours(contours)
             }
         }
     }

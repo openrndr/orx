@@ -4,17 +4,28 @@ import org.openrndr.math.IntVector2
 import org.openrndr.math.Vector2
 import org.openrndr.shape.LineSegment
 import org.openrndr.shape.Rectangle
+import org.openrndr.shape.ShapeContour
 import kotlin.math.max
 import kotlin.math.min
 
+
+/**
+ * Find contours for a function [f] using the marching squares algorithm. A contour is found when f(x) crosses zero.
+ * @param f the function
+ * @param area a rectangular area in which the function should be evaluated
+ * @param cellSize the size of the cells, smaller size gives higher resolution
+ * @param useInterpolation intersection points will be interpolated if true, default true
+ * @return a list of [ShapeContour] instances
+ */
 fun findContours(
     f: (Vector2) -> Double,
     area: Rectangle,
     cellSize: Double,
     useInterpolation: Boolean = true
-): List<LineSegment> {
+): List<ShapeContour> {
     val segments = mutableListOf<LineSegment>()
     val values = mutableMapOf<IntVector2, Double>()
+    val segmentsMap = mutableMapOf<Vector2, MutableList<LineSegment>>()
 
     for (y in 0 until (area.width / cellSize).toInt()) {
         for (x in 0 until (area.width / cellSize).toInt()) {
@@ -25,9 +36,12 @@ fun findContours(
     val zero = 0.0
     for (y in 0 until (area.width / cellSize).toInt()) {
         for (x in 0 until (area.width / cellSize).toInt()) {
-            val v00 = (values[IntVector2(x, y)] ?: zero)
-            val v10 = (values[IntVector2(x + 1, y)] ?: zero)
-            val v01 = (values[IntVector2(x, y + 1)] ?: zero)
+
+            // Here we check if we are at a right or top border. This is to ensure we create closed contours
+            // later on in the process.
+            val v00 = if (x == 0 || y == 0) zero else (values[IntVector2(x, y)] ?: zero)
+            val v10 = if (y == 0) zero else (values[IntVector2(x + 1, y)] ?: zero)
+            val v01 = if (x == 0) zero else (values[IntVector2(x, y + 1)] ?: zero)
             val v11 = (values[IntVector2(x + 1, y + 1)] ?: zero)
 
             val p00 = Vector2(x.toDouble(), y.toDouble()) * cellSize + area.corner
@@ -66,7 +80,12 @@ fun findContours(
             ) {
                 val r0 = blend(v00, v01)
                 val r1 = blend(v10, v11)
-                val l0 = LineSegment(p00.mix(p01, r0), p10.mix(p11, r1))
+
+                val v0 = p00.mix(p01, r0)
+                val v1 = p10.mix(p11, r1)
+                val l0 = LineSegment(v0, v1)
+                segmentsMap.getOrPut(v1) { mutableListOf() }.add(l0)
+                segmentsMap.getOrPut(v0) { mutableListOf() }.add(l0)
                 segments.add(l0)
             }
 
@@ -103,5 +122,32 @@ fun findContours(
             }
         }
     }
-    return segments
+
+    val processedSegments = mutableSetOf<LineSegment>()
+    val contours = mutableListOf<ShapeContour>()
+    for (segment in segments) {
+        if (segment in processedSegments) {
+            continue
+        } else {
+            val collected = mutableListOf<Vector2>()
+            var current: LineSegment? = segment
+            var closed = true
+            do {
+                current!!
+                collected.add(current.start)
+                processedSegments.add(current)
+                if (segmentsMap[current.start]!!.size < 2) {
+                    closed = false
+                }
+                val hold = current
+                current = segmentsMap[current.start]?.firstOrNull { it !in processedSegments }
+                if (current == null) {
+                    current = segmentsMap[hold.end]?.firstOrNull { it !in processedSegments }
+                }
+            } while (current != segment && current != null)
+
+            contours.add(ShapeContour.fromPoints(collected, closed = closed))
+        }
+    }
+    return contours
 }
