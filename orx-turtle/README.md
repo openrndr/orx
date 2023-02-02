@@ -31,3 +31,19 @@ The language also holds some tools to manage the position and orientation of the
 
  * `segment(s: Segment)` to draw a segment with its entrance tangent aligned to the turtle's orientation
  * `contour(c: ShapeContour)` to draw a contour with its entrance tangent aligned to the turtle's orientation
+<!-- __demos__ -->
+## Demos
+### DemoTurtle01
+[source code](src/jvmDemo/kotlin/DemoTurtle01.kt)
+
+![DemoTurtle01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-turtle/images/DemoTurtle01Kt.png)
+
+### DemoTurtle02
+[source code](src/jvmDemo/kotlin/DemoTurtle02.kt)
+
+![DemoTurtle02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-turtle/images/DemoTurtle02Kt.png)
+
+### DemoTurtle03
+[source code](src/jvmDemo/kotlin/DemoTurtle03.kt)
+
+![DemoTurtle03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-turtle/images/DemoTurtle03Kt.png)
