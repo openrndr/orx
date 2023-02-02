@@ -47,6 +47,7 @@ include(
         "orx-no-clear",
         "orx-noise",
         "orx-obj-loader",
+        "orx-marching-squares",
         "orx-jvm:orx-olive",
         "orx-jvm:orx-osc",
         "orx-palette",
