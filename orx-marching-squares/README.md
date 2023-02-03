@@ -8,16 +8,16 @@ Tools for extracting contours from functions
 
 ```kotlin
 fun f(v: Vector2) = v.distanceTo(drawer.bounds.center) - 200.0
-val segments = findContours(::f, drawer.bounds, 16.0)
-drawer.lineSegments(segments)
+val contours = findContours(::f, drawer.bounds, 16.0)
+drawer.contours(contours)
 ```
 
 With a small adjustment to the given function one can use `findContours` to find iso contours. The trick is to add a cosine over the distance function.
 
 ```kotlin
 fun f(v: Vector2) = cos((v.distanceTo(drawer.bounds.center) / 100.0) * 2 * PI)
-val segments = findContours(::f, drawer.bounds.offsetEdges(32.0), 16.0)
-drawer.lineSegments(segments)
+val contours = findContours(::f, drawer.bounds.offsetEdges(32.0), 16.0)
+drawer.contours(contours)
 ```
 <!-- __demos__ -->
 ## Demos
