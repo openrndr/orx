@@ -27,14 +27,14 @@ fun findContours(
     val values = mutableMapOf<IntVector2, Double>()
     val segmentsMap = mutableMapOf<Vector2, MutableList<LineSegment>>()
 
-    for (y in 0 until (area.width / cellSize).toInt()) {
+    for (y in 0 until (area.height / cellSize).toInt()) {
         for (x in 0 until (area.width / cellSize).toInt()) {
             values[IntVector2(x, y)] = f(Vector2(x * cellSize + area.x, y * cellSize + area.y))
         }
     }
 
     val zero = 0.0
-    for (y in 0 until (area.width / cellSize).toInt()) {
+    for (y in 0 until (area.height / cellSize).toInt()) {
         for (x in 0 until (area.width / cellSize).toInt()) {
 
             // Here we check if we are at a right or top border. This is to ensure we create closed contours
