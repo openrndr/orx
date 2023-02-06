@@ -71,7 +71,7 @@ class DelaunayTriangulation(val points: List<Vector2>) {
 
     fun hull() = contour {
         for (h in delaunay.hull) {
-            moveOrLineTo(points[2 * h])
+            moveOrLineTo(points[h])
         }
         close()
     }
