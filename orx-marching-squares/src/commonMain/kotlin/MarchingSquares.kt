@@ -132,9 +132,13 @@ fun findContours(
             val collected = mutableListOf<Vector2>()
             var current: LineSegment? = segment
             var closed = true
+            var lastVertex = Vector2.INFINITY
             do {
                 current!!
-                collected.add(current.start)
+                if (lastVertex.squaredDistanceTo(current.start) > 1E-5) {
+                    collected.add(current.start)
+                }
+                lastVertex = current.start
                 processedSegments.add(current)
                 if (segmentsMap[current.start]!!.size < 2) {
                     closed = false
