@@ -43,8 +43,8 @@ private data class LabeledObject(val label: String, val obj: Any)
 private class CompartmentState(var collapsed: Boolean, val parameterValues: MutableMap<String, Any> = mutableMapOf())
 private class SidebarState(var hidden: Boolean = false, var collapsed: Boolean = false, var scrollTop: Double = 0.0)
 private class TrackedObjectBinding(
-        val parameters: List<Parameter>,
-        val parameterControls: MutableMap<Parameter, Element> = mutableMapOf()
+    val parameters: List<Parameter>,
+    val parameterControls: MutableMap<Parameter, Element> = mutableMapOf()
 )
 
 private val persistentCompartmentStates = mutableMapOf<Long, MutableMap<String, CompartmentState>>()
@@ -54,7 +54,11 @@ private fun sidebarState(): SidebarState = persistentSidebarStates.getOrPut(Driv
     SidebarState()
 }
 
-private fun <T : Any> getPersistedOrDefault(compartmentLabel: String, property: KMutableProperty1<Any, T>, obj: Any): T? {
+private fun <T : Any> getPersistedOrDefault(
+    compartmentLabel: String,
+    property: KMutableProperty1<Any, T>,
+    obj: Any
+): T? {
     val state = persistentCompartmentStates[Driver.instance.contextID]!![compartmentLabel]
     if (state == null) {
         return property.get(obj)
@@ -70,39 +74,42 @@ private fun <T : Any> setAndPersist(compartmentLabel: String, property: KMutable
     state.parameterValues[property.name] = value
 }
 
-private val logger = KotlinLogging.logger {  }
+private val logger = KotlinLogging.logger { }
 
 
-class GUIAppearance(val baseColor: ColorRGBa = ColorRGBa.GRAY, val barWidth:Int = 200)
+class GUIAppearance(val baseColor: ColorRGBa = ColorRGBa.GRAY, val barWidth: Int = 200)
 
 @Suppress("unused", "UNCHECKED_CAST")
-class GUI(val appearance: GUIAppearance = GUIAppearance(),
-          val defaultStyles: List<StyleSheet> = defaultStyles()) : Extension {
+class GUI(
+    val appearance: GUIAppearance = GUIAppearance(),
+    val defaultStyles: List<StyleSheet> = defaultStyles(),
+    ) : Extension {
     private var onChangeListener: ((name: String, value: Any?) -> Unit)? = null
     override var enabled = true
 
     var listenToProduceAssetsEvent = true
 
     var visible = true
-    set(value) {
-        if (field != value) {
-            field = value
-            if (field) {
-                panel?.body?.classes?.remove(collapsed)
-            } else {
-                panel?.body?.classes?.add(collapsed)
+        set(value) {
+            if (field != value) {
+                field = value
+                if (field) {
+                    panel?.body?.classes?.remove(collapsed)
+                } else {
+                    panel?.body?.classes?.add(collapsed)
+                }
+                sidebarState().hidden = !field
             }
-            sidebarState().hidden = !field
         }
-    }
 
     var compartmentsCollapsedByDefault = true
     var doubleBind = true
     var defaultSaveFolder = "gui-parameters"
     var persistState = true
     var enableSideCanvas = false
+    var showToolbar = true
 
-    var canvas : Canvas? = null
+    var canvas: Canvas? = null
     private var panel: ControlManager? = null
 
     // Randomize button
@@ -148,14 +155,14 @@ class GUI(val appearance: GUIAppearance = GUIAppearance(),
 
             if (it.key == KEY_LEFT_SHIFT) {
                 shiftDown = true
-                randomizeButton!!.classes.add(ElementClass("randomize-strong"))
+                randomizeButton?.classes?.add(ElementClass("randomize-strong"))
             }
         }
 
         program.keyboard.keyUp.listen {
             if (it.key == KEY_LEFT_SHIFT) {
                 shiftDown = false
-                randomizeButton!!.classes.remove(ElementClass("randomize-strong"))
+                randomizeButton?.classes?.remove(ElementClass("randomize-strong"))
             }
         }
 
@@ -223,37 +230,39 @@ class GUI(val appearance: GUIAppearance = GUIAppearance(),
 
                 //<editor-fold desc="1) setup control style">
                 descendant(has type "colorpicker-button") {
-                    this.width = (appearance.barWidth-25).px
+                    this.width = (appearance.barWidth - 25).px
                 }
 
                 descendant(has type "slider") {
-                    this.width = (appearance.barWidth-25).px
+                    this.width = (appearance.barWidth - 25).px
                 }
 
                 descendant(has type "button") {
-                    this.width = (appearance.barWidth-25).px
+                    this.width = (appearance.barWidth - 25).px
                 }
 
                 descendant(has type "textfield") {
-                    this.width = (appearance.barWidth-25).px
+                    this.width = (appearance.barWidth - 25).px
                 }
 
                 descendant(has type "toggle") {
-                    this.width = (appearance.barWidth-25).px
+                    this.width = (appearance.barWidth - 25).px
                 }
 
                 descendant(has type "xy-pad") {
-                    this.width = (appearance.barWidth-25).px
-                    this.height = (appearance.barWidth-25).px
+                    this.width = (appearance.barWidth - 25).px
+                    this.height = (appearance.barWidth - 25).px
                 }
 
-                descendant(has type listOf(
+                descendant(
+                    has type listOf(
                         "sequence-editor",
                         "sliders-vector2",
                         "sliders-vector3",
                         "sliders-vector4"
-                )) {
-                    this.width = (appearance.barWidth-25).px
+                    )
+                ) {
+                    this.width = (appearance.barWidth - 25).px
                     this.height = 100.px
                 }
                 //</editor-fold>
@@ -275,49 +284,58 @@ class GUI(val appearance: GUIAppearance = GUIAppearance(),
                 div("fullscreen") {
                     div("container") {
                         id = "container"
-                        @Suppress("UNUSED_VARIABLE") val header = div("toolbar") {
-                            randomizeButton = button {
-                                label = "Randomize"
-                                clicked {
-                                    randomize(strength = if (shiftDown) .75 else .05)
-                                }
-                            }
-                            button {
-                                label = "Load"
-                                clicked {
-                                    openFileDialog(supportedExtensions = listOf("json"), contextID = "gui.parameters") {
-                                        loadParameters(it)
+                        if (showToolbar) {
+                            @Suppress("UNUSED_VARIABLE")
+                            val header = div("toolbar") {
+                                randomizeButton = button {
+                                    label = "Randomize"
+                                    clicked {
+                                        randomize(strength = if (shiftDown) .75 else .05)
                                     }
                                 }
-                            }
-                            button {
-                                label = "Save"
-                                clicked {
-                                    val defaultPath = getDefaultPathForContext(contextID = "gui.parameters")
+                                button {
+                                    label = "Load"
+                                    clicked {
+                                        openFileDialog(
+                                            supportedExtensions = listOf("json"),
+                                            contextID = "gui.parameters"
+                                        ) {
+                                            loadParameters(it)
+                                        }
+                                    }
+                                }
+                                button {
+                                    label = "Save"
+                                    clicked {
+                                        val defaultPath = getDefaultPathForContext(contextID = "gui.parameters")
 
-                                    if (defaultPath == null) {
-                                        val local = File(".")
-                                        val parameters = File(local, defaultSaveFolder)
-                                        if (parameters.exists() && parameters.isDirectory) {
-                                            setDefaultPathForContext(contextID = "gui.parameters", file = parameters)
-                                        } else {
-                                            if (parameters.mkdirs()) {
+                                        if (defaultPath == null) {
+                                            val local = File(".")
+                                            val parameters = File(local, defaultSaveFolder)
+                                            if (parameters.exists() && parameters.isDirectory) {
                                                 setDefaultPathForContext(
                                                     contextID = "gui.parameters",
                                                     file = parameters
                                                 )
                                             } else {
-                                                logger.warn { "Could not create directory ${parameters.absolutePath}" }
+                                                if (parameters.mkdirs()) {
+                                                    setDefaultPathForContext(
+                                                        contextID = "gui.parameters",
+                                                        file = parameters
+                                                    )
+                                                } else {
+                                                    logger.warn { "Could not create directory ${parameters.absolutePath}" }
+                                                }
                                             }
                                         }
-                                    }
 
-                                    saveFileDialog(
-                                        suggestedFilename = "parameters.json",
-                                        contextID = "gui.parameters",
-                                        supportedExtensions = listOf("json")
-                                    ) {
-                                        saveParameters(it)
+                                        saveFileDialog(
+                                            suggestedFilename = "parameters.json",
+                                            contextID = "gui.parameters",
+                                            supportedExtensions = listOf("json")
+                                        ) {
+                                            saveParameters(it)
+                                        }
                                     }
                                 }
                             }
@@ -426,26 +444,45 @@ class GUI(val appearance: GUIAppearance = GUIAppearance(),
                     range = Range(parameter.intRange!!.first.toDouble(), parameter.intRange!!.last.toDouble())
                     precision = 0
                     events.valueChanged.listen {
-                        setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Int>, obj, it.newValue.toInt())
+                        setAndPersist(
+                            compartment.label,
+                            parameter.property as KMutableProperty1<Any, Int>,
+                            obj,
+                            it.newValue.toInt()
+                        )
                         (parameter.property as KMutableProperty1<Any, Int>).set(obj, value.toInt())
                         onChangeListener?.invoke(parameter.property!!.name, it.newValue)
                     }
-                    getPersistedOrDefault(compartment.label, parameter.property as KMutableProperty1<Any, Int>, obj)?.let {
+                    getPersistedOrDefault(
+                        compartment.label,
+                        parameter.property as KMutableProperty1<Any, Int>,
+                        obj
+                    )?.let {
                         value = it.toDouble()
                         setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Int>, obj, it)
                     }
                 }
             }
+
             ParameterType.Double -> {
                 slider {
                     label = parameter.label
                     range = Range(parameter.doubleRange!!.start, parameter.doubleRange!!.endInclusive)
                     precision = parameter.precision!!
                     events.valueChanged.listen {
-                        setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Double>, obj, it.newValue)
+                        setAndPersist(
+                            compartment.label,
+                            parameter.property as KMutableProperty1<Any, Double>,
+                            obj,
+                            it.newValue
+                        )
                         onChangeListener?.invoke(parameter.property!!.name, it.newValue)
                     }
-                    getPersistedOrDefault(compartment.label, parameter.property as KMutableProperty1<Any, Double>, obj)?.let {
+                    getPersistedOrDefault(
+                        compartment.label,
+                        parameter.property as KMutableProperty1<Any, Double>,
+                        obj
+                    )?.let {
                         value = it
                         /*  this is generally not needed, but when the persisted value is equal to the slider default
                             it will not emit the newly set value */
@@ -453,6 +490,7 @@ class GUI(val appearance: GUIAppearance = GUIAppearance(),
                     }
                 }
             }
+
             ParameterType.Action -> {
                 button {
                     label = parameter.label
@@ -463,48 +501,69 @@ class GUI(val appearance: GUIAppearance = GUIAppearance(),
                     }
                 }
             }
+
             ParameterType.Boolean -> {
                 toggle {
                     label = parameter.label
                     events.valueChanged.listen {
                         value = it.newValue
-                        setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Boolean>, obj, it.newValue)
+                        setAndPersist(
+                            compartment.label,
+                            parameter.property as KMutableProperty1<Any, Boolean>,
+                            obj,
+                            it.newValue
+                        )
                         onChangeListener?.invoke(parameter.property!!.name, it.newValue)
                     }
-                    getPersistedOrDefault(compartment.label, parameter.property as KMutableProperty1<Any, Boolean>, obj)?.let {
+                    getPersistedOrDefault(
+                        compartment.label,
+                        parameter.property as KMutableProperty1<Any, Boolean>,
+                        obj
+                    )?.let {
                         value = it
                         setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Boolean>, obj, it)
                     }
                 }
             }
+
             ParameterType.Text -> {
                 textfield {
                     label = parameter.label
                     events.valueChanged.listen {
-                        setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, String>, obj, it.newValue)
+                        setAndPersist(
+                            compartment.label,
+                            parameter.property as KMutableProperty1<Any, String>,
+                            obj,
+                            it.newValue
+                        )
                         onChangeListener?.invoke(parameter.property!!.name, it.newValue)
                     }
-                    getPersistedOrDefault(compartment.label, parameter.property as KMutableProperty1<Any, String>, obj)?.let {
+                    getPersistedOrDefault(
+                        compartment.label,
+                        parameter.property as KMutableProperty1<Any, String>,
+                        obj
+                    )?.let {
                         value = it
                     }
                 }
             }
+
             ParameterType.Color -> {
                 colorpickerButton {
                     label = parameter.label
                     events.valueChanged.listen {
                         setAndPersist(
-                                compartment.label,
-                                parameter.property as KMutableProperty1<Any, ColorRGBa>,
-                                obj,
-                                it.color
+                            compartment.label,
+                            parameter.property as KMutableProperty1<Any, ColorRGBa>,
+                            obj,
+                            it.color
                         )
                         onChangeListener?.invoke(parameter.property!!.name, it.color)
                     }
                     getPersistedOrDefault(
-                            compartment.label,
-                            parameter.property as KMutableProperty1<Any, ColorRGBa>,
-                            obj
+                        compartment.label,
+                        parameter.property as KMutableProperty1<Any, ColorRGBa>,
+                        obj
                     )?.let {
                         color = it
                     }
@@ -524,10 +583,10 @@ class GUI(val appearance: GUIAppearance = GUIAppearance(),
 
                     events.valueChanged.listen {
                         setAndPersist(
-                                compartment.label,
-                                parameter.property as KMutableProperty1<Any, Vector2>,
-                                obj,
-                                it.newValue
+                            compartment.label,
+                            parameter.property as KMutableProperty1<Any, Vector2>,
+                            obj,
+                            it.newValue
                         )
                         onChangeListener?.invoke(parameter.property!!.name, it.newValue)
                     }
@@ -544,20 +603,25 @@ class GUI(val appearance: GUIAppearance = GUIAppearance(),
 
                     events.valueChanged.listen {
                         setAndPersist(
-                                compartment.label,
-                                parameter.property as KMutableProperty1<Any, MutableList<Double>>,
-                                obj,
-                                it.newValue.toMutableList()
+                            compartment.label,
+                            parameter.property as KMutableProperty1<Any, MutableList<Double>>,
+                            obj,
+                            it.newValue.toMutableList()
                         )
                         onChangeListener?.invoke(parameter.property!!.name, it.newValue)
                     }
                     getPersistedOrDefault(
-                            compartment.label,
-                            parameter.property as KMutableProperty1<Any, MutableList<Double>>,
-                            obj
+                        compartment.label,
+                        parameter.property as KMutableProperty1<Any, MutableList<Double>>,
+                        obj
                     )?.let {
                         value = it
-                        setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, MutableList<Double>>, obj, it)
+                        setAndPersist(
+                            compartment.label,
+                            parameter.property as KMutableProperty1<Any, MutableList<Double>>,
+                            obj,
+                            it
+                        )
                     }
                 }
             }
@@ -570,17 +634,18 @@ class GUI(val appearance: GUIAppearance = GUIAppearance(),
 
                     events.valueChanged.listen {
                         setAndPersist(
-                                compartment.label,
-                                parameter.property as KMutableProperty1<Any, Vector2>,
-                                obj,
-                                it.newValue)
+                            compartment.label,
+                            parameter.property as KMutableProperty1<Any, Vector2>,
+                            obj,
+                            it.newValue
+                        )
 
                         onChangeListener?.invoke(parameter.property!!.name, it.newValue)
                     }
                     getPersistedOrDefault(
-                            compartment.label,
-                            parameter.property as KMutableProperty1<Any, Vector2>,
-                            obj
+                        compartment.label,
+                        parameter.property as KMutableProperty1<Any, Vector2>,
+                        obj
                     )?.let {
                         value = it
                         setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Vector2>, obj, it)
@@ -596,17 +661,18 @@ class GUI(val appearance: GUIAppearance = GUIAppearance(),
 
                     events.valueChanged.listen {
                         setAndPersist(
-                                compartment.label,
-                                parameter.property as KMutableProperty1<Any, Vector3>,
-                                obj,
-                                it.newValue)
+                            compartment.label,
+                            parameter.property as KMutableProperty1<Any, Vector3>,
+                            obj,
+                            it.newValue
+                        )
 
                         onChangeListener?.invoke(parameter.property!!.name, it.newValue)
                     }
                     getPersistedOrDefault(
-                            compartment.label,
-                            parameter.property as KMutableProperty1<Any, Vector3>,
-                            obj
+                        compartment.label,
+                        parameter.property as KMutableProperty1<Any, Vector3>,
+                        obj
                     )?.let {
                         value = it
                         setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Vector3>, obj, it)
@@ -622,23 +688,25 @@ class GUI(val appearance: GUIAppearance = GUIAppearance(),
 
                     events.valueChanged.listen {
                         setAndPersist(
-                                compartment.label,
-                                parameter.property as KMutableProperty1<Any, Vector4>,
-                                obj,
-                                it.newValue)
+                            compartment.label,
+                            parameter.property as KMutableProperty1<Any, Vector4>,
+                            obj,
+                            it.newValue
+                        )
 
                         onChangeListener?.invoke(parameter.property!!.name, it.newValue)
                     }
                     getPersistedOrDefault(
-                            compartment.label,
-                            parameter.property as KMutableProperty1<Any, Vector4>,
-                            obj
+                        compartment.label,
+                        parameter.property as KMutableProperty1<Any, Vector4>,
+                        obj
                     )?.let {
                         value = it
                         setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Vector4>, obj, it)
                     }
                 }
             }
+
             ParameterType.Option -> {
                 dropdownButton {
                     val enumProperty = parameter.property as KMutableProperty1<Any, Enum<*>>
@@ -657,20 +725,25 @@ class GUI(val appearance: GUIAppearance = GUIAppearance(),
                     }
                     events.valueChanged.listen {
                         setAndPersist(
-                                compartment.label,
-                                parameter.property as KMutableProperty1<Any, Enum<*>>,
-                                obj,
-                                it.value.data as? Enum<*> ?: error("no data")
+                            compartment.label,
+                            parameter.property as KMutableProperty1<Any, Enum<*>>,
+                            obj,
+                            it.value.data as? Enum<*> ?: error("no data")
                         )
                     }
                     getPersistedOrDefault(
-                            compartment.label,
-                            parameter.property as KMutableProperty1<Any, Enum<*>>,
-                            obj
+                        compartment.label,
+                        parameter.property as KMutableProperty1<Any, Enum<*>>,
+                        obj
                     )?.let { enum ->
                         (this@dropdownButton).value = items().find { item -> item.data == enum }
-                                ?: error("no matching item found")
-                        setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Enum<*>>, obj, enum)
+                            ?: error("no matching item found")
+                        setAndPersist(
+                            compartment.label,
+                            parameter.property as KMutableProperty1<Any, Enum<*>>,
+                            obj,
+                            enum
+                        )
                     }
                 }
             }
@@ -688,18 +761,19 @@ class GUI(val appearance: GUIAppearance = GUIAppearance(),
         }
     }
 
-    class ParameterValue(var doubleValue: Double? = null,
-                         var intValue: Int? = null,
-                         var booleanValue: Boolean? = null,
-                         var colorValue: ColorRGBa? = null,
-                         var vector2Value: Vector2? = null,
-                         var vector3Value: Vector3? = null,
-                         var vector4Value: Vector4? = null,
-                         var doubleListValue: MutableList<Double>? = null,
-                         var textValue: String? = null,
-                         var optionValue: String? = null,
-                         var minValue: Double? = null,
-                         var maxValue: Double? = null
+    class ParameterValue(
+        var doubleValue: Double? = null,
+        var intValue: Int? = null,
+        var booleanValue: Boolean? = null,
+        var colorValue: ColorRGBa? = null,
+        var vector2Value: Vector2? = null,
+        var vector3Value: Vector3? = null,
+        var vector4Value: Vector4? = null,
+        var doubleListValue: MutableList<Double>? = null,
+        var textValue: String? = null,
+        var optionValue: String? = null,
+        var minValue: Double? = null,
+        var maxValue: Double? = null
     )
 
 
@@ -715,48 +789,56 @@ class GUI(val appearance: GUIAppearance = GUIAppearance(),
 
         return trackedObjects.entries.associate { (lo, b) ->
             Pair(lo.label, b.parameterControls.keys.associate { k ->
-                Pair(k.property?.name ?: k.function?.name
-                ?: error("no name"), when (k.parameterType) {
-                    /* 3) setup serializers */
-                    ParameterType.Double -> ParameterValue(
-                        doubleValue = k.property.qget(lo.obj) as Double,
-                        minValue = k.doubleRange?.start,
-                        maxValue = k.doubleRange?.endInclusive
-                    )
+                Pair(
+                    k.property?.name ?: k.function?.name
+                    ?: error("no name"), when (k.parameterType) {
+                        /* 3) setup serializers */
+                        ParameterType.Double -> ParameterValue(
+                            doubleValue = k.property.qget(lo.obj) as Double,
+                            minValue = k.doubleRange?.start,
+                            maxValue = k.doubleRange?.endInclusive
+                        )
 
-                    ParameterType.Int -> ParameterValue(
-                        intValue = k.property.qget(lo.obj) as Int,
-                        minValue = k.intRange?.start?.toDouble(),
-                        maxValue = k.intRange?.endInclusive?.toDouble()
-                    )
-                    ParameterType.Action -> ParameterValue()
-                    ParameterType.Color -> ParameterValue(colorValue = k.property.qget(lo.obj) as ColorRGBa)
-                    ParameterType.Text -> ParameterValue(textValue = k.property.qget(lo.obj) as String)
-                    ParameterType.Boolean -> ParameterValue(booleanValue = k.property.qget(lo.obj) as Boolean)
-                    ParameterType.XY -> ParameterValue(vector2Value = k.property.qget(lo.obj) as Vector2)
-                    ParameterType.DoubleList -> ParameterValue(doubleListValue = k.property.qget(
-                        lo.obj) as MutableList<Double>,
-                        minValue = k.doubleRange?.start,
-                        maxValue = k.doubleRange?.endInclusive
-                    )
+                        ParameterType.Int -> ParameterValue(
+                            intValue = k.property.qget(lo.obj) as Int,
+                            minValue = k.intRange?.start?.toDouble(),
+                            maxValue = k.intRange?.endInclusive?.toDouble()
+                        )
 
-                    ParameterType.Vector2 -> ParameterValue(
-                        vector2Value = k.property.qget(lo.obj) as Vector2,
-                        minValue = k.doubleRange?.start,
-                        maxValue = k.doubleRange?.endInclusive
-                    )
-                    ParameterType.Vector3 -> ParameterValue(
-                        vector3Value = k.property.qget(lo.obj) as Vector3,
-                        minValue = k.doubleRange?.start,
-                        maxValue = k.doubleRange?.endInclusive
-                    )
-                    ParameterType.Vector4 -> ParameterValue(
-                        vector4Value = k.property.qget(lo.obj) as Vector4,
-                        minValue = k.doubleRange?.start,
-                        maxValue = k.doubleRange?.endInclusive
-                    )
-                    ParameterType.Option -> ParameterValue(optionValue = (k.property.qget(lo.obj) as Enum<*>).name)
-                })
+                        ParameterType.Action -> ParameterValue()
+                        ParameterType.Color -> ParameterValue(colorValue = k.property.qget(lo.obj) as ColorRGBa)
+                        ParameterType.Text -> ParameterValue(textValue = k.property.qget(lo.obj) as String)
+                        ParameterType.Boolean -> ParameterValue(booleanValue = k.property.qget(lo.obj) as Boolean)
+                        ParameterType.XY -> ParameterValue(vector2Value = k.property.qget(lo.obj) as Vector2)
+                        ParameterType.DoubleList -> ParameterValue(
+                            doubleListValue = k.property.qget(
+                                lo.obj
+                            ) as MutableList<Double>,
+                            minValue = k.doubleRange?.start,
+                            maxValue = k.doubleRange?.endInclusive
+                        )
+
+                        ParameterType.Vector2 -> ParameterValue(
+                            vector2Value = k.property.qget(lo.obj) as Vector2,
+                            minValue = k.doubleRange?.start,
+                            maxValue = k.doubleRange?.endInclusive
+                        )
+
+                        ParameterType.Vector3 -> ParameterValue(
+                            vector3Value = k.property.qget(lo.obj) as Vector3,
+                            minValue = k.doubleRange?.start,
+                            maxValue = k.doubleRange?.endInclusive
+                        )
+
+                        ParameterType.Vector4 -> ParameterValue(
+                            vector4Value = k.property.qget(lo.obj) as Vector4,
+                            minValue = k.doubleRange?.start,
+                            maxValue = k.doubleRange?.endInclusive
+                        )
+
+                        ParameterType.Option -> ParameterValue(optionValue = (k.property.qget(lo.obj) as Enum<*>).name)
+                    }
+                )
             })
         }
     }
@@ -773,14 +855,14 @@ class GUI(val appearance: GUIAppearance = GUIAppearance(),
      */
     fun fromObject(labeledValues: Map<String, Map<String, ParameterValue>>) {
         fun <T> KMutableProperty1<out Any, Any?>?.qset(obj: Any, value: T) =
-                (this as KMutableProperty1<Any, T>).set(obj, value)
+            (this as KMutableProperty1<Any, T>).set(obj, value)
 
         fun KMutableProperty1<out Any, Any?>?.enumSet(obj: Any, value: String) {
             val v = (this as KMutableProperty1<Any, Enum<*>>).get(obj)
 
             @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN", "UsePropertyAccessSyntax")
             val enumValue = (v as java.lang.Enum<*>).getDeclaringClass().getEnumConstants().find { it.name == value }
-                    ?: error("cannot map value $value to enum")
+                ?: error("cannot map value $value to enum")
             (this as KMutableProperty1<Any, Enum<*>>).set(obj, enumValue)
         }
 
@@ -794,36 +876,47 @@ class GUI(val appearance: GUIAppearance = GUIAppearance(),
                             ParameterType.Double -> parameterValue.doubleValue?.let {
                                 parameter.property.qset(lo.obj, it)
                             }
+
                             ParameterType.Int -> parameterValue.intValue?.let {
                                 parameter.property.qset(lo.obj, it)
                             }
+
                             ParameterType.Text -> parameterValue.textValue?.let {
                                 parameter.property.qset(lo.obj, it)
                             }
+
                             ParameterType.Color -> parameterValue.colorValue?.let {
                                 parameter.property.qset(lo.obj, it)
                             }
+
                             ParameterType.XY -> parameterValue.vector2Value?.let {
                                 parameter.property.qset(lo.obj, it)
                             }
+
                             ParameterType.DoubleList -> parameterValue.doubleListValue?.let {
                                 parameter.property.qset(lo.obj, it)
                             }
+
                             ParameterType.Boolean -> parameterValue.booleanValue?.let {
                                 parameter.property.qset(lo.obj, it)
                             }
+
                             ParameterType.Vector2 -> parameterValue.vector2Value?.let {
                                 parameter.property.qset(lo.obj, it)
                             }
+
                             ParameterType.Vector3 -> parameterValue.vector3Value?.let {
                                 parameter.property.qset(lo.obj, it)
                             }
+
                             ParameterType.Vector4 -> parameterValue.vector4Value?.let {
                                 parameter.property.qset(lo.obj, it)
                             }
+
                             ParameterType.Option -> parameterValue.optionValue?.let {
                                 parameter.property.enumSet(lo.obj, it)
                             }
+
                             ParameterType.Action -> {
                                 // intentionally do nothing
                             }
@@ -847,39 +940,62 @@ class GUI(val appearance: GUIAppearance = GUIAppearance(),
         when (parameter.parameterType) {
             /* 5) Update control from property value */
             ParameterType.Double -> {
-                (control as Slider).value = (parameter.property as KMutableProperty1<Any, Double>).get(labeledObject.obj)
+                (control as Slider).value =
+                    (parameter.property as KMutableProperty1<Any, Double>).get(labeledObject.obj)
             }
+
             ParameterType.Int -> {
-                (control as Slider).value = (parameter.property as KMutableProperty1<Any, Int>).get(labeledObject.obj).toDouble()
+                (control as Slider).value =
+                    (parameter.property as KMutableProperty1<Any, Int>).get(labeledObject.obj).toDouble()
             }
+
             ParameterType.Text -> {
-                (control as Textfield).value = (parameter.property as KMutableProperty1<Any, String>).get(labeledObject.obj)
+                (control as Textfield).value =
+                    (parameter.property as KMutableProperty1<Any, String>).get(labeledObject.obj)
             }
+
             ParameterType.Color -> {
-                (control as ColorpickerButton).color = (parameter.property as KMutableProperty1<Any, ColorRGBa>).get(labeledObject.obj)
+                (control as ColorpickerButton).color =
+                    (parameter.property as KMutableProperty1<Any, ColorRGBa>).get(labeledObject.obj)
             }
+
             ParameterType.XY -> {
-                (control as XYPad).value = (parameter.property as KMutableProperty1<Any, Vector2>).get(labeledObject.obj)
+                (control as XYPad).value =
+                    (parameter.property as KMutableProperty1<Any, Vector2>).get(labeledObject.obj)
             }
+
             ParameterType.DoubleList -> {
-                (control as SequenceEditor).value = (parameter.property as KMutableProperty1<Any, MutableList<Double>>).get(labeledObject.obj)
+                (control as SequenceEditor).value =
+                    (parameter.property as KMutableProperty1<Any, MutableList<Double>>).get(labeledObject.obj)
             }
+
             ParameterType.Boolean -> {
-                (control as Toggle).value = (parameter.property as KMutableProperty1<Any, Boolean>).get(labeledObject.obj)
+                (control as Toggle).value =
+                    (parameter.property as KMutableProperty1<Any, Boolean>).get(labeledObject.obj)
             }
+
             ParameterType.Vector2 -> {
-                (control as SlidersVector2).value = (parameter.property as KMutableProperty1<Any, Vector2>).get(labeledObject.obj)
+                (control as SlidersVector2).value =
+                    (parameter.property as KMutableProperty1<Any, Vector2>).get(labeledObject.obj)
             }
+
             ParameterType.Vector3 -> {
-                (control as SlidersVector3).value = (parameter.property as KMutableProperty1<Any, Vector3>).get(labeledObject.obj)
+                (control as SlidersVector3).value =
+                    (parameter.property as KMutableProperty1<Any, Vector3>).get(labeledObject.obj)
             }
+
             ParameterType.Vector4 -> {
-                (control as SlidersVector4).value = (parameter.property as KMutableProperty1<Any, Vector4>).get(labeledObject.obj)
+                (control as SlidersVector4).value =
+                    (parameter.property as KMutableProperty1<Any, Vector4>).get(labeledObject.obj)
             }
+
             ParameterType.Option -> {
                 val ddb = control as DropdownButton
-                ddb.value = ddb.items().find { item -> item.data == (parameter.property as KMutableProperty1<Any, Enum<*>>).get(labeledObject.obj) } ?: error("could not find item")
+                ddb.value = ddb.items().find { item ->
+                    item.data == (parameter.property as KMutableProperty1<Any, Enum<*>>).get(labeledObject.obj)
+                } ?: error("could not find item")
             }
+
             ParameterType.Action -> {
                 // intentionally do nothing
             }
@@ -900,6 +1016,7 @@ class GUI(val appearance: GUIAppearance = GUIAppearance(),
                         val newValue = mix(currentValue, randomValue, strength)
                         (parameter.property as KMutableProperty1<Any, Double>).set(labeledObject.obj, newValue)
                     }
+
                     ParameterType.Int -> {
                         val min = parameter.intRange!!.first
                         val max = parameter.intRange!!.last
@@ -908,48 +1025,61 @@ class GUI(val appearance: GUIAppearance = GUIAppearance(),
                         val newValue = mix(currentValue.toDouble(), randomValue, strength).roundToInt()
                         (parameter.property as KMutableProperty1<Any, Int>).set(labeledObject.obj, newValue)
                     }
+
                     ParameterType.Boolean -> {
                         //I am not sure about randomizing boolean values here
                         //(parameter.property as KMutableProperty1<Any, Boolean>).set(labeledObject.obj, (Math.random() < 0.5))
                     }
+
                     ParameterType.Color -> {
-                        val currentValue = (parameter.property as KMutableProperty1<Any, ColorRGBa>).get(labeledObject.obj)
-                        val randomValue = ColorRGBa.fromVector(Random.vector3(0.0, 1.0), currentValue.alpha, currentValue.linearity)
+                        val currentValue =
+                            (parameter.property as KMutableProperty1<Any, ColorRGBa>).get(labeledObject.obj)
+                        val randomValue =
+                            ColorRGBa.fromVector(Random.vector3(0.0, 1.0), currentValue.alpha, currentValue.linearity)
                         val newValue = currentValue.mix(randomValue, strength)
                         (parameter.property as KMutableProperty1<Any, ColorRGBa>).set(labeledObject.obj, newValue)
                     }
+
                     ParameterType.Vector2 -> {
                         val min = parameter.doubleRange!!.start
                         val max = parameter.doubleRange!!.endInclusive
-                        val currentValue = (parameter.property as KMutableProperty1<Any, Vector2>).get(labeledObject.obj)
+                        val currentValue =
+                            (parameter.property as KMutableProperty1<Any, Vector2>).get(labeledObject.obj)
                         val randomValue = Random.vector2(min, max)
                         val newValue = currentValue.mix(randomValue, strength)
                         (parameter.property as KMutableProperty1<Any, Vector2>).set(labeledObject.obj, newValue)
                     }
+
                     ParameterType.XY -> {
                         val min = parameter.vectorRange!!.first
                         val max = parameter.vectorRange!!.second
-                        val currentValue = (parameter.property as KMutableProperty1<Any, Vector2>).get(labeledObject.obj)
+                        val currentValue =
+                            (parameter.property as KMutableProperty1<Any, Vector2>).get(labeledObject.obj)
                         val randomValue = Vector2.uniform(min, max)
                         val newValue = currentValue.mix(randomValue, strength)
                         (parameter.property as KMutableProperty1<Any, Vector2>).set(labeledObject.obj, newValue)
                     }
+
                     ParameterType.Vector3 -> {
                         val min = parameter.doubleRange!!.start
                         val max = parameter.doubleRange!!.endInclusive
-                        val currentValue = (parameter.property as KMutableProperty1<Any, Vector3>).get(labeledObject.obj)
+                        val currentValue =
+                            (parameter.property as KMutableProperty1<Any, Vector3>).get(labeledObject.obj)
                         val randomValue = Random.vector3(min, max)
                         val newValue = currentValue.mix(randomValue, strength)
                         (parameter.property as KMutableProperty1<Any, Vector3>).set(labeledObject.obj, newValue)
                     }
+
                     ParameterType.Vector4 -> {
                         val min = parameter.doubleRange!!.start
                         val max = parameter.doubleRange!!.endInclusive
-                        val currentValue = (parameter.property as KMutableProperty1<Any, Vector4>).get(labeledObject.obj)
+                        val currentValue =
+                            (parameter.property as KMutableProperty1<Any, Vector4>).get(labeledObject.obj)
                         val randomValue = Random.vector4(min, max)
                         val newValue = currentValue.mix(randomValue, strength)
                         (parameter.property as KMutableProperty1<Any, Vector4>).set(labeledObject.obj, newValue)
                     }
+
                     else -> {
                         // intentionally do nothing
                     }
