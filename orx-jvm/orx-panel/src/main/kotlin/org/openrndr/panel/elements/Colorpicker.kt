@@ -1,9 +1,6 @@
 package org.openrndr.panel.elements
 
-import org.openrndr.KEY_BACKSPACE
-import org.openrndr.KEY_ENTER
-import org.openrndr.KEY_ESCAPE
-import org.openrndr.MouseEvent
+import org.openrndr.*
 import org.openrndr.color.ColorHSVa
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ColorBuffer
@@ -89,6 +86,16 @@ class Colorpicker : Element {
         }
 
         keyboard.pressed.listen {
+
+            if (KeyModifier.CTRL in it.modifiers || KeyModifier.SUPER in it.modifiers) {
+                if (it.name == "v") {
+                    (root() as Body).controlManager.program.clipboard.contents?.let {
+                        keyboardInput += it
+                        draw.dirty = true
+                    }
+                    it.cancelPropagation()
+                }
+            }
             if (it.key == KEY_BACKSPACE) {
                 if (!keyboardInput.isEmpty()) {
                     keyboardInput = keyboardInput.substring(0, keyboardInput.length - 1)
@@ -106,7 +113,8 @@ class Colorpicker : Element {
 
 
             if (it.key == KEY_ENTER) {
-                val number = if (keyboardInput.length == 6) keyboardInput.toIntOrNull(16) else null
+                val cleanKeyboardInput = keyboardInput.replace(Regex("^#"), "")
+                val number = if (cleanKeyboardInput.length == 6) cleanKeyboardInput.toIntOrNull(16) else null
 
                 number?.let {
                     val r = (number shr 16) and 0xff
@@ -117,7 +125,6 @@ class Colorpicker : Element {
                     events.colorChanged.trigger(ColorChangedEvent(this, oldColor, realColor))
                     keyboardInput = ""
                     draw.dirty = true
-
                 }
                 it.cancelPropagation()
             }
