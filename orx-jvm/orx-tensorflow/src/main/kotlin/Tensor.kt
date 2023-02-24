@@ -42,8 +42,8 @@ fun TFloat32.copyTo(colorBuffer: ColorBuffer) {
 
     val components = when {
         s.numDimensions() == 2 -> 1
-        s.numDimensions() == 3 -> s.size(2).toInt()
-        s.numDimensions() == 4 -> s.size(3).toInt()
+        s.numDimensions() == 3 -> s.get(2).toInt()
+        s.numDimensions() == 4 -> s.get(3).toInt()
         else -> error("can't copy to colorbuffer from ${s.numDimensions()}D tensor")
     }
 
@@ -103,7 +103,7 @@ fun TFloat32.toFloatArray2D(): FloatArray2D {
     require(shape.numDimensions() == 2) {
         "tensor has ${shape.numDimensions()} dimensions, need 2"
     }
-    val targetArray = floatArray2D(shape.size(0).toInt(), shape.size(1).toInt())
+    val targetArray = floatArray2D(shape.get(0).toInt(), shape.get(1).toInt())
     StdArrays.copyFrom(this, targetArray)
     return targetArray
 }
@@ -113,7 +113,7 @@ fun TFloat32.toFloatArray3D(): FloatArray3D {
     require(shape.numDimensions() == 3) {
         "tensor has ${shape.numDimensions()} dimensions, need 3"
     }
-    val targetArray = floatArray3D(shape.size(0).toInt(), shape.size(1).toInt(), shape.size(2).toInt())
+    val targetArray = floatArray3D(shape.get(0).toInt(), shape.get(1).toInt(), shape.get(2).toInt())
     StdArrays.copyFrom(this, targetArray)
     return targetArray
 }
@@ -123,7 +123,7 @@ fun TFloat32.toFloatArray4D(): FloatArray4D {
     require(shape.numDimensions() == 4) {
         "tensor has ${shape.numDimensions()} dimensions, need 4"
     }
-    val targetArray = floatArray4D(shape.size(0).toInt(), shape.size(1).toInt(), shape.size(2).toInt(), shape.size(3).toInt())
+    val targetArray = floatArray4D(shape.get(0).toInt(), shape.get(1).toInt(), shape.get(2).toInt(), shape.get(3).toInt())
     StdArrays.copyFrom(this, targetArray)
     return targetArray
 }
@@ -139,9 +139,9 @@ fun TFloat32.toColorBuffer(target: ColorBuffer? = null): ColorBuffer {
     val s = shape()
     require(s.numDimensions() == 2 || s.numDimensions() == 3)
 
-    val width = (if (s.numDimensions() == 3) s.size(1) else s.size(0)).toInt()
-    val height = (if (s.numDimensions() == 3) s.size(2) else s.size(1)).toInt()
-    val components = if (s.numDimensions() == 3) s.size(0).toInt() else 1
+    val width = (if (s.numDimensions() == 3) s.get(1) else s.get(0)).toInt()
+    val height = (if (s.numDimensions() == 3) s.get(2) else s.get(1)).toInt()
+    val components = if (s.numDimensions() == 3) s.get(0).toInt() else 1
 
     val format = when (components) {
         4 -> ColorFormat.RGBa
@@ -168,9 +168,9 @@ fun TUint8.toColorBuffer(target: ColorBuffer? = null): ColorBuffer {
     val s = shape()
     require(s.numDimensions() == 2 || s.numDimensions() == 3)
 
-    val width = (if (s.numDimensions() == 3) s.size(1) else s.size(0)).toInt()
-    val height = (if (s.numDimensions() == 3) s.size(2) else s.size(1)).toInt()
-    val components = if (s.numDimensions() == 3) s.size(0).toInt() else 1
+    val width = (if (s.numDimensions() == 3) s.get(1) else s.get(0)).toInt()
+    val height = (if (s.numDimensions() == 3) s.get(2) else s.get(1)).toInt()
+    val components = if (s.numDimensions() == 3) s.get(0).toInt() else 1
 
     val format = when (components) {
         4 -> ColorFormat.RGBa
