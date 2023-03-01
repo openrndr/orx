@@ -730,6 +730,8 @@ class GUI(
                             obj,
                             it.value.data as? Enum<*> ?: error("no data")
                         )
+
+                        onChangeListener?.invoke(parameter.property!!.name, it.value.data as? Enum<*> ?: error("no data"))
                     }
                     getPersistedOrDefault(
                         compartment.label,

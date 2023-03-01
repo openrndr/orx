@@ -25,6 +25,9 @@ fun main() = application {
 
         gui.add(settings)
         extend(gui)
+        gui.onChange { name, value ->
+            println("$name: $value")
+        }
         extend {
             when (settings.option) {
                 BackgroundColors.Pink -> drawer.clear(ColorRGBa.PINK)
