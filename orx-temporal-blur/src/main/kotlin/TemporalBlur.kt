@@ -240,6 +240,12 @@ class TemporalBlur : Extension {
         image?.unbind()
         image!!.colorBuffer(0).copyTo(imageResolved!!.colorBuffer(0))
 
+        if (linearizeInput) {
+            imageResolved?.let {
+                linearize.apply(it.colorBuffer(0), it.colorBuffer(0))
+            }
+        }
+
         val activeColorMatrix = colorMatrix(0.0)
         if (activeColorMatrix !== Matrix55.IDENTITY) {
             drawer.isolatedWithTarget(imageResolved!!) {
