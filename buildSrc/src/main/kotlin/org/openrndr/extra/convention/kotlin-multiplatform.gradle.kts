@@ -4,7 +4,6 @@ import CollectScreenshotsTask
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.net.URI
 
 val libs = the<LibrariesForLibs>()
 
@@ -16,8 +15,8 @@ plugins {
 }
 
 repositories {
-    mavenCentral()
     mavenLocal()
+    mavenCentral()
 }
 
 group = "org.openrndr.extra"
@@ -31,7 +30,8 @@ kotlin {
     jvm {
         jvmToolchain(libs.versions.jvmTarget.get().toInt())
         compilations {
-                        val main by getting
+            val main by getting
+
             @Suppress("UNUSED_VARIABLE")
             val demo by creating {
                 associateWith(main)
@@ -39,7 +39,7 @@ kotlin {
                     inputDir.set(output.classesDirs.singleFile)
                     runtimeDependencies.set(runtimeDependencyFiles)
                     outputDir.set(project.file(project.projectDir.toString() + "/images"))
-                    dependsOn(compileKotlinTask)
+                    dependsOn(compileTaskProvider)
                 }
             }
         }

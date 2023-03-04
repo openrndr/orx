@@ -206,7 +206,7 @@ configure(allprojects.findAll { !doNotPublish.contains(it.name) && !multiplatfor
                 from components.java
                 versionMapping {
                     allVariants {
-                        fromResolutionOf("default")
+                        fromResolutionResult()
                     }
                 }
                 groupId = "org.openrndr.extra"

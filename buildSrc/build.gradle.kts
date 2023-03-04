@@ -5,18 +5,8 @@ plugins {
 val preload: SourceSet by sourceSets.creating
 
 repositories {
-    mavenCentral()
     mavenLocal()
-}
-
-val openrndrVersion: String =
-    (extra.properties["OPENRNDR.version"] as String? ?: System.getenv("OPENRNDR_VERSION"))?.removePrefix("v")
-        ?: "0.5.1-SNAPSHOT"
-
-configurations.all {
-    resolutionStrategy.eachDependency {
-        if (requested.group == "org.openrndr") useVersion(openrndrVersion)
-    }
+    mavenCentral()
 }
 
 dependencies {
