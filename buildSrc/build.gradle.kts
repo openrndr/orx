@@ -5,8 +5,8 @@ plugins {
 val preload: SourceSet by sourceSets.creating
 
 repositories {
-    mavenLocal()
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {

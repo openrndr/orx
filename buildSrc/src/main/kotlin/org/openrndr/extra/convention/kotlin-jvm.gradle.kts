@@ -15,8 +15,8 @@ plugins {
 }
 
 repositories {
-    mavenLocal()
     mavenCentral()
+    mavenLocal()
 }
 
 group = "org.openrndr.extra"
