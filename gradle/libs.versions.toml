@@ -3,7 +3,7 @@ kotlinApi = "1.8"
 kotlinLanguage = "1.8"
 kotlin = "1.8.10"
 jvmTarget = "11"
-openrndr = { require = "[0.4.3-alpha2, 1.0.0)" }
+openrndr = { require = "[0.4.3, 1.0.0)" }
 kotlinxCoroutines = "1.6.4"
 kotlinLogging = "3.0.0"
 kotlinxSerialization = "1.5.0-RC"
