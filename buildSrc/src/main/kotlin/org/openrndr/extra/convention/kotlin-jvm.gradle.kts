@@ -3,7 +3,6 @@ package org.openrndr.extra.convention
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.net.URI
 
 val libs = the<LibrariesForLibs>()
 
@@ -22,10 +21,10 @@ repositories {
 
 group = "org.openrndr.extra"
 
-val main by sourceSets.getting
+val main: SourceSet by sourceSets.getting
 
 @Suppress("UNUSED_VARIABLE")
-val demo by sourceSets.creating
+val demo: SourceSet by sourceSets.creating
 
 dependencies {
     implementation(libs.kotlin.stdlib)

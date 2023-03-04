@@ -9,16 +9,6 @@ repositories {
     mavenLocal()
 }
 
-val openrndrVersion: String =
-    (extra.properties["OPENRNDR.version"] as String? ?: System.getenv("OPENRNDR_VERSION"))?.removePrefix("v")
-        ?: "0.5.1-SNAPSHOT"
-
-configurations.all {
-    resolutionStrategy.eachDependency {
-        if (requested.group == "org.openrndr") useVersion(openrndrVersion)
-    }
-}
-
 dependencies {
     implementation(libs.kotlin.gradle.plugin)
     implementation(libs.dokka.gradle.plugin)

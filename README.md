@@ -1,8 +1,7 @@
-# ORX (OPENRNDR EXTRA) 0.4 
+# ORX (OPENRNDR EXTRA)
 
-Note that this is a yet unreleased version of ORX. The prior released version of ORX can be found in the [ORX 0.3 branch](https://github.com/openrndr/orx/tree/orx-0.3).  
-
-A growing library of assorted data structures, algorithms and utilities.
+A growing library of assorted data structures, algorithms and utilities to
+complement [OPENRNDR](https://github.com/openrndr/openrndr).
 
 <!-- __orxListBegin__ -->
 
@@ -70,10 +69,30 @@ A growing library of assorted data structures, algorithms and utilities.
 
 # Developer notes
 
-## Create and use local builds of the library
+## Publish and use local builds of the library in your applications
 
-First build and publish OPENRNDR 0.4 SNAPSHOT (using `-Prelease.version=0.5.1-SNAPSHOT`) from the `openrndr-0.4` branch.  
+First, build and publish [OPENRNDR](https://github.com/openrndr/openrndr) to the local maven repository:
 
-run `./gradlew publishToMavenLocal -Prelease.version=0.5.1-SNAPSHOT` (or import in IntelliJ IDEA and edit the run configuration)
+Run (or import in IntelliJ IDEA and edit the run configuration).
+```sh
+# In openrndr repository
+./gradlew publishToMavenLocal snapshot
+``` 
 
-In an [`openrndr-template`](https://youtu.be/saAzoREfa90?t=787) based project set `orxUseSnapshot = true` in order to use the snapshot build.
+This command will build and publish a snapshot of the next version of the library. For example, if the current latest
+release is 0.4.2, then it will create a release named "0.4.3-SNAPSHOT" and publish it to your local maven repository.
+The exact version will be shown in the console output during the build process.
+
+Now you can run the same command again but for this repository. 
+
+```sh
+# In orx repository
+./gradlew publishToMavenLocal snapshot
+``` 
+
+It will automatically use the locally published snapshot of OPENRNDR for building ORX and will publish ORX to your local
+maven repository with the same logic as before.
+
+Once that's done, you can use the local build of ORX in
+your [openrndr-template](https://github.com/openrndr/openrndr-template) by specifying the version you published. In this
+case, it would be "0.4.3-SNAPSHOT".
