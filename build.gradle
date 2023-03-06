@@ -281,3 +281,8 @@ subprojects {
         description = "Displays all dependencies, including subprojects."
     }
 }
+
+gradle.buildFinished {
+    println("\n")
+    println("orx = \"${version}\"")
+}
