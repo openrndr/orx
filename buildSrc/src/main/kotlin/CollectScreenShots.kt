@@ -20,7 +20,7 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
     @get:SkipWhenEmpty
     abstract val inputDir: DirectoryProperty
 
-    @get:Input
+    @get:InputFiles
     abstract val runtimeDependencies: Property<FileCollection>
 
     @get:OutputDirectory
