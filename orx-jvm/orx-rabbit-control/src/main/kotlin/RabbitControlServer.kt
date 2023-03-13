@@ -101,7 +101,7 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
         val socket = Socket()
         socket.connect(InetSocketAddress("google.com", 80))
         val ip = socket.localAddress.toString().replace("/", "")
-        val clientUrlWithHash = "http://$ip:$staticFilesPort/rabbit-client/index.html/#$ip:$rcpPort"
+        val clientUrlWithHash = "http://$ip:$staticFilesPort/rabbit-client/index.html#$ip:$rcpPort"
         qrCodeImage = getQRCodeImage(barcodeText = clientUrlWithHash)
         println("RabbitControl Web Client: $clientUrlWithHash")
 
