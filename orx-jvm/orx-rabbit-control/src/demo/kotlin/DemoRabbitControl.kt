@@ -51,6 +51,7 @@ fun main() = application {
 
             @ActionParameter("Action test")
             fun clicked() {
+                d += 10.0
                 println("Clicked from RabbitControl")
             }
         }
