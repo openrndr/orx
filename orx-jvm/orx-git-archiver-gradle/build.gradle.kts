@@ -48,9 +48,9 @@ publishing {
                 }
             }
         }
+        tasks.findByName("publishPluginMavenPublicationToSonatypeRepository")!!.dependsOn("signMavenPublication")
+        tasks.findByName("publishPluginMavenPublicationToSonatypeRepository")!!.dependsOn("signPluginMavenPublication")
+        tasks.findByName("publishMavenPublicationToSonatypeRepository")!!.dependsOn("signPluginMavenPublication")
+        tasks.findByName("publishMavenPublicationToSonatypeRepository")!!.dependsOn("signMavenPublication")
     }
 }
-
-tasks.findByName("publishPluginMavenPublicationToSonatypeRepository")?.dependsOn("signMavenPublication")
-tasks.findByName("publishPluginMavenPublicationToSonatypeRepository")?.dependsOn("signPluginMavenPublication")
-tasks.findByName("publishMavenPublicationToSonatypeRepository")?.dependsOn("signPluginMavenPublication")
