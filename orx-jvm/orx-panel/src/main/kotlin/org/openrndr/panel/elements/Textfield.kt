@@ -67,6 +67,7 @@ class Textfield : Element(ElementType("textfield")), DisposableElement {
             val oldValue = value
             value += it.character
             events.valueChanged.trigger(ValueChangedEvent(this, oldValue, value))
+            requestRedraw()
             it.cancelPropagation()
         }
 
