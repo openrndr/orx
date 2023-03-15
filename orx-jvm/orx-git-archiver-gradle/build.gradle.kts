@@ -50,3 +50,4 @@ publishing {
         }
     }
 }
+tasks.findByName("publishMavenPublicationToSonatypeRepository")?.dependsOn("signPluginMavenPublication")
