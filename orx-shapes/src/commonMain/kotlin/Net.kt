@@ -23,16 +23,20 @@ class Net(val point0: Vector2, val point1: Vector2, val circle: Circle) : Linear
      */
     val contour: ShapeContour
         get() {
-            val tangents0 = circle.tangents(point0)
-            val tangents1 = circle.tangents(point1)
-            var k = LineSegment(point0, tangents0.first).contour
-            run {
-                val th0 = Polar.fromVector(tangents0.first - circle.center).theta
-                var th1 = Polar.fromVector(tangents1.second - circle.center).theta
-                if (th1 < th0) th1 += 360.0
-                k += Arc(circle.center, circle.radius, th0, th1).contour
+            return try {
+                val tangents0 = circle.tangents(point0)
+                val tangents1 = circle.tangents(point1)
+                var k = LineSegment(point0, tangents0.first).contour
+                run {
+                    val th0 = Polar.fromVector(tangents0.first - circle.center).theta
+                    var th1 = Polar.fromVector(tangents1.second - circle.center).theta
+                    if (th1 < th0) th1 += 360.0
+                    k += Arc(circle.center, circle.radius, th0, th1).contour
+                }
+                k += LineSegment(tangents1.second, point1).contour
+                k
+            } catch (e: Exception) {
+                ShapeContour.EMPTY
             }
-            k += LineSegment(tangents1.second, point1).contour
-            return k
         }
 }
