@@ -16,6 +16,11 @@ class Net(val point0: Vector2, val point1: Vector2, val circle: Circle) : Linear
 
     override fun minus(right: Net) = Net(point0 - right.point0, point1 - right.point1, circle - right.circle)
 
+    /**
+     * Creates a [ShapeContour] with three segments: two [LineSegment] and one [Arc]. Those three
+     * components form a contour that resemble a string starting at [point0], wrapping around the [circle]
+     * and ending at [point1]. If any of the points is inside the circle an empty contour is returned.
+     */
     val contour: ShapeContour
         get() {
             val tangents0 = circle.tangents(point0)
