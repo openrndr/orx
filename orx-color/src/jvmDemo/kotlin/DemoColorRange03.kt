@@ -1,12 +1,14 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.loadFont
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.color.spaces.*
 import org.openrndr.extra.color.palettes.rangeTo
 
 fun main() {
     application {
+        configure {
+            height = 30 + 50 * 11 // row count
+        }
         program {
             extend {
                 drawer.clear(ColorRGBa.WHITE)
