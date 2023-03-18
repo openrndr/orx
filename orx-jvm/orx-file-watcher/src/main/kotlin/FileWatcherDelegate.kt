@@ -25,7 +25,7 @@ class FileWatcherDelegate<T>(
         }
     }
 
-    operator fun getValue(any: Any, property: KProperty<*>): T {
+    operator fun getValue(any: Any?, property: KProperty<*>): T {
         return value
     }
 }

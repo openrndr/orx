@@ -16,7 +16,7 @@ class PropertyWatcherDelegate<V, R>(
 ) {
     private var watchValue: V? = null
     private var value: R? = null
-    operator fun getValue(any: Any, property: KProperty<*>): R {
+    operator fun getValue(any: Any?, property: KProperty<*>): R {
         val ref = this.property.get()
         if (watchValue != ref) {
             watchValue = ref
@@ -27,6 +27,7 @@ class PropertyWatcherDelegate<V, R>(
         }
         return value ?: error("no value?")
     }
+
 }
 
 /**
@@ -42,7 +43,7 @@ class PropertyWatcherDelegate2<V0, V1, R>(
     private var watchValue0: V0? = null
     private var watchValue1: V1? = null
     private var value: R? = null
-    operator fun getValue(any: Any, property: KProperty<*>): R {
+    operator fun getValue(any: Any?, property: KProperty<*>): R {
         val ref0 = toWatch0.get()
         val ref1 = toWatch1.get()
         if (watchValue0 != ref0 || watchValue1 != ref1) {
@@ -73,7 +74,7 @@ class PropertyWatcherDelegate3<V0, V1, V2, R>(
     private var watchValue1: V1? = null
     private var watchValue2: V2? = null
     private var value: R? = null
-    operator fun getValue(any: Any, property: KProperty<*>): R {
+    operator fun getValue(any: Any?, property: KProperty<*>): R {
         val ref0 = toWatch0.get()
         val ref1 = toWatch1.get()
         val ref2 = toWatch2.get()
