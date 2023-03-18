@@ -12,7 +12,7 @@ fun main() {
 
             val settings = @Description("Settings") object {
                 @PathParameter("image", extensions = ["jpg", "png"], order = 10)
-                var imagePath = "demo-data/image-001.png"
+                var imagePath = "demo-data/images/image-001.png"
 
                 val image by watchingImagePath(::imagePath) {
                     it
