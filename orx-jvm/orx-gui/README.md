@@ -189,6 +189,11 @@ import org.openrndr.extra.parameters.DoubleParameter
 
 ![DemoOptions01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoOptions01Kt.png)
 
+### DemoPath01
+[source code](src/demo/kotlin/DemoPath01.kt)
+
+![DemoPath01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoPath01Kt.png)
+
 ### DemoPresets01
 [source code](src/demo/kotlin/DemoPresets01.kt)
 
