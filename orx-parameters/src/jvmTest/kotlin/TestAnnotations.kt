@@ -56,7 +56,7 @@ object TestAnnotations : Spek({
     describe("an annotated object") {
         it("has listable parameters") {
             val list = a.listParameters()
-            list.size `should be equal to` 12
+            list.size `should be equal to` 13
 
             list[0].property?.name `should be equal to` "d"
             list[0].parameterType `should be equal to` ParameterType.Double
