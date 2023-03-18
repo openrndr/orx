@@ -159,6 +159,29 @@ annotation class Vector4Parameter(
 @Retention(AnnotationRetention.RUNTIME)
 annotation class ActionParameter(val label: String, val order: Int = Int.MAX_VALUE)
 
+
+/**
+ * ActionParameter annotation for functions without arguments
+ * @property label a short description of the parameter
+ * @property absolute should the path be stored as an absolute path
+ * @property context which dialog context to use
+ * @property extensions an array of supported extensions
+ * @property directory the path points to a directory
+ * @property order hint for where to place the parameter in user interfaces
+ */
+
+@Target(AnnotationTarget.PROPERTY)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class PathParameter(
+    val label: String,
+    val absolute: Boolean = false,
+    val context: String = "null",
+    val extensions: Array<String> = [],
+    val directory: Boolean = false,
+    val order: Int = Int.MAX_VALUE
+)
+
+
 //</editor-fold>
 //<editor-fold desc="2. Add an entry to ParameterType" id="add-parameter-type" defaultstate="collapsed">
 enum class ParameterType(val annotationClass: KClass<out Annotation>) {
@@ -173,7 +196,8 @@ enum class ParameterType(val annotationClass: KClass<out Annotation>) {
     Vector2(Vector2Parameter::class),
     Vector3(Vector3Parameter::class),
     Vector4(Vector4Parameter::class),
-    Option(OptionParameter::class)
+    Option(OptionParameter::class),
+    Path(PathParameter::class)
     ;
 
     companion object {
@@ -209,7 +233,12 @@ class Parameter(
         val invertY: Boolean?,
         val showVector: Boolean?,
 //        val optionEnum: Enum<*>,
-        val order: Int)
+        val absolutePath: Boolean?,
+        val pathContext: String?,
+        val pathExtensions: Array<String>?,
+        val pathIsDirectory: Boolean?,
+        val order: Int,
+        )
 //</editor-fold>
 //<editor-fold desc="4. Add handling annotation code to listParameters" defaultstate="collapsed">
 /**

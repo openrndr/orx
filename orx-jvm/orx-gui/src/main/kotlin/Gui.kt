@@ -1,14 +1,12 @@
 package org.openrndr.extra.gui
 
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import mu.KotlinLogging
 import org.openrndr.*
 import org.openrndr.color.ColorRGBa
-import org.openrndr.dialogs.getDefaultPathForContext
-import org.openrndr.dialogs.openFileDialog
-import org.openrndr.dialogs.saveFileDialog
-import org.openrndr.dialogs.setDefaultPathForContext
+import org.openrndr.dialogs.*
 import org.openrndr.draw.Drawer
 import org.openrndr.extra.noise.Random
 import org.openrndr.extra.noise.random
@@ -58,7 +56,7 @@ private fun <T : Any> getPersistedOrDefault(
     compartmentLabel: String,
     property: KMutableProperty1<Any, T>,
     obj: Any
-): T? {
+): T {
     val state = persistentCompartmentStates[Driver.instance.contextID]!![compartmentLabel]
     if (state == null) {
         return property.get(obj)
@@ -83,7 +81,7 @@ class GUIAppearance(val baseColor: ColorRGBa = ColorRGBa.GRAY, val barWidth: Int
 class GUI(
     val appearance: GUIAppearance = GUIAppearance(),
     val defaultStyles: List<StyleSheet> = defaultStyles(),
-    ) : Extension {
+) : Extension {
     private var onChangeListener: ((name: String, value: Any?) -> Unit)? = null
     override var enabled = true
 
@@ -593,6 +591,47 @@ class GUI(
                 }
             }
 
+            ParameterType.Path -> {
+                button {
+                    label = "Load ${parameter.label}"
+                    clicked {
+
+                        if (parameter.pathIsDirectory == false) {
+                            openFileDialog(
+                                supportedExtensions = parameter.pathExtensions?.toList() ?: emptyList(),
+                                contextID = parameter.pathContext ?: "null"
+                            ) {
+                                val resolvedPath = if (parameter.absolutePath == true) {
+                                    it.absolutePath
+                                } else {
+                                    it.relativeTo(File(".").absoluteFile).path
+                                }
+                                setAndPersist(
+                                    compartment.label,
+                                    parameter.property as KMutableProperty1<Any, String>,
+                                    obj,
+                                    resolvedPath
+                                )
+                            }
+                        } else {
+                            openFolderDialog(contextID = parameter.pathContext ?: "null") {
+                                val resolvedPath = if (parameter.absolutePath == true) {
+                                    it.absolutePath
+                                } else {
+                                    it.relativeTo(File(".").absoluteFile).path
+                                }
+                                setAndPersist(
+                                    compartment.label,
+                                    parameter.property as KMutableProperty1<Any, String>,
+                                    obj,
+                                    resolvedPath
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
             ParameterType.DoubleList -> {
                 sequenceEditor {
                     range = parameter.doubleRange!!
@@ -731,7 +770,10 @@ class GUI(
                             it.value.data as? Enum<*> ?: error("no data")
                         )
 
-                        onChangeListener?.invoke(parameter.property!!.name, it.value.data as? Enum<*> ?: error("no data"))
+                        onChangeListener?.invoke(
+                            parameter.property!!.name,
+                            it.value.data as? Enum<*> ?: error("no data")
+                        )
                     }
                     getPersistedOrDefault(
                         compartment.label,
@@ -838,6 +880,8 @@ class GUI(
                             maxValue = k.doubleRange?.endInclusive
                         )
 
+                        ParameterType.Path -> ParameterValue(textValue = k.property.qget(lo.obj) as String)
+
                         ParameterType.Option -> ParameterValue(optionValue = (k.property.qget(lo.obj) as Enum<*>).name)
                     }
                 )
@@ -919,6 +963,10 @@ class GUI(
                                 parameter.property.enumSet(lo.obj, it)
                             }
 
+                            ParameterType.Path -> parameterValue.textValue?.let {
+                                parameter.property.qset(lo.obj, it)
+                            }
+
                             ParameterType.Action -> {
                                 // intentionally do nothing
                             }
@@ -933,7 +981,12 @@ class GUI(
     fun loadParameters(file: File) {
         val json = file.readText()
         val typeToken = object : TypeToken<Map<String, Map<String, ParameterValue>>>() {}
-        val labeledValues: Map<String, Map<String, ParameterValue>> = Gson().fromJson(json, typeToken.type)
+        val labeledValues: Map<String, Map<String, ParameterValue>> = try {
+            Gson().fromJson(json, typeToken.type)
+        } catch (e: JsonSyntaxException) {
+            println("could not parse json: $json")
+            throw e;
+        }
 
         fromObject(labeledValues)
     }
@@ -996,6 +1049,10 @@ class GUI(
                 ddb.value = ddb.items().find { item ->
                     item.data == (parameter.property as KMutableProperty1<Any, Enum<*>>).get(labeledObject.obj)
                 } ?: error("could not find item")
+            }
+
+            ParameterType.Path -> {
+
             }
 
             ParameterType.Action -> {

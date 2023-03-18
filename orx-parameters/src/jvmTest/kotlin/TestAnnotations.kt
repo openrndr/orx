@@ -1,4 +1,5 @@
 import org.amshove.kluent.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.parameters.*
 import org.openrndr.math.Vector2
@@ -45,6 +46,9 @@ val a = object {
 
     @OptionParameter("an option parameter", order = 11)
     var o = ParameterType.Option
+
+    @PathParameter("a path parameter", order = 12)
+    var p = "bla.png"
 
 }
 
@@ -123,6 +127,12 @@ object TestAnnotations : Spek({
             list[11].parameterType `should be equal to` ParameterType.Option
             list[11].property?.name `should be equal to` "o"
             list[11].label `should be equal to` "an option parameter"
+
+            assertEquals(list[12].parameterType, ParameterType.Path)
+            assertEquals(list[12].property?.name, "p")
+            assertEquals(list[12].label, "a path parameter")
+            assertEquals(list[12].absolutePath, false)
+            assertEquals(list[12].pathContext, "null")
 
         }
     }

@@ -51,6 +51,7 @@ include(
         "orx-jvm:orx-olive",
         "orx-jvm:orx-osc",
         "orx-palette",
+        "orx-property-watchers",
         "orx-jvm:orx-panel",
         "orx-jvm:orx-poisson-fill",
         "orx-quadtree",

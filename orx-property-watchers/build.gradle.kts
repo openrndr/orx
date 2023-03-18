@@ -3,7 +3,14 @@ plugins {
 }
 
 kotlin {
-   sourceSets {
+    jvm {
+        testRuns["test"].executionTask {
+            useJUnitPlatform {
+                includeEngines("spek2")
+            }
+        }
+    }
+    sourceSets {
         @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
@@ -18,6 +25,8 @@ kotlin {
         val jvmTest by getting {
             dependencies {
                 implementation(libs.kluent)
+                implementation(libs.spek.dsl)
+                runtimeOnly(libs.spek.junit5)
                 runtimeOnly(libs.kotlin.reflect)
             }
         }

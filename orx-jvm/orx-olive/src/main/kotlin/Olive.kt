@@ -11,8 +11,6 @@ import org.openrndr.events.Event
 import org.openrndr.exceptions.stackRootClassName
 import org.openrndr.extra.kotlinparser.extractProgram
 import org.openrndr.launch
-import org.openrndr.extra.filewatcher.stop
-import org.openrndr.extra.filewatcher.triggerChange
 import org.openrndr.extra.filewatcher.watchFile
 import java.io.File
 
@@ -63,9 +61,14 @@ class Olive<P : Program>(val resources: Resources? = null, private var scriptMod
      * reloads the active script
      */
     fun reload() {
-        watcher?.triggerChange()
+   //     watcher?.triggerChange()
     }
 
+    class ScriptWatcher
+
+
+
+    private var watcherRequestStopEvent = Event<Unit>()
     private var watcher: (() -> Unit)? = null
 
     @OptIn(DelicateCoroutinesApi::class)
@@ -99,7 +102,12 @@ class Olive<P : Program>(val resources: Resources? = null, private var scriptMod
         val originalAssetProperties = program.assetProperties.toMutableMap()
 
         fun setupScript(scriptFile: String) {
-            watcher?.stop()
+            if (watcher != null) {
+                logger.info { "requesting watcher stop" }
+                watcherRequestStopEvent.trigger(Unit)
+            } else {
+                logger.info { "no existing watcher" }
+            }
             val f = File(scriptFile)
             if (!f.exists()) {
                 f.parentFile.mkdirs()
@@ -124,7 +132,7 @@ class Olive<P : Program>(val resources: Resources? = null, private var scriptMod
 
             val jsr233ObjectLoader = if (scriptHost == OliveScriptHost.JSR223_REUSE) ScriptObjectLoader() else null
 
-            watcher = program.watchFile(File(script)) {
+            watcher = watchFile(File(script), requestStopEvent = watcherRequestStopEvent) {
                 try {
                     logger.info("change detected, reloading script")
 
@@ -188,7 +196,7 @@ class Olive<P : Program>(val resources: Resources? = null, private var scriptMod
 
                 val destFile = File("$dest/${filePath}").absoluteFile
 
-                program.watchFile(file) {
+                watchFile(file) {
                     if (resources[file]!! && filePath != null) {
                         file.copyTo(destFile, overwrite = true)
                         reload()
