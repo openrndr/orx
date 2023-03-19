@@ -37,8 +37,10 @@ dependencies {
     testRuntimeOnly(libs.spek.junit5)
     testRuntimeOnly(libs.kotlin.reflect)
     demoImplementation(project(":orx-jvm:orx-panel"))
+    demoImplementation(project(":orx-jvm:orx-gui"))
 }
 
 tasks.getByName("compileKotlin").dependsOn("generateGrammarSource")
+tasks.getByName("compileDemoKotlin").dependsOn("generateDemoGrammarSource")
 tasks.getByName("compileTestKotlin").dependsOn("generateTestGrammarSource")
 tasks.getByName("sourcesJar").dependsOn("generateGrammarSource")
