@@ -7,10 +7,11 @@ import kotlin.reflect.KProperty0
 /**
  * Property watcher delegate
  * @see watchingProperty
+ * @since 0.4.3
  */
 class PropertyWatcherDelegate<V, R>(
     private val property: KProperty0<V>,
-    private val valueChangedEvent: Event<V>,
+    private val valueChangedEvent: Event<R>? = null,
     private val cleaner: ((R) -> Unit)? = null,
     val function: (V) -> R
 ) {
@@ -24,19 +25,21 @@ class PropertyWatcherDelegate<V, R>(
                 cleaner?.invoke(it)
             }
             value = function(ref)
+            valueChangedEvent?.trigger(value ?: error("no value"))
         }
         return value ?: error("no value?")
     }
-
 }
 
 /**
  * Property watcher delegate
  * @see watchingProperties
+ * @since 0.4.3
  */
 class PropertyWatcherDelegate2<V0, V1, R>(
     private val toWatch0: KProperty0<V0>,
     private val toWatch1: KProperty0<V1>,
+    private val valueChangedEvent: Event<R>? = null,
     private val cleaner: ((R) -> Unit)? = null,
     private val function: (V0, V1) -> R
 ) {
@@ -54,6 +57,7 @@ class PropertyWatcherDelegate2<V0, V1, R>(
                 cleaner?.invoke(it)
             }
             value = function(ref0, ref1)
+            valueChangedEvent?.trigger(value ?: error("no value"))
         }
         return value ?: error("no value?")
     }
@@ -62,11 +66,13 @@ class PropertyWatcherDelegate2<V0, V1, R>(
 /**
  * Property watcher delegate
  * @see watchingProperties
+ * @since 0.4.3
  */
 class PropertyWatcherDelegate3<V0, V1, V2, R>(
     private val toWatch0: KProperty0<V0>,
     private val toWatch1: KProperty0<V1>,
     private val toWatch2: KProperty0<V2>,
+    private val valueChangedEvent: Event<R>? = null,
     private val cleaner: ((R) -> Unit)? = null,
     private val function: (V0, V1, V2) -> R
 ) {
@@ -85,6 +91,7 @@ class PropertyWatcherDelegate3<V0, V1, V2, R>(
                 cleaner?.invoke(it)
             }
             value = function(ref0, ref1, ref2)
+            valueChangedEvent?.trigger(value ?: error("no value"))
         }
         return value ?: error("no value?")
     }
@@ -94,30 +101,33 @@ class PropertyWatcherDelegate3<V0, V1, V2, R>(
 /**
  * Delegate property value to a function for which the value of a single property is watched
  * @param property the property for which to watch for value changes
+ * @param valueChangedEvent an optional event that is triggered on value change
+ * @param cleaner an optional cleaner function that is invoked to clean up the old value
  * @param function a function that maps the property value to a new value
+ * @since 0.4.3
  */
 fun <V, R> watchingProperty(
     property: KProperty0<V>,
+    valueChangedEvent: Event<R>? = null,
     cleaner: ((R) -> Unit)? = null,
     function: (value: V) -> R
-): PropertyWatcherDelegate<V, R> {
-    return PropertyWatcherDelegate(property, Event("value-changed-${property.name}"), cleaner, function)
-}
+): PropertyWatcherDelegate<V, R> = PropertyWatcherDelegate(property, valueChangedEvent, cleaner, function)
 
 /**
  * Delegate property value to a function for which the values of 2 properties are watched
  * @param property0 the first property for which to watch for value changes
  * @param property1 the second property which to watch for value changes
  * @param function a function that maps the two property values to a new value
+ * @since 0.4.3
  */
 fun <V0, V1, R> watchingProperties(
     property0: KProperty0<V0>,
     property1: KProperty0<V1>,
+    valueChangedEvent: Event<R>? = null,
     cleaner: ((R) -> Unit)?,
     function: (value0: V0, value1: V1) -> R
-): PropertyWatcherDelegate2<V0, V1, R> {
-    return PropertyWatcherDelegate2(property0, property1, cleaner, function)
-}
+): PropertyWatcherDelegate2<V0, V1, R> =
+    PropertyWatcherDelegate2(property0, property1, valueChangedEvent, cleaner, function)
 
 /**
  * Delegate property value to a function for which the values of 3 properties are watched
@@ -125,13 +135,14 @@ fun <V0, V1, R> watchingProperties(
  * @param property1 the second property which to watch for value changes
  * @param property2 the third property which to watch for value changes
  * @param function a function that maps the three property values to a new value
+ * @since 0.4.3
  */
 fun <V0, V1, V2, R> watchingProperties(
     property0: KProperty0<V0>,
     property1: KProperty0<V1>,
     property2: KProperty0<V2>,
+    valueChangedEvent: Event<R>? = null,
     cleaner: ((R) -> Unit)? = null,
     function: (value0: V0, value1: V1, value2: V2) -> R
-): PropertyWatcherDelegate3<V0, V1, V2, R> {
-    return PropertyWatcherDelegate3(property0, property1, property2, cleaner, function)
-}
+): PropertyWatcherDelegate3<V0, V1, V2, R> =
+    PropertyWatcherDelegate3(property0, property1, property2, valueChangedEvent, cleaner, function)

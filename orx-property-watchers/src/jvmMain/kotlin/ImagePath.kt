@@ -1,12 +1,17 @@
 package org.openrndr.extra.propertywatchers
 
-import org.openrndr.Program
 import org.openrndr.draw.ColorBuffer
 import org.openrndr.draw.loadImage
 import java.io.File
 import kotlin.reflect.KProperty0
 
-fun Program.watchingImagePath(pathProperty: KProperty0<String>, imageTransform: (ColorBuffer) -> ColorBuffer = { it }) =
+/**
+ * Delegate property value by watching a path property
+ * @param pathProperty the property holding a path to watch
+ * @param imageTransform an optional image transform function
+ * @since 0.4.3
+ */
+fun watchingImagePath(pathProperty: KProperty0<String>, imageTransform: (ColorBuffer) -> ColorBuffer = { it }) =
     watchingProperty(pathProperty, cleaner = { it.destroy() }) {
         val file = File(it)
         require(file.exists()) { "$it does not exist" }
