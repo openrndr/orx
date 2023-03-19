@@ -23,7 +23,7 @@ class Net(val point0: Vector2, val point1: Vector2, val circle: Circle) : Linear
      */
     val contour: ShapeContour
         get() {
-            return try {
+            return if(!circle.contains(point0) && !circle.contains(point1)) {
                 val tangents0 = circle.tangents(point0)
                 val tangents1 = circle.tangents(point1)
                 var k = LineSegment(point0, tangents0.first).contour
@@ -35,7 +35,7 @@ class Net(val point0: Vector2, val point1: Vector2, val circle: Circle) : Linear
                 }
                 k += LineSegment(tangents1.second, point1).contour
                 k
-            } catch (e: Exception) {
+            } else {
                 ShapeContour.EMPTY
             }
         }
