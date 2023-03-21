@@ -69,6 +69,11 @@ Collection of 2D shape generators (polygon, star, rounded rectangle) and shape m
 
 ![DemoHobbyCurve02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoHobbyCurve02Kt.png)
 
+### DemoNet01
+[source code](src/jvmDemo/kotlin/DemoNet01.kt)
+
+![DemoNet01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoNet01Kt.png)
+
 ### DemoPulley01
 [source code](src/jvmDemo/kotlin/DemoPulley01.kt)
 
