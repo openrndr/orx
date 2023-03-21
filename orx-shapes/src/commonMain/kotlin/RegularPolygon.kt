@@ -8,6 +8,10 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * Creates a regular polygon at [center] with the given [sides] and [radius].
+ * Specify a [phase] in degrees to rotate it.
+ */
 fun regularPolygon(sides: Int, center: Vector2 = Vector2.ZERO, radius: Double = 100.0, phase: Double = 0.0): ShapeContour {
     val c = contour {
         val phi = phase.asRadians
@@ -22,6 +26,11 @@ fun regularPolygon(sides: Int, center: Vector2 = Vector2.ZERO, radius: Double = 
     return c
 }
 
+/**
+ * Creates a rounded polygon at [center] with the given [sides] and [radius].
+ * Specify a [phase] in degrees to rotate it.
+ * [roundFactor] 0.0 = no rounding, 0.5 = default, 1.0 = full rounding.
+ */
 fun regularPolygonRounded(sides: Int, roundFactor: Double = 0.5, center: Vector2 = Vector2.ZERO, radius: Double = 100.0, phase: Double = 0.0): ShapeContour {
     val c = contour {
         val phi = phase.asRadians
@@ -60,6 +69,13 @@ fun regularPolygonRounded(sides: Int, roundFactor: Double = 0.5, center: Vector2
     return c
 }
 
+/**
+ * Creates a beveled polygon at [center] with the given [sides] and [radius].
+ * Specify a [phase] in degrees to rotate it.
+ * If 0.0 < [bevelFactor] < 1.0 the number of [sides] is doubled.
+ * Using 0.5 all sides have equal length. With other values [bevelFactor]
+ * determines the length ratio between even and odd sides.
+ */
 fun regularPolygonBeveled(sides: Int, bevelFactor: Double = 0.5, center: Vector2 = Vector2.ZERO, radius: Double = 100.0, phase: Double = 0.0): ShapeContour {
     val c = contour {
         val phi = phase.asRadians

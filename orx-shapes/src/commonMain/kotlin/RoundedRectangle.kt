@@ -2,11 +2,14 @@ package org.openrndr.extra.shapes
 
 import org.openrndr.draw.Drawer
 import org.openrndr.math.Vector2
+import org.openrndr.shape.Rectangle
 import org.openrndr.shape.contour
+import org.openrndr.shape.ShapeContour
 import kotlin.math.min
 
 class RoundedRectangle(val corner: Vector2, val width: Double, val height: Double, val radius: Double) {
     constructor(x: Double, y: Double, width: Double, height: Double, radius: Double) : this(Vector2(x, y), width, height, radius)
+    constructor(rectangle: Rectangle, radius: Double) : this(rectangle.corner, rectangle.width, rectangle.height, radius)
 
     /** the center of the rounded rectangle */
     val center: Vector2
@@ -36,6 +39,9 @@ class RoundedRectangle(val corner: Vector2, val width: Double, val height: Doubl
             curveTo(Vector2(x, y), Vector2(x + r, y))
             close()
         }
+
+    val shape
+        get() = contour.shape
 }
 
 fun Drawer.roundedRectangle(x: Double, y: Double, width: Double, height: Double, radius: Double) =
@@ -46,3 +52,5 @@ fun Drawer.roundedRectangle(position: Vector2, width: Double, height: Double, ra
 
 fun Drawer.roundedRectangle(roundedRectangle: RoundedRectangle) =
         contour(roundedRectangle.contour)
+
+fun Rectangle.toRounded(radius: Double) = RoundedRectangle(this, radius)
