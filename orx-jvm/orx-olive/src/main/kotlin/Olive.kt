@@ -86,6 +86,7 @@ class Olive<P : Program>(val resources: Resources? = null, private var scriptMod
             program.keyboard.keyUp,
             program.keyboard.keyDown,
             program.keyboard.keyRepeat,
+            program.keyboard.character,
             program.window.drop,
             program.window.focused,
             program.window.minimized,
