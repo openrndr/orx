@@ -1,9 +1,5 @@
 lexer grammar KeyLangLexer;
 
-@header {
-package org.openrndr.extra.keyframer.antlr;
-}
-
 channels { WHITESPACE }
 
 // Whitespace

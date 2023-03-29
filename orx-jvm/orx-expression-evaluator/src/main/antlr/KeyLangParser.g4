@@ -1,10 +1,6 @@
 
 parser grammar KeyLangParser;
 
-@header {
-package org.openrndr.extra.keyframer.antlr;
-}
-
 options { tokenVocab=KeyLangLexer; }
 
 keyLangFile : lines=line+ ;

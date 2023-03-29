@@ -1,25 +1,21 @@
-import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNear
-import org.openrndr.extra.keyframer.FunctionExtensions
-import org.openrndr.extra.keyframer.evaluateExpression
-import org.openrndr.math.map
+import org.openrndr.extra.expressions.FunctionExtensions
+import org.openrndr.extra.expressions.evaluateExpression
 
 import kotlin.test.Test
 class TestExpressions {
-
-
     @Test
     fun `a value reference`() {
         val expression = "someValue"
-        val result = evaluateExpression(expression, variables= mapOf("someValue" to 5.0))
+        val result = evaluateExpression(expression, constants= mapOf("someValue" to 5.0))
         result?.shouldBeEqualTo(5.0)
     }
 
     @Test
     fun `a backticked value reference`() {
         val expression = "`some-value`"
-        val result = evaluateExpression(expression, variables= mapOf("some-value" to 5.0))
+        val result = evaluateExpression(expression, constants= mapOf("some-value" to 5.0))
         result?.shouldBeEqualTo(5.0)
     }
 

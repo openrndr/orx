@@ -1,7 +1,8 @@
 import org.amshove.kluent.`should throw`
 import org.amshove.kluent.invoking
+import org.openrndr.extra.expressions.ExpressionException
 import kotlin.test.Test
-import org.openrndr.extra.keyframer.ExpressionException
+
 import org.openrndr.extra.keyframer.Keyframer
 import org.openrndr.extra.keyframer.KeyframerFormat
 import java.io.File

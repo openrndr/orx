@@ -6,6 +6,9 @@ import com.google.gson.reflect.TypeToken
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.easing.Easing
 import org.openrndr.extra.easing.EasingFunction
+import org.openrndr.extra.expressions.ExpressionException
+import org.openrndr.extra.expressions.FunctionExtensions
+import org.openrndr.extra.expressions.evaluateExpression
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
@@ -64,41 +67,41 @@ open class Keyframer {
 
 
     inner class DoubleChannel(key: String, defaultValue: Double = 0.0) :
-            CompoundChannel(arrayOf(key), arrayOf(defaultValue)) {
+        CompoundChannel(arrayOf(key), arrayOf(defaultValue)) {
         operator fun getValue(keyframer: Keyframer, property: KProperty<*>): Double = getValue(0)
     }
 
     inner class Vector2Channel(keys: Array<String>, defaultValue: Vector2 = Vector2.ZERO) :
-            CompoundChannel(keys, arrayOf(defaultValue.x, defaultValue.y)) {
+        CompoundChannel(keys, arrayOf(defaultValue.x, defaultValue.y)) {
         operator fun getValue(keyframer: Keyframer, property: KProperty<*>): Vector2 = Vector2(getValue(0), getValue(1))
     }
 
     inner class Vector3Channel(keys: Array<String>, defaultValue: Vector3 = Vector3.ZERO) :
-            CompoundChannel(keys, arrayOf(defaultValue.x, defaultValue.y, defaultValue.z)) {
+        CompoundChannel(keys, arrayOf(defaultValue.x, defaultValue.y, defaultValue.z)) {
         operator fun getValue(keyframer: Keyframer, property: KProperty<*>): Vector3 =
-                Vector3(getValue(0), getValue(1), getValue(2))
+            Vector3(getValue(0), getValue(1), getValue(2))
     }
 
     inner class Vector4Channel(keys: Array<String>, defaultValue: Vector4 = Vector4.ZERO) :
-            CompoundChannel(keys, arrayOf(defaultValue.x, defaultValue.y, defaultValue.z, defaultValue.w)) {
+        CompoundChannel(keys, arrayOf(defaultValue.x, defaultValue.y, defaultValue.z, defaultValue.w)) {
         operator fun getValue(keyframer: Keyframer, property: KProperty<*>): Vector4 =
-                Vector4(getValue(0), getValue(1), getValue(2), getValue(3))
+            Vector4(getValue(0), getValue(1), getValue(2), getValue(3))
     }
 
     inner class RGBaChannel(keys: Array<String>, defaultValue: ColorRGBa = ColorRGBa.WHITE) :
-            CompoundChannel(keys, arrayOf(defaultValue.r, defaultValue.g, defaultValue.b, defaultValue.alpha)) {
+        CompoundChannel(keys, arrayOf(defaultValue.r, defaultValue.g, defaultValue.b, defaultValue.alpha)) {
         operator fun getValue(keyframer: Keyframer, property: KProperty<*>): ColorRGBa =
-                ColorRGBa(getValue(0), getValue(1), getValue(2), getValue(3))
+            ColorRGBa(getValue(0), getValue(1), getValue(2), getValue(3))
     }
 
     inner class RGBChannel(keys: Array<String>, defaultValue: ColorRGBa = ColorRGBa.WHITE) :
-            CompoundChannel(keys, arrayOf(defaultValue.r, defaultValue.g, defaultValue.b)) {
+        CompoundChannel(keys, arrayOf(defaultValue.r, defaultValue.g, defaultValue.b)) {
         operator fun getValue(keyframer: Keyframer, property: KProperty<*>): ColorRGBa =
-                ColorRGBa(getValue(0), getValue(1), getValue(2))
+            ColorRGBa(getValue(0), getValue(1), getValue(2))
     }
 
     inner class DoubleArrayChannel(keys: Array<String>, defaultValue: DoubleArray = DoubleArray(keys.size)) :
-            CompoundChannel(keys, defaultValue.toTypedArray()) {
+        CompoundChannel(keys, defaultValue.toTypedArray()) {
         operator fun getValue(keyframer: Keyframer, property: KProperty<*>): DoubleArray {
             val result = DoubleArray(keys.size)
             for (i in keys.indices) {
@@ -108,14 +111,13 @@ open class Keyframer {
         }
     }
 
-
     val channels = mutableMapOf<String, KeyframerChannel>()
 
     fun loadFromJson(
-            file: File,
-            format: KeyframerFormat = KeyframerFormat.SIMPLE,
-            parameters: Map<String, Double> = emptyMap(),
-            functions: FunctionExtensions = FunctionExtensions.EMPTY
+        file: File,
+        format: KeyframerFormat = KeyframerFormat.SIMPLE,
+        parameters: Map<String, Double> = emptyMap(),
+        functions: FunctionExtensions = FunctionExtensions.EMPTY
     ) {
         require(file.exists()) {
             "failed to load keyframer from json: '${file.absolutePath}' does not exist."
@@ -128,10 +130,10 @@ open class Keyframer {
     }
 
     fun loadFromJson(
-            url: URL,
-            format: KeyframerFormat = KeyframerFormat.SIMPLE,
-            parameters: Map<String, Double> = emptyMap(),
-            functions: FunctionExtensions = FunctionExtensions.EMPTY
+        url: URL,
+        format: KeyframerFormat = KeyframerFormat.SIMPLE,
+        parameters: Map<String, Double> = emptyMap(),
+        functions: FunctionExtensions = FunctionExtensions.EMPTY
     ) {
         try {
             loadFromJsonString(url.readText(), format, parameters, functions)
@@ -143,10 +145,10 @@ open class Keyframer {
     }
 
     fun loadFromJsonString(
-            json: String,
-            format: KeyframerFormat = KeyframerFormat.SIMPLE,
-            parameters: Map<String, Double> = emptyMap(),
-            functions: FunctionExtensions = FunctionExtensions.EMPTY
+        json: String,
+        format: KeyframerFormat = KeyframerFormat.SIMPLE,
+        parameters: Map<String, Double> = emptyMap(),
+        functions: FunctionExtensions = FunctionExtensions.EMPTY
     ) {
         when (format) {
             KeyframerFormat.SIMPLE -> {
@@ -160,6 +162,7 @@ open class Keyframer {
                     error("Error parsing simple Keyframer data: ${e.cause?.message}")
                 }
             }
+
             KeyframerFormat.FULL -> {
                 try {
                     val type = object : TypeToken<Map<String, Any>>() {}.type
@@ -176,9 +179,9 @@ open class Keyframer {
     private val prototypes = mutableMapOf<String, Map<String, Any>>()
 
     fun loadFromObjects(
-            dict: Map<String, Any>,
-            externalParameters: Map<String, Double> = emptyMap(),
-            functions: FunctionExtensions = FunctionExtensions.EMPTY
+        dict: Map<String, Any>,
+        externalParameters: Map<String, Double> = emptyMap(),
+        functions: FunctionExtensions = FunctionExtensions.EMPTY
     ) {
         this.parameters.clear()
         this.parameters.putAll(externalParameters)
@@ -191,7 +194,8 @@ open class Keyframer {
                     when (val candidate = entry.value) {
                         is Double -> candidate
                         is String -> evaluateExpression(candidate, parameters, functions)
-                                ?: error("could not evaluate expression: '$candidate'")
+                            ?: error("could not evaluate expression: '$candidate'")
+
                         is Int -> candidate.toDouble()
                         is Float -> candidate.toDouble()
                         else -> error("unknown type for parameter '${entry.key}'")
@@ -226,9 +230,9 @@ open class Keyframer {
     }
 
     fun loadFromKeyObjects(
-            keys: List<Map<String, Any>>,
-            externalParameters: Map<String, Double>,
-            functions: FunctionExtensions
+        keys: List<Map<String, Any>>,
+        externalParameters: Map<String, Double>,
+        functions: FunctionExtensions
     ) {
         if (externalParameters !== parameters) {
             parameters.clear()
@@ -238,12 +242,12 @@ open class Keyframer {
         var lastTime = 0.0
 
         val channelDelegates = this::class.memberProperties
-                .mapNotNull {
-                    @Suppress("UNCHECKED_CAST")
-                    it as? KProperty1<Keyframer, Any>
-                }
-                .filter { it.isAccessible = true; it.getDelegate(this) is CompoundChannel }
-                .associate { Pair(it.name, it.getDelegate(this) as CompoundChannel) }
+            .mapNotNull {
+                @Suppress("UNCHECKED_CAST")
+                it as? KProperty1<Keyframer, Any>
+            }
+            .filter { it.isAccessible = true; it.getDelegate(this) is CompoundChannel }
+            .associate { Pair(it.name, it.getDelegate(this) as CompoundChannel) }
 
         val channelKeys = channelDelegates.values.flatMap { channel ->
             channel.keys.map { it }
@@ -310,7 +314,8 @@ open class Keyframer {
                 when (val candidate = computed["time"]) {
                     null -> lastTime
                     is String -> evaluateExpression(candidate, expressionContext, functions)
-                            ?: error { "unknown value format for time : $candidate" }
+                        ?: error { "unknown value format for time : $candidate" }
+
                     is Double -> candidate
                     is Int -> candidate.toDouble()
                     is Float -> candidate.toDouble()
@@ -324,7 +329,8 @@ open class Keyframer {
                 when (val candidate = computed["duration"]) {
                     null -> 0.0
                     is String -> evaluateExpression(candidate, expressionContext, functions)
-                            ?: error { "unknown value format for time : $candidate" }
+                        ?: error { "unknown value format for time : $candidate" }
+
                     is Int -> candidate.toDouble()
                     is Float -> candidate.toDouble()
                     is Double -> candidate
@@ -380,7 +386,8 @@ open class Keyframer {
                                 null -> error("no value for '${channelCandidate.key}'")
                                 is Double -> candidate
                                 is String -> evaluateExpression(candidate, expressionContext, functions)
-                                        ?: error("unknown value format for key '${channelCandidate.key}' : $candidate")
+                                    ?: error("unknown value format for key '${channelCandidate.key}' : $candidate")
+
                                 is Int -> candidate.toDouble()
                                 else -> error("unknown value type for key '${channelCandidate.key}' : $candidate")
                             }
@@ -395,11 +402,11 @@ open class Keyframer {
                         }
 
                         val dictEnvelope = when (val candidate = valueMap["envelope"]) {
-                                null -> envelope
-                                is DoubleArray -> candidate
-                                is List<*> -> candidate.map { it.toString().toDouble() }.toDoubleArray()
-                                is Array<*> -> candidate.map { it.toString().toDouble() }.toDoubleArray()
-                                else -> error("unknown envelope for '$candidate")
+                            null -> envelope
+                            is DoubleArray -> candidate
+                            is List<*> -> candidate.map { it.toString().toDouble() }.toDoubleArray()
+                            is Array<*> -> candidate.map { it.toString().toDouble() }.toDoubleArray()
+                            else -> error("unknown envelope for '$candidate")
 
                         }
                         val dictDuration = try {
@@ -407,7 +414,8 @@ open class Keyframer {
                                 null -> null
                                 is Double -> candidate
                                 is String -> evaluateExpression(candidate, expressionContext, functions)
-                                        ?: error("unknown value format for key '${channelCandidate.key}' : $candidate")
+                                    ?: error("unknown value format for key '${channelCandidate.key}' : $candidate")
+
                                 is Int -> candidate.toDouble()
                                 else -> error("unknown value type for key '${channelCandidate.key}' : $candidate")
                             }
@@ -417,7 +425,12 @@ open class Keyframer {
 
                         if (dictDuration != null) {
                             if (dictDuration <= 0.0) {
-                                channel.add(max(lastTime, time + dictDuration), lastValue, Easing.Linear.function, defaultEnvelope)
+                                channel.add(
+                                    max(lastTime, time + dictDuration),
+                                    lastValue,
+                                    Easing.Linear.function,
+                                    defaultEnvelope
+                                )
                                 channel.add(time, value, dictEasing, dictEnvelope)
                             } else {
                                 channel.add(time, lastValue, Easing.Linear.function, defaultEnvelope)
@@ -432,7 +445,8 @@ open class Keyframer {
                             when (val candidate = channelCandidate.value) {
                                 is Double -> candidate
                                 is String -> evaluateExpression(candidate, expressionContext, functions)
-                                        ?: error("unknown value format for key '${channelCandidate.key}' : $candidate")
+                                    ?: error("unknown value format for key '${channelCandidate.key}' : $candidate")
+
                                 is Int -> candidate.toDouble()
                                 else -> error("unknown value type for key '${channelCandidate.key}' : $candidate")
                             }

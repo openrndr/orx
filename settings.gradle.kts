@@ -25,6 +25,7 @@ include(
         "orx-compute-graph-nodes",
         "orx-jvm:orx-dnk3",
         "orx-easing",
+        "orx-jvm:orx-expression-evaluator",
         "orx-jvm:orx-file-watcher",
         "orx-parameters",
         "orx-fx",

@@ -1,5 +1,5 @@
 import org.amshove.kluent.shouldBeNear
-import org.openrndr.extra.keyframer.evaluateExpression
+import org.openrndr.extra.expressions.evaluateExpression
 import kotlin.test.Test
 
 class TestOperators {

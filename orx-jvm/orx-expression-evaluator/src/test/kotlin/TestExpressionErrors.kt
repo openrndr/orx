@@ -1,8 +1,9 @@
 import org.amshove.kluent.`should throw`
 import org.amshove.kluent.`with message`
 import org.amshove.kluent.invoking
-import org.openrndr.extra.keyframer.ExpressionException
-import org.openrndr.extra.keyframer.evaluateExpression
+import org.openrndr.extra.expressions.ExpressionException
+import org.openrndr.extra.expressions.evaluateExpression
+
 import kotlin.test.Test
 
 class TestExpressionErrors {
