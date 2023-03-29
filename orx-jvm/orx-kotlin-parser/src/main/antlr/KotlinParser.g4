@@ -4,11 +4,6 @@
 
 parser grammar KotlinParser;
 
-@header {
-package org.openrndr.extra.kotlin.antlr;
-}
-
-
 options { tokenVocab = KotlinLexer; }
 
 // SECTION: general

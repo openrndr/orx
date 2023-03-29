@@ -6,11 +6,6 @@
 
 lexer grammar UnicodeClasses;
 
-@header {
-package org.openrndr.extra.kotlin.antlr;
-}
-
-
 UNICODE_CLASS_LL:
 	'\u0061'..'\u007A' |
 	'\u00B5' |
