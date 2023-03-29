@@ -50,6 +50,7 @@ complement [OPENRNDR](https://github.com/openrndr/openrndr).
 | [`orx-boofcv`](orx-jvm/orx-boofcv/) | Helper functions to ease working with the BoofCV computer vision library and its data types. |
 | [`orx-chataigne`](orx-jvm/orx-chataigne/) | Expose variables to [Chataigne](http://benjamin.kuperberg.fr/chataigne/en) and any other applications that can interface with it. The current implementation makes use of the OSC protocol and supports `Double` and `ColorRGBa`. |
 | [`orx-dnk3`](orx-jvm/orx-dnk3/) | A scene graph based 3d renderer with support for Gltf based assets |
+| [`orx-expression-evaluator`](orx-jvm/orx-expression-evaluator/) | Tools to evaluate expression strings |
 | [`orx-file-watcher`](orx-jvm/orx-file-watcher/) | Monitor files on disk and auto-reload them if they change. |
 | [`orx-git-archiver`](orx-jvm/orx-git-archiver/) | An extension that hooks into `Program.requestAssets` to commit changed code to Git and provide filenames based on the commit hash. |
 | [`orx-git-archiver-gradle`](orx-jvm/orx-git-archiver-gradle/) | A Gradle plugin that turns a git history and `screenshots` directory into a markdown file. |
