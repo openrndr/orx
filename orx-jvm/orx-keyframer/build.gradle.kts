@@ -15,7 +15,7 @@ dependencies {
     implementation(libs.kotlin.reflect)
     implementation(project(":orx-noise"))
     implementation(project(":orx-easing"))
-    implementation(project(":orx-jvm:orx-expression-evaluator"))
+    api(project(":orx-jvm:orx-expression-evaluator"))
     demoImplementation(project(":orx-jvm:orx-panel"))
     testImplementation(libs.kluent)
 }
