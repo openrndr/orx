@@ -31,7 +31,7 @@ complement [OPENRNDR](https://github.com/openrndr/openrndr).
 | [`orx-obj-loader`](orx-obj-loader/) | Simple loader for Wavefront .obj 3D mesh files. |
 | [`orx-palette`](orx-palette/) | Provides 300 color palettes gathered from different sources, organized in 3 collections. |
 | [`orx-parameters`](orx-parameters/) | Provides annotations and tools for turning Kotlin properties into introspectable parameters. Used by [`orx-gui`](../orx-gui/README.md) to automatically generate user interfaces. |
-| [`orx-property-watchers`](orx-property-watchers/) | Tools for setting up property watcher based pipelines <!-- __demos__ --> ## Demos ### DemoImagePathWatcher01 [source code](src/jvmDemo/kotlin/DemoImagePathWatcher01.kt) |
+| [`orx-property-watchers`](orx-property-watchers/) | Tools for setting up property watcher based pipelines |
 | [`orx-quadtree`](orx-quadtree/) | An extension for creating a [Quadtree](https://en.wikipedia.org/wiki/Quadtree) for points. A quadtree is a spatial partioning tree structure meant to provide fast spatial queries such as nearest points within a range. |
 | [`orx-shade-styles`](orx-shade-styles/) | Collection of shader based fills and strokes. Currently includes 4 types of gradient fills. |
 | [`orx-shader-phrases`](orx-shader-phrases/) | A library that provides a `#pragma import` statement for shaders. |
