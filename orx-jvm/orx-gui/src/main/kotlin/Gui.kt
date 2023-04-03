@@ -27,7 +27,7 @@ import kotlin.reflect.KMutableProperty1
 There is a 6-step incantation to add a new parameter type
 0) Add your parameter type to orx-parameters, follow the instructions provided there.
 
-1) Setup a control style, very likely analogous to the styles already in place.
+1) Set up a control style, very likely analogous to the styles already in place.
 2) Add control creation code.
 3) Add value serialization code, may need to update ParameterValue too.
 4) Add value deserialization code.
@@ -112,7 +112,7 @@ class GUI(
 
     // Randomize button
     private var shiftDown = false
-    private var randomizeButton: Button? = null // FIXME should this be null or is there a better way?
+    private var randomizeButton: Button? = null
 
     fun onChange(listener: (name: String, value: Any?) -> Unit) {
         onChangeListener = listener
@@ -295,7 +295,7 @@ class GUI(
                                     label = "Load"
                                     clicked {
                                         openFileDialog(
-                                            supportedExtensions = listOf("json"),
+                                            supportedExtensions = listOf("GUI parameters" to listOf("json")),
                                             contextID = "gui.parameters"
                                         ) {
                                             loadParameters(it)
@@ -330,7 +330,7 @@ class GUI(
                                         saveFileDialog(
                                             suggestedFilename = "parameters.json",
                                             contextID = "gui.parameters",
-                                            supportedExtensions = listOf("json")
+                                            supportedExtensions = listOf("GUI parameters" to listOf("json"))
                                         ) {
                                             saveParameters(it)
                                         }
@@ -455,7 +455,7 @@ class GUI(
                         compartment.label,
                         parameter.property as KMutableProperty1<Any, Int>,
                         obj
-                    )?.let {
+                    ).let {
                         value = it.toDouble()
                         setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Int>, obj, it)
                     }
@@ -480,7 +480,7 @@ class GUI(
                         compartment.label,
                         parameter.property as KMutableProperty1<Any, Double>,
                         obj
-                    )?.let {
+                    ).let {
                         value = it
                         /*  this is generally not needed, but when the persisted value is equal to the slider default
                             it will not emit the newly set value */
@@ -517,7 +517,7 @@ class GUI(
                         compartment.label,
                         parameter.property as KMutableProperty1<Any, Boolean>,
                         obj
-                    )?.let {
+                    ).let {
                         value = it
                         setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Boolean>, obj, it)
                     }
@@ -540,7 +540,7 @@ class GUI(
                         compartment.label,
                         parameter.property as KMutableProperty1<Any, String>,
                         obj
-                    )?.let {
+                    ).let {
                         value = it
                     }
                 }
@@ -562,7 +562,7 @@ class GUI(
                         compartment.label,
                         parameter.property as KMutableProperty1<Any, ColorRGBa>,
                         obj
-                    )?.let {
+                    ).let {
                         color = it
                     }
                 }
@@ -598,7 +598,7 @@ class GUI(
 
                         if (parameter.pathIsDirectory == false) {
                             openFileDialog(
-                                supportedExtensions = parameter.pathExtensions?.toList() ?: emptyList(),
+                                supportedExtensions = parameter.pathExtensions?.let { listOf("supported extensions" to it.toList())} ?: emptyList(),
                                 contextID = parameter.pathContext ?: "null"
                             ) {
                                 val resolvedPath = if (parameter.absolutePath == true) {
@@ -653,7 +653,7 @@ class GUI(
                         compartment.label,
                         parameter.property as KMutableProperty1<Any, MutableList<Double>>,
                         obj
-                    )?.let {
+                    ).let {
                         value = it
                         setAndPersist(
                             compartment.label,
@@ -685,7 +685,7 @@ class GUI(
                         compartment.label,
                         parameter.property as KMutableProperty1<Any, Vector2>,
                         obj
-                    )?.let {
+                    ).let {
                         value = it
                         setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Vector2>, obj, it)
                     }
@@ -712,7 +712,7 @@ class GUI(
                         compartment.label,
                         parameter.property as KMutableProperty1<Any, Vector3>,
                         obj
-                    )?.let {
+                    ).let {
                         value = it
                         setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Vector3>, obj, it)
                     }
@@ -739,7 +739,7 @@ class GUI(
                         compartment.label,
                         parameter.property as KMutableProperty1<Any, Vector4>,
                         obj
-                    )?.let {
+                    ).let {
                         value = it
                         setAndPersist(compartment.label, parameter.property as KMutableProperty1<Any, Vector4>, obj, it)
                     }
@@ -779,7 +779,7 @@ class GUI(
                         compartment.label,
                         parameter.property as KMutableProperty1<Any, Enum<*>>,
                         obj
-                    )?.let { enum ->
+                    ).let { enum ->
                         (this@dropdownButton).value = items().find { item -> item.data == enum }
                             ?: error("no matching item found")
                         setAndPersist(
@@ -985,7 +985,7 @@ class GUI(
             Gson().fromJson(json, typeToken.type)
         } catch (e: JsonSyntaxException) {
             println("could not parse json: $json")
-            throw e;
+            throw e
         }
 
         fromObject(labeledValues)
