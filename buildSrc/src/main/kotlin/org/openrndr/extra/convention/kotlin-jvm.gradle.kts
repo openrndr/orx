@@ -1,6 +1,5 @@
 package org.openrndr.extra.convention
 
-import gradle.kotlin.dsl.accessors._e1ec756838cb41004a28483270a62877.publishing
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -92,8 +91,8 @@ if (shouldPublish) {
                     }
                 }
                 pom {
-                    name.set("$project.name")
-                    description.set("$project.name")
+                    name.set(project.name)
+                    description.set(project.name)
                     url.set("https://openrndr.org")
                     developers {
                         developer {
