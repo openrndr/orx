@@ -1,4 +1,3 @@
-import ScreenshotsHelper.collectScreenshots
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -13,11 +12,6 @@ tasks.test {
     useJUnitPlatform {
         includeEngines("spek2")
     }
-}
-
-sourceSets {
-    val demo by getting
-    collectScreenshots(project, demo) { }
 }
 
 dependencies {

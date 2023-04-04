@@ -4,11 +4,6 @@ plugins {
     org.openrndr.extra.convention.`kotlin-jvm`
 }
 
-sourceSets {
-    val demo by getting
-    collectScreenshots(project, demo) { }
-}
-
 dependencies {
     api(project(":orx-parameters"))
     api(project(":orx-jvm:orx-panel"))

@@ -1,9 +1,9 @@
 package org.openrndr.extra.convention
 
+import ScreenshotsHelper.collectScreenshots
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.net.URI
 
 val libs = the<LibrariesForLibs>()
 
@@ -33,7 +33,11 @@ group = "org.openrndr.extra"
 val main: SourceSet by sourceSets.getting
 
 @Suppress("UNUSED_VARIABLE")
-val demo: SourceSet by sourceSets.creating
+val demo: SourceSet by sourceSets.creating {
+    if (name != "openrndr-demos") {
+        collectScreenshots(project, this@creating) { }
+    }
+}
 
 dependencies {
     implementation(libs.kotlin.stdlib)

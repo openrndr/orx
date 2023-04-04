@@ -1,12 +1,5 @@
-import ScreenshotsHelper.collectScreenshots
-
 plugins {
     org.openrndr.extra.convention.`kotlin-jvm`
-}
-
-sourceSets {
-    val demo by getting
-    collectScreenshots(project, demo) { }
 }
 
 dependencies {
