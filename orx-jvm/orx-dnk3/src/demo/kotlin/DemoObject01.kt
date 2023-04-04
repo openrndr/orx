@@ -9,12 +9,6 @@ import java.io.File
 
 fun main() = application {
     program {
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
-
         val gltf = loadGltfFromFile(File("demo-data/gltf-models/duck/Duck.gltf"))
         val meshes = gltf.meshes.map {
             it.createDrawCommands(gltf)

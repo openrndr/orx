@@ -17,11 +17,6 @@ fun main() = application {
     }
 
     program {
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
         extend(Orbital()) {
             eye = Vector3(4.0, 4.0, 4.0)
         }

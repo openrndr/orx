@@ -19,12 +19,6 @@ fun main() = application {
     }
 
     program {
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
-
         val gltf = loadGltfFromFile(File("demo-data/gltf-models/box-animated/BoxAnimated.glb"))
         val scene = Scene(SceneNode())
 

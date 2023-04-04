@@ -102,7 +102,10 @@ private fun SceneRenderer.processIrradiance(drawer: Drawer, scene: Scene, featur
             feature.shMap?.let {
                 buffer.rewind()
                 it.write(buffer)
-                it.saveToFile(File("data/scene-cache/sh-$hash.orb"))
+                val f = File("data/scene-cache/sh-$hash.orb")
+                if (f.canWrite()) {
+                    it.saveToFile(f)
+                }
             }
         }
     }

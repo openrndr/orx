@@ -1,3 +1,4 @@
+import org.openrndr.WindowMultisample
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.BufferMultisample
@@ -15,15 +16,10 @@ fun main() = application {
     configure {
         width = 1280
         height = 720
-        //multisample = WindowMultisample.SampleCount(8)
+        multisample = WindowMultisample.SampleCount(8)
     }
 
     program {
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
 
         val gltf = loadGltfFromFile(File("demo-data/gltf-models/fox/Fox.glb"))
         val scene = Scene(SceneNode())

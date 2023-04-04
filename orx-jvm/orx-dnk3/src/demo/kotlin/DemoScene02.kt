@@ -1,6 +1,5 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.dnk3.*
 
 import org.openrndr.extra.dnk3.gltf.buildSceneNodes
@@ -18,12 +17,6 @@ fun main() = application {
     }
 
     program {
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
-
         val gltf = loadGltfFromFile(File("demo-data/gltf-models/duck/Duck.gltf"))
         val scene = Scene(SceneNode())
 
@@ -38,7 +31,7 @@ fun main() = application {
         scene.root.entities.add(HemisphereLight().apply {
             upColor = ColorRGBa.WHITE.shade(1.0)
             downColor = ColorRGBa.WHITE.shade(0.1)
-            })
+        })
         scene.root.children.add(lightNode)
         scene.root.children.addAll(gltf.buildSceneNodes().scenes.first())
 

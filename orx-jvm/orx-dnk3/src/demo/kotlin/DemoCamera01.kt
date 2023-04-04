@@ -12,16 +12,9 @@ fun main() = application {
     configure {
         width = 1280
         height = 720
-        //multisample = WindowMultisample.SampleCount(8)
     }
 
     program {
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
-
         val gltf = loadGltfFromFile(File("demo-data/gltf-models/camera/Scene.glb"))
         val scene = Scene(SceneNode())
 
