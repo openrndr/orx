@@ -1,20 +1,24 @@
 # orx-mesh-generators
 
-Generates 3D meshes: sphere, box, cylinder, plane, dodecahedron.
+Generates various types of 3D meshes.
 
 ## Simple usage
 
 ```kotlin
+// To create simple meshes
 val sphere = sphereMesh(32, 32, 4.0)
-val unitSphere = sphereMesh()
-val cube = boxMesh()
 val box = boxMesh(2.0, 4.0, 2.0)
+val cylinder = cylinderMesh(radius = 0.5, length = 1.0, center = true)
+val dodecahedron = dodecahedronMesh(0.5)
+val plane = planeMesh(Vector3.ZERO, Vector3.UNIT_X, Vector3.UNIT_Y)
+val disk = capMesh(sides = 15, radius = 0.5)
+val tube = revolveMesh(sides = 15, length = 1.0)
 
-drawer.vertexBuffer(sphere, DrawPrimitive.TRIANGLES)
-drawer.vertexBuffer(unitSphere, DrawPrimitive.TRIANGLES)
-drawer.vertexBuffer(cube, DrawPrimitive.TRIANGLES)
-drawer.vertexBuffer(box, DrawPrimitive.TRIANGLES)
+// To draw the generated meshes
+drawer.vertexBuffer(dodecahedron, DrawPrimitive.TRIANGLES)
 ```
+
+
 
 ## Complex triangular mesh generation
 
@@ -27,12 +31,6 @@ buildTriangleMesh {
 }
 
 ```
-
-
-
-
-
-
 
 ## API
 
