@@ -30,7 +30,7 @@ fun List<Vector3>.frames(up0: Vector3): List<Matrix44> {
         result.add(Matrix44.fromColumnVectors(right.xyz0, up.xyz0, forward.xyz0, current.xyz1))
     }
 
-    require(up.length > 0.0)
+    require(up.length > 0.0) { "initial `up.length` is zero in .frames()" }
 
     for (i in 1 until size - 1) {
         val prev = this[i - 1]
@@ -40,12 +40,12 @@ fun List<Vector3>.frames(up0: Vector3): List<Matrix44> {
         val f0 = (current - prev).normalized
 
         val forward = (f0 + f1).normalized
-        require(forward.length > 0.0)
+        require(forward.length > 0.0) { "`forward.length` is zero in .frames()" }
         val right = (forward cross up).normalized
         up = ((right cross forward)).normalized
 
-        require(up.length > 0.0)
-        require(right.length > 0.0)
+        require(up.length > 0.0) { "`up.length` is zero in .frames()" }
+        require(right.length > 0.0) { "`right.length` is zero in .frames()" }
 
         //val m = Matrix44.fromColumnVectors(right.xyz0, up.xyz0, forward.xyz0, current.xyz1)
 
