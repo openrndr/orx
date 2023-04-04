@@ -36,8 +36,7 @@ fun main() {
             }
 
             val spiral = buildTriangleMesh {
-                for (i in -1 .. 1) {
-                    if (i == 0) continue
+                for (i in -1..1 step 2) {
                     val p = spiralPath(0.2 * i, 0.25, 4.0, 400)
 
                     extrudeContourAdaptive(
@@ -55,8 +54,7 @@ fun main() {
 
                     //rotate(Vector3.UNIT_Y, 45.0)
                     for (j in 0 until 1) {
-                        for (i in -1..1) {
-                            if (i == 0) continue
+                        for (i in -1..1 step 2) {
 
                             val rotationDegrees = j * 180.0 / 1.0
                             val rotation = rotationDegrees.asRadians

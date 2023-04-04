@@ -138,9 +138,12 @@ fun TriangleMeshBuilder.grid(
 fun TriangleMeshBuilder.twist(degreesPerUnit: Double, start: Double, axis: Vector3 = Vector3.UNIT_Y) {
     data = data.map {
         val p = it.position.projectedOn(axis)
-        val t =
-            if (axis.x != 0.0) p.x / axis.x else if (axis.y != 0.0) p.y / axis.y else if (axis.z != 0.0) p.z / axis.z else
-                throw IllegalArgumentException("0 axis")
+        val t = when {
+            axis.x != 0.0 -> p.x / axis.x
+            axis.y != 0.0 -> p.y / axis.y
+            axis.z != 0.0 -> p.z / axis.z
+            else -> throw IllegalArgumentException("0 axis")
+        }
         val r = Matrix44.rotate(axis, t * degreesPerUnit)
         TriangleMeshBuilder.VertexData((r * it.position.xyz1).xyz, (r * it.normal.xyz0).xyz, it.texCoord, this@twist.color)
     }.toMutableList()
