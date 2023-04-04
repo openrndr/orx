@@ -8,6 +8,7 @@ dependencies {
     demoImplementation(project(":orx-noise"))
     demoImplementation(project(":orx-jvm:orx-gui"))
     demoImplementation(project(":orx-shader-phrases"))
+    demoImplementation(project(":orx-camera"))
     demoImplementation(libs.slf4j.simple)
     demoImplementation(libs.openrndr.ffmpeg)
     demoImplementation(libs.openrndr.svg)
