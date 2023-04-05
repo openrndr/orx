@@ -59,6 +59,11 @@ fun boxMesh(
 ![DemoComplex05Kt](https://github.com/openrndr/orx/blob/media/orx-mesh-generators/images/DemoComplex05Kt.png
 <!-- __demos__ -->
 ## Demos
+### DemoAll
+[source code](src/demo/kotlin/DemoAll.kt)
+
+![DemoAllKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoAllKt.png)
+
 ### DemoBox
 [source code](src/demo/kotlin/DemoBox.kt)
 
