@@ -5,6 +5,15 @@ import org.openrndr.math.Spherical
 import org.openrndr.math.Vector2
 import kotlin.math.max
 
+/**
+ * Sphere mesh
+ *
+ * @param sides
+ * @param segments
+ * @param radius
+ * @param invert
+ * @return
+ */
 fun sphereMesh(sides: Int = 16, segments: Int = 16, radius: Double = 1.0, invert: Boolean = false): VertexBuffer {
     val vertexCount = 2 * sides * 3 + max(0, (segments - 2)) * sides * 6
     val vb = meshVertexBuffer(vertexCount)
@@ -14,7 +23,15 @@ fun sphereMesh(sides: Int = 16, segments: Int = 16, radius: Double = 1.0, invert
     return vb
 }
 
-
+/**
+ * Generate sphere
+ *
+ * @param sides
+ * @param segments
+ * @param radius
+ * @param invert
+ * @param writer
+ */
 fun generateSphere(sides: Int, segments: Int, radius: Double = 1.0, invert: Boolean = false, writer: VertexWriter) {
     val inverter = if (invert) -1.0 else 1.0
     for (t in 0 until segments) {
@@ -52,6 +69,15 @@ fun generateSphere(sides: Int, segments: Int, radius: Double = 1.0, invert: Bool
     }
 }
 
+/**
+ * Generate hemisphere
+ *
+ * @param sides
+ * @param segments
+ * @param radius
+ * @param invert
+ * @param writer
+ */
 fun generateHemisphere(sides: Int, segments: Int, radius: Double = 1.0, invert: Boolean = false, writer: VertexWriter) {
     val inverter = if (invert) -1.0 else 1.0
     for (t in 0 until segments) {

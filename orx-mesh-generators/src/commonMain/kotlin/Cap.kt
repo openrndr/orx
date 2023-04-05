@@ -1,13 +1,19 @@
 package org.openrndr.extra.meshgenerators
 
 import org.openrndr.draw.VertexBuffer
-import org.openrndr.math.*
+import org.openrndr.math.Matrix44
+import org.openrndr.math.Vector2
+import org.openrndr.math.Vector3
+import org.openrndr.math.YPolarity
 import org.openrndr.math.transforms.rotateY
 
 /**
  * A shape created by rotating an envelope around a vertical axis.
- * The default envelope is a horizontal line which produces a flat round disk.
- * By providing a more complex envelope one can create curved shapes like a bowl.
+ *
+ * @param sides the angular resolution of the cap
+ * @param radius the radius of the cap
+ * @param envelope a list of points defining the profile of the cap. The default envelope is a horizontal line which produces a flat round disk. By providing a more complex envelope one can create curved shapes like a bowl.
+ * @return A vertex buffer containing the triangles to render the 3D shape
  */
 fun capMesh(
     sides: Int,
@@ -24,6 +30,14 @@ fun capMesh(
     return vb
 }
 
+/**
+ * Generate a shape by rotating an envelope around a vertical axis.
+ *
+ * @param sides the angular resolution of the cap
+ * @param radius the radius of the cap
+ * @param envelope a list of points defining the profile of the cap. The default envelope is a horizontal line which produces a flat round disk. By providing a more complex envelope one can create curved shapes like a bowl.
+ * @param writer the vertex writer function
+ */
 fun generateCap(
     sides: Int,
     radius: Double,
@@ -58,9 +72,9 @@ fun generateCap(
         for (segment in 0 until basePositions.size - 1) {
 
             val p00 = v0[segment]
-            val p01 = v0[segment+1]
+            val p01 = v0[segment + 1]
             val p10 = v1[segment]
-            val p11 = v1[segment+1]
+            val p11 = v1[segment + 1]
 
             val nn0 = n0[segment]
             val nn1 = n1[segment]
@@ -78,7 +92,11 @@ fun generateCap(
 
 /**
  * A shape created by rotating an envelope around a vertical axis.
- * The default envelope is a vertical line which produces a hollow cylinder.
+ *
+ * @param sides the angular resolution of the cap
+ * @param length the length of the shape. A multiplier for the y component of the envelope
+ * @param envelope a list of points defining the profile of the shape. The default envelope is a vertical line which produces a hollow cylinder.
+ * @return A vertex buffer containing the triangles to render the 3D shape
  */
 fun revolveMesh(
     sides: Int,
@@ -95,6 +113,14 @@ fun revolveMesh(
     return vb
 }
 
+/**
+ * Generate a shape by rotating an envelope around a vertical axis.
+ *
+ * @param sides the angular resolution of the cap
+ * @param length the length of the shape. A multiplier for the y component of the envelope
+ * @param envelope a list of points defining the profile of the shape. The default envelope is a vertical line which produces a hollow cylinder.
+ * @param writer the vertex writer function
+ */
 fun generateRevolve(
     sides: Int,
     length: Double,
@@ -107,7 +133,7 @@ fun generateRevolve(
     val maxY = envelope.maxByOrNull { it.y } ?: Vector2(0.0, 1.0)
     val a = maxY.y
 
-    val cleanEnvelope = envelope.map { Vector2((it.x), (it.y/a - 0.5) * length ) }
+    val cleanEnvelope = envelope.map { Vector2((it.x), (it.y / a - 0.5) * length) }
 
     val normals2D = envelope.zipWithNext().map {
         val d = it.second - it.first
@@ -129,9 +155,9 @@ fun generateRevolve(
         for (segment in 0 until basePositions.size - 1) {
 
             val p00 = v0[segment]
-            val p01 = v0[segment+1]
+            val p01 = v0[segment + 1]
             val p10 = v1[segment]
-            val p11 = v1[segment+1]
+            val p11 = v1[segment + 1]
 
             val nn0 = n0[segment]
             val nn1 = n1[segment]

@@ -28,7 +28,11 @@ fun bufferWriter(bw: BufferWriter): VertexWriter {
 }
 
 /**
- * creates a [VertexBuffer] that is suited for holding meshes
+ * Creates a [VertexBuffer] that is suited for holding meshes.
+ * Each vertex contains:
+ * - `position` (vec3)
+ * - `normal` (vec3)
+ * - `textureCoordinate` (vec2)
  */
 fun meshVertexBuffer(size: Int): VertexBuffer {
     return vertexBuffer(vertexFormat {
@@ -38,6 +42,14 @@ fun meshVertexBuffer(size: Int): VertexBuffer {
     }, size)
 }
 
+/**
+ * Creates a [VertexBuffer] that is suited for holding meshes.
+ * Each vertex contains:
+ * - `position` (vec3)
+ * - `normal` (vec3)
+ * - `textureCoordinate` (vec2)
+ * - `color` (vec4)
+ */
 fun meshVertexBufferWithColor(size: Int): VertexBuffer {
     return vertexBuffer(vertexFormat {
         position(3)

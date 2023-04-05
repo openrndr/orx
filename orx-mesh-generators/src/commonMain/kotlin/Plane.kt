@@ -5,18 +5,22 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.shape.Rectangle
 
-fun planeMesh(center: Vector3,
-              right: Vector3,
-              forward: Vector3,
-              up: Vector3 = forward.cross(right).normalized,
-              width: Double = 1.0, height: Double = 1.0,
-              widthSegments: Int = 1, heightSegments: Int = 1): VertexBuffer {
+fun planeMesh(
+    center: Vector3,
+    right: Vector3,
+    forward: Vector3,
+    up: Vector3 = forward.cross(right).normalized,
+    width: Double = 1.0, height: Double = 1.0,
+    widthSegments: Int = 1, heightSegments: Int = 1
+): VertexBuffer {
 
     val vertexCount = (widthSegments * heightSegments) * 6
     val vb = meshVertexBuffer(vertexCount)
     vb.put {
-        generatePlane(center, right, forward, up,
-                width, height, widthSegments, heightSegments, bufferWriter(this))
+        generatePlane(
+            center, right, forward, up,
+            width, height, widthSegments, heightSegments, bufferWriter(this)
+        )
     }
     return vb
 }
@@ -36,39 +40,49 @@ fun Rectangle.toMesh(resolution: Double = 2.0) = planeMesh(
 /**
  * generates a finite plane with its center at (0,0,0) and spanning the xz-plane
  */
-fun groundPlaneMesh(width: Double = 1.0,
-                    height: Double = 1.0,
-                    widthSegments: Int = 1,
-                    heightSegments: Int = 1): VertexBuffer {
-    return planeMesh(Vector3.ZERO, Vector3.UNIT_X, Vector3.UNIT_Z, Vector3.UNIT_Y,
-            width, height, widthSegments, heightSegments)
+fun groundPlaneMesh(
+    width: Double = 1.0,
+    height: Double = 1.0,
+    widthSegments: Int = 1,
+    heightSegments: Int = 1
+): VertexBuffer {
+    return planeMesh(
+        Vector3.ZERO, Vector3.UNIT_X, Vector3.UNIT_Z, Vector3.UNIT_Y,
+        width, height, widthSegments, heightSegments
+    )
 }
 
 /**
  * generates a finite plane with its center at (0,0,0) and spanning the xy-plane
  */
-fun wallPlaneMesh(width: Double = 1.0,
-                    height: Double = 1.0,
-                    widthSegments: Int = 1,
-                    heightSegments: Int = 1): VertexBuffer {
-    return planeMesh(Vector3.ZERO, Vector3.UNIT_X, Vector3.UNIT_Y, Vector3.UNIT_Z,
-            width, height, widthSegments, heightSegments)
+fun wallPlaneMesh(
+    width: Double = 1.0,
+    height: Double = 1.0,
+    widthSegments: Int = 1,
+    heightSegments: Int = 1
+): VertexBuffer {
+    return planeMesh(
+        Vector3.ZERO, Vector3.UNIT_X, Vector3.UNIT_Y, Vector3.UNIT_Z,
+        width, height, widthSegments, heightSegments
+    )
 }
 
 
-fun generatePlane(center: Vector3,
-                  right: Vector3,
-                  forward: Vector3,
-                  up: Vector3 = forward.cross(right).normalized,
+fun generatePlane(
+    center: Vector3,
+    right: Vector3,
+    forward: Vector3,
+    up: Vector3 = forward.cross(right).normalized,
 
-                  width: Double = 1.0, height: Double = 1.0,
-                  widthSegments: Int = 1, heightSegments: Int = 2,
-                  writer: VertexWriter) {
+    width: Double = 1.0, height: Double = 1.0,
+    widthSegments: Int = 1, heightSegments: Int = 2,
+    writer: VertexWriter
+) {
 
     val forwardStep = forward.normalized * (height / heightSegments)
     val rightStep = right.normalized * (width / widthSegments)
 
-    val corner = center - forward.normalized *  (height*0.5) - right.normalized * (width * 0.5)
+    val corner = center - forward.normalized * (height * 0.5) - right.normalized * (width * 0.5)
 
     val step = Vector2(1.0 / widthSegments, 1.0 / heightSegments)
 

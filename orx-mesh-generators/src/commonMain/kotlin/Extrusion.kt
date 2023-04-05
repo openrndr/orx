@@ -10,8 +10,22 @@ import org.openrndr.shape.Shape
 import org.openrndr.shape.ShapeContour
 import org.openrndr.shape.Triangle
 
-fun quadToTris(v00: Vector3, v01: Vector3, v10: Vector3, v11: Vector3, faceNormal: Vector3, writer: VertexWriter) {
-
+/**
+ * Writes two triangles to [writer] representing
+ * the quad formed by four vertices.
+ *
+ * @param v00 vertex (0, 0)
+ * @param v01 vertex (0, 1)
+ * @param v10 vertex (1, 0)
+ * @param v11 vertex (1, 1)
+ * @param faceNormal the face normal
+ * @param writer the vertex writer function
+ */
+fun quadToTris(
+    v00: Vector3, v01: Vector3, v10: Vector3, v11: Vector3,
+    faceNormal: Vector3,
+    writer: VertexWriter
+) {
     writer(v11, faceNormal, Vector2.ZERO)
     writer(v01, faceNormal, Vector2.ZERO)
     writer(v00, faceNormal, Vector2.ZERO)
@@ -21,7 +35,22 @@ fun quadToTris(v00: Vector3, v01: Vector3, v10: Vector3, v11: Vector3, faceNorma
     writer(v11, faceNormal, Vector2.ZERO)
 }
 
-fun contourSegment(linearContour: List<Vector3>, frame0: Matrix44, frame1: Matrix44, writer: VertexWriter) {
+/**
+ * Writes quads to [writer] creating a surface that connects two
+ * displaced instances of [linearContour]. The positions and orientations
+ * of the two contours are defined by [frame0] and [frame1].
+ *
+ * @param linearContour the cross-section of the surface to create
+ * @param frame0 a transformation matrix that defines an initial position
+ * @param frame1 a transformation matrix that defines a final position
+ * @param writer the vertex writer function
+ */
+fun contourSegment(
+    linearContour: List<Vector3>,
+    frame0: Matrix44,
+    frame1: Matrix44,
+    writer: VertexWriter
+) {
     for (i in linearContour.indices) {
         val v0 = linearContour[i]
         val v1 = linearContour[(i + 1).mod(linearContour.size)]
@@ -36,7 +65,21 @@ fun contourSegment(linearContour: List<Vector3>, frame0: Matrix44, frame1: Matri
     }
 }
 
-fun triangulationWithFrame(triangulation: List<Triangle>, frame:Matrix44, invert:Boolean = true, writer:VertexWriter) {
+/**
+ * Writes a list of triangles transformed by the [frame]
+ * transformation matrix into [writer].
+ *
+ * @param triangulation the list of triangles to write
+ * @param frame a transformation matrix to apply to each triangle
+ * @param invert generates inside-out geometry if true
+ * @param writer the vertex writer function
+ */
+fun triangulationWithFrame(
+    triangulation: List<Triangle>,
+    frame: Matrix44,
+    invert: Boolean = true,
+    writer: VertexWriter
+) {
     val normalFrame = normalMatrix(frame)
     val normalScale = if (!invert) -1.0 else 1.0
     val normal = ((normalFrame * Vector4(0.0, 0.0, normalScale, 0.0)).xyz)
@@ -48,6 +91,21 @@ fun triangulationWithFrame(triangulation: List<Triangle>, frame:Matrix44, invert
     }
 }
 
+/**
+ * Extrude contour steps
+ *
+ * @param contour
+ * @param path
+ * @param stepCount
+ * @param up0
+ * @param contourDistanceTolerance
+ * @param pathDistanceTolerance
+ * @param steps
+ * @param frames
+ * @param startCap
+ * @param endCap
+ * @param writer
+ */
 fun extrudeContourSteps(
     contour: ShapeContour, path: Path3D, stepCount: Int, up0: Vector3,
     contourDistanceTolerance: Double = 0.5,
@@ -68,6 +126,16 @@ fun extrudeContourSteps(
     }
 }
 
+/**
+ * Extrude caps
+ *
+ * @param linearShape
+ * @param path
+ * @param startCap
+ * @param endCap
+ * @param frames
+ * @param writer
+ */
 private fun extrudeCaps(
     linearShape: Shape,
     path: Path3D,
@@ -87,6 +155,20 @@ private fun extrudeCaps(
     }
 }
 
+/**
+ * Extrude contour adaptive
+ *
+ * @param contour
+ * @param path
+ * @param up0
+ * @param contourDistanceTolerance
+ * @param pathDistanceTolerance
+ * @param steps
+ * @param frames
+ * @param startCap
+ * @param endCap
+ * @param writer
+ */
 fun extrudeContourAdaptive(
     contour: ShapeContour, path: Path3D, up0: Vector3,
     contourDistanceTolerance: Double = 0.5,
@@ -106,7 +188,21 @@ fun extrudeContourAdaptive(
     }
 }
 
-
+/**
+ * Extrude shape steps
+ *
+ * @param shape
+ * @param path
+ * @param stepCount
+ * @param up0
+ * @param contourDistanceTolerance
+ * @param pathDistanceTolerance
+ * @param steps
+ * @param frames
+ * @param startCap
+ * @param endCap
+ * @param writer
+ */
 fun extrudeShapeSteps(
     shape: Shape,
     path: Path3D, stepCount: Int,
@@ -139,6 +235,20 @@ fun extrudeShapeSteps(
     }
 }
 
+/**
+ * Extrude shape adaptive
+ *
+ * @param shape
+ * @param path
+ * @param up0
+ * @param contourDistanceTolerance
+ * @param pathDistanceTolerance
+ * @param steps
+ * @param frames
+ * @param startCap
+ * @param endCap
+ * @param writer
+ */
 fun extrudeShapeAdaptive(
     shape: Shape,
     path: Path3D,
@@ -170,7 +280,18 @@ fun extrudeShapeAdaptive(
     }
 }
 
-
+/**
+ * Extrude shape steps
+ *
+ * @param shape
+ * @param path
+ * @param stepCount
+ * @param up0
+ * @param contourDistanceTolerance
+ * @param pathDistanceTolerance
+ * @param startCap
+ * @param endCap
+ */
 fun TriangleMeshBuilder.extrudeShapeSteps(
     shape: Shape,
     path: Path3D, stepCount: Int,
@@ -191,6 +312,17 @@ fun TriangleMeshBuilder.extrudeShapeSteps(
     writer = this::write
 )
 
+/**
+ * Extrude shape adaptive
+ *
+ * @param shape
+ * @param path
+ * @param up0
+ * @param contourDistanceTolerance
+ * @param pathDistanceTolerance
+ * @param startCap
+ * @param endCap
+ */
 fun TriangleMeshBuilder.extrudeShapeAdaptive(
     shape: Shape,
     path: Path3D,
@@ -210,9 +342,20 @@ fun TriangleMeshBuilder.extrudeShapeAdaptive(
     writer = this::write
 )
 
+/**
+ * Extrude a [contour] along a [path] specifying the number of steps.
+ *
+ * @param contour the cross-section of the produced shape
+ * @param path the 3D path
+ * @param stepCount the number of steps along the [path]
+ * @param up0 the up-vector
+ * @param contourDistanceTolerance
+ * @param pathDistanceTolerance
+ */
 fun TriangleMeshBuilder.extrudeContourSteps(
     contour: ShapeContour,
-    path: Path3D, stepCount: Int,
+    path: Path3D,
+    stepCount: Int,
     up0: Vector3,
     contourDistanceTolerance: Double = 0.5,
     pathDistanceTolerance: Double = 0.5,
@@ -226,6 +369,16 @@ fun TriangleMeshBuilder.extrudeContourSteps(
     writer = this::write
 )
 
+/**
+ * Extrude a [contour] along a [path]. The number of resulting steps
+ * along the path will depend on the tolerance values.
+ *
+ * @param contour the cross-section of the produced shape
+ * @param path the 3D path
+ * @param up0 the up-vector
+ * @param contourDistanceTolerance
+ * @param pathDistanceTolerance
+ */
 fun TriangleMeshBuilder.extrudeContourAdaptive(
     contour: ShapeContour,
     path: Path3D,

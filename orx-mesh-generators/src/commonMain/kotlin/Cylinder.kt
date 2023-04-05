@@ -10,6 +10,17 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * Creates a cylinder along the z-axis
+ *
+ * @param sides the number of sides of the cylinder
+ * @param segments the number of segments along the z-axis
+ * @param radius the radius of the cylinder
+ * @param length the length of the cylinder
+ * @param invert generates inside-out geometry if true
+ * @param center center the cylinder on the z-plane
+ * @return A vertex buffer containing the triangles to render the 3D shape
+ */
 fun cylinderMesh(
     sides: Int = 16,
     segments: Int = 16,
@@ -33,10 +44,9 @@ fun cylinderMesh(
  * @param radius the radius of the cylinder
  * @param length the length of the cylinder
  * @param invert generates inside-out geometry if true
- * @param center
- * @param vertexWriter the vertex writer function
+ * @param center centers the cylinder on the z-plane if true
+ * @param writer the vertex writer function
  */
-
 fun generateCylinder(
     sides: Int,
     segments: Int,
@@ -44,8 +54,8 @@ fun generateCylinder(
     length: Double,
     invert: Boolean = false,
     center: Boolean = false,
-    vertexWriter: VertexWriter
-) = generateTaperedCylinder(sides, segments, radius, radius, length, invert, center, vertexWriter)
+    writer: VertexWriter
+) = generateTaperedCylinder(sides, segments, radius, radius, length, invert, center, writer)
 
 /**
  * Generate a tapered cylinder along the z-axis
@@ -55,8 +65,8 @@ fun generateCylinder(
  * @param radiusEnd the end radius of the tapered cylinder
  * @param length the length of the tapered cylinder
  * @param invert generates inside-out geometry if true
- * @param center
- * @param vertexWriter the vertex writer function
+ * @param center centers the cylinder on the z-plane if true
+ * @param writer the vertex writer function
  */
 fun generateTaperedCylinder(
     sides: Int,
@@ -66,7 +76,7 @@ fun generateTaperedCylinder(
     length: Double,
     invert: Boolean = false,
     center: Boolean = false,
-    vertexWriter: VertexWriter
+    writer: VertexWriter
 ) {
     val dphi = (PI * 2) / sides
     val ddeg = (360.0) / sides
@@ -110,21 +120,21 @@ fun generateTaperedCylinder(
 
 
             if (invert) {
-                vertexWriter(Vector3(x00, y00, z0), n0, Vector2(u0, v0))
-                vertexWriter(Vector3(x10, y10, z0), n1, Vector2(u0, v1))
-                vertexWriter(Vector3(x11, y11, z1), n1, Vector2(u1, v1))
+                writer(Vector3(x00, y00, z0), n0, Vector2(u0, v0))
+                writer(Vector3(x10, y10, z0), n1, Vector2(u0, v1))
+                writer(Vector3(x11, y11, z1), n1, Vector2(u1, v1))
 
-                vertexWriter(Vector3(x11, y11, z1), n1, Vector2(u1, v1))
-                vertexWriter(Vector3(x01, y01, z1), n0, Vector2(u1, v0))
-                vertexWriter(Vector3(x00, y00, z0), n0, Vector2(u0, v0))
+                writer(Vector3(x11, y11, z1), n1, Vector2(u1, v1))
+                writer(Vector3(x01, y01, z1), n0, Vector2(u1, v0))
+                writer(Vector3(x00, y00, z0), n0, Vector2(u0, v0))
             } else {
-                vertexWriter(Vector3(x00, y00, z0), n0, Vector2(u0, v0))
-                vertexWriter(Vector3(x01, y01, z1), n0, Vector2(u1, v0))
-                vertexWriter(Vector3(x11, y11, z1), n1, Vector2(u1, v1))
+                writer(Vector3(x00, y00, z0), n0, Vector2(u0, v0))
+                writer(Vector3(x01, y01, z1), n0, Vector2(u1, v0))
+                writer(Vector3(x11, y11, z1), n1, Vector2(u1, v1))
 
-                vertexWriter(Vector3(x11, y11, z1), n1, Vector2(u1, v1))
-                vertexWriter(Vector3(x10, y10, z0), n1, Vector2(u0, v1))
-                vertexWriter(Vector3(x00, y00, z0), n0, Vector2(u0, v0))
+                writer(Vector3(x11, y11, z1), n1, Vector2(u1, v1))
+                writer(Vector3(x10, y10, z0), n1, Vector2(u0, v1))
+                writer(Vector3(x00, y00, z0), n0, Vector2(u0, v0))
             }
         }
     }
