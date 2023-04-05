@@ -2,7 +2,7 @@
 
 Generates various types of 3D meshes.
 
-## Simple usage
+## Simple meshes
 
 ```kotlin
 // To create simple meshes
@@ -18,44 +18,70 @@ val tube = revolveMesh(sides = 15, length = 1.0)
 drawer.vertexBuffer(dodecahedron, DrawPrimitive.TRIANGLES)
 ```
 
-
-
 ## Complex triangular mesh generation
 
-`orx-mesh-generators` comes with `buildTriangleMesh` 
+`orx-mesh-generators` comes with `buildTriangleMesh`, which
+implements a [DSL](https://en.wikipedia.org/wiki/Domain-specific_language) 
+to construct 3D shapes.
+
+To create shapes we can call methods like `box()`, `sphere()`,
+`cylinder()`, `dodecahedron()`, `plane()`, `revolve()`,
+`taperedCylinder()`, `hemisphere()` and `cap()`.
 
 ```kotlin
-buildTriangleMesh {
+// Create a rotated box
+val mesh = buildTriangleMesh {
     rotate(Vector3.UNIT_Z, 45.0)
     box()
 }
-
 ```
 
-## API
+We can also use methods like `translate()` and `rotate()` to create
+more complex compositions. The `color` property sets the color of
+the next mesh.
 
 ```kotlin
-fun sphereMesh(
-    sides: Int = 16,
-    segments: Int = 16,
-    radius: Double = 1.0,
-    invert: Boolean = false): VertexBuffer
-
-fun groundPlaneMesh(
-    width: Double = 1.0,
-    height: Double = 1.0,
-    widthSegments: Int = 1,
-    heightSegments: Int): VertexBuffer
-
-fun boxMesh(
-    width: Double = 1.0,
-    height: Double = 1.0,
-    depth: Double = 1.0,
-    widthSegments: Int = 1,
-    heightSegments: Int = 1,
-    depthSegments: Int = 1,
-    invert: Boolean = false): VertexBuffer
+// Create a ring of boxes of various colors
+val mesh = buildTriangleMesh {
+    repeat(12) {
+        // Take a small step
+        translate(2.0, 0.0, 0.0)
+        // Turn 30 degrees
+        rotate(Vector3.UNIT_Y, 30.0)
+        // Set a color
+        color = rgb(it / 11.0, 1.0, 1.0 - it / 11.0)
+        // Add a colored box
+        box(1.0, 1.0, 1.0)
+    }
+}
 ```
+
+`isolated { ... }` can be used to encapsulate transformations and
+avoid them accumulating to unpredictable values.
+
+```kotlin
+val mesh = buildTriangleMesh {
+    repeat(10) { x ->
+        repeat(10) { y ->
+            isolated {
+                translate(x * 1.0, y * 1.0, 0.0)
+                sphere(8, 8, 0.1)
+            }
+        }
+    }
+}
+```
+
+Other available methods are:
+
+- `grid()`: creates a tri-dimensional grid of meshes.
+- `extrudeShape()`: gives depth to 2D `Shape`.
+- `twist()`: post-processing effect to twist a mesh around an axis. 
+- `extrudeContourSteps()`: uses Parallel Transport Frames to extrude a contour along a 3D path. 
+
+The [demo folder](src/jvmDemo/kotlin) contains examples using these methods.
+
+Check out the [source code](src/commonMain/kotlin) to learn about function arguments.
 
 <!-- __demos__ -->
 ## Demos
