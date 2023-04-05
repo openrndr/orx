@@ -112,6 +112,15 @@ enum class GridCoordinates {
     BIPOLAR,
 }
 
+/**
+ * Create a 2D grid of [width] x [height] elements.
+ * The [builder] function will get called with the x and y
+ * coordinates of each grid cell. The u and v values passed to the
+ * [builder] function will be scaled depending on [coordinates]:
+ * - [GridCoordinates.INDEX] to get the column and row values as Double.
+ * - [GridCoordinates.BIPOLAR] to get values between -1.0 and 1.0
+ * - [GridCoordinates.UNIPOLAR] to get values between 0.0 and 1.0
+ */
 fun TriangleMeshBuilder.grid(
     width: Int,
     height: Int,
@@ -149,6 +158,15 @@ fun TriangleMeshBuilder.twist(degreesPerUnit: Double, start: Double, axis: Vecto
     }.toMutableList()
 }
 
+/**
+ * Create a 3D grid of [width] x [height] x [depth] elements.
+ * The [builder] function will get called with the x and y
+ * coordinates of each grid cell. The u and v values passed to the
+ * [builder] function will be scaled depending on [coordinates]:
+ * - [GridCoordinates.INDEX] to get the XYZ cell index values as Double.
+ * - [GridCoordinates.BIPOLAR] to get values between -1.0 and 1.0
+ * - [GridCoordinates.UNIPOLAR] to get values between 0.0 and 1.0
+ */
 fun TriangleMeshBuilder.grid(
     width: Int,
     height: Int,
@@ -179,6 +197,11 @@ fun TriangleMeshBuilder.grid(
     }
 }
 
+/**
+ * Generate a box of [width], [height] and [depth] dimensions.
+ * Specify the number of segments with [widthSegments], [heightSegments] and
+ * [depthSegments]. Use [invert] for an inside-out shape.
+ */
 fun TriangleMeshBuilder.box(
     width: Double,
     height: Double,
