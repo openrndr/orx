@@ -16,7 +16,14 @@ fun main() {
 
         program {
             val minim = minim()
+            if (minim.lineOut == null) {
+                application.exit()
+            }
+
             val lineIn = minim.getLineIn(Minim.MONO, 2048, 48000f)
+            if (lineIn == null) {
+                application.exit()
+            }
             val fft = FFT(lineIn.bufferSize(), lineIn.sampleRate())
             fft.window(LanczosWindow())
             extend {

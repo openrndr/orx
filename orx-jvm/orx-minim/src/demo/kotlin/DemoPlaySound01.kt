@@ -5,6 +5,10 @@ fun main() {
     application {
         program {
             val minim = minim()
+            if (minim.lineOut == null) {
+                application.exit()
+            }
+
             val player = minim.loadFile(
                 "demo-data/sounds/26777__junggle__btn402.mp3"
             )

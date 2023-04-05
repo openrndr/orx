@@ -18,6 +18,10 @@ fun main() {
             val minim = minim()
             val out = minim.lineOut
 
+            if (out == null) {
+                application.exit()
+            }
+
             // generates a random frequency value biased down
             fun randomFreq() = 20f + Random.nextFloat().pow(3) * 1000
 
