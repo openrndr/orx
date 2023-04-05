@@ -80,3 +80,14 @@ val xFunction by watchingExpression1(settings::xExpression, "t", constants)
 
 xFunction(1.0)
 ```
+<!-- __demos__ -->
+## Demos
+### DemoExpressionEvaluator01
+[source code](src/demo/kotlin/DemoExpressionEvaluator01.kt)
+
+![DemoExpressionEvaluator01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-expression-evaluator/images/DemoExpressionEvaluator01Kt.png)
+
+### DemoExpressionEvaluator02
+[source code](src/demo/kotlin/DemoExpressionEvaluator02.kt)
+
+![DemoExpressionEvaluator02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-expression-evaluator/images/DemoExpressionEvaluator02Kt.png)

@@ -18,3 +18,9 @@ application {
 ```
 Now when a screenshot is taken, first all uncommitted code is committed to git.
 The screenshot is saved with the first 7 characters of the commit hash in the filename.
+<!-- __demos__ -->
+## Demos
+### GitArchiverDemo01
+[source code](src/demo/kotlin/GitArchiverDemo01.kt)
+
+![GitArchiverDemo01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-git-archiver/images/GitArchiverDemo01Kt.png)

@@ -38,3 +38,19 @@ More info about the web client:
 ### Frequently asked questions
 
 [https://rabbitcontrol.cc/faq/](https://rabbitcontrol.cc/faq/)
+<!-- __demos__ -->
+## Demos
+### DemoRabbitControl
+[source code](src/demo/kotlin/DemoRabbitControl.kt)
+
+![DemoRabbitControlKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-rabbit-control/images/DemoRabbitControlKt.png)
+
+### DemoRabbitControlManualOverlay
+[source code](src/demo/kotlin/DemoRabbitControlManualOverlay.kt)
+
+![DemoRabbitControlManualOverlayKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-rabbit-control/images/DemoRabbitControlManualOverlayKt.png)
+
+### DemoRabbitHole
+[source code](src/demo/kotlin/DemoRabbitHole.kt)
+
+![DemoRabbitHoleKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-rabbit-control/images/DemoRabbitHoleKt.png)

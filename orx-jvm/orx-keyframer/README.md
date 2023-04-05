@@ -192,29 +192,29 @@ Supported functions in expressions:
 ### DemoEvelope01
 [source code](src/demo/kotlin/DemoEvelope01.kt)
 
-![DemoEvelope01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-keyframer/images/DemoEvelope01Kt.png)
+![DemoEvelope01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoEvelope01Kt.png)
 
 ### DemoFull01
 [source code](src/demo/kotlin/DemoFull01.kt)
 
-![DemoFull01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-keyframer/images/DemoFull01Kt.png)
+![DemoFull01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoFull01Kt.png)
 
 ### DemoScrub01
 [source code](src/demo/kotlin/DemoScrub01.kt)
 
-![DemoScrub01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-keyframer/images/DemoScrub01Kt.png)
+![DemoScrub01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoScrub01Kt.png)
 
 ### DemoSimple01
 [source code](src/demo/kotlin/DemoSimple01.kt)
 
-![DemoSimple01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-keyframer/images/DemoSimple01Kt.png)
+![DemoSimple01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoSimple01Kt.png)
 
 ### DemoSimple02
 [source code](src/demo/kotlin/DemoSimple02.kt)
 
-![DemoSimple02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-keyframer/images/DemoSimple02Kt.png)
+![DemoSimple02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoSimple02Kt.png)
 
 ### DemoSimpleExpressions01
 [source code](src/demo/kotlin/DemoSimpleExpressions01.kt)
 
-![DemoSimpleExpressions01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-keyframer/images/DemoSimpleExpressions01Kt.png)
+![DemoSimpleExpressions01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoSimpleExpressions01Kt.png)
