@@ -34,7 +34,8 @@ val main: SourceSet by sourceSets.getting
 
 @Suppress("UNUSED_VARIABLE")
 val demo: SourceSet by sourceSets.creating {
-    if (project.name != "openrndr-demos") {
+    val skipDemos = setOf("openrndr-demos", "orx-minim")
+    if (project.name !in skipDemos) {
         collectScreenshots(project, this@creating) { }
     }
 }
