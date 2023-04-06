@@ -7,7 +7,6 @@ import org.openrndr.draw.vertexFormat
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.mod
-import org.openrndr.shape.Circle
 import org.openrndr.shape.Shape
 import org.openrndr.shape.triangulate
 
@@ -61,8 +60,21 @@ fun meshVertexBufferWithColor(size: Int): VertexBuffer {
 
 
 @Deprecated("binary compatibility only")
-fun extrudeShape(shape: Shape, front: Double, back: Double, distanceTolerance: Double = 0.5, writer: VertexWriter) {
-    extrudeShape(shape, front, back, distanceTolerance = distanceTolerance, flipNormals = false, writer = writer)
+fun extrudeShape(
+    shape: Shape,
+    front: Double,
+    back: Double,
+    distanceTolerance: Double = 0.5,
+    writer: VertexWriter
+) {
+    extrudeShape(
+        shape,
+        front,
+        back,
+        distanceTolerance = distanceTolerance,
+        flipNormals = false,
+        writer = writer
+    )
 }
 
 
@@ -78,20 +90,23 @@ fun extrudeShape(shape: Shape, front: Double, back: Double, distanceTolerance: D
  * @param frontCap add a front cap if true
  * @param backCap add a back cap if true
  * @param sides add the sides if true
+ * @param flipNormals generates inside-out geometry if true
  * @param writer the vertex writer function
  */
 
-fun extrudeShape(baseTriangles: List<Vector2>,
-                 contours: List<List<Vector2>>,
-                 front: Double,
-                 back: Double,
-                 frontScale: Double = 1.0,
-                 backScale: Double = 1.0,
-                 frontCap: Boolean = true,
-                 backCap: Boolean = true,
-                 sides: Boolean = true,
-                 flipNormals: Boolean = false,
-                 writer: VertexWriter) {
+fun extrudeShape(
+    baseTriangles: List<Vector2>,
+    contours: List<List<Vector2>>,
+    front: Double,
+    back: Double,
+    frontScale: Double = 1.0,
+    backScale: Double = 1.0,
+    frontCap: Boolean = true,
+    backCap: Boolean = true,
+    sides: Boolean = true,
+    flipNormals: Boolean = false,
+    writer: VertexWriter
+) {
 
     val depth = back - front
     val flip = if (flipNormals) 1.0 else -1.0
@@ -102,12 +117,20 @@ fun extrudeShape(baseTriangles: List<Vector2>,
 
         if (frontCap) {
             baseTriangles.reversed().forEach {
-                writer((it * frontScale).vector3(z = front), normal, Vector2.ZERO)
+                writer(
+                    (it * frontScale).vector3(z = front),
+                    normal,
+                    Vector2.ZERO
+                )
             }
         }
         if (backCap) {
             baseTriangles.forEach {
-                writer((it * backScale).vector3(z = back), negativeNormal, Vector2.ZERO)
+                writer(
+                    (it * backScale).vector3(z = back),
+                    negativeNormal,
+                    Vector2.ZERO
+                )
             }
         }
     }
@@ -117,7 +140,9 @@ fun extrudeShape(baseTriangles: List<Vector2>,
             val points = it
 
             val normals = (points.indices).map { index ->
-                (points[mod(index + 1, points.size)] - points[mod(index - 1, points.size)]).safeNormalized * -flip
+                val a = mod(index + 1, points.size)
+                val b = mod(index - 1, points.size)
+                (points[a] - points[b]).safeNormalized * -flip
             }
             val forward = Vector3(0.0, 0.0, depth)
             val base = Vector3(0.0, 0.0, front)
@@ -144,8 +169,10 @@ fun extrudeShape(baseTriangles: List<Vector2>,
                 val frontRightUV = Vector2(offset + width, height)
 
 
-                val lnormal = (frontLeft - backLeft).normalized.cross(left.second.xy0)
-                val rnormal = (frontRight - backRight).normalized.cross(right.second.xy0)
+                val lnormal =
+                    (frontLeft - backLeft).normalized.cross(left.second.xy0)
+                val rnormal =
+                    (frontRight - backRight).normalized.cross(right.second.xy0)
 
                 writer(frontLeft, lnormal, frontLeftUV)
                 writer(frontRight, rnormal, frontRightUV)
@@ -163,24 +190,69 @@ fun extrudeShape(baseTriangles: List<Vector2>,
 
 
 /**
- * extrudes a [shape] by triangulating it and creating side- and cap geometry
+ * Extrudes a [shape] by triangulating it and creating side- and cap geometry.
+ * @param front the `z` position of the front
+ * @param back the `z` position of the back
+ * @param frontScale scale factor for the front cap
+ * @param backScale scale factor for the back cap
+ * @param frontCap add a front cap if true
+ * @param backCap add a back cap if true
+ * @param sides add the sides if true
+ * @param distanceTolerance
+ * @param flipNormals generates inside-out geometry if true
+ * @param writer the vertex writer function
  */
-fun extrudeShape(shape: Shape,
-                 front: Double,
-                 back: Double,
-                 frontScale: Double = 1.0,
-                 backScale: Double = 1.0,
-                 frontCap: Boolean = true,
-                 backCap: Boolean = true,
-                 sides: Boolean = true,
-                 distanceTolerance: Double = 0.5,
-                 flipNormals: Boolean = false, writer: VertexWriter) {
+fun extrudeShape(
+    shape: Shape,
+    front: Double,
+    back: Double,
+    frontScale: Double = 1.0,
+    backScale: Double = 1.0,
+    frontCap: Boolean = true,
+    backCap: Boolean = true,
+    sides: Boolean = true,
+    distanceTolerance: Double = 0.5,
+    flipNormals: Boolean = false,
+    writer: VertexWriter
+) {
     val baseTriangles = triangulate(shape, distanceTolerance)
     val points = shape.contours.map { it.adaptivePositions(distanceTolerance) }
 
     extrudeShape(
-            baseTriangles = baseTriangles,
-            contours = points,
+        baseTriangles = baseTriangles,
+        contours = points,
+        front = front,
+        back = back,
+        frontScale = frontScale,
+        backScale = backScale,
+        frontCap = frontCap,
+        backCap = backCap,
+        sides = sides,
+        flipNormals = flipNormals,
+        writer = writer
+    )
+}
+
+/**
+ * Extrudes all [shapes]. Uses [writer] to write the resulting
+ * 3D meshes. The arguments are passed unmodified to [extrudeShape].
+ */
+fun extrudeShapes(
+    shapes: List<Shape>,
+    front: Double,
+    back: Double,
+    frontScale: Double = 1.0,
+    backScale: Double = 1.0,
+    frontCap: Boolean = true,
+    backCap: Boolean = true,
+    sides: Boolean = true,
+    distanceTolerance: Double = 0.5,
+    flipNormals: Boolean = false,
+    writer: VertexWriter
+) {
+    shapes.forEach {
+        extrudeShape(
+            shape = it,
             front = front,
             back = back,
             frontScale = frontScale,
@@ -188,38 +260,16 @@ fun extrudeShape(shape: Shape,
             frontCap = frontCap,
             backCap = backCap,
             sides = sides,
+            distanceTolerance = distanceTolerance,
             flipNormals = flipNormals,
             writer = writer
-    )
-}
-
-fun extrudeShapes(shapes: List<Shape>,
-                  front: Double,
-                  back: Double,
-                  frontScale: Double = 1.0,
-                  backScale: Double = 1.0,
-                  frontCap: Boolean = true,
-                  backCap: Boolean = true,
-                  sides: Boolean = true,
-                  distanceTolerance: Double = 0.5,
-                  flipNormals: Boolean = false, writer: VertexWriter) {
-    shapes.forEach {
-        extrudeShape(
-                shape = it,
-                front = front,
-                back = back,
-                frontScale = frontScale,
-                backScale = backScale,
-                frontCap = frontCap,
-                backCap = backCap,
-                sides = sides,
-                distanceTolerance = distanceTolerance,
-                flipNormals = flipNormals,
-                writer = writer
         )
     }
 }
 
+/**
+ * Return a normalized [Vector2], or [Vector2.ZERO] if the vector is too small
+ */
 private val Vector2.safeNormalized: Vector2
     get() {
         return if (length > 0.0001) {

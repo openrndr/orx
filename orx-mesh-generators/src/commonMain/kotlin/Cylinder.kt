@@ -17,7 +17,7 @@ import kotlin.math.sin
  * @param segments the number of segments along the z-axis
  * @param radius the radius of the cylinder
  * @param length the length of the cylinder
- * @param invert generates inside-out geometry if true
+ * @param flipNormals generates inside-out geometry if true
  * @param center center the cylinder on the z-plane
  * @return A vertex buffer containing the triangles to render the 3D shape
  */
@@ -26,13 +26,13 @@ fun cylinderMesh(
     segments: Int = 16,
     radius: Double = 1.0,
     length: Double,
-    invert: Boolean = false,
+    flipNormals: Boolean = false,
     center: Boolean = false,
 ): VertexBuffer {
     val vertexCount = 6 * sides * segments
     val vb = meshVertexBuffer(vertexCount)
     vb.put {
-        generateCylinder(sides, segments, radius, length, invert, center, bufferWriter(this))
+        generateCylinder(sides, segments, radius, length, flipNormals, center, bufferWriter(this))
     }
     return vb
 }
@@ -43,7 +43,7 @@ fun cylinderMesh(
  * @param segments the number of segments along the z-axis
  * @param radius the radius of the cylinder
  * @param length the length of the cylinder
- * @param invert generates inside-out geometry if true
+ * @param flipNormals generates inside-out geometry if true
  * @param center centers the cylinder on the z-plane if true
  * @param writer the vertex writer function
  */
@@ -52,10 +52,10 @@ fun generateCylinder(
     segments: Int,
     radius: Double,
     length: Double,
-    invert: Boolean = false,
+    flipNormals: Boolean = false,
     center: Boolean = false,
     writer: VertexWriter
-) = generateTaperedCylinder(sides, segments, radius, radius, length, invert, center, writer)
+) = generateTaperedCylinder(sides, segments, radius, radius, length, flipNormals, center, writer)
 
 /**
  * Generate a tapered cylinder along the z-axis
@@ -64,7 +64,7 @@ fun generateCylinder(
  * @param radiusStart the start radius of the tapered cylinder
  * @param radiusEnd the end radius of the tapered cylinder
  * @param length the length of the tapered cylinder
- * @param invert generates inside-out geometry if true
+ * @param flipNormals generates inside-out geometry if true
  * @param center centers the cylinder on the z-plane if true
  * @param writer the vertex writer function
  */
@@ -74,14 +74,14 @@ fun generateTaperedCylinder(
     radiusStart: Double,
     radiusEnd: Double,
     length: Double,
-    invert: Boolean = false,
+    flipNormals: Boolean = false,
     center: Boolean = false,
     writer: VertexWriter
 ) {
     val dphi = (PI * 2) / sides
     val ddeg = (360.0) / sides
 
-    val invertFactor = if (invert) 1.0 else -1.0
+    val invertFactor = if (flipNormals) 1.0 else -1.0
 
     val dr = radiusEnd - radiusStart
 
@@ -119,7 +119,7 @@ fun generateTaperedCylinder(
             val n1 = (Matrix44.rotateZ((side + 1) * ddeg) * baseNormal.xyz0).xyz.normalized * invertFactor
 
 
-            if (invert) {
+            if (flipNormals) {
                 writer(Vector3(x00, y00, z0), n0, Vector2(u0, v0))
                 writer(Vector3(x10, y10, z0), n1, Vector2(u0, v1))
                 writer(Vector3(x11, y11, z1), n1, Vector2(u1, v1))

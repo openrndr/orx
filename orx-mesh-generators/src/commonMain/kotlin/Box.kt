@@ -12,13 +12,17 @@ import org.openrndr.math.Vector3
  * @param widthSegments the number of segments along the x-axis
  * @param heightSegments the number of segments along the z-axis
  * @param depthSegments the number of segments along the y-axis
- * @param invert generates inside-out geometry if true
+ * @param flipNormals generates inside-out geometry if true
  * @return A vertex buffer containing the triangles to render the 3D shape
  */
 fun boxMesh(
-    width: Double = 1.0, height: Double = 1.0, depth: Double = 1.0,
-    widthSegments: Int = 1, heightSegments: Int = 1, depthSegments: Int = 1,
-    invert: Boolean = false
+    width: Double = 1.0,
+    height: Double = 1.0,
+    depth: Double = 1.0,
+    widthSegments: Int = 1,
+    heightSegments: Int = 1,
+    depthSegments: Int = 1,
+    flipNormals: Boolean = false
 ): VertexBuffer {
     val vb = meshVertexBuffer(
         widthSegments * heightSegments * 6 * 2 +
@@ -29,7 +33,7 @@ fun boxMesh(
         generateBox(
             width, height, depth,
             widthSegments, heightSegments, depthSegments,
-            invert, bufferWriter(this)
+            flipNormals, bufferWriter(this)
         )
     }
     return vb
@@ -43,18 +47,22 @@ fun boxMesh(
  * @param widthSegments the number of segments along the x-axis
  * @param heightSegments the number of segments along the z-axis
  * @param depthSegments the number of segments along the y-axis
- * @param invert generates inside-out geometry if true
+ * @param flipNormals generates inside-out geometry if true
  * @param writer the vertex writer function
  */
 
 fun generateBox(
-    width: Double = 1.0, height: Double = 1.0, depth: Double = 1.0,
-    widthSegments: Int = 1, heightSegments: Int = 1, depthSegments: Int = 1,
-    invert: Boolean = false,
+    width: Double = 1.0,
+    height: Double = 1.0,
+    depth: Double = 1.0,
+    widthSegments: Int = 1,
+    heightSegments: Int = 1,
+    depthSegments: Int = 1,
+    flipNormals: Boolean = false,
     writer: VertexWriter
 ) {
 
-    val sign = if (invert) -1.0 else 1.0
+    val sign = if (flipNormals) -1.0 else 1.0
     // +x -- ZY
     generatePlane(
         Vector3(width / 2.0 * sign, 0.0, 0.0),

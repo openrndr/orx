@@ -22,7 +22,10 @@ import org.openrndr.shape.Triangle
  * @param writer the vertex writer function
  */
 fun quadToTris(
-    v00: Vector3, v01: Vector3, v10: Vector3, v11: Vector3,
+    v00: Vector3,
+    v01: Vector3,
+    v10: Vector3,
+    v11: Vector3,
     faceNormal: Vector3,
     writer: VertexWriter
 ) {
@@ -71,20 +74,20 @@ fun contourSegment(
  *
  * @param triangulation the list of triangles to write
  * @param frame a transformation matrix to apply to each triangle
- * @param invert generates inside-out geometry if true
+ * @param flipNormals generates inside-out geometry if true
  * @param writer the vertex writer function
  */
 fun triangulationWithFrame(
     triangulation: List<Triangle>,
     frame: Matrix44,
-    invert: Boolean = true,
+    flipNormals: Boolean = true,
     writer: VertexWriter
 ) {
     val normalFrame = normalMatrix(frame)
-    val normalScale = if (!invert) -1.0 else 1.0
+    val normalScale = if (!flipNormals) -1.0 else 1.0
     val normal = ((normalFrame * Vector4(0.0, 0.0, normalScale, 0.0)).xyz)
     for (triangle in triangulation) {
-        val t = if (!invert) triangle else Triangle(triangle.x3, triangle.x2, triangle.x1)
+        val t = if (!flipNormals) triangle else Triangle(triangle.x3, triangle.x2, triangle.x1)
         writer((frame * t.x1.xy01).xyz, normal, Vector2.ZERO)
         writer((frame * t.x2.xy01).xyz, normal, Vector2.ZERO)
         writer((frame * t.x3.xy01).xyz, normal, Vector2.ZERO)

@@ -54,16 +54,32 @@ class TriangleMeshBuilder {
         popTransform()
     }
 
-    class VertexData(val position: Vector3, val normal: Vector3, val texCoord: Vector2, val color: ColorRGBa) {
-        fun transform(transform: Matrix44, normalTransform: Matrix44): VertexData {
-            return VertexData((transform * position.xyz1).xyz, (normalTransform * normal.xyz0).xyz, texCoord, color)
-        }
+    class VertexData(
+        val position: Vector3,
+        val normal: Vector3,
+        val texCoord: Vector2,
+        val color: ColorRGBa
+    ) {
+        fun transform(
+            transform: Matrix44,
+            normalTransform: Matrix44
+        ) = VertexData(
+            (transform * position.xyz1).xyz,
+            (normalTransform * normal.xyz0).xyz,
+            texCoord,
+            color
+        )
     }
 
     var data = mutableListOf<VertexData>()
 
     fun write(position: Vector3, normal: Vector3, texCoord: Vector2) {
-        data.add(VertexData(position, normal, texCoord, color).transform(transform, normalTransform))
+        data.add(
+            VertexData(position, normal, texCoord, color).transform(
+                transform,
+                normalTransform
+            )
+        )
     }
 
     fun concat(other: TriangleMeshBuilder) {
@@ -98,12 +114,22 @@ class TriangleMeshBuilder {
     }
 }
 
-fun TriangleMeshBuilder.sphere(sides: Int, segments: Int, radius: Double, invert: Boolean = false) {
-    generateSphere(sides, segments, radius, invert, this::write)
+fun TriangleMeshBuilder.sphere(
+    sides: Int,
+    segments: Int,
+    radius: Double,
+    flipNormals: Boolean = false
+) {
+    generateSphere(sides, segments, radius, flipNormals, this::write)
 }
 
-fun TriangleMeshBuilder.hemisphere(sides: Int, segments: Int, radius: Double, invert: Boolean = false) {
-    generateHemisphere(sides, segments, radius, invert, this::write)
+fun TriangleMeshBuilder.hemisphere(
+    sides: Int,
+    segments: Int,
+    radius: Double,
+    flipNormals: Boolean = false
+) {
+    generateHemisphere(sides, segments, radius, flipNormals, this::write)
 }
 
 enum class GridCoordinates {
@@ -138,7 +164,10 @@ fun TriangleMeshBuilder.grid(
                         2 * v / (height - 1.0) - 1
                     )
 
-                    GridCoordinates.UNIPOLAR -> this.builder(u / (width - 1.0), v / (height - 1.0))
+                    GridCoordinates.UNIPOLAR -> this.builder(
+                        u / (width - 1.0),
+                        v / (height - 1.0)
+                    )
                 }
             }
         }
@@ -167,10 +196,16 @@ fun TriangleMeshBuilder.grid(
             for (u in 0 until width) {
                 group {
                     when (coordinates) {
-                        GridCoordinates.INDEX -> this.builder(u * 1.0, v * 1.0, w * 1.0)
+                        GridCoordinates.INDEX -> this.builder(
+                            u * 1.0,
+                            v * 1.0,
+                            w * 1.0
+                        )
+
                         GridCoordinates.BIPOLAR -> this.builder(
                             2 * u / (width - 1.0) - 1,
-                            2 * v / (height - 1.0) - 1, 2 * w / (depth - 1.0) - 1
+                            2 * v / (height - 1.0) - 1,
+                            2 * w / (depth - 1.0) - 1
                         )
 
                         GridCoordinates.UNIPOLAR -> this.builder(
@@ -190,7 +225,11 @@ fun TriangleMeshBuilder.grid(
  * at [axis]. [degreesPerUnit] controls the amount of  twist. [start] is
  * currently unused.
  */
-fun TriangleMeshBuilder.twist(degreesPerUnit: Double, start: Double, axis: Vector3 = Vector3.UNIT_Y) {
+fun TriangleMeshBuilder.twist(
+    degreesPerUnit: Double,
+    start: Double,
+    axis: Vector3 = Vector3.UNIT_Y
+) {
     data = data.map {
         val p = it.position.projectedOn(axis)
         val t = when {
@@ -200,14 +239,19 @@ fun TriangleMeshBuilder.twist(degreesPerUnit: Double, start: Double, axis: Vecto
             else -> throw IllegalArgumentException("0 axis")
         }
         val r = Matrix44.rotate(axis, t * degreesPerUnit)
-        TriangleMeshBuilder.VertexData((r * it.position.xyz1).xyz, (r * it.normal.xyz0).xyz, it.texCoord, this@twist.color)
+        TriangleMeshBuilder.VertexData(
+            (r * it.position.xyz1).xyz,
+            (r * it.normal.xyz0).xyz,
+            it.texCoord,
+            this@twist.color
+        )
     }.toMutableList()
 }
 
 /**
  * Generate a box of [width], [height] and [depth] dimensions.
  * Specify the number of segments with [widthSegments], [heightSegments] and
- * [depthSegments]. Use [invert] for an inside-out shape.
+ * [depthSegments]. Use [flipNormals] for an inside-out shape.
  */
 fun TriangleMeshBuilder.box(
     width: Double,
@@ -216,9 +260,18 @@ fun TriangleMeshBuilder.box(
     widthSegments: Int = 1,
     heightSegments: Int = 1,
     depthSegments: Int = 1,
-    invert: Boolean = false
+    flipNormals: Boolean = false
 ) {
-    generateBox(width, height, depth, widthSegments, heightSegments, depthSegments, invert, this::write)
+    generateBox(
+        width,
+        height,
+        depth,
+        widthSegments,
+        heightSegments,
+        depthSegments,
+        flipNormals,
+        this::write
+    )
 }
 
 /**
@@ -228,7 +281,7 @@ fun TriangleMeshBuilder.box(
  * @param segments the number of segments along the z-axis
  * @param radius the radius of the cylinder
  * @param length the length of the cylinder
- * @param invert generates inside-out geometry if true
+ * @param flipNormals generates inside-out geometry if true
  * @param center center the cylinder on the z-plane
  */
 fun TriangleMeshBuilder.cylinder(
@@ -236,10 +289,18 @@ fun TriangleMeshBuilder.cylinder(
     segments: Int,
     radius: Double,
     length: Double,
-    invert: Boolean = false,
+    flipNormals: Boolean = false,
     center: Boolean = false
 ) {
-    generateCylinder(sides, segments, radius, length, invert, center, this::write)
+    generateCylinder(
+        sides,
+        segments,
+        radius,
+        length,
+        flipNormals,
+        center,
+        this::write
+    )
 }
 
 /**
@@ -258,7 +319,7 @@ fun TriangleMeshBuilder.dodecahedron(radius: Double) {
  * @param startRadius the start radius of the tapered cylinder
  * @param endRadius the end radius of the tapered cylinder
  * @param length the length of the tapered cylinder
- * @param invert generates inside-out geometry if true
+ * @param flipNormals generates inside-out geometry if true
  * @param center centers the cylinder on the z-plane if true
  */
 fun TriangleMeshBuilder.taperedCylinder(
@@ -267,10 +328,19 @@ fun TriangleMeshBuilder.taperedCylinder(
     startRadius: Double,
     endRadius: Double,
     length: Double,
-    invert: Boolean = false,
+    flipNormals: Boolean = false,
     center: Boolean = false
 ) {
-    generateTaperedCylinder(sides, segments, startRadius, endRadius, length, invert, center, this::write)
+    generateTaperedCylinder(
+        sides,
+        segments,
+        startRadius,
+        endRadius,
+        length,
+        flipNormals,
+        center,
+        this::write
+    )
 }
 
 /**
@@ -280,7 +350,11 @@ fun TriangleMeshBuilder.taperedCylinder(
  * @param radius the radius of the cap
  * @param envelope a list of points defining the profile of the cap. The default envelope is a horizontal line which produces a flat round disk. By providing a more complex envelope one can create curved shapes like a bowl.
  */
-fun TriangleMeshBuilder.cap(sides: Int, radius: Double, envelope: List<Vector2>) {
+fun TriangleMeshBuilder.cap(
+    sides: Int,
+    radius: Double,
+    envelope: List<Vector2>
+) {
     generateCap(sides, radius, envelope, this::write)
 }
 
@@ -291,7 +365,11 @@ fun TriangleMeshBuilder.cap(sides: Int, radius: Double, envelope: List<Vector2>)
  * @param length the length of the shape. A multiplier for the y component of the envelope
  * @param envelope a list of points defining the profile of the shape. The default envelope is a vertical line which produces a hollow cylinder.
  */
-fun TriangleMeshBuilder.revolve(sides: Int, length: Double, envelope: List<Vector2>) {
+fun TriangleMeshBuilder.revolve(
+    sides: Int,
+    length: Double,
+    envelope: List<Vector2>
+) {
     generateRevolve(sides, length, envelope, this::write)
 }
 
@@ -303,10 +381,27 @@ fun TriangleMeshBuilder.revolve(sides: Int, length: Double, envelope: List<Vecto
  * segments.
  */
 fun TriangleMeshBuilder.plane(
-    center: Vector3, right: Vector3, forward: Vector3, up: Vector3, width: Double = 1.0, height: Double = 1.0,
-    widthSegments: Int = 1, heightSegments: Int = 1
-) =
-    generatePlane(center, right, forward, up, width, height, widthSegments, heightSegments, this::write)
+    center: Vector3,
+    right: Vector3,
+    forward: Vector3,
+    up: Vector3,
+    width: Double = 1.0,
+    height: Double = 1.0,
+    widthSegments: Int = 1,
+    heightSegments: Int = 1
+) {
+    generatePlane(
+        center,
+        right,
+        forward,
+        up,
+        width,
+        height,
+        widthSegments,
+        heightSegments,
+        this::write
+    )
+}
 
 /**
  * Extrudes a [Shape] from its triangulations
@@ -417,7 +512,10 @@ fun TriangleMeshBuilder.extrudeShapes(
  * @param builder A user function that adds 3D meshes to the [vertexBuffer]
  * @return The populated [VertexBuffer]
  */
-fun buildTriangleMesh(vertexBuffer: VertexBuffer? = null, builder: TriangleMeshBuilder.() -> Unit): VertexBuffer {
+fun buildTriangleMesh(
+    vertexBuffer: VertexBuffer? = null,
+    builder: TriangleMeshBuilder.() -> Unit
+): VertexBuffer {
     val gb = TriangleMeshBuilder()
     gb.builder()
 
@@ -435,7 +533,9 @@ fun buildTriangleMesh(vertexBuffer: VertexBuffer? = null, builder: TriangleMeshB
  * @param builder
  * @return
  */
-fun generator(builder: TriangleMeshBuilder.() -> Unit): TriangleMeshBuilder {
+fun generator(
+    builder: TriangleMeshBuilder.() -> Unit
+): TriangleMeshBuilder {
     val gb = TriangleMeshBuilder()
     gb.builder()
     return gb
@@ -446,7 +546,9 @@ fun generator(builder: TriangleMeshBuilder.() -> Unit): TriangleMeshBuilder {
  *
  * @param builder
  */
-fun TriangleMeshBuilder.group(builder: TriangleMeshBuilder.() -> Unit) {
+fun TriangleMeshBuilder.group(
+    builder: TriangleMeshBuilder.() -> Unit
+) {
     val gb = TriangleMeshBuilder()
     gb.builder()
     this.concat(gb)
