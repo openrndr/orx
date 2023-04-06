@@ -41,7 +41,7 @@ fun quadToTris(
 /**
  * Writes quads to [writer] creating a surface that connects two
  * displaced instances of [linearContour]. The positions and orientations
- * of the two contours are defined by [frame0] and [frame1].
+ * of the two contours are defined by the [frame0] and [frame1] matrices.
  *
  * @param linearContour the cross-section of the surface to create
  * @param frame0 a transformation matrix that defines an initial position
@@ -95,25 +95,34 @@ fun triangulationWithFrame(
 }
 
 /**
- * Extrude contour steps
+ * Extrude a [contour] along a [path] specifying the number of steps.
  *
- * @param contour
- * @param path
- * @param stepCount
- * @param up0
- * @param contourDistanceTolerance
- * @param pathDistanceTolerance
- * @param steps
- * @param frames
- * @param startCap
- * @param endCap
- * @param writer
+ * @param contour the cross-section of the mesh
+ * @param path the 3D path
+ * @param stepCount the number of steps along the [path]
+ * @param up0 the initial up-vector
+ * @param contourDistanceTolerance controls the number of steps in the
+ * cross-section. Lower tolerance values increase the number of steps.
+ * @param pathDistanceTolerance controls the number of steps along the [path].
+ * Lower tolerance values increase the number of steps.
+ * @param steps the resulting positions in the path
+ * @param frames a list of matrices holding the transformation matrices along
+ * the path
+ * @param startCap adds a start cap if set to true
+ * @param endCap adds an end cap if set to true
+ * @param writer the vertex writer function
  */
 fun extrudeContourSteps(
-    contour: ShapeContour, path: Path3D, stepCount: Int, up0: Vector3,
+    contour: ShapeContour,
+    path: Path3D,
+    stepCount: Int,
+    up0: Vector3,
     contourDistanceTolerance: Double = 0.5,
     pathDistanceTolerance: Double = 0.5,
-    steps: List<Vector3> = path.equidistantPositions(stepCount, pathDistanceTolerance),
+    steps: List<Vector3> = path.equidistantPositions(
+        stepCount,
+        pathDistanceTolerance
+    ),
     frames: List<Matrix44> = steps.frames(up0),
     startCap: Boolean = true,
     endCap: Boolean = true,
@@ -130,14 +139,15 @@ fun extrudeContourSteps(
 }
 
 /**
- * Extrude caps
+ * Adds caps to an extruded shape
  *
- * @param linearShape
- * @param path
- * @param startCap
- * @param endCap
- * @param frames
- * @param writer
+ * @param linearShape the cross-section of the mesh
+ * @param path the 3D path
+ * @param startCap adds a start cap if set to true
+ * @param endCap adds an end cap if set to true
+ * @param frames a list of matrices holding the transformation matrices along
+ * the path
+ * @param writer the vertex writer function
  */
 private fun extrudeCaps(
     linearShape: Shape,
@@ -159,21 +169,27 @@ private fun extrudeCaps(
 }
 
 /**
- * Extrude contour adaptive
+ * Extrude a [contour] along a [path]. The number of resulting steps
+ * along the path depends on the tolerance values.
  *
- * @param contour
- * @param path
- * @param up0
- * @param contourDistanceTolerance
- * @param pathDistanceTolerance
- * @param steps
- * @param frames
- * @param startCap
- * @param endCap
- * @param writer
+ * @param contour the cross-section of the mesh
+ * @param path the 3D path
+ * @param up0 the initial up-vector
+ * @param contourDistanceTolerance controls the number of steps in the
+ * cross-section. Lower tolerance values increase the number of steps.
+ * @param pathDistanceTolerance controls the number of steps along the [path].
+ * Lower tolerance values increase the number of steps.
+ * @param steps the resulting positions in the path
+ * @param frames a list of matrices holding the transformation matrices along
+ * the path
+ * @param startCap adds a start cap if set to true
+ * @param endCap adds an end cap if set to true
+ * @param writer the vertex writer function
  */
 fun extrudeContourAdaptive(
-    contour: ShapeContour, path: Path3D, up0: Vector3,
+    contour: ShapeContour,
+    path: Path3D,
+    up0: Vector3,
     contourDistanceTolerance: Double = 0.5,
     pathDistanceTolerance: Double = 0.5,
     steps: List<Vector3> = path.adaptivePositions(pathDistanceTolerance),
@@ -192,23 +208,27 @@ fun extrudeContourAdaptive(
 }
 
 /**
- * Extrude shape steps
+ * Extrude a [shape] along a [path] specifying the number of steps.
  *
- * @param shape
- * @param path
- * @param stepCount
- * @param up0
- * @param contourDistanceTolerance
- * @param pathDistanceTolerance
- * @param steps
- * @param frames
- * @param startCap
- * @param endCap
- * @param writer
+ * @param shape the cross-section of the mesh
+ * @param path the 3D path
+ * @param stepCount the number of steps along the [path]
+ * @param up0 the initial up-vector
+ * @param contourDistanceTolerance controls the number of steps in the
+ * cross-section. Lower tolerance values increase the number of steps.
+ * @param pathDistanceTolerance controls the number of steps along the [path].
+ * Lower tolerance values increase the number of steps.
+ * @param steps the resulting positions in the path
+ * @param frames a list of matrices holding the transformation matrices along
+ * the path
+ * @param startCap adds a start cap if set to true
+ * @param endCap adds an end cap if set to true
+ * @param writer the vertex writer function
  */
 fun extrudeShapeSteps(
     shape: Shape,
-    path: Path3D, stepCount: Int,
+    path: Path3D,
+    stepCount: Int,
     up0: Vector3,
     contourDistanceTolerance: Double = 0.5,
     pathDistanceTolerance: Double = 0.5,
@@ -239,18 +259,22 @@ fun extrudeShapeSteps(
 }
 
 /**
- * Extrude shape adaptive
+ * Extrude a [shape] along a [path]. The number of resulting steps
+ * along the path depends on the tolerance values.
  *
- * @param shape
- * @param path
- * @param up0
- * @param contourDistanceTolerance
- * @param pathDistanceTolerance
- * @param steps
- * @param frames
- * @param startCap
- * @param endCap
- * @param writer
+ * @param shape the cross-section of the mesh
+ * @param path the 3D path
+ * @param up0 the initial up-vector
+ * @param contourDistanceTolerance controls the number of steps in the
+ * cross-section. Lower tolerance values increase the number of steps.
+ * @param pathDistanceTolerance controls the number of steps along the [path].
+ * Lower tolerance values increase the number of steps.
+ * @param steps the resulting positions in the path
+ * @param frames a list of matrices holding the transformation matrices along
+ * the path
+ * @param startCap adds a start cap if set to true
+ * @param endCap adds an end cap if set to true
+ * @param writer the vertex writer function
  */
 fun extrudeShapeAdaptive(
     shape: Shape,
@@ -284,20 +308,23 @@ fun extrudeShapeAdaptive(
 }
 
 /**
- * Extrude shape steps
+ * Extrude a [shape] along a [path] specifying the number of steps.
  *
- * @param shape
- * @param path
- * @param stepCount
- * @param up0
- * @param contourDistanceTolerance
- * @param pathDistanceTolerance
- * @param startCap
- * @param endCap
+ * @param shape the cross-section of the mesh
+ * @param path the 3D path
+ * @param stepCount the number of steps along the [path]
+ * @param up0 the up-vector
+ * @param contourDistanceTolerance controls the number of steps in the
+ * cross-section. Lower tolerance values increase the number of steps.
+ * @param pathDistanceTolerance controls the number of steps along the [path].
+ * Lower tolerance values increase the number of steps.
+ * @param startCap adds a start cap if set to true
+ * @param endCap adds an end cap if set to true
  */
 fun TriangleMeshBuilder.extrudeShapeSteps(
     shape: Shape,
-    path: Path3D, stepCount: Int,
+    path: Path3D,
+    stepCount: Int,
     up0: Vector3,
     contourDistanceTolerance: Double = 0.5,
     pathDistanceTolerance: Double = 0.5,
@@ -316,15 +343,18 @@ fun TriangleMeshBuilder.extrudeShapeSteps(
 )
 
 /**
- * Extrude shape adaptive
+ * Extrude a [shape] along a [path]. The number of resulting steps
+ * along the path depends on the tolerance values.
  *
- * @param shape
- * @param path
- * @param up0
- * @param contourDistanceTolerance
- * @param pathDistanceTolerance
- * @param startCap
- * @param endCap
+ * @param shape the cross-section of the mesh
+ * @param path the 3D path
+ * @param up0 the initial up-vector
+ * @param contourDistanceTolerance controls the number of steps in the
+ * cross-section. Lower tolerance values increase the number of steps.
+ * @param pathDistanceTolerance controls the number of steps along the [path].
+ * Lower tolerance values increase the number of steps.
+ * @param startCap adds a start cap if set to true
+ * @param endCap adds an end cap if set to true
  */
 fun TriangleMeshBuilder.extrudeShapeAdaptive(
     shape: Shape,
@@ -348,12 +378,14 @@ fun TriangleMeshBuilder.extrudeShapeAdaptive(
 /**
  * Extrude a [contour] along a [path] specifying the number of steps.
  *
- * @param contour the cross-section of the produced shape
+ * @param contour the cross-section of the mesh
  * @param path the 3D path
  * @param stepCount the number of steps along the [path]
- * @param up0 the up-vector
- * @param contourDistanceTolerance
- * @param pathDistanceTolerance
+ * @param up0 the initial up-vector
+ * @param contourDistanceTolerance controls the number of steps in the
+ * cross-section. Lower tolerance values increase the number of steps.
+ * @param pathDistanceTolerance controls the number of steps along the [path].
+ * Lower tolerance values increase the number of steps.
  */
 fun TriangleMeshBuilder.extrudeContourSteps(
     contour: ShapeContour,
@@ -374,13 +406,15 @@ fun TriangleMeshBuilder.extrudeContourSteps(
 
 /**
  * Extrude a [contour] along a [path]. The number of resulting steps
- * along the path will depend on the tolerance values.
+ * along the path depends on the tolerance values.
  *
- * @param contour the cross-section of the produced shape
+ * @param contour the cross-section of the shape
  * @param path the 3D path
  * @param up0 the up-vector
- * @param contourDistanceTolerance
- * @param pathDistanceTolerance
+ * @param contourDistanceTolerance controls the number of steps in the
+ * cross-section. Lower tolerance values increase the number of steps.
+ * @param pathDistanceTolerance controls the number of steps along the [path].
+ * Lower tolerance values increase the number of steps.
  */
 fun TriangleMeshBuilder.extrudeContourAdaptive(
     contour: ShapeContour,
