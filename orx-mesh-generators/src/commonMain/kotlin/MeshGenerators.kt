@@ -67,16 +67,31 @@ fun extrudeShape(shape: Shape, front: Double, back: Double, distanceTolerance: D
 
 
 /**
- * extrudes a [shape] from its triangulations
+ * Extrudes a [Shape] from its triangulations
+ *
+ * @param baseTriangles triangle vertices for the caps
+ * @param contours contour vertices for the sides
+ * @param front the `z` position of the front
+ * @param back the `z` position of the back
+ * @param frontScale scale factor for the front cap
+ * @param backScale scale factor for the back cap
+ * @param frontCap add a front cap if true
+ * @param backCap add a back cap if true
+ * @param sides add the sides if true
+ * @param writer the vertex writer function
  */
-fun extrudeShape(baseTriangles: List<Vector2>, contours: List<List<Vector2>>, front: Double,
+
+fun extrudeShape(baseTriangles: List<Vector2>,
+                 contours: List<List<Vector2>>,
+                 front: Double,
                  back: Double,
                  frontScale: Double = 1.0,
                  backScale: Double = 1.0,
                  frontCap: Boolean = true,
                  backCap: Boolean = true,
                  sides: Boolean = true,
-                 flipNormals: Boolean = false, writer: VertexWriter) {
+                 flipNormals: Boolean = false,
+                 writer: VertexWriter) {
 
     val depth = back - front
     val flip = if (flipNormals) 1.0 else -1.0

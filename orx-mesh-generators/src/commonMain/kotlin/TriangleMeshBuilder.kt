@@ -113,11 +113,12 @@ enum class GridCoordinates {
 }
 
 /**
- * Create a 2D grid of [width] x [height] elements.
- * The [builder] function will get called with the x and y
- * coordinates of each grid cell. The u and v values passed to the
- * [builder] function will be scaled depending on [coordinates]:
- * - [GridCoordinates.INDEX] to get the column and row values as Double.
+ * Create a 2D grid of [width] x [height] 3D elements.
+ * The [builder] function will get called with the `u` and `v`
+ * coordinates of each grid cell, so you have an opportunity to add meshes
+ * to the scene using those coordinates. The coordinate values will be scaled
+ * according to [coordinates]. Use:
+ * - [GridCoordinates.INDEX] to get UV cell indices as [Double]s.
  * - [GridCoordinates.BIPOLAR] to get values between -1.0 and 1.0
  * - [GridCoordinates.UNIPOLAR] to get values between 0.0 and 1.0
  */
@@ -144,26 +145,13 @@ fun TriangleMeshBuilder.grid(
     }
 }
 
-fun TriangleMeshBuilder.twist(degreesPerUnit: Double, start: Double, axis: Vector3 = Vector3.UNIT_Y) {
-    data = data.map {
-        val p = it.position.projectedOn(axis)
-        val t = when {
-            axis.x != 0.0 -> p.x / axis.x
-            axis.y != 0.0 -> p.y / axis.y
-            axis.z != 0.0 -> p.z / axis.z
-            else -> throw IllegalArgumentException("0 axis")
-        }
-        val r = Matrix44.rotate(axis, t * degreesPerUnit)
-        TriangleMeshBuilder.VertexData((r * it.position.xyz1).xyz, (r * it.normal.xyz0).xyz, it.texCoord, this@twist.color)
-    }.toMutableList()
-}
-
 /**
- * Create a 3D grid of [width] x [height] x [depth] elements.
- * The [builder] function will get called with the x and y
- * coordinates of each grid cell. The u and v values passed to the
- * [builder] function will be scaled depending on [coordinates]:
- * - [GridCoordinates.INDEX] to get the XYZ cell index values as Double.
+ * Create a 3D grid of [width] x [height] x [depth] 3D elements.
+ * The [builder] function will get called with the `u`, `v` and `w`
+ * coordinates of each grid cell, so you have an opportunity to add meshes
+ * to the scene using those coordinates. The coordinate values will be scaled
+ * according to [coordinates]. Use:
+ * - [GridCoordinates.INDEX] to get the UVW cell indices as [Double]s.
  * - [GridCoordinates.BIPOLAR] to get values between -1.0 and 1.0
  * - [GridCoordinates.UNIPOLAR] to get values between 0.0 and 1.0
  */
@@ -198,6 +186,25 @@ fun TriangleMeshBuilder.grid(
 }
 
 /**
+ * Twists a 3D mesh around an axis that starts at [Vector3.ZERO] and ends
+ * at [axis]. [degreesPerUnit] controls the amount of  twist. [start] is
+ * currently unused.
+ */
+fun TriangleMeshBuilder.twist(degreesPerUnit: Double, start: Double, axis: Vector3 = Vector3.UNIT_Y) {
+    data = data.map {
+        val p = it.position.projectedOn(axis)
+        val t = when {
+            axis.x != 0.0 -> p.x / axis.x
+            axis.y != 0.0 -> p.y / axis.y
+            axis.z != 0.0 -> p.z / axis.z
+            else -> throw IllegalArgumentException("0 axis")
+        }
+        val r = Matrix44.rotate(axis, t * degreesPerUnit)
+        TriangleMeshBuilder.VertexData((r * it.position.xyz1).xyz, (r * it.normal.xyz0).xyz, it.texCoord, this@twist.color)
+    }.toMutableList()
+}
+
+/**
  * Generate a box of [width], [height] and [depth] dimensions.
  * Specify the number of segments with [widthSegments], [heightSegments] and
  * [depthSegments]. Use [invert] for an inside-out shape.
@@ -214,6 +221,16 @@ fun TriangleMeshBuilder.box(
     generateBox(width, height, depth, widthSegments, heightSegments, depthSegments, invert, this::write)
 }
 
+/**
+ * Generate a cylinder
+ *
+ * @param sides the number of sides of the cylinder
+ * @param segments the number of segments along the z-axis
+ * @param radius the radius of the cylinder
+ * @param length the length of the cylinder
+ * @param invert generates inside-out geometry if true
+ * @param center center the cylinder on the z-plane
+ */
 fun TriangleMeshBuilder.cylinder(
     sides: Int,
     segments: Int,
@@ -225,10 +242,25 @@ fun TriangleMeshBuilder.cylinder(
     generateCylinder(sides, segments, radius, length, invert, center, this::write)
 }
 
+/**
+ * Generate dodecahedron mesh
+ *
+ * @param radius the radius of the dodecahedron
+ */
 fun TriangleMeshBuilder.dodecahedron(radius: Double) {
     generateDodecahedron(radius, this::write)
 }
 
+/**
+ * Generate a tapered cylinder along the z-axis
+ * @param sides the number of sides of the tapered cylinder
+ * @param segments the number of segments along the z-axis
+ * @param startRadius the start radius of the tapered cylinder
+ * @param endRadius the end radius of the tapered cylinder
+ * @param length the length of the tapered cylinder
+ * @param invert generates inside-out geometry if true
+ * @param center centers the cylinder on the z-plane if true
+ */
 fun TriangleMeshBuilder.taperedCylinder(
     sides: Int,
     segments: Int,
@@ -241,21 +273,52 @@ fun TriangleMeshBuilder.taperedCylinder(
     generateTaperedCylinder(sides, segments, startRadius, endRadius, length, invert, center, this::write)
 }
 
+/**
+ * Generate a shape by rotating an envelope around a vertical axis.
+ *
+ * @param sides the angular resolution of the cap
+ * @param radius the radius of the cap
+ * @param envelope a list of points defining the profile of the cap. The default envelope is a horizontal line which produces a flat round disk. By providing a more complex envelope one can create curved shapes like a bowl.
+ */
 fun TriangleMeshBuilder.cap(sides: Int, radius: Double, envelope: List<Vector2>) {
     generateCap(sides, radius, envelope, this::write)
 }
 
+/**
+ * Generate a shape by rotating an envelope around a vertical axis.
+ *
+ * @param sides the angular resolution of the cap
+ * @param length the length of the shape. A multiplier for the y component of the envelope
+ * @param envelope a list of points defining the profile of the shape. The default envelope is a vertical line which produces a hollow cylinder.
+ */
 fun TriangleMeshBuilder.revolve(sides: Int, length: Double, envelope: List<Vector2>) {
     generateRevolve(sides, length, envelope, this::write)
 }
 
+/**
+ * Generate plane centered at [center], using the [right], [forward] and [up]
+ * vectors for its orientation.
+ * [width] and [height] specify the dimensions of the plane.
+ * [widthSegments] and [heightSegments] control the plane's number of
+ * segments.
+ */
 fun TriangleMeshBuilder.plane(
     center: Vector3, right: Vector3, forward: Vector3, up: Vector3, width: Double = 1.0, height: Double = 1.0,
     widthSegments: Int = 1, heightSegments: Int = 1
 ) =
     generatePlane(center, right, forward, up, width, height, widthSegments, heightSegments, this::write)
 
-
+/**
+ * Extrudes a [Shape] from its triangulations
+ *
+ * @param baseTriangles triangle vertices for the caps
+ * @param contours contour vertices for the sides
+ * @param length the length of the extrusion
+ * @param scale scale factor for the caps
+ * @param frontCap add a front cap if true
+ * @param backCap add a back cap if true
+ * @param sides add the sides if true
+ */
 fun TriangleMeshBuilder.extrudeShape(
     baseTriangles: List<Vector2>,
     contours: List<List<Vector2>>,
@@ -280,6 +343,18 @@ fun TriangleMeshBuilder.extrudeShape(
     )
 }
 
+/**
+ * Extrudes a [Shape]
+ *
+ * @param shape the [Shape] to extrude
+ * @param length length of the extrusion
+ * @param scale scale factor of the caps
+ * @param frontCap add a front cap if true
+ * @param backCap add a back cap if true
+ * @param sides add the sides if true
+ * @param distanceTolerance controls how many segments will be created. Lower
+ * values result in higher vertex counts.
+ */
 fun TriangleMeshBuilder.extrudeShape(
     shape: Shape,
     length: Double,
@@ -304,6 +379,15 @@ fun TriangleMeshBuilder.extrudeShape(
     )
 }
 
+/**
+ * Extrudes a list of [Shape]
+ *
+ * @param shapes The [Shape]s to extrude
+ * @param length length of the extrusion
+ * @param scale scale factor of the caps
+ * @param distanceTolerance controls how many segments will be created. Lower
+ * values result in higher vertex counts.
+ */
 fun TriangleMeshBuilder.extrudeShapes(
     shapes: List<Shape>,
     length: Double,
@@ -325,6 +409,14 @@ fun TriangleMeshBuilder.extrudeShapes(
     )
 }
 
+/**
+ * Creates a triangle mesh builder
+ *
+ * @param vertexBuffer The optional [VertexBuffer] into which to write data.
+ * If not provided one is created.
+ * @param builder A user function that adds 3D meshes to the [vertexBuffer]
+ * @return The populated [VertexBuffer]
+ */
 fun buildTriangleMesh(vertexBuffer: VertexBuffer? = null, builder: TriangleMeshBuilder.() -> Unit): VertexBuffer {
     val gb = TriangleMeshBuilder()
     gb.builder()
@@ -337,12 +429,23 @@ fun buildTriangleMesh(vertexBuffer: VertexBuffer? = null, builder: TriangleMeshB
     return vb
 }
 
+/**
+ * TODO
+ *
+ * @param builder
+ * @return
+ */
 fun generator(builder: TriangleMeshBuilder.() -> Unit): TriangleMeshBuilder {
     val gb = TriangleMeshBuilder()
     gb.builder()
     return gb
 }
 
+/**
+ * TODO
+ *
+ * @param builder
+ */
 fun TriangleMeshBuilder.group(builder: TriangleMeshBuilder.() -> Unit) {
     val gb = TriangleMeshBuilder()
     gb.builder()

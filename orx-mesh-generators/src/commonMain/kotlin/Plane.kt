@@ -67,7 +67,15 @@ fun wallPlaneMesh(
     )
 }
 
-
+/**
+ * Generate plane centered at [center], using the [right], [forward] and [up]
+ * vectors for its orientation.
+ * [width] and [height] specify the dimensions of the plane.
+ * [widthSegments] and [heightSegments] control the plane's number of
+ * segments.
+ *
+ * @param writer the vertex writer function
+ */
 fun generatePlane(
     center: Vector3,
     right: Vector3,
