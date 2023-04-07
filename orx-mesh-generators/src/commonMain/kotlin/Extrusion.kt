@@ -101,10 +101,10 @@ fun triangulationWithFrame(
  * @param path the 3D path
  * @param stepCount the number of steps along the [path]
  * @param up0 the initial up-vector
- * @param contourDistanceTolerance controls the number of steps in the
- * cross-section. Lower tolerance values increase the number of steps.
- * @param pathDistanceTolerance controls the number of steps along the [path].
- * Lower tolerance values increase the number of steps.
+ * @param contourDistanceTolerance precision for calculating steps along
+ * [contour]. Lower tolerance results in higher precision.
+ * @param pathDistanceTolerance precision for calculating steps along
+ * [path]. Lower tolerance results in higher precision.
  * @param steps the resulting positions in the path
  * @param frames a list of matrices holding the transformation matrices along
  * the path
@@ -130,9 +130,12 @@ fun extrudeContourSteps(
 ) {
     val linearContour = contour.sampleLinear(contourDistanceTolerance)
     val linearContourPoints = linearContour.adaptivePositions().map { it.xy0 }
-
-    extrudeCaps(linearContour.shape, path, startCap, endCap, frames, writer)
     val finalFrames = if (path.closed) frames + frames.first() else frames
+
+    // First add caps
+    extrudeCaps(linearContour.shape, path, startCap, endCap, frames, writer)
+
+    // Then add sides
     finalFrames.windowed(2, 1).forEach {
         contourSegment(linearContourPoints, it[0], it[1], writer)
     }
@@ -175,10 +178,10 @@ private fun extrudeCaps(
  * @param contour the cross-section of the mesh
  * @param path the 3D path
  * @param up0 the initial up-vector
- * @param contourDistanceTolerance controls the number of steps in the
- * cross-section. Lower tolerance values increase the number of steps.
- * @param pathDistanceTolerance controls the number of steps along the [path].
- * Lower tolerance values increase the number of steps.
+ * @param contourDistanceTolerance precision for calculating steps along
+ * [contour]. Lower tolerance results in higher precision and step count.
+ * @param pathDistanceTolerance precision for calculating steps along
+ * [path]. Lower tolerance results in higher precision and step count.
  * @param steps the resulting positions in the path
  * @param frames a list of matrices holding the transformation matrices along
  * the path
@@ -201,7 +204,11 @@ fun extrudeContourAdaptive(
     val linearContour = contour.sampleLinear(contourDistanceTolerance)
     val linearContourPoints = linearContour.adaptivePositions().map { it.xy0 }
     val finalFrames = if (path.closed) frames + frames.first() else frames
+
+    // First add caps
     extrudeCaps(linearContour.shape, path, startCap, endCap, finalFrames, writer)
+
+    // Then add sides
     finalFrames.windowed(2, 1).forEach {
         contourSegment(linearContourPoints, it[0], it[1], writer)
     }
@@ -214,10 +221,10 @@ fun extrudeContourAdaptive(
  * @param path the 3D path
  * @param stepCount the number of steps along the [path]
  * @param up0 the initial up-vector
- * @param contourDistanceTolerance controls the number of steps in the
- * cross-section. Lower tolerance values increase the number of steps.
- * @param pathDistanceTolerance controls the number of steps along the [path].
- * Lower tolerance values increase the number of steps.
+ * @param contourDistanceTolerance precision for calculating steps along
+ * [shape]. Lower tolerance results in higher precision.
+ * @param pathDistanceTolerance precision for calculating steps along
+ * [path]. Lower tolerance results in higher precision.
  * @param steps the resulting positions in the path
  * @param frames a list of matrices holding the transformation matrices along
  * the path
@@ -239,8 +246,11 @@ fun extrudeShapeSteps(
     writer: VertexWriter
 ) {
     val linearShape = Shape(shape.contours.map { it.contour.sampleLinear(contourDistanceTolerance) })
+
+    // First add caps
     extrudeCaps(linearShape, path, startCap, endCap, frames, writer)
 
+    // Then add sides
     for (contour in linearShape.contours) {
         extrudeContourSteps(
             contour,
@@ -251,8 +261,8 @@ fun extrudeShapeSteps(
             pathDistanceTolerance,
             steps,
             frames,
-            false,
-            false,
+            startCap = false,
+            endCap = false,
             writer
         )
     }
@@ -265,10 +275,10 @@ fun extrudeShapeSteps(
  * @param shape the cross-section of the mesh
  * @param path the 3D path
  * @param up0 the initial up-vector
- * @param contourDistanceTolerance controls the number of steps in the
- * cross-section. Lower tolerance values increase the number of steps.
- * @param pathDistanceTolerance controls the number of steps along the [path].
- * Lower tolerance values increase the number of steps.
+ * @param contourDistanceTolerance precision for calculating steps along
+ * [shape]. Lower tolerance results in higher precision and step count.
+ * @param pathDistanceTolerance precision for calculating steps along
+ * [path]. Lower tolerance results in higher precision and step count.
  * @param steps the resulting positions in the path
  * @param frames a list of matrices holding the transformation matrices along
  * the path
@@ -289,8 +299,11 @@ fun extrudeShapeAdaptive(
     writer: VertexWriter
 ) {
     val linearShape = Shape(shape.contours.map { it.contour.sampleLinear(contourDistanceTolerance) })
+
+    // First add caps
     extrudeCaps(linearShape, path, startCap, endCap, frames, writer)
 
+    // Then add sides
     for (contour in linearShape.contours) {
         extrudeContourAdaptive(
             contour,
@@ -314,10 +327,10 @@ fun extrudeShapeAdaptive(
  * @param path the 3D path
  * @param stepCount the number of steps along the [path]
  * @param up0 the up-vector
- * @param contourDistanceTolerance controls the number of steps in the
- * cross-section. Lower tolerance values increase the number of steps.
- * @param pathDistanceTolerance controls the number of steps along the [path].
- * Lower tolerance values increase the number of steps.
+ * @param contourDistanceTolerance precision for calculating steps along
+ * [shape]. Lower tolerance results in higher precision.
+ * @param pathDistanceTolerance precision for calculating steps along
+ * [path]. Lower tolerance results in higher precision.
  * @param startCap adds a start cap if set to true
  * @param endCap adds an end cap if set to true
  */
@@ -335,8 +348,8 @@ fun TriangleMeshBuilder.extrudeShapeSteps(
     path,
     stepCount,
     up0,
-    contourDistanceTolerance = contourDistanceTolerance,
-    pathDistanceTolerance = pathDistanceTolerance,
+    contourDistanceTolerance,
+    pathDistanceTolerance,
     startCap = startCap,
     endCap = endCap,
     writer = this::write
@@ -349,10 +362,10 @@ fun TriangleMeshBuilder.extrudeShapeSteps(
  * @param shape the cross-section of the mesh
  * @param path the 3D path
  * @param up0 the initial up-vector
- * @param contourDistanceTolerance controls the number of steps in the
- * cross-section. Lower tolerance values increase the number of steps.
- * @param pathDistanceTolerance controls the number of steps along the [path].
- * Lower tolerance values increase the number of steps.
+ * @param contourDistanceTolerance precision for calculating steps along
+ * [shape]. Lower tolerance results in higher precision and step count.
+ * @param pathDistanceTolerance precision for calculating steps along
+ * [path]. Lower tolerance results in higher precision and step count.
  * @param startCap adds a start cap if set to true
  * @param endCap adds an end cap if set to true
  */
@@ -368,8 +381,8 @@ fun TriangleMeshBuilder.extrudeShapeAdaptive(
     shape,
     path,
     up0,
-    contourDistanceTolerance = contourDistanceTolerance,
-    pathDistanceTolerance = pathDistanceTolerance,
+    contourDistanceTolerance,
+    pathDistanceTolerance,
     startCap = startCap,
     endCap = endCap,
     writer = this::write
@@ -382,10 +395,10 @@ fun TriangleMeshBuilder.extrudeShapeAdaptive(
  * @param path the 3D path
  * @param stepCount the number of steps along the [path]
  * @param up0 the initial up-vector
- * @param contourDistanceTolerance controls the number of steps in the
- * cross-section. Lower tolerance values increase the number of steps.
- * @param pathDistanceTolerance controls the number of steps along the [path].
- * Lower tolerance values increase the number of steps.
+ * @param contourDistanceTolerance precision for calculating steps along
+ * [contour]. Lower tolerance results in higher precision.
+ * @param pathDistanceTolerance precision for calculating steps along
+ * [path]. Lower tolerance results in higher precision.
  */
 fun TriangleMeshBuilder.extrudeContourSteps(
     contour: ShapeContour,
@@ -399,8 +412,8 @@ fun TriangleMeshBuilder.extrudeContourSteps(
     path,
     stepCount,
     up0,
-    contourDistanceTolerance = contourDistanceTolerance,
-    pathDistanceTolerance = pathDistanceTolerance,
+    contourDistanceTolerance,
+    pathDistanceTolerance,
     writer = this::write
 )
 
@@ -411,10 +424,10 @@ fun TriangleMeshBuilder.extrudeContourSteps(
  * @param contour the cross-section of the shape
  * @param path the 3D path
  * @param up0 the up-vector
- * @param contourDistanceTolerance controls the number of steps in the
- * cross-section. Lower tolerance values increase the number of steps.
- * @param pathDistanceTolerance controls the number of steps along the [path].
- * Lower tolerance values increase the number of steps.
+ * @param contourDistanceTolerance precision for calculating steps along
+ * [contour]. Lower tolerance results in higher precision and step count.
+ * @param pathDistanceTolerance precision for calculating steps along
+ * [path]. Lower tolerance results in higher precision and step count.
  */
 fun TriangleMeshBuilder.extrudeContourAdaptive(
     contour: ShapeContour,
@@ -426,7 +439,7 @@ fun TriangleMeshBuilder.extrudeContourAdaptive(
     contour,
     path,
     up0,
-    contourDistanceTolerance = contourDistanceTolerance,
-    pathDistanceTolerance = pathDistanceTolerance,
+    contourDistanceTolerance,
+    pathDistanceTolerance,
     writer = this::write
 )
