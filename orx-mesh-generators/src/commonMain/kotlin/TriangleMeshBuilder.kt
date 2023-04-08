@@ -13,53 +13,86 @@ import org.openrndr.math.transforms.rotate
 import org.openrndr.shape.Shape
 import org.openrndr.utils.buffer.MPPBuffer
 
+/**
+ * A class that provides a simple Domain Specific Language
+ * to construct and deform triangle-based 3D meshes.
+ *
+ */
 class TriangleMeshBuilder {
+    var color = ColorRGBa.WHITE
+
     var transform = Matrix44.IDENTITY
         set(value) {
             field = value
             normalTransform = normalMatrix(value)
         }
 
-    var color = ColorRGBa.WHITE
-
     var normalTransform: Matrix44 = Matrix44.IDENTITY
         private set
 
     private val transformStack = ArrayDeque<Matrix44>()
 
+    /**
+     * Applies a three-dimensional translation to the [transform] matrix.
+     * Affects meshes added afterward.
+     */
     fun translate(x: Double, y: Double, z: Double) {
         transform *= buildTransform {
             translate(x, y, z)
         }
     }
 
+    /**
+     * Applies a rotation over an arbitrary axis to the [transform] matrix.
+     * Affects meshes added afterward.
+     * @param axis the axis to rotate over, will be normalized
+     * @param degrees the rotation in degrees
+     */
     fun rotate(axis: Vector3, degrees: Double) {
         transform *= buildTransform {
             rotate(axis, degrees)
         }
     }
 
-
+    /**
+     * Push the active [transform] matrix on the transform state stack.
+     */
     fun pushTransform() {
         transformStack.push(transform)
     }
 
+    /**
+     * Pop the active [transform] matrix from the transform state stack.
+     */
     fun popTransform() {
         transform = transformStack.pop()
     }
 
-    fun isolated(builder: TriangleMeshBuilder.() -> Unit) {
+    /**
+     * Pushes the [transform] matrix, calls [function] and pops.
+     * @param function the function that is called in the isolation
+     */
+    fun isolated(function: TriangleMeshBuilder.() -> Unit) {
         pushTransform()
-        builder()
+        function()
         popTransform()
     }
 
+    /**
+     * A container class for vertex [position], [normal], [texCoord] and
+     * [color].
+     */
     class VertexData(
         val position: Vector3,
         val normal: Vector3,
         val texCoord: Vector2,
         val color: ColorRGBa
     ) {
+        /**
+         * Return a new vertex with the position transformed with [transform]
+         * and the normal transformed with [normalTransform]. Used to
+         * translate, rotate or scale vertices.
+         */
         fun transform(
             transform: Matrix44,
             normalTransform: Matrix44
@@ -71,8 +104,15 @@ class TriangleMeshBuilder {
         )
     }
 
+    /**
+     * Vertex storage
+     */
     var data = mutableListOf<VertexData>()
 
+    /**
+     * Write new vertex data into [data]. The current [color] is used for the
+     * vertex.
+     */
     fun write(position: Vector3, normal: Vector3, texCoord: Vector2) {
         data.add(
             VertexData(position, normal, texCoord, color).transform(
@@ -82,10 +122,16 @@ class TriangleMeshBuilder {
         )
     }
 
+    /**
+     * Append [other] data into [data], combining the two meshes.
+     */
     fun concat(other: TriangleMeshBuilder) {
         data.addAll(other.data)
     }
 
+    /**
+     * Returns a [MPPBuffer] representation of [data] used for rendering.
+     */
     fun toByteBuffer(): MPPBuffer {
         //val bb = ByteBuffer.allocateDirect(data.size * (3 * 4 + 3 * 4 + 2 * 4 + 4 * 4))
         val bb = MPPBuffer.allocate(data.size * (3 * 4 + 3 * 4 + 2 * 4 + 4 * 4))
@@ -114,6 +160,14 @@ class TriangleMeshBuilder {
     }
 }
 
+/**
+ * Add a sphere mesh
+ *
+ * @param sides The number of steps around its axis.
+ * @param segments The number of steps from pole to pole.
+ * @param radius The radius of the sphere.
+ * @param flipNormals Create an inside-out shape if true.
+ */
 fun TriangleMeshBuilder.sphere(
     sides: Int,
     segments: Int,
@@ -123,6 +177,14 @@ fun TriangleMeshBuilder.sphere(
     generateSphere(sides, segments, radius, flipNormals, this::write)
 }
 
+/**
+ * Add a hemisphere
+ *
+ * @param sides The number of steps around its axis.
+ * @param segments The number of steps from pole to pole.
+ * @param radius The radius of the sphere.
+ * @param flipNormals Create an inside-out shape if true.
+ */
 fun TriangleMeshBuilder.hemisphere(
     sides: Int,
     segments: Int,
@@ -132,9 +194,26 @@ fun TriangleMeshBuilder.hemisphere(
     generateHemisphere(sides, segments, radius, flipNormals, this::write)
 }
 
+/**
+ * Used by the [grid] methods. Specifies how the UV or UVW
+ * coordinates the user function receives are scaled.
+ */
 enum class GridCoordinates {
+    /**
+     * The coordinates are the cell location index as Double.
+     */
     INDEX,
+
+    /**
+     * The coordinates with the cell's location are normalized
+     * to the 0.0 ~ 1.0 range.
+     */
     UNIPOLAR,
+
+    /**
+     * The coordinates with the cell's location are normalized
+     * to the -1.0 ~ 1.0 range.
+     */
     BIPOLAR,
 }
 
@@ -249,7 +328,7 @@ fun TriangleMeshBuilder.twist(
 }
 
 /**
- * Generate a box of [width], [height] and [depth] dimensions.
+ * Generate a box of size [width], [height] and [depth].
  * Specify the number of segments with [widthSegments], [heightSegments] and
  * [depthSegments]. Use [flipNormals] for an inside-out shape.
  */
@@ -314,6 +393,7 @@ fun TriangleMeshBuilder.dodecahedron(radius: Double) {
 
 /**
  * Generate a tapered cylinder along the z-axis
+ *
  * @param sides the number of sides of the tapered cylinder
  * @param segments the number of segments along the z-axis
  * @param startRadius the start radius of the tapered cylinder
@@ -348,7 +428,9 @@ fun TriangleMeshBuilder.taperedCylinder(
  *
  * @param sides the angular resolution of the cap
  * @param radius the radius of the cap
- * @param envelope a list of points defining the profile of the cap. The default envelope is a horizontal line which produces a flat round disk. By providing a more complex envelope one can create curved shapes like a bowl.
+ * @param envelope a list of points defining the profile of the cap.
+ * The default envelope is a horizontal line which produces a flat round disk.
+ * By providing a more complex envelope one can create curved shapes like a bowl.
  */
 fun TriangleMeshBuilder.cap(
     sides: Int,
@@ -363,7 +445,8 @@ fun TriangleMeshBuilder.cap(
  *
  * @param sides the angular resolution of the cap
  * @param length the length of the shape. A multiplier for the y component of the envelope
- * @param envelope a list of points defining the profile of the shape. The default envelope is a vertical line which produces a hollow cylinder.
+ * @param envelope a list of points defining the profile of the shape.
+ * The default envelope is a vertical line which produces a hollow cylinder.
  */
 fun TriangleMeshBuilder.revolve(
     sides: Int,
@@ -527,24 +610,20 @@ fun buildTriangleMesh(
     return vb
 }
 
-/**
- * TODO
- *
- * @param builder
- * @return
- */
-fun generator(
-    builder: TriangleMeshBuilder.() -> Unit
-): TriangleMeshBuilder {
-    val gb = TriangleMeshBuilder()
-    gb.builder()
-    return gb
-}
+//fun generator(
+//    builder: TriangleMeshBuilder.() -> Unit
+//): TriangleMeshBuilder {
+//    val gb = TriangleMeshBuilder()
+//    gb.builder()
+//    return gb
+//}
 
 /**
- * TODO
+ * Creates a group. Can be used to avoid leaking mesh properties like `color`
+ * and `transform` into following meshes or groups.
  *
- * @param builder
+ * @param builder A user function that adds 3D meshes to the [vertexBuffer]
+ * @see [TriangleMeshBuilder.isolated]
  */
 fun TriangleMeshBuilder.group(
     builder: TriangleMeshBuilder.() -> Unit

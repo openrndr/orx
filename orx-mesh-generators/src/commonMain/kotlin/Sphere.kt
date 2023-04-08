@@ -6,13 +6,12 @@ import org.openrndr.math.Vector2
 import kotlin.math.max
 
 /**
- * Sphere mesh
+ * Returns a sphere mesh
  *
- * @param sides
- * @param segments
- * @param radius
- * @param flipNormals
- * @return
+ * @param sides The number of steps around its axis.
+ * @param segments The number of steps from pole to pole.
+ * @param radius The radius of the sphere.
+ * @param flipNormals Create an inside-out shape if true.
  */
 fun sphereMesh(
     sides: Int = 16,
@@ -29,13 +28,13 @@ fun sphereMesh(
 }
 
 /**
- * Generate sphere
+ * Generate sphere centered at the origin.
  *
- * @param sides
- * @param segments
- * @param radius
- * @param flipNormals
- * @param writer
+ * @param sides The number of steps around its axis.
+ * @param segments The number of steps from pole to pole.
+ * @param radius The radius of the sphere.
+ * @param flipNormals Create an inside-out shape if true.
+ * @param writer The vertex writer function
  */
 fun generateSphere(
     sides: Int,
@@ -81,13 +80,13 @@ fun generateSphere(
 }
 
 /**
- * Generate hemisphere
+ * Generate hemisphere centered at the origin.
  *
- * @param sides
- * @param segments
- * @param radius
- * @param flipNormals
- * @param writer
+ * @param sides The number of steps around its axis.
+ * @param segments The number of steps from pole to pole.
+ * @param radius The radius of the sphere.
+ * @param flipNormals Create an inside-out shape if true.
+ * @param writer The vertex writer function
  */
 fun generateHemisphere(
     sides: Int,

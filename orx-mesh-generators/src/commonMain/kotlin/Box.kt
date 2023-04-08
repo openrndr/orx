@@ -40,7 +40,8 @@ fun boxMesh(
 }
 
 /**
- * Generate a cylinder along the z-axis
+ * Generate a box
+ *
  * @param width the width of the box
  * @param height the height of the box
  * @param depth the depth of the box
