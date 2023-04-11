@@ -67,7 +67,7 @@ fun main() = application {
                 button {
                     label = "save"
                     clicked {
-                        saveFileDialog(supportedExtensions = listOf("json")) {
+                        saveFileDialog(supportedExtensions = listOf("JSON" to listOf("json"))) {
                             programState.save(it)
                         }
                     }
@@ -76,7 +76,7 @@ fun main() = application {
                 button {
                     label = "load"
                     clicked {
-                        openFileDialog(supportedExtensions = listOf("json")) {
+                        openFileDialog(supportedExtensions =  listOf("JSON" to listOf("json"))) {
                             programState.load(it)
                         }
                     }
