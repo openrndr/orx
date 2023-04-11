@@ -18,7 +18,7 @@ fun Any.listParameters(): List<Parameter> {
         !property.isConst &&
                 property is KMutableProperty1<*, *> &&
                 property.visibility == KVisibility.PUBLIC &&
-                property.annotations.map { it.annotationClass }.intersect(ParameterType.parameterAnnotationClasses).isNotEmpty()
+                property.annotations.map { it.annotationClass }.intersect(ParameterType.parameterAnnotationClasses.toSet()).isNotEmpty()
     }.map { property ->
         val annotations = property.annotations.filter { it.annotationClass in ParameterType.parameterAnnotationClasses }
         var intRange: IntRange? = null
@@ -108,6 +108,7 @@ fun Any.listParameters(): List<Parameter> {
                 }
             }
         }
+        @Suppress("UNCHECKED_CAST")
         Parameter(
             parameterType = type ?: error("no type"),
             property = property as KMutableProperty1<out Any, Any?>,
@@ -134,6 +135,7 @@ fun Any.listParameters(): List<Parameter> {
         val label = annotation.label
         val order = annotation.order
         val type = ParameterType.Action
+        @Suppress("UNCHECKED_CAST")
         Parameter(
             type,
             property = null,
