@@ -56,7 +56,7 @@ class ViewBox(
         override val moved = Event<MouseEvent>()
         override var position: Vector2 = -clientArea.corner
 
-        // Note: replaced by MouseTracker()
+        // Note: use MouseTracker() instead of pressedButtons
         //override val pressedButtons: MutableSet<MouseButton>
         //    get() = TODO("Not yet implemented")
 
