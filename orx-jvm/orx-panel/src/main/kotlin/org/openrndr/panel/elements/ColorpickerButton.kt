@@ -19,6 +19,7 @@ class ColorpickerButton : Element(ElementType("colorpicker-button")), Disposable
         set(value) {
             if (value != field) {
                 field = value
+                requestRedraw()
                 events.valueChanged.trigger(ColorChangedEvent(this, value))
             }
         }

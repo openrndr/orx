@@ -56,6 +56,7 @@ class XYPad : Element(ElementType("xy-pad")) {
                     clamp(map(minX, maxX, -1.0, 1.0, newValue.x), -1.0, 1.0),
                     clamp(map(minY, maxY, -1.0, 1.0, newValue.y), -1.0, 1.0)
             )
+            requestRedraw()
         }
 
     init {
