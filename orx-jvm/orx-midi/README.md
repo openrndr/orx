@@ -14,7 +14,7 @@ MidiDeviceDescription.list().forEach {
 }
 
 // -- open a midi controller and listen for control changes
-val dev = MidiTransceiver.fromDeviceVendor("BCR2000 [hw:2,0,0]", "ALSA (http://www.alsa-project.org)")
+val dev = MidiTransceiver.fromDeviceVendor(this, "BCR2000 [hw:2,0,0]", "ALSA (http://www.alsa-project.org)")
 dev.controlChanged.listen {
     println("${it.channel} ${it.control} ${it.value}")
 }
