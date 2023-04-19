@@ -25,7 +25,7 @@ complement [OPENRNDR](https://github.com/openrndr/openrndr).
 | [`orx-jumpflood`](orx-jumpflood/) | Takes an image and calculates either a distance field or a direction field.  GPU accelerated, 2D. Results are provided as an image. |
 | [`orx-kdtree`](orx-kdtree/) | Fast search of the point closest to the queried point in a data set. 2D, 3D and 4D. |
 | [`orx-marching-squares`](orx-marching-squares/) | Tools for extracting contours from functions |
-| [`orx-mesh-generators`](orx-mesh-generators/) | Generates 3D meshes: sphere, box, cylinder, plane, dodecahedron. |
+| [`orx-mesh-generators`](orx-mesh-generators/) | Generates various types of 3D meshes. |
 | [`orx-no-clear`](orx-no-clear/) | Provides the classical draw-without-clearing-the-screen functionality that OPENRNDR does not provide by default. |
 | [`orx-noise`](orx-noise/) | Randomness for every type of person: Perlin, uniform, value, simplex, fractal and many other types of noise. |
 | [`orx-obj-loader`](orx-obj-loader/) | Simple loader for Wavefront .obj 3D mesh files. |
