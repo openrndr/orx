@@ -1,5 +1,3 @@
-package org.openrndr.extra.kinect.v1.demo
-
 import org.openrndr.Fullscreen
 import org.openrndr.application
 import org.openrndr.draw.Filter
@@ -11,9 +9,6 @@ import org.openrndr.extra.depth.camera.calibrator.isolatedWithCalibration
 import org.openrndr.extra.gui.GUI
 import org.openrndr.extra.kinect.v1.Kinect1
 
-/**
- * How to use [DepthCameraCalibrator] with [Kinect1]?
- */
 fun main() = application {
     configure {
         fullscreen = Fullscreen.CURRENT_DISPLAY_MODE
@@ -33,7 +28,23 @@ fun main() = application {
         )
 
         // simple visual effect applied to kinect data
-        val spaceRangeExtractor = SpaceRangeExtractor()
+        val spaceRangeExtractor = object : Filter(filterShaderFromCode("""
+            uniform sampler2D   tex0;             // kinect raw
+            uniform float       minDepth;
+            uniform float       maxDepth;
+            out     vec4        o_color;
+            void main() {
+                ivec2 uv = ivec2(gl_FragCoord.xy);
+                float depth = texelFetch(tex0, uv, 0).r;
+                float luma = ((depth >= minDepth) && (depth <= maxDepth)) ? 1.0 : 0.0;
+                o_color = vec4(vec3(luma), 1.0);
+            }
+            """.trimIndent(),
+            "space range extractor"
+        )) {
+            var minDepth: Double by parameters
+            var maxDepth: Double by parameters
+        }
         camera.onFrameReceived { frame ->
             spaceRangeExtractor.apply(frame, outputBuffer)
         }
@@ -90,28 +101,4 @@ fun main() = application {
 
     }
 
-}
-
-/**
- * A visual effect applied to kinect data in this demonstration.
- * Everything is black, except for the white pixels within the range
- * of 2 virtual walls positioned at [minDepth] at front of the
- * viewer and [maxDepth] behind the viewer.
- */
-class SpaceRangeExtractor : Filter(filterShaderFromCode("""
-    uniform sampler2D   tex0;             // kinect raw
-    uniform float       minDepth;
-    uniform float       maxDepth;
-    out     vec4        o_color;
-    void main() {
-        ivec2 uv = ivec2(gl_FragCoord.xy);
-        float depth = texelFetch(tex0, uv, 0).r;
-        float luma = ((depth >= minDepth) && (depth <= maxDepth)) ? 1.0 : 0.0;
-        o_color = vec4(vec3(luma), 1.0);
-    }
-    """.trimIndent(),
-    "space range extractor"
-)) {
-    var minDepth: Double by parameters
-    var maxDepth: Double by parameters
 }

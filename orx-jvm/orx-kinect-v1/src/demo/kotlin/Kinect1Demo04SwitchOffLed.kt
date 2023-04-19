@@ -1,5 +1,3 @@
-package org.openrndr.extra.kinect.v1.demo
-
 import org.bytedeco.libfreenect.global.freenect
 import org.openrndr.application
 import org.openrndr.extra.kinect.v1.Kinect1
