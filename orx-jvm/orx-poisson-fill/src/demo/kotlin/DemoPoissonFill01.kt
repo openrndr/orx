@@ -1,4 +1,5 @@
 import org.openrndr.MouseButton
+import org.openrndr.MouseTracker
 import org.openrndr.application
 import org.openrndr.color.ColorHSVa
 import org.openrndr.color.ColorRGBa
@@ -41,6 +42,7 @@ fun main() {
                                 100.0 + it * 10.0),
                         Polar(Random.double(-1.0, 1.0), 0.0))
             }
+            val mouseTracker = MouseTracker(mouse)
 
             extend {
                 drawer.isolatedWithTarget(dry) {
@@ -61,7 +63,7 @@ fun main() {
 
                     // draw dark gray window border.
                     // hold mouse button to fade in.
-                    borderOpacity += if (MouseButton.LEFT in mouse.pressedButtons) 0.01 else -0.01
+                    borderOpacity += if (MouseButton.LEFT in mouseTracker.pressedButtons) 0.01 else -0.01
                     borderOpacity = borderOpacity.clamp(0.0, 1.0)
                     stroke = rgb(0.2).opacify(borderOpacity)
                     fill = null

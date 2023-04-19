@@ -1,3 +1,4 @@
+import org.openrndr.MouseTracker
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
@@ -37,6 +38,7 @@ fun main() = application {
                 //x_fill.rgb = vec3(1.0 / (x_fill.r + x_fill.g));
             """
         }
+        val mouseTracker = MouseTracker(mouse)
 
         extend {
             // Draw moving white shapes on a black background
@@ -68,7 +70,7 @@ fun main() = application {
             directionalField.apply(rt.colorBuffer(0), result)
 
             drawer.isolated {
-                if (mouse.pressedButtons.isEmpty()) {
+                if (mouseTracker.pressedButtons.isEmpty()) {
                     shadeStyle = shader
                     image(result)
                 } else {
