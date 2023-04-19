@@ -1,49 +1,63 @@
 package org.openrndr.extra.meshgenerators
 
 import org.openrndr.draw.VertexBuffer
-import org.openrndr.math.*
+import org.openrndr.math.Matrix44
+import org.openrndr.math.Vector2
+import org.openrndr.math.Vector3
+import org.openrndr.math.YPolarity
 import org.openrndr.math.transforms.rotateY
 
 /**
  * A shape created by rotating an envelope around a vertical axis.
- * The default envelope is a horizontal line which produces a flat round disk.
- * By providing a more complex envelop one can create curved shapes like a bowl.
+ *
+ * @param sides the angular resolution of the cap
+ * @param radius the radius of the cap
+ * @param envelope a list of points defining the profile of the cap. The default envelope is a horizontal line which produces a flat round disk. By providing a more complex envelope one can create curved shapes like a bowl.
+ * @return A vertex buffer containing the triangles to render the 3D shape
  */
 fun capMesh(
     sides: Int,
     radius: Double,
-    enveloppe: List<Vector2> = listOf(
+    envelope: List<Vector2> = listOf(
         Vector2(0.0, 0.0),
         Vector2(1.0, 0.0)
     )
 ): VertexBuffer {
-    val vb = meshVertexBuffer(6 * sides * (enveloppe.size - 1))
+    val vb = meshVertexBuffer(6 * sides * (envelope.size - 1))
     vb.put {
-        generateCap(sides, radius, enveloppe, bufferWriter(this))
+        generateCap(sides, radius, envelope, bufferWriter(this))
     }
     return vb
 }
 
+/**
+ * Generate a shape by rotating an envelope around a vertical axis.
+ *
+ * @param sides the angular resolution of the cap
+ * @param radius the radius of the cap
+ * @param envelope a list of points defining the profile of the cap. The default envelope is a horizontal line which produces a flat round disk. By providing a more complex envelope one can create curved shapes like a bowl.
+ * @param writer the vertex writer function
+ */
 fun generateCap(
     sides: Int,
     radius: Double,
-    enveloppe: List<Vector2> = listOf(
+    envelope: List<Vector2> = listOf(
         Vector2(0.0, 0.0),
         Vector2(1.0, 0.0)
     ),
     writer: VertexWriter
 ) {
-    val maxX = enveloppe.maxByOrNull { it.x } ?: Vector2(1.0, 0.0)
+    val maxX = envelope.maxByOrNull { it.x } ?: Vector2(1.0, 0.0)
     val a = maxX.x
 
-    val cleanEnveloppe = enveloppe.map { Vector2((it.x / a) * radius, it.y) }
+    val cleanEnvelope = envelope.map { Vector2((it.x / a) * radius, it.y) }
 
-    val normals2D = enveloppe.zipWithNext().map {
+    val normals2D = envelope.zipWithNext().map {
         val d = it.second - it.first
         d.normalized.perpendicular(YPolarity.CCW_POSITIVE_Y)
     }
 
-    val basePositions = cleanEnveloppe.map { Vector3(it.x, it.y, 0.0) }
+    val basePositions = cleanEnvelope.map { Vector3(it.x, it.y, 0.0) }
     val baseNormals = normals2D.map { Vector3(it.x, it.y, 0.0) }
 
     for (side in 0 until sides) {
@@ -58,9 +72,9 @@ fun generateCap(
         for (segment in 0 until basePositions.size - 1) {
 
             val p00 = v0[segment]
-            val p01 = v0[segment+1]
+            val p01 = v0[segment + 1]
             val p10 = v1[segment]
-            val p11 = v1[segment+1]
+            val p11 = v1[segment + 1]
 
             val nn0 = n0[segment]
             val nn1 = n1[segment]
@@ -78,43 +92,55 @@ fun generateCap(
 
 /**
  * A shape created by rotating an envelope around a vertical axis.
- * The default envelope is a vertical line which produces a hollow cylinder.
+ *
+ * @param sides the angular resolution of the cap
+ * @param length the length of the shape. A multiplier for the y component of the envelope
+ * @param envelope a list of points defining the profile of the shape. The default envelope is a vertical line which produces a hollow cylinder.
+ * @return A vertex buffer containing the triangles to render the 3D shape
  */
 fun revolveMesh(
     sides: Int,
     length: Double,
-    enveloppe: List<Vector2> = listOf(
+    envelope: List<Vector2> = listOf(
         Vector2(1.0, 0.0),
         Vector2(1.0, 1.0)
     )
 ): VertexBuffer {
-    val vb = meshVertexBuffer(6 * sides * (enveloppe.size - 1))
+    val vb = meshVertexBuffer(6 * sides * (envelope.size - 1))
     vb.put {
-        generateRevolve(sides, length, enveloppe, bufferWriter(this))
+        generateRevolve(sides, length, envelope, bufferWriter(this))
     }
     return vb
 }
 
+/**
+ * Generate a shape by rotating an envelope around a vertical axis.
+ *
+ * @param sides the angular resolution of the cap
+ * @param length the length of the shape. A multiplier for the y component of the envelope
+ * @param envelope a list of points defining the profile of the shape. The default envelope is a vertical line which produces a hollow cylinder.
+ * @param writer the vertex writer function
+ */
 fun generateRevolve(
     sides: Int,
     length: Double,
-    enveloppe: List<Vector2> = listOf(
+    envelope: List<Vector2> = listOf(
         Vector2(1.0, 0.0),
         Vector2(1.0, 1.0)
     ),
     writer: VertexWriter
 ) {
-    val maxY = enveloppe.maxByOrNull { it.y } ?: Vector2(0.0, 1.0)
+    val maxY = envelope.maxByOrNull { it.y } ?: Vector2(0.0, 1.0)
     val a = maxY.y
 
-    val cleanEnveloppe = enveloppe.map { Vector2((it.x), (it.y/a - 0.5) * length ) }
+    val cleanEnvelope = envelope.map { Vector2((it.x), (it.y / a - 0.5) * length) }
 
-    val normals2D = enveloppe.zipWithNext().map {
+    val normals2D = envelope.zipWithNext().map {
         val d = it.second - it.first
         d.normalized.perpendicular() * Vector2(1.0, -1.0)
     }
 
-    val basePositions = cleanEnveloppe.map { Vector3(it.x, it.y, 0.0) }
+    val basePositions = cleanEnvelope.map { Vector3(it.x, it.y, 0.0) }
     val baseNormals = normals2D.map { Vector3(it.x, it.y, 0.0) }
 
     for (side in 0 until sides) {
@@ -129,9 +155,9 @@ fun generateRevolve(
         for (segment in 0 until basePositions.size - 1) {
 
             val p00 = v0[segment]
-            val p01 = v0[segment+1]
+            val p01 = v0[segment + 1]
             val p10 = v1[segment]
-            val p11 = v1[segment+1]
+            val p11 = v1[segment + 1]
 
             val nn0 = n0[segment]
             val nn1 = n1[segment]

@@ -1,11 +1,24 @@
 plugins {
-    org.openrndr.extra.convention.`kotlin-jvm`
+    org.openrndr.extra.convention.`kotlin-multiplatform`
 }
 
-dependencies {
-    implementation(libs.openrndr.application)
-    implementation(libs.openrndr.math)
-    demoImplementation(project(":orx-shapes"))
-    demoImplementation(project(":orx-mesh-generators"))
-    demoImplementation(project(":orx-camera"))
+kotlin {
+    sourceSets {
+        @Suppress("UNUSED_VARIABLE")
+        val commonMain by getting {
+            dependencies {
+                api(libs.openrndr.application)
+                api(libs.openrndr.math)
+            }
+        }
+
+        @Suppress("UNUSED_VARIABLE")
+        val jvmDemo by getting {
+            dependencies {
+                implementation(project(":orx-shapes"))
+                implementation(project(":orx-mesh-generators"))
+                implementation(project(":orx-camera"))
+            }
+        }
+    }
 }

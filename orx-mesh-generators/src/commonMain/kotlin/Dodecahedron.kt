@@ -8,12 +8,15 @@ import kotlin.math.sqrt
 // Based on
 // https://github.com/mrdoob/three.js/blob/master/src/geometries/DodecahedronGeometry.js
 
-// Create:
-//   val dode = dodecahedronMesh(400.0)
-// Draw:
-//   drawer.vertexBuffer(dode, DrawPrimitive.TRIANGLES)
-
-fun dodecahedronMesh(radius: Double = 1.0): VertexBuffer {
+/**
+ * A dodecahedron mesh
+ *
+ * @param radius the radius of the dodecahedron
+ * @return A vertex buffer containing the triangles to render the 3D shape
+ */
+fun dodecahedronMesh(
+    radius: Double = 1.0
+): VertexBuffer {
     val vb = meshVertexBuffer(12 * 3 * 3)
     vb.put {
         generateDodecahedron(radius, bufferWriter(this))
@@ -21,10 +24,19 @@ fun dodecahedronMesh(radius: Double = 1.0): VertexBuffer {
     return vb
 }
 
-fun generateDodecahedron(radius: Double = 1.0, writer: VertexWriter) {
+/**
+ * Generate dodecahedron mesh
+ *
+ * @param radius the radius of the dodecahedron
+ * @param writer the vertex writer function
+ */
+fun generateDodecahedron(
+    radius: Double = 1.0,
+    writer: VertexWriter
+) {
 
-    val t = (1.0 + sqrt(5.0)) / 2;
-    val r = 1 / t;
+    val t = (1.0 + sqrt(5.0)) / 2
+    val r = 1 / t
 
     val vertices = listOf(
             // (±1, ±1, ±1)
@@ -74,7 +86,7 @@ fun generateDodecahedron(radius: Double = 1.0, writer: VertexWriter) {
                     vertices[i * 3 + 1],
                     vertices[i * 3 + 2]) * radius
         }
-        val up = (tri[1] - tri[0]).cross(tri[2] - tri[0]).normalized;
+        val up = (tri[1] - tri[0]).cross(tri[2] - tri[0]).normalized
         writer(tri[0], up, uv)
         writer(tri[1], up, uv)
         writer(tri[2], up, uv)

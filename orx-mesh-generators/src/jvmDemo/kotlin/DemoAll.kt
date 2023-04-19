@@ -1,3 +1,4 @@
+import org.openrndr.WindowMultisample
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
@@ -9,12 +10,15 @@ import org.openrndr.shape.Rectangle
 
 fun main() {
     application {
+        configure {
+            multisample = WindowMultisample.SampleCount(8)
+        }
         program {
             val meshes = listOf(
                 boxMesh(1.0, 1.0, 1.0),
                 sphereMesh(radius = 0.5),
                 dodecahedronMesh(0.5),
-                cylinderMesh(radius = 0.5, length = 1.0),
+                cylinderMesh(radius = 0.5, length = 1.0, center = true),
                 planeMesh(Vector3.ZERO, Vector3.UNIT_X, Vector3.UNIT_Y),
                 capMesh(
                     15, 0.5,

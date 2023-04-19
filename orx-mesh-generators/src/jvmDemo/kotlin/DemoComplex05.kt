@@ -1,30 +1,30 @@
+import org.openrndr.WindowMultisample
 import org.openrndr.application
+import org.openrndr.draw.CullTestPass
 import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.shadeStyle
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.camera.Orbital
 import org.openrndr.extra.meshgenerators.*
-import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
-import org.openrndr.math.transforms.transform
 import org.openrndr.shape.Circle
 
 fun main() {
     application {
+        configure {
+            width = 800
+            height = 800
+            multisample = WindowMultisample.SampleCount(8)
+        }
         program {
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
             extend(Orbital()) {
                 this.eye = Vector3(0.0, 30.0, 50.0)
             }
-            val m = meshGenerator {
-
+            val m = buildTriangleMesh {
                 grid(5,5, 5) { u, v, w ->
-                    extrudeShape(Circle(0.0, 0.0, 50.0).shape, 4.0, scale = 0.1)
-                    transform(transform{ translate(u*20.0, v*20.0, w * 20.0)} )
+                    isolated {
+                        translate(u * 20.0, v * 20.0, w * 20.0)
+                        extrudeShape(Circle(0.0, 0.0, 50.0).shape, 4.0, scale = 0.1)
+                    }
                 }
                 twist(360.0/200.0, 0.0)
                 twist(360.0/200.0, 0.0, Vector3.UNIT_X)
@@ -37,6 +37,7 @@ fun main() {
                         x_fill.rgb *= v_viewNormal.z;
                     """.trimIndent()
                 }
+                drawer.drawStyle.cullTestPass = CullTestPass.FRONT
                 drawer.vertexBuffer(m, DrawPrimitive.TRIANGLES)
             }
         }
