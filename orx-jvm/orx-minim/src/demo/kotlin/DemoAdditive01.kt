@@ -1,5 +1,6 @@
 import ddf.minim.ugens.Oscil
 import ddf.minim.ugens.Pan
+import org.openrndr.MouseTracker
 import org.openrndr.application
 import org.openrndr.color.rgb
 import org.openrndr.extra.minim.minim
@@ -31,7 +32,7 @@ fun main() {
             // and the current amplitude defined by the lfo (low frequency
             // oscillator).
             val synths = List(20) {
-                // By default Oscil creates sine waves, but it can be changed.
+                // By default, Oscil creates sine waves, but it can be changed.
                 val lfo = Oscil(
                     Random.nextFloat() * 0.1f + 0.005f,
                     0.05f
@@ -56,6 +57,7 @@ fun main() {
             }
             val bgColor = rgb(0.094, 0.188, 0.349)
             val lineColor = rgb(0.992, 0.918, 0.671)
+            val mouseTracker = MouseTracker(mouse)
 
             extend {
                 drawer.clear(bgColor)
@@ -78,7 +80,7 @@ fun main() {
                         circle(pos, 500 * lfo.lastValues.last().toDouble())
                     }
                 }
-                if (mouse.pressedButtons.isNotEmpty()) {
+                if (mouseTracker.pressedButtons.isNotEmpty()) {
                     synths.random().first.setFrequency(randomFreq())
                 }
             }

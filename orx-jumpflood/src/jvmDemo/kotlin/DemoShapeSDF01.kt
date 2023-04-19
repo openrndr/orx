@@ -1,3 +1,4 @@
+import org.openrndr.MouseTracker
 import org.openrndr.application
 import org.openrndr.draw.ColorFormat
 import org.openrndr.draw.ColorType
@@ -19,8 +20,10 @@ fun main() {
             sdf.setShapes(shapes)
             sdf.apply(emptyArray(), df)
 
+            val mouseTracker = MouseTracker(mouse)
+
             extend {
-                if(mouse.pressedButtons.isEmpty())
+                if(mouseTracker.pressedButtons.isEmpty())
                     drawer.image(df)
                 else
                     drawer.shapes(shapes)
