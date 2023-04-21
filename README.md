@@ -14,7 +14,9 @@ complement [OPENRNDR](https://github.com/openrndr/openrndr).
 | [`orx-compositor`](orx-compositor/) | Toolkit to make composite (layered) images using blend modes and filters. |
 | [`orx-compute-graph`](orx-compute-graph/) | A graph for computation. |
 | [`orx-compute-graph-nodes`](orx-compute-graph-nodes/) | A collection of nodes that can be used with orx-computer-graph. |
+| [`orx-delegate-magic`](orx-delegate-magic/) | Collection of magical property delegators |
 | [`orx-easing`](orx-easing/) | Provides easing functions for smooth animation or non-linear interpolation. |
+| [`orx-envelopes`](orx-envelopes/) | ADSR envelopes and tools |
 | [`orx-fx`](orx-fx/) | Ready-to-use visual effects or filters. Most include [orx-parameters](https://github.com/openrndr/orx/tree/master/orx-parameters) annotations  so they can be easily controlled via orx-gui. |
 | [`orx-glslify`](orx-glslify/) | Load glslify compatible shaders from [npm](https://www.npmjs.com/search?q=glslify). |
 | [`orx-gradient-descent`](orx-gradient-descent/) | Finds equation inputs that output a minimum value: easy to use gradient descent based minimizer. |
