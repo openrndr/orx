@@ -36,3 +36,14 @@ val state = object {
 
 val radiusHistory by tracking(state::radius)
 ```
+<!-- __demos__ -->
+## Demos
+### DemoSmoothing01
+[source code](src/jvmDemo/kotlin/DemoSmoothing01.kt)
+
+![DemoSmoothing01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-delegate-magic/images/DemoSmoothing01Kt.png)
+
+### DemoSpring01
+[source code](src/jvmDemo/kotlin/DemoSpring01.kt)
+
+![DemoSpring01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-delegate-magic/images/DemoSpring01Kt.png)
