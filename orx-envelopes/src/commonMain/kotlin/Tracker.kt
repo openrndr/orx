@@ -2,14 +2,13 @@
 
 package org.openrndr.extra.envelopes
 
-import org.openrndr.Program
-import org.openrndr.animatable.Clock
+import org.openrndr.Clock
 import org.openrndr.extra.parameters.DoubleParameter
 
 class Trigger(val on: Double, var off: Double, val envelope: Envelope)
 
 class TrackerValue(val time: Double, val value: Double)
-abstract class Tracker<T : Envelope>(val program: Program) {
+abstract class Tracker<T : Envelope>(val clock: Clock) {
 
     val triggers = mutableListOf<Trigger>()
 
@@ -17,21 +16,21 @@ abstract class Tracker<T : Envelope>(val program: Program) {
     protected abstract fun createEnvelope(): T
 
     fun triggerOn() {
-        val t = program.seconds
+        val t = clock.seconds
         triggers.removeAll { !it.envelope.isActive(t - it.on, it.off - it.on) }
-        triggers.add(Trigger(program.seconds, 1E30, createEnvelope()))
+        triggers.add(Trigger(clock.seconds, 1E30, createEnvelope()))
     }
 
     fun triggerOff() {
-        val t = program.seconds
+        val t = clock.seconds
         triggers.removeAll { !it.envelope.isActive(t - it.on, it.off - it.on) }
         triggers.lastOrNull()?.let {
-            it.off = program.seconds
+            it.off = clock.seconds
         }
     }
 
     fun values(): List<TrackerValue> {
-        val t = program.seconds
+        val t = clock.seconds
         return triggers.mapNotNull {
             val tOn = t - it.on
             val tOff = it.off - it.on
@@ -52,7 +51,7 @@ abstract class Tracker<T : Envelope>(val program: Program) {
 
 }
 
-class ADSRTracker(program: Program): Tracker<ADSR>(program) {
+class ADSRTracker(clock: Clock): Tracker<ADSR>(clock) {
 
     @DoubleParameter("attack", 0.0, 20.0, order = 1)
     var attack: Double = 0.1
