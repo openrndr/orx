@@ -2,17 +2,17 @@
 
 package org.openrndr.extra.delegatemagic.tracking
 
-import org.openrndr.Program
+import org.openrndr.Clock
 import kotlin.reflect.KProperty
 import kotlin.reflect.KProperty0
 
-class PropertyTracker<T>(private val program: Program, private val property: KProperty0<T>, val length: Int = 30) {
+class PropertyTracker<T>(private val clock: Clock, private val property: KProperty0<T>, val length: Int = 30) {
     private val track = mutableListOf<T>()
     private var lastTime: Double? = null
 
     operator fun getValue(any: Any?, property: KProperty<*>): List<T> {
         if (lastTime != null) {
-            val dt = program.seconds - lastTime!!
+            val dt = clock.seconds - lastTime!!
             if (dt > 1E-10) {
                 track.add(this.property.get())
             }
@@ -22,7 +22,7 @@ class PropertyTracker<T>(private val program: Program, private val property: KPr
         if (track.size > length) {
             track.removeAt(0)
         }
-        lastTime = program.seconds
+        lastTime = clock.seconds
         return track
     }
 }
@@ -34,6 +34,6 @@ class PropertyTracker<T>(private val program: Program, private val property: KPr
  * @return a property tracker
  * @since 0.4.3
  */
-fun <T> Program.tracking(property: KProperty0<T>, length: Int = 30): PropertyTracker<T> {
+fun <T> Clock.tracking(property: KProperty0<T>, length: Int = 30): PropertyTracker<T> {
     return PropertyTracker(this, property, length)
 }

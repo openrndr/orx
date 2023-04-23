@@ -2,14 +2,14 @@
 
 package org.openrndr.extra.delegatemagic.smoothing
 
-import org.openrndr.Program
+import org.openrndr.Clock
 import org.openrndr.math.LinearType
 import kotlin.math.pow
 import kotlin.reflect.KProperty
 import kotlin.reflect.KProperty0
 
 class DoublePropertySmoother(
-    private val program: Program,
+    private val clock: Clock,
     private val property: KProperty0<Double>,
     private val factor: Double = 0.99,
     private val factorProperty: KProperty0<Double>?
@@ -18,7 +18,7 @@ class DoublePropertySmoother(
     private var lastTime: Double? = null
     operator fun getValue(any: Any?, property: KProperty<*>): Double {
         if (lastTime != null) {
-            val dt = program.seconds - lastTime!!
+            val dt = clock.seconds - lastTime!!
             if (dt > 1E-10) {
                 val steps = dt * 60.0
                 val ef = (factorProperty?.get() ?: factor).pow(steps)
@@ -27,13 +27,13 @@ class DoublePropertySmoother(
         } else {
             output = this.property.get()
         }
-        lastTime = program.seconds
+        lastTime = clock.seconds
         return output ?: error("no value")
     }
 }
 
 class PropertySmoother<T : LinearType<T>>(
-    private val program: Program,
+    private val clock: Clock,
     private val property: KProperty0<T>,
     private val factor: Double = 0.99,
     private val factorProperty: KProperty0<Double>?
@@ -42,7 +42,7 @@ class PropertySmoother<T : LinearType<T>>(
     private var lastTime: Double? = null
     operator fun getValue(any: Any?, property: KProperty<*>): T {
         if (lastTime != null) {
-            val dt = program.seconds - lastTime!!
+            val dt = clock.seconds - lastTime!!
             if (dt > 1E-10) {
                 val steps = dt * 60.0
                 val ef = (factorProperty?.get() ?: factor).pow(steps)
@@ -53,7 +53,7 @@ class PropertySmoother<T : LinearType<T>>(
         } else {
             output = this.property.get()
         }
-        lastTime = program.seconds
+        lastTime = clock.seconds
         return output ?: error("no value")
     }
 }
@@ -64,7 +64,7 @@ class PropertySmoother<T : LinearType<T>>(
  * @param factor the smoothing factor
  * @since 0.4.3
  */
-fun Program.smoothing(property: KProperty0<Double>, factor: Double = 0.99): DoublePropertySmoother {
+fun Clock.smoothing(property: KProperty0<Double>, factor: Double = 0.99): DoublePropertySmoother {
     return DoublePropertySmoother(this, property, factor, null)
 }
 
@@ -74,7 +74,7 @@ fun Program.smoothing(property: KProperty0<Double>, factor: Double = 0.99): Doub
  * @param factor the smoothing factor property
  * @since 0.4.3
  */
-fun Program.smoothing(
+fun Clock.smoothing(
     property: KProperty0<Double>,
     factor: KProperty0<Double>
 ): DoublePropertySmoother {
@@ -87,7 +87,7 @@ fun Program.smoothing(
  * @param factor the smoothing factor
  * @since 0.4.3
  */
-fun <T : LinearType<T>> Program.smoothing(property: KProperty0<T>, factor: Double = 0.99): PropertySmoother<T> {
+fun <T : LinearType<T>> Clock.smoothing(property: KProperty0<T>, factor: Double = 0.99): PropertySmoother<T> {
     return PropertySmoother(this, property, factor, null)
 }
 
@@ -97,6 +97,6 @@ fun <T : LinearType<T>> Program.smoothing(property: KProperty0<T>, factor: Doubl
  * @param factor the smoothing factor property
  * @since 0.4.3
  */
-fun <T : LinearType<T>> Program.smoothing(property: KProperty0<T>, factor: KProperty0<Double>): PropertySmoother<T> {
+fun <T : LinearType<T>> Clock.smoothing(property: KProperty0<T>, factor: KProperty0<Double>): PropertySmoother<T> {
     return PropertySmoother(this, property, 1E10, factor)
 }

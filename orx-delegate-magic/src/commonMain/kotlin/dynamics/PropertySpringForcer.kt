@@ -2,13 +2,13 @@
 
 package org.openrndr.extra.delegatemagic.dynamics
 
-import org.openrndr.Program
+import org.openrndr.Clock
 import org.openrndr.math.LinearType
 import kotlin.reflect.KProperty
 import kotlin.reflect.KProperty0
 
 class DoublePropertySpringForcer(
-    private val program: Program,
+    private val clock: Clock,
     private val property: KProperty0<Double>,
     private val k: Double,
     private val kProperty: KProperty0<Double>?,
@@ -25,7 +25,7 @@ class DoublePropertySpringForcer(
 
         val anchor = this.property.get()
         if (lastTime != null) {
-            val dt = program.seconds - lastTime!!
+            val dt = clock.seconds - lastTime!!
             if (dt > 0.0) {
                 val sfY = -k * (output!! - anchor)
                 velocity = velocity * decay + sfY * dt * 10.0
@@ -34,13 +34,13 @@ class DoublePropertySpringForcer(
         } else {
             output = this.property.get()
         }
-        lastTime = program.seconds
+        lastTime = clock.seconds
         return output ?: error("no value")
     }
 }
 
 class LinearTypePropertySpringForcer<T : LinearType<T>>(
-    private val program: Program,
+    private val clock: Clock,
     private val property: KProperty0<T>,
     private val k: Double,
     private val kProperty: KProperty0<Double>?,
@@ -56,7 +56,7 @@ class LinearTypePropertySpringForcer<T : LinearType<T>>(
 
         val anchor = this.property.get()
         if (lastTime != null) {
-            val dt = program.seconds - lastTime!!
+            val dt = clock.seconds - lastTime!!
             if (dt > 0.0) {
                 val sfY = (output!! - anchor) * -k
 
@@ -70,7 +70,7 @@ class LinearTypePropertySpringForcer<T : LinearType<T>>(
         } else {
             output = this.property.get()
         }
-        lastTime = program.seconds
+        lastTime = clock.seconds
         return output ?: error("no value")
     }
 }
@@ -84,7 +84,7 @@ class LinearTypePropertySpringForcer<T : LinearType<T>>(
  * @param decayProperty velocity decay property, overrides [decay]
  * @since 0.4.3
  */
-fun Program.springForcing(
+fun Clock.springForcing(
     property: KProperty0<Double>,
     k: Double = 1.0,
     kProperty: KProperty0<Double>? = null,
@@ -92,7 +92,7 @@ fun Program.springForcing(
     decayProperty: KProperty0<Double>? = null
 ): DoublePropertySpringForcer {
     return DoublePropertySpringForcer(
-        program = this,
+        clock = this,
         property = property,
         k = k,
         kProperty = kProperty,
@@ -110,7 +110,7 @@ fun Program.springForcing(
  * @param decayProperty velocity decay property, overrides [decay]
  * @since 0.4.3
  */
-fun <T : LinearType<T>> Program.springForcing(
+fun <T : LinearType<T>> Clock.springForcing(
     property: KProperty0<T>,
     k: Double = 1.0,
     kProperty: KProperty0<Double>? = null,
@@ -118,7 +118,7 @@ fun <T : LinearType<T>> Program.springForcing(
     decayProperty: KProperty0<Double>? = null
 ): LinearTypePropertySpringForcer<T> {
     return LinearTypePropertySpringForcer(
-        program = this,
+        clock = this,
         property = property,
         k = k,
         kProperty = kProperty,
