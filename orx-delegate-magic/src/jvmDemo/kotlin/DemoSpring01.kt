@@ -1,6 +1,5 @@
 import org.openrndr.application
 import org.openrndr.extra.delegatemagic.dynamics.springForcing
-import org.openrndr.extra.delegatemagic.smoothing.smoothing
 import kotlin.random.Random
 
 fun main() = application {
