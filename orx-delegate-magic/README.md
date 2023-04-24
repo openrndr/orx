@@ -38,6 +38,11 @@ val radiusHistory by tracking(state::radius)
 ```
 <!-- __demos__ -->
 ## Demos
+### DemoDifferencing01
+[source code](src/jvmDemo/kotlin/DemoDifferencing01.kt)
+
+![DemoDifferencing01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-delegate-magic/images/DemoDifferencing01Kt.png)
+
 ### DemoSmoothing01
 [source code](src/jvmDemo/kotlin/DemoSmoothing01.kt)
 
