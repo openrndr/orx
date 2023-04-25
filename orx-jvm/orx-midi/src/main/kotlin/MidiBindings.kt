@@ -13,8 +13,28 @@ import org.openrndr.math.map
 
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.full.findAnnotations
+
+fun bindMidiNote(on: () -> Unit, off: () -> Unit, transceiver: MidiTransceiver, channel: Int, note: Int) {
+    transceiver.noteOn.listen {
+        if ((channel == -1 || it.channel == channel) && it.note == note) {
+            on()
+        }
+    }
+    transceiver.noteOff.listen {
+        if ((channel == -1 || it.channel == channel) && it.note == note) {
+            on()
+        }
+    }
+}
+
+
 @JvmName("bindMidiControlDouble")
-fun Program.bindMidiControl(property: KMutableProperty0<Double>, transceiver: MidiTransceiver, channel: Int, control: Int) {
+fun Program.bindMidiControl(
+    property: KMutableProperty0<Double>,
+    transceiver: MidiTransceiver,
+    channel: Int,
+    control: Int
+) {
     val anno = property.findAnnotations(DoubleParameter::class).firstOrNull()
 
     val low = anno?.low ?: 0.0
@@ -27,7 +47,7 @@ fun Program.bindMidiControl(property: KMutableProperty0<Double>, transceiver: Mi
     }
     launch {
         var propertyValue = property.get()
-        while(true) {
+        while (true) {
             val candidateValue = property.get()
             if (candidateValue != propertyValue) {
                 propertyValue = candidateValue
@@ -40,7 +60,12 @@ fun Program.bindMidiControl(property: KMutableProperty0<Double>, transceiver: Mi
 }
 
 @JvmName("bindMidiControlBoolean")
-fun Program.bindMidiControl(property: KMutableProperty0<Boolean>, transceiver: MidiTransceiver, channel: Int, control: Int) {
+fun Program.bindMidiControl(
+    property: KMutableProperty0<Boolean>,
+    transceiver: MidiTransceiver,
+    channel: Int,
+    control: Int
+) {
     transceiver.controlChanged.listen {
         if (it.eventType == MidiEventType.CONTROL_CHANGED && it.channel == channel && it.control == control) {
             property.set(it.value >= 64)
@@ -48,7 +73,7 @@ fun Program.bindMidiControl(property: KMutableProperty0<Boolean>, transceiver: M
     }
     launch {
         var propertyValue = property.get()
-        while(true) {
+        while (true) {
             val candidateValue = property.get()
             if (candidateValue != propertyValue) {
                 propertyValue = candidateValue
@@ -61,9 +86,11 @@ fun Program.bindMidiControl(property: KMutableProperty0<Boolean>, transceiver: M
 
 
 @JvmName("bindMidiControlVector2")
-fun Program.bindMidiControl(property: KMutableProperty0<Vector2>, transceiver: MidiTransceiver,
-                            channelX: Int, controlX: Int,
-                            channelY: Int = channelX, controlY: Int = controlX + 1) {
+fun Program.bindMidiControl(
+    property: KMutableProperty0<Vector2>, transceiver: MidiTransceiver,
+    channelX: Int, controlX: Int,
+    channelY: Int = channelX, controlY: Int = controlX + 1
+) {
     val anno = property.findAnnotations(Vector2Parameter::class).firstOrNull()
 
     val low = anno?.min ?: 0.0
@@ -91,7 +118,7 @@ fun Program.bindMidiControl(property: KMutableProperty0<Vector2>, transceiver: M
     }
     launch {
         var propertyValue = property.get()
-        while(true) {
+        while (true) {
             val candidateValue = property.get()
             if (candidateValue != propertyValue) {
                 propertyValue = candidateValue
@@ -106,10 +133,12 @@ fun Program.bindMidiControl(property: KMutableProperty0<Vector2>, transceiver: M
 }
 
 @JvmName("bindMidiControlVector3")
-fun Program.bindMidiControl(property: KMutableProperty0<Vector3>, transceiver: MidiTransceiver,
-                            channelX: Int, controlX: Int,
-                            channelY: Int = channelX, controlY: Int = controlX + 1,
-                            channelZ: Int = channelY, controlZ: Int = controlY + 1) {
+fun Program.bindMidiControl(
+    property: KMutableProperty0<Vector3>, transceiver: MidiTransceiver,
+    channelX: Int, controlX: Int,
+    channelY: Int = channelX, controlY: Int = controlX + 1,
+    channelZ: Int = channelY, controlZ: Int = controlY + 1
+) {
     val anno = property.findAnnotations(Vector3Parameter::class).firstOrNull()
 
     val low = anno?.min ?: 0.0
@@ -143,7 +172,7 @@ fun Program.bindMidiControl(property: KMutableProperty0<Vector3>, transceiver: M
     }
     launch {
         var propertyValue = property.get()
-        while(true) {
+        while (true) {
             val candidateValue = property.get()
             if (candidateValue != propertyValue) {
                 propertyValue = candidateValue
@@ -160,12 +189,13 @@ fun Program.bindMidiControl(property: KMutableProperty0<Vector3>, transceiver: M
 }
 
 @JvmName("bindMidiControlColorRGBa")
-fun Program.bindMidiControl(property: KMutableProperty0<ColorRGBa>, transceiver: MidiTransceiver,
-                            channelR: Int, controlR: Int,
-                            channelG: Int = channelR, controlG: Int = controlR + 1,
-                            channelB: Int = channelG, controlB: Int = controlG + 1,
-                            channelA: Int = channelB, controlA: Int = controlB + 1,
-                            ) {
+fun Program.bindMidiControl(
+    property: KMutableProperty0<ColorRGBa>, transceiver: MidiTransceiver,
+    channelR: Int, controlR: Int,
+    channelG: Int = channelR, controlG: Int = controlR + 1,
+    channelB: Int = channelG, controlB: Int = controlG + 1,
+    channelA: Int = channelB, controlA: Int = controlB + 1,
+) {
     val low = 0.0
     val high = 1.0
     transceiver.controlChanged.listen {
@@ -203,7 +233,7 @@ fun Program.bindMidiControl(property: KMutableProperty0<ColorRGBa>, transceiver:
     }
     launch {
         var propertyValue = property.get()
-        while(true) {
+        while (true) {
             val candidateValue = property.get()
             if (candidateValue != propertyValue) {
                 propertyValue = candidateValue
