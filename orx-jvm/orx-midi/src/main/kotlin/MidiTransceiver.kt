@@ -124,14 +124,27 @@ class MidiTransceiver(program: Program, val receiverDevice: MidiDevice?, val tra
             override fun send(message: MidiMessage, timeStamp: Long) {
                 val cmd = message.message
                 val channel = (cmd[0].toInt() and 0xff) and 0x0f
+                val velocity = cmd[2].toInt() and 0xff
                 when ((cmd[0].toInt() and 0xff) and 0xf0) {
-                    ShortMessage.NOTE_ON -> noteOn.trigger(
-                        MidiEvent.noteOn(
-                            channel,
-                            cmd[1].toInt() and 0xff,
-                            cmd[2].toInt() and 0xff
+
+
+
+                    ShortMessage.NOTE_ON -> if (velocity > 0) {
+                        noteOn.trigger(
+                            MidiEvent.noteOn(
+                                channel,
+                                cmd[1].toInt() and 0xff,
+                                velocity
+                            )
                         )
-                    )
+                    } else {
+                        noteOff.trigger(
+                            MidiEvent.noteOff(
+                                channel,
+                                cmd[1].toInt() and 0xff
+                            )
+                        )
+                    }
 
                     ShortMessage.NOTE_OFF -> noteOff.trigger(
                         MidiEvent.noteOff(
