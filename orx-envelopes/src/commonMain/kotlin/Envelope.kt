@@ -1,7 +1,11 @@
 package org.openrndr.extra.envelopes
 
-interface Envelope {
-    fun value(t: Double, tOff: Double): Double
+abstract class Envelope {
+    abstract fun value(t: Double, tOff: Double): Double
 
-    fun isActive(t: Double, tOff:Double): Boolean
+    abstract fun position(t: Double, tOff: Double): Double
+
+    abstract fun isActive(t: Double, tOff: Double): Boolean
+
+    var objectFunction: ((time: Double, value: Double, position: Double) -> Unit) = { _, _, _ -> }
 }
