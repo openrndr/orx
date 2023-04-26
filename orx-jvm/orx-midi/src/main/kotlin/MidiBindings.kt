@@ -22,11 +22,10 @@ fun bindMidiNote(on: () -> Unit, off: () -> Unit, transceiver: MidiTransceiver, 
     }
     transceiver.noteOff.listen {
         if ((channel == -1 || it.channel == channel) && it.note == note) {
-            on()
+            off()
         }
     }
 }
-
 
 @JvmName("bindMidiControlDouble")
 fun Program.bindMidiControl(

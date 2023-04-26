@@ -48,14 +48,16 @@ class MidiConsole: Extension {
 
     override fun afterDraw(drawer: Drawer, program: Program)  {
         drawer.defaults()
-        box = Rectangle(drawer.width - box.width, 0.0, box.width, drawer.height*1.0)
-        val positions = List(messages.size) { index ->
-            Vector2(box.x, box.y + index * 16.0 + 16.0)
+        synchronized(messages) {
+            box = Rectangle(drawer.width - box.width, 0.0, box.width, drawer.height * 1.0)
+            val positions = List(messages.size) { index ->
+                Vector2(box.x, box.y + index * 16.0 + 16.0)
+            }
+            if (demoFont) {
+                drawer.fontMap = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 16.0)
+            }
+            drawer.fill = ColorRGBa.WHITE
+            drawer.texts(messages, positions)
         }
-        if (demoFont) {
-            drawer.fontMap = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 16.0)
-        }
-        drawer.fill = ColorRGBa.WHITE
-        drawer.texts(messages, positions)
     }
 }

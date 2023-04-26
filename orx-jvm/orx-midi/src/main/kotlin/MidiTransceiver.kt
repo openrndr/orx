@@ -65,7 +65,7 @@ data class MidiDeviceDescription(
 
 class MidiTransceiver(program: Program, val receiverDevice: MidiDevice?, val transmitterDevicer: MidiDevice?) {
     companion object {
-        fun fromDeviceVendor(program: Program, name: String, vendor: String): MidiTransceiver {
+        fun fromDeviceVendor(program: Program, name: String, vendor: String? = null): MidiTransceiver {
             val infos = MidiSystem.getMidiDeviceInfo()
 
             var receiverDevice: MidiDevice? = null
@@ -75,17 +75,17 @@ class MidiTransceiver(program: Program, val receiverDevice: MidiDevice?, val tra
                 try {
                     val device = MidiSystem.getMidiDevice(info)
                     if (device !is Sequencer && device !is Synthesizer) {
-                        if (info.vendor == vendor && info.name == name) {
+                        if ((vendor == null || info.vendor == vendor) && info.name == name) {
                             logger.info { "found matching device $name / $vendor" }
                             if (device.maxTransmitters != 0 && device.maxReceivers == 0) {
                                 transmitterDevice = device
-                                logger.info {
+                                logger.debug {
                                     "found transmitter"
                                 }
                             }
                             if (device.maxReceivers != 0 && device.maxTransmitters == 0) {
                                 receiverDevice = device
-                                logger.info {
+                                logger.debug {
                                      "found receiver"
                                 }
                             }
