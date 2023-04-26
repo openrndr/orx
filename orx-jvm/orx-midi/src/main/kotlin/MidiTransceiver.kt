@@ -268,3 +268,6 @@ class MidiTransceiver(program: Program, val receiverDevice: MidiDevice?, val tra
         transmitterDevicer?.close()
     }
 }
+fun listMidiDevices() = MidiDeviceDescription.list()
+
+fun Program.openMidiDevice(name: String) = MidiTransceiver.fromDeviceVendor(this, name)
