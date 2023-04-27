@@ -1,6 +1,6 @@
 # orx-mesh-generators
 
-Generates various types of 3D meshes.
+3D-mesh generating functions and DSL.
 
 ## Simple meshes
 

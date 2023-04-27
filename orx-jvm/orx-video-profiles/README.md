@@ -1,6 +1,6 @@
 # orx-video-profiles
 
-A collection of `VideoWriterProfile` implementations that can be used with `ScreenRecorder` and `VideoWriter`
+GIF, H265, PNG, Prores, TIFF and Webp `VideoWriterProfile`s for `ScreenRecorder` and `VideoWriter`.
 
 ## Usage
 
@@ -24,7 +24,7 @@ fun main() = application {
 }
 ```
 
-Later use `gifsicle` or similar to further reduce file size. For example:
+Then use `gifsicle` or a similar tool to reduce the gif file size. For example:
 
 ```
 $ gifsicle --loop --delay=4 --colors 16 --optimize=2 heavy.gif >lessheavy.gif

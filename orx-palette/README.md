@@ -1,6 +1,6 @@
 # orx-palette
 
-Provides 300 color palettes gathered from different sources, organized in 3 collections.
+Provides hundreds of color palettes.
 
 ## Usage
 

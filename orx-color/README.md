@@ -1,6 +1,6 @@
 # orx-color
 
-Tools to work with color
+Color spaces, palettes, histograms, named colors.
 
 ## Color presets
 

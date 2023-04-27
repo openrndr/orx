@@ -1,6 +1,7 @@
 # orx-minim
 
-A minimal Minim support library
+Simplifies working with the Minim sound library.
+Provides sound synthesis and analysis.
 
 ## Usage
 
