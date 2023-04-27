@@ -1,6 +1,6 @@
 # orx-camera
 
-3D camera controllable via mouse and keyboard.
+2D and 3D cameras controllable via mouse and keyboard.
 
 ## Usage
 

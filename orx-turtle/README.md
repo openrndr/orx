@@ -1,6 +1,6 @@
 # orx-turtle
 
-Bezier (`ShapeContour`) backed turtle graphics.
+Bezier (`ShapeContour`) backed [turtle graphics](https://en.wikipedia.org/wiki/Turtle_graphics).
 
 ## The turtle language
 

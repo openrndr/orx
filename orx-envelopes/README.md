@@ -1,6 +1,6 @@
 # orx-envelopes
 
-ADSR envelopes and tools
+ADSR (Attack, Decay, Sustain, Release) envelopes and tools.
 
 ## ADSR
 

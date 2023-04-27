@@ -1,6 +1,6 @@
 # orx-triangulation
 
-An extension for triangulating a set of points using the **Delaunay** triangulation method. From that triangulation we can also derive a **Voronoi** diagram.
+**Delaunay** triangulation and **Voronoi** diagrams.
 
 The functionality comes from a Javascript port of the following libraries:
 

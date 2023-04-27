@@ -1,6 +1,6 @@
 # orx-compute-graph-nodes
 
-A collection of nodes that can be used with orx-computer-graph.
+A collection of nodes that can be used with `orx-computer-graph`.
 
 ## List of nodes
 

@@ -1,7 +1,6 @@
 # orx-no-clear
 
-Provides the classical draw-without-clearing-the-screen functionality that
-OPENRNDR does not provide by default.
+Provides the classical "draw-without-clearing-the-screen" functionality.
 
 #### Usage
 

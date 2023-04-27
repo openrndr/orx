@@ -1,6 +1,6 @@
 # orx-easing
 
-Provides easing functions for smooth animation or non-linear interpolation.
+Easing functions for smooth animation or non-linear interpolation.
 
 Similar to those on https://easings.net
 

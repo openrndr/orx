@@ -1,6 +1,6 @@
 # orx-jumpflood
 
-Takes an image and calculates either a distance field or a direction field. 
+Calculates distance or direction fields from an image.
 GPU accelerated, 2D. Results are provided as an image.
 
 [Original jump flooding algorithm](https://www.comp.nus.edu.sg/~tants/jfa.html)

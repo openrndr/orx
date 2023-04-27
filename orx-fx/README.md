@@ -1,6 +1,6 @@
 # orx-fx
 
-Ready-to-use visual effects or filters. Most include
+Ready-to-use GPU-based visual effects or filters. Most include
 [orx-parameters](https://github.com/openrndr/orx/tree/master/orx-parameters) annotations 
 so they can be easily controlled via orx-gui.
 

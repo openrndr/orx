@@ -1,6 +1,6 @@
 # orx-hash-grid
 
-A 2D space partitioning for points.
+2D space partitioning for fast point queries.
 
 ## Usage
 

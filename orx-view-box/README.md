@@ -1,6 +1,6 @@
 # orx-view-box
 
-Tools to provide view box support
+To create independent views inside one program window.
 
 <!-- __demos__ -->
 ## Demos

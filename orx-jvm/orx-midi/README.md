@@ -1,6 +1,7 @@
 # orx-midi
 
-Basic MIDI support for keyboards and controllers. Send and receive note and control change events. 
+MIDI support for keyboards and controllers. Send and receive note and control change events.
+Bind inputs to variables.
 
 Orx-midi is a wrapper around javax.midi.
 

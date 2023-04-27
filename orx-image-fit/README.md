@@ -1,6 +1,6 @@
 # orx-image-fit
 
-Draws the given image making sure it fits (`contain`) or it covers (`cover`) the specified area.
+Draws an image ensuring it fits or covers the specified `Rectangle`.
 
 Similar to CSS object-fit (https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit)
 

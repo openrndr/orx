@@ -1,6 +1,6 @@
 # orx-quadtree
 
-An extension for creating a [Quadtree](https://en.wikipedia.org/wiki/Quadtree) for points. A quadtree is a spatial
+A [Quadtree](https://en.wikipedia.org/wiki/Quadtree) is a spatial
 partioning tree structure meant to provide fast spatial queries such as nearest points within a range.
 
 ## Example
