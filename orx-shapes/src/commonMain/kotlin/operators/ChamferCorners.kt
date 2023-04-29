@@ -163,7 +163,7 @@ fun ShapeContour.arcCorners(lengths: List<Double>,
 
 private class Ring<T>(private val x: List<T>) : List<T> by x {
     override operator fun get(index: Int): T {
-        return x[index.mod_(x.size)]
+        return x[index.mod(x.size)]
     }
 }
 

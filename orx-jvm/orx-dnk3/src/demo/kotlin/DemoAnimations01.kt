@@ -45,7 +45,7 @@ fun main() = application {
             fov = 40.0
         }
         extend {
-            sceneData.animations[0].applyToTargets(seconds.mod_(sceneData.animations[0].duration))
+            sceneData.animations[0].applyToTargets(seconds.mod(sceneData.animations[0].duration))
             drawer.clear(ColorRGBa.PINK)
             renderer.draw(drawer, scene)
         }

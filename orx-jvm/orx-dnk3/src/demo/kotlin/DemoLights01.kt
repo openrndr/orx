@@ -35,7 +35,7 @@ fun main() = application {
             camera.setView(Vector3.ZERO, Spherical(30.50, 26.0, 5.6), 40.0)
         }
         extend {
-            sceneData.animations[0].applyToTargets(seconds.mod_(sceneData.animations[0].duration))
+            sceneData.animations[0].applyToTargets(seconds.mod(sceneData.animations[0].duration))
             drawer.clear(ColorRGBa.PINK)
             renderer.draw(drawer, scene)
         }

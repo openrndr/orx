@@ -38,4 +38,4 @@ fun ShapeContour.bulgeSegments(distortion: Double) =
         bulgeSegments { _, _ -> distortion }
 
 fun ShapeContour.bulgeSegments(distortion: List<Double>) =
-        bulgeSegments { index, _ -> distortion[index.mod_(distortion.size)] }
+        bulgeSegments { index, _ -> distortion[index.mod(distortion.size)] }

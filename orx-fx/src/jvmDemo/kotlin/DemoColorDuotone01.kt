@@ -14,7 +14,7 @@ fun main() {
 
             extend {
 
-                duotone.labInterpolation = seconds.mod_(2.0) < 1.0
+                duotone.labInterpolation = seconds.mod(2.0) < 1.0
                 duotone.apply(image, filteredImage)
                 drawer.image(filteredImage)
 

@@ -37,7 +37,7 @@ fun main() = application {
         }
 
         extend {
-            sceneData.animations[2].applyToTargets(seconds.mod_(sceneData.animations[2].duration))
+            sceneData.animations[2].applyToTargets(seconds.mod(sceneData.animations[2].duration))
             drawer.clear(ColorRGBa.PINK)
             renderer.draw(drawer, scene)
         }

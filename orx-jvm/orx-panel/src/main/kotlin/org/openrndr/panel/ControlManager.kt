@@ -136,9 +136,9 @@ class ControlManager : Extension {
 
                         target = if (target != null) {
                             if (KeyModifier.SHIFT in event.modifiers) {
-                                focusableControls[(index - 1).mod_(focusableControls.size)]
+                                focusableControls[(index - 1).mod(focusableControls.size)]
                             } else {
-                                focusableControls[(index + 1).mod_(focusableControls.size)]
+                                focusableControls[(index + 1).mod(focusableControls.size)]
                             }
                         } else {
                             lastTarget ?: focusableControls[0]

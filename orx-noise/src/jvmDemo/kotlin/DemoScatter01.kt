@@ -19,7 +19,7 @@ fun main() {
                 drawer.fill = ColorRGBa.PINK
                 drawer.circles(points, 4.0)
 
-                if (seconds.mod_(2.0) < 1.0) {
+                if (seconds.mod(2.0) < 1.0) {
                     drawer.stroke = ColorRGBa.PINK
                     drawer.fill = null
                     drawer.shape(shape)

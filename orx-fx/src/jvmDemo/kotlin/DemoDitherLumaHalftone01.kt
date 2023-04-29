@@ -18,7 +18,7 @@ fun main() {
                 lumaHalftone.phase0 = seconds*0.1
                 lumaHalftone.phase1 = -seconds*0.1
                 lumaHalftone.apply(image, filteredImage)
-                lumaHalftone.invert = seconds.mod_(2.0) < 1.0
+                lumaHalftone.invert = seconds.mod(2.0) < 1.0
                 drawer.image(filteredImage)
             }
         }
