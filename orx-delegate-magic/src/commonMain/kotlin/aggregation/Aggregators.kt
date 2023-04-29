@@ -4,7 +4,13 @@ package org.openrndr.extra.delegatemagic.aggregation
 
 import kotlin.math.abs
 
+/**
+ * Return element with largest magnitude
+ * @since 0.4.3
+ */
 fun List<Double>.maxMag(): Double {
+
+    this.max()
     if (isEmpty()) {
         error("list is empty")
     }
@@ -21,6 +27,10 @@ fun List<Double>.maxMag(): Double {
     return maxMagWithSign
 }
 
+/**
+ * Return element with smallest magnitude
+ * @since 0.4.3
+ */
 fun List<Double>.minMag(): Double {
     if (isEmpty()) {
         error("list is empty")
