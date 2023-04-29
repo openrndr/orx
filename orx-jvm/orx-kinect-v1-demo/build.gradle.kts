@@ -11,5 +11,4 @@ dependencies {
     implementation(project(":orx-jvm:orx-gui"))
     runtimeOnly(project(":orx-jvm:orx-kinect-v1-${(gradle as ExtensionAware).extra["openrndrClassifier"]}"))
     runtimeOnly(libs.openrndr.gl3.core)
-    runtimeOnly(libs.logback.classic)
 }
