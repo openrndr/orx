@@ -9,15 +9,29 @@ import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 import java.io.File
 
-class MidiConsole: Extension {
+/**
+ * A console for monitoring MIDI events
+ */
+class MidiConsole : Extension {
     override var enabled = true
 
+    /**
+     * placement of the console text
+     */
     var box = Rectangle(0.0, 0.0, 130.0, 200.0)
-    val messages = mutableListOf<String>()
+
+    private val messages = mutableListOf<String>()
+
+    /**
+     * number of entries in the visible history
+     */
     var historySize = 2
 
-    val demoFont = File("demo-data/fonts/IBMPlexMono-Regular.ttf").exists()
+    private val demoFont = File("demo-data/fonts/IBMPlexMono-Regular.ttf").exists()
 
+    /**
+     * register a Midi device for monitoring
+     */
     fun register(transceiver: MidiTransceiver) {
         transceiver.controlChanged.listen {
             synchronized(messages) {
@@ -46,7 +60,7 @@ class MidiConsole: Extension {
         }
     }
 
-    override fun afterDraw(drawer: Drawer, program: Program)  {
+    override fun afterDraw(drawer: Drawer, program: Program) {
         drawer.defaults()
         synchronized(messages) {
             box = Rectangle(drawer.width - box.width, 0.0, box.width, drawer.height * 1.0)

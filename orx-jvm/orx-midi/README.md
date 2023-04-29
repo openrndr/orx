@@ -3,19 +3,19 @@
 MIDI support for keyboards and controllers. Send and receive note and control change events.
 Bind inputs to variables.
 
-Orx-midi is a wrapper around javax.midi.
+Orx-midi is a wrapper around `javax.midi`.
 
 ## Usage
 
 ```kotlin
 
 // -- list all midi devices
-MidiDeviceDescription.list().forEach {
+listMidiDevices().forEach {
     println("${it.name}, ${it.vendor} r:${it.receive} t:${it.transmit}")
 }
 
 // -- open a midi controller and listen for control changes
-val dev = MidiTransceiver.fromDeviceVendor(this, "BCR2000 [hw:2,0,0]", "ALSA (http://www.alsa-project.org)")
+val dev = openMidiDevice("BCR2000 [hw:2,0,0]")
 dev.controlChanged.listen {
     println("${it.channel} ${it.control} ${it.value}")
 }

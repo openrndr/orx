@@ -41,7 +41,7 @@ class MidiEvent(val eventType: MidiEventType) {
             return midiEvent
         }
 
-        fun controlChange(channel:Int, control: Int, value: Int): MidiEvent {
+        fun controlChange(channel: Int, control: Int, value: Int): MidiEvent {
             val midiEvent = MidiEvent(MidiEventType.CONTROL_CHANGED)
             midiEvent.channel = channel
             midiEvent.control = control
@@ -49,21 +49,21 @@ class MidiEvent(val eventType: MidiEventType) {
             return midiEvent
         }
 
-        fun programChange(channel:Int, program: Int): MidiEvent {
+        fun programChange(channel: Int, program: Int): MidiEvent {
             val midiEvent = MidiEvent(MidiEventType.PROGRAM_CHANGE)
             midiEvent.channel = channel
             midiEvent.program = program
             return midiEvent
         }
 
-        fun channelPressure(channel:Int, pressure: Int): MidiEvent {
+        fun channelPressure(channel: Int, pressure: Int): MidiEvent {
             val midiEvent = MidiEvent(MidiEventType.CHANNEL_PRESSURE)
             midiEvent.channel = channel
             midiEvent.pressure = pressure
             return midiEvent
         }
 
-        fun pitchBend(channel:Int, pitchBend: Int): MidiEvent {
+        fun pitchBend(channel: Int, pitchBend: Int): MidiEvent {
             val midiEvent = MidiEvent(MidiEventType.PITCH_BEND)
             midiEvent.channel = channel
             midiEvent.pitchBend = pitchBend

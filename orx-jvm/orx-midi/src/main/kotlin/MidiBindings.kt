@@ -27,6 +27,14 @@ fun bindMidiNote(on: () -> Unit, off: () -> Unit, transceiver: MidiTransceiver, 
     }
 }
 
+/**
+ * Bind MIDI control change to [Double] property
+ * @param property the [KMutableProperty0] to bind to
+ * @param transceiver the midi device to bind to
+ * @param channel the midi channel to use
+ * @param control the midi control to use
+ * @since 0.4.3
+ */
 @JvmName("bindMidiControlDouble")
 fun Program.bindMidiControl(
     property: KMutableProperty0<Double>,
@@ -58,6 +66,14 @@ fun Program.bindMidiControl(
     }
 }
 
+/**
+ * Bind MIDI control change to [Boolean] property
+ * @param property the [KMutableProperty0] to bind to
+ * @param transceiver the midi device to bind to
+ * @param channel the midi channel to use
+ * @param control the midi control to use
+ * @since 0.4.3
+ */
 @JvmName("bindMidiControlBoolean")
 fun Program.bindMidiControl(
     property: KMutableProperty0<Boolean>,
@@ -83,7 +99,16 @@ fun Program.bindMidiControl(
     }
 }
 
-
+/**
+ * Bind MIDI control change to [Vector2] property
+ * @param property the [KMutableProperty0] to bind to
+ * @param transceiver the midi device to bind to
+ * @param channelX the midi channel to use for the [Vector2.x] component
+ * @param controlX the midi control to use for the [Vector2.x] component
+ * @param channelY the midi channel to use for the [Vector2.y] component
+ * @param controlY the midi control to use for the [Vector2.y] component
+ * @since 0.4.3
+ */
 @JvmName("bindMidiControlVector2")
 fun Program.bindMidiControl(
     property: KMutableProperty0<Vector2>, transceiver: MidiTransceiver,
@@ -131,6 +156,18 @@ fun Program.bindMidiControl(
     }
 }
 
+/**
+ * Bind MIDI control change to [Vector3] property
+ * @param property the [KMutableProperty0] to bind to
+ * @param transceiver the midi device to bind to
+ * @param channelX the midi channel to use for the [Vector3.x] component
+ * @param controlX the midi control to use for the [Vector3.x] component
+ * @param channelY the midi channel to use for the [Vector3.y] component
+ * @param controlY the midi control to use for the [Vector3.y] component
+ * @param channelZ the midi channel to use for the [Vector3.z] component
+ * @param controlZ the midi control to use for the [Vector3.z] component
+ * @since 0.4.3
+ */
 @JvmName("bindMidiControlVector3")
 fun Program.bindMidiControl(
     property: KMutableProperty0<Vector3>, transceiver: MidiTransceiver,
@@ -187,6 +224,20 @@ fun Program.bindMidiControl(
     }
 }
 
+/**
+ * Bind MIDI control change to [ColorRGBa] property
+ * @param property the [KMutableProperty0] to bind to
+ * @param transceiver the midi device to bind to
+ * @param channelR the midi channel to use for the [ColorRGBa.r] component
+ * @param controlR the midi control to use for the [ColorRGBa.r] component
+ * @param channelG the midi channel to use for the [ColorRGBa.g] component
+ * @param controlG the midi control to use for the [ColorRGBa.g] component
+ * @param channelB the midi channel to use for the [ColorRGBa.b] component
+ * @param controlB the midi control to use for the [ColorRGBa.b] component
+ * @param channelA the midi channel to use for the [ColorRGBa.alpha] component
+ * @param controlA the midi control to use for the [ColorRGBa.alpha] component
+ * @since 0.4.3
+ */
 @JvmName("bindMidiControlColorRGBa")
 fun Program.bindMidiControl(
     property: KMutableProperty0<ColorRGBa>, transceiver: MidiTransceiver,

@@ -268,6 +268,16 @@ class MidiTransceiver(program: Program, val receiverDevice: MidiDevice?, val tra
         transmitterDevicer?.close()
     }
 }
+
+/**
+ * List all available MIDI devices
+ * @since 0.4.3
+ */
 fun listMidiDevices() = MidiDeviceDescription.list()
 
+/**
+ * Open a MIDI device by name
+ * @param name the name of the MIDI device to open
+ * @since 0.4.3
+ */
 fun Program.openMidiDevice(name: String) = MidiTransceiver.fromDeviceVendor(this, name)
