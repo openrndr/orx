@@ -23,13 +23,12 @@ tensorflow = "0.5.0"
 jarchivelib = "1.2.0"
 logbackClassic = "1.2.11"
 minim = "2.2.2"
-netty = "4.1.79.Final"
+netty = "4.1.92.Final"
 rabbitcontrol = "0.3.29"
 zxing = "3.5.1"
 ktor = "2.2.4"
-jgit = "5.12.0.202106070339-r"
+jgit = "6.5.0.202303070854-r"
 javaosc = "0.8"
-javaparser = "3.15.21"
 
 [libraries]
 kotlin-logging = { group = "io.github.microutils", name = "kotlin-logging", version.ref = "kotlinLogging" }
@@ -72,7 +71,6 @@ ktor-server-core = { group = "io.ktor", name = "ktor-server-core", version.ref =
 ktor-server-netty = { group = "io.ktor", name = "ktor-server-netty", version.ref = "ktor" }
 jgit = { group = "org.eclipse.jgit", name = "org.eclipse.jgit", version.ref = "jgit" }
 javaosc-core = { group = "com.illposed.osc", name = "javaosc-core", version.ref = "javaosc" }
-javaparser-core = { group = "com.github.javaparser", name = "javaparser-core", version.ref = "javaparser" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 antlr-core = { group = "org.antlr", name = "antlr4", version.ref = "antlr" }
 antlr-runtime = { group = "org.antlr", name = "antlr4-runtime", version.ref = "antlr" }
