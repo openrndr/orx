@@ -104,17 +104,33 @@ if (shouldPublish) {
             val fjdj = tasks.create("fakeJavaDocJar", Jar::class) {
                 archiveClassifier.set("javadoc")
             }
-            matching { it.name == "jvm" }.forEach { p ->
-                p as MavenPublication
-                p.artifact(fjdj)
-            }
-            all {
+            named("js") {
                 this as MavenPublication
                 versionMapping {
                     allVariants {
-                        fromResolutionOf("commonMainApiDependenciesMetadata")
+                        fromResolutionOf("jsMainResolvableDependenciesMetadata")
                     }
                 }
+            }
+            named("jvm") {
+                this as MavenPublication
+                this.artifact(fjdj)
+                versionMapping {
+                    allVariants {
+                        fromResolutionOf("jvmMainResolvableDependenciesMetadata")
+                    }
+                }
+            }
+            named("kotlinMultiplatform") {
+                this as MavenPublication
+                versionMapping {
+                    allVariants {
+                        fromResolutionOf("commonMainResolvableDependenciesMetadata")
+                    }
+                }
+            }
+            all {
+                this as MavenPublication
                 pom {
                     name.set(project.name)
                     description.set(project.name)
