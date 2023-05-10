@@ -277,7 +277,21 @@ fun listMidiDevices() = MidiDeviceDescription.list()
 
 /**
  * Open a MIDI device by name
- * @param name the name of the MIDI device to open
+ * @param name the name of the MIDI device to open. Either the
+ * exact name or the first characters of the name.
  * @since 0.4.3
  */
-fun Program.openMidiDevice(name: String) = MidiTransceiver.fromDeviceVendor(this, name)
+fun Program.openMidiDevice(name: String): MidiTransceiver {
+    val devices = listMidiDevices()
+
+    val matchingDevice = devices.firstOrNull {
+        // Existing device name matches `name`
+        it.name == name
+    } ?: devices.firstOrNull {
+        // Existing device name starts with `name`
+        it.name.startsWith(name)
+    }
+    val actualName = matchingDevice?.name ?: name
+
+    return MidiTransceiver.fromDeviceVendor(this, actualName)
+}
