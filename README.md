@@ -1,5 +1,7 @@
 # ORX (OPENRNDR EXTRA)
 
+[![Download](https://maven-badges.herokuapp.com/maven-central/org.openrndr.extra/orx-parameters-jvm/badge.svg)](https://mvnrepository.com/artifact/org.openrndr.extra)
+
 A growing library of assorted data structures, algorithms and utilities to
 complement [OPENRNDR](https://github.com/openrndr/openrndr).
 
