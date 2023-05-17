@@ -279,6 +279,7 @@ fun listMidiDevices() = MidiDeviceDescription.list()
  * Open a MIDI device by name
  * @param name the name of the MIDI device to open. Either the
  * exact name or the first characters of the name.
+ * Throws an exception if the device name is not found.
  * @since 0.4.3
  */
 fun Program.openMidiDevice(name: String): MidiTransceiver {
@@ -295,3 +296,38 @@ fun Program.openMidiDevice(name: String): MidiTransceiver {
 
     return MidiTransceiver.fromDeviceVendor(this, actualName)
 }
+
+/**
+ * Open a MIDI device by name
+ *
+ * @param name the name of the MIDI device to open. Either the
+ * exact name or the first characters of the name.
+ * Returns null if the device name is not found.
+ * @since 0.4.3
+ */
+fun Program.openMidiDeviceOrNull(name: String): MidiTransceiver? {
+    val devices = listMidiDevices()
+
+    val matchingDevice = devices.firstOrNull {
+        // Existing device name matches `name`
+        it.name == name
+    } ?: devices.firstOrNull {
+        // Existing device name starts with `name`
+        it.name.startsWith(name)
+    }
+
+    return if(matchingDevice != null)
+        MidiTransceiver.fromDeviceVendor(this, matchingDevice.name)
+    else
+        null
+}
+
+/**
+ * Open a dummy MIDI device
+ *
+ * Enables running programs that depend on a specific MIDI device
+ * when that device is not available.
+ * Usage: `val dev = openMidiDeviceOrNull("Twister") ?: dummyMidiDevice()`
+ * @since 0.4.3
+ */
+fun Program.dummyMidiDevice() = MidiTransceiver(this, null, null)
