@@ -43,6 +43,16 @@ class TriangleMeshBuilder {
     }
 
     /**
+     * Applies a three-dimensional translation to the [transform] matrix.
+     * Affects meshes added afterward.
+     */
+    fun translate(translation: Vector3) {
+        transform *= buildTransform {
+            translate(translation)
+        }
+    }
+
+    /**
      * Applies a rotation over an arbitrary axis to the [transform] matrix.
      * Affects meshes added afterward.
      * @param axis the axis to rotate over, will be normalized
