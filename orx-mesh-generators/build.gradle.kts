@@ -18,6 +18,7 @@ kotlin {
                 implementation(project(":orx-shapes"))
                 implementation(project(":orx-mesh-generators"))
                 implementation(project(":orx-camera"))
+                implementation(project(":orx-noise"))
             }
         }
     }
