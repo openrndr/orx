@@ -120,6 +120,11 @@ Check out the [source code](src/commonMain/kotlin) to learn about function argum
 
 ![DemoComplex05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex05Kt.png)
 
+### DemoComplex06
+[source code](src/jvmDemo/kotlin/DemoComplex06.kt)
+
+![DemoComplex06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex06Kt.png)
+
 ### DemoExtrude01
 [source code](src/jvmDemo/kotlin/DemoExtrude01.kt)
 
@@ -134,3 +139,8 @@ Check out the [source code](src/commonMain/kotlin) to learn about function argum
 [source code](src/jvmDemo/kotlin/DemoExtrude03.kt)
 
 ![DemoExtrude03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude03Kt.png)
+
+### DemoExtrude04
+[source code](src/jvmDemo/kotlin/DemoExtrude04.kt)
+
+![DemoExtrude04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude04Kt.png)
