@@ -8,6 +8,7 @@ import javax.sound.midi.*
 private val logger = KotlinLogging.logger {  }
 
 data class MidiDeviceName(val name: String, val vendor: String)
+
 class MidiDeviceCapabilities {
     var receive: Boolean = false
     var transmit: Boolean = false
