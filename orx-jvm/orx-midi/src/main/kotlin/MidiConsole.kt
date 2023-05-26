@@ -35,7 +35,7 @@ class MidiConsole : Extension {
     fun register(transceiver: MidiTransceiver) {
         transceiver.controlChanged.listen {
             synchronized(messages) {
-                messages.add("CC ${it.control}: ${it.value}")
+                messages.add("Ch=${it.channel} CC=${it.control}: ${it.value}")
                 if (messages.size > historySize) {
                     messages.removeAt(0)
                 }
