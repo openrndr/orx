@@ -17,13 +17,10 @@ import org.openrndr.extra.color.spaces.ColorOKLABa
 import org.openrndr.math.Vector4
 import kotlin.jvm.JvmName
 
-private val glslVersion = "410 core"
-
 class BezierPatchDrawer {
     private fun vsGenerator(structure: ShadeStructure): String {
         return """
             |// BezierPatchDrawer.kt / vsGenerator
-            |#version $glslVersion
             |${drawerUniforms()}
             |${structure.attributes.orEmpty()}
             |${structure.varyingOut.orEmpty()}
@@ -38,7 +35,6 @@ class BezierPatchDrawer {
     private fun fsGenerator(structure: ShadeStructure): String {
         return ("""
             |// BezierPatchDrawer.kt / fsGenerator            
-            |#version $glslVersion
             |${drawerUniforms()}
             |${structure.varyingIn.orEmpty()}
 
@@ -56,7 +52,6 @@ class BezierPatchDrawer {
     private fun fsGeneratorOKLab(structure: ShadeStructure): String {
         return ("""
             |// BezierPatchDrawer.kt / fsGeneratorOKLab            
-            |#version $glslVersion
             |${drawerUniforms()}
             |${ColorPhraseBook.oklabToLinearRgb.phrase}
             |${ColorPhraseBook.linearRgbToSRgb.phrase}
@@ -76,7 +71,6 @@ class BezierPatchDrawer {
     private fun tseGenerator(structure: ShadeStructure): String {
         BezierPhraseBook.register()
         return """
-            |#version $glslVersion
             |
             |#pragma import beziers.bezier_patch42
             |#pragma import beziers.bezier_patch43
@@ -101,7 +95,6 @@ class BezierPatchDrawer {
 
     private fun tscGenerator(structure: ShadeStructure): String {
         return """
-            |#version $glslVersion
             |uniform int u_subdivisions;
             |${drawerUniforms()}
             |layout(vertices = 16) out; // 16 points per patch
