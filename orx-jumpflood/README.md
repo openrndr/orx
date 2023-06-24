@@ -16,10 +16,10 @@ the distance in red and the original bitmap in green.
 ```kotlin
 import org.openrndr.application
 import org.openrndr.draw.*
+import org.openrndr.extra.fx.blur.ApproximateGaussianBlur
+import org.openrndr.extra.jumpfill.DistanceField
 import org.openrndr.extra.jumpfill.Threshold
-import org.openrndr.extra.jumpfill.distanceFieldFromBitmap
 import org.openrndr.ffmpeg.VideoPlayerFFMPEG
-import org.openrndr.filter.blur.ApproximateGaussianBlur
 
 fun main() = application {
     configure {
@@ -34,7 +34,8 @@ fun main() = application {
         val thresholdFilter = Threshold()
         val thresholded = colorBuffer(width, height)
 
-        val distanceField = colorBuffer(width, height, type = ColorType.FLOAT32)
+        val distanceField = DistanceField()
+        val distanceFieldBuffer = colorBuffer(width, height, type = ColorType.FLOAT32)
 
         val videoCopy = renderTarget(width, height) {
             colorBuffer()
@@ -58,21 +59,21 @@ fun main() = application {
             thresholdFilter.threshold = 0.5
             thresholdFilter.apply(blurred, thresholded)
 
-            distanceFieldFromBitmap(thresholded, result = distanceField)
+            distanceField.apply(thresholded, distanceFieldBuffer)
 
             drawer.isolated {
                 // -- use a shadestyle to visualize the distance field
                 drawer.shadeStyle = shadeStyle {
                     fragmentTransform = """
                         float d = x_fill.r;
-                        if (x_fill.g > 0.5) { 
+                        if (x_fill.g > 0.5) {
                             x_fill.rgb = vec3(cos(d) * 0.5 + 0.5);
                         } else {
                             x_fill.rgb = 0.25 * vec3(1.0 - (cos(d) * 0.5 + 0.5));
                         }
                     """
                 }
-                drawer.image(distanceField)
+                drawer.image(distanceFieldBuffer)
             }
         }
     }
@@ -88,10 +89,10 @@ x-direction in red, y-direction in green, and the original bitmap in blue.
 ```kotlin
 import org.openrndr.application
 import org.openrndr.draw.*
+import org.openrndr.extra.fx.blur.ApproximateGaussianBlur
+import org.openrndr.extra.jumpfill.DirectionalField
 import org.openrndr.extra.jumpfill.Threshold
-import org.openrndr.extra.jumpfill.directionFieldFromBitmap
 import org.openrndr.ffmpeg.VideoPlayerFFMPEG
-import org.openrndr.filter.blur.ApproximateGaussianBlur
 
 fun main() = application {
     configure {
@@ -106,7 +107,8 @@ fun main() = application {
         val thresholdFilter = Threshold()
         val thresholded = colorBuffer(width, height)
 
-        val directionField = colorBuffer(width, height, type = ColorType.FLOAT32)
+        val directionField = DirectionalField()
+        val directionalFieldBuffer = colorBuffer(width, height, type = ColorType.FLOAT32)
 
         val videoPlayer = VideoPlayerFFMPEG.fromDevice(imageWidth = width, imageHeight = height)
         videoPlayer.play()
@@ -131,21 +133,21 @@ fun main() = application {
             thresholdFilter.threshold = 0.5
             thresholdFilter.apply(blurred, thresholded)
 
-            directionFieldFromBitmap(thresholded, result = directionField)
+            directionField.apply(thresholded, directionalFieldBuffer)
 
             drawer.isolated {
                 // -- use a shadestyle to visualize the direction field
                 drawer.shadeStyle = shadeStyle {
                     fragmentTransform = """
                         float a = atan(x_fill.r, x_fill.g);
-                        if (x_fill.b > 0.5) { 
+                        if (x_fill.b > 0.5) {
                             x_fill.rgb = vec3(cos(a)*0.5+0.5, 1.0, sin(a)*0.5+0.5);
                         } else {
                             x_fill.rgb = vec3(cos(a)*0.5+0.5, 0.0, sin(a)*0.5+0.5);
                         }
                     """
                 }
-                drawer.image(directionField)
+                drawer.image(directionalFieldBuffer)
             }
         }
     }
