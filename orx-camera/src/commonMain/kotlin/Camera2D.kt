@@ -43,29 +43,33 @@ class Camera2D : Extension, ChangeEvents {
             rotationCenter = it.position
         }
         mouse.dragged.listen {
-            when (it.button) {
-                MouseButton.LEFT -> view = buildTransform {
-                    translate(it.dragDisplacement)
-                } * view
+            if (!it.propagationCancelled) {
+                when (it.button) {
+                    MouseButton.LEFT -> view = buildTransform {
+                        translate(it.dragDisplacement)
+                    } * view
 
-                MouseButton.RIGHT -> view = buildTransform {
-                    translate(rotationCenter)
-                    rotate(it.dragDisplacement.x + it.dragDisplacement.y)
-                    translate(-rotationCenter)
-                } * view
+                    MouseButton.RIGHT -> view = buildTransform {
+                        translate(rotationCenter)
+                        rotate(it.dragDisplacement.x + it.dragDisplacement.y)
+                        translate(-rotationCenter)
+                    } * view
 
-                else -> Unit
+                    else -> Unit
+                }
+                dirty = true
             }
-            dirty = true
         }
         mouse.scrolled.listen {
-            val scaleFactor = 1.0 - it.rotation.y * 0.03
-            view = buildTransform {
-                translate(it.position)
-                scale(scaleFactor)
-                translate(-it.position)
-            } * view
-            dirty = true
+            if (!it.propagationCancelled) {
+                val scaleFactor = 1.0 - it.rotation.y * 0.03
+                view = buildTransform {
+                    translate(it.position)
+                    scale(scaleFactor)
+                    translate(-it.position)
+                } * view
+                dirty = true
+            }
         }
     }
 
