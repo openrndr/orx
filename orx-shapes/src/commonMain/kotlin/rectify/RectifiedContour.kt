@@ -25,39 +25,62 @@ class RectifiedContour(val contour: ShapeContour, distanceTolerance: Double = 0.
      * computes a rectified t-value for [contour]
      */
     fun rectify(t: Double): Double {
-        if (t <= 0.0) {
+        if (contour.empty) {
             return 0.0
-        }
-        val fi = t * (points.size - 1.0)
-        val fr = fi.mod(1.0)
-        val i0 = fi.toInt()
-        val i1 = i0 + 1
-
-        return if (i0 >= points.size - 1) {
-            1.0
         } else {
-            (points[i0].second * (1.0 - fr) + points[i1].second * fr)
+            if (t <= 0.0) {
+                return 0.0
+            }
+            val fi = t * (points.size - 1.0)
+            val fr = fi.mod(1.0)
+            val i0 = fi.toInt()
+            val i1 = i0 + 1
+
+            return if (i0 >= points.size - 1) {
+                1.0
+            } else {
+                (points[i0].second * (1.0 - fr) + points[i1].second * fr)
+            }
         }
     }
 
     fun position(t: Double): Vector2 {
-        return contour.position(rectify(safe(t)))
+        return if (contour.empty) {
+            Vector2.INFINITY
+        } else {
+            contour.position(rectify(safe(t)))
+        }
     }
 
     fun velocity(t: Double): Vector2 {
-        val (segment, st) = contour.segment(rectify(safe(t)))
-        return contour.segments[segment].direction(st)
+        return if (contour.empty) {
+            Vector2.ZERO
+        } else {
+            val (segment, st) = contour.segment(rectify(safe(t)))
+            contour.segments[segment].direction(st)
+        }
     }
 
     fun normal(t: Double): Vector2 {
-        return contour.normal(rectify(safe(t)))
+        return if (contour.empty) {
+            Vector2.UNIT_Y
+        } else {
+            contour.normal(rectify(safe(t)))
+        }
     }
 
     fun pose(t: Double): Matrix44 {
-        return contour.pose(rectify(safe(t)))
+        return if (contour.empty) {
+            Matrix44.IDENTITY
+        } else {
+            contour.pose(rectify(safe(t)))
+        }
     }
 
     fun sub(t0: Double, t1: Double): ShapeContour {
+        if (contour.empty) {
+            return ShapeContour.EMPTY
+        }
         return if (contour.closed) {
             contour.sub(rectify(t0.mod(1.0)) + floor(t0), rectify(t1.mod(1.0)) + floor(t1))
         } else {
