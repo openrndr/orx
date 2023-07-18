@@ -10,8 +10,8 @@ import kotlin.math.floor
 /**
  * RectifiedContour provides an approximately uniform parameterization for [ShapeContour]
  */
-class RectifiedContour(val contour: ShapeContour, lengthScale: Double = 1.0, distanceTolerance: Double = 0.5) {
-    val points = contour.equidistantPositionsWithT((contour.length * lengthScale).toInt(), distanceTolerance)
+class RectifiedContour(val contour: ShapeContour, distanceTolerance: Double = 0.5, lengthScale: Double = 1.0, ) {
+    val points = contour.equidistantPositionsWithT((contour.length * lengthScale).toInt().coerceAtLeast(2), distanceTolerance)
 
     private fun safe(t: Double): Double {
         return if (contour.closed) {
@@ -68,14 +68,17 @@ class RectifiedContour(val contour: ShapeContour, lengthScale: Double = 1.0, dis
 
 /** create a rectified contour
  * @param distanceTolerance distance tolerance to use, 0.5 is the default distance tolerance
+ * @param lengthScale used to compute the size of the LUT, default value is 1.0
  **/
-fun ShapeContour.rectified(distanceTolerance: Double = 0.5): RectifiedContour {
-    return RectifiedContour(this, distanceTolerance = distanceTolerance)
+fun ShapeContour.rectified(distanceTolerance: Double = 0.5, lengthScale: Double = 1.0): RectifiedContour {
+    return RectifiedContour(this, distanceTolerance, lengthScale)
 }
 
 /**  create a rectified contour
  *   @param distanceTolerance distance tolerance to use, 0.5 is the default distance tolerance
+ *   @param lengthScale used to compute the size of the LUT, default value is 1.0
+ *
  * */
-fun Segment.rectified(distanceTolerance: Double = 0.5): RectifiedContour {
-    return RectifiedContour(this.contour, distanceTolerance = distanceTolerance)
+fun Segment.rectified(distanceTolerance: Double = 0.5, lengthScale: Double = 1.0): RectifiedContour {
+    return RectifiedContour(this.contour, distanceTolerance, lengthScale)
 }
