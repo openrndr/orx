@@ -400,6 +400,7 @@ class ControlManager : Extension {
         if (element.computedStyle.display != Display.NONE) {
             if (element.computedStyle.overflow == Overflow.Visible) {
                 drawer.isolated {
+                    drawer.drawStyle.textSetting = TextSettingMode.PIXEL
                     drawer.translate(element.screenPosition)
                     if (newZComp == zIndex) {
                         element.draw(drawer)
