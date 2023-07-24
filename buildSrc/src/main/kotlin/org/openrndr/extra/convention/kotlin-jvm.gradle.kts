@@ -3,6 +3,7 @@ package org.openrndr.extra.convention
 import ScreenshotsHelper.collectScreenshots
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val libs = the<LibrariesForLibs>()
@@ -58,6 +59,9 @@ kotlin {
 tasks {
     @Suppress("UNUSED_VARIABLE")
     val test by getting(Test::class) {
+        if (DefaultNativePlatform.getCurrentOperatingSystem().isMacOsX) {
+            allJvmArgs = allJvmArgs + "-XstartOnFirstThread"
+        }
         useJUnitPlatform()
         testLogging.exceptionFormat = TestExceptionFormat.FULL
     }
