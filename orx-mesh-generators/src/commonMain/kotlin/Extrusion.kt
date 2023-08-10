@@ -11,34 +11,6 @@ import org.openrndr.shape.ShapeContour
 import org.openrndr.shape.Triangle
 
 /**
- * Writes two triangles to [writer] representing
- * the quad formed by four vertices.
- *
- * @param v00 vertex (0, 0)
- * @param v01 vertex (0, 1)
- * @param v10 vertex (1, 0)
- * @param v11 vertex (1, 1)
- * @param faceNormal the face normal
- * @param writer the vertex writer function
- */
-fun quadToTris(
-    v00: Vector3,
-    v01: Vector3,
-    v10: Vector3,
-    v11: Vector3,
-    faceNormal: Vector3,
-    writer: VertexWriter
-) {
-    writer(v11, faceNormal, Vector2.ZERO)
-    writer(v01, faceNormal, Vector2.ZERO)
-    writer(v00, faceNormal, Vector2.ZERO)
-
-    writer(v00, faceNormal, Vector2.ZERO)
-    writer(v10, faceNormal, Vector2.ZERO)
-    writer(v11, faceNormal, Vector2.ZERO)
-}
-
-/**
  * Writes quads to [writer] creating a surface that connects two
  * displaced instances of [linearContour]. The positions and orientations
  * of the two contours are defined by the [frame0] and [frame1] matrices.
@@ -49,7 +21,7 @@ fun quadToTris(
  * @param writer the vertex writer function
  */
 fun contourSegment(
-    linearContour: List<Vector3>,
+    linearContour: List<Vector2>,
     frame0: Matrix44,
     frame1: Matrix44,
     writer: VertexWriter
@@ -58,39 +30,13 @@ fun contourSegment(
         val v0 = linearContour[i]
         val v1 = linearContour[(i + 1).mod(linearContour.size)]
 
-        val v00 = (frame0 * v0.xyz1).xyz
-        val v01 = (frame0 * v1.xyz1).xyz
+        val v00 = (frame0 * v0.xy01).xyz
+        val v01 = (frame0 * v1.xy01).xyz
 
-        val v10 = (frame1 * v0.xyz1).xyz
-        val v11 = (frame1 * v1.xyz1).xyz
+        val v10 = (frame1 * v0.xy01).xyz
+        val v11 = (frame1 * v1.xy01).xyz
         val faceNormal = ((v10 - v00).normalized cross (v01 - v00).normalized).normalized
         quadToTris(v00, v01, v10, v11, faceNormal, writer)
-    }
-}
-
-/**
- * Writes a list of triangles transformed by the [frame]
- * transformation matrix into [writer].
- *
- * @param triangulation the list of triangles to write
- * @param frame a transformation matrix to apply to each triangle
- * @param flipNormals generates inside-out geometry if true
- * @param writer the vertex writer function
- */
-fun triangulationWithFrame(
-    triangulation: List<Triangle>,
-    frame: Matrix44,
-    flipNormals: Boolean = true,
-    writer: VertexWriter
-) {
-    val normalFrame = normalMatrix(frame)
-    val normalScale = if (!flipNormals) -1.0 else 1.0
-    val normal = ((normalFrame * Vector4(0.0, 0.0, normalScale, 0.0)).xyz)
-    for (triangle in triangulation) {
-        val t = if (!flipNormals) triangle else Triangle(triangle.x3, triangle.x2, triangle.x1)
-        writer((frame * t.x1.xy01).xyz, normal, Vector2.ZERO)
-        writer((frame * t.x2.xy01).xyz, normal, Vector2.ZERO)
-        writer((frame * t.x3.xy01).xyz, normal, Vector2.ZERO)
     }
 }
 
@@ -129,7 +75,7 @@ fun extrudeContourSteps(
     writer: VertexWriter
 ) {
     val linearContour = contour.sampleLinear(contourDistanceTolerance)
-    val linearContourPoints = linearContour.adaptivePositions().map { it.xy0 }
+    val linearContourPoints = linearContour.adaptivePositions()
     val finalFrames = if (path.closed) frames + frames.first() else frames
 
     // First add caps
@@ -138,36 +84,6 @@ fun extrudeContourSteps(
     // Then add sides
     finalFrames.windowed(2, 1).forEach {
         contourSegment(linearContourPoints, it[0], it[1], writer)
-    }
-}
-
-/**
- * Adds caps to an extruded shape
- *
- * @param linearShape the cross-section of the mesh
- * @param path the 3D path
- * @param startCap adds a start cap if set to true
- * @param endCap adds an end cap if set to true
- * @param frames a list of matrices holding the transformation matrices along
- * the path
- * @param writer the vertex writer function
- */
-private fun extrudeCaps(
-    linearShape: Shape,
-    path: Path3D,
-    startCap: Boolean,
-    endCap: Boolean,
-    frames: List<Matrix44>,
-    writer: VertexWriter
-) {
-    if ((startCap || endCap) && !path.closed) {
-        val capTriangles = linearShape.triangulation
-        if (startCap) {
-            triangulationWithFrame(capTriangles, frames.first(), false, writer)
-        }
-        if (endCap) {
-            triangulationWithFrame(capTriangles, frames.last(), true, writer)
-        }
     }
 }
 
@@ -202,7 +118,7 @@ fun extrudeContourAdaptive(
     writer: VertexWriter
 ) {
     val linearContour = contour.sampleLinear(contourDistanceTolerance)
-    val linearContourPoints = linearContour.adaptivePositions().map { it.xy0 }
+    val linearContourPoints = linearContour.adaptivePositions()
     val finalFrames = if (path.closed) frames + frames.first() else frames
 
     // First add caps
