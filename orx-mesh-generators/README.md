@@ -144,3 +144,13 @@ Check out the [source code](src/commonMain/kotlin) to learn about function argum
 [source code](src/jvmDemo/kotlin/DemoExtrude04.kt)
 
 ![DemoExtrude04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude04Kt.png)
+
+### DemoExtrude05
+[source code](src/jvmDemo/kotlin/DemoExtrude05.kt)
+
+![DemoExtrude05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude05Kt.png)
+
+### DemoExtrude06
+[source code](src/jvmDemo/kotlin/DemoExtrude06.kt)
+
+![DemoExtrude06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude06Kt.png)
