@@ -33,7 +33,6 @@ include(
         "orx-fx",
         "orx-jvm:orx-git-archiver",
         "orx-jvm:orx-git-archiver-gradle",
-        "orx-glslify",
         "orx-gradient-descent",
         "orx-hash-grid",
         "orx-integral-image",

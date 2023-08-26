@@ -20,7 +20,6 @@ librealsense = "2.53.1-1.5.9"
 gson = "2.10.1"
 antlr = "4.13.0"
 tensorflow = "0.5.0"
-jarchivelib = "1.2.0"
 minim = "2.2.2"
 netty = "4.1.92.Final"
 rabbitcontrol = "0.3.29"
@@ -60,7 +59,6 @@ tensorflow = { group = "org.tensorflow", name = "tensorflow-core-api", version.r
 boofcv = { group = "org.boofcv", name = "boofcv-core", version.ref = "boofcv" }
 libfreenect = { group = "org.bytedeco", name = "libfreenect", version.ref = "libfreenect" }
 librealsense = { group = "org.bytedeco", name = "librealsense2", version.ref = "librealsense" }
-jarchivelib = { group = "org.rauschig", name = "jarchivelib", version.ref = "jarchivelib" }
 minim = { group = "net.compartmental.code", name = "minim", version.ref = "minim" }
 netty-all = { group = "io.netty", name = "netty-all", version.ref = "netty" }
 rabbitcontrol-rcp = { group = "cc.rabbitcontrol", name = "rcp", version.ref = "rabbitcontrol" }
