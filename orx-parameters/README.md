@@ -1,13 +1,13 @@
 # orx-parameters
 
 Provides annotations and tools for turning Kotlin properties into introspectable parameters.
-Used by [`orx-gui`](../orx-gui/README.md) to automatically generate user interfaces.
+Used by [`orx-gui`](../orx-jvm/orx-gui/README.md) to automatically generate user interfaces.
 
 Note that `orx-parameters` does _not_ generate user interfaces, 
 it only provides the information needed to create them.
 
 For an example (and a highly usable implementation) of generating interfaces 
-from the annotations you are encouraged to check out [`orx-gui`](../orx-gui/README.md). 
+from the annotations you are encouraged to check out [`orx-gui`](../orx-jvm/orx-gui/README.md). 
 
 Currently orx-parameters facilitates the following annotations:
 
