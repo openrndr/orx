@@ -308,7 +308,7 @@ private fun <T> findAllInRadius(
             results.add(node.item)
         }
 
-        val route: Int = if (dimensionValue < node.median && node.children[0] != null) {
+        val route: Int = if ((dimensionValue < node.median || node.children[1]==null) && node.children[0] != null )  {
             queue.add(node.children[0])
             0
         } else if (node.children[1] != null) {
