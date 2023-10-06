@@ -115,7 +115,7 @@ object ScreenshotsHelper {
     ): CollectScreenshotsTask {
         val task = project.tasks.register<CollectScreenshotsTask>("collectScreenshots").get()
         task.outputDir.set(project.file(project.projectDir.toString() + "/images"))
-        task.inputDir.set(File(project.buildDir, "classes/kotlin/${sourceSet.name}"))
+        task.inputDir.set(File(project.layout.buildDirectory.get().asFile, "classes/kotlin/${sourceSet.name}"))
         task.runtimeDependencies.set(sourceSet.runtimeClasspath)
         task.config()
         task.dependsOn(sourceSet.output)
