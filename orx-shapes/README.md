@@ -123,3 +123,8 @@ Collection of 2D shape generators and modifiers.
 [source code](src/jvmDemo/kotlin/DemoTear01.kt)
 
 ![DemoTear01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoTear01Kt.png)
+
+### DemoText01
+[source code](src/jvmDemo/kotlin/DemoText01.kt)
+
+![DemoText01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoText01Kt.png)
