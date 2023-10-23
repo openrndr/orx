@@ -19,6 +19,10 @@ class ContourAdjuster(var contour: ShapeContour) {
      */
     var edgeIndices = listOf(0)
 
+    private var vertexWorkingSet = emptyList<Int>()
+    private var edgeWorkingSet = emptyList<Int>()
+
+
     /**
      * the selected vertex
      */
@@ -27,12 +31,37 @@ class ContourAdjuster(var contour: ShapeContour) {
             return ContourAdjusterVertex(this, vertexIndices.first())
         }
 
+    val vertices: Sequence<ContourAdjusterVertex>
+        get() {
+            vertexWorkingSet = vertexIndices
+            return sequence {
+                while (vertexWorkingSet.isNotEmpty()) {
+                    val head = vertexWorkingSet.first()
+                    vertexWorkingSet = vertexWorkingSet.drop(1)
+                    yield(ContourAdjusterVertex(this@ContourAdjuster, head))
+                }
+            }
+        }
+
+
     /**
      * the selected edge
      */
     val edge: ContourAdjusterEdge
         get() {
             return ContourAdjusterEdge(this, edgeIndices.first())
+        }
+
+    val edges: Sequence<ContourAdjusterEdge>
+        get() {
+            edgeWorkingSet = edgeIndices
+            return sequence {
+                while (edgeWorkingSet.isNotEmpty()) {
+                    val head = edgeWorkingSet.first()
+                    edgeWorkingSet = edgeWorkingSet.drop(1)
+                    yield(ContourAdjusterEdge(this@ContourAdjuster, head))
+                }
+            }
         }
 
     /**
@@ -70,7 +99,7 @@ class ContourAdjuster(var contour: ShapeContour) {
     fun selectVertices(predicate: (Int, ContourVertex) -> Boolean) {
         vertexIndices =
             (0 until if (contour.closed) contour.segments.size else contour.segments.size + 1).filter { index ->
-                predicate(index, ContourVertex(contour, index) )
+                predicate(index, ContourVertex(contour, index))
             }
     }
 
@@ -102,13 +131,11 @@ class ContourAdjuster(var contour: ShapeContour) {
     fun selectEdges(predicate: (Int, ContourEdge) -> Boolean) {
         vertexIndices =
             (0 until if (contour.closed) contour.segments.size else contour.segments.size + 1).filter { index ->
-                predicate(index, ContourEdge(contour, index) )
+                predicate(index, ContourEdge(contour, index))
             }
     }
 
     fun updateSelection(adjustments: List<SegmentOperation>) {
-        var newVertexIndices = vertexIndices
-        var newEdgeIndices = edgeIndices
 
         for (adjustment in adjustments) {
             when (adjustment) {
@@ -120,29 +147,28 @@ class ContourAdjuster(var contour: ShapeContour) {
                             it
                         }
                     }
-                    newVertexIndices = insert(newVertexIndices)
-                    newEdgeIndices = insert(newEdgeIndices)
+                    vertexIndices = insert(vertexIndices)
+                    edgeIndices = insert(edgeIndices)
+                    vertexWorkingSet = insert(vertexWorkingSet)
+                    edgeWorkingSet = insert(edgeWorkingSet)
                 }
+
                 is SegmentOperation.Remove -> {
+
+                    fun remove(list: List<Int>) = list.mapNotNull {
+                        if (it in adjustment.index..<adjustment.index + adjustment.amount) {
+                            null
+                        } else if (it > adjustment.index) {
+                            it - adjustment.amount
+                        } else {
+                            it
+                        }
+                    }
                     // TODO: handling of vertices in open contours is wrong here
-                    newVertexIndices = newVertexIndices.mapNotNull {
-                        if (it in adjustment.index ..< adjustment.index+adjustment.amount) {
-                            null
-                        } else if (it > adjustment.index) {
-                            it - adjustment.amount
-                        } else {
-                            it
-                        }
-                    }
-                    newEdgeIndices = newEdgeIndices.mapNotNull {
-                        if (it in adjustment.index ..< adjustment.index+adjustment.amount) {
-                            null
-                        } else if (it > adjustment.index) {
-                            it - adjustment.amount
-                        } else {
-                            it
-                        }
-                    }
+                    vertexIndices = remove(vertexIndices)
+                    edgeIndices = remove(edgeIndices)
+                    vertexWorkingSet = remove(vertexWorkingSet)
+                    edgeWorkingSet = remove(edgeWorkingSet)
                 }
             }
         }

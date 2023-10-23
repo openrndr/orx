@@ -1,10 +1,7 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.shapes.adjust.adjustContour
-import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
-import kotlin.math.cos
-import kotlin.math.sin
 
 fun main() {
     application {
@@ -18,9 +15,15 @@ fun main() {
                     Circle(drawer.bounds.center, 300.0).contour
 
                 contour = adjustContour(contour) {
-                    for (i in 0 until 4) {
-                        selectEdge(i)
-                        edge.sub(0.2, 0.8)
+                    selectEdges(0, 1, 2, 3)
+                    edges.forEachIndexed { index, it ->
+                        it.replaceWith(0.5)
+//                        if (index == seconds.mod(4.0).toInt()) {
+//                            it.replaceWith(0.5)
+//                        } else {
+//                            val v = cos(seconds) * 0.15 + 0.25
+//                            it.sub(0.5 - v, 0.5 + v)
+//                        }
                     }
                 }
                 drawer.stroke = ColorRGBa.RED
