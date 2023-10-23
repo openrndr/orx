@@ -2,7 +2,7 @@ package org.openrndr.extra.shapes.adjust
 
 import org.openrndr.math.Vector2
 
-data class ContourAdjusterEdge(val contourAdjuster: ContourAdjuster, val segmentIndex: Int) {
+data class ContourAdjusterEdge(val contourAdjuster: ContourAdjuster, val segmentIndex: () -> Int) {
 
     /**
      * A [ContourAdjusterVertex] interface for the start-vertex of the edge
@@ -14,17 +14,17 @@ data class ContourAdjusterEdge(val contourAdjuster: ContourAdjuster, val segment
      * A [ContourAdjusterVertex] interface for the end-vertex of the edge
      */
     val end
-        get() = ContourAdjusterVertex(contourAdjuster, (segmentIndex + 1).mod(contourAdjuster.contour.segments.size))
+        get() = ContourAdjusterVertex(contourAdjuster, { (segmentIndex() + 1).mod(contourAdjuster.contour.segments.size) } )
 
     /**
      * A link to the edge before this edge
      */
     val previous: ContourAdjusterEdge?
         get() = if (contourAdjuster.contour.closed) {
-            this.copy(segmentIndex = (segmentIndex - 1).mod(contourAdjuster.contour.segments.size))
+            this.copy(segmentIndex = { (segmentIndex() - 1).mod(contourAdjuster.contour.segments.size) })
         } else {
-            if (segmentIndex > 0) {
-                this.copy(segmentIndex = segmentIndex - 1)
+            if (segmentIndex() > 0) {
+                this.copy(segmentIndex = { segmentIndex() - 1 })
             } else {
                 null
             }
@@ -35,20 +35,20 @@ data class ContourAdjusterEdge(val contourAdjuster: ContourAdjuster, val segment
      */
     val next: ContourAdjusterEdge?
         get() = if (contourAdjuster.contour.closed) {
-            this.copy(segmentIndex = (segmentIndex + 1).mod(contourAdjuster.contour.segments.size))
+            this.copy(segmentIndex = { (segmentIndex() + 1).mod(contourAdjuster.contour.segments.size) })
         } else {
-            if (segmentIndex < contourAdjuster.contour.segments.size - 1) {
-                this.copy(segmentIndex = segmentIndex + 1)
+            if (segmentIndex() < contourAdjuster.contour.segments.size - 1) {
+                this.copy(segmentIndex =  { segmentIndex() + 1 } )
             } else {
                 null
             }
         }
 
     fun select() {
-        contourAdjuster.selectEdge(segmentIndex)
+        contourAdjuster.selectEdge(segmentIndex())
     }
     private fun wrap(block: ContourEdge.() -> ContourEdge) {
-        val newEdge =  ContourEdge(contourAdjuster.contour, segmentIndex).block()
+        val newEdge =  ContourEdge(contourAdjuster.contour, segmentIndex()).block()
         contourAdjuster.contour = newEdge.contour
         contourAdjuster.updateSelection(newEdge.adjustments)
     }
@@ -66,7 +66,7 @@ data class ContourAdjusterEdge(val contourAdjuster: ContourAdjuster, val segment
 
     fun sub(t0:Double, t1: Double, updateTangents: Boolean = true) {
         contourAdjuster.contour =
-            ContourEdge(contourAdjuster.contour, segmentIndex)
+            ContourEdge(contourAdjuster.contour, segmentIndex())
                 .subbed(t0, t1)
                 .contour
     }

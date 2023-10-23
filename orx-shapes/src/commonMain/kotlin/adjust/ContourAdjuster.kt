@@ -22,13 +22,15 @@ class ContourAdjuster(var contour: ShapeContour) {
     private var vertexWorkingSet = emptyList<Int>()
     private var edgeWorkingSet = emptyList<Int>()
 
+    private var vertexHead = emptyList<Int>()
+    private var edgeHead = emptyList<Int>()
 
     /**
      * the selected vertex
      */
     val vertex: ContourAdjusterVertex
         get() {
-            return ContourAdjusterVertex(this, vertexIndices.first())
+            return ContourAdjusterVertex(this, { vertexIndices.first() } )
         }
 
     val vertices: Sequence<ContourAdjusterVertex>
@@ -36,9 +38,9 @@ class ContourAdjuster(var contour: ShapeContour) {
             vertexWorkingSet = vertexIndices
             return sequence {
                 while (vertexWorkingSet.isNotEmpty()) {
-                    val head = vertexWorkingSet.first()
+                    vertexHead = vertexWorkingSet.take(1)
                     vertexWorkingSet = vertexWorkingSet.drop(1)
-                    yield(ContourAdjusterVertex(this@ContourAdjuster, head))
+                    yield(ContourAdjusterVertex(this@ContourAdjuster, { vertexHead.first() }))
                 }
             }
         }
@@ -49,7 +51,7 @@ class ContourAdjuster(var contour: ShapeContour) {
      */
     val edge: ContourAdjusterEdge
         get() {
-            return ContourAdjusterEdge(this, edgeIndices.first())
+            return ContourAdjusterEdge(this, { edgeIndices.first() })
         }
 
     val edges: Sequence<ContourAdjusterEdge>
@@ -57,9 +59,9 @@ class ContourAdjuster(var contour: ShapeContour) {
             edgeWorkingSet = edgeIndices
             return sequence {
                 while (edgeWorkingSet.isNotEmpty()) {
-                    val head = edgeWorkingSet.first()
+                    edgeHead = edgeWorkingSet.take(1)
                     edgeWorkingSet = edgeWorkingSet.drop(1)
-                    yield(ContourAdjusterEdge(this@ContourAdjuster, head))
+                    yield(ContourAdjusterEdge(this@ContourAdjuster, { edgeHead.first() }))
                 }
             }
         }
