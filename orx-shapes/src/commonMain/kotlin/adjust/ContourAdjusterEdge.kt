@@ -1,8 +1,26 @@
 package org.openrndr.extra.shapes.adjust
 
 import org.openrndr.math.Vector2
+import org.openrndr.shape.ShapeContour
 
 data class ContourAdjusterEdge(val contourAdjuster: ContourAdjuster, val segmentIndex: () -> Int) {
+
+    val startPosition
+        get() = contourAdjuster.contour.segments[segmentIndex()].start
+
+    val endPosition
+        get() = contourAdjuster.contour.segments[segmentIndex()].end
+
+    fun position(t: Double) : Vector2 {
+        return contourAdjuster.contour.segments[segmentIndex()].position(t)
+    }
+
+    fun normal(t: Double) : Vector2 {
+        return contourAdjuster.contour.segments[segmentIndex()].normal(t)
+    }
+
+
+
 
     /**
      * A [ContourAdjusterVertex] interface for the start-vertex of the edge
@@ -62,9 +80,10 @@ data class ContourAdjusterEdge(val contourAdjuster: ContourAdjuster, val segment
     fun scale(scaleFactor: Double, anchorT: Double = 0.5, updateTangents: Boolean = true) =
         wrap { scaledBy(scaleFactor, anchorT, updateTangents = true) }
 
-    fun replaceWith(t:Double, updateTangents: Boolean = true) {
-        wrap { replacedWith(t, updateTangents) }
-    }
+    fun replaceWith(t:Double, updateTangents: Boolean = true) = wrap { replacedWith(t, updateTangents) }
+
+    fun replaceWith(openContour: ShapeContour) = wrap { replacedWith(openContour) }
+
 
     fun sub(t0:Double, t1: Double, updateTangents: Boolean = true) {
         contourAdjuster.contour =

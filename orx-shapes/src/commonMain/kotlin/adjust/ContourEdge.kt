@@ -4,6 +4,7 @@ import org.openrndr.extra.shapes.utilities.insertPointAt
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.math.transforms.buildTransform
+import org.openrndr.shape.Segment
 import org.openrndr.shape.SegmentType
 import org.openrndr.shape.ShapeContour
 import kotlin.math.abs
@@ -50,17 +51,17 @@ data class ContourEdge(
      * convert the edge to a linear edge, truncating control points if those exist
      */
     fun toLinear(): ContourEdge {
-        if (contour.segments[segmentIndex].type != SegmentType.LINEAR) {
+        return if (contour.segments[segmentIndex].type != SegmentType.LINEAR) {
             val newSegment = contour.segments[segmentIndex].copy(control = emptyArray())
             val newSegments = contour.segments
                 .update(segmentIndex to newSegment)
 
-            return ContourEdge(
+            ContourEdge(
                 ShapeContour.fromSegments(newSegments, contour.closed),
                 segmentIndex
             )
         } else {
-            return this
+            this
         }
     }
 
@@ -68,17 +69,17 @@ data class ContourEdge(
      * convert the edge to a cubic edge
      */
     fun toCubic(): ContourEdge {
-        if (contour.segments[segmentIndex].type != SegmentType.CUBIC) {
+        return if (contour.segments[segmentIndex].type != SegmentType.CUBIC) {
             val newSegment = contour.segments[segmentIndex].cubic
             val newSegments = contour.segments
                 .update(segmentIndex to newSegment)
 
-            return ContourEdge(
+            ContourEdge(
                 ShapeContour.fromSegments(newSegments, contour.closed),
                 segmentIndex
             )
         } else {
-            return this
+            this
         }
     }
 
@@ -109,6 +110,34 @@ data class ContourEdge(
         }
         return ContourEdge(ShapeContour.fromSegments(newSegments, contour.closed), segmentIndex, adjustments)
     }
+
+    fun replacedWith(openContour: ShapeContour) : ContourEdge {
+        if (contour.empty) {
+            return withoutAdjustments()
+        }
+        require(!openContour.closed) { "openContour should be open"}
+        val segment = contour.segments[segmentIndex]
+        var newSegments = contour.segments.toMutableList()
+
+        var insertIndex = segmentIndex
+        val adjustments = newSegments.adjust {
+            removeAt(segmentIndex)
+
+            if (segment.start.distanceTo(openContour.position(0.0)) > 1E-3) {
+                add(insertIndex, Segment(segment.start, openContour.position(0.0)))
+                insertIndex++
+            }
+            for (s in openContour.segments) {
+                add(insertIndex, s)
+                insertIndex++
+            }
+            if (segment.end.distanceTo(openContour.position(1.0)) > 1E-3) {
+                add(insertIndex, Segment(segment.end, openContour.position(1.0)))
+            }
+        }
+        return ContourEdge(ShapeContour.fromSegments(newSegments, contour.closed), segmentIndex, adjustments)
+    }
+
 
     /**
      * subs the edge from [t0] to [t1], preserves topology unless t0 = t1
@@ -226,5 +255,7 @@ data class ContourEdge(
             translate(-anchor)
         }, updateTangents)
     }
+
+
 }
 

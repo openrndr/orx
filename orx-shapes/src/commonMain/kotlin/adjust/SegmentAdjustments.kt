@@ -29,6 +29,10 @@ class SegmentAdjuster(val list: MutableList<Segment>) {
         list.add(segment)
         adjustments.add(SegmentOperation.Insert(list.lastIndex, 1))
     }
+    fun add(index: Int, segment: Segment) {
+        list.add(index, segment)
+        adjustments.add(SegmentOperation.Insert(index, 1))
+    }
 }
 
 fun MutableList<Segment>.adjust(block: SegmentAdjuster.() -> Unit) : List<SegmentOperation> {
