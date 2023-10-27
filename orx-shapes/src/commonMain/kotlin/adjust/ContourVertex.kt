@@ -1,9 +1,6 @@
 package org.openrndr.extra.shapes.vertex
 
-import org.openrndr.extra.shapes.adjust.ContourAdjuster
-import org.openrndr.extra.shapes.adjust.SegmentAdjustments
-import org.openrndr.extra.shapes.adjust.SegmentOperation
-import org.openrndr.extra.shapes.adjust.adjust
+import org.openrndr.extra.shapes.adjust.*
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.math.transforms.buildTransform
@@ -94,7 +91,26 @@ data class ContourVertex(val contour: ShapeContour, val segmentIndex: Int, val a
 
     }
 
-    fun movedBy(translation: Vector2, updateTangents: Boolean = true): ContourVertex {
+    fun movedBy(translation: Vector2, updateTangents: Boolean = true): ContourVertex =
+        transformedBy(buildTransform { translate(translation) }, updateTangents)
+
+    fun rotatedBy(rotationInDegrees: Double, anchor:Vector2, updateTangents:Boolean=true): ContourVertex {
+        return transformedBy(buildTransform {
+            translate(anchor)
+            rotate(rotationInDegrees)
+            translate(-anchor)
+        }, updateTangents)
+    }
+
+    fun scaledBy(scaleFactor: Double, anchor:Vector2, updateTangents:Boolean=true): ContourVertex {
+        return transformedBy(buildTransform {
+            translate(anchor)
+            scale(scaleFactor)
+            translate(-anchor)
+        }, updateTangents)
+    }
+
+    fun transformedBy(transform: Matrix44, updateTangents: Boolean = true): ContourVertex {
         if (contour.empty) {
             return withoutAdjustments()
         }
@@ -103,10 +119,10 @@ data class ContourVertex(val contour: ShapeContour, val segmentIndex: Int, val a
         val refOut = contour.segments[segmentIndex]
         val refIn = if (contour.closed) contour.segments[(segmentIndex - 1).mod(contour.segments.size)] else
             contour.segments.getOrNull(segmentIndex - 1)
-        val newPosition = refOut.start + translation
+        val newPosition = refOut.start.transformedBy(transform)
         newSegments[segmentIndex] = if (updateTangents && !refOut.linear) {
             val cubicSegment = refOut.cubic
-            val newControls = arrayOf(cubicSegment.control[0] + translation, cubicSegment.control[1])
+            val newControls = arrayOf(cubicSegment.control[0].transformedBy(transform), cubicSegment.control[1])
             refOut.copy(start = newPosition, control = newControls)
         } else {
             newSegments[segmentIndex].copy(start = newPosition)
@@ -117,7 +133,7 @@ data class ContourVertex(val contour: ShapeContour, val segmentIndex: Int, val a
             newSegments[segmentIndexIn] =
                 if (updateTangents && !refIn.linear) {
                     val cubicSegment = refIn.cubic
-                    val newControls = arrayOf(cubicSegment.control[0], cubicSegment.control[1] + translation)
+                    val newControls = arrayOf(cubicSegment.control[0], cubicSegment.control[1].transformedBy(transform))
                     newSegments[segmentIndexIn].copy(control = newControls, end = newPosition)
                 } else {
 

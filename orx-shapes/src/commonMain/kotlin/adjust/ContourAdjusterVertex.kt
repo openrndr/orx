@@ -19,4 +19,7 @@ class ContourAdjusterVertex(val contourAdjuster: ContourAdjuster, val segmentInd
     fun rotate(rotationInDegrees: Double) = wrap { rotatedBy(rotationInDegrees) }
     fun scale(scaleFactor: Double) = wrap { scaledBy(scaleFactor) }
 
+    fun rotate(rotationInDegrees: Double, anchor: Vector2) = wrap { rotatedBy(rotationInDegrees, anchor) }
+    fun scale(scaleFactor: Double, anchor: Vector2) = wrap { scaledBy(scaleFactor, anchor) }
+
 }

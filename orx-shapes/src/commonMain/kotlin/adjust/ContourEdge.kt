@@ -8,7 +8,7 @@ import org.openrndr.shape.SegmentType
 import org.openrndr.shape.ShapeContour
 import kotlin.math.abs
 
-private fun Vector2.transformedBy(t: Matrix44) = (t * (this.xy01)).xy
+internal fun Vector2.transformedBy(t: Matrix44) = (t * (this.xy01)).xy
 fun <E> List<E>.update(vararg updates: Pair<Int, E>): List<E> {
     if (updates.isEmpty()) {
         return this
@@ -24,12 +24,20 @@ fun <E> List<E>.update(vararg updates: Pair<Int, E>): List<E> {
  * Helper for querying and adjusting [ShapeContour].
  * * An edge embodies exactly the same thing as a [Segment][org.openrndr.shape.Segment]
  * * All edge operations are immutable and will create a new [ContourEdge] pointing to a copied and updated [ShapeContour]
+ * @param contour the contour to be adjusted
+ * @param segmentIndex the index of the segment of the contour to be adjusted
+ * @param adjustments a list of [SegmentOperation] that have been applied to reach to [contour], this is used to inform [ShapeContour]
+ * of changes in the contour topology.
+ * @since 0.4.4
  */
 data class ContourEdge(
     val contour: ShapeContour,
     val segmentIndex: Int,
     val adjustments: List<SegmentOperation> = emptyList()
 ) {
+    /**
+     * provide a copy without the list of adjustments
+     */
     fun withoutAdjustments(): ContourEdge {
         return if (adjustments.isEmpty()) {
             this
@@ -38,9 +46,26 @@ data class ContourEdge(
         }
     }
 
+    /**
+     * convert the edge to a linear edge, truncating control points if those exist
+     */
+    fun toLinear(): ContourEdge {
+        if (contour.segments[segmentIndex].type != SegmentType.LINEAR) {
+            val newSegment = contour.segments[segmentIndex].copy(control = emptyArray())
+            val newSegments = contour.segments
+                .update(segmentIndex to newSegment)
+
+            return ContourEdge(
+                ShapeContour.fromSegments(newSegments, contour.closed),
+                segmentIndex
+            )
+        } else {
+            return this
+        }
+    }
 
     /**
-     *
+     * convert the edge to a cubic edge
      */
     fun toCubic(): ContourEdge {
         if (contour.segments[segmentIndex].type != SegmentType.CUBIC) {
@@ -57,8 +82,10 @@ data class ContourEdge(
         }
     }
 
+
     /**
-     *
+     * replace this edge with a point at [t]
+     * @param t an edge t value between 0 and 1
      */
     fun replacedWith(t: Double, updateTangents: Boolean): ContourEdge {
         if (contour.empty) {
@@ -83,11 +110,16 @@ data class ContourEdge(
         return ContourEdge(ShapeContour.fromSegments(newSegments, contour.closed), segmentIndex, adjustments)
     }
 
+    /**
+     * subs the edge from [t0] to [t1], preserves topology unless t0 = t1
+     * @param t0 the start edge t-value, between 0 and 1
+     * @param t1 the end edge t-value, between 0 and 1
+     */
     fun subbed(t0: Double, t1: Double, updateTangents: Boolean = true): ContourEdge {
         if (contour.empty) {
             return withoutAdjustments()
         }
-        if (abs(t0 -t1) > 1E-6) {
+        if (abs(t0 - t1) > 1E-6) {
             val sub = contour.segments[segmentIndex].sub(t0, t1)
             val segmentInIndex = if (contour.closed) (segmentIndex - 1).mod(contour.segments.size) else segmentIndex - 1
             val segmentOutIndex =
@@ -109,6 +141,10 @@ data class ContourEdge(
         }
     }
 
+    /**
+     * split the edge at [t]
+     * @param t an edge t value between 0 and 1, will not split when t == 0 or t == 1
+     */
     fun splitAt(t: Double): ContourEdge {
         if (contour.empty) {
             return withoutAdjustments()
@@ -121,6 +157,11 @@ data class ContourEdge(
         }
     }
 
+
+    /**
+     * apply [transform] to the edge
+     * @param transform a [Matrix44]
+     */
     fun transformedBy(transform: Matrix44, updateTangents: Boolean = true): ContourEdge {
         val segment = contour.segments[segmentIndex]
         val newSegment = segment.copy(
@@ -132,7 +173,6 @@ data class ContourEdge(
         val segmentOutIndex = if (contour.closed) (segmentIndex + 1).mod(contour.segments.size) else segmentIndex + 1
         val refIn = contour.segments.getOrNull(segmentInIndex)
         val refOut = contour.segments.getOrNull(segmentOutIndex)
-
 
         val newSegments = contour.segments.map { it }.toMutableList()
 
@@ -176,6 +216,10 @@ data class ContourEdge(
 
     fun scaledBy(scaleFactor: Double, anchorT: Double, updateTangents: Boolean = true): ContourEdge {
         val anchor = contour.segments[segmentIndex].position(anchorT)
+        return scaledBy(scaleFactor, anchor, updateTangents)
+    }
+
+    fun scaledBy(scaleFactor: Double, anchor: Vector2, updateTangents: Boolean = true): ContourEdge {
         return transformedBy(buildTransform {
             translate(anchor)
             scale(scaleFactor)

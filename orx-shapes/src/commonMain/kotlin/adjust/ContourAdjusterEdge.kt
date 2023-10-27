@@ -52,6 +52,8 @@ data class ContourAdjusterEdge(val contourAdjuster: ContourAdjuster, val segment
         contourAdjuster.contour = newEdge.contour
         contourAdjuster.updateSelection(newEdge.adjustments)
     }
+    fun toLinear() = wrap { toLinear() }
+
     fun toCubic() = wrap { toCubic() }
     fun splitAt(t: Double) = wrap { splitAt(t) }
     fun moveBy(translation: Vector2, updateTangents: Boolean = true) = wrap { movedBy(translation, updateTangents) }

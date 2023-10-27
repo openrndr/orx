@@ -3,8 +3,8 @@ package org.openrndr.extra.shapes.adjust
 import org.openrndr.shape.Segment
 
 sealed interface SegmentOperation {
-    class Remove(val index: Int, val amount: Int) : SegmentOperation
-    class Insert(val index: Int, val amount: Int) : SegmentOperation
+    data class Remove(val index: Int, val amount: Int) : SegmentOperation
+    data class Insert(val index: Int, val amount: Int) : SegmentOperation
 }
 
 

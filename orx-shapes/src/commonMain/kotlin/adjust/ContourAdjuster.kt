@@ -1,7 +1,9 @@
 package org.openrndr.extra.shapes.adjust
 
+import org.openrndr.collections.pop
 import org.openrndr.extra.shapes.vertex.ContourVertex
 import org.openrndr.shape.ShapeContour
+
 
 /**
  * Adjusts [ShapeContour] using an accessible interface.
@@ -9,15 +11,33 @@ import org.openrndr.shape.ShapeContour
  * [ContourAdjuster]
  */
 class ContourAdjuster(var contour: ShapeContour) {
+    data class Parameters(
+        var selectInsertedEdges: Boolean = false,
+        var selectInsertedVertices: Boolean = false,
+        var clearSelectedEdges: Boolean = false,
+        var clearSelectedVertices: Boolean = false
+    )
+    var parameters = Parameters()
+
+    val parameterStack = ArrayDeque<Parameters>()
+
+    fun pushParameters() {
+        parameterStack.addLast(parameters.copy())
+    }
+
+    fun popParameters() {
+        parameters = parameterStack.pop()
+    }
+
     /**
      * selected vertex indices
      */
-    var vertexIndices = listOf(0)
+    var vertexSelection = listOf(0)
 
     /**
      * selected edge indices
      */
-    var edgeIndices = listOf(0)
+    var edgeSelection = listOf(0)
 
     private var vertexWorkingSet = emptyList<Int>()
     private var edgeWorkingSet = emptyList<Int>()
@@ -25,17 +45,48 @@ class ContourAdjuster(var contour: ShapeContour) {
     private var vertexHead = emptyList<Int>()
     private var edgeHead = emptyList<Int>()
 
+
+    private val vertexSelectionStack = ArrayDeque<List<Int>>()
+    private val edgeSelectionStack = ArrayDeque<List<Int>>()
+
+    fun pushVertexSelection() {
+        vertexSelectionStack.addLast(vertexSelection)
+    }
+
+    fun popVertexSelection() {
+        vertexSelection = vertexSelectionStack.removeLast()
+    }
+
+    fun pushEdgeSelection() {
+        edgeSelectionStack.addLast(edgeSelection)
+    }
+
+    fun popEdgeSelection() {
+        edgeSelection = edgeSelectionStack.removeLast()
+    }
+
+    fun pushSelection() {
+        pushEdgeSelection()
+        pushVertexSelection()
+    }
+
+    fun popSelection() {
+        popEdgeSelection()
+        popVertexSelection()
+    }
+
     /**
      * the selected vertex
      */
     val vertex: ContourAdjusterVertex
         get() {
-            return ContourAdjusterVertex(this, { vertexIndices.first() } )
+            return vertices.first()
         }
 
     val vertices: Sequence<ContourAdjusterVertex>
         get() {
-            vertexWorkingSet = vertexIndices
+            vertexWorkingSet = vertexSelection
+            applyBeforeAdjustment()
             return sequence {
                 while (vertexWorkingSet.isNotEmpty()) {
                     vertexHead = vertexWorkingSet.take(1)
@@ -51,12 +102,14 @@ class ContourAdjuster(var contour: ShapeContour) {
      */
     val edge: ContourAdjusterEdge
         get() {
-            return ContourAdjusterEdge(this, { edgeIndices.first() })
+            return edges.first()
         }
 
     val edges: Sequence<ContourAdjusterEdge>
         get() {
-            edgeWorkingSet = edgeIndices
+            edgeWorkingSet = edgeSelection
+            applyBeforeAdjustment()
+
             return sequence {
                 while (edgeWorkingSet.isNotEmpty()) {
                     edgeHead = edgeWorkingSet.take(1)
@@ -70,28 +123,28 @@ class ContourAdjuster(var contour: ShapeContour) {
      * select a vertex by index
      */
     fun selectVertex(index: Int) {
-        vertexIndices = listOf(index)
+        vertexSelection = listOf(index)
     }
 
     /**
      * deselect a vertex by index
      */
     fun deselectVertex(index: Int) {
-        vertexIndices = vertexIndices.filter { it != index }
+        vertexSelection = vertexSelection.filter { it != index }
     }
 
     /**
      * select multiple vertices
      */
     fun selectVertices(vararg indices: Int) {
-        vertexIndices = indices.toList().distinct()
+        vertexSelection = indices.toList().distinct()
     }
 
     /**
      * select multiple vertices using an index based [predicate]
      */
     fun selectVertices(predicate: (Int) -> Boolean) {
-        vertexIndices =
+        vertexSelection =
             (0 until if (contour.closed) contour.segments.size else contour.segments.size + 1).filter(predicate)
     }
 
@@ -99,7 +152,7 @@ class ContourAdjuster(var contour: ShapeContour) {
      * select multiple vertices using an index-vertex based [predicate]
      */
     fun selectVertices(predicate: (Int, ContourVertex) -> Boolean) {
-        vertexIndices =
+        vertexSelection =
             (0 until if (contour.closed) contour.segments.size else contour.segments.size + 1).filter { index ->
                 predicate(index, ContourVertex(contour, index))
             }
@@ -116,14 +169,14 @@ class ContourAdjuster(var contour: ShapeContour) {
      * select multiple edges by index
      */
     fun selectEdges(vararg indices: Int) {
-        edgeIndices = indices.toList().distinct()
+        edgeSelection = indices.toList().distinct()
     }
 
     /**
      * select multiple vertices using an index based [predicate]
      */
     fun selectEdges(predicate: (Int) -> Boolean) {
-        edgeIndices =
+        edgeSelection =
             contour.segments.indices.filter(predicate)
     }
 
@@ -131,32 +184,57 @@ class ContourAdjuster(var contour: ShapeContour) {
      * select multiple edges using an index-edge based [predicate]
      */
     fun selectEdges(predicate: (Int, ContourEdge) -> Boolean) {
-        vertexIndices =
+        vertexSelection =
             (0 until if (contour.closed) contour.segments.size else contour.segments.size + 1).filter { index ->
                 predicate(index, ContourEdge(contour, index))
             }
     }
 
-    fun updateSelection(adjustments: List<SegmentOperation>) {
+    private fun applyBeforeAdjustment() {
+        if (parameters.clearSelectedEdges) {
+            edgeSelection = emptyList()
+        }
+        if (parameters.clearSelectedVertices) {
+            vertexSelection = emptyList()
+        }
+    }
 
+    fun updateSelection(adjustments: List<SegmentOperation>) {
         for (adjustment in adjustments) {
             when (adjustment) {
                 is SegmentOperation.Insert -> {
-                    fun insert(list: List<Int>) = list.map {
-                        if (it >= adjustment.index) {
-                            it + adjustment.amount
+                    fun insert(list: List<Int>, selectInserted: Boolean = false) =
+                        if (!selectInserted) {
+                            list.map {
+                                if (it >= adjustment.index) {
+                                    it + adjustment.amount
+                                } else {
+                                    it
+                                }
+                            }
                         } else {
-                            it
+                            (list.flatMap {
+                                if (it >= adjustment.index) {
+                                    listOf(it + adjustment.amount) + (it + 1..it + adjustment.amount)
+                                } else {
+                                    listOf(it)
+                                }
+                            } + (adjustment.index..<adjustment.index + adjustment.amount)).distinct()
                         }
+
+                    for ((i, selection) in vertexSelectionStack.withIndex()) {
+                        vertexSelectionStack[i] = insert(selection, false)
                     }
-                    vertexIndices = insert(vertexIndices)
-                    edgeIndices = insert(edgeIndices)
+                    for ((i, selection) in edgeSelectionStack.withIndex()) {
+                        edgeSelectionStack[i] = insert(selection, false)
+                    }
+                    vertexSelection = insert(vertexSelection, parameters.selectInsertedVertices)
+                    edgeSelection = insert(edgeSelection, parameters.selectInsertedEdges)
                     vertexWorkingSet = insert(vertexWorkingSet)
                     edgeWorkingSet = insert(edgeWorkingSet)
                 }
 
                 is SegmentOperation.Remove -> {
-
                     fun remove(list: List<Int>) = list.mapNotNull {
                         if (it in adjustment.index..<adjustment.index + adjustment.amount) {
                             null
@@ -167,8 +245,16 @@ class ContourAdjuster(var contour: ShapeContour) {
                         }
                     }
                     // TODO: handling of vertices in open contours is wrong here
-                    vertexIndices = remove(vertexIndices)
-                    edgeIndices = remove(edgeIndices)
+                    for ((i, selection) in vertexSelectionStack.withIndex()) {
+                        vertexSelectionStack[i] = remove(selection)
+                    }
+                    for ((i, selection) in edgeSelectionStack.withIndex()) {
+                        edgeSelectionStack[i] = remove(selection)
+                    }
+
+
+                    vertexSelection = remove(vertexSelection)
+                    edgeSelection = remove(edgeSelection)
                     vertexWorkingSet = remove(vertexWorkingSet)
                     edgeWorkingSet = remove(edgeWorkingSet)
                 }
