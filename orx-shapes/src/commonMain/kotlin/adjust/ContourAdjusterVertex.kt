@@ -10,6 +10,11 @@ class ContourAdjusterVertex(val contourAdjuster: ContourAdjuster, val segmentInd
         contourAdjuster.updateSelection(newVertex.adjustments)
     }
 
+    val position: Vector2
+        get() {
+            return contourAdjuster.contour.segments[segmentIndex()].start
+        }
+
     fun select() {
         contourAdjuster.selectVertex(segmentIndex())
     }
