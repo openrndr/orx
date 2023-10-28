@@ -1,5 +1,7 @@
 package org.openrndr.extra.shapes.adjust
 
+import org.openrndr.extra.shapes.rectify.rectified
+import org.openrndr.extra.shapes.utilities.fromContours
 import org.openrndr.extra.shapes.utilities.insertPointAt
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
@@ -111,11 +113,25 @@ data class ContourEdge(
         return ContourEdge(ShapeContour.fromSegments(newSegments, contour.closed), segmentIndex, adjustments)
     }
 
-    fun replacedWith(openContour: ShapeContour) : ContourEdge {
+    fun splitIn(parts: Int): ContourEdge {
+        if (contour.empty || parts < 2) {
+            return withoutAdjustments()
+        }
+        val segment = contour.segments[segmentIndex]
+        val r = segment.contour.rectified()
+        val newSegments = (0..parts).map {
+            it.toDouble() / parts
+        }.windowed(2, 1).map {
+            r.sub(it[0], it[1])
+        }
+        return replacedWith(ShapeContour.fromContours(newSegments, false))
+    }
+
+    fun replacedWith(openContour: ShapeContour): ContourEdge {
         if (contour.empty) {
             return withoutAdjustments()
         }
-        require(!openContour.closed) { "openContour should be open"}
+        require(!openContour.closed) { "openContour should be open" }
         val segment = contour.segments[segmentIndex]
         var newSegments = contour.segments.toMutableList()
 
@@ -255,7 +271,5 @@ data class ContourEdge(
             translate(-anchor)
         }, updateTangents)
     }
-
-
 }
 
