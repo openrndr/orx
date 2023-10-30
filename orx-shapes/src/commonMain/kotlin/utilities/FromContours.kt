@@ -16,7 +16,8 @@ fun ShapeContour.Companion.fromContours(contours: List<ShapeContour>, closed: Bo
         for (c in contours.windowed(2,1,true)) {
             copy(c[0])
             if (c.size == 2) {
-                if (c[0].position(1.0).distanceTo(c[1].position(0.0)) > connectEpsilon ) {
+                val d = c[0].position(1.0).distanceTo(c[1].position(0.0))
+                if (d > connectEpsilon ) {
                     lineTo(c[1].position(0.0))
                 }
             }

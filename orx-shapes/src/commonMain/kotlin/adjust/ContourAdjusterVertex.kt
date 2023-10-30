@@ -10,10 +10,34 @@ class ContourAdjusterVertex(val contourAdjuster: ContourAdjuster, val segmentInd
         contourAdjuster.updateSelection(newVertex.adjustments)
     }
 
-    val position: Vector2
+    val previous: ContourAdjusterVertex?
         get() {
-            return contourAdjuster.contour.segments[segmentIndex()].start
+            return if (contourAdjuster.contour.closed || segmentIndex() > 0) {
+                ContourAdjusterVertex(contourAdjuster, { (segmentIndex() - 1).mod(contourAdjuster.contour.segments.size) })
+            } else {
+                null
+            }
         }
+    val next: ContourAdjusterVertex?
+        get() {
+            return if (contourAdjuster.contour.closed || segmentIndex() < contourAdjuster.contour.segments.size-1) {
+                ContourAdjusterVertex(contourAdjuster, { (segmentIndex() + 1).mod(contourAdjuster.contour.segments.size) })
+            } else {
+                null
+            }
+        }
+
+
+    val t: Double
+        get() = ContourVertex(contourAdjuster.contour, segmentIndex(), emptyList()).t
+
+
+    val position: Vector2
+        get() = ContourVertex(contourAdjuster.contour, segmentIndex(), emptyList()).position
+
+    val normal: Vector2
+        get() = ContourVertex(contourAdjuster.contour, segmentIndex(), emptyList()).normal
+
 
     fun select() {
         contourAdjuster.selectVertex(segmentIndex())

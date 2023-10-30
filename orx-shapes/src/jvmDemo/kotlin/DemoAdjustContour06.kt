@@ -20,7 +20,6 @@ fun main() {
                     parameters.selectInsertedVertices = true
 
 
-
                     for (i in 0 until 4) {
                         val splitT = cos(seconds + i * Math.PI*0.5)*0.2+0.5
                         selectEdges { it -> true }

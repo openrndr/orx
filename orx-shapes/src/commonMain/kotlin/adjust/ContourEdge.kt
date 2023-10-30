@@ -85,6 +85,11 @@ data class ContourEdge(
         }
     }
 
+    val length: Double
+        get() {
+            return contour.segments[segmentIndex].length
+        }
+
 
     /**
      * replace this edge with a point at [t]
@@ -124,7 +129,8 @@ data class ContourEdge(
         }.windowed(2, 1).map {
             r.sub(it[0], it[1])
         }
-        return replacedWith(ShapeContour.fromContours(newSegments, false))
+        require(newSegments.size == parts)
+        return replacedWith(ShapeContour.fromContours(newSegments, false, 1.0))
     }
 
     fun replacedWith(openContour: ShapeContour): ContourEdge {

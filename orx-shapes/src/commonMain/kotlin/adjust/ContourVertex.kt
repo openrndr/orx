@@ -6,8 +6,12 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.transforms.buildTransform
 import org.openrndr.shape.ShapeContour
 
-data class ContourVertex(val contour: ShapeContour, val segmentIndex: Int, val adjustments: List<SegmentOperation> = emptyList())  {
-    fun withoutAdjustments() : ContourVertex {
+data class ContourVertex(
+    val contour: ShapeContour,
+    val segmentIndex: Int,
+    val adjustments: List<SegmentOperation> = emptyList()
+) {
+    fun withoutAdjustments(): ContourVertex {
         return if (adjustments.isEmpty()) {
             this
         } else {
@@ -15,17 +19,40 @@ data class ContourVertex(val contour: ShapeContour, val segmentIndex: Int, val a
         }
     }
 
-    val position: Vector2
+    val normal: Vector2
         get() {
-            return contour.segments[segmentIndex].start
+            return if (contour.closed || segmentIndex > 0 || segmentIndex < contour.segments.size) {
+                val segmentIn = contour.segments[(segmentIndex - 1).mod(contour.segments.size)]
+                val normalIn = segmentIn.normal(1.0)
+                val normalOut = contour.segments[segmentIndex].normal(0.0)
+                (normalIn + normalOut).normalized
+            } else if (segmentIndex == 0) {
+                contour.normal(0.0)
+            } else if (segmentIndex == contour.segments.size) {
+                contour.normal(1.0)
+            } else {
+                error("segmentIndex out of bounds ${segmentIndex} >= ${contour.segments.size}")
+            }
         }
 
-    fun remove(updateTangents: Boolean = true) : ContourVertex {
+    val t: Double
+        get() = segmentIndex.toDouble() / contour.segments.size
+
+    val position: Vector2
+        get() {
+            return if (contour.closed || segmentIndex < contour.segments.size) {
+                contour.segments[segmentIndex].start
+            } else {
+                contour.segments[segmentIndex - 1].end
+            }
+        }
+
+    fun remove(updateTangents: Boolean = true): ContourVertex {
         if (contour.empty) {
             return withoutAdjustments()
         }
-        val segmentInIndex = if (contour.closed) (segmentIndex-1).mod(contour.segments.size) else segmentIndex-1
-        val segmentOutIndex = if (contour.closed) (segmentIndex+1).mod(contour.segments.size) else segmentIndex+1
+        val segmentInIndex = if (contour.closed) (segmentIndex - 1).mod(contour.segments.size) else segmentIndex - 1
+        val segmentOutIndex = if (contour.closed) (segmentIndex + 1).mod(contour.segments.size) else segmentIndex + 1
         val newSegments = contour.segments.map { it }.toMutableList()
         val refIn = newSegments.getOrNull(segmentInIndex)
         val refOut = newSegments.getOrNull(segmentOutIndex)
@@ -58,7 +85,7 @@ data class ContourVertex(val contour: ShapeContour, val segmentIndex: Int, val a
         }
         val transform = buildTransform {
             translate(position)
-            this.rotate(rotationInDegrees)
+            this@buildTransform.rotate(rotationInDegrees)
             translate(-position)
         }
         return transformTangents(transform, transform)
@@ -94,7 +121,7 @@ data class ContourVertex(val contour: ShapeContour, val segmentIndex: Int, val a
     fun movedBy(translation: Vector2, updateTangents: Boolean = true): ContourVertex =
         transformedBy(buildTransform { translate(translation) }, updateTangents)
 
-    fun rotatedBy(rotationInDegrees: Double, anchor:Vector2, updateTangents:Boolean=true): ContourVertex {
+    fun rotatedBy(rotationInDegrees: Double, anchor: Vector2, updateTangents: Boolean = true): ContourVertex {
         return transformedBy(buildTransform {
             translate(anchor)
             rotate(rotationInDegrees)
@@ -102,7 +129,7 @@ data class ContourVertex(val contour: ShapeContour, val segmentIndex: Int, val a
         }, updateTangents)
     }
 
-    fun scaledBy(scaleFactor: Double, anchor:Vector2, updateTangents:Boolean=true): ContourVertex {
+    fun scaledBy(scaleFactor: Double, anchor: Vector2, updateTangents: Boolean = true): ContourVertex {
         return transformedBy(buildTransform {
             translate(anchor)
             scale(scaleFactor)
@@ -110,35 +137,64 @@ data class ContourVertex(val contour: ShapeContour, val segmentIndex: Int, val a
         }, updateTangents)
     }
 
-    fun transformedBy(transform: Matrix44, updateTangents: Boolean = true): ContourVertex {
+    fun transformedBy(transform: Matrix44, updateTangents: Boolean): ContourVertex {
+        return transformedBy(updateTangents) { v -> v.transformedBy(transform) }
+    }
+
+    fun transformedBy(updateTangents: Boolean = true, transform: (Vector2) -> Vector2): ContourVertex {
         if (contour.empty) {
             return withoutAdjustments()
         }
 
         val newSegments = contour.segments.map { it }.toMutableList()
-        val refOut = contour.segments[segmentIndex]
-        val refIn = if (contour.closed) contour.segments[(segmentIndex - 1).mod(contour.segments.size)] else
-            contour.segments.getOrNull(segmentIndex - 1)
-        val newPosition = refOut.start.transformedBy(transform)
-        newSegments[segmentIndex] = if (updateTangents && !refOut.linear) {
-            val cubicSegment = refOut.cubic
-            val newControls = arrayOf(cubicSegment.control[0].transformedBy(transform), cubicSegment.control[1])
-            refOut.copy(start = newPosition, control = newControls)
+        val refOut = if (contour.closed || segmentIndex < contour.segments.size) {
+            contour.segments[segmentIndex]
         } else {
-            newSegments[segmentIndex].copy(start = newPosition)
+            contour.segments.last()
+        }
+        val refIn = if (contour.closed) {
+            contour.segments[(segmentIndex - 1).mod(contour.segments.size)]
+        } else {
+            contour.segments.getOrNull(segmentIndex - 1)
+        }
+        val newPosition = if (contour.closed || segmentIndex < contour.segments.size) {
+            transform(refOut.start)
+        } else {
+            transform(refOut.end)
+        }
+
+        if (contour.closed || segmentIndex< contour.segments.size) {
+            newSegments[segmentIndex] = if (updateTangents && !refOut.linear) {
+                val cubicSegment = refOut.cubic
+                val newControls = arrayOf(transform(cubicSegment.control[0]), cubicSegment.control[1])
+                refOut.copy(start = newPosition, control = newControls)
+            } else {
+                newSegments[segmentIndex].copy(start = newPosition)
+            }
+        } else {
+            newSegments[segmentIndex-1] = if (updateTangents && !refOut.linear) {
+                val cubicSegment = refOut.cubic
+                val newControls = arrayOf(cubicSegment.control[0], transform(cubicSegment.control[1]))
+                refOut.copy(end = newPosition, control = newControls)
+            } else {
+                newSegments[segmentIndex-1].copy(end = newPosition)
+            }
         }
 
         val segmentIndexIn = (segmentIndex - 1).mod(contour.segments.size)
-        if (refIn != null) {
+        if (refIn != null && (contour.closed || segmentIndex < contour.segments.size)) {
             newSegments[segmentIndexIn] =
                 if (updateTangents && !refIn.linear) {
                     val cubicSegment = refIn.cubic
-                    val newControls = arrayOf(cubicSegment.control[0], cubicSegment.control[1].transformedBy(transform))
+                    val newControls = arrayOf(cubicSegment.control[0], transform(cubicSegment.control[1]))
                     newSegments[segmentIndexIn].copy(control = newControls, end = newPosition)
                 } else {
 
                     newSegments[segmentIndexIn].copy(end = newPosition)
                 }
+        }
+        for (s in newSegments.windowed(2, 1)) {
+            require(s[0].end.distanceTo(s[1].start) < 1E-3)
         }
         val newContour = ShapeContour.fromSegments(newSegments, contour.closed, contour.polarity)
 

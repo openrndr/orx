@@ -2,10 +2,8 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.shapes.adjust.adjustContour
 import org.openrndr.math.Vector2
-import org.openrndr.shape.Circle
 import org.openrndr.shape.contour
 import kotlin.math.cos
-import kotlin.math.sin
 
 fun main() {
     application {
@@ -15,38 +13,22 @@ fun main() {
         }
         program {
             extend {
-                var contour =
-                    Circle(drawer.bounds.center, 300.0).contour
+                var contour = contour {
+                    moveTo(drawer.bounds.center - Vector2(300.0, 0.0))
+                    lineTo(drawer.bounds.center + Vector2(300.0, 0.0))
+                }
 
                 contour = adjustContour(contour) {
-                    selectEdges(0, 2)
+                    selectEdge(0)
+                    edge.splitIn(128)
+                    val tr = cos(seconds) * 0.5 + 0.5
 
-                    for (e in edges) {
-                        e.replaceWith(contour {
-                            moveTo(e.startPosition)
-                            lineTo(e.position(0.5) + e.normal(0.5) * cos(seconds) * 150.0)
-                            lineTo(e.endPosition)
-                        })
-                    }
-                    selectEdges(0, 1)
+                    selectVertices { i, v -> v.t >= tr }
+                    val anchor = contour.position(tr)
 
-                    for (e in edges) {
-                        e.replaceWith(contour {
-                            moveTo(e.startPosition)
-                            val t = 0.5
-                            lineTo(e.position(t) + e.normal(t) * cos(seconds) * 50.0)
-                            lineTo(e.endPosition)
-                        })
-                    }
-
-                    selectEdges(0, 1)
-                    for (e in edges) {
-                        e.replaceWith(contour {
-                            moveTo(e.startPosition)
-                            val t = 0.5
-                            lineTo(e.position(t) + e.normal(t) * sin(seconds) * 50.0)
-                            lineTo(e.endPosition)
-                        })
+                    for (v in vertices) {
+                        v.rotate((v.t - tr) * 2000.0, anchor)
+                        v.scale(0.05, anchor)
                     }
                 }
 

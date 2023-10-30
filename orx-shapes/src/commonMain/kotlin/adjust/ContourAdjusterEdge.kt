@@ -19,6 +19,11 @@ data class ContourAdjusterEdge(val contourAdjuster: ContourAdjuster, val segment
         return contourAdjuster.contour.segments[segmentIndex()].normal(t)
     }
 
+    val length: Double
+        get() {
+            return contourAdjuster.contour.segments[segmentIndex()].length
+        }
+
 
     /**
      * A [ContourAdjusterVertex] interface for the start-vertex of the edge

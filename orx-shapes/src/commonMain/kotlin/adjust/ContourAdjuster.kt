@@ -184,8 +184,8 @@ class ContourAdjuster(var contour: ShapeContour) {
      * select multiple edges using an index-edge based [predicate]
      */
     fun selectEdges(predicate: (Int, ContourEdge) -> Boolean) {
-        vertexSelection =
-            (0 until if (contour.closed) contour.segments.size else contour.segments.size + 1).filter { index ->
+        edgeSelection =
+            (contour.segments.indices).filter { index ->
                 predicate(index, ContourEdge(contour, index))
             }
     }
