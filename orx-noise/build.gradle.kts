@@ -19,11 +19,8 @@ kotlin {
         }
     }
 
+    kotlin.sourceSets.getByName("commonMain").kotlin.srcDir(embedShaders.outputDir)
     sourceSets {
-        val shaderKotlin by creating {
-            this.kotlin.srcDir(embedShaders.outputDir)
-        }
-
         @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
@@ -33,11 +30,8 @@ kotlin {
                 implementation(project(":orx-hash-grid"))
                 implementation(project(":orx-parameters"))
                 implementation(project(":orx-shader-phrases"))
-                api(shaderKotlin.kotlin)
             }
-            dependsOn(shaderKotlin)
         }
-
 
         @Suppress("UNUSED_VARIABLE")
         val jvmTest by getting {

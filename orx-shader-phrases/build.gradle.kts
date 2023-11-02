@@ -16,22 +16,16 @@ kotlin {
             }
         }
     }
+    kotlin.sourceSets.getByName("commonMain").kotlin.srcDir(embedShaders.outputDir)
     sourceSets {
-        val shaderKotlin by creating {
-            this.kotlin.srcDir(embedShaders.outputDir)
-        }
-
         @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
                 implementation(libs.openrndr.application)
                 implementation(libs.openrndr.draw)
                 implementation(libs.kotlin.reflect)
-                api(shaderKotlin.kotlin)
             }
-            dependsOn(shaderKotlin)
         }
-
 
         @Suppress("UNUSED_VARIABLE")
         val jvmTest by getting {

@@ -12,14 +12,12 @@ val embedShaders = tasks.register<EmbedShadersTask>("embedShaders") {
 
 
 kotlin {
+    kotlin.sourceSets.getByName("commonMain").kotlin.srcDir(embedShaders.outputDir)
     sourceSets {
-        val shaderKotlin by creating {
-            this.kotlin.srcDir(embedShaders.outputDir)
-        }
-
-        @Suppress("UNUSED_VARIABLE")
+@Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
+
                 implementation(project(":orx-parameters"))
                 implementation(project(":orx-shader-phrases"))
                 implementation(project(":orx-color"))
@@ -27,9 +25,7 @@ kotlin {
                 implementation(libs.openrndr.draw)
                 implementation(libs.openrndr.filter)
                 implementation(libs.kotlin.reflect)
-                api(shaderKotlin.kotlin)
             }
-            dependsOn(shaderKotlin)
         }
 
         @Suppress("UNUSED_VARIABLE")
