@@ -1,5 +1,6 @@
 package org.openrndr.extra.easing
 
+import kotlinx.serialization.Serializable
 import kotlin.math.*
 
 typealias EasingFunction = (Double, Double, Double, Double) -> Double
@@ -297,6 +298,7 @@ fun easeSineInOut(t: Double, b: Double = 0.0, c: Double = 1.0, d: Double = 1.0):
  * Use the `Easing.values()` list to iterate over available functions,
  * query its `.size` property or get functions by index.
  */
+@Serializable
 enum class Easing(val function: EasingFunction) {
     Linear(::easeLinear),
 
