@@ -1,23 +1,21 @@
-import org.amshove.kluent.`should be equal to`
+import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.equals.shouldBeEqual
 import org.openrndr.extra.shapes.regularPolygon
 import org.openrndr.extra.shapes.regularPolygonBeveled
 import org.openrndr.extra.shapes.regularPolygonRounded
 import org.openrndr.shape.Winding
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
 
-object TestRegularPolygon : Spek({
-
-
+class TestRegularPolygon : DescribeSpec({
     describe("a regular polygon with 3 sides") {
         val rp = regularPolygon(3)
 
         it("is closed") {
-            rp.closed `should be equal to` true
+            rp.closed.shouldBeTrue()
         }
 
         it("has clockwise winding") {
-            rp.winding `should be equal to` Winding.CLOCKWISE
+            rp.winding.shouldBeEqual(Winding.CLOCKWISE)
         }
     }
 
@@ -25,11 +23,11 @@ object TestRegularPolygon : Spek({
         val rp = regularPolygonRounded(3)
 
         it("is closed") {
-            rp.closed `should be equal to` true
+            rp.closed.shouldBeTrue()
         }
 
         it("has clockwise winding") {
-            rp.winding `should be equal to` Winding.CLOCKWISE
+            rp.winding.shouldBeEqual(Winding.CLOCKWISE)
         }
     }
 
@@ -37,13 +35,11 @@ object TestRegularPolygon : Spek({
         val rp = regularPolygonBeveled(3)
 
         it("is closed") {
-            rp.closed `should be equal to` true
+            rp.closed.shouldBeTrue()
         }
 
         it("has clockwise winding") {
-            rp.winding `should be equal to` Winding.CLOCKWISE
+            rp.winding.shouldBeEqual(Winding.CLOCKWISE)
         }
     }
-
-
 })

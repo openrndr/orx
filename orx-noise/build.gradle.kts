@@ -1,5 +1,6 @@
 plugins {
     org.openrndr.extra.convention.`kotlin-multiplatform`
+    alias(libs.plugins.kotest.multiplatform)
 }
 
 val embedShaders = tasks.register<EmbedShadersTask>("embedShaders") {
@@ -11,17 +12,8 @@ val embedShaders = tasks.register<EmbedShadersTask>("embedShaders") {
 }.get()
 
 kotlin {
-    jvm {
-        testRuns["test"].executionTask {
-            useJUnitPlatform {
-                includeEngines("spek2")
-            }
-        }
-    }
-
     kotlin.sourceSets.getByName("commonMain").kotlin.srcDir(embedShaders.outputDir)
     sourceSets {
-        @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
                 implementation(libs.openrndr.math)
@@ -33,16 +25,13 @@ kotlin {
             }
         }
 
-        @Suppress("UNUSED_VARIABLE")
-        val jvmTest by getting {
+        val commonTest by getting {
             dependencies {
-                implementation(libs.spek.dsl)
-                runtimeOnly(libs.spek.junit5)
-                runtimeOnly(libs.kotlin.reflect)
+                implementation(libs.kotest.assertions)
+                implementation(libs.kotest.framework.engine)
             }
         }
 
-        @Suppress("UNUSED_VARIABLE")
         val jvmDemo by getting {
             dependencies {
                 implementation(project(":orx-hash-grid"))

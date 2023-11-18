@@ -6,7 +6,6 @@ kotlin {
     jvm {
         testRuns["test"].executionTask {
             useJUnitPlatform {
-                includeEngines("spek2")
             }
         }
     }

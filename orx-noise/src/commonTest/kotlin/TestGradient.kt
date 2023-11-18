@@ -1,9 +1,8 @@
+import io.kotest.core.spec.style.DescribeSpec
 import org.openrndr.extra.noise.*
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
 import kotlin.test.assertEquals
 
-object TestGradient : Spek({
+class TestGradient : DescribeSpec({
     describe("Noise") {
         it("has a gradient") {
             gradient1D(::perlinLinear, 100, 0.1)

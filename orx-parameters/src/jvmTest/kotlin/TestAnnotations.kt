@@ -1,12 +1,16 @@
-import org.amshove.kluent.*
-import org.junit.jupiter.api.Assertions.assertEquals
+import io.kotest.assertions.throwables.shouldThrowUnit
+import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.collections.shouldBeIn
+import io.kotest.matchers.doubles.plusOrMinus
+import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.shouldBe
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.parameters.*
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import kotlin.test.assertEquals
 
 val a = object {
     @DoubleParameter("a double scalar", 0.0, 1.0, order = 0)
@@ -52,81 +56,83 @@ val a = object {
 
 }
 
-object TestAnnotations : Spek({
+class TestAnnotations : DescribeSpec({
     describe("an annotated object") {
         it("has listable parameters") {
             val list = a.listParameters()
-            list.size `should be equal to` 13
+            list.size shouldBeEqual 13
 
-            list[0].property?.name `should be equal to` "d"
-            list[0].parameterType `should be equal to` ParameterType.Double
-            list[0].label `should be equal to` "a double scalar"
+            list[0].property?.name shouldBe "d"
+            list[0].parameterType shouldBeEqual ParameterType.Double
+            list[0].label shouldBeEqual "a double scalar"
             list[0].doubleRange?.let {
-                it.start shouldBeInRange 0.0..0.0001
-                it.endInclusive shouldBeInRange 0.999..1.001
+                it.start.shouldBe(0.0.plusOrMinus(0.001))
+                it.endInclusive.shouldBe(1.0.plusOrMinus(0.001))
             }
-            list[0].precision `should be equal to` 3
+            list[0].precision?.shouldBeEqual(3)
 
-            list[1].property?.name `should be equal to` "i"
-            list[1].parameterType `should be equal to` ParameterType.Int
-            list[1].label `should be equal to` "an integer scalar"
+            list[1].property?.name?.shouldBeEqual("i")
+            list[1].parameterType shouldBeEqual ParameterType.Int
+            list[1].label shouldBeEqual "an integer scalar"
             list[1].intRange?.let {
-                it.first `should be equal to` 1
-                it.last `should be equal to` 100
+                it.first shouldBeEqual 1
+                it.last shouldBeEqual 100
             }
 
-            list[2].property?.name `should be equal to` "b"
-            list[2].parameterType `should be equal to` ParameterType.Boolean
-            list[2].label `should be equal to` "a boolean parameter"
-            list[2].precision `should be equal to` null
+            list[2].property?.name?.shouldBeEqual("b")
+            list[2].parameterType shouldBeEqual ParameterType.Boolean
+            list[2].label shouldBeEqual "a boolean parameter"
+            list[2].precision?.shouldBeNull()
 
-            list[3].parameterType `should be equal to` ParameterType.Action
-            list[3].property `should be equal to` null
-            list[3].label `should be equal to` "an action parameter"
+            list[3].parameterType shouldBeEqual ParameterType.Action
+            list[3].property?.shouldBeNull()
+            list[3].label shouldBeEqual "an action parameter"
 
             /*  test if we can call the annotated function, this is performed by raising an expected exception in the
                 function in the annotated function.
             */
-            invoking {
+            shouldThrowUnit<IllegalStateException> {
+
                 try {
                     list[3].function?.call(a)
                 } catch (e: java.lang.reflect.InvocationTargetException) {
                     /* this unpacks the exception that is wrapped in the ITExc */
-                    throw(e.targetException)
+                    throw (e.targetException)
                 }
-            } `should throw` IllegalStateException::class withMessage "this is to test if this function can be called"
+            }
 
-            list[4].parameterType `should be equal to` ParameterType.Text
-            list[4].property?.name `should be equal to` "t"
-            list[4].label `should be equal to` "a text parameter"
 
-            list[5].parameterType `should be equal to` ParameterType.Color
-            list[5].property?.name `should be equal to` "c"
-            list[5].label `should be equal to` "a color parameter"
+            list[4].parameterType shouldBeEqual ParameterType.Text
+            list[4].property?.name?.shouldBeEqual("t")
+            list[4].label shouldBeEqual "a text parameter"
 
-            list[6].parameterType `should be equal to` ParameterType.XY
-            list[6].property?.name `should be equal to` "xy"
-            list[6].label `should be equal to` "an XY parameter"
+            list[5].parameterType shouldBeEqual ParameterType.Color
+            list[5].property?.name?.shouldBeEqual("c")
+            list[5].label shouldBeEqual "a color parameter"
 
-            list[7].parameterType `should be equal to` ParameterType.DoubleList
-            list[7].property?.name `should be equal to` "dl"
-            list[7].label `should be equal to` "a double list parameter"
+            list[6].parameterType shouldBeEqual ParameterType.XY
+            list[6].property?.name?.shouldBeEqual("xy")
+            list[6].label shouldBeEqual "an XY parameter"
 
-            list[8].parameterType `should be equal to` ParameterType.Vector2
-            list[8].property?.name `should be equal to` "v2"
-            list[8].label `should be equal to` "a vector 2 parameter"
+            list[7].parameterType shouldBeEqual ParameterType.DoubleList
+            list[7].property?.name?.shouldBeEqual("dl")
+            list[7].label shouldBeEqual "a double list parameter"
 
-            list[9].parameterType `should be equal to` ParameterType.Vector3
-            list[9].property?.name `should be equal to` "v3"
-            list[9].label `should be equal to` "a vector 3 parameter"
+            list[8].parameterType shouldBeEqual ParameterType.Vector2
+            list[8].property?.name?.shouldBeEqual("v2")
+            list[8].label shouldBeEqual "a vector 2 parameter"
 
-            list[10].parameterType `should be equal to` ParameterType.Vector4
-            list[10].property?.name `should be equal to` "v4"
-            list[10].label `should be equal to` "a vector 4 parameter"
+            list[9].parameterType shouldBeEqual ParameterType.Vector3
+            list[9].property?.name?.shouldBeEqual("v3")
+            list[9].label shouldBeEqual "a vector 3 parameter"
 
-            list[11].parameterType `should be equal to` ParameterType.Option
-            list[11].property?.name `should be equal to` "o"
-            list[11].label `should be equal to` "an option parameter"
+            list[10].parameterType shouldBeEqual ParameterType.Vector4
+            list[10].property?.name?.shouldBeEqual("v4")
+            list[10].label shouldBeEqual "a vector 4 parameter"
+
+            list[11].parameterType shouldBeEqual ParameterType.Option
+            list[11].property?.name?.shouldBeEqual("o")
+            list[11].label shouldBeEqual "an option parameter"
 
             assertEquals(list[12].parameterType, ParameterType.Path)
             assertEquals(list[12].property?.name, "p")

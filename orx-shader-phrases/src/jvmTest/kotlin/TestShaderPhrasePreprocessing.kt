@@ -1,12 +1,11 @@
-import org.amshove.kluent.`should contain`
-import org.amshove.kluent.`should not contain`
+import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldNotContain
 import org.openrndr.extra.shaderphrases.ShaderPhrase
 import org.openrndr.extra.shaderphrases.ShaderPhraseBook
 import org.openrndr.extra.shaderphrases.preprocessShader
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
 
-class TestShaderPhrasePreprocessing : Spek({
+class TestShaderPhrasePreprocessing : DescribeSpec({
     describe("the glsl code") {
         val book = object : ShaderPhraseBook("testBook") {
             val phrase1 = ShaderPhrase("vec3 phrase1() { }")
@@ -24,19 +23,19 @@ class TestShaderPhrasePreprocessing : Spek({
         val glslProcessed = preprocessShader(glsl)
 
         it("should not contain phrase1 before preprocessing") {
-            glsl `should not contain` book.phrase1.phrase
+            glsl.shouldNotContain(book.phrase1.phrase)
         }
 
         it("should not contain phrase2 before preprocessing") {
-            glsl `should not contain` book.phrase2.phrase
+            glsl.shouldNotContain(book.phrase2.phrase)
         }
 
         it("should contain phrase1 after preprocessing") {
-            glslProcessed `should contain` book.phrase1.phrase
+            glslProcessed.shouldContain(book.phrase1.phrase)
         }
 
         it("should contain phrase2 after preprocessing") {
-            glslProcessed `should contain` book.phrase2.phrase
+            glslProcessed.shouldContain(book.phrase2.phrase)
         }
     }
 })

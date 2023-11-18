@@ -7,10 +7,10 @@ openrndr = { require = "[0.4.2, 0.5.0)" }
 kotlinxCoroutines = "1.7.3"
 kotlinLogging = "3.0.0"
 kotlinxSerialization = "1.6.1"
+kotest = "5.8.0"
 dokka = "1.7.10"
 nebulaRelease = "18.0.4"
 gradleNexusPublish = "2.0.0-rc-1"
-spek = "2.0.19"
 boofcv = "1.0.0"
 kluent = "1.73"
 junitJupiter = "5.9.2"
@@ -43,6 +43,11 @@ kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-p
 kotlin-serialization-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-serialization", version.ref = "kotlin" }
 dokka-gradle-plugin = { group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version.ref = "dokka" }
 
+kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
+kotest-runner = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
+kotest-framework-engine = { group = "io.kotest", name = "kotest-framework-engine", version.ref = "kotest" }
+
+
 openrndr-application = { group = "org.openrndr", name = "openrndr-application", version.ref = "openrndr" }
 openrndr-extensions = { group = "org.openrndr", name = "openrndr-extensions", version.ref = "openrndr" }
 openrndr-math = { group = "org.openrndr", name = "openrndr-math", version.ref = "openrndr" }
@@ -73,8 +78,6 @@ antlr-runtime = { group = "org.antlr", name = "antlr4-runtime", version.ref = "a
 
 jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junitJupiter" }
 jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junitJupiter" }
-spek-dsl = { group = "org.spekframework.spek2", name = "spek-dsl-jvm", version.ref = "spek" }
-spek-junit5 = { group = "org.spekframework.spek2", name = "spek-runner-junit5", version.ref = "spek" }
 kluent = { group = "org.amshove.kluent", name = "kluent", version.ref = "kluent" }
 slf4j-simple = { group = "org.slf4j", name = "slf4j-simple", version.ref = "slf4j" }
 
@@ -82,6 +85,8 @@ slf4j-simple = { group = "org.slf4j", name = "slf4j-simple", version.ref = "slf4
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 nebula-release = { id = "nebula.release", version.ref = "nebulaRelease" }
 gradle-nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "gradleNexusPublish" }
+kotest-multiplatform = { id = "io.kotest.multiplatform", version.ref = "kotest"}
+
 
 [bundles]
 jupiter = ["jupiter-api", "jupiter-engine"]

@@ -1,11 +1,10 @@
-import org.amshove.kluent.`should be`
+import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.equals.shouldBeEqual
 import org.openrndr.extra.shaderphrases.ShaderPhrase
 import org.openrndr.extra.shaderphrases.ShaderPhraseBook
 import org.openrndr.extra.shaderphrases.ShaderPhraseRegistry
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
 
-class TestShaderPhraseBook : Spek({
+class TestShaderPhraseBook : DescribeSpec({
     describe("A shader phrase book") {
         val book = object : ShaderPhraseBook("testBook") {
             val phrase = ShaderPhrase(
@@ -21,7 +20,7 @@ class TestShaderPhraseBook : Spek({
         it("can be found") {
             ShaderPhraseRegistry.findPhrase(
                 "testBook.test_phrase"
-            ) `should be` book.phrase
+            )!!.shouldBeEqual(book.phrase)
         }
     }
 })

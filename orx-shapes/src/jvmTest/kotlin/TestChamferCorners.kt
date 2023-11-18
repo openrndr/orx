@@ -1,13 +1,12 @@
-import org.amshove.kluent.`should be equal to`
+import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.equals.shouldBeEqual
 import org.openrndr.extra.shapes.operators.bevelCorners
 import org.openrndr.extra.shapes.operators.roundCorners
 import org.openrndr.extra.shapes.regularPolygon
 import org.openrndr.shape.Circle
 import org.openrndr.shape.contour
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
 
-object TestChamferCorners : Spek({
+class TestChamferCorners : DescribeSpec({
 
     describe("a single segment linear contour") {
         val c = contour {
@@ -17,10 +16,10 @@ object TestChamferCorners : Spek({
 
         it("should be similar to a chamfered version") {
             val cc = c.bevelCorners(10.0)
-            cc.segments.size `should be equal to` 1
+            cc.segments.size shouldBeEqual 1
             cc.position(0.0) `should be near` c.position(0.0)
             cc.position(1.0) `should be near` c.position(1.0)
-            cc.closed `should be equal to` c.closed
+            cc.closed shouldBeEqual c.closed
         }
     }
 
@@ -32,7 +31,7 @@ object TestChamferCorners : Spek({
 
         it("should be similar to a chamfered version") {
             val cc = c.bevelCorners(10.0)
-            cc.segments.size `should be equal to` 1
+            cc.segments.size shouldBeEqual 1
             cc.position(0.0) `should be near` c.position(0.0)
             cc.position(0.5) `should be near` c.position(0.5)
             cc.position(1.0) `should be near` c.position(1.0)
@@ -44,12 +43,12 @@ object TestChamferCorners : Spek({
 
         it("should be similar to a chamfered version") {
             val cc = c.bevelCorners(10.0)
-            cc.segments.size `should be equal to` c.segments.size
+            cc.segments.size shouldBeEqual c.segments.size
             cc.position(0.0) `should be near` c.position(0.0)
             cc.position(0.5) `should be near` c.position(0.5)
             cc.position(1.0) `should be near` c.position(1.0)
-            cc.closed `should be equal to` c.closed
-            c.winding `should be equal to` cc.winding
+            cc.closed shouldBeEqual c.closed
+            c.winding shouldBeEqual cc.winding
         }
     }
 
@@ -61,10 +60,10 @@ object TestChamferCorners : Spek({
         }
         it("should chamfer correctly") {
             val cc = c.bevelCorners(10.0)
-            cc.segments.size `should be equal to` 3
+            cc.segments.size shouldBeEqual 3
             cc.position(0.0) `should be near` c.position(0.0)
             cc.position(1.0) `should be near` c.position(1.0)
-            cc.closed `should be equal to` c.closed
+            cc.closed shouldBeEqual c.closed
         }
     }
 
@@ -76,10 +75,10 @@ object TestChamferCorners : Spek({
         }
         it("should be identical to the chamfered version") {
             val cc = c.bevelCorners(10.0)
-            cc.segments.size `should be equal to` c.segments.size
+            cc.segments.size shouldBeEqual c.segments.size
             cc.position(0.0) `should be near` c.position(0.0)
             cc.position(1.0) `should be near` c.position(1.0)
-            cc.closed `should be equal to` c.closed
+            cc.closed shouldBeEqual c.closed
         }
     }
 
@@ -92,14 +91,14 @@ object TestChamferCorners : Spek({
         }
         it("should be identical to the chamfered version") {
             val cc = c.bevelCorners(10.0)
-            cc.segments.size `should be equal to` c.segments.size
+            cc.segments.size shouldBeEqual c.segments.size
             cc.position(0.0) `should be near` c.position(0.0)
             cc.position(1.0) `should be near` c.position(1.0)
-            cc.closed `should be equal to` c.closed
+            cc.closed shouldBeEqual c.closed
         }
     }
 
-    describe("a two segment curve-linear contour") {
+    describe("another two segment curve-linear contour") {
         val c = contour {
             moveTo(0.0, 0.0)
             curveTo(80.0, 120.0, 50.0, 50.0)
@@ -108,29 +107,29 @@ object TestChamferCorners : Spek({
         }
         it("should be identical to the chamfered version") {
             val cc = c.bevelCorners(10.0)
-            cc.segments.size `should be equal to` c.segments.size
+            cc.segments.size shouldBeEqual c.segments.size
             cc.position(0.0) `should be near` c.position(0.0)
             cc.position(1.0) `should be near` c.position(1.0)
-            cc.closed `should be equal to` c.closed
+            cc.closed shouldBeEqual c.closed
         }
     }
 
     describe("a triangle") {
         val c = regularPolygon(3, radius = 100.0)
 
-        c.closed `should be equal to` true
+        c.closed shouldBeEqual true
 
         val cc = c.roundCorners(1.0)
 
-        c.winding `should be equal to` cc.winding
+        c.winding shouldBeEqual cc.winding
 
-        c.closed `should be equal to` cc.closed
+        c.closed shouldBeEqual cc.closed
 
         val ccc = cc.roundCorners(1.0)
 
-        ccc.closed `should be equal to` cc.closed
+        ccc.closed shouldBeEqual cc.closed
 
-        cc.segments.size `should be equal to` 6
+        cc.segments.size shouldBeEqual 6
 
 //        cc.segments.forEach {
 //            println(it)
@@ -141,7 +140,7 @@ object TestChamferCorners : Spek({
 //            println(it)
 //        }
         it("should have 6 sides") {
-            ccc.segments.size `should be equal to` cc.segments.size
+            ccc.segments.size shouldBeEqual cc.segments.size
         }
         it("should start at the right position") {
             ccc.position(0.0) `should be near`  cc.position(0.0)

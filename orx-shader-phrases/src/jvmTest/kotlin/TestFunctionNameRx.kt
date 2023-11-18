@@ -1,12 +1,13 @@
-import org.amshove.kluent.`should be equal to`
-import org.amshove.kluent.internal.assertFails
+import io.kotest.assertions.shouldFail
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.assertions.throwables.shouldThrowAny
+import io.kotest.assertions.throwables.shouldThrowUnit
+import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.equals.shouldBeEqual
 import org.openrndr.extra.shaderphrases.ShaderPhraseRegistry.getGLSLFunctionName
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
 
-object TestFunctionNameRx : Spek({
+class TestFunctionNameRx : DescribeSpec({
     describe("A function name") {
-        
         mapOf(
             "ivec4 aaa() {" to "aaa",
             "ivec3 bbb() {" to "bbb",
@@ -31,8 +32,8 @@ object TestFunctionNameRx : Spek({
                 """.trimMargin() to "white"
         ).forEach { (goodGLSL, expectedFuncName) ->
             it("can be extracted from valid GLSL") {
-                getGLSLFunctionName(goodGLSL) `should be equal to`
-                        expectedFuncName
+                getGLSLFunctionName(goodGLSL).shouldBeEqual(
+                        expectedFuncName)
             }
         }
     }
@@ -43,7 +44,7 @@ object TestFunctionNameRx : Spek({
             "float rnd {",
         ).forEach { badGLSL ->
             it("is not extracted if GLSL function not declared") {
-                assertFails {
+                shouldThrowUnit<Throwable> {
                     val funcName = getGLSLFunctionName(badGLSL)
                 }
             }

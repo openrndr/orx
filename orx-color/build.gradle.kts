@@ -5,19 +5,11 @@ plugins {
     // version was used. If openrndr were an included build, we probably wouldn't need to do this.
     // https://github.com/gradle/gradle/issues/20084
     id(libs.plugins.kotlin.serialization.get().pluginId)
+    alias(libs.plugins.kotest.multiplatform)
 }
 
 kotlin {
-    jvm {
-        testRuns["test"].executionTask {
-            useJUnitPlatform {
-                includeEngines("spek2")
-            }
-        }
-    }
-
     sourceSets {
-        @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
                 implementation(project(":orx-parameters"))
@@ -30,24 +22,14 @@ kotlin {
             }
         }
 
-        @Suppress("UNUSED_VARIABLE")
         val commonTest by getting {
             dependencies {
                 implementation(libs.kotlin.serialization.json)
+                implementation(libs.kotest.assertions)
+                implementation(libs.kotest.framework.engine)
             }
         }
 
-        @Suppress("UNUSED_VARIABLE")
-        val jvmTest by getting {
-            dependencies {
-                implementation(libs.kluent)
-                implementation(libs.spek.dsl)
-                runtimeOnly(libs.spek.junit5)
-                runtimeOnly(libs.kotlin.reflect)
-            }
-        }
-
-        @Suppress("UNUSED_VARIABLE")
         val jvmDemo by getting {
             dependencies {
                 implementation(project(":orx-camera"))

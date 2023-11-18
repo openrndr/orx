@@ -10,7 +10,6 @@ tasks.withType<KotlinCompile> {
 
 tasks.test {
     useJUnitPlatform {
-        includeEngines("spek2")
     }
 }
 
@@ -25,7 +24,7 @@ dependencies {
     implementation(libs.kotlin.scriptingJSR223)
     implementation(libs.kotlin.coroutines)
     testImplementation(libs.kluent)
-    testImplementation(libs.spek.dsl)
-    testRuntimeOnly(libs.spek.junit5)
+    testImplementation(libs.kotest.runner)
+    testImplementation(libs.kotest.assertions)
     testRuntimeOnly(libs.kotlin.reflect)
 }

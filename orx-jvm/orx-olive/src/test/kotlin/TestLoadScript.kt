@@ -1,18 +1,16 @@
-import org.amshove.kluent.`should be equal to`
+import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.equals.shouldBeEqual
 import org.openrndr.extra.olive.ScriptObjectLoader
-import org.openrndr.extra.olive.loadFromScript
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
 
-object TestLoadScript : Spek({
+class TestLoadScript : DescribeSpec({
 
     describe("some script") {
-        val loader  = ScriptObjectLoader()
+        val loader = ScriptObjectLoader()
 
         val number = loader.load<Int>("5")
 
         it("should evaluate properly") {
-            number `should be equal to` 5
+            number shouldBeEqual 5
         }
     }
 })

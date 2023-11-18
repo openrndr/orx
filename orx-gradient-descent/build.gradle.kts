@@ -1,17 +1,17 @@
 plugins {
     org.openrndr.extra.convention.`kotlin-multiplatform`
+    alias(libs.plugins.kotest.multiplatform)
 }
 
 kotlin {
     jvm {
         testRuns["test"].executionTask {
             useJUnitPlatform {
-                includeEngines("spek2")
+
             }
         }
     }
     sourceSets {
-        @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
                 implementation(project(":orx-parameters"))
@@ -23,13 +23,17 @@ kotlin {
             }
         }
 
+        val commonTest by getting {
+            dependencies {
+                implementation(libs.kotest.assertions)
+                implementation(libs.kotest.framework.engine)
+            }
+        }
 
-        @Suppress("UNUSED_VARIABLE")
         val jvmTest by getting {
             dependencies {
-                implementation(libs.kluent)
-                implementation(libs.spek.dsl)
-                runtimeOnly(libs.spek.junit5)
+                implementation(libs.kotest.assertions)
+                implementation(libs.kotest.framework.engine)
                 runtimeOnly(libs.kotlin.reflect)
             }
         }

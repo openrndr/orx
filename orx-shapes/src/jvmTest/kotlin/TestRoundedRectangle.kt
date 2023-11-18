@@ -1,20 +1,19 @@
-import org.amshove.kluent.`should be equal to`
+import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.equals.shouldBeEqual
 import org.openrndr.extra.shapes.*
 import org.openrndr.shape.Winding
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
 
-object TestRoundedRectangle : Spek({
+class TestRoundedRectangle : DescribeSpec({
     describe("a rounded square") {
         val rs = RoundedRectangle(100.0, 100.0, 200.0, 200.0, 20.0).contour
 
         it("is closed") {
-            rs.closed `should be equal to` true
+            rs.closed.shouldBeTrue()
         }
 
         it("has clockwise winding") {
-            rs.winding `should be equal to` Winding.CLOCKWISE
+            rs.winding.shouldBeEqual(Winding.CLOCKWISE)
         }
     }
-
 })

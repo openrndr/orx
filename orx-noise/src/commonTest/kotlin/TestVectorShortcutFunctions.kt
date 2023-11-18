@@ -1,11 +1,11 @@
+import io.kotest.core.spec.style.DescribeSpec
 import org.openrndr.extra.noise.Random
 import org.openrndr.extra.noise.perlinQuintic
 import org.openrndr.math.Vector4
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+
 import kotlin.test.assertEquals
 
-object TestVectorShortcutFunctions : Spek({
+class TestVectorShortcutFunctions : DescribeSpec({
 
     val v = Vector4(1.13, 2.74, 3.59, 4.83)
 
