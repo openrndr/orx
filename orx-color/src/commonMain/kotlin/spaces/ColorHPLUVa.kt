@@ -1,9 +1,11 @@
 package org.openrndr.extra.color.spaces
 
+import kotlinx.serialization.Serializable
 import org.openrndr.color.*
 import org.openrndr.math.Vector4
 import org.openrndr.math.mixAngle
 
+@Serializable
 data class ColorHPLUVa(val h: Double, val s: Double, val l: Double, override val alpha: Double = 1.0) :
     ColorModel<ColorHPLUVa>,
     HueShiftableColor<ColorHPLUVa>,

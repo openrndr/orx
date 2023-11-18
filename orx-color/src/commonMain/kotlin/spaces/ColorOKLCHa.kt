@@ -1,5 +1,6 @@
 package org.openrndr.extra.color.spaces
 
+import kotlinx.serialization.Serializable
 import org.openrndr.color.*
 import org.openrndr.math.*
 import kotlin.math.*
@@ -7,6 +8,7 @@ import kotlin.math.*
 /**
  * Color in cylindrical OKLab space
  */
+@Serializable
 data class ColorOKLCHa(val l: Double, val c: Double, val h: Double, override val alpha: Double = 1.0) :
     ColorModel<ColorOKLCHa>,
     ShadableColor<ColorOKLCHa>,

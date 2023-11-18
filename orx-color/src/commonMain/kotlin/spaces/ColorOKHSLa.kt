@@ -1,11 +1,13 @@
 package org.openrndr.extra.color.spaces
 
+import kotlinx.serialization.Serializable
 import org.openrndr.color.*
 import org.openrndr.math.Vector4
 import org.openrndr.math.mixAngle
 import kotlin.math.*
 
 @Suppress("LocalVariableName")
+@Serializable
 data class ColorOKHSLa(val h: Double, val s: Double, val l: Double, override val alpha: Double = 1.0) :
     ColorModel<ColorOKHSLa>,
     HueShiftableColor<ColorOKHSLa>,

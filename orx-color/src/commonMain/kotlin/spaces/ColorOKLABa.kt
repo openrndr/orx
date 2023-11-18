@@ -1,5 +1,6 @@
 package org.openrndr.extra.color.spaces
 
+import kotlinx.serialization.Serializable
 import org.openrndr.color.*
 import org.openrndr.math.Vector4
 import kotlin.math.pow
@@ -11,6 +12,7 @@ import kotlin.math.pow
  * [b] = yellow (-1.0) to blue (1.0).
  */
 @Suppress("LocalVariableName")
+@Serializable
 data class ColorOKLABa(val l: Double, val a: Double, val b: Double, override val alpha: Double = 1.0) :
     ColorModel<ColorOKLABa>,
     ShadableColor<ColorOKLABa>,

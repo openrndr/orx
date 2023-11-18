@@ -1,5 +1,6 @@
 package org.openrndr.extra.color.spaces
 
+import kotlinx.serialization.Serializable
 import org.openrndr.color.*
 import org.openrndr.math.Vector4
 import org.openrndr.math.map
@@ -79,6 +80,7 @@ private fun maxChromaForLH(L100: Double, H: Double): Double {
 /**
  * HSLUV color space
  */
+@Serializable
 data class ColorHSLUVa(val h: Double, val s: Double, val l: Double, override val alpha: Double = 1.0) :
         ColorModel<ColorHSLUVa>,
         HueShiftableColor<ColorHSLUVa>,
