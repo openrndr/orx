@@ -1,14 +1,15 @@
 package org.openrndr.extra.kotlinparser
 
+import KotlinLexer
+import KotlinParser
+import KotlinParserBaseListener
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.RuleContext
 import org.antlr.v4.runtime.misc.Interval
 import org.antlr.v4.runtime.tree.ParseTreeWalker
-import org.openrndr.extra.kotlin.antlr.KotlinLexer
-import org.openrndr.extra.kotlin.antlr.KotlinParser
-import org.openrndr.extra.kotlin.antlr.KotlinParserBaseListener
+
 
 fun ParserRuleContext.verbatimText(marginLeft: Int = 0, marginRight: Int = 0): String {
     if (start == null || stop == null) {

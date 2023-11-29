@@ -7,16 +7,7 @@ plugins {
 
 tasks.generateGrammarSource {
     maxHeapSize = "64m"
-    arguments.addAll(listOf("-visitor", "-long-messages", "-package", "org.openrndr.extra.kotlin.antlr"))
-    outputDirectory =  file("${project.buildDir}/generated-src/antlr/org/openrndr/extra/kotlin/antlr".toString())
-}
-
-sourceSets {
-    main {
-        java {
-            srcDir("build/generated-src/antlr")
-        }
-    }
+    arguments.addAll(listOf("-visitor", "-long-messages"))
 }
 
 tasks.withType<KotlinCompile> {
