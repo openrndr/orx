@@ -7,17 +7,9 @@ plugins {
 
 tasks.generateGrammarSource {
     maxHeapSize = "64m"
-    arguments.addAll(listOf("-visitor", "-long-messages", "-package", "org.openrndr.extra.expressions.antlr"))
-    outputDirectory = file("${project.buildDir}/generated-src/antlr/org/openrndr/extra/expressions/antlr")
+    arguments.addAll(listOf("-visitor", "-long-messages"))
 }
 
-sourceSets {
-    main {
-        java {
-            srcDir("build/generated-src/antlr")
-        }
-    }
-}
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.freeCompilerArgs = listOf("-opt-in=kotlin.RequiresOptIn")

@@ -1,11 +1,12 @@
 package org.openrndr.extra.expressions
 
+import KeyLangLexer
+import KeyLangParser
+import KeyLangParserBaseListener
 import org.antlr.v4.runtime.*
 import org.antlr.v4.runtime.tree.ParseTreeWalker
 import org.antlr.v4.runtime.tree.TerminalNode
-import org.openrndr.extra.expressions.antlr.KeyLangLexer
-import org.openrndr.extra.expressions.antlr.KeyLangParser
-import org.openrndr.extra.expressions.antlr.KeyLangParserBaseListener
+
 import org.openrndr.extra.noise.uniform
 import org.openrndr.math.*
 import java.util.*
