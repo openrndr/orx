@@ -1,5 +1,3 @@
-package spaces
-
 import io.kotest.core.spec.style.DescribeSpec
 import org.openrndr.color.ColorRGBa
 import org.openrndr.color.Linearity

@@ -30,6 +30,14 @@ kotlin {
             }
         }
 
+        val jvmTest by getting {
+            dependencies {
+                implementation(libs.kotlin.serialization.json)
+                implementation(libs.kotest.assertions)
+                implementation(libs.kotest.framework.engine)
+            }
+        }
+
         val jvmDemo by getting {
             dependencies {
                 implementation(project(":orx-camera"))
