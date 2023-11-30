@@ -25,7 +25,7 @@ kotlin {
             }
         }
 
-        val commonTest by getting {
+        val jvmTest by getting {
             dependencies {
                 implementation(libs.kotest.assertions)
                 implementation(libs.kotest.framework.engine)
