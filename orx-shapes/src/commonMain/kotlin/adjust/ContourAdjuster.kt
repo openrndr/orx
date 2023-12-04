@@ -32,12 +32,12 @@ class ContourAdjuster(var contour: ShapeContour) {
     /**
      * selected vertex indices
      */
-    var vertexSelection = listOf(0)
+    var vertexSelection = List(contour.segments.size + if (contour.closed) 1 else 0) { it }
 
     /**
      * selected edge indices
      */
-    var edgeSelection = listOf(0)
+    var edgeSelection = List(contour.segments.size) { it }
 
     private var vertexWorkingSet = emptyList<Int>()
     private var edgeWorkingSet = emptyList<Int>()
@@ -147,6 +147,8 @@ class ContourAdjuster(var contour: ShapeContour) {
         vertexSelection =
             (0 until if (contour.closed) contour.segments.size else contour.segments.size + 1).filter(predicate)
     }
+
+
 
     /**
      * select multiple vertices using an index-vertex based [predicate]
