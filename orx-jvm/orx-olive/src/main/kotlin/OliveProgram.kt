@@ -33,7 +33,7 @@ fun stackRootClassName(thread: Thread = Thread.currentThread(), sanitize: Boolea
     return if (sanitize) rootClass.replace(Regex("Kt$"), "") else rootClass
 }
 
-fun ApplicationBuilder.oliveProgram(scriptHost: OliveScriptHost = OliveScriptHost.JSR223_REUSE, resources: Resources? = null, init: OliveProgram.() -> Unit): OliveProgram {
+fun ApplicationBuilder.oliveProgram(scriptHost: OliveScriptHost = OliveScriptHost.JSR223, resources: Resources? = null, init: OliveProgram.() -> Unit): OliveProgram {
     val rootClassName = stackRootClassName(sanitize = true).split(".").last()
 
     var sourceLocation = "src/main/kotlin/$rootClassName.kt"
