@@ -35,6 +35,8 @@ class H265Profile : VideoWriterProfile() {
 
     val filters = mutableListOf("vflip")
 
+    var tagArguments = listOf("-tag:v", "hvc1")
+
     override fun arguments(): Array<String> {
         val chromaArguments = if (highPrecisionChroma) {
             arrayOf(
@@ -60,7 +62,7 @@ class H265Profile : VideoWriterProfile() {
         val filterArguments = arrayOf("-vf", filters.joinToString(","))
 
         val arguments =
-            hwaccelArguments + pixelFormatArguments + chromaArguments + filterArguments + videoCodecArguments + constantRateArguments + presetArguments + userArguments
+            hwaccelArguments + pixelFormatArguments + chromaArguments + filterArguments + videoCodecArguments + constantRateArguments + presetArguments + tagArguments + userArguments
 
         return arguments
     }
