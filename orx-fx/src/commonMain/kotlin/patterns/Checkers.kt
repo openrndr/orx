@@ -1,3 +1,5 @@
+@file:Suppress("RUNTIME_ANNOTATION_NOT_SUPPORTED")
+
 package org.openrndr.extra.fx.patterns
 
 import org.openrndr.color.ColorRGBa

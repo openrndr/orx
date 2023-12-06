@@ -1,3 +1,5 @@
+@file:Suppress("RUNTIME_ANNOTATION_NOT_SUPPORTED")
+
 import org.openrndr.draw.Filter
 import org.openrndr.draw.Filter1to1
 import org.openrndr.draw.filterShaderFromCode

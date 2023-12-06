@@ -40,7 +40,7 @@ data class ColorXSLUVa(val x: Double, val s: Double, val l: Double, override val
 }
 
 private fun xToHue(x:Double) : Double {
-    val x = x % 360.0
+    @Suppress("NAME_SHADOWING") val x = x.mod(360.0)
     return if (0.0 <= x && x < 60.0) {
         map(x, 0.0, 60.0, 0.0, 35.0)
     } else if (60.0 <= x && x < 120.0) {

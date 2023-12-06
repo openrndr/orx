@@ -1,3 +1,5 @@
+@file:Suppress("RUNTIME_ANNOTATION_NOT_SUPPORTED")
+
 package org.openrndr.extra.fx.colormap
 
 import org.openrndr.extra.fx.fx_grayscale_colormap

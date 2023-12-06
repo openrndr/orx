@@ -105,7 +105,7 @@ internal fun find_cusp(a: Double, b: Double): DoubleArray {
 }
 
 internal fun get_ST_max(a: Double, b: Double, cusp: DoubleArray? = null): DoubleArray {
-    val cusp = cusp ?: find_cusp(a, b)
+    @Suppress("NAME_SHADOWING") val cusp = cusp ?: find_cusp(a, b)
 
     val L = cusp[0]
     val C = cusp[1]
@@ -183,7 +183,7 @@ fun find_gamut_intersection(
     L0: Double,
     cusp: DoubleArray? = null
 ): Double {
-    val cusp = cusp ?: find_cusp(a, b)
+    @Suppress("NAME_SHADOWING") val cusp = cusp ?: find_cusp(a, b)
 
 
     // Find the intersection for upper and lower half seprately

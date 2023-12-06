@@ -7,7 +7,7 @@ import org.openrndr.shape.contour
  * Create a contour from a list of contours
  */
 fun ShapeContour.Companion.fromContours(contours: List<ShapeContour>, closed: Boolean, connectEpsilon:Double=1E-6) : ShapeContour {
-    val contours = contours.filter { !it.empty }
+    @Suppress("NAME_SHADOWING") val contours = contours.filter { !it.empty }
     if (contours.isEmpty()) {
         return EMPTY
     }

@@ -1,3 +1,5 @@
+@file:Suppress("RUNTIME_ANNOTATION_NOT_SUPPORTED")
+
 package org.openrndr.extra.color.fettepalette
 
 import org.openrndr.color.ColorHSLa
@@ -75,8 +77,6 @@ object Lamé : Curve {
 object Arc : Curve {
     override fun pointOnCurve(i: Double, total: Double, curveAccent: Double, min: Vector2, max: Vector2): Vector2 {
         val limit = PI / 2
-        val percentile = i / total
-        val t = percentile * limit
         val slice = limit / total
         val y = cos(-PI / 2 + i * slice + curveAccent)
         val x = sin(PI / 2 + i * slice - curveAccent)

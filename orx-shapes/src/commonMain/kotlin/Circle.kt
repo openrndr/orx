@@ -15,8 +15,8 @@ fun Circle.contour(segments: Int): ShapeContour {
         val p = Polar(0.0, radius)
         moveTo(center + p.cartesian)
         for (i in 1 until segments+1) {
-            val p = Polar(i * 360.0/segments, radius).cartesian + center
-            arcTo(radius, radius, 360.0/segments, false, true, p.x, p.y)
+            val lp = Polar(i * 360.0/segments, radius).cartesian + center
+            arcTo(radius, radius, 360.0/segments, false, true, lp.x, lp.y)
         }
         close()
     }

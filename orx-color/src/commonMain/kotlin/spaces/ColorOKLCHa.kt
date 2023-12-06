@@ -33,20 +33,20 @@ data class ColorOKLCHa(val l: Double, val c: Double, val h: Double, override val
     @Deprecated("Legacy alpha parameter name", ReplaceWith("alpha"))
     val a = alpha
 
-    override fun opacify(factor: Double) = copy(alpha = a * factor)
+    override fun opacify(factor: Double) = copy(alpha = alpha * factor)
     override fun shade(factor: Double) = copy(l = l * factor)
     override fun shiftHue(shiftInDegrees: Double) = copy(h = h + shiftInDegrees)
     override fun saturate(factor: Double) = copy(c = c * factor)
 
-    override fun plus(right: ColorOKLCHa) = copy(l = l + right.l, c = c + right.c, h = h + right.h, alpha = a + right.a)
-    override fun minus(right: ColorOKLCHa) = copy(l = l - right.l, c = c - right.c, h = h - right.h, alpha = a - right.a)
-    override fun times(scale: Double) = copy(l = l * scale, c = c * scale, h = h * scale, alpha = a * scale)
+    override fun plus(right: ColorOKLCHa) = copy(l = l + right.l, c = c + right.c, h = h + right.h, alpha = alpha + right.alpha)
+    override fun minus(right: ColorOKLCHa) = copy(l = l - right.l, c = c - right.c, h = h - right.h, alpha = alpha - right.alpha)
+    override fun times(scale: Double) = copy(l = l * scale, c = c * scale, h = h * scale, alpha = alpha * scale)
     override fun mix(other: ColorOKLCHa, factor: Double) = mix(this, other, factor)
 
     fun toOKLABa(): ColorOKLABa {
         val a = c * cos(h.asRadians)
         val b = c * sin(h.asRadians)
-        return ColorOKLABa(l, a, b, alpha = this.a)
+        return ColorOKLABa(l, a, b, alpha = this.alpha)
     }
 
     override fun toRGBa(): ColorRGBa = toOKLABa().toRGBa()
@@ -59,7 +59,7 @@ fun mix(left: ColorOKLCHa, right: ColorOKLCHa, x: Double): ColorOKLCHa {
         (1.0 - sx) * left.l + sx * right.l,
         (1.0 - sx) * left.c + sx * right.c,
         mixAngle(left.h, right.h, sx),
-        (1.0 - sx) * left.a + sx * right.a
+        (1.0 - sx) * left.alpha + sx * right.alpha
     )
 }
 
