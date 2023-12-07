@@ -115,7 +115,7 @@ data class ColorOKHSLa(val h: Double, val s: Double, val l: Double, override val
     override fun mix(other: ColorOKHSLa, factor: Double): ColorOKHSLa {
         val sx = factor.coerceIn(0.0, 1.0)
         return ColorOKHSLa(
-            mixAngle(h, other.h, sx) / 360.0,
+            mixAngle(h, other.h, sx),
             (1.0 - sx) * s + sx * other.s,
             (1.0 - sx) * l + sx * other.l,
             (1.0 - sx) * alpha + sx * other.alpha
