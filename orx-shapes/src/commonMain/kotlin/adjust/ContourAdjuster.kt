@@ -32,7 +32,7 @@ class ContourAdjuster(var contour: ShapeContour) {
     /**
      * selected vertex indices
      */
-    var vertexSelection = List(contour.segments.size + if (contour.closed) 1 else 0) { it }
+    var vertexSelection = List(contour.segments.size + if (contour.closed) 0 else 1) { it }
 
     /**
      * selected edge indices

@@ -233,8 +233,10 @@ data class ContourEdge(
             } else {
                 refIn.cubic.control
             }
-            control[1] = control[1].transformedBy(transform)
-            newSegments[segmentInIndex] = refIn.copy(end = segment.start.transformedBy(transform), control = control)
+            if (control.isNotEmpty()) {
+                control[1] = control[1].transformedBy(transform)
+            }
+            newSegments[segmentInIndex] = refIn.copy(end = segment.start.transformedBy(transform))
         }
         if (refOut != null) {
             val control = if (refOut.linear || !updateTangents) {
@@ -242,7 +244,9 @@ data class ContourEdge(
             } else {
                 refOut.cubic.control
             }
-            control[0] = control[0].transformedBy(transform)
+            if (control.isNotEmpty()) {
+                control[0] = control[0].transformedBy(transform)
+            }
             newSegments[segmentOutIndex] = refOut.copy(start = segment.end.transformedBy(transform))
         }
 
