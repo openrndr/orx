@@ -45,6 +45,7 @@ class ContourAdjusterVertex(val contourAdjuster: ContourAdjuster, val segmentInd
 
     fun remove(updateTangents: Boolean = true) = wrap { remove(updateTangents) }
     fun moveBy(translation: Vector2, updateTangents: Boolean = true) = wrap { movedBy(translation, updateTangents) }
+    fun moveTo(position: Vector2, updateTangents: Boolean = true) = wrap { movedBy(position - this.position, updateTangents) }
     fun rotate(rotationInDegrees: Double) = wrap { rotatedBy(rotationInDegrees) }
     fun scale(scaleFactor: Double) = wrap { scaledBy(scaleFactor) }
 
