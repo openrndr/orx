@@ -151,20 +151,20 @@ internal fun map(x: Double, a: Double, b: Double, c: Double, d: Double): Double 
     return ((x - a) / (b - a)) * (d - c) + c
 }
 
-private fun hueToX(hue:Double): Double {
-    val h = ((hue % 360.0) + 360.0) % 360.0
+fun hueToX(hue:Double): Double {
+    val h = hue.mod(360.0)
     return if (0 <= h && h < 35) {
-        map(h, 0.0, 35.0, 0.0, 60.0)
+        h.map(0.0, 35.0, 0.0, 60.0)
     } else if (35 <= h && h < 60) {
-        map(h, 35.0, 60.0, 60.0, 120.0)
+        h.map(35.0, 60.0, 60.0, 120.0)
     } else if (60 <= h && h < 135.0) {
-        map(h, 60.0, 135.0, 120.0, 180.0)
+        h.map(60.0, 135.0, 120.0, 180.0)
     } else if (135.0 <= h && h < 225.0) {
-        map(h, 135.0, 225.0, 180.0, 240.0)
+        h.map(135.0, 225.0, 180.0, 240.0)
     } else if (225.0 <= h && h < 275.0) {
-        map(h, 225.0, 275.0, 240.0, 300.0)
+        h.map( 225.0, 275.0, 240.0, 300.0)
     } else {
-        map(h, 276.0, 360.0, 300.0, 360.0)
+        h.map( 275.0, 360.0, 300.0, 360.0)
     }
 }
 
