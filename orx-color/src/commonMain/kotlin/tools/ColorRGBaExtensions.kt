@@ -18,6 +18,7 @@ inline fun <reified T : ColorModel<T>> ColorRGBa.convertTo(): T {
         ColorHSLa::class -> this.toHSLa()
         ColorHSVa::class -> this.toHSVa()
         ColorRGBa::class -> this
+        ColorHPLUVa::class -> this.toHPLUVa()
         ColorHSLUVa::class -> this.toHSLUVa()
         ColorOKLABa::class -> this.toOKLABa()
         ColorOKLCHa::class -> this.toOKLCHa()

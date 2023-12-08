@@ -8,6 +8,8 @@ import org.openrndr.extra.color.tools.shiftHue
 /**
  * Generate an analogous palette
  * @param T the color model to use
+ * @param hueShift Hue degrees between the first and the last color
+ * @param steps Number of colors to create
  */
 inline fun <reified T> ColorRGBa.analogous(hueShift: Double, steps: Int = 5): List<ColorRGBa>
         where T : HueShiftableColor<T>,

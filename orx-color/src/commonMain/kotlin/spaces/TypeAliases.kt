@@ -5,6 +5,7 @@ import org.openrndr.color.*
 typealias RGB = ColorRGBa
 typealias LAB = ColorLABa
 typealias LUV = ColorLUVa
+typealias HPLuv = ColorHPLUVa
 typealias HSL = ColorHSLa
 typealias HSV = ColorHSVa
 typealias HSLuv = ColorHSLUVa
