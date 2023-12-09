@@ -18,7 +18,6 @@ fun main() {
         configure {
             width = 800
             height = 800
-
         }
         program {
             val mesh = sphereMesh(8, 8, radius = 0.1)

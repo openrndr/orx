@@ -16,12 +16,13 @@ data class ColorXSLUVa(val x: Double, val s: Double, val l: Double, override val
 
     @Deprecated("Legacy alpha parameter name", ReplaceWith("alpha"))
     val a = alpha
-
-    override fun shiftHue(shiftInDegrees: Double) = copy(x = x + (shiftInDegrees))
+    override val hue: Double = x
+    override fun withHue(hue: Double): ColorXSLUVa = copy(x = hue)
 
     override fun shade(factor: Double) = copy(l = l * factor)
+    override val saturation: Double = s
 
-    override fun saturate(factor: Double) = copy(s = s * factor)
+    override fun withSaturation(saturation: Double): ColorXSLUVa = copy(s = saturation)
 
     override fun toRGBa(): ColorRGBa = toHSLUVa().toRGBa()
 

@@ -12,8 +12,8 @@ import kotlin.math.*
 data class ColorOKLCHa(val l: Double, val c: Double, val h: Double, override val alpha: Double = 1.0) :
     ColorModel<ColorOKLCHa>,
     ShadableColor<ColorOKLCHa>,
+    ChromaColor<ColorOKLCHa>,
     HueShiftableColor<ColorOKLCHa>,
-    SaturatableColor<ColorOKLCHa>,
     AlgebraicColor<ColorOKLCHa> {
 
     companion object {
@@ -35,8 +35,6 @@ data class ColorOKLCHa(val l: Double, val c: Double, val h: Double, override val
 
     override fun opacify(factor: Double) = copy(alpha = alpha * factor)
     override fun shade(factor: Double) = copy(l = l * factor)
-    override fun shiftHue(shiftInDegrees: Double) = copy(h = h + shiftInDegrees)
-    override fun saturate(factor: Double) = copy(c = c * factor)
 
     override fun plus(right: ColorOKLCHa) = copy(l = l + right.l, c = c + right.c, h = h + right.h, alpha = alpha + right.alpha)
     override fun minus(right: ColorOKLCHa) = copy(l = l - right.l, c = c - right.c, h = h - right.h, alpha = alpha - right.alpha)
@@ -51,6 +49,11 @@ data class ColorOKLCHa(val l: Double, val c: Double, val h: Double, override val
 
     override fun toRGBa(): ColorRGBa = toOKLABa().toRGBa()
     override fun toVector4(): Vector4 = Vector4(l, c, h, alpha)
+    override val chroma: Double = c
+    override fun withChroma(chroma: Double): ColorOKLCHa = copy(c = chroma)
+    override val hue: Double = h
+
+    override fun withHue(hue: Double): ColorOKLCHa = copy(h = hue)
 }
 
 fun mix(left: ColorOKLCHa, right: ColorOKLCHa, x: Double): ColorOKLCHa {

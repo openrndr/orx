@@ -26,11 +26,15 @@ data class ColorHPLUVa(val h: Double, val s: Double, val l: Double, override val
         return ColorLCHUVa(l100, c100, h)
     }
 
-    override fun shiftHue(shiftInDegrees: Double): ColorHPLUVa = copy(h = h + (shiftInDegrees))
+    override val hue: Double = h
+    override fun withHue(hue: Double) = copy(h = hue)
+
 
     override fun shade(factor: Double): ColorHPLUVa = copy(l = l * factor)
 
-    override fun saturate(factor: Double): ColorHPLUVa = copy(s = s * factor)
+    override val saturation: Double = s
+
+    override fun withSaturation(saturation: Double): ColorHPLUVa = copy(s = saturation)
 
     override fun toRGBa(): ColorRGBa = toLCHUVa().toRGBa()
 

@@ -102,9 +102,14 @@ data class ColorOKHSVa(val h: Double, val s: Double, val v: Double, override val
         ).toRGBa().toSRGB()
     }
 
-    override fun shiftHue(shiftInDegrees: Double): ColorOKHSVa = copy(h = h + shiftInDegrees)
+    override val hue: Double = h
+
+    override fun withHue(hue: Double): ColorOKHSVa = copy(h = hue)
+
     override fun opacify(factor: Double): ColorOKHSVa = copy(alpha = alpha * factor)
-    override fun saturate(factor: Double): ColorOKHSVa = copy(s = s * factor)
+    override val saturation: Double = s
+    override fun withSaturation(saturation: Double): ColorOKHSVa = copy(s = saturation)
+
     override fun shade(factor: Double): ColorOKHSVa = copy(v = v * factor)
     override fun minus(right: ColorOKHSVa) =
         copy(h = h - right.h, s = s - right.s, v = v - right.v, alpha = alpha - right.alpha)
