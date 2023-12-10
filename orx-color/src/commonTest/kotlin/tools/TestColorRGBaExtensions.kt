@@ -44,7 +44,7 @@ class TestColorRGBaExtensions {
     fun testSaturate1() {
         val seed = ColorRGBa.RED.shade(0.5)
         val shifted = listOf(
-            seed.saturate<OKLCH>(1.0),
+            seed.saturate<HSV>(1.0),
             seed.saturate<HSLuv>(1.0)
         )
         for (s in shifted) {
@@ -57,7 +57,7 @@ class TestColorRGBaExtensions {
     fun testSaturate1Linear() {
         val seed = ColorRGBa.RED.shade(0.5).toLinear()
         val shifted = listOf(
-            seed.saturate<OKLCH>(1.0),
+            seed.saturate<HSV>(1.0),
             seed.saturate<HSLuv>(1.0)
         )
         for (s in shifted) {
