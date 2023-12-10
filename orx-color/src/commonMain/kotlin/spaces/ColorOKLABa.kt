@@ -16,6 +16,7 @@ import kotlin.math.pow
 data class ColorOKLABa(val l: Double, val a: Double, val b: Double, override val alpha: Double = 1.0) :
     ColorModel<ColorOKLABa>,
     ShadableColor<ColorOKLABa>,
+    LuminosityColor<ColorOKLABa>,
     AlgebraicColor<ColorOKLABa> {
 
     companion object {
@@ -66,6 +67,10 @@ data class ColorOKLABa(val l: Double, val a: Double, val b: Double, override val
     override fun times(scale: Double) = ColorOKLABa(l * scale, a * scale, b * scale, alpha * scale)
 
     override fun toVector4() = Vector4(l, a, b, alpha)
+    override val luminosity: Double
+        get() = l
+
+    override fun withLuminosity(luminosity: Double): ColorOKLABa = copy(l = luminosity)
 }
 
 fun ColorRGBa.toOKLABa() = ColorOKLABa.fromRGBa(this)

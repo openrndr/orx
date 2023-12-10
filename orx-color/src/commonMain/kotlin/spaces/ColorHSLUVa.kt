@@ -86,6 +86,7 @@ data class ColorHSLUVa(val h: Double, val s: Double, val l: Double, override val
         HueShiftableColor<ColorHSLUVa>,
         SaturatableColor<ColorHSLUVa>,
         ShadableColor<ColorHSLUVa>,
+        LuminosityColor<ColorHSLUVa>,
         AlgebraicColor<ColorHSLUVa> {
 
     @Deprecated("Legacy alpha parameter name", ReplaceWith("alpha"))
@@ -114,11 +115,14 @@ data class ColorHSLUVa(val h: Double, val s: Double, val l: Double, override val
         return ColorXSLUVa(hueToX(h), s, l, alpha)
     }
 
-    override val hue: Double =h
+    override val hue: Double
+        get() = h
 
     override fun withHue(hue: Double): ColorHSLUVa = copy(h = hue)
     override fun shade(factor: Double) = copy(l = l * factor)
-    override val saturation: Double = s
+    override val saturation: Double
+        get() = s
+
     override fun withSaturation(saturation: Double): ColorHSLUVa = copy(s = saturation)
 
     override fun toRGBa(): ColorRGBa {
@@ -136,6 +140,10 @@ data class ColorHSLUVa(val h: Double, val s: Double, val l: Double, override val
     override fun mix(other: ColorHSLUVa, factor: Double) = mix(this, other, factor)
 
     override fun toVector4(): Vector4 = Vector4(h, s, l, alpha)
+    override val luminosity: Double
+        get() = l
+
+    override fun withLuminosity(luminosity: Double): ColorHSLUVa = copy(l = luminosity)
 
 }
 

@@ -11,6 +11,7 @@ data class ColorHPLUVa(val h: Double, val s: Double, val l: Double, override val
     HueShiftableColor<ColorHPLUVa>,
     SaturatableColor<ColorHPLUVa>,
     ShadableColor<ColorHPLUVa>,
+    LuminosityColor<ColorHPLUVa>,
     AlgebraicColor<ColorHPLUVa> {
     fun toLCHUVa(): ColorLCHUVa {
         val l1 = l
@@ -26,13 +27,15 @@ data class ColorHPLUVa(val h: Double, val s: Double, val l: Double, override val
         return ColorLCHUVa(l100, c100, h)
     }
 
-    override val hue: Double = h
+    override val hue: Double
+        get() = h
     override fun withHue(hue: Double) = copy(h = hue)
 
 
     override fun shade(factor: Double): ColorHPLUVa = copy(l = l * factor)
 
-    override val saturation: Double = s
+    override val saturation: Double
+        get() = s
 
     override fun withSaturation(saturation: Double): ColorHPLUVa = copy(s = saturation)
 
@@ -49,6 +52,10 @@ data class ColorHPLUVa(val h: Double, val s: Double, val l: Double, override val
     override fun mix(other: ColorHPLUVa, factor: Double) = mix(this, other, factor)
 
     override fun toVector4(): Vector4 = Vector4(h, s, l, alpha)
+    override val luminosity: Double
+        get() = l
+
+    override fun withLuminosity(luminosity: Double): ColorHPLUVa = copy(l = luminosity)
 }
 
 fun mix(left: ColorHPLUVa, right: ColorHPLUVa, x: Double): ColorHPLUVa {
