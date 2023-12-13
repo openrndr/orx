@@ -388,24 +388,24 @@ private fun spectralUpsampling(rgb: ColorRGBa): DoubleArray {
 
     lrgb = lrgb.copy(r = lrgb.r - w, g = lrgb.g - w, lrgb.b - w)
 
-    val c = min(lrgb.g, lrgb.b)
-    val m = min(lrgb.r, lrgb.b)
-    val y = min(lrgb.r, lrgb.g)
+    val c = max(0.0, min(lrgb.g, lrgb.b))
+    val m = max(0.0, min(lrgb.r, lrgb.b))
+    val y = max(0.0, min(lrgb.r, lrgb.g))
     val r = max(0.0, min(lrgb.r - lrgb.b, lrgb.r - lrgb.g))
     val g = max(0.0, min(lrgb.g - lrgb.b, lrgb.g - lrgb.r))
     val b = max(0.0, min(lrgb.b - lrgb.g, lrgb.b - lrgb.r))
 
-    return doubleArrayOf(w, c, m, y, r, g, b)
+    return doubleArrayOf(max(0.0, w), c, m, y, r, g, b)
 }
 
 
 internal fun linearToReflectance(rgb: ColorRGBa): DoubleArray {
     val eps = 0.00000001
     val weights = spectralUpsampling(rgb)
-    val R = DoubleArray(38)
+    val reflectance = DoubleArray(38)
 
     for (i in 0 until 38) {
-        R[i] = max(
+        reflectance[i] = max(
             eps,
             weights[0] +
                     weights[1] * SPD_C[i] +
@@ -416,7 +416,7 @@ internal fun linearToReflectance(rgb: ColorRGBa): DoubleArray {
                     weights[6] * SPD_B[i]
         )
     }
-    return R
+    return reflectance
 }
 
 private fun linearToConcentration(l1: Double, l2: Double, t: Double): Double {
@@ -434,10 +434,10 @@ private fun DoubleArray.dot(other: DoubleArray): Double {
     return d
 }
 
-internal fun reflectanceToXYZ(R: DoubleArray): ColorXYZa {
-    val x = R.dot(CIE_CMF_X)
-    val y = R.dot(CIE_CMF_Y)
-    val z = R.dot(CIE_CMF_Z)
+internal fun reflectanceToXYZ(reflectance: DoubleArray): ColorXYZa {
+    val x = reflectance.dot(CIE_CMF_X)
+    val y = reflectance.dot(CIE_CMF_Y)
+    val z = reflectance.dot(CIE_CMF_Z)
     return ColorXYZa(x, y, z)
 }
 
