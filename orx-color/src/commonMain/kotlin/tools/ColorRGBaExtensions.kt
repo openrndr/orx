@@ -3,6 +3,10 @@ package org.openrndr.extra.color.tools
 import org.openrndr.color.*
 import org.openrndr.extra.color.spaces.*
 
+val ColorRGBa.isOutOfGamut: Boolean
+    get() {
+        return (r !in -1E-3..1.0) || (g !in -1E-3..1.0) || (b !in -1E-3..1.0) || (alpha !in 0.0..1.0)
+    }
 fun ColorRGBa.matchLinearity(other: ColorRGBa): ColorRGBa {
     return if (other.linearity.isEquivalent(linearity)) {
         this
@@ -100,6 +104,31 @@ inline fun <reified T> ColorRGBa.mixedWith(other: ColorRGBa, factor: Double): Co
     return source.mix(target, factor).toRGBa().matchLinearity(this)
 }
 
+inline fun <reified T> ColorRGBa.mixChroma(chroma: Double, factor: Double): ColorRGBa
+        where T : ChromaColor<T>,
+              T : ColorModel<T>,
+              T : ConvertibleToColorRGBa =
+    convertTo<T>().mixChroma(chroma, factor).toRGBa().matchLinearity(this)
+
+inline fun <reified T> ColorRGBa.withChroma(chroma: Double): ColorRGBa
+        where T : ChromaColor<T>,
+              T : ColorModel<T>,
+              T : ConvertibleToColorRGBa =
+    convertTo<T>().withChroma(chroma).toRGBa().matchLinearity(this)
+
+inline fun <reified T> ColorRGBa.chroma(): Double
+        where T : ChromaColor<T>,
+              T : ColorModel<T>,
+              T : ConvertibleToColorRGBa =
+    convertTo<T>().chroma
+
+inline fun <reified T> ColorRGBa.modulateChroma(factor: Double): ColorRGBa
+        where T : ChromaColor<T>,
+              T : ColorModel<T>,
+              T : ConvertibleToColorRGBa =
+    convertTo<T>().modulateChroma(factor).toRGBa().matchLinearity(this)
+
+
 inline fun <reified T> ColorRGBa.saturate(factor: Double): ColorRGBa
         where T : SaturatableColor<T>,
               T : ColorModel<T>,
@@ -110,3 +139,13 @@ inline fun <reified T> ColorRGBa.shiftHue(degrees: Double): ColorRGBa where
         T : ColorModel<T>,
         T : ConvertibleToColorRGBa = convertTo<T>().shiftHue(degrees).toRGBa().matchLinearity(this)
 
+inline fun <reified T> ColorRGBa.clipChroma(): ColorRGBa
+        where T : ChromaColor<T>,
+              T : ColorModel<T>,
+              T : ConvertibleToColorRGBa =
+
+    if (isOutOfGamut) {
+        convertTo<T>().clipChroma().toRGBa().matchLinearity(this).clip()
+    } else {
+        this
+    }

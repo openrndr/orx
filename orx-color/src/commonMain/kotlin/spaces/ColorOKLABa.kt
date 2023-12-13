@@ -3,7 +3,9 @@ package org.openrndr.extra.color.spaces
 import kotlinx.serialization.Serializable
 import org.openrndr.color.*
 import org.openrndr.math.Vector4
+import kotlin.math.abs
 import kotlin.math.pow
+import kotlin.math.sign
 
 /**
  * Color in OKLab color space.
@@ -27,9 +29,10 @@ data class ColorOKLABa(val l: Double, val a: Double, val b: Double, override val
             val m = 0.2119034982 * c.r + 0.6806995451 * c.g + 0.1073969566 * c.b
             val s = 0.0883024619 * c.r + 0.2817188376 * c.g + 0.6299787005 * c.b
 
-            val lnl = l.pow(1.0 / 3.0)
-            val mnl = m.pow(1.0 / 3.0)
-            val snl = s.pow(1.0 / 3.0)
+            val lnl = abs(l).pow(1.0 / 3.0) * sign(l)
+            val mnl = abs(m).pow(1.0 / 3.0) * sign(m)
+            val snl = abs(s).pow(1.0 / 3.0) * sign(s)
+
 
             val L = 0.2104542553 * lnl + 0.7936177850 * mnl - 0.0040720468 * snl
             val a = 1.9779984951 * lnl - 2.4285922050 * mnl + 0.4505937099 * snl
@@ -68,9 +71,9 @@ data class ColorOKLABa(val l: Double, val a: Double, val b: Double, override val
 
     override fun toVector4() = Vector4(l, a, b, alpha)
     override val luminosity: Double
-        get() = l
+        get() = l * 100.0
 
-    override fun withLuminosity(luminosity: Double): ColorOKLABa = copy(l = luminosity)
+    override fun withLuminosity(luminosity: Double): ColorOKLABa = copy(l = luminosity / 100.0)
 }
 
 fun ColorRGBa.toOKLABa() = ColorOKLABa.fromRGBa(this)

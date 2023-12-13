@@ -51,16 +51,16 @@ data class ColorOKLCHa(val l: Double, val c: Double, val h: Double, override val
     override fun toRGBa(): ColorRGBa = toOKLABa().toRGBa()
     override fun toVector4(): Vector4 = Vector4(l, c, h, alpha)
     override val chroma: Double
-        get() = c
-    override fun withChroma(chroma: Double): ColorOKLCHa = copy(c = chroma)
+        get() = c * 100.0
+    override fun withChroma(chroma: Double): ColorOKLCHa = copy(c = chroma / 100.0)
     override val hue: Double
         get() = h
 
     override fun withHue(hue: Double): ColorOKLCHa = copy(h = hue)
     override val luminosity: Double
-        get() = l
+        get() = l * 100.0
 
-    override fun withLuminosity(luminosity: Double): ColorOKLCHa = copy(l = luminosity)
+    override fun withLuminosity(luminosity: Double): ColorOKLCHa = copy(l = luminosity / 100.0)
 }
 
 fun mix(left: ColorOKLCHa, right: ColorOKLCHa, x: Double): ColorOKLCHa {
