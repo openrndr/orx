@@ -66,6 +66,11 @@ inline fun <reified T> ColorRGBa.withLuminosity(luminosity: Double): ColorRGBa
               T : ColorModel<T>,
               T : ConvertibleToColorRGBa = convertTo<T>().withLuminosity(luminosity).toRGBa().matchLinearity(this)
 
+inline fun <reified T> ColorRGBa.luminosity(): Double
+        where T : LuminosityColor<T>,
+              T : ColorModel<T>,
+              T : ConvertibleToColorRGBa = convertTo<T>().luminosity
+
 inline fun <reified T> ColorRGBa.mixLuminosity(luminosity: Double, factor: Double): ColorRGBa
         where T : LuminosityColor<T>,
               T : ColorModel<T>,
