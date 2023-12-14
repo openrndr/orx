@@ -8,6 +8,7 @@ import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.math.Vector3
+import org.openrndr.shape.Rectangle
 
 @Description("Displace blend")
 class DisplaceBlend : Filter2to1(mppFilterShader(fx_displace_blend, "displace-blend")) {
@@ -42,7 +43,8 @@ class DisplaceBlend : Filter2to1(mppFilterShader(fx_displace_blend, "displace-bl
 
     var bicubicFiltering = true
     private var intermediate: ColorBuffer? = null
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
+        require(clip == null)
         if (source.size >= 2) {
             if (target[0] === source[0] || target[0] === source[1]) {
                 if (intermediate == null) {
@@ -53,7 +55,7 @@ class DisplaceBlend : Filter2to1(mppFilterShader(fx_displace_blend, "displace-bl
                 source[0].generateMipmaps()
                 source[0].filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
             }
-            super.apply(source, arrayOf(intermediate ?: target[0]))
+            super.apply(source, arrayOf(intermediate ?: target[0]), clip)
             intermediate?.copyTo(target[0])
         }
     }

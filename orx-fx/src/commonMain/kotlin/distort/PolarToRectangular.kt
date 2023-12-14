@@ -9,6 +9,7 @@ import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.Vector2Parameter
 import org.openrndr.math.Vector2
+import org.openrndr.shape.Rectangle
 
 @Description("Polar to rectangular")
 class PolarToRectangular : Filter1to1(mppFilterShader(fx_polar_to_rectangular, "polar-to-rectangular")) {
@@ -21,11 +22,11 @@ class PolarToRectangular : Filter1to1(mppFilterShader(fx_polar_to_rectangular, "
 
 
     var bicubicFiltering = true
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
         if (bicubicFiltering && source.isNotEmpty()) {
             source[0].generateMipmaps()
             source[0].filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
         }
-        super.apply(source, target)
+        super.apply(source, target, clip)
     }
 }

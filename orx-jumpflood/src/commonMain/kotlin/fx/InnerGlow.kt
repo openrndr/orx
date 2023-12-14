@@ -11,6 +11,7 @@ import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.math.Vector2
 import org.openrndr.resourceUrl
+import org.openrndr.shape.Rectangle
 
 private class InnerGlowFilter : Filter(filterShaderFromCode(jf_inner_glow, "inner-glow")) {
     var angle: Double by parameters
@@ -56,7 +57,7 @@ class InnerGlow : Filter1to1() {
     private val glowFilter = InnerGlowFilter()
     private var distance: ColorBuffer? = null
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
         if (jumpFlooder == null) {
             jumpFlooder = JumpFlooder(target[0].width, target[0].height, encodePoints = EncodeSubpixel())
         }
@@ -73,6 +74,6 @@ class InnerGlow : Filter1to1() {
         glowFilter.noise = noise
         glowFilter.shape = shape
         glowFilter.imageOpacity = imageOpacity
-        glowFilter.apply(arrayOf(source[0], distance!!), target[0])
+        glowFilter.apply(arrayOf(source[0], distance!!), target[0], clip)
     }
 }

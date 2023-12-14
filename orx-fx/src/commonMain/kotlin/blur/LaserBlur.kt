@@ -7,6 +7,7 @@ import org.openrndr.extra.fx.fx_laser_blur
 import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.*
 import org.openrndr.math.Vector2
+import org.openrndr.shape.Rectangle
 import kotlin.math.pow
 
 private class LaserBlurPass : Filter(mppFilterShader(fx_laser_blur, "laser-blur")) {
@@ -76,8 +77,7 @@ class LaserBlur : Filter1to1() {
 
     val intermediates = mutableListOf<ColorBuffer>()
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
-
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip:Rectangle?) {
         pass.center = center
         pass.radius = radius
         pass.amp0 = amp0
@@ -101,18 +101,18 @@ class LaserBlur : Filter1to1() {
 
         pass.linearInput = linearInput
         pass.linearOutput = true
-        pass.apply(source[0], intermediates[0])
+        pass.apply(source[0], intermediates[0], clip)
         for (i in 0 until passes - 1) {
             pass.linearInput = true
             pass.linearOutput = true
 
             pass.radius = 1.0 + pow(exp, i + 1.0) * radius //(1.0 + simplex(0, phase + i)) / 2.0
-            pass.apply(intermediates[i % 2], intermediates[(i + 1) % 2])
+            pass.apply(intermediates[i % 2], intermediates[(i + 1) % 2], clip)
         }
         pass.radius = 1.0 + pow(exp, (passes) * 1.0) * radius
         pass.linearInput = true
         pass.linearOutput = linearOutput
-        pass.apply(intermediates[(passes + 1) % 2], target[0])
+        pass.apply(intermediates[(passes + 1) % 2], target[0], clip)
     }
 }
 

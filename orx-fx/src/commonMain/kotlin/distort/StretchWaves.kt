@@ -7,6 +7,7 @@ import org.openrndr.extra.fx.fx_stretch_waves
 import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
+import org.openrndr.shape.Rectangle
 
 @Description("Stretch waves")
 class StretchWaves : Filter1to1(mppFilterShader(fx_stretch_waves, "stretch-waves")) {
@@ -34,11 +35,11 @@ class StretchWaves : Filter1to1(mppFilterShader(fx_stretch_waves, "stretch-waves
     }
 
     var bicubicFiltering = true
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
         if (bicubicFiltering && source.isNotEmpty()) {
             source[0].generateMipmaps()
             source[0].filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
         }
-        super.apply(source, target)
+        super.apply(source, target, clip)
     }
 }

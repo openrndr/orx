@@ -6,6 +6,7 @@ import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.math.Vector2
 import org.openrndr.shape.IntRectangle
+import org.openrndr.shape.Rectangle
 import kotlin.math.ceil
 import kotlin.math.log2
 import kotlin.math.max
@@ -38,7 +39,9 @@ class DirectionalField : Filter1to1() {
 
     private var fit: ColorBuffer? = null
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
+        require(clip == null)
+
         val advisedWidth = 2.0.pow(ceil(log2(source[0].effectiveWidth.toDouble()))).toInt()
         val advisedHeight = 2.0.pow(ceil(log2(source[0].effectiveHeight.toDouble()))).toInt()
         val advisedSize = max(advisedWidth, advisedHeight)

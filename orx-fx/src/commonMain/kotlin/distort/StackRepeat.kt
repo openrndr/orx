@@ -8,6 +8,7 @@ import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
+import org.openrndr.shape.Rectangle
 
 @Description("Stack repeat")
 class StackRepeat : Filter1to1(mppFilterShader(fx_stack_repeat, "stack-repeat")) {
@@ -43,11 +44,11 @@ class StackRepeat : Filter1to1(mppFilterShader(fx_stack_repeat, "stack-repeat"))
     }
 
     var bicubicFiltering = true
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
         if (bicubicFiltering && source.isNotEmpty()) {
             source[0].generateMipmaps()
             source[0].filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
         }
-        super.apply(source, target)
+        super.apply(source, target, clip)
     }
 }

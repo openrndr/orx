@@ -9,6 +9,7 @@ import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.math.Vector2
 import org.openrndr.resourceUrl
+import org.openrndr.shape.Rectangle
 
 private class InpaintFilter : Filter(filterShaderFromCode(jf_inpaint, "inpaint")) {
 
@@ -50,7 +51,7 @@ class Inpaint : Filter1to1() {
 
     private var distance: ColorBuffer? = null
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
         if (jumpFlooder == null) {
             jumpFlooder = JumpFlooder(target[0].width, target[0].height, encodePoints = EncodeSubpixel())
         }
@@ -67,6 +68,6 @@ class Inpaint : Filter1to1() {
         inpaintFilter.opacity = opacity
         inpaintFilter.shape = shape
         inpaintFilter.width = width
-        inpaintFilter.apply(arrayOf(source[0], distance!!), target[0])
+        inpaintFilter.apply(arrayOf(source[0], distance!!), target[0], clip)
     }
 }

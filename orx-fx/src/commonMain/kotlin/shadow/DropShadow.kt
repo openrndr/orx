@@ -12,6 +12,7 @@ import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
 import org.openrndr.math.Vector2
+import org.openrndr.shape.Rectangle
 
 private class Blend : Filter(mppFilterShader(fx_dropshadow_blend, "dropshadow-blend")) {
     var shift: Vector2 by parameters
@@ -45,7 +46,7 @@ class DropShadow : Filter1to1(mppFilterShader(fx_dropshadow_blur, "dropshadow-bl
         gain = 1.0
     }
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
         intermediate?.let {
             if (it.width != target[0].width || it.height != target[0].height) {
                 intermediate = null
@@ -65,13 +66,13 @@ class DropShadow : Filter1to1(mppFilterShader(fx_dropshadow_blur, "dropshadow-bl
 
         intermediate?.let {
             parameters["blurDirection"] = Vector2(1.0, 0.0)
-            super.apply(source, arrayOf(it))
+            super.apply(source, arrayOf(it), clip)
 
             parameters["blurDirection"] = Vector2(0.0, 1.0)
-            super.apply(arrayOf(it), arrayOf(intermediate2!!))
+            super.apply(arrayOf(it), arrayOf(intermediate2!!), clip)
 
             b.shift = (Vector2(xShift,yShift)) / Vector2(target[0].width * 1.0, target[0].height * 1.0)
-            b.apply(arrayOf(intermediate2!!, source[0]), target)
+            b.apply(arrayOf(intermediate2!!, source[0]), target, clip)
         }
     }
 }

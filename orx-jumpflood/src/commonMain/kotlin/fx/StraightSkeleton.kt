@@ -10,6 +10,7 @@ import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.math.Vector2
 import org.openrndr.resourceUrl
+import org.openrndr.shape.Rectangle
 import kotlin.math.sqrt
 
 private class StraightSkeletonFilter : Filter(filterShaderFromCode(jf_straight_skeleton, "straight-skeleton")) {
@@ -56,7 +57,7 @@ class StraightSkeleton : Filter() {
     private val decodeFilter = PixelDirection()
     private val skeletonFilter = StraightSkeletonFilter()
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
         if (thresholded == null) {
             thresholded = colorBuffer(target[0].width, target[0].height, format = ColorFormat.R)
         }
@@ -83,6 +84,6 @@ class StraightSkeleton : Filter() {
         skeletonFilter.skeletonColor = skeletonColor
         skeletonFilter.backgroundColor = backgroundColor
         skeletonFilter.foregroundColor = foregroundColor
-        skeletonFilter.apply(copied!!, target[0])
+        skeletonFilter.apply(copied!!, target[0], clip)
     }
 }

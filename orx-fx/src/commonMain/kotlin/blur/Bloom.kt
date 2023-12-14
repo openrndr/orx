@@ -9,6 +9,7 @@ import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
+import org.openrndr.shape.Rectangle
 
 @Description("Bloom")
 class Bloom(blur: Filter = ApproximateGaussianBlur()) : Filter1to1(mppFilterShader(fx_bloom, "bloom")) {
@@ -51,7 +52,7 @@ class Bloom(blur: Filter = ApproximateGaussianBlur()) : Filter1to1(mppFilterShad
 
     private val blendAdd = Add()
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
         val src = source[0]
         val dest = target[0]
 
@@ -81,7 +82,7 @@ class Bloom(blur: Filter = ApproximateGaussianBlur()) : Filter1to1(mppFilterShad
                 blur.apply(bufferCurrA, bufferNextB)
                 blendAdd.apply(arrayOf(bufferNextA, bufferNextB), bufferNextA)
             } else {
-                super.apply(arrayOf(src, bufferCurrA), target)
+                super.apply(arrayOf(src, bufferCurrA), target, clip)
             }
         }
     }

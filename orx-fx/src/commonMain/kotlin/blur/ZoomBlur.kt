@@ -8,6 +8,7 @@ import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.math.Vector2
+import org.openrndr.shape.Rectangle
 
 @Description("Zoom Blur")
 class ZoomBlur : Filter1to1(mppFilterShader(fx_zoom_blur, "zoom-blur")) {
@@ -23,7 +24,8 @@ class ZoomBlur : Filter1to1(mppFilterShader(fx_zoom_blur, "zoom-blur")) {
 
     private var intermediate: ColorBuffer? = null
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
+        require(clip == null)
         intermediate?.let {
             if (it.width != target[0].width || it.height != target[0].height) {
                 intermediate = null
@@ -37,9 +39,7 @@ class ZoomBlur : Filter1to1(mppFilterShader(fx_zoom_blur, "zoom-blur")) {
 
         intermediate?.let {
             parameters["dimensions"] = Vector2(it.effectiveWidth.toDouble(), it.effectiveHeight.toDouble())
-
-            super.apply(source, arrayOf(it))
-
+            super.apply(source, arrayOf(it), clip)
             it.copyTo(target[0])
         }
     }

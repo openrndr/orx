@@ -12,6 +12,7 @@ import org.openrndr.extra.parameters.IntParameter
 
 import org.openrndr.math.Vector2
 import org.openrndr.math.asRadians
+import org.openrndr.shape.Rectangle
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -60,8 +61,8 @@ class LineBlur : Filter1to1(mppFilterShader(fx_box_blur, "line-blur")) {
         wrapY = false
     }
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
         parameters["blurDirection"] = Vector2(cos(blurAngle.asRadians), sin(blurAngle.asRadians))
-        super.apply(source, target)
+        super.apply(source, target, clip)
     }
 }

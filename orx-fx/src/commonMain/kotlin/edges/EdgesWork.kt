@@ -10,6 +10,7 @@ import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.IntParameter
 import org.openrndr.math.Vector2
+import org.openrndr.shape.Rectangle
 
 internal class EdgesWork1 : Filter(mppFilterShader(fx_edges_work_1, "edges-work-1")) {
     var delta: Vector2 by parameters
@@ -38,7 +39,7 @@ open class EdgesWork : Filter1to1(mppFilterShader(fx_edges_work_2, "edges-work-2
         delta = Vector2.ZERO
     }
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
         val intermediateDescription = ColorBufferDescription(
             target[0].width,
             target[0].height,
@@ -52,10 +53,10 @@ open class EdgesWork : Filter1to1(mppFilterShader(fx_edges_work_2, "edges-work-2
 
         intermediate.let {
             work1.delta = Vector2(radius / it.effectiveWidth.toDouble(), 0.0)
-            work1.apply(source, arrayOf(it))
+            work1.apply(source, arrayOf(it), clip)
 
             parameters["delta"] = Vector2(0.0, radius / it.effectiveHeight.toDouble())
-            super.apply(arrayOf(it), target)
+            super.apply(arrayOf(it), target, clip)
         }
     }
 }

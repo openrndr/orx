@@ -1,3 +1,5 @@
+@file:Suppress("RUNTIME_ANNOTATION_NOT_SUPPORTED")
+
 package org.openrndr.extra.jumpfill.fx
 
 import org.openrndr.draw.*
@@ -9,6 +11,7 @@ import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.math.Vector2
 import org.openrndr.resourceUrl
+import org.openrndr.shape.Rectangle
 
 private class InnerBevelFilter : Filter(filterShaderFromCode(jf_inner_bevel, "inner-bevel")) {
     var angle: Double by parameters
@@ -45,7 +48,7 @@ class InnerBevel : Filter1to1() {
 
     private var distance: ColorBuffer? = null
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
         if (jumpFlooder == null) {
             jumpFlooder = JumpFlooder(target[0].width, target[0].height, encodePoints = EncodeSubpixel())
         }
@@ -60,6 +63,6 @@ class InnerBevel : Filter1to1() {
         bevelFilter.angle = angle
         bevelFilter.width = width
         bevelFilter.noise = noise
-        bevelFilter.apply(arrayOf(source[0], distance!!), target[0])
+        bevelFilter.apply(arrayOf(source[0], distance!!), target[0], clip)
     }
 }

@@ -8,6 +8,7 @@ import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
+import org.openrndr.shape.Rectangle
 
 @Description("Block repeat")
 class BlockRepeat : Filter1to1(mppFilterShader(fx_block_repeat, "block-repeat")) {
@@ -38,12 +39,12 @@ class BlockRepeat : Filter1to1(mppFilterShader(fx_block_repeat, "block-repeat"))
     @BooleanParameter("bicubic filtering")
     var bicubicFiltering: Boolean by parameters
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
         if (bicubicFiltering && source.isNotEmpty()) {
             source[0].generateMipmaps()
             source[0].filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
         }
-        super.apply(source, target)
+        super.apply(source, target, clip)
     }
 
     init {

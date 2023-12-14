@@ -10,6 +10,7 @@ import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.math.Vector2
 import org.openrndr.resourceUrl
+import org.openrndr.shape.Rectangle
 
 private class SkeletonFilter : Filter(filterShaderFromCode(jf_skeleton, "skeleton")) {
     var skeletonColor: ColorRGBa by parameters
@@ -50,7 +51,9 @@ class Skeleton : Filter() {
     private val decodeFilter = PixelDistance()
     private val skeletonFilter = SkeletonFilter()
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
+        require(clip == null)
+
         if (thresholded == null) {
             thresholded = colorBuffer(target[0].width, target[0].height, format = ColorFormat.R)
         }

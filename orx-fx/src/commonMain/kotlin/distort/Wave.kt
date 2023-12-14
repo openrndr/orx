@@ -9,6 +9,7 @@ import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
+import org.openrndr.shape.Rectangle
 
 @Description("Horizontal wave")
 class HorizontalWave : Filter1to1(mppFilterShader(fx_horizontal_wave, "horizontal-wave")) {
@@ -32,12 +33,12 @@ class HorizontalWave : Filter1to1(mppFilterShader(fx_horizontal_wave, "horizonta
     }
 
     var bicubicFiltering = true
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
         if (bicubicFiltering && source.isNotEmpty()) {
             source[0].generateMipmaps()
             source[0].filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
         }
-        super.apply(source, target)
+        super.apply(source, target, clip)
     }
 }
 
@@ -63,11 +64,11 @@ class VerticalWave : Filter1to1(mppFilterShader(fx_vertical_wave, "vertical-wave
     }
     var bicubicFiltering = true
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
         if (bicubicFiltering && source.isNotEmpty()) {
             source[0].generateMipmaps()
             source[0].filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
         }
-        super.apply(source, target)
+        super.apply(source, target, clip)
     }
 }

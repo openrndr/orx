@@ -8,6 +8,7 @@ import org.openrndr.extra.fx.fx_frame_blur
 import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
+import org.openrndr.shape.Rectangle
 
 @Description("Frame blur")
 class FrameBlur(val colorType: ColorType = ColorType.FLOAT16) :
@@ -22,7 +23,8 @@ class FrameBlur(val colorType: ColorType = ColorType.FLOAT16) :
         blend = 0.5
     }
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
+        require(clip == null)
         if (source.isNotEmpty() && target.isNotEmpty()) {
             intermediate?.let {
                 if (it.isEquivalentTo(target[0], ignoreFormat = true, ignoreLevels = true)) {
@@ -36,7 +38,7 @@ class FrameBlur(val colorType: ColorType = ColorType.FLOAT16) :
                 intermediate?.fill(ColorRGBa.TRANSPARENT)
             }
 
-            super.apply(arrayOf(source[0], intermediate!!), arrayOf(intermediate!!))
+            super.apply(arrayOf(source[0], intermediate!!), arrayOf(intermediate!!), clip)
             intermediate!!.copyTo(target[0])
         }
     }

@@ -4,6 +4,7 @@ import org.openrndr.draw.ColorBuffer
 import org.openrndr.draw.Filter
 import org.openrndr.draw.createEquivalent
 import org.openrndr.draw.isEquivalentTo
+import org.openrndr.shape.Rectangle
 
 /**
  * @param first the filter that is applied first
@@ -26,15 +27,15 @@ class CompositeFilter<F0 : Filter, F1 : Filter>(
 ) : Filter() {
     private var intermediate: ColorBuffer? = null
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
         val firstSource = firstSource(source.toList()).toTypedArray()
         if (!useIntermediateBuffer) {
             first.firstParameters()
-            first.apply(firstSource, target)
+            first.apply(firstSource, target, clip)
 
             second.secondParameters()
             val secondSource = secondSource(source.toList(), target.first()).toTypedArray()
-            second.apply(secondSource, target)
+            second.apply(secondSource, target, clip)
         } else {
             val li = intermediate
             if (li != null && !li.isEquivalentTo(target.first())) {
@@ -45,10 +46,10 @@ class CompositeFilter<F0 : Filter, F1 : Filter>(
                 intermediate = target.first().createEquivalent()
             }
             first.firstParameters()
-            first.apply(firstSource, arrayOf(intermediate!!))
+            first.apply(firstSource, arrayOf(intermediate!!), clip)
             val secondSource = secondSource(source.toList(), intermediate!!).toTypedArray()
             second.secondParameters()
-            second.apply(secondSource, target)
+            second.apply(secondSource, target, clip)
         }
     }
 

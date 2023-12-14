@@ -10,6 +10,7 @@ import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
+import org.openrndr.shape.Rectangle
 
 @Description("Perspective plane")
 class PerspectivePlane : Filter1to1(mppFilterShader(fx_perspective_plane, "perspective-plane")) {
@@ -43,7 +44,7 @@ class PerspectivePlane : Filter1to1(mppFilterShader(fx_perspective_plane, "persp
         tile = false
     }
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
         source[0].generateMipmaps()
         source[0].filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
         source[0].wrapU = WrapMode.REPEAT
@@ -55,6 +56,6 @@ class PerspectivePlane : Filter1to1(mppFilterShader(fx_perspective_plane, "persp
             rotate(Vector3.UNIT_Y, planeYaw)
             rotate(Vector3.UNIT_Z, planeRoll)
         }
-        super.apply(source, target)
+        super.apply(source, target, clip)
     }
 }

@@ -10,6 +10,7 @@ import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
 
 import org.openrndr.math.Vector2
+import org.openrndr.shape.Rectangle
 
 /**
  * BoxBlur implemented as a separable filter
@@ -45,7 +46,7 @@ class BoxBlur : Filter1to1(mppFilterShader(fx_box_blur,"box-blur")) {
         gain = 1.0
     }
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
         val intermediateDescription = ColorBufferDescription(target[0].width, target[0].height, target[0].contentScale, target[0].format, target[0].type)
         val intermediate = intermediateCache.getOrPut(intermediateDescription) {
             colorBuffer(target[0].width, target[0].height, target[0].contentScale, target[0].format, target[0].type)
@@ -55,10 +56,10 @@ class BoxBlur : Filter1to1(mppFilterShader(fx_box_blur,"box-blur")) {
         parameters["wrapY"] = false
         intermediate.let {
             parameters["blurDirection"] = Vector2(1.0, 0.0)
-            super.apply(source, arrayOf(it))
+            super.apply(source, arrayOf(it), clip)
 
             parameters["blurDirection"] = Vector2(0.0, 1.0)
-            super.apply(arrayOf(it), target)
+            super.apply(arrayOf(it), target, clip)
         }
     }
 }

@@ -3,6 +3,7 @@ package org.openrndr.extra.fx.color
 import org.openrndr.draw.*
 import org.openrndr.extra.fx.fx_color_lookup
 import org.openrndr.extra.fx.mppFilterShader
+import org.openrndr.shape.Rectangle
 
 class ColorLookup(lookup: ColorBuffer) : Filter1to1(mppFilterShader(fx_color_lookup, "color-lookup")) {
     /** a color look-up texture */
@@ -24,8 +25,8 @@ class ColorLookup(lookup: ColorBuffer) : Filter1to1(mppFilterShader(fx_color_loo
         this.seed = 0.0
     }
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
         lookup.filter(MinifyingFilter.LINEAR, MagnifyingFilter.LINEAR)
-        super.apply(source, target)
+        super.apply(source, target, clip)
     }
 }

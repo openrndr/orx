@@ -14,6 +14,7 @@ import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
 import org.openrndr.filter.color.delinearize
 import org.openrndr.filter.color.linearize
+import org.openrndr.shape.Rectangle
 
 class BloomDownscale : Filter(mppFilterShader(fx_bloom_downscale,"bloom-downscale"))
 
@@ -76,7 +77,8 @@ open class MipBloom<T : Filter>(val blur: T) : Filter1to1(mppFilterShader(fx_blo
     val downScale = BloomDownscale()
     val combine = BloomCombine()
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
+        require(clip == null)
         sourceCopy?.let {
             if (!it.isEquivalentTo(source[0], ignoreType = true)) {
                 it.destroy()
@@ -106,26 +108,26 @@ open class MipBloom<T : Filter>(val blur: T) : Filter1to1(mppFilterShader(fx_blo
 
 
         if (sRGB) {
-            linearize.apply(sourceCopy!!, sourceCopy!!)
+            linearize.apply(sourceCopy!!, sourceCopy!!, clip)
         }
 
         upscale.noiseGain = noiseGain
         upscale.noiseSeed = noiseSeed
-        downScale.apply(sourceCopy!!, intermediates[0])
-        blur.apply(intermediates[0], intermediates[0])
+        downScale.apply(sourceCopy!!, intermediates[0], clip)
+        blur.apply(intermediates[0], intermediates[0], clip)
 
         for (pass in 1 until passes) {
-            downScale.apply(intermediates[pass - 1], intermediates[pass])
-            blur.apply(intermediates[pass], intermediates[pass])
+            downScale.apply(intermediates[pass - 1], intermediates[pass], clip)
+            blur.apply(intermediates[pass], intermediates[pass], clip)
         }
 
-        upscale.apply(intermediates.toTypedArray(), arrayOf(target[0]))
+        upscale.apply(intermediates.toTypedArray(), arrayOf(target[0]), clip)
         combine.gain = gain
         combine.pregain = pregain
-        combine.apply(arrayOf(sourceCopy!!, target[0]), target)
+        combine.apply(arrayOf(sourceCopy!!, target[0]), target, clip)
 
         if (sRGB) {
-            delinearize.apply(target[0], target[0])
+            delinearize.apply(target[0], target[0], clip)
         }
     }
 }
@@ -145,10 +147,10 @@ class HashBloom : MipBloom<HashBlur>(blur = HashBlur()) {
     @IntParameter("number of samples", 1, 100)
     var samples: Int = 30
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
         blur.radius = radius
         blur.samples = samples
-        super.apply(source, target)
+        super.apply(source, target, clip)
     }
 }
 
@@ -166,9 +168,9 @@ class GaussianBloom : MipBloom<GaussianBlur>(blur = GaussianBlur()) {
     @DoubleParameter("kernel sigma", 0.0, 25.0)
     var sigma: Double = 1.0
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
         blur.window = window
         blur.sigma = sigma
-        super.apply(source, target)
+        super.apply(source, target, clip)
     }
 }

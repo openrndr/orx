@@ -6,6 +6,7 @@ import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector4
 import org.openrndr.resourceUrl
+import org.openrndr.shape.Rectangle
 import org.openrndr.shape.Shape
 import org.openrndr.shape.ShapeContour
 
@@ -76,7 +77,7 @@ class ShapeSDF : Filter(filterShaderFromCode(jf_shape_sdf, "shape-sdf")) {
         segmentCount = from.size
     }
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
         require(target[0].type == ColorType.FLOAT16 || target[0].type == ColorType.FLOAT32) {
             "needs a floating point target"
         }
@@ -85,6 +86,6 @@ class ShapeSDF : Filter(filterShaderFromCode(jf_shape_sdf, "shape-sdf")) {
         parameters["segmentCount"] = segmentCount
         // -- bit of an hack
         val effectiveSource = if (source.isNotEmpty()) source else target
-        super.apply(effectiveSource, target)
+        super.apply(effectiveSource, target, clip)
     }
 }

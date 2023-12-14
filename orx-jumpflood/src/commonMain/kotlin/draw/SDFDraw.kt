@@ -8,6 +8,7 @@ import org.openrndr.extra.jumpflood.jf_sdf_stroke_fill
 import org.openrndr.extra.parameters.ColorParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
+import org.openrndr.shape.Rectangle
 
 @Description("SDF stroke and fill")
 class SDFStrokeFill : Filter(filterShaderFromCode(jf_sdf_stroke_fill, "sdf-stroke-fill")) {
@@ -33,9 +34,5 @@ class SDFStrokeFill : Filter(filterShaderFromCode(jf_sdf_stroke_fill, "sdf-strok
         strokeColor = ColorRGBa.BLACK
         fillColor = ColorRGBa.WHITE
 
-    }
-
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
-        super.apply(source, target)
     }
 }

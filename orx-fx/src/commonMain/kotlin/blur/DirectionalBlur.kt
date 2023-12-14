@@ -9,6 +9,7 @@ import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
+import org.openrndr.shape.Rectangle
 
 /**
  * Directional blur filter. Takes source image and direction buffer inputs
@@ -56,9 +57,9 @@ class DirectionalBlur : Filter2to1(mppFilterShader(fx_directional_blur, "directi
         centerWindow = false
     }
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
         parameters["wrapX"] = false
         parameters["wrapY"] = false
-        super.apply(source, target)
+        super.apply(source, target, clip)
     }
 }
