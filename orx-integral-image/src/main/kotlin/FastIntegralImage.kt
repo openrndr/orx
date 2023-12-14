@@ -5,6 +5,7 @@ import org.openrndr.extra.fx.blend.Passthrough
 
 import org.openrndr.math.Vector2
 import org.openrndr.resourceUrl
+import org.openrndr.shape.Rectangle
 
 
 class FastIntegralImageFilter : Filter(filterShaderFromUrl(resourceUrl(
@@ -38,8 +39,8 @@ class FastIntegralImage : Filter(filterShaderFromUrl(resourceUrl(
         return sampleCounts
     }
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
-
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
+        require(clip == null)
         val sampleCountBase = 16
         val xSampleCounts = sampleCounts(source[0].width, sampleCountBase)
         val ySampleCounts = sampleCounts(source[0].height, sampleCountBase)

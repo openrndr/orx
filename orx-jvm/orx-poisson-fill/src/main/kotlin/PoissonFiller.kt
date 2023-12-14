@@ -2,6 +2,7 @@ package org.openrndr.poissonfill
 
 import org.openrndr.draw.*
 import org.openrndr.resourceUrl
+import org.openrndr.shape.Rectangle
 
 internal class FillBoundary : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/poisson/fill-boundary.frag")))
 internal class FillCombine : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/poisson/fill-combine.frag")))
@@ -41,7 +42,8 @@ class PoissonFiller(val width: Int, val height: Int, type: ColorType = ColorType
  */
 class PoissonFill : Filter1to1() {
     private var filler: PoissonFiller? = null
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
+        require(clip == null)
         if (target.isNotEmpty()) {
             filler?.let {
                 if (it.width != target[0].effectiveWidth || it.height != target[0].effectiveHeight) {

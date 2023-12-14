@@ -6,6 +6,7 @@ import org.openrndr.extra.fx.blend.Subtract
 import org.openrndr.filter.color.delinearize
 import org.openrndr.filter.color.linearize
 import org.openrndr.resourceUrl
+import org.openrndr.shape.Rectangle
 
 internal class BlendBoundary : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/poisson/blend-boundary.frag")))
 class AlphaToBitmap : Filter(filterShaderFromUrl(resourceUrl("/shaders/gl3/poisson/alpha-to-bitmap.frag")))
@@ -71,7 +72,8 @@ class PoissonBlend: Filter2to1() {
     val alphaToBitmap = AlphaToBitmap()
     var mask: ColorBuffer? = null
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
+        require(clip == null)
         if (target.isNotEmpty()) {
 
             mask?.let {

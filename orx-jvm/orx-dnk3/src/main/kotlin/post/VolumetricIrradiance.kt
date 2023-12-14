@@ -6,6 +6,7 @@ import org.openrndr.extra.shaderphrases.preprocessShader
 import org.openrndr.math.IntVector3
 import org.openrndr.math.Matrix44
 import org.openrndr.resourceUrl
+import org.openrndr.shape.Rectangle
 import java.net.URL
 
 fun preprocessedFilterShaderFromUrl(url: String): Shader {
@@ -30,7 +31,8 @@ class VolumetricIrradiance : Filter(preprocessedFilterShaderFromUrl(resourceUrl(
         projectionMatrixInverse = Matrix44.IDENTITY
     }
 
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>) {
+    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
+        require(clip == null)
         irradianceSH?.shMap?.let {
             parameters["shMap"] = it
         }
@@ -39,7 +41,7 @@ class VolumetricIrradiance : Filter(preprocessedFilterShaderFromUrl(resourceUrl(
             parameters["shMapOffset"] = it.offset
             parameters["shMapSpacing"] = it.spacing
         }
-        super.apply(source, target)
+        super.apply(source, target, clip)
     }
 }
 
