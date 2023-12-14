@@ -252,3 +252,8 @@ shaping `curve` within this range:
 [source code](src/jvmDemo/kotlin/DemoPost01.kt)
 
 ![DemoPost01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoPost01Kt.png)
+
+### DemoSpectralBlend01
+[source code](src/jvmDemo/kotlin/DemoSpectralBlend01.kt)
+
+![DemoSpectralBlend01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoSpectralBlend01Kt.png)
