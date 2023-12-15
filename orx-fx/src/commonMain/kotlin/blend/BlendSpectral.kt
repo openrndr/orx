@@ -42,31 +42,39 @@ vec3 linear_to_srgb(vec3 c) {
 void main() {
     vec4 a = texture(tex0, v_texCoord0);
     vec4 b = texture(tex1, v_texCoord0);
+    
+    // depremultiply alpha
+    vec4 na = a.a == 0.0 ? vec4(0.0): vec4(a.rgb / a.a,a.a);
+    vec4 nb = b.a == 0.0 ? vec4(0.0): vec4(b.rgb / b.a,b.a);
+
+    
     if (linearizeInputA) {
-        a.rgb = srgb_to_linear(a.rgb);
+        na.rgb = srgb_to_linear(na.rgb);
     }
     
     if (linearizeInputB) {
-        b.rgb = srgb_to_linear(b.rgb);
+        nb.rgb = srgb_to_linear(nb.rgb);
     }
     
-    // depremultiply alpha
-    vec3 na = a.a == 0.0 ? vec3(0.0): a.rgb / a.a;
-    vec3 nb = b.a == 0.0 ? vec3(0.0): b.rgb / b.a;
+    vec4 mixed = vec4(spectral_mix(na.rgb, nb.rgb, min(1.0, fill)), 1.0);
 
-    vec4 mixed = vec4(spectral_mix(na, nb, min(1.0,  b.a * fill) ), min(a.a, b.a));
-
-    // premultiply alpha
-    mixed.rgb *= mixed.a;    
-    
     if (!clip) {
-        vec4 b_over_a = a * (1.0 - b.a) + b;    
-        mixed = b_over_a * (1.0-mixed.a)  + mixed;
+        na.rgb *= a.a;
+        nb.rgb *= b.a;
+        mixed = na * (1.0 - nb.a) + nb * (1.0 - na.a) + mixed * na.a * nb.a; 
+    } else {
+        mixed = mixed * na.a * nb.a;        
     }
+
+    mixed.rgb = mixed.a == 0.0 ? vec3(0.0): mixed.rgb / mixed.a;
 
     if (delinearizeOutput) {
          mixed.rgb = linear_to_srgb(mixed.rgb);
     }
+
+// premultiply alpha
+    mixed.rgb *= mixed.a;    
+    
 
     o_color = mixed;
 }
