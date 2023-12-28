@@ -10,8 +10,15 @@ import kotlin.math.floor
 /**
  * RectifiedContour provides an approximately uniform parameterization for [ShapeContour]
  */
-class RectifiedContour(val contour: ShapeContour, distanceTolerance: Double = 0.5, lengthScale: Double = 1.0, ) {
-    val points = contour.equidistantPositionsWithT((contour.length * lengthScale).toInt().coerceAtLeast(2), distanceTolerance)
+class RectifiedContour(val contour: ShapeContour, distanceTolerance: Double = 0.5, lengthScale: Double = 1.0) {
+    val points =
+        contour.equidistantPositionsWithT((contour.length * lengthScale).toInt().coerceAtLeast(2), distanceTolerance)
+
+    val intervals by lazy {
+        points.zipWithNext().map {
+            Pair(it.first.second, it.second.second)
+        }
+    }
 
     private fun safe(t: Double): Double {
         return if (contour.closed) {
@@ -40,6 +47,35 @@ class RectifiedContour(val contour: ShapeContour, distanceTolerance: Double = 0.
                 1.0
             } else {
                 (points[i0].second * (1.0 - fr) + points[i1].second * fr)
+            }
+        }
+    }
+
+    fun inverseRectify(t: Double): Double {
+        if (contour.empty) {
+            return 0.0
+        } else {
+            if (t <= 0.0) {
+                return 0.0
+            } else if (t >= 1.0) {
+                return 1.0
+            } else {
+                val index = intervals.binarySearch {
+                    if (t < it.first) {
+                        1
+                    } else if (t > it.second) {
+                        -1
+                    } else {
+                        0
+                    }
+                }
+                val t0 = t - intervals[index].first
+                val dt = intervals[index].second - intervals[index].first
+                val f = t0 / dt
+                val f0 = index.toDouble() / intervals.size
+                val f1 = (index + 1.0) / intervals.size
+
+                return f0 * (1.0 - f) + f1 * f
             }
         }
     }
