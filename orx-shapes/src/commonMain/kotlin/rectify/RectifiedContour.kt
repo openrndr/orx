@@ -1,5 +1,6 @@
 package org.openrndr.extra.shapes.rectify
 
+import org.openrndr.extra.shapes.utilities.splitAt
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.math.clamp
@@ -122,6 +123,14 @@ class RectifiedContour(val contour: ShapeContour, distanceTolerance: Double = 0.
         } else {
             contour.sub(rectify(t0), rectify(t1))
         }
+    }
+
+    /**
+     * Split contour at [ascendingTs]
+     * @since orx 0.4.4
+     */
+    fun splitAt(ascendingTs: List<Double>, weldEpsilon: Double = 1E-6): List<ShapeContour> {
+        return contour.splitAt(ascendingTs.map { rectify(it) }, weldEpsilon)
     }
 }
 
