@@ -1,7 +1,7 @@
 [versions]
 kotlinApi = "1.9"
 kotlinLanguage = "1.9"
-kotlin = "1.9.21"
+kotlin = "1.9.22"
 jvmTarget = "11"
 openrndr = { require = "[0.4.2, 0.5.0)" }
 kotlinxCoroutines = "1.7.3"
@@ -14,7 +14,7 @@ gradleNexusPublish = "2.0.0-rc-1"
 boofcv = "1.1.2"
 kluent = "1.73"
 junitJupiter = "5.10.1"
-slf4j = "2.0.9"
+slf4j = "2.0.10"
 libfreenect = "0.5.7-1.5.9"
 librealsense = "2.53.1-1.5.9"
 gson = "2.10.1"
