@@ -49,6 +49,16 @@ Collection of 2D shape generators and modifiers.
 
 ![DemoArc01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoArc01Kt.png)
 
+### DemoArrangement01
+[source code](src/jvmDemo/kotlin/DemoArrangement01.kt)
+
+![DemoArrangement01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoArrangement01Kt.png)
+
+### DemoArrangement02
+[source code](src/jvmDemo/kotlin/DemoArrangement02.kt)
+
+![DemoArrangement02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoArrangement02Kt.png)
+
 ### DemoBezierPatch01
 [source code](src/jvmDemo/kotlin/DemoBezierPatch01.kt)
 
