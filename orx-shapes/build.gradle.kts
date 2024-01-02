@@ -10,6 +10,7 @@ kotlin {
                 implementation(project(":orx-parameters"))
                 implementation(project(":orx-shader-phrases"))
                 implementation(project(":orx-color"))
+                implementation(project(":orx-kdtree"))
                 implementation(libs.openrndr.application)
                 implementation(libs.openrndr.draw)
                 implementation(libs.openrndr.filter)
