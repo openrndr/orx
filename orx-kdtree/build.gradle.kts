@@ -1,15 +1,23 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-    org.openrndr.extra.convention.`kotlin-jvm`
+    org.openrndr.extra.convention.`kotlin-multiplatform`
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.freeCompilerArgs = listOf("-opt-in=kotlin.RequiresOptIn")
+
+kotlin {
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation(libs.openrndr.application)
+                api(libs.openrndr.math)
+                implementation(libs.kotlin.coroutines)
+                api(libs.openrndr.utils)
+            }
+        }
+    }
 }
 
-dependencies {
-    implementation(libs.openrndr.application)
-    implementation(libs.openrndr.math)
-    implementation(libs.kotlin.coroutines)
-}
+
+
+//tasks.withType<KotlinCompile> {
+//    kotlinOptions.freeCompilerArgs = listOf("-opt-in=kotlin.RequiresOptIn")
+//}

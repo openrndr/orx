@@ -51,6 +51,7 @@ kotest-framework-engine = { group = "io.kotest", name = "kotest-framework-engine
 openrndr-application = { group = "org.openrndr", name = "openrndr-application", version.ref = "openrndr" }
 openrndr-extensions = { group = "org.openrndr", name = "openrndr-extensions", version.ref = "openrndr" }
 openrndr-math = { group = "org.openrndr", name = "openrndr-math", version.ref = "openrndr" }
+openrndr-utils = { group = "org.openrndr", name = "openrndr-utils", version.ref = "openrndr" }
 openrndr-shape = { group = "org.openrndr", name = "openrndr-shape", version.ref = "openrndr" }
 openrndr-draw = { group = "org.openrndr", name = "openrndr-draw", version.ref = "openrndr" }
 openrndr-event = { group = "org.openrndr", name = "openrndr-event", version.ref = "openrndr" }

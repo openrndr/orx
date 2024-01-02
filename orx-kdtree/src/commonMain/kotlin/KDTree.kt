@@ -1,45 +1,10 @@
 package org.openrndr.extra.kdtree
 
-import kotlinx.coroutines.*
-import org.openrndr.math.*
-import java.util.*
-import kotlin.IllegalStateException
+
+import org.openrndr.collections.PriorityQueue
 import kotlin.math.abs
 
-/** built-in mapper for [Vector2] */
-fun vector2Mapper(v: Vector2, dimension: Int): Double {
-    return when (dimension) {
-        0 -> v.x
-        else -> v.y
-    }
-}
 
-fun intVector2Mapper(v: IntVector2, dimension: Int): Double {
-    return when (dimension) {
-        0 -> v.x.toDouble()
-        else -> v.y.toDouble()
-    }
-}
-
-
-/** built-in mapper for [Vector3] */
-fun vector3Mapper(v: Vector3, dimension: Int): Double {
-    return when (dimension) {
-        0 -> v.x
-        1 -> v.y
-        else -> v.z
-    }
-}
-
-/** built-in mapper for [Vector4] */
-fun vector4Mapper(v: Vector4, dimension: Int): Double {
-    return when (dimension) {
-        0 -> v.x
-        1 -> v.y
-        2 -> v.z
-        else -> v.w
-    }
-}
 
 class KDTreeNode<T>(val dimensions: Int, val mapper: (T, Int) -> Double) {
     var parent: KDTreeNode<T>? = null
@@ -76,8 +41,7 @@ class KDTreeNode<T>(val dimensions: Int, val mapper: (T, Int) -> Double) {
                 "median=" + median +
                 ", item=" + item +
                 ", dimension=" + dimension +
-                ", children=" + Arrays.toString(children) +
-
+                ", children=" + children.joinToString(", ") { it.toString() } +
                 "} " + super.toString()
     }
 }
@@ -95,82 +59,8 @@ private fun <T> insertItem(root: KDTreeNode<T>, item: T): KDTreeNode<T> {
     }
 }
 
+expect fun <T> buildKDTree(items: MutableList<T>, dimensions: Int, mapper: (T, Int) -> Double): KDTreeNode<T>
 
-@OptIn(DelicateCoroutinesApi::class)
-fun <T> buildKDTree(items: MutableList<T>, dimensions: Int, mapper: (T, Int) -> Double): KDTreeNode<T> {
-    val root = KDTreeNode<T>(dimensions, mapper)
-
-    fun <T> buildTreeTask(
-        scope: CoroutineScope,
-        node: KDTreeNode<T>,
-        items: MutableList<T>,
-        dimensions: Int,
-        levels: Int,
-        mapper: (T, Int) -> Double
-    ): KDTreeNode<T> {
-
-        if (items.size > 0) {
-            val dimension = levels % dimensions
-            val values = ArrayList<T>()
-            for (item in items) {
-                values.add(item)
-            }
-
-            node.dimension = dimension
-            val median = selectNth(items, items.size / 2) { mapper(it, dimension) }
-
-            val leftItems = mutableListOf<T>()
-            val rightItems = mutableListOf<T>()
-
-            node.median = mapper(median, dimension)
-            node.item = median
-            for (item in items) {
-                if (item === median) {
-                    continue
-                }
-                if (mapper(item, dimension) < node.median) {
-                    leftItems.add(item)
-                } else {
-                    rightItems.add(item)
-                }
-            }
-
-            // validate split
-            if (leftItems.size + rightItems.size + 1 != items.size) {
-                throw IllegalStateException("left: ${leftItems.size}, right: ${rightItems.size}, items: ${items.size}")
-            }
-
-            if (leftItems.size > 0) {
-                node.children[0] = KDTreeNode(dimensions, mapper)
-                node.children[0]?.let {
-                    it.parent = node
-
-                    scope.launch {
-                        buildTreeTask(scope, it, leftItems, dimensions, levels + 1, mapper)
-                    }
-                }
-            }
-            if (rightItems.size > 0) {
-                node.children[1] = KDTreeNode(dimensions, mapper)
-                node.children[1]?.let {
-                    it.parent = node
-                    scope.launch {
-                        buildTreeTask(scope, it, rightItems, dimensions, levels + 1, mapper)
-                    }
-                }
-            }
-        }
-        return node
-    }
-
-    val job = GlobalScope.launch {
-        buildTreeTask(this, root, items, dimensions, 0, mapper)
-    }
-    runBlocking {
-        job.join()
-    }
-    return root
-}
 
 
 private fun <T> sqrDistance(left: T, right: T, dimensions: Int, mapper: (T, Int) -> Double): Double {
@@ -184,20 +74,18 @@ private fun <T> sqrDistance(left: T, right: T, dimensions: Int, mapper: (T, Int)
 }
 
 fun <T> findAllNodes(root: KDTreeNode<T>): List<KDTreeNode<T>> {
-    val stack = Stack<KDTreeNode<T>>()
-    val all = ArrayList<KDTreeNode<T>>()
-    stack.push(root)
+    val stack = mutableListOf<KDTreeNode<T>>()
+    val all = mutableListOf<KDTreeNode<T>>()
+    stack.add(root)
     while (!stack.isEmpty()) {
-        val node = stack.pop()
-//        if (node.item != null /*&& !visited.contains(node.children[1])*/) {
+        val node = stack.removeLast()
         all.add(node)
-//        }
 
-        if (node.children[0] != null  /*&&!visited.contains(node.children[0])*/) {
-            stack.push(node.children[0])
+        if (node.children[0] != null) {
+            stack.add(node.children[0] !!)
         }
         if (node.children[1] != null) {
-            stack.push(node.children[1])
+            stack.add(node.children[1] !!)
         }
     }
     return all
@@ -229,16 +117,16 @@ fun <T> findKNearest(
             val distance = sqrDistance(query, node.item ?: error("item is null"), node.dimensions, node.mapper)
 
             if (includeQuery || node.item !== query) {
-                if (queue.size < k || distance < queue.peek().second) {
+                if (queue.size() < k || distance < queue.peek().second) {
                     queue.add(Pair(node, distance))
-                    if (queue.size > k) {
+                    if (queue.size() > k) {
                         queue.poll()
                     }
                 }
             }
 
             val d = abs(node.median - dimensionValue)
-            if (queue.size < k || d * d < queue.peek().second) {
+            if (queue.size() < k || d * d < queue.peek().second) {
                 nearest(node.children[1 - route])
             }
         }
@@ -253,7 +141,7 @@ fun <T> findKNearest(
 }
 
 private fun <T> findNearest(root: KDTreeNode<T>, query: T, includeQuery: Boolean = false): T? {
-    var nearest = java.lang.Double.POSITIVE_INFINITY
+    var nearest = Double.POSITIVE_INFINITY
     var nearestArg: KDTreeNode<T>? = null
 
     fun nearest(node: KDTreeNode<T>?) {
@@ -309,10 +197,10 @@ private fun <T> findAllInRadius(
         }
 
         val route: Int = if ((dimensionValue < node.median || node.children[1]==null) && node.children[0] != null )  {
-            queue.add(node.children[0])
+            queue.add(node.children[0]!!)
             0
         } else if (node.children[1] != null) {
-            queue.add(node.children[1])
+            queue.add(node.children[1]!!)
             1
         } else {
             -1
@@ -333,18 +221,18 @@ private fun <T> findAllInRadius(
 }
 
 private fun <T> insert(root: KDTreeNode<T>, item: T, dimensions: Int, mapper: (T, Int) -> Double): KDTreeNode<T> {
-    val stack = Stack<KDTreeNode<T>>()
-    stack.push(root)
+    val stack = mutableListOf<KDTreeNode<T>>()
+    stack.add(root)
 
     dive@ while (true) {
 
-        val node = stack.peek()
+        val node = stack.last()
 
         val value = mapper(item, node.dimension)
 
         if (value < node.median) {
             if (node.children[0] != null) {
-                stack.push(node.children[0])
+                stack.add(node.children[0]!!)
             } else {
                 // sit here
                 node.children[0] = KDTreeNode(dimensions, mapper)
@@ -356,7 +244,7 @@ private fun <T> insert(root: KDTreeNode<T>, item: T, dimensions: Int, mapper: (T
             }
         } else {
             if (node.children[1] != null) {
-                stack.push(node.children[1])
+                stack.add(node.children[1]!!)
             } else {
                 // sit here
                 node.children[1] = KDTreeNode(dimensions, mapper)
@@ -387,27 +275,27 @@ private fun <T> remove(toRemove: KDTreeNode<T>, mapper: (T, Int) -> Double): KDT
             toRemove.item = null
         }
     } else {
-        val stack = Stack<KDTreeNode<T>>()
+        val stack = mutableListOf<KDTreeNode<T>>()
 
         var branch = 0
 
         if (toRemove.children[0] != null) {
-            stack.push(toRemove.children[0])
+            stack.add(toRemove.children[0]!!)
             branch = 0
         } else {
-            stack.push(toRemove.children[1])
+            stack.add(toRemove.children[1]!!)
             branch = 1
         }
 
-        var minValue: Double = java.lang.Double.POSITIVE_INFINITY
-        var maxValue: Double = java.lang.Double.NEGATIVE_INFINITY
+        var minValue: Double = Double.POSITIVE_INFINITY
+        var maxValue: Double = Double.NEGATIVE_INFINITY
         var minArg: KDTreeNode<T>? = null
         var maxArg: KDTreeNode<T>? = null
 
         while (!stack.isEmpty()) {
-            val node = stack.pop() ?: throw RuntimeException("null on stack")
+            val node = stack.removeLast()
 
-            val value = mapper(node.item ?: throw IllegalStateException("item is null"), toRemove.dimension)
+            val value = mapper(node.item ?: error("item is null"), toRemove.dimension)
 
             if (value < minValue) {
                 minValue = value
@@ -421,27 +309,27 @@ private fun <T> remove(toRemove: KDTreeNode<T>, mapper: (T, Int) -> Double): KDT
 
             if (node.dimension != toRemove.dimension) {
                 if (node.children[0] != null) {
-                    stack.push(node.children[0])
+                    stack.add(node.children[0]!!)
                 }
                 if (node.children[1] != null) {
-                    stack.push(node.children[1])
+                    stack.add(node.children[1]!!)
                 }
             } else {
                 if (branch == 1) {
                     if (node.children[0] != null) {
-                        stack.push(node.children[0])
+                        stack.add(node.children[0]!!)
                     } else {
                         if (node.children[1] != null) {
-                            stack.push(node.children[1])
+                            stack.add(node.children[1]!!)
                         }
                     }
                 }
                 if (branch == 0) {
                     if (node.children[1] != null) {
-                        stack.push(node.children[1])
+                        stack.add(node.children[1]!!)
                     } else {
                         if (node.children[0] != null) {
-                            stack.push(node.children[0])
+                            stack.add(node.children[0]!!)
                         }
                     }
                 }
@@ -461,22 +349,4 @@ private fun <T> remove(toRemove: KDTreeNode<T>, mapper: (T, Int) -> Double): KDT
         }
     }
     return null
-}
-
-@JvmName("kdTreeVector2")
-fun Iterable<Vector2>.kdTree(): KDTreeNode<Vector2> {
-    val items = this.toMutableList()
-    return buildKDTree(items, 2, ::vector2Mapper)
-}
-
-@JvmName("kdTreeVector3")
-fun Iterable<Vector3>.kdTree(): KDTreeNode<Vector3> {
-    val items = this.toMutableList()
-    return buildKDTree(items, 3, ::vector3Mapper)
-}
-
-@JvmName("kdTreeVector4")
-fun Iterable<Vector4>.kdTree(): KDTreeNode<Vector4> {
-    val items = this.toMutableList()
-    return buildKDTree(items, 4, ::vector4Mapper)
 }
