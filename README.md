@@ -19,6 +19,7 @@ complement [OPENRNDR](https://github.com/openrndr/openrndr).
 | [`orx-delegate-magic`](orx-delegate-magic/) | Collection of magical property delegators. For tracking variable change or interpolate towards the value of a variable. |
 | [`orx-easing`](orx-easing/) | Easing functions for smooth animation or non-linear interpolation. |
 | [`orx-envelopes`](orx-envelopes/) | ADSR (Attack, Decay, Sustain, Release) envelopes and tools. |
+| [`orx-expression-evaluator`](orx-expression-evaluator/) | Tools to evaluate strings containing mathematical expressions. |
 | [`orx-fx`](orx-fx/) | Ready-to-use GPU-based visual effects or filters. Most include [orx-parameters](https://github.com/openrndr/orx/tree/master/orx-parameters) annotations  so they can be easily controlled via orx-gui. |
 | [`orx-gradient-descent`](orx-gradient-descent/) | Finds equation inputs that output a minimum value: easy to use gradient descent based minimizer. |
 | [`orx-hash-grid`](orx-hash-grid/) | 2D space partitioning for fast point queries. |
@@ -53,7 +54,6 @@ complement [OPENRNDR](https://github.com/openrndr/openrndr).
 | [`orx-boofcv`](orx-jvm/orx-boofcv/) | Helper functions to ease working with the BoofCV computer vision library and its data types. |
 | [`orx-chataigne`](orx-jvm/orx-chataigne/) | Expose variables to [Chataigne](http://benjamin.kuperberg.fr/chataigne/en) and any other applications that can interface with it. The current implementation makes use of the OSC protocol and supports `Double` and `ColorRGBa`. |
 | [`orx-dnk3`](orx-jvm/orx-dnk3/) | A scene graph based 3d renderer with support for Gltf based assets |
-| [`orx-expression-evaluator`](orx-jvm/orx-expression-evaluator/) | Tools to evaluate strings containing mathematical expressions. |
 | [`orx-file-watcher`](orx-jvm/orx-file-watcher/) | Monitor files on disk and auto-reload them if they change. |
 | [`orx-git-archiver`](orx-jvm/orx-git-archiver/) | An extension that hooks into `Program.requestAssets` to commit changed code to Git and provide filenames based on the commit hash. |
 | [`orx-git-archiver-gradle`](orx-jvm/orx-git-archiver-gradle/) | A Gradle plugin that turns a git history and `screenshots` directory into a markdown file. |
