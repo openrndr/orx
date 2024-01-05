@@ -1,5 +1,5 @@
 import com.strumenta.antlrkotlin.gradle.AntlrKotlinTask
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 
 plugins {
     org.openrndr.extra.convention.`kotlin-multiplatform`
@@ -29,9 +29,6 @@ val generateKotlinGrammarSource = tasks.register<AntlrKotlinTask>("generateKotli
     outputDirectory = layout.buildDirectory.dir(outDir).get().asFile
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.freeCompilerArgs = listOf("-opt-in=kotlin.RequiresOptIn")
-}
 
 kotlin {
     sourceSets {
@@ -61,6 +58,6 @@ kotlin {
     }
 }
 
-tasks.withType<KotlinCompile> {
+tasks.withType<KotlinCompile<*>> {
     dependsOn(generateKotlinGrammarSource)
 }

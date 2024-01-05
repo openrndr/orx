@@ -5,13 +5,14 @@ package org.openrndr.extra.expressions
 import org.antlr.v4.kotlinruntime.*
 import org.antlr.v4.kotlinruntime.tree.ParseTreeWalker
 import org.antlr.v4.kotlinruntime.tree.TerminalNode
+import org.openrndr.collections.pop
+import org.openrndr.collections.push
 import org.openrndr.expressions.parser.KeyLangLexer
 import org.openrndr.expressions.parser.KeyLangParser
 import org.openrndr.expressions.parser.KeyLangParserBaseListener
 
 import org.openrndr.extra.noise.uniform
 import org.openrndr.math.*
-import java.util.*
 import kotlin.math.*
 
 typealias Function0 = () -> Double
@@ -49,14 +50,14 @@ internal class ExpressionListener(
     val constants: Map<String, Double> = mapOf()
 ) :
     KeyLangParserBaseListener() {
-    val doubleStack = Stack<Double>()
-    val functionStack = Stack<(DoubleArray) -> Double>()
+    val doubleStack = ArrayDeque<Double>()
+    val functionStack = ArrayDeque<(DoubleArray) -> Double>()
 
 
-    val idTypeStack = Stack<IDType>()
+    val idTypeStack = ArrayDeque<IDType>()
     var lastExpressionResult: Double? = null
 
-    val exceptionStack = Stack<ExpressionException>()
+    val exceptionStack = ArrayDeque<ExpressionException>()
 
 
     override fun exitExpressionStatement(ctx: KeyLangParser.ExpressionStatementContext) {
@@ -280,8 +281,8 @@ internal class ExpressionListener(
                     val function: (DoubleArray) -> Double =
                         when (name) {
                             "sqrt" -> { x -> sqrt(x[0]) }
-                            "radians" -> { x -> Math.toRadians(x[0]) }
-                            "degrees" -> { x -> Math.toDegrees(x[0]) }
+                            "radians" -> { x -> x[0].asRadians }
+                            "degrees" -> { x -> x[0].asDegrees }
                             "cos" -> { x -> cos(x[0]) }
                             "sin" -> { x -> sin(x[0]) }
                             "tan" -> { x -> tan(x[0]) }
