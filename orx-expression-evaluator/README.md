@@ -83,11 +83,11 @@ xFunction(1.0)
 <!-- __demos__ -->
 ## Demos
 ### DemoExpressionEvaluator01
-[source code](src/demo/kotlin/DemoExpressionEvaluator01.kt)
+[source code](src/jvmDemo/kotlin/DemoExpressionEvaluator01.kt)
 
-![DemoExpressionEvaluator01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-expression-evaluator/images/DemoExpressionEvaluator01Kt.png)
+![DemoExpressionEvaluator01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-expression-evaluator/images/DemoExpressionEvaluator01Kt.png)
 
 ### DemoExpressionEvaluator02
-[source code](src/demo/kotlin/DemoExpressionEvaluator02.kt)
+[source code](src/jvmDemo/kotlin/DemoExpressionEvaluator02.kt)
 
-![DemoExpressionEvaluator02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-expression-evaluator/images/DemoExpressionEvaluator02Kt.png)
+![DemoExpressionEvaluator02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-expression-evaluator/images/DemoExpressionEvaluator02Kt.png)
