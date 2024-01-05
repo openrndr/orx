@@ -7,9 +7,9 @@ import org.antlr.v4.kotlinruntime.tree.ParseTreeWalker
 import org.antlr.v4.kotlinruntime.tree.TerminalNode
 import org.openrndr.collections.pop
 import org.openrndr.collections.push
-import org.openrndr.expressions.parser.KeyLangLexer
-import org.openrndr.expressions.parser.KeyLangParser
-import org.openrndr.expressions.parser.KeyLangParserBaseListener
+import org.openrndr.extra.expressions.parser.KeyLangLexer
+import org.openrndr.extra.expressions.parser.KeyLangParser
+import org.openrndr.extra.expressions.parser.KeyLangParserBaseListener
 
 import org.openrndr.extra.noise.uniform
 import org.openrndr.math.*

@@ -9,15 +9,12 @@ plugins {
 val generateKotlinGrammarSource = tasks.register<AntlrKotlinTask>("generateKotlinGrammarSource") {
     dependsOn("cleanGenerateKotlinGrammarSource")
 
-    // ANTLR .g4 files are under {example-project}/antlr
-    // Only include *.g4 files. This allows tools (e.g., IDE plugins)
-    // to generate temporary files inside the base path
     source = fileTree(layout.projectDirectory.dir("src/commonMain/antlr")) {
         include("**/*.g4")
     }
 
     // We want the generated source files to have this package name
-    val pkgName = "org.openrndr.expressions.parser"
+    val pkgName = "org.openrndr.extra.expressions.parser"
     packageName = pkgName
 
     // We want visitors alongside listeners.
