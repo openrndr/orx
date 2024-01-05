@@ -1,6 +1,7 @@
 package org.openrndr.extra.expressions
 
-import org.antlr.v4.runtime.tree.ParseTreeWalker
+import org.antlr.v4.kotlinruntime.tree.ParseTreeWalker
+
 
 /**
  * Compile a (Double)->Double function from an expression string

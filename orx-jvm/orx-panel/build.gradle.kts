@@ -14,7 +14,7 @@ tasks.test {
 }
 
 dependencies {
-    implementation(project(":orx-jvm:orx-expression-evaluator"))
+    implementation(project(":orx-expression-evaluator"))
     implementation(libs.openrndr.application)
     implementation(libs.openrndr.math)
     implementation(libs.kotlin.coroutines)

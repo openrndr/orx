@@ -19,6 +19,7 @@ libfreenect = "0.5.7-1.5.9"
 librealsense = "2.53.1-1.5.9"
 gson = "2.10.1"
 antlr = "4.13.1"
+antlrKotlin = "0.1.0-RC14"
 tensorflow = "0.5.0"
 minim = "2.2.2"
 netty = "4.1.92.Final"
@@ -76,6 +77,7 @@ javaosc-core = { group = "com.illposed.osc", name = "javaosc-core", version.ref 
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 antlr-core = { group = "org.antlr", name = "antlr4", version.ref = "antlr" }
 antlr-runtime = { group = "org.antlr", name = "antlr4-runtime", version.ref = "antlr" }
+antlr-kotlin-runtime = { group = "com.strumenta", name = "antlr-kotlin-runtime", version.ref = "antlrKotlin" }
 
 jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junitJupiter" }
 jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junitJupiter" }
@@ -86,8 +88,8 @@ slf4j-simple = { group = "org.slf4j", name = "slf4j-simple", version.ref = "slf4
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 nebula-release = { id = "nebula.release", version.ref = "nebulaRelease" }
 gradle-nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "gradleNexusPublish" }
-kotest-multiplatform = { id = "io.kotest.multiplatform", version.ref = "kotest"}
-
+kotest-multiplatform = { id = "io.kotest.multiplatform", version.ref = "kotest" }
+antlr-kotlin = { id = "com.strumenta.antlr-kotlin", version.ref = "antlrKotlin" }
 
 [bundles]
 jupiter = ["jupiter-api", "jupiter-engine"]

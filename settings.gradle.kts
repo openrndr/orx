@@ -27,7 +27,7 @@ include(
         "orx-jvm:orx-dnk3",
         "orx-easing",
         "orx-envelopes",
-        "orx-jvm:orx-expression-evaluator",
+        "orx-expression-evaluator",
         "orx-jvm:orx-file-watcher",
         "orx-parameters",
         "orx-fx",

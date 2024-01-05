@@ -1,11 +1,13 @@
 package org.openrndr.extra.expressions
 
-import KeyLangLexer
-import KeyLangParser
-import KeyLangParserBaseListener
-import org.antlr.v4.runtime.*
-import org.antlr.v4.runtime.tree.ParseTreeWalker
-import org.antlr.v4.runtime.tree.TerminalNode
+
+
+import org.antlr.v4.kotlinruntime.*
+import org.antlr.v4.kotlinruntime.tree.ParseTreeWalker
+import org.antlr.v4.kotlinruntime.tree.TerminalNode
+import org.openrndr.expressions.parser.KeyLangLexer
+import org.openrndr.expressions.parser.KeyLangParser
+import org.openrndr.expressions.parser.KeyLangParserBaseListener
 
 import org.openrndr.extra.noise.uniform
 import org.openrndr.math.*
@@ -84,11 +86,11 @@ internal class ExpressionListener(
         val right = doubleStack.pop()
         val left = doubleStack.pop()
         val result = when (val operator = ctx.operator?.type) {
-            KeyLangParser.PLUS -> left + right
-            KeyLangParser.MINUS -> left - right
-            KeyLangParser.ASTERISK -> left * right
-            KeyLangParser.DIVISION -> left / right
-            KeyLangParser.PERCENTAGE -> mod(left, right)
+            KeyLangLexer.Tokens.PLUS.id -> left + right
+            KeyLangParser.Tokens.MINUS.id -> left - right
+            KeyLangParser.Tokens.ASTERISK.id -> left * right
+            KeyLangParser.Tokens.DIVISION.id -> left / right
+            KeyLangParser.Tokens.PERCENTAGE.id -> mod(left, right)
             else -> error("operator '$operator' not implemented")
         }
         doubleStack.push(result)
@@ -103,10 +105,10 @@ internal class ExpressionListener(
         val left = doubleStack.pop()
         val right = doubleStack.pop()
         val result = when (val operator = ctx.operator?.type) {
-            KeyLangParser.PLUS -> left + right
-            KeyLangParser.MINUS -> right - left
-            KeyLangParser.ASTERISK -> left * right
-            KeyLangParser.DIVISION -> left / right
+            KeyLangParser.Tokens.PLUS.id -> left + right
+            KeyLangParser.Tokens.MINUS.id -> right - left
+            KeyLangParser.Tokens.ASTERISK.id -> left * right
+            KeyLangParser.Tokens.DIVISION.id -> left / right
             else -> error("operator '$operator' not implemented")
         }
         doubleStack.push(result)
@@ -245,13 +247,13 @@ internal class ExpressionListener(
 
     override fun visitTerminal(node: TerminalNode) {
         val type = node.symbol?.type
-        if (type == KeyLangParser.INTLIT) {
+        if (type == KeyLangParser.Tokens.INTLIT.id) {
             doubleStack.push(node.text.toDouble())
         }
-        if (type == KeyLangParser.DECLIT) {
+        if (type == KeyLangParser.Tokens.DECLIT.id) {
             doubleStack.push(node.text.toDouble())
         }
-        if (type == KeyLangParser.ID) {
+        if (type == KeyLangParser.Tokens.ID.id) {
             val name = node.text.replace("`", "")
             @Suppress("DIVISION_BY_ZERO")
             when (val idType = idTypeStack.pop()) {
@@ -409,11 +411,11 @@ fun evaluateExpression(
     parser.removeErrorListeners()
     parser.addErrorListener(object : BaseErrorListener() {
         override fun syntaxError(
-            recognizer: Recognizer<*, *>?,
+            recognizer: Recognizer<*, *>,
             offendingSymbol: Any?,
             line: Int,
             charPositionInLine: Int,
-            msg: String?,
+            msg: String,
             e: RecognitionException?
         ) {
             throw ExpressionException("parser error in expression: '$expression'; [line: $line, character: $charPositionInLine ${offendingSymbol?.let { ", near: $it" } ?: ""} ]")
@@ -440,11 +442,11 @@ fun compileExpression(
     parser.removeErrorListeners()
     parser.addErrorListener(object : BaseErrorListener() {
         override fun syntaxError(
-            recognizer: Recognizer<*, *>?,
+            recognizer: Recognizer<*, *>,
             offendingSymbol: Any?,
             line: Int,
             charPositionInLine: Int,
-            msg: String?,
+            msg: String,
             e: RecognitionException?
         ) {
             throw ExpressionException("parser error in expression: '$expression'; [line: $line, character: $charPositionInLine ${offendingSymbol?.let { ", near: $it" } ?: ""} ]")
@@ -470,11 +472,11 @@ internal fun expressionRoot(expression: String): KeyLangParser.KeyLangFileContex
     parser.removeErrorListeners()
     parser.addErrorListener(object : BaseErrorListener() {
         override fun syntaxError(
-            recognizer: Recognizer<*, *>?,
+            recognizer: Recognizer<*, *>,
             offendingSymbol: Any?,
             line: Int,
             charPositionInLine: Int,
-            msg: String?,
+            msg: String,
             e: RecognitionException?
         ) {
             throw ExpressionException("parser error in expression: '$expression'; [line: $line, character: $charPositionInLine ${offendingSymbol?.let { ", near: $it" } ?: ""} ]")
