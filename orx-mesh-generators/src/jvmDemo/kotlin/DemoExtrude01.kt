@@ -6,10 +6,10 @@ import org.openrndr.draw.shadeStyle
 import org.openrndr.extra.camera.Orbital
 import org.openrndr.extra.meshgenerators.buildTriangleMesh
 import org.openrndr.extra.meshgenerators.extrudeContourSteps
+import org.openrndr.extra.shapes.splines.catmullRom
+import org.openrndr.extra.shapes.splines.toPath3D
 import org.openrndr.math.Vector3
-import org.openrndr.math.catmullRom
 import org.openrndr.shape.Circle
-import org.openrndr.shape.toPath3D
 
 fun main() {
     application {
