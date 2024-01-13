@@ -58,3 +58,7 @@ kotlin {
 tasks.withType<KotlinCompile<*>> {
     dependsOn(generateKotlinGrammarSource)
 }
+
+tasks.withType<org.gradle.jvm.tasks.Jar> {
+    dependsOn(generateKotlinGrammarSource)
+}
