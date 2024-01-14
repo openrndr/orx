@@ -54,7 +54,7 @@ data class ContourEdge(
      */
     fun toLinear(): ContourEdge {
         return if (contour.segments[segmentIndex].type != SegmentType.LINEAR) {
-            val newSegment = contour.segments[segmentIndex].copy(control = emptyArray())
+            val newSegment = contour.segments[segmentIndex].copy(control = emptyList())
             val newSegments = contour.segments
                 .update(segmentIndex to newSegment)
 
@@ -217,7 +217,7 @@ data class ContourEdge(
         val segment = contour.segments[segmentIndex]
         val newSegment = segment.copy(
             start = segment.start.transformedBy(transform),
-            control = segment.control.map { it.transformedBy(transform) }.toTypedArray<Vector2>(),
+            control = segment.control.map { it.transformedBy(transform) },
             end = segment.end.transformedBy(transform)
         )
         val segmentInIndex = if (contour.closed) (segmentIndex - 1).mod(contour.segments.size) else segmentIndex - 1
@@ -228,26 +228,27 @@ data class ContourEdge(
         val newSegments = contour.segments.map { it }.toMutableList()
 
         if (refIn != null) {
-            val control = if (refIn.linear || !updateTangents) {
+            var control = if (refIn.linear || !updateTangents) {
                 refIn.control
             } else {
                 refIn.cubic.control
             }
             if (control.isNotEmpty()) {
-                control[1] = control[1].transformedBy(transform)
+                control = listOf(control[0], control[1].transformedBy(transform))
             }
-            newSegments[segmentInIndex] = refIn.copy(end = segment.start.transformedBy(transform))
+            newSegments[segmentInIndex] = refIn.copy(control = control, end = segment.start.transformedBy(transform))
         }
         if (refOut != null) {
-            val control = if (refOut.linear || !updateTangents) {
+            var control = if (refOut.linear || !updateTangents) {
                 refOut.control
             } else {
                 refOut.cubic.control
             }
             if (control.isNotEmpty()) {
-                control[0] = control[0].transformedBy(transform)
+                control = listOf(control[0].transformedBy(transform), control[1])
+
             }
-            newSegments[segmentOutIndex] = refOut.copy(start = segment.end.transformedBy(transform))
+            newSegments[segmentOutIndex] = refOut.copy(start = segment.end.transformedBy(transform), control = control)
         }
 
         newSegments[segmentIndex] = newSegment

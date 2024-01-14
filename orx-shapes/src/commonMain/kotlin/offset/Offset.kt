@@ -101,13 +101,13 @@ fun Segment.scale(polarity: YPolarity, scale: (Double) -> Double): Segment {
             val nd = d.normalized * s
             it + rc * nd
         }
-        return copy(newStart, newControls.toTypedArray(), newEnd)
+        return copy(newStart, newControls, newEnd)
     } else {
         val newControls = control.mapIndexed { index, it ->
             val rc = scale((index + 1.0) / 3.0)
             it + rc * normal((index + 1.0), polarity)
         }
-        return copy(newStart, newControls.toTypedArray(), newEnd)
+        return copy(newStart, newControls, newEnd)
     }
 }
 

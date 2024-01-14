@@ -101,14 +101,14 @@ data class ContourVertex(
             contour.segments.getOrNull(segmentIndex - 1)
         newSegments[segmentIndex] = run {
             val cubicSegment = refOut.cubic
-            val newControls = arrayOf((transformOut * cubicSegment.control[0].xy01).xy, cubicSegment.control[1])
+            val newControls = listOf((transformOut * cubicSegment.control[0].xy01).xy, cubicSegment.control[1])
             refOut.copy(control = newControls)
         }
         val segmentIndexIn = (segmentIndex - 1).mod(contour.segments.size)
         if (refIn != null) {
             newSegments[segmentIndexIn] = run {
                 val cubicSegment = refIn.cubic
-                val newControls = arrayOf(cubicSegment.control[0], (transformIn * cubicSegment.control[1].xy01).xy)
+                val newControls = listOf(cubicSegment.control[0], (transformIn * cubicSegment.control[1].xy01).xy)
                 refIn.copy(control = newControls)
             }
         }
@@ -166,7 +166,7 @@ data class ContourVertex(
         if (contour.closed || segmentIndex< contour.segments.size) {
             newSegments[segmentIndex] = if (updateTangents && !refOut.linear) {
                 val cubicSegment = refOut.cubic
-                val newControls = arrayOf(transform(cubicSegment.control[0]), cubicSegment.control[1])
+                val newControls = listOf(transform(cubicSegment.control[0]), cubicSegment.control[1])
                 refOut.copy(start = newPosition, control = newControls)
             } else {
                 newSegments[segmentIndex].copy(start = newPosition)
@@ -174,7 +174,7 @@ data class ContourVertex(
         } else {
             newSegments[segmentIndex-1] = if (updateTangents && !refOut.linear) {
                 val cubicSegment = refOut.cubic
-                val newControls = arrayOf(cubicSegment.control[0], transform(cubicSegment.control[1]))
+                val newControls = listOf(cubicSegment.control[0], transform(cubicSegment.control[1]))
                 refOut.copy(end = newPosition, control = newControls)
             } else {
                 newSegments[segmentIndex-1].copy(end = newPosition)
@@ -186,7 +186,7 @@ data class ContourVertex(
             newSegments[segmentIndexIn] =
                 if (updateTangents && !refIn.linear) {
                     val cubicSegment = refIn.cubic
-                    val newControls = arrayOf(cubicSegment.control[0], transform(cubicSegment.control[1]))
+                    val newControls = listOf(cubicSegment.control[0], transform(cubicSegment.control[1]))
                     newSegments[segmentIndexIn].copy(control = newControls, end = newPosition)
                 } else {
 
