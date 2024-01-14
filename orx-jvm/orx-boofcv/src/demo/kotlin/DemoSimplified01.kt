@@ -10,13 +10,12 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ColorBuffer
 import org.openrndr.draw.isolatedWithTarget
 import org.openrndr.draw.renderTarget
-import org.openrndr.extensions.SingleScreenshot
-import org.openrndr.math.CatmullRomChain2
+import org.openrndr.extra.shapes.simplify.simplify
+import org.openrndr.extra.shapes.splines.CatmullRomChain2
+import org.openrndr.extra.shapes.splines.toContour
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 import org.openrndr.shape.ShapeContour
-import org.openrndr.shape.simplify
-import org.openrndr.shape.toContour
 
 fun main() {
     application {
