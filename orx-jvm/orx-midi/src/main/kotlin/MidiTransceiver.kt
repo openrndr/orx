@@ -1,6 +1,6 @@
 package org.openrndr.extra.midi
 
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.openrndr.Program
 import org.openrndr.events.Event
 import javax.sound.midi.*

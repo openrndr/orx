@@ -1,7 +1,7 @@
 package org.openrndr.panel.elements
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.*
-import mu.KotlinLogging
 import org.openrndr.*
 import org.openrndr.draw.Cursor
 import org.openrndr.draw.Drawer

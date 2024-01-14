@@ -1,8 +1,8 @@
 package org.openrndr.extra.palette
 
-import mu.KotlinLogging
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParseException
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.openrndr.*
 import org.openrndr.extra.noise.Random
 import org.openrndr.color.ColorRGBa

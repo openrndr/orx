@@ -1,6 +1,6 @@
 package org.openrndr.extra.computegraph.nodes
 
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.openrndr.KEY_SPACEBAR
 import org.openrndr.Program
 import org.openrndr.RequestAssetsEvent

@@ -1,7 +1,6 @@
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.osc.OSC
-import java.awt.Color
 import kotlin.reflect.KProperty
 
 private val logger = KotlinLogging.logger {}

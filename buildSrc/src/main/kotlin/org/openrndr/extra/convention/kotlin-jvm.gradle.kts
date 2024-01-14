@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlin.logging)
     testImplementation(libs.kotlin.test)
+    testRuntimeOnly(libs.slf4j.simple)
     "demoImplementation"(main.output.classesDirs + main.runtimeClasspath)
     "demoImplementation"(libs.openrndr.application)
     "demoImplementation"(libs.openrndr.extensions)

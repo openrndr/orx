@@ -1,7 +1,7 @@
 package org.openrndr.extra.computegraph
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.*
-import mu.KotlinLogging
 import org.openrndr.events.Event
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind

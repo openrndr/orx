@@ -1,6 +1,6 @@
 package org.openrndr.extra.olive
 
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import java.io.File
 import java.io.InputStream
 import java.io.Reader

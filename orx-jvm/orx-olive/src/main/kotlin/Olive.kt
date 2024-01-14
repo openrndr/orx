@@ -1,9 +1,10 @@
 package org.openrndr.extra.olive
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
-import mu.KotlinLogging
+
 import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.draw.Session

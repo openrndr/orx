@@ -1,8 +1,8 @@
 package org.openrndr.extra.filewatcher
 
 import com.sun.nio.file.SensitivityWatchEventModifier
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.*
-import mu.KotlinLogging
 import org.openrndr.events.Event
 import java.io.File
 import java.nio.file.FileSystems

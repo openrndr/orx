@@ -1,6 +1,7 @@
 package org.openrndr.extra.convention
 
 import CollectScreenshotsTask
+import gradle.kotlin.dsl.accessors._a37e1a3c5785f18372ed85a4dc9bbdf6.testRuntimeOnly
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -81,6 +82,7 @@ kotlin {
         val jvmTest by getting {
             dependencies {
                 runtimeOnly(libs.bundles.jupiter)
+                runtimeOnly(libs.slf4j.simple)
             }
         }
 

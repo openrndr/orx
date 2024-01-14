@@ -1,8 +1,8 @@
 package org.openrndr.extra.kinect.v1
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
-import mu.KotlinLogging
 import org.bytedeco.javacpp.Pointer
 import org.bytedeco.libfreenect.*
 import org.bytedeco.libfreenect.global.freenect.*

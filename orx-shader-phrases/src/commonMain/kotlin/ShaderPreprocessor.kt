@@ -1,9 +1,8 @@
 package org.openrndr.extra.shaderphrases
 
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.openrndr.draw.Shader
 import org.openrndr.extra.shaderphrases.ShaderPhraseRegistry.getGLSLFunctionName
-//import org.openrndr.extra.shaderphrases.phrases.phraseTbnMatrix
 import org.openrndr.utils.url.textFromURL
 
 private val logger = KotlinLogging.logger {}
