@@ -71,7 +71,7 @@ data class ContourAdjusterEdge(val contourAdjuster: ContourAdjuster, val segment
         contourAdjuster.selectEdge(segmentIndex())
     }
 
-    private fun wrap(block: ContourEdge.() -> ContourEdge) {
+    internal fun wrap(block: ContourEdge.() -> ContourEdge) {
         val newEdge = ContourEdge(contourAdjuster.contour, segmentIndex()).block()
         contourAdjuster.contour = newEdge.contour
         contourAdjuster.updateSelection(newEdge.adjustments)
