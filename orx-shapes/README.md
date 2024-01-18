@@ -178,3 +178,13 @@ Collection of 2D shape generators and modifiers.
 [source code](src/jvmDemo/kotlin/DemoText01.kt)
 
 ![DemoText01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoText01Kt.png)
+
+### DemoTunniAdjuster01
+[source code](src/jvmDemo/kotlin/DemoTunniAdjuster01.kt)
+
+![DemoTunniAdjuster01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoTunniAdjuster01Kt.png)
+
+### DemoTunniPoint01
+[source code](src/jvmDemo/kotlin/DemoTunniPoint01.kt)
+
+![DemoTunniPoint01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoTunniPoint01Kt.png)
