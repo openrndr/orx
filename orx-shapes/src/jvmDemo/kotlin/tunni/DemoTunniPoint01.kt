@@ -1,5 +1,3 @@
-package tunni
-
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.shapes.tunni.tunniLine
@@ -19,7 +17,6 @@ fun main() {
                 drawer.fill = null
                 for (s in c.segments) {
                     val tp = s.tunniPoint
-                    println(tp)
                     drawer.circle(tp, 10.0)
                     val sc = s.cubic
                     drawer.lineSegment(sc.control[0], sc.control[1])
@@ -27,9 +24,7 @@ fun main() {
                     drawer.segment(s.withTunniLine(s.tunniLine.position(0.5) + s.tunniLine.normal * cos(seconds) * 40.0))
 
                 }
-
                 drawer.contour(c)
-
             }
         }
     }

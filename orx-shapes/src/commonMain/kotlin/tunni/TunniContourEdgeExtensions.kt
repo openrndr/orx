@@ -1,10 +1,7 @@
-package tunni
+package org.openrndr.extra.shapes.tunni
 
 import org.openrndr.extra.shapes.adjust.ContourAdjusterEdge
 import org.openrndr.extra.shapes.adjust.ContourEdge
-import org.openrndr.extra.shapes.tunni.tunniLine
-import org.openrndr.extra.shapes.tunni.tunniPoint
-import org.openrndr.extra.shapes.tunni.withTunniPoint
 import org.openrndr.math.Vector2
 import org.openrndr.shape.LineSegment
 import org.openrndr.shape.Segment

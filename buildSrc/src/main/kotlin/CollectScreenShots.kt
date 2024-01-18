@@ -8,7 +8,6 @@ import org.gradle.api.provider.Property
 import org.gradle.api.tasks.*
 import org.gradle.kotlin.dsl.register
 import org.gradle.process.ExecOperations
-import org.gradle.work.Incremental
 import org.gradle.work.InputChanges
 import java.io.File
 import java.net.URLClassLoader
@@ -48,7 +47,8 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
                 }
 
                 try {
-                    val cp = (runtimeDependencies.get().map { it.toURI().toURL() } + inputDir.get().asFile.toURI()
+                    val classParentDir = change.file.parentFile
+                    val cp = (runtimeDependencies.get().map { it.toURI().toURL() } + classParentDir.toURI()
                         .toURL()).toTypedArray()
                     val ucl = URLClassLoader(cp)
                     val klass = ucl.loadClass(klassName)
