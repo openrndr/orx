@@ -1,6 +1,5 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extra.noise.poissonDiskSampling
 import org.openrndr.extra.noise.scatter
 import org.openrndr.extra.triangulation.delaunayTriangulation
 import org.openrndr.math.Vector2
