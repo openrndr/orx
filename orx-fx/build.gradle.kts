@@ -4,7 +4,7 @@ plugins {
 
 val embedShaders = tasks.register<EmbedShadersTask>("embedShaders") {
     inputDir.set(file("$projectDir/src/shaders/glsl"))
-    outputDir.set(file("$buildDir/generated/shaderKotlin"))
+    outputDir.set(layout.buildDirectory.dir("generated/shaderKotlin"))
     defaultPackage.set("org.openrndr.extra.fx")
     defaultVisibility.set("internal")
     namePrefix.set("fx_")
@@ -14,7 +14,7 @@ val embedShaders = tasks.register<EmbedShadersTask>("embedShaders") {
 kotlin {
     kotlin.sourceSets.getByName("commonMain").kotlin.srcDir(embedShaders.outputDir)
     sourceSets {
-@Suppress("UNUSED_VARIABLE")
+        @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
 
