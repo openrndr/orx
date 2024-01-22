@@ -2,10 +2,10 @@
 
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.math.CatmullRomChain2
+import org.openrndr.extra.shapes.splines.CatmullRomChain2
+import org.openrndr.extra.shapes.splines.toContour
 import org.openrndr.math.Polar
 import org.openrndr.shape.ShapeContour
-import org.openrndr.shape.toContour
 
 fun main() = application {
     program {
