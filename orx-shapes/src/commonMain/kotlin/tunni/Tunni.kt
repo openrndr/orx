@@ -58,7 +58,6 @@ fun Segment.withTunniPoint(tunniPoint: Vector2): Segment {
  * @since orx 0.4.5
  */
 fun Segment.withTunniLine(pointOnLine: Vector2): Segment {
-    println("hoi! $pointOnLine")
     val ls = LineSegment(pointOnLine, pointOnLine + this.cubic.control[0] - this.cubic.control[1])
     val ac0 = LineSegment(start, this.cubic.control[0])
     val bc1 = LineSegment(end, this.cubic.control[1])
@@ -67,10 +66,8 @@ fun Segment.withTunniLine(pointOnLine: Vector2): Segment {
     val cp1 = intersection(ls, bc1, Double.POSITIVE_INFINITY)
 
     return if (cp0 != Vector2.INFINITY && cp1 != Vector2.INFINITY) {
-        println("$cp0 $cp1")
         copy(start, listOf(cp0, cp1), end)
     } else {
-        println("${cp0} ${cp1}")
         this
     }
 }

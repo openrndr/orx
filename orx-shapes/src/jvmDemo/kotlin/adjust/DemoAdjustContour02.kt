@@ -1,4 +1,4 @@
-//package adjust
+package adjust
 
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
