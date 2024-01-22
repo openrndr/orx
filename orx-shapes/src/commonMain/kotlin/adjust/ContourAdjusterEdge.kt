@@ -105,4 +105,13 @@ data class ContourAdjusterEdge(val contourAdjuster: ContourAdjuster, val segment
                 .subbed(t0, t1)
                 .contour
     }
+
+    fun moveStartBy(translation: Vector2, updateTangents: Boolean = true) = wrap { startMovedBy(translation, updateTangents) }
+
+    fun moveControl0By(translation: Vector2) = wrap { control0MovedBy(translation) }
+
+    fun moveControl1By(translation: Vector2) = wrap { control1MovedBy(translation) }
+    fun moveEndBy(translation: Vector2, updateTangents: Boolean = true) = wrap { startMovedBy(translation, updateTangents) }
+
+
 }

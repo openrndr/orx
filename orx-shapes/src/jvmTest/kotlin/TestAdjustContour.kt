@@ -6,6 +6,8 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 
 class TestAdjustContour {
@@ -24,6 +26,31 @@ class TestAdjustContour {
         assertEquals(150.0, adjusted.segments[0].end.x, 1E-6)
         assertEquals(150.0, adjusted.segments[0].end.y, 1E-6)
     }
+
+
+    @Test
+    fun testSingleLinearSegmentMoveControlIn() {
+        val adjusted = adjustContour(LineSegment(0.0, 0.0, 100.0, 100.0).contour) {
+            selectVertex(0)
+            for (v in vertices) {
+                assertNull(v.controlIn)
+                assertNotNull(v.controlOut)
+                v.moveControlOutBy(Vector2(20.0, 20.0))
+
+            }
+
+
+            selectVertex(1)
+            for (v in vertices) {
+                assertNull(v.controlOut)
+                assertNotNull(v.controlIn)
+                v.moveControlInBy(Vector2(20.0, 20.0))
+            }
+
+        }
+
+    }
+
 
     @Test
     fun testSingleLinearSegmentDefaultVertexSelection() {

@@ -44,7 +44,7 @@ fun ContourEdge.withTunniLine(pointOnLine: Vector2): ContourEdge {
     if (contour.empty) {
         return withoutAdjustments()
     } else {
-        val segment = contour.segments[segmentIndex].withTunniPoint(pointOnLine)
+        val segment = contour.segments[segmentIndex].withTunniLine(pointOnLine)
         val newSegments = contour.segments.map { it }.toMutableList()
         newSegments[segmentIndex] = segment
         return ContourEdge(ShapeContour.fromSegments(newSegments, contour.closed), segmentIndex)

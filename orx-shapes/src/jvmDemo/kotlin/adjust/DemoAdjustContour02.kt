@@ -1,3 +1,5 @@
+//package adjust
+
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.shapes.adjust.adjustContour
@@ -14,14 +16,15 @@ fun main() {
         }
         program {
             extend {
-                var contour = if (seconds.mod(2.0) < 1.0) {
-                    drawer.bounds.scaledBy(0.5, 0.5, 0.5).contour
-                } else {
-                    Circle(drawer.bounds.center, 300.0).contour
-                }
+                var contour = Circle(drawer.bounds.center, 300.0).contour
                 contour = adjustContour(contour) {
-                    selectEdge(0)
-                    edge.replaceWith(cos(seconds) * 0.5 + 0.5)
+                    selectVertex(0)
+                    vertex.remove()
+                    selectVertex(0)
+                    vertex.moveBy(Vector2(cos(seconds) * 40.0, sin(seconds * 0.43) * 40.0))
+                    vertex.scale(cos(seconds*2.0)*2.0)
+
+
                 }
                 drawer.stroke = ColorRGBa.RED
                 drawer.contour(contour)

@@ -39,6 +39,21 @@ Collection of 2D shape generators and modifiers.
 
 ![DemoAdjustContour07Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoAdjustContour07Kt.png)
 
+### DemoAdjustContour08
+[source code](src/jvmDemo/kotlin/DemoAdjustContour08.kt)
+
+![DemoAdjustContour08Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoAdjustContour08Kt.png)
+
+### DemoAdjustContour09
+[source code](src/jvmDemo/kotlin/DemoAdjustContour09.kt)
+
+![DemoAdjustContour09Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoAdjustContour09Kt.png)
+
+### DemoAdjustContourContinue01
+[source code](src/jvmDemo/kotlin/DemoAdjustContourContinue01.kt)
+
+![DemoAdjustContourContinue01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoAdjustContourContinue01Kt.png)
+
 ### DemoAlphaShape
 [source code](src/jvmDemo/kotlin/DemoAlphaShape.kt)
 

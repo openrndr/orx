@@ -47,6 +47,33 @@ data class ContourVertex(
             }
         }
 
+    val controlIn: Vector2?
+        get() {
+            return if (contour.closed || (segmentIndex > 0 && segmentIndex < contour.segments.size)) {
+                contour.segments[(segmentIndex-1).mod(contour.segments.size)].cubic.control[1]
+            } else if (segmentIndex == 0) {
+                null
+            } else {
+                contour.segments[segmentIndex-1].cubic.control[1]
+            }
+        }
+    val controlOut: Vector2?
+        get() {
+            return if (contour.closed || segmentIndex < contour.segments.size) {
+                contour.segments[segmentIndex].cubic.control[0]
+            } else {
+                null
+            }
+        }
+
+    val tangentIn: Vector2?
+        get() = controlIn?.minus(position)
+
+    val tangentOut: Vector2?
+        get() = controlOut?.minus(position)
+
+
+
     fun remove(updateTangents: Boolean = true): ContourVertex {
         if (contour.empty) {
             return withoutAdjustments()
@@ -65,6 +92,27 @@ data class ContourVertex(
             removeAt(segmentIndex)
         }
         return ContourVertex(ShapeContour.fromSegments(newSegments, contour.closed), segmentIndex, adjustments)
+    }
+
+    fun controlInMovedBy(translation: Vector2): ContourVertex {
+        if (contour.empty) {
+            return withoutAdjustments()
+        }
+        val transform = buildTransform {
+            translate(translation)
+        }
+
+        return transformTangents(transform, Matrix44.IDENTITY)
+    }
+
+    fun controlOutMovedBy(translation: Vector2): ContourVertex {
+        if (contour.empty) {
+            return withoutAdjustments()
+        }
+        val transform = buildTransform {
+            translate(translation)
+        }
+        return transformTangents(Matrix44.IDENTITY, transform)
     }
 
     fun scaledBy(scaleFactor: Double): ContourVertex {
@@ -96,13 +144,16 @@ data class ContourVertex(
             return withoutAdjustments()
         }
         val newSegments = contour.segments.map { it }.toMutableList()
-        val refOut = contour.segments[segmentIndex]
+        val refOut = contour.segments.getOrNull(segmentIndex)
         val refIn = if (contour.closed) contour.segments[(segmentIndex - 1).mod(contour.segments.size)] else
             contour.segments.getOrNull(segmentIndex - 1)
-        newSegments[segmentIndex] = run {
-            val cubicSegment = refOut.cubic
-            val newControls = listOf((transformOut * cubicSegment.control[0].xy01).xy, cubicSegment.control[1])
-            refOut.copy(control = newControls)
+
+        if (refOut != null) {
+            newSegments[segmentIndex] = run {
+                val cubicSegment = refOut.cubic
+                val newControls = listOf((transformOut * cubicSegment.control[0].xy01).xy, cubicSegment.control[1])
+                refOut.copy(control = newControls)
+            }
         }
         val segmentIndexIn = (segmentIndex - 1).mod(contour.segments.size)
         if (refIn != null) {

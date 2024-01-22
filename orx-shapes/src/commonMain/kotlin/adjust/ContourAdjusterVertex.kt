@@ -4,7 +4,7 @@ import org.openrndr.extra.shapes.vertex.ContourVertex
 import org.openrndr.math.Vector2
 
 class ContourAdjusterVertex(val contourAdjuster: ContourAdjuster, val segmentIndex: () -> Int) {
-    private fun wrap(block: ContourVertex.() -> ContourVertex) {
+    fun wrap(block: ContourVertex.() -> ContourVertex) {
         val newVertex = ContourVertex(contourAdjuster.contour, segmentIndex()).block()
         contourAdjuster.contour = newVertex.contour
         contourAdjuster.updateSelection(newVertex.adjustments)
@@ -43,7 +43,19 @@ class ContourAdjusterVertex(val contourAdjuster: ContourAdjuster, val segmentInd
         contourAdjuster.selectVertex(segmentIndex())
     }
 
+    val controlIn: Vector2?
+        get() =   ContourVertex(contourAdjuster.contour, segmentIndex()).controlIn
+
+    val controlOut: Vector2?
+        get() =   ContourVertex(contourAdjuster.contour, segmentIndex()).controlOut
+
+
     fun remove(updateTangents: Boolean = true) = wrap { remove(updateTangents) }
+
+    fun moveControlInBy(translation: Vector2) = wrap { controlInMovedBy(translation) }
+
+    fun moveControlOutBy(translation: Vector2) = wrap { controlOutMovedBy(translation) }
+
     fun moveBy(translation: Vector2, updateTangents: Boolean = true) = wrap { movedBy(translation, updateTangents) }
     fun moveTo(position: Vector2, updateTangents: Boolean = true) = wrap { movedBy(position - this.position, updateTangents) }
     fun rotate(rotationInDegrees: Double) = wrap { rotatedBy(rotationInDegrees) }

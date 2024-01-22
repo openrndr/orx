@@ -15,6 +15,7 @@ kotlin {
                 implementation(libs.openrndr.draw)
                 implementation(libs.openrndr.filter)
                 implementation(libs.kotlin.reflect)
+                implementation(libs.kotlin.coroutines)
             }
         }
 

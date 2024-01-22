@@ -2,7 +2,17 @@ package org.openrndr.extra.shapes.adjust
 
 import org.openrndr.collections.pop
 import org.openrndr.extra.shapes.vertex.ContourVertex
+import org.openrndr.math.Vector2
+import org.openrndr.shape.Segment
 import org.openrndr.shape.ShapeContour
+import kotlin.jvm.JvmName
+
+
+class ContourAdjusterStatus(
+    val contour: ShapeContour,
+    val selectedSegments: List<Segment>,
+    val selectedPoints: List<Vector2>
+)
 
 
 /**
@@ -17,6 +27,7 @@ class ContourAdjuster(var contour: ShapeContour) {
         var clearSelectedEdges: Boolean = false,
         var clearSelectedVertices: Boolean = false
     )
+
     var parameters = Parameters()
 
     val parameterStack = ArrayDeque<Parameters>()
@@ -74,6 +85,15 @@ class ContourAdjuster(var contour: ShapeContour) {
         popEdgeSelection()
         popVertexSelection()
     }
+
+
+    val status: ContourAdjusterStatus
+        get() {
+            return ContourAdjusterStatus(contour,
+                edgeSelection.map { contour.segments[it] },
+                vertexSelection.map { if (it < contour.segments.size) contour.segments[it].start else contour.segments[it - 1].end }
+            )
+        }
 
     /**
      * the selected vertex
@@ -147,7 +167,6 @@ class ContourAdjuster(var contour: ShapeContour) {
         vertexSelection =
             (0 until if (contour.closed) contour.segments.size else contour.segments.size + 1).filter(predicate)
     }
-
 
 
     /**
@@ -272,4 +291,13 @@ fun adjustContour(contour: ShapeContour, adjuster: ContourAdjuster.() -> Unit): 
     val ca = ContourAdjuster(contour)
     ca.apply(adjuster)
     return ca.contour
+}
+
+@JvmName("adjustContourSequenceStatus")
+fun adjustContourSequence(
+    contour: ShapeContour,
+    adjuster: ContourAdjuster.() -> Sequence<ContourAdjusterStatus>
+): Sequence<ContourAdjusterStatus> {
+    val ca = ContourAdjuster(contour)
+    return ca.adjuster()
 }

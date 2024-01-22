@@ -11,7 +11,12 @@ import org.openrndr.shape.SegmentType
 import org.openrndr.shape.ShapeContour
 import kotlin.math.abs
 
-internal fun Vector2.transformedBy(t: Matrix44) = (t * (this.xy01)).xy
+internal fun Vector2.transformedBy(t: Matrix44, mask: Int = 0x0f, maskRef: Int = 0x0f) =
+    if ((mask and maskRef) != 0)
+        (t * (this.xy01)).xy else {
+        this
+    }
+
 fun <E> List<E>.update(vararg updates: Pair<Int, E>): List<E> {
     if (updates.isEmpty()) {
         return this
@@ -209,16 +214,36 @@ data class ContourEdge(
     }
 
 
+    enum class ControlMask(val mask: Int) {
+        START(1),
+        CONTROL0(2),
+        CONTROL1(4),
+        END(8)
+    }
+
+    fun maskOf(vararg control: ControlMask): Int {
+        var mask = 0
+        for (c in control) {
+            mask = mask or c.mask
+        }
+        return mask
+    }
+
     /**
      * apply [transform] to the edge
      * @param transform a [Matrix44]
      */
-    fun transformedBy(transform: Matrix44, updateTangents: Boolean = true): ContourEdge {
-        val segment = contour.segments[segmentIndex]
+    fun transformedBy(
+        transform: Matrix44,
+        updateTangents: Boolean = true,
+        mask: Int = 0xf,
+        promoteToCubic: Boolean = false
+    ): ContourEdge {
+        val segment = contour.segments[segmentIndex].let { if (promoteToCubic) it.cubic else it }
         val newSegment = segment.copy(
-            start = segment.start.transformedBy(transform),
-            control = segment.control.map { it.transformedBy(transform) },
-            end = segment.end.transformedBy(transform)
+            start = segment.start.transformedBy(transform, mask, ControlMask.START.mask),
+            control = segment.control.mapIndexed { index, it -> it.transformedBy(transform, mask, 1 shl (index + 1)) },
+            end = segment.end.transformedBy(transform, mask, ControlMask.END.mask)
         )
         val segmentInIndex = if (contour.closed) (segmentIndex - 1).mod(contour.segments.size) else segmentIndex - 1
         val segmentOutIndex = if (contour.closed) (segmentIndex + 1).mod(contour.segments.size) else segmentIndex + 1
@@ -253,6 +278,25 @@ data class ContourEdge(
 
         newSegments[segmentIndex] = newSegment
         return ContourEdge(ShapeContour.fromSegments(newSegments, contour.closed), segmentIndex)
+    }
+
+    fun startMovedBy(translation: Vector2, updateTangents: Boolean = true): ContourEdge =
+        transformedBy(buildTransform {
+            translate(translation)
+        }, updateTangents = updateTangents, mask = maskOf(ControlMask.START))
+
+    fun control0MovedBy(translation: Vector2): ContourEdge = transformedBy(buildTransform {
+        translate(translation)
+    }, updateTangents = false, mask = maskOf(ControlMask.CONTROL0), promoteToCubic = true)
+
+    fun control1MovedBy(translation: Vector2): ContourEdge = transformedBy(buildTransform {
+        translate(translation)
+    }, updateTangents = false, mask = maskOf(ControlMask.CONTROL1), promoteToCubic = true)
+
+    fun endMovedBy(translation: Vector2, updateTangents: Boolean = true): ContourEdge {
+        return transformedBy(buildTransform {
+            translate(translation)
+        }, updateTangents = updateTangents, mask = maskOf(ControlMask.END))
     }
 
     fun movedBy(translation: Vector2, updateTangents: Boolean = true): ContourEdge {
