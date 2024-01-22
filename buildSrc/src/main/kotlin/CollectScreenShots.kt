@@ -13,6 +13,10 @@ import java.io.File
 import java.net.URLClassLoader
 import javax.inject.Inject
 
+private class CustomClassLoader(parent: ClassLoader) : ClassLoader(parent) {
+    fun findClass(file: File): Class<*> = defineClass(null, file.readBytes(), 0, file.readBytes().size)
+}
+
 abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
     @get:InputDirectory
     @get:PathSensitive(PathSensitivity.NAME_ONLY)
@@ -41,16 +45,17 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
         inputChanges.getFileChanges(inputDir).forEach { change ->
             if (change.fileType == FileType.DIRECTORY) return@forEach
             if (change.file.extension == "class") {
-                val klassName = change.file.nameWithoutExtension
+                var klassName = change.file.nameWithoutExtension
                 if (klassName.dropLast(2) in ignore.get()) {
                     return@forEach
                 }
-
                 try {
-                    val classParentDir = change.file.parentFile
-                    val cp = (runtimeDependencies.get().map { it.toURI().toURL() } + classParentDir.toURI()
+                    val cp = (runtimeDependencies.get().map { it.toURI().toURL() } + inputDir.get().asFile.toURI()
                         .toURL()).toTypedArray()
                     val ucl = URLClassLoader(cp)
+                    val ccl = CustomClassLoader(ucl)
+                    val tempClass = ccl.findClass(change.file)
+                    klassName = tempClass.name
                     val klass = ucl.loadClass(klassName)
                     klass.getMethod("main")
                 } catch (e: NoSuchMethodException) {
@@ -58,6 +63,7 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
                 }
 
                 println("Collecting screenshot for ${klassName}")
+                val imageName = klassName.replace(".", "-")
 
                 execOperations.javaexec {
                     this.classpath += project.files(inputDir.get().asFile, preloadClass)
@@ -66,7 +72,7 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
                     this.workingDir(project.rootProject.projectDir)
                     this.jvmArgs(
                         "-DtakeScreenshot=true",
-                        "-DscreenshotPath=${outputDir.get().asFile}/$klassName.png",
+                        "-DscreenshotPath=${outputDir.get().asFile}/$imageName.png",
                         "-Dorg.openrndr.exceptions=JVM"
                     )
                 }
@@ -75,7 +81,7 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
         // this is only executed if there are changes in the inputDir
         val runDemos = outputDir.get().asFile.listFiles { file: File ->
             file.extension == "png"
-        }!!.map { it.nameWithoutExtension }.sorted()
+        }!!.map { it.nameWithoutExtension }.sortedBy { it.lowercase() }
         val readme = File(project.projectDir, "README.md")
         if (readme.exists()) {
             var lines = readme.readLines().toMutableList()
@@ -92,11 +98,10 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
             } else {
                 "demo"
             }
-
             for (demo in runDemos) {
                 val projectPath = project.projectDir.relativeTo(project.rootDir)
-                lines.add("### ${demo.dropLast(2)}")
-                lines.add("[source code](src/${demoModuleName}/kotlin/${demo.dropLast(2)}.kt)")
+                lines.add("### ${demo.dropLast(2).replace("-","/")}")
+                lines.add("[source code](src/${demoModuleName}/kotlin/${demo.dropLast(2).replace("-", "/")}.kt)")
                 lines.add("")
                 lines.add("![${demo}](https://raw.githubusercontent.com/openrndr/orx/media/$projectPath/images/${demo}.png)")
                 lines.add("")
@@ -122,4 +127,3 @@ object ScreenshotsHelper {
         return task
     }
 }
-
