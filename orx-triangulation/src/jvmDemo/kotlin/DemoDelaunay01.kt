@@ -23,7 +23,7 @@ fun main() {
                 drawer.clear(ColorRGBa.BLACK)
                 for ((i, triangle) in triangles.withIndex()) {
                     drawer.fill = ColorRGBa.PINK.shade(1.0 - i / (triangles.size * 1.2))
-                    drawer.stroke = ColorRGBa.PINK.shade( i / (triangles.size * 1.0) + 0.1)
+                    drawer.stroke = ColorRGBa.PINK.shade(i / (triangles.size * 1.0) + 0.1)
                     drawer.contour(triangle)
                 }
             }

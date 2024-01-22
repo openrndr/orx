@@ -59,7 +59,7 @@ class TestDelaunay {
 
     @Test
     fun testNeighbors() {
-        val c = Circle(200.0, 200.0, 150.0).contour.equidistantPositions(20).take(20)
+        val c = Circle(200.0, 200.0, 150.0).contour.equidistantPositions(20)
         val d = Delaunay.from(c)
         for (j in c.indices) {
             assertTrue(d.neighbors(j).toList().isNotEmpty())

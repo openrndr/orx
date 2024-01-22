@@ -23,7 +23,7 @@ fun main() {
                         rotate(Vector3.UNIT_Z, 0.0)
                     }
                 ) }
-                val points = circles.flatMap { it.contour.equidistantPositions(16).take(16) }
+                val points = circles.flatMap { it.contour.equidistantPositions(16) }
                 drawer.circles(points, 5.0)
                 val d = points.delaunayTriangulation()
                 drawer.stroke = ColorRGBa.PINK
