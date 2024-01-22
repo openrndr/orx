@@ -4,55 +4,55 @@ Collection of 2D shape generators and modifiers.
 
 <!-- __demos__ -->
 ## Demos
-### DemoAdjustContour01
-[source code](src/jvmDemo/kotlin/DemoAdjustContour01.kt)
+### adjust/DemoAdjustContour01
+[source code](src/jvmDemo/kotlin/adjust/DemoAdjustContour01.kt)
 
-![DemoAdjustContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoAdjustContour01Kt.png)
+![adjust-DemoAdjustContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour01Kt.png)
 
-### DemoAdjustContour02
-[source code](src/jvmDemo/kotlin/DemoAdjustContour02.kt)
+### adjust/DemoAdjustContour02
+[source code](src/jvmDemo/kotlin/adjust/DemoAdjustContour02.kt)
 
-![DemoAdjustContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoAdjustContour02Kt.png)
+![adjust-DemoAdjustContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour02Kt.png)
 
-### DemoAdjustContour03
-[source code](src/jvmDemo/kotlin/DemoAdjustContour03.kt)
+### adjust/DemoAdjustContour03
+[source code](src/jvmDemo/kotlin/adjust/DemoAdjustContour03.kt)
 
-![DemoAdjustContour03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoAdjustContour03Kt.png)
+![adjust-DemoAdjustContour03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour03Kt.png)
 
-### DemoAdjustContour04
-[source code](src/jvmDemo/kotlin/DemoAdjustContour04.kt)
+### adjust/DemoAdjustContour04
+[source code](src/jvmDemo/kotlin/adjust/DemoAdjustContour04.kt)
 
-![DemoAdjustContour04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoAdjustContour04Kt.png)
+![adjust-DemoAdjustContour04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour04Kt.png)
 
-### DemoAdjustContour05
-[source code](src/jvmDemo/kotlin/DemoAdjustContour05.kt)
+### adjust/DemoAdjustContour05
+[source code](src/jvmDemo/kotlin/adjust/DemoAdjustContour05.kt)
 
-![DemoAdjustContour05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoAdjustContour05Kt.png)
+![adjust-DemoAdjustContour05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour05Kt.png)
 
-### DemoAdjustContour06
-[source code](src/jvmDemo/kotlin/DemoAdjustContour06.kt)
+### adjust/DemoAdjustContour06
+[source code](src/jvmDemo/kotlin/adjust/DemoAdjustContour06.kt)
 
-![DemoAdjustContour06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoAdjustContour06Kt.png)
+![adjust-DemoAdjustContour06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour06Kt.png)
 
-### DemoAdjustContour07
-[source code](src/jvmDemo/kotlin/DemoAdjustContour07.kt)
+### adjust/DemoAdjustContour07
+[source code](src/jvmDemo/kotlin/adjust/DemoAdjustContour07.kt)
 
-![DemoAdjustContour07Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoAdjustContour07Kt.png)
+![adjust-DemoAdjustContour07Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour07Kt.png)
+
+### adjust/DemoAdjustContour09
+[source code](src/jvmDemo/kotlin/adjust/DemoAdjustContour09.kt)
+
+![adjust-DemoAdjustContour09Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour09Kt.png)
+
+### adjust/DemoAdjustContourContinue01
+[source code](src/jvmDemo/kotlin/adjust/DemoAdjustContourContinue01.kt)
+
+![adjust-DemoAdjustContourContinue01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContourContinue01Kt.png)
 
 ### DemoAdjustContour08
 [source code](src/jvmDemo/kotlin/DemoAdjustContour08.kt)
 
 ![DemoAdjustContour08Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoAdjustContour08Kt.png)
-
-### DemoAdjustContour09
-[source code](src/jvmDemo/kotlin/DemoAdjustContour09.kt)
-
-![DemoAdjustContour09Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoAdjustContour09Kt.png)
-
-### DemoAdjustContourContinue01
-[source code](src/jvmDemo/kotlin/DemoAdjustContourContinue01.kt)
-
-![DemoAdjustContourContinue01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoAdjustContourContinue01Kt.png)
 
 ### DemoAlphaShape
 [source code](src/jvmDemo/kotlin/DemoAlphaShape.kt)
@@ -194,12 +194,12 @@ Collection of 2D shape generators and modifiers.
 
 ![DemoText01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoText01Kt.png)
 
-### DemoTunniAdjuster01
-[source code](src/jvmDemo/kotlin/DemoTunniAdjuster01.kt)
+### tunni/DemoTunniAdjuster01
+[source code](src/jvmDemo/kotlin/tunni/DemoTunniAdjuster01.kt)
 
-![DemoTunniAdjuster01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoTunniAdjuster01Kt.png)
+![tunni-DemoTunniAdjuster01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/tunni-DemoTunniAdjuster01Kt.png)
 
-### DemoTunniPoint01
-[source code](src/jvmDemo/kotlin/DemoTunniPoint01.kt)
+### tunni/DemoTunniPoint01
+[source code](src/jvmDemo/kotlin/tunni/DemoTunniPoint01.kt)
 
-![DemoTunniPoint01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoTunniPoint01Kt.png)
+![tunni-DemoTunniPoint01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/tunni-DemoTunniPoint01Kt.png)
