@@ -1,10 +1,9 @@
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.equals.shouldBeEqual
-import org.openrndr.extra.shapes.regularPolygonBeveled
-import org.openrndr.extra.shapes.regularPolygonRounded
-import org.openrndr.extra.shapes.regularStar
-import org.openrndr.extra.shapes.regularStarRounded
+import org.openrndr.extra.shapes.primitives.regularPolygonBeveled
+import org.openrndr.extra.shapes.primitives.regularStar
+import org.openrndr.extra.shapes.primitives.regularStarRounded
 import org.openrndr.shape.Winding
 
 class TestRegularStar : DescribeSpec({

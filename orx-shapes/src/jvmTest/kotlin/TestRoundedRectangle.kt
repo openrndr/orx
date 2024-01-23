@@ -1,7 +1,7 @@
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.equals.shouldBeEqual
-import org.openrndr.extra.shapes.*
+import org.openrndr.extra.shapes.primitives.RoundedRectangle
 import org.openrndr.shape.Winding
 
 class TestRoundedRectangle : DescribeSpec({

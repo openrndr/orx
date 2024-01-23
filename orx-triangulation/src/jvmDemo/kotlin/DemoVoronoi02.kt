@@ -1,6 +1,6 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extra.shapes.grid
+import org.openrndr.extra.shapes.primitives.grid
 import org.openrndr.extra.triangulation.delaunayTriangulation
 import org.openrndr.shape.Circle
 

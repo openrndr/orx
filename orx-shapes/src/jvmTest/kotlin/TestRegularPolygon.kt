@@ -1,9 +1,9 @@
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.equals.shouldBeEqual
-import org.openrndr.extra.shapes.regularPolygon
-import org.openrndr.extra.shapes.regularPolygonBeveled
-import org.openrndr.extra.shapes.regularPolygonRounded
+import org.openrndr.extra.shapes.primitives.regularPolygon
+import org.openrndr.extra.shapes.primitives.regularPolygonBeveled
+import org.openrndr.extra.shapes.primitives.regularPolygonRounded
 import org.openrndr.shape.Winding
 
 class TestRegularPolygon : DescribeSpec({

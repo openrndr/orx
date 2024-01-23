@@ -16,14 +16,10 @@ kotlin {
                 implementation(libs.openrndr.filter)
                 implementation(libs.kotlin.reflect)
                 implementation(libs.kotlin.coroutines)
-            }
-        }
-
-        val jvmMain by getting {
-            dependencies {
                 implementation(project(":orx-triangulation"))
             }
         }
+
 
         val jvmTest by getting {
             dependencies {

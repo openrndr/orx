@@ -6,7 +6,7 @@ import org.openrndr.draw.loadFont
 import org.openrndr.draw.renderTarget
 import org.openrndr.extra.imageFit.FitMethod
 import org.openrndr.extra.imageFit.imageFit
-import org.openrndr.extra.shapes.grid
+import org.openrndr.extra.shapes.primitives.grid
 
 /**
  * Tests `drawer.imageFit()` with all FitMethods for portrait and landscape images.

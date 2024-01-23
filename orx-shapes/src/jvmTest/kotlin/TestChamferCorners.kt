@@ -2,7 +2,7 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.equals.shouldBeEqual
 import org.openrndr.extra.shapes.operators.bevelCorners
 import org.openrndr.extra.shapes.operators.roundCorners
-import org.openrndr.extra.shapes.regularPolygon
+import org.openrndr.extra.shapes.primitives.regularPolygon
 import org.openrndr.shape.Circle
 import org.openrndr.shape.contour
 
