@@ -87,11 +87,11 @@ internal class ExpressionListener(
         val right = doubleStack.pop()
         val left = doubleStack.pop()
         val result = when (val operator = ctx.operator?.type) {
-            KeyLangLexer.Tokens.PLUS.id -> left + right
-            KeyLangParser.Tokens.MINUS.id -> left - right
-            KeyLangParser.Tokens.ASTERISK.id -> left * right
-            KeyLangParser.Tokens.DIVISION.id -> left / right
-            KeyLangParser.Tokens.PERCENTAGE.id -> mod(left, right)
+            KeyLangLexer.Tokens.PLUS -> left + right
+            KeyLangParser.Tokens.MINUS -> left - right
+            KeyLangParser.Tokens.ASTERISK -> left * right
+            KeyLangParser.Tokens.DIVISION -> left / right
+            KeyLangParser.Tokens.PERCENTAGE -> mod(left, right)
             else -> error("operator '$operator' not implemented")
         }
         doubleStack.push(result)
@@ -106,10 +106,10 @@ internal class ExpressionListener(
         val left = doubleStack.pop()
         val right = doubleStack.pop()
         val result = when (val operator = ctx.operator?.type) {
-            KeyLangParser.Tokens.PLUS.id -> left + right
-            KeyLangParser.Tokens.MINUS.id -> right - left
-            KeyLangParser.Tokens.ASTERISK.id -> left * right
-            KeyLangParser.Tokens.DIVISION.id -> left / right
+            KeyLangParser.Tokens.PLUS -> left + right
+            KeyLangParser.Tokens.MINUS -> right - left
+            KeyLangParser.Tokens.ASTERISK -> left * right
+            KeyLangParser.Tokens.DIVISION -> left / right
             else -> error("operator '$operator' not implemented")
         }
         doubleStack.push(result)
@@ -248,13 +248,13 @@ internal class ExpressionListener(
 
     override fun visitTerminal(node: TerminalNode) {
         val type = node.symbol?.type
-        if (type == KeyLangParser.Tokens.INTLIT.id) {
+        if (type == KeyLangParser.Tokens.INTLIT) {
             doubleStack.push(node.text.toDouble())
         }
-        if (type == KeyLangParser.Tokens.DECLIT.id) {
+        if (type == KeyLangParser.Tokens.DECLIT) {
             doubleStack.push(node.text.toDouble())
         }
-        if (type == KeyLangParser.Tokens.ID.id) {
+        if (type == KeyLangParser.Tokens.ID) {
             val name = node.text.replace("`", "")
             @Suppress("DIVISION_BY_ZERO")
             when (val idType = idTypeStack.pop()) {
