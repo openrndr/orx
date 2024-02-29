@@ -84,8 +84,7 @@ Run (or import in IntelliJ IDEA and edit the run configuration).
 ./gradlew publishToMavenLocal snapshot
 ``` 
 
-This command will build and publish a snapshot of the next version of the library. For example, if the current latest
-release is 0.4.2, then it will create a release named "0.4.3-SNAPSHOT" and publish it to your local maven repository.
+This command will build and publish a snapshot of the next version of the library to your local maven repository.
 The exact version will be shown in the console output during the build process.
 
 Now you can run the same command again but for this repository. 
@@ -98,6 +97,7 @@ Now you can run the same command again but for this repository.
 It will automatically use the locally published snapshot of OPENRNDR for building ORX and will publish ORX to your local
 maven repository with the same logic as before.
 
-Once that's done, you can use the local build of ORX in
-your [openrndr-template](https://github.com/openrndr/openrndr-template) by specifying the version you published. In this
-case, it would be "0.4.3-SNAPSHOT".
+Once that's done, you can use the local builds of OPENRNDR and ORX in
+your [openrndr-template](https://github.com/openrndr/openrndr-template) by specifying the version that was published.
+
+Take a look at the [wiki](https://github.com/openrndr/openrndr/wiki/Building-OPENRNDR-and-ORX) for a more detailed walk-through.
