@@ -9,6 +9,7 @@ import org.openrndr.math.Matrix44
 import org.openrndr.math.Quaternion
 import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
+import org.openrndr.utils.buffer.MPPBuffer
 import java.io.File
 import java.nio.Buffer
 import java.nio.ByteOrder
@@ -92,7 +93,8 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
                     require(localBufferView.byteLength != null)
                     localBuffer.position(localBufferView.byteOffset)
                     localBuffer.limit(localBufferView.byteOffset + localBufferView.byteLength)
-                    val cb = ColorBuffer.fromBuffer(localBuffer, null)
+
+                    val cb = loadImage(MPPBuffer(localBuffer))
                     cb.generateMipmaps()
                     cb.filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
                     cb.anisotropy = 100.0

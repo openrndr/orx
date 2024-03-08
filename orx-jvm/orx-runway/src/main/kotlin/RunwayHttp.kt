@@ -22,18 +22,7 @@ fun ColorBuffer.toData(format: ImageFileFormat = ImageFileFormat.JPG): String {
     return "data:image/jpeg;base64,$base64Data"
 }
 
-/**
- * Construct a color buffer from a base64 data string
- */
-fun ColorBuffer.Companion.fromData(data: String): ColorBuffer {
-    val decoder = Base64.getDecoder()
-    val commaIndex = data.indexOf(",")
-    val imageData = decoder.decode(data.drop(commaIndex + 1))
 
-    ByteArrayInputStream(imageData).use {
-        return ColorBuffer.fromStream(it)
-    }
-}
 
 /**
  * Perform a Runway query
