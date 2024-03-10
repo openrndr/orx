@@ -61,6 +61,7 @@ openrndr-dialogs = { group = "org.openrndr", name = "openrndr-dialogs", version.
 openrndr-ffmpeg = { group = "org.openrndr", name = "openrndr-ffmpeg", version.ref = "openrndr" }
 openrndr-svg = { group = "org.openrndr", name = "openrndr-svg", version.ref = "openrndr" }
 openrndr-gl3-core = { group = "org.openrndr", name = "openrndr-gl3", version.ref = "openrndr" }
+openrndr-gl3-natives-macos-arm64 = { group = "org.openrndr", name = "openrndr-gl3-natives-macos-arm64", version.ref = "openrndr" }
 
 tensorflow = { group = "org.tensorflow", name = "tensorflow-core-api", version.ref = "tensorflow" }
 boofcv = { group = "org.boofcv", name = "boofcv-core", version.ref = "boofcv" }
