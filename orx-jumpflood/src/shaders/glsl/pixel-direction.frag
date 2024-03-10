@@ -51,9 +51,9 @@ void main() {
     }
     #else
     if (!normalizedDistance) {
-        o_color = vec4( length(pixelDistance * distanceScale).xx, outputData, 1.0);
+        o_color = vec4( vec2(length(pixelDistance * distanceScale)), outputData, 1.0);
     } else if (!unitDirection) {
-        o_color = vec4( length(pixelDistance / originalSize).xx, outputData, 1.0);
+        o_color = vec4( vec2(length(pixelDistance / originalSize)), outputData, 1.0);
     }
     #endif
 }

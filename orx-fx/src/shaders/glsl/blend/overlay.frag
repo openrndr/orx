@@ -13,7 +13,7 @@ out vec4 o_color;
 #endif
 
 vec3 demul(vec4 c) {
-    if (c.a == 0) {
+    if (c.a == 0.0) {
         return vec3(0.0);
     } else {
         return c.rgb / c.a;

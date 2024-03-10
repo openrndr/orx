@@ -93,7 +93,7 @@ val shaderVSM = """
 |// -- shaderVSM    
 |float linstep(float min, float max, float v)
 |{
-|  return clamp((v - min) / (max - min), 0, 1);
+|  return clamp((v - min) / (max - min), 0.0, 1.0);
 |}
 |// https://developer.nvidia.com/gpugems/GPUGems3/gpugems3_ch08.html
 |float chebyshevUpperBound(vec2 moments, float t, float minVariance) {
@@ -224,7 +224,7 @@ float ggx(vec3 N, vec3 V, vec3 L, float roughness, float F0)
 	D = alphaSqr/(pi * denom * denom);
 
 	// F
-	float dotLH5 = pow(1.0f-dotLH,5);
+	float dotLH5 = pow(1.0f-dotLH,5.0);
 	F = F0 + (1.0-F0)*(dotLH5);
 
 	// V

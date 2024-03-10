@@ -1,7 +1,4 @@
 // from https://github.com/kosua20/Rendu/blob/master/resources/common/shaders/screens/convolution-pyramid/downscale.frag
-
-#version 330
-
 in vec2 v_texCoord0;
 
 uniform vec2 targetSize;
@@ -43,7 +40,8 @@ void main(){
                 continue;
                 //accum = vec4(1.0, 0.0, 0.0, 1.0);
             }
-            accum += h1[dx+2] * h1[dy+2] * texelFetch(tex0, newPix,0);
+            accum += h1[dx+2] * h1[dy+2] * texelFetch(tex0, newPix,0
+            );
         }
     }
     o_output = accum;

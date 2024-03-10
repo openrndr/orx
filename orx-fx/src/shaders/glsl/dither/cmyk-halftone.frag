@@ -23,7 +23,7 @@ vec3 cmyki2rgb(in vec4 c)
     return c.rgb * c.a;
 }
 vec3 u(vec4 c) {
-    if (c.a == 0) {
+    if (c.a == 0.0) {
         return vec3(0.0);
     } else {
         return c.rgb/c.a;
@@ -46,7 +46,7 @@ vec4 cmyki2rgba(in vec4 cmyk){
 
 vec2 px2uv(in vec2 px)
 {
-    return vec2(px / textureSize(tex0, 0));
+    return vec2(px / vec2(textureSize(tex0, 0)));
 }
 
 vec2 grid(in vec2 px)
@@ -63,7 +63,7 @@ vec4 halftone(in vec2 fc,in mat2 m)
 {
     vec2 smp = (grid(m*fc) + 0.5*scale) * m;
     float s = min(length(fc-smp) / (dotSize*0.5*scale), 1.0);
-    vec3 texc = texture(tex0, px2uv(smp+textureSize(tex0, 0)/2.0)).rgb;
+    vec3 texc = texture(tex0, px2uv(smp+vec2(textureSize(tex0, 0))/2.0)).rgb;
     vec4 c = rgb2cmyki(texc);
     return c+s;
 }
@@ -79,7 +79,7 @@ mat2 rotm(in float r)
 }
 
 void main() {
-    vec2 fc = v_texCoord0 * textureSize(tex0, 0) - textureSize(tex0, 0)/2.0;
+    vec2 fc = v_texCoord0 * vec2(textureSize(tex0, 0)) - vec2(textureSize(tex0, 0))/2.0;
 
     mat2 mc = rotm(rotation + radians(15.0));
     mat2 mm = rotm(rotation + radians(75.0));

@@ -29,8 +29,8 @@ fun main() = application {
             // sets angle and radius based on time and shape ID.
             drawer.shadeStyle = shadeStyle {
                 vertexTransform = """
-                    float a = c_instance + p_time * 0.1;
-                    float r = 200 + 100 * sin(a * 0.998);
+                    float a = float(c_instance) + p_time * 0.1;
+                    float r = 200.0 + 100.0 * sin(a * 0.998);
                     x_position.x += r * sin(a);
                     x_position.y += r * cos(a);
                 """.trimIndent()

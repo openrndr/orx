@@ -61,9 +61,9 @@ object ColorPhraseBook : ShaderPhraseBook("color") {
         |vec4 linear_rgb_to_srgb(vec4 c) {
         |   const float t = 0.00313066844250063;
         |   return vec4(
-        |       c.r <= t ? c.r * 12.92 : 1.055 * pow(c.r, 1 / 2.4) - 0.055,
-        |       c.g <= t ? c.g * 12.92 : 1.055 * pow(c.g, 1 / 2.4) - 0.055,
-        |       c.b <= t ? c.b * 12.92 : 1.055 * pow(c.b, 1 / 2.4) - 0.055,
+        |       c.r <= t ? c.r * 12.92 : 1.055 * pow(c.r, 1.0 / 2.4) - 0.055,
+        |       c.g <= t ? c.g * 12.92 : 1.055 * pow(c.g, 1.0 / 2.4) - 0.055,
+        |       c.b <= t ? c.b * 12.92 : 1.055 * pow(c.b, 1.0 / 2.4) - 0.055,
         |       c.a);
         |}""".trimMargin())
 

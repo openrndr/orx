@@ -20,55 +20,55 @@ uniform sampler2D tex4;
 uniform sampler2D tex5;
 
 vec4 sampleBloom(vec2 pos, float shape) {
-	vec4 sum = vec4(0);
-	float total = 0;
+	vec4 sum = vec4(0.0);
+	float total = 0.0;
 
 	{
 		float weight = pow(0.0, shape);
-		vec2 rnd = vec2(nrand(3 + 0.0 + pos.xy + noiseSeed),
-		                nrand(5 + 0.0 + pos.yx - noiseSeed));
-		rnd = (rnd * 2 - 1) / textureSize(tex0, 0);
+		vec2 rnd = vec2(nrand(3.0 + 0.0 + pos.xy + noiseSeed),
+		                nrand(5.0 + 0.0 + pos.yx - noiseSeed));
+		rnd = (rnd * 2.0 - 1.0) / vec2(textureSize(tex0, 0));
 		sum += textureLod(tex0, pos + rnd * noiseGain, 0.0) * weight;
 		total += weight;
 	}
 	{
         float weight = pow(1.0, shape);
-        vec2 rnd = vec2(nrand(3 + 0.0 + pos.xy + noiseSeed),
-                        nrand(5 + 0.0 + pos.yx - noiseSeed));
-        rnd = (rnd * 2 - 1) / textureSize(tex1, 0);
+        vec2 rnd = vec2(nrand(3.0 + 0.0 + pos.xy + noiseSeed),
+                        nrand(5.0 + 0.0 + pos.yx - noiseSeed));
+        rnd = (rnd * 2.0 - 1.0) / vec2(textureSize(tex0, 0));
         sum += textureLod(tex1, pos + rnd * noiseGain, 0.0) * weight;
         total += weight;
     }
     {
         float weight = pow(2.0, shape);
-        vec2 rnd = vec2(nrand(3 + 0.0 + pos.xy + noiseSeed),
-    		                nrand(5 + 0.0 + pos.yx - noiseSeed));
-        rnd = (rnd * 2 - 1) / textureSize(tex2, 0);
+        vec2 rnd = vec2(nrand(3.0 + 0.0 + pos.xy + noiseSeed),
+    		                nrand(5.0 + 0.0 + pos.yx - noiseSeed));
+        rnd = (rnd * 2.0 - 1.0) / vec2(textureSize(tex0, 0));
         sum += textureLod(tex2, pos + rnd * noiseGain, 0.0) * weight;
         total += weight;
     }
 
     {
         float weight = pow(3.0, shape);
-        vec2 rnd = vec2(nrand(3 + 0.0 + pos.xy + noiseSeed),
-    		                nrand(5 + 0.0 + pos.yx - noiseSeed));
-        rnd = (rnd * 3 - 1) / textureSize(tex3, 0);
+        vec2 rnd = vec2(nrand(3.0 + 0.0 + pos.xy + noiseSeed),
+    		                nrand(5.0 + 0.0 + pos.yx - noiseSeed));
+        rnd = (rnd * 3.0 - 1.0) / vec2(textureSize(tex0, 0));
         sum += textureLod(tex3, pos + rnd * noiseGain, 0.0) * weight;
         total += weight;
     }
     {
         float weight = pow(4.0, shape);
-        vec2 rnd = vec2(nrand(3 + 0.0 + pos.xy + noiseSeed),
-    		                nrand(5 + 0.0 + pos.yx - noiseSeed));
-        rnd = (rnd * 3 - 1) / textureSize(tex3, 0);
+        vec2 rnd = vec2(nrand(3.0 + 0.0 + pos.xy + noiseSeed),
+    		                nrand(5.0 + 0.0 + pos.yx - noiseSeed));
+        rnd = (rnd * 3.0 - 1.0) / vec2(textureSize(tex0, 0));
         sum += textureLod(tex4, pos + rnd * noiseGain, 0.0) * weight;
         total += weight;
     }
     {
         float weight = pow(5.0, shape);
-        vec2 rnd = vec2(nrand(3 + 0.0 + pos.xy + noiseSeed),
-    		                nrand(5 + 0.0 + pos.yx - noiseSeed));
-        rnd = (rnd * 3 - 1) / textureSize(tex3, 0);
+        vec2 rnd = vec2(nrand(3.0 + 0.0 + pos.xy + noiseSeed),
+    		                nrand(5.0 + 0.0 + pos.yx - noiseSeed));
+        rnd = (rnd * 3.0 - 1.0) / vec2(textureSize(tex0, 0));
         sum += textureLod(tex5, pos + rnd * noiseGain, 0.0) * weight;
         total += weight;
     }

@@ -21,14 +21,14 @@ void main() {
     vec4 b = texture2D(tex1, v_texCoord0);
     #endif
 
-    vec3 na = a.a > 0 ? a.rgb/a.a : vec3(0.0);
-    vec3 nb = b.a > 0 ? b.rgb/b.a : vec3(0.0);
+    vec3 na = a.a > 0.0 ? a.rgb/a.a : vec3(0.0);
+    vec3 nb = b.a > 0.0 ? b.rgb/b.a : vec3(0.0);
 
     vec3 addColor = b.rgb;
 
     vec4 result;
     if (clip) {
-        result = vec4((na + addColor), 1) * a.a;
+        result = vec4((na + addColor), 1.0) * a.a;
     } else {
         result = (1.0-a.a) * b + a.a * b.a * vec4(min(na + nb, vec3(1.0)), 1.0) + (1.0-b.a) * a;
     }

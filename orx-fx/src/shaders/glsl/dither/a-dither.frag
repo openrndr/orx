@@ -7,22 +7,22 @@ uniform int pattern;
 uniform int levels;
 
 float mask1(int levels, float l, int x, int y, int c) {
-    float mask = ((x ^ y * 149) * 1234& 511)/511.0;
-    return floor(levels * l + mask)/levels;
+    float mask = float((x ^ y * 149) * 1234& 511)/511.0;
+    return floor(float(levels) * l + mask)/float(levels);
 }
 
 float mask2(int levels, float l, int x, int y, int c) {
-    float mask = (((x+c*17) ^ y * 149) * 1234 & 511)/511.0;
-    return floor(levels * l + mask)/levels;
+    float mask = float(((x+c*17) ^ y * 149) * 1234 & 511)/511.0;
+    return floor(float(levels) * l + mask)/float(levels);
 }
 float mask3(int levels, float l, int x, int y, int c) {
-    float mask =  ((x + y * 237) * 119 & 255)/255.0;
-    return floor(levels * l + mask)/levels;
+    float mask =  float((x + y * 237) * 119 & 255)/255.0;
+    return floor(float(levels) * float(l) + mask)/float(levels);
 }
 
 float mask4(int levels, float l, int x, int y, int c) {
-    float mask = (((x+c*67) + y * 236) * 119 & 255)/255.0;
-    return floor(levels * l + mask)/levels;
+    float mask = float(((x+c*67) + y * 236) * 119 & 255)/255.0;
+    return floor(float(levels) * float(l) + mask)/float(levels);
 }
 
 out vec4 o_color;
@@ -31,7 +31,7 @@ void main() {
     if (c.a > 0.0) {
         c.rgb/=c.a;
     }
-    ivec2 ic = ivec2(v_texCoord0 * textureSize(tex0, 0));
+    ivec2 ic = ivec2(v_texCoord0 * vec2(textureSize(tex0, 0)));
 
     vec4 rgba = vec4(0.0);
     if (pattern == 0) {

@@ -16,11 +16,6 @@ fun main() {
             checkers.size = 64.0
             checkers.apply(emptyArray(), image)
 
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
             extend {
                 fd.blend = mouse.position.x/width
                 fd.apply(image, distorted)

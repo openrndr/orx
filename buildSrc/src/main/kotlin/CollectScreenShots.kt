@@ -73,7 +73,9 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
                     this.jvmArgs(
                         "-DtakeScreenshot=true",
                         "-DscreenshotPath=${outputDir.get().asFile}/$imageName.png",
-                        "-Dorg.openrndr.exceptions=JVM"
+                        "-Dorg.openrndr.exceptions=JVM",
+                        "-Dorg.openrndr.gl3.debug=true",
+                        "-Dorg.openrndr.gl3.delete_angle_on_exit=false"
                     )
                 }
             }

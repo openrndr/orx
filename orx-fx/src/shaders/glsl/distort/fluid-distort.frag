@@ -34,11 +34,11 @@ uniform float blend;
 out vec4 o_color;
 
 float getRot(vec2 pos, vec2 b) {
-    vec2 Res = textureSize(tex0, 0);
+    vec2 Res = vec2(textureSize(tex0, 0));
     vec2 p = b;
     float rot = 0.0;
     for (int i = 0; i < RotNum; i++) {
-        rot += dot(texture(tex0, fract((pos + p) / Res.xy)).xy -vec2(0.5), p.yx * vec2(1, -1));
+        rot += dot(texture(tex0, fract((pos + p) / Res.xy)).xy -vec2(0.5), p.yx * vec2(1.0, -1.0));
         p = m * p;
     }
     return rot / float(RotNum)/dot(b, b);
@@ -46,10 +46,10 @@ float getRot(vec2 pos, vec2 b) {
 
 void main() {
     vec2 pos = v_texCoord0 * targetSize;
-    vec2 Res = textureSize(tex0, 0);
+    vec2 Res = vec2(textureSize(tex0, 0));
 
     vec2 b = vec2(cos(ang * random), sin(ang * random));
-    vec2 v = vec2(0);
+    vec2 v = vec2(0.0);
     float bbMax = 0.5 * Res.y;
     bbMax *= bbMax;
     for (int l = 0; l < 20; l++) {

@@ -21,7 +21,7 @@ void main() {
 
     vec2 cell = (uv / size);
     ivec2 cellIndex = ivec2(floor(cell));
-    vec2 cellUV = cell - cellIndex;
+    vec2 cellUV = cell - vec2(cellIndex);
 
     int c = (cellIndex.x + cellIndex.y) % 2;
     vec2 w = fwidth(cell);

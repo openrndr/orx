@@ -25,9 +25,9 @@ void main() {
     vec3 nb = b.a == 0.0 ? vec3(0.0): b.rgb / b.a;
 
     vec3 m = vec3(
-        nb.r <= 0.5? 2*na.r * nb.r : 1.0 - 2.0*(1.0 - na.r)*(1.0 - nb.r),
-        nb.g <= 0.5? 2*na.g * nb.g : 1.0 - 2.0*(1.0 - na.g)*(1.0 - nb.g),
-        nb.b <= 0.5? 2*na.b * nb.b : 1.0 - 2.0*(1.0 - na.b)*(1.0 - nb.b)
+        nb.r <= 0.5? 2.0*na.r * nb.r : 1.0 - 2.0*(1.0 - na.r)*(1.0 - nb.r),
+        nb.g <= 0.5? 2.0*na.g * nb.g : 1.0 - 2.0*(1.0 - na.g)*(1.0 - nb.g),
+        nb.b <= 0.5? 2.0*na.b * nb.b : 1.0 - 2.0*(1.0 - na.b)*(1.0 - nb.b)
         );
 
     vec4 result;

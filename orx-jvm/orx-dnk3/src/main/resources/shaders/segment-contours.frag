@@ -1,12 +1,10 @@
-#version 330
-
-uniform usampler2D tex0;
+uniform highp usampler2D tex0;
 in vec2 v_texCoord0;
 out vec4 o_output;
 
 void main() {
     ivec2 ts = textureSize(tex0, 0);
-    ivec2 pixel = ivec2(v_texCoord0 * ts);
+    ivec2 pixel = ivec2(v_texCoord0 * vec2(ts));
 
     ivec2 c = pixel;
     ivec2 n = c + ivec2(0, -1);

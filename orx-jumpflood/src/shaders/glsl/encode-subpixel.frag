@@ -42,31 +42,31 @@ void main() {
     if (mask == 1) {
         offset.x = 1.0 - (threshold-t10) / zd(t00-t10);
         offset.y = 1.0 - ((threshold-t01) / zd(t00-t01));
-        offset /= 2;
+        offset /= 2.0;
     }
     if (mask == 2) {
         offset.x = ((threshold-t00) / zd(t10-t00));
         offset.y = 1.0-(threshold-t11) / zd(t10-t11);
-        offset /= 2;
+        offset /= 2.0;
     }
     if (mask == 3) { // OK
         float dy0 =  1.0 - (threshold - t01) / zd(t00 - t01);
         float dy1 =  1.0 - (threshold - t11) / zd(t10 - t11);
         offset.y = dy0 + dy1;
         offset.x = 1.0;
-        offset /= 2;
+        offset /= 2.0;
     }
     if (mask == 4) { // OK
         offset.x = 1.0 - (threshold-t11) / zd(t01-t11);
         offset.y = (threshold-t00) / zd(t01-t00);
-        offset /= 2;
+        offset /= 2.0;
     }
     if (mask == 5) { // OK
         float dx0 = 1.0- (threshold - t10) / zd(t00 - t10);
         float dx1 = 1.0-(threshold - t11) / zd(t01 - t11);
         offset.x = dx0 + dx1;
         offset.y = 1.0;
-        offset /= 2;
+        offset /= 2.0;
     }
     if (mask == 6 || mask == 9) {
         offset = vec2(0.5);
@@ -74,41 +74,41 @@ void main() {
     if (mask == 7) { // OK
         offset.x = 1.0 - (threshold-t11) / zd(t01-t11);
         offset.y = 1.0 - (threshold-t11) / zd(t10-t11);
-        offset /= 2;
+        offset /= 2.0;
     }
     if (mask == 8) { // OK
         offset.x = (threshold-t01) / zd(t11-t01);
         offset.y = (threshold-t10) / zd(t11-t10);
-        offset /= 2;
+        offset /= 2.0;
     }
     if (mask == 10) { // OK
         float dx0 = (threshold - t00) / zd(t10 - t00);
         float dx1 = (threshold - t01) / zd(t11 - t01);
         offset.x = (dx0 + dx1);
         offset.y = 1.0;
-        offset /= 2;
+        offset /= 2.0;
     }
     if (mask == 11) { // OK
         offset.x = (threshold-t01) / zd(t11-t01);
         offset.y = (threshold-t01) / zd(t00-t01);
-        offset /= 2;
+        offset /= 2.0;
     }
     if (mask == 12) { // OK
         float dy0 = (threshold - t00) / zd(t01 - t00);
         float dy1 = (threshold - t10) / zd(t11 - t10);
         offset.y = dy0 + dy1;
         offset.x = 1.0;
-        offset /= 2;
+        offset /= 2.0;
     }
     if (mask == 13) { // OK
         offset.x = 1.0 - (threshold-t10) / zd(t00-t10);
         offset.y = (threshold-t10) / zd(t11-t10);
-        offset /= 2;
+        offset /= 2.0;
     }
     if (mask == 14) { // OK
         offset.x = (threshold-t00) / zd(t10-t00);
         offset.y = (threshold-t00) / zd(t01-t00);
-        offset /= 2;
+        offset /= 2.0;
     }
 
     float contour = (mask != 0 && mask != 15)?1.0:0.0;

@@ -28,6 +28,6 @@ vec3 reinhard_extended_luminance(vec3 v, float max_white_l) {
 void main() {
     vec3 texColor = texture(tex0,v_texCoord0).rgb;
     vec3 color = reinhard_extended_luminance(texColor * exposureBias, maxLuminance);
-    vec3 retColor = pow(color, vec3(1/2.2));
+    vec3 retColor = pow(color, vec3(1.0/2.2));
     o_output = vec4(retColor, 1);
 }

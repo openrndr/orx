@@ -2,7 +2,6 @@ import org.openrndr.application
 import org.openrndr.draw.createEquivalent
 import org.openrndr.draw.loadImage
 import org.openrndr.extra.fx.dither.LumaHalftone
-import org.openrndr.math.mod_
 
 fun main() {
     application {

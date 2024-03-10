@@ -295,7 +295,7 @@ void main() {
 
 
     float angle = abs(dot(reflected, viewNormal));
-    float frontalFade = clamp(-reflected.z,0, 1);
+    float frontalFade = clamp(-reflected.z,0.0, 1.0);
     if ( true ) {
         bool hit = traceScreenSpaceRay1(
             viewPos,

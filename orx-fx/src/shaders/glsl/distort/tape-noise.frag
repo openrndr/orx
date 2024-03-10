@@ -35,19 +35,19 @@ void main() {
     o_output = vec4(0.0);
     for (int k = 0; k < 10; ++k ) {
         vec2 duv = v_texCoord0;
-        duv.y += smoothstep(pow(cos(time+k*dk+v_texCoord0.y*1.0),10.0)*0.1+0.1, 0.0, v_texCoord0.x)*deformAmplitude * cos((time+k*dk)*deformFrequency);
-        duv.y += smoothstep(pow(1.0-cos(time+k*dk+v_texCoord0.y*1.0),10.0)*0.1+0.1, 0.9, v_texCoord0.x)*deformAmplitude * cos((time+k*dk)*deformFrequency);
+        duv.y += smoothstep(pow(cos(time+float(k)*dk+v_texCoord0.y*1.0),10.0)*0.1+0.1, 0.0, v_texCoord0.x)*deformAmplitude * cos((time+float(k)*dk)*deformFrequency);
+        duv.y += smoothstep(pow(1.0-cos(time+float(k)*dk+v_texCoord0.y*1.0),10.0)*0.1+0.1, 0.9, v_texCoord0.x)*deformAmplitude * cos((time+float(k)*dk)*deformFrequency);
         duv.y += sin(v_texCoord0.x*3.1415926535)*0.0;
-        float bc = floor(hash22(vec2(time+k*dk, (time+k*dk)*0.1)).x*20.0);
+        float bc = floor(hash22(vec2(time+float(k)*dk, (time+float(k)*dk)*0.1)).x*20.0);
 
         float gb3 = floor(duv.y*bc)/bc;
 
-        vec2 v = hash22(duv.xy*0.003+time+k*dk);
-        vec2 v2 = hash22(duv.xy*0.03+time+k*dk);
-        vec2 v2b = hash22(duv.yx*0.03+time+k*dk);
-        float stretch = (cos(time+k*dk)*0.001+0.002)*0.3+0.001;
-        vec2 h = hash22(duv.yy*stretch+time+k*dk);
-        float gap = smoothstep(gapLow, gapHigh, cos(gb3*(gapFrequency+duv.y*gapFrequency + (time+k*dk)*gapFrequency) +duv.x*gapFrequency)) * (cos(gb3)*0.5+0.5);
+        vec2 v = hash22(duv.xy*0.003+time+float(k)*dk);
+        vec2 v2 = hash22(duv.xy*0.03+time+float(k)*dk);
+        vec2 v2b = hash22(duv.yx*0.03+time+float(k)*dk);
+        float stretch = (cos(time+float(k)*dk)*0.001+0.002)*0.3+0.001;
+        vec2 h = hash22(duv.yy*stretch+time+float(k)*dk);
+        float gap = smoothstep(gapLow, gapHigh, cos(gb3*(gapFrequency+duv.y*gapFrequency + (time+float(k)*dk)*gapFrequency) +duv.x*gapFrequency)) * (cos(gb3)*0.5+0.5);
 
         float r = smoothstep(noiseLow, noiseHigh, h.x*gap*v2.x)*1.0;
         float g = smoothstep(noiseLow, noiseHigh, h.x*gap*v2.y)*1.0;

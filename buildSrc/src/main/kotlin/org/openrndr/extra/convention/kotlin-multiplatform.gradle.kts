@@ -1,11 +1,10 @@
 package org.openrndr.extra.convention
 
 import CollectScreenshotsTask
-import gradle.kotlin.dsl.accessors._a37e1a3c5785f18372ed85a4dc9bbdf6.testRuntimeOnly
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.net.URI
 
 val libs = the<LibrariesForLibs>()
 
@@ -48,6 +47,11 @@ kotlin {
                     runtimeDependencies.set(runtimeDependencyFiles)
                     outputDir.set(project.file(project.projectDir.toString() + "/images"))
                     dependsOn(compileTaskProvider)
+                }
+                dependencies {
+                    if (DefaultNativePlatform.getCurrentOperatingSystem().isMacOsX) {
+                        runtimeOnly(libs.openrndr.gl3.natives.macos.arm64)
+                    }
                 }
             }
         }

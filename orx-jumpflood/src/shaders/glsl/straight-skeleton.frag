@@ -39,7 +39,7 @@ void main() {
         fc += backgroundColor * backgroundColor.a;
     }
 
-    if ((d0 < angleTreshold || d1 < angleTreshold || d2 < angleTreshold || d3 < angleTreshold) && ct.z > 0.0 && length(ct.xy) > 4) {
+    if ((d0 < angleTreshold || d1 < angleTreshold || d2 < angleTreshold || d3 < angleTreshold) && ct.z > 0.0 && length(ct.xy) > 4.0) {
         fc = fc * (1.0 - skeletonColor.a) + (skeletonColor * skeletonColor.a);
     }
     o_color = fc;

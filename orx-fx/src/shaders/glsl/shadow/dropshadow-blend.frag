@@ -7,6 +7,6 @@ out vec4 o_color;
 void main() {
     vec4 a = texture(tex0, v_texCoord0-shift);
     vec4 b = texture(tex1, v_texCoord0);
-    float alpha = min(1,max(0, b.a));
+    float alpha = min(1.0,max(0.0, b.a));
     o_color = a * (1.0-alpha) + b;
 }

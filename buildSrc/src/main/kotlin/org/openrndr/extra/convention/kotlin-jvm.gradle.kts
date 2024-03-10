@@ -49,6 +49,10 @@ dependencies {
     "demoImplementation"(main.output.classesDirs + main.runtimeClasspath)
     "demoImplementation"(libs.openrndr.application)
     "demoImplementation"(libs.openrndr.extensions)
+
+    if (DefaultNativePlatform.getCurrentOperatingSystem().isMacOsX) {
+        "demoRuntimeOnly"(libs.openrndr.gl3.natives.macos.arm64)
+    }
     "demoRuntimeOnly"(libs.openrndr.gl3.core)
     "demoRuntimeOnly"(libs.slf4j.simple)
 }

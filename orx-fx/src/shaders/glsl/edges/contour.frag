@@ -17,13 +17,13 @@ float calc_contour(vec2 uv) {
 }
 
 void main() {
-    vec2 step = 1.0 / textureSize(tex0, 0);
+    vec2 step = 1.0 / vec2(textureSize(tex0, 0));
     float contour = 0.0;
     float weight = 0.0;
 
      for (int i = -window; i <= window; ++i) {
         for (int j = -window; j <= window; ++j) {
-            contour += calc_contour(v_texCoord0 + step/(window+1.0) * vec2(i, j));
+            contour += calc_contour(v_texCoord0 + step/(float(window)+1.0) * vec2(float(i), float(j)));
             weight += 1.0;
         }
     }

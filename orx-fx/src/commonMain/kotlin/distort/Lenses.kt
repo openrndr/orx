@@ -12,7 +12,7 @@ import org.openrndr.extra.parameters.IntParameter
 import org.openrndr.shape.Rectangle
 
 @Description("Lenses")
-class Lenses : Filter1to1(mppFilterShader(fx_lenses, "block-repeat")) {
+class Lenses : Filter1to1(mppFilterShader(fx_lenses, "lenses")) {
     @IntParameter("rows", 1, 64, order = 0)
     var rows: Int by parameters
 

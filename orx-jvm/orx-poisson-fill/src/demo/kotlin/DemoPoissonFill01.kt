@@ -8,11 +8,9 @@ import org.openrndr.draw.ColorType
 import org.openrndr.draw.colorBuffer
 import org.openrndr.draw.isolatedWithTarget
 import org.openrndr.draw.renderTarget
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.noise.Random
 import org.openrndr.math.Polar
 import org.openrndr.math.clamp
-import org.openrndr.math.mix
 import org.openrndr.poissonfill.PoissonFill
 import org.openrndr.shape.Rectangle
 import kotlin.math.sin
@@ -25,7 +23,7 @@ fun main() {
             val dry = renderTarget(width, height) {
                 colorBuffer(type = ColorType.FLOAT32)
             }
-            val wet = colorBuffer(width, height)
+            val wet = colorBuffer(width, height, type = ColorType.FLOAT32)
 
             val fx = PoissonFill()
 

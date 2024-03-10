@@ -1,7 +1,6 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.fx.blur.*
 import org.openrndr.math.Polar
 import kotlin.math.sin

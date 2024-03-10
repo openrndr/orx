@@ -30,8 +30,8 @@ vec4 getVideo(vec2 uv, float amplitude, float seconds) {
     float iTime = seconds;
     vec2 look = mod(uv, vec2(1.0));
     float window = 1.0/(1.0 + 20.0*(look.y-mod(iTime*vfreq, 1.0))*(look.y-mod(iTime*vfreq, 1.)));
-    look.x = look.x + sin(look.y*pfreq + poffset * 3.1415)/50 *(1.+cos(iTime*hfreq))*window*amplitude;
-    look.y = mod(look.y, 1.);
+    look.x = look.x + sin(look.y*pfreq + poffset * 3.1415)/50.0 *(1.0+cos(iTime*hfreq))*window*amplitude;
+    look.y = mod(look.y, 1.0);
 
     vec4 video = texture(tex0, look);
     return video;
@@ -48,11 +48,11 @@ void main() {
     float ds = scrollOffset1 - scrollOffset0;
     if (aa > 0.0 || ds > 0.0) {
         for (int i = 1; i < 16; ++i) {
-            vec4 lc = getVideo(v_texCoord0 + vec2(0.0, scrollOffset0+ds*i), aa, time-i/(16*60.0));
+            vec4 lc = getVideo(v_texCoord0 + vec2(0.0, scrollOffset0+ds*float(i)), aa, time-float(i)/(16.0*60.0));
             if (!linearInput) {
                 lc.rgb = pow(lc.rgb, vec3(2.2));
             }
-            c += lc * (3.0/16.0) * aberrationColor(i/16.0);
+            c += lc * (3.0/16.0) * aberrationColor(float(i)/16.0);
         }
         o_output = c;
     } else {
@@ -63,6 +63,6 @@ void main() {
         o_output = lc;
     }
     if (!linearOutput) {
-        o_output.rgb = pow(o_output.rgb, vec3(1/2.2));
+        o_output.rgb = pow(o_output.rgb, vec3(1.0/2.2));
     }
 }

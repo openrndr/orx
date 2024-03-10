@@ -84,7 +84,7 @@ class SceneRenderer {
                 }
                 val target = shadowLightTargets.getOrPut(shadowLight) {
                     val mapSize = (shadowLight.shadows as Shadows.MappedShadows).mapSize
-                    pass.createPassTarget(mapSize, mapSize, DepthFormat.DEPTH16)
+                    pass.createPassTarget(mapSize, mapSize, DepthFormat.DEPTH_STENCIL)
                 }
                 target.clearDepth(depth = 1.0)
 

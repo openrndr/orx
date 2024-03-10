@@ -22,7 +22,7 @@ void main() {
 
     float ar = targetSize.y / targetSize.x;
 
-    vec4 nb = b.a > 0? b/b.a : vec4(0.0);
+    vec4 nb = b.a > 0.0? b/b.a : vec4(0.0);
 
     vec2 offset = (nb.rg - vec2(offset))*vec2(gain) * nb.a;
     offset = rm * offset * vec2(1.0, ar);

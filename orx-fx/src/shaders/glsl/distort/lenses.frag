@@ -18,7 +18,7 @@ void main() {
     float ca = cos(radians(rotation));
     float sa = sin(radians(rotation));
 
-    vec2 ts = textureSize(tex0, 0);
+    vec2 ts = vec2(textureSize(tex0, 0));
     mat2 rm = mat2(1.0, 0.0, 0.0, ts.x / ts.y) * mat2(vec2(ca, sa), vec2(-sa, ca)) * mat2(1.0, 0.0, 0.0, ts.y / ts.x);
     vec2 ruv = (uv - blockCenter);
     vec2 luv;

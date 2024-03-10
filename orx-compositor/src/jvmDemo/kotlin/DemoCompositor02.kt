@@ -14,6 +14,7 @@ import org.openrndr.shape.Rectangle
  * Try changing which layer has multisampling applied and observe the results.
  */
 fun main() = application {
+    System.setProperty("org.openrndr.gl3.debug", "true")
     configure {
         width = 800
         height = 800
@@ -21,7 +22,7 @@ fun main() = application {
 
     program {
         val layers = compose {
-            layer(multisample = BufferMultisample.SampleCount(16)) {
+            layer(multisample = BufferMultisample.SampleCount(4)) {
                 draw {
                     drawer.translate(drawer.bounds.center)
                     drawer.rotate(seconds)

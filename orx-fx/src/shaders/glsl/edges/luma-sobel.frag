@@ -16,7 +16,7 @@ float luma(vec4 color){
 }
 
 void main() {
-    vec2 step = 1.0 / textureSize(tex0, 0);
+    vec2 step = 1.0 / vec2(textureSize(tex0, 0));
 
     float tl = luma(texture(tex0, v_texCoord0 + vec2(-step.x, step.y)));
     float l = luma(texture(tex0, v_texCoord0 + vec2(-step.x, 0)));
@@ -39,7 +39,7 @@ void main() {
 
     float x = tl + 2.0 * l + bl - tr - 2.0 * r - br;
     float y = -tl - 2.0 * t - tr + bl + 2.0 * b + br;
-    float intensity = sqrt((x*x) + (y*y)) / sqrt(2);
+    float intensity = sqrt(x*x + y*y) / sqrt(2.0);
     vec4 color = mix(vec4(backgroundColor.rgb, backgroundOpacity), vec4(edgeColor.rgb, edgeOpacity), intensity);
 
     vec4 a = texture(tex0, v_texCoord0);

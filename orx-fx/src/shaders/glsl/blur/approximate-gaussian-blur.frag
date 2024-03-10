@@ -20,7 +20,7 @@ void main() {
         float lw = exp( float(-(x*x)) / (2.0 * sigma * sigma) ) ;
         vec2 tc = v_texCoord0 + float(x) * blurDirection * s;// * spread;
         #ifndef OR_WEBGL2
-        sum += textureLod(tex0, tc, sourceLevel) * lw;
+        sum += textureLod(tex0, tc, float(sourceLevel)) * lw;
         #else
         sum += texture(tex0, tc);
         #endif

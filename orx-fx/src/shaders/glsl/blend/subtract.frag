@@ -21,8 +21,8 @@ void main() {
     vec4 b = texture2D(tex1, v_texCoord0);
     #endif
 
-    vec3 na = a.a > 0 ? a.rgb/a.a : vec3(0.0);
-    vec3 nb = b.a > 0 ? b.rgb/b.a : vec3(0.0);
+    vec3 na = a.a > 0.0 ? a.rgb/a.a : vec3(0.0);
+    vec3 nb = b.a > 0.0 ? b.rgb/b.a : vec3(0.0);
     vec3 subColor = b.rgb;
     vec4 result;
     if (clip) {

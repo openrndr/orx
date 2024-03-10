@@ -15,8 +15,7 @@ uniform vec4 foregroundColor;
 uniform float backgroundOpacity;
 uniform float foregroundOpacity;
 
-vec2 iResolution = textureSize(tex0, 0);
-vec2 fragCoord = v_texCoord0 * iResolution;
+vec2 iResolution;
 
 float getAve(vec2 uv){
     vec3 rgb = texture(tex0, uv).rgb;
@@ -104,6 +103,8 @@ float cannyEdge(vec2 fragCoord, float mn, float mx){
 }
 
 void main(){
+    iResolution = vec2(textureSize(tex0, 0));
+    vec2 fragCoord = v_texCoord0 * iResolution;
     float edge = cannyEdge(fragCoord, threshold0, threshold1);
     o_output = mix(foregroundColor * foregroundOpacity, backgroundColor * backgroundOpacity, 1.-edge);
 }

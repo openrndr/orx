@@ -33,9 +33,9 @@ vec3 srgb_to_linear(vec3 c) {
 vec3 linear_to_srgb(vec3 c) {
     const float t = 0.00313066844250063;
     return vec3(
-        c.r <= t ? c.r * 12.92 : 1.055 * pow(c.r, 1 / 2.4) - 0.055,
-        c.g <= t ? c.g * 12.92 : 1.055 * pow(c.g, 1 / 2.4) - 0.055,
-        c.b <= t ? c.b * 12.92 : 1.055 * pow(c.b, 1 / 2.4) - 0.055
+        c.r <= t ? c.r * 12.92 : 1.055 * pow(c.r, 1.0 / 2.4) - 0.055,
+        c.g <= t ? c.g * 12.92 : 1.055 * pow(c.g, 1.0 / 2.4) - 0.055,
+        c.b <= t ? c.b * 12.92 : 1.055 * pow(c.b, 1.0 / 2.4) - 0.055
     );
 }
 
@@ -86,7 +86,7 @@ void main() {
  */
 @Suppress("RUNTIME_ANNOTATION_NOT_SUPPORTED")
 @Description("Blend spectral")
-class BlendSpectral : Filter2to1(filterShaderFromCode(spectralBlendShader, "color-burn")) {
+class BlendSpectral : Filter2to1(filterShaderFromCode(spectralBlendShader, "blend-spectral")) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 

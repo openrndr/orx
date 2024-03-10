@@ -41,7 +41,7 @@ private fun PointLight.fs(index: Int, hasNormalAttribute: Boolean): String = """
 |   vec3 L = normalize(Lr);
 |
 |   float side = ${if (hasNormalAttribute) "dot(L, N)" else "3.1415"};
-|   f_diffuse += attenuation * max(0, side / 3.1415) * p_lightColor$index.rgb * m_color.rgb;
+|   f_diffuse += attenuation * max(0.0, side / 3.1415) * p_lightColor$index.rgb * m_color.rgb;
 |   f_specular += attenuation * ggx(N, V, L, m_roughness, m_f0) * p_lightColor$index.rgb * m_color.rgb;
 }
 """.trimMargin()
@@ -71,7 +71,7 @@ private fun DirectionalLight.fs(index: Int, hasNormalAttribute: Boolean) = """
 
 private fun HemisphereLight.fs(index: Int, hasNormalAttribute: Boolean): String = """
 |{
-|   float f = ${if (hasNormalAttribute) "dot(N, p_lightDirection$index) * 0.5 + 0.5" else "1"};
+|   float f = ${if (hasNormalAttribute) "dot(N, p_lightDirection$index) * 0.5 + 0.5" else "1.0"};
 |   vec3 irr = ${irradianceMap?.let { "texture(p_lightIrradianceMap$index, N).rgb" } ?: "vec3(1.0)"};
 |   f_diffuse += mix(p_lightDownColor$index.rgb, p_lightUpColor$index.rgb, f) * irr * ((1.0 - m_metalness) * m_color.rgb) * m_ambientOcclusion;
 |}
@@ -460,7 +460,7 @@ class PBRMaterial : Material {
         vec3 Vr = ep - v_worldPosition;
         vec3 V = normalize(Vr);
 
-        float NoV = ${if (primitiveContext.hasNormalAttribute) "abs(dot(N, V)) + 1e-5" else "1"};
+        float NoV = ${if (primitiveContext.hasNormalAttribute) "abs(dot(N, V)) + 1e-5" else "1.0"};
 
         ${if (environmentMap && materialContext.meshCubemaps.isNotEmpty() && primitiveContext.hasNormalAttribute) """
            {

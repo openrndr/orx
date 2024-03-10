@@ -1,7 +1,5 @@
 // from https://github.com/kosua20/Rendu/blob/master/resources/common/shaders/screens/convolution-pyramid/filter.frag
 
-#version 330
-
 //layout(binding = 0) uniform sampler2D screenTexture; ///< Level to filter.
 
 uniform sampler2D tex0;
@@ -24,7 +22,7 @@ void main(){
     vec4 accum = vec4(0.0);
     ivec2 size = textureSize(tex0, 0).xy;
 
-    ivec2 coords = ivec2(v_texCoord0 * size);
+    ivec2 coords = ivec2(v_texCoord0 * vec2(size));
 
     for(int dy = -1; dy <=1; dy++){
         for(int dx = -1; dx <=1; dx++){

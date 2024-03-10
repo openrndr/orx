@@ -21,14 +21,14 @@ void main() {
     vec4 b = texture2D(tex1, v_texCoord0);
     #endif
 
-    float alpha = min(1,max(0, b.a));
+    float alpha = min(1.0, max(0.0, b.a));
 
     vec4 result;
     if (!clip) {
-        result = a * (1.0-alpha) + b;
+        result = a * (1.0 - alpha) + b;
         result.a = clamp(o_color.a, 0.0, 1.0);
     } else {
-        result = a * (1.0-alpha) + b * a.a;
+        result = a * (1.0 - alpha) + b * a.a;
     }
 
     #ifdef OR_GL_FRAGCOLOR
