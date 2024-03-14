@@ -5,10 +5,13 @@ package jsyphon
 import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.draw.*
+import org.openrndr.internal.Driver
 
 
 import org.openrndr.internal.gl3.ColorBufferGL3
+import org.openrndr.internal.gl3.DriverTypeGL
 import org.openrndr.internal.gl3.TextureStorageModeGL
+import org.openrndr.internal.gl3.glType
 
 
 class SyphonClient(private val appName: String? = null, private val serverName: String? = null): Extension {
@@ -18,6 +21,10 @@ class SyphonClient(private val appName: String? = null, private val serverName: 
     var buffer: ColorBuffer = colorBuffer(10, 10)
 
     override fun setup(program: Program) {
+        require(Driver.glType == DriverTypeGL.GL) {
+            "The SyphonClient extension will only work when using OpenGL. Use -Dorg.openrndr.gl3.gl_type=gl to force OPENRNDR to use OpenGL."
+        }
+
         buffer = colorBuffer(program.width, program.height)
 
         client.init()

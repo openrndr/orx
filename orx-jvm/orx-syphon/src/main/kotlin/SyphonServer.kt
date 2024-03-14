@@ -7,8 +7,11 @@ import org.openrndr.Program
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.RenderTarget
 import org.openrndr.draw.renderTarget
+import org.openrndr.internal.Driver
 
 import org.openrndr.internal.gl3.ColorBufferGL3
+import org.openrndr.internal.gl3.DriverTypeGL
+import org.openrndr.internal.gl3.glType
 
 
 class SyphonServer(private val name: String = "OPENRNDR", var providedTarget: RenderTarget? = null): Extension {
@@ -17,6 +20,10 @@ class SyphonServer(private val name: String = "OPENRNDR", var providedTarget: Re
     private var targetToSend: RenderTarget? = null
 
     override fun setup(program: Program) {
+        require(Driver.glType == DriverTypeGL.GL) {
+            "The SyphonServer extension will only work when using OpenGL. Use -Dorg.openrndr.gl3.gl_type=gl to force OPENRNDR to use OpenGL."
+        }
+
         server.initWithName(name)
 
         // Create a new target that binds to the main one if no target is provided
