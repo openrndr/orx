@@ -28,6 +28,7 @@ include(
         "orx-easing",
         "orx-envelopes",
         "orx-expression-evaluator",
+        "orx-fcurve",
         "orx-jvm:orx-file-watcher",
         "orx-parameters",
         "orx-fx",
