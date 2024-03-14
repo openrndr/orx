@@ -82,3 +82,19 @@ For example `|M0 |h1 m1|[3]|[2]` expands to `M0 h1 m1 h1 m1 h1 m1 M0 h1 m1 h1 m1
  * https://x.com/ruby0x1/status/1258252352672247814
  * https://blender.stackexchange.com/questions/52403/what-is-the-mathematical-basis-for-f-curves/52468#52468
  * https://pomax.github.io/bezierinfo/#yforx
+<!-- __demos__ -->
+## Demos
+### DemoFCurve01
+[source code](src/jvmDemo/kotlin/DemoFCurve01.kt)
+
+![DemoFCurve01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoFCurve01Kt.png)
+
+### DemoFCurve02
+[source code](src/jvmDemo/kotlin/DemoFCurve02.kt)
+
+![DemoFCurve02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoFCurve02Kt.png)
+
+### DemoMultiFCurve01
+[source code](src/jvmDemo/kotlin/DemoMultiFCurve01.kt)
+
+![DemoMultiFCurve01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoMultiFCurve01Kt.png)
