@@ -1,6 +1,7 @@
 import org.openrndr.application
 import org.openrndr.extra.fcurve.MultiFCurve
 import org.openrndr.extra.fcurve.fcurve
+import org.openrndr.extra.fcurve.vector2
 
 fun main() {
     application {
