@@ -3,9 +3,10 @@ package org.openrndr.panel.elements
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.FontImageMap
-import org.openrndr.draw.Writer
+
 import org.openrndr.draw.isolated
 import org.openrndr.events.Event
+import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.panel.style.*
 import org.openrndr.shape.Rectangle
 
@@ -53,7 +54,7 @@ class Button : Element(ElementType("button")) {
                 val fontSize = (style.fontSize as? LinearDimension.PX)?.value ?: 14.0
                 val fontMap = FontImageMap.fromUrl(fontUrl, fontSize)
 
-                val writer = Writer(null)
+                val writer = TextWriter(null)
 
                 writer.box = Rectangle(0.0,
                         0.0,
@@ -84,7 +85,7 @@ class Button : Element(ElementType("button")) {
 
             (root() as? Body)?.controlManager?.fontManager?.let {
                 val font = it.font(computedStyle)
-                val writer = Writer(drawer)
+                val writer = TextWriter(drawer)
                 drawer.fontMap = (font)
                 val textWidth = writer.textWidth(label)
                 val textHeight = font.ascenderLength

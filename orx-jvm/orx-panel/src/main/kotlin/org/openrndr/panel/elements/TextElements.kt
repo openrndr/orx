@@ -4,7 +4,8 @@ import kotlinx.coroutines.yield
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.FontImageMap
-import org.openrndr.draw.Writer
+import org.openrndr.extra.textwriter.TextWriter
+
 import org.openrndr.launch
 import org.openrndr.math.Vector2
 import org.openrndr.panel.style.*
@@ -20,7 +21,7 @@ class TextNode(var text: String) : Element(ElementType("text")) {
                 drawer.fill = (fill)
             }
             val fontMap = (root() as Body).controlManager.fontManager.font(computedStyle)
-            val writer = Writer(drawer)
+            val writer = TextWriter(drawer)
             drawer.fontMap = (fontMap)
 
             writer.box = Rectangle(Vector2(layout.screenX * 0.0, layout.screenY * 0.0), layout.screenWidth, layout.screenHeight)
@@ -35,7 +36,7 @@ class TextNode(var text: String) : Element(ElementType("text")) {
             val fontSize = (style.fontSize as? LinearDimension.PX)?.value?: 14.0
             val fontMap = FontImageMap.fromUrl(fontUrl, fontSize)
 
-            val writer = Writer(null)
+            val writer = TextWriter(null)
 
             writer.box = Rectangle(layout.screenX,
                        layout.screenY,

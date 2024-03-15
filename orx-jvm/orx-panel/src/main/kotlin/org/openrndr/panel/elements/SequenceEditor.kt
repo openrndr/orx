@@ -5,6 +5,8 @@ import org.openrndr.KeyModifier
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.events.Event
+import org.openrndr.extra.textwriter.Cursor
+import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.math.Vector2
 import org.openrndr.math.map
 import org.openrndr.panel.style.effectiveColor
@@ -196,7 +198,7 @@ open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(E
             drawer.fill = computedStyle.effectiveColor
             (root() as? Body)?.controlManager?.fontManager?.let {
                 val font = it.font(computedStyle)
-                val writer = Writer(drawer)
+                val writer = TextWriter(drawer)
                 drawer.fontMap = (font)
                 drawer.fill = computedStyle.effectiveColor
                 writer.cursor = Cursor(0.0, 4.0)

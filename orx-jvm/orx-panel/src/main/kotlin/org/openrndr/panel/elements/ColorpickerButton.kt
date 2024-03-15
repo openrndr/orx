@@ -4,8 +4,9 @@ import kotlinx.coroutines.yield
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.LineCap
-import org.openrndr.draw.Writer
+
 import org.openrndr.events.Event
+import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.launch
 import org.openrndr.panel.style.*
 
@@ -62,7 +63,7 @@ class ColorpickerButton : Element(ElementType("colorpicker-button")), Disposable
         (root() as? Body)?.controlManager?.fontManager?.let {
             val font = it.font(computedStyle)
 
-            val writer = Writer(drawer)
+            val writer = TextWriter(drawer)
             drawer.fontMap = (font)
 
             val text = "$label"

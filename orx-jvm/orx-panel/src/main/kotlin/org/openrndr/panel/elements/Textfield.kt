@@ -7,9 +7,9 @@ import org.openrndr.draw.Drawer
 import org.openrndr.draw.LineCap
 import org.openrndr.panel.style.*
 import org.openrndr.KeyModifier
-import org.openrndr.draw.Cursor
-import org.openrndr.draw.writer
 import org.openrndr.events.Event
+import org.openrndr.extra.textwriter.Cursor
+import org.openrndr.extra.textwriter.writer
 import org.openrndr.launch
 import org.openrndr.shape.Rectangle
 import kotlin.reflect.KMutableProperty0

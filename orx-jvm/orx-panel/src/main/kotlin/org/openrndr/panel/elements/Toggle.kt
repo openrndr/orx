@@ -7,8 +7,9 @@ import org.openrndr.draw.LineCap
 import org.openrndr.panel.style.*
 import org.openrndr.shape.Rectangle
 
-import org.openrndr.draw.Writer
+
 import org.openrndr.events.Event
+import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.launch
 import kotlin.reflect.KMutableProperty0
 
@@ -35,7 +36,7 @@ class Toggle : Element(ElementType("toggle")), DisposableElement {
                 val fontSize = (style.fontSize as? LinearDimension.PX)?.value ?: 14.0
                 val fontMap = FontImageMap.fromUrl(fontUrl, fontSize)
 
-                val writer = Writer(null)
+                val writer = TextWriter(null)
 
                 writer.box = Rectangle(0.0,
                         0.0,

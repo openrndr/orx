@@ -1,9 +1,11 @@
 package org.openrndr.panel.elements
 
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.Cursor
+
 import org.openrndr.draw.Drawer
-import org.openrndr.draw.Writer
+import org.openrndr.extra.textwriter.Cursor
+import org.openrndr.extra.textwriter.TextWriter
+
 import org.openrndr.math.Vector2
 import org.openrndr.panel.style.*
 
@@ -53,7 +55,7 @@ class EnvelopeButton : Element(ElementType("envelope-button")) {
             (root() as? Body)?.controlManager?.fontManager?.let {
                 val font = it.font(computedStyle)
 
-                val writer = Writer(drawer)
+                val writer = TextWriter(drawer)
                 drawer.fontMap = (font)
                 drawer.fill = (ColorRGBa.BLACK)
                 writer.cursor = Cursor(0.0,layout.screenHeight - 4.0)

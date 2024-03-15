@@ -3,11 +3,13 @@ package org.openrndr.panel.elements
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.*
 import org.openrndr.*
-import org.openrndr.draw.Cursor
+
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.LineCap
-import org.openrndr.draw.Writer
+
 import org.openrndr.events.Event
+import org.openrndr.extra.textwriter.Cursor
+import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.math.Vector2
 import org.openrndr.panel.style.Color
 import org.openrndr.panel.style.color
@@ -267,7 +269,7 @@ class Slider : Element(ElementType("slider")), DisposableElement {
 
         (root() as? Body)?.controlManager?.fontManager?.let {
             val font = it.font(computedStyle)
-            val writer = Writer(drawer)
+            val writer = TextWriter(drawer)
             drawer.fontMap = (font)
             drawer.fill = computedStyle.effectiveColor
             writer.cursor = Cursor(0.0, 8.0)

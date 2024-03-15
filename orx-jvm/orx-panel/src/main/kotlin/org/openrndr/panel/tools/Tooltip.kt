@@ -4,7 +4,8 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.FontImageMap
 import org.openrndr.draw.isolated
-import org.openrndr.draw.writer
+import org.openrndr.extra.textwriter.writer
+
 import org.openrndr.math.Vector2
 import org.openrndr.panel.elements.Body
 import org.openrndr.panel.elements.Element

@@ -4,8 +4,9 @@ import kotlinx.coroutines.yield
 import org.openrndr.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
-import org.openrndr.draw.Writer
+
 import org.openrndr.events.Event
+import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.math.Vector2
 import org.openrndr.math.clamp
 import org.openrndr.math.map
@@ -213,7 +214,7 @@ class XYPad : Element(ElementType("xy-pad")) {
             val valueLabel = "${String.format("%.0${precision}f", value.x)}, ${String.format("%.0${precision}f", value.y)}"
 
             (root() as? Body)?.controlManager?.fontManager?.let {
-                val writer = Writer(drawer)
+                val writer = TextWriter(drawer)
                 drawer.fontMap = it.font(computedStyle)
                 val textWidth = writer.textWidth(valueLabel)
 
