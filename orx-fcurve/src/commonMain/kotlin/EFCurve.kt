@@ -9,14 +9,21 @@ import org.openrndr.extra.expressions.evaluateExpression
  */
 fun efcurve(ef: String, constants: Map<String, Double> = emptyMap()): String {
     val expression = Regex("_([^_]+)_")
-    val repetition = Regex("\\|([^|]+)\\|\\[([^\\[\\]]+)]")
-    val list = Regex("\\|([^|]+)\\|\\{([^\\[\\]]+)}")
+
+    // IntelliJ falsely reports a redundant escape character. the escape character is required when running the regular
+    // expression on a javascript target. Removing the escape character will result in a `Lone quantifier brackets`
+    // syntax error.
+
+    @Suppress("RegExpRedundantEscape")
+    val repetition = Regex("""\|([^|]+)\|\[([^\[\]]+)\]""")
+
+    @Suppress("RegExpRedundantEscape")
+    val list = Regex("\\|([^|]+)\\|\\{([^\\[\\]]+)\\}")
 
     /**
      * perform comment substitution
-     * (?m) enables multiline mode
      */
-    var curve = Regex("(?m)(#.*)$").replace(ef, "")
+    var curve = Regex("(#.*)$", RegexOption.MULTILINE).replace(ef, "")
 
     /**
      * Allow for nested repetitions and lists
@@ -70,20 +77,7 @@ fun efcurve(ef: String, constants: Map<String, Double> = emptyMap()): String {
     /**
      * evaluate expression in expansion
      */
-    return (expression.replace(curve) { ef ->
-        evaluateExpression(ef.groupValues[1], constants)?.toString() ?: error("parse error in '$curve")
+    return (expression.replace(curve) { exp ->
+        evaluateExpression(exp.groupValues[1], constants)?.toString() ?: error("parse error in '$curve")
     })
-}
-
-fun main() {
-    efcurve("""M1 |h5 m3|{
-        |10.3 # toch wel handig zo'n comment
-        |11.2
-        |14.5
-        |}
-    """.trimMargin())
-
-    println(efcurve("|M0 |h4 m3|[2]|[5]"))
-
-    println(efcurve("""M0|h4 m_it_|{|_cos(it * PI * 0.5)_ |[4]}"""))
 }
