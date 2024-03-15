@@ -4,7 +4,7 @@ import org.openrndr.draw.ColorFormat
 import org.openrndr.draw.ColorType
 import org.openrndr.draw.colorBuffer
 import org.openrndr.extra.jumpfill.ShapeSDF
-import org.openrndr.svg.loadSVG
+import org.openrndr.extra.svg.loadSVG
 
 fun main() {
     application {

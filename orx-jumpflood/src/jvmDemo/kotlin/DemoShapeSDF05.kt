@@ -8,9 +8,10 @@ import org.openrndr.extra.gui.GUI
 import org.openrndr.extra.jumpfill.ShapeSDF
 import org.openrndr.extra.jumpfill.draw.SDFStrokeFill
 import org.openrndr.extra.jumpfill.ops.SDFSmoothDifference
+import org.openrndr.extra.svg.loadSVG
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
-import org.openrndr.svg.loadSVG
+
 import kotlin.math.cos
 import kotlin.math.sin
 

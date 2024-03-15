@@ -34,7 +34,8 @@ kotlin {
                 implementation(project(":orx-jumpflood"))
                 implementation(project(":orx-compositor"))
                 implementation(project(":orx-jvm:orx-gui"))
-                implementation(libs.openrndr.svg)
+                implementation(project(":orx-composition"))
+                implementation(project(":orx-svg"))
             }
         }
     }

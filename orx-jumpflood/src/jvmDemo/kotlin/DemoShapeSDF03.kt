@@ -7,7 +7,8 @@ import org.openrndr.extra.fx.distort.FluidDistort
 import org.openrndr.extra.jumpfill.ShapeSDF
 import org.openrndr.extra.jumpfill.draw.SDFStrokeFill
 import org.openrndr.extra.jumpfill.ops.SDFSmoothDifference
-import org.openrndr.svg.loadSVG
+import org.openrndr.extra.svg.loadSVG
+
 
 fun main() {
     application {

@@ -8,8 +8,9 @@ import org.openrndr.extra.gui.GUI
 import org.openrndr.extra.jumpfill.ShapeSDF
 import org.openrndr.extra.jumpfill.draw.SDFStrokeFill
 import org.openrndr.extra.jumpfill.ops.SDFSmoothDifference
+import org.openrndr.extra.svg.loadSVG
 import org.openrndr.shape.Circle
-import org.openrndr.svg.loadSVG
+
 
 fun main() {
     application {

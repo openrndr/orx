@@ -7,9 +7,10 @@ import org.openrndr.extra.jumpfill.ShapeSDF
 import org.openrndr.extra.jumpfill.draw.SDFStrokeFill
 import org.openrndr.extra.jumpfill.ops.SDFOnion
 import org.openrndr.extra.jumpfill.ops.SDFSmoothIntersection
+import org.openrndr.extra.svg.loadSVG
 import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
-import org.openrndr.svg.loadSVG
+
 import kotlin.math.min
 
 fun main() {
