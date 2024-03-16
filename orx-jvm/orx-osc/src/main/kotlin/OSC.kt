@@ -56,7 +56,7 @@ class OSC (
     infix fun String.bind(prop: KMutableProperty0<Double>) {
         val channel = this
 
-        listen(channel) { address, it ->
+        listen(channel) { _, it ->
             when (val message = it.first()) {
                 is Double -> prop.set(message)
                 is Float -> prop.set(message.toDouble())
@@ -78,6 +78,6 @@ class OSC (
 
         receiver.startListening()
 
-        if (receiver.isListening) logger.info("OSC is listening on port: $portIn")
+        if (receiver.isListening) logger.info { "OSC is listening on port: $portIn" }
     }
 }

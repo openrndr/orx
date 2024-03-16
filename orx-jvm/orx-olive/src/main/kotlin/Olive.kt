@@ -136,7 +136,7 @@ class Olive<P : Program>(val resources: Resources? = null, private var scriptMod
 
             watcher = watchFile(File(script), requestStopEvent = watcherRequestStopEvent) {
                 try {
-                    logger.info("change detected, reloading script")
+                    logger.info { "change detected, reloading script" }
 
                     val scriptContents = when (scriptMode) {
                         ScriptMode.KOTLIN_SCRIPT -> it.readText()

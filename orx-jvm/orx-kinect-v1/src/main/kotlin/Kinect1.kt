@@ -83,7 +83,9 @@ class Kinect1 : Kinect, Extension {
      */
     var logLevel: LogLevel
         get() = freenect.logLevel
-        set(value) { freenect.logLevel = value }
+        set(value) {
+            freenect.logLevel = value
+        }
 
     private val logger = KotlinLogging.logger {}
 
@@ -92,8 +94,10 @@ class Kinect1 : Kinect, Extension {
     private lateinit var freenect: Freenect
 
     override fun setup(program: Program) {
-        if (!enabled) { return }
-        logger.info("Starting Kinect1 support")
+        if (!enabled) {
+            return
+        }
+        logger.info { "Starting Kinect1 support" }
         this.program = program
         freenect = Freenect(initialLogLevel = LogLevel.INFO)
     }
@@ -151,9 +155,11 @@ class Kinect1 : Kinect, Extension {
     }
 
     override fun shutdown(program: Program) {
-        if (!enabled) { return }
+        if (!enabled) {
+            return
+        }
         logger.info { "Shutting down Kinect1 support" }
-        logger.debug("Closing active devices, count: ${mutableActiveDevices.size}")
+        logger.debug { "Closing active devices, count: ${mutableActiveDevices.size}" }
         mutableActiveDevices.forEach {
             it.close()
         }
@@ -286,8 +292,10 @@ class Kinect1 : Kinect, Extension {
 
             private fun start() {
                 logger.info { "$info.start()" }
-                freenect.checkReturn(freenect_set_depth_mode(
-                    dev, freenect_find_depth_mode(FREENECT_RESOLUTION_MEDIUM, FREENECT_DEPTH_11BIT))
+                freenect.checkReturn(
+                    freenect_set_depth_mode(
+                        dev, freenect_find_depth_mode(FREENECT_RESOLUTION_MEDIUM, FREENECT_DEPTH_11BIT)
+                    )
                 )
                 freenect.checkReturn(freenect_set_depth_buffer(dev, Pointer(bytesFront)))
                 freenect.checkReturn(freenect_start_depth(dev))
@@ -384,7 +392,7 @@ class Freenect(private val initialLogLevel: Kinect1.LogLevel) {
     private var running: Boolean = true
 
     private val runner = thread(name = "kinect1", start = true) {
-        logger.info("Starting Kinect1 thread")
+        logger.info { "Starting Kinect1 thread" }
         checkReturn(freenect_init(ctx, usbCtx))
         freenect_set_log_level(ctx, logLevel.code)
         val num = checkReturn(freenect_num_devices(ctx))
@@ -433,7 +441,7 @@ class Freenect(private val initialLogLevel: Kinect1.LogLevel) {
                 block(ctx, usbCtx)
                 logger.trace { "'$name': ended" }
             } catch (e: Exception) {
-                logger.error("'$name': failed", e)
+                logger.error(e) { "'$name': failed" }
             }
         }
         freenectCallQueue.add(task)
@@ -454,7 +462,7 @@ class Freenect(private val initialLogLevel: Kinect1.LogLevel) {
                 logger.trace { "'$name': ended" }
                 Result.success(result)
             } catch (e: Exception) {
-                logger.error("'$name': failed", e)
+                logger.error(e) { "'$name': failed" }
                 Result.failure(e)
             }
         }
@@ -464,7 +472,7 @@ class Freenect(private val initialLogLevel: Kinect1.LogLevel) {
         return result.getOrThrow()
     }
 
-    fun listDevices() : List<Kinect1.DeviceInfo> {
+    fun listDevices(): List<Kinect1.DeviceInfo> {
         val attributes = freenect_device_attributes()
         freenect_list_device_attributes(ctx, attributes)
         try {
@@ -487,9 +495,9 @@ class Freenect(private val initialLogLevel: Kinect1.LogLevel) {
     }
 
     fun close() {
-        logger.debug("Closing Kinect1 runner")
+        logger.debug { "Closing Kinect1 runner" }
         running = false
-        logger.debug("Waiting for runner thread to finish")
+        logger.debug { "Waiting for runner thread to finish" }
         runner.join()
     }
 
@@ -553,6 +561,7 @@ internal class Kinect1DepthMappers {
             DepthMeasurement.RAW_NORMALIZED -> {
                 depthToRawNormalized.select(flipH, flipV)
             }
+
             DepthMeasurement.METERS -> {
                 depthToMeters.select(flipH, flipV)
             }

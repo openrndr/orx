@@ -133,11 +133,11 @@ class GUI(
                 val folderFile = File(defaultSaveFolder)
                 val targetFile = File(defaultSaveFolder, "${it.assetMetadata.assetBaseName}.json")
                 if (folderFile.exists() && folderFile.isDirectory) {
-                    logger.info("Saving parameters to '${targetFile.absolutePath}")
+                    logger.info { "Saving parameters to '${targetFile.absolutePath}" }
                     saveParameters(targetFile)
                 } else {
                     if (folderFile.mkdirs()) {
-                        logger.info("Saving parameters to '${targetFile.absolutePath}")
+                        logger.info { "Saving parameters to '${targetFile.absolutePath}" }
                         saveParameters(targetFile)
                     } else {
                         logger.error { "Could not save parameters because could not create directory ${folderFile.absolutePath}" }
@@ -598,7 +598,8 @@ class GUI(
 
                         if (parameter.pathIsDirectory == false) {
                             openFileDialog(
-                                supportedExtensions = parameter.pathExtensions?.let { listOf("supported extensions" to it.toList())} ?: emptyList(),
+                                supportedExtensions = parameter.pathExtensions?.let { listOf("supported extensions" to it.toList()) }
+                                    ?: emptyList(),
                                 contextID = parameter.pathContext ?: "null"
                             ) {
                                 val resolvedPath = if (parameter.absolutePath == true) {
