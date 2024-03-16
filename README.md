@@ -13,6 +13,7 @@ complement [OPENRNDR](https://github.com/openrndr/openrndr).
 | --- | --- |
 | [`orx-camera`](orx-camera/) | 2D and 3D cameras controllable via mouse and keyboard. |
 | [`orx-color`](orx-color/) | Color spaces, palettes, histograms, named colors. |
+| [`orx-composition`](orx-composition/) | Shape composition library |
 | [`orx-compositor`](orx-compositor/) | Toolkit to make composite (layered) images using blend modes and filters. |
 | [`orx-compute-graph`](orx-compute-graph/) | A graph for computation. |
 | [`orx-compute-graph-nodes`](orx-compute-graph-nodes/) | A collection of nodes that can be used with `orx-computer-graph`. |
@@ -41,7 +42,9 @@ complement [OPENRNDR](https://github.com/openrndr/openrndr).
 | [`orx-shade-styles`](orx-shade-styles/) | Shader based fills and strokes, including various types of gradient fills. |
 | [`orx-shader-phrases`](orx-shader-phrases/) | A library that provides a `#pragma import` statement for shaders. |
 | [`orx-shapes`](orx-shapes/) | Collection of 2D shape generators and modifiers. |
+| [`orx-svg`](orx-svg/) | SVG reader and writer library. |
 | [`orx-temporal-blur`](orx-temporal-blur/) | Post-processing temporal-blur video effect. CPU intense, therefore not intended  for use with the `ScreenRecorder` extension or other real-time uses. |
+| [`orx-text-writer`](orx-text-writer/) | Writing texts with layouts |
 | [`orx-time-operators`](orx-time-operators/) | A collection of time-sensitive functions aimed at controlling raw data over-time,  such as Envelope and LFO. |
 | [`orx-timer`](orx-timer/) | Simple timer functionality providing `repeat`, to run code with a given interval and `timeOut`, to run code once after a given delay. |
 | [`orx-triangulation`](orx-triangulation/) | **Delaunay** triangulation and **Voronoi** diagrams. |
