@@ -9,6 +9,7 @@ import org.openrndr.extra.shapes.splines.catmullRom
 import org.openrndr.extra.shapes.splines.toContour
 import org.openrndr.math.smoothstep
 import org.openrndr.math.transforms.buildTransform
+import org.openrndr.shape.LineSegment
 import kotlin.math.*
 import kotlin.random.Random
 
@@ -65,6 +66,18 @@ fun main() {
 
                 // process x-component
                 fft.forward(x)
+
+                drawer.stroke = ColorRGBa.GRAY.shade(0.5)
+                drawer.lineSegments((0 until fft.size / 2).map {
+                    LineSegment(
+                        it.toDouble() * 2.0 + 0.5,
+                        height * 0.5,
+                        it.toDouble() * 2.0 + 0.5,
+                        height * 0.5 - fft.magnitude(it) / 200.0,
+                    )
+                })
+
+
                 val xpower = fft.magnitudeSum()
 
                 val lpc = mouse.position.x / width
@@ -72,26 +85,57 @@ fun main() {
 
                 for (i in 1..fftSize / 2) {
                     val t = i.toDouble() / (fftSize / 2 - 1)
-                    val f = max(lp(t, lpc), hp(t, hpc))
+                    val f = if (hpc <= lpc) lp(t, lpc) * hp(t, hpc) else max(lp(t, lpc), hp(t, hpc))
                     fft.scaleBand(i, f.toFloat())
                 }
                 val xfpower = fft.magnitudeSum().coerceAtLeast(1.0)
 
                 fft.scaleAll((xpower / xfpower).toFloat())
+                drawer.stroke = ColorRGBa.PINK.opacify(0.8)
+                drawer.lineSegments((0 until fft.size / 2).map {
+                    LineSegment(
+                        it.toDouble() * 2.0 + 0.5,
+                        height * 0.5,
+                        it.toDouble() * 2.0 + 0.5,
+                        height * 0.5 - fft.magnitude(it) / 200.0
+                    )
+                })
+
                 fft.inverse(xFiltered)
 
                 // process y-component
                 fft.forward(y)
                 val ypower = fft.magnitudeSum()
 
+                drawer.stroke = ColorRGBa.GRAY.shade(0.5)
+                drawer.lineSegments((0 until fft.size / 2).map {
+                    LineSegment(
+                        it.toDouble() * 2.0 + 0.5,
+                        height * 0.5,
+                        it.toDouble() * 2.0 + 0.5,
+                        height * 0.5 + fft.magnitude(it) / 200.0,
+                    )
+                })
+
+
                 for (i in 1..fftSize / 2) {
                     val t = i.toDouble() / (fftSize / 2 - 1)
-                    val f = max(lp(t, lpc), hp(t, hpc))
+                    val f = if (hpc <= lpc) lp(t, lpc) * hp(t, hpc) else max(lp(t, lpc), hp(t, hpc))
                     fft.scaleBand(i, f.toFloat())
                 }
+
                 val yfpower = fft.magnitudeSum().coerceAtLeast(1.0)
 
                 fft.scaleAll((ypower / yfpower).toFloat())
+                drawer.stroke = ColorRGBa.PINK.opacify(0.7)
+                drawer.lineSegments((0 until fft.size / 2).map {
+                    LineSegment(
+                        it.toDouble() * 2.0 + 0.5,
+                        height * 0.5,
+                        it.toDouble() * 2.0 + 0.5,
+                        height * 0.5 + fft.magnitude(it) / 200.0,
+                    )
+                })
                 fft.inverse(yFiltered)
 
                 val cr = vectorsFromFloatArrays(xFiltered, yFiltered).catmullRom(closed = true).toContour()
@@ -102,6 +146,10 @@ fun main() {
                 })
                 drawer.fill = null
                 drawer.stroke = ColorRGBa.WHITE
+
+                drawer.lineSegment(mouse.position.x/width * 512, 0.0, mouse.position.x/width * 512, height*1.0)
+                drawer.lineSegment(mouse.position.y/height * 512, 0.0, mouse.position.y/height * 512, height*1.0)
+
                 drawer.contour(recenteredShape)
             }
         }
