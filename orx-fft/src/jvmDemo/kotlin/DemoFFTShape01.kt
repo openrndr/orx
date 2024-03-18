@@ -62,7 +62,7 @@ fun main() {
             val yFiltered = FloatArray(fftSize)
 
             extend {
-                c.equidistantPositions(fftSize).take(fftSize).toFloatArrays(x, y)
+                c.equidistantPositions(fftSize).toFloatArrays(x, y)
 
                 // process x-component
                 fft.forward(x)
@@ -147,8 +147,8 @@ fun main() {
                 drawer.fill = null
                 drawer.stroke = ColorRGBa.WHITE
 
-                drawer.lineSegment(mouse.position.x/width * 512, 0.0, mouse.position.x/width * 512, height*1.0)
-                drawer.lineSegment(mouse.position.y/height * 512, 0.0, mouse.position.y/height * 512, height*1.0)
+                drawer.lineSegment(mouse.position.x / width * 512, 0.0, mouse.position.x / width * 512, height * 1.0)
+                drawer.lineSegment(mouse.position.y / height * 512, 0.0, mouse.position.y / height * 512, height * 1.0)
 
                 drawer.contour(recenteredShape)
             }
