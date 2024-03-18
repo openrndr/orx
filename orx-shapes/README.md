@@ -109,6 +109,16 @@ Collection of 2D shape generators and modifiers.
 
 ![bezierpatch-DemoBezierPatches01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatches01Kt.png)
 
+### blend/DemoContourBlend01
+[source code](src/jvmDemo/kotlin/blend/DemoContourBlend01.kt)
+
+![blend-DemoContourBlend01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/blend-DemoContourBlend01Kt.png)
+
+### blend/DemoContourBlend02
+[source code](src/jvmDemo/kotlin/blend/DemoContourBlend02.kt)
+
+![blend-DemoContourBlend02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/blend-DemoContourBlend02Kt.png)
+
 ### DemoAdjustContour08
 [source code](src/jvmDemo/kotlin/DemoAdjustContour08.kt)
 
