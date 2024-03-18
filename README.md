@@ -22,6 +22,7 @@ complement [OPENRNDR](https://github.com/openrndr/openrndr).
 | [`orx-envelopes`](orx-envelopes/) | ADSR (Attack, Decay, Sustain, Release) envelopes and tools. |
 | [`orx-expression-evaluator`](orx-expression-evaluator/) | Tools to evaluate strings containing mathematical expressions. |
 | [`orx-fcurve`](orx-fcurve/) | FCurves are 1 dimensional function curves constructed from 2D bezier functions. |
+| [`orx-fft`](orx-fft/) | Simple forward and inverse FFT routine |
 | [`orx-fx`](orx-fx/) | Ready-to-use GPU-based visual effects or filters. Most include [orx-parameters](https://github.com/openrndr/orx/tree/master/orx-parameters) annotations  so they can be easily controlled via orx-gui. |
 | [`orx-gradient-descent`](orx-gradient-descent/) | Finds equation inputs that output a minimum value: easy to use gradient descent based minimizer. |
 | [`orx-hash-grid`](orx-hash-grid/) | 2D space partitioning for fast point queries. |
