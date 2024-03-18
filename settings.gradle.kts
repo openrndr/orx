@@ -30,6 +30,7 @@ include(
         "orx-envelopes",
         "orx-expression-evaluator",
         "orx-fcurve",
+        "orx-fft",
         "orx-jvm:orx-file-watcher",
         "orx-parameters",
         "orx-fx",
