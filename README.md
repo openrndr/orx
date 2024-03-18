@@ -16,7 +16,7 @@ complement [OPENRNDR](https://github.com/openrndr/openrndr).
 | [`orx-composition`](orx-composition/) | Shape composition library |
 | [`orx-compositor`](orx-compositor/) | Toolkit to make composite (layered) images using blend modes and filters. |
 | [`orx-compute-graph`](orx-compute-graph/) | A graph for computation. |
-| [`orx-compute-graph-nodes`](orx-compute-graph-nodes/) | A collection of nodes that can be used with `orx-computer-graph`. |
+| [`orx-compute-graph-nodes`](orx-compute-graph-nodes/) | A collection of nodes that can be used with `orx-compute-graph`. |
 | [`orx-delegate-magic`](orx-delegate-magic/) | Collection of magical property delegators. For tracking variable change or interpolate towards the value of a variable. |
 | [`orx-easing`](orx-easing/) | Easing functions for smooth animation or non-linear interpolation. |
 | [`orx-envelopes`](orx-envelopes/) | ADSR (Attack, Decay, Sustain, Release) envelopes and tools. |
