@@ -1,11 +1,10 @@
 package org.openrndr.extra.shapes.operators
 
-import org.openrndr.math.mod_
-import org.openrndr.shape.Segment
+import org.openrndr.shape.Segment2D
 import org.openrndr.shape.ShapeContour
 import org.openrndr.shape.contour
 
-fun ShapeContour.bulgeSegments(distortion: (index: Int, segment: Segment) -> Double): ShapeContour {
+fun ShapeContour.bulgeSegments(distortion: (index: Int, segment: Segment2D) -> Double): ShapeContour {
     val c = contour {
         moveTo(position(0.0))
         var index = 0

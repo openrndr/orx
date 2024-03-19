@@ -141,7 +141,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
         var prevQuadCtrlPoint: Vector2? = null
 
         val contours = compounds().map { compound ->
-            val segments = mutableListOf<Segment>()
+            val segments = mutableListOf<Segment2D>()
             var closed = false
             // If an argument is invalid, an error is logged,
             // further interpreting is stopped and compound is returned as-is.
@@ -207,7 +207,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
 
                         // Following points are implicit lineto arguments
                         segments += points.drop(1).map {
-                            Segment(cursor, it).apply {
+                            Segment2D(cursor, it).apply {
                                 cursor = it
                             }
                         }
@@ -219,21 +219,21 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
 
                         // Following points are implicit lineto arguments
                         segments += points.drop(1).map {
-                            Segment(cursor, cursor + it).apply {
+                            Segment2D(cursor, cursor + it).apply {
                                 cursor += it
                             }
                         }
                     }
                     "L" -> {
                         segments += points!!.map {
-                            Segment(cursor, it).apply {
+                            Segment2D(cursor, it).apply {
                                 cursor = it
                             }
                         }
                     }
                     "l" -> {
                         segments += points!!.map {
-                            Segment(cursor, cursor + it).apply {
+                            Segment2D(cursor, cursor + it).apply {
                                 cursor += it
                             }
                         }
@@ -241,7 +241,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                     "H" -> {
                         segments += command.operands.map {
                             val target = Vector2(it, cursor.y)
-                            Segment(cursor, target).apply {
+                            Segment2D(cursor, target).apply {
                                 cursor = target
                             }
                         }
@@ -249,7 +249,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                     "h" -> {
                         segments += command.operands.map {
                             val target = cursor + Vector2(it, 0.0)
-                            Segment(cursor, target).apply {
+                            Segment2D(cursor, target).apply {
                                 cursor = target
                             }
                         }
@@ -257,7 +257,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                     "V" -> {
                         segments += command.operands.map {
                             val target = Vector2(cursor.x, it)
-                            Segment(cursor, target).apply {
+                            Segment2D(cursor, target).apply {
                                 cursor = target
                             }
                         }
@@ -265,7 +265,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                     "v" -> {
                         segments += command.operands.map {
                             val target = cursor + Vector2(0.0, it)
-                            Segment(cursor, target).apply {
+                            Segment2D(cursor, target).apply {
                                 cursor = target
                             }
                         }
@@ -277,7 +277,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                                 return@forEach
                             } else {
                                 val (cp1, cp2, target) = it
-                                Segment(cursor, cp1, cp2, target).also {
+                                Segment2D(cursor, cp1, cp2, target).also {
                                     cursor = target
                                     prevCubicCtrlPoint = cp2
                                 }
@@ -291,7 +291,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                                 return@forEach
                             } else {
                                 val (cp1, cp2, target) = it.map { v -> cursor + v }
-                                Segment(cursor, cp1, cp2, target).apply {
+                                Segment2D(cursor, cp1, cp2, target).apply {
                                     cursor = target
                                     prevCubicCtrlPoint = cp2
                                 }
@@ -306,7 +306,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                             } else {
                                 val cp1 = 2.0 * cursor - (prevCubicCtrlPoint ?: cursor)
                                 val (cp2, target) = it
-                                Segment(cursor, cp1, cp2, target).also {
+                                Segment2D(cursor, cp1, cp2, target).also {
                                     cursor = target
                                     prevCubicCtrlPoint = cp2
                                 }
@@ -321,7 +321,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                             } else {
                                 val cp1 = 2.0 * cursor - (prevCubicCtrlPoint ?: cursor)
                                 val (cp2, target) = it.map { v -> cursor + v }
-                                Segment(cursor, cp1, cp2, target).also {
+                                Segment2D(cursor, cp1, cp2, target).also {
                                     cursor = target
                                     prevCubicCtrlPoint = cp2
                                 }
@@ -335,7 +335,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                                 return@forEach
                             } else {
                                 val (cp, target) = it
-                                Segment(cursor, cp, target).also {
+                                Segment2D(cursor, cp, target).also {
                                     cursor = target
                                     prevQuadCtrlPoint = cp
                                 }
@@ -349,7 +349,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                                 return@forEach
                             } else {
                                 val (cp, target) = it.map { v -> cursor + v }
-                                Segment(cursor, cp, target).also {
+                                Segment2D(cursor, cp, target).also {
                                     cursor = target
                                     prevQuadCtrlPoint = cp
                                 }
@@ -359,7 +359,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                     "T" -> {
                         points!!.forEach {
                             val cp = 2.0 * cursor - (prevQuadCtrlPoint ?: cursor)
-                            Segment(cursor, cp, it).also { _ ->
+                            Segment2D(cursor, cp, it).also { _ ->
                                 cursor = it
                                 prevQuadCtrlPoint = cp
                             }
@@ -368,7 +368,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                     "t" -> {
                         points!!.forEach {
                             val cp = 2.0 * cursor - (prevQuadCtrlPoint ?: cursor)
-                            Segment(cursor, cp, cursor + it).also { _ ->
+                            Segment2D(cursor, cp, cursor + it).also { _ ->
                                 cursor = it
                                 prevQuadCtrlPoint = cp
                             }
@@ -376,7 +376,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                     }
                     "Z", "z" -> {
                         if ((cursor - anchor).length >= 0.001) {
-                            segments += Segment(cursor, anchor)
+                            segments += Segment2D(cursor, anchor)
                         }
                         cursor = anchor
                         closed = true

@@ -3,7 +3,7 @@ package org.openrndr.extra.turtle
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector4
 import org.openrndr.math.transforms.buildTransform
-import org.openrndr.shape.Segment
+import org.openrndr.shape.Segment2D
 import org.openrndr.shape.ShapeContour
 
 fun Turtle.contour(contour: ShapeContour, alignTangent: Boolean = true) {
@@ -16,7 +16,7 @@ fun Turtle.contour(contour: ShapeContour, alignTangent: Boolean = true) {
 }
 
 fun Turtle.segment(
-    segment: Segment,
+    segment: Segment2D,
     alignTangent: Boolean = true,
     externalAlignTransform: Matrix44 = Matrix44.IDENTITY
 ): Matrix44 {

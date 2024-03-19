@@ -2,7 +2,7 @@ package org.openrndr.extra.shapes.hobbycurve
 // Code adapted from http://weitz.de/hobby/
 
 import org.openrndr.math.Vector2
-import org.openrndr.shape.Segment
+import org.openrndr.shape.Segment2D
 import org.openrndr.shape.Shape
 import org.openrndr.shape.ShapeContour
 import kotlin.math.atan2
@@ -109,7 +109,7 @@ fun hobbyCurve(points: List<Vector2>, closed: Boolean = false, curl: Double = 0.
         c2s.add(points[(i+1) % m] - v2 * rho(beta[i]!!, alpha[i]) * distances[i] / 3.0)
     }
 
-    return ShapeContour(List(n) { Segment(points[it], c1s[it], c2s[it], points[(it+1)%m]) }, closed=closed)
+    return ShapeContour(List(n) { Segment2D(points[it], c1s[it], c2s[it], points[(it+1)%m]) }, closed=closed)
 }
 
 private fun thomas(a: Array<Double>, b: Array<Double>, c: Array<Double>, d: Array<Double>): Array<Double> {

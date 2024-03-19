@@ -2,14 +2,14 @@ package org.openrndr.extra.shapes.tunni
 
 import org.openrndr.math.Vector2
 import org.openrndr.shape.LineSegment
-import org.openrndr.shape.Segment
+import org.openrndr.shape.Segment2D
 import org.openrndr.shape.intersection
 
 /**
  * Find the Tunni point for the [Segment]
  * @since orx 0.4.5
  */
-val Segment.tunniPoint: Vector2
+val Segment2D.tunniPoint: Vector2
     get() {
         val c = this.cubic
         val ac = LineSegment(c.start, c.control[0])
@@ -23,7 +23,7 @@ val Segment.tunniPoint: Vector2
  * Find the Tunni line for the [Segment]
  * @since orx 0.4.5
  */
-val Segment.tunniLine: LineSegment
+val Segment2D.tunniLine: LineSegment
     get() {
         val c = this.cubic
         return LineSegment(c.control[0], c.control[1])
@@ -33,7 +33,7 @@ val Segment.tunniLine: LineSegment
  * Find a new segment that has [tunniPoint] as its Tunni-point
  * @since orx 0.4.5
  */
-fun Segment.withTunniPoint(tunniPoint: Vector2): Segment {
+fun Segment2D.withTunniPoint(tunniPoint: Vector2): Segment2D {
     val ha = (start + tunniPoint) / 2.0
     val hb = (end + tunniPoint) / 2.0
     val hpa = ha + this.cubic.control[1] - end
@@ -57,7 +57,7 @@ fun Segment.withTunniPoint(tunniPoint: Vector2): Segment {
  * Find a segment for which [pointOnLine] lies on its Tunni-line
  * @since orx 0.4.5
  */
-fun Segment.withTunniLine(pointOnLine: Vector2): Segment {
+fun Segment2D.withTunniLine(pointOnLine: Vector2): Segment2D {
     val ls = LineSegment(pointOnLine, pointOnLine + this.cubic.control[0] - this.cubic.control[1])
     val ac0 = LineSegment(start, this.cubic.control[0])
     val bc1 = LineSegment(end, this.cubic.control[1])

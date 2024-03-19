@@ -6,7 +6,7 @@ import org.openrndr.extra.shapes.utilities.insertPointAt
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.math.transforms.buildTransform
-import org.openrndr.shape.Segment
+import org.openrndr.shape.Segment2D
 import org.openrndr.shape.SegmentType
 import org.openrndr.shape.ShapeContour
 import kotlin.math.abs
@@ -151,7 +151,7 @@ data class ContourEdge(
             removeAt(segmentIndex)
 
             if (segment.start.distanceTo(openContour.position(0.0)) > 1E-3) {
-                add(insertIndex, Segment(segment.start, openContour.position(0.0)))
+                add(insertIndex, Segment2D(segment.start, openContour.position(0.0)))
                 insertIndex++
             }
             for (s in openContour.segments) {
@@ -159,7 +159,7 @@ data class ContourEdge(
                 insertIndex++
             }
             if (segment.end.distanceTo(openContour.position(1.0)) > 1E-3) {
-                add(insertIndex, Segment(segment.end, openContour.position(1.0)))
+                add(insertIndex, Segment2D(segment.end, openContour.position(1.0)))
             }
         }
         return ContourEdge(ShapeContour.fromSegments(newSegments, contour.closed), segmentIndex, adjustments)

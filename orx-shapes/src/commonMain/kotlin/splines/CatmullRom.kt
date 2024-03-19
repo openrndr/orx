@@ -287,7 +287,7 @@ fun List<Vector3>.catmullRom(alpha: Double = 0.5, closed: Boolean) = CatmullRomC
 
 
 /** Converts spline to a [Segment]. */
-fun CatmullRom2.toSegment(): Segment {
+fun CatmullRom2.toSegment(): Segment2D {
     val d1a2 = (p1 - p0).length.pow(2 * alpha)
     val d2a2 = (p2 - p1).length.pow(2 * alpha)
     val d3a2 = (p3 - p2).length.pow(2 * alpha)
@@ -300,7 +300,7 @@ fun CatmullRom2.toSegment(): Segment {
     val b2 = (p1 * d3a2 - p3 * d2a2 + p2 * (2 * d3a2 + 3 * d3a * d2a + d2a2)) / (3 * d3a * (d3a + d2a))
     val b3 = p2
 
-    return Segment(b0, b1, b2, b3)
+    return Segment2D(b0, b1, b2, b3)
 }
 
 

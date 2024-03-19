@@ -86,7 +86,7 @@ fun ShapeProvider.scatter(
         hg
     }
 
-    fun Segment.randomPoints(count: Int) = sequence {
+    fun Segment2D.randomPoints(count: Int) = sequence {
         for (i in 0 until count) {
             val t = random.nextDouble()
             yield(position(t) - normal(t).normalized * distanceToEdge)

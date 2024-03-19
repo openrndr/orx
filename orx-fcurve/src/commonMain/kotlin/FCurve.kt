@@ -3,14 +3,14 @@ package org.openrndr.extra.fcurve
 import kotlinx.serialization.Serializable
 import org.openrndr.math.Vector2
 import org.openrndr.math.transforms.buildTransform
-import org.openrndr.shape.Segment
+import org.openrndr.shape.Segment2D
 import org.openrndr.shape.ShapeContour
 import kotlin.math.abs
 
 /**
  * Find the (first) t value for a given [x] value
  */
-private fun Segment.tForX(x: Double): Double {
+private fun Segment2D.tForX(x: Double): Double {
     if (linear) {
         return (x - start.x) / (end.x - start.x)
     } else {
@@ -29,7 +29,7 @@ private fun Segment.tForX(x: Double): Double {
 /**
  * Find the y value for a given [x] value
  */
-private fun Segment.yForX(x: Double): Double {
+private fun Segment2D.yForX(x: Double): Double {
     val t = tForX(x)
     return position(t).y
 }
@@ -37,7 +37,7 @@ private fun Segment.yForX(x: Double): Double {
 /**
  * Scale tangents such that tangent lines do not overlap
  */
-fun Segment.scaleTangents(axis: Vector2 = Vector2.UNIT_X): Segment {
+fun Segment2D.scaleTangents(axis: Vector2 = Vector2.UNIT_X): Segment2D {
     if (linear) {
         return this
     } else {
@@ -74,7 +74,7 @@ fun Segment.scaleTangents(axis: Vector2 = Vector2.UNIT_X): Segment {
  * Fcurve class
  */
 @Serializable
-data class FCurve(val segments: List<Segment>) {
+data class FCurve(val segments: List<Segment2D>) {
 
     /**
      * Reverse the fcurve
@@ -105,7 +105,7 @@ data class FCurve(val segments: List<Segment>) {
      * Create a sampler or function from the Fcurve
      */
     fun sampler(normalized: Boolean = false): (Double) -> Double {
-        var cachedSegment: Segment? = null
+        var cachedSegment: Segment2D? = null
         if (!normalized) {
             return { t ->
                 val r = valueWithSegment(t, cachedSegment)
@@ -139,13 +139,13 @@ data class FCurve(val segments: List<Segment>) {
      * @param segment an optional segment that can be used to speed up scanning for the relevant segment
      * @see valueWithSegment
      */
-    fun value(t: Double, segment: Segment? = null): Double = valueWithSegment(t, segment).first
+    fun value(t: Double, segment: Segment2D? = null): Double = valueWithSegment(t, segment).first
 
     /**
      * Evaluate the Fcurve at [t]
      * @param segment an optional segment that can be used to speed up scanning for the relevant segment
      */
-    fun valueWithSegment(t: Double, cachedSegment: Segment? = null): Pair<Double, Segment?> {
+    fun valueWithSegment(t: Double, cachedSegment: Segment2D? = null): Pair<Double, Segment2D?> {
         if (cachedSegment != null) {
             if (t >= cachedSegment.start.x && t < cachedSegment.end.x) {
                 return Pair(cachedSegment.yForX(t), cachedSegment)
@@ -180,7 +180,7 @@ data class FCurve(val segments: List<Segment>) {
      * Return a list of contours that can be used to visualize the Fcurve
      */
     fun contours(scale: Vector2 = Vector2.ONE): List<ShapeContour> {
-        var active = mutableListOf<Segment>()
+        var active = mutableListOf<Segment2D>()
         val result = mutableListOf<ShapeContour>()
 
         for (segment in segments) {
@@ -210,7 +210,7 @@ data class FCurve(val segments: List<Segment>) {
  * Fcurve builder
  */
 class FCurveBuilder {
-    val segments = mutableListOf<Segment>()
+    val segments = mutableListOf<Segment2D>()
     var cursor = Vector2(0.0, 0.0)
 
     var path = ""
@@ -222,7 +222,7 @@ class FCurveBuilder {
 
     fun lineTo(x: Double, y: Double, relative: Boolean = false) {
         val r = if (relative) 1.0 else 0.0
-        segments.add(Segment(cursor, Vector2(x + cursor.x, y + cursor.y * r)))
+        segments.add(Segment2D(cursor, Vector2(x + cursor.x, y + cursor.y * r)))
         cursor = Vector2(cursor.x + x, cursor.y * r + y)
         path += "${if (relative) "l" else "L"}$x,$y"
     }
@@ -234,7 +234,7 @@ class FCurveBuilder {
     ) {
         val r = if (relative) 1.0 else 0.0
         segments.add(
-            Segment(
+            Segment2D(
                 cursor,
                 Vector2(cursor.x + x0, cursor.y * r + y0),
                 Vector2(cursor.x + x, cursor.y * r + y)
@@ -251,7 +251,7 @@ class FCurveBuilder {
     ) {
         val r = if (relative) 1.0 else 0.0
         segments.add(
-            Segment(
+            Segment2D(
                 cursor,
                 Vector2(cursor.x + x0, cursor.y * r + y0),
                 Vector2(cursor.x + x1, cursor.y * r + y1),
@@ -272,7 +272,7 @@ class FCurveBuilder {
         val dy = outPos.y - outTangent.y
         val ts = x / lastDuration
         segments.add(
-            Segment(
+            Segment2D(
                 cursor,
                 Vector2(cursor.x + dx * ts, cursor.y + dy),
                 Vector2(cursor.x + x * 0.66, cursor.y * r + y),
@@ -290,7 +290,7 @@ class FCurveBuilder {
         val dx = cursor.x - outTangent.x
         val dy = cursor.y - outTangent.y
         segments.add(
-            Segment(
+            Segment2D(
                 cursor,
                 Vector2(cursor.x + dx, cursor.y + dy),
                 Vector2(cursor.x + x1, cursor.y * r + y1),
@@ -370,7 +370,7 @@ private fun evaluateFCurveCommands(parts: List<String>): FCurve {
      */
     return fcurve {
         fun dx(): Double {
-            val lastSegment = segments.lastOrNull() ?: Segment(Vector2.ZERO, Vector2.ZERO)
+            val lastSegment = segments.lastOrNull() ?: Segment2D(Vector2.ZERO, Vector2.ZERO)
             return lastSegment.end.x - lastSegment.start.x
         }
 

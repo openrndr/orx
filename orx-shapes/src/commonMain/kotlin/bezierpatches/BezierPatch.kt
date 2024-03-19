@@ -6,7 +6,7 @@ import org.openrndr.color.ConvertibleToColorRGBa
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
-import org.openrndr.shape.Segment
+import org.openrndr.shape.Segment2D
 import org.openrndr.shape.ShapeContour
 import kotlin.random.Random
 
@@ -123,7 +123,7 @@ open class BezierPatchBase<C>(
                 cps[j] += points[i][j] * cs[i]
             }
         }
-        return ShapeContour(listOf(Segment(cps[0], cps[1], cps[2], cps[3])), false)
+        return ShapeContour(listOf(Segment2D(cps[0], cps[1], cps[2], cps[3])), false)
     }
 
     fun vertical(u: Double): ShapeContour {
@@ -134,33 +134,33 @@ open class BezierPatchBase<C>(
                 cps[j] += points[j][i] * cs[i]
             }
         }
-        return ShapeContour(listOf(Segment(cps[0], cps[1], cps[2], cps[3])), false)
+        return ShapeContour(listOf(Segment2D(cps[0], cps[1], cps[2], cps[3])), false)
     }
 
     /**
      * Extract a sub-patch based on uv parameterization
      */
     fun sub(u0: Double, v0: Double, u1: Double, v1: Double): BezierPatchBase<C> {
-        val c0 = Segment(points[0][0], points[0][1], points[0][2], points[0][3]).sub(u0, u1)
-        val c1 = Segment(points[1][0], points[1][1], points[1][2], points[1][3]).sub(u0, u1)
-        val c2 = Segment(points[2][0], points[2][1], points[2][2], points[2][3]).sub(u0, u1)
-        val c3 = Segment(points[3][0], points[3][1], points[3][2], points[3][3]).sub(u0, u1)
+        val c0 = Segment2D(points[0][0], points[0][1], points[0][2], points[0][3]).sub(u0, u1)
+        val c1 = Segment2D(points[1][0], points[1][1], points[1][2], points[1][3]).sub(u0, u1)
+        val c2 = Segment2D(points[2][0], points[2][1], points[2][2], points[2][3]).sub(u0, u1)
+        val c3 = Segment2D(points[3][0], points[3][1], points[3][2], points[3][3]).sub(u0, u1)
 
         val sub0 = bezierPatch(c0, c1, c2, c3)
-        val d0 = Segment(sub0.points[0][0], sub0.points[1][0], sub0.points[2][0], sub0.points[3][0]).sub(v0, v1)
-        val d1 = Segment(sub0.points[0][1], sub0.points[1][1], sub0.points[2][1], sub0.points[3][1]).sub(v0, v1)
-        val d2 = Segment(sub0.points[0][2], sub0.points[1][2], sub0.points[2][2], sub0.points[3][2]).sub(v0, v1)
-        val d3 = Segment(sub0.points[0][3], sub0.points[1][3], sub0.points[2][3], sub0.points[3][3]).sub(v0, v1)
+        val d0 = Segment2D(sub0.points[0][0], sub0.points[1][0], sub0.points[2][0], sub0.points[3][0]).sub(v0, v1)
+        val d1 = Segment2D(sub0.points[0][1], sub0.points[1][1], sub0.points[2][1], sub0.points[3][1]).sub(v0, v1)
+        val d2 = Segment2D(sub0.points[0][2], sub0.points[1][2], sub0.points[2][2], sub0.points[3][2]).sub(v0, v1)
+        val d3 = Segment2D(sub0.points[0][3], sub0.points[1][3], sub0.points[2][3], sub0.points[3][3]).sub(v0, v1)
 
         return fromSegments<C>(d0, d1, d2, d3).transposed
     }
 
     val contour: ShapeContour = ShapeContour(
         listOf(
-            Segment(points[0][0], points[0][1], points[0][2], points[0][3]),
-            Segment(points[0][3], points[1][3], points[2][3], points[3][3]),
-            Segment(points[3][3], points[3][2], points[3][1], points[3][0]),
-            Segment(points[3][0], points[2][0], points[1][0], points[0][0]),
+            Segment2D(points[0][0], points[0][1], points[0][2], points[0][3]),
+            Segment2D(points[0][3], points[1][3], points[2][3], points[3][3]),
+            Segment2D(points[3][3], points[3][2], points[3][1], points[3][0]),
+            Segment2D(points[3][0], points[2][0], points[1][0], points[0][0]),
         ), true
     )
 
@@ -196,7 +196,7 @@ open class BezierPatchBase<C>(
     }
 
     companion object {
-        fun <C> fromSegments(c0: Segment, c1: Segment, c2: Segment, c3: Segment): BezierPatchBase<C>
+        fun <C> fromSegments(c0: Segment2D, c1: Segment2D, c2: Segment2D, c3: Segment2D): BezierPatchBase<C>
                 where C : AlgebraicColor<C>, C : ConvertibleToColorRGBa {
             val c0c = c0.cubic
             val c1c = c1.cubic
@@ -219,7 +219,7 @@ class BezierPatch(points: List<List<Vector2>>, colors: List<List<ColorRGBa>> = e
 /**
  * Create a cubic bezier patch from 4 segments. The control points of the segments are used in row-wise fashion
  */
-fun bezierPatch(c0: Segment, c1: Segment, c2: Segment, c3: Segment): BezierPatch {
+fun bezierPatch(c0: Segment2D, c1: Segment2D, c2: Segment2D, c3: Segment2D): BezierPatch {
     val c0c = c0.cubic
     val c1c = c1.cubic
     val c2c = c2.cubic
@@ -289,7 +289,7 @@ fun BezierPatch.distort(shapeContour: ShapeContour, referenceRectangle: Rectangl
         val ns = position(s.x, s.y)
         val nc0 = position(c0.x, c0.y)
         val nc1 = position(c1.x, c1.y)
-        Segment(ns, nc0, nc1, ne)
+        Segment2D(ns, nc0, nc1, ne)
     }
     return ShapeContour(distortedSegments, shapeContour.closed, shapeContour.polarity)
 }

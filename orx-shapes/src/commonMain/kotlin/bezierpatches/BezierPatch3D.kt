@@ -140,16 +140,16 @@ open class BezierPatch3DBase<C>(
      * Extract a sub-patch based on uv parameterization
      */
     fun sub(u0: Double, v0: Double, u1: Double, v1: Double): BezierPatch3DBase<C> {
-        val c0 = Segment3D(points[0][0], points[0][1], points[0][2], points[0][3]).sub(u0, u1)
-        val c1 = Segment3D(points[1][0], points[1][1], points[1][2], points[1][3]).sub(u0, u1)
-        val c2 = Segment3D(points[2][0], points[2][1], points[2][2], points[2][3]).sub(u0, u1)
-        val c3 = Segment3D(points[3][0], points[3][1], points[3][2], points[3][3]).sub(u0, u1)
+        val c0 = Segment3D(points[0][0], points[0][1], points[0][2], points[0][3]).sub(u0, u1) as Segment3D
+        val c1 = Segment3D(points[1][0], points[1][1], points[1][2], points[1][3]).sub(u0, u1) as Segment3D
+        val c2 = Segment3D(points[2][0], points[2][1], points[2][2], points[2][3]).sub(u0, u1) as Segment3D
+        val c3 = Segment3D(points[3][0], points[3][1], points[3][2], points[3][3]).sub(u0, u1) as Segment3D
 
         val sub0 = bezierPatch(c0, c1, c2, c3)
-        val d0 = Segment3D(sub0.points[0][0], sub0.points[1][0], sub0.points[2][0], sub0.points[3][0]).sub(v0, v1)
-        val d1 = Segment3D(sub0.points[0][1], sub0.points[1][1], sub0.points[2][1], sub0.points[3][1]).sub(v0, v1)
-        val d2 = Segment3D(sub0.points[0][2], sub0.points[1][2], sub0.points[2][2], sub0.points[3][2]).sub(v0, v1)
-        val d3 = Segment3D(sub0.points[0][3], sub0.points[1][3], sub0.points[2][3], sub0.points[3][3]).sub(v0, v1)
+        val d0 = Segment3D(sub0.points[0][0], sub0.points[1][0], sub0.points[2][0], sub0.points[3][0]).sub(v0, v1) as Segment3D
+        val d1 = Segment3D(sub0.points[0][1], sub0.points[1][1], sub0.points[2][1], sub0.points[3][1]).sub(v0, v1) as Segment3D
+        val d2 = Segment3D(sub0.points[0][2], sub0.points[1][2], sub0.points[2][2], sub0.points[3][2]).sub(v0, v1) as Segment3D
+        val d3 = Segment3D(sub0.points[0][3], sub0.points[1][3], sub0.points[2][3], sub0.points[3][3]).sub(v0, v1) as Segment3D
 
         return fromSegments<C>(d0, d1, d2, d3).transposed
     }

@@ -570,28 +570,28 @@ class CompositionDrawer(documentBounds: CompositionDimensions = defaultCompositi
         c1: Vector2,
         end: Vector2,
         insert: Boolean = true
-    ) = segment(Segment(start, c0, c1, end), insert)
+    ) = segment(Segment2D(start, c0, c1, end), insert)
 
     fun segment(
         start: Vector2,
         c0: Vector2,
         end: Vector2,
         insert: Boolean = true
-    ) = segment(Segment(start, c0, end), insert)
+    ) = segment(Segment2D(start, c0, end), insert)
 
     fun segment(
         start: Vector2,
         end: Vector2,
         insert: Boolean = true
-    ) = segment(Segment(start, end), insert)
+    ) = segment(Segment2D(start, end), insert)
 
     fun segment(
-        segment: Segment,
+        segment: Segment2D,
         insert: Boolean = true
     ) = contour(segment.contour, insert)
 
     fun segments(
-        segments: List<Segment>,
+        segments: List<Segment2D>,
         insert: Boolean = true
     ) = segments.map {
         segment(it, insert)

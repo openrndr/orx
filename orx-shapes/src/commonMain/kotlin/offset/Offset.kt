@@ -9,7 +9,7 @@ import kotlin.math.sign
 import kotlin.math.sqrt
 
 
-private fun Segment.splitOnExtrema(): List<Segment> {
+private fun Segment2D.splitOnExtrema(): List<Segment2D> {
     var extrema = extrema().toMutableList()
 
     if (isStraight(0.05)) {
@@ -40,10 +40,10 @@ private fun Segment.splitOnExtrema(): List<Segment> {
     }
 }
 
-private fun Segment.splitToSimple(step: Double): List<Segment> {
+private fun Segment2D.splitToSimple(step: Double): List<Segment2D> {
     var t1 = 0.0
     var t2 = 0.0
-    val result = mutableListOf<Segment>()
+    val result = mutableListOf<Segment2D>()
     while (t2 <= 1.0) {
         t2 = t1 + step
         while (t2 <= 1.0 + step) {
@@ -72,15 +72,15 @@ private fun Segment.splitToSimple(step: Double): List<Segment> {
 }
 
 
-fun Segment.reduced(stepSize: Double = 0.01): List<Segment> {
+fun Segment2D.reduced(stepSize: Double = 0.01): List<Segment2D> {
     val pass1 = splitOnExtrema()
     //return pass1
     return pass1.flatMap { it.splitToSimple(stepSize) }
 }
 
-fun Segment.scale(scale: Double, polarity: YPolarity) = scale(polarity) { scale }
+fun Segment2D.scale(scale: Double, polarity: YPolarity) = scale(polarity) { scale }
 
-fun Segment.scale(polarity: YPolarity, scale: (Double) -> Double): Segment {
+fun Segment2D.scale(polarity: YPolarity, scale: (Double) -> Double): Segment2D {
     if (control.size == 1) {
         return cubic.scale(polarity, scale)
     }
@@ -111,19 +111,19 @@ fun Segment.scale(polarity: YPolarity, scale: (Double) -> Double): Segment {
     }
 }
 
-fun Segment.offset(
+fun Segment2D.offset(
     distance: Double,
     stepSize: Double = 0.01,
     yPolarity: YPolarity = YPolarity.CW_NEGATIVE_Y
-): List<Segment> {
+): List<Segment2D> {
     return if (linear) {
         val n = normal(0.0, yPolarity)
         if (distance > 0.0) {
-            listOf(Segment(start + distance * n, end + distance * n))
+            listOf(Segment2D(start + distance * n, end + distance * n))
         } else {
             val d = direction()
             val s = distance.coerceAtMost(length / 2.0)
-            val candidate = Segment(
+            val candidate = Segment2D(
                 start - s * d + distance * n,
                 end + s * d + distance * n
             )
@@ -226,12 +226,12 @@ fun ShapeContour.offset(distance: Double, joinType: SegmentJoin = SegmentJoin.RO
     var final = candidateContour.removeLoops()
 
     if (postProc && !final.empty) {
-        val head = Segment(
+        val head = Segment2D(
             segments[0].start + segments[0].normal(0.0)
                 .perpendicular(polarity) * 1000.0, segments[0].start
         ).offset(distance).firstOrNull()?.copy(end = final.segments[0].start)?.contour
 
-        val tail = Segment(
+        val tail = Segment2D(
             segments.last().end,
             segments.last().end - segments.last().normal(1.0)
                 .perpendicular(polarity) * 1000.0

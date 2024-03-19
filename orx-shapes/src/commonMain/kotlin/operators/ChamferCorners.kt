@@ -7,15 +7,15 @@ import kotlin.math.abs
 import kotlin.math.sign
 import kotlin.math.sqrt
 
-private fun Segment.linearSub(l0: Double, l1: Double): Segment {
+private fun Segment2D.linearSub(l0: Double, l1: Double): Segment2D {
     return sub(l0 / length, l1 / length)
 }
 
-private fun Segment.linearPosition(l: Double): Vector2 {
+private fun Segment2D.linearPosition(l: Double): Vector2 {
     return position((l / length).coerceIn(0.0, 1.0))
 }
 
-private fun pickLength(leftLength: Double, rightLength: Double, s0: Segment, s1: Segment): Double {
+private fun pickLength(leftLength: Double, rightLength: Double, s0: Segment2D, s1: Segment2D): Double {
     val p3 = s1.end
     val p2 = s0.end
     val p1 = s0.start
@@ -36,8 +36,8 @@ private fun pickLength(leftLength: Double, rightLength: Double, s0: Segment, s1:
  * @param chamfer the chamfer function to apply
  */
 fun ShapeContour.chamferCorners(
-        lengths: (index: Int, left: Segment, right: Segment) -> Double,
-        expands: (index: Int, left: Segment, right: Segment) -> Double = { _, _, _ -> 0.0 },
+        lengths: (index: Int, left: Segment2D, right: Segment2D) -> Double,
+        expands: (index: Int, left: Segment2D, right: Segment2D) -> Double = { _, _, _ -> 0.0 },
         clip: Boolean = true,
         angleThreshold: Double = 180.0,
         chamfer: ContourBuilder.(p1: Vector2, p2: Vector2, p3: Vector2) -> Unit

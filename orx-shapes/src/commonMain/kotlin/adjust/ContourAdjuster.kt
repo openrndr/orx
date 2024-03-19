@@ -3,14 +3,14 @@ package org.openrndr.extra.shapes.adjust
 import org.openrndr.collections.pop
 import org.openrndr.extra.shapes.vertex.ContourVertex
 import org.openrndr.math.Vector2
-import org.openrndr.shape.Segment
+import org.openrndr.shape.Segment2D
 import org.openrndr.shape.ShapeContour
 import kotlin.jvm.JvmName
 
 
 class ContourAdjusterStatus(
     val contour: ShapeContour,
-    val selectedSegments: List<Segment>,
+    val selectedSegments: List<Segment2D>,
     val selectedPoints: List<Vector2>
 )
 

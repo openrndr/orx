@@ -37,6 +37,7 @@ kotlin {
                 implementation(project(":orx-triangulation"))
                 implementation(project(":orx-shapes"))
                 implementation(project(":orx-noise"))
+                implementation(project(":orx-mesh-generators"))
             }
         }
     }

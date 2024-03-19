@@ -111,13 +111,13 @@ class AlphaShape(val points: List<Vector2>) {
     private fun edgesToShapeContour(edges: List<Pair<Int, Int>>): ShapeContour {
         if (edges.isEmpty()) return ShapeContour.EMPTY
         val mapping = edges.toMap()
-        val segments = mutableListOf<Segment>()
+        val segments = mutableListOf<Segment2D>()
         val start = edges.first().first
         var current = start
         val left = edges.map { it.first }.toMutableSet()
         for (i in edges.indices) {
             val next = mapping[current]!!
-            segments.add(Segment(getVec(current), getVec(next)))
+            segments.add(Segment2D(getVec(current), getVec(next)))
             left.remove(current)
             current = next
             if (current == start) break
@@ -140,11 +140,11 @@ class AlphaShape(val points: List<Vector2>) {
         while (left.isNotEmpty()) {
             val start = left.first()
             var current = start
-            val segments = mutableListOf<Segment>()
+            val segments = mutableListOf<Segment2D>()
             val contourPoints = mutableListOf<Vector2>()
             for (i in edges.indices) {
                 val next = mapping[current]!!
-                segments.add(Segment(getVec(current), getVec(next)))
+                segments.add(Segment2D(getVec(current), getVec(next)))
                 contourPoints.add(getVec(current))
                 left.remove(current)
                 current = next
