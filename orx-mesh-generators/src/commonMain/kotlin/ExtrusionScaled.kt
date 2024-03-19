@@ -1,5 +1,6 @@
 package org.openrndr.extra.meshgenerators
 
+import org.openrndr.extra.shapes.frames.frames
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector3
 import org.openrndr.shape.Path3D

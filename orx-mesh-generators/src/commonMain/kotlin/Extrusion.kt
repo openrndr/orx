@@ -1,14 +1,12 @@
 package org.openrndr.extra.meshgenerators
 
+import org.openrndr.extra.shapes.frames.frames
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
-import org.openrndr.math.Vector4
-import org.openrndr.math.transforms.normalMatrix
 import org.openrndr.shape.Path3D
 import org.openrndr.shape.Shape
 import org.openrndr.shape.ShapeContour
-import org.openrndr.shape.Triangle
 
 /**
  * Writes quads to [writer] creating a surface that connects two

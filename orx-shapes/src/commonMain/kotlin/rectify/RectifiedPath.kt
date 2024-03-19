@@ -92,6 +92,14 @@ abstract class RectifiedPath<T : EuclideanVector<T>>(
         }
     }
 
+    fun direction(t: Double): T {
+        return if (path.empty) {
+            path.infinity
+        } else {
+            path.direction(rectify(safe(t)))
+        }
+    }
+
     abstract fun sub(t0: Double, t1: Double): Path<T>
 
     /**

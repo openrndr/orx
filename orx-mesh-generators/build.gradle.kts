@@ -9,6 +9,7 @@ kotlin {
             dependencies {
                 api(libs.openrndr.application)
                 api(libs.openrndr.math)
+                implementation(project(":orx-shapes"))
             }
         }
 

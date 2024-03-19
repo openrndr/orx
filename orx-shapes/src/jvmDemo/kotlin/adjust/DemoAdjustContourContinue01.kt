@@ -9,7 +9,7 @@ import org.openrndr.extra.shapes.tunni.tunniPoint
 import org.openrndr.extra.shapes.tunni.withTunniLine
 import org.openrndr.launch
 import org.openrndr.math.Vector2
-import org.openrndr.shape.Segment
+import org.openrndr.shape.Segment2D
 import kotlin.math.cos
 
 fun main() {
@@ -21,7 +21,7 @@ fun main() {
         program {
 
             var res = drawer.bounds.offsetEdges(-200.0).contour
-            var selectedSegments = emptyList<Segment>()
+            var selectedSegments = emptyList<Segment2D>()
             var selectedPoints = emptyList<Vector2>()
 
             val contourSeq = adjustContourSequence(res) {
