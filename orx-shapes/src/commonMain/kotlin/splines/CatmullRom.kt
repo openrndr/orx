@@ -21,7 +21,7 @@ private const val almostOne = 0.99999999
  * @param alpha The *tension* of the curve.
  *      Use `0.0` for the uniform spline, `0.5` for the centripetal spline, `1.0` for the chordal spline.
  */
-class CatmullRom1 @JvmOverloads constructor (val p0: Double, val p1: Double, val p2: Double, val p3: Double, val alpha: Double = 0.5) {
+class CatmullRom1(val p0: Double, val p1: Double, val p2: Double, val p3: Double, val alpha: Double = 0.5) {
     /** Value of t for p0. */
     val t0: Double = 0.0
     /** Value of t for p1. */
@@ -69,7 +69,7 @@ class CatmullRom1 @JvmOverloads constructor (val p0: Double, val p1: Double, val
  *      Use `0.0` for the uniform spline, `0.5` for the centripetal spline, `1.0` for the chordal spline.
  * @param loop Whether to connect the first and last point, such that it forms a closed shape.
  */
-class CatmullRomChain1 @JvmOverloads constructor (points: List<Double>, alpha: Double = 0.5, val loop: Boolean = false) {
+class CatmullRomChain1(points: List<Double>, alpha: Double = 0.5, val loop: Boolean = false) {
     val segments = if (!loop) points.windowed(4, 1).map {
         CatmullRom1(it[0], it[1], it[2], it[3], alpha)
     } else {
@@ -109,7 +109,7 @@ class CatmullRomChain1 @JvmOverloads constructor (points: List<Double>, alpha: D
  * @param alpha The *tension* of the curve.
  *      Use `0.0` for the uniform spline, `0.5` for the centripetal spline, `1.0` for the chordal spline.
  */
-class CatmullRom2 @JvmOverloads constructor (val p0: Vector2, val p1: Vector2, val p2: Vector2, val p3: Vector2, val alpha: Double = 0.5) {
+class CatmullRom2(val p0: Vector2, val p1: Vector2, val p2: Vector2, val p3: Vector2, val alpha: Double = 0.5) {
     /** Value of t for p0. */
     val t0: Double = 0.0
     /** Value of t for p1. */
@@ -150,7 +150,7 @@ class CatmullRom2 @JvmOverloads constructor (val p0: Vector2, val p1: Vector2, v
  *      Use `0.0` for the uniform spline, `0.5` for the centripetal spline, `1.0` for the chordal spline.
  * @param loop Whether to connect the first and last point, such that it forms a closed shape.
  */
-class CatmullRomChain2 @JvmOverloads constructor (points: List<Vector2>, alpha: Double = 0.5, val loop: Boolean = false) {
+class CatmullRomChain2(points: List<Vector2>, alpha: Double = 0.5, val loop: Boolean = false) {
     val segments = if (!loop) {
         val startPoints = points.take(2)
         val endPoints = points.takeLast(2)
@@ -204,7 +204,7 @@ class CatmullRomChain2 @JvmOverloads constructor (points: List<Vector2>, alpha: 
  * @param alpha The *tension* of the curve.
  *      Use `0.0` for the uniform spline, `0.5` for the centripetal spline, `1.0` for the chordal spline.
  */
-class CatmullRom3 @JvmOverloads constructor (val p0: Vector3, val p1: Vector3, val p2: Vector3, val p3: Vector3, val alpha: Double = 0.5) {
+class CatmullRom3(val p0: Vector3, val p1: Vector3, val p2: Vector3, val p3: Vector3, val alpha: Double = 0.5) {
     /** Value of t for p0. */
     val t0: Double = 0.0
     /** Value of t for p1. */
@@ -245,7 +245,7 @@ class CatmullRom3 @JvmOverloads constructor (val p0: Vector3, val p1: Vector3, v
  *      Use `0.0` for the uniform spline, `0.5` for the centripetal spline, `1.0` for the chordal spline.
  * @param loop Whether to connect the first and last point, such that it forms a closed shape.
  */
-class CatmullRomChain3 @JvmOverloads constructor (points: List<Vector3>, alpha: Double = 0.5, val loop: Boolean = false) {
+class CatmullRomChain3(points: List<Vector3>, alpha: Double = 0.5, val loop: Boolean = false) {
     val segments = if (!loop) {
         val startPoints = points.take(2)
         val endPoints = points.takeLast(2)
