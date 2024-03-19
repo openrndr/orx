@@ -64,6 +64,11 @@ Collection of 2D shape generators and modifiers.
 
 ![arrangement-DemoArrangement02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/arrangement-DemoArrangement02Kt.png)
 
+### arrangement/DemoArrangement04
+[source code](src/jvmDemo/kotlin/arrangement/DemoArrangement04.kt)
+
+![arrangement-DemoArrangement04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/arrangement-DemoArrangement04Kt.png)
+
 ### bezierpatch/DemoBezierPatch01
 [source code](src/jvmDemo/kotlin/bezierpatch/DemoBezierPatch01.kt)
 
@@ -123,6 +128,11 @@ Collection of 2D shape generators and modifiers.
 [source code](src/jvmDemo/kotlin/DemoAdjustContour08.kt)
 
 ![DemoAdjustContour08Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/DemoAdjustContour08Kt.png)
+
+### frames/DemoFrames01
+[source code](src/jvmDemo/kotlin/frames/DemoFrames01.kt)
+
+![frames-DemoFrames01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/frames-DemoFrames01Kt.png)
 
 ### hobbycurve/DemoHobbyCurve01
 [source code](src/jvmDemo/kotlin/hobbycurve/DemoHobbyCurve01.kt)
@@ -198,6 +208,16 @@ Collection of 2D shape generators and modifiers.
 [source code](src/jvmDemo/kotlin/rectify/DemoRectifiedContour02.kt)
 
 ![rectify-DemoRectifiedContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/rectify-DemoRectifiedContour02Kt.png)
+
+### rectify/DemoRectifiedContour03
+[source code](src/jvmDemo/kotlin/rectify/DemoRectifiedContour03.kt)
+
+![rectify-DemoRectifiedContour03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/rectify-DemoRectifiedContour03Kt.png)
+
+### rectify/DemoRectifiedPath3D01
+[source code](src/jvmDemo/kotlin/rectify/DemoRectifiedPath3D01.kt)
+
+![rectify-DemoRectifiedPath3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/rectify-DemoRectifiedPath3D01Kt.png)
 
 ### text/DemoText01
 [source code](src/jvmDemo/kotlin/text/DemoText01.kt)
