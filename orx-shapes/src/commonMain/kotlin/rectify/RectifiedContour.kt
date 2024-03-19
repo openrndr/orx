@@ -50,4 +50,6 @@ class RectifiedContour(contour: ShapeContour, distanceTolerance: Double = 0.5, l
         @Suppress("UNCHECKED_CAST")
         return super.splitAt(ascendingTs, weldEpsilon) as List<ShapeContour>
     }
+
+    val contour: ShapeContour get() = path as ShapeContour
 }
