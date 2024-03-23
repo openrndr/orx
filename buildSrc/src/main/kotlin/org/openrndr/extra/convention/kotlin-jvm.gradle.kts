@@ -57,9 +57,7 @@ dependencies {
     "demoRuntimeOnly"(libs.slf4j.simple)
 }
 
-kotlin {
-    jvmToolchain(libs.versions.jvmTarget.get().toInt())
-}
+
 
 tasks {
     @Suppress("UNUSED_VARIABLE")
@@ -79,14 +77,19 @@ tasks {
         }
     }
     withType<KotlinCompile>() {
+        kotlinOptions.jvmTarget = libs.versions.jvmTarget.get()
         kotlinOptions.apiVersion = libs.versions.kotlinApi.get()
         kotlinOptions.languageVersion = libs.versions.kotlinLanguage.get()
+        kotlinOptions.freeCompilerArgs += "-Xexpect-actual-classes"
+        kotlinOptions.freeCompilerArgs += "-Xjdk-release=${libs.versions.jvmTarget.get()}"
     }
 }
 
 java {
     withJavadocJar()
     withSourcesJar()
+    targetCompatibility = JavaVersion.valueOf("VERSION_${libs.versions.jvmTarget.get()}")
+    sourceCompatibility = JavaVersion.valueOf("VERSION_${libs.versions.jvmTarget.get()}")
 }
 
 val isReleaseVersion = !(version.toString()).endsWith("SNAPSHOT")
