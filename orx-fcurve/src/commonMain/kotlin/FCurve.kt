@@ -297,6 +297,7 @@ class FCurveBuilder {
                 Vector2(cursor.x + x, cursor.y * r + y)
             ).scaleTangents()
         )
+        cursor = Vector2(cursor.x + x, cursor.y * r + y)
         path += "${if (relative) "s" else "S"}$x1,$y1,$x,$y"
     }
 
