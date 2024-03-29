@@ -1,18 +1,20 @@
 # orx-fcurve
 
-FCurves are 1 dimensional function curves constructed from 2D bezier functions. 
+FCurves are 1 dimensional function curves constructed from 2D bezier functions.
 
 The language to express Fcurves is similar to SVG's path language.
 
-| Command               | Description                                                 |
-|-----------------------|-------------------------------------------------------------|
-| `m/M y`               | move the pen only in the y-direction                        |
-| `h/H x`               | draw a horizontal line                                      |
-| `l/L x y`             | line to (x, y)                                              |  
-| `q/Q x0 y0 x y`       | quadratic bezier to (x,y) and control-point (x0, y0)        |
-| `c/C x0 y0 x1 y1 x y` | cubic bezier to (x,y) and control-points (x0, y0), (x1, y1) |
-| `t/T x y`             | quadratic smooth to (x, y)                                  |
-| `s/S x1 y1 x y`       | cubic smooth to (x,y) and control point (x1, y1)            |
+`x` values usually represent duration in seconds.
+
+| Relative command    | Absolute command      | Description                                                 |
+|---------------------|-----------------------|-------------------------------------------------------------|
+| `m y`               | `M y`                 | move the pen only in the y-direction                        |
+| `h x`               | `H x`                 | hold a value to draw a horizontal line                      |
+| `l x,y`             | `L x,y`               | line to (x, y)                                              |
+| `q x0,y0,x,y`       | `Q x0,y0,x,y`         | quadratic bezier to (x,y) and control-point (x0, y0)        |
+| `c x0,y0,x1,y1,x,y` | `C x0,y0,x1,y1,x,y`   | cubic bezier to (x,y) and control-points (x0, y0), (x1, y1) |
+| `t x,y`             | `T x,y`               | quadratic smooth to (x, y)                                  |
+| `s x1,y1,x,y`       | `S x1,y1,x,y`         | cubic smooth to (x,y) and control point (x1, y1)            |
 
 ## Example Fcurves
 
@@ -20,7 +22,7 @@ The language to express Fcurves is similar to SVG's path language.
 
 `M0 h10 c3,10,5,-10,8,0.5 L5,5`
 
-New lines are allowed, which can help in formatting the Fcurve
+New lines and commas are optional. They can help with readability.
 ```
 M0 h10
 c3,10,5,-10,8,0.5
