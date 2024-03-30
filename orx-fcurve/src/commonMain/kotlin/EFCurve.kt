@@ -8,17 +8,18 @@ import org.openrndr.extra.expressions.evaluateExpression
  * @param constants a map of constants that is passed to [evaluateExpression]
  */
 fun efcurve(ef: String, constants: Map<String, Double> = emptyMap()): String {
-    val expression = Regex("\\{([^_]+)\\}")
-
     // IntelliJ falsely reports a redundant escape character. the escape character is required when running the regular
     // expression on a javascript target. Removing the escape character will result in a `Lone quantifier brackets`
     // syntax error.
 
     @Suppress("RegExpRedundantEscape")
-    val repetition = Regex("""\|([^|]+)\|\[([^\[\]]+)\]""")
+    val expression = Regex("\\{([^{}]+)\\}")
 
     @Suppress("RegExpRedundantEscape")
-    val list = Regex("\\|([^|]+)\\|\\{([^\\[\\]]+)\\}")
+    val repetition = Regex("""\(([^()]+)\)\[([^\[\]]+)\]""")
+
+    @Suppress("RegExpRedundantEscape")
+    val list = Regex("\\(([^()]+)\\)\\{([^\\[\\]]+)\\}")
 
     /**
      * perform comment substitution
