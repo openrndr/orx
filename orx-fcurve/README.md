@@ -152,7 +152,7 @@ In this example we used `% 9.0` to loop the time between 0.0 and 9.0, repeating 
 
 # EFCurves
 
-Extended Fcurves have a additional preprocessing step in which scalar expressions are evaluated.
+Extended Fcurves have an additional preprocessing step in which scalar expressions are evaluated.
 
 ## Comments
 
@@ -170,10 +170,10 @@ L5,5
 
 ## Expressions
 
-Expressions wrapped in underscore characters (`_`) are evaluated using `orx-expression-evaluator`.
+Expressions within curly brackets are evaluated using `orx-expression-evaluator`.
 Please refer to its [documentation](https://github.com/openrndr/orx/tree/master/orx-expression-evaluator) for details on the expression language used.
 
-For example: `M0 L_3 * 4_,4` evaluates to `M0 L12,4`.
+For example: `M0 L{3 * 4},4` evaluates to `M0 L12,4`.
 
 ## Repetitions 
 
@@ -193,9 +193,9 @@ For example `|M0 |h1 m1|[3]|[2]` expands to `M0 h1 m1 h1 m1 h1 m1 M0 h1 m1 h1 m1
 
 ### Interaction between repetitions and expressions
 
-`M0 |H_it + 1_ m1][3]` expands to `M0 H1 m1 H2 m1 H3 m1`
+`M0 |H{it + 1} m1][3]` expands to `M0 H1 m1 H2 m1 H3 m1`
 
-`M0 |H_index + 1_ m_it_]{1.2, 1.3, 1.4}` expands to `M0 H1 m1.2 H2 m1.3 H3 m1.4`
+`M0 |H{index + 1} m{it}]{1.2, 1.3, 1.4}` expands to `M0 H1 m1.2 H2 m1.3 H3 m1.4`
 
 
 # References

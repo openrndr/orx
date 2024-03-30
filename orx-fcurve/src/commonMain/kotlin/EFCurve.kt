@@ -8,7 +8,7 @@ import org.openrndr.extra.expressions.evaluateExpression
  * @param constants a map of constants that is passed to [evaluateExpression]
  */
 fun efcurve(ef: String, constants: Map<String, Double> = emptyMap()): String {
-    val expression = Regex("_([^_]+)_")
+    val expression = Regex("\\{([^_]+)\\}")
 
     // IntelliJ falsely reports a redundant escape character. the escape character is required when running the regular
     // expression on a javascript target. Removing the escape character will result in a `Lone quantifier brackets`
