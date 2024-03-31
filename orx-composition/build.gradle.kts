@@ -22,7 +22,7 @@ kotlin {
         @Suppress("UNUSED_VARIABLE")
         val jvmDemo by getting {
             dependencies {
-                implementation(project(":orx-shapes"))
+                implementation(project(":orx-svg"))
             }
         }
     }
