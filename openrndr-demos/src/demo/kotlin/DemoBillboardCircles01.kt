@@ -26,7 +26,7 @@ fun main() = application {
 
         circlePositions.put {
             for (i in 0 until circlePositions.vertexCount) {
-                write(Vector3.uniformRing(0.0, 3.0))
+                write(Vector3.uniformRing(2.0, 3.0))
                 write(Math.random().toFloat()*0.1f)
             }
         }
@@ -36,8 +36,7 @@ fun main() = application {
             drawer.perspective(90.0, width*1.0/height*1.0, 0.1, 100.0)
 
             drawer.fill = ColorRGBa.PINK
-            drawer.stroke = ColorRGBa.GREEN
-            drawer.strokeWeight = 0.05
+            drawer.stroke = null
             drawer.drawStyle.alphaToCoverage = true
 
             drawer.depthWrite = true
@@ -52,6 +51,14 @@ fun main() = application {
                     x_position = viewOffset + vec3(a_position.xy * i_scale, 0.0);
                     vi_radius = vec2(i_scale);
                 """.trimIndent()
+
+                // The circle bounds can be used to calculate a color or to sample a texture
+                fragmentTransform = """
+                    float r = length(c_boundsPosition.xy - 0.5) * 2.0;
+                    x_fill.rg = c_boundsPosition.xy;
+                    x_fill.a = 1.0 - step(1.0, r);
+                """.trimIndent()
+
                 attributes(circlePositions)
             }
 
