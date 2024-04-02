@@ -1,7 +1,8 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.shape.ClipMode
-import org.openrndr.shape.drawComposition
+import org.openrndr.extra.composition.ClipMode
+import org.openrndr.extra.composition.composition
+import org.openrndr.extra.composition.drawComposition
 
 fun main() {
     application {

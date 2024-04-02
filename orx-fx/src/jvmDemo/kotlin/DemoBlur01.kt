@@ -63,6 +63,7 @@ fun main() {
                         is HashBlur -> {
                             blur.samples = 50
                             blur.radius = 5.0
+                            blur.time = seconds
                         }
                         is GaussianBlur -> {
                             blur.window = 25
