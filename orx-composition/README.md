@@ -15,3 +15,18 @@ Read about Composition [in the guide](https://guide.openrndr.org/drawing/drawing
 _The code in `orx-composition` was previously found under `openrndr-draw` in the `openrndr` repository._
 
 <!-- __demos__ -->
+## Demos
+### DemoCompositionDrawer01
+[source code](src/jvmDemo/kotlin/DemoCompositionDrawer01.kt)
+
+![DemoCompositionDrawer01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoCompositionDrawer01Kt.png)
+
+### DemoCompositionDrawer02
+[source code](src/jvmDemo/kotlin/DemoCompositionDrawer02.kt)
+
+![DemoCompositionDrawer02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoCompositionDrawer02Kt.png)
+
+### DemoCompositionDrawer03
+[source code](src/jvmDemo/kotlin/DemoCompositionDrawer03.kt)
+
+![DemoCompositionDrawer03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoCompositionDrawer03Kt.png)
