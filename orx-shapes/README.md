@@ -144,6 +144,11 @@ Collection of 2D shape generators and modifiers.
 
 ![hobbycurve-DemoHobbyCurve02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve02Kt.png)
 
+### hobbycurve/DemoHobbyCurve3D01
+[source code](src/jvmDemo/kotlin/hobbycurve/DemoHobbyCurve3D01.kt)
+
+![hobbycurve-DemoHobbyCurve3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve3D01Kt.png)
+
 ### primitives/DemoArc01
 [source code](src/jvmDemo/kotlin/primitives/DemoArc01.kt)
 
