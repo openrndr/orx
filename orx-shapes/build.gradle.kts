@@ -21,6 +21,12 @@ kotlin {
         }
 
 
+        val commonTest by getting {
+            dependencies {
+                implementation(project(":orx-noise"))
+            }
+        }
+
         val jvmTest by getting {
             dependencies {
                 implementation(libs.kotest.assertions)
