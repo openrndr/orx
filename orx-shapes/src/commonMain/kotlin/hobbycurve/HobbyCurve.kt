@@ -61,10 +61,10 @@ fun hobbyCurve(points: List<Vector2>, closed: Boolean = false, curl: Double = 0.
     }
     if (!closed) gamma[n] = 0.0
 
-    val a = DoubleArray(n) { 0.0 }
-    val b = DoubleArray(n) { 0.0 }
-    val c = DoubleArray(n) { 0.0 }
-    val d = DoubleArray(n) { 0.0 }
+    val a = DoubleArray(m) { 0.0 }
+    val b = DoubleArray(m) { 0.0 }
+    val c = DoubleArray(m) { 0.0 }
+    val d = DoubleArray(m) { 0.0 }
 
     for (i in (if (closed) 0 else 1) until n) {
         val j = (i + 1).mod(m)
