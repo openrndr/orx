@@ -108,7 +108,7 @@ class TextWriter(val drawerRef: Drawer?) {
     fun drawTextTokens(tokens: List<TextToken>) {
         drawerRef?.let { d ->
             val renderer = d.fontImageMapDrawer
-            val queue = renderer.getQueue(tokens.size)
+            val queue = renderer.getQueue(tokens.sumOf { it.token.length })
             tokens.forEach {
                 renderer.queueText(
                     fontMap = d.drawStyle.fontMap!!,
