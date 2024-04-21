@@ -11,6 +11,9 @@ import kotlin.math.abs
  * Find the (first) t value for a given [x] value
  */
 private fun Segment2D.tForX(x: Double): Double {
+    if (x == start.x) return 0.0
+    if (x == end.x) return 1.0
+
     if (linear) {
         return (x - start.x) / (end.x - start.x)
     } else {
@@ -155,7 +158,7 @@ data class FCurve(val segments: List<Segment2D>) {
         if (segments.isEmpty()) {
             return Pair(0.0, null)
         }
-        if (t < segments.first().start.x) {
+        if (t <= segments.first().start.x) {
             val segment = segments.first()
             return Pair(segment.start.y, segment)
         } else if (t > segments.last().end.x) {
