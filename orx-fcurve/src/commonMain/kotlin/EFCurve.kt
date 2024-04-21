@@ -1,5 +1,6 @@
 package org.openrndr.extra.fcurve
 
+import org.openrndr.extra.expressions.FunctionExtensions
 import org.openrndr.extra.expressions.evaluateExpression
 
 /**
@@ -7,7 +8,12 @@ import org.openrndr.extra.expressions.evaluateExpression
  * @param ef an efcurve string
  * @param constants a map of constants that is passed to [evaluateExpression]
  */
-fun efcurve(ef: String, constants: Map<String, Double> = emptyMap()): String {
+fun efcurve(
+    ef: String,
+    constants: Map<String, Double> = emptyMap(),
+    functions: FunctionExtensions = FunctionExtensions.EMPTY
+
+): String {
     // IntelliJ falsely reports a redundant escape character. the escape character is required when running the regular
     // expression on a javascript target. Removing the escape character will result in a `Lone quantifier brackets`
     // syntax error.
@@ -38,7 +44,7 @@ fun efcurve(ef: String, constants: Map<String, Double> = emptyMap()): String {
         curve = list.replace(curve) { occ ->
             val listText = expression.replace(occ.groupValues[2]) { exp ->
                 val expressionText = exp.groupValues[1]
-                evaluateExpression(expressionText, constants)?.toString()
+                evaluateExpression(expressionText, constants, functions)?.toString()
                     ?: error("parse error in repetition count expression '$expressionText'")
             }
             val listTokens = listText.split(Regex("[,;][\t\n ]*|[\t\n ]+"))
@@ -50,7 +56,8 @@ fun efcurve(ef: String, constants: Map<String, Double> = emptyMap()): String {
                     val expressionText = exp.groupValues[1]
                     evaluateExpression(
                         exp.groupValues[1],
-                        constants + mapOf("index" to index.toDouble(), "it" to value)
+                        constants + mapOf("index" to index.toDouble(), "it" to value),
+                        functions
                     )?.toString() ?: error("parse error in repeated expression '$expressionText'")
                 }
             }.joinToString(" ")
@@ -68,7 +75,11 @@ fun efcurve(ef: String, constants: Map<String, Double> = emptyMap()): String {
             List(repetitions) { repetition ->
                 expression.replace(occ.groupValues[1]) { exp ->
                     val expressionText = exp.groupValues[1]
-                    evaluateExpression(exp.groupValues[1], constants + mapOf("it" to repetition.toDouble()))?.toString()
+                    evaluateExpression(
+                        exp.groupValues[1],
+                        constants + mapOf("it" to repetition.toDouble()),
+                        functions
+                    )?.toString()
                         ?: error("parse error in repeated expression '$expressionText'")
                 }
             }.joinToString(" ")
@@ -79,6 +90,6 @@ fun efcurve(ef: String, constants: Map<String, Double> = emptyMap()): String {
      * evaluate expression in expansion
      */
     return (expression.replace(curve) { exp ->
-        evaluateExpression(exp.groupValues[1], constants)?.toString() ?: error("parse error in '$curve")
+        evaluateExpression(exp.groupValues[1], constants, functions)?.toString() ?: error("parse error in '$curve")
     })
 }
