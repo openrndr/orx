@@ -38,4 +38,31 @@ class TestEFCurve {
         val s = fc.sampler()
         assertEquals(0.0,  s(6.0))
     }
+
+    @Test
+    fun testConstantValue() {
+        val text = "10.5"
+        val fc = fcurve(efcurve(text))
+        assertEquals(10.5, fc.value(0.0))
+        assertEquals(10.5, fc.value(1.0))
+        assertEquals(10.5, fc.value(-1.0))
+
+        val normalizedSampler = fc.sampler(true)
+        assertEquals(10.5, normalizedSampler(0.0))
+        assertEquals(10.5, normalizedSampler(1.0))
+        assertEquals(10.5, normalizedSampler(-1.0))
+    }
+    @Test
+    fun testConstantExpression() {
+        val text = "${21.0 / 2.0}"
+        val fc = fcurve(efcurve(text))
+        assertEquals(10.5, fc.value(0.0))
+        assertEquals(10.5, fc.value(1.0))
+        assertEquals(10.5, fc.value(-1.0))
+
+        val normalizedSampler = fc.sampler(true)
+        assertEquals(10.5, normalizedSampler(0.0))
+        assertEquals(10.5, normalizedSampler(1.0))
+        assertEquals(10.5, normalizedSampler(-1.0))
+    }
 }

@@ -477,6 +477,9 @@ private fun evaluateFCurveCommands(parts: List<String>): FCurve {
 }
 
 fun fcurve(d: String): FCurve {
+    val constantExpression = d.toDoubleOrNull()
+    if (constantExpression != null) {
+        return FCurve(listOf(Segment2D(Vector2(0.0, constantExpression), Vector2(0.0, constantExpression))))
+    }
     return evaluateFCurveCommands(fCurveCommands(d))
 }
-
