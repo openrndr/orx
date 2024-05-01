@@ -10,7 +10,7 @@ import org.openrndr.shape.contours
  * Kotlin/OPENRNDR idiomatic interface to `Delaunay`
  */
 class DelaunayTriangulation(val points: List<Vector2>) {
-    internal val delaunay: Delaunay = Delaunay.from(points)
+    val delaunay: Delaunay = Delaunay.from(points)
 
     fun voronoiDiagram(bounds: Rectangle) = VoronoiDiagram(this, bounds)
 
