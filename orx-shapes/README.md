@@ -149,6 +149,11 @@ Collection of 2D shape generators and modifiers.
 
 ![hobbycurve-DemoHobbyCurve3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve3D01Kt.png)
 
+### operators/DemoRoundCorners01
+[source code](src/jvmDemo/kotlin/operators/DemoRoundCorners01.kt)
+
+![operators-DemoRoundCorners01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/operators-DemoRoundCorners01Kt.png)
+
 ### path3d/DemoPath3DProjection
 [source code](src/jvmDemo/kotlin/path3d/DemoPath3DProjection.kt)
 
