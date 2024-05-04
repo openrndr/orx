@@ -97,7 +97,7 @@ fun ShapeContour.chamferCorners(
                     moveOrLineTo(q0)
                     chamfer(q0, s0.end, q1)
                 } else {
-                    lineTo(s0.end)
+                    moveOrLineTo(s0.end)
                 }
             }
         }
