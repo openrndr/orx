@@ -18,9 +18,6 @@ import org.openrndr.math.transforms.translate
 private fun glslFull(@Language("GLSL") glsl: String) = glsl
 
 class PlainAdd : Filter(filterShaderFromCode(glslFull("""
-
-#version 330
-
 uniform sampler2D tex0;
 uniform sampler2D tex1;
 in vec2 v_texCoord0;
