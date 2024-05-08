@@ -11,7 +11,7 @@ import org.openrndr.shape.ShapeContour
  * RectifiedContour provides an approximately uniform parameterization for [ShapeContour]
  */
 abstract class RectifiedPath<T : EuclideanVector<T>>(
-    val path: Path<T>,
+    open val path: Path<T>,
     distanceTolerance: Double = 0.5,
     lengthScale: Double = 1.0
 ) {

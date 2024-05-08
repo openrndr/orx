@@ -7,8 +7,9 @@ import kotlin.math.floor
 class RectifiedPath3D(contour: Path3D, distanceTolerance: Double = 0.5, lengthScale: Double = 1.0) :
     RectifiedPath<Vector3>(contour, distanceTolerance, lengthScale) {
 
+    override val path: Path3D = super.path as Path3D
+
     override fun sub(t0: Double, t1: Double): Path3D {
-        path as Path3D
         if (path.empty) {
             return Path3D(emptyList(), false)
         }
