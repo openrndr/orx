@@ -8,41 +8,41 @@ import kotlin.math.floor
 class RectifiedContour(contour: ShapeContour, distanceTolerance: Double = 0.5, lengthScale: Double = 1.0) :
     RectifiedPath<Vector2>(contour, distanceTolerance, lengthScale) {
     fun velocity(t: Double): Vector2 {
-        return if (path.empty) {
+        return if (originalPath.empty) {
             Vector2.ZERO
         } else {
-            val (segment, st) = path.segment(rectify(safe(t)))
-            path.segments[segment].direction(st)
+            val (segment, st) = originalPath.segment(rectify(safe(t)))
+            originalPath.segments[segment].direction(st)
         }
     }
 
     fun normal(t: Double): Vector2 {
-        return if (path.empty) {
+        return if (originalPath.empty) {
             Vector2.UNIT_Y
         } else {
-            (path as ShapeContour).normal(rectify(safe(t)))
+            (originalPath as ShapeContour).normal(rectify(safe(t)))
         }
     }
 
     fun pose(t: Double): Matrix44 {
-        path as ShapeContour
-        return if (path.empty) {
+        originalPath as ShapeContour
+        return if (originalPath.empty) {
             Matrix44.IDENTITY
         } else {
-            path.pose(rectify(safe(t)))
+            originalPath.pose(rectify(safe(t)))
         }
     }
 
     override fun sub(t0: Double, t1: Double): ShapeContour {
-        path as ShapeContour
-        if (path.empty) {
+        originalPath as ShapeContour
+        if (originalPath.empty) {
             return ShapeContour.EMPTY
         }
 
-        return if (path.closed) {
-            path.sub(rectify(t0.mod(1.0)) + floor(t0), rectify(t1.mod(1.0)) + floor(t1))
+        return if (originalPath.closed) {
+            originalPath.sub(rectify(t0.mod(1.0)) + floor(t0), rectify(t1.mod(1.0)) + floor(t1))
         } else {
-            path.sub(rectify(t0), rectify(t1))
+            originalPath.sub(rectify(t0), rectify(t1))
         }
     }
 
@@ -51,5 +51,5 @@ class RectifiedContour(contour: ShapeContour, distanceTolerance: Double = 0.5, l
         return super.splitAt(ascendingTs, weldEpsilon) as List<ShapeContour>
     }
 
-    val contour: ShapeContour get() = path as ShapeContour
+    val contour: ShapeContour get() = originalPath as ShapeContour
 }

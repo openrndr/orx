@@ -1,6 +1,5 @@
 package org.openrndr.extra.shapes.rectify
 
-import org.openrndr.extra.shapes.utilities.splitAt
 import org.openrndr.extra.shapes.utilities.splitAtBase
 import org.openrndr.math.EuclideanVector
 import org.openrndr.math.clamp
@@ -11,12 +10,12 @@ import org.openrndr.shape.ShapeContour
  * RectifiedContour provides an approximately uniform parameterization for [ShapeContour]
  */
 abstract class RectifiedPath<T : EuclideanVector<T>>(
-    open val path: Path<T>,
+    val originalPath: Path<T>,
     distanceTolerance: Double = 0.5,
     lengthScale: Double = 1.0
 ) {
     val points =
-        path.equidistantPositionsWithT((path.length * lengthScale).toInt().coerceAtLeast(2), distanceTolerance)
+        originalPath.equidistantPositionsWithT((originalPath.length * lengthScale).toInt().coerceAtLeast(2), distanceTolerance)
 
     val intervals by lazy {
         points.zipWithNext().map {
@@ -25,7 +24,7 @@ abstract class RectifiedPath<T : EuclideanVector<T>>(
     }
 
     internal fun safe(t: Double): Double {
-        return if (path.closed) {
+        return if (originalPath.closed) {
             t.mod(1.0)
         } else {
             t.clamp(0.0, 1.0)
@@ -33,10 +32,10 @@ abstract class RectifiedPath<T : EuclideanVector<T>>(
     }
 
     /**
-     * computes a rectified t-value for [path]
+     * computes a rectified t-value for [originalPath]
      */
     fun rectify(t: Double): Double {
-        if (path.empty) {
+        if (originalPath.empty) {
             return 0.0
         } else {
             if (t <= 0.0) {
@@ -56,7 +55,7 @@ abstract class RectifiedPath<T : EuclideanVector<T>>(
     }
 
     fun inverseRectify(t: Double): Double {
-        if (path.empty) {
+        if (originalPath.empty) {
             return 0.0
         } else {
             if (t <= 0.0) {
@@ -85,18 +84,18 @@ abstract class RectifiedPath<T : EuclideanVector<T>>(
     }
 
     fun position(t: Double): T {
-        return if (path.empty) {
-            path.infinity
+        return if (originalPath.empty) {
+            originalPath.infinity
         } else {
-            path.position(rectify(safe(t)))
+            originalPath.position(rectify(safe(t)))
         }
     }
 
     fun direction(t: Double): T {
-        return if (path.empty) {
-            path.infinity
+        return if (originalPath.empty) {
+            originalPath.infinity
         } else {
-            path.direction(rectify(safe(t)))
+            originalPath.direction(rectify(safe(t)))
         }
     }
 
@@ -107,6 +106,6 @@ abstract class RectifiedPath<T : EuclideanVector<T>>(
      * @since orx 0.4.4
      */
     open fun splitAt(ascendingTs: List<Double>, weldEpsilon: Double = 1E-6): List<Path<T>> {
-        return path.splitAtBase(ascendingTs.map { rectify(it) }, weldEpsilon)
+        return originalPath.splitAtBase(ascendingTs.map { rectify(it) }, weldEpsilon)
     }
 }

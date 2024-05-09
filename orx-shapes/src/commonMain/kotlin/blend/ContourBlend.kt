@@ -28,8 +28,8 @@ fun ContourBlend(a: ShapeContour, b: ShapeContour): ContourBlend {
     val rb = b.rectified()
     val sa = ra.splitForBlend(rb)
     val sb = rb.splitForBlend(ra)
-    require(sa.path.segments.size == sb.path.segments.size) {
-        "preprocessing for contours failed to produce equal number of segments. ${sa.path.segments.size}, ${sb.path.segments.size}"
+    require(sa.originalPath.segments.size == sb.originalPath.segments.size) {
+        "preprocessing for contours failed to produce equal number of segments. ${sa.originalPath.segments.size}, ${sb.originalPath.segments.size}"
     }
     return ContourBlend(sa, sb)
 }

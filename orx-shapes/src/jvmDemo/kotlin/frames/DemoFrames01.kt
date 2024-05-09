@@ -1,5 +1,6 @@
 package frames
 
+import org.openrndr.WindowMultisample
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.DrawPrimitive
@@ -19,6 +20,7 @@ fun main() {
         configure {
             width = 720
             height = 720
+            multisample = WindowMultisample.SampleCount(4)
         }
         program {
             val random = Random(0)

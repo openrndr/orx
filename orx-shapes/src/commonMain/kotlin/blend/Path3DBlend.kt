@@ -1,10 +1,8 @@
 package org.openrndr.extra.shapes.blend
 
-import org.openrndr.extra.shapes.rectify.RectifiedContour
 import org.openrndr.extra.shapes.rectify.RectifiedPath3D
 import org.openrndr.extra.shapes.rectify.rectified
 import org.openrndr.shape.Path3D
-import org.openrndr.shape.ShapeContour
 
 /**
  * ContourBlend holds two rectified contours with an equal amount of segments
@@ -30,8 +28,8 @@ fun Path3DBlend(a: Path3D, b: Path3D): Path3DBlend {
     val rb = b.rectified()
     val sa = ra.splitForBlend(rb)
     val sb = rb.splitForBlend(ra)
-    require(sa.path.segments.size == sb.path.segments.size) {
-        "preprocessing for contours failed to produce equal number of segments. ${sa.path.segments.size}, ${sb.path.segments.size}"
+    require(sa.originalPath.segments.size == sb.originalPath.segments.size) {
+        "preprocessing for contours failed to produce equal number of segments. ${sa.originalPath.segments.size}, ${sb.originalPath.segments.size}"
     }
     return Path3DBlend(sa, sb)
 }
