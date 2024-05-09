@@ -133,9 +133,35 @@ data class FCurve(val segments: List<Segment2D>) {
             return if (segments.isEmpty()) {
                 0.0
             } else {
+                end - start
+            }
+        }
+
+    /**
+     * The unitless start position of the Fcurve
+     */
+    val start: Double
+        get() {
+            return if (segments.isEmpty()) {
+                0.0
+            } else {
+                segments.first().start.x
+
+        }
+    }
+
+    /**
+     * The unitless end position of the Fcurve
+     */
+    val end: Double
+        get() {
+            return if (segments.isEmpty()) {
+                0.0
+            } else {
                 segments.last().end.x
             }
         }
+
 
     /**
      * Evaluate the Fcurve at [t]

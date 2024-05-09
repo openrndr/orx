@@ -13,6 +13,18 @@ open class MultiFCurve(val compounds: Map<String, FCurve?>) {
      * Duration of the [MultiFCurve]
      */
     val duration by lazy { compounds.values.maxOfOrNull { it?.duration ?: 0.0 } ?: 0.0 }
+
+
+    /**
+     * Start position of the [MultiFCurve]
+     */
+    val start by lazy { compounds.values.minOfOrNull { it?.start ?: 0.0 } ?: 0.0 }
+
+    /**
+     * End position of the [MultiFCurve]
+     */
+    val end by lazy { compounds.values.maxOfOrNull { it?.end ?: 0.0 } ?: 0.0 }
+
     operator fun get(name: String): FCurve? {
         return compounds[name]
     }

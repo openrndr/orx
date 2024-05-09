@@ -24,12 +24,18 @@ class TestFCurve {
             val fc = fcurve(text)
             assertEquals(0.0, fc.value(-1.0))
             assertEquals(5.0, fc.value(4.0))
+            assertEquals(-1.0, fc.start)
+            assertEquals(4.0, fc.end)
+            assertEquals(5.0, fc.duration)
         }
         run {
             val text = "H1 L 5 5"
             val fc = fcurve(text)
             assertEquals(0.0, fc.value(1.0))
             assertEquals(5.0, fc.value(6.0))
+            assertEquals(1.0, fc.start)
+            assertEquals(6.0, fc.end)
+            assertEquals(5.0, fc.duration)
         }
     }
 }
