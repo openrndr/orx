@@ -308,11 +308,8 @@ class FCurveBuilder {
         if (relative) {
             lineTo(x, cursor.y)
         } else {
-            val d = x - cursor.x
-            require(d >= 0.0) {
-                "requested to hold until $x, but cursor is already at ${cursor.x}"
-            }
-            lineTo(d, cursor.y)
+            require(segments.isEmpty()) { "absolute hold (H $x) is only allowed when used as first command"}
+            cursor = cursor.copy(x = x)
         }
         path += "h$x"
     }

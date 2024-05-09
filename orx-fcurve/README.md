@@ -6,15 +6,16 @@ They are often used to control a property over time.
 
 The language to express FCurves is similar to SVG's path language.
 
-| Relative command    | Absolute command      | Description                                                 |
-|---------------------|-----------------------|-------------------------------------------------------------|
-| `m y`               | `M y`                 | move the pen only in the y-direction                        |
-| `h x`               | `H x`                 | hold a value to draw a horizontal line                      |
-| `l x,y`             | `L x,y`               | line to (x, y)                                              |
-| `q x0,y0,x,y`       | `Q x0,y0,x,y`         | quadratic bezier to (x,y) and control-point (x0, y0)        |
-| `c x0,y0,x1,y1,x,y` | `C x0,y0,x1,y1,x,y`   | cubic bezier to (x,y) and control-points (x0, y0), (x1, y1) |
-| `t x,y`             | `T x,y`               | quadratic smooth to (x, y)                                  |
-| `s x1,y1,x,y`       | `S x1,y1,x,y`         | cubic smooth to (x,y) and control point (x1, y1)            |
+| Relative command    | Absolute command    | Description                                                  |
+|---------------------|---------------------|--------------------------------------------------------------|
+| `m y`               | `M y`               | move the pen only in the y-direction                         |
+| `h x`               |                     | hold a value to draw a horizontal line                       |
+|                     | `H x`               | shift curve in time by x. Can only be used as first command. | 
+| `l x,y`             | `L x,y`             | line to (x, y)                                               |
+| `q x0,y0,x,y`       | `Q x0,y0,x,y`       | quadratic bezier to (x,y) and control-point (x0, y0)         |
+| `c x0,y0,x1,y1,x,y` | `C x0,y0,x1,y1,x,y` | cubic bezier to (x,y) and control-points (x0, y0), (x1, y1)  |
+| `t x,y`             | `T x,y`             | quadratic smooth to (x, y)                                   |
+| `s x1,y1,x,y`       | `S x1,y1,x,y`       | cubic smooth to (x,y) and control point (x1, y1)             |
 
 ## Examples
 

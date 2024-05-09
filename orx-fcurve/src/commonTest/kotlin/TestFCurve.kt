@@ -16,4 +16,20 @@ class TestFCurve {
         assertEquals(10.5, normalizedSampler(1.0))
         assertEquals(10.5, normalizedSampler(-1.0))
     }
+
+    @Test
+    fun testAbsoluteHold() {
+        run {
+            val text = "H-1 L 5 5"
+            val fc = fcurve(text)
+            assertEquals(0.0, fc.value(-1.0))
+            assertEquals(5.0, fc.value(4.0))
+        }
+        run {
+            val text = "H1 L 5 5"
+            val fc = fcurve(text)
+            assertEquals(0.0, fc.value(1.0))
+            assertEquals(5.0, fc.value(6.0))
+        }
+    }
 }
