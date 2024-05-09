@@ -12,7 +12,7 @@ fun main() {
         program {
             class XYAnimation : MultiFCurve(mapOf(
                 "x" to fcurve("M0 Q4,360,5,720"),
-                "y" to fcurve("M360 H5")
+                "y" to fcurve("M360 h5")
             )) {
                 val position = vector2("x", "y")
             }

@@ -13,7 +13,7 @@ fun main() {
         program {
             val xposCurve = fcurve("M0 Q4,360,5,720")
             val xpos = xposCurve.sampler()
-            val yposCurve = fcurve("M360 H5")
+            val yposCurve = fcurve("M360 h5")
             val ypos = yposCurve.sampler()
 
 
