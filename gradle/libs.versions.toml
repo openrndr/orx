@@ -27,7 +27,7 @@ rabbitcontrol = "0.3.36"
 zxing = "3.5.3"
 ktor = "2.3.9"
 jgit = "6.9.0.202403050737-r"
-javaosc = "0.8"
+javaosc = "0.9"
 jsoup = "1.17.2"
 
 [libraries]
