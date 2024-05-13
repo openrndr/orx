@@ -16,7 +16,7 @@ fun main() {
             }
             val filteredPoints = points.filter(20.0)
             extend {
-                drawer.circles(filteredPoints, 4.0)
+                drawer.circles(filteredPoints, 10.0)
             }
         }
     }
