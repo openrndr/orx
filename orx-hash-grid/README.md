@@ -72,6 +72,11 @@ val hashGrid = points.hashGrid(20.0)
 
 ![DemoFilter01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-hash-grid/images/DemoFilter01Kt.png)
 
+### DemoFilter3D01
+[source code](src/jvmDemo/kotlin/DemoFilter3D01.kt)
+
+![DemoFilter3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-hash-grid/images/DemoFilter3D01Kt.png)
+
 ### DemoHashGrid01
 [source code](src/jvmDemo/kotlin/DemoHashGrid01.kt)
 
