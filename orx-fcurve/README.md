@@ -23,7 +23,7 @@ This is an example of a flat horizontal FCurve:
 
 ```kotlin
 // set the initial value to 0.5, hold that value for 1 seconds
-val sizeCurve = fcurve("M0.5 H1")
+val sizeCurve = fcurve("M0.5 h1")
 ```
 
 Two horizontal segments at different heights:
@@ -36,12 +36,6 @@ val sizeCurve = fcurve("M0.4 h0.5 M0.6 h0.5")
 Note that `x` values are relative, except for `H` where `x` is absolute.
 For `y` values, lower case commands are relative and upper case commands are absolute.
 
-The last example can be written with absolute times as:
-
-```kotlin
-// hold value 0.4 until time 0.5, then hold value 0.6 until time 1.0
-val sizeCurve = fcurve("M0.4 H0.5 M0.6 H1.0")
-```
 
 ### Line
 
@@ -103,11 +97,11 @@ commands require the presence of a previous segment, otherwise the program will 
 ```kotlin
 // Hold the value 0.5 during 0.2 seconds
 // then draw a smooth curve down to 0.5, up to 0.7 down to 0.3 and up to 0.7
-val smoothCurveT = fcurve("M0.5 H0.2 T0.2,0.3 T0.2,0.7 T0.2,0.3 T0.2,0.7")
+val smoothCurveT = fcurve("M0.5 h0.2 T0.2,0.3 T0.2,0.7 T0.2,0.3 T0.2,0.7")
 
 // Hold the value 0.5 during 0.2 seconds
 // then draw a smooth with 4 repetitions where we move up slowly and down quickly
-val smoothCurveS = fcurve("M0.5 H0.2 S0.2,0.0,0.2,0.5 S0.2,0.0,0.2,0.5 S0.2,0.0,0.2,0.5 S0.2,0.0,0.2,0.5")
+val smoothCurveS = fcurve("M0.5 h0.2 S0.2,0.0,0.2,0.5 S0.2,0.0,0.2,0.5 S0.2,0.0,0.2,0.5 S0.2,0.0,0.2,0.5")
 ```
 
 ## Useful FCurve methods

@@ -5,6 +5,7 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.transforms.buildTransform
 import org.openrndr.shape.Segment2D
 import org.openrndr.shape.ShapeContour
+import org.openrndr.shape.bounds
 import kotlin.math.abs
 
 /**
@@ -91,6 +92,19 @@ data class FCurve(val segments: List<Segment2D>) {
         return FCurve(segments.map { it.reverse.transform(t) })
     }
 
+    val bounds by lazy {
+        segments.map { it.bounds }.bounds
+    }
+    val min: Double
+        get() {
+            if (segments.isEmpty()) return 0.0 else return bounds.position(0.0, 0.0).y
+        }
+
+    val max: Double
+        get() {
+            if (segments.isEmpty()) return 0.0 else return bounds.position(1.0, 1.0).y
+        }
+
     /**
      * Change the duration of the Fcurve
      */
@@ -146,9 +160,8 @@ data class FCurve(val segments: List<Segment2D>) {
                 0.0
             } else {
                 segments.first().start.x
-
+            }
         }
-    }
 
     /**
      * The unitless end position of the Fcurve
@@ -208,24 +221,28 @@ data class FCurve(val segments: List<Segment2D>) {
     /**
      * Return a list of contours that can be used to visualize the Fcurve
      */
-    fun contours(scale: Vector2 = Vector2.ONE): List<ShapeContour> {
+    fun contours(scale: Vector2 = Vector2(1.0, -1.0), offset: Vector2 = Vector2.ZERO): List<ShapeContour> {
         var active = mutableListOf<Segment2D>()
         val result = mutableListOf<ShapeContour>()
 
         for (segment in segments) {
-            if (active.isEmpty()) {
-                active.add(segment.transform(buildTransform {
+
+            val tsegment = segment.transform(
+                buildTransform {
+                    translate(offset)
                     scale(scale.x, scale.y)
-                }))
+                }
+            )
+
+            if (active.isEmpty()) {
+                active.add(tsegment)
             } else {
-                val dy = abs(active.last().end.y - segment.start.y)
+                val dy = abs(active.last().end.y - tsegment.start.y)
                 if (dy > 1E-3) {
                     result.add(ShapeContour.fromSegments(active, false))
                     active = mutableListOf()
                 }
-                active.add(segment.transform(buildTransform {
-                    scale(scale.x, scale.y)
-                }))
+                active.add(tsegment)
             }
         }
         if (active.isNotEmpty()) {
@@ -293,21 +310,28 @@ class FCurveBuilder {
 
     fun continueTo(x: Double, y: Double, relative: Boolean = false) {
         val r = if (relative) 1.0 else 0.0
-        val lastSegment = segments.last()
-        val lastDuration = lastSegment.end.x - lastSegment.start.x
-        val outTangent = segments.last().cubic.control.last()
-        val outPos = lastSegment.end
-        val dx = outPos.x - outTangent.x
-        val dy = outPos.y - outTangent.y
-        val ts = x / lastDuration
-        segments.add(
-            Segment2D(
-                cursor,
-                Vector2(cursor.x + dx * ts, cursor.y + dy),
-                Vector2(cursor.x + x * 0.66, cursor.y * r + y),
-                Vector2(cursor.x + x, cursor.y * r + y)
-            ).scaleTangents()
-        )
+
+        if (segments.isNotEmpty()) {
+            val lastSegment = segments.last()
+            val lastDuration = lastSegment.end.x - lastSegment.start.x
+            val outTangent = if (segments.last().linear) lastSegment.end else segments.last().control.last()
+            val outPos = lastSegment.end
+            val d = outPos - outTangent
+            //val dn = d.normalized
+            val ts = 1.0// x / lastDuration
+            segments.add(
+                Segment2D(
+                    cursor,
+                    cursor + d * ts,
+                    Vector2(cursor.x + x, cursor.y * r + y)
+                ).scaleTangents()
+            )
+        } else {
+            segments.add(
+                Segment2D(cursor,
+                    Vector2(cursor.x + x, cursor.y * r + y)).quadratic
+            )
+        }
         cursor = Vector2(cursor.x + x, cursor.y * r + y)
         path += "${if (relative) "t" else "T"}$x,$y"
     }
@@ -334,7 +358,7 @@ class FCurveBuilder {
         if (relative) {
             lineTo(x, cursor.y)
         } else {
-            require(segments.isEmpty()) { "absolute hold (H $x) is only allowed when used as first command"}
+            require(segments.isEmpty()) { "absolute hold (H $x) is only allowed when used as first command" }
             cursor = cursor.copy(x = x)
         }
         path += "h$x"
@@ -361,11 +385,12 @@ fun fcurve(builder: FCurveBuilder.() -> Unit): FCurve {
 /**
  * Split an Fcurve string in to command parts
  */
-private fun fCurveCommands(d: String): List<String> {
+fun fCurveCommands(d: String): List<String> {
     val svgCommands = "mMlLqQsStTcChH"
     val number = "0-9.\\-E%"
 
-    return d.split(Regex("(?:[\t ,]|\r?\n)+|(?<=[$svgCommands])(?=[$number])|(?<=[$number])(?=[$svgCommands])")).filter { it.isNotBlank() }
+    return d.split(Regex("(?:[\t ,]|\r?\n)+|(?<=[$svgCommands])(?=[$number])|(?<=[$number])(?=[$svgCommands])"))
+        .filter { it.isNotBlank() }
 }
 
 private fun evaluateFCurveCommands(parts: List<String>): FCurve {
@@ -418,8 +443,8 @@ private fun evaluateFCurveCommands(parts: List<String>): FCurve {
                  */
                 "l", "L" -> {
                     val isRelative = command.first().isLowerCase()
-                    val x = popNumberOrPercentageOf { dx() }
-                    val y = popNumberOrPercentageOf { cursor.y }
+                    val x = popNumber()
+                    val y = popNumber()
                     lineTo(x, y, isRelative)
                 }
 
@@ -432,8 +457,8 @@ private fun evaluateFCurveCommands(parts: List<String>): FCurve {
                     val tcy0 = popToken()
                     val tcx1 = popToken()
                     val tcy1 = popToken()
-                    val x = popNumberOrPercentageOf { dx() }
-                    val y = popNumberOrPercentageOf { cursor.y }
+                    val x = popNumber()
+                    val y = popNumber()
                     val x0 = tcx0.numberOrPercentageOf { x }
                     val y0 = tcy0.numberOrFactorOf { factor ->
                         if (relative) y * factor else cursor.y * (1.0 - factor).coerceAtLeast(0.0) + y * factor
@@ -476,8 +501,8 @@ private fun evaluateFCurveCommands(parts: List<String>): FCurve {
                     val relative = command.first().isLowerCase()
                     val tcx0 = popToken()
                     val tcy0 = popToken()
-                    val x = popNumberOrPercentageOf { dx() }
-                    val y = popNumberOrPercentageOf { cursor.y }
+                    val x = popNumber()
+                    val y = popNumber()
                     val x1 = tcx0.numberOrPercentageOf { x }
                     val y1 = tcy0.numberOrPercentageOf { y }
                     continueTo(x1, y1, x, y, relative)
@@ -488,8 +513,8 @@ private fun evaluateFCurveCommands(parts: List<String>): FCurve {
                  */
                 "t", "T" -> {
                     val isRelative = command.first().isLowerCase()
-                    val x = popNumberOrPercentageOf { dx() }
-                    val y = popNumberOrPercentageOf { cursor.y }
+                    val x = popNumber()
+                    val y = popNumber()
                     continueTo(x, y, isRelative)
                 }
 

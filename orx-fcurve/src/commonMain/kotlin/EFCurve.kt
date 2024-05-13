@@ -4,6 +4,34 @@ import org.openrndr.extra.expressions.FunctionExtensions
 import org.openrndr.extra.expressions.evaluateExpression
 
 /**
+ * expand mfcurve to fcurve
+ */
+fun mfcurve(
+    mf: String,
+    constants: Map<String, Double> = emptyMap(),
+    functions: FunctionExtensions = FunctionExtensions.EMPTY
+): String {
+    /**
+     * perform comment substitution
+     */
+    val stripped = Regex("(#.*)$", RegexOption.MULTILINE).replace(mf, "")
+
+    /**
+     * detect modifier
+     */
+    val parts = stripped.split("|")
+
+    val efcurve = parts.getOrElse(0) { "" }
+    val modifier = parts.getOrNull(1)
+
+    var fcurve = efcurve(efcurve, constants, functions)
+    if (modifier != null) {
+        fcurve = modifyFCurve(fcurve, modifier, constants, functions)
+    }
+    return fcurve
+}
+
+/**
  * expand efcurve to fcurve
  * @param ef an efcurve string
  * @param constants a map of constants that is passed to [evaluateExpression]
@@ -12,7 +40,6 @@ fun efcurve(
     ef: String,
     constants: Map<String, Double> = emptyMap(),
     functions: FunctionExtensions = FunctionExtensions.EMPTY
-
 ): String {
     // IntelliJ falsely reports a redundant escape character. the escape character is required when running the regular
     // expression on a javascript target. Removing the escape character will result in a `Lone quantifier brackets`
