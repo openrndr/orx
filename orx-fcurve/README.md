@@ -210,6 +210,11 @@ For example `(M0 (h1 m1)[3])[2]` expands to `M0 h1 m1 h1 m1 h1 m1 M0 h1 m1 h1 m1
 
 ![DemoFCurve02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoFCurve02Kt.png)
 
+### DemoFCurveSheet01
+[source code](src/jvmDemo/kotlin/DemoFCurveSheet01.kt)
+
+![DemoFCurveSheet01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoFCurveSheet01Kt.png)
+
 ### DemoMultiFCurve01
 [source code](src/jvmDemo/kotlin/DemoMultiFCurve01.kt)
 
