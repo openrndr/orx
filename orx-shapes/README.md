@@ -229,6 +229,11 @@ Collection of 2D shape generators and modifiers.
 
 ![rectify-DemoRectifiedContour03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/rectify-DemoRectifiedContour03Kt.png)
 
+### rectify/DemoRectifiedContour04
+[source code](src/jvmDemo/kotlin/rectify/DemoRectifiedContour04.kt)
+
+![rectify-DemoRectifiedContour04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/rectify-DemoRectifiedContour04Kt.png)
+
 ### rectify/DemoRectifiedPath3D01
 [source code](src/jvmDemo/kotlin/rectify/DemoRectifiedPath3D01.kt)
 
