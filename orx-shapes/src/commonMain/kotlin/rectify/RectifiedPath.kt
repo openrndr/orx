@@ -14,8 +14,10 @@ abstract class RectifiedPath<T : EuclideanVector<T>>(
     distanceTolerance: Double = 0.5,
     lengthScale: Double = 1.0
 ) {
-    val points =
+    val candidatePoints =
         originalPath.equidistantPositionsWithT((originalPath.length * lengthScale).toInt().coerceAtLeast(2), distanceTolerance)
+
+    val points = if (originalPath.closed) candidatePoints + candidatePoints.first() else candidatePoints
 
     val intervals by lazy {
         points.zipWithNext().map {
