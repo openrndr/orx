@@ -19,9 +19,8 @@ fun main() = application {
             }
         }
 
-        val gui = GUI(GUIAppearance(barWidth = 400))
+        val gui = GUI(GUIAppearance(baseColor = ColorRGBa.GRAY.opacify(0.9), barWidth = 400))
         gui.compartmentsCollapsedByDefault = false
-
 
         val settings = @Description("Settings") object {
             @DoubleParameter("radius", 0.0, 100.0)

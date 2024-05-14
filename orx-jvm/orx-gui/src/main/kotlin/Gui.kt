@@ -48,6 +48,10 @@ private class TrackedObjectBinding(
 private val persistentCompartmentStates = mutableMapOf<Long, MutableMap<String, CompartmentState>>()
 private val persistentSidebarStates = mutableMapOf<Long, SidebarState>()
 
+private fun compartmentState(): MutableMap<String, CompartmentState> = persistentCompartmentStates.getOrPut(Driver.instance.contextID) {
+    mutableMapOf()
+}
+
 private fun sidebarState(): SidebarState = persistentSidebarStates.getOrPut(Driver.instance.contextID) {
     SidebarState()
 }
@@ -57,7 +61,7 @@ private fun <T : Any> getPersistedOrDefault(
     property: KMutableProperty1<Any, T>,
     obj: Any
 ): T {
-    val state = persistentCompartmentStates[Driver.instance.contextID]!![compartmentLabel]
+    val state = compartmentState()[compartmentLabel]
     if (state == null) {
         return property.get(obj)
     } else {
@@ -68,17 +72,19 @@ private fun <T : Any> getPersistedOrDefault(
 
 private fun <T : Any> setAndPersist(compartmentLabel: String, property: KMutableProperty1<Any, T>, obj: Any, value: T) {
     property.set(obj, value)
-    val state = persistentCompartmentStates[Driver.instance.contextID]!![compartmentLabel]!!
+    val state = compartmentState()[compartmentLabel] ?: error("item '$compartmentLabel' not in state (${compartmentState()}. ContextID ${Driver.instance.contextID} )")
     state.parameterValues[property.name] = value
 }
 
 private val logger = KotlinLogging.logger { }
 
 
-class GUIAppearance(val baseColor: ColorRGBa = ColorRGBa.GRAY, val barWidth: Int = 200)
+class GUIAppearance(
+    val baseColor: ColorRGBa = ColorRGBa.GRAY.opacify(0.99),
+    val barWidth: Int = 200)
 
 @Suppress("unused", "UNCHECKED_CAST")
-class GUI(
+open class GUI(
     val appearance: GUIAppearance = GUIAppearance(),
     val defaultStyles: List<StyleSheet> = defaultStyles(),
 ) : Extension {
@@ -204,7 +210,7 @@ class GUI(
                 this.width = 100.percent
                 this.display = Display.FLEX
                 this.flexDirection = FlexDirection.Row
-                this.background = Color.RGBa(appearance.baseColor.copy(alpha = 0.99))
+                this.background = Color.RGBa(appearance.baseColor)
             }
 
             styleSheet(has class_ "collapsed") {
@@ -223,7 +229,7 @@ class GUI(
                 this.paddingRight = 10.px
                 this.marginRight = 2.px
                 this.height = 100.percent
-                this.background = Color.RGBa(appearance.baseColor.copy(alpha = 0.99))
+                this.background = Color.RGBa(appearance.baseColor)
                 this.overflow = Overflow.Scroll
 
                 //<editor-fold desc="1) setup control style">
@@ -360,7 +366,7 @@ class GUI(
                                 val collapseClass = ElementClass("collapsed")
 
                                 /* this is guaranteed to be in the dictionary after insertion through add() */
-                                val collapseState = persistentCompartmentStates[Driver.instance.contextID]!![label]!!
+                                val collapseState = compartmentState()[label]!!
                                 if (collapseState.collapsed) {
                                     collapsible.classes.add(collapseClass)
                                 }
@@ -372,7 +378,7 @@ class GUI(
 
                                     if (KeyModifier.CTRL in me.modifiers) {
                                         collapsible.classes.remove(collapseClass)
-                                        persistentCompartmentStates[Driver.instance.contextID]!!.forEach {
+                                        compartmentState().forEach {
                                             it.value.collapsed = true
                                         }
                                         collapseState.collapsed = false
