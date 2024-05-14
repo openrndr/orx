@@ -12,60 +12,6 @@ import org.openrndr.panel.style.*
 import org.openrndr.panel.style.Display
 import org.openrndr.shape.Rectangle
 
-//class SurfaceCache(val width: Int, val height: Int, val contentScale:Double) {
-//    val cache = renderTarget(width, height, contentScale) {
-//        colorMap()
-//        depthBuffer()
-//    }
-//
-//    private val atlas = mutableMapOf<Element, IntRectangle>()
-//
-//    private var root: PackNode = PackNode(IntRectangle(0, 0, width, height))
-//    val packer = IntPacker()
-//
-//    fun flush() {
-//        atlas.clear()
-//        root = PackNode(IntRectangle(0, 0, width, height))
-//    }
-//
-//    fun drawCached(drawer: Drawer, element: Element, f: () -> Unit): IntRectangle {
-//        val rectangle = atlas.getOrPut(element) {
-//            val r = packer.insert(root, IntRectangle(0, 0, Math.ceil(element.layout.screenWidth).toInt(),
-//                    Math.ceil(element.layout.screenHeight).toInt()))?.area?:throw RuntimeException("bork")
-//            draw(drawer, r, f)
-//            r
-//        }
-//        if (element.draw.dirty) {
-//            draw(drawer, rectangle, f)
-//        }
-//        drawer.ortho()
-//        drawer.isolated {
-//            drawer.model = Matrix44.IDENTITY
-//            drawer.image(cache.colorMap(0), Rectangle(rectangle.corner.x * 1.0, rectangle.corner.y * 1.0, rectangle.width * 1.0, rectangle.height * 1.0),
-//                    element.screenArea)
-//        }
-//        return rectangle
-//    }
-//
-//    fun draw(drawer: Drawer, rectangle: IntRectangle, f: () -> Unit) {
-//        drawer.isolatedWithTarget(cache) {
-//            drawer.ortho(cache)
-//            drawer.drawStyle.blendMode = BlendMode.REPLACE
-//            drawer.drawStyle.fill = ColorRGBa.BLACK.opacify(0.0)
-//            drawer.drawStyle.stroke = null
-//            drawer.view = Matrix44.IDENTITY
-//            drawer.model = Matrix44.IDENTITY
-//            drawer.rectangle(Rectangle(rectangle.x * 1.0, rectangle.y * 1.0, rectangle.width * 1.0, rectangle.height * 1.0))
-//
-//            drawer.drawStyle.blendMode = BlendMode.OVER
-//            drawer.drawStyle.clip = Rectangle(rectangle.x * 1.0, rectangle.y * 1.0, rectangle.width * 1.0, rectangle.height * 1.0)
-//            drawer.view = Matrix44.IDENTITY
-//            drawer.model = org.openrndr.math.transforms.translate(rectangle.x * 1.0, rectangle.y * 1.0, 0.0)
-//            f()
-//        }
-//    }
-//}
-
 private val logger = KotlinLogging.logger {}
 
 class ControlManager : Extension {
@@ -79,7 +25,7 @@ class ControlManager : Extension {
     override var enabled: Boolean = true
 
     var contentScale = 1.0
-    lateinit var renderTarget: RenderTarget
+    var renderTarget: RenderTarget? = null
 
     init {
         fontManager.register("default", resourceUrl("/fonts/Roboto-Regular.ttf"))
@@ -94,8 +40,6 @@ class ControlManager : Extension {
     }
 
     val dropInput = DropInput()
-
-
 
 
     inner class KeyboardInput {
@@ -130,7 +74,8 @@ class ControlManager : Extension {
                 if (event.key == KEY_TAB) {
                     val focusableControls = body?.findAllVisible { it.handlesKeyboardFocus } ?: emptyList()
 
-                    val index = target?.let { focusableControls.indexOf(it) } ?: lastTarget?.let { focusableControls.indexOf(it) } ?: -1
+                    val index = target?.let { focusableControls.indexOf(it) }
+                        ?: lastTarget?.let { focusableControls.indexOf(it) } ?: -1
                     if (focusableControls.isNotEmpty()) {
 
                         target = if (target != null) {
@@ -282,7 +227,16 @@ class ControlManager : Extension {
             val toRemove = insideElements.filter { (event.position !in it.screenArea) }
 
             toRemove.forEach {
-                it.mouse.exited.trigger(MouseEvent(event.position, Vector2.ZERO, Vector2.ZERO, MouseEventType.MOVED, MouseButton.NONE, event.modifiers))
+                it.mouse.exited.trigger(
+                    MouseEvent(
+                        event.position,
+                        Vector2.ZERO,
+                        Vector2.ZERO,
+                        MouseEventType.MOVED,
+                        MouseButton.NONE,
+                        event.modifiers
+                    )
+                )
             }
 
             insideElements.removeAll(toRemove)
@@ -327,9 +281,7 @@ class ControlManager : Extension {
         contentScale = program.window.contentScale
         window = program.window
 
-        //surfaceCache = SurfaceCache(4096, 4096, contentScale)
         fontManager.contentScale = contentScale
-//        program.mouse.buttonUp.listen { mouseInput.release(it) }
         program.mouse.buttonUp.listen { mouseInput.click(it) }
         program.mouse.moved.listen { mouseInput.move(it) }
         program.mouse.scrolled.listen { mouseInput.scroll(it) }
@@ -346,9 +298,6 @@ class ControlManager : Extension {
 
         width = program.width
         height = program.height
-        renderTarget = renderTarget(program.width, program.height, contentScale) {
-            colorBuffer()
-        }
 
         body?.draw?.dirty = true
     }
@@ -363,14 +312,17 @@ class ControlManager : Extension {
         // check if user did not minimize window
         if (width > 0 && height > 0) {
             body?.draw?.dirty = true
-            if (renderTarget.colorAttachments.isNotEmpty()) {
-                renderTarget.colorBuffer(0).destroy()
-                renderTarget.depthBuffer?.destroy()
-                renderTarget.detachColorAttachments()
-                renderTarget.detachDepthBuffer()
-                renderTarget.destroy()
-            } else {
-                logger.error { "that is strange. no color buffers" }
+            val lrc = renderTarget
+            if (lrc != null) {
+                if (lrc.colorAttachments.isNotEmpty()) {
+                    lrc.colorBuffer(0).destroy()
+                    lrc.depthBuffer?.destroy()
+                    lrc.detachColorAttachments()
+                    lrc.detachDepthBuffer()
+                    lrc.destroy()
+                } else {
+                    logger.error { "that is strange. no color buffers" }
+                }
             }
 
             renderTarget = renderTarget(program.width, program.height, contentScale) {
@@ -378,9 +330,9 @@ class ControlManager : Extension {
                 depthBuffer()
             }
 
-            renderTarget.bind()
+            renderTarget?.bind()
             program.drawer.clear(ColorRGBa.BLACK.opacify(0.0))
-            renderTarget.unbind()
+            renderTarget?.unbind()
 
             renderTargetCache.forEach { (_, u) -> u.destroy() }
             renderTargetCache.clear()
@@ -389,12 +341,12 @@ class ControlManager : Extension {
 
     private fun drawElement(element: Element, drawer: Drawer, zIndex: Int, zComp: Int) {
         val newZComp =
-                element.computedStyle.zIndex.let {
-                    when (it) {
-                        is ZIndex.Value -> it.value
-                        else -> zComp
-                    }
+            element.computedStyle.zIndex.let {
+                when (it) {
+                    is ZIndex.Value -> it.value
+                    else -> zComp
                 }
+            }
 
         if (element.computedStyle.display != Display.NONE) {
             if (element.computedStyle.overflow == Overflow.Visible) {
@@ -404,12 +356,6 @@ class ControlManager : Extension {
                     if (newZComp == zIndex) {
                         element.draw(drawer)
                     }
-//                    if (newZComp == zIndex) {
-//                        surfaceCache.drawCached(drawer, element) {
-//                            element.draw(drawer)
-//                        }
-//
-//                    }
                 }
                 element.children.forEach {
                     drawElement(it, drawer, zIndex, newZComp)
@@ -446,8 +392,10 @@ class ControlManager : Extension {
 
                 drawer.drawStyle.blendMode = BlendMode.OVER
                 //drawer.image(rt.colorMap(0))
-                drawer.image(rt.colorBuffer(0), Rectangle(Vector2(area.x, area.y), area.width, area.height),
-                        Rectangle(Vector2(area.x, area.y), area.width, area.height))
+                drawer.image(
+                    rt.colorBuffer(0), Rectangle(Vector2(area.x, area.y), area.width, area.height),
+                    Rectangle(Vector2(area.x, area.y), area.width, area.height)
+                )
             }
         }
         element.draw.dirty = false
@@ -475,67 +423,63 @@ class ControlManager : Extension {
     var drawCount = 0
     override fun afterDraw(drawer: Drawer, program: Program) {
         if (program.width > 0 && program.height > 0) {
-            profile("after draw") {
+            if (program.width != renderTarget?.width || program.height != renderTarget?.height) {
+                body?.draw?.dirty = true
 
-                if (program.width != renderTarget.width || program.height != renderTarget.height) {
-                    profile("resize target") {
-                        body?.draw?.dirty = true
+                renderTarget?.colorBuffer(0)?.destroy()
+                renderTarget?.destroy()
+                renderTarget = null
 
-                        renderTarget.colorBuffer(0).destroy()
-                        renderTarget.destroy()
-                        renderTarget = renderTarget(program.width, program.height, contentScale) {
-                            colorBuffer()
-                        }
-
-                        renderTarget.bind()
-                        program.drawer.clear(ColorRGBa.BLACK.opacify(0.0))
-                        renderTarget.unbind()
-                    }
-                }
-
-                val redraw = body?.any {
-                    it.draw.dirty
-                } ?: false
-
-                if (redraw) {
-                    drawer.ortho()
-                    drawer.view = Matrix44.IDENTITY
-                    drawer.defaults()
-
-                    profile("redraw") {
-                        renderTarget.bind()
-                        body?.style = StyleSheet(CompoundSelector())
-                        body?.style?.width = program.width.px
-                        body?.style?.height = program.height.px
-
-                        body?.let {
-                            program.drawer.clear(ColorRGBa.BLACK.opacify(0.0))
-                            layouter.computeStyles(it)
-                            layouter.layout(it)
-                            drawElement(it, program.drawer, 0, 0)
-                            drawElement(it, program.drawer, 1, 0)
-                            drawElement(it, program.drawer, 1000, 0)
-                        }
-                        renderTarget.unbind()
-                    }
-                }
-                body?.visit {
-                    draw.dirty = false
-                }
-
-                profile("draw image") {
-                    drawer.ortho(RenderTarget.active)
-                    drawer.view = Matrix44.IDENTITY
-                    drawer.defaults()
-                    program.drawer.image(renderTarget.colorBuffer(0), 0.0, 0.0)
-                }
-                drawCount++
             }
+
+            if (renderTarget == null) {
+                renderTarget = renderTarget(program.width, program.height, contentScale) {
+                    colorBuffer()
+                }
+                renderTarget!!.bind()
+                program.drawer.clear(ColorRGBa.BLACK.opacify(0.0))
+                renderTarget!!.unbind()
+            }
+
+            val redraw = body?.any {
+                it.draw.dirty
+            } ?: false
+
+            if (redraw) {
+                drawer.ortho()
+                drawer.view = Matrix44.IDENTITY
+                drawer.defaults()
+
+                renderTarget!!.bind()
+                body?.style = StyleSheet(CompoundSelector())
+                body?.style?.width = program.width.px
+                body?.style?.height = program.height.px
+
+                body?.let {
+                    program.drawer.clear(ColorRGBa.BLACK.opacify(0.0))
+                    layouter.computeStyles(it)
+                    layouter.layout(it)
+                    drawElement(it, program.drawer, 0, 0)
+                    drawElement(it, program.drawer, 1, 0)
+                    drawElement(it, program.drawer, 1000, 0)
+                }
+                renderTarget!!.unbind()
+            }
+
+            body?.visit {
+                draw.dirty = false
+            }
+
+            drawer.ortho(RenderTarget.active)
+            drawer.view = Matrix44.IDENTITY
+            drawer.defaults()
+            program.drawer.image(renderTarget!!.colorBuffer(0), 0.0, 0.0)
+
+            drawCount++
         }
     }
 }
 
-@Deprecated("use new style extend")
 class ControlManagerBuilder(val controlManager: ControlManager) {
     fun styleSheet(selector: CompoundSelector, init: StyleSheet.() -> Unit): StyleSheet {
         val styleSheet = StyleSheet(selector).apply { init() }
@@ -571,17 +515,10 @@ fun ControlManager.layout(init: Body.() -> Unit) {
     this.body = body
 }
 
-@Deprecated("use Program.controlManager")
-fun controlManager(defaultStyles: List<StyleSheet> = defaultStyles(), builder: ControlManagerBuilder.() -> Unit): ControlManager {
-    val cm = ControlManager()
-    cm.fontManager.register("default", resourceUrl("/fonts/Roboto-Regular.ttf"))
-    cm.layouter.styleSheets.addAll(defaultStyles.flatMap { it.flatten() })
-    val cmb = ControlManagerBuilder(cm)
-    cmb.builder()
-    return cm
-}
-
-fun Program.controlManager(defaultStyles: List<StyleSheet> = defaultStyles(), builder: ControlManagerBuilder.() -> Unit): ControlManager {
+fun Program.controlManager(
+    defaultStyles: List<StyleSheet> = defaultStyles(),
+    builder: ControlManagerBuilder.() -> Unit
+): ControlManager {
     val cm = ControlManager()
     cm.program = this
     cm.fontManager.register("default", resourceUrl("/fonts/Roboto-Regular.ttf"))
