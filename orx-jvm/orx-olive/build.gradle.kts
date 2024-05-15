@@ -16,6 +16,7 @@ tasks.test {
 dependencies {
     implementation(project(":orx-jvm:orx-file-watcher"))
     implementation(project(":orx-jvm:orx-kotlin-parser"))
+    demoImplementation(project(":orx-jvm:orx-gui"))
     implementation(libs.openrndr.application)
     implementation(libs.openrndr.math)
     implementation(libs.kotlin.scriptingJvm)
@@ -23,6 +24,7 @@ dependencies {
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.scriptingJSR223)
     implementation(libs.kotlin.coroutines)
+    demoImplementation(libs.kotlin.coroutines)
     testImplementation(libs.kluent)
     testImplementation(libs.kotest.runner)
     testImplementation(libs.kotest.assertions)
