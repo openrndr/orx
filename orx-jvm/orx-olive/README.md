@@ -140,7 +140,7 @@ import org.openrndr.draw.*
 
 ![DemoOlive01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-olive/images/DemoOlive01Kt.png)
 
-### DemoOliveScriptless01
-[source code](src/demo/kotlin/DemoOliveScriptless01.kt)
+### DemoOliveFromScript01
+[source code](src/demo/kotlin/DemoOliveFromScript01.kt)
 
-![DemoOliveScriptless01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-olive/images/DemoOliveScriptless01Kt.png)
+![DemoOliveFromScript01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-olive/images/DemoOliveFromScript01Kt.png)
