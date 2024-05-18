@@ -11,7 +11,8 @@ private val childWindows = mutableMapOf<Long, ApplicationWindow>()
 
 class WindowedGUI(
     val appearance: GUIAppearance = GUIAppearance(),
-    val defaultStyles: List<StyleSheet> = defaultStyles()
+    val defaultStyles: List<StyleSheet> = defaultStyles(),
+    val windowClosable: Boolean = false,
 ) : Extension {
     override var enabled: Boolean = true
 
@@ -41,7 +42,8 @@ class WindowedGUI(
         val cw = childWindows.getOrPut(Driver.instance.contextID) {
             program.window(
                 WindowConfiguration(
-                    width = 200,
+                    closable = windowClosable,
+                    width = appearance.barWidth,
                     height = program.height,
                     position = program.window.position.toInt() - IntVector2(200, 0)
                 )
