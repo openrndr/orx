@@ -62,3 +62,9 @@ class WindowedGUI(
         }
     }
 }
+
+@JvmName("addToWindowedGui")
+fun <T : Any> T.addTo(gui: WindowedGUI, label: String? = this.title()): T {
+    gui.add(this, label)
+    return this
+}
