@@ -26,6 +26,12 @@ fun ShapeProvider.uniform(distanceToEdge: Double = 0.0, random: Random = Random.
 }
 
 /**
+ * Generate [sampleCount] uniformly distributed points inside the area of [ShapeProvider]
+ */
+fun ShapeProvider.uniform(sampleCount: Int) : List<Vector2> = shape.triangulation.uniform(sampleCount)
+
+
+/**
  * Returns a list of pairs in which the first component is a radius and the
  * second component a list of [Vector2] positions of items with that radius.
  *
