@@ -13,6 +13,7 @@ class WindowedGUI(
     val appearance: GUIAppearance = GUIAppearance(),
     val defaultStyles: List<StyleSheet> = defaultStyles(),
     val windowClosable: Boolean = false,
+    val windowAlwaysOntop: Boolean = false,
 ) : Extension {
     override var enabled: Boolean = true
 
@@ -37,12 +38,15 @@ class WindowedGUI(
             window.program.keyboard.keyRepeat.listeners.clear()
             window.program.keyboard.character.listeners.clear()
             window.program.extensions.clear()
+            window.program.produceAssets.listeners.clear()
+            window.program.requestAssets.listeners.clear()
         }
 
         val cw = childWindows.getOrPut(Driver.instance.contextID) {
             program.window(
                 WindowConfiguration(
                     closable = windowClosable,
+                    alwaysOnTop = windowAlwaysOntop,
                     width = appearance.barWidth,
                     height = program.height,
                     position = program.window.position.toInt() - IntVector2(200, 0)
@@ -59,6 +63,9 @@ class WindowedGUI(
                 gui.add(o.first, o.second)
             }
             cw.program.extend(gui)
+            program.produceAssets.listen {
+                cw.program.produceAssets.trigger(it)
+            }
         }
     }
 }
