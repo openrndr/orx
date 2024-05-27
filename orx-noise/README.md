@@ -52,7 +52,8 @@ val noiseValue2 = myNoise2(993, seconds * 0.1)
 These are a mostly straight port from FastNoise-Java but have a slightly different interface.
 
 ### Perlin noise
-```
+
+```kotlin
 // -- 1d
 val v0 = perlinLinear(seed, x)
 val v1 = perlinQuintic(seed, x)
@@ -70,7 +71,8 @@ val v8 = perlinHermite(seed, x, y, z)
 ```
 
 ### Value noise
-```
+
+```kotlin
 // -- 1d
 val v0 = valueLinear(seed, x)
 val v1 = valueQuintic(seed, x)
@@ -88,7 +90,8 @@ val v7 = valueHermite(seed, x, y ,z)
 ```
 
 ### Simplex noise
-```
+
+```kotlin
 // -- 1d
 val v0 = simplex(seed, x)
 
@@ -103,7 +106,8 @@ val v3 = simplex(seed, x, y, z, w)
 ```
 
 ### Cubic noise
-```
+
+```kotlin
 // -- 1d
 val v0 = cubic(seed, x, y)
 val v1 = cubicQuintic(seed, x, y)
@@ -126,7 +130,7 @@ The library provides 3 functions with which fractal noise can be composed.
 
 #### Fractal brownian motion (FBM)
 
-```
+```kotlin
 // 1d
 val v0 = fbm(seed, x, ::perlinLinear, octaves, lacunarity, gain)
 val v1 = fbm(seed, x, ::simplexLinear, octaves, lacunarity, gain)
@@ -145,7 +149,7 @@ val v8 = fbm(seed, x, y, z, ::valueLinear, octaves, lacunarity, gain)
 
 #### Rigid
 
-```
+```kotlin
 // 1d
 val v0 = rigid(seed, x, ::perlinLinear, octaves, lacunarity, gain)
 val v1 = rigid(seed, x, ::simplexLinear, octaves, lacunarity, gain)
@@ -164,7 +168,7 @@ val v5 = rigid(seed, x, y, z, ::valueLinear, octaves, lacunarity, gain)
 
 #### Billow
 
-```
+```kotlin
 // 1d
 val v0 = billow(seed, x, ::perlinLinear, octaves, lacunarity, gain)
 val v1 = billow(seed, x, ::perlinLinear, octaves, lacunarity, gain)
@@ -180,6 +184,7 @@ val v6 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 val v7 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 ```
+
 <!-- __demos__ >
 # Demos
 [DemoGradientPerturb2DKt](src/demo/kotlin/DemoGradientPerturb2DKt.kt

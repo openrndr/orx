@@ -134,6 +134,7 @@ one detail that doesn't occur in normal programs: the UI state is reset when a
 script is changed and re-evaluated. This is overcome by using an annotated `Reloadable` object.
 
 An example `live.kts` script that uses `orx-gui` and `Reloadable`:
+
 ```kotlin
 @file:Suppress("UNUSED_LAMBDA_EXPRESSION")
 import org.openrndr.Program
@@ -172,6 +173,7 @@ import org.openrndr.extra.parameters.DoubleParameter
 ![DemoOptions01Kt](https://github.com/openrndr/orx/blob/media/orx-gui/images/DemoOptions01Kt.png
 [DemoSimple01Kt](src/demo/kotlin/DemoSimple01Kt.kt
 ![DemoSimple01Kt](https://github.com/openrndr/orx/blob/media/orx-gui/images/DemoSimple01Kt.png
+
 <!-- __demos__ -->
 ## Demos
 ### DemoAppearance01

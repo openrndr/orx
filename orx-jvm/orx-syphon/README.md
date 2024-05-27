@@ -6,6 +6,7 @@ Send frames to- and from OPENRNDR to other applications in real time using _Syph
 
 ### Syphon Server
 #### Sharing the whole view
+
 ```kotlin
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
@@ -33,6 +34,7 @@ fun main() {
 ```
 
 #### Sharing a different render target
+
 ```kotlin
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
@@ -75,6 +77,7 @@ fun main() {
 ```
 
 ### Syphon Client
+
 ```kotlin
 fun main() = application {
     configure {

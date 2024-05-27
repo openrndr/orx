@@ -29,7 +29,7 @@ extend(TemporalBlur()) {
 
 Additionally, a color matrix can be set per accumulation step. See [`DemoColorShift01.kt`](src/demo/kotlin/DemoColorShift01.kt)
 
-```
+```kotlin
 extend(TemporalBlur()) {
     colorMatrix = {
         // `it` is 0.0 at start of frame, 1.0 at end of frame
