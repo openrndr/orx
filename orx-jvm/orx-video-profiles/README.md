@@ -6,7 +6,7 @@ GIF, H265, PNG, Prores, TIFF and Webp `VideoWriterProfile`s for `ScreenRecorder`
 
 ### GIF
 
-```
+```kotlin
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.videoprofiles.*
@@ -26,7 +26,7 @@ fun main() = application {
 
 Then use `gifsicle` or a similar tool to reduce the gif file size. For example:
 
-```
+```bash
 $ gifsicle --loop --delay=4 --colors 16 --optimize=2 heavy.gif >lessheavy.gif
 ```
 

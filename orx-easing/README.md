@@ -25,7 +25,7 @@ Similar to those on https://easings.net
 
 ## Usage
 
-```
+```kotlin
 fun easeX(
   t: Double,       // current time
   b: Double = 0.0, // beginning (output value when t is 0.0)

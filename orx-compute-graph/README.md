@@ -8,7 +8,7 @@ In development. Things may change without prior notice.
 
 ## Usage
 
-```
+```kotlin
 fun main() = application {
     program {
         val linkNode: ComputeNode

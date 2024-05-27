@@ -5,7 +5,7 @@ Provides live coding functionality: updates a running OPENRNDR program when you 
 ## usage
 
 make sure that you add the following to your list of dependencies (next to orx-olive)
-```
+```gradle
 implementation "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.3.31"
 ```
 
@@ -42,6 +42,7 @@ Along with the extension comes a mechanism that allows state to be reloaded from
 This functionality is offered by the `Reloadable` class.
 
 An example `live.kts` in which the reloadable state is used:
+
 ```kotlin
 @file:Suppress("UNUSED_LAMBDA_EXPRESSION")
 import org.openrndr.color.ColorRGBa
@@ -68,7 +69,7 @@ The Reloadable store can be cleared using the `clearReloadables` function.
 To store GPU resources or objects that use GPU resources (a.o. `ColorBuffer`, `VertexBuffer`, `Shader`, `BufferTexture`)  in a `Reloadable` object one uses OPENRNDR's 
 `persistent {}` builder function.
 
-```!kotlin
+```kotlin
 @file:Suppress("UNUSED_LAMBDA_EXPRESSION")
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
@@ -133,6 +134,7 @@ import org.openrndr.draw.*
     }
 }
 ```
+
 <!-- __demos__ -->
 ## Demos
 ### DemoOlive01

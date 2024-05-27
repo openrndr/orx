@@ -8,7 +8,7 @@ Similar to CSS object-fit (https://developer.mozilla.org/en-US/docs/Web/CSS/obje
 
 ## Usage
 
-```
+```kotlin
 drawer.imageFit(
   img: ColorBuffer, 
   x: Double, y: Double, w: Double, h: Double, 
@@ -19,7 +19,7 @@ drawer.imageFit(
 
 or 
 
-```
+```kotlin
 drawer.imageFit(
   img: ColorBuffer, 
   bounds: Rectangle, 
@@ -66,7 +66,8 @@ fun main() = application {
         }
     }
 }
-``` 
+```
+
 <!-- __demos__ -->
 ## Demos
 ### DemoImageFit01

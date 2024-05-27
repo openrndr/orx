@@ -6,7 +6,8 @@ when we need all entries containing a specific time value. Useful when creating 
 For more information on interval trees read the [wikipedia page](https://en.wikipedia.org/wiki/Interval_tree).
 
 ## Usage
-```
+
+```kotlin
 // -- the item class we want to search for
 class Item(val start: Double, val end: Double)
 

@@ -4,7 +4,7 @@ CPU and GPU-based implementation for integral images (summed area tables)
 
 #### Usage
 
-```
+```kotlin
 val image = colorBuffer( ... )
 image.shadow.download()
 val integralImage = IntegralImage.fromColorBufferShadow(image.shadow)
