@@ -33,6 +33,7 @@ enum class OliveScriptHost {
     KOTLIN_SCRIPT
 }
 
+@JvmRecord
 data class ScriptLoadedEvent(val scriptFile: String)
 
 enum class ScriptMode {

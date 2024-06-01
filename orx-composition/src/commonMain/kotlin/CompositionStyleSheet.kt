@@ -7,6 +7,7 @@ import org.openrndr.extra.composition.AttributeOrPropertyKey.*
 import org.openrndr.extra.composition.Inheritance.*
 import org.openrndr.math.*
 import org.openrndr.shape.Rectangle
+import kotlin.jvm.JvmRecord
 import kotlin.reflect.*
 
 enum class Inheritance {
@@ -216,8 +217,10 @@ enum class MeetOrSlice {
     SLICE
 }
 
+@JvmRecord
 data class AspectRatio(val align: Align, val meetOrSlice: MeetOrSlice) : AttributeOrPropertyValue {
-    override val value = this
+    override val value: AspectRatio
+        get() = this
 
     companion object {
         val DEFAULT = AspectRatio(Align.X_MID_Y_MID, MeetOrSlice.MEET)
@@ -267,6 +270,7 @@ sealed interface ViewBox : AttributeOrPropertyValue {
     }
 }
 
+@JvmRecord
 private data class PropertyBehavior(val inherit: Inheritance, val initial: AttributeOrPropertyValue)
 
 private object PropertyBehaviors {

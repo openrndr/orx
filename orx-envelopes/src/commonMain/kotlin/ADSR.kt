@@ -1,6 +1,7 @@
 package org.openrndr.extra.envelopes
 
 import org.openrndr.math.mix
+import kotlin.jvm.JvmRecord
 import kotlin.math.min
 
 data class ADSR(

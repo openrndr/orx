@@ -11,6 +11,7 @@ enum class PropertyInheritance {
     RESET
 }
 
+@JvmRecord
 data class Property(val name: String,
                     val value: Any?)
 
@@ -41,7 +42,7 @@ sealed class LinearDimension(inherit: Boolean = false) : PropertyValue(inherit) 
     object Inherit : LinearDimension(inherit = true)
 }
 
-
+@JvmRecord
 data class PropertyBehaviour(val inheritance: PropertyInheritance, val intitial: Any)
 
 object PropertyBehaviours {

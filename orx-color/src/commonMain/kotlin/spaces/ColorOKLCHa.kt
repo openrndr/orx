@@ -3,12 +3,14 @@ package org.openrndr.extra.color.spaces
 import kotlinx.serialization.Serializable
 import org.openrndr.color.*
 import org.openrndr.math.*
+import kotlin.jvm.JvmRecord
 import kotlin.math.*
 
 /**
  * Color in cylindrical OKLab space
  */
 @Serializable
+@JvmRecord
 data class ColorOKLCHa(val l: Double, val c: Double, val h: Double, override val alpha: Double = 1.0) :
     ColorModel<ColorOKLCHa>,
     ShadableColor<ColorOKLCHa>,
@@ -30,9 +32,6 @@ data class ColorOKLCHa(val l: Double, val c: Double, val h: Double, override val
             return ColorOKLCHa(l, c, h, oklaba.alpha)
         }
     }
-
-    @Deprecated("Legacy alpha parameter name", ReplaceWith("alpha"))
-    val a = alpha
 
     override fun opacify(factor: Double) = copy(alpha = alpha * factor)
     override fun shade(factor: Double) = copy(l = l * factor)

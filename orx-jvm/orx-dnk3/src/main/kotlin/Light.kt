@@ -8,6 +8,7 @@ import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.ortho
 import org.openrndr.math.transforms.perspective
 
+@JvmRecord
 data class LightContext(val lights: List<NodeContent<Light>>,
                         val shadowMaps: Map<ShadowLight, RenderTarget>)
 

@@ -4,12 +4,11 @@ package org.openrndr.extra.shadestyles
 
 import org.openrndr.color.*
 import org.openrndr.draw.ShadeStyle
-import org.openrndr.extra.parameters.ColorParameter
-import org.openrndr.extra.parameters.Description
-import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.shaderphrases.preprocess
 import org.openrndr.extra.color.phrases.ColorPhraseBook
 import org.openrndr.extra.color.spaces.ColorOKLABa
+import org.openrndr.extra.color.spaces.toOKLABa
+import org.openrndr.extra.parameters.*
 import org.openrndr.math.CastableToVector4
 import org.openrndr.math.Vector2
 import kotlin.reflect.KClass
@@ -20,7 +19,8 @@ open class LinearGradientBase<C>(
     color1: C,
     offset: Vector2 = Vector2.ZERO,
     rotation: Double = 0.0,
-    exponent: Double = 1.0
+    exponent: Double = 1.0,
+    quantize: Int = 0,
 ) : ShadeStyle()
         where C : ConvertibleToColorRGBa, C : AlgebraicColor<C>, C: CastableToVector4 {
 
@@ -29,6 +29,8 @@ open class LinearGradientBase<C>(
 
     @ColorParameter("end color", order = 1)
     var color1: C by Parameter()
+
+    @Vector2Parameter("offset")
     var offset: Vector2 by Parameter()
 
     @DoubleParameter("rotation", -180.0, 180.0, order = 2)
@@ -37,6 +39,9 @@ open class LinearGradientBase<C>(
     @DoubleParameter("exponent", 0.01, 10.0, order = 3)
     var exponent: Double by Parameter()
 
+    @IntParameter("quantize", 0, 256)
+    var quantize: Int by Parameter()
+
     init {
         ColorPhraseBook.register()
         this.color0 = color0
@@ -44,6 +49,7 @@ open class LinearGradientBase<C>(
         this.offset = offset
         this.rotation = rotation
         this.exponent = exponent
+        this.quantize  = quantize
 
         fragmentPreamble = """
             |#pragma import color.oklab_to_linear_rgb
@@ -59,8 +65,13 @@ open class LinearGradientBase<C>(
                 
             vec4 color0 = p_color0;
             vec4 color1 = p_color1; 
+            
+            float t = pow(f, p_exponent);
+            if (p_quantize > 0) {
+                t = floor(t * float(p_quantize)) / float(p_quantize);
+            }
 
-            vec4 gradient = mix(color0, color1, pow(f, p_exponent));
+            vec4 gradient = mix(color0, color1, t);
             ${generateColorTransform(color0::class)}
             x_fill *= gradient;
         """
@@ -68,8 +79,8 @@ open class LinearGradientBase<C>(
 }
 
 class LinearGradient(
-    color0: ColorRGBa,
-    color1: ColorRGBa,
+    color0: ColorRGBa = ColorRGBa.BLACK,
+    color1: ColorRGBa = ColorRGBa.WHITE,
     offset: Vector2 = Vector2.ZERO,
     rotation: Double = 0.0,
     exponent: Double = 1.0
@@ -85,8 +96,8 @@ class LinearGradientOKLab(
 
 
 fun linearGradient(
-    color0: ColorRGBa,
-    color1: ColorRGBa,
+    color0: ColorRGBa = ColorRGBa.BLACK,
+    color1: ColorRGBa = ColorRGBa.WHITE,
     offset: Vector2 = Vector2.ZERO,
     rotation: Double = 0.0,
     exponent: Double = 1.0
@@ -95,8 +106,8 @@ fun linearGradient(
 }
 
 fun linearGradient(
-    color0: ColorOKLABa,
-    color1: ColorOKLABa,
+    color0: ColorOKLABa = ColorRGBa.BLACK.toOKLABa(),
+    color1: ColorOKLABa = ColorRGBa.WHITE.toOKLABa(),
     offset: Vector2 = Vector2.ZERO,
     rotation: Double = 0.0,
     exponent: Double = 1.0

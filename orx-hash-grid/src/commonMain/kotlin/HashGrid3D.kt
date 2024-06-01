@@ -1,5 +1,6 @@
 package org.openrndr.extra.hashgrid
 import org.openrndr.math.Vector3
+import kotlin.jvm.JvmRecord
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -10,6 +11,7 @@ private fun Double.fastFloor(): Int {
     return if (this >= 0) this.toInt() else this.toInt() - 1
 }
 
+@JvmRecord
 private data class GridCoords3D(val x: Int, val y: Int, val z: Int) {
     fun offset(i: Int, j: Int, k : Int): GridCoords3D = copy(x = x + i, y = y + j, z = z + k)
 }

@@ -5,6 +5,7 @@ import org.openrndr.draw.DepthFormat
 import org.openrndr.draw.RenderTarget
 import org.openrndr.draw.renderTarget
 
+@JvmRecord
 data class RenderPass(val combiners: List<FacetCombiner>,
                       val renderOpaque: Boolean = true,
                       val renderTransparent: Boolean = false,

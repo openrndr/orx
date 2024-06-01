@@ -4,10 +4,12 @@ import kotlinx.serialization.Serializable
 import org.openrndr.color.*
 import org.openrndr.math.Vector4
 import org.openrndr.math.mixAngle
+import kotlin.jvm.JvmRecord
 import kotlin.math.*
 
 @Suppress("LocalVariableName")
 @Serializable
+@JvmRecord
 data class ColorOKHSVa(val h: Double, val s: Double, val v: Double, override val alpha: Double = 1.0) :
     ColorModel<ColorOKHSVa>,
     HueShiftableColor<ColorOKHSVa>,
@@ -53,9 +55,6 @@ data class ColorOKHSVa(val h: Double, val s: Double, val v: Double, override val
             return ColorOKHSVa(h * 360.0, if (s == s) s else 0.0, if (v == v) v else 0.0, c.alpha)
         }
     }
-
-    @Deprecated("Legacy alpha parameter name", ReplaceWith("alpha"))
-    val a = alpha
 
     override fun toRGBa(): ColorRGBa {
         val a_ = cos(2 * PI * h / 360.0)

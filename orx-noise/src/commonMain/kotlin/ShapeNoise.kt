@@ -28,7 +28,7 @@ fun ShapeProvider.uniform(distanceToEdge: Double = 0.0, random: Random = Random.
 /**
  * Generate [sampleCount] uniformly distributed points inside the area of [ShapeProvider]
  */
-fun ShapeProvider.uniform(sampleCount: Int) : List<Vector2> = shape.triangulation.uniform(sampleCount)
+fun ShapeProvider.uniform(sampleCount: Int, random: Random = Random.Default) : List<Vector2> = shape.triangulation.uniform(sampleCount, random)
 
 
 /**

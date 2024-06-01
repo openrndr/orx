@@ -12,6 +12,7 @@ import org.openrndr.math.Vector3
 import org.openrndr.math.YPolarity
 import org.openrndr.math.transforms.*
 import org.openrndr.shape.*
+import kotlin.jvm.JvmRecord
 
 /**
  * Used internally to define [ClipMode]s.
@@ -71,12 +72,14 @@ private data class CompositionDrawStyle(
 /**
  * Data structure containing intersection information.
  */
+@JvmRecord
 data class ShapeNodeIntersection(val node: ShapeNode, val intersection: ContourIntersection)
 
 /**
  * Data structure containing information about a point
  * in a [ShapeContour] closest to some other 2D point.
  */
+@JvmRecord
 data class ShapeNodeNearestContour(val node: ShapeNode, val point: ContourPoint, val distanceDirection: Vector2, val distance: Double)
 
 /**

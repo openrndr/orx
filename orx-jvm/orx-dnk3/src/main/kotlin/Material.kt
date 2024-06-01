@@ -52,8 +52,8 @@ data class MaterialContext(val pass: RenderPass,
 
 
 
-
+@JvmRecord
 data class PrimitiveContext(val hasNormalAttribute: Boolean, val hasSkinning: Boolean)
 
-
+@JvmRecord
 data class ContextKey(val materialContext: MaterialContext, val primitiveContext: PrimitiveContext)

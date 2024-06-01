@@ -8,6 +8,7 @@ import org.openrndr.extra.fx.blend.SourceIn
 import org.openrndr.extra.fx.blend.SourceOut
 import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.Description
+import kotlin.jvm.JvmRecord
 
 fun RenderTarget.deepDestroy() {
     val cbcopy = colorAttachments.map { it }
@@ -320,6 +321,7 @@ fun <F : Filter2to1> Layer.blend(filter: F, configure: F.() -> Unit = {}): F {
     return filter
 }
 
+@JvmRecord
 data class ColorBufferCacheKey(
     val colorType: ColorType,
     val contentScale: Double

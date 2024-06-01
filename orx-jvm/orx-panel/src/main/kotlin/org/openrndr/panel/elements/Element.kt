@@ -14,8 +14,11 @@ import org.openrndr.shape.Rectangle
 
 import java.util.*
 
+@JvmRecord
 data class ElementClass(val name: String)
+@JvmRecord
 data class ElementPseudoClass(val name: String)
+@JvmRecord
 data class ElementType(val name: String)
 
 val disabled = ElementPseudoClass("disabled")

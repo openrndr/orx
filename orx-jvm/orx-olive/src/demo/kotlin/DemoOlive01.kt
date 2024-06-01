@@ -16,7 +16,7 @@ fun main() {
         }
         oliveProgram {
             extend {
-                drawer.clear(ColorRGBa.GRAY)
+                drawer.clear(ColorRGBa.PINK)
                 drawer.fill = ColorRGBa.WHITE
                 for (i in 0 until 100) {
                     drawer.circle(

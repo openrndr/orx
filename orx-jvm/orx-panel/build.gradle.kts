@@ -15,6 +15,7 @@ tasks.test {
 
 dependencies {
     implementation(project(":orx-expression-evaluator"))
+    implementation(project(":orx-color"))
     implementation(project(":orx-text-writer"))
     implementation(libs.openrndr.application)
     implementation(libs.openrndr.math)

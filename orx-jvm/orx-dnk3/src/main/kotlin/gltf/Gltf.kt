@@ -26,8 +26,10 @@ const val GLTF_ELEMENT_ARRAY_BUFFER = 34963
 
 data class GltfAsset(val generator: String?, val version: String?)
 
+@JvmRecord
 data class GltfScene(val nodes: IntArray)
 
+@JvmRecord
 data class GltfNode(val name: String?,
                val children: IntArray?,
                val matrix: DoubleArray?,
@@ -39,8 +41,10 @@ data class GltfNode(val name: String?,
                val camera: Int?,
                val extensions: GltfNodeExtensions?)
 
+@JvmRecord
 data class KHRLightsPunctualIndex(val light: Int)
 
+@JvmRecord
 data class GltfNodeExtensions(val KHR_lights_punctual: KHRLightsPunctualIndex?) {
 
 }

@@ -5,7 +5,9 @@ import org.openrndr.draw.RectangleBatchBuilder
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 import org.openrndr.shape.intersects
+import kotlin.jvm.JvmRecord
 
+@JvmRecord
 data class QuadtreeQuery<T>(val nearest: T, val neighbours: List<T>, val quads: List<Quadtree<T>>)
 
 /**

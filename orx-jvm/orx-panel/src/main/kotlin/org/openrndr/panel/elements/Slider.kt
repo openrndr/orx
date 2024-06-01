@@ -21,6 +21,7 @@ import kotlin.reflect.KMutableProperty0
 
 private val logger = KotlinLogging.logger {}
 
+@JvmRecord
 data class Range(val min: Double, val max: Double) {
     val span: Double get() = max - min
 }

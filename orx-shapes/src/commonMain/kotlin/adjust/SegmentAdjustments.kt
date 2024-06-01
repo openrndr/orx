@@ -1,9 +1,12 @@
 package org.openrndr.extra.shapes.adjust
 
 import org.openrndr.shape.Segment2D
+import kotlin.jvm.JvmRecord
 
 sealed interface SegmentOperation {
+    @JvmRecord
     data class Remove(val index: Int, val amount: Int) : SegmentOperation
+    @JvmRecord
     data class Insert(val index: Int, val amount: Int) : SegmentOperation
 }
 

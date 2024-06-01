@@ -13,6 +13,7 @@ import java.io.File
 
 val logger = KotlinLogging.logger { }
 
+@JvmRecord
 private data class RenderTargetDescription(val width: Int, val height: Int, val contentScale: Double)
 
 private fun RenderTarget.description() = RenderTargetDescription(width, height, contentScale)

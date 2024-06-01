@@ -5,6 +5,7 @@ import org.openrndr.color.*
 import org.openrndr.math.Vector4
 import org.openrndr.math.map
 import org.openrndr.math.mixAngle
+import kotlin.jvm.JvmRecord
 import kotlin.math.*
 
 private val m = arrayOf(
@@ -81,6 +82,7 @@ private fun maxChromaForLH(L100: Double, H: Double): Double {
  * HSLUV color space
  */
 @Serializable
+@JvmRecord
 data class ColorHSLUVa(val h: Double, val s: Double, val l: Double, override val alpha: Double = 1.0) :
         ColorModel<ColorHSLUVa>,
         HueShiftableColor<ColorHSLUVa>,
@@ -89,8 +91,6 @@ data class ColorHSLUVa(val h: Double, val s: Double, val l: Double, override val
         LuminosityColor<ColorHSLUVa>,
         AlgebraicColor<ColorHSLUVa> {
 
-    @Deprecated("Legacy alpha parameter name", ReplaceWith("alpha"))
-    val a = alpha
 
     fun toLCHUVa(): ColorLCHUVa {
 

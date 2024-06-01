@@ -5,8 +5,10 @@ import org.openrndr.color.*
 import org.openrndr.math.Vector4
 import org.openrndr.math.map
 import org.openrndr.math.mixAngle
+import kotlin.jvm.JvmRecord
 
 @Serializable
+@JvmRecord
 data class ColorXSLUVa(val x: Double, val s: Double, val l: Double, override val alpha: Double = 1.0) :
     ColorModel<ColorXSLUVa>,
     HueShiftableColor<ColorXSLUVa>,
@@ -14,8 +16,6 @@ data class ColorXSLUVa(val x: Double, val s: Double, val l: Double, override val
     ShadableColor<ColorXSLUVa>,
     AlgebraicColor<ColorXSLUVa> {
 
-    @Deprecated("Legacy alpha parameter name", ReplaceWith("alpha"))
-    val a = alpha
     override val hue: Double
         get() = x
     override fun withHue(hue: Double): ColorXSLUVa = copy(x = hue)

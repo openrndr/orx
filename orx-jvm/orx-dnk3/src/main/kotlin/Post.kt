@@ -3,6 +3,7 @@ package org.openrndr.extra.dnk3
 import org.openrndr.draw.*
 import org.openrndr.math.Matrix44
 
+@JvmRecord
 data class PostContext(val lightContext: LightContext, val inverseViewMatrix: Matrix44)
 
 interface PostStep {

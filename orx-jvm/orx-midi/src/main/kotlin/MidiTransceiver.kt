@@ -7,6 +7,7 @@ import javax.sound.midi.*
 
 private val logger = KotlinLogging.logger {  }
 
+@JvmRecord
 data class MidiDeviceName(val name: String, val vendor: String)
 
 class MidiDeviceCapabilities {
@@ -18,6 +19,7 @@ class MidiDeviceCapabilities {
     }
 }
 
+@JvmRecord
 data class MidiDeviceDescription(
     val name: String,
     val vendor: String,

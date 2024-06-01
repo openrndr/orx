@@ -9,6 +9,7 @@ import org.openrndr.math.transforms.buildTransform
 import org.openrndr.shape.Segment2D
 import org.openrndr.shape.SegmentType
 import org.openrndr.shape.ShapeContour
+import kotlin.jvm.JvmRecord
 import kotlin.math.abs
 
 internal fun Vector2.transformedBy(t: Matrix44, mask: Int = 0x0f, maskRef: Int = 0x0f) =
@@ -38,6 +39,7 @@ fun <E> List<E>.update(vararg updates: Pair<Int, E>): List<E> {
  * of changes in the contour topology.
  * @since 0.4.4
  */
+@JvmRecord
 data class ContourEdge(
     val contour: ShapeContour,
     val segmentIndex: Int,

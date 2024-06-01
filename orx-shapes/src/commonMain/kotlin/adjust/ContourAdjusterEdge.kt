@@ -2,7 +2,9 @@ package org.openrndr.extra.shapes.adjust
 
 import org.openrndr.math.Vector2
 import org.openrndr.shape.ShapeContour
+import kotlin.jvm.JvmRecord
 
+@JvmRecord
 data class ContourAdjusterEdge(val contourAdjuster: ContourAdjuster, val segmentIndex: () -> Int) {
 
     val startPosition

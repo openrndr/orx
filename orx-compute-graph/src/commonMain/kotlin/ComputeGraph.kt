@@ -6,10 +6,12 @@ import org.openrndr.events.Event
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
+import kotlin.jvm.JvmRecord
 import kotlin.reflect.KProperty
 
 private val logger = KotlinLogging.logger { }
 
+@JvmRecord
 data class ComputeEvent(val source: ComputeNode)
 
 open class ComputeNode(val graph: ComputeGraph, var computeFunction: suspend () -> Unit = {}) {

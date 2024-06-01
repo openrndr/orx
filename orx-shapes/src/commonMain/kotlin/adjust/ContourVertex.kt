@@ -5,7 +5,9 @@ import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.math.transforms.buildTransform
 import org.openrndr.shape.ShapeContour
+import kotlin.jvm.JvmRecord
 
+@JvmRecord
 data class ContourVertex(
     val contour: ShapeContour,
     val segmentIndex: Int,
