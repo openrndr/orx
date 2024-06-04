@@ -80,6 +80,20 @@ complement [OPENRNDR](https://github.com/openrndr/openrndr).
 
 # Developer notes
 
+## Syncing git tags between upstream orx repository and your development fork
+
+If you are forking the orx GitHub repository, you can sync your fork with the upstream either by the web interface or
+with the `gh` commandline. Unfortunately none of these methods will sync tags from the upstream orx repository.
+The orx build and artifact publishing process described in the following section uses git tags to determine the
+version number of your orx artifacts. To avoid discrepancy of version numbering between your fork and the upstream orx
+repository you can also sync tags by executing these commands in the folder of your fork:
+
+```sh
+git remote add upstream https://github.com/openrndr/orx
+git fetch --tags upstream
+git push --tags
+```
+
 ## Publish and use local builds of the library in your applications
 
 First, build and publish [OPENRNDR](https://github.com/openrndr/openrndr) to the local maven repository:
