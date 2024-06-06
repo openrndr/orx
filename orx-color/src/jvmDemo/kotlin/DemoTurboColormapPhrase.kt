@@ -11,8 +11,10 @@ fun main() = application {
             fragmentTransform = "x_fill.rgb = turbo_colormap(c_boundsPosition.x);"
         }
         extend {
-            drawer.shadeStyle = style
-            drawer.rectangle(0.0, 0.0, width.toDouble(), height.toDouble())
+            drawer.run {
+                shadeStyle = style
+                rectangle(bounds)
+            }
         }
     }
 }
