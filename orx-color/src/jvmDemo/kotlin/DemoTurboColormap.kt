@@ -1,12 +1,10 @@
 import org.openrndr.application
-import org.openrndr.extra.color.colormaps.ColormapPhraseBook
 import org.openrndr.extra.color.colormaps.turboColormap
 import org.openrndr.extra.noise.fastFloor
 import kotlin.math.sin
 
 fun main() = application {
     program {
-        ColormapPhraseBook.register()
         extend {
             drawer.stroke = null
             val stripeCount = 32 + (sin(seconds) * 16.0).fastFloor()
