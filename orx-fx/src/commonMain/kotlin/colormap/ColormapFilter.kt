@@ -2,7 +2,6 @@
 
 package org.openrndr.extra.fx.colormap
 
-import org.openrndr.draw.Filter
 import org.openrndr.draw.Filter1to1
 import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.DoubleParameter
