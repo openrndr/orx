@@ -1,10 +1,6 @@
-package spaces
+package org.openrndr.extra.color.spaces
 
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extra.color.spaces.hueToX
-import org.openrndr.extra.color.spaces.toHSLUVa
-import org.openrndr.extra.color.spaces.toXSLUVa
-import org.openrndr.extra.color.spaces.xToHue
 import kotlin.math.abs
 import kotlin.test.Test
 import kotlin.test.assertTrue

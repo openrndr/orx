@@ -1,8 +1,6 @@
-package spaces
+package org.openrndr.extra.color.spaces
 
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extra.color.spaces.OKLCH
-import org.openrndr.extra.color.spaces.toOKLCHa
 import org.openrndr.extra.color.tools.chroma
 import org.openrndr.extra.color.tools.withLuminosity
 import kotlin.test.Test

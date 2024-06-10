@@ -1,10 +1,7 @@
-package tools
+package org.openrndr.extra.color.tools
 
 import org.openrndr.color.*
 import org.openrndr.extra.color.spaces.*
-import org.openrndr.extra.color.tools.mixedWith
-import org.openrndr.extra.color.tools.saturate
-import org.openrndr.extra.color.tools.shiftHue
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
