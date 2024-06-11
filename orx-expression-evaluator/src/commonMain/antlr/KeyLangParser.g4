@@ -10,8 +10,13 @@ line      : statement (NEWLINE | EOF) ;
 statement :
            expression       # expressionStatement ;
 
+lambda: LCURLY (ID ( COMMA ID )* ARROW )? expression RCURLY                             # functionLiteral;
+
 expression : INTLIT                                                        # intLiteral
            | DECLIT                                                        # decimalLiteral
+           | LBRACKET (expression ( COMMA expression )*)? RBRACKET             # listLiteral
+           | expression DOT ID lambda                                      # memberFunctionCall0LambdaExpression
+           | lambda                                                        # lambdaExpression
            | expression DOT ID LPAREN RPAREN                               # memberFunctionCall0Expression
            | expression DOT ID LPAREN expression RPAREN                    # memberFunctionCall1Expression
            | expression DOT ID LPAREN expression COMMA expression RPAREN   # memberFunctionCall2Expression

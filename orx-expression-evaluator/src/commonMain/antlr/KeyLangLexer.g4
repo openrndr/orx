@@ -25,9 +25,15 @@ DIVISION           : '/' ;
 ASSIGN             : '=' ;
 LPAREN             : '(' ;
 RPAREN             : ')' ;
+LBRACKET           : '[' ;
+RBRACKET           : ']' ;
+LCURLY             : '{' ;
+RCURLY             : '}' ;
 
 QUESTION_MARK      : '?' ;
 COLON              : ':' ;
+
+ARROW              : '->' ;
 
 COMMA              : ',' ;
 DOT                : '.' ;
@@ -35,8 +41,8 @@ DOT                : '.' ;
 EQ             : '==' ;
 LT             : '<' ;
 LTEQ           : '<=' ;
-GT             : '>=' ;
-GTEQ           : '>'  ;
+GT             : '>' ;
+GTEQ           : '>='  ;
 
 AND            : '&&' ;
 OR             : '||'  ;

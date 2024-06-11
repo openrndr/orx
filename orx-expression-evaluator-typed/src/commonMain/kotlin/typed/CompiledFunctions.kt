@@ -11,9 +11,9 @@ fun <T0, R> compileFunction1(
     constants: (String) -> Any? = { null },
     functions: TypedFunctionExtensions = TypedFunctionExtensions.EMPTY
 ): ((T0) -> R) {
-    require(constants(parameter0) == null) {
-        "${parameter0} is in constants with value '${constants(parameter0)}"
-    }
+//    require(constants(parameter0) == null) {
+//        "${parameter0} is in constants with value '${constants(parameter0)}"
+//    }
     val root = expressionRoot(expression)
 
     var varP0: T0? = null
