@@ -3,20 +3,20 @@ import org.openrndr.draw.ComputeShader
 import org.openrndr.draw.colorBuffer
 import org.openrndr.draw.font.BufferAccess
 import org.openrndr.draw.imageBinding
-import org.openrndr.extra.computeshaders.computeShaderExecuteDimensionsFor2D
+import org.openrndr.extra.computeshaders.computeShaderExecuteDimensions
 import org.openrndr.extra.computeshaders.resolution
 
 /**
  * A compute shader computing an image of an arbitrary size. If dimensions of an image are not a multiplicity
  * of a workgroup size dimensions (`local_size_x`, `local_size_y`), then excessive calculations will happen,
  * and they should be discarded with the initial if statement in the compute shader.
- * The [computeShaderExecuteDimensionsFor2D] function will calculate proper executeDimensions for the compute
- * shader outputting such a 2D image.
+ * The [computeShaderExecuteDimensions] function will calculate proper `executeDimensions` for the `ComputeShader`
+ * outputting such a 2D image.
  */
 fun main() = application {
     program {
         val image = colorBuffer(
-            width = width - 1,
+            width = width - 1,  // we are changing to image size to uneven on purpose
             height = height -1
         )
         val shader = ComputeShader.fromCode(
@@ -46,7 +46,7 @@ fun main() = application {
             uniform("resolution", image.resolution)
             image("image", 0, image.imageBinding(0, BufferAccess.WRITE))
         }
-        val executeDimensions = computeShaderExecuteDimensionsFor2D(
+        val executeDimensions = computeShaderExecuteDimensions(
             image.resolution,
             localSizeX = 8,
             localSizeY = 8
