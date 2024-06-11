@@ -2,6 +2,7 @@ package org.openrndr.extra.pointclouds
 
 import org.openrndr.draw.*
 import org.openrndr.draw.font.BufferAccess
+import org.openrndr.extra.computeshaders.appendAfterVersion
 import org.openrndr.extra.computeshaders.resolution
 import org.openrndr.math.Vector2
 
@@ -26,8 +27,11 @@ class HeightMapToPointCloudGenerator(
 ) {
 
     private val shader = ComputeShader.fromCode(
-        code = pointclouds_height_map_to_point_cloud
-            .maybePreserveProportions(preserveProportions),
+        code = pointclouds_height_map_to_point_cloud.appendAfterVersion(
+            """
+                ${if (preserveProportions) "#define PRESERVE_PROPORTIONS" else ""}
+            """.trimIndent()
+        ),
         name = "height-map-to-point-cloud"
     )
 
@@ -95,8 +99,12 @@ class ColoredHeightMapToPointCloudGenerator(
 ) {
 
     private val shader = ComputeShader.fromCode(
-        code = pointclouds_colored_height_map_to_point_cloud
-            .maybePreserveProportions(preserveProportions),
+        code = pointclouds_height_map_to_point_cloud.appendAfterVersion(
+            """
+                ${if (preserveProportions) "#define PRESERVE_PROPORTIONS" else ""}
+                #define COLORED
+            """.trimIndent()
+        ),
         name = "colored-height-map-to-point-cloud"
     )
 
