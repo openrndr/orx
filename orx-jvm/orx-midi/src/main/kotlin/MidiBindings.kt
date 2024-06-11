@@ -317,7 +317,7 @@ fun Program.bindMidiControl(
  * @param controlW the midi control to use for the [Vector4.w] component
  * @since 0.4.3
  */
-@JvmName("bindMidiControlColorVector4")
+@JvmName("bindMidiControlVector4")
 fun Program.bindMidiControl(
     property: KMutableProperty0<Vector4>, transceiver: MidiTransceiver,
     channelX: Int, controlX: Int,
