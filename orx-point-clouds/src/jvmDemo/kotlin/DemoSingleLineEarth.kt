@@ -37,14 +37,14 @@ fun main() = application {
         val style = shadeStyle {
             vertexPreamble = "const float PI = 3.14159265359;"
             vertexTransform = """
-                    float phi = a_position.x * PI * 2.0;
-                    float theta = a_position.y * PI;
-                    x_position = vec3(
-                        sin(theta) * cos(phi),
-                        sin(theta) * sin(phi),
-                        cos(theta)
-                    ) * (1.0 + a_position.z);
-                    """.trimIndent()
+                float phi = a_position.x * PI * 2.0;
+                float theta = a_position.y * PI;
+                x_position = vec3(
+                    sin(theta) * cos(phi),
+                    sin(theta) * sin(phi),
+                    cos(theta)
+                ) * (1.0 + a_position.z);
+                """.trimIndent()
             fragmentTransform = "x_fill.rgb = va_color.rgb;"
         }
         extend {
