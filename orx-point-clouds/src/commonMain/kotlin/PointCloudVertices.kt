@@ -18,15 +18,23 @@ val coloredPointCloudVertexFormat: VertexFormat = vertexFormat {
 }
 
 fun pointCloudVertexBuffer(
-    resolution: IntVector2
+    size: Int
 ) = vertexBuffer(
     pointCloudVertexFormat,
-    vertexCount = resolution.x * resolution.y
+    vertexCount = size
+)
+
+fun pointCloudVertexBuffer(
+    resolution: IntVector2
+) = pointCloudVertexBuffer(size = resolution.x * resolution.y)
+
+fun coloredPointCloudVertexBuffer(
+    size: Int
+) = vertexBuffer(
+    coloredPointCloudVertexFormat,
+    vertexCount = size
 )
 
 fun coloredPointCloudVertexBuffer(
     resolution: IntVector2
-) = vertexBuffer(
-    coloredPointCloudVertexFormat,
-    vertexCount = resolution.x * resolution.y
-)
+) = coloredPointCloudVertexBuffer(resolution.x * resolution.y)
