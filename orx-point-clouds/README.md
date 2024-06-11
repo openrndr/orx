@@ -31,14 +31,14 @@ fun main() = application {
 }
 ```
 
-## Organized point clouds
+## About organized point clouds
 
 Organized point clouds assume that points are stored in a 2-dimensional array, for example representing XY-coordinates
 of a plane, where the 3rd dimension might represent an elevation or a distance.
 
-### Height map point clouds
+## Height map point clouds
 
-#### Usage
+### Usage
 
 ```kotlin
 val heightMap = loadImage("height-map.png")
@@ -53,7 +53,7 @@ Note: the `heightMap` can be any `ColorBuffer`, not necessarily an image.
 The `HeightMapToPointCloudGenerator` is using a `ComputeShader` under the hood, which will read the RED channel from
 the `height-map.png`. The resulting `pointCloud` is a `VertexBuffer` which can be rendered as points.
 
-#### The `preserveProportions` parameter
+### The `preserveProportions` parameter
 
 The `preserveProportions` proportion flag can be passed to the `HeightMapToPointCloudGenerator` constructor.
 
@@ -64,13 +64,13 @@ When set to `false`, the `XY` coordinates of the resulting point cloud will be n
 might be useful for certain use case scenarios, for example for wrapping the points over a sphere in the spherical 
 coordinate system.
 
-#### The `heightScale` parameter
+### The `heightScale` parameter
 
 It is possible to control the `heightScale` by supplying parameter to the `HeightMapToPointCloudGenerator` constructor.
 The default `heightScale` is `1.0`, which means that maximal height value read from the source (1.0 in case of images),
 will be multiplied by this factor when placing it on the Z coordinate.
 
-#### Streaming the height map data
+### Streaming the height map data
 
 The `generate` function produces the `pointCloud` `VertexBuffer` once. If the point cloud generation is supposed to
 happen continuously (e.g. to represent some real time data as a point cloud), then the `populate` function can be used
@@ -86,7 +86,7 @@ extend {
 }
 ```
 
-#### Colored height maps
+### Colored height maps
 
 A special `ColoredHeightMapToPointCloudGenerator` will use `coloredPointCloudVertexBuffer()` function which also defines
 color attribute for each point/vertex. It can be used as follows:
