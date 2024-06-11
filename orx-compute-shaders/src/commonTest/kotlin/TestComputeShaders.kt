@@ -8,32 +8,42 @@ import kotlin.test.Test
 class TestComputeShaders {
 
     @Test
-    fun testComputeShaderExecuteDimensionsFor2D() {
+    fun testComputeShaderExecuteDimensions() {
 
-        computeShaderExecuteDimensionsFor2D(
+        computeShaderExecuteDimensions(
             resolution = IntVector2(639, 480),
             localSizeX = 8,
             localSizeY = 8
         ) shouldBe IntVector3(80, 60, 1)
 
-        computeShaderExecuteDimensionsFor2D(
+        computeShaderExecuteDimensions(
             resolution = IntVector2(640, 480),
             localSizeX = 8,
             localSizeY = 8
         ) shouldBe IntVector3(80, 60, 1)
 
-        computeShaderExecuteDimensionsFor2D(
+        computeShaderExecuteDimensions(
             resolution = IntVector2(641, 480),
             localSizeX = 8,
             localSizeY = 8
         ) shouldBe IntVector3(81, 60, 1)
 
-        computeShaderExecuteDimensionsFor2D(
+        computeShaderExecuteDimensions(
             resolution = IntVector2(641, 481),
             localSizeX = 8,
             localSizeY = 8
         ) shouldBe IntVector3(81, 61, 1)
 
+    }
+
+    @Test
+    fun replaceVersion() {
+        "foo".appendAfterVersion("bar") shouldBe "foo"
+        "#version 430".appendAfterVersion("#define FOO") shouldBe """
+            #version 430
+            #define FOO
+            
+            """.trimIndent()
     }
 
 }
