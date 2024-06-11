@@ -144,6 +144,36 @@ Two color spaces are added: `ColorHSLUVa` and `ColorHPLUVa`, they are an impleme
 
 ![DemoOKHSV01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoOKHSV01Kt.png)
 
+### DemoSpectralZucconiColormap
+[source code](src/jvmDemo/kotlin/DemoSpectralZucconiColormap.kt)
+
+![DemoSpectralZucconiColormapKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoSpectralZucconiColormapKt.png)
+
+### DemoSpectralZucconiColormapPhrase
+[source code](src/jvmDemo/kotlin/DemoSpectralZucconiColormapPhrase.kt)
+
+![DemoSpectralZucconiColormapPhraseKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoSpectralZucconiColormapPhraseKt.png)
+
+### DemoSpectralZucconiColormapPlot
+[source code](src/jvmDemo/kotlin/DemoSpectralZucconiColormapPlot.kt)
+
+![DemoSpectralZucconiColormapPlotKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoSpectralZucconiColormapPlotKt.png)
+
+### DemoTurboColormap
+[source code](src/jvmDemo/kotlin/DemoTurboColormap.kt)
+
+![DemoTurboColormapKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoTurboColormapKt.png)
+
+### DemoTurboColormapPhrase
+[source code](src/jvmDemo/kotlin/DemoTurboColormapPhrase.kt)
+
+![DemoTurboColormapPhraseKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoTurboColormapPhraseKt.png)
+
+### DemoTurboColormapPlot
+[source code](src/jvmDemo/kotlin/DemoTurboColormapPlot.kt)
+
+![DemoTurboColormapPlotKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoTurboColormapPlotKt.png)
+
 ### DemoXSLUV01
 [source code](src/jvmDemo/kotlin/DemoXSLUV01.kt)
 

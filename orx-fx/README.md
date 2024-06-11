@@ -213,6 +213,21 @@ shaping `curve` within this range:
 
 ![DemoColorDuotoneGradient01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColorDuotoneGradient01Kt.png)
 
+### DemoColormapGrayscale
+[source code](src/jvmDemo/kotlin/DemoColormapGrayscale.kt)
+
+![DemoColormapGrayscaleKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColormapGrayscaleKt.png)
+
+### DemoColormapSpectralZucconi
+[source code](src/jvmDemo/kotlin/DemoColormapSpectralZucconi.kt)
+
+![DemoColormapSpectralZucconiKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColormapSpectralZucconiKt.png)
+
+### DemoColormapTurbo
+[source code](src/jvmDemo/kotlin/DemoColormapTurbo.kt)
+
+![DemoColormapTurboKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColormapTurboKt.png)
+
 ### DemoColorPosterize01
 [source code](src/jvmDemo/kotlin/DemoColorPosterize01.kt)
 
