@@ -22,6 +22,7 @@ expression : INTLIT                                                        # int
            | expression DOT ID LPAREN expression COMMA expression RPAREN   # memberFunctionCall2Expression
            | expression DOT ID LPAREN expression COMMA expression COMMA expression RPAREN  # memberFunctionCall3Expression
            | expression DOT ID LPAREN expression COMMA expression COMMA expression COMMA expression RPAREN  # memberFunctionCall4Expression
+           | expression LBRACKET expression RBRACKET                       # indexExpression
            | ID LPAREN RPAREN                                              # functionCall0Expression
            | ID LPAREN expression RPAREN                                   # functionCall1Expression
            | ID LPAREN expression COMMA expression RPAREN                  # functionCall2Expression

@@ -97,8 +97,27 @@ abstract class TypedExpressionListenerBase(
 
     override fun exitListLiteral(ctx: KeyLangParser.ListLiteralContext) {
         val s = state
+        if (s.inFunctionLiteral > 0) {
+            return
+        }
         val list = (0 until ctx.getExpression().size).map { s.valueStack.pop() }
         s.valueStack.push(list.reversed())
+    }
+
+    override fun exitIndexExpression(ctx: KeyLangParser.IndexExpressionContext) {
+        val s = state
+        if (s.inFunctionLiteral > 0) {
+            return
+        }
+        val index = (s.valueStack.pop() as? Double)?.roundToInt() ?: error("index is not a number")
+        val listValue = s.valueStack.pop()
+
+        val value = when (listValue) {
+            is List<*> -> listValue[index] ?: error("got null")
+            is Function<*> -> (listValue as (Int)->Any)(index)
+            else -> error("can't index on '$listValue'")
+        }
+        s.valueStack.push(value)
     }
 
     override fun enterFunctionLiteral(ctx: KeyLangParser.FunctionLiteralContext) {
@@ -689,6 +708,7 @@ abstract class TypedExpressionListenerBase(
             is Vector4 -> current.property(property)
             is ColorRGBa -> current.property(property)
             is Matrix44 -> current.property(property)
+            is String -> current.property(property)
             else -> error("can't look up: ${current::class} '$current', root:'$root' ${ctx.text} ")
         }
         s.valueStack.push(current)
