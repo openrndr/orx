@@ -5,9 +5,9 @@ layout (local_size_x = 8, local_size_y = 8) in;
 uniform ivec2 resolution;
 uniform vec2 floatResolution;
 
-layout(rgba32f, binding = 0) uniform readonly image2D heightMap;
+layout(rgba8, binding = 0) uniform readonly image2D heightMap;
 #ifdef COLORED
-layout(rgba32f, binding = 1) uniform readonly image2D colors;
+layout(rgba8, binding = 1) uniform readonly image2D colors;
 #endif
 
 uniform float heightScale;
@@ -25,7 +25,7 @@ struct Point {
     #endif
 };
 
-layout (std430, binding = 2) buffer pointCloud {
+layout(binding = 2) buffer pointCloud {
     Point points[];
 };
 
@@ -47,7 +47,7 @@ void main() {
     points[index].position = vec3(
         position.x,
         position.y,
-        height.r * heightScale
+        height * heightScale.r
     );
     points[index].size = height.a; // the alpha channel is used to populate size attribute
     #ifdef COLORED
