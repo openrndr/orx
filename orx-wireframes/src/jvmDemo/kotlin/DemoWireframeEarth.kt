@@ -50,6 +50,7 @@ fun main() = application {
             eye = Vector3.UNIT_Y * 1.6
             lookAt = Vector3.ZERO
             near = .001
+            keySpeed = .01
         }
         extend {
             drawer.run {

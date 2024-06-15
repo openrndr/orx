@@ -35,6 +35,7 @@ fun main() = application {
             eye = Vector3(0.03, 0.03, .3)
             lookAt = Vector3.ZERO
             near = .001
+            keySpeed = .01
         }
         extend {
             drawer.shadeStyle = style
