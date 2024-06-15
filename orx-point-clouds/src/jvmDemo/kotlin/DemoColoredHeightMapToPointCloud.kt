@@ -2,8 +2,7 @@ import org.openrndr.application
 import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.loadImage
 import org.openrndr.draw.shadeStyle
-import org.openrndr.extra.camera.OrbitalCamera
-import org.openrndr.extra.camera.OrbitalControls
+import org.openrndr.extra.camera.Orbital
 import org.openrndr.extra.pointclouds.ColoredHeightMapToPointCloudGenerator
 import org.openrndr.math.Vector3
 
@@ -20,14 +19,12 @@ fun main() = application {
             heightMap = heightMap,
             colors = earth
         )
-        val camera = OrbitalCamera(
-            eye = Vector3(0.03, 0.03, .3),
-            lookAt = Vector3.ZERO
-        )
-        extend(camera)
-        extend(OrbitalControls(camera))
         val style = shadeStyle {
             fragmentTransform = "x_fill.rgb = va_color.rgb;"
+        }
+        extend(Orbital()) {
+            eye = Vector3(0.03, 0.03, .3)
+            lookAt = Vector3.ZERO
         }
         extend {
             drawer.shadeStyle = style
