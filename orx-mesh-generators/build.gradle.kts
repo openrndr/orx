@@ -2,9 +2,17 @@ plugins {
     org.openrndr.extra.convention.`kotlin-multiplatform`
 }
 
+val embedShaders = tasks.register<EmbedShadersTask>("embedShaders") {
+    inputDir.set(file("$projectDir/src/shaders/glsl"))
+    outputDir.set(layout.buildDirectory.dir("generated/shaderKotlin"))
+    defaultPackage.set("org.openrndr.extra.meshgenerators")
+    defaultVisibility.set("internal")
+    namePrefix.set("meshgenerators_")
+}.get()
+
 kotlin {
+    kotlin.sourceSets.getByName("commonMain").kotlin.srcDir(embedShaders.outputDir)
     sourceSets {
-        @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
                 api(libs.openrndr.application)
@@ -13,8 +21,6 @@ kotlin {
                 implementation(project(":orx-compute-shaders"))
             }
         }
-
-        @Suppress("UNUSED_VARIABLE")
         val jvmDemo by getting {
             dependencies {
                 implementation(project(":orx-shapes"))
