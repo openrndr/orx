@@ -28,7 +28,7 @@ layout (std430, binding = 2) buffer wireframe {
 
 void main() {
     ivec2 coord = ivec2(gl_GlobalInvocationID.xy);
-    if (coord.x >= (resolutionMinus1.x) || coord.y >= (resolutionMinus1.y)) {
+    if (coord.x >= resolutionMinus1.x || coord.y >= resolutionMinus1.y) {
         return;
     }
 
