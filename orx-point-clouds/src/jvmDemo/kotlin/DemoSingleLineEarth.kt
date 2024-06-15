@@ -43,6 +43,7 @@ fun main() = application {
         extend(Orbital()) {
             eye = Vector3.UNIT_Y * 1.6
             lookAt = Vector3.ZERO
+            keySpeed = .01
         }
         extend {
             drawer.run {
