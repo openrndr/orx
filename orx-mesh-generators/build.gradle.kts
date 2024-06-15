@@ -10,6 +10,7 @@ kotlin {
                 api(libs.openrndr.application)
                 api(libs.openrndr.math)
                 implementation(project(":orx-shapes"))
+                implementation(project(":orx-compute-shaders"))
             }
         }
 
@@ -20,6 +21,7 @@ kotlin {
                 implementation(project(":orx-mesh-generators"))
                 implementation(project(":orx-camera"))
                 implementation(project(":orx-noise"))
+                implementation(project(":orx-point-clouds"))
             }
         }
     }
