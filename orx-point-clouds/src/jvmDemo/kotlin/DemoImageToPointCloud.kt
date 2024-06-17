@@ -15,6 +15,7 @@ fun main() = application {
         extend(Orbital()) {
             eye = Vector3(0.03, 0.03, .3)
             lookAt = Vector3.ZERO
+            near = 0.001
             keySpeed = .01
         }
         extend {
