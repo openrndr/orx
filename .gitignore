@@ -4,8 +4,8 @@ out/
 target/
 build/
 *.iml/
-.idea/
 gradle.properties
 /hs_err_pid*.log
 /gui-parameters/
 /ShaderError.glsl
+/.kotlin

@@ -9,6 +9,7 @@ import org.openrndr.extra.parameters.Vector3Parameter
 import org.openrndr.launch
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
+import org.openrndr.math.Vector4
 import org.openrndr.math.map
 
 import kotlin.reflect.KMutableProperty0
@@ -295,6 +296,84 @@ fun Program.bindMidiControl(
                 transceiver.controlChange(channelG, controlG, valueG)
                 transceiver.controlChange(channelB, controlB, valueB)
                 transceiver.controlChange(channelA, controlA, valueA)
+            }
+            yield()
+        }
+    }
+}
+
+
+/**
+ * Bind MIDI control change to [Vector4] property
+ * @param property the [KMutableProperty0] to bind to
+ * @param transceiver the midi device to bind to
+ * @param channelX the midi channel to use for the [Vector4.x] component
+ * @param controlX the midi control to use for the [Vector4.x] component
+ * @param channelY the midi channel to use for the [Vector4.y] component
+ * @param controlY the midi control to use for the [Vector4.y] component
+ * @param channelZ the midi channel to use for the [Vector4.z] component
+ * @param controlZ the midi control to use for the [Vector4.z] component
+ * @param channelW the midi channel to use for the [Vector4.w] component
+ * @param controlW the midi control to use for the [Vector4.w] component
+ * @since 0.4.3
+ */
+@JvmName("bindMidiControlVector4")
+fun Program.bindMidiControl(
+    property: KMutableProperty0<Vector4>, transceiver: MidiTransceiver,
+    channelX: Int, controlX: Int,
+    channelY: Int = channelX, controlY: Int = controlX + 1,
+    channelZ: Int = channelY, controlZ: Int = controlY + 1,
+    channelW: Int = channelZ, controlW: Int = controlZ + 1,
+) {
+    val low = 0.0
+    val high = 1.0
+    transceiver.controlChanged.listen {
+        val v = property.get()
+        var x = v.x
+        var y = v.y
+        var z = v.z
+        var w = v.w
+        var changed = false
+
+        if (it.eventType == MidiEventType.CONTROL_CHANGED && it.channel == channelX && it.control == controlX) {
+            changed = true
+            x = it.value.toDouble().map(0.0, 127.0, low, high, clamp = true)
+        }
+
+        if (it.eventType == MidiEventType.CONTROL_CHANGED && it.channel == channelY && it.control == controlY) {
+            changed = true
+            y = it.value.toDouble().map(0.0, 127.0, low, high, clamp = true)
+        }
+
+        if (it.eventType == MidiEventType.CONTROL_CHANGED && it.channel == channelZ && it.control == controlZ) {
+            changed = true
+            z = it.value.toDouble().map(0.0, 127.0, low, high, clamp = true)
+        }
+
+        if (it.eventType == MidiEventType.CONTROL_CHANGED && it.channel == channelW && it.control == controlW) {
+            changed = true
+            w = it.value.toDouble().map(0.0, 127.0, low, high, clamp = true)
+        }
+
+        if (changed) {
+            val nv = Vector4(x, y, z, w)
+            property.set(nv)
+        }
+    }
+    launch {
+        var propertyValue = property.get()
+        while (true) {
+            val candidateValue = property.get()
+            if (candidateValue != propertyValue) {
+                propertyValue = candidateValue
+                val valueR = propertyValue.x.map(low, high, 0.0, 127.0, clamp = true).toInt()
+                val valueG = propertyValue.y.map(low, high, 0.0, 127.0, clamp = true).toInt()
+                val valueB = propertyValue.z.map(low, high, 0.0, 127.0, clamp = true).toInt()
+                val valueA = propertyValue.w.map(low, high, 0.0, 127.0, clamp = true).toInt()
+                transceiver.controlChange(channelX, controlX, valueR)
+                transceiver.controlChange(channelY, controlY, valueG)
+                transceiver.controlChange(channelZ, controlZ, valueB)
+                transceiver.controlChange(channelW, controlW, valueA)
             }
             yield()
         }

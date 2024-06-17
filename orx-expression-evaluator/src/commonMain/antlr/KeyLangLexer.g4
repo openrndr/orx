@@ -6,14 +6,6 @@ channels { WHITESPACE }
 NEWLINE            : '\r\n' | '\r' | '\n' ;
 WS                 : [\t ]+ -> channel(WHITESPACE) ;
 
-// Keywords
-INPUT              : 'input' ;
-VAR                : 'var' ;
-PRINT              : 'print';
-AS                 : 'as';
-INT                : 'Int';
-DECIMAL            : 'Decimal';
-STRING             : 'String';
 
 // Identifiers
 ID                 : [$_]*[a-zA-Z][A-Za-z0-9_]* | '`'[$_]*[A-Za-z0-9_-]*'`';
@@ -33,9 +25,28 @@ DIVISION           : '/' ;
 ASSIGN             : '=' ;
 LPAREN             : '(' ;
 RPAREN             : ')' ;
+LBRACKET           : '[' ;
+RBRACKET           : ']' ;
+LCURLY             : '{' ;
+RCURLY             : '}' ;
 
+QUESTION_MARK      : '?' ;
+COLON              : ':' ;
+
+ARROW              : '->' ;
 
 COMMA              : ',' ;
+DOT                : '.' ;
+
+EQ             : '==' ;
+LT             : '<' ;
+LTEQ           : '<=' ;
+GT             : '>' ;
+GTEQ           : '>='  ;
+
+AND            : '&&' ;
+OR             : '||'  ;
+NOT            : '!'   ;
 
 STRING_OPEN        : '"' -> pushMode(MODE_IN_STRING);
 

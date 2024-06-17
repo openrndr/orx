@@ -1,9 +1,7 @@
-package tools
+package org.openrndr.extra.color.tools
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.color.spaces.toOKLCHa
-import org.openrndr.extra.color.tools.findMaxChroma
-import org.openrndr.extra.color.tools.isOutOfGamut
 import kotlin.test.Test
 
 class TestChromaColorExtensions {

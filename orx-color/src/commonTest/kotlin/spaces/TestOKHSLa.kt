@@ -1,7 +1,6 @@
-package spaces
+package org.openrndr.extra.color.spaces
 
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extra.color.spaces.toOKHSLa
 import kotlin.test.Test
 import kotlin.test.assertTrue
 

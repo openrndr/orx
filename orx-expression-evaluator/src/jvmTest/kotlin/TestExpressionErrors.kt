@@ -13,25 +13,17 @@ class TestExpressionErrors {
         val expression = ")("
         invoking {
             evaluateExpression(expression)
-        } `should throw` ExpressionException::class `with message` "parser error in expression: ')('; [line: 1, character: 0 , near: [@0,0:0=')',<21>,1:0] ]"
+        } `should throw` ExpressionException::class
 
     }
 
-    @Test
-    fun `an expression with equality instead of assign`() {
-        val expression = "a == 5"
-        invoking {
-            evaluateExpression(expression)
-        } `should throw` ExpressionException::class `with message` "parser error in expression: 'a == 5'; [line: 1, character: 3 , near: [@3,3:3='=',<19>,1:3] ]"
-
-    }
 
     @Test
     fun `an expression trying to reassign a number`() {
         val expression = "3 = 5"
         invoking {
             evaluateExpression(expression)
-        } `should throw` ExpressionException::class `with message` "parser error in expression: '3 = 5'; [line: 1, character: 2 , near: [@2,2:2='=',<19>,1:2] ]"
+        } `should throw` ExpressionException::class
     }
 
     @Test
