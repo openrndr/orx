@@ -5,25 +5,14 @@
 ## Setting up the orbital camera to view point clouds
 
 ```kotlin
-import org.openrndr.application
-import org.openrndr.draw.DrawPrimitive
-import org.openrndr.draw.loadImage
-import org.openrndr.draw.shadeStyle
-import org.openrndr.extra.camera.OrbitalCamera
-import org.openrndr.extra.camera.OrbitalControls
-import org.openrndr.extra.pointclouds.ColoredHeightMapToPointCloudGenerator
-import org.openrndr.math.Vector3
-
 fun main() = application {
     program {
         val pointCloud = pointCloudVertexBuffer(IntVector2(640, 480))
         // populate point cloud with data
-        val camera = OrbitalCamera(
-            eye = Vector3.UNIT_Z * .5,
-            lookAt = Vector3.ZERO
-        )
-        extend(camera)
-        extend(OrbitalControls(camera))
+        extend(Orbital()) {
+            eye = Vector3.UNIT_Z * .5
+            lookAt = Vector3.ZERO            
+        }
         extend {
             drawer.vertexBuffer(pointCloud, DrawPrimitive.POINTS)
         }
