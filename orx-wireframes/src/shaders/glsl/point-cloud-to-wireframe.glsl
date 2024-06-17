@@ -18,11 +18,11 @@ struct Line {
     Point end;
 };
 
-layout (std430, binding = 1) buffer pointCloud {
+layout(binding = 1) buffer pointCloud {
     Point points[];
 };
 
-layout (std430, binding = 2) buffer wireframe {
+layout (binding = 2) buffer wireframe {
     Line lines[];
 };
 

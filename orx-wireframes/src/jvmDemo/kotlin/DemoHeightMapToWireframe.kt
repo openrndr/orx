@@ -1,5 +1,7 @@
 import org.openrndr.WindowMultisample
 import org.openrndr.application
+import org.openrndr.color.ColorRGBa
+import org.openrndr.draw.BlendMode
 import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.loadImage
 import org.openrndr.extra.camera.Orbital
@@ -32,6 +34,9 @@ fun main() = application {
             keySpeed = .01
         }
         extend {
+            drawer.fill = ColorRGBa.WHITE.opacify(.1)
+            drawer.depthWrite = false
+            drawer.drawStyle.blendMode = BlendMode.ADD
             drawer.vertexBuffer(wireFrame, DrawPrimitive.LINES)
         }
     }

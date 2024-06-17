@@ -21,7 +21,7 @@ fun main() = application {
         val earth = loadImage("demo-data/images/nasa-blue-marble.png")
         val resolution = heightMap.resolution
         val pointCloud = ColoredHeightMapToPointCloudGenerator(
-            heightScale = .01
+            heightScale = .05
         ).generate(
             heightMap,
             colors = earth
@@ -32,7 +32,7 @@ fun main() = application {
             fragmentTransform = "x_fill.rgb = va_color.rgb;"
         }
         extend(Orbital()) {
-            eye = Vector3(0.03, 0.03, .3)
+            eye = Vector3(0.1, 0.05, .1)
             lookAt = Vector3.ZERO
             near = .001
             keySpeed = .01
