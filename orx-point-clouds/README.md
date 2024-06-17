@@ -105,3 +105,19 @@ extend {
     drawer.vertexBuffer(pointCloud, DrawPrimitive.POINTS)
 }
 ```
+<!-- __demos__ -->
+## Demos
+### DemoColoredHeightMapToPointCloud
+[source code](src/jvmDemo/kotlin/DemoColoredHeightMapToPointCloud.kt)
+
+![DemoColoredHeightMapToPointCloudKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-point-clouds/images/DemoColoredHeightMapToPointCloudKt.png)
+
+### DemoImageToPointCloud
+[source code](src/jvmDemo/kotlin/DemoImageToPointCloud.kt)
+
+![DemoImageToPointCloudKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-point-clouds/images/DemoImageToPointCloudKt.png)
+
+### DemoSingleLineEarth
+[source code](src/jvmDemo/kotlin/DemoSingleLineEarth.kt)
+
+![DemoSingleLineEarthKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-point-clouds/images/DemoSingleLineEarthKt.png)
