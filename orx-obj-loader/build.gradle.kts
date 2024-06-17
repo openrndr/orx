@@ -5,4 +5,5 @@ plugins {
 dependencies {
     implementation(libs.openrndr.application)
     implementation(libs.openrndr.math)
+    demoImplementation(project(":orx-mesh-generators"))
 }
