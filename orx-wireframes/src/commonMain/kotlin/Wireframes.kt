@@ -2,7 +2,6 @@ package org.openrndr.extra.wireframes
 
 import org.openrndr.draw.*
 import org.openrndr.extra.computeshaders.appendAfterVersion
-import org.openrndr.extra.computeshaders.resolution
 import org.openrndr.math.IntVector2
 
 /**
@@ -54,9 +53,8 @@ class ColoredPointCloudToWireframeGenerator {
     fun populate(
         wireframe: VertexBuffer,
         pointCloud: VertexBuffer,
-        colors: ColorBuffer
+        resolution: IntVector2
     ) {
-        val resolution = colors.resolution
         shader.setUniforms(
             wireframe,
             pointCloud,
@@ -67,11 +65,11 @@ class ColoredPointCloudToWireframeGenerator {
 
     fun generate(
         pointCloud: VertexBuffer,
-        colors: ColorBuffer
+        resolution: IntVector2
     ): VertexBuffer = coloredWireframeVertexBuffer(
-        colors.resolution
+        resolution
     ).also {
-        populate(it, pointCloud, colors)
+        populate(it, pointCloud, resolution)
     }
 
 }
