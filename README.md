@@ -17,6 +17,7 @@ complement [OPENRNDR](https://github.com/openrndr/openrndr).
 | [`orx-compositor`](orx-compositor/) | Toolkit to make composite (layered) images using blend modes and filters. |
 | [`orx-compute-graph`](orx-compute-graph/) | A graph for computation. |
 | [`orx-compute-graph-nodes`](orx-compute-graph-nodes/) | A collection of nodes that can be used with `orx-compute-graph`. |
+| [`orx-compute-shaders`](orx-compute-shaders/) | Tools easing the work with compute shaders. |
 | [`orx-delegate-magic`](orx-delegate-magic/) | Collection of magical property delegators. For tracking variable change or interpolate towards the value of a variable. |
 | [`orx-easing`](orx-easing/) | Easing functions for smooth animation or non-linear interpolation. |
 | [`orx-envelopes`](orx-envelopes/) | ADSR (Attack, Decay, Sustain, Release) envelopes and tools. |
@@ -38,6 +39,7 @@ complement [OPENRNDR](https://github.com/openrndr/openrndr).
 | [`orx-obj-loader`](orx-obj-loader/) | Simple loader for Wavefront .obj 3D mesh files. |
 | [`orx-palette`](orx-palette/) | Provides hundreds of color palettes. |
 | [`orx-parameters`](orx-parameters/) | Provides annotations and tools for turning Kotlin properties into introspectable parameters. Used by [`orx-gui`](../orx-jvm/orx-gui/README.md) to automatically generate user interfaces. |
+| [`orx-point-clouds`](orx-point-clouds/) | 3D-point cloud generating functions |
 | [`orx-property-watchers`](orx-property-watchers/) | Tools for setting up property watcher based pipelines |
 | [`orx-quadtree`](orx-quadtree/) | A [Quadtree](https://en.wikipedia.org/wiki/Quadtree) is a spatial partioning tree structure meant to provide fast spatial queries such as nearest points within a range. |
 | [`orx-shade-styles`](orx-shade-styles/) | Shader based fills and strokes, including various types of gradient fills. |
@@ -51,6 +53,7 @@ complement [OPENRNDR](https://github.com/openrndr/openrndr).
 | [`orx-triangulation`](orx-triangulation/) | **Delaunay** triangulation and **Voronoi** diagrams. |
 | [`orx-turtle`](orx-turtle/) | Bezier (`ShapeContour`) backed [turtle graphics](https://en.wikipedia.org/wiki/Turtle_graphics). |
 | [`orx-view-box`](orx-view-box/) | To create independent views inside one program window. |
+| [`orx-wireframes`](orx-wireframes/) | 3D-wireframe generating functions |
 
 ## JVM only
 
