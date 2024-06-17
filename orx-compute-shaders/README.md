@@ -48,3 +48,10 @@ shader.execute(executeDimensions)
 ```
 
 Note: Ensure the local size matches between the GLSL and Kotlin code for each respective dimension.
+
+<!-- __demos__ -->
+## Demos
+### DemoComputeShaderExecute2D
+[source code](src/jvmDemo/kotlin/DemoComputeShaderExecute2D.kt)
+
+![DemoComputeShaderExecute2DKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-compute-shaders/images/DemoComputeShaderExecute2DKt.png)
