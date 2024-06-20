@@ -1,5 +1,4 @@
 import org.openrndr.application
-import org.openrndr.extra.expressions.evaluateExpression
 import org.openrndr.extra.expressions.watchingExpression1
 import org.openrndr.extra.gui.GUI
 import org.openrndr.extra.gui.addTo

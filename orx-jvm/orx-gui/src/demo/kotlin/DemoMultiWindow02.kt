@@ -1,9 +1,6 @@
-import org.openrndr.WindowConfiguration
 import org.openrndr.application
-import org.openrndr.extra.gui.GUI
 import org.openrndr.extra.gui.WindowedGUI
-import org.openrndr.extra.parameters.*
-import org.openrndr.window
+import org.openrndr.extra.parameters.DoubleParameter
 import kotlin.system.exitProcess
 
 /**

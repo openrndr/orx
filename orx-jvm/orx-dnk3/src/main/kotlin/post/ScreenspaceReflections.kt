@@ -1,8 +1,6 @@
 package org.openrndr.extra.dnk3.post
 
 import org.openrndr.draw.Filter
-import org.openrndr.draw.Shader
-import org.openrndr.draw.filterShaderFromUrl
 import org.openrndr.math.Matrix44
 import org.openrndr.resourceUrl
 

@@ -4,14 +4,15 @@ package org.openrndr.extra.jumpfill.fx
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
-import org.openrndr.extra.jumpfill.*
+import org.openrndr.extra.jumpfill.ContourPoints
+import org.openrndr.extra.jumpfill.JumpFlooder
+import org.openrndr.extra.jumpfill.PixelDirection
+import org.openrndr.extra.jumpfill.Threshold
 import org.openrndr.extra.jumpflood.jf_straight_skeleton
 import org.openrndr.extra.parameters.ColorParameter
-
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.math.Vector2
-import org.openrndr.resourceUrl
 import org.openrndr.shape.Rectangle
 import kotlin.math.sqrt
 

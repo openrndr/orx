@@ -9,7 +9,6 @@ import org.openrndr.draw.filterShaderFromCode
 import org.openrndr.extra.jumpflood.*
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
-import org.openrndr.resourceUrl
 import org.openrndr.shape.Rectangle
 
 class SDFSmoothUnion : Filter(filterShaderFromCode(jf_sdf_smooth_union, "sdf-smooth-union")) {

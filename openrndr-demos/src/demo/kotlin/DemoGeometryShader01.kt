@@ -5,7 +5,6 @@ import org.openrndr.draw.Shader
 import org.openrndr.extra.camera.Orbital
 import org.openrndr.extra.meshgenerators.boxMesh
 import org.openrndr.resourceText
-import org.openrndr.resourceUrl
 
 fun main() {
     application {

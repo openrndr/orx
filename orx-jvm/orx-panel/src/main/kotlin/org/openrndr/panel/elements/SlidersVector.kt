@@ -1,7 +1,6 @@
 package org.openrndr.panel.elements
 
 import kotlinx.coroutines.yield
-import org.openrndr.color.ColorRGBa
 import org.openrndr.events.Event
 import org.openrndr.launch
 import org.openrndr.math.Vector2

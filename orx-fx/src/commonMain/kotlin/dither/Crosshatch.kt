@@ -2,7 +2,6 @@
 
 package org.openrndr.extra.fx.dither
 
-import org.openrndr.draw.Filter
 import org.openrndr.draw.Filter1to1
 import org.openrndr.extra.fx.fx_crosshatch
 import org.openrndr.extra.fx.mppFilterShader

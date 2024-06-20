@@ -6,11 +6,8 @@ import org.openrndr.draw.ColorFormat
 import org.openrndr.draw.ColorType
 import org.openrndr.draw.colorBuffer
 import org.openrndr.extra.tensorflow.arrays.*
-import org.tensorflow.Output
-import org.tensorflow.Tensor
 import org.tensorflow.ndarray.StdArrays
 import org.tensorflow.ndarray.buffer.DataBuffers
-import org.tensorflow.op.math.Add
 import org.tensorflow.types.*
 import org.tensorflow.types.family.TType
 import java.nio.ByteBuffer

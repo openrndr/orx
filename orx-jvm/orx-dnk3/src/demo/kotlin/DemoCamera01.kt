@@ -1,11 +1,9 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.dnk3.*
 import org.openrndr.extra.dnk3.gltf.buildSceneNodes
 import org.openrndr.extra.dnk3.gltf.loadGltfFromFile
 import org.openrndr.extra.dnk3.renderers.dryRenderer
-import org.openrndr.math.*
 import java.io.File
 
 fun main() = application {

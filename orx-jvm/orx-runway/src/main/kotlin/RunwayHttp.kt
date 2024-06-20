@@ -3,7 +3,6 @@ package org.openrndr.extra.runway
 import com.google.gson.Gson
 import org.openrndr.draw.ColorBuffer
 import org.openrndr.draw.ImageFileFormat
-import java.io.ByteArrayInputStream
 import java.io.File
 import java.net.*
 import java.util.*

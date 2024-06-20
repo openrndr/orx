@@ -1,7 +1,6 @@
 package org.openrndr.extra.palette
 
 import org.openrndr.color.ColorRGBa
-import org.openrndr.color.Linearity
 
 // https://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
 fun getLuminance(color: ColorRGBa): Double = 0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b

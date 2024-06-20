@@ -1,9 +1,11 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.*
+import org.openrndr.draw.DrawPrimitive
+import org.openrndr.draw.Shader
+import org.openrndr.draw.vertexBuffer
+import org.openrndr.draw.vertexFormat
 import org.openrndr.math.Vector3
 import org.openrndr.resourceText
-import org.openrndr.resourceUrl
 
 fun main() {
     application {

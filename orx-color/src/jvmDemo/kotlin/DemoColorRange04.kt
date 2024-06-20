@@ -3,7 +3,6 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.isolated
 import org.openrndr.draw.loadFont
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.camera.Orbital
 import org.openrndr.extra.color.palettes.rangeTo
 import org.openrndr.extra.color.spaces.toHSLUVa

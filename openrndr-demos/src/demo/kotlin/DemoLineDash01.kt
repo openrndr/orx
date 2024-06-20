@@ -1,9 +1,9 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.shadeStyle
-import org.openrndr.extensions.Screenshots
 import org.openrndr.math.Polar
 import org.openrndr.shape.contour
+
 fun main() = application {
     program {
         val style = shadeStyle {

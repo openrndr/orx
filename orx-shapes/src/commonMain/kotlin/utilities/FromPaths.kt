@@ -1,8 +1,6 @@
 package org.openrndr.extra.shapes.utilities
 
 import org.openrndr.shape.Path3D
-import org.openrndr.shape.ShapeContour
-import org.openrndr.shape.contour
 import org.openrndr.shape.path3D
 
 /**

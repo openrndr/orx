@@ -1,12 +1,9 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.isolated
-import org.openrndr.extra.color.presets.NAVY
 import org.openrndr.extra.color.spaces.OKHSV
-import org.openrndr.extra.color.tools.hue
 import org.openrndr.extra.color.tools.mixHue
 import org.openrndr.extra.color.tools.withHue
-import kotlin.math.cos
 
 fun main() {
     application {

@@ -8,7 +8,6 @@ import org.openrndr.extra.runway.FaceLandmarksResponse
 import org.openrndr.extra.runway.runwayQuery
 import org.openrndr.ffmpeg.VideoPlayerFFMPEG
 import org.openrndr.math.Vector2
-import org.openrndr.resourceUrl
 
 fun main() = application {
     configure {

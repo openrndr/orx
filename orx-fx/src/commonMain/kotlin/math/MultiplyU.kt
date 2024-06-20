@@ -1,14 +1,11 @@
 @file:Suppress("RUNTIME_ANNOTATION_NOT_SUPPORTED")
 
-import org.openrndr.draw.Filter
 import org.openrndr.draw.Filter1to1
 import org.openrndr.draw.filterShaderFromCode
-import org.openrndr.extra.fx.fx_film_grain
 import org.openrndr.extra.fx.fx_multiply_u
-import org.openrndr.extra.fx.mppFilterShader
-import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
+
 /**
  * Multiply by u coordinate
  */

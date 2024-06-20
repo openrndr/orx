@@ -4,9 +4,7 @@ import org.openrndr.draw.ColorBuffer
 import org.openrndr.draw.loadFont
 import org.openrndr.extra.runway.*
 import org.openrndr.ffmpeg.ScreenRecorder
-import org.openrndr.resourceUrl
 import java.io.File
-import java.net.URL
 
 /**
  * This demonstrates a feedback loop

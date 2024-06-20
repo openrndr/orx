@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
-
 plugins {
     org.openrndr.extra.convention.`kotlin-multiplatform`
 }

@@ -2,15 +2,16 @@
 
 package org.openrndr.extra.shadestyles
 
-import org.openrndr.color.*
+import org.openrndr.color.AlgebraicColor
+import org.openrndr.color.ColorRGBa
+import org.openrndr.color.ConvertibleToColorRGBa
 import org.openrndr.draw.ShadeStyle
-import org.openrndr.draw.shadeStyle
+import org.openrndr.extra.color.phrases.ColorPhraseBook
+import org.openrndr.extra.color.spaces.ColorOKLABa
 import org.openrndr.extra.parameters.ColorParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.shaderphrases.preprocess
-import org.openrndr.extra.color.phrases.ColorPhraseBook
-import org.openrndr.extra.color.spaces.ColorOKLABa
 import org.openrndr.math.CastableToVector4
 import org.openrndr.math.Vector2
 

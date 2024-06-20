@@ -2,7 +2,6 @@
 
 package org.openrndr.extra.fx.distort
 
-import org.openrndr.draw.Filter
 import org.openrndr.draw.Filter1to1
 import org.openrndr.extra.fx.fx_video_glitch
 import org.openrndr.extra.fx.mppFilterShader

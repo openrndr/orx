@@ -1,9 +1,9 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.*
-import org.openrndr.extra.meshgenerators.planeMesh
-import org.openrndr.internal.Driver
-import org.openrndr.math.Vector3
+import org.openrndr.draw.ImageAccess
+import org.openrndr.draw.colorBuffer
+import org.openrndr.draw.imageBinding
+import org.openrndr.draw.shadeStyle
 
 
 fun main() = application {

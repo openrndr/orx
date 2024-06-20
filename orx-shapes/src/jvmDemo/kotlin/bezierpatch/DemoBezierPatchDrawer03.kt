@@ -8,7 +8,6 @@ import org.openrndr.extra.shapes.bezierpatches.bezierPatch
 import org.openrndr.extra.shapes.primitives.grid
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
-import org.openrndr.math.min
 import org.openrndr.math.transforms.buildTransform
 import org.openrndr.shape.Circle
 import org.openrndr.shape.Rectangle

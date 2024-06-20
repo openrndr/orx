@@ -1,12 +1,11 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.rectangleBatch
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.noise.Random
 import org.openrndr.extra.noise.gaussian
+import org.openrndr.extra.quadtree.Quadtree
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
-import org.openrndr.extra.quadtree.Quadtree
 
 fun main() {
     application {

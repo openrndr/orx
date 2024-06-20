@@ -4,9 +4,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.yield
 import org.openrndr.draw.Drawer
 import org.openrndr.launch
-import org.openrndr.panel.elements.*
 import org.openrndr.panel.hash.watchHash
-import kotlin.reflect.KMutableProperty0
 
 class WatchObjectDiv<T:Any>(
     val watchObject: T,

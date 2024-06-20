@@ -2,7 +2,6 @@
 
 package org.openrndr.extra.fx.blur
 
-import org.openrndr.draw.Filter
 import org.openrndr.draw.Filter1to1
 import org.openrndr.draw.Filter2to1
 import org.openrndr.draw.Filter3to1

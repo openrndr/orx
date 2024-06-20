@@ -1,11 +1,8 @@
 package org.openrndr.extra.triangulation
 
+import org.openrndr.extra.triangulation.Delaunay.Companion.from
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
-import org.openrndr.shape.Triangle
-import org.openrndr.shape.contour
-import org.openrndr.shape.contours
-import kotlin.js.JsName
 import kotlin.math.cos
 import kotlin.math.pow
 import kotlin.math.sin
