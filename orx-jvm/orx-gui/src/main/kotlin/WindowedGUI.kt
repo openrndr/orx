@@ -16,8 +16,10 @@ class WindowedGUI(
     val windowAlwaysOntop: Boolean = false,
 ) : Extension {
     override var enabled: Boolean = true
+    val gui: GUI = GUI(appearance, defaultStyles)
 
     private val addedObjects = mutableListOf<Pair<Any, String?>>()
+
     fun <T : Any> add(objectWithParameters: T, label: String? = objectWithParameters.title()): T {
         addedObjects.add(Pair(objectWithParameters, label))
         return objectWithParameters
@@ -58,9 +60,8 @@ class WindowedGUI(
 
         // launch because at this stage Driver.instance.contextID points to the context of the parent window
         cw.program.launch {
-            val gui = GUI(appearance, defaultStyles)
-            for (o in addedObjects) {
-                gui.add(o.first, o.second)
+            for ((obj, label) in addedObjects) {
+                gui.add(obj, label)
             }
             cw.program.extend(gui)
             program.produceAssets.listen {
