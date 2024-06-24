@@ -1,7 +1,9 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.*
-import org.openrndr.extensions.Screenshots
+import org.openrndr.draw.VolumeTexture
+import org.openrndr.draw.colorBuffer
+import org.openrndr.draw.isolatedWithTarget
+import org.openrndr.draw.renderTarget
 
 fun main() = application {
     program {

@@ -1,9 +1,7 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.math.Vector2
-import org.openrndr.math.mod_
-
 import org.openrndr.extra.noise.scatter
+import org.openrndr.math.Vector2
 import org.openrndr.shape.Ellipse
 import kotlin.math.cos
 import kotlin.random.Random

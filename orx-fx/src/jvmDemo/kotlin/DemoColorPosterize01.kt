@@ -1,9 +1,7 @@
-import org.openrndr.extra.fx.color.Duotone
 import org.openrndr.application
 import org.openrndr.draw.createEquivalent
 import org.openrndr.draw.loadImage
 import org.openrndr.extra.fx.color.Posterize
-import org.openrndr.math.mod_
 
 fun main() {
     application {
@@ -16,10 +14,7 @@ fun main() {
                 posterize.levels = 2
                 posterize.apply(image, filteredImage)
                 drawer.image(filteredImage)
-
             }
-
         }
-
     }
 }

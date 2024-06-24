@@ -7,8 +7,6 @@ import org.openrndr.extra.camera.*
 import org.openrndr.extra.gui.GUI
 import org.openrndr.extra.gui.addTo
 import org.openrndr.extra.meshgenerators.boxMesh
-import org.openrndr.extra.meshgenerators.sphereMesh
-import org.openrndr.math.Vector3
 
 fun main() = application {
     configure {

@@ -10,7 +10,6 @@ import org.openrndr.extra.jumpflood.jf_inner_bevel
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.math.Vector2
-import org.openrndr.resourceUrl
 import org.openrndr.shape.Rectangle
 
 private class InnerBevelFilter : Filter(filterShaderFromCode(jf_inner_bevel, "inner-bevel")) {

@@ -12,7 +12,6 @@ import org.openrndr.extra.parameters.ColorParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.math.Vector2
-import org.openrndr.resourceUrl
 import org.openrndr.shape.Rectangle
 
 private class OuterGlowFilter : Filter(filterShaderFromCode(jf_outer_glow, "outer-glow")) {

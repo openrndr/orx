@@ -6,7 +6,6 @@ import org.openrndr.math.transforms.buildTransform
 import org.openrndr.shape.Segment2D
 import org.openrndr.shape.ShapeContour
 import org.openrndr.shape.bounds
-import kotlin.jvm.JvmRecord
 import kotlin.math.abs
 
 /**

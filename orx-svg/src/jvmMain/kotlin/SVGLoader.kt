@@ -1,10 +1,10 @@
 package org.openrndr.extra.svg
-import org.jsoup.*
-import org.jsoup.parser.*
+import org.jsoup.Jsoup
+import org.jsoup.parser.Parser
 import org.openrndr.extra.composition.*
-import org.openrndr.shape.*
-import java.io.*
-import java.net.*
+import java.io.File
+import java.net.MalformedURLException
+import java.net.URL
 
 /**
  * Load a [Composition] from a filename, url or svg string

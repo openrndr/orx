@@ -4,10 +4,8 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
 import org.openrndr.shape.Rectangle
-import kotlin.math.ln
 import kotlin.math.max
 import kotlin.math.pow
-import kotlin.math.sqrt
 import org.openrndr.extra.noise.fbm as orxFbm
 import kotlin.random.Random as DefaultRandom
 

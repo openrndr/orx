@@ -2,10 +2,6 @@ package org.openrndr.extra.triangulation
 
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
-import org.openrndr.shape.Shape
-import org.openrndr.shape.ShapeContour
-import org.openrndr.shape.bounds
-import kotlin.js.JsName
 import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.math.sign

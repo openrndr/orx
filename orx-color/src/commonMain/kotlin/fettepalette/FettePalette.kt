@@ -11,7 +11,6 @@ import org.openrndr.extra.color.spaces.toOKHSLa
 import org.openrndr.extra.parameters.*
 import org.openrndr.math.Vector2
 import org.openrndr.math.clamp
-import org.openrndr.math.mod_
 import kotlin.math.*
 
 /*

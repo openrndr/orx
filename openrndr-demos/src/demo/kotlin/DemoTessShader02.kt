@@ -5,7 +5,6 @@ import org.openrndr.draw.Shader
 import org.openrndr.draw.vertexBuffer
 import org.openrndr.draw.vertexFormat
 import org.openrndr.resourceText
-import org.openrndr.resourceUrl
 import org.openrndr.shape.Ellipse
 
 fun main() {

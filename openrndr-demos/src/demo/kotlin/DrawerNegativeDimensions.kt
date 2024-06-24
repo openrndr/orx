@@ -4,8 +4,6 @@
 
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extra.noise.Random
-import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 
 fun main() = application {

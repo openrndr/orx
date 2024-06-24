@@ -3,10 +3,11 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.colorBuffer
 import org.openrndr.draw.loadFont
 import org.openrndr.extra.fx.transform.FlipVertically
-import org.openrndr.extra.runway.*
+import org.openrndr.extra.runway.Im2txtRequest
+import org.openrndr.extra.runway.Im2txtResult
+import org.openrndr.extra.runway.runwayQuery
 import org.openrndr.ffmpeg.ScreenRecorder
 import org.openrndr.ffmpeg.VideoPlayerFFMPEG
-import org.openrndr.math.Vector2
 
 
 /**

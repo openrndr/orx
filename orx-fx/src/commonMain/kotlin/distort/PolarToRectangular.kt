@@ -2,13 +2,14 @@
 
 package org.openrndr.extra.fx.distort
 
-import org.openrndr.draw.*
+import org.openrndr.draw.ColorBuffer
+import org.openrndr.draw.Filter1to1
+import org.openrndr.draw.MagnifyingFilter
+import org.openrndr.draw.MinifyingFilter
 import org.openrndr.extra.fx.fx_polar_to_rectangular
 import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.Description
-import org.openrndr.extra.parameters.Vector2Parameter
-import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 
 @Description("Polar to rectangular")

@@ -1,5 +1,3 @@
-import ScreenshotsHelper.collectScreenshots
-
 plugins {
     org.openrndr.extra.convention.`kotlin-jvm`
 }

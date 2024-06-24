@@ -1,8 +1,5 @@
         package jsyphon
 
-import java.io.File
-import java.util.*
-
 class JSyphonClient
 {
     private var ptr: Long = 0

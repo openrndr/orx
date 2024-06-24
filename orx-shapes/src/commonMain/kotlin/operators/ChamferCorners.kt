@@ -1,7 +1,6 @@
 package org.openrndr.extra.shapes.operators
 
 import org.openrndr.math.Vector2
-import org.openrndr.math.mod_
 import org.openrndr.shape.*
 import kotlin.math.abs
 import kotlin.math.sign

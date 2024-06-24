@@ -3,7 +3,6 @@
 package org.openrndr.extra.fx.edges
 
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.Filter
 import org.openrndr.draw.Filter1to1
 import org.openrndr.draw.filterShaderFromCode
 import org.openrndr.extra.fx.fx_canny_edge_detector

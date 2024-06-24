@@ -9,11 +9,10 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.expressions.parser.KeyLangLexer
 import org.openrndr.extra.expressions.parser.KeyLangParser
 import org.openrndr.extra.expressions.parser.KeyLangParserBaseListener
-import org.openrndr.extra.expressions.parser.KeyLangParserVisitor
-
 import org.openrndr.extra.noise.uniform
 import org.openrndr.math.*
-import kotlin.math.*
+import kotlin.math.PI
+import kotlin.math.roundToInt
 
 typealias TypedFunction0 = () -> Any
 typealias TypedFunction1 = (Any) -> Any

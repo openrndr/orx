@@ -4,7 +4,6 @@ import org.openrndr.*
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.asRadians
-import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.tan
 

@@ -1,12 +1,11 @@
 import org.openrndr.application
-
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.fft.FFT
 import org.openrndr.extra.noise.scatter
 import org.openrndr.extra.shapes.hobbycurve.hobbyCurve
-import org.openrndr.math.Vector2
 import org.openrndr.extra.shapes.splines.catmullRom
 import org.openrndr.extra.shapes.splines.toContour
+import org.openrndr.math.Vector2
 import org.openrndr.math.smoothstep
 import org.openrndr.math.transforms.buildTransform
 import org.openrndr.shape.LineSegment

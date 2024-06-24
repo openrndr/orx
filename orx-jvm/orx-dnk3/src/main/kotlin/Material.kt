@@ -1,8 +1,10 @@
 package org.openrndr.extra.dnk3
 
-import org.openrndr.draw.*
+import org.openrndr.draw.Cubemap
+import org.openrndr.draw.RenderTarget
+import org.openrndr.draw.ShadeStyle
+import org.openrndr.draw.shadeStyle
 import org.openrndr.extra.dnk3.features.IrradianceSH
-import org.openrndr.math.Vector3
 
 interface Material {
     val name: String?

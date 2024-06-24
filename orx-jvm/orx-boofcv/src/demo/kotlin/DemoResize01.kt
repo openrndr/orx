@@ -1,8 +1,7 @@
 import org.openrndr.application
-import org.openrndr.boofcv.binding.*
+import org.openrndr.boofcv.binding.resizeBy
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.loadImage
-import org.openrndr.extensions.SingleScreenshot
 
 
 fun main() {

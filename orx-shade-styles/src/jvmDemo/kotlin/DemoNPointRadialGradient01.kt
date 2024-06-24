@@ -1,7 +1,6 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.color.rgb
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.shadestyles.NPointRadialGradient
 import org.openrndr.shape.Circle
 import kotlin.random.Random

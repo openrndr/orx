@@ -1,7 +1,6 @@
 package org.openrndr.extra.fx.color
 
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.Filter
 import org.openrndr.draw.Filter1to1
 import org.openrndr.extra.fx.fx_subtract_constant
 import org.openrndr.extra.fx.mppFilterShader

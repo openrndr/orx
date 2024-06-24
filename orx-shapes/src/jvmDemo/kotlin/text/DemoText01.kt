@@ -5,8 +5,6 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.font.loadFace
 import org.openrndr.extra.shapes.bounds.bounds
 import org.openrndr.extra.shapes.text.shapesFromText
-import org.openrndr.math.Vector2
-import java.io.File
 
 fun main() {
     application {

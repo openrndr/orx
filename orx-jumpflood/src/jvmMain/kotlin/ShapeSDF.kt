@@ -5,7 +5,6 @@ import org.openrndr.extra.jumpflood.jf_shape_sdf
 import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector4
-import org.openrndr.resourceUrl
 import org.openrndr.shape.Rectangle
 import org.openrndr.shape.Shape
 import org.openrndr.shape.ShapeContour

@@ -1,9 +1,7 @@
-import org.openrndr.WindowMultisample
 import org.openrndr.application
 import org.openrndr.extra.fx.Post
 import org.openrndr.extra.fx.blend.Add
 import org.openrndr.extra.fx.blur.ApproximateGaussianBlur
-import org.openrndr.shape.Circle
 import kotlin.math.cos
 
 fun main() = application {

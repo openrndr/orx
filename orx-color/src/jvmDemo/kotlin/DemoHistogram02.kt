@@ -2,7 +2,6 @@
 
 import org.openrndr.application
 import org.openrndr.draw.loadImage
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.color.statistics.calculateHistogramRGB
 import kotlin.math.pow
 

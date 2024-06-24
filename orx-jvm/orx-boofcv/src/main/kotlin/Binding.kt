@@ -9,7 +9,6 @@ import org.openrndr.draw.ColorBuffer
 import org.openrndr.draw.ColorFormat
 import org.openrndr.draw.ColorType
 import org.openrndr.draw.colorBuffer
-import kotlin.experimental.and
 
 fun ColorBuffer.toGrayF32() : GrayF32 {
     val p = GrayF32(width, height)
