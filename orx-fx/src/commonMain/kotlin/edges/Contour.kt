@@ -13,7 +13,7 @@ import org.openrndr.extra.parameters.IntParameter
 
 @Description("Contour")
 class Contour : Filter1to1(mppFilterShader(fx_contour, "contour")) {
-    @DoubleParameter("levels", 1.0, 16.0)
+    @DoubleParameter("levels", 0.0, 16.0)
     var levels: Double by parameters
 
     @DoubleParameter("contour width", 0.0, 4.0)
@@ -24,6 +24,10 @@ class Contour : Filter1to1(mppFilterShader(fx_contour, "contour")) {
 
     @DoubleParameter("background opacity", 0.0, 1.0)
     var backgroundOpacity: Double by parameters
+
+    @DoubleParameter("bias", -1.0, 1.0)
+    var bias: Double by parameters
+
 
     @ColorParameter("contour color")
     var contourColor: ColorRGBa by parameters
@@ -38,5 +42,6 @@ class Contour : Filter1to1(mppFilterShader(fx_contour, "contour")) {
         backgroundOpacity = 1.0
         contourOpacity = 1.0
         window = 1
+        bias = 0.0
     }
 }
