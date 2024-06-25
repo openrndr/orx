@@ -34,6 +34,8 @@ kotlin {
                 implementation(project(":orx-color"))
                 implementation(project(":orx-fx"))
                 implementation(project(":orx-noise"))
+                implementation(project(":orx-shapes"))
+                implementation(project(":orx-image-fit"))
             }
         }
     }

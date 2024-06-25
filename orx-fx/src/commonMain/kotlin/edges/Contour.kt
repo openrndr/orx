@@ -6,10 +6,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Filter1to1
 import org.openrndr.extra.fx.fx_contour
 import org.openrndr.extra.fx.mppFilterShader
-import org.openrndr.extra.parameters.ColorParameter
-import org.openrndr.extra.parameters.Description
-import org.openrndr.extra.parameters.DoubleParameter
-import org.openrndr.extra.parameters.IntParameter
+import org.openrndr.extra.parameters.*
 
 @Description("Contour")
 class Contour : Filter1to1(mppFilterShader(fx_contour, "contour")) {
@@ -28,12 +25,17 @@ class Contour : Filter1to1(mppFilterShader(fx_contour, "contour")) {
     @DoubleParameter("bias", -1.0, 1.0)
     var bias: Double by parameters
 
-
     @ColorParameter("contour color")
     var contourColor: ColorRGBa by parameters
 
     @IntParameter("window", 0, 10)
     var window: Int by parameters
+
+    @BooleanParameter("output bands", order = 100)
+    var outputBands: Boolean by parameters
+
+    @DoubleParameter("fade", 0.0, 1.0, order = 200)
+    var fade: Double by parameters
 
     init {
         levels = 6.0
@@ -43,5 +45,7 @@ class Contour : Filter1to1(mppFilterShader(fx_contour, "contour")) {
         contourOpacity = 1.0
         window = 1
         bias = 0.0
+        outputBands = false
+        fade = 1.0
     }
 }

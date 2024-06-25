@@ -37,6 +37,9 @@ class CannyEdgeDetector : Filter1to1(
     var backgroundOpacity: Double by parameters
 
 
+    @DoubleParameter("fade", 0.0, 1.0, order = 7)
+    var fade: Double by parameters
+
     init {
         threshold0 = 2.0
         threshold1 = 0.0
@@ -45,6 +48,7 @@ class CannyEdgeDetector : Filter1to1(
         backgroundColor = ColorRGBa.BLACK
         backgroundOpacity = 1.0
         foregroundOpacity = 1.0
+        fade = 1.0
     }
 
 }
