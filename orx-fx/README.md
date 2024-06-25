@@ -238,6 +238,11 @@ shaping `curve` within this range:
 
 ![DemoCompositeFilter01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoCompositeFilter01Kt.png)
 
+### DemoContour01
+[source code](src/jvmDemo/kotlin/DemoContour01.kt)
+
+![DemoContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoContour01Kt.png)
+
 ### DemoDirectionalBlur01
 [source code](src/jvmDemo/kotlin/DemoDirectionalBlur01.kt)
 
