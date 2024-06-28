@@ -34,14 +34,18 @@ internal fun List<*>.memberFunctions(n: String): ((Array<Any>) -> Any)? {
         "minBy" -> { n ->
             val lambda = (n[0] as (Any) -> Any); this.minByOrNull { lambda(it!!) as Comparable<Any> } ?: error("no max")
         }
+
         "sorted" -> { n -> (this as List<Comparable<Any>>).sorted() }
         "sortedBy" -> { n ->
             val lambda = (n[0] as (Any) -> Any); this.sortedBy { lambda(it!!) as Comparable<Any> }
         }
+
         "sortedByDescending" -> { n ->
             val lambda = (n[0] as (Any) -> Any); this.sortedByDescending { lambda(it!!) as Comparable<Any> }
         }
+
         "reversed" -> { n -> this.reversed() }
+        "zip" -> { n -> this.zip(n[0] as List<Any>).map { listOf(it.first, it.second) } }
 
         else -> null
     }

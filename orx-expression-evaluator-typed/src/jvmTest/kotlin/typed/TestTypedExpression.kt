@@ -51,6 +51,14 @@ class TestTypedExpression {
 
         println("result is: ${evaluateTypedExpression("[] + []")}")
         println("result is: ${evaluateTypedExpression("([1] * 2 + [2] * 1)*5")}" )
+
+        println("result is: ${evaluateTypedExpression("[] + []")}")
+        println("result is: ${evaluateTypedExpression("[[0, 1, 2][1]]")}" )
+
+        println("result is: ${evaluateTypedExpression("[0, 1, 2].max()")}" )
+        println("result is: ${evaluateTypedExpression("[0, 1, 2].maxBy { x -> x }")}" )
+        println("result is: ${evaluateTypedExpression("""["one", "two", "three"].maxBy { x -> x.length }""")}")
+
     }
 
 

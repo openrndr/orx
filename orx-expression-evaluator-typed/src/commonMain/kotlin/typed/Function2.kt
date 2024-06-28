@@ -59,6 +59,21 @@ internal fun vec3(x: Any, y: Any): Vector3 = when {
     }
 }
 
+internal fun vec4(x: Any, y: Any): Vector4 = when {
+    x is Double && y is Vector3 -> {
+        Vector4(x, y.x, y.y, y.z)
+    }
+    x is Vector2 && y is Vector2 -> {
+        Vector4(x.x, x.y, y.x, y.y)
+    }
+    x is Vector3 && y is Double -> {
+        Vector4(x.x, x.y, x.z, y)
+    }
+    else -> {
+        error("unsupported arguments, '$x' (${x::class}) '$y' (${y::class}")
+    }
+}
+
 internal fun dispatchFunction2(name: String, functions: Map<String, TypedFunction2>): ((Array<Any>) -> Any)? {
     return when (name) {
             "min" -> { x -> min(x[0], x[1]) }

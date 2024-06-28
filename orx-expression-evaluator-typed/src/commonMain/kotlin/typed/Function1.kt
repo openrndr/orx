@@ -13,18 +13,67 @@ import kotlin.math.sin as sin_
 import kotlin.math.sqrt as sqrt_
 
 internal fun vec2(x: Any): Vector2 {
-    require(x is Double)
-    return Vector2(x, x)
+    return when (x) {
+        is Double -> Vector2(x, x)
+        is List<*> -> {
+            when (x.size) {
+                2 -> {
+                    x as List<Double>; Vector2(x[0], x[1])
+                }
+
+                else -> error("vec2(): unsupported argument: '$x'")
+            }
+        }
+
+        else -> error("vec2(): unsupported argument: '$x'")
+    }
 }
 
 internal fun vec3(x: Any): Vector3 {
-    require(x is Double)
-    return Vector3(x, x, x)
+    return when (x) {
+        is Double -> Vector3(x, x, x)
+        is List<*> -> {
+            when (x.size) {
+                2 -> {
+                    vec3(x[0]!!, x[1]!!)
+                }
+
+                3 -> {
+                    vec3(x[0]!!, x[1]!!, x[2]!!)
+                }
+
+                else -> error("vec3(): unsupported argument: '$x'")
+            }
+        }
+
+        else -> error("vec3(): unsupported argument: '$x'")
+    }
 }
 
+
 internal fun vec4(x: Any): Vector4 {
-    require(x is Double)
-    return Vector4(x, x, x, x)
+    return when (x) {
+        is Double -> Vector4(x, x, x, x)
+        is List<*> -> {
+            when (x.size) {
+                2 -> {
+                    vec4(x[0]!!, x[1]!!)
+                }
+
+                3 -> {
+                    vec4(x[0]!!, x[1]!!, x[2]!!)
+                }
+
+                4 -> {
+                    vec4(x[0]!!, x[1]!!, x[2]!!, x[3]!!)
+                }
+
+                else -> error("vec4(): unsupported argument: '$x'")
+            }
+        }
+
+        else -> error("vec4(): unsupported argument: '$x'")
+    }
 }
 
 internal fun rgba(x: Any): ColorRGBa {
@@ -120,17 +169,36 @@ internal fun translate(translation: Any): Matrix44 {
     return Matrix44.translate(translation)
 }
 
+internal fun mat4(x: Any): Matrix44 {
+    return when (x) {
+        is List<*> -> {
+            when (x.size) {
+                16 -> Matrix44.fromDoubleArray((x as List<Double>).toDoubleArray())
+                4 -> {
+                    (x as List<Vector4>)
+                    Matrix44.fromColumnVectors(x[0], x[1], x[2], x[3])
+                }
+
+                else -> error("mat4(): unsupported argument: '$x'")
+            }
+        }
+
+        else -> error("mat4(): unsupported argument: '$x'")
+    }
+}
+
 internal fun dispatchFunction1(name: String, functions: Map<String, TypedFunction1>): ((Array<Any>) -> Any)? {
     return when (name) {
         "vec2" -> { x -> vec2(x[0]) }
         "vec3" -> { x -> vec3(x[0]) }
         "vec4" -> { x -> vec4(x[0]) }
-
+        "mat4" -> { x -> mat4(x[0]) }
         "cos" -> { x -> cos(x[0]) }
         "sin" -> { x -> sin(x[0]) }
         "sqrt" -> { v -> sqrt(v[0]) }
         "abs" -> { v -> abs(v[0]) }
         "scale" -> { x -> scale(x[0]) }
+        "rgb", "rgba" -> { x -> rgba(x[0]) }
         "translate" -> { x -> translate(x[0]) }
         "transpose" -> { x -> transpose(x[0]) }
         "inverse" -> { x -> inverse(x[0]) }

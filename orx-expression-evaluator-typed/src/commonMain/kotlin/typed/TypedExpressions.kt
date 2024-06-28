@@ -819,7 +819,7 @@ abstract class TypedExpressionListenerBase(
                         }
 
 
-                        else -> error("receiver '${receiver}' not supported")
+                        else -> error("receiver for '$name' '${receiver.toString().take(30)}' ${receiver::class} not supported")
                     }
                 }
 
