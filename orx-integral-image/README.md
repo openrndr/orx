@@ -8,3 +8,8 @@ CPU and GPU-based implementation for integral images (summed area tables)
 [source code](src/demo/kotlin/DemoFII01.kt)
 
 ![DemoFII01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-integral-image/images/DemoFII01Kt.png)
+
+### DemoFII02
+[source code](src/demo/kotlin/DemoFII02.kt)
+
+![DemoFII02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-integral-image/images/DemoFII02Kt.png)
