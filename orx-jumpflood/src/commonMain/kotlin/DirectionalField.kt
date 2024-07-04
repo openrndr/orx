@@ -28,6 +28,10 @@ class DirectionalField : Filter1to1() {
     @BooleanParameter("unit direction")
     var unitDirection = false
 
+    @BooleanParameter("signed magnitude")
+    var signedMagnitude = false
+
+
     @BooleanParameter("flip v direction")
     var flipV = true
 
@@ -87,6 +91,7 @@ class DirectionalField : Filter1to1() {
         decodeFilter.distanceScale = distanceScale
         decodeFilter.normalizedDistance = normalizedDistance
         decodeFilter.unitDirection = unitDirection
+        decodeFilter.signedMagnitude = signedMagnitude
         decodeFilter.flipV = flipV
         decodeFilter.apply(arrayOf(result, thresholded!!), arrayOf(result))
         result.copyTo(target[0],

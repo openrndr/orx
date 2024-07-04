@@ -38,6 +38,7 @@ class PixelDirection(val decodeMode: DecodeMode = DecodeMode.DIRECTION) :
     var originalSize: Vector2 by parameters
     var normalizedDistance: Boolean by parameters
     var unitDirection: Boolean by parameters
+    var signedMagnitude: Boolean by parameters
     var flipV: Boolean by parameters
     var outputIds: Boolean by parameters
 
@@ -49,6 +50,7 @@ class PixelDirection(val decodeMode: DecodeMode = DecodeMode.DIRECTION) :
         unitDirection = false
         flipV = true
         outputIds = false
+        signedMagnitude = false
     }
 }
 

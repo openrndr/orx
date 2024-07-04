@@ -1,4 +1,3 @@
-
 /*
 use #define OUTPUT_DISTANCE to output distance
 use #define OUTPUT_DIRECTION to output direction
@@ -13,6 +12,7 @@ uniform bool normalizedDistance;
 uniform bool unitDirection;
 uniform bool flipV;
 uniform bool outputIds;
+uniform bool signedMagnitude;
 in vec2 v_texCoord0;
 
 out vec4 o_color;
@@ -23,7 +23,7 @@ void main() {
 
     vec2 pixelPosition = v_texCoord0;
     vec4 textureData = texture(tex0, v_texCoord0);
-    vec2 centroidPixelPosition =  textureData.xy;
+    vec2 centroidPixelPosition = textureData.xy;
 
 
     vec2 pixelDistance = (centroidPixelPosition - pixelPosition) * sizeDF;
@@ -32,8 +32,8 @@ void main() {
         pixelDistance *= vec2(1.0, -1.0);
     }
 
+    float length = length(pixelDistance);
     if (unitDirection) {
-        float length = length(pixelDistance);
         if (length >= 1E-6) {
             pixelDistance /= length;
         }
@@ -51,9 +51,17 @@ void main() {
     }
     #else
     if (!normalizedDistance) {
-        o_color = vec4( vec2(length(pixelDistance * distanceScale)), outputData, 1.0);
+        o_color = vec4(vec2(length(pixelDistance * distanceScale)), outputData, 1.0);
     } else if (!unitDirection) {
-        o_color = vec4( vec2(length(pixelDistance / originalSize)), outputData, 1.0);
+        o_color = vec4(vec2(length(pixelDistance / originalSize)), outputData, 1.0);
     }
     #endif
+
+    if (!outputIds) {
+        if (signedMagnitude) {
+            float s = -sign(o_color.b - 0.5);
+            o_color.rg *= s;
+            o_color.b = s * length;
+        }
+    }
 }
