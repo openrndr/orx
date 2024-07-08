@@ -99,7 +99,7 @@ abstract class TypedExpressionListenerBase(
         if (s.inFunctionLiteral > 0) {
             return
         }
-        val list = (0 until ctx.getExpression().size).map { s.valueStack.pop() }
+        val list = (0 until ctx.expression().size).map { s.valueStack.pop() }
         s.valueStack.push(list.reversed())
     }
 
@@ -127,7 +127,7 @@ abstract class TypedExpressionListenerBase(
     override fun exitFunctionLiteral(ctx: KeyLangParser.FunctionLiteralContext) {
         val s = state
         s.inFunctionLiteral--
-        val functionExpr = ctx.getExpression().text
+        val functionExpr = ctx.expression().text
 
         val ids = ctx.ID()
         val f = when (ids.size) {
