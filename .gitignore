@@ -9,3 +9,4 @@ gradle.properties
 /gui-parameters/
 /ShaderError.glsl
 /.kotlin
+/.lwjgl
