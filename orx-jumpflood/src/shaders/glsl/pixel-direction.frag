@@ -32,10 +32,10 @@ void main() {
         pixelDistance *= vec2(1.0, -1.0);
     }
 
-    float length = length(pixelDistance);
+    float length_ = length(pixelDistance);
     if (unitDirection) {
-        if (length >= 1E-6) {
-            pixelDistance /= length;
+        if (length_ >= 1E-6) {
+            pixelDistance /= length_;
         }
     }
 
@@ -61,7 +61,7 @@ void main() {
         if (signedMagnitude) {
             float s = -sign(o_color.b - 0.5);
             o_color.rg *= s;
-            o_color.b = s * length;
+            o_color.b = s * length_;
         }
     }
 }

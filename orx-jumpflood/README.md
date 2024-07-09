@@ -160,6 +160,11 @@ fun main() = application {
 
 ![DemoDirectionField01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoDirectionField01Kt.png)
 
+### DemoDirectionField02
+[source code](src/jvmDemo/kotlin/DemoDirectionField02.kt)
+
+![DemoDirectionField02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoDirectionField02Kt.png)
+
 ### DemoDistanceField01
 [source code](src/jvmDemo/kotlin/DemoDistanceField01.kt)
 
