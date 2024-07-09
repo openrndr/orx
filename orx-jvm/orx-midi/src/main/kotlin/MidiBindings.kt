@@ -48,7 +48,7 @@ fun Program.bindMidiControl(
     val low = anno?.low ?: 0.0
     val high = anno?.high ?: 1.0
     transceiver.controlChanged.listen {
-        if (it.eventType == MidiEventType.CONTROL_CHANGED && it.channel == channel && it.control == control) {
+        if (it.eventType == MidiEventType.CONTROL_CHANGE && it.channel == channel && it.control == control) {
             val value = it.value.toDouble().map(0.0, 127.0, low, high, clamp = true)
             property.set(value)
         }
@@ -83,7 +83,7 @@ fun Program.bindMidiControl(
     control: Int
 ) {
     transceiver.controlChanged.listen {
-        if (it.eventType == MidiEventType.CONTROL_CHANGED && it.channel == channel && it.control == control) {
+        if (it.eventType == MidiEventType.CONTROL_CHANGE && it.channel == channel && it.control == control) {
             property.set(it.value >= 64)
         }
     }
@@ -126,12 +126,12 @@ fun Program.bindMidiControl(
         var y = v.y
         var changed = false
 
-        if (it.eventType == MidiEventType.CONTROL_CHANGED && it.channel == channelX && it.control == controlX) {
+        if (it.eventType == MidiEventType.CONTROL_CHANGE && it.channel == channelX && it.control == controlX) {
             changed = true
             x = it.value.toDouble().map(0.0, 127.0, low, high, clamp = true)
         }
 
-        if (it.eventType == MidiEventType.CONTROL_CHANGED && it.channel == channelY && it.control == controlY) {
+        if (it.eventType == MidiEventType.CONTROL_CHANGE && it.channel == channelY && it.control == controlY) {
             changed = true
             y = it.value.toDouble().map(0.0, 127.0, low, high, clamp = true)
         }
@@ -187,17 +187,17 @@ fun Program.bindMidiControl(
         var z = v.z
         var changed = false
 
-        if (it.eventType == MidiEventType.CONTROL_CHANGED && it.channel == channelX && it.control == controlX) {
+        if (it.eventType == MidiEventType.CONTROL_CHANGE && it.channel == channelX && it.control == controlX) {
             changed = true
             x = it.value.toDouble().map(0.0, 127.0, low, high, clamp = true)
         }
 
-        if (it.eventType == MidiEventType.CONTROL_CHANGED && it.channel == channelY && it.control == controlY) {
+        if (it.eventType == MidiEventType.CONTROL_CHANGE && it.channel == channelY && it.control == controlY) {
             changed = true
             y = it.value.toDouble().map(0.0, 127.0, low, high, clamp = true)
         }
 
-        if (it.eventType == MidiEventType.CONTROL_CHANGED && it.channel == channelZ && it.control == controlZ) {
+        if (it.eventType == MidiEventType.CONTROL_CHANGE && it.channel == channelZ && it.control == controlZ) {
             changed = true
             z = it.value.toDouble().map(0.0, 127.0, low, high, clamp = true)
         }
@@ -257,22 +257,22 @@ fun Program.bindMidiControl(
         var a = v.alpha
         var changed = false
 
-        if (it.eventType == MidiEventType.CONTROL_CHANGED && it.channel == channelR && it.control == controlR) {
+        if (it.eventType == MidiEventType.CONTROL_CHANGE && it.channel == channelR && it.control == controlR) {
             changed = true
             r = it.value.toDouble().map(0.0, 127.0, low, high, clamp = true)
         }
 
-        if (it.eventType == MidiEventType.CONTROL_CHANGED && it.channel == channelG && it.control == controlG) {
+        if (it.eventType == MidiEventType.CONTROL_CHANGE && it.channel == channelG && it.control == controlG) {
             changed = true
             g = it.value.toDouble().map(0.0, 127.0, low, high, clamp = true)
         }
 
-        if (it.eventType == MidiEventType.CONTROL_CHANGED && it.channel == channelB && it.control == controlB) {
+        if (it.eventType == MidiEventType.CONTROL_CHANGE && it.channel == channelB && it.control == controlB) {
             changed = true
             b = it.value.toDouble().map(0.0, 127.0, low, high, clamp = true)
         }
 
-        if (it.eventType == MidiEventType.CONTROL_CHANGED && it.channel == channelA && it.control == controlA) {
+        if (it.eventType == MidiEventType.CONTROL_CHANGE && it.channel == channelA && it.control == controlA) {
             changed = true
             a = it.value.toDouble().map(0.0, 127.0, low, high, clamp = true)
         }
@@ -335,22 +335,22 @@ fun Program.bindMidiControl(
         var w = v.w
         var changed = false
 
-        if (it.eventType == MidiEventType.CONTROL_CHANGED && it.channel == channelX && it.control == controlX) {
+        if (it.eventType == MidiEventType.CONTROL_CHANGE && it.channel == channelX && it.control == controlX) {
             changed = true
             x = it.value.toDouble().map(0.0, 127.0, low, high, clamp = true)
         }
 
-        if (it.eventType == MidiEventType.CONTROL_CHANGED && it.channel == channelY && it.control == controlY) {
+        if (it.eventType == MidiEventType.CONTROL_CHANGE && it.channel == channelY && it.control == controlY) {
             changed = true
             y = it.value.toDouble().map(0.0, 127.0, low, high, clamp = true)
         }
 
-        if (it.eventType == MidiEventType.CONTROL_CHANGED && it.channel == channelZ && it.control == controlZ) {
+        if (it.eventType == MidiEventType.CONTROL_CHANGE && it.channel == channelZ && it.control == controlZ) {
             changed = true
             z = it.value.toDouble().map(0.0, 127.0, low, high, clamp = true)
         }
 
-        if (it.eventType == MidiEventType.CONTROL_CHANGED && it.channel == channelW && it.control == controlW) {
+        if (it.eventType == MidiEventType.CONTROL_CHANGE && it.channel == channelW && it.control == controlW) {
             changed = true
             w = it.value.toDouble().map(0.0, 127.0, low, high, clamp = true)
         }
