@@ -9,4 +9,7 @@ dependencies {
     implementation(libs.kotlin.coroutines)
     implementation(project(":orx-property-watchers"))
     implementation(project(":orx-parameters"))
+
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotest.assertions)
 }

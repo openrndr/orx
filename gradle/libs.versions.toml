@@ -29,6 +29,7 @@ ktor = "2.3.11"
 jgit = "6.9.0.202403050737-r"
 javaosc = "0.9"
 jsoup = "1.17.2"
+mockk = "1.13.11"
 
 [libraries]
 kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging", version.ref = "kotlinLogging" }
@@ -49,6 +50,7 @@ kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", vers
 kotest-runner = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
 kotest-framework-engine = { group = "io.kotest", name = "kotest-framework-engine", version.ref = "kotest" }
 
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk"}
 
 openrndr-application = { group = "org.openrndr", name = "openrndr-application", version.ref = "openrndr" }
 openrndr-extensions = { group = "org.openrndr", name = "openrndr-extensions", version.ref = "openrndr" }
