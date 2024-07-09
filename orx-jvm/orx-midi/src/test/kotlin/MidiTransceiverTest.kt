@@ -12,94 +12,64 @@ import javax.sound.midi.Receiver
 import javax.sound.midi.ShortMessage
 import kotlin.test.Test
 
+@Suppress("MemberVisibilityCanBePrivate")
 class MidiTransceiverTest {
 
-    @Test
-    fun `should send noteOn message`() {
-        // given
-        val program = mockk<Program>(relaxed = true)
+    // given
+    val program = mockk<Program>(relaxed = true)
+    val receiver = mockk<Receiver>()
+    val receiverDevice = mockk<MidiDevice>(relaxed = true)
+    val messageSlot = slot<MidiMessage>()
 
-        val receiver = mockk<Receiver>()
-        val receiverDevice = mockk<MidiDevice>(relaxed = true)
+    val transmitter = TestTransmitter()
+    val transmitterDevice = mockk<MidiDevice>()
+
+    init {
         every { receiverDevice.receiver } returns receiver
-        val messageSlot = slot<MidiMessage>()
         every { receiver.send(capture(messageSlot), any()) } just runs
-
-        val transmitter = TestTransmitter()
-        val transmitterDevice = mockk<MidiDevice>()
         every { transmitterDevice.transmitter } returns transmitter
+    }
 
-        val transceiver = MidiTransceiver(
-            program,
-            receiverDevice,
-            transmitterDevice
-        )
+    val transceiver = MidiTransceiver(
+        program,
+        receiverDevice,
+        transmitterDevice
+    )
 
+    @Test
+    fun `should send out NOTE_ON message`() {
         // when
         transceiver.noteOn(5, 10, 100)
 
         // then
         messageSlot.captured should beInstanceOf<ShortMessage>()
-        val message = messageSlot.captured as ShortMessage
-        message.command shouldBe ShortMessage.NOTE_ON
-        message.channel shouldBe 5
-        message.data1 shouldBe 10
-        message.data2 shouldBe 100
+        (messageSlot.captured as ShortMessage).apply {
+            command shouldBe ShortMessage.NOTE_ON
+            channel shouldBe 5
+            data1 shouldBe 10
+            data2 shouldBe 100
+        }
+
     }
 
     @Test
-    fun `should send noteOff message`() {
-        // given
-        val program = mockk<Program>(relaxed = true)
-
-        val receiver = mockk<Receiver>()
-        val receiverDevice = mockk<MidiDevice>(relaxed = true)
-        every { receiverDevice.receiver } returns receiver
-        val messageSlot = slot<MidiMessage>()
-        every { receiver.send(capture(messageSlot), any()) } just runs
-
-        val transmitter = TestTransmitter()
-        val transmitterDevice = mockk<MidiDevice>()
-        every { transmitterDevice.transmitter } returns transmitter
-
-        val transceiver = MidiTransceiver(
-            program,
-            receiverDevice,
-            transmitterDevice
-        )
-
+    fun `should send out NOTE_OFF message`() {
         // when
         transceiver.noteOff(1, 10, 62)
 
         // then
         messageSlot.captured should beInstanceOf<ShortMessage>()
-        val message = messageSlot.captured as ShortMessage
-        message.command shouldBe ShortMessage.NOTE_OFF
-        message.channel shouldBe 1
-        message.data1 shouldBe 10
-        message.data2 shouldBe 62
+        (messageSlot.captured as ShortMessage).apply {
+            command shouldBe ShortMessage.NOTE_OFF
+            channel shouldBe 1
+            data1 shouldBe 10
+            data2 shouldBe 62
+        }
     }
 
     @Test
-    fun `should receive noteOn event`() {
+    fun `should receive NOTE_ON event on receiving NOTE_ON message`() {
         // given
-        val program = mockk<Program>(relaxed = true)
-
-        val receiver = mockk<Receiver>()
-        val receiverDevice = mockk<MidiDevice>(relaxed = true)
-        every { receiverDevice.receiver } returns receiver
-        val messageSlot = slot<MidiMessage>()
-        every { receiver.send(capture(messageSlot), any()) } just runs
-
-        val transmitter = TestTransmitter()
-        val transmitterDevice = mockk<MidiDevice>()
-        every { transmitterDevice.transmitter } returns transmitter
-
-        val transceiver = MidiTransceiver(
-            program,
-            receiverDevice,
-            transmitterDevice
-        )
         val eventSlot = AtomicReference<MidiEvent>()
         transceiver.noteOn.listen {
             eventSlot.set(it)
@@ -122,25 +92,8 @@ class MidiTransceiverTest {
     }
 
     @Test
-    fun `should receive noteOff event for NOTE_ON message with velocity 0`() {
+    fun `should receive NOTE_OFF event on receiving NOTE_ON message with velocity 0`() {
         // given
-        val program = mockk<Program>(relaxed = true)
-
-        val receiver = mockk<Receiver>()
-        val receiverDevice = mockk<MidiDevice>(relaxed = true)
-        every { receiverDevice.receiver } returns receiver
-        val messageSlot = slot<MidiMessage>()
-        every { receiver.send(capture(messageSlot), any()) } just runs
-
-        val transmitter = TestTransmitter()
-        val transmitterDevice = mockk<MidiDevice>()
-        every { transmitterDevice.transmitter } returns transmitter
-
-        val transceiver = MidiTransceiver(
-            program,
-            receiverDevice,
-            transmitterDevice
-        )
         val eventSlot = AtomicReference<MidiEvent>()
         transceiver.noteOff.listen {
             eventSlot.set(it)
