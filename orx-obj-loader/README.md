@@ -16,3 +16,9 @@ drawer.vertexBuffer(vertexBuffer, DrawPrimitive.TRIANGLES)
 ```
 
 
+<!-- __demos__ -->
+## Demos
+### DemoWireframe01
+[source code](src/demo/kotlin/DemoWireframe01.kt)
+
+![DemoWireframe01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-obj-loader/images/DemoWireframe01Kt.png)
