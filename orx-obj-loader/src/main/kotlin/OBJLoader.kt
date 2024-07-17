@@ -6,6 +6,10 @@ import java.io.File
 import java.net.MalformedURLException
 import java.net.URL
 
+/**
+ * Loads an OBJ file as a Map of names to lists of [Polygon].
+ * Use this method to access the loaded OBJ data from the CPU.
+ */
 fun loadOBJ(fileOrUrl: String): Map<String, List<Polygon>> {
     return try {
         val url = URL(fileOrUrl)
@@ -15,6 +19,10 @@ fun loadOBJ(fileOrUrl: String): Map<String, List<Polygon>> {
     }
 }
 
+/**
+ * Loads an OBJ file as a [VertexBuffer].
+ * Use this method to render / process the loaded OBJ data using the GPU.
+ */
 fun loadOBJasVertexBuffer(fileOrUrl: String): VertexBuffer {
     return try {
         val url = URL(fileOrUrl)
@@ -52,10 +60,7 @@ fun loadOBJMeshData(lines: List<String>): MeshData {
 
             if (tokens.isNotEmpty()) {
                 when (tokens[0]) {
-                    "v" -> {
-                        positions += Vector3(tokens[1].toDouble(), tokens[2].toDouble(), tokens[3].toDouble())
-                    }
-
+                    "v" -> positions += Vector3(tokens[1].toDouble(), tokens[2].toDouble(), tokens[3].toDouble())
                     "vn" -> normals += Vector3(tokens[1].toDouble(), tokens[2].toDouble(), tokens[3].toDouble())
                     "vt" -> textureCoords += Vector2(tokens[1].toDouble(), tokens[2].toDouble())
                     "g" -> {

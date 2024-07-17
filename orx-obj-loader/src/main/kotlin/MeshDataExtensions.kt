@@ -1,16 +1,23 @@
 package org.openrndr.extra.objloader
 
 import org.openrndr.draw.VertexBuffer
+import org.openrndr.draw.VertexFormat
 import org.openrndr.draw.vertexBuffer
 import org.openrndr.draw.vertexFormat
 import org.openrndr.math.Vector2
 
+/**
+ * The [VertexFormat] for a [VertexBuffer] with positions, normals and texture coordinates.
+ */
 private val objVertexFormat = vertexFormat {
     position(3)
     normal(3)
     textureCoordinate(2)
 }
 
+/**
+ * Converts a [MeshData] instance into a [VertexBuffer]
+ */
 fun MeshData.toVertexBuffer() : VertexBuffer {
     val objects = triangulate().flattenPolygons()
     val triangleCount = objects.values.sumOf { it.size }
