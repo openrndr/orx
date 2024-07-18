@@ -94,6 +94,9 @@ include(
         "orx-jvm:orx-depth-camera-calibrator",
         "orx-view-box",
         "orx-text-writer",
-        "orx-turtle"
+        "orx-turtle",
+        "orx-compute-shaders",
+        "orx-point-clouds",
+        "orx-wireframes"
     )
 )

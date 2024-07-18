@@ -5,9 +5,9 @@ plugins {
 val embedShaders = tasks.register<EmbedShadersTask>("embedShaders") {
     inputDir.set(file("$projectDir/src/shaders/glsl"))
     outputDir.set(layout.buildDirectory.dir("generated/shaderKotlin"))
-    defaultPackage.set("org.openrndr.extra.meshgenerators")
+    defaultPackage.set("org.openrndr.extra.pointclouds")
     defaultVisibility.set("internal")
-    namePrefix.set("meshgenerators_")
+    namePrefix.set("pointclouds_")
 }.get()
 
 kotlin {
@@ -15,19 +15,19 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(libs.openrndr.application)
-                api(libs.openrndr.math)
-                implementation(project(":orx-shapes"))
+                implementation(libs.openrndr.application)
+                implementation(libs.openrndr.math)
                 implementation(project(":orx-compute-shaders"))
+            }
+        }
+        val commonTest by getting {
+            dependencies {
+                api(libs.kotest.assertions)
             }
         }
         val jvmDemo by getting {
             dependencies {
-                implementation(project(":orx-shapes"))
-                implementation(project(":orx-mesh-generators"))
                 implementation(project(":orx-camera"))
-                implementation(project(":orx-noise"))
-                implementation(project(":orx-point-clouds"))
             }
         }
     }
