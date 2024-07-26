@@ -101,7 +101,7 @@ class MidiTransceiverTest {
 
         // when
         transmitter.receiver!!.send(
-            ShortMessage(ShortMessage.NOTE_OFF, 2, 3, 0), 1042
+            ShortMessage(ShortMessage.NOTE_ON, 2, 3, 0), 1042
         )
         val noteOnEvent = eventSlot.get()
 
