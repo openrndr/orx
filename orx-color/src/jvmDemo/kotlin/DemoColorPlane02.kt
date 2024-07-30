@@ -35,7 +35,7 @@ fun main() {
                     for (lumo in 0 until 100 step 1) {
                         for (chroma in 0 until 100 step 1) {
                             val lch = ColorOKLCHa(lumo / 100.0, chroma / 100.0, cos(seconds * 0.1) * 360.0)
-                            val srgb = lch.toRGBa().toSRGB().saturated
+                            val srgb = lch.toRGBa().toSRGB().clip()
                             write(srgb)
                             write(Vector3((srgb.r - 0.5) * 10.0, (srgb.g - 0.5) * 10.0, (srgb.b - 0.5) * 10.0))
                         }

@@ -48,7 +48,7 @@ fun main() {
                 drawer.fontMap = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 16.0)
                 for ((_, steps) in allSteps) {
                     for (i in steps.indices) {
-                        val srgb = steps[i].toSRGB().saturated
+                        val srgb = steps[i].toSRGB().clip()
                         drawer.fill = srgb
                         drawer.isolated {
                             drawer.translate((srgb.r - 0.5) * 10.0, (srgb.g - 0.5) * 10.0, (srgb.b - 0.5) * 10.0)
@@ -56,7 +56,7 @@ fun main() {
                         }
                     }
                     val positions = steps.map {
-                        val l = it.toSRGB().saturated
+                        val l = it.toSRGB().clip()
                         Vector3((l.r - 0.5) * 10.0, (l.g - 0.5) * 10.0, (l.b - 0.5) * 10.0)
                     }
                     drawer.stroke = ColorRGBa.BLACK.opacify(0.25)
