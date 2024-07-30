@@ -10,7 +10,8 @@ import org.openrndr.extra.timer.repeat
 
 fun main() = application {
     program {
-        val event = Event<Any?>().postpone(true)
+        val event = Event<Any?>()
+        event.postpone = true
         event.listen {
             drawer.circle(width / 2.0, height / 2.0, 200.0)
         }
