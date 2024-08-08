@@ -7,6 +7,14 @@ NEWLINE            : '\r\n' | '\r' | '\n' ;
 WS                 : [\t ]+ -> channel(WHITESPACE) ;
 
 
+RANGE_INCLUSIVE : '..' ;
+RANGE_EXCLUSIVE_UNTIL : 'until' ;
+RANGE_EXCLUSIVE : '..<' ;
+RANGE_DOWNTO : 'downTo' ;
+
+STEP : 'step' ;
+
+
 // Identifiers
 ID                 : [$_]*[a-zA-Z][A-Za-z0-9_]* | '`'[$_]*[A-Za-z0-9_-]*'`';
 FUNCTION_ID        : [$_]*[a-z][A-Za-z0-9_]* ;

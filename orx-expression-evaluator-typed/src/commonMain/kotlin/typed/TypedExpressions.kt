@@ -7,6 +7,10 @@ import org.openrndr.collections.pop
 import org.openrndr.collections.push
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.expressions.parser.KeyLangLexer
+import org.openrndr.extra.expressions.parser.KeyLangLexer.Tokens.RANGE_DOWNTO
+import org.openrndr.extra.expressions.parser.KeyLangLexer.Tokens.RANGE_EXCLUSIVE
+import org.openrndr.extra.expressions.parser.KeyLangLexer.Tokens.RANGE_EXCLUSIVE_UNTIL
+import org.openrndr.extra.expressions.parser.KeyLangLexer.Tokens.RANGE_INCLUSIVE
 import org.openrndr.extra.expressions.parser.KeyLangParser
 import org.openrndr.extra.expressions.parser.KeyLangParserBaseListener
 import org.openrndr.extra.noise.uniform
@@ -94,12 +98,53 @@ abstract class TypedExpressionListenerBase(
         s.reset()
     }
 
+    override fun exitRangeExpression(ctx: KeyLangParser.RangeExpressionContext) {
+        val s = state
+        if (s.inFunctionLiteral > 0) {
+            return
+        }
+
+        val step: Any?
+        if (ctx.step != null) {
+            step = s.valueStack.pop()
+        } else {
+            step = null
+        }
+
+        val right = s.valueStack.pop()
+        val left = s.valueStack.pop()
+
+
+        val lower = (left as Double).toInt()
+        val upper = (right as Double).toInt()
+        val list = if (step == null) {
+            when (ctx.operator?.type) {
+                RANGE_INCLUSIVE -> (lower..upper).toList().map { it.toDouble() }
+                RANGE_EXCLUSIVE -> (lower..<upper).toList().map { it.toDouble() }
+                RANGE_EXCLUSIVE_UNTIL -> (lower until upper).toList().map { it.toDouble() }
+                RANGE_DOWNTO -> (lower downTo upper).toList().map { it.toDouble() }
+                else -> error("unsupported operator: '${ctx.operator?.text}'")
+            }
+        } else {
+            val stepSize = (step as Double).toInt()
+            when (ctx.operator?.type) {
+                RANGE_INCLUSIVE -> (lower..upper step stepSize).toList().map { it.toDouble() }
+                RANGE_EXCLUSIVE -> (lower..<upper step stepSize).toList().map { it.toDouble() }
+                RANGE_EXCLUSIVE_UNTIL -> (lower until upper step stepSize).toList().map { it.toDouble() }
+                RANGE_DOWNTO -> (lower downTo upper step stepSize).toList().map { it.toDouble() }
+                else -> error("unsupported operator: '${ctx.operator?.text}'")
+            }
+        }
+        s.valueStack.push(list)
+
+    }
+
     override fun exitListLiteral(ctx: KeyLangParser.ListLiteralContext) {
         val s = state
         if (s.inFunctionLiteral > 0) {
             return
         }
-        val list = (0 until ctx.expression().size).map { s.valueStack.pop() }
+        val list = (0 until ctx.expressionRoot().size).map { s.valueStack.pop() }
         s.valueStack.push(list.reversed())
     }
 
@@ -113,7 +158,7 @@ abstract class TypedExpressionListenerBase(
 
         val value = when (listValue) {
             is List<*> -> listValue[index] ?: error("got null")
-            is Function<*> -> (listValue as (Int)->Any)(index)
+            is Function<*> -> (listValue as (Int) -> Any)(index)
             else -> error("can't index on '$listValue'")
         }
         s.valueStack.push(value)
@@ -545,9 +590,9 @@ abstract class TypedExpressionListenerBase(
         if (s.inFunctionLiteral > 0) {
             return
         }
-
         s.idTypeStack.push(IDType.FUNCTION2)
     }
+
 
     override fun exitFunctionCall2Expression(ctx: KeyLangParser.FunctionCall2ExpressionContext) {
         val s = state
@@ -819,7 +864,11 @@ abstract class TypedExpressionListenerBase(
                         }
 
 
-                        else -> error("receiver for '$name' '${receiver.toString().take(30)}' ${receiver::class} not supported")
+                        else -> error(
+                            "receiver for '$name' '${
+                                receiver.toString().take(30)
+                            }' ${receiver::class} not supported"
+                        )
                     }
                 }
 
