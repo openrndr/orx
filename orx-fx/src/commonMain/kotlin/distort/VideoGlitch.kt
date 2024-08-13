@@ -37,12 +37,6 @@ class VideoGlitch : Filter1to1(mppFilterShader(fx_video_glitch, "video-glitch"))
     @DoubleParameter("scroll offset 1", 0.0, 1.0)
     var scrollOffset1: Double by parameters
 
-    @BooleanParameter("linear input")
-    var linearInput: Boolean by parameters
-
-    @BooleanParameter("linear output")
-    var linearOutput: Boolean by parameters
-
     init {
         amplitude = 1.0
         vfreq = 4.0
@@ -52,7 +46,5 @@ class VideoGlitch : Filter1to1(mppFilterShader(fx_video_glitch, "video-glitch"))
         scrollOffset0 = 0.0
         scrollOffset1 = 0.0
         borderHeight = 0.05
-        linearInput = false
-        linearOutput = false
     }
 }

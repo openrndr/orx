@@ -49,7 +49,7 @@ open class Layer internal constructor(
     val children: MutableList<Layer> = mutableListOf()
     var blendFilter: Pair<Filter, Filter.() -> Unit>? = null
     val postFilters: MutableList<Triple<Filter, Array<out Layer>, Filter.() -> Unit>> = mutableListOf()
-    var colorType = ColorType.UINT8
+    var colorType = ColorType.UINT8_SRGB
     private var unresolvedAccumulation: ColorBuffer? = null
     var accumulation: ColorBuffer? = null
 

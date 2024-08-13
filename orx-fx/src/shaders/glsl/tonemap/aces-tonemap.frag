@@ -20,6 +20,6 @@ vec3 ACESFilm(vec3 x) {
 void main() {
     vec3 texColor = texture(tex0,v_texCoord0).rgb;
     vec3 color = ACESFilm(texColor * exposureBias);
-    vec3 retColor = pow(color, vec3(1.0/2.2));
-    o_output = vec4(retColor, 1.0);
+
+    o_output = vec4(color, 1.0);
 }

@@ -18,8 +18,6 @@ private class LaserBlurPass : Filter(mppFilterShader(fx_laser_blur, "laser-blur"
     var vignette: Double by parameters
     var vignetteSize: Double by parameters
     var aberration: Double by parameters
-    var linearInput: Boolean by parameters
-    var linearOutput: Boolean by parameters
 
     init {
         radius = 0.0
@@ -29,8 +27,6 @@ private class LaserBlurPass : Filter(mppFilterShader(fx_laser_blur, "laser-blur"
         vignette = 0.0
         vignetteSize = 1.0
         aberration = 0.0
-        linearInput = false
-        linearOutput = false
     }
 }
 
@@ -59,12 +55,6 @@ class LaserBlur : Filter1to1() {
 
     @DoubleParameter("exp", -1.0, 1.0, order = 7)
     var exp = 0.739
-
-    @BooleanParameter("linear input", order = 8)
-    var linearInput = false
-
-    @BooleanParameter("linear output", order = 9)
-    var linearOutput = false
 
     @DoubleParameter("phase", -1.0, 1.0, order = 7)
     var phase = 0.0
@@ -99,19 +89,13 @@ class LaserBlur : Filter1to1() {
 
         pass.radius = 1.0 + pow(exp, 0.0) * radius
 
-        pass.linearInput = linearInput
-        pass.linearOutput = true
         pass.apply(source[0], intermediates[0], clip)
         for (i in 0 until passes - 1) {
-            pass.linearInput = true
-            pass.linearOutput = true
 
             pass.radius = 1.0 + pow(exp, i + 1.0) * radius //(1.0 + simplex(0, phase + i)) / 2.0
             pass.apply(intermediates[i % 2], intermediates[(i + 1) % 2], clip)
         }
         pass.radius = 1.0 + pow(exp, (passes) * 1.0) * radius
-        pass.linearInput = true
-        pass.linearOutput = linearOutput
         pass.apply(intermediates[(passes + 1) % 2], target[0], clip)
     }
 }

@@ -14,17 +14,17 @@ class Post : Extension {
     /**
      * The color type to use for the intermediate color buffers
      */
-    var intermediateType = ColorType.UINT8
+    var intermediateType = ColorType.UINT8_SRGB
 
     /**
      * The color type to use for the output color buffer
      */
-    var outputType = ColorType.UINT8
+    var outputType = ColorType.UINT8_SRGB
 
     /**
      * The color type to use for the input buffer
      */
-    var inputType = ColorType.UINT8
+    var inputType = ColorType.UINT8_SRGB
 
     /**
      * The depth format to use for the input buffer
