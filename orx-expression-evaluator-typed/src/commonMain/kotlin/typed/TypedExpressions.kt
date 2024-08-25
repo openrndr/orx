@@ -156,7 +156,7 @@ abstract class TypedExpressionListenerBase(
         val index = (s.valueStack.pop() as? Double)?.roundToInt() ?: error("index is not a number")
         val listValue = s.valueStack.pop()
 
-        val value = when (listValue) {
+        @Suppress("UNCHECKED_CAST") val value = when (listValue) {
             is List<*> -> listValue[index] ?: error("got null")
             is Function<*> -> (listValue as (Int) -> Any)(index)
             else -> error("can't index on '$listValue'")
@@ -216,6 +216,7 @@ abstract class TypedExpressionListenerBase(
         )
     }
 
+    @Suppress("IMPLICIT_CAST_TO_ANY")
     override fun exitBinaryOperation1(ctx: KeyLangParser.BinaryOperation1Context) {
         val s = state
         if (s.inFunctionLiteral > 0) {
@@ -759,6 +760,7 @@ abstract class TypedExpressionListenerBase(
     }
 
 
+    @Suppress("MoveLambdaOutsideParentheses")
     override fun visitTerminal(node: TerminalNode) {
         val s = state
         if (s.inFunctionLiteral > 0) {
@@ -835,26 +837,30 @@ abstract class TypedExpressionListenerBase(
                         is Function<*> -> {
                             @Suppress("UNCHECKED_CAST")
                             receiver as (String) -> Any
-                            @Suppress("UNCHECKED_CAST") val function =
-                                receiver.invoke(name) ?: error("no such function $name")
+                            val function =
+                                receiver.invoke(name)
 
                             when (idType) {
                                 IDType.MEMBER_FUNCTION0 -> {
+                                    @Suppress("UNCHECKED_CAST")
                                     function as () -> Any
                                     s.functionStack.push({ function() })
                                 }
 
                                 IDType.MEMBER_FUNCTION1 -> {
+                                    @Suppress("UNCHECKED_CAST")
                                     function as (Any) -> Any
                                     s.functionStack.push({ x -> function(x[0]) })
                                 }
 
                                 IDType.MEMBER_FUNCTION2 -> {
+                                    @Suppress("UNCHECKED_CAST")
                                     function as (Any, Any) -> Any
                                     s.functionStack.push({ x -> function(x[0], x[1]) })
                                 }
 
                                 IDType.MEMBER_FUNCTION3 -> {
+                                    @Suppress("UNCHECKED_CAST")
                                     function as (Any, Any, Any) -> Any
                                     s.functionStack.push({ x -> function(x[0], x[1], x[2]) })
                                 }
@@ -873,13 +879,13 @@ abstract class TypedExpressionListenerBase(
                 }
 
                 IDType.FUNCTION1 -> {
-                    val s = state
+                    val localState = state
                     val function: (Array<Any>) -> Any =
                         dispatchFunction1(name, functions.functions1)
                             ?: errorValue(
                                 "unresolved function: '${name}(x0)'"
                             ) { _ -> error("this is the error function") }
-                    s.functionStack.push(function)
+                    localState.functionStack.push(function)
                 }
 
                 IDType.FUNCTION2 -> {

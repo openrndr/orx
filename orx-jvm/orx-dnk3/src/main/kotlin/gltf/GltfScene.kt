@@ -90,7 +90,6 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
 
                     val localBuffer = buffers[localBufferView.buffer].contents(this@buildSceneNodes)
                     require(localBufferView.byteOffset != null)
-                    require(localBufferView.byteLength != null)
                     localBuffer.position(localBufferView.byteOffset)
                     localBuffer.limit(localBufferView.byteOffset + localBufferView.byteLength)
 
@@ -321,7 +320,6 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
     val scenes = scenes.map { scene ->
         scene.nodes.map { node ->
             val gltfNode = nodes.getOrNull(node) ?: error("node not found: $node")
-            require(gltfNode != null)
             val sceneNode = gltfNode.createSceneNode()
             sceneNode
         }

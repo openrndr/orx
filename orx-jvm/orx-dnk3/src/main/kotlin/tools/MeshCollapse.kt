@@ -19,12 +19,12 @@ fun Mesh.collapse() {
     }
 
     grouped.map {
-        val vertexCount = it.value.sumBy { primitive ->
+        val vertexCount = it.value.sumOf { primitive ->
             primitive.geometry.vertexCount
         }
 
         val indexCount = if (it.key.hasIndexBuffer)
-            it.value.sumBy { primitive ->
+            it.value.sumOf { primitive ->
                 primitive.geometry.indexBuffer?.indexCount ?: 0
             }
         else 0

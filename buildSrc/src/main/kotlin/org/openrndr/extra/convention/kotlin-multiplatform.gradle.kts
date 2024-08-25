@@ -4,10 +4,11 @@ import CollectScreenshotsTask
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-
 
 val libs = the<LibrariesForLibs>()
 
@@ -31,14 +32,19 @@ repositories {
 
 group = "org.openrndr.extra"
 
-tasks.withType<KotlinCompile<*>> {
-    kotlinOptions.apiVersion = libs.versions.kotlinApi.get()
-    kotlinOptions.languageVersion = libs.versions.kotlinLanguage.get()
-    kotlinOptions.freeCompilerArgs += "-Xexpect-actual-classes"
-    kotlinOptions.freeCompilerArgs += "-Xjdk-release=${libs.versions.jvmTarget.get()}"
+tasks.withType<KotlinCompilationTask<*>> {
+    compilerOptions {
+        apiVersion.set(KotlinVersion.valueOf("KOTLIN_${libs.versions.kotlinApi.get().replace(".", "_")}"))
+        languageVersion.set(KotlinVersion.valueOf("KOTLIN_${libs.versions.kotlinApi.get().replace(".", "_")}"))
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
 }
+
 tasks.withType<KotlinJvmCompile>().configureEach {
-    compilerOptions.jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
+    compilerOptions {
+        jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
+        freeCompilerArgs.add("-Xjdk-release=${libs.versions.jvmTarget.get()}")
+    }
 }
 
 kotlin {
@@ -46,7 +52,6 @@ kotlin {
         compilations {
             val main by getting
 
-            @Suppress("UNUSED_VARIABLE")
             val demo by creating {
                 associateWith(main)
                 tasks.register<CollectScreenshotsTask>("collectScreenshots") {
@@ -74,7 +79,6 @@ kotlin {
     }
 
     sourceSets {
-        @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
                 implementation(libs.kotlin.stdlib)
@@ -82,14 +86,12 @@ kotlin {
             }
         }
 
-        @Suppress("UNUSED_VARIABLE")
         val commonTest by getting {
             dependencies {
                 implementation(libs.kotlin.test)
             }
         }
 
-        @Suppress("UNUSED_VARIABLE")
         val jvmTest by getting {
             dependencies {
                 runtimeOnly(libs.bundles.jupiter)
@@ -97,7 +99,6 @@ kotlin {
             }
         }
 
-        @Suppress("UNUSED_VARIABLE")
         val jvmDemo by getting {
             dependencies {
                 implementation(libs.openrndr.application)
@@ -181,6 +182,7 @@ if (shouldPublish) {
 }
 
 kotlin {
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
     jvm().mainRun {
         classpath(kotlin.jvm().compilations.getByName("demo").output.allOutputs)
         classpath(kotlin.jvm().compilations.getByName("demo").configurations.runtimeDependencyConfiguration!!)

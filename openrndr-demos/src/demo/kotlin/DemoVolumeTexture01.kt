@@ -1,13 +1,10 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.VolumeTexture
-import org.openrndr.draw.colorBuffer
-import org.openrndr.draw.isolatedWithTarget
-import org.openrndr.draw.renderTarget
+import org.openrndr.draw.*
 
 fun main() = application {
     program {
-        val volumeTexture = VolumeTexture.create(128,128,32)
+        val volumeTexture = VolumeTexture.create(128,128,32, type = ColorType.UINT8)
         val rt = renderTarget(128, 128) {
             volumeTexture(volumeTexture, 0)
         }

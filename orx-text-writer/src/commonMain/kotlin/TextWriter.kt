@@ -5,6 +5,9 @@ import org.openrndr.draw.Drawer
 import org.openrndr.draw.FontImageMap
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 class Cursor(var x: Double = 0.0, var y: Double = 0.0) {
     constructor(cursor: Cursor) : this(cursor.x, cursor.y)
@@ -205,7 +208,11 @@ class TextWriter(val drawerRef: Drawer?) {
     }
 }
 
+@OptIn(ExperimentalContracts::class)
 fun <T> writer(drawer: Drawer, f: TextWriter.() -> T): T {
+    contract {
+        callsInPlace(f, InvocationKind.EXACTLY_ONCE)
+    }
     val textWriter = TextWriter(drawer)
     return textWriter.f()
 }

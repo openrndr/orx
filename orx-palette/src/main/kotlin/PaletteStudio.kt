@@ -219,7 +219,7 @@ class PaletteStudio(
 
     fun randomPalette() {
         val comparison = palette.colors.toMutableList()
-        val colors = Random.pick(palettes, comparison) as MutableList<ColorRGBa>
+        @Suppress("UNCHECKED_CAST") val colors = Random.pick(palettes, comparison) as MutableList<ColorRGBa>
 
         paletteIndex = palettes.indexOf(colors)
         palette = createPalette(colors)

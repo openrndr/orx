@@ -224,7 +224,7 @@ class Quadtree<T>(val bounds: Rectangle, val maxObjects: Int = 10, val mapper: (
     }
 
     private fun intersect(rect: Rectangle): List<Quadtree<T>>? {
-        val intersects = intersects(bounds, rect)
+        val intersects = bounds.intersects(rect)
 
         if (!intersects) return null
 

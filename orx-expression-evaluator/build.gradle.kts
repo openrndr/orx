@@ -1,5 +1,5 @@
 import com.strumenta.antlrkotlin.gradle.AntlrKotlinTask
-import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 plugins {
     org.openrndr.extra.convention.`kotlin-multiplatform`
@@ -55,7 +55,7 @@ kotlin {
     }
 }
 
-tasks.withType<KotlinCompile<*>> {
+tasks.withType<KotlinCompilationTask<*>> {
     dependsOn(generateKotlinGrammarSource)
 }
 

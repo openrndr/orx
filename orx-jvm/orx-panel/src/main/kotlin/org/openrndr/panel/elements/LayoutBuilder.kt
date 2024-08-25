@@ -88,7 +88,7 @@ fun Element.div(vararg classes: String, init: Div.() -> Unit): Div {
 }
 
 inline fun <reified T : TextElement> Element.textElement(classes: Array<out String>, init: T.() -> String): T {
-    val te = T::class.java.newInstance()
+    @Suppress("DEPRECATION") val te = T::class.java.newInstance()
     te.classes.addAll(classes.map { ElementClass(it) })
     te.text(te.init())
     append(te)

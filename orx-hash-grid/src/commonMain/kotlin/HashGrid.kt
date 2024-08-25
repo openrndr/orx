@@ -81,7 +81,7 @@ class HashGrid(val radius: Double) {
         private set
 
     val cellSize = radius / sqrt(2.0)
-    private inline fun coords(v: Vector2): GridCoords {
+    private fun coords(v: Vector2): GridCoords {
         val x = (v.x / cellSize).fastFloor()
         val y = (v.y / cellSize).fastFloor()
         return GridCoords(x, y)

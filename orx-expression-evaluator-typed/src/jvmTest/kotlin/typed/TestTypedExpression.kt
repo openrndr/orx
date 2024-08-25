@@ -11,12 +11,12 @@ class TestTypedExpression {
     fun funTestFunction() {
         run {
             val r = evaluateTypedExpression("{ x -> 2.0 + x }")
-            val f = r as (Double) -> Double
+            @Suppress("UNCHECKED_CAST") val f = r as (Double) -> Double
             println(f(3.0))
         }
         run {
             val r = evaluateTypedExpression("{ { 2.0 + it } }")
-            val f0 = r as (Any) -> ((Any) -> Any)
+            @Suppress("UNCHECKED_CAST") val f0 = r as (Any) -> ((Any) -> Any)
             val f1 = f0(0.0)
             println(f1(3.0))
         }
@@ -102,6 +102,7 @@ class TestTypedExpression {
         return fun(p: String): Any? {
             val v = this[p]
             if (v is Map<*, *>) {
+                @Suppress("UNCHECKED_CAST")
                 return (v as Map<String, Any>).function()
             } else {
                 return v

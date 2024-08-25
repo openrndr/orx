@@ -87,7 +87,7 @@ class HashGrid3D(val radius: Double) {
         private set
 
     val cellSize = radius / sqrt(3.0)
-    private inline fun coords(v: Vector3): GridCoords3D {
+    private fun coords(v: Vector3): GridCoords3D {
         val x = (v.x / cellSize).fastFloor()
         val y = (v.y / cellSize).fastFloor()
         val z = (v.z / cellSize).fastFloor()
