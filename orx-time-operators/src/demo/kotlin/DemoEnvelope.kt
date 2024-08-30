@@ -11,11 +11,6 @@ fun main() {
             val size = Envelope(50.0, 400.0, 0.5, 0.5)
             val rotation = Envelope(easingFactor = 0.4)
 
-            if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.outputFile = System.getProperty("screenshotPath")
-                }
-            }
             extend(TimeOperators()) {
                 track(size, rotation)
             }

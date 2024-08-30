@@ -14,11 +14,6 @@ fun main() = application {
         }
         val animation = Animation()
         animation.loadFromJson(URL(resourceUrl("/demo-full-01.json")), format = KeyframerFormat.FULL)
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
         extend {
             animation(seconds)
             drawer.fill = animation.color

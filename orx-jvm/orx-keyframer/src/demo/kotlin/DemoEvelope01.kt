@@ -11,11 +11,6 @@ fun main() = application {
         }
         val animation = Animation()
         animation.loadFromJson(URL(resourceUrl("/demo-envelope-01.json")))
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
         extend {
             animation(seconds)
             drawer.circle(animation.position, 100.0)

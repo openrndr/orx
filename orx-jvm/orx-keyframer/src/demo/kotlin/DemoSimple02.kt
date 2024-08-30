@@ -13,11 +13,6 @@ fun main() = application {
         }
         val animation = Animation()
         animation.loadFromJson(URL(resourceUrl("/demo-simple-02.json")))
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
         extend {
             animation(seconds)
             drawer.fill = animation.color

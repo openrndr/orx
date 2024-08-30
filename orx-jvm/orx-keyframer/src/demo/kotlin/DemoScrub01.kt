@@ -30,11 +30,6 @@ fun main() = application {
                 }
             }
         }
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
         extend(cm)
         class Animation: Keyframer() {
             val position by Vector2Channel(arrayOf("x", "y"))

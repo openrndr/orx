@@ -15,13 +15,6 @@ fun main() = application {
     }
 
     program {
-        // -- this block is for automation purposes only
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
-
         /**
          * Start RabbitControlServer with a Rabbithole with key 'orxtest'
          * Please visit https://rabbithole.rabbitcontrol.cc for more information.

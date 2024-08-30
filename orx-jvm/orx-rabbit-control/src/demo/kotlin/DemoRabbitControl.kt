@@ -15,13 +15,6 @@ fun main() = application {
     }
 
     program {
-        // -- this block is for automation purposes only
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
-
         val rabbit = RabbitControlServer()
         val font = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 20.0)
         val settings = object {

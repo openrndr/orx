@@ -1,7 +1,6 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.events.Event
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.timer.repeat
 
 /**
@@ -18,11 +17,6 @@ fun main() = application {
         repeat(2.0) {
             // -- we can not draw here, so we relay the repeat signal to the event
             event.trigger(null)
-        }
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
         }
         extend {
             drawer.clear(ColorRGBa.PINK)

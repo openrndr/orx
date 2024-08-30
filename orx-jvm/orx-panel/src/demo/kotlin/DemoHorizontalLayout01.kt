@@ -12,12 +12,6 @@ import org.openrndr.panel.style.*
 
 fun main() = application {
     program {
-        // -- this block is for automation purposes only
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
         val cm = controlManager {
             styleSheet(has class_ "horizontal") {
                 paddingLeft = 10.px
