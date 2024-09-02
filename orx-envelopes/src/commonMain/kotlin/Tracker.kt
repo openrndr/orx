@@ -73,15 +73,29 @@ abstract class Tracker<T : Envelope>(val clock: Clock) {
 
 class ADSRTracker(clock: Clock) : Tracker<ADSR>(clock) {
 
+    /**
+     * The time it takes to transition to 1.0 when calling [triggerOn], usually in seconds.
+     */
     @DoubleParameter("attack", 0.0, 20.0, order = 1)
     var attack: Double = 0.1
 
+    /**
+     * The time it takes to transition from 1.0 to the [sustain] level, usually in seconds.
+     * The decay happens immediately after the attack.
+     */
     @DoubleParameter("decay", 0.0, 20.0, order = 2)
     var decay: Double = 0.1
 
+    /**
+     * The sustain level, between 0.0 and 1.0.
+     * The tracker will keep this value until [triggerOff] is called.
+     */
     @DoubleParameter("sustain", 0.0, 1.0, order = 3)
     var sustain: Double = 0.9
 
+    /**
+     * The time it takes to transition back to 0.0 when calling [triggerOff], usually in seconds.
+     */
     @DoubleParameter("release", 0.0, 20.0, order = 4)
     var release: Double = 0.9
 

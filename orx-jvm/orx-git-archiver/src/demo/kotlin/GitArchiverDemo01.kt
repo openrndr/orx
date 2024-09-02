@@ -6,11 +6,6 @@
 //
 //fun main() = application {
 //    program {
-//        if (System.getProperty("takeScreenshot") == "true") {
-//            extend(SingleScreenshot()) {
-//                this.outputFile = System.getProperty("screenshotPath")
-//            }
-//        }
 //        val ga = extend(GitArchiver()) {
 //            commitOnRun = true
 //            commitOnRequestAssets = false

@@ -12,9 +12,8 @@ fun main() {
             val size = LFO()
             val rotation = LFO(LFOWave.Sine)
             if (System.getProperty("takeScreenshot") == "true") {
-                extend(SingleScreenshot()) {
-                    this.delayFrames = 10
-                    this.outputFile = System.getProperty("screenshotPath")
+                extensions.filterIsInstance<SingleScreenshot>().forEach {
+                    it.delayFrames = 10
                 }
             }
             extend(TimeOperators()) {
