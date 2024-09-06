@@ -83,6 +83,37 @@ The [demo folder](src/jvmDemo/kotlin) contains examples using these methods.
 
 Check out the [source code](src/commonMain/kotlin) to learn about function arguments.
 
+## Meshes out of point clouds
+
+```kotlin
+val resolution = IntVector2(640, 480)
+val mesh = PointCloudToMeshGenerator().generate(pointCloud, resolution)
+```
+
+This approach is suitable for one time generation, but the mesh `VertexBuffer` can be also updated continuously.
+
+```kotlin
+val resolution = IntVector2(640, 480)
+val mesh = meshVertexBuffer(resolution)
+val generator = PointCloudToMeshGenerator()
+// ...
+extend {
+    generator.populate(mesh, pointCloud, resolution)
+}
+```
+
+All of this can be also achieved for colored point clouds:
+
+```kotlin
+val resolution = IntVector2(640, 480)
+val mesh = coloredMeshVertexBuffer(resolution)
+val generator = ColoredPointCloudToMeshGenerator()
+// ...
+extend {
+    generator.populate(mesh, pointCloud, resolution)
+}
+```
+
 <!-- __demos__ -->
 ## Demos
 ### DemoAll
@@ -94,6 +125,11 @@ Check out the [source code](src/commonMain/kotlin) to learn about function argum
 [source code](src/jvmDemo/kotlin/DemoBox.kt)
 
 ![DemoBoxKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoBoxKt.png)
+
+### DemoColoredHeightMapToMesh
+[source code](src/jvmDemo/kotlin/DemoColoredHeightMapToMesh.kt)
+
+![DemoColoredHeightMapToMeshKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoColoredHeightMapToMeshKt.png)
 
 ### DemoComplex01
 [source code](src/jvmDemo/kotlin/DemoComplex01.kt)
@@ -154,3 +190,8 @@ Check out the [source code](src/commonMain/kotlin) to learn about function argum
 [source code](src/jvmDemo/kotlin/DemoExtrude06.kt)
 
 ![DemoExtrude06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude06Kt.png)
+
+### DemoHeightMapToMesh
+[source code](src/jvmDemo/kotlin/DemoHeightMapToMesh.kt)
+
+![DemoHeightMapToMeshKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoHeightMapToMeshKt.png)
