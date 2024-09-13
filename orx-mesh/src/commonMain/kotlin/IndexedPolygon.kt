@@ -9,11 +9,15 @@ import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.round
 
-data class IndexedPolygon(
-    val positions: IntArray, val textureCoords: IntArray, val normals: IntArray
-) {
+interface IIndexedPolygon {
+    val positions: List<Int>
+    val textureCoords: List<Int>
+    val normals: List<Int>
+    val colors: List<Int>
+    val tangents: List<Int>
+    val bitangents: List<Int>
 
-    fun base(vertexData: VertexData): Matrix44 {
+    fun base(vertexData: IVertexData): Matrix44 {
         val u = (vertexData.positions[positions[1]] - vertexData.positions[positions[0]])
         val v = (vertexData.positions[positions[positions.size - 1]] - vertexData.positions[positions[0]])
         val normal = u.cross(v)
@@ -26,7 +30,7 @@ data class IndexedPolygon(
         )
     }
 
-    fun isPlanar(vertexData: VertexData, eps: Double = 1E-2): Boolean {
+    fun isPlanar(vertexData: IVertexData, eps: Double = 1E-2): Boolean {
         fun normal(i: Int): Vector3 {
             val p0 = vertexData.positions[positions[(i - 1).mod(positions.size)]]
             val p1 = vertexData.positions[positions[(i).mod(positions.size)]]
@@ -44,7 +48,7 @@ data class IndexedPolygon(
         }
     }
 
-    fun isConvex(vertexData: VertexData): Boolean {
+    fun isConvex(vertexData: IVertexData): Boolean {
         val planar = base(vertexData).inversed
 
         fun p(v: Vector3): Vector2 {
@@ -71,7 +75,7 @@ data class IndexedPolygon(
                 return false
             }
             var angle = newDirection - oldDirection
-            if (angle <= -Math.PI)
+            if (angle <= -PI)
                 angle += PI * 2.0
 
             if (angle > PI) {
@@ -95,37 +99,69 @@ data class IndexedPolygon(
         return abs(round(angleSum / (2 * PI))) == 1.0
     }
 
-    fun tessellate(vertexData: VertexData): List<IndexedPolygon> {
+    fun toPolygon(vertexData: IVertexData): IPolygon
+}
+
+
+data class IndexedPolygon(
+    override val positions: List<Int>,
+    override val textureCoords: List<Int>,
+    override val normals: List<Int>,
+    override val colors: List<Int>,
+    override val tangents: List<Int>,
+    override val bitangents: List<Int>
+
+    ) : IIndexedPolygon {
+
+    fun tessellate(vertexData: IVertexData): List<IndexedPolygon> {
         val points = vertexData.positions.slice(positions.toList())
         val triangles = org.openrndr.shape.triangulate(listOf(points))
 
         return triangles.windowed(3, 3).map {
             IndexedPolygon(
-                positions.sliceArray(it),
-                if (textureCoords.isNotEmpty()) textureCoords.sliceArray(it) else intArrayOf(),
-                if (normals.isNotEmpty()) normals.sliceArray(it) else intArrayOf()
+                positions.slice(it),
+                if (textureCoords.isNotEmpty()) textureCoords.slice(it) else listOf(),
+                if (normals.isNotEmpty()) normals.slice(it) else listOf(),
+                if (colors.isNotEmpty()) colors.slice(it) else listOf(),
+                if (tangents.isNotEmpty()) tangents.slice(it) else listOf(),
+                if (bitangents.isNotEmpty()) bitangents.slice(it) else listOf()
             )
         }
     }
 
-    fun triangulate(vertexData: VertexData): List<IndexedPolygon> {
+    fun triangulate(vertexData: IVertexData): List<IndexedPolygon> {
         return when {
             positions.size == 3 -> listOf(this)
             isPlanar(vertexData) && isConvex(vertexData) -> {
                 val triangleCount = positions.size - 2
                 (0 until triangleCount).map {
                     IndexedPolygon(
-                        intArrayOf(positions[0], positions[it + 1], positions[it + 2]),
+                        listOf(positions[0], positions[it + 1], positions[it + 2]),
                         listOfNotNull(
                             textureCoords.getOrNull(0),
                             textureCoords.getOrNull(it),
                             textureCoords.getOrNull(it + 1)
-                        ).toIntArray(),
+                        ),
                         listOfNotNull(
                             normals.getOrNull(0),
                             normals.getOrNull(it),
                             normals.getOrNull(it + 1)
-                        ).toIntArray(),
+                        ),
+                        listOfNotNull(
+                            colors.getOrNull(0),
+                            colors.getOrNull(it + 1),
+                            colors.getOrNull(it + 2)
+                        ),
+                        listOfNotNull(
+                            tangents.getOrNull(0),
+                            tangents.getOrNull(it + 1),
+                            tangents.getOrNull(it + 2)
+                        ),
+                        listOfNotNull(
+                            bitangents.getOrNull(0),
+                            bitangents.getOrNull(it + 1),
+                            bitangents.getOrNull(it + 2)
+                        ),
                     )
                 }
             }
@@ -134,11 +170,31 @@ data class IndexedPolygon(
         }
     }
 
-    fun toPolygon(vertexData: VertexData): Polygon {
+    override fun toPolygon(vertexData: IVertexData): Polygon {
         return Polygon(
-            vertexData.positions.slice(positions.toList()).toTypedArray(),
-            vertexData.normals.slice(normals.toList()).toTypedArray(),
-            vertexData.textureCoords.slice(textureCoords.toList()).toTypedArray()
+            vertexData.positions.slice(positions),
+            vertexData.normals.slice(normals),
+            vertexData.textureCoords.slice(textureCoords),
+            vertexData.colors.slice(colors)
+        )
+    }
+}
+
+data class MutableIndexedPolygon(
+    override val positions: MutableList<Int>,
+    override val textureCoords: MutableList<Int>,
+    override val normals: MutableList<Int>,
+    override val colors: MutableList<Int>,
+    override val tangents: MutableList<Int>,
+    override val bitangents: MutableList<Int>
+) : IIndexedPolygon {
+
+    override fun toPolygon(vertexData: IVertexData): MutablePolygon {
+        return MutablePolygon(
+            vertexData.positions.slice(positions).toMutableList(),
+            vertexData.normals.slice(normals).toMutableList(),
+            vertexData.textureCoords.slice(textureCoords).toMutableList(),
+            vertexData.colors.slice(colors).toMutableList()
         )
     }
 }

@@ -6,6 +6,7 @@ dependencies {
     implementation(libs.openrndr.application)
     implementation(libs.openrndr.math)
     implementation(libs.openrndr.ffmpeg)
+    api(project(":orx-mesh"))
     demoImplementation(project(":orx-camera"))
     demoImplementation(project(":orx-mesh-generators"))
 }
