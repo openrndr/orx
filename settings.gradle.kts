@@ -46,6 +46,7 @@ include(
         "orx-image-fit",
         "orx-kdtree",
         "orx-jvm:orx-keyframer",
+        "orx-mesh",
         "orx-mesh-generators",
         "orx-jvm:orx-minim",
         "orx-jvm:orx-kotlin-parser",
