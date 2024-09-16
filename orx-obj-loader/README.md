@@ -24,6 +24,11 @@ vertexBuffer.saveOBJ("my/path/exported.obj")
 
 <!-- __demos__ -->
 ## Demos
+### DemoObjCompoundRW01
+[source code](src/jvmDemo/kotlin/DemoObjCompoundRW01.kt)
+
+![DemoObjCompoundRW01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-obj-loader/images/DemoObjCompoundRW01Kt.png)
+
 ### DemoObjLoader01
 [source code](src/jvmDemo/kotlin/DemoObjLoader01.kt)
 
