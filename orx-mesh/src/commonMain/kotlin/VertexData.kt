@@ -4,7 +4,6 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 
-
 /**
  * Vertex data interface
  */
@@ -40,6 +39,9 @@ interface IVertexData {
     val bitangents: List<Vector3>
 }
 
+/**
+ * Immutable vertex data implementation
+ */
 class VertexData(
     override val positions: List<Vector3> = emptyList(),
     override val normals: List<Vector3> = emptyList(),
@@ -47,8 +49,27 @@ class VertexData(
     override val colors: List<ColorRGBa> = emptyList(),
     override val tangents: List<Vector3> = emptyList(),
     override val bitangents: List<Vector3> = emptyList()
-) : IVertexData
+) : IVertexData {
 
+    /**
+     * Convert to [MutableVertexData]
+     */
+    fun toMutableVertexData(): MutableVertexData {
+        return MutableVertexData(
+            positions.toMutableList(),
+            normals.toMutableList(),
+            textureCoords.toMutableList(),
+            colors.toMutableList(),
+            tangents.toMutableList(),
+            bitangents.toMutableList()
+        )
+    }
+}
+
+
+/**
+ * Mutable vertex data implementation
+ */
 class MutableVertexData(
     override val positions: MutableList<Vector3> = mutableListOf(),
     override val normals: MutableList<Vector3> = mutableListOf(),
@@ -56,4 +77,19 @@ class MutableVertexData(
     override val colors: MutableList<ColorRGBa> = mutableListOf(),
     override val tangents: MutableList<Vector3> = mutableListOf(),
     override val bitangents: MutableList<Vector3> = mutableListOf()
-) : IVertexData
+) : IVertexData {
+
+    /**
+     * Convert to [VertexData]
+     */
+    fun toVertexData(): VertexData {
+        return VertexData(
+            positions.toList(),
+            normals.toList(),
+            textureCoords.toList(),
+            colors.toList(),
+            tangents.toList(),
+            bitangents.toList()
+        )
+    }
+}

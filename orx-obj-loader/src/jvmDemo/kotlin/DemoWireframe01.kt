@@ -8,7 +8,7 @@ import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.TransformTarget
 import org.openrndr.draw.shadeStyle
 import org.openrndr.extra.camera.Orbital
-import org.openrndr.extra.objloader.loadOBJMeshData
+import org.openrndr.extra.objloader.readObjMeshData
 import org.openrndr.extra.objloader.loadOBJasVertexBuffer
 import org.openrndr.extra.objloader.wireframe
 import org.openrndr.math.Vector3
@@ -25,7 +25,7 @@ fun main() {
         }
         program {
             val vb = loadOBJasVertexBuffer("orx-obj-loader/test-data/non-planar.obj")
-            val md = loadOBJMeshData(File("orx-obj-loader/test-data/non-planar.obj").readLines())
+            val md = readObjMeshData(File("orx-obj-loader/test-data/non-planar.obj").readLines())
 
             val paths = md.wireframe().map {
                 Path3D.fromPoints(it, true)

@@ -1,5 +1,6 @@
 package org.openrndr.extra.objloader
 
+import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.VertexBuffer
 import org.openrndr.draw.VertexFormat
 import org.openrndr.draw.vertexBuffer
@@ -13,13 +14,14 @@ internal val objVertexFormat = vertexFormat {
     position(3)
     normal(3)
     textureCoordinate(2)
+    color(4)
 }
 
 /**
  * Converts a [MeshData] instance into a [VertexBuffer]
  */
 fun IMeshData.toVertexBuffer(elementOffset: Int = 0, vertexBuffer: VertexBuffer? = null): VertexBuffer {
-    val objects = triangulate().flattenPolygons()
+    val objects = triangulate().toPolygons()
     val triangleCount = objects.size
     val vertexBuffer = vertexBuffer ?: vertexBuffer(objVertexFormat, triangleCount * 3)
 
@@ -40,11 +42,14 @@ fun IMeshData.toVertexBuffer(elementOffset: Int = 0, vertexBuffer: VertexBuffer?
                 } else {
                     write(Vector2.ZERO)
                 }
+                if (it.colors.isNotEmpty()) {
+                    write(it.colors[i])
+                } else {
+                    write(ColorRGBa.WHITE)
+                }
             }
         }
     }
-
-
     vertexBuffer.shadow.destroy()
     return vertexBuffer
 }

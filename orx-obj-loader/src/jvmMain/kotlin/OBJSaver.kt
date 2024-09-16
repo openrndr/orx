@@ -47,6 +47,7 @@ fun VertexBuffer.saveOBJ(filePath: String) {
     val bb = ByteBuffer.allocateDirect(vertexCount * vertexFormat.size)
     bb.order(ByteOrder.nativeOrder())
     read(bb)
+    bb.rewind()
 
     val tokens = mapOf(
         "position" to "v",

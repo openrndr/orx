@@ -25,21 +25,21 @@ vertexBuffer.saveOBJ("my/path/exported.obj")
 <!-- __demos__ -->
 ## Demos
 ### DemoObjLoader01
-[source code](src/demo/kotlin/DemoObjLoader01.kt)
+[source code](src/jvmDemo/kotlin/DemoObjLoader01.kt)
 
 ![DemoObjLoader01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-obj-loader/images/DemoObjLoader01Kt.png)
 
 ### DemoObjSaver01
-[source code](src/demo/kotlin/DemoObjSaver01.kt)
+[source code](src/jvmDemo/kotlin/DemoObjSaver01.kt)
 
 ![DemoObjSaver01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-obj-loader/images/DemoObjSaver01Kt.png)
 
 ### DemoObjSaver02
-[source code](src/demo/kotlin/DemoObjSaver02.kt)
+[source code](src/jvmDemo/kotlin/DemoObjSaver02.kt)
 
 ![DemoObjSaver02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-obj-loader/images/DemoObjSaver02Kt.png)
 
 ### DemoWireframe01
-[source code](src/demo/kotlin/DemoWireframe01.kt)
+[source code](src/jvmDemo/kotlin/DemoWireframe01.kt)
 
 ![DemoWireframe01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-obj-loader/images/DemoWireframe01Kt.png)

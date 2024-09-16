@@ -9,12 +9,38 @@ import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.round
 
+/**
+ * Indexed polygon interface
+ */
 interface IIndexedPolygon {
+    /**
+     * Position indices
+     */
     val positions: List<Int>
+
+    /**
+     * Texture coordinate indices, optional
+     */
     val textureCoords: List<Int>
+
+    /**
+     * Normal indices, optional
+     */
     val normals: List<Int>
+
+    /**
+     * Color indices, optional
+     */
     val colors: List<Int>
+
+    /**
+     * Tangents, optional
+     */
     val tangents: List<Int>
+
+    /**
+     * Bitangents, optional
+     */
     val bitangents: List<Int>
 
     fun base(vertexData: IVertexData): Matrix44 {
@@ -30,6 +56,11 @@ interface IIndexedPolygon {
         )
     }
 
+    /**
+     * Determine if polygon is planar
+     * @param vertexData the vertex data
+     * @param eps error tolerance
+     */
     fun isPlanar(vertexData: IVertexData, eps: Double = 1E-2): Boolean {
         fun normal(i: Int): Vector3 {
             val p0 = vertexData.positions[positions[(i - 1).mod(positions.size)]]
@@ -48,6 +79,9 @@ interface IIndexedPolygon {
         }
     }
 
+    /**
+     * Determine polygon convexity
+     */
     fun isConvex(vertexData: IVertexData): Boolean {
         val planar = base(vertexData).inversed
 
@@ -99,10 +133,16 @@ interface IIndexedPolygon {
         return abs(round(angleSum / (2 * PI))) == 1.0
     }
 
+    /**
+     * Convert to [IPolygon]
+     * @param vertexData the vertex data required to build the [IPolygon]
+     */
     fun toPolygon(vertexData: IVertexData): IPolygon
 }
 
-
+/**
+ * Immutable indexed polygon implementation
+ */
 data class IndexedPolygon(
     override val positions: List<Int>,
     override val textureCoords: List<Int>,
@@ -113,7 +153,7 @@ data class IndexedPolygon(
 
     ) : IIndexedPolygon {
 
-    fun tessellate(vertexData: IVertexData): List<IndexedPolygon> {
+    private fun tessellate(vertexData: IVertexData): List<IndexedPolygon> {
         val points = vertexData.positions.slice(positions.toList())
         val triangles = org.openrndr.shape.triangulate(listOf(points))
 
@@ -129,6 +169,11 @@ data class IndexedPolygon(
         }
     }
 
+    /**
+     * Convert to a list of triangle [IndexedPolygon]
+     *
+     * Supports non-planar and non-convex polygons
+     */
     fun triangulate(vertexData: IVertexData): List<IndexedPolygon> {
         return when {
             positions.size == 3 -> listOf(this)
@@ -180,6 +225,9 @@ data class IndexedPolygon(
     }
 }
 
+/**
+ * Mutable indexed polygon implementation
+ */
 data class MutableIndexedPolygon(
     override val positions: MutableList<Int>,
     override val textureCoords: MutableList<Int>,

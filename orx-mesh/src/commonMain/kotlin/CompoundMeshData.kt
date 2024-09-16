@@ -1,5 +1,8 @@
 package org.openrndr.extra.objloader
 
+/**
+ * Compound mesh data interface
+ */
 interface ICompoundMeshData {
     val vertexData: IVertexData
     val compounds: Map<String, IMeshData>
@@ -11,6 +14,10 @@ class CompoundMeshData(
     override val vertexData: VertexData,
     override val compounds: Map<String, MeshData>
 ) : ICompoundMeshData {
+
+    init {
+        
+    }
 
     override fun triangulate(): CompoundMeshData {
         return CompoundMeshData(vertexData, compounds.mapValues {
@@ -25,6 +32,10 @@ class MutableCompoundMeshData(
 ) : ICompoundMeshData {
 
     override fun triangulate(): MutableCompoundMeshData {
-        TODO("Not yet implemented")
+        return MutableCompoundMeshData(
+            vertexData,
+            compounds.mapValues {
+                it.value.triangulate()
+            }.toMutableMap())
     }
 }

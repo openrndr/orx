@@ -8,6 +8,10 @@ import org.openrndr.shape.Box
 import kotlin.math.max
 import kotlin.math.min
 
+
+/**
+ * 3D Polygon interface
+ */
 interface IPolygon {
     val positions: List<Vector3>
     val normals: List<Vector3>
@@ -20,7 +24,7 @@ interface IPolygon {
 }
 
 /**
- * A 3D Polygon
+ * Immutable 3D Polygon implementation
  *
  * @property positions Vertex 3D positions
  * @property normals Vertex 3D normals
@@ -54,6 +58,9 @@ class Polygon(
     }
 }
 
+/**
+ * Mutable 3D Polygon implementation
+ */
 class MutablePolygon(
     override val positions: MutableList<Vector3> = mutableListOf(),
     override val normals: MutableList<Vector3> = mutableListOf(),
@@ -77,7 +84,7 @@ class MutablePolygon(
 
 
 /**
- * Calculates the 3D bounding box of a list of [IPolygon].
+ * Calculate the 3D bounding box of a list of [IPolygon].
  */
 fun bounds(polygons: List<IPolygon>): Box {
     var minX = Double.POSITIVE_INFINITY
@@ -100,4 +107,43 @@ fun bounds(polygons: List<IPolygon>): Box {
         }
     }
     return Box(Vector3(minX, minY, minZ), maxX - minX, maxY - minY, maxZ - minZ)
+}
+
+
+/**
+ * Convert list of polygons to [MeshData]
+ */
+fun List<IPolygon>.toMeshData(): MeshData {
+    val vertexData = MutableVertexData()
+
+    for (p in this) {
+        vertexData.positions.addAll(p.positions)
+        vertexData.normals.addAll(p.normals)
+        vertexData.colors.addAll(p.colors)
+        vertexData.textureCoords.addAll(p.textureCoords)
+        vertexData.tangents.addAll(p.tangents)
+        vertexData.bitangents.addAll(p.bitangents)
+    }
+
+    val indexedPolygons = mutableListOf<IndexedPolygon>()
+
+    var vertexOffset = 0
+    for (p in this) {
+
+        val indices = (vertexOffset until vertexOffset + p.positions.size).toList()
+
+        indexedPolygons.add(
+            IndexedPolygon(
+                positions = indices,
+                textureCoords = if (p.textureCoords.isNotEmpty()) indices else emptyList(),
+                normals = if (p.normals.isNotEmpty()) indices else emptyList(),
+                colors = if (p.colors.isNotEmpty()) indices else emptyList(),
+                tangents = if (p.tangents.isNotEmpty()) indices else emptyList(),
+                bitangents = if (p.bitangents.isNotEmpty()) indices else emptyList()
+            )
+        )
+
+        vertexOffset += p.positions.size
+    }
+    return MeshData(vertexData.toVertexData(), indexedPolygons)
 }

@@ -19,6 +19,6 @@ fun ICompoundMeshData.toVertexBuffer(): VertexBuffer {
     return vertexBuffer
 }
 
-fun ICompoundMeshData.flattenPolygons(): Map<String, List<IPolygon>> {
-    return compounds.mapValues { it.value.flattenPolygons() }
+fun ICompoundMeshData.toPolygons(): Map<String, List<IPolygon>> {
+    return compounds.mapValues { it.value.toPolygons() }
 }

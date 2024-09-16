@@ -2,13 +2,19 @@ package org.openrndr.extra.objloader
 
 import kotlin.jvm.JvmRecord
 
+/**
+ * Mesh data interface
+ */
 interface IMeshData {
     val vertexData: IVertexData
     val polygons: List<IIndexedPolygon>
     fun triangulate(): IMeshData
-    fun flattenPolygons(): List<IPolygon>
+    fun toPolygons(): List<IPolygon>
 }
 
+/**
+ * Immutable mesh data implementation
+ */
 @JvmRecord
 data class MeshData(
     override val vertexData: VertexData,
@@ -18,7 +24,7 @@ data class MeshData(
         return copy(polygons = polygons.flatMap { polygon -> polygon.triangulate(vertexData) })
     }
 
-    override fun flattenPolygons(): List<Polygon> {
+    override fun toPolygons(): List<Polygon> {
         return polygons.map { ip ->
             ip.toPolygon(vertexData)
         }
@@ -26,6 +32,9 @@ data class MeshData(
 }
 
 
+/**
+ * Mutable mesh data implementation
+ */
 data class MutableMeshData(
     override val vertexData: MutableVertexData,
     override val polygons: MutableList<IndexedPolygon>
@@ -34,8 +43,7 @@ data class MutableMeshData(
         return copy(polygons = polygons.flatMap { it.triangulate(vertexData) }.toMutableList())
     }
 
-    override fun flattenPolygons(): List<Polygon> {
+    override fun toPolygons(): List<Polygon> {
         return polygons.map { it.toPolygon(vertexData) }
-
     }
 }
