@@ -1,4 +1,4 @@
-package org.openrndr.extra.objloader
+package org.openrndr.extra.mesh
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.math.Matrix44

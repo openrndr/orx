@@ -2,7 +2,7 @@ import org.openrndr.application
 import org.openrndr.draw.loadFont
 import org.openrndr.extra.meshgenerators.buildTriangleMesh
 import org.openrndr.extra.meshgenerators.sphere
-import org.openrndr.extra.objloader.saveOBJ
+import org.openrndr.extra.mesh.saveOBJ
 
 fun main() = application {
     configure {

@@ -1,4 +1,4 @@
-package org.openrndr.extra.objloader
+package org.openrndr.extra.mesh
 
 /**
  * Convert mesh data to Wavefront OBJ representation

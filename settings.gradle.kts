@@ -48,6 +48,7 @@ include(
         "orx-jvm:orx-keyframer",
         "orx-mesh",
         "orx-mesh-generators",
+        "orx-mesh-noise",
         "orx-jvm:orx-minim",
         "orx-jvm:orx-kotlin-parser",
         "orx-jvm:orx-midi",

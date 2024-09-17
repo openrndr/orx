@@ -1,4 +1,4 @@
-package org.openrndr.extra.objloader
+package org.openrndr.extra.mesh
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.VertexBuffer
@@ -18,7 +18,14 @@ internal val objVertexFormat = vertexFormat {
 }
 
 /**
- * Converts a [MeshData] instance into a [VertexBuffer]
+ * Determine if [IMeshData] is triangular by checking if each polygon has exactly 3 vertices
+ */
+fun IMeshData.isTriangular(): Boolean {
+    return polygons.all { it.positions.size == 3 }
+}
+
+/**
+ * Convert a [MeshData] instance into a [VertexBuffer]
  */
 fun IMeshData.toVertexBuffer(elementOffset: Int = 0, vertexBuffer: VertexBuffer? = null): VertexBuffer {
     val objects = triangulate().toPolygons()
