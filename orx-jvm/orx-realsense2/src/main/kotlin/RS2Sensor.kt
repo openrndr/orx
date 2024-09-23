@@ -142,7 +142,7 @@ abstract class Sensor {
     /**
      * wait for frames to arrives
      */
-    abstract fun waitForFrames()
+    abstract fun waitForFrames(timeOut: Int = 15000)
 
     /**
      * destroy the sensor
@@ -153,7 +153,7 @@ abstract class Sensor {
 class DummySensor : Sensor() {
     override val serial: String = "DummySensor-${System.identityHashCode(this)}"
 
-    override fun waitForFrames() {
+    override fun waitForFrames(timeOut: Int) {
     }
 
     override fun destroy() {
@@ -179,9 +179,9 @@ class RS2Sensor(
         serial
     }
 
-    override fun waitForFrames() {
+    override fun waitForFrames(timeOut: Int) {
         val error = rs2_error()
-        val frames = rs2_pipeline_wait_for_frames(pipeline, RS2_DEFAULT_TIMEOUT, error)
+        val frames = rs2_pipeline_wait_for_frames(pipeline, timeOut, error)
         error.check()
 
         val frameCount = rs2_embedded_frames_count(frames, error)
