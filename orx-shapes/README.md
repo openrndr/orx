@@ -184,6 +184,11 @@ Collection of 2D shape generators and modifiers.
 
 ![primitives-DemoRectangleGrid02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleGrid02Kt.png)
 
+### primitives/DemoRectangleIntersection01
+[source code](src/jvmDemo/kotlin/primitives/DemoRectangleIntersection01.kt)
+
+![primitives-DemoRectangleIntersection01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleIntersection01Kt.png)
+
 ### primitives/DemoRegularPolygon
 [source code](src/jvmDemo/kotlin/primitives/DemoRegularPolygon.kt)
 
