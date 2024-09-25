@@ -18,6 +18,7 @@ kotlin {
                 api(libs.openrndr.shape)
                 implementation(project(":orx-shapes"))
                 implementation(project(":orx-mesh-generators"))
+                implementation(project(":orx-obj-loader"))
                 implementation(project(":orx-camera"))
                 implementation(project(":orx-noise"))
             }

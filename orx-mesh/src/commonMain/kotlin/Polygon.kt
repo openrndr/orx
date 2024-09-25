@@ -14,9 +14,9 @@ import kotlin.math.min
  */
 interface IPolygon {
     val positions: List<Vector3>
-    val normals: List<Vector3>
     val textureCoords: List<Vector2>
     val colors: List<ColorRGBa>
+    val normals: List<Vector3>
     val tangents: List<Vector3>
     val bitangents: List<Vector3>
 
@@ -33,14 +33,14 @@ interface IPolygon {
  */
 class Polygon(
     override val positions: List<Vector3> = emptyList(),
-    override val normals: List<Vector3> = emptyList(),
     override val textureCoords: List<Vector2> = emptyList(),
     override val colors: List<ColorRGBa> = emptyList(),
+    override val normals: List<Vector3> = emptyList(),
     override val tangents: List<Vector3> = emptyList(),
     override val bitangents: List<Vector3> = emptyList(),
 ) : IPolygon {
     override fun transform(t: Matrix44): Polygon {
-        return Polygon(positions.map { (t * it.xyz1).div }, normals, textureCoords, colors, tangents, bitangents)
+        return Polygon(positions.map { (t * it.xyz1).div }, textureCoords, colors, normals, tangents, bitangents)
     }
 
     /**
@@ -49,9 +49,9 @@ class Polygon(
     fun toMutablePolygon(): MutablePolygon {
         return MutablePolygon(
             positions.toMutableList(),
-            normals.toMutableList(),
             textureCoords.toMutableList(),
             colors.toMutableList(),
+            normals.toMutableList(),
             tangents.toMutableList(),
             bitangents.toMutableList()
         )
@@ -63,9 +63,9 @@ class Polygon(
  */
 class MutablePolygon(
     override val positions: MutableList<Vector3> = mutableListOf(),
-    override val normals: MutableList<Vector3> = mutableListOf(),
     override val textureCoords: MutableList<Vector2> = mutableListOf(),
     override val colors: MutableList<ColorRGBa> = mutableListOf(),
+    override val normals: MutableList<Vector3> = mutableListOf(),
     override val tangents: MutableList<Vector3> = mutableListOf(),
     override val bitangents: MutableList<Vector3> = mutableListOf()
 
@@ -73,9 +73,9 @@ class MutablePolygon(
     override fun transform(t: Matrix44): MutablePolygon {
         return MutablePolygon(
             positions.map { (t * it.xyz1).div }.toMutableList(),
-            ArrayList(normals),
             ArrayList(textureCoords),
             ArrayList(colors),
+            ArrayList(normals),
             ArrayList(tangents),
             ArrayList(bitangents)
         )
@@ -136,8 +136,8 @@ fun List<IPolygon>.toMeshData(): MeshData {
             IndexedPolygon(
                 positions = indices,
                 textureCoords = if (p.textureCoords.isNotEmpty()) indices else emptyList(),
-                normals = if (p.normals.isNotEmpty()) indices else emptyList(),
                 colors = if (p.colors.isNotEmpty()) indices else emptyList(),
+                normals = if (p.normals.isNotEmpty()) indices else emptyList(),
                 tangents = if (p.tangents.isNotEmpty()) indices else emptyList(),
                 bitangents = if (p.bitangents.isNotEmpty()) indices else emptyList()
             )

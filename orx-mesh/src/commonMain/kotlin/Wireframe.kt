@@ -9,7 +9,6 @@ fun IMeshData.wireframe(): List<List<Vector3>> {
     return polygons.map { ip -> ip.toPolygon(this.vertexData).positions.toList() }
 }
 
-
 /**
  * Extract wireframe from compound mesh data
  */

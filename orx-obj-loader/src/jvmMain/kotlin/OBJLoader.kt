@@ -1,6 +1,7 @@
-package org.openrndr.extra.mesh
+package org.openrndr.extra.objloader
 
 import org.openrndr.draw.VertexBuffer
+import org.openrndr.extra.mesh.IPolygon
 import java.io.File
 import java.net.MalformedURLException
 import java.net.URL

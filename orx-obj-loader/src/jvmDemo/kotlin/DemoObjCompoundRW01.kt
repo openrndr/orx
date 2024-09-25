@@ -1,6 +1,6 @@
 import org.openrndr.application
-import org.openrndr.extra.mesh.loadOBJMeshData
-import org.openrndr.extra.mesh.toObj
+import org.openrndr.extra.objloader.loadOBJMeshData
+import org.openrndr.extra.objloader.toObj
 import java.io.File
 
 fun main() {

@@ -1,4 +1,4 @@
-package org.openrndr.extra.mesh
+package org.openrndr.extra.objloader
 
 import org.openrndr.draw.VertexBuffer
 import java.io.File

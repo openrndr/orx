@@ -3,7 +3,7 @@ import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.isolated
 import org.openrndr.draw.shadeStyle
 import org.openrndr.extra.camera.Orbital
-import org.openrndr.extra.mesh.loadOBJMeshData
+import org.openrndr.extra.objloader.loadOBJMeshData
 import org.openrndr.extra.mesh.noise.uniform
 import org.openrndr.extra.meshgenerators.sphereMesh
 import org.openrndr.math.Vector3

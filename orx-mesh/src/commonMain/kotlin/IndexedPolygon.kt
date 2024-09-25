@@ -4,10 +4,7 @@ import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
-import kotlin.math.PI
-import kotlin.math.abs
-import kotlin.math.atan2
-import kotlin.math.round
+import kotlin.math.*
 
 /**
  * Indexed polygon interface
@@ -134,6 +131,15 @@ interface IIndexedPolygon {
     }
 
     /**
+     * Evaluate polygon normal
+     */
+    fun normal(vertexData: IVertexData) : Vector3 {
+        val u = vertexData.positions[positions[1]] - vertexData.positions[positions[0]]
+        val v = vertexData.positions[positions[2]] - vertexData.positions[positions[0]]
+        return u.cross(v).normalized
+    }
+
+    /**
      * Convert to [IPolygon]
      * @param vertexData the vertex data required to build the [IPolygon]
      */
@@ -146,12 +152,12 @@ interface IIndexedPolygon {
 data class IndexedPolygon(
     override val positions: List<Int>,
     override val textureCoords: List<Int>,
-    override val normals: List<Int>,
     override val colors: List<Int>,
+    override val normals: List<Int>,
     override val tangents: List<Int>,
     override val bitangents: List<Int>
 
-    ) : IIndexedPolygon {
+) : IIndexedPolygon {
 
     private fun tessellate(vertexData: IVertexData): List<IndexedPolygon> {
         val points = vertexData.positions.slice(positions.toList())
@@ -161,8 +167,8 @@ data class IndexedPolygon(
             IndexedPolygon(
                 positions.slice(it),
                 if (textureCoords.isNotEmpty()) textureCoords.slice(it) else listOf(),
-                if (normals.isNotEmpty()) normals.slice(it) else listOf(),
                 if (colors.isNotEmpty()) colors.slice(it) else listOf(),
+                if (normals.isNotEmpty()) normals.slice(it) else listOf(),
                 if (tangents.isNotEmpty()) tangents.slice(it) else listOf(),
                 if (bitangents.isNotEmpty()) bitangents.slice(it) else listOf()
             )
@@ -188,14 +194,14 @@ data class IndexedPolygon(
                             textureCoords.getOrNull(it + 1)
                         ),
                         listOfNotNull(
-                            normals.getOrNull(0),
-                            normals.getOrNull(it),
-                            normals.getOrNull(it + 1)
-                        ),
-                        listOfNotNull(
                             colors.getOrNull(0),
                             colors.getOrNull(it + 1),
                             colors.getOrNull(it + 2)
+                        ),
+                        listOfNotNull(
+                            normals.getOrNull(0),
+                            normals.getOrNull(it),
+                            normals.getOrNull(it + 1)
                         ),
                         listOfNotNull(
                             tangents.getOrNull(0),
@@ -218,9 +224,39 @@ data class IndexedPolygon(
     override fun toPolygon(vertexData: IVertexData): Polygon {
         return Polygon(
             vertexData.positions.slice(positions),
-            vertexData.normals.slice(normals),
             vertexData.textureCoords.slice(textureCoords),
-            vertexData.colors.slice(colors)
+            vertexData.colors.slice(colors),
+            vertexData.normals.slice(normals),
+            vertexData.tangents.slice(tangents),
+            vertexData.bitangents.slice(bitangents)
+        )
+    }
+
+    /**
+     * Shift indices
+     * @param positions position index shift
+     * @param textureCoords texture coordinate index shift
+     * @param colors color index shift
+     * @param normals normal index shift
+     * @param tangents tangent index shift
+     * @param bitangents bitangent index shift
+     *
+     */
+    fun shiftIndices(
+        positions: Int = 0,
+        textureCoords: Int = 0,
+        colors: Int = 0,
+        normals: Int = 0,
+        tangents: Int = 0,
+        bitangents: Int = 0
+    ): IndexedPolygon {
+        return IndexedPolygon(
+            positions = this.positions.map { it + positions },
+            textureCoords = this.textureCoords.map { it + textureCoords },
+            colors = this.colors.map { it + colors },
+            normals = this.normals.map { it + normals },
+            tangents = this.tangents.map { it + tangents },
+            bitangents = this.bitangents.map { it + bitangents }
         )
     }
 }
@@ -240,9 +276,9 @@ data class MutableIndexedPolygon(
     override fun toPolygon(vertexData: IVertexData): MutablePolygon {
         return MutablePolygon(
             vertexData.positions.slice(positions).toMutableList(),
-            vertexData.normals.slice(normals).toMutableList(),
             vertexData.textureCoords.slice(textureCoords).toMutableList(),
-            vertexData.colors.slice(colors).toMutableList()
+            vertexData.colors.slice(colors).toMutableList(),
+            vertexData.normals.slice(normals).toMutableList()
         )
     }
 }

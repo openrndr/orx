@@ -3,7 +3,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.DepthTestPass
 import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.shadeStyle
-import org.openrndr.extra.mesh.loadOBJasVertexBuffer
+import org.openrndr.extra.objloader.loadOBJasVertexBuffer
 import org.openrndr.math.Vector3
 
 fun main() = application {

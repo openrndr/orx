@@ -1,7 +1,8 @@
-package org.openrndr.extra.mesh
+package org.openrndr.extra.objloader
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.VertexBuffer
+import org.openrndr.extra.mesh.*
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 
@@ -79,8 +80,8 @@ fun readObjMeshData(lines: Iterable<String>): CompoundMeshData {
                             IndexedPolygon(
                                 if (hasPosition) indices.map { it[0] - 1 } else listOf(),
                                 if (hasUV) indices.map { it[1] - 1 } else listOf(),
-                                if (hasNormal) indices.map { it[2] - 1 } else listOf(),
                                 if (hasColor) indices.map { it[0] - 1 } else listOf(),
+                                if (hasNormal) indices.map { it[2] - 1 } else listOf(),
                                 if (hasTangents) indices.map { it[2] - 1 } else listOf(),
                                 if (hasBitangents) indices.map { it[2] - 1 } else listOf()
                             )
@@ -95,7 +96,7 @@ fun readObjMeshData(lines: Iterable<String>): CompoundMeshData {
         }
     }
 
-    val vertexData = VertexData(positions, normals, textureCoords, colors)
+    val vertexData = VertexData(positions, textureCoords, colors, normals)
     return CompoundMeshData(
         vertexData,
         meshes.mapValues {

@@ -8,8 +8,8 @@ import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.TransformTarget
 import org.openrndr.draw.shadeStyle
 import org.openrndr.extra.camera.Orbital
-import org.openrndr.extra.mesh.readObjMeshData
-import org.openrndr.extra.mesh.loadOBJasVertexBuffer
+import org.openrndr.extra.objloader.readObjMeshData
+import org.openrndr.extra.objloader.loadOBJasVertexBuffer
 import org.openrndr.extra.mesh.wireframe
 import org.openrndr.math.Vector3
 import org.openrndr.shape.Path3D

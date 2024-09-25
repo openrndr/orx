@@ -2,8 +2,6 @@ package org.openrndr.extra.mesh
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.VertexBuffer
-import org.openrndr.extra.mesh.Polygon
-import org.openrndr.extra.mesh.objVertexFormat
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import java.nio.ByteBuffer
@@ -53,7 +51,7 @@ fun VertexBuffer.toPolygons(vertexCount: Int = this.vertexCount): List<Polygon> 
             textureCoordinates.add(buffer.getVector2())
             colors.add(buffer.getColorRGBa())
         }
-        polygons.add(Polygon(positions, normals, textureCoordinates, colors))
+        polygons.add(Polygon(positions, textureCoordinates, colors, normals))
     }
     return polygons
 }
