@@ -85,6 +85,16 @@ Check out the [source code](src/commonMain/kotlin) to learn about function argum
 
 <!-- __demos__ -->
 ## Demos
+### decal/DemoDecal01
+[source code](src/jvmDemo/kotlin/decal/DemoDecal01.kt)
+
+![decal-DemoDecal01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/decal-DemoDecal01Kt.png)
+
+### decal/DemoDecal02
+[source code](src/jvmDemo/kotlin/decal/DemoDecal02.kt)
+
+![decal-DemoDecal02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/decal-DemoDecal02Kt.png)
+
 ### DemoAll
 [source code](src/jvmDemo/kotlin/DemoAll.kt)
 
