@@ -6,7 +6,7 @@ jvmTarget = "17"
 openrndr = { require = "[0.4.2, 0.5.0)" }
 kotlinxCoroutines = "1.9.0"
 kotlinLogging = "7.0.0"
-kotlinxSerialization = "1.7.2"
+kotlinxSerialization = "1.7.3"
 kotest = "5.9.1"
 dokka = "1.7.10"
 nebulaRelease = "18.0.7"
