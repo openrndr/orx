@@ -4,6 +4,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.FontImageMap
 import org.openrndr.draw.isolated
+import org.openrndr.draw.loadFont
 import org.openrndr.extra.textwriter.writer
 
 import org.openrndr.math.Vector2
@@ -16,7 +17,9 @@ class Tooltip(val parent: Element, val position: Vector2, val message: String) {
 
         val fontUrl = (parent.root() as Body).controlManager.fontManager.resolve("default") ?: error("no font")
         val fontSize = 14.0
-        val fontMap = FontImageMap.fromUrl(fontUrl, fontSize)
+        val program = (parent.root() as? Body)?.controlManager?.program ?: error("no program")
+        val fontMap =  program.loadFont(fontUrl, fontSize)
+
         val lines = message.split("\n")
 
         drawer.isolated {

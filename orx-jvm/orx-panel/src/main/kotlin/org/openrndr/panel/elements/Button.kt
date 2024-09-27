@@ -2,9 +2,9 @@ package org.openrndr.panel.elements
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
-import org.openrndr.draw.FontImageMap
 
 import org.openrndr.draw.isolated
+import org.openrndr.draw.loadFont
 import org.openrndr.events.Event
 import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.panel.style.*
@@ -52,7 +52,9 @@ class Button : Element(ElementType("button")) {
             computedStyle.let { style ->
                 val fontUrl = (root() as? Body)?.controlManager?.fontManager?.resolve(style.fontFamily) ?: "broken"
                 val fontSize = (style.fontSize as? LinearDimension.PX)?.value ?: 14.0
-                val fontMap = FontImageMap.fromUrl(fontUrl, fontSize)
+
+                val program = (root() as? Body)?.controlManager?.program ?: error("no program")
+                val fontMap =  program.loadFont(fontUrl, fontSize)
 
                 val writer = TextWriter(null)
 

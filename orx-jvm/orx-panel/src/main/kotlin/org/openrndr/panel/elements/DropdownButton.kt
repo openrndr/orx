@@ -10,6 +10,7 @@ import kotlinx.coroutines.yield
 import org.openrndr.KEY_ARROW_DOWN
 import org.openrndr.KEY_ARROW_UP
 import org.openrndr.KEY_ENTER
+import org.openrndr.draw.loadFont
 
 import org.openrndr.events.Event
 import org.openrndr.launch
@@ -79,7 +80,10 @@ class DropdownButton : Element(ElementType("dropdown-button")), DisposableElemen
             computedStyle.let { style ->
                 val fontUrl = (root() as? Body)?.controlManager?.fontManager?.resolve(style.fontFamily) ?: "broken"
                 val fontSize = (style.fontSize as? LinearDimension.PX)?.value ?: 16.0
-                val fontMap = FontImageMap.fromUrl(fontUrl, fontSize)
+
+                val program = (root() as? Body)?.controlManager?.program ?: error("no program")
+                val fontMap =  program.loadFont(fontUrl, fontSize)
+
                 val writer = TextWriter(null)
 
                 writer.box = Rectangle(0.0,

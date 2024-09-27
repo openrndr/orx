@@ -276,6 +276,8 @@ class ControlManager : Extension {
 
     val mouseInput = MouseInput()
     override fun setup(program: Program) {
+
+        fontManager.program = program
         this.program = program
 
         contentScale = program.window.contentScale
