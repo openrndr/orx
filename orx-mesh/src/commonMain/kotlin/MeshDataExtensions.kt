@@ -3,6 +3,7 @@ package org.openrndr.extra.mesh
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.math.*
+import org.openrndr.shape.Box
 
 /**
  * The [VertexFormat] for a [VertexBuffer] with positions, normals and texture coordinates.
@@ -226,3 +227,9 @@ fun IMeshData.weld(
     )
     return MeshData(reindexedVertexData, reindexedPolygons)
 }
+
+/**
+ * Evaluate mesh bounds
+ */
+val IMeshData.bounds: Box
+    get() = polygons.bounds(vertexData)
