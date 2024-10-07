@@ -1,9 +1,14 @@
 # ORX (OPENRNDR EXTRA)
 
-[![Download](https://maven-badges.herokuapp.com/maven-central/org.openrndr.extra/orx-parameters-jvm/badge.svg)](https://mvnrepository.com/artifact/org.openrndr.extra)
+[![ORX maven badge](https://maven-badges.herokuapp.com/maven-central/org.openrndr.extra/orx-parameters-jvm/badge.svg)](https://mvnrepository.com/artifact/org.openrndr.extra)
 
 A growing library of assorted data structures, algorithms and utilities to
-complement [OPENRNDR](https://github.com/openrndr/openrndr).
+complement [OPENRNDR](https://github.com/openrndr/openrndr). 
+Multiplatform, unless they deal with hardware or depend on binary libraries. Those are JVM-only.
+
+## Usage
+
+To make use of these extensions clone the [OPENRNDR template](https://github.com/openrndr/openrndr-template), uncomment the ones you need in its [build.gradle.kts](https://github.com/openrndr/openrndr-template/blob/master/build.gradle.kts) file, and reload Gradle. Cloning this repo is optional but useful to run the demos in each ORX folder, to study the source code, and to contribute to existing or new ORX'es.
 
 <!-- __orxListBegin__ -->
 
