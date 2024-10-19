@@ -195,6 +195,11 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 ![DemoPoissonDiskSamplingKt](https://github.com/openrndr/orx/blob/media/orx-noise/images/DemoPoissonDiskSamplingKt.png
 <!-- __demos__ -->
 ## Demos
+### DemoCubicNoise2D01
+[source code](src/jvmDemo/kotlin/DemoCubicNoise2D01.kt)
+
+![DemoCubicNoise2D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoCubicNoise2D01Kt.png)
+
 ### DemoFunctionalComposition01
 [source code](src/jvmDemo/kotlin/DemoFunctionalComposition01.kt)
 
@@ -234,3 +239,18 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 [source code](src/jvmDemo/kotlin/DemoSimplexGLSL.kt)
 
 ![DemoSimplexGLSLKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoSimplexGLSLKt.png)
+
+### DemoTriangleNoise01
+[source code](src/jvmDemo/kotlin/DemoTriangleNoise01.kt)
+
+![DemoTriangleNoise01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoTriangleNoise01Kt.png)
+
+### DemoUHash01
+[source code](src/jvmDemo/kotlin/DemoUHash01.kt)
+
+![DemoUHash01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoUHash01Kt.png)
+
+### DemoValueNoise2D01
+[source code](src/jvmDemo/kotlin/DemoValueNoise2D01.kt)
+
+![DemoValueNoise2D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoValueNoise2D01Kt.png)
