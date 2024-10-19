@@ -17,7 +17,7 @@ fun List<Triangle>.uniform(count: Int, random: Random = Random.Default): List<Ve
     var sum = 0.0
     for (t in this) {
         sum += t.area
-        while (idx < randoms.lastIndex && sum > randoms[idx]) {
+        while (idx <= randoms.lastIndex && sum > randoms[idx]) {
             result.add(t.randomPoint(random))
             idx++
         }
