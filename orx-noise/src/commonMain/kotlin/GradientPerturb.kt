@@ -4,9 +4,11 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.mix
 
-fun gradientPerturbFractal(seed: Int, amplitude: Double = 1.0, frequency: Double = 2.0,
-                           lacunarity: Double = 2.0, gain: Double = 0.5,
-                           octaves: Int = 4, position: Vector3, interpolator: (Double) -> Double = ::quintic): Vector3 {
+fun gradientPerturbFractal(
+    seed: Int, amplitude: Double = 1.0, frequency: Double = 2.0,
+    lacunarity: Double = 2.0, gain: Double = 0.5,
+    octaves: Int = 4, position: Vector3, interpolator: (Double) -> Double = ::quintic
+): Vector3 {
 
     var seed_ = seed
     var amplitude_ = amplitude
@@ -22,7 +24,13 @@ fun gradientPerturbFractal(seed: Int, amplitude: Double = 1.0, frequency: Double
     return p
 }
 
-fun gradientPerturb(seed: Int, amplitude: Double, frequency: Double, position: Vector3, interpolator: (Double) -> Double = ::quintic): Vector3 {
+fun gradientPerturb(
+    seed: Int,
+    amplitude: Double,
+    frequency: Double,
+    position: Vector3,
+    interpolator: (Double) -> Double = ::quintic
+): Vector3 {
     val xf = position.x * frequency
     val yf = position.y * frequency
     val zf = position.z * frequency
@@ -38,15 +46,15 @@ fun gradientPerturb(seed: Int, amplitude: Double, frequency: Double, position: V
     val ys = interpolator(yf - y0)
     val zs = interpolator(zf - z0)
 
-    var vec0 = Cell3D[hash3D(seed, x0, y0, z0) and 0xff]
-    var vec1 = Cell3D[hash3D(seed, x1, y0, z0) and 0xff]
+    var vec0 = Cell3D[(uhash3D(seed, x0, y0, z0) and 0xffU).toInt()]
+    var vec1 = Cell3D[(uhash3D(seed, x1, y0, z0) and 0xffU).toInt()]
 
     var lx0x = mix(vec0.x, vec1.x, xs)
     var ly0x = mix(vec0.y, vec1.y, xs)
     var lz0x = mix(vec0.z, vec1.z, xs)
 
-    vec0 = Cell3D[hash3D(seed, x0, y1, z0) and 0xff]
-    vec1 = Cell3D[hash3D(seed, x1, y1, z0) and 0xff]
+    vec0 = Cell3D[(uhash3D(seed, x0, y1, z0) and 0xffU).toInt()]
+    vec1 = Cell3D[(uhash3D(seed, x1, y1, z0) and 0xffU).toInt()]
 
     var lx1x = mix(vec0.x, vec1.x, xs)
     var ly1x = mix(vec0.y, vec1.y, xs)
@@ -56,30 +64,32 @@ fun gradientPerturb(seed: Int, amplitude: Double, frequency: Double, position: V
     val ly0y = mix(ly0x, ly1x, ys)
     val lz0y = mix(lz0x, lz1x, ys)
 
-    vec0 = Cell3D[hash3D(seed, x0, y0, z1) and 0xff]
-    vec1 = Cell3D[hash3D(seed, x1, y0, z1) and 0xff]
+    vec0 = Cell3D[(uhash3D(seed, x0, y0, z1) and 0xffU).toInt()]
+    vec1 = Cell3D[(uhash3D(seed, x1, y0, z1) and 0xffU).toInt()]
 
     lx0x = mix(vec0.x, vec1.x, xs)
     ly0x = mix(vec0.y, vec1.y, xs)
     lz0x = mix(vec0.z, vec1.z, xs)
 
-    vec0 = Cell3D[hash3D(seed, x0, y1, z1) and 0xff]
-    vec1 = Cell3D[hash3D(seed, x1, y1, z1) and 0xff]
+    vec0 = Cell3D[(uhash3D(seed, x0, y1, z1) and 0xffU).toInt()]
+    vec1 = Cell3D[(uhash3D(seed, x1, y1, z1) and 0xffU).toInt()]
 
     lx1x = mix(vec0.x, vec1.x, xs)
     ly1x = mix(vec0.y, vec1.y, xs)
     lz1x = mix(vec0.z, vec1.z, xs)
 
     return position + Vector3(
-            mix(lx0y, mix(lx0x, lx1x, ys), zs),
-            mix(ly0y, mix(ly0x, ly1x, ys), zs),
-            mix(lz0y, mix(lz0x, lz1x, ys), zs)
+        mix(lx0y, mix(lx0x, lx1x, ys), zs),
+        mix(ly0y, mix(ly0x, ly1x, ys), zs),
+        mix(lz0y, mix(lz0x, lz1x, ys), zs)
     ) * amplitude
 }
 
-fun gradientPerturbFractal(seed: Int, amplitude: Double = 1.0, frequency: Double = 2.0,
-                           lacunarity: Double = 2.0, gain: Double = 0.5,
-                           octaves: Int = 4, position: Vector2, interpolator: (Double) -> Double = ::quintic): Vector2 {
+fun gradientPerturbFractal(
+    seed: Int, amplitude: Double = 1.0, frequency: Double = 2.0,
+    lacunarity: Double = 2.0, gain: Double = 0.5,
+    octaves: Int = 4, position: Vector2, interpolator: (Double) -> Double = ::quintic
+): Vector2 {
 
     var seed_ = seed
     var amplitude_ = amplitude
@@ -95,7 +105,13 @@ fun gradientPerturbFractal(seed: Int, amplitude: Double = 1.0, frequency: Double
     return p
 }
 
-fun gradientPerturb(seed: Int, amplitude: Double, frequency: Double, position: Vector2, interpolator: (Double) -> Double = ::quintic): Vector2 {
+fun gradientPerturb(
+    seed: Int,
+    amplitude: Double,
+    frequency: Double,
+    position: Vector2,
+    interpolator: (Double) -> Double = ::quintic
+): Vector2 {
     val xf = position.x * frequency
     val yf = position.y * frequency
     val x0 = xf.fastFloor()
@@ -106,21 +122,21 @@ fun gradientPerturb(seed: Int, amplitude: Double, frequency: Double, position: V
     val xs = interpolator(xf - x0)
     val ys = interpolator(yf - y0)
 
-    var vec0 = Cell2D[hash2D(seed, x0, y0) and 0xff]
-    var vec1 = Cell2D[hash2D(seed, x1, y0) and 0xff]
+    var vec0 = Cell2D[(uhash2D(seed, x0, y0) and 0xffU).toInt()]
+    var vec1 = Cell2D[(uhash2D(seed, x1, y0) and 0xffU).toInt()]
 
     val lx0x = mix(vec0.x, vec1.x, xs)
     val ly0x = mix(vec0.y, vec1.y, xs)
 
-    vec0 = Cell2D[hash2D(seed, x0, y1) and 0xff]
-    vec1 = Cell2D[hash2D(seed, x1, y1) and 0xff]
+    vec0 = Cell2D[(uhash2D(seed, x0, y1) and 0xffU).toInt()]
+    vec1 = Cell2D[(uhash2D(seed, x1, y1) and 0xffU).toInt()]
 
     val lx1x = mix(vec0.x, vec1.x, xs)
     val ly1x = mix(vec0.y, vec1.y, xs)
 
     return position + Vector2(
-            mix(lx0x, lx1x, ys),
-            mix(ly0x, ly1x, ys)
+        mix(lx0x, lx1x, ys),
+        mix(ly0x, ly1x, ys)
     ) * amplitude
 
 }

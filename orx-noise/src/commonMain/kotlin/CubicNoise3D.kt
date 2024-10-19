@@ -35,28 +35,28 @@ fun cubic(seed: Int, x: Double, y: Double, z: Double, interpolator: (Double) -> 
 
     return cubic(
             cubic(
-                    cubic(valCoord3D(seed, x0, y0, z0), valCoord3D(seed, x1, y0, z0), valCoord3D(seed, x2, y0, z0), valCoord3D(seed, x3, y0, z0), xs),
-                    cubic(valCoord3D(seed, x0, y1, z0), valCoord3D(seed, x1, y1, z0), valCoord3D(seed, x2, y1, z0), valCoord3D(seed, x3, y1, z0), xs),
-                    cubic(valCoord3D(seed, x0, y2, z0), valCoord3D(seed, x1, y2, z0), valCoord3D(seed, x2, y2, z0), valCoord3D(seed, x3, y2, z0), xs),
-                    cubic(valCoord3D(seed, x0, y3, z0), valCoord3D(seed, x1, y3, z0), valCoord3D(seed, x2, y3, z0), valCoord3D(seed, x3, y3, z0), xs),
+                    cubic(fshash3D(seed, x0, y0, z0), fshash3D(seed, x1, y0, z0), fshash3D(seed, x2, y0, z0), fshash3D(seed, x3, y0, z0), xs),
+                    cubic(fshash3D(seed, x0, y1, z0), fshash3D(seed, x1, y1, z0), fshash3D(seed, x2, y1, z0), fshash3D(seed, x3, y1, z0), xs),
+                    cubic(fshash3D(seed, x0, y2, z0), fshash3D(seed, x1, y2, z0), fshash3D(seed, x2, y2, z0), fshash3D(seed, x3, y2, z0), xs),
+                    cubic(fshash3D(seed, x0, y3, z0), fshash3D(seed, x1, y3, z0), fshash3D(seed, x2, y3, z0), fshash3D(seed, x3, y3, z0), xs),
                     ys),
             cubic(
-                    cubic(valCoord3D(seed, x0, y0, z1), valCoord3D(seed, x1, y0, z1), valCoord3D(seed, x2, y0, z1), valCoord3D(seed, x3, y0, z1), xs),
-                    cubic(valCoord3D(seed, x0, y1, z1), valCoord3D(seed, x1, y1, z1), valCoord3D(seed, x2, y1, z1), valCoord3D(seed, x3, y1, z1), xs),
-                    cubic(valCoord3D(seed, x0, y2, z1), valCoord3D(seed, x1, y2, z1), valCoord3D(seed, x2, y2, z1), valCoord3D(seed, x3, y2, z1), xs),
-                    cubic(valCoord3D(seed, x0, y3, z1), valCoord3D(seed, x1, y3, z1), valCoord3D(seed, x2, y3, z1), valCoord3D(seed, x3, y3, z1), xs),
+                    cubic(fshash3D(seed, x0, y0, z1), fshash3D(seed, x1, y0, z1), fshash3D(seed, x2, y0, z1), fshash3D(seed, x3, y0, z1), xs),
+                    cubic(fshash3D(seed, x0, y1, z1), fshash3D(seed, x1, y1, z1), fshash3D(seed, x2, y1, z1), fshash3D(seed, x3, y1, z1), xs),
+                    cubic(fshash3D(seed, x0, y2, z1), fshash3D(seed, x1, y2, z1), fshash3D(seed, x2, y2, z1), fshash3D(seed, x3, y2, z1), xs),
+                    cubic(fshash3D(seed, x0, y3, z1), fshash3D(seed, x1, y3, z1), fshash3D(seed, x2, y3, z1), fshash3D(seed, x3, y3, z1), xs),
                     ys),
             cubic(
-                    cubic(valCoord3D(seed, x0, y0, z2), valCoord3D(seed, x1, y0, z2), valCoord3D(seed, x2, y0, z2), valCoord3D(seed, x3, y0, z2), xs),
-                    cubic(valCoord3D(seed, x0, y1, z2), valCoord3D(seed, x1, y1, z2), valCoord3D(seed, x2, y1, z2), valCoord3D(seed, x3, y1, z2), xs),
-                    cubic(valCoord3D(seed, x0, y2, z2), valCoord3D(seed, x1, y2, z2), valCoord3D(seed, x2, y2, z2), valCoord3D(seed, x3, y2, z2), xs),
-                    cubic(valCoord3D(seed, x0, y3, z2), valCoord3D(seed, x1, y3, z2), valCoord3D(seed, x2, y3, z2), valCoord3D(seed, x3, y3, z2), xs),
+                    cubic(fshash3D(seed, x0, y0, z2), fshash3D(seed, x1, y0, z2), fshash3D(seed, x2, y0, z2), fshash3D(seed, x3, y0, z2), xs),
+                    cubic(fshash3D(seed, x0, y1, z2), fshash3D(seed, x1, y1, z2), fshash3D(seed, x2, y1, z2), fshash3D(seed, x3, y1, z2), xs),
+                    cubic(fshash3D(seed, x0, y2, z2), fshash3D(seed, x1, y2, z2), fshash3D(seed, x2, y2, z2), fshash3D(seed, x3, y2, z2), xs),
+                    cubic(fshash3D(seed, x0, y3, z2), fshash3D(seed, x1, y3, z2), fshash3D(seed, x2, y3, z2), fshash3D(seed, x3, y3, z2), xs),
                     ys),
             cubic(
-                    cubic(valCoord3D(seed, x0, y0, z3), valCoord3D(seed, x1, y0, z3), valCoord3D(seed, x2, y0, z3), valCoord3D(seed, x3, y0, z3), xs),
-                    cubic(valCoord3D(seed, x0, y1, z3), valCoord3D(seed, x1, y1, z3), valCoord3D(seed, x2, y1, z3), valCoord3D(seed, x3, y1, z3), xs),
-                    cubic(valCoord3D(seed, x0, y2, z3), valCoord3D(seed, x1, y2, z3), valCoord3D(seed, x2, y2, z3), valCoord3D(seed, x3, y2, z3), xs),
-                    cubic(valCoord3D(seed, x0, y3, z3), valCoord3D(seed, x1, y3, z3), valCoord3D(seed, x2, y3, z3), valCoord3D(seed, x3, y3, z3), xs),
+                    cubic(fshash3D(seed, x0, y0, z3), fshash3D(seed, x1, y0, z3), fshash3D(seed, x2, y0, z3), fshash3D(seed, x3, y0, z3), xs),
+                    cubic(fshash3D(seed, x0, y1, z3), fshash3D(seed, x1, y1, z3), fshash3D(seed, x2, y1, z3), fshash3D(seed, x3, y1, z3), xs),
+                    cubic(fshash3D(seed, x0, y2, z3), fshash3D(seed, x1, y2, z3), fshash3D(seed, x2, y2, z3), fshash3D(seed, x3, y2, z3), xs),
+                    cubic(fshash3D(seed, x0, y3, z3), fshash3D(seed, x1, y3, z3), fshash3D(seed, x2, y3, z3), fshash3D(seed, x3, y3, z3), xs),
                     ys),
             zs) * CUBIC_3D_BOUNDING
 }

@@ -20,43 +20,24 @@ private val GRAD_3D = arrayOf(
         Vector3(1.0, 1.0, 0.0), Vector3(0.0, -1.0, 1.0), Vector3(-1.0, 1.0, 0.0), Vector3(0.0, -1.0, -1.0))
 
 fun gradCoord2D(seed: Int, x: Int, y: Int, xd: Double, yd: Double): Double {
-    var hash = seed
-    hash = hash xor X_PRIME * x
-    hash = hash xor Y_PRIME * y
+    val hash = uhash2D(seed, x, y)
 
-    hash = hash * hash * hash * 60493
-    hash = hash shr 13 xor hash
-
-    val (x1, y1) = GRAD_2D[hash and 7]
+    val (x1, y1) = GRAD_2D[(hash and 7U).toInt()]
 
     return xd * x1 + yd * y1
 }
 
 fun gradCoord3D(seed: Int, x: Int, y: Int, z: Int, xd: Double, yd: Double, zd: Double): Double {
-    var hash = seed
-    hash = hash xor X_PRIME * x
-    hash = hash xor Y_PRIME * y
-    hash = hash xor Z_PRIME * z
+    val hash = uhash3D(seed, x, y, z)
 
-    hash *= hash * hash * 60493
-    hash = hash shr 13 xor hash
-
-    val g = GRAD_3D[hash and 15]
+    val g = GRAD_3D[(hash and 15U).toInt()]
 
     return xd * g.x + yd * g.y + zd * g.z
 }
 
 fun gradCoord4D(seed: Int, x: Int, y: Int, z: Int, w: Int, xd: Double, yd: Double, zd: Double, wd: Double): Double {
-    var hash = seed
-    hash = hash xor X_PRIME * x
-    hash = hash xor Y_PRIME * y
-    hash = hash xor Z_PRIME * z
-    hash = hash xor W_PRIME * w
+    val hash = (uhash4D(seed, x, y, z, w) and 31U).toInt()
 
-    hash = hash * hash * hash * 60493
-    hash = hash shr 13 xor hash
-
-    hash = hash and 31
     var a = yd
     var b = zd
     var c = wd            // X,Y,Z
@@ -81,57 +62,6 @@ fun gradCoord4D(seed: Int, x: Int, y: Int, z: Int, w: Int, xd: Double, yd: Doubl
     // Z,W,X
     // Y,Z,W
     return (if (hash and 4 == 0) -a else a) + (if (hash and 2 == 0) -b else b) + if (hash and 1 == 0) -c else c
-}
-
-
-fun hash2D(seed: Int, x: Int, y: Int): Int {
-    var hash = seed
-    hash = hash xor X_PRIME * x
-    hash = hash xor Y_PRIME * y
-
-    hash = hash * hash * hash * 60493
-    hash = hash shr 13 xor hash
-
-    return hash
-}
-
-fun hash3D(seed: Int, x: Int, y: Int, z: Int): Int {
-    var hash = seed
-    hash = hash xor X_PRIME * x
-    hash = hash xor Y_PRIME * y
-    hash = hash xor Z_PRIME * z
-
-    hash = hash * hash * hash * 60493
-    hash = hash shr 13 xor hash
-
-    return hash
-}
-
-fun hash4D(seed: Int, x: Int, y: Int, z: Int, w: Int): Int {
-    var hash = seed
-    hash = hash xor X_PRIME * x
-    hash = hash xor Y_PRIME * y
-    hash = hash xor Z_PRIME * z
-    hash = hash xor W_PRIME * w
-
-    hash = hash * hash * hash * 60493
-    hash = hash shr 13 xor hash
-    return hash
-}
-
-
-fun valCoord1D(seed: Int, x: Int): Double {
-    var n = seed
-    n = n xor X_PRIME * x
-    return n * n * n * 60493 / 2147483648.0
-}
-
-fun valCoord2D(seed: Int, x: Int, y: Int): Double {
-    var n = seed
-    n = n xor X_PRIME * x
-    n = n xor Y_PRIME * y
-
-    return n * n * n * 60493 / 2147483648.0
 }
 
 fun valCoord3D(seed: Int, x: Int, y: Int, z: Int): Double {
