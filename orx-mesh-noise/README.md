@@ -7,3 +7,8 @@ Generate random samples on the surface of a mesh
 [source code](src/jvmDemo/kotlin/DemoMeshNoise01.kt)
 
 ![DemoMeshNoise01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-noise/images/DemoMeshNoise01Kt.png)
+
+### DemoMeshNoise02
+[source code](src/jvmDemo/kotlin/DemoMeshNoise02.kt)
+
+![DemoMeshNoise02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-noise/images/DemoMeshNoise02Kt.png)

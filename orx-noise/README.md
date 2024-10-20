@@ -195,6 +195,11 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 ![DemoPoissonDiskSamplingKt](https://github.com/openrndr/orx/blob/media/orx-noise/images/DemoPoissonDiskSamplingKt.png
 <!-- __demos__ -->
 ## Demos
+### DemoCircleHash01
+[source code](src/jvmDemo/kotlin/DemoCircleHash01.kt)
+
+![DemoCircleHash01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoCircleHash01Kt.png)
+
 ### DemoCubicNoise2D01
 [source code](src/jvmDemo/kotlin/DemoCubicNoise2D01.kt)
 
@@ -224,6 +229,11 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 [source code](src/jvmDemo/kotlin/DemoNoisesGLSL.kt)
 
 ![DemoNoisesGLSLKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoNoisesGLSLKt.png)
+
+### DemoRectangleHash01
+[source code](src/jvmDemo/kotlin/DemoRectangleHash01.kt)
+
+![DemoRectangleHash01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoRectangleHash01Kt.png)
 
 ### DemoScatter01
 [source code](src/jvmDemo/kotlin/DemoScatter01.kt)

@@ -164,3 +164,8 @@ Check out the [source code](src/commonMain/kotlin) to learn about function argum
 [source code](src/jvmDemo/kotlin/DemoExtrude06.kt)
 
 ![DemoExtrude06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude06Kt.png)
+
+### tangents/DemoTangents01
+[source code](src/jvmDemo/kotlin/tangents/DemoTangents01.kt)
+
+![tangents-DemoTangents01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/tangents-DemoTangents01Kt.png)
