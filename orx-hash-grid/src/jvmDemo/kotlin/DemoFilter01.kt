@@ -1,6 +1,6 @@
 import org.openrndr.application
 import org.openrndr.extra.hashgrid.filter
-import org.openrndr.extra.noise.uniform
+import org.openrndr.extra.noise.shapes.uniform
 import kotlin.random.Random
 
 fun main() {

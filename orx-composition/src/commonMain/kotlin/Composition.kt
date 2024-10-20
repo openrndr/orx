@@ -186,11 +186,16 @@ class ShapeNode(var shape: Shape) : CompositionNode() {
         }
     }
 
+
     /**
      * apply transforms of all ancestor nodes and return a new detached shape node with identity transform and transformed Shape
+     * @param composition use viewport transform
      */
-    fun flatten(): ShapeNode {
-        return ShapeNode(shape.transform(transform(this))).also {
+    fun flatten(composition: Composition? = null): ShapeNode {
+
+        val viewport = composition?.calculateViewportTransform() ?: Matrix44.IDENTITY
+
+        return ShapeNode(shape.transform(viewport * transform(this))).also {
             it.id = id
             it.parent = parent
             it.style = effectiveStyle
@@ -293,10 +298,10 @@ data class CompositionDimensions(val x: Length, val y: Length, val width: Length
     // but otherwise equality checks will never succeed
     override fun equals(other: Any?): Boolean {
         return other is CompositionDimensions
-            && x.value == other.x.value
-            && y.value == other.y.value
-            && width.value == other.width.value
-            && height.value == other.height.value
+                && x.value == other.x.value
+                && y.value == other.y.value
+                && width.value == other.width.value
+                && height.value == other.height.value
     }
 
     override fun hashCode(): Int {

@@ -10,6 +10,7 @@ kotlin {
                 api(libs.openrndr.math)
                 api(libs.openrndr.shape)
                 api(project(":orx-mesh"))
+                implementation(project(":orx-noise"))
             }
         }
 

@@ -1,35 +1,25 @@
 package org.openrndr.extra.noise
 
 import org.openrndr.extra.hashgrid.HashGrid
+import org.openrndr.extra.noise.shapes.hash
+import org.openrndr.extra.noise.shapes.uniform
 import org.openrndr.math.Vector2
 import org.openrndr.shape.*
 import kotlin.random.Random
 
 /**
- * Returns a random [Vector2] point located inside a [ShapeProvider] while
- * maintaining a distance to the edge of the shape of [distanceToEdge] units.
+ * Generates specified amount of random points that lie inside the [Shape].
+ *
+ * @param pointCount The number of points to generate.
+ * @param random The [Random] number generator to use, defaults to [Random.Default].
  */
-fun ShapeProvider.uniform(distanceToEdge: Double = 0.0, random: Random = Random.Default): Vector2 {
-    val shape = shape
-    require(!shape.empty)
-    var attempts = 0
-    val innerBounds = shape.bounds.offsetEdges(-distanceToEdge.coerceAtLeast(0.0))
-    return Vector2.uniformSequence(innerBounds, random).first {
-        attempts++
-        require(attempts < 100)
-        if (distanceToEdge == 0.0) {
-            shape.contains(it)
-        } else {
-            shape.contains(it) && shape.contours.minOf { c -> c.nearest(it).position.distanceTo(it) } > distanceToEdge
-        }
-    }
+fun ShapeProvider.uniform(pointCount: Int, random: Random = Random.Default): List<Vector2> {
+    return shape.triangulation.uniform(pointCount, random)
 }
 
-/**
- * Generate [sampleCount] uniformly distributed points inside the area of [ShapeProvider]
- */
-fun ShapeProvider.uniform(sampleCount: Int, random: Random = Random.Default) : List<Vector2> = shape.triangulation.uniform(sampleCount, random)
-
+fun ShapeProvider.hash(pointCount: Int, seed: Int, x: Int): List<Vector2> {
+    return shape.triangulation.hash(pointCount, seed, x)
+}
 
 /**
  * Returns a list of pairs in which the first component is a radius and the

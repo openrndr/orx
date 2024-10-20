@@ -13,6 +13,7 @@ import java.io.File
 
 /**
  * Demonstrate decal generator as an object slicer
+ * @see <img src="https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/decal-DemoDecal01Kt.png">
  */
 fun main() {
     application {

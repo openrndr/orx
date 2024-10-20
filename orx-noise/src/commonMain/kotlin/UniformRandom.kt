@@ -23,6 +23,12 @@ fun Double.Companion.uniform(
 ) =
     (random.nextDouble() * (max - min)) + min
 
+fun Double.Companion.hash(
+    seed: Int, x: Int,
+    min: Double = -1.0, max: Double = 1.0
+) = fhash1D(seed, x) * (max - min) + min
+
+
 fun Vector2.Companion.uniform(
     min: Vector2 = -ONE, max: Vector2 = ONE,
     random: Random = Random.Default
@@ -32,11 +38,27 @@ fun Vector2.Companion.uniform(
         Double.uniform(min.y, max.y, random)
     )
 
+fun Vector2.Companion.hash(
+    seed: Int, x: Int,
+    min: Vector2 = -ONE, max: Vector2 = ONE
+) =
+    Vector2(
+        Double.hash(seed, x, min.x, max.x),
+        Double.hash(seed xor 0x7f7f7f7f, x, min.y, max.y)
+    )
+
 fun Vector2.Companion.uniform(
     min: Double = -1.0, max: Double = 1.0,
     random: Random = Random.Default
 ) =
     Vector2.uniform(Vector2(min, min), Vector2(max, max), random)
+
+fun Vector2.Companion.hash(
+    seed: Int, x: Int,
+    min: Double = -1.0, max: Double = 1.0,
+) =
+    Vector2.hash(seed, x, Vector2(min, min), Vector2(max, max))
+
 
 fun Vector2.Companion.uniform(
     rect: Rectangle,
@@ -78,7 +100,7 @@ fun Vector2.Companion.uniformRing(
 
     val eps = 1E-6
 
-    if ( abs(innerRadius - outerRadius) < eps) {
+    if (abs(innerRadius - outerRadius) < eps) {
         val angle = Double.uniform(-180.0, 180.0, random)
         return Polar(angle, innerRadius).cartesian
 

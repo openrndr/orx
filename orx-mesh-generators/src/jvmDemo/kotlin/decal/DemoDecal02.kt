@@ -15,6 +15,7 @@ import kotlin.math.PI
 
 /**
  * Demonstrate decal generation and rendering
+ * @see <img src="https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/decal-DemoDecal02Kt.png">
  */
 fun main() {
     application {

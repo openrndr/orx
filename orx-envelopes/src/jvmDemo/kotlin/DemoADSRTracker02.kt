@@ -1,7 +1,7 @@
 import org.openrndr.application
 import org.openrndr.draw.loadFont
 import org.openrndr.extra.envelopes.ADSRTracker
-import org.openrndr.extra.noise.uniform
+import org.openrndr.extra.noise.shapes.uniform
 import org.openrndr.shape.Rectangle
 
 fun main() {
@@ -15,13 +15,13 @@ fun main() {
 
             keyboard.keyDown.listen {
                 if (it.name == "t") {
-                    val center = drawer.bounds.uniform(distanceToEdge = 30.0)
+                    val center = drawer.bounds.offsetEdges(-30.0).uniform()
                     tracker.triggerOn(0) { time, value, position ->
                         drawer.circle(center, value * 100.0)
                     }
                 }
                 if (it.name == "r") {
-                    val center = drawer.bounds.uniform(distanceToEdge = 30.0)
+                    val center = drawer.bounds.offsetEdges(-30.0).uniform()
                     tracker.triggerOn(1) { time, value, position ->
                         val r = Rectangle.fromCenter(center, width = value * 100.0, height = value * 100.0)
                         drawer.rectangle(r)

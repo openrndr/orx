@@ -6,6 +6,7 @@ import org.openrndr.extra.shapes.primitives.intersection
 
 /**
  * Demonstrate rectangle-rectangle intersection
+ * @see <img src="https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleIntersection01Kt.png">
  */
 fun main() {
     application {
