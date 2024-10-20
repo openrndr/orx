@@ -1,7 +1,7 @@
 package typed
 
 import org.openrndr.extra.expressions.typed.compileFunction1OrNull
-import org.openrndr.extra.noise.shapes.uniform
+import org.openrndr.extra.noise.uniform
 import org.openrndr.math.Vector2
 import kotlin.test.Test
 import kotlin.test.assertEquals
