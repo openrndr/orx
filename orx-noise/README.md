@@ -264,3 +264,8 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 [source code](src/jvmDemo/kotlin/DemoValueNoise2D01.kt)
 
 ![DemoValueNoise2D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoValueNoise2D01Kt.png)
+
+### phrases/DemoUHashPhrase01
+[source code](src/jvmDemo/kotlin/phrases/DemoUHashPhrase01.kt)
+
+![phrases-DemoUHashPhrase01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/phrases-DemoUHashPhrase01Kt.png)
