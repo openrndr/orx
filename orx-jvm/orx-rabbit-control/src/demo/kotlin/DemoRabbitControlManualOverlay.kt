@@ -1,8 +1,7 @@
 import org.openrndr.KEY_HOME
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extensions.SingleScreenshot
-import org.openrndr.extra.parameters.*
+import org.openrndr.extra.parameters.BooleanParameter
 
 
 fun main() = application {

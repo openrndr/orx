@@ -1,7 +1,6 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.loadFont
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.parameters.*
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
