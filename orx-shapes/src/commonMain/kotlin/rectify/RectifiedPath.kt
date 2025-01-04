@@ -101,6 +101,13 @@ abstract class RectifiedPath<T : EuclideanVector<T>>(
         }
     }
 
+    /**
+     * Evaluate curvature for [t]
+     */
+    fun curvature(t: Double): Double {
+        return originalPath.curvature(rectify(safe(t)))
+    }
+
     abstract fun sub(t0: Double, t1: Double): Path<T>
 
     /**
