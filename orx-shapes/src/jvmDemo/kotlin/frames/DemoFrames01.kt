@@ -42,7 +42,7 @@ fun main() {
             val pr = p.rectified(0.01, 100.0)
 
 
-            val frames = pr.frames((0 until 100).map { it / 100.0}, Vector3.UNIT_Y)
+            val frames = pr.frames((0 until 100).map { it / 100.0}, Vector3.UNIT_Y, analyticalDirections = false)
             extend(Orbital())
             extend {
                 drawer.shadeStyle = shadeStyle {
