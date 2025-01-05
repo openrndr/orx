@@ -781,7 +781,7 @@ abstract class TypedExpressionListenerBase(
                 IDType.VARIABLE -> s.valueStack.pushChecked(
                     when (name) {
                         "PI" -> PI
-                        else -> constants(name) ?: errorValue("unresolved variable: '${name}'", 0.0 / 0.0)
+                        else -> constants(name) ?: errorValue("unresolved value: '${name}'. Available constant: ${constants}", Unit)
                     }
                 )
 
@@ -835,10 +835,15 @@ abstract class TypedExpressionListenerBase(
 
 
                         is Function<*> -> {
+
+                            fun input(): String {
+                                return "in '${node.getParent()?.text}'"
+                            }
+
                             @Suppress("UNCHECKED_CAST")
-                            receiver as (String) -> Any
+                            receiver as (String) -> Any?
                             val function =
-                                receiver.invoke(name)
+                                receiver.invoke(name) ?: error("Unresolved function '${name} ${input()}")
 
                             when (idType) {
                                 IDType.MEMBER_FUNCTION0 -> {
@@ -849,19 +854,19 @@ abstract class TypedExpressionListenerBase(
 
                                 IDType.MEMBER_FUNCTION1 -> {
                                     @Suppress("UNCHECKED_CAST")
-                                    function as (Any) -> Any
+                                    (function as? (Any) -> Any) ?: error("Cannot cast function '$name' ($function) to (Any) -> Any ${input()}")
                                     s.functionStack.push({ x -> function(x[0]) })
                                 }
 
                                 IDType.MEMBER_FUNCTION2 -> {
                                     @Suppress("UNCHECKED_CAST")
-                                    function as (Any, Any) -> Any
+                                    function as? (Any, Any) -> Any ?: error("Cannot cast function '$name' ($function) to (Any, Any) -> Any ${input()}")
                                     s.functionStack.push({ x -> function(x[0], x[1]) })
                                 }
 
                                 IDType.MEMBER_FUNCTION3 -> {
                                     @Suppress("UNCHECKED_CAST")
-                                    function as (Any, Any, Any) -> Any
+                                    function as? (Any, Any, Any) -> Any ?: error("Cannot cast function '$name' ($function) to (Any, Any, Any) -> Any ${input()}")
                                     s.functionStack.push({ x -> function(x[0], x[1], x[2]) })
                                 }
 

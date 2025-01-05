@@ -261,7 +261,7 @@ internal class ExpressionListener(
                 IDType.VARIABLE -> doubleStack.push(
                     when (name) {
                         "PI" -> PI
-                        else -> constants[name] ?: errorValue("unresolved variable: '${name}'", 0.0 / 0.0)
+                        else -> constants[name] ?: errorValue("unresolved value: '${name}'. available values: ${constants}", 0.0 / 0.0)
                     }
                 )
 

@@ -28,9 +28,13 @@ fun <T0, R> compileFunction1(
 
     return { p0 ->
         varP0 = p0
-        ParseTreeWalker.DEFAULT.walk(listener, root)
+        try {
+            ParseTreeWalker.DEFAULT.walk(listener, root)
+        } catch(e: Throwable) {
+            throw RuntimeException("Error while evaluating '$expression' with parameter $parameter0=$p0. ${e.message}", e)
+        }
         @Suppress("UNCHECKED_CAST")
-        listener.state.lastExpressionResult as? R ?: error("no result")
+        listener.state.lastExpressionResult as? R ?: error("No result while evaluating '$expression' with parameter $parameter0=$p0")
     }
 }
 
