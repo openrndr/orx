@@ -37,7 +37,11 @@ fun frames(positions: List<Vector3>, directions: List<Vector3> = emptyList(), up
         val forward = (directions.getOrNull(0) ?: (next - current)).normalized
         val right = (forward cross up).normalized
         up = ((right cross forward)).normalized
-        result.add(Matrix44.fromColumnVectors(right.xyz0, up.xyz0, forward.xyz0, current.xyz1))
+        val frame = Matrix44.fromColumnVectors(right.xyz0, up.xyz0, -forward.xyz0, current.xyz1)
+        require(frame.determinant in 0.99..1.01) {
+            "Initial frame determinant (${frame.determinant}) != 1.0"
+        }
+        result.add(frame)
     }
 
     for (i in 1 until positions.size - 1) {
@@ -55,9 +59,14 @@ fun frames(positions: List<Vector3>, directions: List<Vector3> = emptyList(), up
         require(up.length > 0.0) { "`up.length` is zero or NaN in .frames()" }
         require(right.length > 0.0) { "`right.length` is zero or NaN in .frames()" }
 
+        val orientation = Matrix44.fromColumnVectors(right.xyz0, up.xyz0, -forward.xyz0, Vector4.UNIT_W)
+        require(orientation.determinant in 0.99..1.01) {
+            "Orientation determinant ${orientation.determinant} != 1.0"
+        }
+
         val m = buildTransform {
             translate(current)
-            multiply(Matrix44.fromColumnVectors(right.xyz0, up.xyz0, forward.xyz0, Vector4.UNIT_W))
+            multiply(orientation)
         }
 
         result.add(m)
