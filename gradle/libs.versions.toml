@@ -22,13 +22,13 @@ antlr = "4.13.2"
 antlrKotlin = "1.0.1"
 tensorflow = "0.5.0"
 minim = "2.2.2"
-netty = "4.1.115.Final"
+netty = "4.1.117.Final"
 rabbitcontrol = "0.3.39"
 zxing = "3.5.3"
-ktor = "3.0.1"
+ktor = "3.0.3"
 jgit = "7.0.0.202409031743-r"
 javaosc = "0.9"
-jsoup = "1.18.2"
+jsoup = "1.18.3"
 
 [libraries]
 kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging", version.ref = "kotlinLogging" }
