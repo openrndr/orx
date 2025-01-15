@@ -40,6 +40,6 @@ class TestExpressionErrors {
         val expression = "notExisting + 4"
         invoking {
             evaluateExpression(expression)
-        } `should throw` ExpressionException::class `with message` "error in evaluation of 'notExisting+4': unresolved variable: 'notExisting'"
+        } `should throw` ExpressionException::class `with message` "error in evaluation of 'notExisting+4': unresolved value: 'notExisting'. available values: {}"
     }
 }
