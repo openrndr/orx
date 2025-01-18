@@ -4,6 +4,18 @@ import org.openrndr.extra.kdtree.kdTree
 import org.openrndr.math.Vector2
 import org.openrndr.shape.LineSegment
 
+/**
+ * This demo initializes an interactive graphical application where 1000 randomly distributed points
+ * are displayed on a 2D canvas. A KD-tree structure is used for spatial querying of the points, enabling
+ * efficient nearest-neighbor searches based on the user's cursor position. The closest 7 points to the
+ * cursor are highlighted with circles and lines connecting them to the cursor.
+ *
+ * Key features:
+ * - Generates 1000 random 2D points within the canvas dimensions (1080x720).
+ * - Builds a KD-tree from the list of points for optimized spatial querying.
+ * - Visualizes the points and highlights the 7 nearest neighbors to the user's cursor position dynamically.
+ * - Highlights include red-colored circles around the nearest points and red lines connecting them to the cursor.
+ */
 fun main() {
     application {
         configure {

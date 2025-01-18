@@ -4,6 +4,19 @@ import org.openrndr.extra.kdtree.kdTree
 import org.openrndr.math.Vector2
 
 
+/**
+ * Initializes an interactive graphical application that demonstrates spatial querying with KD-trees.
+ * A canvas is populated with 1000 randomly distributed 2D points, and a KD-tree is used for efficient
+ * spatial operations. The program dynamically highlights points within a specified radius from the
+ * user's cursor position.
+ *
+ * Key features:
+ * - Generates and displays 1000 random 2D points within canvas dimensions of 1080x720.
+ * - Builds a KD-tree structure for optimized querying of spatial data.
+ * - Dynamically highlights points within a specified radius (50.0) from the cursor position.
+ * - Visualizes the current query radius around the cursor as an outline circle.
+ * - Uses different fill and stroke styles to distinguish highlighted points and query visuals.
+ */
 fun main() {
     application {
 
