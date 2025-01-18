@@ -14,6 +14,12 @@ internal fun max(a: Double, b: Double, c: Double, d: Double): Double {
     return max(max(a, b), max(c, d))
 }
 
+/**
+ * Computes a modified version of the Toe mapping function, used in color space transformations.
+ *
+ * @param x The input value for the function, representing a parameter in the transformation process.
+ * @return The transformed value after applying the Toe mapping function.
+ */
 fun toe(x: Double): Double {
     val k1 = 0.206
     val k2 = 0.03
@@ -24,6 +30,14 @@ fun toe(x: Double): Double {
     return 0.5 * (k3 * x - k1 + sqrt(d.coerceAtLeast(0.0)))
 }
 
+/**
+ * Computes the toe inverse transformation of a given input value based on specific constants.
+ * This function is typically used for calculations involving perceptual transformations
+ * or non-linear scaling in color spaces or other mathematical models.
+ *
+ * @param x The input value for which the toe inverse transformation is calculated.
+ * @return A transformed value based on the toe inverse function.
+ */
 fun toeInv(x: Double): Double {
     val k1 = 0.206
     val k2 = 0.03

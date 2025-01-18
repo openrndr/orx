@@ -13,6 +13,14 @@ import kotlin.math.sqrt
 Direct port of https://github.com/rvanwijnen/spectral.js
  */
 
+/**
+ * Represents spectral power distribution (SPD) coefficients for the cyan channel,
+ * spanning 38 wavelength samples. This array is used as part of the spectral upsampling
+ * process to convert a linear RGB color into a reflectance spectrum.
+ *
+ * The coefficients are predefined values that define the contribution of the cyan channel
+ * at specific wavelengths to the resulting reflectance spectrum.
+ */
 private val SPD_C = doubleArrayOf(
     0.96853629,
     0.96855103,
@@ -54,6 +62,11 @@ private val SPD_C = doubleArrayOf(
     0.01435408
 )
 
+/**
+ * Represents the spectral power distribution (SPD) data for the magenta color component.
+ * This array contains 38 predefined values corresponding to specific wavelengths.
+ * Used in the process of spectral upsampling to compute reflectance spectra from RGB color information.
+ */
 private val SPD_M = doubleArrayOf(
     0.51567122,
     0.5401552,
@@ -95,6 +108,11 @@ private val SPD_M = doubleArrayOf(
     0.50083021
 )
 
+/**
+ * Spectral power distribution (SPD) values for the Yellow primary in the spectral upsampling process.
+ * This array contains 38 precomputed reflectance values corresponding to specific wavelength samples.
+ * It is used to calculate the reflectance spectrum when converting a linear RGB color to its spectral representation.
+ */
 private val SPD_Y = doubleArrayOf(
     0.02055257,
     0.02059936,
@@ -136,6 +154,17 @@ private val SPD_Y = doubleArrayOf(
     0.98350852
 )
 
+/**
+ * A predefined spectral power distribution (SPD) array for the red channel,
+ * used in the spectral upsampling process to convert linear RGB colors into reflectance spectra.
+ *
+ * This array contains 38 values corresponding to specific wavelengths and represents
+ * the relative spectral contribution of the red channel in the conversion process.
+ *
+ * The SPD_R array is utilized in conjunction with other SPDs (e.g., SPD_C, SPD_M, SPD_Y, SPD_G, SPD_B)
+ * and the weights derived from spectral upsampling to calculate the reflectance spectrum
+ * for a given color.
+ */
 private val SPD_R = doubleArrayOf(
     0.03147571,
     0.03146636,
@@ -177,6 +206,16 @@ private val SPD_R = doubleArrayOf(
     0.98551547
 )
 
+/**
+ * Represents the predefined spectral power distribution (SPD) values for the green component
+ * used in spectral upsampling of linear RGB colors.
+ *
+ * This array contains 38 reflectance values corresponding to specific wavelengths and
+ * reflects the spectral characteristics of the green primary in the color model.
+ *
+ * It is utilized as one of the SPD datasets in the linearToReflectance function, which
+ * converts linear RGB colors into reflectance spectra.
+ */
 private val SPD_G = doubleArrayOf(
     0.49108579,
     0.46944057,
@@ -218,6 +257,12 @@ private val SPD_G = doubleArrayOf(
     0.49889859
 )
 
+/**
+ * Represents the spectral power distribution (SPD) values corresponding to the blue component
+ * of a linear RGB color. The array contains 38 precomputed reflectance values
+ * that span a specific range of wavelengths. These values are utilized in the spectral
+ * upsampling process to map an RGB color to its equivalent spectral reflectance distribution.
+ */
 private val SPD_B = doubleArrayOf(
     0.97901834,
     0.97901649,
@@ -259,6 +304,14 @@ private val SPD_B = doubleArrayOf(
     0.0157002
 )
 
+/**
+ * A pre-defined array representing the CIE 1931 Standard Observer's color matching function values for the X component.
+ * This data is used in color science calculations to transform spectral reflectance data into the CIE XYZ color space.
+ * The array contains 38 discrete samples corresponding to wavelengths within the visible spectrum.
+ *
+ * This constant is specifically used during computations involving spectral data to calculate the X component
+ * of the CIE XYZ color space via multiplication with a corresponding reflectance spectrum array.
+ */
 private val CIE_CMF_X = doubleArrayOf(
     0.00006469,
     0.00021941,
@@ -300,6 +353,17 @@ private val CIE_CMF_X = doubleArrayOf(
     0.00002
 )
 
+/**
+ * Represents the Y-component of the CIE 1931 color matching functions.
+ *
+ * The CIE 1931 color matching functions are used to convert spectral power distributions into
+ * CIE XYZ tristimulus values, which represent a color in a perceptually-uniform color space.
+ * These functions are defined over 38 discrete wavelength samples, typically covering
+ * the visible spectrum.
+ *
+ * The Y-component corresponds to the luminous efficiency function,
+ * which describes the sensitivity of human vision to different wavelengths of light.
+ */
 private val CIE_CMF_Y = doubleArrayOf(
     0.00000184,
     0.00000621,
@@ -341,6 +405,15 @@ private val CIE_CMF_Y = doubleArrayOf(
     0.00000722
 )
 
+/**
+ * Represents the Z component of the CIE 1931 2° Standard Observer Color Matching Function (CMF).
+ *
+ * This array contains precomputed values representing the spectral sensitivity of the human eye's Z cone.
+ * It is used in color science to convert spectral reflectance data into the Z component of the CIE XYZ color space.
+ *
+ * The values in this array correspond to sampling points across the visible light spectrum
+ * and are used in conjunction with `CIE_CMF_X` and `CIE_CMF_Y` to perform reflectance spectrum to XYZ color conversions.
+ */
 private val CIE_CMF_Z = doubleArrayOf(
     0.00030502,
     0.00103681,
@@ -382,6 +455,12 @@ private val CIE_CMF_Z = doubleArrayOf(
     0.0
 )
 
+/**
+ * Converts RGB color values into a form that represents spectral power distribution weights.
+ *
+ * @param rgb The RGB color in the form of a `ColorRGBa` object, which is to be converted to spectral weights.
+ * @return A `DoubleArray` representing the decomposed weights for white, cyan, magenta, yellow, red, green, and blue.
+ */
 private fun spectralUpsampling(rgb: ColorRGBa): DoubleArray {
     var lrgb = rgb.toLinear()
     val w = min(min(lrgb.r, lrgb.g), lrgb.b)
@@ -399,6 +478,14 @@ private fun spectralUpsampling(rgb: ColorRGBa): DoubleArray {
 }
 
 
+/**
+ * Converts a linear RGB color into a reflectance spectrum represented as a `DoubleArray`.
+ * The resulting reflectance spectrum spans 38 wavelength samples
+ * and is computed using spectral upsampling based on predefined spectral distributions.
+ *
+ * @param rgb The linear RGB color to be converted, represented as a `ColorRGBa` object.
+ * @return A `DoubleArray` containing 38 reflectance values corresponding to the wavelengths.
+ */
 internal fun linearToReflectance(rgb: ColorRGBa): DoubleArray {
     val eps = 0.00000001
     val weights = spectralUpsampling(rgb)
@@ -419,6 +506,20 @@ internal fun linearToReflectance(rgb: ColorRGBa): DoubleArray {
     return reflectance
 }
 
+/**
+ * Computes the concentration of a component in a linear interpolation based on the specified parameters.
+ *
+ * The method calculates a concentration factor `c` using two linear values `l1` and `l2`,
+ * as well as a blend factor `t`. This can be used in scenarios such as spectral mixing
+ * or interpolation tasks where weights are dynamically computed.
+ *
+ * @param l1 The first linear value, typically derived from reflectance or intensity.
+ * @param l2 The second linear value, typically derived from reflectance or intensity.
+ * @param t The blending factor in the range [0.0, 1.0], where 0.0 represents full influence of `l1`
+ *          and 1.0 represents full influence of `l2`.
+ * @return The computed concentration factor as a `Double`, representing the relative contribution
+ *         of the components based on the blending factor.
+ */
 private fun linearToConcentration(l1: Double, l2: Double, t: Double): Double {
     val t1 = l1 * (1 - t).pow(2.0)
     val t2 = l2 * t.pow(2.0)
@@ -434,6 +535,16 @@ private fun DoubleArray.dot(other: DoubleArray): Double {
     return d
 }
 
+/**
+ * Converts a reflectance spectrum represented as a `DoubleArray` to a color in the CIE XYZ color space.
+ *
+ * This method calculates the XYZ color by performing a dot product operation between the reflectance spectrum
+ * and the CIE color matching functions (CIE_CMF_X, CIE_CMF_Y, CIE_CMF_Z). The result is returned as a `ColorXYZa` object.
+ *
+ * @param reflectance An array of reflectance spectrum values, typically spanning the visible spectrum.
+ *                    This is represented as a `DoubleArray` with 38 wavelength samples.
+ * @return A `ColorXYZa` object representing the corresponding color in the CIE XYZ color space.
+ */
 internal fun reflectanceToXYZ(reflectance: DoubleArray): ColorXYZa {
     val x = reflectance.dot(CIE_CMF_X)
     val y = reflectance.dot(CIE_CMF_Y)
@@ -443,10 +554,34 @@ internal fun reflectanceToXYZ(reflectance: DoubleArray): ColorXYZa {
 
 private fun pow(x: Double, y: Double): Double = x.pow(y)
 
+/**
+ * Applies the Saunderson correction to a reflectance value to account for surface reflectance effects.
+ *
+ * Saunderson correction adjusts the measured reflectance by considering front surface reflection
+ * and internal reflections in the material. The correction is based on two coefficients, `k1` and `k2`.
+ *
+ * @param rInf The measured reflectance value to be corrected.
+ * @param k1 The first Saunderson coefficient representing front surface reflection.
+ * @param k2 The second Saunderson coefficient representing internal reflection effects.
+ * @return The corrected reflectance value as a `Double`.
+ */
 internal fun saundersonCorrection(rInf: Double, k1: Double, k2: Double): Double {
     return k1 + ((1 - k1) * (1 - k2) * rInf) / (1 - (k2 * rInf))
 }
 
+/**
+ * Blends two colors spectrally by interpolating their reflectance spectra and returns the resulting color.
+ * This method uses spectral upsampling, Saunderson correction, and concentration factors to compute
+ * the resulting color in the RGB color space.
+ *
+ * @param color1 The first color to be mixed, represented as a `ColorRGBa`.
+ * @param color2 The second color to be mixed, represented as a `ColorRGBa`.
+ * @param t The blending factor in the range [0.0, 1.0], where 0.0 represents full influence of `color1`
+ *          and 1.0 represents full influence of `color2`.
+ * @param k1 The first Saunderson correction coefficient for surface reflection. Default is 0.0.
+ * @param k2 The second Saunderson correction coefficient for internal reflections. Default is 0.0.
+ * @return The resulting blended color as a `ColorRGBa`, maintaining the linearity of the first input color (`color1`).
+ */
 fun mixSpectral(color1: ColorRGBa, color2: ColorRGBa, t: Double, k1: Double = 0.0, k2: Double = 0.0): ColorRGBa {
     val lrgb1 = color1.toLinear()
     val lrgb2 = color2.toLinear()

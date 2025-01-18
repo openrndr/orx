@@ -7,6 +7,16 @@ import org.openrndr.math.map
 import org.openrndr.math.mixAngle
 import kotlin.jvm.JvmRecord
 
+/**
+ * Represents a color in the XSLUV color space with an optional alpha transparency value.
+ * XSLUV is a cylindrical representation of the HSLUV color space using an alternative X coordinate
+ * instead of the standard hue. It provides a perceptually uniform color representation.
+ *
+ * @property x The X coordinate representing the hue variation in the XSLUV color space.
+ * @property s The saturation of the color in the XSLUV color space.
+ * @property l The luminance of the color in the XSLUV color space.
+ * @property alpha The alpha transparency value of the color, ranging from 0.0 to 1.0. Defaults to 1.0.
+ */
 @Serializable
 @JvmRecord
 data class ColorXSLUVa(val x: Double, val s: Double, val l: Double, override val alpha: Double = 1.0) :

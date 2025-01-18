@@ -6,6 +6,16 @@ import org.openrndr.math.Vector4
 import org.openrndr.math.mixAngle
 import kotlin.jvm.JvmRecord
 
+/**
+ * Represents a color in the HPLUVa (Hue, Perceptual Lightness, Saturation, Alpha) color space.
+ * This color space is based on perceptual uniformity, making it suitable for operations
+ * like interpolation, shading, and manipulation of hue, saturation, and lightness values.
+ *
+ * @property h The hue component of the color, representing the angle on the color wheel in degrees [0, 360).
+ * @property s The saturation component of the color, representing the intensity of the color [0.0, 1.0].
+ * @property l The lightness component of the color, representing the relative brightness [0.0, 1.0].
+ * @property alpha The alpha (opacity) component of the color, ranging from fully transparent (0.0) to fully opaque (1.0).
+ */
 @Serializable
 @JvmRecord
 data class ColorHPLUVa(val h: Double, val s: Double, val l: Double, override val alpha: Double = 1.0) :

@@ -78,8 +78,16 @@ private fun maxChromaForLH(L100: Double, H: Double): Double {
     return min
 }
 
+
 /**
- * HSLUV color space
+ * Represents a color in the HSLuv color space with an alpha transparency component.
+ * HSLuv is a perceptually uniform color space, where hues are uniformly distributed
+ * and the perception of color is consistent across the spectrum.
+ *
+ * @property h The hue of the color in degrees, ranging from 0.0 to 360.0.
+ * @property s The saturation of the color, ranging from 0.0 to 1.0.
+ * @property l The luminance of the color, ranging from 0.0 to 1.0.
+ * @property alpha The alpha transparency value, ranging from 0.0 (fully transparent) to 1.0 (fully opaque).
  */
 @Serializable
 @JvmRecord

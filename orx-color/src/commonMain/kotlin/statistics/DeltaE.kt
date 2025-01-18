@@ -5,7 +5,12 @@ import org.openrndr.color.ConvertibleToColorRGBa
 import org.openrndr.math.Vector3
 
 /**
- * Computes delta E between two colors.
+ * Computes the CIE76 color difference (ΔE*76) between this color and another color.
+ * The method calculates the Euclidean distance between the two colors in the LAB color space.
+ * If either of the colors is not in LAB format, it will be converted to LAB before computation.
+ *
+ * @param other The second color to compare, which should implement the ConvertibleToColorRGBa interface.
+ * @return The calculated CIE76 color difference as a Double.
  */
 fun <T: ConvertibleToColorRGBa> T.deltaE76(other: T): Double {
     return if (this is ColorLABa && other is ColorLABa) {

@@ -6,8 +6,14 @@ import org.openrndr.math.*
 import kotlin.jvm.JvmRecord
 import kotlin.math.*
 
+
 /**
- * Color in cylindrical OKLab space
+ * Represents a color in the OKLCH color space, which is based on the OKLab color space with added polar coordinates for chroma and hue.
+ *
+ * @property l Lightness of the color. Range: 0.0 (black) to 1.0 (white).
+ * @property c Chroma, representing color intensity. Typically non-negative.
+ * @property h Hue angle in degrees. Range: 0.0 to 360.0.
+ * @property alpha Opacity of the color. Range: 0.0 (fully transparent) to 1.0 (fully opaque). Default is 1.0.
  */
 @Serializable
 @JvmRecord
