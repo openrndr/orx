@@ -5,6 +5,25 @@ import org.openrndr.extra.triangulation.delaunayTriangulation
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
 
+/**
+ * Entry point of the application.
+ *
+ * This method sets up a graphical application using the OPENRNDR framework
+ * to visually demonstrate Delaunay triangulation on a set of points scattered
+ * along a circle with Poisson disk sampling.
+ *
+ * The application features the following:
+ * - A central circle with a defined radius.
+ * - Points generated within the circle using a scatter algorithm that
+ *   maintains specific spacing and avoids clustering.
+ * - Delaunay triangulation computed from the combined point set.
+ * - Rendering of triangles that are part of the Delaunay triangulation.
+ * - Visual styling with dynamic color shading for better clarity of layers
+ *   and triangle order.
+ *
+ * This method demonstrates concepts of computational geometry and procedural
+ * rendering with a focus on interactive visual applications.
+ */
 fun main() {
     application {
         configure {
