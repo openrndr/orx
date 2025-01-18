@@ -6,6 +6,16 @@ import org.openrndr.extra.mesh.*
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 
+/**
+ * Reads and processes mesh data from a list of lines in OBJ format.
+ *
+ * @param lines An iterable collection of strings representing the lines of an OBJ file.
+ * Each line contains information about vertices, normals, texture coordinates,
+ * face definitions, or group definitions.
+ * @return A `CompoundMeshData` object containing processed vertex data and meshes.
+ * The resulting data includes vertices, texture coordinates, colors, normals, tangents, and bitangents,
+ * alongside their associated face indices, grouped into meshes.
+ */
 fun readObjMeshData(lines: Iterable<String>): CompoundMeshData {
     val meshes = mutableMapOf<String, List<IndexedPolygon>>()
     val positions = mutableListOf<Vector3>()
@@ -105,9 +115,22 @@ fun readObjMeshData(lines: Iterable<String>): CompoundMeshData {
     )
 }
 
+/**
+ * Loads a Wavefront OBJ file representation provided as a list of strings and parses it into a VertexBuffer.
+ *
+ * @param lines The list of strings representing the content of the Wavefront OBJ file. Each string corresponds to a line in the file.
+ * @return A VertexBuffer containing the vertex information parsed from the OBJ data.
+ */
 fun loadOBJasVertexBuffer(lines: List<String>): VertexBuffer {
     return readObjMeshData(lines).toVertexBuffer()
 }
 
+/**
+ * Parses a list of strings representing the content of a Wavefront OBJ file and converts it into
+ * a map of polygon groups, where each key corresponds to a mesh name and the value is a list of polygons.
+ *
+ * @param lines the lines of the OBJ file as a list of strings, with each string representing a line in the file.
+ * @return a map where keys are mesh names and values are lists of polygons ([IPolygon]) corresponding to those meshes.
+ */
 fun loadOBJ(lines: List<String>): Map<String, List<IPolygon>> = readObjMeshData(lines).triangulate().toPolygons()
 
