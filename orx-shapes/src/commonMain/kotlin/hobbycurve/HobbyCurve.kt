@@ -245,6 +245,18 @@ private fun thomas(a: DoubleArray, b: DoubleArray, c: DoubleArray, d: DoubleArra
     return x
 }
 
+/**
+ * Uses the Sherman-Morrison formula to solve a system of linear equations with a modified
+ * tridiagonal matrix, based on the Thomas algorithm.
+ *
+ * @param a The lower diagonal coefficients of the tridiagonal matrix.
+ * @param b The main diagonal coefficients of the tridiagonal matrix.
+ * @param c The upper diagonal coefficients of the tridiagonal matrix.
+ * @param d The right-hand side vector of the system of equations.
+ * @param s The value for the last row modification in the matrix.
+ * @param t The value for the first row modification in the matrix.
+ * @return A solution vector of the system of equations considering the specified matrix modifications.
+ */
 private fun sherman(
     a: DoubleArray,
     b: DoubleArray,
@@ -270,6 +282,13 @@ private fun sherman(
     }
 }
 
+/**
+ * Calculates a parameter used in Hobby's algorithm for constructing smooth curves.
+ *
+ * @param a The first angle in radians, representing the direction of the tangent vector at the start of the segment.
+ * @param b The second angle in radians, representing the direction of the tangent vector at the end of the segment.
+ * @return A computed value used to adjust the control points for the curve segment.
+ */
 private fun rho(a: Double, b: Double): Double {
     val sa = sin(a)
     val sb = sin(b)

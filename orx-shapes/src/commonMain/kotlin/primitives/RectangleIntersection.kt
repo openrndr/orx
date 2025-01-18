@@ -5,8 +5,12 @@ import kotlin.math.max
 import kotlin.math.min
 
 /**
- * Find intersection of [this] and [other]
- * @return a rectangle shaped intersection or [Rectangle.EMPTY] when the intersection is empty.
+ * Computes the intersection of two rectangles and returns the resulting rectangle.
+ * If the rectangles do not intersect, an empty rectangle is returned.
+ *
+ * @param other The rectangle to intersect with the current rectangle.
+ * @return A [Rectangle] representing the overlapping area of the two rectangles,
+ * or an empty rectangle if there is no intersection.
  */
 fun Rectangle.intersection(other: Rectangle) : Rectangle = if (this.intersects(other)) {
     val tn = this.normalized

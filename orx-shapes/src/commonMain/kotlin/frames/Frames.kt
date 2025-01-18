@@ -14,6 +14,15 @@ fun List<Vector3>.frames(up0: Vector3): List<Matrix44> {
     return frames(this, up0 = up0)
 }
 
+/**
+ * Calculates a list of frame transformation matrices using parallel transport along a series of positions.
+ *
+ * @param positions a list of 3D positions defining the path.
+ * @param directions an optional list of direction vectors at each position for guiding forward orientation;
+ *                   if empty, directions are estimated from the positions.
+ * @param up0 the initial up vector, must not have zero or NaN length.
+ * @return a list of 4x4 frame matrices corresponding to the input positions.
+ */
 fun frames(positions: List<Vector3>, directions: List<Vector3> = emptyList(), up0: Vector3): List<Matrix44> {
 
     require(up0.squaredLength > 0.0) {

@@ -6,6 +6,16 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.transforms.buildTransform
 import org.openrndr.shape.Shape
 
+/**
+ * Generates a list of shapes representing the given text with the specified font face, size, and position.
+ *
+ * @param face The font face used to render the text.
+ * @param text The text content to be converted into shapes.
+ * @param size The font size to be applied to the shapes.
+ * @param position The starting position for rendering the text, defaulting to the origin vector.
+ * @param scaler A function that scales the font face. By default, it uses `fontHeightScaler`.
+ * @return A list of shapes representing the rendered text.
+ */
 fun shapesFromText(
     face: Face,
     text: String,

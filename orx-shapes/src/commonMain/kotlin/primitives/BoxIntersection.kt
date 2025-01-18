@@ -6,8 +6,13 @@ import kotlin.math.max
 import kotlin.math.min
 
 /**
- * Find intersection of [this] and [other]
- * @return a rectangle shaped intersection or [Rectangle.EMPTY] when the intersection is empty.
+ * Computes the intersection of the current box with another box.
+ * If the two boxes intersect, the resulting box represents the overlapping region.
+ * If the two boxes do not intersect, an empty box is returned.
+ *
+ * @param other The box to intersect with the current box.
+ * @return A new box representing the overlapping region between the current box and the specified box,
+ *         or an empty box if there is no intersection.
  */
 fun Box.intersection(other: Box) : Box = if (this.intersects(other)) {
     val tn = this.normalized

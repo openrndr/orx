@@ -6,6 +6,17 @@ import org.openrndr.shape.Circle
 import org.openrndr.shape.LineSegment
 import org.openrndr.shape.ShapeContour
 
+/**
+ * Represents a pulley system defined by two circles.
+ *
+ * This class models a geometric structure where two circles are connected with
+ * tangential lines, forming a pulley-like system. The `Pulley` class provides
+ * operations for scaling, addition, and subtraction, as well as generating
+ * a contour that represents the shape of the pulley.
+ *
+ * @property circle0 The first circle in the pulley system.
+ * @property circle1 The second circle in the pulley system.
+ */
 class Pulley(val circle0: Circle, val circle1: Circle) : LinearType<Pulley> {
     override fun div(scale: Double): Pulley {
         return Pulley(circle0 / scale, circle1 / scale)

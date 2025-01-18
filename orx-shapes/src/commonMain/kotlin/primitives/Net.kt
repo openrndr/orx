@@ -7,6 +7,17 @@ import org.openrndr.shape.Circle
 import org.openrndr.shape.LineSegment
 import org.openrndr.shape.ShapeContour
 
+/**
+ * Represents a net defined by two points and a circle. The net can be seen as a structure
+ * that connects the two points with the circle in between, forming a string-like shape.
+ *
+ * This class implements basic linear transformations such as scaling and translation
+ * and defines how nets can interact by addition or subtraction.
+ *
+ * @property point0 The starting point of the net.
+ * @property point1 The ending point of the net.
+ * @property circle The circle around which the net is constructed.
+ */
 class Net(val point0: Vector2, val point1: Vector2, val circle: Circle) :
     LinearType<Net> {
     override fun div(scale: Double) =

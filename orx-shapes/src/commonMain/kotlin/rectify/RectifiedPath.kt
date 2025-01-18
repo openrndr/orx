@@ -7,14 +7,27 @@ import org.openrndr.shape.Path
 import org.openrndr.shape.ShapeContour
 
 /**
- * RectifiedContour provides an approximately uniform parameterization for [ShapeContour]
+ * Provides a rectified representation of a path in N-dimensional Euclidean space. Rectification refers
+ * to the process of mapping the parameter space of the path to a uniform distribution based on arc length.
+ *
+ * @param T The specific type of Euclidean vector representing the dimension of the path.
+ * @property originalPath The underlying path being rectified.
+ * @property points Final list of points used in the rectification process, possibly including an additional
+ * point to close the loop if the original path is closed.
+ * @property intervals Lazy-evaluated list of parameter intervals corresponding to the `points` property,
+ * used for mapping and inverse mapping of parameter values.
+ *
+ * @param distanceTolerance The acceptable tolerance for the distance error in the rectification process.
+ * Default value is 0.5.
+ * @param lengthScale Scale factor to adjust the length of the Look-Up Table (LUT) for the rectified path.
+ * Default value is 1.0.
  */
 abstract class RectifiedPath<T : EuclideanVector<T>>(
     val originalPath: Path<T>,
     distanceTolerance: Double = 0.5,
     lengthScale: Double = 1.0
 ) {
-    val candidatePoints =
+    private val candidatePoints =
         originalPath.equidistantPositionsWithT((originalPath.length * lengthScale).toInt().coerceAtLeast(2), distanceTolerance)
 
     val points = if (originalPath.closed) candidatePoints + candidatePoints.first().copy(second = 1.0) else candidatePoints
@@ -56,6 +69,16 @@ abstract class RectifiedPath<T : EuclideanVector<T>>(
         }
     }
 
+    /**
+     * Computes an inverse rectified t-value for the given normalized `t` parameter.
+     * This method determines the original parameter space value from a rectified
+     * (uniformly distributed) parameter space value.
+     *
+     * @param t A normalized parameter (between 0.0 and 1.0) in rectified parameter space.
+     *          Values outside this range will be clamped to 0.0 or 1.0.
+     * @return A normalized parameter (between 0.0 and 1.0) in the original parameter space.
+     *         Returns 0.0 if the original path is empty.
+     */
     fun inverseRectify(t: Double): Double {
         if (originalPath.empty) {
             return 0.0

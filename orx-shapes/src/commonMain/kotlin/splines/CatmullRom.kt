@@ -313,6 +313,15 @@ fun CatmullRomChain2.toContour(): ShapeContour =
 
 
 
+/**
+ * Converts the current 3D Catmull-Rom spline segment into a cubic Bézier curve representation.
+ *
+ * This function calculates the four control points required for a cubic Bézier curve
+ * using the Catmull-Rom spline's positions and its alpha value determining the tension.
+ * The resulting cubic Bézier curve spans between `p1` and `p2` of the Catmull-Rom segment.
+ *
+ * @return A [Segment3D] object representing the equivalent cubic Bézier curve of the Catmull-Rom spline segment.
+ */
 fun CatmullRom3.toSegment(): Segment3D {
     val d1a2 = (p1 - p0).length.pow(2 * alpha)
     val d2a2 = (p2 - p1).length.pow(2 * alpha)
@@ -329,4 +338,12 @@ fun CatmullRom3.toSegment(): Segment3D {
     return Segment3D(b0, b1, b2, b3)
 }
 
+/**
+ * Converts a 3D Catmull-Rom spline chain into a `Path3D` representation.
+ *
+ * The resulting `Path3D` contains the segments generated from the Catmull-Rom spline
+ * and preserves the information about whether the spline forms a closed loop.
+ *
+ * @return A `Path3D` object representing the converted spline chain.
+ */
 fun CatmullRomChain3.toPath3D(): Path3D = Path3D(segments.map { it.toSegment() }, this.loop)

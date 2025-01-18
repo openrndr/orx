@@ -15,6 +15,15 @@ fun List<Vector2>.alphaShape(): Shape {
     return AlphaShape(this).createShape()
 }
 
+/**
+ * Calculates the circumradius of a triangle formed by three 2D points.
+ * The circumradius is the radius of the circumcircle passing through all three points of the triangle.
+ *
+ * @param p1 The first vertex of the triangle.
+ * @param p2 The second vertex of the triangle.
+ * @param p3 The third vertex of the triangle.
+ * @return The circumradius of the triangle as a Double.
+ */
 private fun circumradius(p1: Vector2, p2: Vector2, p3: Vector2): Double {
     val a = (p2 - p1).length
     val b = (p3 - p2).length
