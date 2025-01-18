@@ -63,6 +63,19 @@ enum class IDType {
     FUNCTION_ARGUMENT
 }
 
+/**
+ * A base class for handling typed expressions in a custom language parser.
+ * This class provides an extensive set of overrides for various parser rules
+ * to allow custom implementation when these rules are triggered during parsing.
+ *
+ * @property functions Represents a mapping of functions categorized by their arity.
+ * @property constants Tracks constants identified during parsing.
+ * @property state Maintains the current state of the listener, preserving contextual information.
+ *
+ * Methods primarily handle entering and exiting parser rules for expressions, statements, and
+ * function calls, offering hooks to extend or modify behavior for each parsing scenario. Additionally,
+ * utility methods are provided to handle and propagate errors during parsing.
+ */
 abstract class TypedExpressionListenerBase(
     val functions: TypedFunctionExtensions = TypedFunctionExtensions.EMPTY,
     val constants: (String) -> Any? = { null }
@@ -940,6 +953,21 @@ expect class TypedExpressionListener(
 
 class ExpressionException(message: String) : RuntimeException(message)
 
+/**
+ * Evaluates a typed expression based on the provided string input, constants,
+ * and function definitions.
+ *
+ * @param expression The string representation of the expression to evaluate.
+ * @param constants A lambda function providing constant values for specific
+ * variables. Returns null if a constant is not found. Defaults to a function
+ * returning null for any input.
+ * @param functions A `TypedFunctionExtensions` instance encapsulating function
+ * definitions for 0 to 5 arguments. Defaults to an empty set of functions.
+ * @return The result of the evaluated expression as an `Any?` type.
+ *         Returns null if the evaluation produces no result.
+ * @throws ExpressionException If a syntax error occurs in the input expression
+ * or during expression evaluation.
+ */
 fun evaluateTypedExpression(
     expression: String,
     constants: (String) -> Any? = { null },
