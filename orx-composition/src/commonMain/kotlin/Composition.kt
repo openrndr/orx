@@ -245,8 +245,14 @@ data class TextNode(var text: String, var contour: ShapeContour?) : CompositionN
         get() = Rectangle.EMPTY
 }
 
+
 /**
- * A [CompositionNode] that functions as a group node
+ * Represents a group node in a composition hierarchy.
+ * A `GroupNode` itself does not have explicit contents but serves as a container for managing child nodes.
+ * It allows grouping of multiple `CompositionNode` instances and provides functionalities like calculating
+ * the bounds for all its child elements and copying itself with overrides.
+ *
+ * @property children A mutable list of child nodes belonging to this group. Defaults to an empty list.
  */
 open class GroupNode(open val children: MutableList<CompositionNode> = mutableListOf()) : CompositionNode() {
     override val bounds: Rectangle
@@ -316,6 +322,16 @@ data class CompositionDimensions(val x: Length, val y: Length, val width: Length
 val defaultCompositionDimensions = CompositionDimensions(0.0.pixels, 0.0.pixels, 768.0.pixels, 576.0.pixels)
 
 
+/**
+ * Represents a specialized type of `GroupNode` in a composition hierarchy, serving as a container for child nodes.
+ *
+ * `GroupNodeStop` inherits from `GroupNode` and extends its functionality. It can be used to define a specific
+ * grouping behavior or semantic grouping in a composition system. Instances of this class hold a mutable list
+ * of `CompositionNode` entities as children.
+ *
+ * @constructor Creates a `GroupNodeStop` with the given child nodes.
+ * @param children A mutable list of `CompositionNode` instances to be managed by this group.
+ */
 class GroupNodeStop(children: MutableList<CompositionNode>) : GroupNode(children)
 
 /**
@@ -442,6 +458,14 @@ fun CompositionNode.remove() {
     parent = null
 }
 
+/**
+ * Recursively finds all terminal nodes within the composition tree starting from the current node
+ * and applies the provided filter to determine which nodes to include in the result.
+ *
+ * @param filter A predicate function used to filter terminal nodes. Only nodes that satisfy this
+ * predicate will be included in the result.
+ * @return A list of terminal nodes within the composition tree that satisfy the given filter.
+ */
 fun CompositionNode.findTerminals(filter: (CompositionNode) -> Boolean): List<CompositionNode> {
     val result = mutableListOf<CompositionNode>()
     fun find(node: CompositionNode) {
@@ -456,6 +480,14 @@ fun CompositionNode.findTerminals(filter: (CompositionNode) -> Boolean): List<Co
     return result
 }
 
+/**
+ * Finds all `CompositionNode` instances in the current node hierarchy that satisfy the given filter.
+ * Traverses the hierarchy recursively, evaluating each node and its children.
+ *
+ * @param filter A predicate function to determine whether a node should be included in the result.
+ *               It takes a `CompositionNode` as input and returns a Boolean.
+ * @return A list of `CompositionNode` instances that satisfy the provided filter condition.
+ */
 fun CompositionNode.findAll(filter: (CompositionNode) -> Boolean): List<CompositionNode> {
     val result = mutableListOf<CompositionNode>()
     fun find(node: CompositionNode) {
@@ -537,6 +569,21 @@ class UserData<T : Any>(
     }
 }
 
+/**
+ * Filters a `CompositionNode` and its hierarchy based on the provided filter function.
+ * The method recursively applies the filter to the node and its children, creating
+ * a new hierarchy that contains only the nodes for which the filter returns true.
+ * If the filter condition fails for the root node, null is returned.
+ *
+ * For `GroupNode` instances, the method applies the filter to its children and
+ * creates a new `GroupNode` containing filtered children that satisfy the filter condition.
+ * For `ShapeNode` instances, a copy is created if the filter condition is met.
+ *
+ * @param filter A lambda function that takes a `CompositionNode` and returns a `Boolean`.
+ *               The function determines if a node should be included in the resulting hierarchy.
+ *
+ * @return A new filtered `CompositionNode` tree, or null if the root node does not pass the filter.
+ */
 fun CompositionNode.filter(filter: (CompositionNode) -> Boolean): CompositionNode? {
     val f = filter(this)
 

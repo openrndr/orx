@@ -3,13 +3,13 @@ package org.openrndr.extra.composition
 import org.openrndr.draw.Drawer
 import org.openrndr.shape.*
 
+
 /**
- * Draws a [Composition]
- * @param composition The composition to draw
- * @see contour
- * @see contours
- * @see shape
- * @see shapes
+ * Renders a vector `Composition` onto the `Drawer`. This method applies transformations, styles,
+ * and renders the hierarchy of nodes from the given `Composition` object.
+ *
+ * @param composition The vector composition containing the root node and associated dimensions.
+ *                    It includes the styling and viewport transformation details necessary for rendering.
  */
 fun Drawer.composition(composition: Composition) {
     pushModel()
