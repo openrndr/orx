@@ -74,8 +74,13 @@ fun Segment2D.scaleTangents(axis: Vector2 = Vector2.UNIT_X): Segment2D {
     }
 }
 
+
 /**
- * Fcurve class
+ * Represents a functional curve composed of multiple 2D segments. It provides utilities to
+ * manipulate and query the curve, such as reversing its direction, changing its speed,
+ * sampling values, and visualizing it as contours.
+ *
+ * @param segments a list of 2D segments that define the curve
  */
 @Serializable
 data class FCurve(val segments: List<Segment2D>) {
@@ -95,11 +100,27 @@ data class FCurve(val segments: List<Segment2D>) {
     val bounds by lazy {
         segments.map { it.bounds }.bounds
     }
+
+    /**
+     * Represents the minimum value of the curve.
+     *
+     * This property evaluates to the minimum vertical position (y-coordinate)
+     * of the FCurve based on its `segments` and `bounds`. If the `segments`
+     * list is empty, the value defaults to `0.0`. Otherwise, it calculates
+     * the minimum as the y-coordinate at the starting position of the bounds.
+     */
     val min: Double
         get() {
             if (segments.isEmpty()) return 0.0 else return bounds.position(0.0, 0.0).y
         }
 
+    /**
+     * Represents the maximum y-coordinate value of the FCurve at its bounds.
+     *
+     * If the `segments` list of the FCurve is empty, the returned value is 0.0.
+     * Otherwise, it calculates the y-coordinate of the furthest extent of the curve
+     * by evaluating the position of the `bounds` at the upper-right corner (1.0, 1.0).
+     */
     val max: Double
         get() {
             if (segments.isEmpty()) return 0.0 else return bounds.position(1.0, 1.0).y
@@ -118,8 +139,15 @@ data class FCurve(val segments: List<Segment2D>) {
         }
     }
 
+
     /**
-     * Create a sampler or function from the Fcurve
+     * Creates a function to sample the FCurve at a specific time.
+     *
+     * @param normalized Specifies whether the sampling is normalized to the range [0, 1].
+     *                   If `true`, the time parameter will be scaled to the duration of the curve.
+     *                   If `false`, the raw time parameter is used directly.
+     * @return A lambda function that takes a `Double` representing the time and returns a `Double`
+     *         corresponding to the sampled value from the FCurve at that specific time.
      */
     fun sampler(normalized: Boolean = false): (Double) -> Double {
         var cachedSegment: Segment2D? = null
@@ -140,7 +168,8 @@ data class FCurve(val segments: List<Segment2D>) {
     }
 
     /**
-     * The unitless duration of the Fcurve
+     * The duration of the FCurve, calculated as the difference between its start and end points.
+     * Returns 0.0 if the FCurve has no segments.
      */
     val duration: Double
         get() {
@@ -151,8 +180,10 @@ data class FCurve(val segments: List<Segment2D>) {
             }
         }
 
+
     /**
-     * The unitless start position of the Fcurve
+     * Represents the starting x-coordinate of the first segment in the FCurve.
+     * If the `segments` list is empty, it defaults to `0.0`.
      */
     val start: Double
         get() {
@@ -163,8 +194,12 @@ data class FCurve(val segments: List<Segment2D>) {
             }
         }
 
+
     /**
-     * The unitless end position of the Fcurve
+     * Represents the x-coordinate of the endpoint of the last segment in the FCurve.
+     *
+     * If the `segments` list is empty, the value defaults to `0.0`.
+     * Otherwise, it returns the x-coordinate of the endpoint (`end.x`) of the last segment.
      */
     val end: Double
         get() {
@@ -524,6 +559,15 @@ private fun evaluateFCurveCommands(parts: List<String>): FCurve {
     }
 }
 
+/**
+ * Parses the provided string to create an FCurve. This function attempts to either interpret the
+ * input as a constant value or evaluate it as a series of functional curve commands.
+ *
+ * @param d A string representing either a constant value or functional curve commands.
+ *          If the string can be converted to a double, it is treated as a constant value for the FCurve.
+ *          Otherwise, it is parsed as functional curve commands.
+ * @return An FCurve constructed based on the input string.
+ */
 fun fcurve(d: String): FCurve {
     val constantExpression = d.toDoubleOrNull()
     if (constantExpression != null) {

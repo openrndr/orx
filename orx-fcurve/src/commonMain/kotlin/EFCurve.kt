@@ -32,9 +32,13 @@ fun mfcurve(
 }
 
 /**
- * expand efcurve to fcurve
- * @param ef an efcurve string
- * @param constants a map of constants that is passed to [evaluateExpression]
+ * Processes and expands a formatted string based on specific expressions and rules such as comments, lists,
+ * and repetitions. The method allows for recursive evaluation of expressions within the string.
+ *
+ * @param ef The input string to be processed, containing expression placeholders, lists, or repetitions.
+ * @param constants A map of constants used for substituting and evaluating expressions.
+ * @param functions An object containing user-defined functions for expression evaluation.
+ * @return A processed string with all expressions, lists, and repetitions evaluated and expanded.
  */
 fun efcurve(
     ef: String,
