@@ -4,6 +4,23 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.mix
 
+/**
+ * Applies fractal gradient perturbation to a 3D position vector.
+ *
+ * This method perturbs the input position vector using a fractal noise pattern based on multiple
+ * octaves of gradient noise. It combines parameters such as amplitude, frequency, lacunarity, and gain
+ * to control the noise characteristics, while supporting custom interpolation.
+ *
+ * @param seed The initial seed value to generate the noise.
+ * @param amplitude The initial magnitude of the displacement during the perturbation.
+ * @param frequency The base frequency for the noise generation.
+ * @param lacunarity The frequency multiplier between successive octaves.
+ * @param gain The amplitude multiplier between successive octaves.
+ * @param octaves The number of noise layers (octaves) to combine in the fractal calculation.
+ * @param position The input 3D vector representing the position to perturb.
+ * @param interpolator A function to apply smooth interpolation, typically used for gradient noise transitions.
+ * @return The perturbed 3D position vector after applying the fractal gradient perturbation.
+ */
 fun gradientPerturbFractal(
     seed: Int, amplitude: Double = 1.0, frequency: Double = 2.0,
     lacunarity: Double = 2.0, gain: Double = 0.5,
@@ -24,6 +41,17 @@ fun gradientPerturbFractal(
     return p
 }
 
+/**
+ * Perturbs a position vector in 3D space by applying a gradient noise algorithm.
+ *
+ * @param seed The seed value used for generating deterministic patterns.
+ * @param amplitude The amplitude of the perturbation, which controls the scale of displacement.
+ * @param frequency The frequency of the perturbation, which determines the scale of the noise.
+ * @param position The original position vector to be perturbed.
+ * @param interpolator The interpolation function used to smooth the noise transitions,
+ *                     defaulting to the quintic function.
+ * @return A new position vector that has been perturbed by the gradient noise algorithm.
+ */
 fun gradientPerturb(
     seed: Int,
     amplitude: Double,
@@ -85,6 +113,21 @@ fun gradientPerturb(
     ) * amplitude
 }
 
+/**
+ * Applies fractal gradient perturbation to the given position vector using the specified parameters.
+ * This method introduces multiple layers of noise to create a fractal effect by perturbing the position iteratively
+ * based on the number of octaves, frequency, and amplitude adjustments.
+ *
+ * @param seed An integer seed used to initialize the random number generator for noise generation.
+ * @param amplitude The initial amplitude of the perturbation. Higher values result in larger displacements.
+ * @param frequency The initial frequency of the noise. Higher values increase the density of the noise variation.
+ * @param lacunarity The rate at which the frequency increases with each octave.
+ * @param gain The rate at which the amplitude decreases with each octave.
+ * @param octaves The number of fractal noise layers to apply. More octaves increase detail.
+ * @param position A 2D vector representing the original point to be perturbed.
+ * @param interpolator A function that defines how to interpolate values smoothly. Defaults to the quintic function.
+ * @return A 2D vector representing the perturbed position after applying the fractal gradient noise.
+ */
 fun gradientPerturbFractal(
     seed: Int, amplitude: Double = 1.0, frequency: Double = 2.0,
     lacunarity: Double = 2.0, gain: Double = 0.5,
@@ -105,6 +148,16 @@ fun gradientPerturbFractal(
     return p
 }
 
+/**
+ * Calculates a perturbed position based on gradient noise.
+ *
+ * @param seed An integer seed value used to initialize the pseudo-random number generator.
+ * @param amplitude A double value that determines the strength of the perturbation applied to the position.
+ * @param frequency A double value that defines how frequent the perturbation occurs in the space.
+ * @param position A 2D vector specifying the initial position to perturb.
+ * @param interpolator A function used for interpolation between gradient values, defaults to the quintic interpolation function.
+ * @return A 2D vector that represents the new perturbed position.
+ */
 fun gradientPerturb(
     seed: Int,
     amplitude: Double,

@@ -19,6 +19,16 @@ private val GRAD_3D = arrayOf(
         Vector3(0.0, 1.0, 1.0), Vector3(0.0, -1.0, 1.0), Vector3(0.0, 1.0, -1.0), Vector3(0.0, -1.0, -1.0),
         Vector3(1.0, 1.0, 0.0), Vector3(0.0, -1.0, 1.0), Vector3(-1.0, 1.0, 0.0), Vector3(0.0, -1.0, -1.0))
 
+/**
+ * Computes the dot product of a gradient vector and a distance vector in 2D space.
+ *
+ * @param seed The seed value used for hashing and determining the gradient vector.
+ * @param x The x-coordinate in grid space used for hashing.
+ * @param y The y-coordinate in grid space used for hashing.
+ * @param xd The x component of the distance vector.
+ * @param yd The y component of the distance vector.
+ * @return The dot product of the gradient vector and the distance vector.
+ */
 fun gradCoord2D(seed: Int, x: Int, y: Int, xd: Double, yd: Double): Double {
     val hash = uhash2D(seed, x, y)
 
@@ -27,6 +37,18 @@ fun gradCoord2D(seed: Int, x: Int, y: Int, xd: Double, yd: Double): Double {
     return xd * x1 + yd * y1
 }
 
+/**
+ * Computes a gradient dot-product noise value for 3D coordinates based on the given seed and position inputs.
+ *
+ * @param seed The seed value used to generate the pseudo-random gradient.
+ * @param x The x-coordinate of the position in 3D space.
+ * @param y The y-coordinate of the position in 3D space.
+ * @param z The z-coordinate of the position in 3D space.
+ * @param xd The x-offset or displacement in 3D space.
+ * @param yd The y-offset or displacement in 3D space.
+ * @param zd The z-offset or displacement in 3D space.
+ * @return The computed gradient dot-product noise value as a Double.
+ */
 fun gradCoord3D(seed: Int, x: Int, y: Int, z: Int, xd: Double, yd: Double, zd: Double): Double {
     val hash = uhash3D(seed, x, y, z)
 
@@ -35,6 +57,20 @@ fun gradCoord3D(seed: Int, x: Int, y: Int, z: Int, xd: Double, yd: Double, zd: D
     return xd * g.x + yd * g.y + zd * g.z
 }
 
+/**
+ * Computes a gradient coordinate value in 4D space based on the provided inputs.
+ *
+ * @param seed An integer seed value used to initialize the hash function.
+ * @param x The x-coordinate as an integer.
+ * @param y The y-coordinate as an integer.
+ * @param z The z-coordinate as an integer.
+ * @param w The w-coordinate as an integer.
+ * @param xd The x-offset as a double.
+ * @param yd The y-offset as a double.
+ * @param zd The z-offset as a double.
+ * @param wd The w-offset as a double.
+ * @return A double value representing the calculated gradient coordinate in 4D space.
+ */
 fun gradCoord4D(seed: Int, x: Int, y: Int, z: Int, w: Int, xd: Double, yd: Double, zd: Double, wd: Double): Double {
     val hash = (uhash4D(seed, x, y, z, w) and 31U).toInt()
 
@@ -64,6 +100,15 @@ fun gradCoord4D(seed: Int, x: Int, y: Int, z: Int, w: Int, xd: Double, yd: Doubl
     return (if (hash and 4 == 0) -a else a) + (if (hash and 2 == 0) -b else b) + if (hash and 1 == 0) -c else c
 }
 
+/**
+ * Generates a pseudo-random value based on the input seed and 3D coordinates.
+ *
+ * @param seed The base seed value used for pseudo-random generation.
+ * @param x The x-coordinate in the 3D space.
+ * @param y The y-coordinate in the 3D space.
+ * @param z The z-coordinate in the 3D space.
+ * @return A pseudo-random double value calculated using the seed and coordinates.
+ */
 fun valCoord3D(seed: Int, x: Int, y: Int, z: Int): Double {
     var n = seed
     n = n xor X_PRIME * x

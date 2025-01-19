@@ -64,15 +64,3 @@ fun ((Int, Double, Double) -> Double).fixedRadiusPolar(
     origin: Vector2 = Vector2.ZERO
 ): (Int, Double) -> Double =
     fixedRadiusPolarFunc(this, radius, origin)
-
-
-
-fun example() {
-    val polarFbmSimplex = polarFunc(noise = fbmFunc2D(noise = ::simplex))
-    val polarBillowPerlin = polarFunc(noise = billowFunc2D(noise = ::perlin))
-
-    val polarFbmSimplexAlt = fbmFunc2D(noise = ::simplex).withPolarInput()
-
-    val polarFbm = simplex2D.fbm().withPolarInput()
-
-}

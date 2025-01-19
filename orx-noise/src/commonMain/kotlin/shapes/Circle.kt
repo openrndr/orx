@@ -9,7 +9,11 @@ import kotlin.math.sqrt
 import kotlin.random.Random
 
 /**
- * Generate a uniformly distributed random point inside [Circle]
+ * Generates a random point within the bounds of the `Circle` using a hash-based approach.
+ *
+ * @param seed An integer seed for the hash function, used to produce deterministic random results for the same seed.
+ * @param x An integer input to the hash function, adding further variation to the generated point.
+ * @return A `Vector2` representing a random point within the `Circle`, based on the provided `seed` and `x`.
  */
 fun Circle.hash(seed: Int, x: Int): Vector2 {
     val r = radius * sqrt(fhash1D(seed, x))
@@ -18,7 +22,10 @@ fun Circle.hash(seed: Int, x: Int): Vector2 {
 }
 
 /**
- * Generate a uniformly distributed random point inside [Circle]
+ * Generates a uniformly distributed random point within the `Circle`.
+ *
+ * @param random An optional random number generator to use. Defaults to `Random.Default`.
+ * @return A `Vector2` representing a random point within the `Circle`.
  */
 fun Circle.uniform(random: Random = Random.Default): Vector2 {
     val r = radius * sqrt(random.nextDouble())

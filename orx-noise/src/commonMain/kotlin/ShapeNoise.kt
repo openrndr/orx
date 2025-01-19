@@ -8,15 +8,24 @@ import org.openrndr.shape.*
 import kotlin.random.Random
 
 /**
- * Generates specified amount of random points that lie inside the [Shape].
+ * Generates a list of uniformly distributed points within the shape provided by the ShapeProvider.
  *
  * @param pointCount The number of points to generate.
- * @param random The [Random] number generator to use, defaults to [Random.Default].
+ * @param random An optional random number generator to influence the distribution.
+ * @return A list of Vector2 objects representing the uniformly distributed points.
  */
 fun ShapeProvider.uniform(pointCount: Int, random: Random = Random.Default): List<Vector2> {
     return shape.triangulation.uniform(pointCount, random)
 }
 
+/**
+ * Generates a list of hashed points based on the shape's triangulation.
+ *
+ * @param pointCount The number of points to generate in the hashed result.
+ * @param seed The seed value used for randomization in the hashing process.
+ * @param x An additional parameter used in the hashing process to modify randomization.
+ * @return A list of vectors representing the hashed points.
+ */
 fun ShapeProvider.hash(pointCount: Int, seed: Int, x: Int): List<Vector2> {
     return shape.triangulation.hash(pointCount, seed, x)
 }
