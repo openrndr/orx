@@ -66,7 +66,6 @@ include(
         "orx-jvm:orx-realsense2-natives-linux-x64",
         "orx-jvm:orx-realsense2-natives-macos",
         "orx-jvm:orx-realsense2-natives-windows",
-        "orx-jvm:orx-runway",
         "orx-shader-phrases",
         "orx-shade-styles",
         "orx-shapes",
