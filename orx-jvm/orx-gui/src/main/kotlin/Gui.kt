@@ -8,7 +8,6 @@ import org.openrndr.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.dialogs.*
 import org.openrndr.draw.Drawer
-import org.openrndr.extra.noise.Random
 import org.openrndr.extra.noise.random
 import org.openrndr.extra.noise.uniform
 import org.openrndr.extra.parameters.*
@@ -1101,7 +1100,7 @@ open class GUI(
                         val currentValue =
                             (parameter.property as KMutableProperty1<Any, ColorRGBa>).get(labeledObject.obj)
                         val randomValue =
-                            ColorRGBa.fromVector(Random.vector3(0.0, 1.0), currentValue.alpha, currentValue.linearity)
+                            ColorRGBa.fromVector(Vector3.uniform(0.0, 1.0), currentValue.alpha, currentValue.linearity)
                         val newValue = currentValue.mix(randomValue, strength)
                         (parameter.property as KMutableProperty1<Any, ColorRGBa>).set(labeledObject.obj, newValue)
                     }
@@ -1111,7 +1110,7 @@ open class GUI(
                         val max = parameter.doubleRange!!.endInclusive
                         val currentValue =
                             (parameter.property as KMutableProperty1<Any, Vector2>).get(labeledObject.obj)
-                        val randomValue = Random.vector2(min, max)
+                        val randomValue = Vector2.uniform(min, max)
                         val newValue = currentValue.mix(randomValue, strength)
                         (parameter.property as KMutableProperty1<Any, Vector2>).set(labeledObject.obj, newValue)
                     }
@@ -1131,7 +1130,7 @@ open class GUI(
                         val max = parameter.doubleRange!!.endInclusive
                         val currentValue =
                             (parameter.property as KMutableProperty1<Any, Vector3>).get(labeledObject.obj)
-                        val randomValue = Random.vector3(min, max)
+                        val randomValue = Vector3.uniform(min, max)
                         val newValue = currentValue.mix(randomValue, strength)
                         (parameter.property as KMutableProperty1<Any, Vector3>).set(labeledObject.obj, newValue)
                     }
@@ -1141,7 +1140,7 @@ open class GUI(
                         val max = parameter.doubleRange!!.endInclusive
                         val currentValue =
                             (parameter.property as KMutableProperty1<Any, Vector4>).get(labeledObject.obj)
-                        val randomValue = Random.vector4(min, max)
+                        val randomValue = Vector4.uniform(min, max)
                         val newValue = currentValue.mix(randomValue, strength)
                         (parameter.property as KMutableProperty1<Any, Vector4>).set(labeledObject.obj, newValue)
                     }

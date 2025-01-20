@@ -13,6 +13,7 @@ private data class RandomState(var seed: String, var rng: DefaultRandom)
 /**
  * Deterministic Random using a seed to guarantee the same random values between iterations
  */
+@Deprecated("Duplicate functionality")
 object Random {
     var rnd: DefaultRandom
 
