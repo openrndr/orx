@@ -24,7 +24,7 @@ fun simplify(points: List<Vector2>, epsilon: Double): List<Vector2> {
     var index = 0
     val end = points.size
     for (i in 1..(end - 2)) {
-        val ls = LineSegment(points[0], points[endIndex]).extend(1000000.0)
+        val ls = LineSegment(points[0], points[endIndex]).extendTo(1E6)
         val d = ls.distance(points[i])
         if (d > dMax) {
             index = i
