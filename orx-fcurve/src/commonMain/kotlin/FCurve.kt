@@ -48,7 +48,6 @@ fun Segment2D.scaleTangents(axis: Vector2 = Vector2.UNIT_X): Segment2D {
         val c = this.cubic
         val width = end.distanceTo(start)
 
-        val d = c.end - c.start
         val cd0 = (c.control[0] - c.start).projectedOn(axis)
         val cd0a = cd0.dot(axis)
         val cd1 = (c.control[1] - c.end).projectedOn(-axis)
@@ -220,7 +219,7 @@ data class FCurve(val segments: List<Segment2D>) {
 
     /**
      * Evaluate the Fcurve at [t]
-     * @param segment an optional segment that can be used to speed up scanning for the relevant segment
+     * @param cachedSegment an optional segment that can be used to speed up scanning for the relevant segment
      */
     fun valueWithSegment(t: Double, cachedSegment: Segment2D? = null): Pair<Double, Segment2D?> {
         if (cachedSegment != null) {
@@ -348,11 +347,9 @@ class FCurveBuilder {
 
         if (segments.isNotEmpty()) {
             val lastSegment = segments.last()
-            val lastDuration = lastSegment.end.x - lastSegment.start.x
             val outTangent = if (segments.last().linear) lastSegment.end else segments.last().control.last()
             val outPos = lastSegment.end
             val d = outPos - outTangent
-            //val dn = d.normalized
             val ts = 1.0// x / lastDuration
             segments.add(
                 Segment2D(
@@ -417,14 +414,20 @@ fun fcurve(builder: FCurveBuilder.() -> Unit): FCurve {
     return fb.build()
 }
 
+
 /**
- * Split an Fcurve string in to command parts
+ * Splits an input string containing fcurve path commands and numbers into individual components,
+ * preserving the order of commands and associated numbers.
+ * The splitting considers the relations between commands and numbers, ensuring proper separation.
+ *
+ * @param d The input string representing fcurve path commands and numbers.
+ * @return A list of strings where each element is either an fcurve path command or a related numerical value.
  */
 fun fCurveCommands(d: String): List<String> {
-    val svgCommands = "mMlLqQsStTcChH"
+    val fcurveCommands = "mMlLqQsStTcChH"
     val number = "0-9.\\-E%"
 
-    return d.split(Regex("(?:[\t ,]|\r?\n)+|(?<=[$svgCommands])(?=[$number])|(?<=[$number])(?=[$svgCommands])"))
+    return d.split(Regex("(?:[\t ,]|\r?\n)+|(?<=[$fcurveCommands])(?=[$number])|(?<=[$number])(?=[$fcurveCommands])"))
         .filter { it.isNotBlank() }
 }
 
