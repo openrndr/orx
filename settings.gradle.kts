@@ -22,8 +22,6 @@ include(
         "orx-color",
         "orx-composition",
         "orx-compositor",
-        "orx-compute-graph",
-        "orx-compute-graph-nodes",
         "orx-delegate-magic",
         "orx-jvm:orx-dnk3",
         "orx-easing",
