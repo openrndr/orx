@@ -20,8 +20,6 @@ To make use of these extensions clone the [OPENRNDR template](https://github.com
 | [`orx-color`](orx-color/) | Color spaces, palettes, histograms, named colors. |
 | [`orx-composition`](orx-composition/) | Shape composition library |
 | [`orx-compositor`](orx-compositor/) | Toolkit to make composite (layered) images using blend modes and filters. |
-| [`orx-compute-graph`](orx-compute-graph/) | A graph for computation. |
-| [`orx-compute-graph-nodes`](orx-compute-graph-nodes/) | A collection of nodes that can be used with `orx-compute-graph`. |
 | [`orx-delegate-magic`](orx-delegate-magic/) | Collection of magical property delegators. For tracking variable change or interpolate towards the value of a variable. |
 | [`orx-easing`](orx-easing/) | Easing functions for smooth animation or non-linear interpolation. |
 | [`orx-envelopes`](orx-envelopes/) | ADSR (Attack, Decay, Sustain, Release) envelopes and tools. |
@@ -80,7 +78,6 @@ To make use of these extensions clone the [OPENRNDR template](https://github.com
 | [`orx-panel`](orx-jvm/orx-panel/) | The OPENRNDR UI toolkit. Provides buttons, sliders, text, a color picker and much more. HTML/CSS-like. |
 | [`orx-poisson-fill`](orx-jvm/orx-poisson-fill/) | Post processing effect that fills transparent parts of the image interpolating the edge pixel colors. GPU-based. |
 | [`orx-rabbit-control`](orx-jvm/orx-rabbit-control/) | Creates a web-based remote UI to control your OPENRNDR program from a mobile device or a different computer. Alternative to `orx-gui`. |
-| [`orx-runway`](orx-jvm/orx-runway/) | Interfaces with the RunwayML machine learning library that provides features like motion capture, image synthesis, object recognition, style transfer and more. More info at [runwayml.com](https://runwayml.com/). |
 | [`orx-syphon`](orx-jvm/orx-syphon/) | Send frames to- and from OPENRNDR to other applications in real time using _Syphon_ for Mac. |
 | [`orx-video-profiles`](orx-jvm/orx-video-profiles/) | GIF, H265, PNG, Prores, TIFF and Webp `VideoWriterProfile`s for `ScreenRecorder` and `VideoWriter`. |
 <!-- __orxListEnd__ -->
