@@ -33,7 +33,7 @@ private val ShapeContour.endContourPoint get() =
         segments.last().start,
     )
 
-private fun ShapeContour.direction(ut: Double): Vector2 = normal(ut).perpendicular(polarity.opposite)
+private fun ShapeContour.pdirection(ut: Double): Vector2 = normal(ut).perpendicular(polarity.opposite)
 
 private val YPolarity.opposite get() =
     when(this) {
@@ -128,10 +128,10 @@ data class XHalfEdge(val source: XVertex, val target: XVertex, val contour: Shap
     val next by lazy {
         if (target.outgoing.size == 2 && this in target.outgoing) return@lazy this
         val y = target.pos
-        val x = y - contour.direction(1.0)
+        val x = y - contour.pdirection(1.0)
         val candidates = target.outgoing.filterNot { it == twin }
             .map {
-                val z = y + it.contour.direction(0.0)
+                val z = y + it.contour.pdirection(0.0)
                 it to angleBetween(z - y, x - y)
             }.filter { it.second > -1E-6 || it.second < -PI + 1E-6 }
 
