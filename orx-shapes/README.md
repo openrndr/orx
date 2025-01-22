@@ -154,6 +154,16 @@ Collection of 2D shape generators and modifiers.
 
 ![operators-DemoRoundCorners01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/operators-DemoRoundCorners01Kt.png)
 
+### ordering/DemoHilbertOrder01
+[source code](src/jvmDemo/kotlin/ordering/DemoHilbertOrder01.kt)
+
+![ordering-DemoHilbertOrder01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/ordering-DemoHilbertOrder01Kt.png)
+
+### ordering/DemoHilbertOrder02
+[source code](src/jvmDemo/kotlin/ordering/DemoHilbertOrder02.kt)
+
+![ordering-DemoHilbertOrder02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/ordering-DemoHilbertOrder02Kt.png)
+
 ### path3d/DemoPath3DProjection
 [source code](src/jvmDemo/kotlin/path3d/DemoPath3DProjection.kt)
 
