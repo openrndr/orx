@@ -249,13 +249,13 @@ fun TriangleMeshBuilder.grid(
                 when (coordinates) {
                     GridCoordinates.INDEX -> this.builder(u * 1.0, v * 1.0)
                     GridCoordinates.BIPOLAR -> this.builder(
-                        2 * u / (width - 1.0) - 1,
-                        2 * v / (height - 1.0) - 1
+                        if (width <= 1) 0.0 else 2 * u / (width - 1.0) - 1,
+                        if (height <= 1) 0.0 else 2 * v / (height - 1.0) - 1
                     )
 
                     GridCoordinates.UNIPOLAR -> this.builder(
-                        u / (width - 1.0),
-                        v / (height - 1.0)
+                        if (width <= 1) 0.0 else u / (width - 1.0),
+                        if (height <= 1) 0.0 else v / (height - 1.0)
                     )
                 }
             }
@@ -292,15 +292,15 @@ fun TriangleMeshBuilder.grid(
                         )
 
                         GridCoordinates.BIPOLAR -> this.builder(
-                            2 * u / (width - 1.0) - 1,
-                            2 * v / (height - 1.0) - 1,
-                            2 * w / (depth - 1.0) - 1
+                            if (width <= 1) 0.0 else 2 * u / (width - 1.0) - 1,
+                            if (height <= 1) 0.0 else 2 * v / (height - 1.0) - 1,
+                            if (depth <= 1) 0.0 else 2 * w / (depth - 1.0) - 1
                         )
 
                         GridCoordinates.UNIPOLAR -> this.builder(
-                            u / (width - 1.0),
-                            v / (height - 1.0),
-                            w / (depth - 1.0)
+                            if (width <= 1) 0.0 else u / (width - 1.0),
+                            if (height <= 1) 0.0 else v / (height - 1.0),
+                            if (depth <= 1) 0.0 else w / (depth - 1.0)
                         )
                     }
                 }
