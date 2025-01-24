@@ -27,26 +27,24 @@ import kotlin.math.min
  *   of the point and its color calculated by shifting the hue of a base color using
  *   the w-coordinate value.
  */
-fun main() {
-    application {
-        configure {
-            width = 720
-            height = 720
-        }
+fun main() = application {
+    configure {
+        width = 720
+        height = 720
+    }
 
-        program {
-            val sphere = sphereMesh(radius = 0.1)
-            val points = (0 until 10000).map {
-                (rSeq4D(it) - Vector4(0.5, 0.5, 0.5, 0.0)) * Vector4(10.0, 10.0, 10.0, 1.0)
-            }
-            extend(Orbital())
-            extend {
-                for (point in points) {
-                    drawer.isolated {
-                        drawer.translate(point.xyz)
-                        drawer.fill = ColorRGBa.RED.toHSVa().shiftHue(point.w * 360.0).toRGBa()
-                        drawer.vertexBuffer(sphere, DrawPrimitive.TRIANGLES)
-                    }
+    program {
+        val sphere = sphereMesh(radius = 0.1)
+        val points = (0 until 10000).map {
+            (rSeq4D(it) - Vector4(0.5, 0.5, 0.5, 0.0)) * Vector4(10.0, 10.0, 10.0, 1.0)
+        }
+        extend(Orbital())
+        extend {
+            for (point in points) {
+                drawer.isolated {
+                    drawer.translate(point.xyz)
+                    drawer.fill = ColorRGBa.RED.toHSVa().shiftHue(point.w * 360.0).toRGBa()
+                    drawer.vertexBuffer(sphere, DrawPrimitive.TRIANGLES)
                 }
             }
         }

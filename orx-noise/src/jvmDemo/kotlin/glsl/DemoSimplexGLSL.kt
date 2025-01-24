@@ -1,8 +1,10 @@
+package glsl
+
 import org.openrndr.application
 import org.openrndr.color.rgb
 import org.openrndr.draw.colorBuffer
-import org.openrndr.extra.noise.Random
-import org.openrndr.extra.noise.filters.*
+import org.openrndr.extra.noise.filters.SimplexNoise3D
+import org.openrndr.extra.noise.uniform
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
 import kotlin.math.sin
@@ -11,10 +13,10 @@ import kotlin.math.sin
  * A sine oscillator with randomized parameters
  */
 class SinOsc {
-    private val freq = Random.double(0.1, 2.0)
-    private val phase = Random.double(0.0, 6.28)
-    private val add = Random.double(0.0, 1.0)
-    private val mul = Random.double(0.0, 1.0 - add)
+    private val freq = Double.uniform(0.1, 2.0)
+    private val phase = Double.uniform(0.0, 6.28)
+    private val add = Double.uniform(0.0, 1.0)
+    private val mul = Double.uniform(0.0, 1.0 - add)
     operator fun invoke() = sin(System.currentTimeMillis() * 0.0001 * freq + phase) * mul + add
 }
 
@@ -25,6 +27,10 @@ class SinOsc {
  * randomized sine oscillators.
  */
 fun main() = application {
+    configure {
+        width = 720
+        height = 540
+    }
     program {
         val noise = SimplexNoise3D()
         val img = colorBuffer(width, height)

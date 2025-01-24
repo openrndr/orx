@@ -185,21 +185,8 @@ val v7 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 ```
 
-<!-- __demos__ >
-# Demos
-[DemoGradientPerturb2DKt](src/demo/kotlin/DemoGradientPerturb2DKt.kt
-![DemoGradientPerturb2DKt](https://github.com/openrndr/orx/blob/media/orx-noise/images/DemoGradientPerturb2DKt.png
-[DemoGradientPerturb3DKt](src/demo/kotlin/DemoGradientPerturb3DKt.kt
-![DemoGradientPerturb3DKt](https://github.com/openrndr/orx/blob/media/orx-noise/images/DemoGradientPerturb3DKt.png
-[DemoPoissonDiskSamplingKt](src/demo/kotlin/DemoPoissonDiskSamplingKt.kt
-![DemoPoissonDiskSamplingKt](https://github.com/openrndr/orx/blob/media/orx-noise/images/DemoPoissonDiskSamplingKt.png
 <!-- __demos__ -->
 ## Demos
-### DemoCircleHash01
-[source code](src/jvmDemo/kotlin/DemoCircleHash01.kt)
-
-![DemoCircleHash01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoCircleHash01Kt.png)
-
 ### DemoCubicNoise2D01
 [source code](src/jvmDemo/kotlin/DemoCubicNoise2D01.kt)
 
@@ -220,21 +207,6 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 
 ![DemoGradientPerturb3DKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoGradientPerturb3DKt.png)
 
-### DemoNoisesGLSLGui
-[source code](src/jvmDemo/kotlin/DemoNoisesGLSLGui.kt)
-
-![DemoNoisesGLSLGuiKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoNoisesGLSLGuiKt.png)
-
-### DemoNoisesGLSL
-[source code](src/jvmDemo/kotlin/DemoNoisesGLSL.kt)
-
-![DemoNoisesGLSLKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoNoisesGLSLKt.png)
-
-### DemoRectangleHash01
-[source code](src/jvmDemo/kotlin/DemoRectangleHash01.kt)
-
-![DemoRectangleHash01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoRectangleHash01Kt.png)
-
 ### DemoScatter01
 [source code](src/jvmDemo/kotlin/DemoScatter01.kt)
 
@@ -245,25 +217,30 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 
 ![DemoSimplex01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoSimplex01Kt.png)
 
-### DemoSimplexGLSL
-[source code](src/jvmDemo/kotlin/DemoSimplexGLSL.kt)
-
-![DemoSimplexGLSLKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoSimplexGLSLKt.png)
-
 ### DemoTriangleNoise01
 [source code](src/jvmDemo/kotlin/DemoTriangleNoise01.kt)
 
 ![DemoTriangleNoise01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoTriangleNoise01Kt.png)
 
-### DemoUHash01
-[source code](src/jvmDemo/kotlin/DemoUHash01.kt)
-
-![DemoUHash01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoUHash01Kt.png)
-
 ### DemoValueNoise2D01
 [source code](src/jvmDemo/kotlin/DemoValueNoise2D01.kt)
 
 ![DemoValueNoise2D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoValueNoise2D01Kt.png)
+
+### glsl/DemoNoisesGLSLGui
+[source code](src/jvmDemo/kotlin/glsl/DemoNoisesGLSLGui.kt)
+
+![glsl-DemoNoisesGLSLGuiKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/glsl-DemoNoisesGLSLGuiKt.png)
+
+### glsl/DemoNoisesGLSL
+[source code](src/jvmDemo/kotlin/glsl/DemoNoisesGLSL.kt)
+
+![glsl-DemoNoisesGLSLKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/glsl-DemoNoisesGLSLKt.png)
+
+### glsl/DemoSimplexGLSL
+[source code](src/jvmDemo/kotlin/glsl/DemoSimplexGLSL.kt)
+
+![glsl-DemoSimplexGLSLKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/glsl-DemoSimplexGLSLKt.png)
 
 ### hammersley/DemoHammersley2D01
 [source code](src/jvmDemo/kotlin/hammersley/DemoHammersley2D01.kt)
@@ -279,6 +256,21 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 [source code](src/jvmDemo/kotlin/hammersley/DemoHammersley4D01.kt)
 
 ![hammersley-DemoHammersley4D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/hammersley-DemoHammersley4D01Kt.png)
+
+### hash/DemoCircleHash01
+[source code](src/jvmDemo/kotlin/hash/DemoCircleHash01.kt)
+
+![hash-DemoCircleHash01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/hash-DemoCircleHash01Kt.png)
+
+### hash/DemoRectangleHash01
+[source code](src/jvmDemo/kotlin/hash/DemoRectangleHash01.kt)
+
+![hash-DemoRectangleHash01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/hash-DemoRectangleHash01Kt.png)
+
+### hash/DemoUHash01
+[source code](src/jvmDemo/kotlin/hash/DemoUHash01.kt)
+
+![hash-DemoUHash01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/hash-DemoUHash01Kt.png)
 
 ### phrases/DemoUHashPhrase01
 [source code](src/jvmDemo/kotlin/phrases/DemoUHashPhrase01.kt)

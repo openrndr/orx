@@ -19,25 +19,23 @@ import org.openrndr.math.Vector3
  * - Generation of quasirandom points in 3D space using the `rSeq3D` function.
  * - Transformation and rendering of each point as a sphere using vertex buffers.
  */
-fun main() {
-    application {
-        configure {
-            width = 720
-            height = 720
-        }
+fun main() = application {
+    configure {
+        width = 720
+        height = 720
+    }
 
-        program {
-            val sphere = sphereMesh(radius = 0.1)
-            extend(Orbital())
-            extend {
-                val points = (0 until 1400).map {
-                    (rSeq3D(it) - Vector3(0.5)) * 10.0
-                }
-                for (point in points) {
-                    drawer.isolated {
-                        drawer.translate(point)
-                        drawer.vertexBuffer(sphere, DrawPrimitive.TRIANGLES)
-                    }
+    program {
+        val sphere = sphereMesh(radius = 0.1)
+        extend(Orbital())
+        extend {
+            val points = (0 until 1400).map {
+                (rSeq3D(it) - Vector3(0.5)) * 10.0
+            }
+            for (point in points) {
+                drawer.isolated {
+                    drawer.translate(point)
+                    drawer.vertexBuffer(sphere, DrawPrimitive.TRIANGLES)
                 }
             }
         }

@@ -1,3 +1,5 @@
+package glsl
+
 import org.openrndr.application
 import org.openrndr.draw.colorBuffer
 import org.openrndr.extra.gui.GUI
@@ -9,8 +11,10 @@ import org.openrndr.extra.noise.filters.*
  */
 fun main() = application {
     configure {
-        width = 200 * 6 + 200
-        height = 500
+        configure {
+            width = 720
+            height = 360
+        }
     }
     program {
         val noises = listOf(
@@ -18,7 +22,7 @@ fun main() = application {
             ValueNoise(), SimplexNoise3D(), WorleyNoise()
         )
 
-        val img = colorBuffer(200, 460)
+        val img = colorBuffer((width - 200) / noises.size, 460)
 
         val gui = GUI()
         noises.forEach { gui.add(it) }
@@ -27,7 +31,7 @@ fun main() = application {
         extend {
             noises.forEachIndexed { i, noise ->
                 noise.apply(emptyArray(), img)
-                drawer.image(img, 200.0 + i * 200.0, 20.0)
+                drawer.image(img, 200.0 + i * img.width, 20.0)
             }
         }
     }

@@ -20,25 +20,23 @@ import org.openrndr.math.Vector3
  * to navigate the scene. The visualization relies on the draw loop for continuous
  * rendering of the points.
  */
-fun main() {
-    application {
-        configure {
-            width = 720
-            height = 720
-        }
+fun main() = application {
+    configure {
+        width = 720
+        height = 720
+    }
 
-        program {
-            val sphere = sphereMesh(radius = 0.1)
-            extend(Orbital())
-            extend {
-                val points = (0 until 1400).map {
-                    (hammersley3D(it, 1400) - Vector3(0.5)) * 10.0
-                }
-                for (point in points) {
-                    drawer.isolated {
-                        drawer.translate(point)
-                        drawer.vertexBuffer(sphere, DrawPrimitive.TRIANGLES)
-                    }
+    program {
+        val sphere = sphereMesh(radius = 0.1)
+        extend(Orbital())
+        extend {
+            val points = (0 until 1400).map {
+                (hammersley3D(it, 1400) - Vector3(0.5)) * 10.0
+            }
+            for (point in points) {
+                drawer.isolated {
+                    drawer.translate(point)
+                    drawer.vertexBuffer(sphere, DrawPrimitive.TRIANGLES)
                 }
             }
         }

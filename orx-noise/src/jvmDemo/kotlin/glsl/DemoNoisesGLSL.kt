@@ -1,3 +1,5 @@
+package glsl
+
 import org.openrndr.application
 import org.openrndr.draw.colorBuffer
 import org.openrndr.extra.noise.filters.*
@@ -14,6 +16,10 @@ import kotlin.math.sin
  * The noise color can be set using a `color` or a `gain` property.
  */
 fun main() = application {
+    configure {
+        width = 720
+        height = 360
+    }
     program {
         val noises = listOf(
             HashNoise(), SpeckleNoise(), CellNoise(),
