@@ -265,7 +265,37 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 
 ![DemoValueNoise2D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoValueNoise2D01Kt.png)
 
+### hammersley/DemoHammersley2D01
+[source code](src/jvmDemo/kotlin/hammersley/DemoHammersley2D01.kt)
+
+![hammersley-DemoHammersley2D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/hammersley-DemoHammersley2D01Kt.png)
+
+### hammersley/DemoHammersley3D01
+[source code](src/jvmDemo/kotlin/hammersley/DemoHammersley3D01.kt)
+
+![hammersley-DemoHammersley3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/hammersley-DemoHammersley3D01Kt.png)
+
+### hammersley/DemoHammersley4D01
+[source code](src/jvmDemo/kotlin/hammersley/DemoHammersley4D01.kt)
+
+![hammersley-DemoHammersley4D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/hammersley-DemoHammersley4D01Kt.png)
+
 ### phrases/DemoUHashPhrase01
 [source code](src/jvmDemo/kotlin/phrases/DemoUHashPhrase01.kt)
 
 ![phrases-DemoUHashPhrase01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/phrases-DemoUHashPhrase01Kt.png)
+
+### rseq/DemoRseq2D01
+[source code](src/jvmDemo/kotlin/rseq/DemoRseq2D01.kt)
+
+![rseq-DemoRseq2D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/rseq-DemoRseq2D01Kt.png)
+
+### rseq/DemoRseq3D01
+[source code](src/jvmDemo/kotlin/rseq/DemoRseq3D01.kt)
+
+![rseq-DemoRseq3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/rseq-DemoRseq3D01Kt.png)
+
+### rseq/DemoRseq4D01
+[source code](src/jvmDemo/kotlin/rseq/DemoRseq4D01.kt)
+
+![rseq-DemoRseq4D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/rseq-DemoRseq4D01Kt.png)
