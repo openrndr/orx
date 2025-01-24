@@ -83,7 +83,7 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
         // this is only executed if there are changes in the inputDir
         val runDemos = outputDir.get().asFile.listFiles { file: File ->
             file.extension == "png"
-        }!!.map { it.nameWithoutExtension }.sortedBy { it.lowercase() }
+        }!!.sortedBy { it.absolutePath.lowercase() }.map { it.nameWithoutExtension }
         val readme = File(project.projectDir, "README.md")
         if (readme.exists()) {
             var lines = readme.readLines().toMutableList()
@@ -102,10 +102,12 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
             }
             for (demo in runDemos) {
                 val projectPath = project.projectDir.relativeTo(project.rootDir)
+                // Set the url to "" for local testing
+                val url = "https://raw.githubusercontent.com/openrndr/orx/media/$projectPath/"
                 lines.add("### ${demo.dropLast(2).replace("-","/")}")
                 lines.add("[source code](src/${demoModuleName}/kotlin/${demo.dropLast(2).replace("-", "/")}.kt)")
                 lines.add("")
-                lines.add("![${demo}](https://raw.githubusercontent.com/openrndr/orx/media/$projectPath/images/${demo}.png)")
+                lines.add("![${demo}](${url}images/${demo}.png)")
                 lines.add("")
             }
             readme.delete()
