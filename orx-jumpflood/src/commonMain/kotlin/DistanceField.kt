@@ -14,6 +14,25 @@ import kotlin.math.log2
 import kotlin.math.max
 import kotlin.math.pow
 
+/**
+ * The `DistanceField` class provides an implementation for computing a distance field representation of an image.
+ * The distance field calculation is achieved via mechanisms like thresholding, contour tracing, and jump flooding.
+ * This class can operate on a single source image and produce a single target image.
+ *
+ * The distance field process involves:
+ * - Applying a threshold filter to the source image to create a binary image representation.
+ * - Computing the contours of the binary representation.
+ * - Using a jump flooding algorithm to compute distances from each pixel to the nearest contour point.
+ * - Optionally utilizing signed distances by distinguishing between pixels inside and outside the contour.
+ *
+ * The class uses several configurable parameters and intermediate processing steps:
+ * - `threshold`: Controls the binary threshold level used in the threshold filter.
+ * - `distanceScale`: Scales the computed distance field values.
+ * - `signedDistance`: Indicates whether the distance field should contain signed or unsigned distances.
+ *
+ * Internal optimizations include resizing the input to power-of-two dimensions for efficient processing, and reusing
+ * intermediate buffers to reduce memory allocation overhead.
+ */
 @Description("Distance field")
 class DistanceField : Filter1to1() {
     @DoubleParameter("threshold", 0.0, 1.0)

@@ -14,6 +14,39 @@ import kotlin.math.log2
 import kotlin.math.max
 import kotlin.math.pow
 
+
+/**
+ * DirectionalField is a filter that generates a directional field representation
+ * of an input image, utilizing operations such as thresholding, contour detection,
+ * jump flooding, and direction decoding. The generated output encodes directional
+ * and distance information from the contours of the input.
+ *
+ * The filter supports a variety of configurable properties such as thresholds,
+ * scaling, and different modes for direction and magnitude representation.
+ *
+ * This class extends Filter1to1, processing one input `ColorBuffer` and producing
+ * one output `ColorBuffer`.
+ *
+ * Parameters:
+ * - `threshold`: The threshold value used during the binary segmentation of the input image.
+ * - `distanceScale`: The scale factor applied to the distance values encoded in the output.
+ * - `normalizedDistance`: Whether to normalize the distance values in the output.
+ * - `unitDirection`: Whether to represent gradient directions as unit vectors.
+ * - `signedMagnitude`: Whether to encode magnitude with signed values.
+ * - `flipV`: Whether to flip the vertical component of the direction vectors in the output.
+ *
+ * Lifecycle:
+ * - Resources such as intermediate `ColorBuffer` instances are created dynamically
+ *   based on the dimensions of the input image. These resources are cleaned up
+ *   in the `destroy` method to prevent memory leaks.
+ *
+ * Responsibilities:
+ * - Threshold the input to create a binary image.
+ * - Detect contours from the thresholded image.
+ * - Generate a jump flood field to calculate distance and direction information.
+ * - Decode directional data into the final output.
+ *
+ */
 @Description("Directional field")
 class DirectionalField : Filter1to1() {
     @DoubleParameter("threshold", 0.0, 1.0)
