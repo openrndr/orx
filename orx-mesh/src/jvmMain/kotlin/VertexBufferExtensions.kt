@@ -30,7 +30,11 @@ private fun ByteBuffer.getColorRGBa(): ColorRGBa {
 }
 
 /**
-    Convert vertex buffer contents to a list of [Polygon] instances
+ * Converts the vertex buffer into a list of polygons based on the provided vertex count.
+ * Each polygon is formed by grouping vertices into triangles.
+ *
+ * @param vertexCount The number of vertices to process from the vertex buffer. Defaults to the total number of vertices in the buffer.
+ * @return A list of polygons, where each polygon contains the vertex positions, texture coordinates, colors, and normals.
  */
 fun VertexBuffer.toPolygons(vertexCount: Int = this.vertexCount): List<Polygon> {
     require(vertexFormat == objVertexFormat)

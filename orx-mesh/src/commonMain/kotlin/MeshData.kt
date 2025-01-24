@@ -2,36 +2,102 @@ package org.openrndr.extra.mesh
 
 import kotlin.jvm.JvmRecord
 
+
 /**
- * Mesh data interface
+ * Interface representing mesh data in 3D space.
+ *
+ * Provides access to vertices and polygonal structure, along with methods
+ * for common mesh transformations and manipulations.
  */
 interface IMeshData {
+    /**
+     * Provides vertex data for the mesh, including positions, normals, colors,
+     * texture coordinates, tangents, and bitangents. This data is central to
+     * defining the geometric and visual properties of the mesh and can be used
+     * for performing various operations and transformations.
+     */
     val vertexData: IVertexData
+    /**
+     * Represents the list of indexed polygons that define the structure of the mesh.
+     *
+     * Each polygon in the list is an instance of [IIndexedPolygon], which references
+     * vertex attributes through indices, such as positions, texture coordinates, normals, and more.
+     */
     val polygons: List<IIndexedPolygon>
 
+
     /**
-     * Convert mesh data to triangular mesh data
+     * Converts the current mesh data into a fully triangulated form.
+     *
+     * This method processes the mesh's polygons and ensures that all non-triangle polygons
+     * are subdivided into triangles. The resulting mesh maintains the original structure
+     * and attributes while adhering to the requirement of being composed solely of triangles.
+     *
+     * @return A new instance of [IMeshData] containing the triangulated representation
+     *         of the original mesh data.
      */
     fun triangulate(): IMeshData
 
+
     /**
-     * Convert mesh data to a list of [IPolygon]
+     * Converts the current mesh data into a list of polygons.
+     *
+     * This method extracts the polygonal structure of the mesh and represents
+     * it as a collection of [IPolygon] instances. Each polygon contains vertex
+     * data such as positions, texture coordinates, colors, normals, tangents,
+     * and bitangents, which are used to define its geometry and visual properties.
+     *
+     * @return A list of [IPolygon] instances representing the individual polygons
+     *         within the mesh.
      */
     fun toPolygons(): List<IPolygon>
 
+
     /**
-     * Join mesh data with [other] mesh data
+     * Combines the current mesh data with another mesh data instance.
+     *
+     * The method merges the polygons and vertex attributes of the two meshes, resulting in a new
+     * mesh data instance that includes the data from both inputs.
+     *
+     * @param other The [IMeshData] instance to be merged with the current mesh data.
+     * @return A new [IMeshData] instance that contains the combined data from both meshes.
      */
     fun join(other: IMeshData): IMeshData
 
 
+    /**
+     * Converts the current mesh data into an immutable `MeshData` instance.
+     *
+     * This method provides a direct representation of the current mesh,
+     * encapsulating its vertex data and polygon information in an immutable format.
+     *
+     * @return A `MeshData` instance representing the current mesh data.
+     */
     fun toMeshData(): MeshData
 
+    /**
+     * Converts the current mesh data into a mutable representation.
+     *
+     * This method provides a `MutableMeshData` instance that encapsulates
+     * the current mesh data, allowing modifications to its vertex and polygon
+     * structures. The mutable representation is useful for scenarios where
+     * changes to the mesh data are required, such as editing geometry or
+     * updating attributes.
+     *
+     * @return A `MutableMeshData` instance that represents the current mesh
+     *         data in a mutable format.
+     */
     fun toMutableMeshData() : MutableMeshData
 }
 
 /**
- * Immutable mesh data implementation
+ * Represents data for a 3D mesh. Implements the `IMeshData` interface and provides additional methods
+ * for manipulating and combining mesh data. This class is immutable and includes operations for
+ * triangulation, conversion to polygons, and joining multiple meshes.
+ *
+ * @property vertexData The vertex data associated with the mesh, including positions, normals, tangents,
+ *                      texture coordinates, colors, and bitangents.
+ * @property polygons A list of polygons defined using indexed vertex data.
  */
 @JvmRecord
 data class MeshData(
@@ -142,7 +208,11 @@ data class MeshData(
 
 
 /**
- * Mutable mesh data implementation
+ * Represents mutable mesh data with modifiable vertex data and polygonal structure.
+ *
+ * @property vertexData Mutable vertex data instance containing positions, texture coordinates,
+ *                      colors, normals, tangents, and bitangents of vertices.
+ * @property polygons Mutable list of indexed polygons defining the geometric structure of the mesh.
  */
 data class MutableMeshData(
     override val vertexData: MutableVertexData,

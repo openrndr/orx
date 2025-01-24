@@ -10,10 +10,14 @@ internal fun <T : LinearType<T>> bc(barycentric: Vector3, items: List<T>): T {
     return (items[0] * barycentric.x) + (items[1] * barycentric.y) + (items[2] * barycentric.z)
 }
 
+
 /**
- * Evaluate a point in triangle
- * @param vertexData the vertex data to use
- * @param barycentric the barycentric coordinates of the point to evaluate
+ * Computes a `Point` by interpolating vertex attributes from a 3D polygon using
+ * barycentric coordinates.
+ *
+ * @param vertexData The vertex data containing positions, texture coordinates, colors, normals, tangents, and bitangents.
+ * @param barycentric The barycentric coordinates used to interpolate the vertex attributes.
+ * @return A `Point` containing interpolated vertex attributes including position, texture coordinates, color, normal, tangent, and bitangent.
  */
 fun IIndexedPolygon.point(vertexData: VertexData, barycentric: Vector3): Point {
     require(positions.size == 3)
@@ -35,8 +39,12 @@ fun IIndexedPolygon.point(vertexData: VertexData, barycentric: Vector3): Point {
     )
 }
 
+
 /**
- * Evaluate position bounds
+ * Calculates the bounding box of a list of indexed polygons using the specified vertex data.
+ *
+ * @param vertexData The vertex data containing the positions of the vertices referenced by the polygons.
+ * @return A [Box] representing the axis-aligned bounding box of the polygons. If the list is empty, returns an empty box.
  */
 fun List<IIndexedPolygon>.bounds(vertexData: IVertexData): Box {
     if (isEmpty()) {

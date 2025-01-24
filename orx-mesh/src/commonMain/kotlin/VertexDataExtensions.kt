@@ -7,7 +7,16 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 
 /**
- * Convert vertex data to [VertexBuffer]. Assumes every 3 consecutive vertices encode a triangle.
+ * Converts the vertex data stored in the [IVertexData] instance to a [VertexBuffer].
+ * The method iterates through the vertex attributes such as positions, normals, texture coordinates,
+ * and colors, and writes them sequentially into the provided or newly created [VertexBuffer].
+ * Missing attributes are substituted with default values.
+ *
+ * @param elementOffset The index offset where the vertex data should start being written in the buffer.
+ *                       Defaults to 0 if no offset is specified.
+ * @param vertexBuffer An optional existing [VertexBuffer] instance to be reused. If null, a new buffer
+ *                     will be created.
+ * @return A [VertexBuffer] containing the processed vertex data.
  */
 fun IVertexData.toVertexBuffer(elementOffset: Int = 0, vertexBuffer: VertexBuffer? = null): VertexBuffer {
 
@@ -43,7 +52,15 @@ fun IVertexData.toVertexBuffer(elementOffset: Int = 0, vertexBuffer: VertexBuffe
 }
 
 /**
- * Convert vertex data to [MeshData]. Assumes every 3 consecutive vertices encode a triangle.
+ * Converts the vertex data into a MeshData representation by constructing the indexed polygons
+ * based on the vertex data attributes such as positions, texture coordinates, colors, normals,
+ * tangents, and bitangents.
+ *
+ * Each triangle in the vertex data is represented as an IndexedPolygon, where the indices are
+ * generated based on the triangle order, and optional attributes like texture coordinates or
+ * colors are included if present in the source vertex data.
+ *
+ * @return A MeshData instance containing the vertex data and a list of indexed polygons representing the mesh.
  */
 
 fun VertexData.toMeshData(): MeshData {

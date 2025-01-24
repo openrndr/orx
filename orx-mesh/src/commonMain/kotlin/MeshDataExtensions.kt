@@ -6,7 +6,15 @@ import org.openrndr.math.*
 import org.openrndr.shape.Box
 
 /**
- * The [VertexFormat] for a [VertexBuffer] with positions, normals and texture coordinates.
+ * Defines the vertex format for 3D objects with attributes including positions, normals,
+ * texture coordinates, and colors. This format specifies the structure of vertex data
+ * to be used for rendering 3D objects.
+ *
+ * - The `position` attribute represents the 3D position of each vertex, using 3 components (x, y, z).
+ * - The `normal` attribute defines the normal vector at each vertex, using 3 components (x, y, z),
+ *   which is essential for lighting calculations.
+ * - The `textureCoordinate` attribute provides 2D texture mapping coordinates (u, v) for each vertex.
+ * - The `color` attribute specifies a color for each vertex, using 4 components (r, g, b, a).
  */
 internal val objVertexFormat = vertexFormat {
     position(3)
@@ -15,6 +23,19 @@ internal val objVertexFormat = vertexFormat {
     color(4)
 }
 
+/**
+ * Represents a vertex format definition that includes attributes necessary
+ * for 3D rendering with tangents and bitangents, commonly used for advanced lighting
+ * techniques such as normal mapping.
+ *
+ * This vertex format includes the following attributes:
+ * - Position: 3D coordinates (Vector3).
+ * - Normal: 3D vector for surface orientation (Vector3).
+ * - Texture Coordinate: 2D UV coordinate (Vector2).
+ * - Color: RGBA color values (Vector4).
+ * - Tangent: 3D vector for tangent space (Vector3).
+ * - Bitangent: 3D vector perpendicular to tangent and normal vectors (Vector3).
+ */
 internal val objVertexFormatTangents = vertexFormat {
     position(3)
     normal(3)
@@ -26,14 +47,29 @@ internal val objVertexFormatTangents = vertexFormat {
 
 
 /**
- * Determine if [IMeshData] is triangular by checking if each polygon has exactly 3 vertices
+ * Checks if all polygons in the mesh are triangular.
+ *
+ * This method evaluates each polygon to determine whether it consists
+ * of exactly three vertices. A mesh is considered triangular if all its
+ * polygons meet this condition.
+ *
+ * @return True if all polygons in the mesh are triangles, false otherwise.
  */
 fun IMeshData.isTriangular(): Boolean {
     return polygons.all { it.positions.size == 3 }
 }
 
 /**
- * Convert a [MeshData] instance into a [VertexBuffer]
+ * Converts the current mesh data into a [VertexBuffer] representation, preparing geometry for rendering.
+ *
+ * The method processes the mesh data, including positions, normals, texture coordinates, colors, tangents,
+ * and bitangents, and writes it into a vertex buffer. It uses triangulated geometry to ensure compatibility
+ * with rendering pipelines that expect triangles as input.
+ *
+ * @param elementOffset The starting offset in the vertex buffer where the mesh data should be written. Defaults to 0.
+ * @param vertexBuffer An optional pre-existing [VertexBuffer] in which to store the data. If not provided, a new
+ *                     [VertexBuffer] is created with the appropriate format.
+ * @return A [VertexBuffer] containing the mesh data in the specified format, ready for rendering.
  */
 fun IMeshData.toVertexBuffer(elementOffset: Int = 0, vertexBuffer: VertexBuffer? = null): VertexBuffer {
     val objects = triangulate().toPolygons()
@@ -78,8 +114,17 @@ fun IMeshData.toVertexBuffer(elementOffset: Int = 0, vertexBuffer: VertexBuffer?
 }
 
 /**
- * Weld vertices
- * @param positionFractBits number of bits to use for fractional representation, negative amount to skip welding
+ * Welds the mesh data by consolidating vertices based on specified fractional bit precision
+ * for attributes such as positions, texture coordinates, colors, normals, tangents, and bitangents.
+ * This reduces redundant vertices and optimizes the mesh structure.
+ *
+ * @param positionFractBits The number of fractional bits to use for quantizing vertex positions. If negative, positions are not modified.
+ * @param textureCoordFractBits The number of fractional bits to use for quantizing texture coordinates. If negative, texture coordinates are not modified.
+ * @param colorFractBits The number of fractional bits to use for quantizing vertex colors. If negative, colors are not modified.
+ * @param normalFractBits The number of fractional bits to use for quantizing vertex normals. If negative, normals are not modified.
+ * @param tangentFractBits The number of fractional bits to use for quantizing vertex tangents. If negative, tangents are not modified.
+ * @param bitangentFractBits The number of fractional bits to use for quantizing vertex bitangents. If negative, bitangents are not modified.
+ * @return A new instance of MeshData containing the welded and optimized vertex data and polygons.
  */
 fun IMeshData.weld(
     positionFractBits: Int,
@@ -229,7 +274,14 @@ fun IMeshData.weld(
 }
 
 /**
- * Evaluate mesh bounds
+ * Provides the bounding box of the mesh based on its polygons and associated vertex data.
+ *
+ * The bounding box is an axis-aligned box that encapsulates all the polygons in the mesh.
+ * It is computed using the positions in the mesh's vertex data referenced by the polygons.
+ * If the mesh contains no polygons, an empty bounding box is returned.
+ *
+ * @receiver The [IMeshData] instance for which the bounding box is calculated.
+ * @return A [Box] representing the axis-aligned bounding box of the mesh.
  */
 val IMeshData.bounds: Box
     get() = polygons.bounds(vertexData)

@@ -6,8 +6,10 @@ import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
 import kotlin.math.*
 
+
 /**
- * Indexed polygon interface
+ * Represents an indexed polygon in 3D space. The polygon is defined using indices referencing
+ * the various attributes (e.g., position, texture coordinates, normals) provided in an external vertex data.
  */
 interface IIndexedPolygon {
     /**
@@ -53,10 +55,13 @@ interface IIndexedPolygon {
         )
     }
 
+
     /**
-     * Determine if polygon is planar
-     * @param vertexData the vertex data
-     * @param eps error tolerance
+     * Checks if the polygon defined by the given vertex data is planar.
+     *
+     * @param vertexData The vertex data that contains the positions of the polygon's vertices.
+     * @param eps A small tolerance value used to determine planarity. Defaults to 1E-2.
+     * @return True if the polygon is planar, false otherwise.
      */
     fun isPlanar(vertexData: IVertexData, eps: Double = 1E-2): Boolean {
         fun normal(i: Int): Vector3 {
@@ -76,8 +81,12 @@ interface IIndexedPolygon {
         }
     }
 
+
     /**
-     * Determine polygon convexity
+     * Determines if the polygon defined by the given vertex data is convex.
+     *
+     * @param vertexData The vertex data containing the positions of the polygon's vertices.
+     * @return True if the polygon is convex, false otherwise.
      */
     fun isConvex(vertexData: IVertexData): Boolean {
         val planar = base(vertexData).inversed
@@ -130,8 +139,15 @@ interface IIndexedPolygon {
         return abs(round(angleSum / (2 * PI))) == 1.0
     }
 
+
     /**
-     * Evaluate polygon normal
+     * Computes the normal vector of the polygon based on the given vertex data.
+     *
+     * The method calculates the cross product of two edges of the polygon
+     * and normalizes the resulting vector to obtain the normal.
+     *
+     * @param vertexData The vertex data that contains the positions of the polygon's vertices.
+     * @return A normalized 3D vector representing the normal of the polygon.
      */
     fun normal(vertexData: IVertexData) : Vector3 {
         val u = vertexData.positions[positions[1]] - vertexData.positions[positions[0]]
@@ -139,15 +155,28 @@ interface IIndexedPolygon {
         return u.cross(v).normalized
     }
 
+
     /**
-     * Convert to [IPolygon]
-     * @param vertexData the vertex data required to build the [IPolygon]
+     * Converts the provided vertex data into a polygon representation.
+     *
+     * @param vertexData The vertex data containing positions, normals, texture coordinates, and other attributes of the vertices.
+     * @return A polygon created from the given vertex data.
      */
     fun toPolygon(vertexData: IVertexData): IPolygon
 }
 
+
 /**
- * Immutable indexed polygon implementation
+ * Represents a polygon defined by indices corresponding to vertex data such as positions,
+ * texture coordinates, colors, normals, tangents, and bitangents. It can be used to describe
+ * a geometric shape for rendering or processing in 3D graphics or geometry applications.
+ *
+ * @property positions List of indices referencing the vertex positions.
+ * @property textureCoords List of indices referencing the texture coordinates.
+ * @property colors List of indices referencing vertex colors.
+ * @property normals List of indices referencing vertex normals.
+ * @property tangents List of indices referencing vertex tangents.
+ * @property bitangents List of indices referencing vertex bitangents.
  */
 data class IndexedPolygon(
     override val positions: List<Int>,
@@ -175,10 +204,14 @@ data class IndexedPolygon(
         }
     }
 
+
     /**
-     * Convert to a list of triangle [IndexedPolygon]
+     * Triangulates the polygon represented by the provided vertex data.
      *
-     * Supports non-planar and non-convex polygons
+     * @param vertexData The vertex data that defines the positions, texture coordinates,
+     *                   colors, normals, tangents, and bitangents of the polygon vertices.
+     * @return A list of indexed triangles representing the triangulated polygon. Each triangle
+     *         is defined using the vertex information from the provided vertex data.
      */
     fun triangulate(vertexData: IVertexData): List<IndexedPolygon> {
         return when {
@@ -232,15 +265,18 @@ data class IndexedPolygon(
         )
     }
 
+
     /**
-     * Shift indices
-     * @param positions position index shift
-     * @param textureCoords texture coordinate index shift
-     * @param colors color index shift
-     * @param normals normal index shift
-     * @param tangents tangent index shift
-     * @param bitangents bitangent index shift
+     * Shifts the indices for position, texture coordinates, colors, normals, tangents, and bitangents
+     * by the specified amounts and returns a new IndexedPolygon with the updated indices.
      *
+     * @param positions The amount to shift the position indices. Defaults to 0.
+     * @param textureCoords The amount to shift the texture coordinate indices. Defaults to 0.
+     * @param colors The amount to shift the color indices. Defaults to 0.
+     * @param normals The amount to shift the normal indices. Defaults to 0.
+     * @param tangents The amount to shift the tangent indices. Defaults to 0.
+     * @param bitangents The amount to shift the bitangent indices. Defaults to 0.
+     * @return A new IndexedPolygon with indices shifted by the provided values.
      */
     fun shiftIndices(
         positions: Int = 0,
@@ -261,8 +297,21 @@ data class IndexedPolygon(
     }
 }
 
+
 /**
- * Mutable indexed polygon implementation
+ * Represents a mutable 3D indexed polygon. This class allows modifications to its indices and
+ * provides functionality to transform vertex references into a corresponding polygon representation.
+ *
+ * The polygon is defined by indices referencing an external vertex data source, such as the
+ * position, texture coordinates, normals, colors, tangents, and bitangents of the vertices. These
+ * indices can be updated, providing flexibility for dynamic operations on the polygon.
+ *
+ * @property positions Mutable list of position indices defining the polygon's vertices.
+ * @property textureCoords Mutable list of texture coordinate indices defining the mapping of textures.
+ * @property normals Mutable list of normal indices, which specify the normals of the vertices.
+ * @property colors Mutable list of color indices specifying the vertex colors.
+ * @property tangents Mutable list of tangent indices, optional.
+ * @property bitangents Mutable list of bitangent indices, optional.
  */
 data class MutableIndexedPolygon(
     override val positions: MutableList<Int>,

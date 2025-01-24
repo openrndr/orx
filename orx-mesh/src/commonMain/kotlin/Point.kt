@@ -5,13 +5,15 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 
 /**
- * Point with optional attributes
- * @param position position attribute
- * @param textureCoord optional texture coordinate attribute
- * @param color optional color attribute
- * @param normal optional normal attribute
- * @param tangent optional tangent attribute
- * @param bitangent optional bitangent attribute
+ * Represents a 3D point with optional attributes for texture coordinates, color,
+ * normal vector, tangent vector, and bitangent vector.
+ *
+ * @property position The 3D position of the point represented as a [Vector3].
+ * @property textureCoord The optional 2D texture coordinates of the point represented as a [Vector2].
+ * @property color The optional color of the point represented as a [ColorRGBa].
+ * @property normal The optional normal vector of the point represented as a [Vector3].
+ * @property tangent The optional tangent vector of the point represented as a [Vector3].
+ * @property bitangent The optional bitangent vector of the point represented as a [Vector3].
  */
 data class Point(
     val position: Vector3,

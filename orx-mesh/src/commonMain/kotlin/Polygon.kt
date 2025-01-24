@@ -10,7 +10,15 @@ import kotlin.math.min
 
 
 /**
- * 3D Polygon interface
+ * Represents a polygon in 3D space, defined by a collection of attributes such as positions, texture coordinates,
+ * colors, normals, tangents, and bitangents.
+ *
+ * @property positions The list of 3D positions of the polygon vertices represented as [Vector3].
+ * @property textureCoords The list of 2D texture coordinates for the polygon vertices represented as [Vector2].
+ * @property colors The list of color values for the polygon vertices represented as [ColorRGBa].
+ * @property normals The list of normal vectors for the polygon vertices represented as [Vector3].
+ * @property tangents The list of tangent vectors for the polygon vertices represented as [Vector3].
+ * @property bitangents The list of bitangent vectors for the polygon vertices represented as [Vector3].
  */
 interface IPolygon {
     val positions: List<Vector3>
@@ -20,16 +28,27 @@ interface IPolygon {
     val tangents: List<Vector3>
     val bitangents: List<Vector3>
 
+    /**
+     * Transforms the polygon using a given 4x4 transformation matrix.
+     *
+     * @param t The 4x4 transformation matrix to apply to the polygon.
+     * @return A new polygon instance resulting from applying the transformation.
+     */
     fun transform(t: Matrix44): IPolygon
 }
 
 /**
- * Immutable 3D Polygon implementation
+ * Represents a polygon in 3D space with immutable attributes such as positions, texture coordinates,
+ * colors, normals, tangents, and bitangents. Provides methods to transform the polygon and convert
+ * it to a mutable version.
  *
- * @property positions Vertex 3D positions
- * @property normals Vertex 3D normals
- * @property textureCoords Vertex 2D texture coordinates
- * @constructor Create empty 3D Polygon
+ * @constructor Creates a Polygon with specified attributes.
+ * @param positions The list of 3D positions of the polygon vertices.
+ * @param textureCoords The list of 2D texture coordinates for the polygon vertices.
+ * @param colors The list of color values for the polygon vertices.
+ * @param normals The list of normal vectors for the polygon vertices.
+ * @param tangents The list of tangent vectors for the polygon vertices.
+ * @param bitangents The list of bitangent vectors for the polygon vertices.
  */
 class Polygon(
     override val positions: List<Vector3> = emptyList(),
@@ -44,7 +63,10 @@ class Polygon(
     }
 
     /**
-     * Create a [MutablePolygon] by copying
+     * Converts the current immutable polygon instance into a mutable polygon.
+     *
+     * @return A [MutablePolygon] instance containing mutable lists of positions, texture coordinates,
+     * colors, normals, tangents, and bitangents copied from the current polygon.
      */
     fun toMutablePolygon(): MutablePolygon {
         return MutablePolygon(
@@ -59,7 +81,19 @@ class Polygon(
 }
 
 /**
- * Mutable 3D Polygon implementation
+ * A mutable implementation of the [IPolygon] interface that represents a polygon in 3D space.
+ * This class allows modification of the polygon's attributes such as vertex positions,
+ * texture coordinates, colors, normals, tangents, and bitangents.
+ *
+ * @constructor Creates a mutable polygon with optional initial values for positions, texture coordinates,
+ * colors, normals, tangents, and bitangents. If no initial values are provided, empty mutable lists are used.
+ *
+ * @property positions The mutable list of 3D positions of the polygon vertices, represented as [Vector3].
+ * @property textureCoords The mutable list of 2D texture coordinates for the polygon vertices, represented as [Vector2].
+ * @property colors The mutable list of color values for the polygon vertices, represented as [ColorRGBa].
+ * @property normals The mutable list of normal vectors for the polygon vertices, represented as [Vector3].
+ * @property tangents The mutable list of tangent vectors for the polygon vertices, represented as [Vector3].
+ * @property bitangents The mutable list of bitangent vectors for the polygon vertices, represented as [Vector3].
  */
 class MutablePolygon(
     override val positions: MutableList<Vector3> = mutableListOf(),
