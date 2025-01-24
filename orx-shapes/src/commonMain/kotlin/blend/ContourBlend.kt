@@ -34,12 +34,19 @@ class ContourBlend(val a: RectifiedContour, val b: RectifiedContour) {
  *
  * @param a the first ShapeContour to blend
  * @param b the second ShapeContour to blend
+ * @param distanceTolerance the distance tolerance used in the rectification preprocess of [a] and [b]
+ * @param lengthScale the length scale used in the rectification preprocess of [a] and [b]
  * @return a ContourBlend instance representing the blended contours
  * @throws IllegalArgumentException if the preprocessing for contours fails to produce an equal number of segments
  */
-fun ContourBlend(a: ShapeContour, b: ShapeContour): ContourBlend {
-    val ra = a.rectified()
-    val rb = b.rectified()
+fun ContourBlend(
+    a: ShapeContour,
+    b: ShapeContour,
+    distanceTolerance: Double = 0.5,
+    lengthScale: Double = 1.0
+): ContourBlend {
+    val ra = a.rectified(distanceTolerance, lengthScale)
+    val rb = b.rectified(distanceTolerance, lengthScale)
     val sa = ra.splitForBlend(rb)
     val sb = rb.splitForBlend(ra)
     require(sa.originalPath.segments.size == sb.originalPath.segments.size) {
