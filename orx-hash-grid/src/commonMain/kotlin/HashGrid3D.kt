@@ -1,5 +1,6 @@
 package org.openrndr.extra.hashgrid
 import org.openrndr.math.Vector3
+import org.openrndr.shape.Box
 import kotlin.jvm.JvmRecord
 import kotlin.math.abs
 import kotlin.math.max
@@ -30,17 +31,17 @@ class Cell3D(val x: Int, val y: Int, val z: Int, val cellSize: Double) {
     var zMax: Double = Double.NEGATIVE_INFINITY
         private set
 
-    val bounds: Box3D
+    val bounds: Box
         get() {
-            return Box3D(Vector3(x * cellSize, y * cellSize, z * cellSize), cellSize, cellSize, cellSize)
+            return Box(Vector3(x * cellSize, y * cellSize, z * cellSize), cellSize, cellSize, cellSize)
         }
 
-    val contentBounds: Box3D
+    val contentBounds: Box
         get() {
             return if (points.isEmpty()) {
-                Box3D.EMPTY
+                Box.EMPTY
             } else {
-                Box3D(Vector3(xMin, yMin, zMin), xMax - xMin, yMax - yMin, zMax - zMin)
+                Box(Vector3(xMin, yMin, zMin), xMax - xMin, yMax - yMin, zMax - zMin)
             }
         }
 
