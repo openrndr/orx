@@ -7,6 +7,10 @@ import org.openrndr.extra.objloader.loadOBJasVertexBuffer
 import org.openrndr.math.Vector3
 
 fun main() = application {
+    configure {
+        width = 720
+        height = 540
+    }
     program {
         val mesh = loadOBJasVertexBuffer("demo-data/obj-models/suzanne/Suzanne.obj")
 

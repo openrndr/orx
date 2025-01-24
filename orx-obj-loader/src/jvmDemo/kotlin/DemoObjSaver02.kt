@@ -6,6 +6,7 @@ import org.openrndr.extra.objloader.saveOBJ
 
 fun main() = application {
     configure {
+        width = 720
         height = 100
     }
     program {

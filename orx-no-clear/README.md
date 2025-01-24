@@ -25,7 +25,7 @@ Optionally, a static `backdrop` may be setup by providing custom code.
 - Example 1. Customising the backdrop with an image
 ```kotlin
 extend(NoClear()) {
-    val img = loadImage("data\\backdrop.png")
+    val img = loadImage("data/backdrop.png")
     backdrop = {
         drawer.image(img, 0.0, 0.0, width * 1.0, height * 1.0)
     }

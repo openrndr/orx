@@ -11,6 +11,10 @@ import org.openrndr.math.Vector3
 import java.io.File
 
 fun main() = application {
+    configure {
+        width = 720
+        height = 720
+    }
     program {
         val obj = loadOBJMeshData(File("demo-data/obj-models/suzanne/Suzanne.obj")).toMeshData().triangulate()
         val tangentObj = obj.estimateTangents()

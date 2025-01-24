@@ -11,34 +11,32 @@ import org.openrndr.shape.LineSegment
  * cursor are highlighted with circles and lines connecting them to the cursor.
  *
  * Key features:
- * - Generates 1000 random 2D points within the canvas dimensions (1080x720).
+ * - Generates 1000 random 2D points within the canvas.
  * - Builds a KD-tree from the list of points for optimized spatial querying.
  * - Visualizes the points and highlights the 7 nearest neighbors to the user's cursor position dynamically.
  * - Highlights include red-colored circles around the nearest points and red lines connecting them to the cursor.
  */
-fun main() {
-    application {
-        configure {
-            width = 1080
-            height = 720
+fun main() = application {
+    configure {
+        width = 720
+        height = 720
+    }
+
+    program {
+        val points = MutableList(1000) {
+            Vector2(Math.random() * width, Math.random() * height)
         }
+        val tree = points.kdTree()
 
-        program {
-            val points = MutableList(1000) {
-                Vector2(Math.random() * width, Math.random() * height)
-            }
-            val tree = points.kdTree()
+        extend {
+            drawer.circles(points, 5.0)
 
-            extend {
-                drawer.circles(points, 5.0)
-
-                val kNearest = tree.findKNearest(mouse.position, k = 7)
-                drawer.fill = ColorRGBa.RED
-                drawer.stroke = ColorRGBa.RED
-                drawer.strokeWeight = 2.0
-                drawer.circles(kNearest, 7.0)
-                drawer.lineSegments(kNearest.map { LineSegment(mouse.position, it) })
-            }
+            val kNearest = tree.findKNearest(mouse.position, k = 7)
+            drawer.fill = ColorRGBa.RED
+            drawer.stroke = ColorRGBa.RED
+            drawer.strokeWeight = 2.0
+            drawer.circles(kNearest, 7.0)
+            drawer.lineSegments(kNearest.map { LineSegment(mouse.position, it) })
         }
     }
 }

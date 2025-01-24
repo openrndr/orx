@@ -22,25 +22,24 @@ import kotlin.math.cos
  * based on the t value along a Path3D. In other words, a tube in which the cross-section does not need
  * to be constant, but can be scaled, rotated and displaced along its curvy axis.
  */
-fun main() {
-    application {
-        configure {
-            width = 800
-            height = 800
-            multisample = WindowMultisample.SampleCount(8)
+fun main() = application {
+    configure {
+        width = 720
+        height = 720
+        multisample = WindowMultisample.SampleCount(8)
+    }
+    program {
+        Random.seed = System.currentTimeMillis().toString()
+
+        val texture = loadImage("demo-data/images/peopleCity01.jpg").also {
+            it.wrapU = WrapMode.REPEAT
+            it.wrapV = WrapMode.REPEAT
+            it.filterMag = MagnifyingFilter.LINEAR
+            it.filterMin = MinifyingFilter.LINEAR
         }
-        program {
-            Random.seed = System.currentTimeMillis().toString()
 
-            val texture = loadImage("demo-data/images/peopleCity01.jpg").also {
-                it.wrapU = WrapMode.REPEAT
-                it.wrapV = WrapMode.REPEAT
-                it.filterMag = MagnifyingFilter.LINEAR
-                it.filterMin = MinifyingFilter.LINEAR
-            }
-
-            val shader = shadeStyle {
-                fragmentTransform = """
+        val shader = shadeStyle {
+            fragmentTransform = """
                         // A. Passed color
                         x_fill = va_color;
                         
@@ -56,38 +55,37 @@ fun main() {
                         // Black fog (darken far away shapes)
                         x_fill.rgb += v_viewPosition.z * 0.05;
                     """.trimIndent()
-                parameter("img", texture)
-            }
+            parameter("img", texture)
+        }
 
-            extend(Orbital()) {
-                eye = Vector3(0.0, 3.0, 7.0)
-                lookAt = Vector3(0.0, 0.0, 0.0)
-            }
-            extend {
-                drawer.stroke = null
+        extend(Orbital()) {
+            eye = Vector3(0.0, 3.0, 7.0)
+            lookAt = Vector3(0.0, 0.0, 0.0)
+        }
+        extend {
+            drawer.stroke = null
 
-                val path = get3DPath(10.0, seconds * 0.05, 400)
-                val tubes = makeTubes(path, seconds * 0.2)
+            val path = get3DPath(10.0, seconds * 0.05, 400)
+            val tubes = makeTubes(path, seconds * 0.2)
 
-                shader.parameter("seconds", seconds * 0.1)
-                drawer.fill = ColorRGBa.WHITE
-                drawer.shadeStyle = shader
-                tubes.forEachIndexed { i, vb ->
-                    shader.parameter("offset", i * 0.3 + 0.2)
+            shader.parameter("seconds", seconds * 0.1)
+            drawer.fill = ColorRGBa.WHITE
+            drawer.shadeStyle = shader
+            tubes.forEachIndexed { i, vb ->
+                shader.parameter("offset", i * 0.3 + 0.2)
 
-                    // Mirror the mesh 5 times
-                    repeat(5) {
-                        drawer.isolated {
-                            rotate(Vector3.UNIT_Z, it * 72.0)
-                            vertexBuffer(vb, DrawPrimitive.TRIANGLES)
-                        }
+                // Mirror the mesh 5 times
+                repeat(5) {
+                    drawer.isolated {
+                        rotate(Vector3.UNIT_Z, it * 72.0)
+                        vertexBuffer(vb, DrawPrimitive.TRIANGLES)
                     }
-
-                    // Remember to free the memory! Otherwise, the computer will quickly run out of RAM.
-                    vb.destroy()
                 }
 
+                // Remember to free the memory! Otherwise, the computer will quickly run out of RAM.
+                vb.destroy()
             }
+
         }
     }
 }
