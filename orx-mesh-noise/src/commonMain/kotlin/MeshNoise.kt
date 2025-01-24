@@ -32,6 +32,10 @@ fun nonUniformBarycentric(weight0: Double, weight1: Double, weight2: Double, ran
     var b0 = b.x / weight0
     var b1 = b.y / weight1
     var b2 = b.z / weight2
+    val b = uniformBarycentric(random)
+    var b0 = b.x * weight0
+    var b1 = b.y * weight1
+    var b2 = b.z * weight2
     val totalWeight = b0 + b1 + b2
     b0 /= totalWeight
     b1 /= totalWeight
