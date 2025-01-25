@@ -19,7 +19,7 @@ internal fun <T : LinearType<T>> bc(barycentric: Vector3, items: List<T>): T {
  * @param barycentric The barycentric coordinates used to interpolate the vertex attributes.
  * @return A `Point` containing interpolated vertex attributes including position, texture coordinates, color, normal, tangent, and bitangent.
  */
-fun IIndexedPolygon.point(vertexData: VertexData, barycentric: Vector3): Point {
+fun IIndexedPolygon.point(vertexData: IVertexData, barycentric: Vector3): Point {
     require(positions.size == 3)
 
     val positions = vertexData.positions.slice(positions)
