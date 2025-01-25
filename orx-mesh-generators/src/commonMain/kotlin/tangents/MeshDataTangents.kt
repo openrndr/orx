@@ -9,10 +9,10 @@ import org.openrndr.math.Vector3
  */
 fun IMeshData.estimateTangents(): MeshData {
     require(vertexData.textureCoords.isNotEmpty()) {
-        "need texture coordinates to estimate tangents"
+        "The mesh must have texture coordinates to estimate tangents."
     }
     require(isTriangular()) {
-
+        "The mesh data must consist of triangular polygons to estimate tangents."
     }
 
     val normals = MutableList(vertexData.positions.size) { Vector3.ZERO }
