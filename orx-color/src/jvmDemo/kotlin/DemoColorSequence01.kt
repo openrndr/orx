@@ -24,45 +24,43 @@ import org.openrndr.math.Vector3
  * - Applying a custom fragment shader with a palette-based shading style.
  * - Rendering a grid of 3D spheres, each transformed and rotated to create a dynamic pattern.
  */
-fun main() {
-    application {
-        configure {
-            width = 720
-            height = 720
-        }
-        program {
-            val cs = ColorSequence(
-                listOf(
-                    0.0 to ColorRGBa.PINK,
-                    0.25 to ColorRGBa.ORANGE.toOKLABa(),
-                    0.27 to ColorRGBa.WHITE.toOKLABa(),
-                    0.32 to ColorRGBa.BLUE,
-                    1.0 to ColorRGBa.MEDIUM_AQUAMARINE
-                )
+fun main() = application {
+    configure {
+        width = 720
+        height = 720
+    }
+    program {
+        val cs = ColorSequence(
+            listOf(
+                0.0 to ColorRGBa.PINK,
+                0.25 to ColorRGBa.ORANGE.toOKLABa(),
+                0.27 to ColorRGBa.WHITE.toOKLABa(),
+                0.32 to ColorRGBa.BLUE,
+                1.0 to ColorRGBa.MEDIUM_AQUAMARINE
             )
-            val palette = cs.toColorBuffer(drawer, 256, 16)
-            val sphere = sphereMesh(sides = 48, segments = 48)
+        )
+        val palette = cs.toColorBuffer(drawer, 256, 16)
+        val sphere = sphereMesh(sides = 48, segments = 48)
 
-            extend(Orbital()) {
-                fov = 50.0
-                eye = Vector3(0.0, 0.0, 13.0)
-            }
-            extend {
-                drawer.shadeStyle = shadeStyle {
-                    fragmentTransform = """
+        extend(Orbital()) {
+            fov = 50.0
+            eye = Vector3(0.0, 0.0, 13.0)
+        }
+        extend {
+            drawer.shadeStyle = shadeStyle {
+                fragmentTransform = """
                        float d = normalize(va_normal).z;
                        x_fill = texture(p_palette, vec2(1.0-d, 0.0));
                    """.trimIndent()
-                    parameter("palette", palette)
-                }
-                for (j in -2..2) {
-                    for (i in -2..2) {
-                        drawer.isolated {
-                            drawer.translate(i * 2.0, j * 2.0, 0.0)
-                            drawer.rotate(Vector3.UNIT_Y, j * 30.0)
-                            drawer.rotate(Vector3.UNIT_X, i * 30.0)
-                            drawer.vertexBuffer(sphere, DrawPrimitive.TRIANGLES)
-                        }
+                parameter("palette", palette)
+            }
+            for (j in -2..2) {
+                for (i in -2..2) {
+                    drawer.isolated {
+                        drawer.translate(i * 2.0, j * 2.0, 0.0)
+                        drawer.rotate(Vector3.UNIT_Y, j * 30.0)
+                        drawer.rotate(Vector3.UNIT_X, i * 30.0)
+                        drawer.vertexBuffer(sphere, DrawPrimitive.TRIANGLES)
                     }
                 }
             }

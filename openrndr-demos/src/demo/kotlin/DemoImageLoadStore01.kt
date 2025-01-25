@@ -5,12 +5,11 @@ import org.openrndr.extra.meshgenerators.planeMesh
 import org.openrndr.internal.Driver
 import org.openrndr.math.Vector3
 
-
 fun main() = application {
     program {
-
-        val shader = Shader.createFromCode(vsCode =
-                """${Driver.instance.shaderConfiguration()}
+        val shader = Shader.createFromCode(
+            vsCode =
+                """${Driver.instance.shaderConfiguration(ShaderType.VERTEX)}
 in vec3 a_position;
 in vec2 a_texCoord0;
 in vec3 a_normal;
@@ -21,14 +20,15 @@ void main() {
     gl_Position = projMatrix * vec4(a_position, 1.0);  
 }
         """,
-               fsCode = """${Driver.instance.shaderConfiguration()}
+            fsCode = """${Driver.instance.shaderConfiguration(ShaderType.FRAGMENT)}
 out vec4 o_color;
 layout(rgba8) uniform writeonly image2D bla;
 void main() {
     imageStore(bla, ivec2(30,30), vec4(1.0, 0.0, 0.0, 1.0));
-    o_color =  vec4(1.0);
+    o_color = vec4(1.0);
 }
-                """, name = "ils")
+                """, name = "ils"
+        )
         val cb = colorBuffer(128, 128, type = ColorType.UINT8)
         val mesh = planeMesh(Vector3.ZERO, Vector3.UNIT_X, Vector3.UNIT_Y, -Vector3.UNIT_Z, 100.0, 100.0)
 
@@ -44,6 +44,5 @@ void main() {
             drawer.clear(ColorRGBa.BLACK)
             drawer.image(cb)
         }
-
     }
 }

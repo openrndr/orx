@@ -10,7 +10,6 @@ This program demonstrates dynamic circle batches
 
 fun main() = application {
     program {
-
         extend {
             drawer.clear(ColorRGBa.GRAY)
             drawer.circles {

@@ -4,7 +4,7 @@ import org.openrndr.draw.*
 
 fun main() = application {
     program {
-        val volumeTexture = VolumeTexture.create(128,128,32, type = ColorType.UINT8)
+        val volumeTexture = VolumeTexture.create(128, 128, 32, type = ColorType.UINT8)
         val rt = renderTarget(128, 128) {
             volumeTexture(volumeTexture, 0)
         }

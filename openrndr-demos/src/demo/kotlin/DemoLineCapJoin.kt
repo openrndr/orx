@@ -33,9 +33,9 @@ fun main() {
                     stroke = ColorRGBa.PINK
                     strokeWeight = 8.0
                     fontMap = font
-                    LineCap.values().forEachIndexed { x, cap ->
+                    LineCap.entries.forEachIndexed { x, cap ->
                         lineCap = cap
-                        LineJoin.values().forEachIndexed { y, join ->
+                        LineJoin.entries.forEachIndexed { y, join ->
                             lineJoin = join
                             val pos = IntVector2(x - 1, y - 1).vector2 * 180.0
                             isolated {

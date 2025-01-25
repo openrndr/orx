@@ -16,6 +16,12 @@ fun main() = application {
     program {
         var time = 0.0
 
+        if (System.getProperty("takeScreenshot") == "true") {
+            extensions.filterIsInstance<SingleScreenshot>().forEach {
+                it.delayFrames = 200
+            }
+        }
+
         // ------------------------------------------------------------
         // By default OPENRNDR clears the canvas on each animation
         // frame. NoClear disables that behavior, letting you
@@ -29,11 +35,6 @@ fun main() = application {
             backdrop = { drawer.clear(rgb(0.15)) }
         }
 
-        if (System.getProperty("takeScreenshot") == "true") {
-            extensions.filterIsInstance<SingleScreenshot>().forEach {
-                it.delayFrames = 60
-            }
-        }
         extend {
             // Draw something. For this demo *what* you draw is not so
             // important, only the fact that it stays on the canvas

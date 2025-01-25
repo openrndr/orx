@@ -1,11 +1,18 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
+import org.openrndr.color.rgb
 import org.openrndr.extra.color.spaces.ColorOKHSLa
 import org.openrndr.extra.color.spaces.ColorOKHSVa
 
 fun main() = application {
+    configure {
+        width = 720
+        height = 160
+    }
     program {
         extend {
+            drawer.clear(rgb(0.2))
+
             val c = ColorRGBa.GREEN
             val okhsv = ColorOKHSVa.fromColorRGBa(c)
             val hsv = c.toHSVa()

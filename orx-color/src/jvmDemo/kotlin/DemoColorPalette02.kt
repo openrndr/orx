@@ -11,6 +11,10 @@ import org.openrndr.extra.color.tools.shadeLuminosity
  * an increased dynamic range.
  */
 fun main() = application {
+    configure {
+        width = 720
+        height = 360
+    }
     program {
         val count = 8
         val palette = RGB.PINK.analogous<HSLuv>(360.0, count).mapIndexed { i, c ->

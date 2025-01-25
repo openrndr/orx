@@ -1,3 +1,5 @@
+package colorRange
+
 // Create a colorSequence with multiple color models
 
 import org.openrndr.application
@@ -6,6 +8,10 @@ import org.openrndr.extra.color.palettes.colorSequence
 import org.openrndr.extra.color.spaces.toHSLUVa
 
 fun main() = application {
+    configure {
+        width = 720
+        height = 360
+    }
     program {
         extend {
             val cs = colorSequence(0.0 to ColorRGBa.PINK,

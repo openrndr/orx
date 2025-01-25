@@ -1,9 +1,15 @@
+package colormap
+
 import org.openrndr.application
 import org.openrndr.extra.color.colormaps.spectralZucconi6
 import org.openrndr.extra.noise.fastFloor
 import kotlin.math.sin
 
 fun main() = application {
+    configure {
+        width = 720
+        height = 360
+    }
     program {
         extend {
             drawer.stroke = null

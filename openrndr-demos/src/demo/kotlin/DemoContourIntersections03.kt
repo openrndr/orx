@@ -12,12 +12,12 @@ fun main() = application {
         val points = 200
         extend {
             val contour = ShapeContour.fromPoints(
-                    List(points) {
-                        val a = PI * 2 * it / points
-                        val x = (200 + 50 * cos(a * 2)) * sin(a * 3 + sin(a))
-                        val y = 150 * cos(a * 2 + seconds * 0.2)
-                        Vector2(x, y)
-                    }, closed = true
+                List(points) {
+                    val a = PI * 2 * it / points
+                    val x = (200 + 50 * cos(a * 2)) * sin(a * 3 + sin(a))
+                    val y = 150 * cos(a * 2 + seconds * 0.2)
+                    Vector2(x, y)
+                }, closed = true
             )
             val ints = intersections(contour, contour)
             drawer.run {

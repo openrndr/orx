@@ -49,6 +49,56 @@ for (c in cs blend (width / 40)) {
 Two color spaces are added: `ColorHSLUVa` and `ColorHPLUVa`, they are an implementation of the colorspaces presented at [hsluv.org](http://www.hsluv.org)
 <!-- __demos__ -->
 ## Demos
+### colormap/DemoSpectralZucconiColormap
+[source code](src/jvmDemo/kotlin/colormap/DemoSpectralZucconiColormap.kt)
+
+![colormap-DemoSpectralZucconiColormapKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoSpectralZucconiColormapKt.png)
+
+### colormap/DemoSpectralZucconiColormapPhrase
+[source code](src/jvmDemo/kotlin/colormap/DemoSpectralZucconiColormapPhrase.kt)
+
+![colormap-DemoSpectralZucconiColormapPhraseKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoSpectralZucconiColormapPhraseKt.png)
+
+### colormap/DemoSpectralZucconiColormapPlot
+[source code](src/jvmDemo/kotlin/colormap/DemoSpectralZucconiColormapPlot.kt)
+
+![colormap-DemoSpectralZucconiColormapPlotKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoSpectralZucconiColormapPlotKt.png)
+
+### colormap/DemoTurboColormap
+[source code](src/jvmDemo/kotlin/colormap/DemoTurboColormap.kt)
+
+![colormap-DemoTurboColormapKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoTurboColormapKt.png)
+
+### colormap/DemoTurboColormapPhrase
+[source code](src/jvmDemo/kotlin/colormap/DemoTurboColormapPhrase.kt)
+
+![colormap-DemoTurboColormapPhraseKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoTurboColormapPhraseKt.png)
+
+### colormap/DemoTurboColormapPlot
+[source code](src/jvmDemo/kotlin/colormap/DemoTurboColormapPlot.kt)
+
+![colormap-DemoTurboColormapPlotKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoTurboColormapPlotKt.png)
+
+### colorRange/DemoColorRange01
+[source code](src/jvmDemo/kotlin/colorRange/DemoColorRange01.kt)
+
+![colorRange-DemoColorRange01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colorRange-DemoColorRange01Kt.png)
+
+### colorRange/DemoColorRange02
+[source code](src/jvmDemo/kotlin/colorRange/DemoColorRange02.kt)
+
+![colorRange-DemoColorRange02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colorRange-DemoColorRange02Kt.png)
+
+### colorRange/DemoColorRange03
+[source code](src/jvmDemo/kotlin/colorRange/DemoColorRange03.kt)
+
+![colorRange-DemoColorRange03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colorRange-DemoColorRange03Kt.png)
+
+### colorRange/DemoColorRange04
+[source code](src/jvmDemo/kotlin/colorRange/DemoColorRange04.kt)
+
+![colorRange-DemoColorRange04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colorRange-DemoColorRange04Kt.png)
+
 ### DemoColorPalette01
 [source code](src/jvmDemo/kotlin/DemoColorPalette01.kt)
 
@@ -69,26 +119,6 @@ Two color spaces are added: `ColorHSLUVa` and `ColorHPLUVa`, they are an impleme
 
 ![DemoColorPlane02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorPlane02Kt.png)
 
-### DemoColorRange01
-[source code](src/jvmDemo/kotlin/DemoColorRange01.kt)
-
-![DemoColorRange01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorRange01Kt.png)
-
-### DemoColorRange02
-[source code](src/jvmDemo/kotlin/DemoColorRange02.kt)
-
-![DemoColorRange02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorRange02Kt.png)
-
-### DemoColorRange03
-[source code](src/jvmDemo/kotlin/DemoColorRange03.kt)
-
-![DemoColorRange03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorRange03Kt.png)
-
-### DemoColorRange04
-[source code](src/jvmDemo/kotlin/DemoColorRange04.kt)
-
-![DemoColorRange04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorRange04Kt.png)
-
 ### DemoColorSequence01
 [source code](src/jvmDemo/kotlin/DemoColorSequence01.kt)
 
@@ -108,21 +138,6 @@ Two color spaces are added: `ColorHSLUVa` and `ColorHPLUVa`, they are an impleme
 [source code](src/jvmDemo/kotlin/DemoFettePalette02.kt)
 
 ![DemoFettePalette02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoFettePalette02Kt.png)
-
-### DemoHistogram01
-[source code](src/jvmDemo/kotlin/DemoHistogram01.kt)
-
-![DemoHistogram01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHistogram01Kt.png)
-
-### DemoHistogram02
-[source code](src/jvmDemo/kotlin/DemoHistogram02.kt)
-
-![DemoHistogram02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHistogram02Kt.png)
-
-### DemoHistogram03
-[source code](src/jvmDemo/kotlin/DemoHistogram03.kt)
-
-![DemoHistogram03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHistogram03Kt.png)
 
 ### DemoHSLUV01
 [source code](src/jvmDemo/kotlin/DemoHSLUV01.kt)
@@ -149,37 +164,22 @@ Two color spaces are added: `ColorHSLUVa` and `ColorHPLUVa`, they are an impleme
 
 ![DemoOKHSV01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoOKHSV01Kt.png)
 
-### DemoSpectralZucconiColormap
-[source code](src/jvmDemo/kotlin/DemoSpectralZucconiColormap.kt)
-
-![DemoSpectralZucconiColormapKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoSpectralZucconiColormapKt.png)
-
-### DemoSpectralZucconiColormapPhrase
-[source code](src/jvmDemo/kotlin/DemoSpectralZucconiColormapPhrase.kt)
-
-![DemoSpectralZucconiColormapPhraseKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoSpectralZucconiColormapPhraseKt.png)
-
-### DemoSpectralZucconiColormapPlot
-[source code](src/jvmDemo/kotlin/DemoSpectralZucconiColormapPlot.kt)
-
-![DemoSpectralZucconiColormapPlotKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoSpectralZucconiColormapPlotKt.png)
-
-### DemoTurboColormap
-[source code](src/jvmDemo/kotlin/DemoTurboColormap.kt)
-
-![DemoTurboColormapKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoTurboColormapKt.png)
-
-### DemoTurboColormapPhrase
-[source code](src/jvmDemo/kotlin/DemoTurboColormapPhrase.kt)
-
-![DemoTurboColormapPhraseKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoTurboColormapPhraseKt.png)
-
-### DemoTurboColormapPlot
-[source code](src/jvmDemo/kotlin/DemoTurboColormapPlot.kt)
-
-![DemoTurboColormapPlotKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoTurboColormapPlotKt.png)
-
 ### DemoXSLUV01
 [source code](src/jvmDemo/kotlin/DemoXSLUV01.kt)
 
 ![DemoXSLUV01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoXSLUV01Kt.png)
+
+### histogram/DemoHistogram01
+[source code](src/jvmDemo/kotlin/histogram/DemoHistogram01.kt)
+
+![histogram-DemoHistogram01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/histogram-DemoHistogram01Kt.png)
+
+### histogram/DemoHistogram02
+[source code](src/jvmDemo/kotlin/histogram/DemoHistogram02.kt)
+
+![histogram-DemoHistogram02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/histogram-DemoHistogram02Kt.png)
+
+### histogram/DemoHistogram03
+[source code](src/jvmDemo/kotlin/histogram/DemoHistogram03.kt)
+
+![histogram-DemoHistogram03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/histogram-DemoHistogram03Kt.png)

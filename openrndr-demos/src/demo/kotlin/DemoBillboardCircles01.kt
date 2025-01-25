@@ -11,13 +11,11 @@ import org.openrndr.math.Vector3
 
 
 fun main() = application {
-
     configure {
         multisample = WindowMultisample.SampleCount(8)
     }
     program {
         extend(Orbital())
-
 
         val circlePositions = vertexBuffer(vertexFormat {
             attribute("position", VertexElementType.VECTOR3_FLOAT32)
@@ -30,7 +28,6 @@ fun main() = application {
                 write(Math.random().toFloat()*0.1f)
             }
         }
-
 
         extend {
             drawer.perspective(90.0, width*1.0/height*1.0, 0.1, 100.0)

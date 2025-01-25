@@ -1,10 +1,14 @@
-// Show color histogram of an image
+package histogram// Show color histogram of an image
 
 import org.openrndr.application
 import org.openrndr.draw.loadImage
 import org.openrndr.extra.color.statistics.calculateHistogramRGB
 
 fun main() = application {
+    configure {
+        width = 720
+        height = 540
+    }
     program {
         val useColors = 32
         val image = loadImage("demo-data/images/image-001.png")
@@ -29,7 +33,7 @@ fun main() = application {
                 "% of the image colors.")
 
         extend {
-            drawer.image(image)
+            drawer.image(image, 0.0, 0.0, width * 1.0, height * 1.0)
             drawer.stroke = null
             var x = 0.0
             topColorsSortedByLuminosity.forEachIndexed { i, (color, freq) ->

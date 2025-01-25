@@ -8,7 +8,8 @@ fun main() = application {
     program {
         val style = shadeStyle {
             //fragmentTransform = "x_stroke.a *= step(0.5, fract(c_contourPosition / p_dashLen));"
-            fragmentTransform = "x_stroke.a *= smoothstep(0.0, 1.0, mod(c_contourPosition, p_dashLen)) * smoothstep(p_dashLen, p_dashLen-1.0, mod(c_contourPosition, p_dashLen));"
+            fragmentTransform =
+                "x_stroke.a *= smoothstep(0.0, 1.0, mod(c_contourPosition, p_dashLen)) * smoothstep(p_dashLen, p_dashLen-1.0, mod(c_contourPosition, p_dashLen));"
             parameter("dashLen", 20.0)
         }
         extend {
@@ -25,8 +26,7 @@ fun main() = application {
                 shadeStyle = style
                 contour(c)
 
-                drawer.lineSegment(0.0, 0.0, width*1.0, height*1.0)
-
+                drawer.lineSegment(0.0, 0.0, width * 1.0, height * 1.0)
             }
         }
     }

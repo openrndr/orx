@@ -12,7 +12,6 @@ fun main() {
         }
 
         program {
-
             val cs = Rectangle(0.0, 0.0, 200.0, 200.0).contour
             val cc = Circle(100.0, 0.0, 100.0).contour
 

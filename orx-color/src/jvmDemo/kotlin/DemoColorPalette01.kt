@@ -11,7 +11,10 @@ import org.openrndr.extra.color.spaces.*
  * Demonstrates the creation of color palettes using various available methods
  */
 fun main() = application {
-    configure { }
+    configure {
+        width = 720
+        height = 540
+    }
     program {
         // HueShiftableColor:
         // HPLuv HSL HSV LCHab LCHuv XSL XSV XSLuv HSLuv OKHSL OKHSV OKLCH
@@ -27,34 +30,33 @@ fun main() = application {
 
             palette0.forEachIndexed { i, c ->
                 drawer.fill = c
-                drawer.circle(100.0 + i * 40.0, 80.0, 40.0)
+                drawer.circle(100.0 + i * 50.0, 80.0, 50.0)
             }
 
             palette1.forEachIndexed { i, c ->
                 drawer.fill = c
-                drawer.circle(100.0 + i * 40.0, 180.0, 40.0)
+                drawer.circle(100.0 + i * 50.0, 200.0, 50.0)
             }
 
             palette2.forEachIndexed { i, c ->
                 drawer.fill = c
-                drawer.circle(380.0 + i * 40.0, 180.0, 40.0)
+                drawer.circle(440.0 + i * 50.0, 200.0, 50.0)
             }
 
             palette3.forEachIndexed { i, c ->
                 drawer.fill = c
-                drawer.circle(100.0 + i * 40.0, 280.0, 40.0)
+                drawer.circle(100.0 + i * 50.0, 320.0, 50.0)
             }
 
             palette4.forEachIndexed { i, c ->
                 drawer.fill = c
-                drawer.circle(350.0 + i * 40.0, 280.0, 40.0)
+                drawer.circle(400.0 + i * 50.0, 320.0, 50.0)
             }
 
             palette5.forEachIndexed { i, c ->
                 drawer.fill = c
-                drawer.circle(100.0 + i * 40.0, 380.0, 40.0)
+                drawer.circle(100.0 + i * 50.0, 440.0, 50.0)
             }
-
         }
     }
 }
