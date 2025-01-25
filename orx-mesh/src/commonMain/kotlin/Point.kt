@@ -1,6 +1,7 @@
 package org.openrndr.extra.mesh
 
 import org.openrndr.color.ColorRGBa
+import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 
@@ -21,5 +22,26 @@ data class Point(
     val color: ColorRGBa? = null,
     val normal: Vector3? = null,
     val tangent: Vector3? = null,
-    val bitangent: Vector3? =null
-)
+    val bitangent: Vector3? = null
+) {
+
+    /**
+     * Computes the pose of the point as a transformation matrix. The pose is derived using the
+     * normalized tangent, bitangent, and normal vectors as the columns of the matrix, combined
+     * with the position vector as the translation component.
+     *
+     * @return A 4x4 transformation matrix representing the pose of the point.
+     * @throws IllegalArgumentException if the normal, tangent, or bitangent vectors are null.
+     */
+    fun pose(): Matrix44 {
+        require(normal != null && tangent != null && bitangent != null) {
+            "Normal, tangent, and bitangent must be non-null to compute the pose."
+        }
+        return Matrix44.fromColumnVectors(
+            tangent.normalized.xyz0,
+            bitangent.normalized.xyz0,
+            normal.normalized.xyz0,
+            position.xyz1
+        )
+    }
+}
