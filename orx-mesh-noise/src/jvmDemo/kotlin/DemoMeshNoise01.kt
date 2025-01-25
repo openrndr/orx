@@ -1,3 +1,4 @@
+import org.openrndr.WindowMultisample
 import org.openrndr.application
 import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.isolated
@@ -26,30 +27,27 @@ import kotlin.random.Random
  * The application runs with a window size of 720x720 pixels and positions the camera
  * in front of the scene using the "Orbital" extension.
  */
-fun main() {
-    application {
-        configure {
-            width = 720
-            height = 720
-        }
-        program {
-            val mesh = loadOBJMeshData(File("demo-data/obj-models/suzanne/Suzanne.obj")).toMeshData()
-            val points = mesh.uniform(1000, Random(0))
+fun main() = application {
+    configure {
+        width = 720
+        height = 720
+        multisample = WindowMultisample.SampleCount(8)
+    }
+    program {
+        val mesh = loadOBJMeshData(File("demo-data/obj-models/suzanne/Suzanne.obj")).toMeshData()
+        val points = mesh.uniform(1000, Random(0))
 
-            val sphere = sphereMesh(radius = 0.1)
-            extend(Orbital()) {
-                eye = Vector3(0.0, 0.0, 2.0)
+        val sphere = sphereMesh(radius = 0.1)
+        extend(Orbital()) {
+            eye = Vector3(0.0, 0.0, 2.0)
+        }
+        extend {
+            drawer.shadeStyle = shadeStyle {
+                fragmentTransform = "x_fill = vec4(v_viewNormal*0.5+0.5, 1.0);"
             }
-            extend {
-                drawer.shadeStyle = shadeStyle {
-                    fragmentTransform = "x_fill = vec4(v_viewNormal*0.5+0.5, 1.0);"
-                }
-                for (point in points) {
-                    drawer.isolated {
-                        drawer.translate(point)
-                        drawer.vertexBuffer(sphere, DrawPrimitive.TRIANGLES)
-                    }
-                }
+            for (point in points) drawer.isolated {
+                drawer.translate(point)
+                drawer.vertexBuffer(sphere, DrawPrimitive.TRIANGLES)
             }
         }
     }
