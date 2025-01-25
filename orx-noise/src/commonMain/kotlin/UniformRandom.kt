@@ -172,11 +172,6 @@ fun Vector2.Companion.uniformRing(
     outerRadius: Double = 1.0,
     random: Random = Random.Default
 ): Vector2 {
-
-    require(innerRadius <= outerRadius) {
-
-    }
-
     val eps = 1E-6
 
     if (abs(innerRadius - outerRadius) < eps) {

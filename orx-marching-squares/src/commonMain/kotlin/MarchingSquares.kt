@@ -56,13 +56,16 @@ fun findContours(
 
             fun blend(v1: Double, v2: Double): Double {
                 if (useInterpolation) {
-                    require(v1 == v1 && v2 == v2)
+                    require(!v1.isNaN() && !v2.isNaN()) {
+                        "Input values v1=$v1 or v2=$v2 are NaN, which is not allowed."
+                    }
                     val f1 = min(v1, v2)
                     val f2 = max(v1, v2)
                     val v = (-f1) / (f2 - f1)
 
-                    require(v == v)
-                    require(v in 0.0..1.0)
+                    require(v == v && v in 0.0..1.0) {
+                        "Invalid value calculated during interpolation: v=$v"
+                    }
 
                     return if (f1 == v1) {
                         v
