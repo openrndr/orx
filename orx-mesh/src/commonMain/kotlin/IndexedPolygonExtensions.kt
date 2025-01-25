@@ -10,6 +10,26 @@ internal fun <T : LinearType<T>> bc(barycentric: Vector3, items: List<T>): T {
     return (items[0] * barycentric.x) + (items[1] * barycentric.y) + (items[2] * barycentric.z)
 }
 
+/**
+ * Computes the 3D position of a point in a polygon using barycentric coordinates.
+ *
+ * The method retrieves the positions of the vertices associated with this polygon
+ * from the provided vertex data. Using the given barycentric coordinates, it calculates
+ * the weighted combination of the vertex positions.
+ *
+ * @param vertexData The vertex data containing the positions of the polygon's vertices.
+ * @param barycentric A vector representing the barycentric coordinates, used to describe
+ *                    the relative position within the polygon.
+ * @return A 3D vector representing the position in the polygon corresponding to the given
+ *         barycentric coordinates.
+ * @throws IllegalArgumentException If the polygon does not have exactly 3 position indices.
+ * @throws IllegalStateException If the polygon's positions list is empty.
+ */
+fun IIndexedPolygon.position(vertexData: IVertexData, barycentric: Vector3): Vector3 {
+    require(positions.size == 3)
+    val positions = vertexData.positions.slice(positions)
+    return if (positions.isNotEmpty()) bc(barycentric, positions) else error("No positions")
+}
 
 /**
  * Computes a `Point` by interpolating vertex attributes from a 3D polygon using
