@@ -9,6 +9,11 @@ To create independent views inside one program window.
 
 ![DemoProxyProgram01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-view-box/images/DemoProxyProgram01Kt.png)
 
+### DemoProxyProgram02
+[source code](src/jvmDemo/kotlin/DemoProxyProgram02.kt)
+
+![DemoProxyProgram02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-view-box/images/DemoProxyProgram02Kt.png)
+
 ### DemoUpdate01
 [source code](src/jvmDemo/kotlin/DemoUpdate01.kt)
 
