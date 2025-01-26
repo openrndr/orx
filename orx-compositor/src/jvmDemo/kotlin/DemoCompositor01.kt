@@ -17,8 +17,8 @@ import kotlin.random.Random
  */
 fun main() = application {
     configure {
-        width = 900
-        height = 900
+        width = 720
+        height = 720
     }
 
     program {

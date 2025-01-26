@@ -7,42 +7,40 @@ import org.openrndr.extra.quadtree.Quadtree
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 
-fun main() {
-    application {
-        configure {
-            width = 800
-            height = 800
-            title = "QuadTree"
+fun main() = application {
+    configure {
+        width = 800
+        height = 800
+        title = "QuadTree"
+    }
+    program {
+        val box = Rectangle.fromCenter(Vector2(400.0), 750.0)
+
+        val points = (0 until 1_000).map {
+            Vector2.gaussian(box.center, Vector2(95.0), Random.rnd)
         }
-        program {
-            val box = Rectangle.fromCenter(Vector2(400.0), 750.0)
 
-            val points = (0 until 1_000).map {
-                Vector2.gaussian(box.center, Vector2(95.0), Random.rnd)
-            }
+        val quadTree = Quadtree<Vector2>(box) { it }
 
-            val quadTree = Quadtree<Vector2>(box) { it }
+        for (point in points) {
+            quadTree.insert(point)
+        }
 
-            for (point in points) {
-                quadTree.insert(point)
-            }
+        val batch = drawer.rectangleBatch {
+            this.fill = null
+            this.stroke = ColorRGBa.GRAY
+            this.strokeWeight = 0.5
+            quadTree.batch(this)
+        }
 
-            val batch = drawer.rectangleBatch {
-                this.fill = null
-                this.stroke = ColorRGBa.GRAY
-                this.strokeWeight = 0.5
-                quadTree.batch(this)
-            }
+        extend {
+            drawer.clear(ColorRGBa.BLACK)
 
-            extend {
-                drawer.clear(ColorRGBa.BLACK)
+            drawer.rectangles(batch)
 
-                drawer.rectangles(batch)
-
-                drawer.fill = ColorRGBa.PINK.opacify(0.7)
-                drawer.stroke = null
-                drawer.circles(points, 5.0)
-            }
+            drawer.fill = ColorRGBa.PINK.opacify(0.7)
+            drawer.stroke = null
+            drawer.circles(points, 5.0)
         }
     }
 }

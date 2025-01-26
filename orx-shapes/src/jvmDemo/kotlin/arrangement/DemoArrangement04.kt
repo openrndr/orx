@@ -12,33 +12,34 @@ import org.openrndr.shape.Circle
 import kotlin.math.sqrt
 import kotlin.random.Random
 
-fun main() {
-    application {
-        program {
-            val circles = listOf(
-                Circle(drawer.bounds.center -Vector2(50.0, 0.0), 50.0),
-                Circle(drawer.bounds.center + Vector2(50.0, 0.0),  50.0),
-                Circle(drawer.bounds.center + Vector2(0.0, 50.0),  50.0),
-                Circle(drawer.bounds.center - Vector2(0.0, 50.0),  50.0),
-                Circle(drawer.bounds.center -Vector2(50.0, 0.0), sqrt(50.0*50.0+50.0*50.0)-49.9),
-                Circle(drawer.bounds.center +Vector2(50.0, 0.0), sqrt(50.0*50.0+50.0*50.0)-49.9),
-                Circle(drawer.bounds.center -Vector2(0.0, 50.0), sqrt(50.0*50.0+50.0*50.0)-49.9),
-                Circle(drawer.bounds.center +Vector2(0.0, 50.0), sqrt(50.0*50.0+50.0*50.0)-49.9),
-            ).shuffled()
+fun main() = application {
+    program {
+        val circles = listOf(
+            Circle(drawer.bounds.center - Vector2(50.0, 0.0), 50.0),
+            Circle(drawer.bounds.center + Vector2(50.0, 0.0), 50.0),
+            Circle(drawer.bounds.center + Vector2(0.0, 50.0), 50.0),
+            Circle(drawer.bounds.center - Vector2(0.0, 50.0), 50.0),
+            Circle(drawer.bounds.center - Vector2(50.0, 0.0), sqrt(50.0 * 50.0 + 50.0 * 50.0) - 49.9),
+            Circle(drawer.bounds.center + Vector2(50.0, 0.0), sqrt(50.0 * 50.0 + 50.0 * 50.0) - 49.9),
+            Circle(drawer.bounds.center - Vector2(0.0, 50.0), sqrt(50.0 * 50.0 + 50.0 * 50.0) - 49.9),
+            Circle(drawer.bounds.center + Vector2(0.0, 50.0), sqrt(50.0 * 50.0 + 50.0 * 50.0) - 49.9),
+        ).shuffled()
 
-            val  arr = Arrangement(circles)
+        val arr = Arrangement(circles)
 
-            extend {
-                val r = Random(100)
-                drawer.stroke = ColorRGBa.WHITE
-                for (f in arr.boundedFaces) {
-                    drawer.fill =
+        extend {
+            val r = Random(100)
+            drawer.stroke = ColorRGBa.WHITE
+            for (f in arr.boundedFaces) {
+                drawer.fill =
 
-                        rgb(Double.uniform(0.0, 1.0, r), Double.uniform(0.0, 1.0, r), Double.uniform(0.0, 1.0, r)).saturate<OKHSV>(0.25)
-                    drawer.contour(f.contour)
-                }
+                    rgb(
+                        Double.uniform(0.0, 1.0, r),
+                        Double.uniform(0.0, 1.0, r),
+                        Double.uniform(0.0, 1.0, r)
+                    ).saturate<OKHSV>(0.25)
+                drawer.contour(f.contour)
             }
-
         }
     }
 }

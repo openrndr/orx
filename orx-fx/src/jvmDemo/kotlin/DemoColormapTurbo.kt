@@ -5,17 +5,15 @@ import org.openrndr.draw.loadImage
 import org.openrndr.extra.fx.colormap.TurboColormap
 import kotlin.math.sin
 
-fun main() {
-    application {
-        program {
-            val colormap = TurboColormap()
-            val image = loadImage("demo-data/images/image-001.png")
-            val colormapImage = image.createEquivalent(type = ColorType.FLOAT32)
-            extend {
-                colormap.curve = 1.0 + sin(seconds) * .5
-                colormap.apply(image, colormapImage)
-                drawer.image(colormapImage)
-            }
+fun main() = application {
+    program {
+        val colormap = TurboColormap()
+        val image = loadImage("demo-data/images/image-001.png")
+        val colormapImage = image.createEquivalent(type = ColorType.FLOAT32)
+        extend {
+            colormap.curve = 1.0 + sin(seconds) * .5
+            colormap.apply(image, colormapImage)
+            drawer.image(colormapImage)
         }
     }
 }

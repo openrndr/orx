@@ -17,30 +17,28 @@ import org.openrndr.shape.Rectangle
  * - Extracts the cell polygons of the Voronoi diagram.
  * - Renders the Voronoi cell polygons on the canvas, with a pink stroke on a black background.
  */
-fun main() {
-    application {
-        configure {
-            width = 800
-            height = 800
-        }
-        program {
-            val circle = Circle(Vector2(400.0), 250.0)
-            val frame = Rectangle.fromCenter(Vector2(400.0), 600.0, 600.0)
+fun main() = application {
+    configure {
+        width = 720
+        height = 720
+    }
+    program {
+        val circle = Circle(Vector2(400.0), 250.0)
+        val frame = drawer.bounds.offsetEdges(-50.0)
 
-            val points = poissonDiskSampling(drawer.bounds, 30.0)
-                .filter { circle.contains(it) }
+        val points = poissonDiskSampling(drawer.bounds, 30.0)
+            .filter { circle.contains(it) }
 
-            val delaunay = (points + circle.contour.equidistantPositions(40)).delaunayTriangulation()
-            val voronoi = delaunay.voronoiDiagram(frame)
+        val delaunay = (points + circle.contour.equidistantPositions(40)).delaunayTriangulation()
+        val voronoi = delaunay.voronoiDiagram(frame)
 
-            val cells = voronoi.cellPolygons()
+        val cells = voronoi.cellPolygons()
 
-            extend {
-                drawer.clear(ColorRGBa.BLACK)
-                drawer.fill = null
-                drawer.stroke = ColorRGBa.PINK
-                drawer.contours(cells)
-            }
+        extend {
+            drawer.clear(ColorRGBa.BLACK)
+            drawer.fill = null
+            drawer.stroke = ColorRGBa.PINK
+            drawer.contours(cells)
         }
     }
 }

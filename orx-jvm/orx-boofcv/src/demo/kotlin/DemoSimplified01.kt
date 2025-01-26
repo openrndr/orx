@@ -17,63 +17,65 @@ import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 import org.openrndr.shape.ShapeContour
 
-fun main() {
-    application {
-        program {
-            // Create a buffer where to draw something for boofcv
-            val rt = renderTarget(width, height) {
-                colorBuffer()
-                depthBuffer()
-            }
-            // Draw some shapes on that buffer
-            drawer.isolatedWithTarget(rt) {
-                clear(ColorRGBa.BLACK)
-                fill = ColorRGBa.WHITE
-                stroke = null
-                rectangle(Rectangle.fromCenter(bounds.position(0.33, 0.5),
-                        150.0, 150.0))
-                translate(bounds.position(0.62, 0.5))
-                rotate(30.0)
-                rectangle(Rectangle.fromCenter(Vector2.ZERO, 200.0, 200.0))
-                rectangle(0.0, -200.0, 60.0, 60.0)
-                circle(0.0, 190.0, 60.0)
-            }
-            // Convert the bitmap buffer into ShapeContours
-            val vectorized = imageToContours(rt.colorBuffer(0))
+fun main() = application {
+    program {
+        // Create a buffer where to draw something for boofcv
+        val rt = renderTarget(width, height) {
+            colorBuffer()
+            depthBuffer()
+        }
+        // Draw some shapes on that buffer
+        drawer.isolatedWithTarget(rt) {
+            clear(ColorRGBa.BLACK)
+            fill = ColorRGBa.WHITE
+            stroke = null
+            rectangle(
+                Rectangle.fromCenter(
+                    bounds.position(0.33, 0.5),
+                    150.0, 150.0
+                )
+            )
+            translate(bounds.position(0.62, 0.5))
+            rotate(30.0)
+            rectangle(Rectangle.fromCenter(Vector2.ZERO, 200.0, 200.0))
+            rectangle(0.0, -200.0, 60.0, 60.0)
+            circle(0.0, 190.0, 60.0)
+        }
+        // Convert the bitmap buffer into ShapeContours
+        val vectorized = imageToContours(rt.colorBuffer(0))
 
-            // Show amount of segments in each shape (high number)
-            vectorized.forEachIndexed { i, it ->
-                println("boofcv shape $i: ${it.segments.size} segments")
-            }
+        // Show amount of segments in each shape (high number)
+        vectorized.forEachIndexed { i, it ->
+            println("boofcv shape $i: ${it.segments.size} segments")
+        }
 
-            // Make a simplified list of points
-            val simplePoints = vectorized.map {
-                simplify(it.adaptivePositions(), 4.0)
-            }.filter { it.size >= 3 }
+        // Make a simplified list of points
+        val simplePoints = vectorized.map {
+            simplify(it.adaptivePositions(), 4.0)
+        }.filter { it.size >= 3 }
 
-            // Use the simplified list to make a smooth contour
-            val smooth = simplePoints.map {
-                CatmullRomChain2(it, 0.0, true).toContour()
-            }
+        // Use the simplified list to make a smooth contour
+        val smooth = simplePoints.map {
+            CatmullRomChain2(it, 0.0, true).toContour()
+        }
 
-            // Use the simplified list to make a polygonal contour
-            val polygonal = simplePoints.map {
-                ShapeContour.fromPoints(it, true)
-            }
+        // Use the simplified list to make a polygonal contour
+        val polygonal = simplePoints.map {
+            ShapeContour.fromPoints(it, true)
+        }
 
-            // Show amount of segments in simplified shapes (low number).
-            // Note: `smooth` and `polygonal` have the same number of segments
-            smooth.forEachIndexed { i, it ->
-                println("simplified shape $i: ${it.segments.size} segments")
-            }
+        // Show amount of segments in simplified shapes (low number).
+        // Note: `smooth` and `polygonal` have the same number of segments
+        smooth.forEachIndexed { i, it ->
+            println("simplified shape $i: ${it.segments.size} segments")
+        }
 
-            extend {
-                drawer.run {
-                    fill = null // ColorRGBa.PINK.opacify(0.15)
-                    stroke = ColorRGBa.PINK.opacify(0.7)
-                    contours(polygonal)
-                    contours(smooth)
-                }
+        extend {
+            drawer.run {
+                fill = null // ColorRGBa.PINK.opacify(0.15)
+                stroke = ColorRGBa.PINK.opacify(0.7)
+                contours(polygonal)
+                contours(smooth)
             }
         }
     }

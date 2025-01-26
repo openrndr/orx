@@ -6,20 +6,13 @@ import org.openrndr.draw.shadeStyle
 import org.openrndr.extra.camera.Orbital
 import org.openrndr.extra.mesh.IIndexedPolygon
 import org.openrndr.extra.mesh.IVertexData
-import org.openrndr.extra.mesh.noise.nonuniform
-import org.openrndr.extra.mesh.noise.nonuniformHammersley
 import org.openrndr.extra.mesh.noise.nonuniformRSeq
-import org.openrndr.extra.objloader.loadOBJMeshData
-import org.openrndr.extra.mesh.noise.uniform
 import org.openrndr.extra.meshgenerators.normals.estimateNormals
 import org.openrndr.extra.meshgenerators.sphereMesh
-import org.openrndr.math.Spherical
+import org.openrndr.extra.objloader.loadOBJMeshData
 import org.openrndr.math.Vector3
 import java.io.File
-import kotlin.math.absoluteValue
-import kotlin.math.cos
 import kotlin.math.pow
-import kotlin.math.sin
 import kotlin.random.Random
 
 

@@ -16,30 +16,28 @@ import kotlin.math.cos
  * on a static shape (a circle for example) or you can animate a shape
  * with a static gradient.
  */
-fun main() {
-    application {
-        program {
-            val numPoints = 8
-            val gradient = NPointGradient(Array(numPoints) {
-                ColorXSVa(it * 360.0 / numPoints, 1.0, 1.0).toRGBa()
-            })
+fun main() = application {
+    program {
+        val numPoints = 8
+        val gradient = NPointGradient(Array(numPoints) {
+            ColorXSVa(it * 360.0 / numPoints, 1.0, 1.0).toRGBa()
+        })
 
-            extend {
-                drawer.run {
-                    clear(ColorRGBa.WHITE.shade(0.9))
-                    val t = PI * 2 * (frameCount % 300) / 300.0
-                    val points = Array(numPoints) {
-                        val lfo = cos(it * PI / 2 - t)
-                        val theta = it * 360.0 / numPoints - 22.5 * lfo
-                        val radius = 200 + 170 * lfo
-                        bounds.center + Polar(theta, radius).cartesian
-                    }
-                    gradient.points = points
-                    shadeStyle = gradient
-                    stroke = ColorRGBa.WHITE
-                    strokeWeight = 4.0
-                    contour(ShapeContour.fromPoints(points.asList(), true))
+        extend {
+            drawer.run {
+                clear(ColorRGBa.WHITE.shade(0.9))
+                val t = PI * 2 * (frameCount % 300) / 300.0
+                val points = Array(numPoints) {
+                    val lfo = cos(it * PI / 2 - t)
+                    val theta = it * 360.0 / numPoints - 22.5 * lfo
+                    val radius = 200 + 170 * lfo
+                    bounds.center + Polar(theta, radius).cartesian
                 }
+                gradient.points = points
+                shadeStyle = gradient
+                stroke = ColorRGBa.WHITE
+                strokeWeight = 4.0
+                contour(ShapeContour.fromPoints(points.asList(), true))
             }
         }
     }

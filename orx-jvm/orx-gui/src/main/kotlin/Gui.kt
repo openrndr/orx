@@ -8,7 +8,6 @@ import org.openrndr.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.dialogs.*
 import org.openrndr.draw.Drawer
-import org.openrndr.extra.noise.random
 import org.openrndr.extra.noise.uniform
 import org.openrndr.extra.parameters.*
 import org.openrndr.internal.Driver
@@ -1077,7 +1076,7 @@ open class GUI(
                         val min = parameter.doubleRange!!.start
                         val max = parameter.doubleRange!!.endInclusive
                         val currentValue = (parameter.property as KMutableProperty1<Any, Double>).get(labeledObject.obj)
-                        val randomValue = random(min, max)
+                        val randomValue = Double.uniform(min, max)
                         val newValue = mix(currentValue, randomValue, strength)
                         (parameter.property as KMutableProperty1<Any, Double>).set(labeledObject.obj, newValue)
                     }
@@ -1086,7 +1085,7 @@ open class GUI(
                         val min = parameter.intRange!!.first
                         val max = parameter.intRange!!.last
                         val currentValue = (parameter.property as KMutableProperty1<Any, Int>).get(labeledObject.obj)
-                        val randomValue = random(min.toDouble(), max.toDouble())
+                        val randomValue = Double.uniform(min.toDouble(), max.toDouble())
                         val newValue = mix(currentValue.toDouble(), randomValue, strength).roundToInt()
                         (parameter.property as KMutableProperty1<Any, Int>).set(labeledObject.obj, newValue)
                     }

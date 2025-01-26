@@ -10,21 +10,19 @@ import kotlin.random.Random
  * - Filters the generated points to enforce a minimum distance of 20.0 units between them.
  * - Visualizes the filtered points as circles with a radius of 10.0 units on the canvas.
  */
-fun main() {
-    application {
-        configure {
-            width = 720
-            height = 720
+fun main() = application {
+    configure {
+        width = 720
+        height = 720
+    }
+    program {
+        val r = Random(0)
+        val points = (0 until 10000).map {
+            drawer.bounds.uniform(random = r)
         }
-        program {
-            val r = Random(0)
-            val points = (0 until 10000).map {
-                drawer.bounds.uniform(random = r)
-            }
-            val filteredPoints = points.filter(20.0)
-            extend {
-                drawer.circles(filteredPoints, 10.0)
-            }
+        val filteredPoints = points.filter(20.0)
+        extend {
+            drawer.circles(filteredPoints, 10.0)
         }
     }
 }

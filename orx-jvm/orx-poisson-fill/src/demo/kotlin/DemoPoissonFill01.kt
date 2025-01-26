@@ -9,6 +9,7 @@ import org.openrndr.draw.colorBuffer
 import org.openrndr.draw.isolatedWithTarget
 import org.openrndr.draw.renderTarget
 import org.openrndr.extra.noise.Random
+import org.openrndr.extra.noise.uniform
 import org.openrndr.math.Polar
 import org.openrndr.math.clamp
 import org.openrndr.poissonfill.PoissonFill
@@ -34,11 +35,11 @@ fun main() {
             val things = List(10) {
                 Thing(
                         ColorHSVa(it * 182.0,
-                                Random.double(0.3, 0.6),
-                                Random.double(0.1, 0.9)).toRGBa(),
-                        Polar(Random.double0(360.0),
+                                Double.uniform(0.3, 0.6),
+                                Double.uniform(0.1, 0.9)).toRGBa(),
+                        Polar(Double.uniform(0.0, 360.0),
                                 100.0 + it * 10.0),
-                        Polar(Random.double(-1.0, 1.0), 0.0))
+                        Polar(Double.uniform(-1.0, 1.0), 0.0))
             }
             val mouseTracker = MouseTracker(mouse)
 

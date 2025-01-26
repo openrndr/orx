@@ -13,32 +13,29 @@ import kotlin.random.Random
  * - Rectangles representing the bounds of the cells in the grid.
  * - Circles representing the generated points.
  */
-fun main() {
-    application {
-        configure {
-            width = 720
-            height = 720
-        }
-        program {
-            val r = Random(0)
-            val hashGrid = HashGrid(72.0)
+fun main() = application {
+    configure {
+        width = 720
+        height = 720
+    }
+    program {
+        val r = Random(0)
+        val hashGrid = HashGrid(72.0)
 
-            extend {
-                for (i in 0 until 100) {
-                    val p = drawer.bounds.uniform(random = r)
-                    if (hashGrid.isFree(p)) {
-                        hashGrid.insert(p)
-                    }
+        extend {
+            for (i in 0 until 100) {
+                val p = drawer.bounds.uniform(random = r)
+                if (hashGrid.isFree(p)) {
+                    hashGrid.insert(p)
                 }
-
-                drawer.fill = null
-                drawer.stroke = ColorRGBa.WHITE
-                drawer.rectangles(hashGrid.cells().map { it.bounds }.toList())
-                drawer.fill = null
-                drawer.stroke = ColorRGBa.PINK
-                drawer.circles(hashGrid.points().map { it.first }.toList(), 36.0)
-
             }
+
+            drawer.fill = null
+            drawer.stroke = ColorRGBa.WHITE
+            drawer.rectangles(hashGrid.cells().map { it.bounds }.toList())
+            drawer.fill = null
+            drawer.stroke = ColorRGBa.PINK
+            drawer.circles(hashGrid.points().map { it.first }.toList(), 36.0)
         }
     }
 }

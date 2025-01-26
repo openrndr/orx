@@ -201,38 +201,36 @@ import org.openrndr.extra.fx.edges.EdgesWork
 import org.openrndr.extra.gui.GUI
 import org.openrndr.math.Vector2
 
-fun main() {
-    application {
-        configure {
-            width = 768
-            height = 768
-        }
-        program {
-            val w2 = width / 2.0
-            val h2 = height / 2.0
+fun main() = application {
+    configure {
+        width = 768
+        height = 768
+    }
+    program {
+        val w2 = width / 2.0
+        val h2 = height / 2.0
 
-            val c = compose {
+        val c = compose {
+            draw {
+                drawer.fill = ColorRGBa.PINK
+                drawer.circle(width / 2.0, height / 2.0, 10.0)
+            }
+
+            layer {
+                blend(Add())
+
                 draw {
-                    drawer.fill = ColorRGBa.PINK
-                    drawer.circle(width / 2.0, height / 2.0, 10.0)
+                    drawer.circle(width / 2.0, height / 2.0, 100.0)
                 }
-    
-                layer {
-                    blend(Add())
-
-                    draw {
-                        drawer.circle(width / 2.0, height / 2.0, 100.0)
-                    }
-                    post(ApproximateGaussianBlur()) {
-                        window = 10
-                        sigma = Math.cos(seconds * 10.0) * 10.0 + 10.0
-                    }
+                post(ApproximateGaussianBlur()) {
+                    window = 10
+                    sigma = Math.cos(seconds * 10.0) * 10.0 + 10.0
                 }
             }
-            extend(gui)
-            extend {
-                c.draw(drawer)
-            }
+        }
+        extend(gui)
+        extend {
+            c.draw(drawer)
         }
     }
 }

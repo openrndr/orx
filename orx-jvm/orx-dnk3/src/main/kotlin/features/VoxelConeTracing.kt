@@ -62,7 +62,7 @@ private fun SceneRenderer.processVoxelConeTracing(drawer: Drawer, scene: Scene, 
                 val position = Vector3.ZERO
                 drawer.lookAt(position + side.forward*40.0, position , side.up)
                 drawPass(drawer, pass, materialContext, context) {
-                    it.parameter("voxelMap", feature.voxelMap!!.imageBinding(0, ImageAccess.WRITE))
+                    it.image("voxelMap", feature.voxelMap!!.imageBinding(0, ImageAccess.WRITE))
                 }
             }
         }
