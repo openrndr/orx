@@ -144,7 +144,7 @@ class TriangleMeshBuilder {
      */
     fun toByteBuffer(): MPPBuffer {
         //val bb = ByteBuffer.allocateDirect(data.size * (3 * 4 + 3 * 4 + 2 * 4 + 4 * 4))
-        val bb = MPPBuffer.allocate(data.size * (3 * 4 + 3 * 4 + 2 * 4 + 4 * 4))
+        val bb = MPPBuffer.allocate(data.size * (4 * 4 + 4 * 4 + 4 * 4 + 4 * 4))
 
         //bb.order(ByteOrder.nativeOrder())
         bb.rewind()
@@ -152,13 +152,16 @@ class TriangleMeshBuilder {
             bb.putFloat(d.position.x.toFloat())
             bb.putFloat(d.position.y.toFloat())
             bb.putFloat(d.position.z.toFloat())
+            bb.putFloat(0.0f)
 
             bb.putFloat(d.normal.x.toFloat())
             bb.putFloat(d.normal.y.toFloat())
             bb.putFloat(d.normal.z.toFloat())
-
+            bb.putFloat(0.0f)
             bb.putFloat(d.texCoord.x.toFloat())
             bb.putFloat(d.texCoord.y.toFloat())
+            bb.putFloat(0.0f)
+            bb.putFloat(0.0f)
 
             bb.putFloat(d.color.r.toFloat())
             bb.putFloat(d.color.g.toFloat())

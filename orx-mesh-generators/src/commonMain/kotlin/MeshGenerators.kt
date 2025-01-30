@@ -1,9 +1,6 @@
 package org.openrndr.extra.meshgenerators
 
-import org.openrndr.draw.BufferWriter
-import org.openrndr.draw.VertexBuffer
-import org.openrndr.draw.vertexBuffer
-import org.openrndr.draw.vertexFormat
+import org.openrndr.draw.*
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.mod
@@ -34,7 +31,7 @@ fun bufferWriter(bw: BufferWriter): VertexWriter {
  * - `textureCoordinate` (vec2)
  */
 fun meshVertexBuffer(size: Int): VertexBuffer {
-    return vertexBuffer(vertexFormat {
+    return vertexBuffer(vertexFormat(BufferAlignment.STD430) {
         position(3)
         normal(3)
         textureCoordinate(2)
@@ -50,7 +47,7 @@ fun meshVertexBuffer(size: Int): VertexBuffer {
  * - `color` (vec4)
  */
 fun meshVertexBufferWithColor(size: Int): VertexBuffer {
-    return vertexBuffer(vertexFormat {
+    return vertexBuffer(vertexFormat(BufferAlignment.STD430) {
         position(3)
         normal(3)
         textureCoordinate(2)
