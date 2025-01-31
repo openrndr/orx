@@ -28,14 +28,16 @@ fun main() = application {
             revolveMesh(5, 0.5)
         )
 
-        val texture = colorBuffer(256, 256)
-        val s = texture.shadow
+        val texture1 = colorBuffer(256, 256)
+        val s = texture1.shadow
         for (y in 0 until 256) {
             for (x in 0 until 256) {
                 s[x, y] = ColorRGBa(x / 256.0, y / 256.0, 0.0, 1.0)
             }
         }
         s.upload()
+
+        val texture2 = loadImage("demo-data/images/peopleCity01.jpg")
 
         val positions = Rectangle.fromCenter(Vector2.ZERO, width * 0.01, height * 0.01)
             .grid(4, 2).flatten().map {
@@ -53,7 +55,7 @@ fun main() = application {
                         x_fill = texture(p_texture, va_texCoord0.xy);
                         x_fill.rgb *= light;
                     """.trimIndent()
-                parameter("texture", texture)
+                parameter("texture", if(mouse.position.x > drawer.bounds.center.x) texture2 else texture1)
                 parameter("light", Vector3(1.0).normalized)
             }
             meshes.forEachIndexed { i, mesh ->
