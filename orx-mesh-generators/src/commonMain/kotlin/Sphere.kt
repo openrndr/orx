@@ -56,23 +56,23 @@ fun generateSphere(
 
             when (t) {
                 0 -> {
-                    writer(st00.cartesian, st00.cartesian.normalized * invertFactor, Vector2(st00.theta / thetaMax + 0.5, 1.0 - st00.phi / phiMax))
-                    writer(st01.cartesian, st01.cartesian.normalized * invertFactor, Vector2(st01.theta / thetaMax + 0.5, 1.0 - st01.phi / phiMax))
-                    writer(st11.cartesian, st11.cartesian.normalized * invertFactor, Vector2(st11.theta / thetaMax + 0.5, 1.0 - st11.phi / phiMax))
+                    writer(st00.cartesian, st00.cartesian.normalized * invertFactor, Vector2(st00.theta / thetaMax, 1.0 - st00.phi / phiMax))
+                    writer(st01.cartesian, st01.cartesian.normalized * invertFactor, Vector2(st01.theta / thetaMax, 1.0 - st01.phi / phiMax))
+                    writer(st11.cartesian, st11.cartesian.normalized * invertFactor, Vector2(st11.theta / thetaMax, 1.0 - st11.phi / phiMax))
                 }
                 segments - 1 -> {
-                    writer(st11.cartesian, st11.cartesian.normalized * invertFactor, Vector2(st11.theta / thetaMax + 0.5, 1.0 - st11.phi / phiMax))
-                    writer(st10.cartesian, st10.cartesian.normalized * invertFactor, Vector2(st10.theta / thetaMax + 0.5, 1.0 - st10.phi / phiMax))
-                    writer(st00.cartesian, st00.cartesian.normalized * invertFactor, Vector2(st00.theta / thetaMax + 0.5, 1.0 - st00.phi / phiMax))
+                    writer(st11.cartesian, st11.cartesian.normalized * invertFactor, Vector2(st11.theta / thetaMax, 1.0 - st11.phi / phiMax))
+                    writer(st10.cartesian, st10.cartesian.normalized * invertFactor, Vector2(st10.theta / thetaMax, 1.0 - st10.phi / phiMax))
+                    writer(st00.cartesian, st00.cartesian.normalized * invertFactor, Vector2(st00.theta / thetaMax, 1.0 - st00.phi / phiMax))
                 }
                 else -> {
-                    writer(st00.cartesian, st00.cartesian.normalized * invertFactor, Vector2(st00.theta / thetaMax + 0.5, 1.0 - st00.phi / phiMax))
-                    writer(st01.cartesian, st01.cartesian.normalized * invertFactor, Vector2(st01.theta / thetaMax + 0.5, 1.0 - st01.phi / phiMax))
-                    writer(st11.cartesian, st11.cartesian.normalized * invertFactor, Vector2(st11.theta / thetaMax + 0.5, 1.0 - st11.phi / phiMax))
+                    writer(st00.cartesian, st00.cartesian.normalized * invertFactor, Vector2(st00.theta / thetaMax, 1.0 - st00.phi / phiMax))
+                    writer(st01.cartesian, st01.cartesian.normalized * invertFactor, Vector2(st01.theta / thetaMax, 1.0 - st01.phi / phiMax))
+                    writer(st11.cartesian, st11.cartesian.normalized * invertFactor, Vector2(st11.theta / thetaMax, 1.0 - st11.phi / phiMax))
 
-                    writer(st11.cartesian, st11.cartesian.normalized * invertFactor, Vector2(st11.theta / thetaMax + 0.5, 1.0 - st11.phi / phiMax))
-                    writer(st10.cartesian, st10.cartesian.normalized * invertFactor, Vector2(st10.theta / thetaMax + 0.5, 1.0 - st10.phi / phiMax))
-                    writer(st00.cartesian, st00.cartesian.normalized * invertFactor, Vector2(st00.theta / thetaMax + 0.5, 1.0 - st00.phi / phiMax))
+                    writer(st11.cartesian, st11.cartesian.normalized * invertFactor, Vector2(st11.theta / thetaMax, 1.0 - st11.phi / phiMax))
+                    writer(st10.cartesian, st10.cartesian.normalized * invertFactor, Vector2(st10.theta / thetaMax, 1.0 - st10.phi / phiMax))
+                    writer(st00.cartesian, st00.cartesian.normalized * invertFactor, Vector2(st00.theta / thetaMax, 1.0 - st00.phi / phiMax))
                 }
             }
         }
