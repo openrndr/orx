@@ -62,12 +62,17 @@ fun VertexBuffer.saveOBJ(filePath: String) {
     // Process the ByteBuffer and populate data structures
     while (bb.position() < bb.capacity()) {
         vertexFormat.items.forEach { vertexElement ->
-            val floats = List(vertexElement.type.componentCount) {
+            val componentCount = vertexElement.type.componentCount
+            val floats = List(componentCount) {
                 bb.getFloat()
             }.joinToString(" ")
             val token = tokens[vertexElement.attribute]
             if (token != null) {
                 lastIndices[token] = indexMap[token]!!.add(floats)
+            }
+            // Skip padding
+            repeat(4 - componentCount) {
+                bb.getFloat()
             }
         }
         vertexIndices.add("${lastIndices["v"]}/${lastIndices["vt"]}/${lastIndices["vn"]}")
@@ -84,8 +89,8 @@ fun VertexBuffer.saveOBJ(filePath: String) {
             // Write v, vt, vn blocks
             indexMap.forEach { (token, verts) ->
                 appendLine(verts.toObjBlock(token))
-
             }
+
             // Write faces processing three vertices at a time
             vertexIndices.chunked(3) {
                 appendLine("f ${it[0]} ${it[1]} ${it[2]}")
