@@ -8,13 +8,13 @@ import org.openrndr.math.IntVector3
  * - how to use a compute shader to initialize an SSBO
  * - how to use a different shader to update the SSBO
  *
- * The local size in headerGLSL defines the size of workgroups. The GPU splits tasks
- * into chunks and computes those in parallel. The ideal local size in different GPUs
- * may differ. Too small of a size may be inefficient.
+ * Note the `workGroupSize` property. The GPU splits tasks
+ * into chunks and computes those in parallel. The ideal workGroupSize depends on
+ * the GPU being used. Too small of a size may be inefficient.
  *
  * In some cases a compute shader works with 2D images or 3D data structures, but in this
  * program we are processing the elements of a 1D array. That's why we only
- * increase local_size_x to 32, leaving y and z equal to 1.
+ * increase the x value to 32, leaving y and z equal to 1.
  *
  * Note: this program only does the computation, but does not visualize the results
  * in any way. We will do that in another program.
