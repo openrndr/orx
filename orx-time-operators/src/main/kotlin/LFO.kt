@@ -33,7 +33,7 @@ class LFO(wave: LFOWave = LFOWave.Saw) : TimeTools {
     }
 
     fun sample(frequency: Double = 1.0, phase: Double = 0.0): Double {
-        return when(wave) {
+        return when (wave) {
             LFOWave.Saw -> saw(frequency, phase)
             LFOWave.Sine -> sine(frequency, phase)
             LFOWave.Square -> square(frequency, phase)
@@ -43,7 +43,7 @@ class LFO(wave: LFOWave = LFOWave.Saw) : TimeTools {
 
     fun saw(frequency: Double = 1.0, phase: Double = 0.0): Double {
         val cycleFreq = 1.0 / frequency
-        val cycleTime = mod(time + (phase * frequency), cycleFreq)
+        val cycleTime = (time + (phase * frequency)).mod(cycleFreq)
         current = (cycleTime) / cycleFreq
         return current
     }
@@ -60,7 +60,7 @@ class LFO(wave: LFOWave = LFOWave.Saw) : TimeTools {
 
     fun triangle(frequency: Double = 1.0, phase: Double = 0.0): Double {
         val t = (time * frequency) + (phase * frequency)
-        current = 1.0 - 2.0 * abs(mod(t, 1.0) - 0.5)
+        current = 1.0 - 2.0 * abs(t.mod(1.0) - 0.5)
         return current
     }
 }

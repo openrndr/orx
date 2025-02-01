@@ -91,7 +91,7 @@ internal class ExpressionListener(
             KeyLangParser.Tokens.MINUS -> left - right
             KeyLangParser.Tokens.ASTERISK -> left * right
             KeyLangParser.Tokens.DIVISION -> left / right
-            KeyLangParser.Tokens.PERCENTAGE -> mod(left, right)
+            KeyLangParser.Tokens.PERCENTAGE -> left.mod(right)
             else -> error("operator '$operator' not implemented")
         }
         doubleStack.push(result)

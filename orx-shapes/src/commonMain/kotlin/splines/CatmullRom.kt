@@ -83,7 +83,7 @@ class CatmullRomChain1(points: List<Double>, alpha: Double = 0.5, val loop: Bool
     }
 
     fun position(rt: Double): Double {
-        val st = if (loop) mod(rt, 1.0) else rt.coerceIn(0.0, 1.0)
+        val st = if (loop) rt.mod(1.0) else rt.coerceIn(0.0, 1.0)
         val segmentIndex = (kotlin.math.min(almostOne, st) * segments.size).toInt()
         val t = (kotlin.math.min(almostOne, st) * segments.size) - segmentIndex
         return segments[segmentIndex].position(t)
@@ -178,7 +178,7 @@ class CatmullRomChain2(points: List<Vector2>, alpha: Double = 0.5, val loop: Boo
     }
 
     fun position(rt: Double): Vector2 {
-        val st = if (loop) mod(rt, 1.0) else rt.coerceIn(0.0, 1.0)
+        val st = if (loop) rt.mod(1.0) else rt.coerceIn(0.0, 1.0)
         val segmentIndex = (kotlin.math.min(almostOne, st) * segments.size).toInt()
         val t = (kotlin.math.min(almostOne, st) * segments.size) - segmentIndex
         return segments[segmentIndex].position(t)
@@ -273,7 +273,7 @@ class CatmullRomChain3(points: List<Vector3>, alpha: Double = 0.5, val loop: Boo
     }
 
     fun position(rt: Double): Vector3 {
-        val st = if (loop) mod(rt, 1.0) else rt.coerceIn(0.0, 1.0)
+        val st = if (loop) rt.mod(1.0) else rt.coerceIn(0.0, 1.0)
         val segmentIndex = (kotlin.math.min(almostOne, st) * segments.size).toInt()
         val t = (kotlin.math.min(almostOne, st) * segments.size) - segmentIndex
         return segments[segmentIndex].position(t)

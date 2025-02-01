@@ -137,8 +137,8 @@ fun extrudeShape(
             val points = it
 
             val normals = (points.indices).map { index ->
-                val a = mod(index + 1, points.size)
-                val b = mod(index - 1, points.size)
+                val a = (index + 1).mod(points.size)
+                val b = (index - 1).mod(points.size)
                 (points[a] - points[b]).safeNormalized * -flip
             }
             val forward = Vector3(0.0, 0.0, depth)
