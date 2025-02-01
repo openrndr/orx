@@ -272,6 +272,11 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 
 ![hash-DemoUHash01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/hash-DemoUHash01Kt.png)
 
+### linearrange/DemoLinearRange01
+[source code](src/jvmDemo/kotlin/linearrange/DemoLinearRange01.kt)
+
+![linearrange-DemoLinearRange01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/linearrange-DemoLinearRange01Kt.png)
+
 ### phrases/DemoUHashPhrase01
 [source code](src/jvmDemo/kotlin/phrases/DemoUHashPhrase01.kt)
 
