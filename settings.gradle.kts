@@ -44,6 +44,7 @@ include(
         "orx-image-fit",
         "orx-kdtree",
         "orx-jvm:orx-keyframer",
+        "orx-math",
         "orx-mesh",
         "orx-mesh-generators",
         "orx-mesh-noise",
