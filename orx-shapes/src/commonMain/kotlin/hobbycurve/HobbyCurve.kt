@@ -109,8 +109,8 @@ fun hobbyCurve(points: List<Vector2>, closed: Boolean = false, curl: Double = 0.
         }
     }
 
-    val c1s = mutableListOf<Vector2>()
-    val c2s = mutableListOf<Vector2>()
+    val c1s = ArrayList<Vector2>(n)
+    val c2s = ArrayList<Vector2>(n)
     for (i in 0 until n) {
         val v1 = rotateAngle(chords[i], alpha[i]).normalized
         val v2 = rotateAngle(chords[i], -beta[i]).normalized
@@ -205,8 +205,8 @@ fun hobbyCurve(
         }
     }
 
-    val c1s = mutableListOf<Vector3>()
-    val c2s = mutableListOf<Vector3>()
+    val c1s = ArrayList<Vector3>(n)
+    val c2s = ArrayList<Vector3>(n)
     for (i in 0 until n) {
         val r1 = buildTransform { rotate(normals[i], alpha[i].asDegrees) }
         val r2 = buildTransform { rotate(normals[(i + 1).mod(normals.size)], -beta[i].asDegrees) }
