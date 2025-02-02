@@ -296,3 +296,8 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 [source code](src/jvmDemo/kotlin/rseq/DemoRseq4D01.kt)
 
 ![rseq-DemoRseq4D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/rseq-DemoRseq4D01Kt.png)
+
+### simplexrange/DemoSimplexRange2D01
+[source code](src/jvmDemo/kotlin/simplexrange/DemoSimplexRange2D01.kt)
+
+![simplexrange-DemoSimplexRange2D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/simplexrange-DemoSimplexRange2D01Kt.png)
