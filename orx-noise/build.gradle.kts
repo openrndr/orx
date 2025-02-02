@@ -22,6 +22,7 @@ kotlin {
                 implementation(project(":orx-hash-grid"))
                 implementation(project(":orx-parameters"))
                 implementation(project(":orx-shader-phrases"))
+                api(project(":orx-math"))
             }
         }
 

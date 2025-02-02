@@ -3,7 +3,7 @@ package linearrange
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.noise.linearrange.uniform
-import org.openrndr.math.rangeTo
+import org.openrndr.extra.math.linearrange.rangeTo
 import kotlin.random.Random
 
 fun main() {

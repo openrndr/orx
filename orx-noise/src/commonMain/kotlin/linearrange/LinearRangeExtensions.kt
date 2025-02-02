@@ -1,7 +1,8 @@
 package org.openrndr.extra.noise.linearrange
 
 import org.openrndr.extra.noise.fhash1D
-import org.openrndr.math.*
+import org.openrndr.extra.math.linearrange.*
+import org.openrndr.math.LinearType
 import kotlin.random.Random
 
 /**
