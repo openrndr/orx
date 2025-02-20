@@ -78,3 +78,21 @@ fun Rectangle.grid(
         }
     }
 }
+
+/**
+ * Transposes a 2D list of rectangles, switching rows and columns.
+ *
+ * This method takes a list of lists and rearranges its elements such that
+ * the rows become columns and the columns become rows.
+ *
+ * @return A new 2D list of rectangles where rows and columns are swapped.
+ */
+fun List<List<Rectangle>>.transpose() : List<List<Rectangle>> {
+    val columns = MutableList<MutableList<Rectangle>>(this[0].size) { mutableListOf() }
+    for (row in this) {
+        for ((index, column) in row.withIndex()) {
+            columns[index].add(column)
+        }
+    }
+    return columns
+}
