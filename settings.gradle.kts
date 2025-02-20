@@ -87,6 +87,7 @@ include(
         "orx-depth-camera",
         "orx-jvm:orx-depth-camera-calibrator",
         "orx-view-box",
+        "orx-text-on-contour",
         "orx-text-writer",
         "orx-turtle"
     )

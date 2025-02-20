@@ -23,20 +23,24 @@ import org.openrndr.shape.Rectangle
  * - `drawer` enables isolated operations for drawing elements.
  * - `writer` facilitates text rendering with alignment and spacing adjustments.
  */
-fun main() = application {
-    program {
-        extend {
-            val r = Rectangle.fromCenter(drawer.bounds.center, 200.0, 200.0)
-            drawer.isolated {
-                drawer.fill = null
-                drawer.stroke = ColorRGBa.WHITE
-                drawer.rectangle(r)
-            }
-            drawer.fontMap = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 24.0)
-            writer {
-                box = r.offsetEdges(-10.0)
-                newLine()
-                text("hello world")
+fun main() {
+
+    application {
+
+        program {
+            extend {
+                val r = Rectangle.fromCenter(drawer.bounds.center, 200.0, 200.0)
+                drawer.isolated {
+                    drawer.fill = null
+                    drawer.stroke = ColorRGBa.WHITE
+                    drawer.rectangle(r)
+                }
+                drawer.fontMap = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 24.0)
+                writer {
+                    box = r.offsetEdges(-10.0)
+                    newLine()
+                    text("hello world")
+                }
             }
         }
     }
