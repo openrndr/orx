@@ -5,8 +5,10 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.font.loadFace
 import org.openrndr.extra.shapes.bounds.bounds
 import org.openrndr.extra.shapes.text.shapesFromText
+import org.openrndr.internal.Driver
 
 fun main() = application {
+    System.setProperty("org.openrndr.draw.wait_for_finish", "true")
     configure {
         width = 720
         height = 720
