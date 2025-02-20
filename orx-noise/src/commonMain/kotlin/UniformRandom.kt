@@ -39,6 +39,25 @@ fun Double.Companion.uniform(
 ) =
     (random.nextDouble() * (max - min)) + min
 
+
+/**
+ * Generates a list of random double values within the specified range.
+ *
+ * @param count The number of random double values to generate.
+ * @param min The minimum value (inclusive) of the range. Default is -1.0.
+ * @param max The maximum value (exclusive) of the range. Default is 1.0.
+ * @param random The random number generator to use. Default is Random.Default.
+ * @return A list of random double values within the specified range.
+ */
+fun Double.Companion.uniforms(
+    count: Int,
+    min: Double = -1.0, max: Double = 1.0,
+    random: Random = Random.Default
+) =
+    List(count) {
+        (random.nextDouble() * (max - min)) + min
+    }
+
 fun Double.Companion.hash(
     seed: Int, x: Int,
     min: Double = -1.0, max: Double = 1.0
@@ -396,7 +415,11 @@ fun Vector4.Companion.uniform(min: Double = -1.0, max: Double = 1.0, random: Ran
  * @param random The random number generator to use. Defaults to Random.Default.
  * @return A 4-dimensional vector with components uniformly distributed between the specified minimum and maximum values.
  */
-fun Vector4.Companion.uniform(min: Vector4 = -ONE, max: Vector4 = ONE, random: Random = Random.Default): Vector4 {
+fun Vector4.Companion.uniform(
+    min: Vector4 = -ONE,
+    max: Vector4 = ONE,
+    random: Random = Random.Default
+): Vector4 {
     return Vector4(
         Double.uniform(min.x, max.x, random),
         Double.uniform(min.y, max.y, random),
