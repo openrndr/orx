@@ -59,7 +59,6 @@ fun Rectangle.irregularGrid(
     return result
 }
 
-
 /**
  * Splits [Rectangle] into a grid of [Rectangle]s
  * @param columns the number of columns in the resulting grid
@@ -222,6 +221,37 @@ fun List<List<Rectangle>>.uniform(random: Random): Rectangle {
 }
 
 /**
+ * Extracts a uniform random sub-block of rectangles from a 2D list within the specified constraints.
+ *
+ * @param minWidth The minimum width (number of columns) of the block. Defaults to 1.
+ * @param maxWidth The maximum width (number of columns) of the block. Defaults to the width of the original 2D list.
+ * @param minHeight The minimum height (number of rows) of the block. Defaults to 1.
+ * @param maxHeight The maximum height (number of rows) of the block. Defaults to the height of the original 2D list.
+ * @param random An instance of Random used to generate random coordinates and dimensions for the block.
+ * @return A 2D list of rectangles representing the randomly extracted uniform block.
+ */
+fun List<List<Rectangle>>.uniformBlock(
+    minWidth: Int = 1,
+    maxWidth: Int = this[0].size,
+    minHeight: Int = 1,
+    maxHeight: Int = this.size,
+    random: Random = Random.Default
+): List<List<Rectangle>> {
+    require(minWidth > 0) { "Minimum width must be greater than zero." }
+    require(minHeight > 0) { "Minimum height must be greater than zero." }
+    require(minWidth <= maxWidth) { "Minimum width must be less than or equal to maximum width." }
+    require(minHeight <= maxHeight) { "Minimum height must be less than or equal to maximum height." }
+    require(maxWidth <= this[0].size + 1) { "Maximum width (=$maxWidth) must be less than or equal to the width of the original 2D list + 1 (=${this[0].size})." }
+    require(maxHeight <= this.size + 1) { "Maximum height (=$maxHeight) must be less than or equal the height of the original 2D list + 1 (=${this.size})." }
+    val width = random.nextInt(minWidth, maxWidth)
+    val height = random.nextInt(minHeight, maxHeight)
+
+    val x = random.nextInt(0, this[0].size - width + 1)
+    val y = random.nextInt(0, this.size - height + 1)
+    return block(x, y, width, height)
+}
+
+/**
  * Retrieves a column of rectangles from a 2D list of rectangles.
  *
  * @param index The index of the column to retrieve.
@@ -237,3 +267,75 @@ fun List<List<Rectangle>>.column(index: Int): List<Rectangle> = this.map { it[in
  * @return A list of `Rectangle` objects representing the row at the given index.
  */
 fun List<List<Rectangle>>.row(index: Int): List<Rectangle> = this[index]
+
+/**
+ * Extracts a sub-block from a 2D list of rectangles based on the specified coordinates and dimensions.
+ *
+ * @param x The horizontal starting index of the block.
+ * @param y The vertical starting index of the block.
+ * @param width The width of the block, specifying the number of columns to include.
+ * @param height The height of the block, specifying the number of rows to include.
+ * @return A 2D list of rectangles representing the extracted block.
+ */
+fun List<List<Rectangle>>.block(x: Int, y: Int, width: Int, height: Int): List<List<Rectangle>> {
+    require(x + width <= this[0].size) { "Width of block exceeds bounds of the original 2D list." }
+    require(y + height <= this.size) { "Height of block exceeds bounds of the original 2D list." }
+    require(width > 0) { "Width of block must be greater than zero." }
+    require(height > 0) { "Height of block must be greater than zero." }
+    require(x >= 0) { "X coordinate of block must be non-negative." }
+    require(y >= 0) { "Y coordinate of block must be non-negative." }
+    return this[x..<x + width, y..<y + height]
+}
+
+/**
+ * Drops the first n columns from a 2D list of Rectangles.
+ *
+ * This function removes the first n elements from each inner list in the 2D list,
+ * effectively dropping the first n columns of the structure.
+ *
+ * @param n The number of columns to drop from each inner list. Must be non-negative.
+ * @return A new 2D list of Rectangles with the first n columns removed.
+ */
+fun List<List<Rectangle>>.dropColumns(n: Int): List<List<Rectangle>> = map { it.drop(n) }
+
+/**
+ * Removes the last `n` columns from each row (inner list) within a two-dimensional list.
+ *
+ * @param n The number of columns to drop from the end of each inner list.
+ * @return A new two-dimensional list with the last `n` columns removed from each row.
+ */
+fun List<List<Rectangle>>.dropLastColumns(n: Int): List<List<Rectangle>> = map { it.dropLast(n) }
+
+/**
+ * Selects the first `n` columns from each row in a 2D list of `Rectangle` objects.
+ *
+ * @param n The number of columns to select from each row. If a row has fewer than `n` elements,
+ *          all elements of that row are returned.
+ * @return A new 2D list containing the first `n` columns from each row of the original list.
+ */
+fun List<List<Rectangle>>.takeColumns(n: Int): List<List<Rectangle>> = map { it.take(n) }
+
+/**
+ * Returns a new list where each sub-list contains only the last `n` elements of the original sub-list.
+ *
+ * @param n The number of elements to retain from the end of each sub-list.
+ * @return A list containing sub-lists that include the last `n` elements of each original sub-list.
+ */
+fun List<List<Rectangle>>.takeLastColumns(n: Int): List<List<Rectangle>> = map { it.takeLast(n) }
+
+/**
+ * Slices the specified range of columns from each row of a two-dimensional list.
+ *
+ * @param range The range of column indices to slice from each row.
+ * @return A new list containing sublists with columns sliced from the input range.
+ */
+fun List<List<Rectangle>>.sliceColumns(range: IntRange): List<List<Rectangle>> = map { it.slice(range) }
+
+/**
+ * Selects specific columns from a two-dimensional list of rectangles.
+ * The method slices each inner list based on the provided column indices.
+ *
+ * @param indices The collection of column indices to retain in each inner list.
+ * @return A new two-dimensional list of rectangles with only the selected columns.
+ */
+fun List<List<Rectangle>>.sliceColumns(indices: Iterable<Int>): List<List<Rectangle>> = map { it.slice(indices) }
