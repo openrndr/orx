@@ -13,6 +13,7 @@ import org.openrndr.extra.color.spaces.ColorOKLABa
 import org.openrndr.math.CastableToVector4
 import org.openrndr.math.Vector2
 
+@Deprecated("use gradient {} instead")
 @Description("Multicolor linear gradient")
 open class NPointLinearGradientBase<C>(
     colors: Array<C>,

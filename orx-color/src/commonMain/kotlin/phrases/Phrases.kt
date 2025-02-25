@@ -3,14 +3,27 @@ package org.openrndr.extra.color.phrases
 import org.openrndr.extra.shaderphrases.ShaderPhrase
 import org.openrndr.extra.shaderphrases.ShaderPhraseBook
 
-object ColorPhraseBook : ShaderPhraseBook("color") {
-    val phraseAtan2 = ShaderPhrase("""
-        |float atan2(in float y, in float x) {
-        |   bool s = (abs(x) > abs(y));
-        |   return mix(PI/2.0 - atan(x,y), atan(y,x), float(s));
-        |}""".trimMargin())
+val oklabToLinearRgbPhrase = """#ifndef ORX_COLOR_OKLAB_TO_LINEAR_RGB_PHRASE
+        |#define ORX_COLOR_OKLAB_TO_LINEAR_RGB_PHRASE
+        |vec4 oklab_to_linear_rgb(vec4 lab) {
+        |   const mat3 kLMStoCONE = mat3(
+        |       1.0,            1.0,           1.0,
+        |       0.3963377774,  -0.1055613458, -0.0894841775,
+        |       0.2158037573,  -0.0638541728,  -1.2914855480);
+        |   const mat3 kRot = mat3(
+        |       4.0767416621, -1.2684380046, -0.0041960863,
+        |       -3.3077115913,  2.6097574011,  -0.7034186147,
+        |       0.2309699292, -0.3413193965, 1.7076147010);
+        |   vec3 lms = kLMStoCONE * lab.rgb;
+        |   lms = lms * lms * lms;
+        |   vec4 res = vec4(kRot * lms,lab.a);
+        |   return res;
+        |}
+        |#endif""".trimMargin()
 
-    val phraseLinearRgbToOKLab = ShaderPhrase("""
+val linearRgbToOklabPhrase = """
+        |#ifndef ORX_COLOR_LINEAR_RGB_TO_OKLAB_PHRASE
+        |#define ORX_COLOR_LINEAR_RGB_TO_OKLAB_PHRASE
         |vec4 linear_rgb_to_oklab(vec4 c) {
         |   c.rgb = max(vec3(0.0), c.rgb);
         |   const mat3 kCONEtoLMS = mat3(
@@ -25,23 +38,19 @@ object ColorPhraseBook : ShaderPhraseBook("color") {
         |   vec3 lms = pow(kCONEtoLMS * c.rgb, vec3(1.0/3.0));
         |   vec4 res = vec4((kRot) * lms, c.a);
         |   return res;
+        |}
+        |#endif""".trimMargin()
+
+object ColorPhraseBook : ShaderPhraseBook("color") {
+    val phraseAtan2 = ShaderPhrase("""
+        |float atan2(in float y, in float x) {
+        |   bool s = (abs(x) > abs(y));
+        |   return mix(PI/2.0 - atan(x,y), atan(y,x), float(s));
         |}""".trimMargin())
 
-    val oklabToLinearRgb = ShaderPhrase("""
-        |vec4 oklab_to_linear_rgb(vec4 lab) {
-        |   const mat3 kLMStoCONE = mat3(
-        |       1.0,            1.0,           1.0,
-        |       0.3963377774,  -0.1055613458, -0.0894841775,
-        |       0.2158037573,  -0.0638541728,  -1.2914855480);
-        |   const mat3 kRot = mat3(
-        |       4.0767416621, -1.2684380046, -0.0041960863,
-        |       -3.3077115913,  2.6097574011,  -0.7034186147,
-        |       0.2309699292, -0.3413193965, 1.7076147010);
-        |   vec3 lms = kLMStoCONE * lab.rgb;
-        |   lms = lms * lms * lms;
-        |   vec4 res = vec4(kRot * lms,lab.a);
-        |   return res;
-        |}""".trimMargin())
+    val phraseLinearRgbToOKLab = ShaderPhrase(linearRgbToOklabPhrase)
+
+    val oklabToLinearRgb = ShaderPhrase(oklabToLinearRgbPhrase)
 
     val phraseLabToLch = ShaderPhrase( """
         |vec4 lab_to_lch(vec4 lab) {

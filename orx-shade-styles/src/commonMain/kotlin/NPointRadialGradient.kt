@@ -7,6 +7,7 @@ import org.openrndr.draw.ShadeStyle
 import org.openrndr.extra.parameters.Description
 import org.openrndr.math.Vector2
 
+@Deprecated("use gradient {} instead")
 @Description("Multicolor radial gradient")
 class NPointRadialGradient(
         colors: Array<ColorRGBa>,

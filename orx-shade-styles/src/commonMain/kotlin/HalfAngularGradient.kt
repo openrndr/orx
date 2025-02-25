@@ -9,6 +9,7 @@ import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.math.Vector2
 
+@Deprecated("use gradient {} instead")
 @Description("Half-angular gradient")
 class HalfAngularGradient(
         color0: ColorRGBa,

@@ -7,7 +7,7 @@ import kotlin.reflect.KClass
 internal fun generateColorTransform(kClass: KClass<*>): String {
     return when (kClass) {
         ColorRGBa::class -> """"""
-        ColorOKLABa::class -> """gradient = linear_rgb_to_srgb(oklab_to_linear_rgb(gradient));"""
+        ColorOKLABa::class -> """gradient = oklab_to_linear_rgb(gradient);"""
         else -> error("color space not supported $kClass")
     }
 }
