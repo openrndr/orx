@@ -8,37 +8,32 @@ Shader based fills and strokes, including various types of gradient fills.
 ![DemoRadialGradient01Kt](https://github.com/openrndr/orx/blob/media/orx-shade-styles/images/DemoRadialGradient01Kt.png
 <!-- __demos__ -->
 ## Demos
-### DemoAllGradients01
-[source code](src/jvmDemo/kotlin/DemoAllGradients01.kt)
+### gradients/DemoGradient01
+[source code](src/jvmDemo/kotlin/gradients/DemoGradient01.kt)
 
-![DemoAllGradients01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/DemoAllGradients01Kt.png)
+![gradients-DemoGradient01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient01Kt.png)
 
-### DemoImageFit01
-[source code](src/jvmDemo/kotlin/DemoImageFit01.kt)
+### gradients/DemoGradient02
+[source code](src/jvmDemo/kotlin/gradients/DemoGradient02.kt)
 
-![DemoImageFit01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/DemoImageFit01Kt.png)
+![gradients-DemoGradient02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient02Kt.png)
 
-### DemoLinearGradient
-[source code](src/jvmDemo/kotlin/DemoLinearGradient.kt)
+### gradients/DemoGradient03
+[source code](src/jvmDemo/kotlin/gradients/DemoGradient03.kt)
 
-![DemoLinearGradientKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/DemoLinearGradientKt.png)
+![gradients-DemoGradient03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient03Kt.png)
 
-### DemoNPointGradient01
-[source code](src/jvmDemo/kotlin/DemoNPointGradient01.kt)
+### image/DemoImageFill01
+[source code](src/jvmDemo/kotlin/image/DemoImageFill01.kt)
 
-![DemoNPointGradient01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/DemoNPointGradient01Kt.png)
+![image-DemoImageFill01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/image-DemoImageFill01Kt.png)
 
-### DemoNPointLinearGradient01
-[source code](src/jvmDemo/kotlin/DemoNPointLinearGradient01.kt)
+### image/DemoImageFill02
+[source code](src/jvmDemo/kotlin/image/DemoImageFill02.kt)
 
-![DemoNPointLinearGradient01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/DemoNPointLinearGradient01Kt.png)
+![image-DemoImageFill02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/image-DemoImageFill02Kt.png)
 
-### DemoNPointRadialGradient01
-[source code](src/jvmDemo/kotlin/DemoNPointRadialGradient01.kt)
+### image/DemoImageFill03
+[source code](src/jvmDemo/kotlin/image/DemoImageFill03.kt)
 
-![DemoNPointRadialGradient01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/DemoNPointRadialGradient01Kt.png)
-
-### DemoRadialGradient01
-[source code](src/jvmDemo/kotlin/DemoRadialGradient01.kt)
-
-![DemoRadialGradient01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/DemoRadialGradient01Kt.png)
+![image-DemoImageFill03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/image-DemoImageFill03Kt.png)
