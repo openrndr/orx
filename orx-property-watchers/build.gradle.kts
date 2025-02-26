@@ -19,6 +19,11 @@ kotlin {
             }
         }
 
+        val jvmDemo by getting {
+            dependencies {
+                implementation(project(":orx-color"))
+            }
+        }
 
         @Suppress("UNUSED_VARIABLE")
         val jvmTest by getting {

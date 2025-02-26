@@ -1,7 +1,7 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.grayscale
 import org.openrndr.draw.loadImage
+import org.openrndr.extra.color.colormatrix.grayscale
 import org.openrndr.extra.marchingsquares.findContours
 import org.openrndr.math.Vector2
 import kotlin.math.PI

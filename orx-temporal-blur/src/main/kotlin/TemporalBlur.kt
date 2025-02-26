@@ -6,6 +6,7 @@ import org.openrndr.Program
 import org.openrndr.ProgramImplementation
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
+import org.openrndr.extra.color.colormatrix.tint
 import org.openrndr.extra.noise.uniformRing
 import org.openrndr.filter.color.delinearize
 import org.openrndr.filter.color.linearize
@@ -78,12 +79,12 @@ class TemporalBlur : Extension {
     /**
      * should the accumulator linearize the input. this should be true when rendering in sRGB
      */
-    var linearizeInput = true
+    var linearizeInput = false
 
     /**
      * should the accumulator delinearize the output. this should be true when rendering in sRGB
      */
-    var delinearizeOutput = true
+    var delinearizeOutput = false
 
     /**
      * multisampling setting
@@ -262,7 +263,6 @@ class TemporalBlur : Extension {
 
             drawer.isolatedWithTarget(result!!) {
                 drawer.drawStyle.blendMode = BlendMode.OVER
-
                 drawer.clear(ColorRGBa.BLACK)
                 drawer.drawStyle.colorMatrix = tint(ColorRGBa.WHITE.shade((1.0 / samples) * gain))
                 drawer.image(accumulator!!.colorBuffer(0))

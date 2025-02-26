@@ -1,10 +1,10 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ColorType
-import org.openrndr.draw.constant
 import org.openrndr.draw.createEquivalent
-import org.openrndr.draw.tint
 import org.openrndr.drawImage
+import org.openrndr.extra.color.colormatrix.constant
+import org.openrndr.extra.color.colormatrix.tint
 import org.openrndr.extra.jumpfill.DirectionalField
 import org.openrndr.extra.noise.scatter
 import org.openrndr.math.IntVector2
