@@ -35,3 +35,30 @@ fun Rectangle.hash(seed: Int, x: Int): Vector2 {
     val y = fy * height + corner.y
     return Vector2(x, y)
 }
+
+
+/**
+ * Generates a uniformly distributed sub-rectangle based on random parameters within specified ranges.
+ *
+ * @param minWidth The minimum width of the sub-rectangle. Defaults to 0.0.
+ * @param maxWidth The maximum width of the sub-rectangle. Defaults to 1.0.
+ * @param minHeight The minimum height of the sub-rectangle. Defaults to 0.0.
+ * @param maxHeight The maximum height of the sub-rectangle. Defaults to 1.0.
+ * @param random The `Random` instance used for generating random values.
+ * @return A new `Rectangle` that represents the sub-rectangle.
+ */
+fun Rectangle.uniformSub(
+    minWidth: Double = 0.0,
+    maxWidth: Double = 1.0,
+    minHeight: Double = 0.0,
+    maxHeight: Double = 1.0,
+    random: Random = Random.Default
+): Rectangle {
+    val width = random.nextDouble(minWidth, maxWidth)
+    val height = random.nextDouble(minHeight, maxHeight)
+    val u0 = random.nextDouble(1.0 - width)
+    val v0 = random.nextDouble(1.0 - height)
+    val u1 = u0 + width
+    val v1 = v0 + height
+    return sub(u0..u1, v0..v1)
+}
