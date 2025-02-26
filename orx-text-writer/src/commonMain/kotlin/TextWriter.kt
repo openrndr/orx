@@ -346,7 +346,7 @@ class TextWriter(val drawerRef: Drawer?) {
 
         // Triggers loading the default font (if needed) by accessing .fontMap
         // otherwise makeRenderTokens() is not aware of the default font.
-        val fontMap = drawerRef?.fontMap ?: error("no fontmap")
+        val fontMap = drawerRef?.fontMap
 
         var renderTokens = makeTextTokens(text, false)
 
@@ -380,11 +380,11 @@ class TextWriter(val drawerRef: Drawer?) {
                 val first = renderTokens.filter { it != TextToken.END_OF_LINE }.first()
                 val last = renderTokens.last()
                 renderTokens.split().flatMap {
-                    val sy =  first.y - fontMap.ascenderLength
-                    val ey = last.y + fontMap.descenderLength
+                    val sy =  first.y - (fontMap?.ascenderLength ?: 0.0)
+                    val ey = last.y + (fontMap?.descenderLength ?: 0.0)
 
                     val th = ey - sy
-                    it.map { it.shift(0.0, fontMap.height + (box.height - th) * align) }
+                    it.map { it.shift(0.0, (fontMap?.height ?: 0.0) + (box.height - th) * align) }
                 }
             }
         }
