@@ -79,6 +79,26 @@ Two color spaces are added: `ColorHSLUVa` and `ColorHPLUVa`, they are an impleme
 
 ![colormap-DemoTurboColormapPlotKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoTurboColormapPlotKt.png)
 
+### colormatrix/DemoColorMatrix01
+[source code](src/jvmDemo/kotlin/colormatrix/DemoColorMatrix01.kt)
+
+![colormatrix-DemoColorMatrix01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormatrix-DemoColorMatrix01Kt.png)
+
+### colormatrix/DemoColorMatrix02
+[source code](src/jvmDemo/kotlin/colormatrix/DemoColorMatrix02.kt)
+
+![colormatrix-DemoColorMatrix02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormatrix-DemoColorMatrix02Kt.png)
+
+### colormatrix/DemoColorMatrix03
+[source code](src/jvmDemo/kotlin/colormatrix/DemoColorMatrix03.kt)
+
+![colormatrix-DemoColorMatrix03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormatrix-DemoColorMatrix03Kt.png)
+
+### colormatrix/DemoColorMatrix04
+[source code](src/jvmDemo/kotlin/colormatrix/DemoColorMatrix04.kt)
+
+![colormatrix-DemoColorMatrix04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormatrix-DemoColorMatrix04Kt.png)
+
 ### colorRange/DemoColorRange01
 [source code](src/jvmDemo/kotlin/colorRange/DemoColorRange01.kt)
 
