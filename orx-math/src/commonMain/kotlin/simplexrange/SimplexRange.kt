@@ -47,13 +47,18 @@ fun simplexUpscale(b: DoubleArray): DoubleArray {
  */
 @JvmRecord
 data class SimplexRange2D<T : LinearType<T>>(val x0: T, val x1: T, val x2: T) : Parametric2D<T> {
-    override fun value(u: Double, v: Double): T {
+    fun upscale(u: Double, v: Double): DoubleArray {
         val r1 = sqrt(u)
         val r2 = v
 
         val a = 1 - r1
         val b = r1 * (1 - r2)
         val c = r1 * r2
+        return doubleArrayOf(a, b, c)
+    }
+
+    override fun value(u: Double, v: Double): T {
+        val (a,b,c) = upscale(u,v)
         return x0 * a + x1 * b + x2 * c
     }
 }
