@@ -301,3 +301,18 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 [source code](src/jvmDemo/kotlin/simplexrange/DemoSimplexRange2D01.kt)
 
 ![simplexrange-DemoSimplexRange2D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/simplexrange-DemoSimplexRange2D01Kt.png)
+
+### simplexrange/DemoSimplexRange2D02
+[source code](src/jvmDemo/kotlin/simplexrange/DemoSimplexRange2D02.kt)
+
+![simplexrange-DemoSimplexRange2D02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/simplexrange-DemoSimplexRange2D02Kt.png)
+
+### simplexrange/DemoSimplexUniform01
+[source code](src/jvmDemo/kotlin/simplexrange/DemoSimplexUniform01.kt)
+
+![simplexrange-DemoSimplexUniform01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/simplexrange-DemoSimplexUniform01Kt.png)
+
+### simplexrange/DemoSimplexUniform02
+[source code](src/jvmDemo/kotlin/simplexrange/DemoSimplexUniform02.kt)
+
+![simplexrange-DemoSimplexUniform02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/simplexrange-DemoSimplexUniform02Kt.png)
