@@ -74,3 +74,8 @@ fun main() = application {
 [source code](src/jvmDemo/kotlin/DemoImageFit01.kt)
 
 ![DemoImageFit01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-image-fit/images/DemoImageFit01Kt.png)
+
+### DemoImageFitSub01
+[source code](src/jvmDemo/kotlin/DemoImageFitSub01.kt)
+
+![DemoImageFitSub01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-image-fit/images/DemoImageFitSub01Kt.png)
