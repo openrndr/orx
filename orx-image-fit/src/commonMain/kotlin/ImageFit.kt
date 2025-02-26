@@ -153,3 +153,35 @@ fun Drawer.imageFit(
     image(img, source, target)
     return Pair(source, target)
 }
+
+/**
+ * Draws a subsection of the given image into a target rectangle within the current `Drawer` bounds,
+ * using the specified fit method and alignment.
+ *
+ * @param img The `ColorBuffer` representing the image to draw.
+ * @param source The subsection of the image to be fitted, defined as a `Rectangle`. Defaults to the full bounds of the image.
+ * @param target The rectangle within the `Drawer` bounds where the image will be drawn. Defaults to the full bounds of the `Drawer`.
+ * @param horizontalPosition Horizontal alignment or cropping position for the image as a normalized value from -1.0 to 1.0.
+ * @param verticalPosition Vertical alignment or cropping position for the image as a normalized value from -1.0 to 1.0.
+ * @param fitMethod The method to use for fitting the image into the target rectangle. Defaults to `FitMethod.Cover`.
+ * @return A `Pair` of `Rectangle` objects, where the first element is the transformed source rectangle, and the second element is the target rectangle.
+ */
+fun Drawer.imageFitSub(
+    img: ColorBuffer,
+    source: Rectangle = img.bounds,
+    target: Rectangle = this.bounds,
+    horizontalPosition: Double = 0.0,
+    verticalPosition: Double = 0.0,
+    fitMethod: FitMethod = FitMethod.Cover
+): Pair<Rectangle, Rectangle> {
+    val (fitSource, fitTarget) = fitRectangle(
+        source,
+        target,
+        horizontalPosition,
+        verticalPosition,
+        fitMethod
+    )
+
+    image(img, fitSource, fitTarget)
+    return Pair(source, target)
+}
