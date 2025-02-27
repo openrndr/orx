@@ -23,6 +23,11 @@ Shader based fills and strokes, including various types of gradient fills.
 
 ![gradients-DemoGradient03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient03Kt.png)
 
+### gradients/DemoGradient04
+[source code](src/jvmDemo/kotlin/gradients/DemoGradient04.kt)
+
+![gradients-DemoGradient04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient04Kt.png)
+
 ### image/DemoImageFill01
 [source code](src/jvmDemo/kotlin/image/DemoImageFill01.kt)
 
