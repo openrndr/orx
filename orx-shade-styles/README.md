@@ -8,6 +8,21 @@ Shader based fills and strokes, including various types of gradient fills.
 ![DemoRadialGradient01Kt](https://github.com/openrndr/orx/blob/media/orx-shade-styles/images/DemoRadialGradient01Kt.png
 <!-- __demos__ -->
 ## Demos
+### clip/DemoClip01
+[source code](src/jvmDemo/kotlin/clip/DemoClip01.kt)
+
+![clip-DemoClip01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/clip-DemoClip01Kt.png)
+
+### clip/DemoClip02
+[source code](src/jvmDemo/kotlin/clip/DemoClip02.kt)
+
+![clip-DemoClip02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/clip-DemoClip02Kt.png)
+
+### clip/DemoClip03
+[source code](src/jvmDemo/kotlin/clip/DemoClip03.kt)
+
+![clip-DemoClip03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/clip-DemoClip03Kt.png)
+
 ### gradients/DemoGradient01
 [source code](src/jvmDemo/kotlin/gradients/DemoGradient01.kt)
 
@@ -27,6 +42,16 @@ Shader based fills and strokes, including various types of gradient fills.
 [source code](src/jvmDemo/kotlin/gradients/DemoGradient04.kt)
 
 ![gradients-DemoGradient04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient04Kt.png)
+
+### gradients/DemoGradient05
+[source code](src/jvmDemo/kotlin/gradients/DemoGradient05.kt)
+
+![gradients-DemoGradient05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient05Kt.png)
+
+### gradients/DemoGradient06
+[source code](src/jvmDemo/kotlin/gradients/DemoGradient06.kt)
+
+![gradients-DemoGradient06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient06Kt.png)
 
 ### image/DemoImageFill01
 [source code](src/jvmDemo/kotlin/image/DemoImageFill01.kt)
