@@ -93,25 +93,39 @@ open class GradientBase<C>(
             f = levelWarp(coord, f);
             
             if (p_quantization != 0) {
-                f = floor(f * float(p_quantization)) / (float(p_quantization) - 1.0);
+                f *= float(p_quantization);
+                float seam = ceil(f + 0.5);
+                vec2 d = vec2(dFdx(f), dFdy(f));
+                f = (f - seam) / length(d*1.0) + seam;
+                f = clamp(f, seam-.5, seam+.5);
+                f /= float(p_quantization);
             }
             
+            float sf;
+            float mf = 0.0; 
             if (p_spreadMethod == 0) { // PAD
-                f = clamp(f, 0.0, 1.0);    
+                sf = clamp(f, 0.0, 1.0);    
             } else if (p_spreadMethod == 1) { // REFLECT
-                f = 2.0 * abs(f / 2.0 - floor(f / 2.0 + 0.5));
+                sf = 2.0 * abs(f / 2.0 - floor(f / 2.0 + 0.5));
             } else if (p_spreadMethod == 2) { // REPEAT
-                f = mod(f, 1.0);
+                sf = mod(f, 1.0);
+                float seam = ceil(f);
+                vec2 d = vec2(dFdx(f), dFdy(f));
+                mf = (f - seam) / length(d) + seam;
             }
 
             int i = 0;
-            while (i < p_points_SIZE - 1 && f >= p_points[i+1]) { i++; }
+            while (i < p_points_SIZE - 1 && sf >= p_points[i+1]) { i++; }
             
             vec4 color0 = p_colors[i];
-            vec4 color1 = p_colors[i+1]; 
+            vec4 color1 = p_colors[(i+1) % p_colors_SIZE]; 
             
-            float g = (f - p_points[i]) / (p_points[i+1] - p_points[i]);
+            float g = (sf - p_points[i]) / (p_points[i+1] - p_points[i]);
             vec4 gradient = mix(color0, color1, clamp(g, 0.0, 1.0)); 
+            
+            if (mf > 0.0 && p_quantization == 0) {
+                gradient = p_colors[p_colors_SIZE - 1] * (1.0 - mf) + p_colors[0] * mf;
+            }
             
             ${generateColorTransform(colorType)}
             x_fill *= gradient;

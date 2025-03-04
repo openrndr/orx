@@ -24,6 +24,7 @@ kotlin {
                 implementation(project(":orx-shade-styles"))
                 implementation(project(":orx-noise"))
                 implementation(project(":orx-shapes"))
+                implementation(project(":orx-image-fit"))
             }
         }
     }

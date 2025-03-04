@@ -2,6 +2,7 @@ package org.openrndr.extra.shadestyles.fills.gradients
 
 import org.openrndr.color.AlgebraicColor
 import org.openrndr.color.ConvertibleToColorRGBa
+import org.openrndr.extra.shaderphrases.sdf.sdStarPhrase
 import org.openrndr.math.CastableToVector4
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector4
@@ -42,48 +43,17 @@ open class StellarGradient<C>(
     }
 
     companion object {
-        val gradientFunction = """
-const float pi = $PI;
-const vec3 c = vec3(1,0,-1);
-/*
-    taken from https://www.shadertoy.com/view/csXcD8# by ShaderToy user 'nr4'
-*/
-float dstar(in vec2 x, in float r1, in float r2, in float N) {
-    N *= 2.;
-    float p = atan(x.y,x.x),
-    k = pi/N,
-    dp = mod(p, 2.*k),
-    parity = mod(round((p-dp)*.5/k), 2.),
-    dkp = mix(k,-k,parity),
-    kp = k+dkp,
-    km = k-dkp;
-    vec2 p1 = r1*vec2(cos(km),sin(km)),
-    p2 = r2*vec2(cos(kp),sin(kp)),
-    dpp = p2-p1,
-    n = normalize(dpp).yx*c.xz,
-    xp = length(x)*vec2(cos(dp), sin(dp)),
-    xp1 = xp-p1;
-    float t = dot(xp1,dpp)/dot(dpp,dpp)-.5,
-    r = (1.-2.*parity)*dot(xp1,n);
-    return t < -.5
-        ? sign(r)*length(xp1)
-        : t < .5
-            ? r
-            : sign(r)*length(xp-p2);
-}
-
-float gradientFunction(vec2 coord) {
-    vec2 d0 = coord - p_center;
-    d0 = rotate2D(d0, p_rotation);
-    float innerRadius = 1.0 - p_sharpness;
-    float f = dstar(d0 / p_radius, innerRadius, 1.0, float(p_sides));
-    // dstar is broken at vec2(0.0, 0.0), let's nudge it a bit
-    float f0 = dstar(vec2(1E-6, 1E-6), innerRadius, 1.0, float(p_sides));
-    f -= f0;
-    f /= 0.5 * 1.0 * (1.0 + cos(pi / float(p_sides)));
-    return f;
-}
-""".trimIndent()
+        val gradientFunction = """$sdStarPhrase
+            float gradientFunction(vec2 coord) {
+                vec2 d0 = coord - p_center;
+                d0 = rotate2D(d0, p_rotation);
+                float f = sdStar(d0 / p_radius, 1.0, p_sides, p_sharpness);
+                float f0 = sdStar(vec2(0.0), 1.0, p_sides, p_sharpness);
+                f -= f0;
+                f /= 0.5 * 1.0 * (1.0 + cos($PI / float(p_sides)));
+                return f;
+            }
+            """.trimIndent()
     }
 }
 

@@ -57,6 +57,11 @@ class GradientBuilder<C>(val colorType: KClass<C>)
         gradientFunction = RadialGradient.gradientFunction
     }
 
+    fun elliptic(builder: EllipticalGradientBuilder<C>.() -> Unit) {
+        shadeStyleBuilder = EllipticalGradientBuilder(this).apply { builder() }
+        gradientFunction = EllipticalGradient.gradientFunction
+    }
+
     /**
      * Configures a conic gradient by applying the provided builder block.
      *
