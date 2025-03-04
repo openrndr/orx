@@ -94,9 +94,9 @@ open class GradientBase<C>(
             
             if (p_quantization != 0) {
                 f *= float(p_quantization);
-                float seam = ceil(f + 0.5);
+                float seam = floor(f + 0.5);
                 vec2 d = vec2(dFdx(f), dFdy(f));
-                f = (f - seam) / length(d*1.0) + seam;
+                f = (f - seam) / length(d*2.0) + seam;
                 f = clamp(f, seam-.5, seam+.5);
                 f /= float(p_quantization);
             }
@@ -111,7 +111,7 @@ open class GradientBase<C>(
                 sf = mod(f, 1.0);
                 float seam = ceil(f);
                 vec2 d = vec2(dFdx(f), dFdy(f));
-                mf = (f - seam) / length(d) + seam;
+                mf = (f - seam) / length(d*2.0) + seam;
             }
 
             int i = 0;
