@@ -34,6 +34,8 @@ open class GradientBase<C>(
     var spreadMethod: Int by Parameter()
     var fillUnits: Int by Parameter()
     var fillFit: Int by Parameter()
+    var filterWindow: Int by Parameter("filterWindow", 2)
+    var filterSpread: Double by Parameter("filterSpread", 0.5)
 
     init {
         this.quantization = 0
@@ -87,47 +89,54 @@ open class GradientBase<C>(
                 coord.y = u_viewDimensions.y - coord.y;
             }
 
-            coord = domainWarp(coord);
+            vec4 gradient;
+            vec2 dx = p_filterSpread * dFdx(coord) / (float(p_filterWindow) + 1.0);
+            vec2 dy = p_filterSpread * dFdy(coord) / (float(p_filterWindow) + 1.0);
+            
+            for (int u = -p_filterWindow; u <= p_filterWindow; u++) {
+                for (int v = -p_filterWindow; v <= p_filterWindow; v++) {
 
-            float f = gradientFunction(coord);
-            f = levelWarp(coord, f);
-            
-            if (p_quantization != 0) {
-                f *= float(p_quantization);
-                float seam = floor(f + 0.5);
-                vec2 d = vec2(dFdx(f), dFdy(f));
-                f = (f - seam) / length(d*2.0) + seam;
-                f = clamp(f, seam-.5, seam+.5);
-                f /= float(p_quantization);
+                    vec2 scoord = coord + dx * float(u) + dy * float(v);
+                    vec2 wcoord = domainWarp(scoord);
+        
+                    float f = gradientFunction(wcoord);
+                    f = levelWarp(wcoord, f);
+                    
+                    if (p_quantization != 0) {
+                        f *= float(p_quantization);
+                        f = floor(f + 0.5);
+                        f /= float(p_quantization);
+                    }
+                    
+                    float sf;
+                    float mf = 0.0; 
+                    if (p_spreadMethod == 0) { // PAD
+                        sf = clamp(f, 0.0, 1.0);    
+                    } else if (p_spreadMethod == 1) { // REFLECT
+                        sf = 2.0 * abs(f / 2.0 - floor(f / 2.0 + 0.5));
+                    } else if (p_spreadMethod == 2) { // REPEAT
+                        sf = mod(f, 1.0);
+                        float seam = ceil(f);
+                        vec2 d = vec2(dFdx(f), dFdy(f));
+                        mf = (f - seam) / length(d*2.0) + seam;
+                    }
+        
+                    int i = 0;
+                    while (i < p_points_SIZE - 1 && sf >= p_points[i+1]) { i++; }
+                    
+                    vec4 color0 = p_colors[i];
+                    vec4 color1 = p_colors[(i+1) % p_colors_SIZE]; 
+                    
+                    float g = (sf - p_points[i]) / (p_points[i+1] - p_points[i]);
+                    vec4 m = mix(color0, color1, clamp(g, 0.0, 1.0));
+                    m.rgb *= m.a;
+                    gradient += m;
+                }
             }
-            
-            float sf;
-            float mf = 0.0; 
-            if (p_spreadMethod == 0) { // PAD
-                sf = clamp(f, 0.0, 1.0);    
-            } else if (p_spreadMethod == 1) { // REFLECT
-                sf = 2.0 * abs(f / 2.0 - floor(f / 2.0 + 0.5));
-            } else if (p_spreadMethod == 2) { // REPEAT
-                sf = mod(f, 1.0);
-                float seam = ceil(f);
-                vec2 d = vec2(dFdx(f), dFdy(f));
-                mf = (f - seam) / length(d*2.0) + seam;
+            gradient /= (float(p_filterWindow) * 2.0 + 1.0) * (float(p_filterWindow) * 2.0 + 1.0);
+            if (gradient.a > 0.0) {
+                gradient.rgb /= gradient.a;
             }
-
-            int i = 0;
-            while (i < p_points_SIZE - 1 && sf >= p_points[i+1]) { i++; }
-            
-            vec4 color0 = p_colors[i];
-            vec4 color1 = p_colors[(i+1) % p_colors_SIZE]; 
-            
-            float g = (sf - p_points[i]) / (p_points[i+1] - p_points[i]);
-            vec4 gradient = mix(color0, color1, clamp(g, 0.0, 1.0)); 
-            
-            if (mf > 0.0 && p_quantization == 0) {
-                gradient = p_colors[p_colors_SIZE - 1] * (1.0 - mf) + p_colors[0] * mf;
-            }
-            
-            ${generateColorTransform(colorType)}
             x_fill *= gradient;
         """
     }

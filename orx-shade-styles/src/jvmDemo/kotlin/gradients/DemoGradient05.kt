@@ -18,20 +18,13 @@ fun main() {
             extend {
                 drawer.shadeStyle = gradient<ColorRGBa> {
                     stops[0.0] = ColorRGBa.BLACK
+                    stops[0.5] = ColorRGBa.BLUE_STEEL
                     stops[1.0] = ColorRGBa.WHITE
 
                     fillUnits = FillUnits.WORLD
                     spreadMethod = SpreadMethod.REPEAT
-                    //levelWarpFunction = """float levelWarp(vec2 p, float level) { return level + cos(p.x*0.01 + level)*0.1; } """
 
-                    //quantization = 3
-//                    stellar {
-//                        radius = drawer.bounds.width/8.0
-//                        center = drawer.bounds.position(0.5, 0.0)
-//                        sides = 6
-//                        sharpness = 0.5
-//                        rotation = seconds * 36.0
-//                    }
+                    quantization = 10
                     conic {
                         angle = 360.0 * 8.0
                         center = drawer.bounds.position(0.5, 0.5)
