@@ -72,3 +72,18 @@ Shader based fills and strokes, including various types of gradient fills.
 [source code](src/jvmDemo/kotlin/image/DemoImageFill03.kt)
 
 ![image-DemoImageFill03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/image-DemoImageFill03Kt.png)
+
+### patterns/DemoPatterns01
+[source code](src/jvmDemo/kotlin/patterns/DemoPatterns01.kt)
+
+![patterns-DemoPatterns01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/patterns-DemoPatterns01Kt.png)
+
+### patterns/DemoPatterns02
+[source code](src/jvmDemo/kotlin/patterns/DemoPatterns02.kt)
+
+![patterns-DemoPatterns02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/patterns-DemoPatterns02Kt.png)
+
+### patterns/DemoPatterns03
+[source code](src/jvmDemo/kotlin/patterns/DemoPatterns03.kt)
+
+![patterns-DemoPatterns03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/patterns-DemoPatterns03Kt.png)
