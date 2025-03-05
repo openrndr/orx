@@ -3,7 +3,9 @@ package org.openrndr.extra.shadestyles.fills.gradients
 import org.openrndr.color.AlgebraicColor
 import org.openrndr.color.ColorRGBa
 import org.openrndr.color.ConvertibleToColorRGBa
+import org.openrndr.draw.ObservableHashmap
 import org.openrndr.draw.ShadeStyle
+import org.openrndr.draw.StyleParameters
 import org.openrndr.extra.shadestyles.fills.FillFit
 import org.openrndr.extra.shadestyles.fills.FillUnits
 import org.openrndr.extra.shadestyles.fills.SpreadMethod
@@ -11,8 +13,12 @@ import org.openrndr.math.CastableToVector4
 import org.openrndr.math.Vector4
 import kotlin.reflect.KClass
 
-class GradientBuilder<C>(val colorType: KClass<C>)
+class GradientBuilder<C>(val colorType: KClass<C>): StyleParameters
         where C : ConvertibleToColorRGBa, C : AlgebraicColor<C>, C : CastableToVector4 {
+    override var parameterTypes: ObservableHashmap<String, String> = ObservableHashmap(mutableMapOf()) {}
+    override var parameterValues: MutableMap<String, Any> = mutableMapOf()
+    override var textureBaseIndex: Int = 2
+
 
     var stops = mutableMapOf<Double, C>()
     var fillUnits = FillUnits.BOUNDS
@@ -24,6 +30,8 @@ class GradientBuilder<C>(val colorType: KClass<C>)
     var quantization = 0
 
     private fun setBaseParameters(style: GradientBase<C>) {
+        style.parameterTypes.putAll(parameterTypes)
+        style.parameterValues.putAll(parameterValues)
         style.quantization = quantization
         style.spreadMethod = spreadMethod.ordinal
         style.fillUnits = fillUnits.ordinal
