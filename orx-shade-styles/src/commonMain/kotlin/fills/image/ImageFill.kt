@@ -1,16 +1,21 @@
 package org.openrndr.extra.shadestyles.fills.image
 
 import org.openrndr.draw.ColorBuffer
+import org.openrndr.draw.ObservableHashmap
 import org.openrndr.draw.ShadeStyle
+import org.openrndr.draw.StyleParameters
 import org.openrndr.extra.shadestyles.fills.FillFit
 import org.openrndr.extra.shadestyles.fills.FillUnits
 import org.openrndr.extra.shadestyles.fills.SpreadMethod
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
-import org.openrndr.math.Vector3
-import org.openrndr.math.Vector4
 
-class ImageFillBuilder {
+class ImageFillBuilder: StyleParameters {
+    override var parameterTypes: ObservableHashmap<String, String> = ObservableHashmap(mutableMapOf()) {}
+    override var parameterValues: MutableMap<String, Any> = mutableMapOf()
+    override var textureBaseIndex: Int = 2
+
+
     /**
      * Specifies the units in which the image fill is defined.
      *
@@ -102,25 +107,11 @@ class ImageFillBuilder {
     var domainWarpFunction: String = """vec2 if_domainWarp(vec2 p) { return p; }"""
 
 
-    /**
-     * A mutable map that stores custom parameter key-value pairs to configure the behavior of the image fill.
-     *
-     * Keys should be strings representing parameter names, while values can be objects of supported types including:
-     * - `Double`
-     * - `Int`
-     * - `Vector2`
-     * - `Vector3`
-     * - `Vector4`
-     * - `Matrix44`
-     *
-     * This map is primarily used to pass additional configuration data to the domain warp function or other
-     * dynamic aspects of the image fill. Unsupported value types will result in an error.
-     */
-    var parameters = mutableMapOf<String, Any>()
-
     var scale = 1.0
     fun build(): ImageFill {
         val imageFill = ImageFill(domainWarpFunction)
+        imageFill.parameterTypes.putAll(parameterTypes)
+        imageFill.parameterValues.putAll(parameterValues)
         imageFill.if_image = image ?: error("image not set")
         imageFill.if_fillUnits = fillUnits.ordinal
         imageFill.if_fillFit = fillFit.ordinal
@@ -129,17 +120,6 @@ class ImageFillBuilder {
         imageFill.if_flipV = image?.flipV ?: false
         imageFill.if_scale = scale
         imageFill.if_fillTransform = fillTransform
-        for ((key, value) in parameters) {
-            when (value) {
-                is Double -> imageFill.parameter(key, value)
-                is Int -> imageFill.parameter(key, value)
-                is Vector2 -> imageFill.parameter(key, value)
-                is Vector3 -> imageFill.parameter(key, value)
-                is Vector4 -> imageFill.parameter(key, value)
-                is Matrix44 -> imageFill.parameter(key, value)
-                else -> error("unsupported type $key $value")
-            }
-        }
 
         return imageFill
     }
