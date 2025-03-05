@@ -18,7 +18,7 @@ fun main() = application {
         extend {
             drawer.shadeStyle = imageFill {
                 image = img
-                parameters["time"] = seconds
+                parameter("time", seconds)
                 domainWarpFunction = """vec2 if_domainWarp(vec2 p) { return p + vec2(cos(p.y * 20.0 + p_time), sin(p.x * 20.0 + p_time)) * 0.1; }"""
                 spreadMethodX = SpreadMethod.REFLECT
                 spreadMethodY = SpreadMethod.REFLECT
