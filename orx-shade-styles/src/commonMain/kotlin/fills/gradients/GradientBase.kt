@@ -104,8 +104,8 @@ open class GradientBase<C>(
                     
                     if (p_quantization != 0) {
                         f *= float(p_quantization);
-                        f = floor(f + 0.5);
-                        f /= float(p_quantization);
+                        f = floor(f);
+                        f /= float(p_quantization) - 1.0;
                     }
                     
                     float sf;
