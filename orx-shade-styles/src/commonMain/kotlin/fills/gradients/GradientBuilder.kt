@@ -19,6 +19,8 @@ class GradientBuilder<C>(val colorType: KClass<C>): StyleParameters
     override var parameterValues: MutableMap<String, Any> = mutableMapOf()
     override var textureBaseIndex: Int = 2
 
+    var filterWindow: Int by Parameter("filterWindow", 3)
+    var filterSpread: Double by Parameter("filterSpread", 0.5)
 
     var stops = mutableMapOf<Double, C>()
     var fillUnits = FillUnits.BOUNDS

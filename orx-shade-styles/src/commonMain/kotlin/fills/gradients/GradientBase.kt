@@ -34,8 +34,6 @@ open class GradientBase<C>(
     var spreadMethod: Int by Parameter()
     var fillUnits: Int by Parameter()
     var fillFit: Int by Parameter()
-    var filterWindow: Int by Parameter("filterWindow", 2)
-    var filterSpread: Double by Parameter("filterSpread", 0.5)
 
     init {
         this.quantization = 0
@@ -93,8 +91,11 @@ open class GradientBase<C>(
             vec2 dx = p_filterSpread * dFdx(coord) / (float(p_filterWindow) + 1.0);
             vec2 dy = p_filterSpread * dFdy(coord) / (float(p_filterWindow) + 1.0);
             
-            for (int u = -p_filterWindow; u <= p_filterWindow; u++) {
-                for (int v = -p_filterWindow; v <= p_filterWindow; v++) {
+            for (int u = 0; u < p_filterWindow; u++) {
+                for (int v = 0; v < p_filterWindow; v++) {
+
+                    float fv = float(v) / (float(p_filterWindow) - 1.0) - 0.5;
+                    float fu = float(u) / (float(p_filterWindow) - 1.0) - 0.5;
 
                     vec2 scoord = coord + dx * float(u) + dy * float(v);
                     vec2 wcoord = domainWarp(scoord);
@@ -135,7 +136,7 @@ open class GradientBase<C>(
                     gradient += m;
                 }
             }
-            gradient /= (float(p_filterWindow) * 2.0 + 1.0) * (float(p_filterWindow) * 2.0 + 1.0);
+            gradient /= float(p_filterWindow) * float(p_filterWindow); 
             if (gradient.a > 0.0) {
                 gradient.rgb /= gradient.a;
             }
