@@ -74,7 +74,7 @@ open class LinearGradientBase<C>(
             }
 
             vec4 gradient = mix(color0, color1, t);
-            ${generateColorTransform(color0::class)}
+            ${generateColorTransform(color0::class, "gradient")}
             x_fill *= gradient;
         """
     }

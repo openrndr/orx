@@ -129,6 +129,8 @@ open class GradientBase<C>(
                     
                     float g = (sf - p_points[i]) / (p_points[i+1] - p_points[i]);
                     vec4 m = mix(color0, color1, clamp(g, 0.0, 1.0));
+                    ${generateColorTransform(colorType, "m")} 
+                    
                     m.rgb *= m.a;
                     gradient += m;
                 }

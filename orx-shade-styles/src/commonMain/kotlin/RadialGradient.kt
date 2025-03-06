@@ -63,7 +63,7 @@ where C : ConvertibleToColorRGBa, C : AlgebraicColor<C>, C: CastableToVector4 {
             vec4 color1 = p_color1; 
 
             vec4 gradient = mix(color0, color1, pow(f, p_exponent));
-            ${generateColorTransform(color0::class)}
+            ${generateColorTransform(color0::class, "gradient")}
 
             x_fill *= gradient;
         """

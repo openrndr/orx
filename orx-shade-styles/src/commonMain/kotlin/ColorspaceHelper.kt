@@ -4,10 +4,10 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.color.spaces.ColorOKLABa
 import kotlin.reflect.KClass
 
-internal fun generateColorTransform(kClass: KClass<*>): String {
+internal fun generateColorTransform(kClass: KClass<*>, identifier: String): String {
     return when (kClass) {
         ColorRGBa::class -> """"""
-        ColorOKLABa::class -> """gradient = oklab_to_linear_rgb(gradient);"""
+        ColorOKLABa::class -> """$identifier = oklab_to_linear_rgb($identifier);"""
         else -> error("color space not supported $kClass")
     }
 }
