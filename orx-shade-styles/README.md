@@ -88,6 +88,11 @@ Shader based fills and strokes, including various types of gradient fills.
 
 ![patterns-DemoPatterns03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/patterns-DemoPatterns03Kt.png)
 
+### spatial/DemoHemisphere01
+[source code](src/jvmDemo/kotlin/spatial/DemoHemisphere01.kt)
+
+![spatial-DemoHemisphere01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/spatial-DemoHemisphere01Kt.png)
+
 ### spatial/DemoVisualizeNormals01
 [source code](src/jvmDemo/kotlin/spatial/DemoVisualizeNormals01.kt)
 
