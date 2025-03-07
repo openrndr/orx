@@ -6,6 +6,7 @@ import org.openrndr.extra.shaderphrases.sdf.sdEllipsePhrase
 import org.openrndr.math.CastableToVector4
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector4
+import kotlin.math.PI
 import kotlin.reflect.KClass
 
 class EllipticalGradient<C>(
@@ -13,6 +14,7 @@ class EllipticalGradient<C>(
     center: Vector2 = Vector2(0.5, 0.5),
     radiusX: Double = 1.0,
     radiusY: Double = 1.0,
+    rotation: Double = 0.0,
     colors: Array<Vector4>,
     points: Array<Double> = Array(colors.size) { it / (colors.size - 1.0) },
     structure: GradientBaseStructure
@@ -27,26 +29,35 @@ class EllipticalGradient<C>(
     var radiusX: Double by Parameter()
     var radiusY: Double by Parameter()
     var center: Vector2 by Parameter()
+    var rotation: Double by Parameter()
 
     init {
         this.radiusX = radiusX
         this.radiusY = radiusY
         this.center = center
+        this.rotation = rotation
     }
 
     companion object {
         val gradientFunction = """$sdEllipsePhrase
         float gradientFunction(vec2 coord) {
-            if (abs(p_radiusX - p_radiusY) < 1E-4) {
-                vec2 d0 = coord - p_center;
+            vec2 d0 = coord - p_center;
+            d0 = rotate2D(d0, p_rotation);
+            
+            float minRadius = min(p_radiusX, p_radiusY);
+            float maxRadius = max(p_radiusX, p_radiusY);
+            
+            if (minRadius < 1E-3) {
+                return 1.0;
+            } else  if (abs(p_radiusX - p_radiusY) < 1E-4) {
+                
                 float d0l = length(d0);
-                float f = d0l / p_radiusX;
-                return f;
+                float f = d0l;// / p_radiusX;
+                return f / p_radiusX;
             } else {
-                float maxRadius = min(p_radiusX, p_radiusY);
-                vec2 d0 = (coord - p_center) / maxRadius;                
-                float f = sdEllipse(d0, vec2(p_radiusX, p_radiusY)/maxRadius );
-                float f0 = sdEllipse(vec2(0.0), vec2(p_radiusX, p_radiusY)/maxRadius );
+                                
+                float f = sdEllipse(d0, vec2(p_radiusX, p_radiusY) ) / minRadius;
+                float f0 = sdEllipse(vec2(0.001, 0.001), vec2(p_radiusX, p_radiusY)) / minRadius;
                 f -= f0;
                 return f;
             }
@@ -82,6 +93,7 @@ class EllipticalGradientBuilder<C>(private val gradientBuilder: GradientBuilder<
     var radiusX = 0.5
     var radiusY = 0.5
 
+    var rotation = 0.0
     /**
      * Specifies the focal center point for the radial gradient.
      *
@@ -104,6 +116,7 @@ class EllipticalGradientBuilder<C>(private val gradientBuilder: GradientBuilder<
             center,
             radiusX,
             radiusY,
+            rotation,
             colors,
             stops,
             gradientBuilder.structure()

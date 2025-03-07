@@ -2,8 +2,6 @@ package gradients
 
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extra.color.spaces.ColorOKLABa
-import org.openrndr.extra.color.spaces.toOKLABa
 import org.openrndr.extra.shadestyles.fills.SpreadMethod
 import org.openrndr.extra.shadestyles.fills.gradients.gradient
 import org.openrndr.math.Vector2
