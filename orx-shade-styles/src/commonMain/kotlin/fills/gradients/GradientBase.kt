@@ -34,6 +34,7 @@ open class GradientBase<C>(
     var spreadMethod: Int by Parameter()
     var fillUnits: Int by Parameter()
     var fillFit: Int by Parameter()
+    var resetFill: Boolean by Parameter()
 
     init {
         this.quantization = 0
@@ -42,7 +43,9 @@ open class GradientBase<C>(
         this.fillUnits = FillUnits.BOUNDS.ordinal
         this.spreadMethod = SpreadMethod.PAD.ordinal
         this.fillFit = FillFit.STRETCH.ordinal
+        this.resetFill = false
         fragmentPreamble = """
+            |vec4 g_fill;
             |vec2 rotate2D(vec2 x, float angle){
             |   float rad = angle / 180.0 * $PI;
             |   mat2 m = mat2(cos(rad),-sin(rad), sin(rad),cos(rad));
@@ -56,6 +59,7 @@ open class GradientBase<C>(
             |""".trimMargin()
 
         fragmentTransform = """
+            g_fill = x_fill;
             vec2 coord = vec2(0.0);
             
             if (p_fillUnits == 0) { // BOUNDS
@@ -139,6 +143,9 @@ open class GradientBase<C>(
             gradient /= float(p_filterWindow) * float(p_filterWindow); 
             if (gradient.a > 0.0) {
                 gradient.rgb /= gradient.a;
+            }
+            if (p_resetFill) {
+                x_fill.rgb = vec3(1.0);
             }
             x_fill *= gradient;
         """

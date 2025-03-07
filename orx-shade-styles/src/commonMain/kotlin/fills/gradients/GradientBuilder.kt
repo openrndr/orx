@@ -31,6 +31,18 @@ class GradientBuilder<C>(val colorType: KClass<C>): StyleParameters
     var gradientFunction = """float gradientFunction(vec2 coord) { return 0.0; }"""
     var quantization = 0
 
+    /**
+     * Specifies whether to reset the fill state when building a gradient.
+     *
+     * If set to `true`, it ensures that the fill color is overridden with
+     * the defined gradient fill during the rendering process. When set to `false`,
+     * the previous fill state persists, allowing the gradient to blend with
+     * other graphical elements.
+     *
+     * The default value is `false`
+     */
+    var resetFill = false
+
     private fun setBaseParameters(style: GradientBase<C>) {
         style.parameterTypes.putAll(parameterTypes)
         style.parameterValues.putAll(parameterValues)
@@ -38,6 +50,7 @@ class GradientBuilder<C>(val colorType: KClass<C>): StyleParameters
         style.spreadMethod = spreadMethod.ordinal
         style.fillUnits = fillUnits.ordinal
         style.fillFit = fillFit.ordinal
+        style.resetFill = resetFill
     }
 
     @PublishedApi
@@ -67,9 +80,27 @@ class GradientBuilder<C>(val colorType: KClass<C>): StyleParameters
         gradientFunction = RadialGradient.gradientFunction
     }
 
+    /**
+     * Configures an elliptical gradient by applying the provided builder block.
+     *
+     * @param builder A lambda function used to define the properties of the elliptical gradient.
+     */
     fun elliptic(builder: EllipticalGradientBuilder<C>.() -> Unit) {
         shadeStyleBuilder = EllipticalGradientBuilder(this).apply { builder() }
         gradientFunction = EllipticalGradient.gradientFunction
+    }
+
+    /**
+     * Configures a luma gradient by applying the provided builder block.
+     *
+     * @param builder A lambda function used to define the properties of the luma gradient.
+     *                The builder block allows customization of attributes such as luminance-based
+     *                transformations, including specifying minimum and maximum luminance levels.
+     */
+    fun luma(builder: LumaGradientBuilder<C>.() -> Unit) {
+        shadeStyleBuilder = LumaGradientBuilder(this).apply { builder() }
+        gradientFunction = LumaGradient.gradientFunction
+        resetFill = true
     }
 
     /**
