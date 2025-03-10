@@ -1,6 +1,7 @@
 package org.openrndr.extra.shadestyles.fills.patterns
 
 import org.openrndr.draw.ShadeStyle
+import kotlin.math.PI
 
 
 class PatternBaseStructure(
@@ -16,6 +17,14 @@ class PatternBase(structure: PatternBaseStructure) : ShadeStyle() {
 
     init {
         fragmentPreamble = """
+            #ifndef SP_ROTATE2D
+            #define SP_ROTATE2D
+            vec2 rotate2D(vec2 x, float angle){
+               float rad = angle / 180.0 * $PI;
+               mat2 m = mat2(cos(rad),-sin(rad), sin(rad),cos(rad));
+               return m * x;
+            }
+            #endif
             ${structure.domainWarpFunction}
             ${structure.patternFunction}
         """.trimIndent()

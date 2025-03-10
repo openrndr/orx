@@ -135,9 +135,10 @@ class XorMod2PatternBuilder(builder: PatternBuilder) {
 class DotsPatternBuilder(builder: PatternBuilder) {
     var dotSize: Double by builder.Parameter("patternDotSize", 0.25)
     var strokeWeight: Double by builder.Parameter("patternStrokeWeight", 1E10)
+    var rotation: Double by builder.Parameter("patternDotRotation", 0.0)
     init {
         builder.patternFunction = """float pattern(vec2 coord) {
-            vec2 scoord = coord * p_patternScale;
+            vec2 scoord = rotate2D(coord, p_patternDotRotation) * p_patternScale;
             vec2 mcoord = mod(scoord  + vec2(0.5), vec2(1.0)) - vec2(0.5);
             float d = length(mcoord) - p_patternDotSize;
             float dw = fwidth(d);

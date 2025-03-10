@@ -46,11 +46,14 @@ open class GradientBase<C>(
         this.resetFill = false
         fragmentPreamble = """
             |vec4 g_fill;
+            |#ifndef SP_ROTATE2D
+            |#define SP_ROTATE2D
             |vec2 rotate2D(vec2 x, float angle){
             |   float rad = angle / 180.0 * $PI;
             |   mat2 m = mat2(cos(rad),-sin(rad), sin(rad),cos(rad));
             |   return m * x;
             |}
+            |#endif
             |$oklabToLinearRgbPhrase
             |$linearRgbToOklabPhrase
             |${structure.gradientFunction}
