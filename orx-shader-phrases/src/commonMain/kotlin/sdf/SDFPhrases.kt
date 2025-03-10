@@ -2,6 +2,80 @@ package org.openrndr.extra.shaderphrases.sdf
 
 import kotlin.math.PI
 
+const val dot2Phrase = """#ifndef SP_DOT2
+#define SP_DOT2
+float dot2(vec2 v) { return dot(v,v); }
+#endif"""
+
+const val opXorPhrase = """#ifndef SP_OPXOR
+#define SP_OPXOR
+float opXor( float a, float b ) {
+    return max( min(a,b), -max(a,b) );
+}
+#endif    
+"""
+
+const val opUnionPhrase = """#ifndef SP_OPUNION
+#define SP_OPUNION
+float opUnion( float d1, float d2 ){
+    return min(d1,d2);
+}
+#endif"""
+
+const val opIntersectionPhrase = """#ifndef SP_OPINTERSECTION
+#define SP_OPINTERSECTION
+float opIntersection( float d1, float d2 ){
+    return max(d1,d2);
+}"""
+
+const val opSubtractionPhrase = """#ifndef SP_OPSUBTRACTION
+#define SP_OPSUBTRACTION
+float opSubtraction( float d1, float d2 ){
+    return max(-d1,d2);
+}
+"""
+
+const val sdBoxPhrase = """#ifndef SP_SDBOX
+#define SP_SDBOX
+float sdBox(in vec2 p, in vec2 b) {
+    vec2 d = abs(p) - b;
+    return length(max(d, 0.0)) + min(max(d.x, d.y), 0.0);
+}
+#endif
+"""
+
+const val sdCirclePhrase = """#ifndef SP_SDCIRCLE
+#define SP_SDCIRCLE
+float sdCircle(in vec2 p, in float r) {
+    return length(p) - r;
+}
+#endif
+"""
+
+const val sdSegmentPhrase = """#ifndef SP_SDSEGMENT
+#define SP_SDSEGMENT
+float sdSegment(in vec2 p, in vec2 a, in vec2 b) {
+    vec2 pa = p - a;
+    vec2 ba = b - a;
+    float h = clamp( dot(pa,ba)/dot(ba,ba), 0.0, 1.0 );
+    return length( pa - ba*h );
+}    
+#endif
+"""
+
+const val sdHeartPhrase = """#ifndef SP_SDHEART
+#define SP_SDHEART
+$dot2Phrase
+float sdHeart(in vec2 p) {
+    p.x = abs(p.x);
+    if (p.y+p.x>1.0) {
+        return sqrt(dot2(p-vec2(0.25,0.75))) - sqrt(2.0)/4.0;
+    }
+    return sqrt(min(dot2(p-vec2(0.00,1.00)), dot2(p-0.5*max(p.x+p.y,0.0)))) * sign(p.x-p.y);    
+}
+#endif
+"""
+
 const val sdEllipsePhrase = """#ifndef SP_SDELLIPSE
 #define SP_SDELLIPSE
 float sdEllipse( in vec2 p, in vec2 ab ) {
