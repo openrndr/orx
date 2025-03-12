@@ -12,23 +12,6 @@ import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.Description
 import kotlin.jvm.JvmRecord
 
-fun RenderTarget.deepDestroy() {
-    val cbcopy = colorAttachments.map { it }
-    val dbcopy = depthBuffer
-    detachDepthBuffer()
-    detachColorAttachments()
-    cbcopy.forEach {
-        when (it) {
-            is ColorBufferAttachment -> it.colorBuffer.destroy()
-            is CubemapAttachment -> it.cubemap.destroy()
-            is ArrayTextureAttachment -> it.arrayTexture.destroy()
-            is ArrayCubemapAttachment -> it.arrayCubemap.destroy()
-            else -> {}
-        }
-    }
-    dbcopy?.destroy()
-    destroy()
-}
 
 enum class LayerType {
     LAYER,
@@ -185,7 +168,7 @@ open class Layer internal constructor(
     private fun createLayerTarget(
         activeRenderTarget: RenderTarget, drawer: Drawer, bufferMultisample: BufferMultisample
     ) {
-        layerTarget?.deepDestroy()
+        layerTarget?.destroy()
         layerTarget = renderTarget(
             activeRenderTarget.width, activeRenderTarget.height,
             activeRenderTarget.contentScale, bufferMultisample
@@ -348,37 +331,31 @@ class ColorBufferCache(val width: Int, val height: Int) {
     }
 }
 
-class Composite : Layer(LayerType.LAYER) {
-
+class Composite(val session: Session?) : Layer(LayerType.LAYER), AutoCloseable {
     private var cache = ColorBufferCache(RenderTarget.active.width, RenderTarget.active.height)
     fun draw(drawer: Drawer) {
 
+        session?.push()
         if (cache.width != RenderTarget.active.width || cache.height != RenderTarget.active.height) {
             cache.destroy()
             cache = ColorBufferCache(RenderTarget.active.width, RenderTarget.active.height)
         }
-
         drawLayer(drawer, cache)
+        session?.pop()
+    }
+
+    override fun close() {
+        session?.close()
     }
 }
 
 /**
  * create a layered composition
  */
-fun compose(function: Layer.() -> Unit): Composite {
-    val root = Composite()
+fun compose(function: Composite.() -> Unit): Composite {
+    val session = Session.active.fork()
+    val root = Composite(session)
     root.function()
+    session.pop()
     return root
-}
-
-class Compositor : Extension {
-    override var enabled: Boolean = true
-    var composite = Composite()
-
-    override fun afterDraw(drawer: Drawer, program: Program) {
-        drawer.isolated {
-            drawer.defaults()
-            composite.draw(drawer)
-        }
-    }
 }
