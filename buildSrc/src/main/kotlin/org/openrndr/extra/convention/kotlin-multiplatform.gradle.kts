@@ -55,7 +55,8 @@ kotlin {
             val demo by creating {
                 associateWith(main)
                 tasks.register<CollectScreenshotsTask>("collectScreenshots") {
-                    inputDir.set(output.classesDirs.singleFile)
+                    // since Kotlin 2.1.20 output.classesDirs no longer contains a single file
+                    inputDir.set(output.classesDirs.filter { it.path.contains("classes/kotlin") }.singleFile)
                     runtimeDependencies.set(runtimeDependencyFiles)
                     outputDir.set(project.file(project.projectDir.toString() + "/images"))
                     dependsOn(compileTaskProvider)
