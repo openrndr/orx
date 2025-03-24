@@ -94,7 +94,7 @@ open class GradientBase<C>(
                 coord.y = u_viewDimensions.y - coord.y;
             }
 
-            vec4 gradient;
+            vec4 gradient = vec4(0.0);
             vec2 dx = p_filterSpread * dFdx(coord) / (float(p_filterWindow) + 1.0);
             vec2 dy = p_filterSpread * dFdy(coord) / (float(p_filterWindow) + 1.0);
             
