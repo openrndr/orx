@@ -1,9 +1,16 @@
-package histogram// Create a simple rectangle composition based on colors sampled from image
+package histogram
 
 import org.openrndr.application
 import org.openrndr.draw.loadImage
 import org.openrndr.extra.color.statistics.calculateHistogramRGB
 
+/*
+ * Create a simple grid-like composition based on colors sampled from image.
+ * The cells are 32 by 32 pixels in size and are filled with a random sample
+ * taken from the color histogram of the image.
+ *
+ * Note: due to its random nature the resulting animation contains flickering colors.
+ */
 fun main() = application {
     configure {
         width = 720

@@ -1,9 +1,14 @@
-package histogram// Show color histogram of an image
+package histogram
 
 import org.openrndr.application
 import org.openrndr.draw.loadImage
 import org.openrndr.extra.color.statistics.calculateHistogramRGB
 
+/*
+ * Demonstrates how to generate a palette with the top 32 colors
+ * of a loaded image, sorted by luminosity. The colors are displayed
+ * as rectangles overlayed on top of the image.
+ */
 fun main() = application {
     configure {
         width = 720

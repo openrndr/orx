@@ -1,10 +1,14 @@
-package histogram// Show color histogram using non-uniform weighting
+package histogram
 
 import org.openrndr.application
 import org.openrndr.draw.loadImage
 import org.openrndr.extra.color.statistics.calculateHistogramRGB
 import kotlin.math.pow
 
+/*
+ * Show the color histogram of an image using non-uniform weighting,
+ * prioritizing bright colors.
+ */
 fun main() = application {
     configure {
         width = 720
