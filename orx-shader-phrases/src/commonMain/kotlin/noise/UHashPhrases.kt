@@ -1,10 +1,9 @@
-package org.openrndr.extra.noise.phrases
+package org.openrndr.extra.shaderphrases.noise
 
 /**
  * uniform hash shader phrase
  */
-@Deprecated("use uhash11Phrase", ReplaceWith("uhash11Phrase", "org.openrndr.extra.shaderphrases.noise.uhash11Phrase"))
-val uhash11 = """
+val uhash11Phrase = """
 #ifndef PHRASE_UHASH11
 #define PHRASE_UHASH11
 uint uhash11(uint x) {
@@ -22,9 +21,8 @@ uint uhash11(uint x) {
 /**
  * uniform hash shader phrase
  */
-@Deprecated("use fhash11Phrase", ReplaceWith("fhash11Phrase", "org.openrndr.extra.shaderphrases.noise.fhash11Phrase"))
-val fhash11 = """
-$uhash11    
+val fhash11Phrase = """
+$uhash11Phrase    
 #ifndef PHRASE_FHASH11
 #define PHRASE_FHASH11
 float fhash11(float x) {
@@ -37,9 +35,8 @@ float fhash11(float x) {
 /**
  * uniform hash shader phrase
  */
-@Deprecated("use uhash12Phrase", ReplaceWith("uhash12Phrase", "org.openrndr.extra.shaderphrases.noise.uhash12Phrase"))
-val uhash12 = """
-$uhash11    
+val uhash12Phrase = """
+$uhash11Phrase    
 #ifndef PHRASE_UHASH12
 #define PHRASE_UHASH12
 uint uhash12(uvec2 x) {
@@ -52,9 +49,8 @@ uint uhash12(uvec2 x) {
 /**
  * uniform hash shader phrase
  */
-@Deprecated("use fhash12Phrase", ReplaceWith("fhash12Phrase", "org.openrndr.extra.shaderphrases.noise.fhash12Phrase"))
-val fhash12 = """
-$uhash12    
+val fhash12Phrase = """
+$uhash12Phrase    
 #ifndef PHRASE_FHASH12
 #define PHRASE_FHASH12
 float fhash12(vec2 x) {
@@ -67,9 +63,8 @@ float fhash12(vec2 x) {
 /**
  * uniform hash shader phrase
  */
-@Deprecated("use uhash13Phrase", ReplaceWith("uhash13Phrase", "org.openrndr.extra.shaderphrases.noise.uhash13Phrase"))
-val uhash13 = """
-$uhash11    
+val uhash13Phrase = """
+$uhash11Phrase    
 #ifndef PHRASE_UHASH13
 #define PHRASE_UHASH13
 uint uhash13(uvec3 x) {
@@ -82,9 +77,8 @@ uint uhash13(uvec3 x) {
 /**
  * uniform hash shader phrase
  */
-@Deprecated("use fhash13Phrase", ReplaceWith("fhash13Phrase", "org.openrndr.extra.shaderphrases.noise.fhash13Phrase"))
-val fhash13 = """
-$uhash13  
+val fhash13Phrase = """
+$uhash13Phrase  
 #ifndef PHRASE_FHASH13
 #define PHRASE_FHASH13
 float fhash13(vec3 x) {
@@ -97,9 +91,8 @@ float fhash13(vec3 x) {
 /**
  * uniform hash shader phrase
  */
-@Deprecated("use uhash14Phrase", ReplaceWith("uhash14Phrase", "org.openrndr.extra.shaderphrases.noise.uhash14Phrase"))
-val uhash14 = """
-$uhash11    
+val uhash14Phrase = """
+$uhash11Phrase    
 #ifndef PHRASE_UHASH14
 #define PHRASE_UHASH14
 uint uhash14(uvec4 x) {
@@ -112,9 +105,8 @@ uint uhash14(uvec4 x) {
 /**
  * uniform hash shader phrase
  */
-@Deprecated("use fhash14Phrase", ReplaceWith("fhash14Phrase", "org.openrndr.extra.shaderphrases.noise.fhash14Phrase"))
-val fhash14 = """
-$uhash14  
+val fhash14Phrase = """
+$uhash14Phrase  
 #ifndef PHRASE_FHASH14
 #define PHRASE_FHASH14
 float fhash14(vec4 x) {
