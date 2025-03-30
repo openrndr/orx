@@ -88,6 +88,21 @@ Shader based fills and strokes, including various types of gradient fills.
 
 ![image-DemoImageFill03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/image-DemoImageFill03Kt.png)
 
+### noise/DemoBlueNoise01
+[source code](src/jvmDemo/kotlin/noise/DemoBlueNoise01.kt)
+
+![noise-DemoBlueNoise01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/noise-DemoBlueNoise01Kt.png)
+
+### noise/DemoSimplex01
+[source code](src/jvmDemo/kotlin/noise/DemoSimplex01.kt)
+
+![noise-DemoSimplex01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/noise-DemoSimplex01Kt.png)
+
+### noise/DemoWhiteNoise01
+[source code](src/jvmDemo/kotlin/noise/DemoWhiteNoise01.kt)
+
+![noise-DemoWhiteNoise01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/noise-DemoWhiteNoise01Kt.png)
+
 ### patterns/DemoPatterns01
 [source code](src/jvmDemo/kotlin/patterns/DemoPatterns01.kt)
 
