@@ -61,6 +61,7 @@ include(
         "orx-property-watchers",
         "orx-jvm:orx-panel",
         "orx-jvm:orx-poisson-fill",
+        "orx-jvm:orx-processing",
         "orx-quadtree",
         "orx-jvm:orx-rabbit-control",
         "orx-jvm:orx-realsense2",
@@ -71,6 +72,7 @@ include(
         "orx-shade-styles",
         "orx-shapes",
         "orx-svg",
+
         "orx-jvm:orx-syphon",
         "orx-temporal-blur",
         "orx-timer",
