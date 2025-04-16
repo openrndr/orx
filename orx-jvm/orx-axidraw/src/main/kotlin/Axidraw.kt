@@ -1,6 +1,5 @@
 import offset.offset
 import org.openrndr.color.ColorRGBa
-import org.openrndr.dialogs.openFileDialog
 import org.openrndr.dialogs.saveFileDialog
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.isolated
@@ -292,31 +291,31 @@ class Axidraw(paperSize: PaperSize, orientation: PaperOrientation = PaperOrienta
      * Save current design as SVG
      */
     @ActionParameter("save", 340)
-    fun save() {
-        saveFileDialog(supportedExtensions = listOf("SVG" to listOf("svg"))) { svgFile ->
-            // If the user wants a frame covering the design...
-            if (occlusion && margin > 0) {
-                // Create a in-memory SVG representation of the frame
-                val frameSVG = drawComposition {
-                    fill = ColorRGBa.WHITE
-                    stroke = null
-                    shape(makeFrame(margin.toDouble()))
-                }.toSVG()
+    fun onSave() = saveFileDialog(supportedExtensions = listOf("SVG" to listOf("svg"))) { save(it) }
 
-                // Extract the actual shapes from the SVG
-                val pattern = "<svg[^>]*>(.*?)</svg>".toRegex(RegexOption.DOT_MATCHES_ALL)
-                val frameXML = pattern.find(frameSVG)?.groupValues?.getOrNull(1) ?: ""
+    private fun save(svgFile: File) {
+        // If the user wants a frame covering the design...
+        if (occlusion && margin > 0) {
+            // Create a in-memory SVG representation of the frame
+            val frameSVG = drawComposition {
+                fill = ColorRGBa.WHITE
+                stroke = null
+                shape(makeFrame(margin.toDouble()))
+            }.toSVG()
 
-                // Finally insert those shapes at the end of the file and save it
-                design.saveToInkscapeFile(svgFile) {
-                    it.replace("</svg>", "$frameXML</svg>")
-                }
-                // A simpler option would be to start a new composition, draw the design first
-                // and the frame on top, but this adds a bunch of <g> tags wrapping everything,
-                // which breaks the format axicli expects (layers directly on the root).
-            } else {
-                design.saveToInkscapeFile(svgFile)
+            // Extract the actual shapes from the SVG
+            val pattern = "<svg[^>]*>(.*?)</svg>".toRegex(RegexOption.DOT_MATCHES_ALL)
+            val frameXML = pattern.find(frameSVG)?.groupValues?.getOrNull(1) ?: ""
+
+            // Finally insert those shapes at the end of the file and save it
+            design.saveToInkscapeFile(svgFile) {
+                it.replace("</svg>", "$frameXML</svg>")
             }
+            // A simpler option would be to start a new composition, draw the design first
+            // and the frame on top, but this adds a bunch of <g> tags wrapping everything,
+            // which breaks the format axicli expects (layers directly on the root).
+        } else {
+            design.saveToInkscapeFile(svgFile)
         }
     }
 
@@ -324,16 +323,16 @@ class Axidraw(paperSize: PaperSize, orientation: PaperOrientation = PaperOrienta
      * Plot [svgFile] using the current settings
      */
     @ActionParameter("plot", 350)
-    fun plot() {
-        openFileDialog(supportedExtensions = listOf("SVG" to listOf("svg"))) { svgFile ->
-            runCMD(plotArgs(svgFile, makeTempSVGFile()))
-        }
+    fun onPlot() {
+        val svgFile = makeTempSVGFile()
+        save(svgFile)
+        runCMD(plotArgs(svgFile, makeTempSVGFile()))
     }
 
     /**
      * After hitting pause, use this to move the pen home
      */
-    @ActionParameter("resume to home", 320)
+    @ActionParameter("resume to home", 360)
     fun goHome() {
         runCMD(plotArgs(lastOutputFile, makeTempSVGFile()) + listOf("--mode", "res_home"))
     }
@@ -342,7 +341,7 @@ class Axidraw(paperSize: PaperSize, orientation: PaperOrientation = PaperOrienta
      * After hitting pause, use this to continue plotting
      *
      */
-    @ActionParameter("resume plotting", 330)
+    @ActionParameter("resume plotting", 370)
     fun resume() {
         runCMD(plotArgs(lastOutputFile, makeTempSVGFile()) + listOf("--mode", "res_plot"))
     }

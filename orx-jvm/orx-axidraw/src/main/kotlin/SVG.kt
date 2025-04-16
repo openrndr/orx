@@ -7,6 +7,7 @@ import java.io.File
 /**
  * Axidraw layer mode. The [command] argument will be prepended to the layer name.
  */
+@Suppress("unused")
 enum class AxiLayerMode(val command: String) {
     /**
      * The default mode prepends nothing.
