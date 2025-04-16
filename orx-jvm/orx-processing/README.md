@@ -11,3 +11,9 @@ For example, orx-processing enables you to:
  
 This module is particularly useful in projects that require the features or
 APIs of both Processing and OPENRNDR, simplifying interoperability and reducing boilerplate code for type translation.
+<!-- __demos__ -->
+## Demos
+### DemoPShape01
+[source code](src/demo/kotlin/DemoPShape01.kt)
+
+![DemoPShape01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-processing/images/DemoPShape01Kt.png)
