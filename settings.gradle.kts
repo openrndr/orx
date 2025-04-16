@@ -16,6 +16,7 @@ val openrndrClassifier: String by (gradle as ExtensionAware).extra(
 include(
     listOf(
         "openrndr-demos",
+        "orx-jvm:orx-axidraw",
         "orx-jvm:orx-boofcv",
         "orx-camera",
         "orx-jvm:orx-chataigne",
