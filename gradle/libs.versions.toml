@@ -29,6 +29,7 @@ ktor = "3.1.2"
 jgit = "7.1.0.202411261347-r"
 javaosc = "0.9"
 jsoup = "1.19.1"
+processing = "4.3.4"
 
 [libraries]
 kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging", version.ref = "kotlinLogging" }
@@ -49,7 +50,7 @@ kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", vers
 kotest-runner = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
 kotest-framework-engine = { group = "io.kotest", name = "kotest-framework-engine", version.ref = "kotest" }
 
-
+processing-core = { group = "org.processing", name = "core", version.ref = "processing"}
 openrndr-application = { group = "org.openrndr", name = "openrndr-application", version.ref = "openrndr" }
 openrndr-extensions = { group = "org.openrndr", name = "openrndr-extensions", version.ref = "openrndr" }
 openrndr-math = { group = "org.openrndr", name = "openrndr-math", version.ref = "openrndr" }
