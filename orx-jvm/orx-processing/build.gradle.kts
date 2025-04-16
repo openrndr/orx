@@ -3,13 +3,9 @@ plugins {
 }
 
 dependencies {
-//    api(project(":orx-parameters"))
-//    api(project(":orx-jvm:orx-panel"))
-//    api(libs.minim) {
-//        exclude(group = "org.apache.maven.plugins", module = "maven-javadoc-plugin")
-//    }
     api(libs.processing.core) {
-        exclude(group = "com.jogamp")
+        exclude(group = "org.jogamp.gluegen")
+        exclude(group = "org.jogamp.jogl")
     }
     implementation(libs.openrndr.application)
     implementation(libs.openrndr.math)
