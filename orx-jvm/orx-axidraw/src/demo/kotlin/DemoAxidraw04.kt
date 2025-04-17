@@ -1,13 +1,14 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.gui.WindowedGUI
-import org.openrndr.extra.noise.uniform
 import org.openrndr.extra.shapes.primitives.grid
 
 /**
  * Demonstrates:
- * - How to create layers via `group` and give each layer
- * a unique pen height and pen speed.
+ * - How to create a flattened grid of with 24 items
+ * - How to randomize the order of those items
+ * - How to take chunks of 10 items, then make
+ *   a pause to change the pen after plotting each chunk
  *
  */
 fun main() = application {
@@ -21,14 +22,16 @@ fun main() = application {
         axi.clear()
         axi.draw {
             fill = null
-            axi.bounds.grid(4, 6).flatten().forEach {
-                group {
-                    circle(it.center, 50.0)
-                }.configure(
-                    penHeight = Int.uniform(30, 60),
-                    penSpeed = Int.uniform(20, 50)
-                )
-            }
+            axi.bounds.grid(4, 6).flatten()
+                .shuffled().chunked(10).forEach { chunk ->
+                    group {
+                        chunk.forEach {
+                            circle(it.center, 50.0)
+                        }
+                    }
+                    group {
+                    }.configure(layerMode = AxiLayerMode.PAUSE)
+                }
         }
 
         extend(gui)

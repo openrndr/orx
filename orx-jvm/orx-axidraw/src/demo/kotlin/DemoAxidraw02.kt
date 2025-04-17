@@ -12,13 +12,10 @@ import org.openrndr.extra.parameters.Description
  *
  */
 fun main() = application {
-    val axi = Axidraw(PaperSize.A5, PaperOrientation.LANDSCAPE)
-
-    configure {
-        width = axi.windowWidth(100.0)
-        height = axi.windowHeight(100.0)
-    }
     program {
+        val axi = Axidraw(this, PaperSize.A5, PaperOrientation.LANDSCAPE)
+        axi.resizeWindow()
+
         val gui = WindowedGUI()
         gui.add(axi)
 

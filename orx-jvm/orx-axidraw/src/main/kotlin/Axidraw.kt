@@ -1,13 +1,16 @@
 import offset.offset
+import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.dialogs.saveFileDialog
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.isolated
+import org.openrndr.extra.camera.Camera2D
 import org.openrndr.extra.composition.*
 import org.openrndr.extra.imageFit.fit
 import org.openrndr.extra.parameters.*
-import org.openrndr.extra.svg.toSVG
 import org.openrndr.math.IntVector2
+import org.openrndr.math.Matrix44
+import org.openrndr.math.Vector2
 import org.openrndr.shape.IntRectangle
 import org.openrndr.shape.SegmentJoin
 import org.openrndr.shape.Shape
@@ -89,7 +92,7 @@ enum class PaperOrientation {
  *
  */
 @Description("Axidraw")
-class Axidraw(paperSize: PaperSize, orientation: PaperOrientation = PaperOrientation.PORTRAIT) {
+class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrientation = PaperOrientation.PORTRAIT) {
     val actualPaperSize = when (orientation) {
         PaperOrientation.LANDSCAPE -> paperSize.size.yx.vector2
         PaperOrientation.PORTRAIT -> paperSize.size.vector2
@@ -234,16 +237,6 @@ class Axidraw(paperSize: PaperSize, orientation: PaperOrientation = PaperOrienta
     private val design = drawComposition(compositionDimensions()) { }
 
     /**
-     * Returns a suggested window width in pixels matching the [actualPaperSize]
-     */
-    fun windowWidth(ppi: Double = 96.0) = (ppi * actualPaperSize.x / 25.4).toInt()
-
-    /**
-     * Returns a suggested window height in pixels matching the [actualPaperSize]
-     */
-    fun windowHeight(ppi: Double = 96.0) = (ppi * actualPaperSize.y / 25.4).toInt()
-
-    /**
      * Returns the bounds of the drawable area so user code can draw things
      * whithout leaving the paper.
      */
@@ -294,29 +287,32 @@ class Axidraw(paperSize: PaperSize, orientation: PaperOrientation = PaperOrienta
     fun onSave() = saveFileDialog(supportedExtensions = listOf("SVG" to listOf("svg"))) { save(it) }
 
     private fun save(svgFile: File) {
-        // If the user wants a frame covering the design...
-        if (occlusion && margin > 0) {
-            // Create a in-memory SVG representation of the frame
-            val frameSVG = drawComposition {
+        // Create a new SVG with the frame and camera applied
+        val designRendered = drawComposition(compositionDimensions()) {
+            val m = camera.view
+            design.findGroups().forEach { gn ->
+                if(gn.findGroups().size == 1) {
+                    val g = group {
+                        gn.findShapes().forEach { shp ->
+                            shape(shp.shape.transform(m))
+                        }
+                    }
+                    g.attributes.putAll(gn.attributes)
+                }
+            }
+            //design.findShapes().forEach {
+            //    shape(it.shape.transform(m))
+            //}
+            //composition(design)
+
+            // If the user wants a frame covering the design...
+            if (occlusion) {
                 fill = ColorRGBa.WHITE
                 stroke = null
                 shape(makeFrame(margin.toDouble()))
-            }.toSVG()
-
-            // Extract the actual shapes from the SVG
-            val pattern = "<svg[^>]*>(.*?)</svg>".toRegex(RegexOption.DOT_MATCHES_ALL)
-            val frameXML = pattern.find(frameSVG)?.groupValues?.getOrNull(1) ?: ""
-
-            // Finally insert those shapes at the end of the file and save it
-            design.saveToInkscapeFile(svgFile) {
-                it.replace("</svg>", "$frameXML</svg>")
             }
-            // A simpler option would be to start a new composition, draw the design first
-            // and the frame on top, but this adds a bunch of <g> tags wrapping everything,
-            // which breaks the format axicli expects (layers directly on the root).
-        } else {
-            design.saveToInkscapeFile(svgFile)
         }
+        designRendered.saveToInkscapeFile(svgFile)
     }
 
     /**
@@ -380,21 +376,47 @@ class Axidraw(paperSize: PaperSize, orientation: PaperOrientation = PaperOrienta
         )
     }.lastArgMemo()
 
+    var fitMatrix = Matrix44.IDENTITY
+
     /**
      * Display the composition using [drawer].
      */
     fun display(drawer: Drawer) {
-        val m = bounds.fit(drawer.bounds)
+        fitMatrix = bounds.fit(drawer.bounds)
         drawer.isolated {
-            drawer.view *= m
-            composition(design)
+            view *= fitMatrix
+
+            isolated {
+                view *= camera.view
+                composition(design)
+            }
 
             // Draw frame
-            if (occlusion && margin > 0) {
+            if (occlusion) {
                 fill = ColorRGBa.WHITE
                 stroke = null
                 shape(makeFrame(margin.toDouble()))
             }
         }
+    }
+
+    /**
+     * Resizes the program window to match
+     * the paper size according to the
+     * [ppi] (Pixels Per Inch) value.
+     */
+    fun resizeWindow(ppi: Double = 96.0) {
+        val app = program.application
+        val resizable = app.windowResizable
+        app.windowResizable = true
+        app.windowSize = Vector2(
+            ppi * actualPaperSize.x / 25.4,
+            ppi * actualPaperSize.y / 25.4
+        )
+        app.windowResizable = resizable
+    }
+
+    val camera = Camera2D().also {
+        it.setup(program)
     }
 }

@@ -104,8 +104,16 @@ fun Composition.saveToInkscapeFile(
     """.trimIndent()
 
     // Remove the wrapping <g>, otherwise layers don't work.
+    // Also remove duplicated <g><g> and </g></g> which show up when
+    // drawing a composition into another composition.
     val updated = svg.replace(
         Regex("""(<g\s?>(.*)</g>)""", RegexOption.DOT_MATCHES_ALL), "$2"
+    ).replace(
+        "(<g >\\W?)+<g ".toRegex(setOf(RegexOption.MULTILINE, RegexOption.DOT_MATCHES_ALL)),
+        "<g "
+    ).replace(
+        "(\\W?</g>)+".toRegex(setOf(RegexOption.MULTILINE, RegexOption.DOT_MATCHES_ALL)),
+        "\n</g>"
     ).replace(
         Regex("""(<svg.*?>)""", RegexOption.DOT_MATCHES_ALL), "$1$header"
     )

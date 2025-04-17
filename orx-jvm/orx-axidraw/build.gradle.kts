@@ -10,6 +10,7 @@ dependencies {
     implementation(project(":orx-svg"))
     implementation(project(":orx-image-fit"))
     implementation(project(":orx-shapes"))
+    implementation(project(":orx-camera"))
     demoImplementation(project(":orx-camera"))
     demoImplementation(project(":orx-noise"))
     demoImplementation(project(":orx-parameters"))

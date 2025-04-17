@@ -23,7 +23,8 @@ fun main() = application {
         height = PaperSize.A5.size.y * 5
     }
     program {
-        val axi = Axidraw(PaperSize.A5)
+        val axi = Axidraw(this, PaperSize.A5)
+        axi.resizeWindow()
 
         val gui = GUI()
         gui.add(axi)

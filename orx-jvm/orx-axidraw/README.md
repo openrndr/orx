@@ -14,12 +14,9 @@ NOTE: work in progress, Linux-only alpha release expecting `axicli` to be in the
 
 ```kotlin
 fun main() = application {
-    configure {
-        width = PaperSize.A5.size.x * 5
-        height = PaperSize.A5.size.y * 5
-    }
     program {
         val axi = Axidraw(PaperSize.A5)
+        axi.resizeWindow()
 
         val gui = WindowedGUI()
         gui.add(axi)
@@ -50,9 +47,13 @@ to find the ideal heights for the pen.
 Enable `fills occlude strokes` and increase margin value to hide elements near 
 the borders of the paper.
 
-Click `save` before plotting and choose where you want to save your SVG file.
-Click `plot` and choose the SVG file you want to plot using the current settings.
-If one presses the hardware pause button, one can click `resume plotting` to continue.
+Click `save` to save your SVG file.
+Click `plot` to plot the visible design using the current settings.
+A [2D camera](https://guide.openrndr.org/extensions/camera2D.html) is enabled by default 
+to place your design on the paper.
+
+Click `resume plotting` after pressing the hardware pause button (or including a pause
+command on a layer) to continue.
 
 If `preview` is enabled when plotting a plotting-time estimate will be shown.
 
