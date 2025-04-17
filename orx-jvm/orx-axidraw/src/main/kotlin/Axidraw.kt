@@ -1,6 +1,7 @@
 import offset.offset
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
+import org.openrndr.dialogs.openFileDialog
 import org.openrndr.dialogs.saveFileDialog
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.isolated
@@ -8,6 +9,7 @@ import org.openrndr.extra.camera.Camera2D
 import org.openrndr.extra.composition.*
 import org.openrndr.extra.imageFit.fit
 import org.openrndr.extra.parameters.*
+import org.openrndr.extra.svg.loadSVG
 import org.openrndr.math.IntVector2
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
@@ -280,6 +282,27 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
     @ActionParameter("info: system", 310)
     fun sysInfo() = runCMD(listOf("--mode", "sysinfo"))
 
+    @ActionParameter("load", 330)
+    fun onLoad() = openFileDialog(supportedExtensions = listOf("SVG" to listOf("svg"))) {
+        clear()
+        camera.view = Matrix44.IDENTITY
+        val loaded = loadSVG(it)
+        draw {
+            loaded.findGroups().forEach { gn ->
+                if(gn.findGroups().size == 1) {
+                    val g = group {
+                        gn.findShapes().forEach { shp ->
+                            if(shp.attributes["type"] != "margin") {
+                                shape(shp.shape)
+                            }
+                        }
+                    }
+                    g.attributes.putAll(gn.attributes)
+                }
+            }
+        }
+    }
+
     /**
      * Save current design as SVG
      */
@@ -300,23 +323,19 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
                     g.attributes.putAll(gn.attributes)
                 }
             }
-            //design.findShapes().forEach {
-            //    shape(it.shape.transform(m))
-            //}
-            //composition(design)
 
             // If the user wants a frame covering the design...
             if (occlusion) {
                 fill = ColorRGBa.WHITE
                 stroke = null
-                shape(makeFrame(margin.toDouble()))
+                shape(makeFrame(margin.toDouble()))?.attributes?.put("type", "margin")
             }
         }
         designRendered.saveToInkscapeFile(svgFile)
     }
 
     /**
-     * Plot [svgFile] using the current settings
+     * Plot design using the current settings
      */
     @ActionParameter("plot", 350)
     fun onPlot() {
