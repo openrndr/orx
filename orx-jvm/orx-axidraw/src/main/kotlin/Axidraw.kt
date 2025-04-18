@@ -95,6 +95,18 @@ enum class PaperOrientation {
  */
 @Description("Axidraw")
 class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrientation = PaperOrientation.PORTRAIT) {
+
+    fun setupAxidrawCli() {
+        if (!File("axidraw-venv").exists()) {
+            invokePython(listOf("-m", "venv", "axidraw-venv"))
+        }
+        val python = venvPython(File("axidraw-venv"))
+        invokePython(listOf("-m", "pip", "install", "https://cdn.evilmadscientist.com/dl/ad/public/AxiDraw_API.zip"), python)
+    }
+
+    fun init() {
+        setupAxidrawCli()
+    }
     val actualPaperSize = when (orientation) {
         PaperOrientation.LANDSCAPE -> paperSize.size.yx.vector2
         PaperOrientation.PORTRAIT -> paperSize.size.vector2
@@ -264,10 +276,18 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
     }
 
     private fun runCMD(args: List<String>, hold: Boolean = true) {
-        val actualCMD = (if (hold) cmd else listOf(cmd.last())) + args
-        println((actualCMD).joinToString(" "))
-        val pb = ProcessBuilder(actualCMD)
-        pb.start()
+        val python = venvPython(File("axidraw-venv"))
+        println("hello this is python: $python")
+        invokePython(listOf("-m", "axicli") + args, python)
+
+
+//        if (hold )
+//
+//
+//        val actualCMD = (if (hold) cmd else listOf(cmd.last())) + args
+//        println((actualCMD).joinToString(" "))
+//        val pb = ProcessBuilder(actualCMD)
+//        pb.start()
     }
 
     /**

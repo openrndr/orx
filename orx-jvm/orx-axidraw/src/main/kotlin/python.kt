@@ -1,26 +1,43 @@
 import java.io.BufferedInputStream
 import java.io.File
 
-fun invokePython(script: String, input: String): String {
+fun systemPython(): String {
     val executable = if (System.getProperty("os.name").lowercase().contains("windows")) {
-        "python/venv/Scripts/python.exe"
+        "python3.exe"
     } else {
-        "python/venv/bin/python"
+        "python3"
     }
+    return executable
+}
+
+fun venvPython(venv: File): String {
+    val executable = if (System.getProperty("os.name").lowercase().contains("windows")) {
+        "${venv.absolutePath}/Scripts/python3.exe"
+    } else {
+        "${venv.absolutePath}/bin/python"
+    }
+    return executable
+}
+
+
+
+fun invokePython(arguments: List<String>, executable: String = systemPython()): String {
+
+    println("invoking with executable $executable and arguments $arguments")
 
     val result: String
     val pb = ProcessBuilder()
         .let {
-            it.command(listOf(executable, script))
+            it.command(listOf(executable) + arguments)
             it.redirectError(File("python.error.txt"))
         }
         .start()
         .let {
-            val os = it.outputStream
-            val bw = os.bufferedWriter()
-            bw.write(input)
-            bw.flush()
-            bw.close()
+//            val os = it.outputStream
+//            val bw = os.bufferedWriter()
+//            bw.write(input)
+//            bw.flush()
+//            bw.close()
 
             val `is` = it.inputStream
             val bis = BufferedInputStream(`is`)
@@ -33,6 +50,14 @@ fun invokePython(script: String, input: String): String {
         }
 
     return result
+}
+
+fun main() {
+    if (!File("axidraw-venv").exists()) {
+        invokePython(listOf("-m", "venv", "axidraw-venv"))
+    }
+    val python = venvPython(File("axidraw-venv"))
+    invokePython(listOf("-m", "pip", "install", "https://cdn.evilmadscientist.com/dl/ad/public/AxiDraw_API.zip"), python)
 }
 
 /*
