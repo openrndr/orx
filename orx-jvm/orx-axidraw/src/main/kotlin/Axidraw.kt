@@ -456,7 +456,9 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
         app.windowResizable = resizable
     }
 
-    val camera = Camera2D().also {
-        it.setup(program)
+    val camera by lazy {
+        Camera2D().also {
+            it.setup(program)
+        }
     }
 }
