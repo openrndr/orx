@@ -3,7 +3,7 @@ import java.io.File
 
 fun systemPython(): String {
     val executable = if (System.getProperty("os.name").lowercase().contains("windows")) {
-        "python3.exe"
+        "python.exe"
     } else {
         "python3"
     }
@@ -12,13 +12,12 @@ fun systemPython(): String {
 
 fun venvPython(venv: File): String {
     val executable = if (System.getProperty("os.name").lowercase().contains("windows")) {
-        "${venv.absolutePath}/Scripts/python3.exe"
+        "${venv.absolutePath}/Scripts/python.exe"
     } else {
         "${venv.absolutePath}/bin/python"
     }
     return executable
 }
-
 
 
 fun invokePython(arguments: List<String>, executable: String = systemPython()): String {
@@ -29,7 +28,8 @@ fun invokePython(arguments: List<String>, executable: String = systemPython()): 
     val pb = ProcessBuilder()
         .let {
             it.command(listOf(executable) + arguments)
-            it.redirectError(File("python.error.txt"))
+            //it.redirectError(File("python.error.txt"))
+            it.inheritIO()
         }
         .start()
         .let {

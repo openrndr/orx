@@ -1,3 +1,4 @@
+import io.github.oshai.kotlinlogging.KotlinLogging
 import offset.offset
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
@@ -19,6 +20,8 @@ import org.openrndr.shape.Shape
 import java.io.File
 import java.util.*
 import kotlin.io.path.createTempFile
+
+private val logger = KotlinLogging.logger {}
 
 /**
  * Axidraw reordering optimization types.
@@ -97,14 +100,17 @@ enum class PaperOrientation {
 class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrientation = PaperOrientation.PORTRAIT) {
 
     fun setupAxidrawCli() {
+
         if (!File("axidraw-venv").exists()) {
+            logger.info { "installing axidraw-cli virtual environment" }
             invokePython(listOf("-m", "venv", "axidraw-venv"))
         }
         val python = venvPython(File("axidraw-venv"))
+        logger.info { "installing axidraw-cli in virtual environment $python" }
         invokePython(listOf("-m", "pip", "install", "https://cdn.evilmadscientist.com/dl/ad/public/AxiDraw_API.zip"), python)
     }
 
-    fun init() {
+    init {
         setupAxidrawCli()
     }
     val actualPaperSize = when (orientation) {
@@ -277,13 +283,8 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
 
     private fun runCMD(args: List<String>, hold: Boolean = true) {
         val python = venvPython(File("axidraw-venv"))
-        println("hello this is python: $python")
         invokePython(listOf("-m", "axicli") + args, python)
 
-
-//        if (hold )
-//
-//
 //        val actualCMD = (if (hold) cmd else listOf(cmd.last())) + args
 //        println((actualCMD).joinToString(" "))
 //        val pb = ProcessBuilder(actualCMD)
