@@ -40,6 +40,14 @@ fun PShape.stroke(c: ColorRGBa) {
     stroke(c.r.toFloat() * 255.0f, c.g.toFloat() * 255.0f, c.b.toFloat() * 255.0f, c.alpha.toFloat() * 255.0f)
 }
 
+/**
+ * Adds a cubic Bézier curve vertex to the current shape. The curve is defined
+ * by two control points and an end point.
+ *
+ * @param v2 The first control point that influences the direction and shape of the curve.
+ * @param v3 The second control point that affects the curvature of the Bézier curve.
+ * @param v4 The end point where the Bézier curve terminates.
+ */
 fun PShape.bezierVertex(v2: Vector2, v3: Vector2, v4: Vector2) {
     bezierVertex(
         v2.x.toFloat(), v2.y.toFloat(),
@@ -48,6 +56,18 @@ fun PShape.bezierVertex(v2: Vector2, v3: Vector2, v4: Vector2) {
     )
 }
 
+/**
+ * Combines a list of [Shape] objects into a single [PShape] object of type `GROUP`
+ * by adding each shape as a child.
+ *
+ * Each [Shape] in the input list is converted to a [PShape], and these are added as
+ * children to a parent [PShape] of type `GROUP`. This allows for easy grouping and management
+ * of multiple [Shape] objects while using the Processing library.
+ *
+ * @param shapes the list of [Shape] objects to combine. Each shape is converted and added
+ *               as a child to the resulting [PShape] object.
+ * @return a [PShape] object of type `GROUP` containing the provided shapes as children.
+ */
 fun PShape(shapes: List<Shape>): PShape {
     val ps = PShape(PShape.GROUP)
     for (shape in shapes) {
@@ -56,6 +76,16 @@ fun PShape(shapes: List<Shape>): PShape {
     return ps
 }
 
+/**
+ * Converts a given [Shape] instance into a [PShape] object. If the shape contains a single
+ * contour, it is directly converted. Otherwise, the method constructs a complex [PShape]
+ * with paths and contours, mapping each segment type appropriately.
+ *
+ * @param shape the [Shape] instance to be converted into a [PShape]. The shape may consist
+ *              of one or more contours, each containing multiple segments.
+ * @return a [PShape] object representing the input shape. The resulting [PShape]
+ *         will contain vertices, contours, and paths corresponding to the geometry of the input.
+ */
 fun PShape(shape: Shape): PShape {
     if (shape.contours.size == 1) {
         return PShape(shape.contours[0])
@@ -79,14 +109,28 @@ fun PShape(shape: Shape): PShape {
     }
 }
 
+/**
+ * Converts a given [ShapeContour] into a [PShape] object. The method translates contour
+ * segments (linear, quadratic, cubic) into corresponding vertices and shapes suitable
+ * for use with the Processing library.
+ *
+ * @param contour the [ShapeContour] to convert into a [PShape]. It may consist of multiple
+ * segments of varying types and can be open or closed.
+ * @return a [PShape] object representing the given [ShapeContour].
+ */
 fun PShape(contour: ShapeContour): PShape {
     val ps = PShape(PShape.PATH)
     if (!contour.empty) {
         ps.beginShape()
-        ps.vertex(contour.segments[0].start)
-        for (segment in contour.segments) {
+        val start = contour.segments[0].start
+        ps.vertex(start)
+        for ((index, segment) in contour.segments.withIndex()) {
             when (segment.type) {
-                SegmentType.LINEAR -> ps.vertex(segment.end)
+                SegmentType.LINEAR -> {
+                    if (!(contour.closed && index == contour.segments.size - 1)) {
+                        ps.vertex(segment.end)
+                    }
+                }
                 SegmentType.QUADRATIC -> ps.quadraticVertex(segment.control[0], segment.end)
                 SegmentType.CUBIC -> {
                     ps.bezierVertex(segment.control[0], segment.control[1], segment.end)
@@ -111,7 +155,7 @@ fun PShape(contour: ShapeContour): PShape {
  * @throws IllegalArgumentException if the `PShape` is not of type `PATH`.
  * @throws IllegalStateException for unsupported vertex codes.
  */
-fun PShape.toShapeContour(): ShapeContour {
+fun PShape.pathToShapeContours(): List<ShapeContour> {
     require(family == PShape.PATH) {
         "can only convert PShape.PATH to ShapeContour"
     }
@@ -122,39 +166,55 @@ fun PShape.toShapeContour(): ShapeContour {
             vertices.add(pv.toVector2())
         }
         val contour = ShapeContour.fromPoints(vertices, isClosed)
-        return contour
+        return listOf(contour)
     } else {
-        val segments = mutableListOf<Segment2D>()
+        val result = mutableListOf<ShapeContour>()
+
+        var segments = mutableListOf<Segment2D>()
         var vertexIndex = 0
-        var vertex = getVertex(vertexIndex).toVector2()
-        vertexIndex++
-        for (i in 1 until vertexCodeCount) {
+        var vertex:Vector2? = null
+
+        for (i in 0 until vertexCodeCount) {
             val code = vertexCodes[i]
             when (code) {
                 PShape.VERTEX -> {
                     val pv = getVertex(vertexIndex).toVector2()
                     vertexIndex++
-                    segments.add(Segment2D(vertex, pv))
+                    if (vertex != null) {
+                        segments.add(Segment2D(vertex, pv))
+                    }
                     vertex = pv
                 }
                 PShape.BEZIER_VERTEX -> {
                     val c0 = getVertex(vertexIndex).toVector2(); vertexIndex++
                     val c1 = getVertex(vertexIndex).toVector2(); vertexIndex++
                     val pv = getVertex(vertexIndex).toVector2(); vertexIndex++
-                   segments.add(Segment2D(vertex, c0, c1, pv))
+                   segments.add(Segment2D(vertex ?: error("no vertex set"), c0, c1, pv))
                     vertex = pv
                 }
                 PShape.QUADRATIC_VERTEX -> {
                     val c0 = getVertex(vertexIndex).toVector2(); vertexIndex++
                     val pv = getVertex(vertexIndex).toVector2(); vertexIndex++
-                    segments.add(Segment2D(vertex, c0,  pv))
+                    segments.add(Segment2D(vertex ?: error("no vertex set"), c0,  pv))
                     vertex = pv
+                }
+                PShape.BREAK -> {
+                    segments.add(Segment2D(vertex ?: error("no vertex set"), segments.first().start))
+                    result.add(ShapeContour(segments, closed = isClosed))
+                    segments = mutableListOf()
+                    vertex = getVertex(vertexIndex).toVector2()
                 }
                 else -> error("unsupported code $code")
             }
         }
-        val contour = ShapeContour(segments, closed = isClosed)
-        return contour
+        if (isClosed && segments.last().end.distanceTo(segments.first().start) > 1E-6) {
+            segments.add(Segment2D(segments.last().end, segments.first().start))
+        }
+
+        if (segments.isNotEmpty()) {
+            result.add(ShapeContour(segments, closed = isClosed))
+        }
+        return result
     }
 }
 
@@ -177,7 +237,7 @@ fun PShape.toShapeContours(): List<ShapeContour> {
         }
 
         PShape.PATH -> {
-            listOf(toShapeContour())
+            pathToShapeContours()
         }
 
         PShape.GEOMETRY -> {
@@ -192,13 +252,10 @@ fun PShape.toShapeContours(): List<ShapeContour> {
                     activeContour = mutableListOf()
                     codeIndex++
                 }
-
-                //  activeContour.add(getVertex(i).toVector2())
             }
             if (activeContour.isNotEmpty()) {
                 contourPoints.add(activeContour)
             }
-            //Shape(contourPoints.map { ShapeContour.fromPoints(it, false) })
             contourPoints.map { ShapeContour.fromPoints(it, false) }
         }
 
