@@ -51,9 +51,14 @@ fun invokePython(arguments: List<String>, executable: String = systemPython()): 
             val br = bis.bufferedReader()
             result = br.readText().trim()
             val error = it.waitFor()
-            if (error != 0) {
-                error("Python invoke failed with error $error")
-            }
+            println("Python returned: $error")
+
+            // Error detection disabled because pressing the pause button on the Axidraw
+            // returns "1", and we don't want the program to close when that happens.
+            // There's no obvious way to distinguish between actual errors and pressing the pause button.
+            // if (error != 0) {
+            //     error("Python invoke failed with error $error")
+            // }
         }
 
     return result
