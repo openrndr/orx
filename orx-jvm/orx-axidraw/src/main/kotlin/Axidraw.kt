@@ -1,4 +1,5 @@
 package org.openrndr.extra.axidraw
+
 import io.github.oshai.kotlinlogging.KotlinLogging
 import offset.offset
 import org.openrndr.Program
@@ -12,6 +13,7 @@ import org.openrndr.extra.composition.*
 import org.openrndr.extra.imageFit.fit
 import org.openrndr.extra.parameters.*
 import org.openrndr.extra.svg.loadSVG
+import org.openrndr.extra.svg.toSVG
 import org.openrndr.math.IntVector2
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
@@ -108,12 +110,16 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
         }
         val python = venvPython(File("axidraw-venv"))
         logger.info { "installing axidraw-cli in virtual environment $python" }
-        invokePython(listOf("-m", "pip", "install", "https://cdn.evilmadscientist.com/dl/ad/public/AxiDraw_API.zip"), python)
+        invokePython(
+            listOf("-m", "pip", "install", "https://cdn.evilmadscientist.com/dl/ad/public/AxiDraw_API.zip"),
+            python
+        )
     }
 
     init {
         setupAxidrawCli()
     }
+
     val actualPaperSize = when (orientation) {
         PaperOrientation.LANDSCAPE -> paperSize.size.yx.vector2
         PaperOrientation.PORTRAIT -> paperSize.size.vector2
@@ -199,19 +205,20 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
     @BooleanParameter("webhook", 230)
     var webhook = false
 
+    /**
+     * Creates a temporary SVG file. Used by the AxiCLI "resume" methods. When plotting,
+     * the temporary SVG file is updated to keep track of progress and allow resuming.
+     */
     private fun makeTempSVGFile(): File {
         val tmpFile = createTempFile("axi_${UUID.randomUUID()}", ".svg").toFile()
         tmpFile.deleteOnExit()
         return tmpFile
     }
 
+    /**
+     * Keeps track of the most recent output file. Used to resume plotting after a pause.
+     */
     private var lastOutputFile = makeTempSVGFile()
-
-    private val cmd = listOf(
-        "xterm", "-hold", "-fullscreen",
-        "-fs", "24",
-        "-e", "axicli"
-    )
 
     private fun plotArgs(plotFile: File, outputFile: File): List<String> {
         lastOutputFile = outputFile
@@ -285,11 +292,6 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
     private fun runCMD(args: List<String>, hold: Boolean = true) {
         val python = venvPython(File("axidraw-venv"))
         invokePython(listOf("-m", "axicli") + args, python)
-
-//        val actualCMD = (if (hold) cmd else listOf(cmd.last())) + args
-//        println((actualCMD).joinToString(" "))
-//        val pb = ProcessBuilder(actualCMD)
-//        pb.start()
     }
 
     /**
@@ -311,10 +313,10 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
         val loaded = loadSVG(it)
         draw {
             loaded.findGroups().forEach { gn ->
-                if(gn.findGroups().size == 1) {
+                if (gn.findGroups().size == 1) {
                     val g = group {
                         gn.findShapes().forEach { shp ->
-                            if(shp.attributes["type"] != "margin") {
+                            if (shp.attributes["type"] != "margin") {
                                 shape(shp.shape)
                             }
                         }
@@ -335,10 +337,13 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
         // Create a new SVG with the frame and camera applied
         val designRendered = drawComposition(compositionDimensions()) {
             val m = camera.view
+
             design.findGroups().forEach { gn ->
-                if(gn.findGroups().size == 1) {
+                if (gn.findGroups().size == 1) {
                     val g = group {
                         gn.findShapes().forEach { shp ->
+                            stroke = shp.stroke
+                            fill = shp.fill
                             shape(shp.shape.transform(m))
                         }
                     }
@@ -417,15 +422,12 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
         )
     }.lastArgMemo()
 
-    var fitMatrix = Matrix44.IDENTITY
-
     /**
      * Display the composition using [drawer].
      */
     fun display(drawer: Drawer) {
-        fitMatrix = bounds.fit(drawer.bounds)
         drawer.isolated {
-            view *= fitMatrix
+            view *= bounds.fit(drawer.bounds)
 
             isolated {
                 view *= camera.view
@@ -462,4 +464,41 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
             it.setup(program)
         }
     }
+
+    /**
+     * Rebuilds the design putting shapes under groups based on stroke colors and inserts a pause
+     * after each group.
+     *
+     * Call this method after creating a draw composition that uses several stroke colors.
+     * When plotting, change pens after each pause, then click "resume plotting".
+     *
+     * NOTE: this method changes line order. Therefore, avoid it if order is important,
+     * for instance with designs using fill colors to occlude.
+     *
+     */
+    fun groupStrokeColors() {
+        val colorGroups = design.findShapes().filter { it.stroke != null }.groupBy { it.stroke!! }
+        design.clear()
+        design.draw {
+            var i = 0
+            colorGroups.forEach { (color, nodes) ->
+                val hexColor = "%06x".format(
+                    ((color.r * 255).toInt() shl 16) + ((color.g * 255).toInt() shl 8) + ((color.b * 255).toInt())
+                )
+                group { cursor.children.addAll(nodes) }.configure(hexColor)
+
+                // Add a pause if it's not the last layer
+                if(++i < colorGroups.size) {
+                    group { }.configure(layerMode = AxiLayerMode.PAUSE)
+                }
+            }
+        }
+    }
+
+    /**
+     * Read-only String variable to inspect the current design in SVG format for debugging purposes.
+     */
+    var svg: String = ""
+        get() = design.toSVG()
+        private set
 }
