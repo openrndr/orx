@@ -11,4 +11,5 @@ dependencies {
     implementation(libs.openrndr.math)
     implementation(libs.kotlin.reflect)
     demoRuntimeOnly(libs.slf4j.simple)
+    demoImplementation(project(":orx-shapes"))
 }

@@ -29,7 +29,7 @@ ktor = "3.1.2"
 jgit = "7.1.0.202411261347-r"
 javaosc = "0.9"
 jsoup = "1.19.1"
-processing = "4.3.4"
+processing = "4.4.0"
 
 [libraries]
 kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging", version.ref = "kotlinLogging" }
