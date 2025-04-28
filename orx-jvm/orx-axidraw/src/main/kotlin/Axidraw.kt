@@ -317,6 +317,8 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
                     val g = group {
                         gn.findShapes().forEach { shp ->
                             if (shp.attributes["type"] != "margin") {
+                                stroke = shp.stroke
+                                fill = shp.fill
                                 shape(shp.shape)
                             }
                         }
