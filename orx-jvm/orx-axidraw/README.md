@@ -5,17 +5,16 @@ GUI for configuring an plotting with an Axidraw pen-plotter.
 Uses the [AxiCLI](https://axidraw.com/doc/cli_api/#introduction) command line tool 
 to communicate with the pen plotter.
 
-NOTE: Requires Python 3.8 or higher.
+Requirements: Python 3.8 or higher.
 
-NOTE: work in progress, Linux-only alpha release expecting `axicli` to be in the path.
-
+This orx create a Python virtual environment and downloads AxiCLI automatically. 
 
 ## Usage
 
 ```kotlin
 fun main() = application {
     program {
-        val axi = Axidraw(PaperSize.A5)
+        val axi = Axidraw(this, PaperSize.A5)
         axi.resizeWindow()
 
         val gui = WindowedGUI()
@@ -55,6 +54,12 @@ to place your design on the paper.
 Click `resume plotting` after pressing the hardware pause button (or including a pause
 command on a layer) to continue.
 
-If `preview` is enabled when plotting a plotting-time estimate will be shown.
+To get a plotting time estimate, enable `preview` and click `plot`. Nothing will be plotted, but the estimate will be shown in the IDE console.
 
-The `Load` and `Save` buttons at the top can be used to load and save the plotting settings.
+The `Load` and `Save` buttons at the top can be used to load and save the plotting settings. In a future version we may embed the plotting settings into the SVG file.
+
+### Multi color plots
+
+orx-axidraw makes it easy to create multi-pen plots. To do that, use two or more stroke colors in your design. The order of the lines does not matter. Then, before plotting, call `axi.groupStrokeColors()`. This will group curves into layers based their stroke colors and insert a pause between layers, allowing you to change the pen. 
+
+When the plotter pauses during plotting, change the pen and click `resume plotting` to continue.
