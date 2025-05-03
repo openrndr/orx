@@ -5,24 +5,22 @@ import org.openrndr.draw.ColorType
 import org.openrndr.draw.colorBuffer
 import org.openrndr.draw.loadImage
 import org.openrndr.drawImage
-import org.openrndr.extra.fx.blur.DirectionalBlur
+import org.openrndr.extra.fx.distort.DirectionalDisplace
 import org.openrndr.math.Polar
 
 /**
- * Demonstrate how to use [DirectionalBlur]. By using a window of 1,
- * only 1 sample is taken, producing a sharp image instead of a
- * blurry one.
+ * Demonstrate how to use [DirectionalDisplace].
  *
  * The program draws 12 overlapping translucent circles on the
  * `direction` color buffer to produce new color combinations
  * on the overlapping areas. Those colors specify where the
- * `DirectionalBlur` effect will sample pixels from.
+ * `DirectionalDisplace` effect will sample pixels from.
  *
  */
 
 fun main() = application {
     program {
-        val db = DirectionalBlur()
+        val db = DirectionalDisplace()
 
         val blurred = colorBuffer(width, height)
         val direction = drawImage(width, height, type = ColorType.FLOAT32) {
@@ -39,9 +37,7 @@ fun main() = application {
         }
         val image = loadImage("demo-data/images/image-001.png")
         extend {
-            db.window = 1
-            db.skipSelf = true
-            db.spread = 250.0
+            db.distance = 250.0
             db.apply(arrayOf(image, direction), blurred)
             drawer.image(blurred)
             //drawer.image(direction)
