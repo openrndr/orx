@@ -2,14 +2,13 @@
 
 package org.openrndr.extra.fx.blur
 
-import org.openrndr.draw.*
+import org.openrndr.draw.Filter2to1
 import org.openrndr.extra.fx.fx_directional_blur
 import org.openrndr.extra.fx.mppFilterShader
 import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
-import org.openrndr.shape.Rectangle
 
 /**
  * Directional blur filter. Takes source image and direction buffer inputs
@@ -24,13 +23,13 @@ class DirectionalBlur : Filter2to1(mppFilterShader(fx_directional_blur, "directi
     var centerWindow: Boolean by parameters
 
     /**
-     * The sample window, default is 5
+     * The sample window: how many samples to mix. The default is 5
      */
     @IntParameter("window size", 1, 25)
     var window: Int by parameters
 
     /**
-     * Spread multiplier, default is 1.0
+     * Spread multiplier: the distance in pixels between sampled pixels. The default is 1.0
      */
     @DoubleParameter("kernel spread", 1.0, 4.0)
     var spread: Double by parameters
@@ -42,12 +41,32 @@ class DirectionalBlur : Filter2to1(mppFilterShader(fx_directional_blur, "directi
     var gain: Double by parameters
 
     /**
-     * Should filter use directions perpendicular to those in the direction buffer?
+     * Should filter use directions perpendicular to those in the direction buffer? default is false
      */
     @BooleanParameter("perpendicular")
     var perpendicular: Boolean by parameters
 
+    /**
+     * By default, when [window] is 1 the algorithm would sample just
+     * the current pixel location, producing no visible result.
+     * By setting [skipSelf] to true, [window] iterations are counted
+     * starting at 1 instead of 0, allowing to produce non-blurred
+     * results with pixels sampled at [spread] pixels away.
+     */
+    @BooleanParameter("skipSelf")
+    var skipSelf: Boolean by parameters
 
+    /**
+     * Wrap around left and right edges
+     */
+    @BooleanParameter("wrapX")
+    var wrapX: Boolean by parameters
+
+    /**
+     * Wrap around top and bottom edges
+     */
+    @BooleanParameter("wrapY")
+    var wrapY: Boolean by parameters
 
     init {
         window = 5
@@ -55,11 +74,8 @@ class DirectionalBlur : Filter2to1(mppFilterShader(fx_directional_blur, "directi
         gain = 1.0
         perpendicular = false
         centerWindow = false
-    }
-
-    override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
-        parameters["wrapX"] = false
-        parameters["wrapY"] = false
-        super.apply(source, target, clip)
+        skipSelf = false
+        wrapX = false
+        wrapY = false
     }
 }

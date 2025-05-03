@@ -6,6 +6,19 @@ import org.openrndr.math.smoothstep
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * Demonstrates how to use [DirectionalBlur] by creating a `direction`
+ * ColorBuffer in which the red and green components of the pixels point
+ * in various directions where to sample pixels from. All the pixel colors
+ * of the ColorBuffer are set one by one using two for loops.
+ *
+ * Note the FLOAT32 color type of the buffer to allow for negative values,
+ * so sampling can happen from every direction.
+ *
+ * Every 60 animation frames the `centerWindow` property is toggled
+ * between true and false to demonstrate how the result changes.
+ *
+ */
 fun main() = application {
     program {
         val db = DirectionalBlur()
@@ -31,6 +44,7 @@ fun main() = application {
                 drawer.image(image)
             }
             db.window = 10
+            db.centerWindow = frameCount % 120 > 60
             db.apply(arrayOf(rt.colorBuffer(0), direction), blurred)
             drawer.image(blurred)
         }
