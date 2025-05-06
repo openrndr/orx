@@ -727,6 +727,7 @@ class CompositionDrawer(documentBounds: CompositionDimensions = defaultCompositi
                     groupNode.children.forEach {
                         it.parent = groupNode
                     }
+                    groupNode.attributes.putAll(node.attributes)
                     groupNode
                 }
             }
