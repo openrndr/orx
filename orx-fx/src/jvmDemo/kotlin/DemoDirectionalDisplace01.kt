@@ -8,6 +8,7 @@ import org.openrndr.drawImage
 import org.openrndr.extra.fx.distort.DirectionalDisplace
 import org.openrndr.extra.noise.simplex
 import org.openrndr.extra.shapes.primitives.grid
+import kotlin.math.cos
 
 /**
  * Demonstrate how to use [DirectionalDisplace].
@@ -15,14 +16,14 @@ import org.openrndr.extra.shapes.primitives.grid
  * The direction map is populated using `drawImage` instead of
  * pixel by pixel. A grid of circles is drawn, each circle with a
  * color based on simplex noise. The R and G channels of the colors
- * control the direction of the sampling.
- *
+ * control the direction of the sampling. By animating the sampling
+ * distance the result oscillates between no-effect and a noticeable one.
  */
 fun main() = application {
     program {
-        val db = DirectionalDisplace()
+        val displace = DirectionalDisplace()
 
-        val blurred = colorBuffer(width, height)
+        val displaced = colorBuffer(width, height)
         val direction = drawImage(width, height, type = ColorType.FLOAT32) {
             clear(ColorRGBa.BLACK)
             bounds.grid(32, 24).flatten().forEach {
@@ -39,11 +40,11 @@ fun main() = application {
         }
         val image = loadImage("demo-data/images/image-001.png")
         extend {
-            db.distance = 400.0
-            db.wrapX = true
-            db.wrapX = true
-            db.apply(arrayOf(image, direction), blurred)
-            drawer.image(blurred)
+            displace.distance = 100.0 + 100.0 * cos(seconds)
+            displace.wrapX = true
+            displace.wrapX = true
+            displace.apply(arrayOf(image, direction), displaced)
+            drawer.image(displaced)
         }
     }
 }

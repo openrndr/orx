@@ -15,14 +15,13 @@ import org.openrndr.math.Polar
  * `direction` color buffer to produce new color combinations
  * on the overlapping areas. Those colors specify where the
  * `DirectionalDisplace` effect will sample pixels from.
- *
  */
 
 fun main() = application {
     program {
-        val db = DirectionalDisplace()
+        val displace = DirectionalDisplace()
 
-        val blurred = colorBuffer(width, height)
+        val displaced = colorBuffer(width, height)
         val direction = drawImage(width, height, type = ColorType.FLOAT32) {
             clear(ColorRGBa.BLACK)
             for(x in 0 until 6) {
@@ -37,9 +36,9 @@ fun main() = application {
         }
         val image = loadImage("demo-data/images/image-001.png")
         extend {
-            db.distance = 250.0
-            db.apply(arrayOf(image, direction), blurred)
-            drawer.image(blurred)
+            displace.distance = 250.0
+            displace.apply(arrayOf(image, direction), displaced)
+            drawer.image(displaced)
             //drawer.image(direction)
         }
     }
