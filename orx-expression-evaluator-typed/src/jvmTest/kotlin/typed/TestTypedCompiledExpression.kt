@@ -61,4 +61,57 @@ class TestTypedCompiledExpression {
             println("that took ${end - start}")
         }
     }
+
+    @Test
+    fun testFunction2() {
+        run {
+            val c = compileFunction1OrNull<Map<String, Any>, Double>("x.x + 3.0", "x")!!
+            assertEquals(1.0 + 3.0, c(mapOf("x" to 1.0)))
+            //assertEquals(2.0 + 3.0, c(mapOf("x" to 2.0))
+        }
+    }
+
+    @Test
+    fun testDynamicConstants() {
+
+        val env = { n: String ->
+            when (n) {
+                "a" -> { nn: String ->
+                    when (nn) {
+                        "a" -> { nnn: String ->
+                            when (nnn) {
+                                "b" -> 7.0
+                                "c" -> { x: Double -> x + 1.0 }
+                                else -> null
+                            }
+                        }
+
+                        "b" -> 5.0
+                        "c" -> { x: Double -> x * 2.0 }
+                        else -> null
+                    }
+
+                }
+                "c" -> { x: Double -> x * 3.0 }
+                else -> null
+            }
+        }
+
+        val c0 = compileFunction1OrNull<Map<String, Any>, Double>("a.a.c(2.0)", "x", constants = env)!!
+        val r0 = c0(emptyMap())
+        assertEquals(3.0, r0)
+
+        val c1 = compileFunction1OrNull<Map<String, Any>, Double>("a.c(2.0)", "x", constants = env)!!
+        val r1 = c1(emptyMap())
+        assertEquals(4.0, r1)
+
+        val c2 = compileFunction1OrNull<Map<String, Any>, Double>("c(2.0)", "x", constants = env)!!
+        val r2 = c2(emptyMap())
+        assertEquals(6.0, r2)
+
+        val c3 = compileFunction1OrNull<Map<String, Any>, Double>("cos(2.0)", "x", constants = env)!!
+        val r3 = c3(emptyMap())
+
+
+    }
 }
