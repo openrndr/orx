@@ -251,7 +251,7 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
     override fun shutdown(program: Program) {
         transporter.dispose()
         rabbitholeTransporter?.dispose()
-        webServer?.stop(0, 0)
+        webServer?.stop(50, 50)
     }
 
     private fun getQRCodeImage(barcodeText: String): ColorBuffer {
