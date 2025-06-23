@@ -1,7 +1,7 @@
 package org.openrndr.extra.composition
 
 import org.openrndr.collections.pflatMap
-import org.openrndr.collections.pforEach
+import org.openrndr.collections.pmap
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ColorBuffer
 import org.openrndr.draw.LineCap
@@ -427,8 +427,7 @@ class CompositionDrawer(documentBounds: CompositionDimensions = defaultCompositi
             }
             else -> {
                 val shapeNodes = (if (!clipMode.grouped) composition.findShapes() else cursor.findShapes())
-                val toRemove = mutableListOf<CompositionNode>()
-                shapeNodes.pforEach { shapeNode ->
+                val toRemove = shapeNodes.pmap { shapeNode ->
                     val inverse = shapeNode.effectiveTransform.inversed
                     val transformedShape = postShape.transform(inverse * model)
                     val operated =
@@ -438,16 +437,15 @@ class CompositionDrawer(documentBounds: CompositionDimensions = defaultCompositi
                                 ClipOp.DIFFERENCE -> difference(shapeNode.shape, transformedShape)
                                 else -> error("unsupported base op ${clipMode.op}")
                             }
-                    if (!operated.empty) {
+                    return@pmap if (!operated.empty) {
                         shapeNode.shape = operated
+                        null
                     } else {
-                        //synchronized(toRemove) {
-                            toRemove.add(shapeNode)
-                        //}
+                        shapeNode
                     }
                 }
                 for (node in toRemove) {
-                    node.remove()
+                    node?.remove()
                 }
                 null
             }
