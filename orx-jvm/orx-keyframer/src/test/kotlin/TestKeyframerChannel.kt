@@ -1,15 +1,14 @@
-import org.amshove.kluent.`should be`
-import org.amshove.kluent.shouldBeNear
-import org.openrndr.extra.keyframer.KeyframerChannel
 import org.openrndr.extra.easing.Easing
-
+import org.openrndr.extra.keyframer.KeyframerChannel
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 class TestKeyframerChannel {
     @Test
     fun `a keyframer channel without keys`() {
         val kfc = KeyframerChannel()
-        kfc.value(0.0) `should be` null
+        assertNull(kfc.value(0.0))
     }
 
     @Test
@@ -17,8 +16,11 @@ class TestKeyframerChannel {
         val kfc = KeyframerChannel()
 
         kfc.add(0.0, 1.0, Easing.Linear.function)
-        kfc.value(0.0)?.shouldBeNear(1.0, 10E-6)
-        kfc.value(-1.0) `should be` null
+        val value = kfc.value(0.0)
+        if (value != null) {
+            assertEquals(value, 1.0, 10E-6)
+        }
+        assertNull(kfc.value(-1.0))
     }
 
     @Test
@@ -26,7 +28,10 @@ class TestKeyframerChannel {
         val kfc = KeyframerChannel()
         kfc.add(0.0, 1.0, Easing.Linear.function)
         kfc.add(1.0, 2.0, Easing.Linear.function)
-        kfc.value(0.0)?.shouldBeNear(1.0, 10E-6)
-        kfc.value(-1.0) `should be` null
+        val value = kfc.value(0.0)
+        if (value != null) {
+            assertEquals(value, 1.0, 10E-6)
+        }
+        assertNull(kfc.value(-1.0))
     }
 }
