@@ -9,7 +9,7 @@ class TestCompiledExpression {
     fun `a simple compiled expression`() {
         val expression = "someValue"
         val function = compileExpression(expression, constants = mutableMapOf("someValue" to 5.0))
-        assertEquals(function(), 5.0)
+        assertEquals(5.0, function())
     }
 
     @Test
@@ -17,9 +17,9 @@ class TestCompiledExpression {
         val expression = "someValue"
         val context = mutableMapOf("someValue" to 5.0)
         val function = compileExpression(expression, constants = context)
-        assertEquals(function(), 5.0)
+        assertEquals(5.0, function())
         context["someValue"] = 6.0
-        assertEquals(function(), 6.0)
+        assertEquals(6.0, function())
     }
 
     @Test

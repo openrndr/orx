@@ -18,7 +18,7 @@ class TestKeyframerChannel {
         kfc.add(0.0, 1.0, Easing.Linear.function)
         val value = kfc.value(0.0)
         if (value != null) {
-            assertEquals(value, 1.0, 10E-6)
+            assertEquals(1.0, value, 10E-6)
         }
         assertNull(kfc.value(-1.0))
     }
@@ -30,7 +30,7 @@ class TestKeyframerChannel {
         kfc.add(1.0, 2.0, Easing.Linear.function)
         val value = kfc.value(0.0)
         if (value != null) {
-            assertEquals(value, 1.0, 10E-6)
+            assertEquals(1.0, value, 10E-6)
         }
         assertNull(kfc.value(-1.0))
     }

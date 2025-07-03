@@ -10,6 +10,6 @@ class TestExpressionDelegates {
             var expression = "x * x"
             val function1 by watchingExpression1(::expression, "x")
         }
-        assertEquals(state.function1(5.0), 25.0)
+        assertEquals(25.0, state.function1(5.0))
     }
 }

@@ -10,14 +10,14 @@ class TestExpressions {
     fun `a value reference`() {
         val expression = "someValue"
         val result = evaluateExpression(expression, constants = mapOf("someValue" to 5.0))
-        assertEquals(result, 5.0)
+        assertEquals(5.0, result)
     }
 
     @Test
     fun `a backticked value reference`() {
         val expression = "`some-value`"
         val result = evaluateExpression(expression, constants = mapOf("some-value" to 5.0))
-        assertEquals(result, 5.0)
+        assertEquals(5.0, result)
     }
 
 
@@ -26,7 +26,7 @@ class TestExpressions {
         val expression = "sqrt(4.0)"
         val result = evaluateExpression(expression)
         assertNotNull(result)
-        assertEquals(result, 2.0, 10E-6)
+        assertEquals(2.0, result, 10E-6)
     }
 
     @Test
@@ -34,7 +34,7 @@ class TestExpressions {
         val expression = "`sqrt`(4.0)"
         val result = evaluateExpression(expression)
         assertNotNull(result)
-        assertEquals(result, 2.0, 10E-6)
+        assertEquals(2.0, result, 10E-6)
     }
 
     @Test
@@ -42,7 +42,7 @@ class TestExpressions {
         val expression = "sqrt(4.0) * sqrt(4.0)"
         val result = evaluateExpression(expression)
         assertNotNull(result)
-        assertEquals(result, 4.0, 10E-6)
+        assertEquals(4.0, result, 10E-6)
     }
 
     @Test
@@ -50,7 +50,7 @@ class TestExpressions {
         val expression = "max(0.0, 4.0)"
         val result = evaluateExpression(expression)
         assertNotNull(result)
-        assertEquals(result, 4.0, 10E-6)
+        assertEquals(4.0, result, 10E-6)
     }
 
     @Test
@@ -58,7 +58,7 @@ class TestExpressions {
         val expression = "min(8.0, 4.0)"
         val result = evaluateExpression(expression)
         assertNotNull(result)
-        assertEquals(result, 4.0, 10E-6)
+        assertEquals(4.0, result, 10E-6)
     }
 
     @Test
@@ -66,7 +66,7 @@ class TestExpressions {
         val expression = "mix(8.0, 4.0, 0.5)"
         val result = evaluateExpression(expression)
         assertNotNull(result)
-        assertEquals(result, 6.0, 10E-6)
+        assertEquals(6.0, result, 10E-6)
     }
 
     @Test
@@ -74,7 +74,7 @@ class TestExpressions {
         val expression = "map(0.0, 1.0, 0.0, 8.0, 0.5)"
         val result = evaluateExpression(expression)
         assertNotNull(result)
-        assertEquals(result, 4.0, 10E-6)
+        assertEquals(4.0, result, 10E-6)
     }
 
     @Test
@@ -82,7 +82,7 @@ class TestExpressions {
         val expression = "pow(2.0, 3.0)"
         val result = evaluateExpression(expression)
         assertNotNull(result)
-        assertEquals(result, 8.0, 10E-6)
+        assertEquals(8.0, result, 10E-6)
     }
 
     @Test
@@ -90,7 +90,7 @@ class TestExpressions {
         val expression = "sqrt(min(8.0, 4.0))"
         val result = evaluateExpression(expression)
         assertNotNull(result)
-        assertEquals(result, 2.0, 10E-6)
+        assertEquals(2.0, result, 10E-6)
     }
 
     @Test
@@ -103,7 +103,7 @@ class TestExpressions {
             )
         )
         assertNotNull(result)
-        assertEquals(result, 2.0, 10E-6)
+        assertEquals(2.0, result, 10E-6)
     }
 
     @Test
@@ -118,7 +118,7 @@ class TestExpressions {
             )
         )
         assertNotNull(result)
-        assertEquals(result, 2.0, 10E-6)
+        assertEquals(2.0, result, 10E-6)
     }
 
     @Test
@@ -133,7 +133,7 @@ class TestExpressions {
             )
         )
         assertNotNull(result)
-        assertEquals(result, 2.0, 10E-6)
+        assertEquals(2.0, result, 10E-6)
     }
 
     @Test
@@ -148,7 +148,7 @@ class TestExpressions {
             )
         )
         assertNotNull(result)
-        assertEquals(result, 2.0, 10E-6)
+        assertEquals(2.0, result, 10E-6)
     }
 
     @Test
@@ -163,7 +163,7 @@ class TestExpressions {
             )
         )
         assertNotNull(result)
-        assertEquals(result, 3.0, 10E-6)
+        assertEquals(3.0, result, 10E-6)
     }
 
     @Test
@@ -178,7 +178,7 @@ class TestExpressions {
             )
         )
         assertNotNull(result)
-        assertEquals(result, 4.0, 10E-6)
+        assertEquals(4.0, result, 10E-6)
     }
 
     @Test
@@ -193,6 +193,6 @@ class TestExpressions {
             )
         )
         assertNotNull(result)
-        assertEquals(result, 5.0, 10E-6)
+        assertEquals(5.0, result, 10E-6)
     }
 }
