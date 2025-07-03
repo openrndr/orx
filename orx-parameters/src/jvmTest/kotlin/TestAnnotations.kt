@@ -1,6 +1,5 @@
 import io.kotest.assertions.throwables.shouldThrowUnit
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.collections.shouldBeIn
 import io.kotest.matchers.doubles.plusOrMinus
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.nulls.shouldBeNull
@@ -134,11 +133,11 @@ class TestAnnotations : DescribeSpec({
             list[11].property?.name?.shouldBeEqual("o")
             list[11].label shouldBeEqual "an option parameter"
 
-            assertEquals(list[12].parameterType, ParameterType.Path)
-            assertEquals(list[12].property?.name, "p")
-            assertEquals(list[12].label, "a path parameter")
-            assertEquals(list[12].absolutePath, false)
-            assertEquals(list[12].pathContext, "null")
+            assertEquals(ParameterType.Path, list[12].parameterType)
+            assertEquals("p", list[12].property?.name)
+            assertEquals("a path parameter", list[12].label)
+            assertEquals(false, list[12].absolutePath)
+            assertEquals("null", list[12].pathContext)
 
         }
     }

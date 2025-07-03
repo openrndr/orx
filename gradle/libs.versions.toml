@@ -12,7 +12,6 @@ dokka = "1.7.10"
 nebulaRelease = "18.0.7"
 gradleNexusPublish = "2.0.0"
 boofcv = "1.2.2"
-kluent = "1.73"
 junitJupiter = "5.12.2"
 slf4j = "2.0.17"
 libfreenect = "0.5.7-1.5.9"
@@ -84,7 +83,6 @@ jsoup = { group = "org.jsoup", name = "jsoup", version.ref = "jsoup" }
 
 jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junitJupiter" }
 jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junitJupiter" }
-kluent = { group = "org.amshove.kluent", name = "kluent", version.ref = "kluent" }
 slf4j-simple = { group = "org.slf4j", name = "slf4j-simple", version.ref = "slf4j" }
 
 [plugins]

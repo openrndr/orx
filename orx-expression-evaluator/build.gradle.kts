@@ -47,11 +47,6 @@ kotlin {
                 implementation(project(":orx-jvm:orx-gui"))
             }
         }
-        val jvmTest by getting {
-            dependencies {
-                implementation(libs.kluent)
-            }
-        }
     }
 }
 

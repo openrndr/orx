@@ -3,6 +3,7 @@ package typed
 import org.openrndr.extra.expressions.typed.compileFunction1OrNull
 import org.openrndr.extra.noise.uniform
 import org.openrndr.math.Vector2
+import kotlin.math.cos
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -111,7 +112,6 @@ class TestTypedCompiledExpression {
 
         val c3 = compileFunction1OrNull<Map<String, Any>, Double>("cos(2.0)", "x", constants = env)!!
         val r3 = c3(emptyMap())
-
-
+        assertEquals(cos(2.0), r3, 1E-6)
     }
 }

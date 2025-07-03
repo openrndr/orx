@@ -28,7 +28,6 @@ kotlin {
         @Suppress("UNUSED_VARIABLE")
         val jvmTest by getting {
             dependencies {
-                implementation(libs.kluent)
                 runtimeOnly(libs.kotlin.reflect)
             }
         }
