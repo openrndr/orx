@@ -184,6 +184,16 @@ Collection of 2D shape generators and modifiers.
 
 ![primitives-DemoPulley01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoPulley01Kt.png)
 
+### primitives/DemoRectangleDistribute01
+[source code](src/jvmDemo/kotlin/primitives/DemoRectangleDistribute01.kt)
+
+![primitives-DemoRectangleDistribute01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleDistribute01Kt.png)
+
+### primitives/DemoRectangleFitHorizontally
+[source code](src/jvmDemo/kotlin/primitives/DemoRectangleFitHorizontally.kt)
+
+![primitives-DemoRectangleFitHorizontallyKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleFitHorizontallyKt.png)
+
 ### primitives/DemoRectangleGrid01
 [source code](src/jvmDemo/kotlin/primitives/DemoRectangleGrid01.kt)
 
