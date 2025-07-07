@@ -1,13 +1,11 @@
 in vec2 v_texCoord0;
 
-uniform bool centerWindow;
 uniform sampler2D tex0; // image
-uniform sampler2D tex1; // blurDirection
+uniform sampler2D tex1; // displaceDirection
 uniform vec2 textureSize0;
 
-uniform int window;
 uniform float gain;
-uniform float spread;
+uniform float distance;
 
 uniform bool wrapX;
 uniform bool wrapY;
@@ -31,16 +29,9 @@ void main() {
     if (perpendicular) {
         blurDirection = vec2(-blurDirection.y, blurDirection.x);
     }
-    float weight = 0.0;
 
-    int start = centerWindow ? -window / 2 : 0;
-    int end = centerWindow ? window / 2 + 1 : window;
+    vec4 result = texture(tex0, wrap(v_texCoord0 + blurDirection * s * distance))
+        * gain;
 
-    for (int x = start; x < end; ++x) {
-        sum += texture(tex0, wrap(v_texCoord0 + float(x) * blurDirection * s * spread));
-        weight += 1.0;
-    }
-
-    vec4 result = (sum / weight) * gain;
     o_color = result;
 }
