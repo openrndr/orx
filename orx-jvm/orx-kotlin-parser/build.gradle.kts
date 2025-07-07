@@ -19,7 +19,6 @@ tasks.withType<KotlinCompile> {
 dependencies {
     antlr(libs.antlr.core)
     implementation(libs.antlr.runtime)
-    testImplementation(libs.kluent)
 }
 
 tasks.getByName("compileKotlin").dependsOn("generateGrammarSource")

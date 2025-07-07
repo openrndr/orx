@@ -19,5 +19,4 @@ dependencies {
     implementation(project(":orx-easing"))
     api(project(":orx-expression-evaluator"))
     demoImplementation(project(":orx-jvm:orx-panel"))
-    testImplementation(libs.kluent)
 }
