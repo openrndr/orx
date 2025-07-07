@@ -64,7 +64,10 @@ fun main() = application {
         extend(cam)
         extend {
             updateCS.buffer("vb", vb.shaderStorageBufferView())
-            updateCS.execute(vb.vertexCount)
+            // We use a width of 2 because we have 108 vertices and the
+            // workgroup size is 64. 2 x 64 = 128, which is greater than 108 and
+            // therefore processes all the vertices.
+            updateCS.execute(2)
 
             drawer.clear(ColorRGBa.GRAY)
             drawer.fill = ColorRGBa.WHITE

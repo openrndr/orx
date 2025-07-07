@@ -17,7 +17,7 @@ import org.openrndr.math.IntVector3
 
 fun main() = application {
     program {
-        val particleCount = 48000
+        val particleCount = 4800
         // Define SSBO format
         val fmt = shaderStorageFormat {
             struct("Particle", "particle", particleCount) {
@@ -92,13 +92,13 @@ fun main() = application {
 
         // Execute initCS
         initCS.buffer("particles", particleSSBO)
-        initCS.execute(particleCount)
+        initCS.execute(particleCount / initCS.workGroupSize.x)
 
         extend {
             updateCS.buffer("vb", vb.shaderStorageBufferView())
             updateCS.buffer("particles", particleSSBO)
             updateCS.parameter("windowSize", drawer.bounds.dimensions)
-            updateCS.execute(particleCount)
+            updateCS.execute(particleCount /updateCS.workGroupSize.x)
 
             drawer.fill = ColorRGBa.WHITE
             drawer.vertexBuffer(vb, DrawPrimitive.POINTS)

@@ -15,7 +15,7 @@ import org.openrndr.math.IntVector3
 
 fun main() = application {
     program {
-        val particleCount = 48000
+        val particleCount = 4800
         // Define SSBO format
         val fmt = shaderStorageFormat {
             struct("Particle", "particle", particleCount) {
@@ -101,7 +101,7 @@ fun main() = application {
 
         // Execute initCS
         initCS.buffer("particles", particleSSBO)
-        initCS.execute(particleCount)
+        initCS.execute(particleCount / initCS.workGroupSize.x)
 
         extend {
             // Clear the image, otherwise all pixels become eventually white
@@ -112,7 +112,7 @@ fun main() = application {
             updateCS.image("img", cb.imageBinding(0, ImageAccess.WRITE))
             updateCS.buffer("particles", particleSSBO)
             updateCS.parameter("windowSize", drawer.bounds.dimensions)
-            updateCS.execute(particleCount)
+            updateCS.execute(particleCount / updateCS.workGroupSize.x)
 
             drawer.image(cb)
         }

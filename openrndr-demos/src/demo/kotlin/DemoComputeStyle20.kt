@@ -1,6 +1,7 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
+import org.openrndr.math.IntVector3
 import kotlin.math.sin
 
 /**
@@ -31,6 +32,7 @@ fun main() {
                     vec4 c = imageLoad(p_inputImage, src);
                     imageStore(p_outputImage, id, c);                    
                 """.trimIndent()
+                workGroupSize = IntVector3(16, 16, 1)
             }
 
             cs.image("inputImage", input.colorBuffer(0).imageBinding(0, ImageAccess.READ))
@@ -45,7 +47,11 @@ fun main() {
 
                 // Apply the compute shader to update output
                 cs.parameter("m", sin(seconds * 0.8) * 13.0 + 15.0)
-                cs.execute(output.width, output.height, 1)
+                cs.execute(
+                    output.width / cs.workGroupSize.x,
+                    output.height / cs.workGroupSize.y,
+                    1
+                )
 
                 // Draw result
                 drawer.image(output)

@@ -108,13 +108,13 @@ fun main() = application {
         // Execute initCS
         initCS.buffer("vb", vb.shaderStorageBufferView())
         initCS.buffer("particles", particleSSBO)
-        initCS.execute(particleCount)
+        initCS.execute(particleCount / initCS.workGroupSize.x)
 
         extend {
             updateCS.buffer("vb", vb.shaderStorageBufferView())
             updateCS.buffer("particles", particleSSBO)
             updateCS.parameter("windowSize", drawer.bounds.dimensions)
-            updateCS.execute(particleCount)
+            updateCS.execute(particleCount / updateCS.workGroupSize.x)
 
             drawer.fill = ColorRGBa.WHITE
             drawer.shadeStyle = shadeStyle {

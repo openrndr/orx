@@ -72,7 +72,7 @@ fun main() = application {
         extend(cam)
         extend {
             updateCS.buffer("vb", vb.shaderStorageBufferView())
-            updateCS.execute(vb.vertexCount)
+            updateCS.execute(2)
 
             drawer.clear(ColorRGBa.WHEAT.shade(0.2))
             drawer.fill = ColorRGBa.WHITE
