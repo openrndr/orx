@@ -10,6 +10,7 @@ dependencies {
     demoImplementation(project(":orx-shader-phrases"))
     demoImplementation(project(":orx-camera"))
     demoImplementation(project(":orx-color"))
+    demoImplementation(project(":orx-composition"))
     demoImplementation(project(":orx-shapes"))
     demoImplementation(project(":orx-svg"))
     demoImplementation(libs.slf4j.simple)
