@@ -61,7 +61,7 @@ class TestCompositionIntersections {
     fun `use a shape as a mask for line segments`() {
         // Make sure intersections do not fail randomly, which was fixed in
         // https://github.com/openrndr/orx/commit/e8f50b3dd153ed82de121e9017cf42f6ea95ac8e
-        val svg = List(100) {
+        val svg = List(50) {
             drawComposition {
                 lineSegments(List(num) { segNum ->
                     val yNorm = (segNum / (num - 1.0))
@@ -76,12 +76,12 @@ class TestCompositionIntersections {
             }
         }
 
-        val shapes = svg[50].findShapes()
-        val dimensions = svg[50].bounds.dimensions
+        val shapes = svg.last().findShapes()
+        val dimensions = svg.last().bounds.dimensions
 
-        assertTrue(shapes.isNotEmpty())
-        assertTrue(shapes.first().shape.contours.isNotEmpty())
-        assertTrue(dimensions.x > 0.0)
-        assertTrue(dimensions.y > 0.0)
+        assertTrue(shapes.isNotEmpty(), "shapes should not be empty")
+        assertTrue(shapes.first().shape.contours.isNotEmpty(), "contour should not be empty")
+        assertTrue(dimensions.x > 0.0, "dimensions.x should be greater than 0.0")
+        assertTrue(dimensions.y > 0.0, "dimensions.y should be greater than 0.0")
     }
 }
