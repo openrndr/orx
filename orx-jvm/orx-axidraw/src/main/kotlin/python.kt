@@ -2,6 +2,7 @@ package org.openrndr.extra.axidraw
 
 import java.io.BufferedInputStream
 import java.io.File
+import java.io.IOException
 
 /**
  * Determines the appropriate Python executable name based on the operating system.
@@ -38,6 +39,8 @@ fun venvPython(venv: File): String {
 
 fun invokePython(arguments: List<String>, executable: String = systemPython()): String {
     val result: String
+    try {
+
     val pb = ProcessBuilder()
         .let {
             it.command(listOf(executable) + arguments)
@@ -60,6 +63,9 @@ fun invokePython(arguments: List<String>, executable: String = systemPython()): 
             //     error("Python invoke failed with error $error")
             // }
         }
+    } catch (e: IOException) {
+        error("\n\nPython 3.8 or higher is required but failed to run. Is it installed?\n\n")
+    }
 
     return result
 }
