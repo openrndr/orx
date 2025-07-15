@@ -248,6 +248,16 @@ shaping `curve` within this range:
 
 ![DemoDirectionalBlur01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDirectionalBlur01Kt.png)
 
+### DemoDirectionalDisplace01
+[source code](src/jvmDemo/kotlin/DemoDirectionalDisplace01.kt)
+
+![DemoDirectionalDisplace01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDirectionalDisplace01Kt.png)
+
+### DemoDirectionalDisplace02
+[source code](src/jvmDemo/kotlin/DemoDirectionalDisplace02.kt)
+
+![DemoDirectionalDisplace02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDirectionalDisplace02Kt.png)
+
 ### DemoDistortLenses01
 [source code](src/jvmDemo/kotlin/DemoDistortLenses01.kt)
 

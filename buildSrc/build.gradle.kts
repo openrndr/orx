@@ -18,5 +18,9 @@ dependencies {
     "preloadImplementation"(libs.openrndr.application)
     "preloadImplementation"(libs.openrndr.extensions)
 }
-
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xskip-metadata-version-check")
+    }
+}
 tasks.getByName("compileKotlin").dependsOn("compilePreloadKotlin")

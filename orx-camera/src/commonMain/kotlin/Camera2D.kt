@@ -41,6 +41,11 @@ class Camera2D : Extension, ChangeEvents {
     fun setupMouseEvents(mouse: MouseEvents) {
         mouse.buttonDown.listen {
             rotationCenter = it.position
+
+            if (it.button == MouseButton.CENTER) {
+                view = Matrix44.IDENTITY
+                dirty = true
+            }
         }
         mouse.dragged.listen {
             if (!it.propagationCancelled) {

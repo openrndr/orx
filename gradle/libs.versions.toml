@@ -1,35 +1,34 @@
 [versions]
-kotlinApi = "2.1"
-kotlinLanguage = "2.1"
-kotlin = "2.1.20"
+kotlinApi = "2.2"
+kotlinLanguage = "2.2"
+kotlin = "2.2.0"
 jvmTarget = "17"
 openrndr = { require = "[0.4.2, 0.5.0)" }
 kotlinxCoroutines = "1.10.2"
 kotlinLogging = "7.0.7"
-kotlinxSerialization = "1.8.1"
+kotlinxSerialization = "1.9.0"
 kotest = "5.9.1"
 dokka = "1.7.10"
 nebulaRelease = "18.0.7"
 gradleNexusPublish = "2.0.0"
-boofcv = "1.2.2"
-kluent = "1.73"
+boofcv = "1.2.3"
 junitJupiter = "5.12.2"
 slf4j = "2.0.17"
 libfreenect = "0.5.7-1.5.9"
 librealsense = "2.53.1-1.5.9"
 gson = "2.13.1"
 antlr = "4.13.2"
-antlrKotlin = "1.0.2"
+antlrKotlin = "1.0.3"
 tensorflow = "0.5.0"
 minim = "2.2.2"
-netty = "4.2.0.Final"
+netty = "4.2.2.Final"
 rabbitcontrol = "0.3.39"
 zxing = "3.5.3"
-ktor = "3.1.2"
-jgit = "7.1.0.202411261347-r"
+ktor = "3.2.1"
+jgit = "7.3.0.202506031305-r"
 javaosc = "0.9"
-jsoup = "1.19.1"
-processing = "4.4.0"
+jsoup = "1.21.1"
+processing = "4.4.4"
 
 [libraries]
 kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging", version.ref = "kotlinLogging" }
@@ -84,7 +83,6 @@ jsoup = { group = "org.jsoup", name = "jsoup", version.ref = "jsoup" }
 
 jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junitJupiter" }
 jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junitJupiter" }
-kluent = { group = "org.amshove.kluent", name = "kluent", version.ref = "kluent" }
 slf4j-simple = { group = "org.slf4j", name = "slf4j-simple", version.ref = "slf4j" }
 
 [plugins]

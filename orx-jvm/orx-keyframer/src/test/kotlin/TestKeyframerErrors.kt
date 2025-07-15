@@ -1,5 +1,4 @@
-import org.amshove.kluent.`should throw`
-import org.amshove.kluent.invoking
+import org.junit.jupiter.api.assertThrows
 import org.openrndr.extra.expressions.ExpressionException
 import kotlin.test.Test
 
@@ -27,14 +26,18 @@ class TestKeyframerErrors {
         val animation = Animation()
         val json = """
         """
-        invoking { animation.loadFromJsonString(json) } `should throw` (IllegalStateException::class)
+        assertThrows<IllegalStateException> {
+            animation.loadFromJsonString(json)
+        }
    }
 
     @Test
     fun `loading a non existing json`() {
         val animation = Animation()
 
-        invoking { animation.loadFromJson(testFile("this-does-not-exist")) } `should throw` (IllegalArgumentException::class)
+        assertThrows<IllegalArgumentException> {
+            animation.loadFromJson(testFile("this-does-not-exist"))
+        }
 
     }
     @Test
@@ -47,12 +50,12 @@ class TestKeyframerErrors {
 
         val animation = Animation()
 
-        invoking {
+        assertThrows<ExpressionException> {
             animation.loadFromJson(
                 testFile("src/test/resources/error-reporting/time-01.json"),
                 format = KeyframerFormat.SIMPLE
             )
-        } `should throw` ExpressionException::class //`with message` "Error loading from '${testName("src/test/resources/error-reporting/time-01.json")}': error in keys[0].'time': parser error in expression: ')('; [line: 1, character: 0 , near: [@0,0:0=')',<21>,1:0] ]"
+        } //`with message` "Error loading from '${testName("src/test/resources/error-reporting/time-01.json")}': error in keys[0].'time': parser error in expression: ')('; [line: 1, character: 0 , near: [@0,0:0=')',<21>,1:0] ]"
 
     }
 
@@ -64,34 +67,34 @@ class TestKeyframerErrors {
     @Test
     fun `loading a json with a faulty time expression (2) `() {
         val animation = Animation()
-        invoking {
+        assertThrows<ExpressionException> {
             animation.loadFromJson(
                 testFile("src/test/resources/error-reporting/time-02.json"),
                 format = KeyframerFormat.SIMPLE
             )
-        } `should throw` ExpressionException::class //`with message` "Error loading from '${testName("src/test/resources/error-reporting/time-02.json")}': error in keys[0].'time': error in evaluation of 'doesNotExist': unresolved variable: 'doesNotExist'"
+        } //`with message` "Error loading from '${testName("src/test/resources/error-reporting/time-02.json")}': error in keys[0].'time': error in evaluation of 'doesNotExist': unresolved variable: 'doesNotExist'"
 
     }
     @Test
     fun `loading a json with a non-existing easing`() {
         val animation = Animation()
-        invoking {
+        assertThrows<ExpressionException> {
             animation.loadFromJson(
                 testFile("src/test/resources/error-reporting/easing.json"),
                 format = KeyframerFormat.SIMPLE
             )
-        } `should throw` ExpressionException::class //`with message` "Error loading from '${testName("src/test/resources/error-reporting/easing.json")}': error in keys[0].'easing': unknown easing name 'garble'"
+        }  //`with message` "Error loading from '${testName("src/test/resources/error-reporting/easing.json")}': error in keys[0].'easing': unknown easing name 'garble'"
     }
 
     @Test
     fun `loading a json with a faulty value (1)`() {
         val animation = Animation()
 
-        invoking {
+        assertThrows<ExpressionException> {
             animation.loadFromJson(
                 testFile("src/test/resources/error-reporting/value-01.json"),
                 format = KeyframerFormat.SIMPLE
             )
-        } `should throw` ExpressionException::class //`with message` "Error loading from '${testName("src/test/resources/error-reporting/value-01.json")}': error in keys[0].'x': error in evaluation of 'garble': unresolved variable: 'garble'"
+        } //`with message` "Error loading from '${testName("src/test/resources/error-reporting/value-01.json")}': error in keys[0].'x': error in evaluation of 'garble': unresolved variable: 'garble'"
     }
 }

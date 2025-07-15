@@ -27,7 +27,6 @@ dependencies {
     implementation(libs.kotlin.scriptingJSR223)
     implementation(libs.kotlin.coroutines)
     demoImplementation(libs.kotlin.coroutines)
-    testImplementation(libs.kluent)
     testImplementation(libs.kotest.runner)
     testImplementation(libs.kotest.assertions)
     testRuntimeOnly(libs.kotlin.reflect)
