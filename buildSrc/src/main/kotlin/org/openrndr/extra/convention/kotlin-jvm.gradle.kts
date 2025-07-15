@@ -37,12 +37,13 @@ val main: SourceSet by sourceSets.getting
 val demo: SourceSet by sourceSets.creating {
     val skipDemos = setOf(
         "openrndr-demos",
+        "orx-axidraw",
+        "orx-midi",
         "orx-minim",
         "orx-realsense2",
         "orx-runway",
-        "orx-video-profiles",
-        "orx-midi",
         "orx-syphon",
+        "orx-video-profiles",
     )
     if (project.name !in skipDemos) {
         collectScreenshots(project, this@creating) { }
