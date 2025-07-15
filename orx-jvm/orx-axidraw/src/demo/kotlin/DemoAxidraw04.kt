@@ -11,6 +11,10 @@ import org.openrndr.extra.shapes.primitives.grid
  * - How to take chunks of 10 items, then make
  *   a pause to change the pen after plotting each chunk
  *
+ * Operation: After plotting ten circles, plotting will stop to let you change the pen.
+ * With the second pen installed, click `resume`. It will plot ten circles more.
+ * Change the pen again and click `resume` to plot the remaining 4 circles.
+ * Once done, click `resume` one more time to bring the pen home.
  */
 fun main() = application {
     program {

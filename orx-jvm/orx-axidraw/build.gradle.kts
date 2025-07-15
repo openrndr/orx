@@ -14,4 +14,5 @@ dependencies {
     demoImplementation(project(":orx-camera"))
     demoImplementation(project(":orx-noise"))
     demoImplementation(project(":orx-parameters"))
+    demoImplementation(project(":orx-jvm:orx-axidraw"))
 }
