@@ -62,6 +62,7 @@ class TestCompositionIntersections {
         // Make sure intersections do not fail randomly, which was fixed in
         // https://github.com/openrndr/orx/commit/e8f50b3dd153ed82de121e9017cf42f6ea95ac8e
         val svg = List(50) {
+            println("intersection test $it")
             drawComposition {
                 lineSegments(List(num) { segNum ->
                     val yNorm = (segNum / (num - 1.0))
