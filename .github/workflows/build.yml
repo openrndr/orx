@@ -49,5 +49,14 @@ jobs:
       - name: Build ORX
         run: ./gradlew build
 
+      - name: Upload Test Report
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: reports
+          path: |
+            **/build/reports/
+            **/build/test-results/
+
       - name: Collect screenshots without errors
         run: xvfb-run ./gradlew collectScreenshots
