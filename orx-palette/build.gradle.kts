@@ -4,12 +4,15 @@ plugins {
 
 kotlin {
     sourceSets {
-        @Suppress("UNUSED_VARIABLE")
+        val commonMain by getting {
+            dependencies {
+                implementation(libs.openrndr.application)
+            }
+        }
         val jvmMain by getting {
             dependencies {
-                implementation(libs.gson)
                 implementation(project(":orx-noise"))
-                implementation(libs.openrndr.application)
+                implementation(libs.gson)
                 implementation(libs.openrndr.math)
             }
         }
