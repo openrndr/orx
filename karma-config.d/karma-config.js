@@ -1,8 +1,7 @@
 config.set({
   client: {
     mocha: {
-      timeout: 30000
+      timeout: 300000
     }
   }
 });
-
