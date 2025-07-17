@@ -45,23 +45,28 @@ class TestComposition {
 }
 
 class TestCompositionIntersections {
-    val bounds = Rectangle(Vector2.ZERO, 640.0, 480.0)
-    val outline = Shape(
-        listOf(
-            Circle(bounds.center, 70.0).contour.reversed,
-            Circle(bounds.center, 100.0).contour,
-        )
-    )
-
-    val radius = outline.bounds.dimensions.length / 2
-    val off = outline.bounds.center
-    val num = radius.toInt()
-
     @Test
     fun `use a shape as a mask for line segments`() {
         // Make sure intersections do not fail randomly, which was fixed in
         // https://github.com/openrndr/orx/commit/e8f50b3dd153ed82de121e9017cf42f6ea95ac8e
-        val svg = List(50) {
+        val bounds = Rectangle(Vector2.ZERO, 640.0, 480.0)
+
+        // Create a 2D torus
+        val outline = Shape(
+            listOf(
+                Circle(bounds.center, 70.0).contour.reversed,
+                Circle(bounds.center, 100.0).contour,
+            )
+        )
+
+        val radius = outline.bounds.dimensions.length / 2
+        val off = outline.bounds.center
+
+        val compositions = List(100) {
+            // Create compositions featuring horizontal lines
+            // visible inside the torus shape. Change the number of
+            // lines to make sure the calculations are not cached.
+            val num = radius.toInt() + it
             drawComposition {
                 lineSegments(List(num) { segNum ->
                     val yNorm = (segNum / (num - 1.0))
@@ -76,8 +81,8 @@ class TestCompositionIntersections {
             }
         }
 
-        val shapes = svg.last().findShapes()
-        val dimensions = svg.last().bounds.dimensions
+        val shapes = compositions.last().findShapes()
+        val dimensions = compositions.last().bounds.dimensions
 
         assertTrue(shapes.isNotEmpty(), "shapes should not be empty")
         assertTrue(shapes.first().shape.contours.isNotEmpty(), "contour should not be empty")
