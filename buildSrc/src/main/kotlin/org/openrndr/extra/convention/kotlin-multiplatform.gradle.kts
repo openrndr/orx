@@ -76,13 +76,7 @@ kotlin {
 
     js(IR) {
         browser()
-        nodejs {
-            testTask {
-                useMocha {
-                    timeout = "30s"
-                }
-            }
-        }
+        nodejs()
     }
 
     sourceSets {
