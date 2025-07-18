@@ -95,7 +95,7 @@ private fun SceneRenderer.processIrradiance(drawer: Drawer, scene: Scene, featur
                         buffer.putVector3((coef))
                     }
                     probeID++
-                    println("$probeID / ${irradianceProbePositions.size}")
+                    //println("$probeID / ${irradianceProbePositions.size}")
                     probe.dirty = false
                 }
             }

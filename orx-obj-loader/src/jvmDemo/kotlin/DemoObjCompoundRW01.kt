@@ -17,7 +17,7 @@ fun main() = application {
         // Convert mesh data to Wavefront OBJ String representation
         val obj = cm.toObj()
 
-        println(obj)
+        //println(obj)
 
         val font = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 24.0)
 
