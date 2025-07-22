@@ -116,7 +116,7 @@ val isReleaseVersion = !(version.toString()).endsWith("SNAPSHOT")
 if (shouldPublish) {
     publishing {
         publications {
-            val fjdj = tasks.create("fakeJavaDocJar", Jar::class) {
+            val fjdj = tasks.register("fakeJavaDocJar", Jar::class) {
                 archiveClassifier.set("javadoc")
             }
             named("js") {

@@ -8,7 +8,7 @@ repositories {
     mavenCentral()
 }
 
-task buildMainReadme {
+tasks.register('buildMainReadme') {
     doFirst {
         def subProjects = project.subprojects
         //.findAll { !it.name.contains("kinect-common") && !it.name.contains
@@ -37,7 +37,7 @@ task buildMainReadme {
         // Skip the hash character from the headline, then start
         // on the next line and continue until the next empty line.
         // Don't fall into Windows line breaks.
-        def descriptionRx = ~/(?s)\#.*?\n(.+?)\n\r?\n/
+        def descriptionRx = ~/(?s)#.*?\n(.+?)\n\r?\n/
         // Note: the readme needs an empty line after the description
 
         def orxMultiplatform = []
@@ -93,8 +93,8 @@ group = "org.openrndr.extra"
 nexusPublishing {
     repositories {
         sonatype {
-            username.set(findProperty("ossrhUsername") ?: System.getenv("OSSRH_USERNAME"))
-            password.set(findProperty("ossrhPassword") ?: System.getenv("OSSRH_PASSWORD"))
+            username.set(findProperty("ossrhUsername")?.toString() ?: System.getenv("OSSRH_USERNAME"))
+            password.set(findProperty("ossrhPassword")?.toString() ?: System.getenv("OSSRH_PASSWORD"))
             nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
             snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots"))
         }
@@ -106,6 +106,14 @@ subprojects {
     tasks.register("dependenciesAll", DependencyReportTask) {
         group = HelpTasksPlugin.HELP_GROUP
         description = "Displays all dependencies, including subprojects."
+    }
+}
+
+dependencies {
+    subprojects.findAll {
+        it.name.startsWith("orx-")
+    }.each { subproject ->
+        dokka(project(subproject.path))
     }
 }
 
