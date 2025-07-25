@@ -50,10 +50,7 @@ kotlin {
     }
 }
 
-tasks.withType<KotlinCompilationTask<*>> {
-    dependsOn(generateKotlinGrammarSource)
-}
-
-tasks.withType<org.gradle.jvm.tasks.Jar> {
-    dependsOn(generateKotlinGrammarSource)
-}
+tasks.withType<KotlinCompilationTask<*>> { dependsOn(generateKotlinGrammarSource) }
+tasks.withType<org.gradle.jvm.tasks.Jar> { dependsOn(generateKotlinGrammarSource) }
+tasks.named("dokkaGeneratePublicationHtml") { dependsOn(generateKotlinGrammarSource) }
+tasks.named("dokkaGenerateModuleHtml") { dependsOn(generateKotlinGrammarSource) }

@@ -72,7 +72,6 @@ include(
         "orx-shade-styles",
         "orx-shapes",
         "orx-svg",
-
         "orx-jvm:orx-syphon",
         "orx-temporal-blur",
         "orx-timer",

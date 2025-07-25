@@ -23,3 +23,5 @@ dependencies {
 
 tasks.getByName("compileKotlin").dependsOn("generateGrammarSource")
 tasks.getByName("sourcesJar").dependsOn("generateGrammarSource")
+tasks.named("dokkaGeneratePublicationHtml") { dependsOn("generateGrammarSource") }
+tasks.named("dokkaGenerateModuleHtml") { dependsOn("generateGrammarSource") }
