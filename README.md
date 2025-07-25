@@ -42,7 +42,7 @@ To make use of these extensions clone the [OPENRNDR template](https://github.com
 | [`orx-no-clear`](orx-no-clear/) | Provides the classical "draw-without-clearing-the-screen" functionality. |
 | [`orx-noise`](orx-noise/) | Randomness for every type of person: Perlin, uniform, value, simplex, fractal and many other types of noise. |
 | [`orx-obj-loader`](orx-obj-loader/) | Simple loader and saver for Wavefront .obj 3D mesh files. |
-| [`orx-palette`](orx-palette/) | Provides hundreds of color palettes. |
+| [`orx-palette`](orx-palette/) | Collections of color palettes and tools for interacting with them. |
 | [`orx-parameters`](orx-parameters/) | Provides annotations and tools for turning Kotlin properties into introspectable parameters. Used by [`orx-gui`](../orx-jvm/orx-gui/README.md) to automatically generate user interfaces. |
 | [`orx-property-watchers`](orx-property-watchers/) | Tools for setting up property watcher based pipelines |
 | [`orx-quadtree`](orx-quadtree/) | A [Quadtree](https://en.wikipedia.org/wiki/Quadtree) is a spatial partioning tree structure meant to provide fast spatial queries such as nearest points within a range. |
