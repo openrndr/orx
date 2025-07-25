@@ -1,0 +1,41 @@
+name: Release API docs
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  release_apidocs:
+    if: github.repository == 'openrndr/orx'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - name: Build apidocs
+        run: ./gradlew :dokkaGenerate -Dorg.gradle.jvmargs=-Xmx1536M
+
+      - name: Publish to gh-pages
+        run: |
+          git worktree add --detach docs-temp
+          cd docs-temp
+          git checkout --orphan gh-pages
+          git reset HEAD -- .
+          git clean -df
+          mv ../build/dokka/html/* .
+          cp ../dokka/styles/* styles/
+          echo orx.openrndr.org > CNAME
+          git status
+          git config --global user.email "actions@openrndr.org"
+          git config --global user.name "OPENRNDR Actions"
+          git add . 
+          git commit -m "Add automatically generated API docs"
+          git push origin gh-pages --force
