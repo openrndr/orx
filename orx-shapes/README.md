@@ -99,6 +99,11 @@ Collection of 2D shape generators and modifiers.
 
 ![bezierpatch-DemoBezierPatch05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatch05Kt.png)
 
+### bezierpatch/DemoBezierPatch06
+[source code](src/jvmDemo/kotlin/bezierpatch/DemoBezierPatch06.kt)
+
+![bezierpatch-DemoBezierPatch06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatch06Kt.png)
+
 ### bezierpatch/DemoBezierPatchDrawer01
 [source code](src/jvmDemo/kotlin/bezierpatch/DemoBezierPatchDrawer01.kt)
 
