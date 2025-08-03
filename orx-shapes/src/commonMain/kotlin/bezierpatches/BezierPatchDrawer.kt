@@ -34,6 +34,7 @@ class BezierPatchDrawer {
         return ("""
             |// BezierPatchDrawer.kt / fsGenerator            
             |${drawerUniforms()}
+            |${structure.uniforms ?: ""}
             |${structure.varyingIn.orEmpty()}
 
             |out vec4 o_color;
@@ -53,6 +54,7 @@ class BezierPatchDrawer {
             |${drawerUniforms()}
             |${ColorPhraseBook.oklabToLinearRgb.phrase}
             |${ColorPhraseBook.linearRgbToSRgb.phrase}
+            |${structure.uniforms ?: ""}
             |${structure.varyingIn.orEmpty()}
             |out vec4 o_color;
             |void main() {
