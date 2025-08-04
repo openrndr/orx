@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     org.openrndr.extra.convention.`kotlin-jvm`
     antlr
@@ -8,12 +6,6 @@ plugins {
 tasks.generateGrammarSource {
     maxHeapSize = "64m"
     arguments.addAll(listOf("-visitor", "-long-messages"))
-}
-
-tasks.withType<KotlinCompile> {
-    compilerOptions {
-        freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
-    }
 }
 
 dependencies {
