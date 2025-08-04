@@ -4,7 +4,6 @@ import org.openrndr.application
 import org.openrndr.extra.noise.shapes.uniformSub
 import org.openrndr.extra.shapes.primitives.alignToVertically
 import org.openrndr.extra.shapes.primitives.distributeHorizontally
-import org.openrndr.shape.Rectangle
 import kotlin.math.cos
 import kotlin.random.Random
 

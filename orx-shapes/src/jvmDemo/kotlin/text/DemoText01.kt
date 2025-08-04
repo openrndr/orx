@@ -6,7 +6,6 @@ import org.openrndr.draw.font.loadFace
 import org.openrndr.extra.camera.Camera2D
 import org.openrndr.extra.shapes.bounds.bounds
 import org.openrndr.extra.shapes.text.shapesFromText
-import org.openrndr.internal.Driver
 
 fun main() = application {
     configure {

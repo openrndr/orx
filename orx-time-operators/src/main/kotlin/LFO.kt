@@ -3,7 +3,6 @@ package org.openrndr.extra.timeoperators
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.OptionParameter
 import org.openrndr.math.clamp
-import org.openrndr.math.mod
 import kotlin.math.*
 
 internal const val TAU = 2.0 * PI

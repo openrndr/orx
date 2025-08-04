@@ -9,8 +9,6 @@ import org.openrndr.extra.shapes.primitives.grid
 import org.openrndr.extra.shapes.primitives.placeIn
 import org.openrndr.math.Vector2
 import org.openrndr.math.transforms.transform
-import kotlin.math.PI
-import kotlin.math.cos
 
 fun main() = application {
     configure {

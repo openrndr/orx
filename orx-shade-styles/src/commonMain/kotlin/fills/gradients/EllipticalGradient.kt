@@ -6,7 +6,6 @@ import org.openrndr.extra.shaderphrases.sdf.sdEllipsePhrase
 import org.openrndr.math.CastableToVector4
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector4
-import kotlin.math.PI
 import kotlin.reflect.KClass
 
 class EllipticalGradient<C>(

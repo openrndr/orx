@@ -8,7 +8,6 @@ import org.openrndr.draw.ColorType
 import org.openrndr.draw.colorBuffer
 import org.openrndr.draw.isolatedWithTarget
 import org.openrndr.draw.renderTarget
-import org.openrndr.extra.noise.Random
 import org.openrndr.extra.noise.uniform
 import org.openrndr.math.Polar
 import org.openrndr.math.clamp

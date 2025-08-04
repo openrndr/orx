@@ -1,6 +1,5 @@
 import io.kotest.core.spec.style.DescribeSpec
 import org.openrndr.extra.noise.*
-import kotlin.test.assertEquals
 
 class TestGradient : DescribeSpec({
     describe("Noise") {

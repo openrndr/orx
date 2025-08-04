@@ -1,7 +1,6 @@
 package org.openrndr.extra.composition
 
 import org.openrndr.draw.Drawer
-import org.openrndr.shape.*
 
 
 /**

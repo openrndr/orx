@@ -2,8 +2,6 @@ package gradients
 
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.loadFont
-import org.openrndr.extra.color.presets.BLUE_STEEL
 import org.openrndr.extra.shadestyles.fills.FillUnits
 import org.openrndr.extra.shadestyles.fills.SpreadMethod
 import org.openrndr.extra.shadestyles.fills.gradients.gradient

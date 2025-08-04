@@ -10,7 +10,6 @@ import org.openrndr.internal.Driver
 
 import org.openrndr.internal.gl3.ColorBufferGL3
 import org.openrndr.internal.gl3.DriverTypeGL
-import org.openrndr.internal.gl3.TextureStorageModeGL
 import org.openrndr.internal.gl3.glType
 
 

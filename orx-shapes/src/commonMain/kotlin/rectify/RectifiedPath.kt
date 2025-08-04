@@ -4,7 +4,6 @@ import org.openrndr.extra.shapes.utilities.splitAtBase
 import org.openrndr.math.EuclideanVector
 import org.openrndr.math.clamp
 import org.openrndr.shape.Path
-import org.openrndr.shape.ShapeContour
 
 /**
  * Provides a rectified representation of a path in N-dimensional Euclidean space. Rectification refers

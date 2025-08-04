@@ -2,18 +2,13 @@ package gradients
 
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.loadFont
 import org.openrndr.extra.camera.Camera2D
-import org.openrndr.extra.color.presets.BLUE_STEEL
 import org.openrndr.extra.shadestyles.fills.FillFit
 import org.openrndr.extra.shadestyles.fills.FillUnits
 import org.openrndr.extra.shadestyles.fills.SpreadMethod
 import org.openrndr.extra.shadestyles.fills.gradients.gradient
 import org.openrndr.extra.shapes.primitives.grid
 import org.openrndr.math.Vector2
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
 
 fun main() = application {
     configure {

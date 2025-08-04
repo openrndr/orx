@@ -1,7 +1,6 @@
 package org.openrndr.extra.noise.shapes
 
 import org.openrndr.extra.noise.fhash1D
-import org.openrndr.extra.noise.hash
 import org.openrndr.math.Polar
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle

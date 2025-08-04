@@ -2,7 +2,6 @@ package gradients
 
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extra.color.presets.BLUE_STEEL
 import org.openrndr.extra.color.spaces.OKHSV
 import org.openrndr.extra.color.tools.shiftHue
 import org.openrndr.extra.shadestyles.fills.SpreadMethod

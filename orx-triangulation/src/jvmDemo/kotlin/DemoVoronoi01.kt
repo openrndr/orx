@@ -4,7 +4,6 @@ import org.openrndr.extra.noise.poissonDiskSampling
 import org.openrndr.extra.triangulation.delaunayTriangulation
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
-import org.openrndr.shape.Rectangle
 
 /**
  *  This program generates a Voronoi diagram within a defined circular area and visualizes it.

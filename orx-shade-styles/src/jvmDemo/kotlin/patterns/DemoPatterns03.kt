@@ -2,13 +2,9 @@ package patterns
 
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.loadFont
-import org.openrndr.draw.loadImage
 import org.openrndr.extra.camera.Camera2D
 import org.openrndr.extra.color.presets.DARK_GRAY
-import org.openrndr.extra.color.presets.NAVY
 import org.openrndr.extra.color.presets.PEACH_PUFF
-import org.openrndr.extra.imageFit.imageFit
 import org.openrndr.extra.shadestyles.fills.FillUnits
 import org.openrndr.extra.shadestyles.fills.clip.clip
 import org.openrndr.extra.shadestyles.fills.gradients.gradient

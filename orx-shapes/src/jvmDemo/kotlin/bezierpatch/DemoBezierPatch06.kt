@@ -6,7 +6,6 @@ import org.openrndr.draw.loadImage
 import org.openrndr.draw.shadeStyle
 import org.openrndr.extra.shapes.bezierpatches.bezierPatch
 import org.openrndr.math.Polar
-import org.openrndr.shape.LineSegment
 import org.openrndr.shape.Segment2D
 
 /**

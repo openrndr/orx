@@ -3,7 +3,6 @@ package org.openrndr.extra.mesh.noise
 import org.openrndr.extra.noise.fhash1D
 import org.openrndr.math.Vector3
 import kotlin.math.sqrt
-import kotlin.random.Random
 
 typealias Barycentric = Vector3
 

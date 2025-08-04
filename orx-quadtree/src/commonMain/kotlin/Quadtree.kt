@@ -4,7 +4,6 @@ import org.openrndr.draw.Drawer
 import org.openrndr.draw.RectangleBatchBuilder
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
-import org.openrndr.shape.intersects
 import kotlin.jvm.JvmRecord
 
 @JvmRecord

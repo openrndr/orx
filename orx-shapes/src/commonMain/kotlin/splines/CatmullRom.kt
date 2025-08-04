@@ -2,7 +2,6 @@ package org.openrndr.extra.shapes.splines
 
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
-import org.openrndr.math.mod
 import org.openrndr.shape.*
 import kotlin.math.abs
 import kotlin.math.pow

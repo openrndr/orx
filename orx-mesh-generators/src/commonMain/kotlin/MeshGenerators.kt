@@ -3,7 +3,6 @@ package org.openrndr.extra.meshgenerators
 import org.openrndr.draw.*
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
-import org.openrndr.math.mod
 import org.openrndr.shape.Shape
 import org.openrndr.shape.triangulate
 

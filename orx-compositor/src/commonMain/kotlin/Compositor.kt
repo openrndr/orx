@@ -2,8 +2,6 @@
 
 package org.openrndr.extra.compositor
 
-import org.openrndr.Extension
-import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.extra.fx.blend.SourceIn

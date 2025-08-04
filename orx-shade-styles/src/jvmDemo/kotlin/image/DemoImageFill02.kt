@@ -2,8 +2,6 @@ package image
 
 import org.openrndr.application
 import org.openrndr.draw.loadImage
-import org.openrndr.extra.shadestyles.fills.FillUnits
-import org.openrndr.extra.shadestyles.fills.SpreadMethod
 import org.openrndr.extra.shadestyles.fills.image.imageFill
 import org.openrndr.math.transforms.transform
 import kotlin.math.cos

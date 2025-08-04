@@ -1,5 +1,4 @@
 import org.openrndr.application
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.keyframer.Keyframer
 import org.openrndr.resourceUrl
 import java.net.URL

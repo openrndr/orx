@@ -3,7 +3,6 @@ package org.openrndr.panel.elements
 import kotlinx.coroutines.yield
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
-import org.openrndr.draw.FontImageMap
 import org.openrndr.draw.loadFont
 import org.openrndr.extra.textwriter.TextWriter
 

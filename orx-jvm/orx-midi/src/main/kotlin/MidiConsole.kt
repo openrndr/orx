@@ -4,7 +4,6 @@ import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
-import org.openrndr.draw.loadFont
 import org.openrndr.draw.loadFontImageMap
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle

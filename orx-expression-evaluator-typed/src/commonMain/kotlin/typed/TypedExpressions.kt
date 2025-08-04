@@ -13,7 +13,6 @@ import org.openrndr.extra.expressions.parser.KeyLangLexer.Tokens.RANGE_EXCLUSIVE
 import org.openrndr.extra.expressions.parser.KeyLangLexer.Tokens.RANGE_INCLUSIVE
 import org.openrndr.extra.expressions.parser.KeyLangParser
 import org.openrndr.extra.expressions.parser.KeyLangParserBaseListener
-import org.openrndr.extra.noise.uniform
 import org.openrndr.math.*
 import kotlin.math.PI
 import kotlin.math.roundToInt

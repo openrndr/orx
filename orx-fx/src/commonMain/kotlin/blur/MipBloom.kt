@@ -8,12 +8,9 @@ import org.openrndr.extra.fx.fx_bloom_combine
 import org.openrndr.extra.fx.fx_bloom_downscale
 import org.openrndr.extra.fx.fx_bloom_upscale
 import org.openrndr.extra.fx.mppFilterShader
-import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
-import org.openrndr.filter.color.delinearize
-import org.openrndr.filter.color.linearize
 import org.openrndr.shape.Rectangle
 
 class BloomDownscale : Filter(mppFilterShader(fx_bloom_downscale,"bloom-downscale"))

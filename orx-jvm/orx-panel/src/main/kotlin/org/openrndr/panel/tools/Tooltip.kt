@@ -2,7 +2,6 @@ package org.openrndr.panel.tools
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
-import org.openrndr.draw.FontImageMap
 import org.openrndr.draw.isolated
 import org.openrndr.draw.loadFont
 import org.openrndr.extra.textwriter.writer

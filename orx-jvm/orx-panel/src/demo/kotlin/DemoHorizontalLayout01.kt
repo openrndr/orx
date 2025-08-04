@@ -1,7 +1,6 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.color.Linearity
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.math.Spherical
 import org.openrndr.math.Vector3
 import org.openrndr.panel.controlManager

@@ -4,13 +4,7 @@ import org.openrndr.application
 import org.openrndr.draw.loadImage
 import org.openrndr.extra.camera.Camera2D
 import org.openrndr.extra.imageFit.imageFit
-import org.openrndr.extra.noise.uniform
-import org.openrndr.extra.shaderphrases.noise.simplex13
 import org.openrndr.extra.shadestyles.fills.noise.noise
-import org.openrndr.math.Vector3
-import org.openrndr.math.transforms.transform
-import kotlin.math.cos
-import kotlin.reflect.KMutableProperty0
 
 fun main() {
     application {

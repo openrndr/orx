@@ -6,12 +6,8 @@ import org.openrndr.draw.DrawPrimitive
 import org.openrndr.draw.isolated
 import org.openrndr.extra.camera.Orbital
 import org.openrndr.extra.meshgenerators.sphereMesh
-import org.openrndr.extra.noise.rsequence.rSeq3D
 import org.openrndr.extra.noise.rsequence.rSeq4D
-import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
-import kotlin.math.abs
-import kotlin.math.min
 
 /**
  * Demo that presents a 3D visualization of points distributed using a 4D quasirandom sequence (R4).

@@ -1,6 +1,5 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.panel.controlManager
 import org.openrndr.panel.elements.div
 import org.openrndr.panel.elements.slider

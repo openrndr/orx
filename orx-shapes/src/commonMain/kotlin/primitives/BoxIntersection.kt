@@ -1,7 +1,6 @@
 package org.openrndr.extra.shapes.primitives
 
 import org.openrndr.shape.Box
-import org.openrndr.shape.Rectangle
 import kotlin.math.max
 import kotlin.math.min
 

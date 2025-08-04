@@ -4,10 +4,8 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.isolated
 import org.openrndr.extra.math.simplexrange.SimplexRange2D
-import org.openrndr.extra.math.simplexrange.SimplexRange3D
 import org.openrndr.extra.noise.scatter
 import kotlin.random.Random
-import org.openrndr.extra.noise.simplexrange.uniformSimplex
 import org.openrndr.math.Polar
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle

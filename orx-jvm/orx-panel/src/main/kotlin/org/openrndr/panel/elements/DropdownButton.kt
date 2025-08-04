@@ -1,19 +1,17 @@
 package org.openrndr.panel.elements
 
-import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.Drawer
-import org.openrndr.draw.FontImageMap
-import org.openrndr.panel.style.*
-import org.openrndr.shape.Rectangle
-import org.openrndr.extra.textwriter.TextWriter
 import kotlinx.coroutines.yield
 import org.openrndr.KEY_ARROW_DOWN
 import org.openrndr.KEY_ARROW_UP
 import org.openrndr.KEY_ENTER
+import org.openrndr.color.ColorRGBa
+import org.openrndr.draw.Drawer
 import org.openrndr.draw.loadFont
-
 import org.openrndr.events.Event
+import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.launch
+import org.openrndr.panel.style.*
+import org.openrndr.shape.Rectangle
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt

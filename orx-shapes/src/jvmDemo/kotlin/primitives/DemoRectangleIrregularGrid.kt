@@ -3,7 +3,6 @@ package primitives
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.color.presets.CORAL
-import org.openrndr.extra.noise.uniform
 import org.openrndr.extra.noise.uniforms
 import org.openrndr.extra.shapes.primitives.column
 import org.openrndr.extra.shapes.primitives.irregularGrid
