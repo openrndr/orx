@@ -92,7 +92,7 @@ class ParametricOrbital : Extension, ChangeEvents {
 
 
     override fun setup(program: Program) {
-
+        camera.setup(program)
     }
 
     override fun beforeDraw(drawer: Drawer, program: Program) {

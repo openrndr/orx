@@ -35,6 +35,7 @@ class Camera2D : Extension, ChangeEvents {
         set(value) {
             if (value && !field) {
                 changed.trigger(Unit)
+                program.window.requestDraw()
             }
             field = value
         }

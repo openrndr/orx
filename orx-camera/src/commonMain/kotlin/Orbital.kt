@@ -5,6 +5,9 @@ import org.openrndr.Program
 import org.openrndr.draw.Drawer
 import org.openrndr.events.Event
 import org.openrndr.math.Vector3
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * Extension that provides orbital camera view and controls.
@@ -42,6 +45,7 @@ class Orbital : Extension, ChangeEvents {
     val controls by lazy { OrbitalControls(camera, userInteraction, keySpeed) }
 
     override fun setup(program: Program) {
+        camera.setup(program)
         controls.setup(program)
     }
 
@@ -51,5 +55,13 @@ class Orbital : Extension, ChangeEvents {
 
     override fun afterDraw(drawer: Drawer, program: Program) {
         camera.afterDraw(drawer, program)
+    }
+
+    @OptIn(ExperimentalContracts::class)
+    fun isolated(drawFunction: Drawer.() -> Unit) {
+        contract {
+            callsInPlace(drawFunction, InvocationKind.EXACTLY_ONCE)
+        }
+        camera.isolated(camera.program.drawer, drawFunction)
     }
 }
