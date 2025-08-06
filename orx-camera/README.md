@@ -68,10 +68,20 @@ fun main() = application {
 
 ![DemoCamera2D02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoCamera2D02Kt.png)
 
+### DemoCamera2DManual01
+[source code](src/jvmDemo/kotlin/DemoCamera2DManual01.kt)
+
+![DemoCamera2DManual01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoCamera2DManual01Kt.png)
+
 ### DemoOrbitalCamera01
 [source code](src/jvmDemo/kotlin/DemoOrbitalCamera01.kt)
 
 ![DemoOrbitalCamera01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoOrbitalCamera01Kt.png)
+
+### DemoOrbitalManual01
+[source code](src/jvmDemo/kotlin/DemoOrbitalManual01.kt)
+
+![DemoOrbitalManual01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoOrbitalManual01Kt.png)
 
 ### DemoParametricOrbital01
 [source code](src/jvmDemo/kotlin/DemoParametricOrbital01.kt)
