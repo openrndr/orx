@@ -21,8 +21,8 @@ fun main() = application {
             colorBuffer()
             depthBuffer()
         }
-        // Create camera and apply an initial transformation
-        // so the origin is no longer in the top left corner.
+        // Create a camera and apply an initial transformation
+        // so the origin is no longer in the top-left corner.
         val cam = Camera2D()
         cam.view *= transform {
             translate(width * 0.5, height * 1.0)

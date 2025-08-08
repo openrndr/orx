@@ -65,6 +65,24 @@ class OrbitalCamera(
     var orthoNear = -1000.0
     var orthoFar = 1000.0
 
+    // Defaults
+    val eyeDefault = eye.copy()
+    val lookAtDefault = lookAt.copy()
+    val fovDefault = fov
+    val magnitudeDefault = magnitude
+
+    /**
+     * Reinitialize the camera to its initial state.
+     *
+     * @param instant whether the rotation is applied immediately; if false, it interpolates over time (default is false)
+     */
+    fun defaults(instant: Boolean = false) {
+        panTo(lookAtDefault, instant)
+        rotateTo(eyeDefault, instant)
+        zoomTo(fovDefault, instant)
+        scaleTo(magnitudeDefault, instant)
+    }
+
     /**
      * Sets the view for the orbital camera by updating the look-at position, spherical coordinates,
      * and field of view (FOV). This method initializes both the target and current states of these properties.

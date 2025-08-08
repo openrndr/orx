@@ -13,7 +13,7 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.transforms.buildTransform
 
 /**
- * The [Camera2D] extension enables panning, rotating and zooming the view
+ * The [Camera2D] extension enables panning, rotating, and zooming the view
  * with the mouse:
  * - left click and drag to **pan**
  * - right click and drag to **rotate**
@@ -60,6 +60,17 @@ class Camera2D : Extension, ChangeEvents {
     }
 
     /**
+     * Reinitialize the camera to its default state, where no transformations
+     * (such as rotation, translation, or scaling) are applied. It also sets the `dirty` flag to `true`,
+     * indicating that the camera's state has been modified and needs to be updated or rendered accordingly.
+     */
+    fun defaults() {
+        view = Matrix44.IDENTITY
+        rotationCenter = Vector2.ZERO
+        dirty = true
+    }
+
+    /**
      * Configures the mouse interaction events for controlling the camera view and handling
      * transformations such as translation, rotation, and scaling via mouse inputs.
      *
@@ -71,8 +82,7 @@ class Camera2D : Extension, ChangeEvents {
             rotationCenter = it.position
 
             if (it.button == MouseButton.CENTER) {
-                view = Matrix44.IDENTITY
-                dirty = true
+                defaults()
             }
         }
         mouse.dragged.listen {

@@ -54,5 +54,10 @@ fun main() = application {
                 drawer.circle(0.0, 0.0, 50.0)
             }
         }
+        keyboard.keyDown.listen {
+            if (it.name == "r") {
+                camera.defaults()
+            }
+        }
     }
 }
