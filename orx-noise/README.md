@@ -133,17 +133,17 @@ The library provides 3 functions with which fractal noise can be composed.
 ```kotlin
 // 1d
 val v0 = fbm(seed, x, ::perlinLinear, octaves, lacunarity, gain)
-val v1 = fbm(seed, x, ::simplexLinear, octaves, lacunarity, gain)
+val v1 = fbm(seed, x, ::simplex, octaves, lacunarity, gain)
 val v2 = fbm(seed, x, ::valueLinear, octaves, lacunarity, gain)
 
 // 2d
 val v3 = fbm(seed, x, y, ::perlinLinear, octaves, lacunarity, gain)
-val v4 = fbm(seed, x, y, ::simplexLinear, octaves, lacunarity, gain)
+val v4 = fbm(seed, x, y, ::simplex, octaves, lacunarity, gain)
 val v5 = fbm(seed, x, y, ::valueLinear, octaves, lacunarity, gain)
 
 // 3d
 val v6 = fbm(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
-val v7 = fbm(seed, x, y, z, ::simplexLinear, octaves, lacunarity, gain)
+val v7 = fbm(seed, x, y, z, ::simplex, octaves, lacunarity, gain)
 val v8 = fbm(seed, x, y, z, ::valueLinear, octaves, lacunarity, gain)
 ```
 
@@ -152,17 +152,17 @@ val v8 = fbm(seed, x, y, z, ::valueLinear, octaves, lacunarity, gain)
 ```kotlin
 // 1d
 val v0 = rigid(seed, x, ::perlinLinear, octaves, lacunarity, gain)
-val v1 = rigid(seed, x, ::simplexLinear, octaves, lacunarity, gain)
+val v1 = rigid(seed, x, ::simplex, octaves, lacunarity, gain)
 val v2 = rigid(seed, x, ::valueLinear, octaves, lacunarity, gain)
 
 // 2d
 val v2 = rigid(seed, x, y, ::perlinLinear, octaves, lacunarity, gain)
-val v3 = rigid(seed, x, y, ::simplexLinear, octaves, lacunarity, gain)
+val v3 = rigid(seed, x, y, ::simplex, octaves, lacunarity, gain)
 val v4 = rigid(seed, x, y, ::valueLinear, octaves, lacunarity, gain)
 
 // 3d
 val v3 = rigid(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
-val v4 = rigid(seed, x, y, z, ::simplexLinear, octaves, lacunarity, gain)
+val v4 = rigid(seed, x, y, z, ::simplex, octaves, lacunarity, gain)
 val v5 = rigid(seed, x, y, z, ::valueLinear, octaves, lacunarity, gain)
 ```
 
