@@ -16,9 +16,9 @@ fun Circle.contour(segments: Int): ShapeContour {
     return buildContour {
         val p = Polar(0.0, radius)
         moveTo(center + p.cartesian)
-        for (i in 1 until segments+1) {
-            val lp = Polar(i * 360.0/segments, radius).cartesian + center
-            arcTo(radius, radius, 360.0/segments, false, true, lp.x, lp.y)
+        for (i in 1 until segments + 1) {
+            val lp = Polar(i * 360.0 / segments, radius).cartesian + center
+            arcTo(radius, radius, 360.0 / segments, false, true, lp.x, lp.y)
         }
         close()
     }
@@ -32,7 +32,7 @@ fun Ellipse.contour(segments: Int): ShapeContour {
     return Circle(Vector2.ZERO, xRadius).contour(segments).transform(
         buildTransform {
             translate(center)
-            scale(1.0, yRadius/xRadius)
+            scale(1.0, yRadius / xRadius)
         }
     )
 }
