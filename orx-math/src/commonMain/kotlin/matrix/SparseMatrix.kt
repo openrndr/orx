@@ -1,5 +1,6 @@
 package org.openrndr.extra.math.matrix
 
+import kotlinx.serialization.Serializable
 import kotlin.math.abs
 import kotlin.math.sqrt
 
@@ -37,6 +38,7 @@ private fun countNonZeroElements(matrix: Matrix): Int {
  * @property columnIndices Array containing the column indices of the non-zero values.
  * @property rowPointers Array containing the starting position of each row in the values array.
  */
+@Serializable
 class SparseMatrix(
     val rows: Int,
     val cols: Int,

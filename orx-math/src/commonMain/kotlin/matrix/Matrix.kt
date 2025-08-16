@@ -1,5 +1,7 @@
 package org.openrndr.extra.math.matrix
 
+import kotlinx.serialization.Serializable
+
 /**
  * Represents a two-dimensional matrix with support for basic operations such as indexing,
  * copying, and mathematical computations.
@@ -7,6 +9,7 @@ package org.openrndr.extra.math.matrix
  * @property rows The number of rows in the matrix.
  * @property cols The number of columns in the matrix.
  */
+@Serializable
 class Matrix(val rows: Int, val cols: Int) {
     val data = Array(rows) { DoubleArray(cols) }
 
