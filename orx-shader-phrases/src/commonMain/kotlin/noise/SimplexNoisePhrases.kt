@@ -1,6 +1,6 @@
 package org.openrndr.extra.shaderphrases.noise
 
-val grad4Phrase = """#ifndef SP_GRAD4
+const val grad4Phrase = """#ifndef SP_GRAD4
 #define SP_GRAD4
 
 vec4 grad4(float j, vec4 ip) {
@@ -17,7 +17,7 @@ vec4 grad4(float j, vec4 ip) {
 #endif
 """
 
-val simplex12 = """#ifndef SP_SIMPLEX12
+const val simplex12 = """#ifndef SP_SIMPLEX12
 #define SP_SIMPLEX12        
 $mod289V2Phrase
 $mod289V3Phrase
@@ -74,7 +74,7 @@ float simplex12(in vec2 v) {
 #endif
 """
 
-val simplex13 = """#ifndef SP_SIMPLEX13
+const val simplex13 = """#ifndef SP_SIMPLEX13
 #define SP_SIMPLEX13
 $mod289V3Phrase
 $mod289V4Phrase
@@ -156,7 +156,7 @@ float simplex13(in vec3 v) {
 #endif                                
 }"""
 
-val simplex14 = """#ifndef SP_SIMPLEX14
+const val simplex14 = """#ifndef SP_SIMPLEX14
 #define SP_SIMPLEX14
 $mod289Phrase
 $mod289V2Phrase
@@ -249,7 +249,7 @@ float simplex14(vec4 v) {
 #endif        
 """
 
-val simplex22 = """#ifndef SP_SIMPLEX22
+const val simplex22 = """#ifndef SP_SIMPLEX22
 #define SP_SIMPLEX22        
 $simplex12
 vec2 simplex22( vec2 x ){
@@ -260,7 +260,7 @@ vec2 simplex22( vec2 x ){
 #endif
 """
 
-val simplex33 = """#ifndef SP_SIMPLEX33
+const val simplex33 = """#ifndef SP_SIMPLEX33
 #define SP_SIMPLEX33    
 $simplex13
 vec3 simplex33( vec3 x ){
@@ -272,7 +272,7 @@ vec3 simplex33( vec3 x ){
 #endif
 """
 
-val simplex34 = """#ifndef SP_SIMPLEX34
+const val simplex34 = """#ifndef SP_SIMPLEX34
 #define SP_SIMPLEX34        
 $simplex14
 vec3 simplex34( vec4 x ){

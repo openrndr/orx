@@ -10,7 +10,7 @@ package org.openrndr.extra.shaderphrases.noise
  * This phrase is wrapped in preprocessor guards to ensure it is only defined once during the shader compilation process.
  */
 // knuth's multiplicative hash function (fixed point R1)
-val kmhfPhrase = """#ifndef SP_KMHF
+const val kmhfPhrase = """#ifndef SP_KMHF
 #define SP_KMHF
 uint kmhf(uint x) {
     return 0x80000000u + 2654435789u * x;
@@ -28,10 +28,10 @@ uint kmhf(uint x) {
  * during shader compilation.
  */
 // inverse of Knuth's multiplicative hash function (fixed point R1)
-val inverseKmhfPhrase = """#ifndef SP_INVERSE_KMHF
+const val inverseKmhfPhrase = """#ifndef SP_INVERSE_KMHF
 #define SP_INVERSE_KMHF
 uint inverseKmhf(uint x) {
     return (x - 0x80000000u) * 827988741u;
 }
 #endif
-""".trimMargin()
+"""

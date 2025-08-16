@@ -1,6 +1,6 @@
 package org.openrndr.extra.shaderphrases.noise
 
-val permutePhrase = """#ifndef SP_PERMUTE
+const val permutePhrase = """#ifndef SP_PERMUTE
 #define SP_PERMUTE
 $mod289Phrase
 float permute(const in float x) { return mod289(((x * 34.0) + 1.0) * x); }

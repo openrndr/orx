@@ -3,7 +3,7 @@ package org.openrndr.extra.shaderphrases.noise
 /**
  * uniform hash shader phrase
  */
-val uhash11Phrase = """
+const val uhash11Phrase = """
 #ifndef PHRASE_UHASH11
 #define PHRASE_UHASH11
 uint uhash11(uint x) {
@@ -21,7 +21,7 @@ uint uhash11(uint x) {
 /**
  * uniform hash shader phrase
  */
-val fhash11Phrase = """
+const val fhash11Phrase = """
 $uhash11Phrase    
 #ifndef PHRASE_FHASH11
 #define PHRASE_FHASH11
@@ -35,7 +35,7 @@ float fhash11(float x) {
 /**
  * uniform hash shader phrase
  */
-val uhash12Phrase = """
+const val uhash12Phrase = """
 $uhash11Phrase    
 #ifndef PHRASE_UHASH12
 #define PHRASE_UHASH12
@@ -49,7 +49,7 @@ uint uhash12(uvec2 x) {
 /**
  * uniform hash shader phrase
  */
-val fhash12Phrase = """
+const val fhash12Phrase = """
 $uhash12Phrase    
 #ifndef PHRASE_FHASH12
 #define PHRASE_FHASH12
@@ -63,7 +63,7 @@ float fhash12(vec2 x) {
 /**
  * uniform hash shader phrase
  */
-val uhash13Phrase = """
+const val uhash13Phrase = """
 $uhash11Phrase    
 #ifndef PHRASE_UHASH13
 #define PHRASE_UHASH13
@@ -77,7 +77,7 @@ uint uhash13(uvec3 x) {
 /**
  * uniform hash shader phrase
  */
-val fhash13Phrase = """
+const val fhash13Phrase = """
 $uhash13Phrase  
 #ifndef PHRASE_FHASH13
 #define PHRASE_FHASH13
@@ -91,7 +91,7 @@ float fhash13(vec3 x) {
 /**
  * uniform hash shader phrase
  */
-val uhash14Phrase = """
+const val uhash14Phrase = """
 $uhash11Phrase    
 #ifndef PHRASE_UHASH14
 #define PHRASE_UHASH14
@@ -105,7 +105,7 @@ uint uhash14(uvec4 x) {
 /**
  * uniform hash shader phrase
  */
-val fhash14Phrase = """
+const val fhash14Phrase = """
 $uhash14Phrase  
 #ifndef PHRASE_FHASH14
 #define PHRASE_FHASH14

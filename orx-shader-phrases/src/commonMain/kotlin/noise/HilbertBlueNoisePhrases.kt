@@ -5,7 +5,7 @@ import org.openrndr.extra.shaderphrases.spacefilling.hilbertV3Phrase
 import org.openrndr.extra.shaderphrases.spacefilling.inverseGray32Phrase
 
 // https://www.shadertoy.com/view/3tB3z3
-val hilbertR1BlueNoisePhrase = """#ifndef SP_HILBERT_R1_BLUE_NOISE
+const val hilbertR1BlueNoisePhrase = """#ifndef SP_HILBERT_R1_BLUE_NOISE
 #define SP_HILBERT_R1_BLUE_NOISE
 $hilbertPhrase
 $kmhfPhrase
@@ -17,7 +17,7 @@ uint hilbertR1BlueNoise(uvec2 p, uint bits, uint seed) {
 #endif
 """
 
-val hilbertR1BlueNoiseFloatPhrase = """#ifndef SP_HILBERT_R1_BLUE_NOISE_FLOAT
+const val hilbertR1BlueNoiseFloatPhrase = """#ifndef SP_HILBERT_R1_BLUE_NOISE_FLOAT
 #define SP_HILBERT_R1_BLUE_NOISE_FLOAT
 $hilbertR1BlueNoisePhrase
 float hilbertR1BlueNoiseFloat(uvec2 p, uint bits, uint seed) {
@@ -28,7 +28,7 @@ float hilbertR1BlueNoiseFloat(uvec2 p, uint bits, uint seed) {
 """
 
 // https://www.shadertoy.com/view/3tB3z3
-val inverseR1BlueNoisePhrase = """#ifndef SP_INVERSE_R1_BLUE_NOISE
+const val inverseR1BlueNoisePhrase = """#ifndef SP_INVERSE_R1_BLUE_NOISE
 #define SP_INVERSE_R1_BLUE_NOISE
 $inverseGray32Phrase
 $inverseKmhfPhrase
@@ -38,7 +38,7 @@ ivec2 inverseR1BlueNoise(uint x, uint bits) {
 #endif"""
 
 // https://www.shadertoy.com/view/3tB3z3
-val hilbertR1BlueNoiseV3Phrase = """#ifndef SP_HILBERT_R1_BLUE_NOISE_V3
+const val hilbertR1BlueNoiseV3Phrase = """#ifndef SP_HILBERT_R1_BLUE_NOISE_V3
 #define SP_HILBERT_R1_BLUE_NOISE_V3
 $hilbertV3Phrase
 $kmhfPhrase
@@ -50,7 +50,7 @@ uint hilbertR1BlueNoise(uvec3 p, uint bits, uint seed) {
 #endif
 """
 
-val hilbertR1BlueNoiseFloatV3Phrase = """#ifndef SP_HILBERT_R1_BLUE_NOISE_FLOAT_V3
+const val hilbertR1BlueNoiseFloatV3Phrase = """#ifndef SP_HILBERT_R1_BLUE_NOISE_FLOAT_V3
 #define SP_HILBERT_R1_BLUE_NOISE_FLOAT_V3
 $hilbertR1BlueNoiseV3Phrase
 float hilbertR1BlueNoiseFloat(uvec3 p, uint bits, uint seed) {
