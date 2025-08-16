@@ -149,6 +149,11 @@ Collection of 2D shape generators and modifiers.
 
 ![hobbycurve-DemoHobbyCurve02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve02Kt.png)
 
+### hobbycurve/DemoHobbyCurve03
+[source code](src/jvmDemo/kotlin/hobbycurve/DemoHobbyCurve03.kt)
+
+![hobbycurve-DemoHobbyCurve03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve03Kt.png)
+
 ### hobbycurve/DemoHobbyCurve3D01
 [source code](src/jvmDemo/kotlin/hobbycurve/DemoHobbyCurve3D01.kt)
 
@@ -178,6 +183,16 @@ Collection of 2D shape generators and modifiers.
 [source code](src/jvmDemo/kotlin/primitives/DemoArc01.kt)
 
 ![primitives-DemoArc01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoArc01Kt.png)
+
+### primitives/DemoCircleInversion01
+[source code](src/jvmDemo/kotlin/primitives/DemoCircleInversion01.kt)
+
+![primitives-DemoCircleInversion01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoCircleInversion01Kt.png)
+
+### primitives/DemoCircleInversion02
+[source code](src/jvmDemo/kotlin/primitives/DemoCircleInversion02.kt)
+
+![primitives-DemoCircleInversion02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoCircleInversion02Kt.png)
 
 ### primitives/DemoNet01
 [source code](src/jvmDemo/kotlin/primitives/DemoNet01.kt)
