@@ -10,9 +10,9 @@ package org.openrndr.extra.math.matrix
 class Matrix(val rows: Int, val cols: Int) {
     val data = Array(rows) { DoubleArray(cols) }
 
-    operator fun get(i: Int, j: Int) = data[i][j]
-    operator fun set(i: Int, j: Int, value: Double) {
-        data[i][j] = value
+    operator fun get(row: Int, column: Int) = data[row][column]
+    operator fun set(row: Int, column: Int, value: Double) {
+        data[row][column] = value
     }
 
     fun copy(): Matrix {
@@ -137,6 +137,13 @@ class Matrix(val rows: Int, val cols: Int) {
     }
 }
 
+/**
+ * Calculates the mean of each column in the matrix and returns the result as a new single-row matrix.
+ *
+ * The mean is calculated by summing all elements in each column and dividing by the number of rows.
+ *
+ * @return A row matrix containing the mean of each column of the input matrix.
+ */
 fun Matrix.columnMean(): Matrix {
     val means = DoubleArray(cols)
 
@@ -144,11 +151,12 @@ fun Matrix.columnMean(): Matrix {
         for (i in 0 until cols) {
             means[i] += this[j, i]
         }
-
     }
+
     for (i in 0 until cols) {
         means[i] /= rows.toDouble()
     }
+
     val result = Matrix.zeros(1, cols)
     for (i in 0 until cols) {
         result[0, i] = means[i]
