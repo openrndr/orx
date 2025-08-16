@@ -1,5 +1,6 @@
 package org.openrndr.extra.math.complex
 
+import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmRecord
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -22,6 +23,7 @@ import kotlin.math.sinh
  * @property imaginary The imaginary part of the complex number.
  */
 @JvmRecord
+@Serializable
 data class Complex(val real: Double, val imaginary: Double) {
     operator fun plus(other: Complex): Complex {
         return Complex(real + other.real, imaginary + other.imaginary)
