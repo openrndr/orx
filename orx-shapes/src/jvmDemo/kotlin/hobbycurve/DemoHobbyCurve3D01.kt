@@ -29,7 +29,7 @@ fun main() = application {
             val hobby3D = hobbyCurve(
                 pts.map { it.xy0 + Vector3(0.0, 0.0, Double.uniform(-360.0, 360.0, r)) },
                 true,
-                tensions = { chordIndex: Int ->
+                tensions = { chordIndex, inAngle, outAngle ->
                     Pair(
                         cos(seconds + chordIndex * 0.1) * 0.5 + 0.5,
                         cos(seconds + (1.0 + chordIndex) * 0.1) * 0.5 + 0.5

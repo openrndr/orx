@@ -8,6 +8,10 @@ import org.openrndr.math.Vector2
 import kotlin.random.Random
 
 fun main() = application {
+    configure {
+        width = 720
+        height = 720
+    }
     program {
         val points = List(40) {
             Vector2(
