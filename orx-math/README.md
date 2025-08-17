@@ -18,6 +18,11 @@ Mathematical utilities
 
 ![matrix-DemoLeastSquares01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/matrix-DemoLeastSquares01Kt.png)
 
+### matrix/DemoLeastSquares02
+[source code](src/jvmDemo/kotlin/matrix/DemoLeastSquares02.kt)
+
+![matrix-DemoLeastSquares02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/matrix-DemoLeastSquares02Kt.png)
+
 ### rbf/RbfInterpolation01
 [source code](src/jvmDemo/kotlin/rbf/RbfInterpolation01.kt)
 
