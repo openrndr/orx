@@ -18,7 +18,7 @@ private class FluidDistortFilter : Filter(mppFilterShader(fx_fluid_distort, "flu
     }
 }
 
-class FluidDistort : Filter1to1() {
+class FluidDistort : Filter1to1(null) {
     var blend: Double = 1.0
 
     var outputUV = false

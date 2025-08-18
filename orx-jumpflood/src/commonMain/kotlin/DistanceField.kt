@@ -34,7 +34,7 @@ import kotlin.math.pow
  * intermediate buffers to reduce memory allocation overhead.
  */
 @Description("Distance field")
-class DistanceField : Filter1to1() {
+class DistanceField : Filter1to1(null) {
     @DoubleParameter("threshold", 0.0, 1.0)
     var threshold = 0.5
 

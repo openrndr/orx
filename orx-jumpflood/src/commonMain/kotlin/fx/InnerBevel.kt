@@ -25,7 +25,7 @@ private class InnerBevelFilter : Filter(filterShaderFromCode(jf_inner_bevel, "in
 }
 
 @Description("Inner bevel")
-class InnerBevel : Filter1to1() {
+class InnerBevel : Filter1to1(null) {
     @DoubleParameter("threshold", 0.0, 1.0)
     var threshold = 0.01
 

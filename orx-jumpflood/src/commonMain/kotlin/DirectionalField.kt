@@ -48,7 +48,7 @@ import kotlin.math.pow
  *
  */
 @Description("Directional field")
-class DirectionalField : Filter1to1() {
+class DirectionalField : Filter1to1(null) {
     @DoubleParameter("threshold", 0.0, 1.0)
     var threshold = 0.5
 

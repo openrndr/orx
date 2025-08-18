@@ -24,7 +24,7 @@ private var filterQuadFormat = vertexFormat {
 /**
  * Filter base class. Renders "full-screen" quads.
  */
-open class CubemapFilter(private val shader: Shader? = null, private val watcher: ShaderWatcher? = null) {
+open class CubemapFilter(private val shader: Shader? = null) {
 
     /**
      * parameter map
@@ -79,7 +79,9 @@ open class CubemapFilter(private val shader: Shader? = null, private val watcher
     }
 
     fun apply(source: Array<Cubemap>, target: RenderTarget) {
-        val shader = if (this.watcher != null) watcher.shader!! else this.shader!!
+        if (shader == null) {
+            return
+        }
         target.bind()
 
         if (filterQuad == null) {

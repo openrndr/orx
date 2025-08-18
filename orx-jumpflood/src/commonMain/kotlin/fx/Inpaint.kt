@@ -30,7 +30,7 @@ private class InpaintFilter : Filter(filterShaderFromCode(jf_inpaint, "inpaint")
 }
 
 @Description("Inpaint")
-class Inpaint : Filter1to1() {
+class Inpaint : Filter1to1(null) {
     @DoubleParameter("width", 0.0, 1.0)
     var width = 0.5
 
