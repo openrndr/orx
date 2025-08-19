@@ -6,6 +6,8 @@ uniform int window;
 uniform float sigma;
 uniform float spread;
 uniform float gain;
+uniform int wrapU;
+uniform int wrapV;
 
 uniform int sourceLevel;
 
@@ -19,6 +21,14 @@ void main() {
     for (int x = -w; x <= w; ++x) {
         float lw = exp( float(-(x*x)) / (2.0 * sigma * sigma) ) ;
         vec2 tc = v_texCoord0 + float(x) * blurDirection * s;// * spread;
+
+        if (wrapU != 0) {
+            tc.x = mod(tc.x, 1.0);
+        }
+        if (wrapV != 0) {
+            tc.y = mod(tc.y, 1.0);
+        }
+
         sum += texture(tex0, tc) * lw;
         weight += lw;
     }
