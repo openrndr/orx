@@ -193,6 +193,11 @@ shaping `curve` within this range:
 ![DemoFluidDistort01Kt](https://github.com/openrndr/orx/blob/media/orx-fx/images/DemoFluidDistort01Kt.png
 <!-- __demos__ -->
 ## Demos
+### DemoApproximateGaussianBlur01
+[source code](src/jvmDemo/kotlin/DemoApproximateGaussianBlur01.kt)
+
+![DemoApproximateGaussianBlur01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoApproximateGaussianBlur01Kt.png)
+
 ### DemoBlur01
 [source code](src/jvmDemo/kotlin/DemoBlur01.kt)
 
