@@ -194,6 +194,11 @@ Collection of 2D shape generators and modifiers.
 
 ![primitives-DemoCircleInversion02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoCircleInversion02Kt.png)
 
+### primitives/DemoCircleInversion03
+[source code](src/jvmDemo/kotlin/primitives/DemoCircleInversion03.kt)
+
+![primitives-DemoCircleInversion03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoCircleInversion03Kt.png)
+
 ### primitives/DemoNet01
 [source code](src/jvmDemo/kotlin/primitives/DemoNet01.kt)
 
