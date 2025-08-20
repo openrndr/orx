@@ -8,6 +8,9 @@ import org.openrndr.events.Event
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Spherical
 import org.openrndr.math.Vector3
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.pow
@@ -423,15 +426,20 @@ class OrbitalCamera(
  * in the same program.
  * @param function the function that is called in the isolation
  */
+@OptIn(ExperimentalContracts::class)
 fun OrbitalCamera.isolated(drawer: Drawer, function: Drawer.() -> Unit) {
+    contract {
+        callsInPlace(function, InvocationKind.EXACTLY_ONCE)
+    }
     drawer.pushTransforms()
     drawer.pushStyle()
-
-    applyTo(drawer)
-    function(drawer)
-
-    drawer.popStyle()
-    drawer.popTransforms()
+    try {
+        applyTo(drawer)
+        function(drawer)
+    } finally {
+        drawer.popStyle()
+        drawer.popTransforms()
+    }
 }
 
 

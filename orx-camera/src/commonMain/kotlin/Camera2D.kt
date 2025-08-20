@@ -12,6 +12,8 @@ import org.openrndr.events.Event
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.math.transforms.buildTransform
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
 /**
  * The [Camera2D] extension enables panning, rotating, and zooming the view
@@ -78,7 +80,11 @@ class Camera2D : Extension, ChangeEvents {
      *
      * @param function the drawing function to be applied within the isolated scope of the `Drawer`.
      */
+    @OptIn(ExperimentalContracts::class)
     fun isolated(function: Drawer.() -> Unit) {
+        contract {
+            callsInPlace(function, kotlin.contracts.InvocationKind.EXACTLY_ONCE)
+        }
         program.drawer.isolated {
             program.drawer.ortho(RenderTarget.active)
 
