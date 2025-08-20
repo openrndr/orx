@@ -138,7 +138,7 @@ class Camera2D : Extension, ChangeEvents {
     fun zoom(center: Vector2, factor: Double) {
         view = buildTransform {
             translate(center)
-            scale(factor)
+            scale(factor, factor, 1.0)
             translate(-center)
         } * view
     }
