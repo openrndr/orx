@@ -25,7 +25,10 @@ fun main() = application {
                         drawer.clear(ColorRGBa.WHITE)
                         drawer.fill = ColorRGBa.BLACK
                         drawer.stroke = null
-                        drawer.circle(mc.invertConformal(c))
+                        val ci = mc.invertConformal(c)
+                        when (ci) {
+                            is Circle -> drawer.circle(ci)
+                        }
                         break
                     }
                 }
@@ -39,7 +42,10 @@ fun main() = application {
                 for (i in 0 until 10) {
                     val c = Circle(i * width / 10.0 + width / 20.0, j * height / 10.0 + height / 20.0, 36.0)
                     if (p !in c) {
-                        drawer.circle(mc.invertConformal(c))
+                        val ci = mc.invertConformal(c)
+                        when (ci) {
+                            is Circle -> drawer.circle(ci)
+                        }
                     }
                 }
             }

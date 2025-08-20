@@ -1,8 +1,14 @@
 package org.openrndr.extra.shapes.primitives
 
+import org.openrndr.math.GeometricPrimitive2D
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
+import org.openrndr.shape.Line2D
+import org.openrndr.shape.LineSegment
 import kotlin.math.abs
+import kotlin.math.atan2
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.sqrt
 
 
@@ -53,7 +59,7 @@ fun Circle.invert(point: Vector2): Vector2 {
  * @return The inverted circle
  * @throws IllegalArgumentException if the circle to be inverted is centered at the center of the inverting circle
  */
-fun Circle.invert(circle: Circle): Circle {
+fun Circle.invert(circle: Circle): GeometricPrimitive2D {
     // Vector from this circle's center to the other circle's center
     val v = circle.center - this.center
 
@@ -73,8 +79,7 @@ fun Circle.invert(circle: Circle): Circle {
         // Special case: the result would be a line, which we can't represent as a Circle
         // We'll approximate it as a very large circle
         val direction = v.normalized
-        val farPoint = this.center + direction * 1e6
-        return Circle(farPoint, 1e6)
+        return Line2D(this.center, direction)
     }
 
     // Calculate power of the point (center of the inverting circle) with respect to the circle being inverted
@@ -101,7 +106,7 @@ fun Circle.invert(circle: Circle): Circle {
  * @return The conformally inverted circle
  * @throws IllegalArgumentException if the circle to be inverted is centered at the center of the inverting circle
  */
-fun Circle.invertConformal(circle: Circle): Circle {
+fun Circle.invertConformal(circle: Circle): GeometricPrimitive2D {
     // Vector from this circle's center to the other circle's center
     val v = circle.center - this.center
 
@@ -118,11 +123,8 @@ fun Circle.invertConformal(circle: Circle): Circle {
 
     // Check if the circle to be inverted passes through the center of the inverting circle
     if (abs(circle.radius - distance) < 1e-10) {
-        // Special case: the result would be a line, which we can't represent as a Circle
-        // We'll approximate it as a very large circle
         val direction = v.normalized
-        val farPoint = this.center + direction * 1e6
-        return Circle(farPoint, 1e6)
+        return Line2D(this.center, direction)
     }
 
     // For conformal inversion that preserves tangency, we use the standard circle inversion formula
@@ -141,4 +143,60 @@ fun Circle.invertConformal(circle: Circle): Circle {
     val newRadius = abs(this.radius * this.radius * circle.radius / power)
 
     return Circle(newCenter, newRadius)
+}
+
+fun Circle.invert(segment: LineSegment): GeometricPrimitive2D {
+    val a = segment.start
+    val b = segment.end
+    val c = segment.position(0.5)
+
+    // Direction of the line (normalized)
+    val dir = (b - a)
+    val dirLen = dir.length
+    if (dirLen < 1e-10) {
+        // Degenerate segment: treat as a point inversion
+        return invert(a)
+    }
+    val u = dir / dirLen
+
+    // Foot of the perpendicular from circle center to the infinite line AB
+    val ao = center - a
+    val t = ao.dot(u)
+    val foot = a + u * t
+
+    val perpVec = center - foot
+    val dist = perpVec.length
+
+    // If the line passes through the center of inversion, it maps to a line
+    if (dist < 1e-10) {
+        val aInv = invert(a)
+        val bInv = invert(b)
+        return LineSegment(aInv, bInv)
+    }
+
+    // Inverse of a line not through the center is a circle passing through the center
+    val rPrime = (radius * radius) / (2.0 * dist)
+    val n = (foot - center).normalized // direction from center towards the line
+    val circleCenter = center + n * rPrime
+
+    // The circle radius equals rPrime (since it passes through the center)
+    val aInv = invert(a)
+    val bInv = invert(b)
+    val cInv = invert(c)
+
+    // Compute angles (in degrees) for the arc between inverted endpoints
+    val angleA = atan2(aInv.y - circleCenter.y, aInv.x - circleCenter.x) * 180.0 / kotlin.math.PI
+    val angleB = atan2(bInv.y - circleCenter.y, bInv.x - circleCenter.x) * 180.0 / kotlin.math.PI
+    val angleC = atan2(cInv.y - circleCenter.y, cInv.x - circleCenter.x) * 180.0 / kotlin.math.PI
+
+    var angle0 = min(angleA, angleB)
+    var angle1 = max(angleA, angleB)
+
+    if (angleC in angle0..angle1) {
+        angle1 -= 360.0
+    }
+
+
+    return Arc(circleCenter, rPrime, angle0, angle1).conjugate()
+
 }
