@@ -4,6 +4,8 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.panel.style.PropertyInheritance.INHERIT
 import org.openrndr.panel.style.PropertyInheritance.RESET
 import java.util.*
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 import kotlin.reflect.KProperty
 
 enum class PropertyInheritance {
@@ -232,7 +234,11 @@ fun StyleSheet.flatten(): List<StyleSheet> {
     return listOf(this) + children.flatMap { it.flatten() }
 }
 
+@OptIn(ExperimentalContracts::class)
 fun styleSheet(selector: CompoundSelector = CompoundSelector.DUMMY, init: StyleSheet.() -> Unit): StyleSheet {
+    contract {
+        callsInPlace(init, kotlin.contracts.InvocationKind.EXACTLY_ONCE)
+    }
     return StyleSheet(selector).apply {
         init()
     }

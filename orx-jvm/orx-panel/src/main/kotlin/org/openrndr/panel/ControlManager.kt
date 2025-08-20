@@ -11,6 +11,9 @@ import org.openrndr.panel.layout.Layouter
 import org.openrndr.panel.style.*
 import org.openrndr.panel.style.Display
 import org.openrndr.shape.Rectangle
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 private val logger = KotlinLogging.logger {}
 
@@ -493,7 +496,11 @@ class ControlManagerBuilder(val controlManager: ControlManager) {
         controlManager.layouter.styleSheets.addAll(styleSheets.flatMap { it.flatten() })
     }
 
+    @OptIn(ExperimentalContracts::class)
     fun layout(init: Body.() -> Unit) {
+        contract {
+            callsInPlace(init, InvocationKind.EXACTLY_ONCE)
+        }
         val body = Body(controlManager)
         body.init()
         controlManager.body = body
@@ -517,10 +524,14 @@ fun ControlManager.layout(init: Body.() -> Unit) {
     this.body = body
 }
 
+@OptIn(ExperimentalContracts::class)
 fun Program.controlManager(
     defaultStyles: List<StyleSheet> = defaultStyles(),
     builder: ControlManagerBuilder.() -> Unit
 ): ControlManager {
+    contract {
+        callsInPlace(builder, InvocationKind.EXACTLY_ONCE)
+    }
     val cm = ControlManager()
     cm.program = this
     cm.fontManager.register("default", resourceUrl("/fonts/Roboto-Regular.ttf"))
