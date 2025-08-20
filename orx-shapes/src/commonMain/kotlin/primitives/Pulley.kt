@@ -1,10 +1,12 @@
 package org.openrndr.extra.shapes.primitives
 
+import org.openrndr.math.GeometricPrimitive2D
 import org.openrndr.math.LinearType
 import org.openrndr.math.Polar
 import org.openrndr.shape.Circle
 import org.openrndr.shape.LineSegment
 import org.openrndr.shape.ShapeContour
+import kotlin.jvm.JvmRecord
 
 /**
  * Represents a pulley system defined by two circles.
@@ -17,7 +19,8 @@ import org.openrndr.shape.ShapeContour
  * @property circle0 The first circle in the pulley system.
  * @property circle1 The second circle in the pulley system.
  */
-class Pulley(val circle0: Circle, val circle1: Circle) : LinearType<Pulley> {
+@JvmRecord
+data class Pulley(val circle0: Circle, val circle1: Circle) : LinearType<Pulley>, GeometricPrimitive2D {
     override fun div(scale: Double): Pulley {
         return Pulley(circle0 / scale, circle1 / scale)
     }

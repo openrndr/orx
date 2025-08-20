@@ -1,11 +1,13 @@
 package org.openrndr.extra.shapes.primitives
 
+import org.openrndr.math.GeometricPrimitive2D
 import org.openrndr.math.LinearType
 import org.openrndr.math.Polar
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
 import org.openrndr.shape.LineSegment
 import org.openrndr.shape.ShapeContour
+import kotlin.jvm.JvmRecord
 
 /**
  * Represents a "Tear" consisting of a point and a circle.
@@ -18,7 +20,8 @@ import org.openrndr.shape.ShapeContour
  * @property point The [Vector2] coordinate representing a point in the Tear.
  * @property circle The [Circle] geometry associated with the Tear.
  */
-class Tear(val point: Vector2, val circle: Circle) : LinearType<Tear> {
+@JvmRecord
+data class Tear(val point: Vector2, val circle: Circle) : LinearType<Tear>, GeometricPrimitive2D {
     override fun div(scale: Double) = Tear(point / scale, circle / scale)
 
     override fun times(scale: Double) = Tear(point * scale, circle * scale)

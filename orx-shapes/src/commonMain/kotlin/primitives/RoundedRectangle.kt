@@ -5,9 +5,11 @@ import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 import org.openrndr.shape.contour
 import org.openrndr.shape.ShapeContour
+import kotlin.jvm.JvmRecord
 import kotlin.math.min
 
-class RoundedRectangle(val corner: Vector2, val width: Double, val height: Double, val radius: Double) {
+@JvmRecord
+data class RoundedRectangle(val corner: Vector2, val width: Double, val height: Double, val radius: Double) {
     constructor(x: Double, y: Double, width: Double, height: Double, radius: Double) : this(
         Vector2(x, y),
         width,

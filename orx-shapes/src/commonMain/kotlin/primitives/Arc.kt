@@ -3,6 +3,7 @@ package org.openrndr.extra.shapes.primitives
 import org.openrndr.math.*
 import org.openrndr.shape.ShapeContour
 import org.openrndr.shape.contour
+import kotlin.jvm.JvmRecord
 
 /**
  * Represents an arc defined by a center point, a radius, and a range of angles.
@@ -15,7 +16,8 @@ import org.openrndr.shape.contour
  * @property angle0 The starting angle of the arc, in degrees.
  * @property angle1 The ending angle of the arc, in degrees.
  */
-class Arc(val center: Vector2, val radius: Double, val angle0: Double, val angle1: Double) : LinearType<Arc> {
+@JvmRecord
+data class Arc(val center: Vector2, val radius: Double, val angle0: Double, val angle1: Double) : LinearType<Arc>, GeometricPrimitive2D {
     /**
      * Calculates the position of a point along the arc at a specified parameter `t`.
      * The parameter `t` interpolates between the starting and ending angles of the arc.
@@ -28,6 +30,8 @@ class Arc(val center: Vector2, val radius: Double, val angle0: Double, val angle
         val angle = mix(angle0, angle1, t.clamp(0.0, 1.0))
         return Polar(angle, radius).cartesian + center
     }
+
+    fun conjugate() = Arc(center, radius, angle1-360.0, angle0)
 
     /**
      * A computed property that provides a [ShapeContour] representation of the arc.
