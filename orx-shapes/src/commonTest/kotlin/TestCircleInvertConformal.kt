@@ -43,7 +43,7 @@ class TestCircleInvertConformal {
         val inverted2 = invertingCircle.invertConformal(circle2)
         
         // Verify that the inverted circles are also tangent
-        assertTrue(areTangent(inverted1, inverted2), "The inverted circles should remain tangent")
+        assertTrue(areTangent(inverted1 as Circle, inverted2 as Circle), "The inverted circles should remain tangent")
     }
     
     @Test
@@ -64,7 +64,7 @@ class TestCircleInvertConformal {
         val inverted2 = invertingCircle.invertConformal(circle2)
         
         // Verify that the inverted circles are also tangent
-        assertTrue(areTangent(inverted1, inverted2), "The inverted circles should remain tangent")
+        assertTrue(areTangent(inverted1 as Circle, inverted2 as Circle), "The inverted circles should remain tangent")
     }
     
     @Test
