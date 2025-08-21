@@ -93,10 +93,10 @@ group = "org.openrndr.extra"
 nexusPublishing {
     repositories {
         sonatype {
-            username.set(findProperty("ossrhUsername")?.toString() ?: System.getenv("OSSRH_USERNAME"))
-            password.set(findProperty("ossrhPassword")?.toString() ?: System.getenv("OSSRH_PASSWORD"))
-            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
-            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots"))
+            username.set(findProperty("ossrhUsername") ?: System.getenv("OSSRH_USERNAME"))
+            password.set(findProperty("ossrhPassword") ?: System.getenv("OSSRH_PASSWORD"))
+            nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
         }
     }
 }
@@ -116,7 +116,13 @@ dependencies {
         dokka(project(subproject.path))
     }
 }
-
+class SleepTask extends DefaultTask {
+    @TaskAction
+    void action() {
+        sleep(60 * 5 * 1000)
+    }
+}
+tasks.register("sleep", SleepTask)
 gradle.buildFinished {
     println("\n")
     println("orx = \"${version}\"")
