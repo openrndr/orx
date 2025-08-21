@@ -1,8 +1,11 @@
 name: Release API docs
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
+
+defaults:
+  run:
+    working-directory: ./orx
 
 jobs:
   release_apidocs:
@@ -12,13 +15,35 @@ jobs:
       - name: Checkout current repository
         uses: actions/checkout@v4
         with:
+          path: ./orx
           fetch-depth: 0
+
+      - name: Checkout OPENRNDR repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          repository: openrndr/openrndr
+          path: ./openrndr
+          ref: master
+
+      - name: Test glxinfo
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mesa-utils xvfb
+          xvfb-run glxinfo
 
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
           cache: gradle
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build OPENRNDR
+        working-directory: ./openrndr
+        run: ./gradlew publishToMavenLocal snapshot
 
       - name: Build apidocs
         run: ./gradlew :dokkaGenerate -Dorg.gradle.jvmargs=-Xmx1536M
