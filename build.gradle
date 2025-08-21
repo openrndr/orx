@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.nebula.release)
-    alias(libs.plugins.gradle.nexus.publish)
+    //alias(libs.plugins.gradle.nexus.publish)
+    id("com.gradleup.nmcp.aggregation").version("1.1.0")
+
     id("org.openrndr.extra.convention.dokka")
 }
 
@@ -89,17 +91,28 @@ tasks.register('buildMainReadme') {
     }
 }
 group = "org.openrndr.extra"
+nmcpAggregation {
+    centralPortal {
+        username.set(findProperty("ossrhUsername") ?: System.getenv("OSSRH_USERNAME"))
+        password.set(findProperty("ossrhPassword") ?: System.getenv("OSSRH_PASSWORD"))
 
-nexusPublishing {
-    repositories {
-        sonatype {
-            username.set(findProperty("ossrhUsername") ?: System.getenv("OSSRH_USERNAME"))
-            password.set(findProperty("ossrhPassword") ?: System.getenv("OSSRH_PASSWORD"))
-            nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
-            snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
-        }
+        // publish manually from the portal
+        publishingType = "USER_MANAGED"
     }
+
+    // Publish all projects that apply the 'maven-publish' plugin
+    publishAllProjectsProbablyBreakingProjectIsolation()
 }
+//nexusPublishing {
+//    repositories {
+//        sonatype {
+//            username.set(findProperty("ossrhUsername") ?: System.getenv("OSSRH_USERNAME"))
+//            password.set(findProperty("ossrhPassword") ?: System.getenv("OSSRH_PASSWORD"))
+//            nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
+//            snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
+//        }
+//    }
+//}
 
 subprojects {
     // Equivalent Kotlin is: tasks.register<DependencyReportTask>("dependenciesAll") { ...
