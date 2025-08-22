@@ -140,6 +140,24 @@ open class Element(val type: ElementType) {
     }
 
 
+    /**
+     * Determines whether the current element, or any of its ancestors, has a display style of `Display.NONE`.
+     *
+     * @return `true` if the element or any of its ancestors is hidden (has `Display.NONE` style), `false` otherwise.
+     */
+    fun isHidden() : Boolean {
+        var current: Element? = this
+
+        while (current != null) {
+            if (current.computedStyle.display == Display.NONE) {
+                return true
+            }
+            current = current.parent
+        }
+
+        return false
+    }
+
     fun root(): Element {
         return parent?.root() ?: this
     }

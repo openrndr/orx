@@ -11,6 +11,7 @@ import org.openrndr.panel.layout.Layouter
 import org.openrndr.panel.style.*
 import org.openrndr.panel.style.Display
 import org.openrndr.shape.Rectangle
+import org.w3c.dom.Node
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -63,6 +64,9 @@ class ControlManager : Extension {
 
         fun press(event: KeyEvent) {
             target?.let {
+                if (it.isHidden()) {
+                    return
+                }
                 var current: Element? = it
                 while (current != null) {
                     if (!event.propagationCancelled) {
@@ -96,6 +100,10 @@ class ControlManager : Extension {
         }
 
         fun release(event: KeyEvent) {
+            if (target?.isHidden() == true) {
+                return
+            }
+
             target?.keyboard?.released?.trigger(event)
             if (target != null) {
                 checkForManualRedraw()
@@ -103,6 +111,10 @@ class ControlManager : Extension {
         }
 
         fun repeat(event: KeyEvent) {
+            if (target?.isHidden() == true) {
+                return
+            }
+
             target?.keyboard?.repeated?.trigger(event)
             if (target != null) {
                 checkForManualRedraw()
@@ -110,6 +122,10 @@ class ControlManager : Extension {
         }
 
         fun character(event: CharacterEvent) {
+            if (target?.isHidden() == true) {
+                return
+            }
+
             target?.keyboard?.character?.trigger(event)
             if (target != null) {
                 checkForManualRedraw()
@@ -156,6 +172,9 @@ class ControlManager : Extension {
             logger.debug { "click target: $clickTarget" }
 
             clickTarget?.let {
+                if (it.isHidden()) {
+                    return
+                }
                 if (it.handlesDoubleClick) {
                     if (ct - lastClick > 500) {
                         logger.debug { "normal click on $clickTarget" }
@@ -223,7 +242,14 @@ class ControlManager : Extension {
 
         fun drag(event: MouseEvent) {
             logger.debug { "drag event $event" }
-            dragTarget?.mouse?.dragged?.trigger(event)
+            dragTarget?.let {
+                if (it.isHidden()) {
+                    dragTarget = null
+                    return
+                }
+                it.mouse.dragged.trigger(event)
+            }
+
             if (event.propagationCancelled) {
                 logger.debug { "propagation cancelled by $dragTarget setting clickTarget to null" }
                 clickTarget = null

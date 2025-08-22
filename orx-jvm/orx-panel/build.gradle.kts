@@ -18,4 +18,5 @@ dependencies {
     testRuntimeOnly(libs.kotlin.reflect)
     demoImplementation(libs.openrndr.dialogs)
     demoImplementation(libs.gson)
+    demoImplementation(project(":orx-jvm:orx-panel"))
 }
