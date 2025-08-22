@@ -48,6 +48,7 @@ publishing {
                 }
             }
         }
+        tasks.findByName("publishPluginMavenPublicationToNmcpRepository")!!.dependsOn("signMavenPublication")
         tasks.findByName("publishMavenPublicationToNmcpRepository")!!.dependsOn("signPluginMavenPublication")
     }
 }
