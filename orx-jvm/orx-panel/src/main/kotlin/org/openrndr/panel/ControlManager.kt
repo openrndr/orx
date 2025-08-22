@@ -130,7 +130,12 @@ class ControlManager : Extension {
 
         fun scroll(event: MouseEvent) {
             fun traverse(element: Element) {
-                element.children.forEach(::traverse)
+                if (element.computedStyle.display == Display.NONE) {
+                    return
+                }
+                for (child in element.children) {
+                    traverse(child)
+                }
                 if (!event.propagationCancelled) {
                     if (event.position in element.screenArea && element.computedStyle.display != Display.NONE) {
                         element.mouse.scrolled.trigger(event)
@@ -174,7 +179,9 @@ class ControlManager : Extension {
             logger.debug { "press event: $event" }
             val candidates = mutableListOf<Pair<Element, Int>>()
             fun traverse(element: Element, depth: Int = 0) {
-
+                if (element.computedStyle.display == Display.NONE) {
+                    return
+                }
                 if (element.computedStyle.overflow == Overflow.Scroll) {
                     if (event.position !in element.screenArea) {
                         return
