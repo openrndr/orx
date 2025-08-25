@@ -3,7 +3,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ColorFormat
 import org.openrndr.draw.ColorType
 import org.openrndr.draw.colorBuffer
-import org.openrndr.draw.tint
+import org.openrndr.extra.color.colormatrix.tint
 import org.openrndr.extra.realsense2.RS2Sensor
 
 /**
