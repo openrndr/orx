@@ -3,6 +3,7 @@ package org.openrndr.extra.shapes.bezierpatches
 import org.openrndr.color.AlgebraicColor
 import org.openrndr.color.ColorRGBa
 import org.openrndr.color.ConvertibleToColorRGBa
+import org.openrndr.math.GeometricPrimitive3D
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector3
 import org.openrndr.shape.Path3D
@@ -229,7 +230,7 @@ open class BezierPatch3DBase<C>(
 }
 
 class BezierPatch3D(points: List<List<Vector3>>, colors: List<List<ColorRGBa>> = emptyList()) :
-    BezierPatch3DBase<ColorRGBa>(points, colors)
+    BezierPatch3DBase<ColorRGBa>(points, colors), GeometricPrimitive3D
 
 /**
  * Create a cubic bezier patch from 4 segments. The control points of the segments are used in row-wise fashion
