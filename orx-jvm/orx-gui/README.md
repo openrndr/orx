@@ -177,41 +177,60 @@ import org.openrndr.extra.parameters.DoubleParameter
 <!-- __demos__ -->
 ## Demos
 ### DemoAppearance01
-[source code](src/demo/kotlin/DemoAppearance01.kt)
 
+A simple demonstration of a GUI for drawing some circles
 ![DemoAppearance01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoAppearance01Kt.png)
 
-### DemoHide01
-[source code](src/demo/kotlin/DemoHide01.kt)
+[source code](src/demo/kotlin/DemoAppearance01.kt)
 
+### DemoHide01
+
+A simple demonstration of a GUI for drawing some circles
 ![DemoHide01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoHide01Kt.png)
 
-### DemoOptions01
-[source code](src/demo/kotlin/DemoOptions01.kt)
+[source code](src/demo/kotlin/DemoHide01.kt)
 
+### DemoOptions01
+
+A simple demonstration of a GUI with a drop down menu
 ![DemoOptions01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoOptions01Kt.png)
 
+[source code](src/demo/kotlin/DemoOptions01.kt)
+
 ### DemoPath01
-[source code](src/demo/kotlin/DemoPath01.kt)
+
 
 ![DemoPath01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoPath01Kt.png)
 
-### DemoPresets01
-[source code](src/demo/kotlin/DemoPresets01.kt)
+[source code](src/demo/kotlin/DemoPath01.kt)
 
+### DemoPresets01
+
+Shows how to store and retrieve in-memory gui presets.
+Keyboard controls:
+[Left Shift] + [0]..[9] => store current gui values to a preset
+[0]..[9] => recall a preset
 ![DemoPresets01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoPresets01Kt.png)
 
-### DemoSideCanvas01
-[source code](src/demo/kotlin/DemoSideCanvas01.kt)
+[source code](src/demo/kotlin/DemoPresets01.kt)
 
+### DemoSideCanvas01
+
+A simple demonstration of a GUI for drawing some circles
 ![DemoSideCanvas01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoSideCanvas01Kt.png)
 
-### DemoSimple01
-[source code](src/demo/kotlin/DemoSimple01.kt)
+[source code](src/demo/kotlin/DemoSideCanvas01.kt)
 
+### DemoSimple01
+
+A simple demonstration of a GUI for drawing some circles
 ![DemoSimple01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoSimple01Kt.png)
 
+[source code](src/demo/kotlin/DemoSimple01.kt)
+
 ### DemoXYParameter
-[source code](src/demo/kotlin/DemoXYParameter.kt)
+
 
 ![DemoXYParameterKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoXYParameterKt.png)
+
+[source code](src/demo/kotlin/DemoXYParameter.kt)
