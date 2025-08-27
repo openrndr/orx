@@ -42,6 +42,8 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
         require(preloadClass.exists()) {
             "preload class not found: '${preloadClass.absolutePath}'"
         }
+
+        // Execute demos
         inputChanges.getFileChanges(inputDir).forEach { change ->
             if (change.fileType == FileType.DIRECTORY) return@forEach
             if (change.file.extension == "class") {
@@ -62,9 +64,14 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
                     return@forEach
                 }
 
-                println("Collecting screenshot for ${klassName}")
+                println("Collecting screenshot for $klassName")
                 val imageName = klassName.replace(".", "-")
+                val pngFile = "${outputDir.get().asFile}/$imageName.png"
 
+                // A. Create an empty image for quick tests
+                //File(pngFile).createNewFile()
+
+                // B. Create an actual image by running a demo program
                 execOperations.javaexec {
                     this.classpath += project.files(inputDir.get().asFile, preloadClass)
                     this.classpath += runtimeDependencies.get()
@@ -72,7 +79,7 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
                     this.workingDir(project.rootProject.projectDir)
                     this.jvmArgs(
                         "-DtakeScreenshot=true",
-                        "-DscreenshotPath=${outputDir.get().asFile}/$imageName.png",
+                        "-DscreenshotPath=$pngFile",
                         "-Dorg.openrndr.exceptions=JVM",
                         "-Dorg.openrndr.gl3.debug=true",
                         "-Dorg.openrndr.gl3.delete_angle_on_exit=false"
@@ -80,38 +87,60 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
                 }
             }
         }
-        // this is only executed if there are changes in the inputDir
-        val runDemos = outputDir.get().asFile.listFiles { file: File ->
+
+        // List found PNG images.
+        // Only executed if there are changes in the inputDir.
+        val demoImageBaseNames = outputDir.get().asFile.listFiles { file: File ->
             file.extension == "png"
         }!!.sortedBy { it.absolutePath.lowercase() }.map { it.nameWithoutExtension }
+
+        // Update readme.md using the found PNG images
         val readme = File(project.projectDir, "README.md")
         if (readme.exists()) {
-            var lines = readme.readLines().toMutableList()
-            val screenshotsLine = lines.indexOfFirst { it == "<!-- __demos__ -->" }
+            var readmeLines = readme.readLines().toMutableList()
+            val screenshotsLine = readmeLines.indexOfFirst { it == "<!-- __demos__ -->" }
             if (screenshotsLine != -1) {
-                lines = lines.subList(0, screenshotsLine)
+                readmeLines = readmeLines.subList(0, screenshotsLine)
             }
-            lines.add("<!-- __demos__ -->")
-            lines.add("## Demos")
+            readmeLines.add("<!-- __demos__ -->")
+            readmeLines.add("## Demos")
 
-            // Find out if current project is MPP
-            val demoModuleName = if (project.plugins.hasPlugin("org.jetbrains.kotlin.multiplatform")) {
-                "jvmDemo"
-            } else {
-                "demo"
-            }
-            for (demo in runDemos) {
+            val isKotlinMultiplatform = project.plugins.hasPlugin("org.jetbrains.kotlin.multiplatform")
+            val demoModuleName = if (isKotlinMultiplatform) "jvmDemo" else "demo"
+
+            for (demoImageBaseName in demoImageBaseNames) {
                 val projectPath = project.projectDir.relativeTo(project.rootDir)
-                // Set the url to "" for local testing
+
+                // val url = "" // for local testing
                 val url = "https://raw.githubusercontent.com/openrndr/orx/media/$projectPath/"
-                lines.add("### ${demo.dropLast(2).replace("-","/")}")
-                lines.add("[source code](src/${demoModuleName}/kotlin/${demo.dropLast(2).replace("-", "/")}.kt)")
-                lines.add("")
-                lines.add("![${demo}](${url}images/${demo}.png)")
-                lines.add("")
+
+                val imagePath = demoImageBaseName.dropLast(2).replace("-", "/")
+                val ktFilePath = "src/$demoModuleName/kotlin/$imagePath.kt"
+                val ktFile = File("$projectPath/$ktFilePath")
+
+                val description = if (ktFile.isFile) {
+                    val codeLines = ktFile.readLines()
+                    val start = codeLines.indexOfFirst { it.startsWith("/**") }
+                    val end = codeLines.indexOfFirst { it.endsWith("*/") }
+                    val main = codeLines.indexOfFirst { it.startsWith("fun main") }
+
+                    if ((start < end) && (end < main)) {
+                        codeLines.subList(start + 1, end).joinToString("\n") {
+                            it.trimStart(' ', '*')
+                        }
+                    } else ""
+                } else ""
+
+                readmeLines.add("### $imagePath")
+                readmeLines.add("")
+                readmeLines.add(description)
+                readmeLines.add("![$demoImageBaseName](${url}images/$demoImageBaseName.png)")
+                readmeLines.add("")
+                readmeLines.add("[source code]($ktFilePath)")
+                readmeLines.add("")
             }
             readme.delete()
-            readme.writeText(lines.joinToString("\n"))
+            readme.writeText(readmeLines.joinToString("\n"))
         }
     }
 }
