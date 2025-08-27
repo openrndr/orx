@@ -85,16 +85,16 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
                 }
 
                 // A. Create an empty image for quick tests
-                File(pngFile).createNewFile()
+                //File(pngFile).createNewFile()
 
                 // B. Create an actual image by running a demo program
-//                runCatching {
-//                    launchDemoProgram()
-//                }.onFailure {
-//                    println("Retrying $klassName after error: ${it.message}")
-//                    Thread.sleep(5000)
-//                    launchDemoProgram()
-//                }
+                runCatching {
+                    launchDemoProgram()
+                }.onFailure {
+                    println("Retrying $klassName after error: ${it.message}")
+                    Thread.sleep(5000)
+                    launchDemoProgram()
+                }
             }
         }
 
