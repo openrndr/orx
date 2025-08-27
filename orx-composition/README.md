@@ -30,3 +30,13 @@ _The code in `orx-composition` was previously found under `openrndr-draw` in the
 [source code](src/jvmDemo/kotlin/DemoCompositionDrawer03.kt)
 
 ![DemoCompositionDrawer03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoCompositionDrawer03Kt.png)
+
+### DemoCompositionDrawer04
+[source code](src/jvmDemo/kotlin/DemoCompositionDrawer04.kt)
+
+![DemoCompositionDrawer04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoCompositionDrawer04Kt.png)
+
+### DemoCompositionDrawer05
+[source code](src/jvmDemo/kotlin/DemoCompositionDrawer05.kt)
+
+![DemoCompositionDrawer05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoCompositionDrawer05Kt.png)
