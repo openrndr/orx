@@ -86,86 +86,128 @@ Check out the [source code](src/commonMain/kotlin) to learn about function argum
 <!-- __demos__ -->
 ## Demos
 ### decal/DemoDecal01
-[source code](src/jvmDemo/kotlin/decal/DemoDecal01.kt)
 
+Demonstrate decal generator as an object slicer
+@see <img src="https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/decal-DemoDecal01Kt.png">
 ![decal-DemoDecal01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/decal-DemoDecal01Kt.png)
 
-### decal/DemoDecal02
-[source code](src/jvmDemo/kotlin/decal/DemoDecal02.kt)
+[source code](src/jvmDemo/kotlin/decal/DemoDecal01.kt)
 
+### decal/DemoDecal02
+
+Demonstrate decal generation and rendering
+@see <img src="https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/decal-DemoDecal02Kt.png">
 ![decal-DemoDecal02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/decal-DemoDecal02Kt.png)
 
+[source code](src/jvmDemo/kotlin/decal/DemoDecal02.kt)
+
 ### DemoAll
-[source code](src/jvmDemo/kotlin/DemoAll.kt)
+
 
 ![DemoAllKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoAllKt.png)
 
+[source code](src/jvmDemo/kotlin/DemoAll.kt)
+
 ### DemoBox
-[source code](src/jvmDemo/kotlin/DemoBox.kt)
+
 
 ![DemoBoxKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoBoxKt.png)
 
+[source code](src/jvmDemo/kotlin/DemoBox.kt)
+
 ### DemoComplex01
-[source code](src/jvmDemo/kotlin/DemoComplex01.kt)
+
 
 ![DemoComplex01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex01Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoComplex01.kt)
+
 ### DemoComplex02
-[source code](src/jvmDemo/kotlin/DemoComplex02.kt)
+
 
 ![DemoComplex02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex02Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoComplex02.kt)
+
 ### DemoComplex03
-[source code](src/jvmDemo/kotlin/DemoComplex03.kt)
+
 
 ![DemoComplex03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex03Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoComplex03.kt)
+
 ### DemoComplex04
-[source code](src/jvmDemo/kotlin/DemoComplex04.kt)
+
 
 ![DemoComplex04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex04Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoComplex04.kt)
+
 ### DemoComplex05
-[source code](src/jvmDemo/kotlin/DemoComplex05.kt)
+
 
 ![DemoComplex05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex05Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoComplex05.kt)
+
 ### DemoComplex06
-[source code](src/jvmDemo/kotlin/DemoComplex06.kt)
+
+Generates a grid of grids of boxes.
+Interactive orbital camera.
 
 ![DemoComplex06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex06Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoComplex06.kt)
+
 ### DemoExtrude01
-[source code](src/jvmDemo/kotlin/DemoExtrude01.kt)
+
 
 ![DemoExtrude01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude01Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoExtrude01.kt)
+
 ### DemoExtrude02
-[source code](src/jvmDemo/kotlin/DemoExtrude02.kt)
+
 
 ![DemoExtrude02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude02Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoExtrude02.kt)
+
 ### DemoExtrude03
-[source code](src/jvmDemo/kotlin/DemoExtrude03.kt)
+
 
 ![DemoExtrude03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude03Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoExtrude03.kt)
+
 ### DemoExtrude04
-[source code](src/jvmDemo/kotlin/DemoExtrude04.kt)
+
+Extruded Bézier tubes grown on a morphing Bézier surface.
 
 ![DemoExtrude04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude04Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoExtrude04.kt)
+
 ### DemoExtrude05
-[source code](src/jvmDemo/kotlin/DemoExtrude05.kt)
+
+Extruded Bézier tubes grown on a morphing Bézier surface.
 
 ![DemoExtrude05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude05Kt.png)
 
-### DemoExtrude06
-[source code](src/jvmDemo/kotlin/DemoExtrude06.kt)
+[source code](src/jvmDemo/kotlin/DemoExtrude05.kt)
 
+### DemoExtrude06
+
+Demo extrudeContourStepsMorphed which allows to create a mesh with a morphing cross-section
+based on the t value along a Path3D. In other words, a tube in which the cross-section does not need
+to be constant, but can be scaled, rotated and displaced along its curvy axis.
 ![DemoExtrude06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude06Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoExtrude06.kt)
+
 ### tangents/DemoTangents01
-[source code](src/jvmDemo/kotlin/tangents/DemoTangents01.kt)
+
 
 ![tangents-DemoTangents01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/tangents-DemoTangents01Kt.png)
+
+[source code](src/jvmDemo/kotlin/tangents/DemoTangents01.kt)

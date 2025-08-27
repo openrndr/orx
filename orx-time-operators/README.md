@@ -56,11 +56,15 @@ drawer.circle(0.0, 0.0, size.sine(freq, phase))
 <!-- __demos__ -->
 ## Demos
 ### DemoEnvelope
-[source code](src/demo/kotlin/DemoEnvelope.kt)
+
 
 ![DemoEnvelopeKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-time-operators/images/DemoEnvelopeKt.png)
 
+[source code](src/demo/kotlin/DemoEnvelope.kt)
+
 ### DemoLFO
-[source code](src/demo/kotlin/DemoLFO.kt)
+
 
 ![DemoLFOKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-time-operators/images/DemoLFOKt.png)
+
+[source code](src/demo/kotlin/DemoLFO.kt)

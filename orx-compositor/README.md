@@ -238,16 +238,25 @@ fun main() = application {
 <!-- __demos__ -->
 ## Demos
 ### DemoAside01
-[source code](src/jvmDemo/kotlin/DemoAside01.kt)
+
 
 ![DemoAside01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-compositor/images/DemoAside01Kt.png)
 
-### DemoCompositor01
-[source code](src/jvmDemo/kotlin/DemoCompositor01.kt)
+[source code](src/jvmDemo/kotlin/DemoAside01.kt)
 
+### DemoCompositor01
+
+Compositor demo showing 3 layers of moving items
+with a different amount of blur in each layer,
+simulating depth of field
 ![DemoCompositor01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-compositor/images/DemoCompositor01Kt.png)
 
-### DemoCompositor02
-[source code](src/jvmDemo/kotlin/DemoCompositor02.kt)
+[source code](src/jvmDemo/kotlin/DemoCompositor01.kt)
 
+### DemoCompositor02
+
+Demonstration of using [BufferMultisample] on a per layer basis.
+Try changing which layer has multisampling applied and observe the results.
 ![DemoCompositor02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-compositor/images/DemoCompositor02Kt.png)
+
+[source code](src/jvmDemo/kotlin/DemoCompositor02.kt)

@@ -94,6 +94,11 @@ println(Easing.values().size)
 <!-- __demos__ -->
 ## Demos
 ### DemoEasings01
-[source code](src/jvmDemo/kotlin/DemoEasings01.kt)
+
+# Visualizes Easing types as a graph and as motion.
+
+[grid] is used to layout graphs on rows and columns.
 
 ![DemoEasings01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-easing/images/DemoEasings01Kt.png)
+
+[source code](src/jvmDemo/kotlin/DemoEasings01.kt)

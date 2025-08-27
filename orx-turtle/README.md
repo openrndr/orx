@@ -34,16 +34,25 @@ The language also holds some tools to manage the position and orientation of the
 <!-- __demos__ -->
 ## Demos
 ### DemoTurtle01
-[source code](src/jvmDemo/kotlin/DemoTurtle01.kt)
 
+/*
+Drawing a square using the turtle interface.
 ![DemoTurtle01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-turtle/images/DemoTurtle01Kt.png)
 
-### DemoTurtle02
-[source code](src/jvmDemo/kotlin/DemoTurtle02.kt)
+[source code](src/jvmDemo/kotlin/DemoTurtle01.kt)
 
+### DemoTurtle02
+
+/*
+A simple random walk made using the turtle interface.
 ![DemoTurtle02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-turtle/images/DemoTurtle02Kt.png)
 
-### DemoTurtle03
-[source code](src/jvmDemo/kotlin/DemoTurtle03.kt)
+[source code](src/jvmDemo/kotlin/DemoTurtle02.kt)
 
+### DemoTurtle03
+
+/*
+Drawing shape contours aligned to the turtle's orientation.
 ![DemoTurtle03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-turtle/images/DemoTurtle03Kt.png)
+
+[source code](src/jvmDemo/kotlin/DemoTurtle03.kt)

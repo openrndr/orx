@@ -54,6 +54,8 @@ NB! any submitted _lambda expression_ must be valid within the `renderTarget` co
 <!-- __demos__ -->
 ## Demos
 ### DemoNoClear
-[source code](src/jvmDemo/kotlin/DemoNoClear.kt)
+
 
 ![DemoNoClearKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-no-clear/images/DemoNoClearKt.png)
+
+[source code](src/jvmDemo/kotlin/DemoNoClear.kt)
