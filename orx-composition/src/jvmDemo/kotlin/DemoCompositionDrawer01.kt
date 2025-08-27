@@ -5,21 +5,22 @@ import org.openrndr.extra.composition.drawComposition
 import org.openrndr.extra.svg.toSVG
 import org.openrndr.math.Vector2
 
+/**
+ * Demonstrates how to
+ *
+ * - Create a Composition
+ * - Draw it on the program window
+ * - Save it to an SVG file
+ * - Print the SVG content as text
+ */
 fun main() = application {
     program {
         val composition = drawComposition {
-            val layer = group {
-                fill = ColorRGBa.PINK
-                stroke = ColorRGBa.BLACK
-                strokeWeight = 10.0
-                circle(Vector2(width / 2.0, height / 2.0), 100.0)
-                circle(Vector2(200.0, 200.0), 50.0)
-            }
-            // demonstrating how to set custom attributes on the CompositionNode
-            // these are stored in SVG
-            //layer.id = "Layer_2"
-            //layer.attributes["inkscape:label"] = "Layer 1"
-            //layer.attributes["inkscape:groupmode"] = "layer"
+            fill = ColorRGBa.PINK
+            stroke = ColorRGBa.BLACK
+            strokeWeight = 10.0
+            circle(Vector2(width / 2.0, height / 2.0), 100.0)
+            circle(Vector2(200.0, 200.0), 50.0)
         }
 
         // print the svg to the console

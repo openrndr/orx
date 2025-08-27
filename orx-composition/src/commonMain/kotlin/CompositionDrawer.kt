@@ -804,15 +804,15 @@ fun drawComposition(
 }
 
 /**
- * Draws the content of an existing composition using the provided drawing function.
+ * Draws content into an existing composition using the provided drawing function.
  *
- * @param drawFunction the drawing logic to be executed using a [CompositionDrawer].
- * This function allows defining how the composition should be rendered visually.
  * @param cursor an optional [GroupNode] that serves as the starting point for drawing.
  * Defaults to the root of the composition if not provided.
+ * @param drawFunction the drawing logic to be executed using a [CompositionDrawer].
+ * This function should contain instructions to draw content into the composition.
  */
 @OptIn(ExperimentalContracts::class)
-fun Composition.draw(drawFunction: CompositionDrawer.() -> Unit, cursor: GroupNode? = this.root as? GroupNode) {
+fun Composition.draw(cursor: GroupNode? = this.root as? GroupNode, drawFunction: CompositionDrawer.() -> Unit) {
     contract {
         callsInPlace(drawFunction, InvocationKind.EXACTLY_ONCE)
     }
