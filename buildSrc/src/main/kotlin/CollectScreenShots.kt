@@ -68,23 +68,33 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
                 val imageName = klassName.replace(".", "-")
                 val pngFile = "${outputDir.get().asFile}/$imageName.png"
 
+                fun launchDemoProgram() {
+                    execOperations.javaexec {
+                        this.classpath += project.files(inputDir.get().asFile, preloadClass)
+                        this.classpath += runtimeDependencies.get()
+                        this.mainClass.set(klassName)
+                        this.workingDir(project.rootProject.projectDir)
+                        this.jvmArgs(
+                            "-DtakeScreenshot=true",
+                            "-DscreenshotPath=$pngFile",
+                            "-Dorg.openrndr.exceptions=JVM",
+                            "-Dorg.openrndr.gl3.debug=true",
+                            "-Dorg.openrndr.gl3.delete_angle_on_exit=false"
+                        )
+                    }
+                }
+
                 // A. Create an empty image for quick tests
-                //File(pngFile).createNewFile()
+                File(pngFile).createNewFile()
 
                 // B. Create an actual image by running a demo program
-                execOperations.javaexec {
-                    this.classpath += project.files(inputDir.get().asFile, preloadClass)
-                    this.classpath += runtimeDependencies.get()
-                    this.mainClass.set(klassName)
-                    this.workingDir(project.rootProject.projectDir)
-                    this.jvmArgs(
-                        "-DtakeScreenshot=true",
-                        "-DscreenshotPath=$pngFile",
-                        "-Dorg.openrndr.exceptions=JVM",
-                        "-Dorg.openrndr.gl3.debug=true",
-                        "-Dorg.openrndr.gl3.delete_angle_on_exit=false"
-                    )
-                }
+//                runCatching {
+//                    launchDemoProgram()
+//                }.onFailure {
+//                    println("Retrying $klassName after error: ${it.message}")
+//                    Thread.sleep(5000)
+//                    launchDemoProgram()
+//                }
             }
         }
 
@@ -131,13 +141,18 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
                     } else ""
                 } else ""
 
-                readmeLines.add("### $imagePath")
-                readmeLines.add("")
-                readmeLines.add(description)
-                readmeLines.add("![$demoImageBaseName](${url}images/$demoImageBaseName.png)")
-                readmeLines.add("")
-                readmeLines.add("[source code]($ktFilePath)")
-                readmeLines.add("")
+                readmeLines.add(
+                    """
+                    |### $imagePath
+                    |
+                    |$description
+                    |
+                    |![$demoImageBaseName](${url}images/$demoImageBaseName.png)
+                    |
+                    |[source code]($ktFilePath)
+                    |
+                    """.trimMargin()
+                )
             }
             readme.delete()
             readme.writeText(readmeLines.joinToString("\n"))
