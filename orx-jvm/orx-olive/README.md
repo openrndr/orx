@@ -140,6 +140,7 @@ import org.openrndr.draw.*
 ### DemoOlive01
 
 Live-coding with [oliveProgram]
+
 ![DemoOlive01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-olive/images/DemoOlive01Kt.png)
 
 [source code](src/demo/kotlin/DemoOlive01.kt)
@@ -147,6 +148,7 @@ Live-coding with [oliveProgram]
 ### DemoOliveFromScript01
 
 Live-coding with [Olive], an older, not recommended, way to do things
+
 ![DemoOliveFromScript01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-olive/images/DemoOliveFromScript01Kt.png)
 
 [source code](src/demo/kotlin/DemoOliveFromScript01.kt)

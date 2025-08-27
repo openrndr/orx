@@ -179,6 +179,7 @@ import org.openrndr.extra.parameters.DoubleParameter
 ### DemoAppearance01
 
 A simple demonstration of a GUI for drawing some circles
+
 ![DemoAppearance01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoAppearance01Kt.png)
 
 [source code](src/demo/kotlin/DemoAppearance01.kt)
@@ -186,6 +187,7 @@ A simple demonstration of a GUI for drawing some circles
 ### DemoHide01
 
 A simple demonstration of a GUI for drawing some circles
+
 ![DemoHide01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoHide01Kt.png)
 
 [source code](src/demo/kotlin/DemoHide01.kt)
@@ -193,11 +195,13 @@ A simple demonstration of a GUI for drawing some circles
 ### DemoOptions01
 
 A simple demonstration of a GUI with a drop down menu
+
 ![DemoOptions01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoOptions01Kt.png)
 
 [source code](src/demo/kotlin/DemoOptions01.kt)
 
 ### DemoPath01
+
 
 
 ![DemoPath01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoPath01Kt.png)
@@ -210,6 +214,7 @@ Shows how to store and retrieve in-memory gui presets.
 Keyboard controls:
 [Left Shift] + [0]..[9] => store current gui values to a preset
 [0]..[9] => recall a preset
+
 ![DemoPresets01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoPresets01Kt.png)
 
 [source code](src/demo/kotlin/DemoPresets01.kt)
@@ -217,6 +222,7 @@ Keyboard controls:
 ### DemoSideCanvas01
 
 A simple demonstration of a GUI for drawing some circles
+
 ![DemoSideCanvas01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoSideCanvas01Kt.png)
 
 [source code](src/demo/kotlin/DemoSideCanvas01.kt)
@@ -224,11 +230,13 @@ A simple demonstration of a GUI for drawing some circles
 ### DemoSimple01
 
 A simple demonstration of a GUI for drawing some circles
+
 ![DemoSimple01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoSimple01Kt.png)
 
 [source code](src/demo/kotlin/DemoSimple01.kt)
 
 ### DemoXYParameter
+
 
 
 ![DemoXYParameterKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoXYParameterKt.png)
