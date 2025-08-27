@@ -16,6 +16,7 @@ Key features:
 - Builds a KD-tree from the list of points for optimized spatial querying.
 - Visualizes the points and highlights the 7 nearest neighbors to the user's cursor position dynamically.
 - Highlights include red-colored circles around the nearest points and red lines connecting them to the cursor.
+
 ![DemoKNearestNeighbour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-kdtree/images/DemoKNearestNeighbour01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoKNearestNeighbour01.kt)
@@ -32,6 +33,7 @@ Key functionality:
 Highlights:
 - KD-tree structure enables efficient nearest-neighbor searches.
 - The nearest point to the cursor is determined and visually emphasized in real-time as the cursor moves.
+
 ![DemoNearestNeighbour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-kdtree/images/DemoNearestNeighbour01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoNearestNeighbour01.kt)
@@ -49,6 +51,7 @@ Key features:
 - Dynamically highlights points within a specified radius (50.0) from the cursor position.
 - Visualizes the current query radius around the cursor as an outline circle.
 - Uses different fill and stroke styles to distinguish highlighted points and query visuals.
+
 ![DemoRangeQuery01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-kdtree/images/DemoRangeQuery01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoRangeQuery01.kt)

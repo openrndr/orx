@@ -38,6 +38,7 @@ Note that drawing inside the `repeat` action has no effect. Have a look at the d
 ### DemoRepeat01
 
 
+
 ![DemoRepeat01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-timer/images/DemoRepeat01Kt.png)
 
 [source code](src/demo/kotlin/DemoRepeat01.kt)
@@ -45,11 +46,13 @@ Note that drawing inside the `repeat` action has no effect. Have a look at the d
 ### DemoRepeat02
 
 This demonstrates how to combine `repeat {}` with a postponed event to trigger drawing
+
 ![DemoRepeat02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-timer/images/DemoRepeat02Kt.png)
 
 [source code](src/demo/kotlin/DemoRepeat02.kt)
 
 ### DemoTimeOut01
+
 
 
 ![DemoTimeOut01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-timer/images/DemoTimeOut01Kt.png)

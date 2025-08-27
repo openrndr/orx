@@ -196,11 +196,13 @@ shaping `curve` within this range:
 ### DemoApproximateGaussianBlur01
 
 
+
 ![DemoApproximateGaussianBlur01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoApproximateGaussianBlur01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoApproximateGaussianBlur01.kt)
 
 ### DemoBlur01
+
 
 
 ![DemoBlur01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoBlur01Kt.png)
@@ -210,11 +212,13 @@ shaping `curve` within this range:
 ### DemoCannyEdgeDetector01
 
 
+
 ![DemoCannyEdgeDetector01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoCannyEdgeDetector01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoCannyEdgeDetector01.kt)
 
 ### DemoColorDuotone01
+
 
 
 ![DemoColorDuotone01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColorDuotone01Kt.png)
@@ -224,11 +228,13 @@ shaping `curve` within this range:
 ### DemoColorDuotoneGradient01
 
 
+
 ![DemoColorDuotoneGradient01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColorDuotoneGradient01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoColorDuotoneGradient01.kt)
 
 ### DemoColormapGrayscale
+
 
 
 ![DemoColormapGrayscaleKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColormapGrayscaleKt.png)
@@ -238,11 +244,13 @@ shaping `curve` within this range:
 ### DemoColormapSpectralZucconi
 
 
+
 ![DemoColormapSpectralZucconiKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColormapSpectralZucconiKt.png)
 
 [source code](src/jvmDemo/kotlin/DemoColormapSpectralZucconi.kt)
 
 ### DemoColormapTurbo
+
 
 
 ![DemoColormapTurboKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColormapTurboKt.png)
@@ -252,11 +260,13 @@ shaping `curve` within this range:
 ### DemoColorPosterize01
 
 
+
 ![DemoColorPosterize01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColorPosterize01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoColorPosterize01.kt)
 
 ### DemoCompositeFilter01
+
 
 
 ![DemoCompositeFilter01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoCompositeFilter01Kt.png)
@@ -267,6 +277,7 @@ shaping `curve` within this range:
 
 Demonstrate the Contour filter
 @author Edwin Jakobs
+
 ![DemoContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoContour01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoContour01.kt)
@@ -284,6 +295,7 @@ so sampling can happen from every direction.
 Every 60 animation frames the `centerWindow` property is toggled
 between true and false to demonstrate how the result changes.
 
+
 ![DemoDirectionalBlur01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDirectionalBlur01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoDirectionalBlur01.kt)
@@ -297,6 +309,7 @@ pixel by pixel. A grid of circles is drawn, each circle with a
 color based on simplex noise. The R and G channels of the colors
 control the direction of the sampling. By animating the sampling
 distance the result oscillates between no-effect and a noticeable one.
+
 ![DemoDirectionalDisplace01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDirectionalDisplace01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoDirectionalDisplace01.kt)
@@ -309,11 +322,13 @@ The program draws 12 overlapping translucent circles on the
 `direction` color buffer to produce new color combinations
 on the overlapping areas. Those colors specify where the
 `DirectionalDisplace` effect will sample pixels from.
+
 ![DemoDirectionalDisplace02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDirectionalDisplace02Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoDirectionalDisplace02.kt)
 
 ### DemoDistortLenses01
+
 
 
 ![DemoDistortLenses01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDistortLenses01Kt.png)
@@ -323,11 +338,13 @@ on the overlapping areas. Those colors specify where the
 ### DemoDitherLumaHalftone01
 
 
+
 ![DemoDitherLumaHalftone01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDitherLumaHalftone01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoDitherLumaHalftone01.kt)
 
 ### DemoFluidDistort01
+
 
 
 ![DemoFluidDistort01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoFluidDistort01Kt.png)
@@ -338,6 +355,7 @@ on the overlapping areas. Those colors specify where the
 
 This demonstrates converting a [ColorBuffer] from and to (OK)LAB color space using the [RgbToOkLab] and [OkLabToRgb]
 filters. The (OK)Lab representation is signed and requires a floating point representation.
+
 ![DemoOkLab01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoOkLab01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoOkLab01.kt)
@@ -345,11 +363,13 @@ filters. The (OK)Lab representation is signed and requires a floating point repr
 ### DemoPost01
 
 
+
 ![DemoPost01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoPost01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoPost01.kt)
 
 ### DemoSpectralBlend01
+
 
 
 ![DemoSpectralBlend01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoSpectralBlend01Kt.png)

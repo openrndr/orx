@@ -52,11 +52,13 @@ Two color spaces are added: `ColorHSLUVa` and `ColorHPLUVa`, they are an impleme
 ### colormap/DemoSpectralZucconiColormap
 
 
+
 ![colormap-DemoSpectralZucconiColormapKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoSpectralZucconiColormapKt.png)
 
 [source code](src/jvmDemo/kotlin/colormap/DemoSpectralZucconiColormap.kt)
 
 ### colormap/DemoSpectralZucconiColormapPhrase
+
 
 
 ![colormap-DemoSpectralZucconiColormapPhraseKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoSpectralZucconiColormapPhraseKt.png)
@@ -66,11 +68,13 @@ Two color spaces are added: `ColorHSLUVa` and `ColorHPLUVa`, they are an impleme
 ### colormap/DemoSpectralZucconiColormapPlot
 
 
+
 ![colormap-DemoSpectralZucconiColormapPlotKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoSpectralZucconiColormapPlotKt.png)
 
 [source code](src/jvmDemo/kotlin/colormap/DemoSpectralZucconiColormapPlot.kt)
 
 ### colormap/DemoTurboColormap
+
 
 
 ![colormap-DemoTurboColormapKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoTurboColormapKt.png)
@@ -80,11 +84,13 @@ Two color spaces are added: `ColorHSLUVa` and `ColorHPLUVa`, they are an impleme
 ### colormap/DemoTurboColormapPhrase
 
 
+
 ![colormap-DemoTurboColormapPhraseKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoTurboColormapPhraseKt.png)
 
 [source code](src/jvmDemo/kotlin/colormap/DemoTurboColormapPhrase.kt)
 
 ### colormap/DemoTurboColormapPlot
+
 
 
 ![colormap-DemoTurboColormapPlotKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoTurboColormapPlotKt.png)
@@ -103,6 +109,7 @@ Functionality:
 - Splits the drawing area into an evenly spaced 4x2 grid.
 - Applies different color matrix inversions (red, green, blue) based on the position index.
 - Fits the image into each grid cell while providing horizontal alignment adjustments.
+
 ![colormatrix-DemoColorMatrix01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormatrix-DemoColorMatrix01Kt.png)
 
 [source code](src/jvmDemo/kotlin/colormatrix/DemoColorMatrix01.kt)
@@ -119,6 +126,7 @@ Functionality:
 - Splits the drawing area into an evenly spaced 4x2 grid.
 - Applies different color matrix inversions (red, green, blue) based on the position index.
 - Fits the image into each grid cell while providing horizontal alignment adjustments.
+
 ![colormatrix-DemoColorMatrix02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormatrix-DemoColorMatrix02Kt.png)
 
 [source code](src/jvmDemo/kotlin/colormatrix/DemoColorMatrix02.kt)
@@ -137,6 +145,7 @@ Key features:
 - Applies a color tint transformation utilizing the red channel, shifting its hue progressively
 per cell index to create a colorful gradient effect.
 - Adjusts the positions of the images within each grid cell for aesthetic alignment.
+
 ![colormatrix-DemoColorMatrix03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormatrix-DemoColorMatrix03Kt.png)
 
 [source code](src/jvmDemo/kotlin/colormatrix/DemoColorMatrix03.kt)
@@ -155,11 +164,13 @@ a color matrix. The grayscale transformation coefficients for red, green, and bl
 channels are computed based on the index of the grid cell.
 - Displays the adjusted image in each grid cell with horizontal alignment modifications
 to position the images dynamically based on their index within the grid.
+
 ![colormatrix-DemoColorMatrix04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormatrix-DemoColorMatrix04Kt.png)
 
 [source code](src/jvmDemo/kotlin/colormatrix/DemoColorMatrix04.kt)
 
 ### colorRange/DemoColorRange01
+
 
 
 ![colorRange-DemoColorRange01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colorRange-DemoColorRange01Kt.png)
@@ -169,11 +180,13 @@ to position the images dynamically based on their index within the grid.
 ### colorRange/DemoColorRange02
 
 
+
 ![colorRange-DemoColorRange02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colorRange-DemoColorRange02Kt.png)
 
 [source code](src/jvmDemo/kotlin/colorRange/DemoColorRange02.kt)
 
 ### colorRange/DemoColorRange03
+
 
 
 ![colorRange-DemoColorRange03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colorRange-DemoColorRange03Kt.png)
@@ -183,6 +196,7 @@ to position the images dynamically based on their index within the grid.
 ### colorRange/DemoColorRange04
 
 
+
 ![colorRange-DemoColorRange04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colorRange-DemoColorRange04Kt.png)
 
 [source code](src/jvmDemo/kotlin/colorRange/DemoColorRange04.kt)
@@ -190,6 +204,7 @@ to position the images dynamically based on their index within the grid.
 ### DemoColorPalette01
 
 Demonstrates the creation of color palettes using various available methods
+
 ![DemoColorPalette01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorPalette01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoColorPalette01.kt)
@@ -200,6 +215,7 @@ By default, generated palettes contain colors of varying hue
 but similar brightness and saturation.
 Here we alter the brightness of each color using .shade() for
 an increased dynamic range.
+
 ![DemoColorPalette02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorPalette02Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoColorPalette02.kt)
@@ -207,11 +223,13 @@ an increased dynamic range.
 ### DemoColorPlane01
 
 
+
 ![DemoColorPlane01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorPlane01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoColorPlane01.kt)
 
 ### DemoColorPlane02
+
 
 
 ![DemoColorPlane02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorPlane02Kt.png)
@@ -231,11 +249,13 @@ The rendering process includes:
 - Setting up an orbital camera extension to provide an interactive 3D view.
 - Applying a custom fragment shader with a palette-based shading style.
 - Rendering a grid of 3D spheres, each transformed and rotated to create a dynamic pattern.
+
 ![DemoColorSequence01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorSequence01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoColorSequence01.kt)
 
 ### DemoDeltaE
+
 
 
 ![DemoDeltaEKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoDeltaEKt.png)
@@ -245,11 +265,13 @@ The rendering process includes:
 ### DemoFettePalette01
 
 
+
 ![DemoFettePalette01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoFettePalette01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoFettePalette01.kt)
 
 ### DemoFettePalette02
+
 
 
 ![DemoFettePalette02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoFettePalette02Kt.png)
@@ -259,11 +281,13 @@ The rendering process includes:
 ### DemoHSLUV01
 
 
+
 ![DemoHSLUV01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHSLUV01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoHSLUV01.kt)
 
 ### DemoHSLUV02
+
 
 
 ![DemoHSLUV02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHSLUV02Kt.png)
@@ -273,11 +297,13 @@ The rendering process includes:
 ### DemoHueTools01
 
 
+
 ![DemoHueTools01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHueTools01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoHueTools01.kt)
 
 ### DemoMixSpectral01
+
 
 
 ![DemoMixSpectral01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoMixSpectral01Kt.png)
@@ -287,11 +313,13 @@ The rendering process includes:
 ### DemoOKHSV01
 
 
+
 ![DemoOKHSV01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoOKHSV01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoOKHSV01.kt)
 
 ### DemoXSLUV01
+
 
 
 ![DemoXSLUV01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoXSLUV01Kt.png)
@@ -310,6 +338,7 @@ import org.openrndr.extra.color.statistics.calculateHistogramRGB
 Demonstrates how to generate a palette with the top 32 colors
 of a loaded image, sorted by luminosity. The colors are displayed
 as rectangles overlayed on top of the image.
+
 ![histogram-DemoHistogram01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/histogram-DemoHistogram01Kt.png)
 
 [source code](src/jvmDemo/kotlin/histogram/DemoHistogram01.kt)
@@ -326,6 +355,7 @@ import kotlin.math.pow
 /*
 Show the color histogram of an image using non-uniform weighting,
 prioritizing bright colors.
+
 ![histogram-DemoHistogram02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/histogram-DemoHistogram02Kt.png)
 
 [source code](src/jvmDemo/kotlin/histogram/DemoHistogram02.kt)
@@ -344,6 +374,7 @@ The cells are 32 by 32 pixels in size and are filled with a random sample
 taken from the color histogram of the image.
 
 Note: due to its random nature the resulting animation contains flickering colors.
+
 ![histogram-DemoHistogram03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/histogram-DemoHistogram03Kt.png)
 
 [source code](src/jvmDemo/kotlin/histogram/DemoHistogram03.kt)

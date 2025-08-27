@@ -81,11 +81,13 @@ and triangle order.
 
 This method demonstrates concepts of computational geometry and procedural
 rendering.
+
 ![DemoDelaunay01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoDelaunay01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoDelaunay01.kt)
 
 ### DemoDelaunay02
+
 
 
 ![DemoDelaunay02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoDelaunay02Kt.png)
@@ -103,6 +105,7 @@ The program performs the following:
 - Derives the Voronoi diagram using the Delaunay triangulation and the bounding frame.
 - Extracts the cell polygons of the Voronoi diagram.
 - Renders the Voronoi cell polygons on the canvas, with a pink stroke on a black background.
+
 ![DemoVoronoi01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoVoronoi01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoVoronoi01.kt)
@@ -110,11 +113,13 @@ The program performs the following:
 ### DemoVoronoi02
 
 
+
 ![DemoVoronoi02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoVoronoi02Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoVoronoi02.kt)
 
 ### DemoVoronoi03
+
 
 
 ![DemoVoronoi03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoVoronoi03Kt.png)

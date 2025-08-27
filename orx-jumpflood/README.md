@@ -163,6 +163,7 @@ then applies the DirectionalField filter which returns a [ColorBuffer] in which
 the red and green components encode the direction to the closest black/white edge.
 
 Hold down a mouse button to see the raw animation.
+
 ![DemoDirectionField01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoDirectionField01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoDirectionField01.kt)
@@ -170,6 +171,7 @@ Hold down a mouse button to see the raw animation.
 ### DemoDirectionField02
 
 Create directional distance field and demonstrate signed distance
+
 ![DemoDirectionField02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoDirectionField02Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoDirectionField02.kt)
@@ -189,11 +191,13 @@ between two colors.
 The inverse of the distance is used to obtain a non-linear brightness.
 
 Hold down a mouse button to see the raw animation.
+
 ![DemoDistanceField01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoDistanceField01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoDistanceField01.kt)
 
 ### DemoInnerGlow01
+
 
 
 ![DemoInnerGlow01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoInnerGlow01Kt.png)
@@ -203,11 +207,13 @@ Hold down a mouse button to see the raw animation.
 ### DemoInnerGlow02
 
 
+
 ![DemoInnerGlow02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoInnerGlow02Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoInnerGlow02.kt)
 
 ### DemoShapeSDF01
+
 
 
 ![DemoShapeSDF01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF01Kt.png)
@@ -217,11 +223,13 @@ Hold down a mouse button to see the raw animation.
 ### DemoShapeSDF02
 
 
+
 ![DemoShapeSDF02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF02Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoShapeSDF02.kt)
 
 ### DemoShapeSDF03
+
 
 
 ![DemoShapeSDF03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF03Kt.png)
@@ -231,11 +239,13 @@ Hold down a mouse button to see the raw animation.
 ### DemoShapeSDF04
 
 
+
 ![DemoShapeSDF04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF04Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoShapeSDF04.kt)
 
 ### DemoShapeSDF05
+
 
 
 ![DemoShapeSDF05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF05Kt.png)
@@ -245,11 +255,13 @@ Hold down a mouse button to see the raw animation.
 ### DemoSkeleton01
 
 
+
 ![DemoSkeleton01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoSkeleton01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoSkeleton01.kt)
 
 ### DemoStraightSkeleton01
+
 
 
 ![DemoStraightSkeleton01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoStraightSkeleton01Kt.png)
@@ -259,6 +271,7 @@ Hold down a mouse button to see the raw animation.
 ### DemoVoronoi01
 
 
+
 ![DemoVoronoi01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoVoronoi01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoVoronoi01.kt)
@@ -266,11 +279,13 @@ Hold down a mouse button to see the raw animation.
 ### DemoVoronoi02
 
 
+
 ![DemoVoronoi02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoVoronoi02Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoVoronoi02.kt)
 
 ### DemoVoronoi03
+
 
 
 ![DemoVoronoi03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoVoronoi03Kt.png)

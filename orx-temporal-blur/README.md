@@ -44,11 +44,13 @@ extend(TemporalBlur()) {
 ### DemoBasic01
 
 
+
 ![DemoBasic01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-temporal-blur/images/DemoBasic01Kt.png)
 
 [source code](src/demo/kotlin/DemoBasic01.kt)
 
 ### DemoColorShift01
+
 
 
 ![DemoColorShift01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-temporal-blur/images/DemoColorShift01Kt.png)

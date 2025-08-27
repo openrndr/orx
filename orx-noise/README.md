@@ -190,11 +190,13 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 ### DemoCubicNoise2D01
 
 
+
 ![DemoCubicNoise2D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoCubicNoise2D01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoCubicNoise2D01.kt)
 
 ### DemoFunctionalComposition01
+
 
 
 ![DemoFunctionalComposition01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoFunctionalComposition01Kt.png)
@@ -204,11 +206,13 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 ### DemoGradientPerturb2D
 
 
+
 ![DemoGradientPerturb2DKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoGradientPerturb2DKt.png)
 
 [source code](src/jvmDemo/kotlin/DemoGradientPerturb2D.kt)
 
 ### DemoGradientPerturb3D
+
 
 
 ![DemoGradientPerturb3DKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoGradientPerturb3DKt.png)
@@ -218,11 +222,13 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 ### DemoScatter01
 
 
+
 ![DemoScatter01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoScatter01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoScatter01.kt)
 
 ### DemoSimplex01
+
 
 
 ![DemoSimplex01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoSimplex01Kt.png)
@@ -233,11 +239,13 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 
 Demonstrate the generation of uniformly distributed points inside a list of triangles
 @see <img src="https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoTriangleNoise01Kt.png">
+
 ![DemoTriangleNoise01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoTriangleNoise01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoTriangleNoise01.kt)
 
 ### DemoValueNoise2D01
+
 
 
 ![DemoValueNoise2D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoValueNoise2D01Kt.png)
@@ -248,6 +256,7 @@ Demonstrate the generation of uniformly distributed points inside a list of tria
 
 Render existing GLSL noise algorithms side by side.
 Use the GUI to explore the effects.
+
 ![glsl-DemoNoisesGLSLGuiKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/glsl-DemoNoisesGLSLGuiKt.png)
 
 [source code](src/jvmDemo/kotlin/glsl/DemoNoisesGLSLGui.kt)
@@ -259,6 +268,7 @@ Re-use the same color buffer for the rendering.
 Not all noise properties are used. Explore each noise class
 to find out more adjustable properties.
 The noise color can be set using a `color` or a `gain` property.
+
 ![glsl-DemoNoisesGLSLKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/glsl-DemoNoisesGLSLKt.png)
 
 [source code](src/jvmDemo/kotlin/glsl/DemoNoisesGLSL.kt)
@@ -266,6 +276,7 @@ The noise color can be set using a `color` or a `gain` property.
 ### glsl/DemoSimplexGLSL
 
 A sine oscillator with randomized parameters
+
 ![glsl-DemoSimplexGLSLKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/glsl-DemoSimplexGLSLKt.png)
 
 [source code](src/jvmDemo/kotlin/glsl/DemoSimplexGLSL.kt)
@@ -277,6 +288,7 @@ Demo that visualizes a 2D Hammersley point set.
 The application is configured to run at 720x720 resolution. The program computes
 400 2D Hammersley points mapped within the bounds of the application's resolution.
 These points are visualized by rendering circles at their respective positions.
+
 ![hammersley-DemoHammersley2D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/hammersley-DemoHammersley2D01Kt.png)
 
 [source code](src/jvmDemo/kotlin/hammersley/DemoHammersley2D01.kt)
@@ -293,6 +305,7 @@ in 3D space. This is achieved by mapping the generated points into a scaled doma
 The rendering utilizes the Orbital extension, enabling an interactive 3D camera
 to navigate the scene. The visualization relies on the draw loop for continuous
 rendering of the points.
+
 ![hammersley-DemoHammersley3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/hammersley-DemoHammersley3D01Kt.png)
 
 [source code](src/jvmDemo/kotlin/hammersley/DemoHammersley3D01.kt)
@@ -310,11 +323,13 @@ shifting the hue in HSV color space.
 This program employs the `Orbital` extension, enabling camera interaction for 3D navigation
 of the scene. Rendering occurs within the draw loop, providing continuous visualization
 of the point distribution.
+
 ![hammersley-DemoHammersley4D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/hammersley-DemoHammersley4D01Kt.png)
 
 [source code](src/jvmDemo/kotlin/hammersley/DemoHammersley4D01.kt)
 
 ### hash/DemoCircleHash01
+
 
 
 ![hash-DemoCircleHash01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/hash-DemoCircleHash01Kt.png)
@@ -324,11 +339,13 @@ of the point distribution.
 ### hash/DemoRectangleHash01
 
 
+
 ![hash-DemoRectangleHash01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/hash-DemoRectangleHash01Kt.png)
 
 [source code](src/jvmDemo/kotlin/hash/DemoRectangleHash01.kt)
 
 ### hash/DemoUHash01
+
 
 
 ![hash-DemoUHash01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/hash-DemoUHash01Kt.png)
@@ -338,6 +355,7 @@ of the point distribution.
 ### linearrange/DemoLinearRange01
 
 
+
 ![linearrange-DemoLinearRange01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/linearrange-DemoLinearRange01Kt.png)
 
 [source code](src/jvmDemo/kotlin/linearrange/DemoLinearRange01.kt)
@@ -345,6 +363,7 @@ of the point distribution.
 ### phrases/DemoUHashPhrase01
 
 Demonstrate uniform hashing function phrase in a shadestyle
+
 ![phrases-DemoUHashPhrase01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/phrases-DemoUHashPhrase01Kt.png)
 
 [source code](src/jvmDemo/kotlin/phrases/DemoUHashPhrase01.kt)
@@ -354,6 +373,7 @@ Demonstrate uniform hashing function phrase in a shadestyle
 This demo sets up a window with dimensions 720x720 and renders frames
 demonstrating 2D quasirandomly distributed points. The points are generated
 using the R2 sequence and drawn as circles with a radius of 5.0.
+
 ![rseq-DemoRseq2D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/rseq-DemoRseq2D01Kt.png)
 
 [source code](src/jvmDemo/kotlin/rseq/DemoRseq2D01.kt)
@@ -369,6 +389,7 @@ The visualization setup includes:
 - Creation of a reusable sphere mesh with a specified radius.
 - Generation of quasirandom points in 3D space using the `rSeq3D` function.
 - Transformation and rendering of each point as a sphere using vertex buffers.
+
 ![rseq-DemoRseq3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/rseq-DemoRseq3D01Kt.png)
 
 [source code](src/jvmDemo/kotlin/rseq/DemoRseq3D01.kt)
@@ -387,6 +408,7 @@ and transformed into 3D positions with an additional w-coordinate for color vari
 - Renders each point as a sphere with its position determined by the 3D coordinates
 of the point and its color calculated by shifting the hue of a base color using
 the w-coordinate value.
+
 ![rseq-DemoRseq4D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/rseq-DemoRseq4D01Kt.png)
 
 [source code](src/jvmDemo/kotlin/rseq/DemoRseq4D01.kt)
@@ -402,6 +424,7 @@ Functionalities:
 - Randomly populates two sections of the screen with rectangles filled with colors
 sampled from simplex and linear ranges respectively.
 - Draws a vertical divider line in the middle of the application window.
+
 ![simplexrange-DemoSimplexRange2D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/simplexrange-DemoSimplexRange2D01Kt.png)
 
 [source code](src/jvmDemo/kotlin/simplexrange/DemoSimplexRange2D01.kt)
@@ -417,6 +440,7 @@ Functionalities:
 - Randomly populates two sections of the screen with rectangles filled with colors
 sampled from simplex and linear ranges respectively.
 - Draws a vertical divider line in the middle of the application window.
+
 ![simplexrange-DemoSimplexRange2D02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/simplexrange-DemoSimplexRange2D02Kt.png)
 
 [source code](src/jvmDemo/kotlin/simplexrange/DemoSimplexRange2D02.kt)
@@ -432,6 +456,7 @@ Functionalities:
 - Randomly populates two sections of the screen with rectangles filled with colors
 sampled from simplex and linear ranges respectively.
 - Draws a vertical divider line in the middle of the application window.
+
 ![simplexrange-DemoSimplexUniform01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/simplexrange-DemoSimplexUniform01Kt.png)
 
 [source code](src/jvmDemo/kotlin/simplexrange/DemoSimplexUniform01.kt)
@@ -447,6 +472,7 @@ Functionalities:
 - Randomly populates two sections of the screen with rectangles filled with colors
 sampled from simplex and linear ranges respectively.
 - Draws a vertical divider line in the middle of the application window.
+
 ![simplexrange-DemoSimplexUniform02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/simplexrange-DemoSimplexUniform02Kt.png)
 
 [source code](src/jvmDemo/kotlin/simplexrange/DemoSimplexUniform02.kt)

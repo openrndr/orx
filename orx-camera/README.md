@@ -63,6 +63,7 @@ fun main() = application {
 # Camera2D demo
 
 click and drag the mouse for panning, use the mouse wheel for zooming
+
 ![DemoCamera2D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoCamera2D01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoCamera2D01.kt)
@@ -72,6 +73,7 @@ click and drag the mouse for panning, use the mouse wheel for zooming
 # Camera2D demo with static elements
 
 An approach for having certain elements not affected by the camera
+
 ![DemoCamera2D02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoCamera2D02Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoCamera2D02.kt)
@@ -87,6 +89,7 @@ drawing operations while maintaining individual camera states, ensuring proper t
 Three circles are drawn on the canvas: a small pink one, a medium white one and a large pink one.
 Only the pink ones are affected by the interactive `Camera2DManual`, while the middle white circle is outside
 the camera's isolated scope.
+
 ![DemoCamera2DManual01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoCamera2DManual01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoCamera2DManual01.kt)
@@ -102,11 +105,13 @@ the new active contour.
 
 As the mouse is dragged or its wheel scrolled, the camera is updated, affecting
 how the active contour is rendered.
+
 ![DemoCamera2DManual02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoCamera2DManual02Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoCamera2DManual02.kt)
 
 ### DemoOrbitalCamera01
+
 
 
 ![DemoOrbitalCamera01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoOrbitalCamera01Kt.png)
@@ -124,11 +129,13 @@ Functionality:
 - Spawns an orbital camera, initially positioned away from the origin, to allow for focused rendering.
 - Renders 3D wireframe shapes (sphere and cube) using the camera's isolated perspective.
 - Draws a static 2D pink circle overlay at the window center.
+
 ![DemoOrbitalManual01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoOrbitalManual01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoOrbitalManual01.kt)
 
 ### DemoParametricOrbital01
+
 
 
 ![DemoParametricOrbital01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoParametricOrbital01Kt.png)

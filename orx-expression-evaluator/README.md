@@ -85,6 +85,7 @@ xFunction(1.0)
 ### DemoExpressionEvaluator01
 
 
+
 ![DemoExpressionEvaluator01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-expression-evaluator/images/DemoExpressionEvaluator01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoExpressionEvaluator01.kt)
@@ -93,6 +94,7 @@ xFunction(1.0)
 
 Improved version of DemoExpressionEvaluator01, it uses [watchingExpression1] to automatically convert an expression
 string into a function with a parameter "t".
+
 ![DemoExpressionEvaluator02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-expression-evaluator/images/DemoExpressionEvaluator02Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoExpressionEvaluator02.kt)

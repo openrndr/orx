@@ -74,6 +74,7 @@ The program performs the following steps:
 - Generates 10,000 random points uniformly distributed within the drawable bounds.
 - Filters the generated points to enforce a minimum distance of 20.0 units between them.
 - Visualizes the filtered points as circles with a radius of 10.0 units on the canvas.
+
 ![DemoFilter01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-hash-grid/images/DemoFilter01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoFilter01.kt)
@@ -88,6 +89,7 @@ The program performs the following key steps:
 - Creates a small sphere mesh that will be instanced for each filtered point.
 - Sets up an orbital camera to allow viewing the 3D scene interactively.
 - Renders the filtered points by translating the sphere mesh to each point's position and applying a shader that modifies the fragment color based on the view normal.
+
 ![DemoFilter3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-hash-grid/images/DemoFilter3D01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoFilter3D01.kt)
@@ -101,6 +103,7 @@ points are then inserted into the grid if they satisfy certain spatial condition
 The visual output includes:
 - Rectangles representing the bounds of the cells in the grid.
 - Circles representing the generated points.
+
 ![DemoHashGrid01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-hash-grid/images/DemoHashGrid01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoHashGrid01.kt)

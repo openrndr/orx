@@ -26,6 +26,7 @@ Key Components:
 - `Rectangle` provides a way to define the rectangular area.
 - `drawer` enables isolated operations for drawing elements.
 - `writer` facilitates text rendering with alignment and spacing adjustments.
+
 ![DemoTextWriter01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/DemoTextWriter01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoTextWriter01.kt)
@@ -33,11 +34,13 @@ Key Components:
 ### DemoTextWriter02
 
 
+
 ![DemoTextWriter02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/DemoTextWriter02Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoTextWriter02.kt)
 
 ### DemoTextWriter03
+
 
 
 ![DemoTextWriter03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/DemoTextWriter03Kt.png)

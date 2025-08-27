@@ -42,6 +42,7 @@ val radiusHistory by tracking(state::radius)
 ### DemoDifferencing01
 
 
+
 ![DemoDifferencing01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-delegate-magic/images/DemoDifferencing01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoDifferencing01.kt)
@@ -69,6 +70,7 @@ The second one contains `Property` in its name and can be
 modified after its creation and even be linked to a UI
 to modify the behavior of the delegate function in real time.
 The `Property` argument overrides the other.
+
 ![DemoFollowing01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-delegate-magic/images/DemoFollowing01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoFollowing01.kt)
@@ -76,11 +78,13 @@ The `Property` argument overrides the other.
 ### DemoSmoothing01
 
 
+
 ![DemoSmoothing01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-delegate-magic/images/DemoSmoothing01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoSmoothing01.kt)
 
 ### DemoSpring01
+
 
 
 ![DemoSpring01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-delegate-magic/images/DemoSpring01Kt.png)
