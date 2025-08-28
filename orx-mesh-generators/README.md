@@ -88,7 +88,7 @@ Check out the [source code](src/commonMain/kotlin) to learn about function argum
 ### decal/DemoDecal01
 
 Demonstrate decal generator as an object slicer
-@see <img src="https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/decal-DemoDecal01Kt.png">
+
 
 ![decal-DemoDecal01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/decal-DemoDecal01Kt.png)
 
@@ -97,7 +97,7 @@ Demonstrate decal generator as an object slicer
 ### decal/DemoDecal02
 
 Demonstrate decal generation and rendering
-@see <img src="https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/decal-DemoDecal02Kt.png">
+
 
 ![decal-DemoDecal02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/decal-DemoDecal02Kt.png)
 

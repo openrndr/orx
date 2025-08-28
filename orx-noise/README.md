@@ -238,7 +238,7 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 ### DemoTriangleNoise01
 
 Demonstrate the generation of uniformly distributed points inside a list of triangles
-@see <img src="https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoTriangleNoise01Kt.png">
+
 
 ![DemoTriangleNoise01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoTriangleNoise01Kt.png)
 

@@ -6,7 +6,12 @@ Collection of 2D shape generators and modifiers.
 ## Demos
 ### adjust/DemoAdjustContour01
 
+Demonstrates how to use `adjustContour` to select and modify three vertices
+in a circular contour. In OPENRNDR circles contain 4 cubic bézier
+segments connecting 4 vertices.
 
+On every animation frame the circular contour is created and transformed
+using sines, cosines and the variable `seconds` for an animated effect.
 
 ![adjust-DemoAdjustContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour01Kt.png)
 
@@ -14,7 +19,8 @@ Collection of 2D shape generators and modifiers.
 
 ### adjust/DemoAdjustContour02
 
-
+Demonstrates how to use `adjustContour` to select and remove vertex 0
+from a circular contour, then select and animate the position and scale the new vertex 0.
 
 ![adjust-DemoAdjustContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour02Kt.png)
 
@@ -22,6 +28,15 @@ Collection of 2D shape generators and modifiers.
 
 ### adjust/DemoAdjustContour03
 
+Demonstrates how to select and alter the edges of a rectangle.
+
+The rectangle is a scaled-down version window bounds.
+
+By default, the edges of a rectangular contour are linear, so the `edge.toCubic()` method
+is called to make it possible to bend them.
+
+Then various edges are selected one by one and transformed over time using operations like
+scale, rotate, splitAt and moveBy.
 
 
 ![adjust-DemoAdjustContour03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour03Kt.png)
@@ -30,6 +45,12 @@ Collection of 2D shape generators and modifiers.
 
 ### adjust/DemoAdjustContour04
 
+Demonstrates an `adjustContour` animated effect where edge 0 of a contour
+is replaced by a point sampled on that edge. The specific edge point oscillates between
+0.0 (at the start) and 1.0 (at the end) using a cosine and the `seconds` variable.
+
+The base contour used for the effect alternates every second
+between a rectangular and a circular contour.
 
 
 ![adjust-DemoAdjustContour04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour04Kt.png)
@@ -420,7 +441,7 @@ and a dynamic anchor point derived from the cosine of elapsed time.
 ### primitives/DemoRectangleIntersection01
 
 Demonstrate rectangle-rectangle intersection
-@see <img src="https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleIntersection01Kt.png">
+
 
 ![primitives-DemoRectangleIntersection01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleIntersection01Kt.png)
 
