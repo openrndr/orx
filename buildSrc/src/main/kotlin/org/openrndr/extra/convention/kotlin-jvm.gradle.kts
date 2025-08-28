@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 val libs = the<LibrariesForLibs>()
 
-val shouldPublish = project.name !in setOf("openrndr-demos")
+val shouldPublish = project.name !in setOf("openrndr-demos", "orx-git-archiver-gradle")
 
 plugins {
     java
