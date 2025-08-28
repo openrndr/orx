@@ -171,7 +171,14 @@ Interactive orbital camera.
 
 ### DemoExtrude01
 
+Demonstrates how to create curved tubes by extruding
+a circular contour along a 3D catmullRom-path
+using [buildTriangleMesh] and [extrudeContourSteps].
 
+The result is a [org.openrndr.draw.VertexBuffer] which can be rendered with
+`drawer.vertexBuffer()`.
+An [Orbital] camera makes the scene interactive. A minimal `shadeStyle` is used
+to simulate a directional light.
 
 ![DemoExtrude01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude01Kt.png)
 
@@ -179,7 +186,14 @@ Interactive orbital camera.
 
 ### DemoExtrude02
 
+Demonstrates how to create hollow tubes with thickness by extruding
+a circular [Shape] built out of two concentric circular contours.
+Note that the inner contour is reversed.
 
+The result is a [org.openrndr.draw.VertexBuffer] which can be rendered with
+`drawer.vertexBuffer()`.
+An [Orbital] camera makes the scene interactive. A minimal `shadeStyle` is used
+to simulate a directional light.
 
 ![DemoExtrude02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude02Kt.png)
 
@@ -187,7 +201,17 @@ Interactive orbital camera.
 
 ### DemoExtrude03
 
+Demonstration creating two intersecting spirals
+using [buildTriangleMesh] and [extrudeContourAdaptive].
+This approach generates as many vertices as needed
+based on the provided tolerance.
 
+The result is a [org.openrndr.draw.VertexBuffer] which can be rendered with
+`drawer.vertexBuffer()`.
+
+The [Orbital] camera slowly rotates on its own while
+still being interactive.
+A minimal `shadeStyle` is used to simulate a directional light.
 
 ![DemoExtrude03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude03Kt.png)
 
@@ -195,7 +219,15 @@ Interactive orbital camera.
 
 ### DemoExtrude04
 
-Extruded Bézier tubes grown on a morphing Bézier surface.
+A series of 3D Bézier tubes grown on an animated,
+morphing, invisible Bézier surface.
+
+As if we were drawing a series of parallel lines
+on a piece of paper, then twisting and bending
+that paper over time.
+
+Demonstrates how to destroy a [org.openrndr.draw.VertexBuffer]
+on every animation frame to avoid filling out the memory.
 
 
 ![DemoExtrude04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude04Kt.png)
@@ -204,7 +236,15 @@ Extruded Bézier tubes grown on a morphing Bézier surface.
 
 ### DemoExtrude05
 
-Extruded Bézier tubes grown on a morphing Bézier surface.
+A series of 3D Bézier tubes grown on an animated,
+morphing, invisible Bézier surface.
+
+This variation uses [extrudeContourStepsScaled] to
+apply a varying scaling to the cross-sections,
+making the ends shrink to a hairline.
+
+Calls `destroy` on the [org.openrndr.draw.VertexBuffer]
+on every animation frame to free the used memory.
 
 
 ![DemoExtrude05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude05Kt.png)
@@ -213,9 +253,16 @@ Extruded Bézier tubes grown on a morphing Bézier surface.
 
 ### DemoExtrude06
 
-Demo extrudeContourStepsMorphed which allows to create a mesh with a morphing cross-section
-based on the t value along a Path3D. In other words, a tube in which the cross-section does not need
-to be constant, but can be scaled, rotated and displaced along its curvy axis.
+Demo [extrudeContourStepsMorphed] which allows creating a mesh with an animated, morphing cross-section
+based on the t value along a [Path3D]. In other words, a tube in which the cross-section does not need
+to be constant, but can be scaled, rotated and displaced along its curved axis.
+
+Loads a texture and applies a repeat-wrapping mode to it.
+The texture can be enabled in the GLSL code inside
+the shadeStyle.
+
+The mesh is rendered 5 times rotated around axis Z
+for a radial-symmetry effect.
 
 ![DemoExtrude06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude06Kt.png)
 
