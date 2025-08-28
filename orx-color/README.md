@@ -222,7 +222,16 @@ an increased dynamic range.
 
 ### DemoColorPlane01
 
+Visualizes a plane of ColorOKLCH colors as small 3D spheres
+inside a 3D box. The plane represents all available hues and chromas.
+The luminosity used to create the colors is modulated over time
+with a slow sine wave.
+Instanced rendering is used to render 90 x 100 colored spheres,
+each with a unique position based on the RGB components of the color.
 
+Since the OKLCH color space is larger than the RGB space, some
+spheres would be outside the 3D box, but they are
+actually clipped to the walls.
 
 ![DemoColorPlane01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorPlane01Kt.png)
 
