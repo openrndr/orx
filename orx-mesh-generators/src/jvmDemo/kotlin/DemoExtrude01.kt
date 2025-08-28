@@ -11,6 +11,16 @@ import org.openrndr.extra.shapes.splines.toPath3D
 import org.openrndr.math.Vector3
 import org.openrndr.shape.Circle
 
+/**
+ * Demonstrates how to create curved tubes by extruding
+ * a circular contour along a 3D catmullRom-path
+ * using [buildTriangleMesh] and [extrudeContourSteps].
+ *
+ * The result is a [org.openrndr.draw.VertexBuffer] which can be rendered with
+ * `drawer.vertexBuffer()`.
+ * An [Orbital] camera makes the scene interactive. A minimal `shadeStyle` is used
+ * to simulate a directional light.
+ */
 fun main() = application {
     configure {
         width = 720

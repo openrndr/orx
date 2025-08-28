@@ -12,6 +12,16 @@ import org.openrndr.math.Vector3
 import org.openrndr.shape.Circle
 import org.openrndr.shape.Shape
 
+/**
+ * Demonstrates how to create hollow tubes with thickness by extruding
+ * a circular [Shape] built out of two concentric circular contours.
+ * Note that the inner contour is reversed.
+ *
+ * The result is a [org.openrndr.draw.VertexBuffer] which can be rendered with
+ * `drawer.vertexBuffer()`.
+ * An [Orbital] camera makes the scene interactive. A minimal `shadeStyle` is used
+ * to simulate a directional light.
+ */
 fun main() = application {
     configure {
         width = 720
@@ -33,7 +43,12 @@ fun main() = application {
             translate(-5.0, 0.0, 0.0)
 
 
-            val ring = Shape(listOf(Circle(0.0, 0.0, 0.5).contour, Circle(0.0, 0.0, 0.25).contour.reversed))
+            val ring = Shape(
+                listOf(
+                    Circle(0.0, 0.0, 0.5).contour,
+                    Circle(0.0, 0.0, 0.25).contour.reversed
+                )
+            )
 
             for (i in 0 until 5) {
                 extrudeShapeSteps(

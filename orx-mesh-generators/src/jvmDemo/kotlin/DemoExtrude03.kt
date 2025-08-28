@@ -6,6 +6,7 @@ import org.openrndr.draw.shadeStyle
 import org.openrndr.extra.camera.Orbital
 import org.openrndr.extra.meshgenerators.buildTriangleMesh
 import org.openrndr.extra.meshgenerators.extrudeContourAdaptive
+import org.openrndr.extra.meshgenerators.extrudeContourSteps
 import org.openrndr.math.Polar
 import org.openrndr.math.Vector3
 import org.openrndr.math.asDegrees
@@ -15,6 +16,19 @@ import org.openrndr.shape.Path3D
 import kotlin.math.PI
 import kotlin.math.exp
 
+/**
+ * Demonstration creating two intersecting spirals
+ * using [buildTriangleMesh] and [extrudeContourAdaptive].
+ * This approach generates as many vertices as needed
+ * based on the provided tolerance.
+ *
+ * The result is a [org.openrndr.draw.VertexBuffer] which can be rendered with
+ * `drawer.vertexBuffer()`.
+ *
+ * The [Orbital] camera slowly rotates on its own while
+ * still being interactive.
+ * A minimal `shadeStyle` is used to simulate a directional light.
+ */
 fun main() = application {
     configure {
         width = 720

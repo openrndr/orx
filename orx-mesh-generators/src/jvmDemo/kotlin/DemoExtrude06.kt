@@ -5,7 +5,6 @@ import org.openrndr.draw.*
 import org.openrndr.extra.camera.Orbital
 import org.openrndr.extra.meshgenerators.buildTriangleMesh
 import org.openrndr.extra.meshgenerators.extrudeContourStepsMorphed
-import org.openrndr.extra.noise.Random
 import org.openrndr.extra.noise.simplex
 import org.openrndr.math.Polar
 import org.openrndr.math.Vector2
@@ -18,9 +17,16 @@ import kotlin.math.PI
 import kotlin.math.cos
 
 /**
- * Demo extrudeContourStepsMorphed which allows to create a mesh with a morphing cross-section
- * based on the t value along a Path3D. In other words, a tube in which the cross-section does not need
- * to be constant, but can be scaled, rotated and displaced along its curvy axis.
+ * Demo [extrudeContourStepsMorphed] which allows creating a mesh with an animated, morphing cross-section
+ * based on the t value along a [Path3D]. In other words, a tube in which the cross-section does not need
+ * to be constant, but can be scaled, rotated and displaced along its curved axis.
+ *
+ * Loads a texture and applies a repeat-wrapping mode to it.
+ * The texture can be enabled in the GLSL code inside
+ * the shadeStyle.
+ *
+ * The mesh is rendered 5 times rotated around axis Z
+ * for a radial-symmetry effect.
  */
 fun main() = application {
     configure {
@@ -29,8 +35,6 @@ fun main() = application {
         multisample = WindowMultisample.SampleCount(8)
     }
     program {
-        Random.seed = System.currentTimeMillis().toString()
-
         val texture = loadImage("demo-data/images/peopleCity01.jpg").also {
             it.wrapU = WrapMode.REPEAT
             it.wrapV = WrapMode.REPEAT
@@ -94,7 +98,7 @@ val crossSection = Circle(Vector2.ZERO, 0.1).contour.transform(
     transform { scale(5.0, 1.0, 1.0) }
 )
 
-// Create simplex-based 3D path
+// Create a simplex-based 3D path
 fun get3DPath(scale: Double, time: Double, steps: Int): Path3D {
     val mult = 0.005
     val points = List(steps) { Vector3.simplex(337, time + it * mult) * scale }

@@ -6,14 +6,22 @@ import org.openrndr.draw.shadeStyle
 import org.openrndr.extra.camera.Orbital
 import org.openrndr.extra.meshgenerators.buildTriangleMesh
 import org.openrndr.extra.meshgenerators.extrudeContourSteps
-import org.openrndr.extra.noise.Random
+import org.openrndr.extra.noise.simplex
 import org.openrndr.math.Vector3
 import org.openrndr.shape.Circle
 import org.openrndr.shape.Path3D
 import org.openrndr.shape.Segment3D
 
 /**
- * Extruded Bézier tubes grown on a morphing Bézier surface.
+ * A series of 3D Bézier tubes grown on an animated,
+ * morphing, invisible Bézier surface.
+ *
+ * As if we were drawing a series of parallel lines
+ * on a piece of paper, then twisting and bending
+ * that paper over time.
+ *
+ * Demonstrates how to destroy a [org.openrndr.draw.VertexBuffer]
+ * on every animation frame to avoid filling out the memory.
  *
  */
 fun main() = application {
@@ -41,7 +49,7 @@ fun main() = application {
             val m = buildTriangleMesh {
                 val beziers = List(4) { curveId ->
                     val n = List(12) {
-                        Random.simplex(it * 7.387, curveId * 5.531 + seconds * 0.05) * 10.0
+                        simplex(1413, it * 7.387, curveId * 5.531 + seconds * 0.05) * 10.0
                     }
                     Segment3D(
                         Vector3(n[0], n[1], n[2]),
