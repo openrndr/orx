@@ -6,7 +6,6 @@ import org.openrndr.draw.shadeStyle
 import org.openrndr.extra.camera.Orbital
 import org.openrndr.extra.meshgenerators.buildTriangleMesh
 import org.openrndr.extra.meshgenerators.extrudeContourAdaptive
-import org.openrndr.extra.meshgenerators.extrudeContourSteps
 import org.openrndr.math.Polar
 import org.openrndr.math.Vector3
 import org.openrndr.math.asDegrees
