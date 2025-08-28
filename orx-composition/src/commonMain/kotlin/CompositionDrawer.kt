@@ -440,8 +440,12 @@ class CompositionDrawer(
                 shapeNode.miterLimit = miterlimit
                 shapeNode.lineCap = lineCap
                 shapeNode.lineJoin = lineJoin
-                shapeNode.fill = fill
-                shapeNode.fillOpacity = fillOpacity
+                if(shape.contours.all { it.closed}) {
+                    shapeNode.fill = fill
+                    shapeNode.fillOpacity = fillOpacity
+                } else {
+                    shapeNode.fill = null
+                }
 
                 if (insert) {
                     cursor.children.add(shapeNode)
