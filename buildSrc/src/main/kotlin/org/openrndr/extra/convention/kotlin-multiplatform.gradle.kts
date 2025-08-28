@@ -4,6 +4,7 @@ import CollectScreenshotsTask
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
+import org.gradle.nativeplatform.platform.internal.DefaultOperatingSystem
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
@@ -71,6 +72,12 @@ kotlin {
         testRuns["test"].executionTask {
             useJUnitPlatform()
             testLogging.exceptionFormat = TestExceptionFormat.FULL
+        }
+
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        mainRun {
+            classpath(kotlin.jvm().compilations.getByName("demo").output.allOutputs)
+            classpath(kotlin.jvm().compilations.getByName("demo").configurations.runtimeDependencyConfiguration!!)
         }
     }
 
@@ -182,12 +189,10 @@ if (shouldPublish) {
     }
 }
 
-kotlin {
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
-    jvm().mainRun {
-        classpath(kotlin.jvm().compilations.getByName("demo").output.allOutputs)
-        classpath(kotlin.jvm().compilations.getByName("demo").configurations.runtimeDependencyConfiguration!!)
+tasks.withType<JavaExec>().matching { it.name == "jvmRun" }.configureEach {
+    workingDir = rootDir
+    val os: OperatingSystem? = DefaultNativePlatform.getCurrentOperatingSystem()
+    if (os?.name == "Mac OS X") {
+        setJvmArgs(listOf("-XstartOnFirstThread"))
     }
 }
-
-tasks.withType<JavaExec>().matching { it.name == "jvmRun" }.configureEach { workingDir = rootDir }
