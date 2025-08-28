@@ -6,6 +6,15 @@ import org.openrndr.extra.shapes.adjust.adjustContour
 import org.openrndr.shape.Circle
 import kotlin.math.cos
 
+/**
+ * Demonstrates an `adjustContour` animated effect where edge 0 of a contour
+ * is replaced by a point sampled on that edge. The specific edge point oscillates between
+ * 0.0 (at the start) and 1.0 (at the end) using a cosine and the `seconds` variable.
+ *
+ * The base contour used for the effect alternates every second
+ * between a rectangular and a circular contour.
+ *
+ */
 fun main() = application {
     configure {
         width = 800

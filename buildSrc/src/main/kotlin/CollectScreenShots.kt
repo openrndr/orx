@@ -43,7 +43,7 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
             "preload class not found: '${preloadClass.absolutePath}'"
         }
 
-        // Execute demos
+        // Execute demos and produce PNG files
         inputChanges.getFileChanges(inputDir).forEach { change ->
             if (change.fileType == FileType.DIRECTORY) return@forEach
             if (change.file.extension == "class") {
@@ -98,7 +98,7 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
             }
         }
 
-        // List found PNG images.
+        // List produced PNG images.
         // Only executed if there are changes in the inputDir.
         val demoImageBaseNames = outputDir.get().asFile.listFiles { file: File ->
             file.extension == "png"
@@ -135,10 +135,14 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
                     val main = codeLines.indexOfFirst { it.startsWith("fun main") }
 
                     if ((start < end) && (end < main)) {
-                        codeLines.subList(start + 1, end).joinToString("\n") {
-                            it.trimStart(' ', '*')
+                        codeLines.subList(start + 1, end).joinToString("\n") { line ->
+                            val trimmed = line.trimStart(' ', '*')
+                            if(trimmed.startsWith("@see")) "" else trimmed
                         }
-                    } else ""
+                    } else {
+                        println("/** comment */ missing in $projectPath/$ktFilePath")
+                        ""
+                    }
                 } else ""
 
                 readmeLines.add(

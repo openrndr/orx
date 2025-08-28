@@ -8,6 +8,14 @@ import org.openrndr.shape.Circle
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * Demonstrates how to use `adjustContour` to select and modify three vertices
+ * in a circular contour. In OPENRNDR circles contain 4 cubic bézier
+ * segments connecting 4 vertices.
+ *
+ * On every animation frame the circular contour is created and transformed
+ * using sines, cosines and the variable `seconds` for an animated effect.
+ */
 fun main() = application {
     configure {
         width = 800

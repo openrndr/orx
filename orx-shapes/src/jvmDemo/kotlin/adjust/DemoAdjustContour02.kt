@@ -8,6 +8,10 @@ import org.openrndr.shape.Circle
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * Demonstrates how to use `adjustContour` to select and remove vertex 0
+ * from a circular contour, then select and animate the position and scale the new vertex 0.
+ */
 fun main() = application {
     configure {
         width = 800
@@ -22,8 +26,6 @@ fun main() = application {
                 selectVertex(0)
                 vertex.moveBy(Vector2(cos(seconds) * 40.0, sin(seconds * 0.43) * 40.0))
                 vertex.scale(cos(seconds * 2.0) * 2.0)
-
-
             }
             drawer.stroke = ColorRGBa.RED
             drawer.contour(contour)
