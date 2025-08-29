@@ -47,7 +47,7 @@ scale, rotate, splitAt and moveBy.
 
 Demonstrates an `adjustContour` animated effect where edge 0 of a contour
 is replaced by a point sampled on that edge. The specific edge point oscillates between
-0.0 (at the start) and 1.0 (at the end) using a cosine and the `seconds` variable.
+0.0 (at the start of the segment) and 1.0 (at the end) using a cosine and the `seconds` variable.
 
 The base contour used for the effect alternates every second
 between a rectangular and a circular contour.
@@ -59,7 +59,17 @@ between a rectangular and a circular contour.
 
 ### adjust/DemoAdjustContour05
 
+Demonstrates animated modifications to a circular contour using `adjustContour`.
 
+The application creates a circular contour and dynamically alters its edges
+based on the current time in seconds. Each edge of the contour is selected
+and transformed through a series of operations:
+
+- The currently active edge (based on time modulo 4) is replaced with a point at 0.5.
+- All other edges are reshaped by reducing their length dynamically, with the reduction
+calculated using a cosine function involving the current time in seconds.
+
+The resulting contour is then drawn with a red stroke color.
 
 ![adjust-DemoAdjustContour05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour05Kt.png)
 
@@ -67,7 +77,20 @@ between a rectangular and a circular contour.
 
 ### adjust/DemoAdjustContour06
 
+Demonstrates the use of `adjustContour`
+to create an animated effect where edges are split, vertices are selected,
+and transformations such as scaling are applied.
 
+The program creates a circular contour which is modified on each animation frame.
+
+- Edges of the circular contour are split dynamically based on a time-based cosine function.
+- Newly created vertices are selected and scaled around the center of the contour
+using time-dependent transformations.
+
+The selection of vertices happens automatically thanks to
+`parameters.clearSelectedVertices` and `parameters.selectInsertedVertices`
+
+The modified animated contour is finally drawn.
 
 ![adjust-DemoAdjustContour06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour06Kt.png)
 
@@ -75,7 +98,13 @@ between a rectangular and a circular contour.
 
 ### adjust/DemoAdjustContour07
 
+Demonstrates how to create and manipulate a contour dynamically using the `adjustContour` function.
 
+The program initializes a simple linear contour and applies transformations to it on each animation frame:
+- The only edge of the contour is split into many equal parts.
+- A value between 0 and 1 is calculated based on the cosine of the current time in seconds.
+- That value is used to calculate an anchor point and to select all vertices to its right
+- The selected vertices are rotated around an anchor, as if rolling a straight line into a spiral.
 
 ![adjust-DemoAdjustContour07Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour07Kt.png)
 
@@ -83,7 +112,14 @@ between a rectangular and a circular contour.
 
 ### adjust/DemoAdjustContour08
 
+Demonstrates how to adjust and manipulate the vertices and edges of a contour.
 
+This method shows two approaches for transforming contours:
+
+1. Adjusting vertices directly by selecting specific vertices in a contour and modifying their control points.
+2. Adjusting edges of a contour by transforming their control points.
+
+For each approach, a red line is drawn representing the transformed contour.
 
 ![adjust-DemoAdjustContour08Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour08Kt.png)
 
@@ -91,6 +127,22 @@ between a rectangular and a circular contour.
 
 ### adjust/DemoAdjustContour09
 
+Demonstrates how to manipulate a contour by adjusting and transforming its vertices
+and edges, and subsequently visualizing the result using different drawing styles.
+
+The program creates a rectangular contour derived by shrinking the bounds of the drawing area.
+It then applies multiple transformations to selected vertices. These transformations include:
+
+- Averaging tangents for selected vertices
+- Scaling and rotating vertex positions based on the horizontal mouse position
+- Switching tangents for specific vertices
+
+The resulting contour is drawn in black. Additionally:
+
+- Control line segments are visualized in red, connecting segment endpoints to control points.
+- Vertices are numbered and highlighted with black-filled circles.
+- Tunni lines, which represent optimized control line placements, are visualized in cyan.
+- Tunni points, marking the Tunni line's control, are emphasized with yellow-filled circles.
 
 
 ![adjust-DemoAdjustContour09Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour09Kt.png)
@@ -99,7 +151,22 @@ between a rectangular and a circular contour.
 
 ### adjust/DemoAdjustContourContinue01
 
+Demonstrates how to adjust and animate contour segments and vertices.
 
+The method initially creates a contour by offsetting the edges of the window's bounds. A process is
+defined to sequence through various transformations on the contour, such as selecting edges, selecting
+vertices, rotating points, or modifying segment attributes based on mathematical transformations.
+
+The adjusted contour and its modified segments and vertices are iterated through a sequence
+and updated in real time. Rendering involves visualizing the contour, its control points, the
+Tunni lines, Tunni points, as well as the selected segments and points with distinct styles
+for better visualization.
+
+The complex animation sequence is implemented using coroutines. Two loops in the code alternate
+between rotating vertices and adjusting Tunni lines while the `extend` function takes care of
+rendering the composition in its current state.
+
+The core elements to study to in this demo are `adjustContourSequence` and `launch`.
 
 ![adjust-DemoAdjustContourContinue01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContourContinue01Kt.png)
 
