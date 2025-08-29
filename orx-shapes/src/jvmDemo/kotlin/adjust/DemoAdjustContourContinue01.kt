@@ -12,6 +12,24 @@ import org.openrndr.math.Vector2
 import org.openrndr.shape.Segment2D
 import kotlin.math.cos
 
+/**
+ * Demonstrates how to adjust and animate contour segments and vertices.
+ *
+ * The method initially creates a contour by offsetting the edges of the window's bounds. A process is
+ * defined to sequence through various transformations on the contour, such as selecting edges, selecting
+ * vertices, rotating points, or modifying segment attributes based on mathematical transformations.
+ *
+ * The adjusted contour and its modified segments and vertices are iterated through a sequence
+ * and updated in real time. Rendering involves visualizing the contour, its control points, the
+ * Tunni lines, Tunni points, as well as the selected segments and points with distinct styles
+ * for better visualization.
+ *
+ * The complex animation sequence is implemented using coroutines. Two loops in the code alternate
+ * between rotating vertices and adjusting Tunni lines while the `extend` function takes care of
+ * rendering the composition in its current state.
+ *
+ * The core elements to study to in this demo are `adjustContourSequence` and `launch`.
+ */
 fun main() = application {
     configure {
         width = 800
@@ -39,7 +57,6 @@ fun main() = application {
                     selectVertices((i * 3).mod(4))
                     for (v in vertices) {
                         yield(status)
-
                     }
 
 
@@ -47,7 +64,10 @@ fun main() = application {
                     selectEdges(i.mod(4))
                     for (j in 0 until 30) {
                         for (e in edges) {
-                            e.withTunniLine(e.tunniLine.position(0.5) + e.tunniLine.normal * cos(i.toDouble() + e.segmentIndex()) * 50.0 / 30.0)
+                            e.withTunniLine(
+                                e.tunniLine.position(0.5) +
+                                        e.tunniLine.normal * cos(i.toDouble() + e.segmentIndex()) * 50.0 / 30.0
+                            )
                             yield(status)
                         }
                     }

@@ -6,6 +6,19 @@ import org.openrndr.extra.shapes.adjust.adjustContour
 import org.openrndr.shape.Circle
 import kotlin.math.cos
 
+/**
+ * Demonstrates animated modifications to a circular contour using `adjustContour`.
+ *
+ * The application creates a circular contour and dynamically alters its edges
+ * based on the current time in seconds. Each edge of the contour is selected
+ * and transformed through a series of operations:
+ *
+ * - The currently active edge (based on time modulo 4) is replaced with a point at 0.5.
+ * - All other edges are reshaped by reducing their length dynamically, with the reduction
+ *   calculated using a cosine function involving the current time in seconds.
+ *
+ * The resulting contour is then drawn with a red stroke color.
+ */
 fun main() = application {
     configure {
         width = 800

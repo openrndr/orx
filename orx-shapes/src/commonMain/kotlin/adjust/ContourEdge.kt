@@ -57,7 +57,7 @@ data class ContourEdge(
     }
 
     /**
-     * convert the edge to a linear edge, truncating control points if those exist
+     * Convert the edge to a linear edge, truncating control points if those exist
      */
     fun toLinear(): ContourEdge {
         return if (contour.segments[segmentIndex].type != SegmentType.LINEAR) {
@@ -75,7 +75,7 @@ data class ContourEdge(
     }
 
     /**
-     * convert the edge to a cubic edge
+     * Convert the edge to a cubic edge
      */
     fun toCubic(): ContourEdge {
         return if (contour.segments[segmentIndex].type != SegmentType.CUBIC) {
@@ -99,10 +99,10 @@ data class ContourEdge(
 
 
     /**
-     * replace this edge with a point at [t]
+     * Replace this edge with a point at [t]
      * @param t an edge t value between 0 and 1
      */
-    fun replacedWith(t: Double, updateTangents: Boolean): ContourEdge {
+    fun replacedWith(t: Double): ContourEdge {
         if (contour.empty) {
             return withoutAdjustments()
         }
@@ -125,6 +125,9 @@ data class ContourEdge(
         return ContourEdge(ShapeContour.fromSegments(newSegments, contour.closed), segmentIndex, adjustments)
     }
 
+    /**
+     * Split the edge in [numberOfParts] parts of equal length
+     */
     fun splitIn(parts: Int): ContourEdge {
         if (contour.empty || parts < 2) {
             return withoutAdjustments()
@@ -140,13 +143,20 @@ data class ContourEdge(
         return replacedWith(ShapeContour.fromContours(newSegments, false, 1.0))
     }
 
+    /**
+     * Replaces the current edge with the segments of an open shape contour.
+     *
+     * @param openContour the open shape contour whose segments replace the current edge. The provided
+     *                    contour must not be closed.
+     * @return a new ContourEdge instance with the updated segments from the `openContour`.
+     */
     fun replacedWith(openContour: ShapeContour): ContourEdge {
         if (contour.empty) {
             return withoutAdjustments()
         }
         require(!openContour.closed) { "openContour should be open" }
         val segment = contour.segments[segmentIndex]
-        var newSegments = contour.segments.toMutableList()
+        val newSegments = contour.segments.toMutableList()
 
         var insertIndex = segmentIndex
         val adjustments = newSegments.adjust {
@@ -169,11 +179,12 @@ data class ContourEdge(
 
 
     /**
-     * subs the edge from [t0] to [t1], preserves topology unless t0 = t1
-     * @param t0 the start edge t-value, between 0 and 1
-     * @param t1 the end edge t-value, between 0 and 1
+     * Returns part of the edge between [t0] to [t1].
+     * Preserves topology unless t0 = t1.
+     * @param t0 the edge's start t-value, between 0 and 1
+     * @param t1 the edge's end t-value, between 0 and 1
      */
-    fun subbed(t0: Double, t1: Double, updateTangents: Boolean = true): ContourEdge {
+    fun subbed(t0: Double, t1: Double): ContourEdge {
         if (contour.empty) {
             return withoutAdjustments()
         }
@@ -195,23 +206,23 @@ data class ContourEdge(
             newSegments[segmentIndex] = sub
             return ContourEdge(ShapeContour.fromSegments(newSegments, contour.closed), segmentIndex)
         } else {
-            return replacedWith(t0, updateTangents)
+            return replacedWith(t0)
         }
     }
 
     /**
-     * split the edge at [t]
-     * @param t an edge t value between 0 and 1, will not split when t == 0 or t == 1
+     * Split the edge at [t]
+     * @param t An edge t value between 0 and 1. No splitting happens when t == 0 or t == 1.
      */
     fun splitAt(t: Double): ContourEdge {
         if (contour.empty) {
             return withoutAdjustments()
         }
         val newContour = contour.insertPointAt(segmentIndex, t)
-        if (newContour.segments.size == contour.segments.size + 1) {
-            return ContourEdge(newContour, segmentIndex, listOf(SegmentOperation.Insert(segmentIndex + 1, 1)))
+        return if (newContour.segments.size == contour.segments.size + 1) {
+            ContourEdge(newContour, segmentIndex, listOf(SegmentOperation.Insert(segmentIndex + 1, 1)))
         } else {
-            return this.copy(adjustments = emptyList())
+            this.copy(adjustments = emptyList())
         }
     }
 
@@ -282,25 +293,58 @@ data class ContourEdge(
         return ContourEdge(ShapeContour.fromSegments(newSegments, contour.closed), segmentIndex)
     }
 
+    /**
+     * Moves the starting point of the contour edge by the given translation vector.
+     *
+     * @param translation the translation vector to apply to the starting point of the contour edge.
+     * @param updateTangents whether the tangents of adjacent segments should be updated after the transformation. Defaults to true.
+     * @return a new instance of the contour edge with the starting point moved by the given translation.
+     */
     fun startMovedBy(translation: Vector2, updateTangents: Boolean = true): ContourEdge =
         transformedBy(buildTransform {
             translate(translation)
         }, updateTangents = updateTangents, mask = maskOf(ControlMask.START))
 
+    /**
+     * Moves the first control point of a contour edge by a specified translation vector.
+     *
+     * @param translation the translation vector to apply to the first control point of the contour edge.
+     * @return a new instance of the contour edge with the first control point moved by the given translation.
+     */
     fun control0MovedBy(translation: Vector2): ContourEdge = transformedBy(buildTransform {
         translate(translation)
     }, updateTangents = false, mask = maskOf(ControlMask.CONTROL0), promoteToCubic = true)
 
+    /**
+     * Moves the second control point (Control1) of a contour edge by a specified translation vector.
+     *
+     * @param translation the translation vector to apply to the second control point of the contour edge.
+     * @return a new instance of the contour edge with the second control point moved by the given translation.
+     */
     fun control1MovedBy(translation: Vector2): ContourEdge = transformedBy(buildTransform {
         translate(translation)
     }, updateTangents = false, mask = maskOf(ControlMask.CONTROL1), promoteToCubic = true)
 
+    /**
+     * Moves the end point of the contour edge by the specified translation vector.
+     *
+     * @param translation the translation vector to apply to the end point of the contour edge.
+     * @param updateTangents whether the tangents of adjacent segments should be updated after the transformation. Defaults to true.
+     * @return a new instance of the contour edge with the end point moved by the given translation.
+     */
     fun endMovedBy(translation: Vector2, updateTangents: Boolean = true): ContourEdge {
         return transformedBy(buildTransform {
             translate(translation)
         }, updateTangents = updateTangents, mask = maskOf(ControlMask.END))
     }
 
+    /**
+     * Creates a new contour edge by applying a translation to the current edge.
+     *
+     * @param translation the translation vector to apply to the contour edge.
+     * @param updateTangents whether the tangents of adjacent segments should be updated after the transformation.
+     * @return a new instance of the contour edge, transformed by the given translation.
+     */
     fun movedBy(translation: Vector2, updateTangents: Boolean = true): ContourEdge {
         return transformedBy(buildTransform {
             translate(translation)
