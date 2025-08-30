@@ -130,9 +130,10 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
 
                 val description = if (ktFile.isFile) {
                     val codeLines = ktFile.readLines()
-                    val start = codeLines.indexOfFirst { it.startsWith("/**") }
-                    val end = codeLines.indexOfFirst { it.endsWith("*/") }
                     val main = codeLines.indexOfFirst { it.startsWith("fun main") }
+                    val head = codeLines.take(main)
+                    val start = head.indexOfLast { it.startsWith("/**") }
+                    val end = head.indexOfLast { it.endsWith("*/") }
 
                     if ((start < end) && (end < main)) {
                         codeLines.subList(start + 1, end).joinToString("\n") { line ->
