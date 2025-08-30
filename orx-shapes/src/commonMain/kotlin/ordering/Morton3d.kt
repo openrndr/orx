@@ -32,6 +32,7 @@ fun morton3dEncode5Bit(
     return ((index1 shr 16) or (index2 shr 15) or (index3 shr 14));
 }
 
+@OptIn(ExperimentalUnsignedTypes::class)
 fun morton3dDecode5Bit(morton: UInt): UIntArray { // unpack 3 5-bit indices from a 15-bit Morton code
     var value1 = morton;
     var value2 = (value1 shr 1);
@@ -61,6 +62,7 @@ fun morton3dDecode5Bit(morton: UInt): UIntArray { // unpack 3 5-bit indices from
 }
 
 
+@OptIn(ExperimentalUnsignedTypes::class)
 fun morton3dEncode10Bit(
     index1: UInt,
     index2: UInt,
