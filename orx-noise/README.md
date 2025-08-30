@@ -273,7 +273,13 @@ Time is used as a noise argument to produce an animated effect.
 
 ### DemoTriangleNoise01
 
-Demonstrate the generation of uniformly distributed points inside a list of triangles
+Demonstrate the generation of uniformly distributed points inside a list of triangles.
+For demonstration purposes there is only one triangle in the list, but could contain many.
+
+We can consider the `hash` function as giving us access to a slice in a pool of random Vector2 values.
+Since we increase the x argument in the call to `hash()` based on the current time in seconds,
+older random points get replaced by newer ones, then stay visible for a while.
+
 
 
 ![DemoTriangleNoise01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoTriangleNoise01Kt.png)
@@ -460,7 +466,6 @@ This demo renders a 3D visualization of points distributed using the R3 quasiran
 represented as a sphere and positioned in 3D space based on the quasirandom sequence values.
 
 The visualization setup includes:
-- Configuration of application window size to 720x720.
 - Usage of an orbital camera for interactive 3D navigation.
 - Creation of a reusable sphere mesh with a specified radius.
 - Generation of quasirandom points in 3D space using the `rSeq3D` function.
@@ -473,10 +478,9 @@ The visualization setup includes:
 ### rseq/DemoRseq4D01
 
 Demo that presents a 3D visualization of points distributed using a 4D quasirandom sequence (R4).
-Each point is represented as a sphere with it position and color derived from the sequence values.
+Each point is represented as a sphere with its position and color derived from the sequence values.
 
 This function performs the following tasks:
-- Configures the application window dimensions to 720x720 pixels.
 - Initializes a 3D camera for orbital navigation of the scene.
 - Generates 10,000 points in 4D space using the `rSeq4D` function. The points are scaled
 and transformed into 3D positions with an additional w-coordinate for color variation.

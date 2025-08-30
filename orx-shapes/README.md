@@ -204,7 +204,12 @@ random shape is always the same.
 
 ### arrangement/DemoArrangement01
 
+Demonstrates the use of Arrangement to create a 2D arrangement of shapes.
 
+The Arrangement constructor takes as arguments instances of [org.openrndr.shape.ShapeProvider]s.
+
+Once constructed, we can request `originFaces`, `edges`, `vertices`, `boundaries` and `holes`,
+to render or manipulate them further as needed.
 
 ![arrangement-DemoArrangement01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/arrangement-DemoArrangement01Kt.png)
 
@@ -212,7 +217,12 @@ random shape is always the same.
 
 ### arrangement/DemoArrangement02
 
+Demonstrates the use of Arrangement to create a 2D arrangement of shapes using a self-intersecting curve.
 
+For self-intersections we need to pass the same curve twice as arguments to Arrangement.
+The specific curve used results in 4 intersection points.
+
+This demo shows how we can query and visualize the neighborhoods of those 4 vertices.
 
 ![arrangement-DemoArrangement02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/arrangement-DemoArrangement02Kt.png)
 
@@ -220,7 +230,11 @@ random shape is always the same.
 
 ### arrangement/DemoArrangement04
 
+Demonstrates using the `boundedFaces` collection available in Arrangements.
 
+`boundedFaces` elements have a `contour` property, while `unboundedFaces` do not.
+
+In this example, `faces` contains 25 items: 24 `bounded` and 1 `unbounded` faces.
 
 ![arrangement-DemoArrangement04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/arrangement-DemoArrangement04Kt.png)
 
@@ -306,7 +320,13 @@ Shows how to
 
 ### bezierpatch/DemoBezierPatchDrawer01
 
+Demonstrates how to draw a bezier patch and its corresponding contours.
+The bezier patch is generated from a circular shape and is assigned colors
+for each control point. The patch is subdivided into horizontal and vertical
+contours, which are rendered to visualize the structure of the bezier patch.
 
+The bezier patch constructor expects a contour with 4 segments, for example
+a rectangular contour or a circle, which in OPENRNDR is made out of 4 segments.
 
 ![bezierpatch-DemoBezierPatchDrawer01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatchDrawer01Kt.png)
 
@@ -314,7 +334,15 @@ Shows how to
 
 ### bezierpatch/DemoBezierPatchDrawer02
 
+Demonstrates how to use bezier patches with specified colors and displays text labels for
+the color space used in each. This method:
 
+- Creates two bezier patches with different color spaces (RGB and OKLab).
+- Draws these bezier patches using the drawer.
+- Renders text labels to differentiate the color spaces used.
+
+The bezier patches are created from closed circular contours and colored by specifying
+a grid of colors matching the patch's vertices.
 
 ![bezierpatch-DemoBezierPatchDrawer02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatchDrawer02Kt.png)
 
@@ -322,11 +350,30 @@ Shows how to
 
 ### bezierpatch/DemoBezierPatchDrawer03
 
+Demonstrates how to render a grid of bezier patches that morph between a rectangle and
+a rotated circle contour.
+These shapes are transformed into bezier patches, and their colors are interpolated through a blend
+factor calculated for each cell in the grid.
 
+The grid layout contains 4 columns and 4 rows with margins and gutters.
+Each cell's center serves as the drawing position for a blended bezier patch.
 
 ![bezierpatch-DemoBezierPatchDrawer03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatchDrawer03Kt.png)
 
 [source code](src/jvmDemo/kotlin/bezierpatch/DemoBezierPatchDrawer03.kt)
+
+### bezierpatch/DemoBezierPatchDrawer04
+
+Demonstrates how to create and render a bezier patch with randomized control points
+and colors. The bezier patch is derived from a scaled-down copy of the
+drawer bounds, converted to a contour and deformed using `adjustContour`.
+
+The bezier patch uses 16 randomly generated colors chunked into 4 lists with 4 colors each.
+
+
+![bezierpatch-DemoBezierPatchDrawer04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatchDrawer04Kt.png)
+
+[source code](src/jvmDemo/kotlin/bezierpatch/DemoBezierPatchDrawer04.kt)
 
 ### bezierpatch/DemoBezierPatches01
 
@@ -344,7 +391,10 @@ to use in bezier patches.
 
 ### blend/DemoContourBlend01
 
-Demonstration of uniform contour blending
+Animated demonstration of uniform contour blending. Once a `ContourBlend` between two
+contours is created, it can be queried using the `.mix()` method to get a contour interpolated
+between the first one (when the blend argument is 0.0) and the second one (when the argument
+is 1.0)
 
 ![blend-DemoContourBlend01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/blend-DemoContourBlend01Kt.png)
 
@@ -353,6 +403,15 @@ Demonstration of uniform contour blending
 ### blend/DemoContourBlend02
 
 Demonstration of non-uniform contour blending
+
+The `mix` method of a `ContourBlend` does not only accept a Double, but also a function.
+This function should take one Double argument, which specifies the normalized `t` value between
+the start and the end of the contour, and should return a normalized value indicating the
+morphing state between the first contour and the second contour, for that specific t value.
+
+This allows us, for instance, to morph one part of the shape first, then have other parts follow.
+
+This demo shows a grid of 9 contours which are part circle and part 5-point start.
 
 ![blend-DemoContourBlend02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/blend-DemoContourBlend02Kt.png)
 
