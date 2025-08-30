@@ -6,6 +6,17 @@ import org.openrndr.shape.Ellipse
 import kotlin.math.cos
 import kotlin.random.Random
 
+/**
+ * Demonstrates how to create an animated visualization of scattered points.
+ *
+ * The program creates an animated ellipse with increasing and decreasing height.
+ * Then, scatters points inside it with a placementRadius of 20.0.
+ *
+ * The animation reveals that the scattering positions are somewhat stable between
+ * animation frames.
+ *
+ * The ellipse's contour is revealed and hidden every other second.
+ */
 fun main() = application {
     configure {
         width = 720

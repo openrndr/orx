@@ -2,6 +2,13 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.noise.valueQuintic3D
 
+/**
+ * Demonstrates how to render grayscale noise patterns dynamically using 3D quintic noise.
+ *
+ * The program draws one point per pixel on the screen, calculating the color intensity of
+ * each point based on a 3D quintic noise function. The noise value is influenced by the
+ * pixel's 2D coordinates and animated over time.
+ */
 fun main() = application {
     configure {
         width = 720

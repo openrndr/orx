@@ -6,6 +6,17 @@ import org.openrndr.extra.noise.shapes.uniform
 import org.openrndr.shape.Circle
 import kotlin.random.Random
 
+/**
+ * Demonstrates how to draw circles distributed within two subregions of a rectangular area
+ * using uniform random distribution and a hash-based method for randomness.
+ *
+ * The application divides the window area into two subregions, offsets the edges inwards,
+ * and then calculates two circles representing these subregions. Points are then generated and drawn
+ * within these circles using two different methods:
+ *
+ * - A uniform random distribution within the first circle.
+ * - A hash-based deterministic random point generation within the second circle.
+ */
 fun main() = application {
     configure {
         width = 720

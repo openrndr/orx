@@ -6,6 +6,17 @@ import org.openrndr.extra.noise.simplex
 import org.openrndr.math.Vector2
 import kotlin.math.absoluteValue
 
+/**
+ * Demonstrates how to generate a dynamic fractal-based visual effect
+ * using 2D gradient perturbation and simplex noise.
+ *
+ * This method initializes a color buffer to create an image and applies fractal gradient noise to set
+ * each pixel's brightness, producing a dynamic visual texture. The fractal effect is achieved by layering multiple
+ * levels of noise, and each pixel's color intensity is based on the noise function results.
+ * The output is continuously updated to produce animated patterns.
+ *
+ * CPU-based.
+ */
 fun main() = application {
     configure {
         width = 720

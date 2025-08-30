@@ -6,8 +6,7 @@ import org.openrndr.extra.noise.hammersley.hammersley2D
 /**
  * Demo that visualizes a 2D Hammersley point set.
  *
- * The application is configured to run at 720x720 resolution. The program computes
- * 400 2D Hammersley points mapped within the bounds of the application's resolution.
+ * The program computes 400 2D Hammersley points mapped within the window bounds.
  * These points are visualized by rendering circles at their respective positions.
  */
 fun main() = application {

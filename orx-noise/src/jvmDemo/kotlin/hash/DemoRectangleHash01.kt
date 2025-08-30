@@ -5,6 +5,14 @@ import org.openrndr.extra.noise.shapes.hash
 import org.openrndr.extra.noise.shapes.uniform
 import kotlin.random.Random
 
+/**
+ * Demonstrates how to generate and draw random points within two subregions of a rectangular area
+ * using two different randomization methods.
+ *
+ * The first subregion generates points using a _uniform_ random distribution, while the second subregion
+ * generates points deterministically with a _hash-based_ randomization approach. The points are visualized
+ * as small circles.
+ */
 fun main() = application {
     configure {
         width = 720

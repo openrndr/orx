@@ -2,6 +2,11 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.noise.cubicHermite3D
 
+/**
+ * Demonstrates how to render dynamic grayscale patterns using 3D cubic Hermite interpolation.
+ * The program draws one point per pixel on the screen, calculating the color intensity of each point
+ * based on a 3D cubic Hermite noise function.
+ */
 fun main() = application {
     configure {
         width = 720

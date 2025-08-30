@@ -9,7 +9,7 @@ import org.openrndr.extra.noise.rsequence.rSeq3D
 import org.openrndr.math.Vector3
 
 /**
- * This demo renders a 3D visualizationof points distributed using the R3 quasirandom sequence. Each point is
+ * This demo renders a 3D visualization of points distributed using the R3 quasirandom sequence. Each point is
  * represented as a sphere and positioned in 3D space based on the quasirandom sequence values.
  *
  * The visualization setup includes:

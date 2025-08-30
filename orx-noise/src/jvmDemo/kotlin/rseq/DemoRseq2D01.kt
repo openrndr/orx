@@ -4,8 +4,7 @@ import org.openrndr.application
 import org.openrndr.extra.noise.rsequence.rSeq2D
 
 /**
- * This demo sets up a window with dimensions 720x720 and renders frames
- * demonstrating 2D quasirandomly distributed points. The points are generated
+ * Demonstrates quasirandomly distributed 2D points. The points are generated
  * using the R2 sequence and drawn as circles with a radius of 5.0.
  */
 fun main() = application {

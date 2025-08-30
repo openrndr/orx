@@ -10,17 +10,15 @@ import org.openrndr.extra.noise.hammersley.hammersley4D
 import org.openrndr.math.Vector4
 
 /**
- * Demo that visualizes a 4D Hammersley point set in a 3D space, with colors determined by the 4th dimension.
+ * Demo visualizing a 4D Hammersley point set in a 3D space, with colors determined by the 4th dimension.
  *
- * The application is configured at a resolution of 720x720 pixels. A sphere mesh is created
- * using the `sphereMesh` utility, and a total of 10,000 4D points are generated with the
- * `hammersley4D` sequence. These points are scaled, translated, and rendered as small spheres.
+ * A total of 10,000 4D points are generated with the `hammersley4D` sequence.
+ * These points are mapped to a cubical volume and rendered as small spheres.
  * The color of each sphere is modified based on the 4th dimension of its corresponding point by
  * shifting the hue in HSV color space.
  *
  * This program employs the `Orbital` extension, enabling camera interaction for 3D navigation
- * of the scene. Rendering occurs within the draw loop, providing continuous visualization
- * of the point distribution.
+ * of the scene.
  */
 fun main() = application {
     configure {

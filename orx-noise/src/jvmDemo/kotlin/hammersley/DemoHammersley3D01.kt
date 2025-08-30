@@ -11,14 +11,12 @@ import org.openrndr.math.Vector3
 /**
  * Demo program rendering a 3D visualization of points distributed using the Hammersley sequence in 3D space.
  *
- * The application is set up at a resolution of 720x720 pixels. Within the visual
- * program, a sphere mesh is created and a set of 1400 points is generated using
- * the Hammersley sequence. Each point is translated and rendered as a small sphere
- * in 3D space. This is achieved by mapping the generated points into a scaled domain.
+ * A set of 1400 points is generated using the Hammersley sequence.
+ * Each point is translated and rendered as a small sphere
+ * in 3D space.
  *
- * The rendering utilizes the Orbital extension, enabling an interactive 3D camera
- * to navigate the scene. The visualization relies on the draw loop for continuous
- * rendering of the points.
+ * The rendering uses the Orbital extension, enabling an interactive 3D camera
+ * to navigate the scene.
  */
 fun main() = application {
     configure {

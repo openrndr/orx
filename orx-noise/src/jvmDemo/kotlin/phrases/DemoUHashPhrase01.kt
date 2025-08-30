@@ -2,10 +2,15 @@ package phrases
 
 import org.openrndr.application
 import org.openrndr.draw.shadeStyle
-import org.openrndr.extra.noise.phrases.fhash13
+import org.openrndr.extra.shaderphrases.noise.fhash13Phrase
 
 /**
- * Demonstrate uniform hashing function phrase in a shadestyle
+ * Demonstrate the use of a uniform hashing function phrase in a ShadeStyle.
+ *
+ * The hashing function uses the screen coordinates and the current time to
+ * calculate the brightness of each pixel.
+ *
+ * Multiple GLSL hashing functions are defined in orx-shader-phrases.
  */
 fun main() = application {
     configure {
@@ -16,7 +21,10 @@ fun main() = application {
         extend {
             /** A custom shadestyle */
             val ss = shadeStyle {
-                fragmentPreamble = """$fhash13"""
+                fragmentPreamble = """
+                        $fhash13Phrase
+                    """.trimIndent()
+
                 fragmentTransform = """
                         float cf = fhash13(vec3(c_screenPosition, p_time));
                         x_fill = vec4(cf, cf, cf, 1.0);                                                                       
