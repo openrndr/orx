@@ -31,10 +31,10 @@ fun <E> List<E>.update(vararg updates: Pair<Int, E>): List<E> {
 
 /**
  * Helper for querying and adjusting [ShapeContour].
- * * An edge embodies exactly the same thing as a [Segment][org.openrndr.shape.Segment]
+ * * An edge embodies exactly the same thing as a [Segment2D][org.openrndr.shape.Segment2D]
  * * All edge operations are immutable and will create a new [ContourEdge] pointing to a copied and updated [ShapeContour]
  * @param contour the contour to be adjusted
- * @param segmentIndex the index of the segment of the contour to be adjusted
+ * @param segmentIndex the index the contour's segment to be adjusted
  * @param adjustments a list of [SegmentOperation] that have been applied to reach to [contour], this is used to inform [ShapeContour]
  * of changes in the contour topology.
  * @since 0.4.4
@@ -126,7 +126,7 @@ data class ContourEdge(
     }
 
     /**
-     * Split the edge in [numberOfParts] parts of equal length
+     * Split the edge in [parts] parts of equal length
      */
     fun splitIn(parts: Int): ContourEdge {
         if (contour.empty || parts < 2) {

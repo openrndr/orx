@@ -3,7 +3,6 @@ package adjust
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.loadFont
-import org.openrndr.extra.color.presets.DARK_CYAN
 import org.openrndr.extra.shapes.adjust.adjustContour
 import org.openrndr.extra.shapes.adjust.extensions.averageTangents
 import org.openrndr.extra.shapes.adjust.extensions.switchTangents
