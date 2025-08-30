@@ -172,13 +172,35 @@ The core elements to study to in this demo are `adjustContourSequence` and `laun
 
 [source code](src/jvmDemo/kotlin/adjust/DemoAdjustContourContinue01.kt)
 
-### alphashape/DemoAlphaShape
+### alphashape/DemoAlphaShape01
 
+Demonstrates the use of [AlphaShape] to create a [org.openrndr.shape.ShapeContour] out
+of a collection of random [Vector2] points. Unlike the convex hull, an Alpha shape can be concave.
 
+More details in [WikiPedia](https://en.wikipedia.org/wiki/Alpha_shape)
 
-![alphashape-DemoAlphaShapeKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/alphashape-DemoAlphaShapeKt.png)
+![alphashape-DemoAlphaShape01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/alphashape-DemoAlphaShape01Kt.png)
 
-[source code](src/jvmDemo/kotlin/alphashape/DemoAlphaShape.kt)
+[source code](src/jvmDemo/kotlin/alphashape/DemoAlphaShape01.kt)
+
+### alphashape/DemoAlphaShape02
+
+Demonstrates the use of [AlphaShape] to create ten
+[org.openrndr.shape.ShapeContour] instances out of a collection of random [Vector2] points.
+
+The same points are used for each contour, but an increased alpha parameter
+is passed to the AlphaShape algorithm. Higher values return more convex shapes
+= shapes with a larger surface.
+
+The list of shapes is reversed to draw the smaller contours on top, otherwise only
+the last one would be visible.
+
+An instance of [Random] with a fixed seed is used to ensure the resulting
+random shape is always the same.
+
+![alphashape-DemoAlphaShape02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/alphashape-DemoAlphaShape02Kt.png)
+
+[source code](src/jvmDemo/kotlin/alphashape/DemoAlphaShape02.kt)
 
 ### arrangement/DemoArrangement01
 
@@ -383,6 +405,14 @@ Demonstration of non-uniform contour blending
 ![operators-DemoRoundCorners01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/operators-DemoRoundCorners01Kt.png)
 
 [source code](src/jvmDemo/kotlin/operators/DemoRoundCorners01.kt)
+
+### operators/DemoRoundCorners02
+
+
+
+![operators-DemoRoundCorners02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/operators-DemoRoundCorners02Kt.png)
+
+[source code](src/jvmDemo/kotlin/operators/DemoRoundCorners02.kt)
 
 ### ordering/DemoHilbertOrder01
 
