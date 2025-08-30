@@ -11,7 +11,10 @@ import kotlin.math.PI
 import kotlin.math.cos
 
 /**
- * Demonstration of uniform contour blending
+ * Animated demonstration of uniform contour blending. Once a `ContourBlend` between two
+ * contours is created, it can be queried using the `.mix()` method to get a contour interpolated
+ * between the first one (when the blend argument is 0.0) and the second one (when the argument
+ * is 1.0)
  */
 fun main() = application {
     configure {

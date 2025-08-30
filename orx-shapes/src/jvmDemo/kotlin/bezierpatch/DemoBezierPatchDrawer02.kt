@@ -7,6 +7,17 @@ import org.openrndr.extra.color.spaces.toOKLABa
 import org.openrndr.extra.shapes.bezierpatches.bezierPatch
 import org.openrndr.shape.Circle
 
+/**
+ * Demonstrates how to use bezier patches with specified colors and displays text labels for
+ * the color space used in each. This method:
+ *
+ * - Creates two bezier patches with different color spaces (RGB and OKLab).
+ * - Draws these bezier patches using the drawer.
+ * - Renders text labels to differentiate the color spaces used.
+ *
+ * The bezier patches are created from closed circular contours and colored by specifying
+ * a grid of colors matching the patch's vertices.
+ */
 fun main() = application {
     configure {
         width = 720

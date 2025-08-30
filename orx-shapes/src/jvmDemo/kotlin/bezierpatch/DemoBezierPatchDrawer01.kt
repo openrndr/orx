@@ -5,6 +5,15 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.shapes.bezierpatches.bezierPatch
 import org.openrndr.shape.Circle
 
+/**
+ * Demonstrates how to draw a bezier patch and its corresponding contours.
+ * The bezier patch is generated from a circular shape and is assigned colors
+ * for each control point. The patch is subdivided into horizontal and vertical
+ * contours, which are rendered to visualize the structure of the bezier patch.
+ *
+ * The bezier patch constructor expects a contour with 4 segments, for example
+ * a rectangular contour or a circle, which in OPENRNDR is made out of 4 segments.
+ */
 fun main() = application {
     program {
         extend {

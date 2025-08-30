@@ -13,6 +13,15 @@ import kotlin.math.cos
 
 /**
  * Demonstration of non-uniform contour blending
+ *
+ * The `mix` method of a `ContourBlend` does not only accept a Double, but also a function.
+ * This function should take one Double argument, which specifies the normalized `t` value between
+ * the start and the end of the contour, and should return a normalized value indicating the
+ * morphing state between the first contour and the second contour, for that specific t value.
+ *
+ * This allows us, for instance, to morph one part of the shape first, then have other parts follow.
+ *
+ * This demo shows a grid of 9 contours which are part circle and part 5-point start.
  */
 fun main() = application {
     configure {

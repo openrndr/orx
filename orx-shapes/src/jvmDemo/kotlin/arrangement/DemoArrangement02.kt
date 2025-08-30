@@ -10,6 +10,14 @@ import org.openrndr.extra.shapes.arrangement.BoundedFace
 import org.openrndr.extra.shapes.hobbycurve.hobbyCurve
 import kotlin.random.Random
 
+/**
+ * Demonstrates the use of Arrangement to create a 2D arrangement of shapes using a self-intersecting curve.
+ *
+ * For self-intersections we need to pass the same curve twice as arguments to Arrangement.
+ * The specific curve used results in 4 intersection points.
+ *
+ * This demo shows how we can query and visualize the neighborhoods of those 4 vertices.
+ */
 fun main() = application {
     configure {
         width = 800
@@ -21,7 +29,7 @@ fun main() = application {
         val uniformPoints = poissonDiskSampling(drawer.bounds.offsetEdges(-200.0), 100.0, random=Random(10579))
         val curve = hobbyCurve(uniformPoints, closed=true)
 
-        // Construct an arrangement of the curve. In order to obtain an arrangement dealing with self intersections,
+        // Construct an arrangement of the curve. To get an arrangement dealing with self-intersections,
         // the curve is passed in twice.
         val arrangement = Arrangement(curve, curve)
 

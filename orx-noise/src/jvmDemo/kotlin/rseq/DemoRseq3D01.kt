@@ -13,7 +13,6 @@ import org.openrndr.math.Vector3
  * represented as a sphere and positioned in 3D space based on the quasirandom sequence values.
  *
  * The visualization setup includes:
- * - Configuration of application window size to 720x720.
  * - Usage of an orbital camera for interactive 3D navigation.
  * - Creation of a reusable sphere mesh with a specified radius.
  * - Generation of quasirandom points in 3D space using the `rSeq3D` function.

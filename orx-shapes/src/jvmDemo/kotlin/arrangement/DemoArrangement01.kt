@@ -12,6 +12,14 @@ import org.openrndr.shape.Rectangle
 import org.openrndr.shape.Shape
 import kotlin.random.Random
 
+/**
+ * Demonstrates the use of Arrangement to create a 2D arrangement of shapes.
+ *
+ * The Arrangement constructor takes as arguments instances of [org.openrndr.shape.ShapeProvider]s.
+ *
+ * Once constructed, we can request `originFaces`, `edges`, `vertices`, `boundaries` and `holes`,
+ * to render or manipulate them further as needed.
+ */
 fun main() = application {
     configure {
         width = 800

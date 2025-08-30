@@ -11,10 +11,9 @@ import org.openrndr.math.Vector4
 
 /**
  * Demo that presents a 3D visualization of points distributed using a 4D quasirandom sequence (R4).
- * Each point is represented as a sphere with it position and color derived from the sequence values.
+ * Each point is represented as a sphere with its position and color derived from the sequence values.
  *
  * This function performs the following tasks:
- * - Configures the application window dimensions to 720x720 pixels.
  * - Initializes a 3D camera for orbital navigation of the scene.
  * - Generates 10,000 points in 4D space using the `rSeq4D` function. The points are scaled
  *   and transformed into 3D positions with an additional w-coordinate for color variation.
