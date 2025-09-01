@@ -118,80 +118,80 @@ class MidiTransceiver(program: Program, val receiverDevice: MidiDevice?, val tra
         }
     }
 
+    private fun trigger(message: MidiMessage) {
+        val cmd = message.message
+        val channel = (cmd[0].toInt() and 0xff) and 0x0f
+        when (val eventType = message.eventType) {
+
+            MidiEventType.NOTE_ON -> {
+                val key = cmd[1].toInt() and 0xff
+                val velocity = cmd[2].toInt() and 0xff
+                if (velocity > 0) {
+                    noteOn.trigger(MidiEvent.noteOn(channel, key, velocity))
+                } else {
+                    noteOff.trigger(MidiEvent.noteOff(channel, key, velocity))
+                }
+            }
+
+            MidiEventType.NOTE_OFF -> noteOff.trigger(
+                MidiEvent.noteOff(
+                    channel,
+                    cmd[1].toInt() and 0xff,
+                    cmd[2].toInt() and 0xff
+                )
+            )
+
+            MidiEventType.CONTROL_CHANGE -> controlChanged.trigger(
+                MidiEvent.controlChange(
+                    channel,
+                    cmd[1].toInt() and 0xff,
+                    cmd[2].toInt() and 0xff
+                )
+            )
+
+            MidiEventType.PROGRAM_CHANGE -> programChanged.trigger(
+                MidiEvent.programChange(
+                    channel,
+                    cmd[1].toInt() and 0xff
+                )
+            )
+
+            MidiEventType.CHANNEL_PRESSURE -> channelPressure.trigger(
+                MidiEvent.channelPressure(
+                    channel,
+                    cmd[1].toInt() and 0xff
+                )
+            )
+
+            // https://sites.uci.edu/camp2014/2014/04/30/managing-midi-pitchbend-messages/
+            // The next operation to combine two 7bit values
+            // was verified to give the same results as the Linux
+            // `midisnoop` program while using an `Alesis Vortex
+            // Wireless 2` device. This MIDI device does not provide a
+            // full range 14 bit pitch-bend resolution though, so
+            // a different device is needed to confirm the pitch bend
+            // values slide as expected from -8192 to +8191.
+            MidiEventType.PITCH_BEND -> pitchBend.trigger(
+                MidiEvent.pitchBend(
+                    channel,
+                    (cmd[2].toInt() shl 25 shr 18) + cmd[1].toInt()
+                )
+            )
+
+            else -> {
+                logger.trace { "Unsupported MIDI event type: $eventType" }
+            }
+
+        }
+    }
+
     init {
         transmitter?.receiver = object : MidiDeviceReceiver {
             override fun getMidiDevice(): MidiDevice? {
                 return null
             }
-
             override fun send(message: MidiMessage, timeStamp: Long) {
-                val cmd = message.message
-                val channel = (cmd[0].toInt() and 0xff) and 0x0f
-                val velocity = cmd[2].toInt() and 0xff
-                when ((cmd[0].toInt() and 0xff) and 0xf0) {
-
-
-
-                    ShortMessage.NOTE_ON -> if (velocity > 0) {
-                        noteOn.trigger(
-                            MidiEvent.noteOn(
-                                channel,
-                                cmd[1].toInt() and 0xff,
-                                velocity
-                            )
-                        )
-                    } else {
-                        noteOff.trigger(
-                            MidiEvent.noteOff(
-                                channel,
-                                cmd[1].toInt() and 0xff
-                            )
-                        )
-                    }
-
-                    ShortMessage.NOTE_OFF -> noteOff.trigger(
-                        MidiEvent.noteOff(
-                            channel,
-                            cmd[1].toInt() and 0xff
-                        )
-                    )
-
-                    ShortMessage.CONTROL_CHANGE -> controlChanged.trigger(
-                        MidiEvent.controlChange(
-                            channel,
-                            cmd[1].toInt() and 0xff,
-                            cmd[2].toInt() and 0xff
-                        )
-                    )
-
-                    ShortMessage.PROGRAM_CHANGE -> programChanged.trigger(
-                        MidiEvent.programChange(
-                            channel,
-                            cmd[1].toInt() and 0xff
-                        )
-                    )
-
-                    ShortMessage.CHANNEL_PRESSURE -> channelPressure.trigger(
-                        MidiEvent.channelPressure(
-                            channel,
-                            cmd[1].toInt() and 0xff
-                        )
-                    )
-                    // https://sites.uci.edu/camp2014/2014/04/30/managing-midi-pitchbend-messages/
-                    // The next operation to combine two 7bit values
-                    // was verified to give the same results as the Linux
-                    // `midisnoop` program while using an `Alesis Vortex
-                    // Wireless 2` device. This MIDI device does not provide a
-                    // full range 14 bit pitch-bend resolution though, so
-                    // a different device is needed to confirm the pitch bend
-                    // values slide as expected from -8192 to +8191.
-                    ShortMessage.PITCH_BEND -> pitchBend.trigger(
-                        MidiEvent.pitchBend(
-                            channel,
-                            (cmd[2].toInt() shl 25 shr 18) + cmd[1].toInt()
-                        )
-                    )
-                }
+                trigger(message)
             }
             override fun close() {
             }
@@ -212,64 +212,45 @@ class MidiTransceiver(program: Program, val receiverDevice: MidiDevice?, val tra
     val pitchBend = Event<MidiEvent>("midi-transceiver::pitch-bend")
 
     fun controlChange(channel: Int, control: Int, value: Int) {
-        if (receiver != null && receiverDevice != null) {
-            try {
-                val msg = ShortMessage(ShortMessage.CONTROL_CHANGE, channel, control, value)
-                receiver.send(msg, receiverDevice.microsecondPosition)
-            } catch (e: InvalidMidiDataException) {
-                logger.warn { e.message }
-            }
-        }
+        send { ShortMessage(ShortMessage.CONTROL_CHANGE, channel, control, value) }
     }
 
     fun programChange(channel: Int, program: Int) {
-        if (receiver != null && receiverDevice != null) {
-            try {
-                val msg = ShortMessage(ShortMessage.PROGRAM_CHANGE, channel, program)
-                receiver.send(msg, receiverDevice.microsecondPosition)
-            } catch (e: InvalidMidiDataException) {
-                logger.warn { e.message }
-            }
-        }
+        send { ShortMessage(ShortMessage.PROGRAM_CHANGE, channel, program) }
     }
 
     fun noteOn(channel: Int, key: Int, velocity: Int) {
-        if (receiver != null && receiverDevice != null) {
-            try {
-                val msg = ShortMessage(ShortMessage.NOTE_ON, channel, key, velocity)
-                receiver.send(msg, receiverDevice.microsecondPosition)
-            } catch (e: InvalidMidiDataException) {
-                logger.warn { e.message }
-            }
-        }
+        send { ShortMessage(ShortMessage.NOTE_ON, channel, key, velocity) }
+    }
+
+    fun noteOff(channel: Int, key: Int, velocity: Int) {
+        send { ShortMessage(ShortMessage.NOTE_OFF, channel, key, velocity) }
     }
 
     fun channelPressure(channel: Int, value: Int) {
-        if (receiver != null && receiverDevice != null) {
-            try {
-                val msg = ShortMessage(ShortMessage.CHANNEL_PRESSURE, channel, value)
-                receiver.send(msg, receiverDevice.microsecondPosition)
-            } catch (e: InvalidMidiDataException) {
-                logger.warn { e.message }
-            }
-        }
+        send { ShortMessage(ShortMessage.CHANNEL_PRESSURE, channel, value) }
     }
 
     fun pitchBend(channel: Int, value: Int) {
-        if (receiver != null && receiverDevice != null) {
-            try {
-                val msg = ShortMessage(ShortMessage.PITCH_BEND, channel, value)
-                receiver.send(msg, receiverDevice.microsecondPosition)
-            } catch (e: InvalidMidiDataException) {
-                logger.warn { e.message }
-            }
-        }
+        send { ShortMessage(ShortMessage.PITCH_BEND, channel, value) }
     }
 
     fun destroy() {
         receiverDevice?.close()
         transmitterDevicer?.close()
     }
+
+    private fun send(block: () -> MidiMessage) {
+        if (receiver != null && receiverDevice != null) {
+            try {
+                val msg = block()
+                receiver.send(msg, receiverDevice.microsecondPosition)
+            } catch (e: InvalidMidiDataException) {
+                logger.warn { e.message }
+            }
+        }
+    }
+
 }
 
 /**
