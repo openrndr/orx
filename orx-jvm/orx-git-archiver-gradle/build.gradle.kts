@@ -3,6 +3,8 @@ plugins {
     `java-gradle-plugin`
 }
 
+apply(plugin = "maven-publish")
+
 dependencies {
     implementation(project(":orx-jvm:orx-git-archiver"))
 }
@@ -49,6 +51,6 @@ publishing {
             }
         }
         tasks.findByName("publishPluginMavenPublicationToNmcpRepository")!!.dependsOn("signMavenPublication")
-        tasks.findByName("publishMavenPublicationToNmcpRepository")!!.dependsOn("signPluginMavenPublication")
+        //tasks.findByName("publishMavenPublicationToNmcpRepository")!!.dependsOn("signPluginMavenPublication")
     }
 }
