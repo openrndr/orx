@@ -125,7 +125,7 @@ class Camera2D : Extension, ChangeEvents {
             translate(rotationCenter)
             rotate(angle)
             translate(-rotationCenter)
-        }
+        } * view
     }
 
     /**
