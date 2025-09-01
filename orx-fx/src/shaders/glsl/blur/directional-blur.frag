@@ -1,8 +1,8 @@
 in vec2 v_texCoord0;
 
 uniform bool centerWindow;
-uniform sampler2D tex0;// image
-uniform sampler2D tex1;// blurDirection
+uniform sampler2D tex0; // image
+uniform sampler2D tex1; // blurDirection
 uniform vec2 textureSize0;
 
 uniform int window;
@@ -17,15 +17,11 @@ out vec4 o_color;
 
 vec2 wrap(vec2 uv) {
     vec2 res = uv;
-    if (wrapX) {
-        res.x = mod(res.x, 1.0);
-    }
-    if (wrapY) {
-        res.y = mod(res.y, 1.0);
-    }
+    if (wrapX) { res.x = fract(res.x); }
+    if (wrapY) { res.y = fract(res.y); }
     return res;
-
 }
+
 void main() {
     vec2 s = textureSize0;
     s = vec2(1.0 / s.x, 1.0 / s.y);
@@ -37,15 +33,14 @@ void main() {
     }
     float weight = 0.0;
 
-    int start = centerWindow? -window/2 : 0;
-    int end = centerWindow? window/2 + 1 : window;
+    int start = centerWindow ? -window / 2 : 0;
+    int end = centerWindow ? window / 2 + 1 : window;
 
-
-    for (int x = 0; x < window; ++x) {
+    for (int x = start; x < end; ++x) {
         sum += texture(tex0, wrap(v_texCoord0 + float(x) * blurDirection * s * spread));
         weight += 1.0;
     }
 
-    vec4 result = (sum/weight) * gain;
+    vec4 result = (sum / weight) * gain;
     o_color = result;
 }

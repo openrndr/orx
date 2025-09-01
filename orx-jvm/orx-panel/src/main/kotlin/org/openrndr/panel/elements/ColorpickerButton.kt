@@ -2,6 +2,7 @@ package org.openrndr.panel.elements
 
 import kotlinx.coroutines.yield
 import org.openrndr.color.ColorRGBa
+import org.openrndr.color.Linearity
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.LineCap
 
@@ -16,7 +17,7 @@ class ColorpickerButton : Element(ElementType("colorpicker-button")), Disposable
     override var disposed: Boolean = false
 
     var label: String = "OK"
-    var color: ColorRGBa = ColorRGBa(0.5, 0.5, 0.5)
+    var color: ColorRGBa = ColorRGBa(0.5, 0.5, 0.5, linearity = Linearity.SRGB)
         set(value) {
             if (value != field) {
                 field = value
@@ -74,13 +75,13 @@ class ColorpickerButton : Element(ElementType("colorpicker-button")), Disposable
             val offset = Math.round((layout.screenWidth - textWidth) / 2.0)
             val yOffset = Math.round((layout.screenHeight / 2) + textHeight / 2.0) - 2.0
 
-            drawer.fill = ((computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE)
+            drawer.fill = (computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE
             drawer.fontMap = font
             drawer.text(text, 0.0 + offset, 0.0 + yOffset)
-            drawer.stroke = (color)
+            drawer.stroke = color
             drawer.pushStyle()
-            drawer.strokeWeight = (4.0)
-            drawer.lineCap = (LineCap.ROUND)
+            drawer.strokeWeight = 4.0
+            drawer.lineCap = LineCap.ROUND
             drawer.lineSegment(2.0, layout.screenHeight - 2.0, layout.screenWidth - 2.0, layout.screenHeight - 2.0)
             drawer.popStyle()
         }

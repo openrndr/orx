@@ -1,9 +1,7 @@
 import org.openrndr.application
 
-fun main() {
-    application {
-        program {
+fun main() = application {
+    program {
 
-        }
     }
 }

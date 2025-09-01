@@ -71,6 +71,17 @@ fun main() = application {
 <!-- __demos__ -->
 ## Demos
 ### DemoImageFit01
-[source code](src/jvmDemo/kotlin/DemoImageFit01.kt)
+
+Tests `drawer.imageFit()` with all FitMethods for portrait and landscape images.
 
 ![DemoImageFit01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-image-fit/images/DemoImageFit01Kt.png)
+
+[source code](src/jvmDemo/kotlin/DemoImageFit01.kt)
+
+### DemoImageFitSub01
+
+
+
+![DemoImageFitSub01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-image-fit/images/DemoImageFitSub01Kt.png)
+
+[source code](src/jvmDemo/kotlin/DemoImageFitSub01.kt)

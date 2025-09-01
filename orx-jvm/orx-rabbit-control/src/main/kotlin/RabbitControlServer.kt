@@ -87,13 +87,11 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
          */
         val server = embeddedServer(Netty, port = staticFilesPort) {
             routing {
-                static("/rabbit-client") {
-                    resources("rabbit-client")
-                }
+                staticResources("/rabbit-client", "rabbit-client")
             }
         }
         server.start()
-        webServer = server
+        webServer = server.engine
 
         /**
          * Print the address
@@ -108,7 +106,7 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
         /**
          * Update the object when it has been updated in RabbitControl
          */
-        rabbitServer.setUpdateListener {
+        rabbitServer.addUpdateListener {
             val (obj, orxParameter) = parameterMap[it]!!
             when(it) {
                 is Int32Parameter -> {
@@ -253,7 +251,7 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
     override fun shutdown(program: Program) {
         transporter.dispose()
         rabbitholeTransporter?.dispose()
-        webServer?.stop(0, 0)
+        webServer?.stop(50, 50)
     }
 
     private fun getQRCodeImage(barcodeText: String): ColorBuffer {

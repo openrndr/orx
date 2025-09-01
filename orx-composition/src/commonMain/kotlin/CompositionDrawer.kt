@@ -1,7 +1,7 @@
 package org.openrndr.extra.composition
 
 import org.openrndr.collections.pflatMap
-import org.openrndr.collections.pforEach
+import org.openrndr.collections.pmap
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ColorBuffer
 import org.openrndr.draw.LineCap
@@ -12,6 +12,9 @@ import org.openrndr.math.Vector3
 import org.openrndr.math.YPolarity
 import org.openrndr.math.transforms.*
 import org.openrndr.shape.*
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.jvm.JvmRecord
 
 /**
@@ -80,7 +83,12 @@ data class ShapeNodeIntersection(val node: ShapeNode, val intersection: ContourI
  * in a [ShapeContour] closest to some other 2D point.
  */
 @JvmRecord
-data class ShapeNodeNearestContour(val node: ShapeNode, val point: ContourPoint, val distanceDirection: Vector2, val distance: Double)
+data class ShapeNodeNearestContour(
+    val node: ShapeNode,
+    val point: ContourPoint,
+    val distanceDirection: Vector2,
+    val distance: Double
+)
 
 /**
  * Merges two lists of [ShapeNodeIntersection] removing duplicates under the
@@ -104,9 +112,10 @@ fun List<ShapeNodeIntersection>.merge(threshold: Double = 0.5): List<ShapeNodeIn
  * A Drawer-like interface for the creation of Compositions
  * This should be easier than creating Compositions manually
  */
-class CompositionDrawer(documentBounds: CompositionDimensions = defaultCompositionDimensions,
-                        composition: Composition? = null,
-                        cursor: GroupNode? = composition?.root as? GroupNode
+class CompositionDrawer(
+    documentBounds: CompositionDimensions = defaultCompositionDimensions,
+    composition: Composition? = null,
+    cursor: GroupNode? = composition?.root as? GroupNode
 ) {
     val root = (composition?.root as? GroupNode) ?: GroupNode()
     val composition = composition ?: Composition(root, documentBounds)
@@ -194,7 +203,11 @@ class CompositionDrawer(documentBounds: CompositionDimensions = defaultCompositi
         drawStyle = styleStack.removeLast()
     }
 
+    @OptIn(ExperimentalContracts::class)
     fun isolated(draw: CompositionDrawer.() -> Unit) {
+        contract {
+            callsInPlace(draw, InvocationKind.EXACTLY_ONCE)
+        }
         pushModel()
         pushStyle()
         draw()
@@ -202,7 +215,11 @@ class CompositionDrawer(documentBounds: CompositionDimensions = defaultCompositi
         popStyle()
     }
 
+    @OptIn(ExperimentalContracts::class)
     fun GroupNode.with(builder: CompositionDrawer.() -> Unit): GroupNode {
+        contract {
+            callsInPlace(builder, InvocationKind.EXACTLY_ONCE)
+        }
         val oldCursor = cursor
         cursor = this
         builder()
@@ -216,7 +233,12 @@ class CompositionDrawer(documentBounds: CompositionDimensions = defaultCompositi
      * @param id an optional identifier
      * @param builder the function that is executed inside the group context
      */
+    @OptIn(ExperimentalContracts::class)
     fun group(insert: Boolean = true, id: String? = null, builder: CompositionDrawer.() -> Unit): GroupNode {
+        contract {
+            callsInPlace(builder, InvocationKind.EXACTLY_ONCE)
+        }
+
         val group = GroupNode()
         group.id = id
         val oldCursor = cursor
@@ -267,8 +289,8 @@ class CompositionDrawer(documentBounds: CompositionDimensions = defaultCompositi
      * @return an optional org.openrndr.shape.ShapeNodeNearestContour instance
      */
     fun nearest(
-            point: Vector2,
-            searchFrom: CompositionNode = composition.root as GroupNode
+        point: Vector2,
+        searchFrom: CompositionNode = composition.root as GroupNode
     ): ShapeNodeNearestContour? {
         return distances(point, searchFrom).firstOrNull()
     }
@@ -297,13 +319,13 @@ class CompositionDrawer(documentBounds: CompositionDimensions = defaultCompositi
      * @return a sorted list of [ShapeNodeNearestContour] describing distance to every contour
      */
     fun distances(
-            point: Vector2,
-            searchFrom: CompositionNode = composition.root as GroupNode
+        point: Vector2,
+        searchFrom: CompositionNode = composition.root as GroupNode
     ): List<ShapeNodeNearestContour> {
         return searchFrom.findShapes().flatMap { node ->
             node.shape.contours.filter { !it.empty }
-                    .map { it.nearest(point) }
-                    .map { ShapeNodeNearestContour(node, it, point - it.position, it.position.distanceTo(point)) }
+                .map { it.nearest(point) }
+                .map { ShapeNodeNearestContour(node, it, point - it.position, it.position.distanceTo(point)) }
         }.sortedBy { it.distance }
     }
 
@@ -342,7 +364,7 @@ class CompositionDrawer(documentBounds: CompositionDimensions = defaultCompositi
     }
 
     fun CompositionNode.intersections(contour: ShapeContour, mergeThreshold: Double = 0.5) =
-            intersections(contour, this, mergeThreshold)
+        intersections(contour, this, mergeThreshold)
 
     /**
      * Test a given `shape` against org.openrndr.shape.contours in the composition tree
@@ -361,7 +383,7 @@ class CompositionDrawer(documentBounds: CompositionDimensions = defaultCompositi
     }
 
     fun CompositionNode.intersections(shape: Shape, mergeThreshold: Double = 0.5) =
-            intersections(shape, this, mergeThreshold)
+        intersections(shape, this, mergeThreshold)
 
 
     fun shape(shape: Shape, insert: Boolean = true): ShapeNode? {
@@ -388,6 +410,7 @@ class CompositionDrawer(documentBounds: CompositionDimensions = defaultCompositi
                         shapeNode.transform = model
                         Matrix44.IDENTITY
                     }
+
                     TransformMode.APPLY -> {
                         shapeNode.transform = Matrix44.IDENTITY
                         model
@@ -408,6 +431,7 @@ class CompositionDrawer(documentBounds: CompositionDimensions = defaultCompositi
                         }
                         toInsert
                     }
+
                     else -> error("unreachable")
                 }
                 shapeNode.stroke = stroke
@@ -425,29 +449,28 @@ class CompositionDrawer(documentBounds: CompositionDimensions = defaultCompositi
                 }
                 shapeNode
             }
+
             else -> {
                 val shapeNodes = (if (!clipMode.grouped) composition.findShapes() else cursor.findShapes())
-                val toRemove = mutableListOf<CompositionNode>()
-                shapeNodes.pforEach { shapeNode ->
+                val toRemove = shapeNodes.pmap { shapeNode ->
                     val inverse = shapeNode.effectiveTransform.inversed
                     val transformedShape = postShape.transform(inverse * model)
                     val operated =
-                            when (clipMode.op) {
-                                ClipOp.INTERSECT -> intersection(shapeNode.shape, transformedShape)
-                                ClipOp.UNION -> union(shapeNode.shape, transformedShape)
-                                ClipOp.DIFFERENCE -> difference(shapeNode.shape, transformedShape)
-                                else -> error("unsupported base op ${clipMode.op}")
-                            }
-                    if (!operated.empty) {
+                        when (clipMode.op) {
+                            ClipOp.INTERSECT -> intersection(shapeNode.shape, transformedShape)
+                            ClipOp.UNION -> union(shapeNode.shape, transformedShape)
+                            ClipOp.DIFFERENCE -> difference(shapeNode.shape, transformedShape)
+                            else -> error("unsupported base op ${clipMode.op}")
+                        }
+                    return@pmap if (!operated.empty) {
                         shapeNode.shape = operated
+                        null
                     } else {
-                        //synchronized(toRemove) {
-                            toRemove.add(shapeNode)
-                        //}
+                        shapeNode
                     }
                 }
                 for (node in toRemove) {
-                    node.remove()
+                    node?.remove()
                 }
                 null
             }
@@ -456,38 +479,45 @@ class CompositionDrawer(documentBounds: CompositionDimensions = defaultCompositi
 
     fun shapes(shapes: List<Shape>, insert: Boolean = true) = shapes.map { shape(it, insert) }
 
-    fun rectangle(rectangle: Rectangle, closed: Boolean = true, insert: Boolean = true) = contour(rectangle.contour.let {
-        if (closed) {
-            it
-        } else {
-            it.open
-        }
-    }, insert = insert)
+    fun rectangle(rectangle: Rectangle, closed: Boolean = true, insert: Boolean = true) =
+        contour(rectangle.contour.let {
+            if (closed) {
+                it
+            } else {
+                it.open
+            }
+        }, insert = insert)
 
-    fun rectangle(x: Double, y: Double, width: Double, height: Double, closed: Boolean = true, insert: Boolean = true) = rectangle(
-        Rectangle(x, y, width, height), closed, insert)
+    fun rectangle(x: Double, y: Double, width: Double, height: Double, closed: Boolean = true, insert: Boolean = true) =
+        rectangle(
+            Rectangle(x, y, width, height), closed, insert
+        )
 
     fun rectangles(rectangles: List<Rectangle>, insert: Boolean = true) = rectangles.map { rectangle(it, insert) }
 
-    fun rectangles(positions: List<Vector2>, width: Double, height: Double, insert: Boolean = true) = rectangles(positions.map {
-        Rectangle(it, width, height)
-    }, insert)
+    fun rectangles(positions: List<Vector2>, width: Double, height: Double, insert: Boolean = true) =
+        rectangles(positions.map {
+            Rectangle(it, width, height)
+        }, insert)
 
-    fun rectangles(positions: List<Vector2>, dimensions: List<Vector2>, insert: Boolean) = rectangles((positions zip dimensions).map {
-        Rectangle(it.first, it.second.x, it.second.y)
-    }, insert)
+    fun rectangles(positions: List<Vector2>, dimensions: List<Vector2>, insert: Boolean) =
+        rectangles((positions zip dimensions).map {
+            Rectangle(it.first, it.second.x, it.second.y)
+        }, insert)
 
     fun circle(x: Double, y: Double, radius: Double, closed: Boolean = true, insert: Boolean = true) = circle(
         Circle(
             Vector2(x, y),
             radius
-        ), closed, insert)
+        ), closed, insert
+    )
 
     fun circle(position: Vector2, radius: Double, closed: Boolean = true, insert: Boolean = true) = circle(
         Circle(
             position,
             radius
-        ), closed, insert)
+        ), closed, insert
+    )
 
     fun circle(circle: Circle, closed: Boolean = true, insert: Boolean = true) = contour(circle.contour.let {
         if (closed) {
@@ -506,12 +536,13 @@ class CompositionDrawer(documentBounds: CompositionDimensions = defaultCompositi
         )
     }, insert)
 
-    fun circles(positions: List<Vector2>, radii: List<Double>, insert: Boolean = true) = circles((positions zip radii).map {
-        Circle(
-            it.first,
-            it.second
-        )
-    }, insert)
+    fun circles(positions: List<Vector2>, radii: List<Double>, insert: Boolean = true) =
+        circles((positions zip radii).map {
+            Circle(
+                it.first,
+                it.second
+            )
+        }, insert)
 
     /*
     fun ellipse(
@@ -542,17 +573,17 @@ class CompositionDrawer(documentBounds: CompositionDimensions = defaultCompositi
 
 
     fun lineSegment(
-            startX: Double,
-            startY: Double,
-            endX: Double,
-            endY: Double,
-            insert: Boolean = true
+        startX: Double,
+        startY: Double,
+        endX: Double,
+        endY: Double,
+        insert: Boolean = true
     ) = lineSegment(LineSegment(startX, startY, endX, endY), insert)
 
     fun lineSegment(
-            start: Vector2,
-            end: Vector2,
-            insert: Boolean = true
+        start: Vector2,
+        end: Vector2,
+        insert: Boolean = true
     ) = lineSegment(LineSegment(start, end), insert)
 
     fun lineSegment(
@@ -601,19 +632,19 @@ class CompositionDrawer(documentBounds: CompositionDimensions = defaultCompositi
     }
 
     fun lineStrip(
-            points: List<Vector2>,
-            insert: Boolean = true
+        points: List<Vector2>,
+        insert: Boolean = true
     ) = contour(ShapeContour.fromPoints(points, false, YPolarity.CW_NEGATIVE_Y), insert)
 
     fun lineLoop(
-            points: List<Vector2>,
-            insert: Boolean = true
+        points: List<Vector2>,
+        insert: Boolean = true
     ) = contour(ShapeContour.fromPoints(points, true, YPolarity.CW_NEGATIVE_Y), insert)
 
     fun text(
-            text: String,
-            position: Vector2,
-            insert: Boolean = true
+        text: String,
+        position: Vector2,
+        insert: Boolean = true
     ): TextNode {
         val g = GroupNode()
         g.style.transform = Transform.Matrix(transform { translate(position.xy0) })
@@ -644,18 +675,18 @@ class CompositionDrawer(documentBounds: CompositionDimensions = defaultCompositi
     }
 
     fun texts(text: List<String>, positions: List<Vector2>) =
-            (text zip positions).map {
-                text(it.first, it.second)
-            }
+        (text zip positions).map {
+            text(it.first, it.second)
+        }
 
     /**
      * Adds an image to the composition tree
      */
     fun image(
-            image: ColorBuffer,
-            x: Double = 0.0,
-            y: Double = 0.0,
-            insert: Boolean = true
+        image: ColorBuffer,
+        x: Double = 0.0,
+        y: Double = 0.0,
+        insert: Boolean = true
     ): ImageNode {
         val node = ImageNode(image, x, y, width = image.width.toDouble(), height = image.height.toDouble())
         node.style.transform = Transform.Matrix(this.model)
@@ -699,7 +730,11 @@ class CompositionDrawer(documentBounds: CompositionDimensions = defaultCompositi
         }
     }
 
+    @OptIn(ExperimentalContracts::class)
     fun CompositionNode.transform(builder: TransformBuilder.() -> Unit) {
+        contract {
+            callsInPlace(builder, kotlin.contracts.InvocationKind.EXACTLY_ONCE)
+        }
         return this.transform(builder)
     }
 
@@ -715,12 +750,15 @@ class CompositionDrawer(documentBounds: CompositionDimensions = defaultCompositi
                 is ImageNode -> {
                     ImageNode(node.image, node.x, node.y, node.width, node.height)
                 }
+
                 is ShapeNode -> {
                     ShapeNode(node.shape)
                 }
+
                 is TextNode -> {
                     TextNode(node.text, node.contour)
                 }
+
                 is GroupNode -> {
                     val children = node.children.map { nodeCopy(it) }.toMutableList()
                     val groupNode = GroupNode(children)
@@ -744,20 +782,39 @@ class CompositionDrawer(documentBounds: CompositionDimensions = defaultCompositi
 }
 
 /**
- * Creates a [Composition]. The draw operations contained inside
- * the [drawFunction] do not render graphics to the screen,
- * but populate the Composition instead.
+ * Draws a vector composition by applying a provided drawing function.
+ *
+ * @param documentBounds Defines the dimensions and bounds of the composition. Defaults to `defaultCompositionDimensions`.
+ * @param composition The target composition to be drawn on. If null, a new composition will be created.
+ * @param cursor Specifies the current position within the composition structure. Defaults to the root of the given composition cast as a `GroupNode`.
+ * @param drawFunction The actual drawing logic that will be executed in the drawing context of the `CompositionDrawer`.
+ * @return The resulting `Composition` after applying the drawing function.
  */
+@OptIn(ExperimentalContracts::class)
 fun drawComposition(
     documentBounds: CompositionDimensions = defaultCompositionDimensions,
     composition: Composition? = null,
     cursor: GroupNode? = composition?.root as? GroupNode,
     drawFunction: CompositionDrawer.() -> Unit
-): Composition = CompositionDrawer(documentBounds, composition, cursor).apply { drawFunction() }.composition
+): Composition {
+    contract {
+        callsInPlace(drawFunction, InvocationKind.EXACTLY_ONCE)
+    }
+    return CompositionDrawer(documentBounds, composition, cursor).apply { drawFunction() }.composition
+}
 
 /**
- * Draw into an existing [Composition].
+ * Draws content into an existing composition using the provided drawing function.
+ *
+ * @param cursor an optional [GroupNode] that serves as the starting point for drawing.
+ * Defaults to the root of the composition if not provided.
+ * @param drawFunction the drawing logic to be executed using a [CompositionDrawer].
+ * This function should contain instructions to draw content into the composition.
  */
-fun Composition.draw(drawFunction: CompositionDrawer.() -> Unit) {
+@OptIn(ExperimentalContracts::class)
+fun Composition.draw(cursor: GroupNode? = this.root as? GroupNode, drawFunction: CompositionDrawer.() -> Unit) {
+    contract {
+        callsInPlace(drawFunction, InvocationKind.EXACTLY_ONCE)
+    }
     drawComposition(composition = this, drawFunction = drawFunction)
 }

@@ -1,5 +1,8 @@
 import org.openrndr.application
-import org.openrndr.draw.*
+import org.openrndr.draw.BufferPrimitiveType
+import org.openrndr.draw.shadeStyle
+import org.openrndr.draw.shaderStorageBuffer
+import org.openrndr.draw.shaderStorageFormat
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
@@ -46,6 +49,5 @@ fun main() = application {
             // Therefore the value of `f1` can vary from frame to frame,
             // because we don't know how many times `+= 2.0` was executed.
         }
-
     }
 }

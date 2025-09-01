@@ -1,6 +1,5 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.gui.GUI
 import org.openrndr.extra.gui.GUIAppearance
 import org.openrndr.extra.parameters.*
@@ -12,13 +11,6 @@ import org.openrndr.shape.Circle
  */
 fun main() = application {
     program {
-        // -- this block is for automation purposes only
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
-
         val gui = GUI(GUIAppearance(baseColor = ColorRGBa.GRAY.opacify(0.9), barWidth = 400))
         gui.compartmentsCollapsedByDefault = false
 

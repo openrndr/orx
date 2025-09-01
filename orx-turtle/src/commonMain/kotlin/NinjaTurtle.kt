@@ -39,7 +39,11 @@ fun Turtle.segment(
     })
 
     require(position.distanceTo(segment0.start) < 1E-5) {
-        """${position}, ${segment0.start}"""
+        "Alignment error: Turtle position ${position} is not aligned with segment start ${segment0.start}. Distance: ${
+            position.distanceTo(
+                segment0.start
+            )
+        }"
     }
     cb.segment(segment0)
     orientation = cb.segments.last().pose(1.0).matrix33.matrix44

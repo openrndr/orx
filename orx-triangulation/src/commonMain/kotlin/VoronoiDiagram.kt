@@ -81,6 +81,12 @@ class VoronoiDiagram(val delaunayTriangulation: DelaunayTriangulation, val bound
     }
 }
 
+/**
+ * Generates a Voronoi diagram based on the points in the list and the provided bounds.
+ *
+ * @param bounds The rectangular bounds within which the Voronoi diagram is generated. Defaults to the bounds of the point list.
+ * @return A VoronoiDiagram object representing the calculated Voronoi diagram.
+ */
 fun List<Vector2>.voronoiDiagram(bounds: Rectangle = this.bounds): VoronoiDiagram {
     val d = this.delaunayTriangulation()
     return d.voronoiDiagram(bounds)

@@ -3,12 +3,29 @@ package org.openrndr.extra.shapes.bezierpatches
 import org.openrndr.color.AlgebraicColor
 import org.openrndr.color.ColorRGBa
 import org.openrndr.color.ConvertibleToColorRGBa
+import org.openrndr.math.GeometricPrimitive3D
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector3
 import org.openrndr.shape.Path3D
 import org.openrndr.shape.Segment3D
 import kotlin.random.Random
 
+/**
+ * Represents a 3D Bezier patch defined by a 4x4 grid of control points and optional color data.
+ * This class provides utilities for manipulation, transformation, and evaluation of the patch.
+ *
+ * The control points and colors must be organized as a 4x4 grid. The patch supports operations
+ * including transformation, sub-patching, path extraction, and random point generation.
+ *
+ * @param C The type of color data associated with the patch. It must implement both
+ * `AlgebraicColor` and `ConvertibleToColorRGBa`.
+ * @property points A 4x4 grid of control points that define the shape of the Bezier patch.
+ * @property colors A 4x4 grid of color data corresponding to the control points. This parameter
+ * is optional and defaults to an empty list.
+ *
+ * @throws IllegalArgumentException if `points` or `colors`, if provided, do not conform
+ * to the required 4x4 structure.
+ */
 open class BezierPatch3DBase<C>(
     val points: List<List<Vector3>>,
     val colors: List<List<C>> = emptyList()
@@ -213,7 +230,7 @@ open class BezierPatch3DBase<C>(
 }
 
 class BezierPatch3D(points: List<List<Vector3>>, colors: List<List<ColorRGBa>> = emptyList()) :
-    BezierPatch3DBase<ColorRGBa>(points, colors)
+    BezierPatch3DBase<ColorRGBa>(points, colors), GeometricPrimitive3D
 
 /**
  * Create a cubic bezier patch from 4 segments. The control points of the segments are used in row-wise fashion

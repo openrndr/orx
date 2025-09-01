@@ -14,7 +14,7 @@ class TestSpectral {
 
         for (c in colors) {
             val r = linearToReflectance(c)
-            assertEquals(r.size, 38)
+            assertEquals(38, r.size)
             val xyz = reflectanceToXYZ(r)
             val cp = xyz.toRGBa().matchLinearity(c)
             assertTrue(cp.toVector4().distanceTo(c.toVector4()) < 5E-3)

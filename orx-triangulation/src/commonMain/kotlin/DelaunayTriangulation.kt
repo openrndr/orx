@@ -81,6 +81,15 @@ class DelaunayTriangulation(val points: List<Vector2>) {
     fun nearestPoint(query: Vector2): Vector2 = points[nearest(query)]
 }
 
+/**
+ * Computes the Delaunay triangulation for the list of 2D points.
+ *
+ * The Delaunay triangulation is a triangulation of a set of points such that
+ * no point is inside the circumcircle of any triangle. It maximizes the minimum
+ * angle of all the angles in the triangles, avoiding skinny triangles.
+ *
+ * @return A DelaunayTriangulation object representing the triangulation of the given points.
+ */
 fun List<Vector2>.delaunayTriangulation(): DelaunayTriangulation {
     return DelaunayTriangulation(this)
 }

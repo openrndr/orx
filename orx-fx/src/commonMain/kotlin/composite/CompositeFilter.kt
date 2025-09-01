@@ -24,7 +24,7 @@ class CompositeFilter<F0 : Filter, F1 : Filter>(
     private val firstParameters: F0.() -> Unit,
     private val secondParameters: F1.() -> Unit,
     private val useIntermediateBuffer: Boolean = false
-) : Filter() {
+) : Filter(null) {
     private var intermediate: ColorBuffer? = null
 
     override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {

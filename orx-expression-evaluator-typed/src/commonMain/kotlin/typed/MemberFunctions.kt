@@ -4,48 +4,79 @@ import kotlin.math.roundToInt
 
 internal fun String.memberFunctions(n: String): ((Array<Any>) -> Any)? {
     return when (n) {
-        "take" -> { n -> this.take((n[0] as Number).toInt()) }
-        "drop" -> { n -> this.drop((n[0] as Number).toInt()) }
-        "takeLast" -> { n -> this.takeLast((n[0] as Number).toInt()) }
-        "dropLast" -> { n -> this.takeLast((n[0] as Number).toInt()) }
+        "take" -> { nn -> this.take((nn[0] as Number).toInt()) }
+        "drop" -> { nn -> this.drop((nn[0] as Number).toInt()) }
+        "takeLast" -> { nn -> this.takeLast((nn[0] as Number).toInt()) }
+        "dropLast" -> { nn -> this.takeLast((nn[0] as Number).toInt()) }
         else -> null
     }
 }
 
 internal fun List<*>.memberFunctions(n: String): ((Array<Any>) -> Any)? {
     return when (n) {
-        "first" -> { n -> this.first() ?: error("empty list") }
-        "last" -> { n -> this.last() ?: error("empty list") }
-        "take" -> { n -> this.take((n[0] as Number).toInt()) }
-        "drop" -> { n -> this.drop((n[0] as Number).toInt()) }
-        "takeLast" -> { n -> this.takeLast((n[0] as Number).toInt()) }
-        "dropLast" -> { n -> this.takeLast((n[0] as Number).toInt()) }
-        "map" -> { n -> val lambda = (n[0] as (Any) -> Any); this.map { lambda(it!!) } }
-        "filter" -> { n ->
-            val lambda = (n[0] as (Any) -> Any); this.filter { (lambda(it!!) as Double).roundToInt() != 0 }
+        "first" -> { _ -> this.first() ?: error("empty list") }
+        "last" -> { _ -> this.last() ?: error("empty list") }
+        "take" -> { nn -> this.take((nn[0] as Number).toInt()) }
+        "drop" -> { nn -> this.drop((nn[0] as Number).toInt()) }
+        "takeLast" -> { nn -> this.takeLast((nn[0] as Number).toInt()) }
+        "dropLast" -> { nn -> this.takeLast((nn[0] as Number).toInt()) }
+        "map" -> { nn -> @Suppress("UNCHECKED_CAST") val lambda = (nn[0] as (Any) -> Any); this.map { lambda(it!!) } }
+        "filter" -> { nn ->
+            @Suppress("UNCHECKED_CAST", "UNCHECKED_CAST") val lambda =
+                (nn[0] as (Any) -> Any); this.filter { (lambda(it!!) as Double).roundToInt() != 0 }
         }
 
-        "max" -> { n -> (this as List<Comparable<Any>>).max() }
-        "min" -> { n -> (this as List<Comparable<Any>>).min() }
-        "maxBy" -> { n ->
-            val lambda = (n[0] as (Any) -> Any); this.maxByOrNull { lambda(it!!) as Comparable<Any> } ?: error("no max")
+        "max" -> { _ ->
+            @Suppress("UNCHECKED_CAST")
+            (this as List<Comparable<Any>>).max()
         }
 
-        "minBy" -> { n ->
-            val lambda = (n[0] as (Any) -> Any); this.minByOrNull { lambda(it!!) as Comparable<Any> } ?: error("no max")
+        "min" -> { _ ->
+            @Suppress("UNCHECKED_CAST")
+            (this as List<Comparable<Any>>).min()
         }
 
-        "sorted" -> { n -> (this as List<Comparable<Any>>).sorted() }
-        "sortedBy" -> { n ->
-            val lambda = (n[0] as (Any) -> Any); this.sortedBy { lambda(it!!) as Comparable<Any> }
+        "maxBy" -> { nn ->
+            @Suppress("UNCHECKED_CAST") val lambda =
+                (nn[0] as (Any) -> Any); this.maxByOrNull {
+            @Suppress("UNCHECKED_CAST")
+            lambda(it!!) as Comparable<Any>
+        } ?: error("no max")
         }
 
-        "sortedByDescending" -> { n ->
-            val lambda = (n[0] as (Any) -> Any); this.sortedByDescending { lambda(it!!) as Comparable<Any> }
+        "minBy" -> { nn ->
+            @Suppress("UNCHECKED_CAST") val lambda =
+                (nn[0] as (Any) -> Any); this.minByOrNull {
+            @Suppress("UNCHECKED_CAST")
+            lambda(it!!) as Comparable<Any>
+        } ?: error("no max")
         }
 
-        "reversed" -> { n -> this.reversed() }
-        "zip" -> { n -> this.zip(n[0] as List<Any>).map { listOf(it.first, it.second) } }
+        "sorted" -> { _ ->
+            @Suppress("UNCHECKED_CAST")
+            (this as List<Comparable<Any>>).sorted()
+        }
+
+        "sortedBy" -> { nn ->
+            @Suppress("UNCHECKED_CAST") val lambda =
+                (nn[0] as (Any) -> Any); this.sortedBy {
+            @Suppress("UNCHECKED_CAST")
+            lambda(it!!) as Comparable<Any>
+        }
+        }
+
+        "sortedByDescending" -> { nn ->
+            @Suppress("UNCHECKED_CAST") val lambda = (nn[0] as (Any) -> Any); this.sortedByDescending {
+            @Suppress("UNCHECKED_CAST")
+            lambda(it!!) as Comparable<Any>
+        }
+        }
+
+        "reversed" -> { _ -> this.reversed() }
+        "zip" -> { nn ->
+            @Suppress("UNCHECKED_CAST")
+            this.zip(nn[0] as List<Any>).map { listOf(it.first, it.second) }
+        }
 
         else -> null
     }

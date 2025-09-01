@@ -2,6 +2,8 @@ package org.openrndr.extra.svg
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.jsoup.nodes.*
+import org.openrndr.draw.ColorBuffer
+import org.openrndr.draw.loadImage
 import org.openrndr.extra.composition.*
 import org.openrndr.math.*
 import org.openrndr.shape.*
@@ -74,6 +76,7 @@ internal open class SVGGroup(val element: Element, val elements: MutableList<SVG
     private fun handleChildren() {
         this.element.children().forEach { child ->
             when (child.tagName()) {
+                "image" -> elements.add(SVGImage(child))
                 in Tag.graphicsList -> elements.add(SVGPath(child))
                 else -> elements.add(SVGGroup(child))
             }
@@ -105,6 +108,37 @@ internal fun Double.toBoolean(): Boolean? = when (this) {
     1.0 -> true
     else -> null
 }
+
+internal class SVGImage(val element: Element? = null) : SVGElement(element) {
+
+    val x = element?.attribute("x")?.value?.toDoubleOrNull() ?: 0.0
+    val y = element?.attribute("y")?.value?.toDoubleOrNull() ?: 0.0
+
+    val width = element?.attribute("width")?.value?.toDoubleOrNull() ?: 0.0
+    val height = element?.attribute("height")?.value?.toDoubleOrNull() ?: 0.0
+
+
+    fun image(): ColorBuffer {
+        return loadImage(element!!.attr("xlink:href"))
+    }
+
+    override fun handleAttribute(attribute: Attribute) {
+        if (this.element is Element) {
+            when (attribute.key) {
+                // Attributes can also be style properties, in which case they're passed on
+                in Prop.list -> styleProperty(attribute.key, attribute.value)
+                Attr.TRANSFORM -> style.transform = SVGParse.transform(this.element)
+            }
+        }
+    }
+
+    init {
+        if (element != null) {
+            style.transform = SVGParse.transform(this.element)
+        }
+    }
+}
+
 
 internal class SVGPath(val element: Element? = null) : SVGElement(element) {
     val commands = mutableListOf<Command>()
@@ -198,8 +232,9 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
 
                         // I don't know why we can't just have segments from the above map,
                         // but this is the only way this works.
-                        segments += contours.flatMap { it.segments}
+                        segments += contours.flatMap { it.segments }
                     }
+
                     "M" -> {
                         // TODO: Log an error when this nulls
                         cursor = points!!.firstOrNull() ?: return@forEach
@@ -212,6 +247,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                             }
                         }
                     }
+
                     "m" -> {
                         // TODO: Log an error when this nulls
                         cursor += points!!.firstOrNull() ?: return@forEach
@@ -224,6 +260,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                             }
                         }
                     }
+
                     "L" -> {
                         segments += points!!.map {
                             Segment2D(cursor, it).apply {
@@ -231,6 +268,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                             }
                         }
                     }
+
                     "l" -> {
                         segments += points!!.map {
                             Segment2D(cursor, cursor + it).apply {
@@ -238,6 +276,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                             }
                         }
                     }
+
                     "H" -> {
                         segments += command.operands.map {
                             val target = Vector2(it, cursor.y)
@@ -246,6 +285,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                             }
                         }
                     }
+
                     "h" -> {
                         segments += command.operands.map {
                             val target = cursor + Vector2(it, 0.0)
@@ -254,6 +294,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                             }
                         }
                     }
+
                     "V" -> {
                         segments += command.operands.map {
                             val target = Vector2(cursor.x, it)
@@ -262,6 +303,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                             }
                         }
                     }
+
                     "v" -> {
                         segments += command.operands.map {
                             val target = cursor + Vector2(0.0, it)
@@ -270,6 +312,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                             }
                         }
                     }
+
                     "C" -> {
                         segments += points!!.windowed(3, 3, true).map {
                             if (it.size != 3) {
@@ -284,6 +327,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                             }
                         }
                     }
+
                     "c" -> {
                         segments += points!!.windowed(3, 3, true).map {
                             if (it.size != 3) {
@@ -298,6 +342,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                             }
                         }
                     }
+
                     "S" -> {
                         segments += points!!.windowed(2, 2, true).map {
                             if (it.size != 2) {
@@ -313,6 +358,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                             }
                         }
                     }
+
                     "s" -> {
                         segments += points!!.windowed(2, 2, true).map {
                             if (it.size != 2) {
@@ -328,6 +374,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                             }
                         }
                     }
+
                     "Q" -> {
                         segments += points!!.windowed(2, 2, true).map {
                             if (it.size != 2) {
@@ -342,6 +389,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                             }
                         }
                     }
+
                     "q" -> {
                         segments += points!!.windowed(2, 2, true).map {
                             if (it.size != 2) {
@@ -356,6 +404,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                             }
                         }
                     }
+
                     "T" -> {
                         points!!.forEach {
                             val cp = 2.0 * cursor - (prevQuadCtrlPoint ?: cursor)
@@ -365,6 +414,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                             }
                         }
                     }
+
                     "t" -> {
                         points!!.forEach {
                             val cp = 2.0 * cursor - (prevQuadCtrlPoint ?: cursor)
@@ -374,6 +424,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                             }
                         }
                     }
+
                     "Z", "z" -> {
                         if ((cursor - anchor).length >= 0.001) {
                             segments += Segment2D(cursor, anchor)
@@ -381,6 +432,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                         cursor = anchor
                         closed = true
                     }
+
                     else -> {
                         // The spec declares we should still attempt to render
                         // the path up until the erroneous command as to visually

@@ -13,6 +13,7 @@ import org.openrndr.extra.color.spaces.ColorOKLABa
 import org.openrndr.math.CastableToVector4
 import org.openrndr.math.Vector2
 
+@Deprecated("use gradient {} instead")
 @Description("Multicolor linear gradient")
 open class NPointLinearGradientBase<C>(
     colors: Array<C>,
@@ -57,7 +58,7 @@ open class NPointLinearGradientBase<C>(
             float g = (f - p_points[i]) / (p_points[i+1] - p_points[i]);
             vec4 gradient = mix(color0, color1, clamp(g, 0.0, 1.0)); 
             
-            ${generateColorTransform(colors[0]::class)}
+            ${generateColorTransform(colors[0]::class, "gradient")}
             
             x_fill *= gradient;
             if (x_fill.a != 0) {

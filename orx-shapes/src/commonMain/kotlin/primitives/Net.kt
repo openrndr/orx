@@ -1,14 +1,29 @@
 package org.openrndr.extra.shapes.primitives
 
+import org.openrndr.math.GeometricPrimitive2D
 import org.openrndr.math.LinearType
 import org.openrndr.math.Polar
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
 import org.openrndr.shape.LineSegment
 import org.openrndr.shape.ShapeContour
+import kotlin.jvm.JvmInline
+import kotlin.jvm.JvmRecord
 
-class Net(val point0: Vector2, val point1: Vector2, val circle: Circle) :
-    LinearType<Net> {
+/**
+ * Represents a net defined by two points and a circle. The net can be seen as a structure
+ * that connects the two points with the circle in between, forming a string-like shape.
+ *
+ * This class implements basic linear transformations such as scaling and translation
+ * and defines how nets can interact by addition or subtraction.
+ *
+ * @property point0 The starting point of the net.
+ * @property point1 The ending point of the net.
+ * @property circle The circle around which the net is constructed.
+ */
+@JvmRecord
+data class Net(val point0: Vector2, val point1: Vector2, val circle: Circle) :
+    LinearType<Net>, GeometricPrimitive2D {
     override fun div(scale: Double) =
         Net(point0 / scale, point1 / scale, circle / scale)
 

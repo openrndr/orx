@@ -41,6 +41,9 @@ Find the Chataigne example project in `/resources/timeline_example_chataigne.noi
 <!-- __demos__ -->
 ## Demos
 ### ChataigneOSCDemo
-[source code](src/demo/kotlin/ChataigneOSCDemo.kt)
+
+
 
 ![ChataigneOSCDemoKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-chataigne/images/ChataigneOSCDemoKt.png)
+
+[source code](src/demo/kotlin/ChataigneOSCDemo.kt)

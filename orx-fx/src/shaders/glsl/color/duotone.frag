@@ -24,15 +24,12 @@ void main() {
     if (!labInterpolation) {
         o_color = mix(bg, fg, c.r) * c.a;
     } else {
-        bg = srgb_to_linear_rgb(bg);
         bg = linear_rgb_to_oklab(bg);
-        fg = srgb_to_linear_rgb(fg);
         fg = linear_rgb_to_oklab(fg);
 
         vec4 m = mix(bg, fg, c.r);
         m = oklab_to_linear_rgb(m);
         m *= c.a;
-        m = linear_rgb_to_srgb(m);
         o_color = m;
     }
 }

@@ -4,7 +4,6 @@ import org.openrndr.draw.Drawer
 import org.openrndr.draw.RectangleBatchBuilder
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
-import org.openrndr.shape.intersects
 import kotlin.jvm.JvmRecord
 
 @JvmRecord
@@ -224,7 +223,7 @@ class Quadtree<T>(val bounds: Rectangle, val maxObjects: Int = 10, val mapper: (
     }
 
     private fun intersect(rect: Rectangle): List<Quadtree<T>>? {
-        val intersects = intersects(bounds, rect)
+        val intersects = bounds.intersects(rect)
 
         if (!intersects) return null
 

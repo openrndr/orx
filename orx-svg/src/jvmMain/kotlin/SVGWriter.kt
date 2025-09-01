@@ -6,6 +6,15 @@ import org.openrndr.extra.composition.TextNode
 
 import java.io.*
 
+/**
+ * Saves the vector composition to a file in SVG format.
+ *
+ * Only files with the ".svg" extension are supported. Writing to files with unsupported extensions
+ * will result in an exception.
+ *
+ * @param file the file to which the composition should be saved. The file must have an ".svg" extension.
+ * @throws IllegalArgumentException if the file does not have the ".svg" extension.
+ */
 fun Composition.saveToFile(file: File) {
     if (file.extension == "svg") {
         val svg = writeSVG(this)
@@ -15,6 +24,18 @@ fun Composition.saveToFile(file: File) {
     }
 }
 
+/**
+ * Converts a [Composition] into its equivalent SVG representation.
+ *
+ * This method serializes the vector composition, including its structure, style,
+ * and attributes, into an SVG string. The resulting SVG can be used for rendering
+ * or exporting the composition to an SVG file.
+ *
+ * The method internally utilizes the [writeSVG] function for the conversion process.
+ *
+ * @receiver The [Composition] instance to be converted into SVG.
+ * @return A [String] representing the composition in SVG format.
+ */
 fun Composition.toSVG() = writeSVG(this)
 
 private val CompositionNode.svgId: String
@@ -59,6 +80,13 @@ private fun Styleable.serialize(parentStyleable: Styleable? = null): String {
     return sb.trim().toString()
 }
 
+/**
+ * Generates an SVG string representation of a given vector composition.
+ *
+ * @param composition the vector composition to be converted to an SVG string
+ * @param topLevelId an optional ID for the top-level SVG element, defaults to "openrndr-svg"
+ * @return a string containing the SVG representation of the composition
+ */
 fun writeSVG(
     composition: Composition,
     topLevelId: String = "openrndr-svg"

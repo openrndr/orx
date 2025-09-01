@@ -63,6 +63,12 @@ internal class SVGDocument(private val root: SVGSVGElement, val namespaces: Map<
                 this.id = svgElem.id
             }
         }
+        is SVGImage -> {
+            ImageNode(svgElem.image(),svgElem.x, svgElem.y, svgElem.width, svgElem.height).apply {
+                style = svgElem.style
+                this.id = svgElem.id
+            }
+        }
     }.apply {
         transform = svgElem.style.transform.value
     }

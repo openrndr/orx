@@ -1,5 +1,5 @@
 import com.strumenta.antlrkotlin.gradle.AntlrKotlinTask
-import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 plugins {
     org.openrndr.extra.convention.`kotlin-multiplatform`
@@ -47,18 +47,10 @@ kotlin {
                 implementation(project(":orx-jvm:orx-gui"))
             }
         }
-        val jvmTest by getting {
-            dependencies {
-                implementation(libs.kluent)
-            }
-        }
     }
 }
 
-tasks.withType<KotlinCompile<*>> {
-    dependsOn(generateKotlinGrammarSource)
-}
-
-tasks.withType<org.gradle.jvm.tasks.Jar> {
-    dependsOn(generateKotlinGrammarSource)
-}
+tasks.withType<KotlinCompilationTask<*>> { dependsOn(generateKotlinGrammarSource) }
+tasks.withType<org.gradle.jvm.tasks.Jar> { dependsOn(generateKotlinGrammarSource) }
+tasks.named("dokkaGeneratePublicationHtml") { dependsOn(generateKotlinGrammarSource) }
+tasks.named("dokkaGenerateModuleHtml") { dependsOn(generateKotlinGrammarSource) }

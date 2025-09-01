@@ -1,12 +1,8 @@
 package org.openrndr.extra.meshgenerators
 
-import org.openrndr.draw.BufferWriter
-import org.openrndr.draw.VertexBuffer
-import org.openrndr.draw.vertexBuffer
-import org.openrndr.draw.vertexFormat
+import org.openrndr.draw.*
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
-import org.openrndr.math.mod
 import org.openrndr.shape.Shape
 import org.openrndr.shape.triangulate
 
@@ -34,7 +30,7 @@ fun bufferWriter(bw: BufferWriter): VertexWriter {
  * - `textureCoordinate` (vec2)
  */
 fun meshVertexBuffer(size: Int): VertexBuffer {
-    return vertexBuffer(vertexFormat {
+    return vertexBuffer(vertexFormat(BufferAlignment.STD430) {
         position(3)
         normal(3)
         textureCoordinate(2)
@@ -50,7 +46,7 @@ fun meshVertexBuffer(size: Int): VertexBuffer {
  * - `color` (vec4)
  */
 fun meshVertexBufferWithColor(size: Int): VertexBuffer {
-    return vertexBuffer(vertexFormat {
+    return vertexBuffer(vertexFormat(BufferAlignment.STD430) {
         position(3)
         normal(3)
         textureCoordinate(2)
@@ -140,8 +136,8 @@ fun extrudeShape(
             val points = it
 
             val normals = (points.indices).map { index ->
-                val a = mod(index + 1, points.size)
-                val b = mod(index - 1, points.size)
+                val a = (index + 1).mod(points.size)
+                val b = (index - 1).mod(points.size)
                 (points[a] - points[b]).safeNormalized * -flip
             }
             val forward = Vector3(0.0, 0.0, depth)

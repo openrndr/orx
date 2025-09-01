@@ -1,5 +1,12 @@
 package org.openrndr.extra.fcurve
 
+/**
+ * Represents a collection of named `FCurve` objects, enabling the manipulation and
+ * querying of multiple functional curves as a unified entity. Each `FCurve` in the
+ * collection is identified by a unique string key, allowing structured access and control.
+ *
+ * @param compounds A map containing string keys associated with `FCurve` instances.
+ */
 open class MultiFCurve(val compounds: Map<String, FCurve?>) {
     fun changeSpeed(speed: Double): MultiFCurve {
         return if (speed == 1.0) {

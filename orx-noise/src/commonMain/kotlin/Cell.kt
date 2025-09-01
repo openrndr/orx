@@ -3,6 +3,16 @@ package org.openrndr.extra.noise
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 
+/**
+ * Represents a 2D array of pre-defined normalized Vector2 values often used
+ * in algorithms requiring pseudo-random or structured deterministic value sets.
+ *
+ * Each `Vector2` instance inside the array constitutes X and Y components
+ * that are normalized or constrained to a specific range.
+ *
+ * This array may serve as a set of offsets, noise gradients, or lookup values
+ * for computational geometry, randomization, or procedural generation tasks.
+ */
 val Cell2D = arrayOf(
         Vector2(-0.4313539279, 0.1281943404), Vector2(-0.1733316799, 0.415278375), Vector2(-0.2821957395, -0.3505218461), Vector2(-0.2806473808, 0.3517627718), Vector2(0.3125508975, -0.3237467165), Vector2(0.3383018443, -0.2967353402), Vector2(-0.4393982022, -0.09710417025), Vector2(-0.4460443703, -0.05953502905),
         Vector2(-0.302223039, 0.3334085102), Vector2(-0.212681052, -0.3965687458), Vector2(-0.2991156529, 0.3361990872), Vector2(0.2293323691, 0.3871778202), Vector2(0.4475439151, -0.04695150755), Vector2(0.1777518, 0.41340573), Vector2(0.1688522499, -0.4171197882), Vector2(-0.0976597166, 0.4392750616),
@@ -37,6 +47,15 @@ val Cell2D = arrayOf(
         Vector2(0.1475103971, -0.4251360756), Vector2(0.09258030352, 0.4403735771), Vector2(-0.1589664637, -0.4209865359), Vector2(0.2482445008, 0.3753327428), Vector2(0.4383624232, -0.1016778537), Vector2(0.06242802956, 0.4456486745), Vector2(0.2846591015, -0.3485243118), Vector2(-0.344202744, -0.2898697484),
         Vector2(0.1198188883, -0.4337550392), Vector2(-0.243590703, 0.3783696201), Vector2(0.2958191174, -0.3391033025), Vector2(-0.1164007991, 0.4346847754), Vector2(0.1274037151, -0.4315881062), Vector2(0.368047306, 0.2589231171), Vector2(0.2451436949, 0.3773652989), Vector2(-0.4314509715, 0.12786735))
 
+/**
+ * `Cell3D` represents a predefined 3-dimensional grid or lattice of points in space, where each point
+ * is represented as a `Vector3` object containing three coordinates (x, y, z). These coordinates are used
+ * for various computational purposes such as procedural generation, cell-based simulations, or spatial analysis.
+ *
+ * The points in `Cell3D` are statically defined and may represent offsets, directions, or specific positions
+ * within a system. The choice of values implies a structure or pattern that can be applied to systems utilizing
+ * a 3D grid or space representation.
+ */
 val Cell3D = arrayOf(
         Vector3(0.1453787434, -0.4149781685, -0.0956981749), Vector3(-0.01242829687, -0.1457918398, -0.4255470325), Vector3(0.2877979582, -0.02606483451, -0.3449535616), Vector3(-0.07732986802, 0.2377094325, 0.3741848704), Vector3(0.1107205875, -0.3552302079, -0.2530858567), Vector3(0.2755209141, 0.2640521179, -0.238463215), Vector3(0.294168941, 0.1526064594, 0.3044271714), Vector3(0.4000921098, -0.2034056362, 0.03244149937),
         Vector3(-0.1697304074, 0.3970864695, -0.1265461359), Vector3(-0.1483224484, -0.3859694688, 0.1775613147), Vector3(0.2623596946, -0.2354852944, 0.2796677792), Vector3(-0.2709003183, 0.3505271138, -0.07901746678), Vector3(-0.03516550699, 0.3885234328, 0.2243054374), Vector3(-0.1267712655, 0.1920044036, 0.3867342179), Vector3(0.02952021915, 0.4409685861, 0.08470692262), Vector3(-0.2806854217, -0.266996757, 0.2289725438),

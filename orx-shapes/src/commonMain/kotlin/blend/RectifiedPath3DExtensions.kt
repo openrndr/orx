@@ -16,6 +16,18 @@ fun RectifiedPath3D.splitForBlend(other: RectifiedPath3D): RectifiedPath3D {
     return Path3D.fromPaths(splitAt(rts), originalPath.closed && other.originalPath.closed).rectified()
 }
 
+/**
+ * Produces a blended 3D path by mixing two rectified paths using a custom blending function.
+ *
+ * This function combines segments from the current `RectifiedPath3D` instance with segments
+ * from another specified `RectifiedPath3D` instance. Each segment is blended based on a
+ * provided blending function that accepts a normalized parameter and returns a blend weight.
+ * The resultant path retains characteristics such as closedness if both input paths are closed.
+ *
+ * @param other the other `RectifiedPath3D` to be blended with the current path
+ * @param blendFunction a function that provides blending weights based on a normalized parameter (t-value)
+ * @return a `Path3D` representing the blended result of the two input paths
+ */
 fun RectifiedPath3D.mix(other: RectifiedPath3D, blendFunction: (Double) -> Double): Path3D {
     val n = this.originalPath.segments.size.toDouble()
     val segs = (this.originalPath.segments zip other.originalPath.segments).mapIndexed { index, it ->

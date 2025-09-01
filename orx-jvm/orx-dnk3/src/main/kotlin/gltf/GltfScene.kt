@@ -90,7 +90,6 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
 
                     val localBuffer = buffers[localBufferView.buffer].contents(this@buildSceneNodes)
                     require(localBufferView.byteOffset != null)
-                    require(localBufferView.byteLength != null)
                     localBuffer.position(localBufferView.byteOffset)
                     localBuffer.limit(localBufferView.byteOffset + localBufferView.byteLength)
 
@@ -279,9 +278,16 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
             ibmData.order(ByteOrder.nativeOrder())
             (ibmData as Buffer).position(ibmAccessor.byteOffset + (ibmBufferView.byteOffset ?: 0))
 
-            require(ibmAccessor.type == "MAT4")
-            require(ibmAccessor.componentType == GLTF_FLOAT)
-            require(ibmAccessor.count == joints.size)
+            require(ibmAccessor.type == "MAT4") {
+                "Unsupported inverse bind matrix type: ${ibmAccessor.type}"
+            }
+            require(ibmAccessor.componentType == GLTF_FLOAT) {
+                "Unsupported inverse bind matrix component type: ${ibmAccessor.componentType}"
+            }
+            require(ibmAccessor.count == joints.size) {
+                "Mismatch between inverse bind matrix count (${ibmAccessor.count}) and joints size (${joints.size})"
+
+            }
             val ibms = (0 until ibmAccessor.count).map {
                 val array = DoubleArray(16)
                 for (i in 0 until 16) {
@@ -321,7 +327,6 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
     val scenes = scenes.map { scene ->
         scene.nodes.map { node ->
             val gltfNode = nodes.getOrNull(node) ?: error("node not found: $node")
-            require(gltfNode != null)
             val sceneNode = gltfNode.createSceneNode()
             sceneNode
         }

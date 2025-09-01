@@ -8,6 +8,15 @@ private const val G33 = G3 * 3 - 1
 
 fun simplex(seed: Int, position: Vector3): Double = simplex(seed, position.x, position.y, position.z)
 
+/**
+ * Computes a 3D simplex noise value for the given coordinates and seed.
+ *
+ * @param seed The seed value used for generating consistent noise values.
+ * @param x The x-coordinate of the point in 3D space.
+ * @param y The y-coordinate of the point in 3D space.
+ * @param z The z-coordinate of the point in 3D space.
+ * @return The computed 3D simplex noise value as a Double.
+ */
 fun simplex(seed: Int, x: Double, y: Double, z: Double): Double {
 
     val t = (x + y + z) / 3.0
@@ -101,6 +110,13 @@ fun simplex(seed: Int, x: Double, y: Double, z: Double): Double {
     return 32 * (n0 + n1 + n2 + n3)
 }
 
+/**
+ * Generates a 3D vector using simplex noise based on the given seed and x-coordinate.
+ *
+ * @param seed The seed value used for generating consistent noise values.
+ * @param x The x-coordinate of the point in 3D space to calculate the noise value.
+ * @return A 3D vector where each component is a noise value calculated based on the given seed and coordinate.
+ */
 fun Vector3.Companion.simplex(seed: Int, x: Double): Vector3 = Vector3(simplex(seed, x, 0.0, 0.0),
         simplex(seed, 0.0, x + 31.3383, 0.0),
         simplex(seed, 0.0, 0.0, x - 483.23))

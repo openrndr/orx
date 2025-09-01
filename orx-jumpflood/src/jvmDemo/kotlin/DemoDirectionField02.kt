@@ -1,25 +1,23 @@
-import org.openrndr.MouseTracker
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.*
+import org.openrndr.draw.ColorType
+import org.openrndr.draw.createEquivalent
 import org.openrndr.drawImage
+import org.openrndr.extra.color.colormatrix.constant
+import org.openrndr.extra.color.colormatrix.tint
 import org.openrndr.extra.jumpfill.DirectionalField
 import org.openrndr.extra.noise.scatter
-import org.openrndr.extra.noise.simplex
 import org.openrndr.math.IntVector2
-import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.clamp
-import org.openrndr.shape.Rectangle
-import kotlin.math.abs
 
 /**
  * Create directional distance field and demonstrate signed distance
  */
 fun main() = application {
     configure {
-        width = 1024
-        height = 1024
+        width = 720
+        height = 720
     }
 
     program {
@@ -37,7 +35,10 @@ fun main() = application {
 
         ddf.shadow.download()
         extend {
-            val p = (mouse.position * ddf.contentScale).toInt().clamp(IntVector2.ZERO, IntVector2(width-1, height-1))
+            val p = (mouse.position * ddf.contentScale).toInt().clamp(
+                IntVector2.ZERO,
+                IntVector2(width - 1, height - 1)
+            )
             val c = ddf.shadow[p.x, p.y]
             val sdf3 = Vector3(c.r, c.g, c.b)
 

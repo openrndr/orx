@@ -14,10 +14,9 @@ import org.openrndr.shape.Rectangle
  * Try changing which layer has multisampling applied and observe the results.
  */
 fun main() = application {
-    System.setProperty("org.openrndr.gl3.debug", "true")
     configure {
-        width = 800
-        height = 800
+        width = 720
+        height = 720
     }
 
     program {
@@ -25,17 +24,17 @@ fun main() = application {
             layer(multisample = BufferMultisample.SampleCount(4)) {
                 draw {
                     drawer.translate(drawer.bounds.center)
-                    drawer.rotate(seconds)
+                    drawer.rotate(seconds + 5)
                     drawer.fill = ColorRGBa.PINK
                     drawer.rectangle(Rectangle.fromCenter(Vector2.ZERO, 200.0))
                 }
 
-                layer {
+                layer() {
                     blend(Normal()) {
                         clip = true
                     }
                     draw {
-                        drawer.rotate(seconds * -2)
+                        drawer.rotate((seconds + 5) * -2)
                         drawer.fill = ColorRGBa.WHITE
                         drawer.rectangle(Rectangle.fromCenter(Vector2.ZERO, 200.0))
                     }

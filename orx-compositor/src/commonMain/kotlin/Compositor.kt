@@ -1,32 +1,18 @@
+@file:Suppress("RUNTIME_ANNOTATION_NOT_SUPPORTED")
+
 package org.openrndr.extra.compositor
 
-import org.openrndr.Extension
-import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.extra.fx.blend.SourceIn
 import org.openrndr.extra.fx.blend.SourceOut
 import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.Description
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.jvm.JvmRecord
 
-fun RenderTarget.deepDestroy() {
-    val cbcopy = colorAttachments.map { it }
-    val dbcopy = depthBuffer
-    detachDepthBuffer()
-    detachColorAttachments()
-    cbcopy.forEach {
-        when (it) {
-            is ColorBufferAttachment -> it.colorBuffer.destroy()
-            is CubemapAttachment -> it.cubemap.destroy()
-            is ArrayTextureAttachment -> it.arrayTexture.destroy()
-            is ArrayCubemapAttachment -> it.arrayCubemap.destroy()
-            else -> {}
-        }
-    }
-    dbcopy?.destroy()
-    destroy()
-}
 
 enum class LayerType {
     LAYER,
@@ -49,7 +35,7 @@ open class Layer internal constructor(
     val children: MutableList<Layer> = mutableListOf()
     var blendFilter: Pair<Filter, Filter.() -> Unit>? = null
     val postFilters: MutableList<Triple<Filter, Array<out Layer>, Filter.() -> Unit>> = mutableListOf()
-    var colorType = ColorType.UINT8
+    var colorType = ColorType.UINT8_SRGB
     private var unresolvedAccumulation: ColorBuffer? = null
     var accumulation: ColorBuffer? = null
 
@@ -183,7 +169,7 @@ open class Layer internal constructor(
     private fun createLayerTarget(
         activeRenderTarget: RenderTarget, drawer: Drawer, bufferMultisample: BufferMultisample
     ) {
-        layerTarget?.deepDestroy()
+        layerTarget?.destroy()
         layerTarget = renderTarget(
             activeRenderTarget.width, activeRenderTarget.height,
             activeRenderTarget.contentScale, bufferMultisample
@@ -217,24 +203,50 @@ open class Layer internal constructor(
 }
 
 /**
- * create a layer within the composition
+ * Creates a new layer within the current layer, allowing for hierarchical composition of drawings.
+ * The newly created layer inherits properties such as color type and multisample from the parent layer
+ * unless explicitly overridden. A custom lambda function can be applied to configure the new layer.
+ *
+ * @param colorType The color type for the new layer. Defaults to the color type of the parent layer.
+ * @param multisample Specifies the multisampling mode for the new layer to control antialiasing.
+ * Defaults to [BufferMultisample.Disabled].
+ * @param function A configuration block where the properties and behavior of the new layer
+ * can be defined.
+ * @return The newly created layer, which is also added as a child of the parent layer.
  */
+@OptIn(ExperimentalContracts::class)
 fun Layer.layer(
     colorType: ColorType = this.colorType,
     multisample: BufferMultisample = BufferMultisample.Disabled,
     function: Layer.() -> Unit
 ): Layer {
+    contract {
+        callsInPlace(function, InvocationKind.EXACTLY_ONCE)
+    }
     val layer = Layer(LayerType.LAYER, multisample).apply { function() }
     layer.colorType = colorType
     children.add(layer)
     return layer
 }
 
+/**
+ * Creates a new `Layer` of type `ASIDE` as a child of the current layer, applies the specified function
+ * to configure it, and returns the created layer.
+ *
+ * @param colorType The color type for the new layer. Defaults to the color type of the parent layer.
+ * @param multisample Multisampling configuration for the new layer. Defaults to `BufferMultisample.Disabled`.
+ * @param function Configuration function applied to the newly created layer.
+ * @return The newly created `Layer` of type `ASIDE`.
+ */
+@OptIn(ExperimentalContracts::class)
 fun Layer.aside(
     colorType: ColorType = this.colorType,
     multisample: BufferMultisample = BufferMultisample.Disabled,
     function: Layer.() -> Unit
 ): Layer {
+    contract {
+        callsInPlace(function, InvocationKind.EXACTLY_ONCE)
+    }
     val layer = Layer(LayerType.ASIDE, multisample).apply { function() }
     layer.colorType = colorType
     children.add(layer)
@@ -346,37 +358,39 @@ class ColorBufferCache(val width: Int, val height: Int) {
     }
 }
 
-class Composite : Layer(LayerType.LAYER) {
-
+class Composite(val session: Session?) : Layer(LayerType.LAYER), AutoCloseable {
     private var cache = ColorBufferCache(RenderTarget.active.width, RenderTarget.active.height)
     fun draw(drawer: Drawer) {
 
+        session?.push()
         if (cache.width != RenderTarget.active.width || cache.height != RenderTarget.active.height) {
             cache.destroy()
             cache = ColorBufferCache(RenderTarget.active.width, RenderTarget.active.height)
         }
-
         drawLayer(drawer, cache)
+        session?.pop()
+    }
+
+    override fun close() {
+        session?.close()
     }
 }
 
 /**
- * create a layered composition
+ * Creates a `Composite` object and allows configuration of its layers and effects within the provided `function`.
+ *
+ * @param function the lambda function used to configure the `Composite`. It is invoked with the `Composite` instance as the receiver.
+ * @return the configured `Composite` object.
  */
-fun compose(function: Layer.() -> Unit): Composite {
-    val root = Composite()
-    root.function()
-    return root
-}
-
-class Compositor : Extension {
-    override var enabled: Boolean = true
-    var composite = Composite()
-
-    override fun afterDraw(drawer: Drawer, program: Program) {
-        drawer.isolated {
-            drawer.defaults()
-            composite.draw(drawer)
-        }
+@OptIn(ExperimentalContracts::class)
+fun compose(function: Composite.() -> Unit): Composite {
+    contract {
+        callsInPlace(function, InvocationKind.EXACTLY_ONCE)
     }
+
+    val session = Session.active.fork()
+    val root = Composite(session)
+    root.function()
+    session.pop()
+    return root
 }

@@ -1,3 +1,4 @@
+import org.openrndr.WindowMultisample
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.DrawPrimitive
@@ -10,6 +11,11 @@ import org.openrndr.extra.meshgenerators.sphereMesh
 import org.openrndr.math.Vector3
 
 fun main() = application {
+    configure {
+        width = 720
+        height = 720
+        multisample = WindowMultisample.SampleCount(8)
+    }
     program {
         val camera = OrbitalCamera(
             Vector3.UNIT_Z * 90.0, Vector3.ZERO, 90.0, 0.1, 5000.0
@@ -33,7 +39,7 @@ fun main() = application {
 
         extend {
             // mouse and keyboard input can be toggled on and off
-            controls.userInteraction = seconds.toInt() % 4 < 2
+            controls.userInteraction = true
 
             drawer.vertexBuffer(sphere, DrawPrimitive.LINE_LOOP)
             drawer.vertexBuffer(cube, DrawPrimitive.LINE_LOOP)
@@ -46,6 +52,11 @@ fun main() = application {
                 // Note: 2D primitives are not optimized for 3D and can
                 // occlude each other
                 drawer.circle(0.0, 0.0, 50.0)
+            }
+        }
+        keyboard.keyDown.listen {
+            if (it.name == "r") {
+                camera.defaults()
             }
         }
     }

@@ -4,7 +4,12 @@ import org.openrndr.shape.ShapeContour
 import org.openrndr.shape.contour
 
 /**
- * Create a contour from a list of contours
+ * Creates a new `ShapeContour` by combining multiple `ShapeContour` instances.
+ *
+ * @param contours a list of `ShapeContour` to be combined; empty contours are removed
+ * @param closed a boolean indicating whether the resulting `ShapeContour` should be closed
+ * @param connectEpsilon the tolerance for connecting contours, default is 1E-6
+ * @return a new `ShapeContour` combining the input contours
  */
 fun ShapeContour.Companion.fromContours(contours: List<ShapeContour>, closed: Boolean, connectEpsilon:Double=1E-6) : ShapeContour {
     @Suppress("NAME_SHADOWING") val contours = contours.filter { !it.empty }

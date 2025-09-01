@@ -65,26 +65,63 @@ Edwin Jakobs / [@edwinRNDR](https://github.com/edwinRNDR)
 <!-- __demos__ -->
 ## Demos
 ### DemoDelaunay01
-[source code](src/jvmDemo/kotlin/DemoDelaunay01.kt)
+
+This method sets up a graphical application using the OPENRNDR framework
+to visually demonstrate Delaunay triangulation on a set of points scattered
+along a circle with Poisson disk sampling.
+
+The application features the following:
+- A central circle with a defined radius.
+- Points generated within the circle using a scatter algorithm that
+maintains specific spacing and avoids clustering.
+- Delaunay triangulation computed from the combined point set.
+- Rendering of triangles that are part of the Delaunay triangulation.
+- Visual styling with dynamic color shading for better clarity of layers
+and triangle order.
+
+This method demonstrates concepts of computational geometry and procedural
+rendering.
 
 ![DemoDelaunay01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoDelaunay01Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoDelaunay01.kt)
+
 ### DemoDelaunay02
-[source code](src/jvmDemo/kotlin/DemoDelaunay02.kt)
+
+
 
 ![DemoDelaunay02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoDelaunay02Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoDelaunay02.kt)
+
 ### DemoVoronoi01
-[source code](src/jvmDemo/kotlin/DemoVoronoi01.kt)
+
+This program generates a Voronoi diagram within a defined circular area and visualizes it.
+
+The program performs the following:
+- Defines a circular area and a rectangular bounding frame within the canvas.
+- Uses Poisson Disk Sampling to generate points within the circular area.
+- Computes the Delaunay triangulation for the generated points, including equidistant points on the circle boundary.
+- Derives the Voronoi diagram using the Delaunay triangulation and the bounding frame.
+- Extracts the cell polygons of the Voronoi diagram.
+- Renders the Voronoi cell polygons on the canvas, with a pink stroke on a black background.
 
 ![DemoVoronoi01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoVoronoi01Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoVoronoi01.kt)
+
 ### DemoVoronoi02
-[source code](src/jvmDemo/kotlin/DemoVoronoi02.kt)
+
+
 
 ![DemoVoronoi02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoVoronoi02Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoVoronoi02.kt)
+
 ### DemoVoronoi03
-[source code](src/jvmDemo/kotlin/DemoVoronoi03.kt)
+
+
 
 ![DemoVoronoi03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoVoronoi03Kt.png)
+
+[source code](src/jvmDemo/kotlin/DemoVoronoi03.kt)

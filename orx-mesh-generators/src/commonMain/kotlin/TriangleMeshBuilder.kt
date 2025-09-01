@@ -144,7 +144,7 @@ class TriangleMeshBuilder {
      */
     fun toByteBuffer(): MPPBuffer {
         //val bb = ByteBuffer.allocateDirect(data.size * (3 * 4 + 3 * 4 + 2 * 4 + 4 * 4))
-        val bb = MPPBuffer.allocate(data.size * (3 * 4 + 3 * 4 + 2 * 4 + 4 * 4))
+        val bb = MPPBuffer.allocate(data.size * (4 * 4 + 4 * 4 + 4 * 4 + 4 * 4))
 
         //bb.order(ByteOrder.nativeOrder())
         bb.rewind()
@@ -152,13 +152,16 @@ class TriangleMeshBuilder {
             bb.putFloat(d.position.x.toFloat())
             bb.putFloat(d.position.y.toFloat())
             bb.putFloat(d.position.z.toFloat())
+            bb.putFloat(0.0f)
 
             bb.putFloat(d.normal.x.toFloat())
             bb.putFloat(d.normal.y.toFloat())
             bb.putFloat(d.normal.z.toFloat())
-
+            bb.putFloat(0.0f)
             bb.putFloat(d.texCoord.x.toFloat())
             bb.putFloat(d.texCoord.y.toFloat())
+            bb.putFloat(0.0f)
+            bb.putFloat(0.0f)
 
             bb.putFloat(d.color.r.toFloat())
             bb.putFloat(d.color.g.toFloat())
@@ -249,13 +252,13 @@ fun TriangleMeshBuilder.grid(
                 when (coordinates) {
                     GridCoordinates.INDEX -> this.builder(u * 1.0, v * 1.0)
                     GridCoordinates.BIPOLAR -> this.builder(
-                        2 * u / (width - 1.0) - 1,
-                        2 * v / (height - 1.0) - 1
+                        if (width <= 1) 0.0 else 2 * u / (width - 1.0) - 1,
+                        if (height <= 1) 0.0 else 2 * v / (height - 1.0) - 1
                     )
 
                     GridCoordinates.UNIPOLAR -> this.builder(
-                        u / (width - 1.0),
-                        v / (height - 1.0)
+                        if (width <= 1) 0.0 else u / (width - 1.0),
+                        if (height <= 1) 0.0 else v / (height - 1.0)
                     )
                 }
             }
@@ -292,15 +295,15 @@ fun TriangleMeshBuilder.grid(
                         )
 
                         GridCoordinates.BIPOLAR -> this.builder(
-                            2 * u / (width - 1.0) - 1,
-                            2 * v / (height - 1.0) - 1,
-                            2 * w / (depth - 1.0) - 1
+                            if (width <= 1) 0.0 else 2 * u / (width - 1.0) - 1,
+                            if (height <= 1) 0.0 else 2 * v / (height - 1.0) - 1,
+                            if (depth <= 1) 0.0 else 2 * w / (depth - 1.0) - 1
                         )
 
                         GridCoordinates.UNIPOLAR -> this.builder(
-                            u / (width - 1.0),
-                            v / (height - 1.0),
-                            w / (depth - 1.0)
+                            if (width <= 1) 0.0 else u / (width - 1.0),
+                            if (height <= 1) 0.0 else v / (height - 1.0),
+                            if (depth <= 1) 0.0 else w / (depth - 1.0)
                         )
                     }
                 }

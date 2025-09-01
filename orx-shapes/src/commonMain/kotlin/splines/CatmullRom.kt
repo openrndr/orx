@@ -2,7 +2,6 @@ package org.openrndr.extra.shapes.splines
 
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
-import org.openrndr.math.mod
 import org.openrndr.shape.*
 import kotlin.math.abs
 import kotlin.math.pow
@@ -83,7 +82,7 @@ class CatmullRomChain1(points: List<Double>, alpha: Double = 0.5, val loop: Bool
     }
 
     fun position(rt: Double): Double {
-        val st = if (loop) mod(rt, 1.0) else rt.coerceIn(0.0, 1.0)
+        val st = if (loop) rt.mod(1.0) else rt.coerceIn(0.0, 1.0)
         val segmentIndex = (kotlin.math.min(almostOne, st) * segments.size).toInt()
         val t = (kotlin.math.min(almostOne, st) * segments.size) - segmentIndex
         return segments[segmentIndex].position(t)
@@ -178,7 +177,7 @@ class CatmullRomChain2(points: List<Vector2>, alpha: Double = 0.5, val loop: Boo
     }
 
     fun position(rt: Double): Vector2 {
-        val st = if (loop) mod(rt, 1.0) else rt.coerceIn(0.0, 1.0)
+        val st = if (loop) rt.mod(1.0) else rt.coerceIn(0.0, 1.0)
         val segmentIndex = (kotlin.math.min(almostOne, st) * segments.size).toInt()
         val t = (kotlin.math.min(almostOne, st) * segments.size) - segmentIndex
         return segments[segmentIndex].position(t)
@@ -273,7 +272,7 @@ class CatmullRomChain3(points: List<Vector3>, alpha: Double = 0.5, val loop: Boo
     }
 
     fun position(rt: Double): Vector3 {
-        val st = if (loop) mod(rt, 1.0) else rt.coerceIn(0.0, 1.0)
+        val st = if (loop) rt.mod(1.0) else rt.coerceIn(0.0, 1.0)
         val segmentIndex = (kotlin.math.min(almostOne, st) * segments.size).toInt()
         val t = (kotlin.math.min(almostOne, st) * segments.size) - segmentIndex
         return segments[segmentIndex].position(t)
@@ -313,6 +312,15 @@ fun CatmullRomChain2.toContour(): ShapeContour =
 
 
 
+/**
+ * Converts the current 3D Catmull-Rom spline segment into a cubic Bézier curve representation.
+ *
+ * This function calculates the four control points required for a cubic Bézier curve
+ * using the Catmull-Rom spline's positions and its alpha value determining the tension.
+ * The resulting cubic Bézier curve spans between `p1` and `p2` of the Catmull-Rom segment.
+ *
+ * @return A [Segment3D] object representing the equivalent cubic Bézier curve of the Catmull-Rom spline segment.
+ */
 fun CatmullRom3.toSegment(): Segment3D {
     val d1a2 = (p1 - p0).length.pow(2 * alpha)
     val d2a2 = (p2 - p1).length.pow(2 * alpha)
@@ -329,4 +337,12 @@ fun CatmullRom3.toSegment(): Segment3D {
     return Segment3D(b0, b1, b2, b3)
 }
 
+/**
+ * Converts a 3D Catmull-Rom spline chain into a `Path3D` representation.
+ *
+ * The resulting `Path3D` contains the segments generated from the Catmull-Rom spline
+ * and preserves the information about whether the spline forms a closed loop.
+ *
+ * @return A `Path3D` object representing the converted spline chain.
+ */
 fun CatmullRomChain3.toPath3D(): Path3D = Path3D(segments.map { it.toSegment() }, this.loop)

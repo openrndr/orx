@@ -5,10 +5,12 @@ import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 val libs = the<LibrariesForLibs>()
 
-val shouldPublish = project.name !in setOf("openrndr-demos")
+val shouldPublish = project.name !in setOf("openrndr-demos", "orx-git-archiver-gradle")
 
 plugins {
     java
@@ -21,8 +23,6 @@ plugins {
 if (shouldPublish) {
     apply(plugin = "maven-publish")
 }
-
-//apply(plugin = "nebula.release")
 
 repositories {
     mavenCentral()
@@ -57,8 +57,6 @@ dependencies {
     "demoRuntimeOnly"(libs.slf4j.simple)
 }
 
-
-
 tasks {
     @Suppress("UNUSED_VARIABLE")
     val test by getting(Test::class) {
@@ -76,12 +74,14 @@ tasks {
             addBooleanOption("Xdoclint:none", true)
         }
     }
-    withType<KotlinCompile>() {
-        kotlinOptions.jvmTarget = libs.versions.jvmTarget.get()
-        kotlinOptions.apiVersion = libs.versions.kotlinApi.get()
-        kotlinOptions.languageVersion = libs.versions.kotlinLanguage.get()
-        kotlinOptions.freeCompilerArgs += "-Xexpect-actual-classes"
-        kotlinOptions.freeCompilerArgs += "-Xjdk-release=${libs.versions.jvmTarget.get()}"
+    withType<KotlinCompile> {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.valueOf("JVM_${libs.versions.jvmTarget.get()}"))
+            freeCompilerArgs.add("-Xexpect-actual-classes")
+            freeCompilerArgs.add("-Xjdk-release=${libs.versions.jvmTarget.get()}")
+            apiVersion.set(KotlinVersion.valueOf("KOTLIN_${libs.versions.kotlinApi.get().replace(".", "_")}"))
+            languageVersion.set(KotlinVersion.valueOf("KOTLIN_${libs.versions.kotlinLanguage.get().replace(".", "_")}"))
+        }
     }
 }
 

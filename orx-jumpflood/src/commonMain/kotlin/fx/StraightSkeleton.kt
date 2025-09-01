@@ -31,7 +31,7 @@ private class StraightSkeletonFilter : Filter(filterShaderFromCode(jf_straight_s
 }
 
 @Description("Skeleton")
-class StraightSkeleton : Filter() {
+class StraightSkeleton : Filter(null) {
     @DoubleParameter("threshold", 0.0, 1.0, order = 0)
     var threshold = 0.5
 

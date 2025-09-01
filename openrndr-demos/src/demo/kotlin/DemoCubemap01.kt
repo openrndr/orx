@@ -1,16 +1,17 @@
 import org.openrndr.application
-import org.openrndr.draw.*
+import org.openrndr.draw.DrawPrimitive
+import org.openrndr.draw.Session
+import org.openrndr.draw.loadCubemap
+import org.openrndr.draw.shadeStyle
 import org.openrndr.extra.camera.Orbital
 import org.openrndr.extra.meshgenerators.boxMesh
 
 fun main() = application {
     program {
-
         val cubemap = loadCubemap("demo-data/cubemaps/garage_iem.dds", null, session = Session.active)
         val cube = boxMesh()
-        extend(Orbital()) {
 
-        }
+        extend(Orbital())
         extend {
             drawer.shadeStyle = shadeStyle {
                 fragmentTransform = """

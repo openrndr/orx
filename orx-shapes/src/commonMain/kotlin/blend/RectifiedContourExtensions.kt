@@ -16,6 +16,19 @@ fun RectifiedContour.splitForBlend(other: RectifiedContour): RectifiedContour {
     return ShapeContour.fromContours(splitAt(rts), originalPath.closed && other.originalPath.closed).rectified()
 }
 
+/**
+ * Blends two rectified contours by applying a blend function to their segments.
+ *
+ * This method takes two `RectifiedContour` instances and a blend function to produce
+ * a `ShapeContour` that smoothly interpolates between the two contours.
+ * The blending is performed by applying the blend function at specific parameter values
+ * for each segment of the contours.
+ *
+ * @param other the other `RectifiedContour` to blend with
+ * @param blendFunction a function determining the blend factor for the segments as a function of rectified parameter space
+ * @return a `ShapeContour` that is the result of blending this contour with the other contour
+ *         using the provided blend function
+ */
 fun RectifiedContour.mix(other: RectifiedContour, blendFunction: (Double) -> Double): ShapeContour {
     val n = this.originalPath.segments.size.toDouble()
     val segs = (this.originalPath.segments zip other.originalPath.segments).mapIndexed { index, it ->

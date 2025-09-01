@@ -15,82 +15,89 @@ import org.openrndr.shape.Path3D
 import kotlin.math.PI
 import kotlin.math.exp
 
-fun main() {
-    application {
-        configure {
-            width = 800
-            height = 800
-            multisample = WindowMultisample.SampleCount(8)
+/**
+ * Demonstration creating two intersecting spirals
+ * using [buildTriangleMesh] and [extrudeContourAdaptive].
+ * This approach generates as many vertices as needed
+ * based on the provided tolerance.
+ *
+ * The result is a [org.openrndr.draw.VertexBuffer] which can be rendered with
+ * `drawer.vertexBuffer()`.
+ *
+ * The [Orbital] camera slowly rotates on its own while
+ * still being interactive.
+ * A minimal `shadeStyle` is used to simulate a directional light.
+ */
+fun main() = application {
+    configure {
+        width = 720
+        height = 720
+        multisample = WindowMultisample.SampleCount(8)
+    }
+    program {
+        fun spiralPath(a: Double, k: Double, cycles: Double, steps: Int, direction: Double = 1.0): Path3D {
+            val points = (0 until steps).map {
+
+                val theta = ((PI * 2.0 * cycles) / steps) * it
+                val radius = a * exp(k * theta)
+
+                val c = Polar(theta.asDegrees, radius).cartesian
+                c.xy0
+            }
+            return Path3D.fromPoints(points, false)
         }
-        program {
-            fun spiralPath(a: Double, k: Double, cycles: Double, steps: Int, direction:Double = 1.0): Path3D {
-                val points = (0 until steps).map {
 
-                    val theta = ((PI * 2.0 * cycles) / steps) * it
-                    val radius = a * exp(k * theta)
+        val spiral = buildTriangleMesh {
+            for (i in -1..1 step 2) {
+                val p = spiralPath(0.2 * i, 0.25, 4.0, 400)
 
-                    val c = Polar(theta.asDegrees, radius).cartesian
-                    c.xy0
-                }
-                return Path3D.fromPoints(points, false)
+                extrudeContourAdaptive(
+                    Circle(0.0, 0.0, 0.1).contour,
+                    p,
+                    Vector3.UNIT_Z,
+                    contourDistanceTolerance = 0.02,
+                    pathDistanceTolerance = 0.001
+                )
             }
 
-            val spiral = buildTriangleMesh {
-                for (i in -1..1 step 2) {
-                    val p = spiralPath(0.2 * i, 0.25, 4.0, 400)
+            isolated {
+                color = ColorRGBa.YELLOW
+                rotate(Vector3.UNIT_X, 90.0)
 
-                    extrudeContourAdaptive(
-                        Circle(0.0, 0.0, 0.1).contour,
-                        p,
-                        Vector3.UNIT_Z,
-                        contourDistanceTolerance = 0.02,
-                        pathDistanceTolerance = 0.001
-                    )
-                }
+                //rotate(Vector3.UNIT_Y, 45.0)
+                for (j in 0 until 1) {
+                    for (i in -1..1 step 2) {
 
-                isolated {
-                    color = ColorRGBa.YELLOW
-                    rotate(Vector3.UNIT_X, 90.0)
+                        val rotationDegrees = j * 180.0 / 1.0
+                        val rotation = rotationDegrees.asRadians
+                        val scale = exp(rotation * 0.25)
 
-                    //rotate(Vector3.UNIT_Y, 45.0)
-                    for (j in 0 until 1) {
-                        for (i in -1..1 step 2) {
+                        val p = spiralPath(0.2 * i * scale, 0.25, 4.0, 400)
 
-                            val rotationDegrees = j * 180.0 / 1.0
-                            val rotation = rotationDegrees.asRadians
-                            val scale = exp(rotation * 0.25)
-
-                            val p = spiralPath(0.2 * i * scale, 0.25, 4.0, 400)
-
-                            extrudeContourAdaptive(
-                                Circle(0.0, 0.0, 0.1).contour,
-                                p,
-                                Vector3.UNIT_Z,
-                                contourDistanceTolerance = 0.02,
-                                pathDistanceTolerance = 0.001
-                            )
-                        }
-                        rotate(Vector3.UNIT_Y, 180.0 / 1.0)
+                        extrudeContourAdaptive(
+                            Circle(0.0, 0.0, 0.1).contour,
+                            p,
+                            Vector3.UNIT_Z,
+                            contourDistanceTolerance = 0.02,
+                            pathDistanceTolerance = 0.001
+                        )
                     }
+                    rotate(Vector3.UNIT_Y, 180.0 / 1.0)
                 }
-
-
-
             }
+        }
 
-            extend(Orbital())
-            extend {
-                drawer.shadeStyle = shadeStyle {
-                    fragmentTransform = """
+        extend(Orbital())
+        extend {
+            drawer.shadeStyle = shadeStyle {
+                fragmentTransform = """
                         x_fill = va_color;
                         x_fill.rgb *= v_viewNormal.z;
                     """.trimIndent()
-                }
-
-                drawer.rotate(Vector3.UNIT_X, seconds*20.0)
-                drawer.vertexBuffer(spiral, DrawPrimitive.TRIANGLES)
-
             }
+
+            drawer.rotate(Vector3.UNIT_X, seconds * 20.0)
+            drawer.vertexBuffer(spiral, DrawPrimitive.TRIANGLES)
         }
     }
 }

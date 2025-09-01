@@ -25,8 +25,8 @@ inline fun value(seed: Int, x: Double, y: Double, crossinline interpolation: (Do
     val xs = interpolation(x - x0)
     val ys = interpolation(y - y0)
 
-    val xf0 = mix(valCoord2D(seed, x0, y0), valCoord2D(seed, x1, y0), xs)
-    val xf1 = mix(valCoord2D(seed, x0, y1), valCoord2D(seed, x1, y1), xs)
+    val xf0 = mix(fshash2D(seed, x0, y0), fshash2D(seed, x1, y0), xs)
+    val xf1 = mix(fshash2D(seed, x0, y1), fshash2D(seed, x1, y1), xs)
 
     return mix(xf0, xf1, ys)
 }

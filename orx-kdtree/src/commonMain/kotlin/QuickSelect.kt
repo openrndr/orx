@@ -1,5 +1,16 @@
 package org.openrndr.extra.kdtree
 
+/**
+ * Selects the nth element from the given list after partially sorting it based on a mapping function.
+ *
+ * This method modifies the input list to reorder its elements such that the nth element is placed
+ * at the correct sorted position if the list were fully sorted according to the provided mapper.
+ *
+ * @param items The list of elements to process and partially sort.
+ * @param n The zero-based index of the element to select after partial sorting.
+ * @param mapper A lambda function that maps an element of type T to a Double, used to determine sorting order.
+ * @return The nth element in the reordered list.
+ */
 fun <T> selectNth(items: MutableList<T>, n: Int, mapper: (T)->Double): T {
     var from = 0
     var to = items.size - 1

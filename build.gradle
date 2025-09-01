@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.nebula.release)
-    alias(libs.plugins.gradle.nexus.publish)
+    //alias(libs.plugins.gradle.nexus.publish)
+    id("com.gradleup.nmcp.aggregation").version("1.1.0")
+
     id("org.openrndr.extra.convention.dokka")
 }
 
@@ -8,7 +10,7 @@ repositories {
     mavenCentral()
 }
 
-task buildMainReadme {
+tasks.register('buildMainReadme') {
     doFirst {
         def subProjects = project.subprojects
         //.findAll { !it.name.contains("kinect-common") && !it.name.contains
@@ -37,7 +39,7 @@ task buildMainReadme {
         // Skip the hash character from the headline, then start
         // on the next line and continue until the next empty line.
         // Don't fall into Windows line breaks.
-        def descriptionRx = ~/(?s)\#.*?\n(.+?)\n\r?\n/
+        def descriptionRx = ~/(?s)#.*?\n(.+?)\n\r?\n/
         // Note: the readme needs an empty line after the description
 
         def orxMultiplatform = []
@@ -89,17 +91,28 @@ task buildMainReadme {
     }
 }
 group = "org.openrndr.extra"
+nmcpAggregation {
+    centralPortal {
+        username.set(findProperty("ossrhUsername") ?: System.getenv("OSSRH_USERNAME"))
+        password.set(findProperty("ossrhPassword") ?: System.getenv("OSSRH_PASSWORD"))
 
-nexusPublishing {
-    repositories {
-        sonatype {
-            username.set(findProperty("ossrhUsername") ?: System.getenv("OSSRH_USERNAME"))
-            password.set(findProperty("ossrhPassword") ?: System.getenv("OSSRH_PASSWORD"))
-            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
-            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots"))
-        }
+        // publish manually from the portal
+        publishingType = "USER_MANAGED"
     }
+
+    // Publish all projects that apply the 'maven-publish' plugin
+    publishAllProjectsProbablyBreakingProjectIsolation()
 }
+//nexusPublishing {
+//    repositories {
+//        sonatype {
+//            username.set(findProperty("ossrhUsername") ?: System.getenv("OSSRH_USERNAME"))
+//            password.set(findProperty("ossrhPassword") ?: System.getenv("OSSRH_PASSWORD"))
+//            nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
+//            snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
+//        }
+//    }
+//}
 
 subprojects {
     // Equivalent Kotlin is: tasks.register<DependencyReportTask>("dependenciesAll") { ...
@@ -109,6 +122,20 @@ subprojects {
     }
 }
 
+dependencies {
+    subprojects.findAll {
+        it.name.startsWith("orx-")
+    }.each { subproject ->
+        dokka(project(subproject.path))
+    }
+}
+class SleepTask extends DefaultTask {
+    @TaskAction
+    void action() {
+        sleep(60 * 5 * 1000)
+    }
+}
+tasks.register("sleep", SleepTask)
 gradle.buildFinished {
     println("\n")
     println("orx = \"${version}\"")

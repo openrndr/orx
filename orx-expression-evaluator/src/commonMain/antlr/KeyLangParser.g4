@@ -8,13 +8,19 @@ keyLangFile : lines=line+ ;
 line      : statement (NEWLINE | EOF) ;
 
 statement :
-           expression       # expressionStatement ;
+           expressionRoot       # expressionStatement ;
+
+rangeExpression: expression operator=(RANGE_INCLUSIVE|RANGE_EXCLUSIVE|RANGE_EXCLUSIVE_UNTIL|RANGE_DOWNTO) expression (step=STEP expression)?;
+
+expressionRoot: rangeExpression
+              | expression
+              ;
 
 lambda: LCURLY (ID ( COMMA ID )* ARROW )? expression RCURLY                             # functionLiteral;
 
 expression : INTLIT                                                        # intLiteral
            | DECLIT                                                        # decimalLiteral
-           | LBRACKET (expression ( COMMA expression )*)? RBRACKET             # listLiteral
+           | LBRACKET (expressionRoot ( COMMA expressionRoot )*)? RBRACKET             # listLiteral
            | expression DOT ID lambda                                      # memberFunctionCall0LambdaExpression
            | lambda                                                        # lambdaExpression
            | expression DOT ID LPAREN RPAREN                               # memberFunctionCall0Expression
@@ -32,7 +38,7 @@ expression : INTLIT                                                        # int
            | ID                                                            # valueReference
            | STRING_OPEN (parts+=stringLiteralContent)* STRING_CLOSE       # stringLiteral
            | expression DOT ID                                             # propReference
-           | LPAREN expression RPAREN                                      # parenExpression
+           | LPAREN expressionRoot RPAREN                                      # parenExpression
            | MINUS expression                                              # minusExpression
            | NOT expression                                                # negateExpression
            | expression operator=(DIVISION|ASTERISK|PERCENTAGE) expression # binaryOperation1

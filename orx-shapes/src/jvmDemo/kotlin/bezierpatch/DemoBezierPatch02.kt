@@ -15,24 +15,22 @@ import org.openrndr.shape.ShapeContour
  * but one can manually create any other 4-segment closed contour
  * to use in bezier patches.
  */
-fun main() {
-    application {
-        configure {
-            width = 800
-            height = 800
-        }
-        program {
-            val c = Circle(width / 2.0, height / 2.0, 350.0).contour
-            val bp = bezierPatch(c)
+fun main() = application {
+    configure {
+        width = 800
+        height = 800
+    }
+    program {
+        val c = Circle(width / 2.0, height / 2.0, 350.0).contour
+        val bp = bezierPatch(c)
 
-            extend {
-                drawer.clear(ColorRGBa.PINK)
-                drawer.stroke = ColorRGBa.BLACK
+        extend {
+            drawer.clear(ColorRGBa.PINK)
+            drawer.stroke = ColorRGBa.BLACK
 
-                for (i in 0..10) {
-                    drawer.contour(bp.horizontal(i / 10.0))
-                    drawer.contour(bp.vertical(i / 10.0))
-                }
+            for (i in 0..10) {
+                drawer.contour(bp.horizontal(i / 10.0))
+                drawer.contour(bp.vertical(i / 10.0))
             }
         }
     }

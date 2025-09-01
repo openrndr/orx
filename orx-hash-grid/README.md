@@ -68,16 +68,42 @@ val hashGrid = points.hashGrid(20.0)
 <!-- __demos__ -->
 ## Demos
 ### DemoFilter01
-[source code](src/jvmDemo/kotlin/DemoFilter01.kt)
+
+
+The program performs the following steps:
+- Generates 10,000 random points uniformly distributed within the drawable bounds.
+- Filters the generated points to enforce a minimum distance of 20.0 units between them.
+- Visualizes the filtered points as circles with a radius of 10.0 units on the canvas.
 
 ![DemoFilter01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-hash-grid/images/DemoFilter01Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoFilter01.kt)
+
 ### DemoFilter3D01
-[source code](src/jvmDemo/kotlin/DemoFilter3D01.kt)
+
+This demo sets up and renders a 3D visualization of filtered random points displayed as small spheres.
+
+The program performs the following key steps:
+- Generates 10,000 random 3D points within a ring defined by a minimum and maximum radius.
+- Filters the points to ensure a minimum distance between any two points using a spatial hash grid.
+- Creates a small sphere mesh that will be instanced for each filtered point.
+- Sets up an orbital camera to allow viewing the 3D scene interactively.
+- Renders the filtered points by translating the sphere mesh to each point's position and applying a shader that modifies the fragment color based on the view normal.
 
 ![DemoFilter3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-hash-grid/images/DemoFilter3D01Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoFilter3D01.kt)
+
 ### DemoHashGrid01
-[source code](src/jvmDemo/kotlin/DemoHashGrid01.kt)
+
+This demo sets up an interactive graphics application with a configurable
+display window and visualization logic. It uses a `HashGrid` to manage points
+in a 2D space and randomly generates points within the drawable area. These
+points are then inserted into the grid if they satisfy certain spatial conditions.
+The visual output includes:
+- Rectangles representing the bounds of the cells in the grid.
+- Circles representing the generated points.
 
 ![DemoHashGrid01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-hash-grid/images/DemoHashGrid01Kt.png)
+
+[source code](src/jvmDemo/kotlin/DemoHashGrid01.kt)

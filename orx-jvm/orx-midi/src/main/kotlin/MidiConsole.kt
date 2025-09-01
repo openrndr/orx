@@ -4,7 +4,7 @@ import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
-import org.openrndr.draw.loadFont
+import org.openrndr.draw.loadFontImageMap
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 import java.io.File
@@ -68,7 +68,7 @@ class MidiConsole : Extension {
                 Vector2(box.x, box.y + index * 16.0 + 16.0)
             }
             if (demoFont) {
-                drawer.fontMap = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 16.0)
+                drawer.fontMap = loadFontImageMap("demo-data/fonts/IBMPlexMono-Regular.ttf", 16.0)
             }
             drawer.fill = ColorRGBa.WHITE
             drawer.texts(messages, positions)

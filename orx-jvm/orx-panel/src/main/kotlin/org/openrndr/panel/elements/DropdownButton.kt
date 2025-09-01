@@ -1,18 +1,17 @@
 package org.openrndr.panel.elements
 
-import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.Drawer
-import org.openrndr.draw.FontImageMap
-import org.openrndr.panel.style.*
-import org.openrndr.shape.Rectangle
-import org.openrndr.extra.textwriter.TextWriter
 import kotlinx.coroutines.yield
 import org.openrndr.KEY_ARROW_DOWN
 import org.openrndr.KEY_ARROW_UP
 import org.openrndr.KEY_ENTER
-
+import org.openrndr.color.ColorRGBa
+import org.openrndr.draw.Drawer
+import org.openrndr.draw.loadFont
 import org.openrndr.events.Event
+import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.launch
+import org.openrndr.panel.style.*
+import org.openrndr.shape.Rectangle
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -79,7 +78,10 @@ class DropdownButton : Element(ElementType("dropdown-button")), DisposableElemen
             computedStyle.let { style ->
                 val fontUrl = (root() as? Body)?.controlManager?.fontManager?.resolve(style.fontFamily) ?: "broken"
                 val fontSize = (style.fontSize as? LinearDimension.PX)?.value ?: 16.0
-                val fontMap = FontImageMap.fromUrl(fontUrl, fontSize)
+
+                val program = (root() as? Body)?.controlManager?.program ?: error("no program")
+                val fontMap =  program.loadFont(fontUrl, fontSize)
+
                 val writer = TextWriter(null)
 
                 writer.box = Rectangle(0.0,

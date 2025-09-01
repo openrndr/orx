@@ -1,7 +1,9 @@
 package org.openrndr.extra.composition
 
 import org.openrndr.shape.Shape
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 class TestComposition {
     val composition = let { _ ->

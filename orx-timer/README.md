@@ -33,32 +33,28 @@ fun main() = application {
 Note that drawing inside the `repeat` action has no effect. Have a look at the demos listed below for an example of
 `repeat` triggered drawing.
 
-## Demos
-
- * [Simple `repeat` demonstration](src/demo/kotlin/DemoRepeat01.kt)
- * [A `repeat` demonstration with drawing](src/demo/kotlin/DemoRepeat02.kt)
- * [Simple `timeOut` demonstration](src/demo/kotlin/DemoTimeOut01.kt)
-<!-- __demos__ >
-# Demos
-[DemoRepeat01Kt](src/demo/kotlin/DemoRepeat01Kt.kt
-![DemoRepeat01Kt](https://github.com/openrndr/orx/blob/media/orx-timer/images/DemoRepeat01Kt.png
-[DemoRepeat02Kt](src/demo/kotlin/DemoRepeat02Kt.kt
-![DemoRepeat02Kt](https://github.com/openrndr/orx/blob/media/orx-timer/images/DemoRepeat02Kt.png
-[DemoTimeOut01Kt](src/demo/kotlin/DemoTimeOut01Kt.kt
-![DemoTimeOut01Kt](https://github.com/openrndr/orx/blob/media/orx-timer/images/DemoTimeOut01Kt.png
 <!-- __demos__ -->
 ## Demos
 ### DemoRepeat01
-[source code](src/demo/kotlin/DemoRepeat01.kt)
+
+
 
 ![DemoRepeat01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-timer/images/DemoRepeat01Kt.png)
 
+[source code](src/demo/kotlin/DemoRepeat01.kt)
+
 ### DemoRepeat02
-[source code](src/demo/kotlin/DemoRepeat02.kt)
+
+This demonstrates how to combine `repeat {}` with a postponed event to trigger drawing
 
 ![DemoRepeat02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-timer/images/DemoRepeat02Kt.png)
 
+[source code](src/demo/kotlin/DemoRepeat02.kt)
+
 ### DemoTimeOut01
-[source code](src/demo/kotlin/DemoTimeOut01.kt)
+
+
 
 ![DemoTimeOut01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-timer/images/DemoTimeOut01Kt.png)
+
+[source code](src/demo/kotlin/DemoTimeOut01.kt)

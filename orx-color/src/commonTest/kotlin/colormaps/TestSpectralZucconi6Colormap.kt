@@ -19,11 +19,11 @@ class TestSpectralZucconi6Colormap {
 
     @Test
     fun testSpectralZucconi6() {
-        spectralZucconi6(0.0) shouldBe ColorRGBa(0.0, 0.0, 0.026075309353279508, linearity = Linearity.SRGB)
-        spectralZucconi6(0.5) shouldBe ColorRGBa(0.49637374891706215, 0.8472371726323733, 0.18366091774095827, linearity = Linearity.SRGB)
-        spectralZucconi6(1.0) shouldBe ColorRGBa(0.0, 0.0, 0.0, linearity = Linearity.SRGB)
-        spectralZucconi6(-0.1) shouldBe ColorRGBa(0.0, 0.0, 0.0, linearity = Linearity.SRGB)
-        spectralZucconi6(1.1) shouldBe ColorRGBa(0.0, 0.0, 0.0, linearity = Linearity.SRGB)
+        spectralZucconi6(0.0) shouldBe ColorRGBa(0.0, 0.0, 0.026075309353279508, linearity = Linearity.LINEAR)
+        spectralZucconi6(0.5) shouldBe ColorRGBa(0.49637374891706215, 0.8472371726323733, 0.18366091774095827, linearity = Linearity.LINEAR)
+        spectralZucconi6(1.0) shouldBe ColorRGBa(0.0, 0.0, 0.0, linearity = Linearity.LINEAR)
+        spectralZucconi6(-0.1) shouldBe ColorRGBa(0.0, 0.0, 0.0, linearity = Linearity.LINEAR)
+        spectralZucconi6(1.1) shouldBe ColorRGBa(0.0, 0.0, 0.0, linearity = Linearity.LINEAR)
     }
 
 }

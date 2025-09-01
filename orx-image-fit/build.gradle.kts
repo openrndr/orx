@@ -21,6 +21,7 @@ kotlin {
             dependencies {
                 implementation(project(":orx-shapes"))
                 implementation(project(":orx-image-fit"))
+                implementation(project(":orx-noise"))
             }
         }
     }

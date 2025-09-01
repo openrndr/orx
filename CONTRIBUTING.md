@@ -57,6 +57,7 @@ orx-magic/
 ```
 Note that inside `src` only `commonMain` is required.
 
+
 ## ORX README.md
 
 Assuming you are creating an orx called `magic`, the readme should be formatted as follows:
@@ -88,6 +89,7 @@ Main content describing the usage of orx-magic goes here
    This is specially useful for orx'es that produce graphical output, but less so for orx'es that interface
    with hardware (like `orx-midi`).
 
+
 ## ORX build.gradle.kts
 
 ORX `build.gradle.kts` files declare their dependencies and most follow the same structure. 
@@ -106,6 +108,36 @@ See an [example](https://github.com/openrndr/orx/blob/master/orx-jvm/orx-dnk3/bu
 ### Multiplatform
 
 The multiplatform build files may have blocks like `commonMain`, `commonTest`, `jvmTest`, `jvmDemo`, etc. to specify the dependencies for each case. See an [example](https://github.com/openrndr/orx/blob/master/orx-color/build.gradle.kts).
+
+
+## I want to contribute to the documentation
+
+There are various places where you can contribute without writing code. It will be greatly
+appreciated by others trying to learn about OPENRNDR.
+
+### Guide
+
+The [guide](https://guide.openrndr.org/) is the first contact with OPENRNDR for most users.
+[Learn how to work on the guide](https://github.com/openrndr/openrndr-guide/blob/dev/contributing.md).
+
+### ORX API page
+
+The [ORX API page](https://orx.openrndr.org/) needs some love too. The content is automatically
+extracted from comments written in ORX's source code. It goes like this:
+
+1. Fork the [ORX repo](https://github.com/openrndr/orx/), then clone your fork (so you
+   have a copy on your computer) and get familiar with OPENRNDR and ORX.
+2. Find an undocumented section at https://orx.openrndr.org you want to explain.
+3. Find the corresponding Kotlin file in your cloned repo and add missing comments. Read about
+   the [suggested style](https://developers.google.com/style).
+4. Generate the API website locally to verify your changes look correct by running the following
+   command: `./gradlew dokkaGenerate -Dorg.gradle.jvmargs=-Xmx1536M`. This will create the
+   html documentation under `build/dokka/html/`.
+5. Open the `build/dokka/html/index.html` in your web browser. If something looks off
+   tweak your comments. Note: the sidebar will be empty unless viewed through a web server.
+   You can launch one by running `python3 -m http.server --bind 127.0.0.1` in the html folder.
+7. To continue improving the API go back to step 3, otherwise send a Pull Requests from your fork.
+
 
 ## Demos
 

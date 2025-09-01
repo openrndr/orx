@@ -1,9 +1,15 @@
 # ORX (OPENRNDR EXTRA)
 
-[![Download](https://maven-badges.herokuapp.com/maven-central/org.openrndr.extra/orx-parameters-jvm/badge.svg)](https://mvnrepository.com/artifact/org.openrndr.extra)
+[![ORX maven badge](https://img.shields.io/maven-central/v/org.openrndr.extra/orx-noise-jvm?style=flat&color=%23FFC0CB
+)](https://mvnrepository.com/artifact/org.openrndr.extra)
 
 A growing library of assorted data structures, algorithms and utilities to
-complement [OPENRNDR](https://github.com/openrndr/openrndr).
+complement [OPENRNDR](https://github.com/openrndr/openrndr). 
+Multiplatform, unless they deal with hardware or depend on binary libraries. Those are JVM-only.
+
+## Usage
+
+To make use of these extensions clone the [OPENRNDR template](https://github.com/openrndr/openrndr-template), uncomment the ones you need in its [build.gradle.kts](https://github.com/openrndr/openrndr-template/blob/master/build.gradle.kts) file, and reload Gradle. Cloning this repo is optional but useful to run the demos in each ORX folder, to study the source code, and to contribute to existing or new ORX'es.
 
 <!-- __orxListBegin__ -->
 
@@ -15,8 +21,6 @@ complement [OPENRNDR](https://github.com/openrndr/openrndr).
 | [`orx-color`](orx-color/) | Color spaces, palettes, histograms, named colors. |
 | [`orx-composition`](orx-composition/) | Shape composition library |
 | [`orx-compositor`](orx-compositor/) | Toolkit to make composite (layered) images using blend modes and filters. |
-| [`orx-compute-graph`](orx-compute-graph/) | A graph for computation. |
-| [`orx-compute-graph-nodes`](orx-compute-graph-nodes/) | A collection of nodes that can be used with `orx-compute-graph`. |
 | [`orx-delegate-magic`](orx-delegate-magic/) | Collection of magical property delegators. For tracking variable change or interpolate towards the value of a variable. |
 | [`orx-easing`](orx-easing/) | Easing functions for smooth animation or non-linear interpolation. |
 | [`orx-envelopes`](orx-envelopes/) | ADSR (Attack, Decay, Sustain, Release) envelopes and tools. |
@@ -33,10 +37,12 @@ complement [OPENRNDR](https://github.com/openrndr/openrndr).
 | [`orx-jumpflood`](orx-jumpflood/) | Calculates distance or direction fields from an image. GPU accelerated, 2D. Results are provided as an image. |
 | [`orx-kdtree`](orx-kdtree/) | Fast search of points closest to the queried point in a data set. 2D, 3D and 4D. |
 | [`orx-marching-squares`](orx-marching-squares/) | Tools for extracting contours from functions |
+| [`orx-math`](orx-math/) | Mathematical utilities <!-- __demos__ --> ## Demos ### linearrange/DemoLinearRange02 |
 | [`orx-mesh-generators`](orx-mesh-generators/) | 3D-mesh generating functions and DSL. |
+| [`orx-mesh-noise`](orx-mesh-noise/) | Generate random samples on the surface of a mesh <!-- __demos__ --> ## Demos ### DemoMeshNoise01 |
 | [`orx-no-clear`](orx-no-clear/) | Provides the classical "draw-without-clearing-the-screen" functionality. |
 | [`orx-noise`](orx-noise/) | Randomness for every type of person: Perlin, uniform, value, simplex, fractal and many other types of noise. |
-| [`orx-obj-loader`](orx-obj-loader/) | Simple loader for Wavefront .obj 3D mesh files. |
+| [`orx-obj-loader`](orx-obj-loader/) | Simple loader and saver for Wavefront .obj 3D mesh files. |
 | [`orx-palette`](orx-palette/) | Provides hundreds of color palettes. |
 | [`orx-parameters`](orx-parameters/) | Provides annotations and tools for turning Kotlin properties into introspectable parameters. Used by [`orx-gui`](../orx-jvm/orx-gui/README.md) to automatically generate user interfaces. |
 | [`orx-property-watchers`](orx-property-watchers/) | Tools for setting up property watcher based pipelines |
@@ -46,6 +52,7 @@ complement [OPENRNDR](https://github.com/openrndr/openrndr).
 | [`orx-shapes`](orx-shapes/) | Collection of 2D shape generators and modifiers. |
 | [`orx-svg`](orx-svg/) | SVG reader and writer library. |
 | [`orx-temporal-blur`](orx-temporal-blur/) | Post-processing temporal-blur video effect. CPU intense, therefore not intended  for use with the `ScreenRecorder` extension or other real-time uses. |
+| [`orx-text-on-contour`](orx-text-on-contour/) | Writing texts on contours. |
 | [`orx-text-writer`](orx-text-writer/) | Writing texts with layouts |
 | [`orx-time-operators`](orx-time-operators/) | A collection of time-sensitive functions aimed at controlling raw data over-time,  such as Envelope and LFO. |
 | [`orx-timer`](orx-timer/) | Simple timer functionality providing `repeat`, to run code with a given interval and `timeOut`, to run code once after a given delay. |
@@ -73,8 +80,8 @@ complement [OPENRNDR](https://github.com/openrndr/openrndr).
 | [`orx-osc`](orx-jvm/orx-osc/) | Open Sound Control makes it possible to send and receive messages from other OSC enabled programs in the same or a different computer. Used to create multi-application or multi-device software. |
 | [`orx-panel`](orx-jvm/orx-panel/) | The OPENRNDR UI toolkit. Provides buttons, sliders, text, a color picker and much more. HTML/CSS-like. |
 | [`orx-poisson-fill`](orx-jvm/orx-poisson-fill/) | Post processing effect that fills transparent parts of the image interpolating the edge pixel colors. GPU-based. |
+| [`orx-processing`](orx-jvm/orx-processing/) | orx-processing is a module designed to facilitate seamless type conversions between Processing's types and OPENRNDR's types. It provides utilities and methods that allow developers to integrate the two graphics frameworks effectively by bridging the gap between their respective data structures. |
 | [`orx-rabbit-control`](orx-jvm/orx-rabbit-control/) | Creates a web-based remote UI to control your OPENRNDR program from a mobile device or a different computer. Alternative to `orx-gui`. |
-| [`orx-runway`](orx-jvm/orx-runway/) | Interfaces with the RunwayML machine learning library that provides features like motion capture, image synthesis, object recognition, style transfer and more. More info at [runwayml.com](https://runwayml.com/). |
 | [`orx-syphon`](orx-jvm/orx-syphon/) | Send frames to- and from OPENRNDR to other applications in real time using _Syphon_ for Mac. |
 | [`orx-video-profiles`](orx-jvm/orx-video-profiles/) | GIF, H265, PNG, Prores, TIFF and Webp `VideoWriterProfile`s for `ScreenRecorder` and `VideoWriter`. |
 <!-- __orxListEnd__ -->

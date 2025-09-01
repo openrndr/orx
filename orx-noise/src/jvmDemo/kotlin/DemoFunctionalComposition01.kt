@@ -5,6 +5,14 @@ import org.openrndr.extra.noise.gradient
 import org.openrndr.extra.noise.simplex3D
 import org.openrndr.extra.noise.withVector2Output
 
+/**
+ * Demonstrates how to chain methods behind noise functions like `simplex3D` to
+ * alter its output. By default `simplex3D` produces one double value, but
+ * by calling `.withVector2Output()` it produces `Vector2` instances instead.
+ *
+ * The `.gradient()` method alters the output to return the direction of fastest
+ * increase. Read more in [WikiPedia](https://en.wikipedia.org/wiki/Gradient).
+ */
 fun main() = application {
     configure {
         width = 720

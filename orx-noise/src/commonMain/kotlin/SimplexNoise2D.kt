@@ -9,7 +9,14 @@ private const val G2 = (3.0 - SQRT3) / 6.0
 fun simplex(seed: Int, position: Vector2): Double = simplex(seed, position.x, position.y)
 
 
-//fun simplex2D(seed:Int, x:Double, y:Double) = simplex(seed, x, y)
+/**
+ * Computes a 2D simplex noise value for given coordinates and seed.
+ *
+ * @param seed The seed value used for generating the noise.
+ * @param x The x-coordinate in 2D space for which the noise value is calculated.
+ * @param y The y-coordinate in 2D space for which the noise value is calculated.
+ * @return The 2D simplex noise value for the given coordinates and seed.
+ */
 fun simplex(seed: Int, x: Double, y: Double): Double {
     var t = (x + y) * F2
     val i = (x + t).fastFloor()
@@ -70,6 +77,13 @@ val simplex2D: (Int, Double, Double) -> Double = ::simplex
 val simplex3D: (Int, Double, Double, Double) -> Double = ::simplex
 val simplex4D: (Int, Double, Double, Double) -> Double = ::simplex
 
+/**
+ * Generates a 2D simplex noise vector based on the given seed and input position.
+ *
+ * @param seed The seed value used to generate deterministic noise.
+ * @param x The x-coordinate for the noise generation.
+ * @return A Vector2 object representing the 2D noise values at the given position.
+ */
 fun Vector2.Companion.simplex(seed: Int, x: Double): Vector2 = Vector2(
     simplex(seed, x, 0.0, 0.0, 0.0),
     simplex(seed, 0.0, x + 31.3383, 0.0, 0.0)

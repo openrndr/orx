@@ -1,6 +1,6 @@
-out vec4 o_output;
-in vec2 v_texCoord0;
-uniform sampler2D tex0;
+highp out vec4 o_output;
+highp in vec2 v_texCoord0;
+uniform highp sampler2D tex0;
 
 
 // -- based on https://github.com/excess-demogroup/even-laster-engine/blob/a451a89f6bd6d3c6017d5890b92d9f72823bc742/src/shaders/bloom.fra
@@ -11,9 +11,9 @@ void main()
 	vec4 offsets = vec4(-diagonalOffsets.xy, +diagonalOffsets.xy) / vec2(textureSize(tex0, 0)).xyxy;
 	float diagonalWeight = 0.2085034734347498;
 
-	o_output = textureLod(tex0, v_texCoord0, 0.0) * centerWeight +
-	               textureLod(tex0, v_texCoord0 + offsets.xy, 0.0) * diagonalWeight +
-	               textureLod(tex0, v_texCoord0 + offsets.wx, 0.0) * diagonalWeight +
-	               textureLod(tex0, v_texCoord0 + offsets.zw, 0.0) * diagonalWeight +
-	               textureLod(tex0, v_texCoord0 + offsets.yz, 0.0) * diagonalWeight;
+	o_output = texture(tex0, v_texCoord0) * centerWeight +
+	               texture(tex0, v_texCoord0 + offsets.xy) * diagonalWeight +
+	               texture(tex0, v_texCoord0 + offsets.wx) * diagonalWeight +
+	               texture(tex0, v_texCoord0 + offsets.zw) * diagonalWeight +
+	               texture(tex0, v_texCoord0 + offsets.yz) * diagonalWeight;
 }

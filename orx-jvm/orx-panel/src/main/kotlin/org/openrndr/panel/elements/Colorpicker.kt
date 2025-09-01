@@ -141,7 +141,7 @@ class Colorpicker : Element {
             for (y in 0..49) {
                 for (x in 0 until it.colorBuffer.width) {
                     val hsv = ColorHSVa(360.0 / it.colorBuffer.width * x, saturation, (49 - y) / 49.0)
-                    it.write(x, y, hsv.toRGBa())
+                    it.write(x, y, hsv.toRGBa().toLinear())
                 }
             }
             it.upload()
@@ -155,7 +155,7 @@ class Colorpicker : Element {
         }
 
         drawer.image(colorMap!!, 0.0, 0.0)
-        drawer.fill = (color)
+        drawer.fill = color
         drawer.stroke = null
         drawer.shadeStyle = null
         drawer.rectangle(0.0, 50.0, layout.screenWidth, 20.0)

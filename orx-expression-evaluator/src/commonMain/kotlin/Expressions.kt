@@ -91,7 +91,7 @@ internal class ExpressionListener(
             KeyLangParser.Tokens.MINUS -> left - right
             KeyLangParser.Tokens.ASTERISK -> left * right
             KeyLangParser.Tokens.DIVISION -> left / right
-            KeyLangParser.Tokens.PERCENTAGE -> mod(left, right)
+            KeyLangParser.Tokens.PERCENTAGE -> left.mod(right)
             else -> error("operator '$operator' not implemented")
         }
         doubleStack.push(result)
@@ -261,7 +261,7 @@ internal class ExpressionListener(
                 IDType.VARIABLE -> doubleStack.push(
                     when (name) {
                         "PI" -> PI
-                        else -> constants[name] ?: errorValue("unresolved variable: '${name}'", 0.0 / 0.0)
+                        else -> constants[name] ?: errorValue("unresolved value: '${name}'. available values: ${constants}", 0.0 / 0.0)
                     }
                 )
 

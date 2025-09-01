@@ -1,6 +1,6 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.tint
+import org.openrndr.extra.color.colormatrix.tint
 import org.openrndr.extra.temporalblur.TemporalBlur
 import org.openrndr.math.Polar
 import kotlin.math.cos

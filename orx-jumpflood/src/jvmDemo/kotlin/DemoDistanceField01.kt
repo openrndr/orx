@@ -10,19 +10,23 @@ import org.openrndr.shape.Rectangle
 
 /**
  * Shows how to use the [DistanceField] filter.
+ *
  * Draws moving white shapes on black background,
  * then applies the DistanceField filter which returns a [ColorBuffer] in which
  * the red component encodes the distance to the closest black/white edge.
- * The value is positive when on the black background and negative
- * when inside white shapes. The sign is used in the [shadeStyle] to choose
- * between two colors. The inverse of the distance is used to obtain a
- * non-linear brightness.
+ *
+ * The value of the green component is negative when on the black background
+ * and positive when inside white shapes. The sign is used in the [shadeStyle] to choose
+ * between two colors.
+ *
+ * The inverse of the distance is used to obtain a non-linear brightness.
+ *
  * Hold down a mouse button to see the raw animation.
  */
 fun main() = application {
     configure {
-        width = 1024
-        height = 1024
+        width = 720
+        height = 720
     }
 
     program {
@@ -39,8 +43,7 @@ fun main() = application {
                 // wavy effect
                 // bri *= (1.0 + 0.2 * sin(distance * 0.2));
                 
-                x_fill.rgb = bri * (x_fill.r > 0 ? 
-                    vec3(1.0, 0.0, 0.0) : vec3(0.0, 1.0, 1.0));
+                x_fill.rgb = bri * (x_fill.g > 0.0 ? vec3(1.0, 0.0, 0.0) : vec3(0.0, 1.0, 1.0));
             """
         }
         val mouseTracker = MouseTracker(mouse)

@@ -16,28 +16,8 @@ in vec2 v_texCoord0;
 
 out vec4 o_color;
 
-uniform bool linearizeInputA;
-uniform bool linearizeInputB;
-uniform bool delinearizeOutput;
 uniform float fill;
 uniform bool clip;
-
-vec3 srgb_to_linear(vec3 c) {
-    const float t = 0.00313066844250063;
-    return vec3(
-        c.r <= t ? c.r / 12.92 : pow((c.r + 0.055) / 1.055, 2.4),
-        c.g <= t ? c.g / 12.92 : pow((c.g + 0.055) / 1.055, 2.4),
-        c.b <= t ? c.b / 12.92 : pow((c.b + 0.055) / 1.055, 2.4));
-}
-
-vec3 linear_to_srgb(vec3 c) {
-    const float t = 0.00313066844250063;
-    return vec3(
-        c.r <= t ? c.r * 12.92 : 1.055 * pow(c.r, 1.0 / 2.4) - 0.055,
-        c.g <= t ? c.g * 12.92 : 1.055 * pow(c.g, 1.0 / 2.4) - 0.055,
-        c.b <= t ? c.b * 12.92 : 1.055 * pow(c.b, 1.0 / 2.4) - 0.055
-    );
-}
 
 void main() {
     vec4 a = texture(tex0, v_texCoord0);
@@ -48,13 +28,6 @@ void main() {
     vec4 nb = b.a == 0.0 ? vec4(0.0): vec4(b.rgb / b.a,b.a);
 
     
-    if (linearizeInputA) {
-        na.rgb = srgb_to_linear(na.rgb);
-    }
-    
-    if (linearizeInputB) {
-        nb.rgb = srgb_to_linear(nb.rgb);
-    }
     
     vec4 mixed = vec4(spectral_mix(na.rgb, nb.rgb, min(1.0, fill)), 1.0);
 
@@ -68,9 +41,6 @@ void main() {
 
     mixed.rgb = mixed.a == 0.0 ? vec3(0.0): mixed.rgb / mixed.a;
 
-    if (delinearizeOutput) {
-         mixed.rgb = linear_to_srgb(mixed.rgb);
-    }
 
 // premultiply alpha
     mixed.rgb *= mixed.a;    

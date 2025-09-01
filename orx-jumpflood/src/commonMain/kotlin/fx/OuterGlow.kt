@@ -34,7 +34,7 @@ private class OuterGlowFilter : Filter(filterShaderFromCode(jf_outer_glow, "oute
 }
 
 @Description("Outer glow")
-class OuterGlow : Filter1to1() {
+class OuterGlow : Filter1to1(null) {
     @DoubleParameter("width", 0.0, 50.0)
     var width = 5.0
 

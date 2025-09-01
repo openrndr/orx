@@ -13,14 +13,14 @@ fun main() = application {
         height = 512
     }
     program {
-        val rt = renderTarget(512, 512, 1.0) {
+        val rt = renderTarget(width, height, 1.0) {
             colorBuffer(type = ColorType.FLOAT32)
         }
         val encoder = EncodePoints()
-        val jf = JumpFlooder(512, 512, encodePoints = Passthrough())
-        val jf2 = JumpFlooder(512, 512, encodePoints = Passthrough())
+        val jf = JumpFlooder(width, height, encodePoints = Passthrough())
+        val jf2 = JumpFlooder(width, height, encodePoints = Passthrough())
         val idcontours = IdContourPoints()
-        val contoured = colorBuffer(512, 512, type = ColorType.FLOAT32)
+        val contoured = colorBuffer(width, height, type = ColorType.FLOAT32)
         extend {
             fun plot(x: Double, y: Double, id: Double) {
                 drawer.fill = ColorRGBa(id, 0.0, 0.0, 1.0)
@@ -53,7 +53,7 @@ fun main() = application {
             drawer.image(contoured)
             val flooded2 = jf2.jumpFlood(contoured)
 
-            drawer.image(flooded2, 512.0, 0.0)
+            drawer.image(flooded2, width * 1.0, 0.0)
 
             drawer.shadeStyle = shadeStyle {
                 fragmentTransform = """

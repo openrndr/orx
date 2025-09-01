@@ -8,12 +8,9 @@ import org.openrndr.extra.fx.fx_bloom_combine
 import org.openrndr.extra.fx.fx_bloom_downscale
 import org.openrndr.extra.fx.fx_bloom_upscale
 import org.openrndr.extra.fx.mppFilterShader
-import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
-import org.openrndr.filter.color.delinearize
-import org.openrndr.filter.color.linearize
 import org.openrndr.shape.Rectangle
 
 class BloomDownscale : Filter(mppFilterShader(fx_bloom_downscale,"bloom-downscale"))
@@ -66,12 +63,8 @@ open class MipBloom<T : Filter>(val blur: T) : Filter1to1(mppFilterShader(fx_blo
 
     @DoubleParameter("noise seed", 0.0, 1000.0)
     var noiseSeed: Double = 0.0
-
-    @BooleanParameter("sRGB")
-    var sRGB = true
-
     var intermediates = mutableListOf<ColorBuffer>()
-    var sourceCopy: ColorBuffer? = null
+    var blurred = mutableListOf<ColorBuffer>()
 
     val upscale = BloomUpscale()
     val downScale = BloomDownscale()
@@ -79,17 +72,6 @@ open class MipBloom<T : Filter>(val blur: T) : Filter1to1(mppFilterShader(fx_blo
 
     override fun apply(source: Array<ColorBuffer>, target: Array<ColorBuffer>, clip: Rectangle?) {
         require(clip == null)
-        sourceCopy?.let {
-            if (!it.isEquivalentTo(source[0], ignoreType = true)) {
-                it.destroy()
-                sourceCopy = null
-            }
-        }
-        if (sourceCopy == null) {
-            sourceCopy = source[0].createEquivalent(type = ColorType.FLOAT16)
-        }
-
-        source[0].copyTo(sourceCopy!!)
 
         upscale.shape = shape
         if (intermediates.size != passes
@@ -97,38 +79,35 @@ open class MipBloom<T : Filter>(val blur: T) : Filter1to1(mppFilterShader(fx_blo
             intermediates.forEach {
                 it.destroy()
             }
+            blurred.forEach {
+                it.destroy()
+            }
             intermediates.clear()
+            blurred.clear()
 
             for (pass in 0 until passes) {
                 val tdiv = 1 shl (pass + 1)
-                val cb = colorBuffer(target[0].width / tdiv, target[0].height / tdiv, type = ColorType.FLOAT16)
+                val cb = colorBuffer(target[0].width / tdiv, target[0].height / tdiv, type = ColorType.FLOAT32)
                 intermediates.add(cb)
+                val cbb = colorBuffer(target[0].width / tdiv, target[0].height / tdiv, type = ColorType.FLOAT32)
+                blurred.add(cbb)
             }
-        }
-
-
-        if (sRGB) {
-            linearize.apply(sourceCopy!!, sourceCopy!!, clip)
         }
 
         upscale.noiseGain = noiseGain
         upscale.noiseSeed = noiseSeed
-        downScale.apply(sourceCopy!!, intermediates[0], clip)
-        blur.apply(intermediates[0], intermediates[0], clip)
+        downScale.apply(source[0], intermediates[0], clip)
+        blur.apply(intermediates[0], blurred[0], clip)
 
         for (pass in 1 until passes) {
-            downScale.apply(intermediates[pass - 1], intermediates[pass], clip)
-            blur.apply(intermediates[pass], intermediates[pass], clip)
+            downScale.apply(blurred[pass - 1], intermediates[pass], clip)
+            blur.apply(intermediates[pass], blurred[pass], clip)
         }
 
-        upscale.apply(intermediates.toTypedArray(), arrayOf(target[0]), clip)
+        upscale.apply(blurred.toTypedArray(), arrayOf(target[0]), clip)
         combine.gain = gain
         combine.pregain = pregain
-        combine.apply(arrayOf(sourceCopy!!, target[0]), target, clip)
-
-        if (sRGB) {
-            delinearize.apply(target[0], target[0], clip)
-        }
+        combine.apply(arrayOf(source[0], target[0]), target, clip)
     }
 }
 

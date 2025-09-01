@@ -11,6 +11,10 @@ import org.openrndr.panel.layout.Layouter
 import org.openrndr.panel.style.*
 import org.openrndr.panel.style.Display
 import org.openrndr.shape.Rectangle
+import org.w3c.dom.Node
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 private val logger = KotlinLogging.logger {}
 
@@ -60,6 +64,9 @@ class ControlManager : Extension {
 
         fun press(event: KeyEvent) {
             target?.let {
+                if (it.isHidden()) {
+                    return
+                }
                 var current: Element? = it
                 while (current != null) {
                     if (!event.propagationCancelled) {
@@ -93,6 +100,10 @@ class ControlManager : Extension {
         }
 
         fun release(event: KeyEvent) {
+            if (target?.isHidden() == true) {
+                return
+            }
+
             target?.keyboard?.released?.trigger(event)
             if (target != null) {
                 checkForManualRedraw()
@@ -100,6 +111,10 @@ class ControlManager : Extension {
         }
 
         fun repeat(event: KeyEvent) {
+            if (target?.isHidden() == true) {
+                return
+            }
+
             target?.keyboard?.repeated?.trigger(event)
             if (target != null) {
                 checkForManualRedraw()
@@ -107,6 +122,10 @@ class ControlManager : Extension {
         }
 
         fun character(event: CharacterEvent) {
+            if (target?.isHidden() == true) {
+                return
+            }
+
             target?.keyboard?.character?.trigger(event)
             if (target != null) {
                 checkForManualRedraw()
@@ -127,7 +146,12 @@ class ControlManager : Extension {
 
         fun scroll(event: MouseEvent) {
             fun traverse(element: Element) {
-                element.children.forEach(::traverse)
+                if (element.computedStyle.display == Display.NONE) {
+                    return
+                }
+                for (child in element.children) {
+                    traverse(child)
+                }
                 if (!event.propagationCancelled) {
                     if (event.position in element.screenArea && element.computedStyle.display != Display.NONE) {
                         element.mouse.scrolled.trigger(event)
@@ -148,6 +172,9 @@ class ControlManager : Extension {
             logger.debug { "click target: $clickTarget" }
 
             clickTarget?.let {
+                if (it.isHidden()) {
+                    return
+                }
                 if (it.handlesDoubleClick) {
                     if (ct - lastClick > 500) {
                         logger.debug { "normal click on $clickTarget" }
@@ -171,7 +198,9 @@ class ControlManager : Extension {
             logger.debug { "press event: $event" }
             val candidates = mutableListOf<Pair<Element, Int>>()
             fun traverse(element: Element, depth: Int = 0) {
-
+                if (element.computedStyle.display == Display.NONE) {
+                    return
+                }
                 if (element.computedStyle.overflow == Overflow.Scroll) {
                     if (event.position !in element.screenArea) {
                         return
@@ -213,7 +242,14 @@ class ControlManager : Extension {
 
         fun drag(event: MouseEvent) {
             logger.debug { "drag event $event" }
-            dragTarget?.mouse?.dragged?.trigger(event)
+            dragTarget?.let {
+                if (it.isHidden()) {
+                    dragTarget = null
+                    return
+                }
+                it.mouse.dragged.trigger(event)
+            }
+
             if (event.propagationCancelled) {
                 logger.debug { "propagation cancelled by $dragTarget setting clickTarget to null" }
                 clickTarget = null
@@ -276,6 +312,8 @@ class ControlManager : Extension {
 
     val mouseInput = MouseInput()
     override fun setup(program: Program) {
+
+        fontManager.program = program
         this.program = program
 
         contentScale = program.window.contentScale
@@ -491,7 +529,11 @@ class ControlManagerBuilder(val controlManager: ControlManager) {
         controlManager.layouter.styleSheets.addAll(styleSheets.flatMap { it.flatten() })
     }
 
+    @OptIn(ExperimentalContracts::class)
     fun layout(init: Body.() -> Unit) {
+        contract {
+            callsInPlace(init, InvocationKind.EXACTLY_ONCE)
+        }
         val body = Body(controlManager)
         body.init()
         controlManager.body = body
@@ -515,10 +557,14 @@ fun ControlManager.layout(init: Body.() -> Unit) {
     this.body = body
 }
 
+@OptIn(ExperimentalContracts::class)
 fun Program.controlManager(
     defaultStyles: List<StyleSheet> = defaultStyles(),
     builder: ControlManagerBuilder.() -> Unit
 ): ControlManager {
+    contract {
+        callsInPlace(builder, InvocationKind.EXACTLY_ONCE)
+    }
     val cm = ControlManager()
     cm.program = this
     cm.fontManager.register("default", resourceUrl("/fonts/Roboto-Regular.ttf"))

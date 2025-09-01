@@ -19,11 +19,11 @@ class TestTurboColormap {
 
     @Test
     fun testTurboColormap() {
-        turboColormap(0.0) shouldBe ColorRGBa(0.13572138, 0.09140261, 0.1066733, linearity = Linearity.SRGB)
-        turboColormap(0.5) shouldBe ColorRGBa(0.5885220621875007, 0.981864383125, 0.31316869781249856, linearity = Linearity.SRGB)
-        turboColormap(1.0) shouldBe ColorRGBa(0.5658592099999993, 0.05038885999999998, -0.025520659999997974, linearity = Linearity.SRGB)
-        turboColormap(-0.1) shouldBe ColorRGBa(0.13572138, 0.09140261, 0.1066733, linearity = Linearity.SRGB)
-        turboColormap(1.1) shouldBe ColorRGBa(0.5658592099999993, 0.05038885999999998, -0.025520659999997974, linearity = Linearity.SRGB)
+        turboColormap(0.0) shouldBe ColorRGBa(0.13572138, 0.09140261, 0.1066733, linearity = Linearity.LINEAR)
+        turboColormap(0.5) shouldBe ColorRGBa(0.5885220621875007, 0.981864383125, 0.31316869781249856, linearity = Linearity.LINEAR)
+        turboColormap(1.0) shouldBe ColorRGBa(0.5658592099999993, 0.05038885999999998, -0.025520659999997974, linearity = Linearity.LINEAR)
+        turboColormap(-0.1) shouldBe ColorRGBa(0.13572138, 0.09140261, 0.1066733, linearity = Linearity.LINEAR)
+        turboColormap(1.1) shouldBe ColorRGBa(0.5658592099999993, 0.05038885999999998, -0.025520659999997974, linearity = Linearity.LINEAR)
     }
 
 }

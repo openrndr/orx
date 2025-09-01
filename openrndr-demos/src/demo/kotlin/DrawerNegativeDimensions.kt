@@ -31,9 +31,11 @@ fun main() = application {
 
             // Rectangles with the bottom right corner centered in the window
             drawer.rectangles(List(10) {
-                Rectangle(drawer.bounds.center,
-                        -squareSize * 2 + it * 10,
-                        -squareSize * 2 + it * 10)
+                Rectangle(
+                    drawer.bounds.center,
+                    -squareSize * 2 + it * 10,
+                    -squareSize * 2 + it * 10
+                )
             })
         }
     }

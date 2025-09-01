@@ -9,6 +9,7 @@ import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.math.Vector2
 
+@Deprecated("use gradient {} instead")
 @Description("Angular gradient")
 class AngularGradient(
         color0: ColorRGBa,
@@ -62,6 +63,7 @@ class AngularGradient(
     }
 }
 
+@Deprecated("use gradient {} instead")
 fun angularGradient(
         color0: ColorRGBa,
         color1: ColorRGBa,

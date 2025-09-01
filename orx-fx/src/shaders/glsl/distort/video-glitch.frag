@@ -12,9 +12,6 @@ uniform float scrollOffset1;
 
 uniform float borderHeight;
 
-uniform bool linearInput;
-uniform bool linearOutput;
-
 #define HASHSCALE 443.8975
 vec2 hash22(vec2 p) {
     vec3 p3 = fract(vec3(p.xyx) * HASHSCALE);
@@ -49,20 +46,11 @@ void main() {
     if (aa > 0.0 || ds > 0.0) {
         for (int i = 1; i < 16; ++i) {
             vec4 lc = getVideo(v_texCoord0 + vec2(0.0, scrollOffset0+ds*float(i)), aa, time-float(i)/(16.0*60.0));
-            if (!linearInput) {
-                lc.rgb = pow(lc.rgb, vec3(2.2));
-            }
             c += lc * (3.0/16.0) * aberrationColor(float(i)/16.0);
         }
         o_output = c;
     } else {
         vec4 lc = texture(tex0, mod(v_texCoord0 + vec2(0.0, scrollOffset1), vec2(1.0)));
-        if (!linearInput) {
-            lc.rgb = pow(lc.rgb, vec3(2.2));
-        }
         o_output = lc;
-    }
-    if (!linearOutput) {
-        o_output.rgb = pow(o_output.rgb, vec3(1.0/2.2));
     }
 }

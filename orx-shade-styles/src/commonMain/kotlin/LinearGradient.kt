@@ -14,6 +14,7 @@ import org.openrndr.extra.shaderphrases.preprocess
 import org.openrndr.math.CastableToVector4
 import org.openrndr.math.Vector2
 
+@Deprecated("use gradient {} instead")
 @Description("Linear gradient")
 open class LinearGradientBase<C>(
     color0: C,
@@ -73,12 +74,13 @@ open class LinearGradientBase<C>(
             }
 
             vec4 gradient = mix(color0, color1, t);
-            ${generateColorTransform(color0::class)}
+            ${generateColorTransform(color0::class, "gradient")}
             x_fill *= gradient;
         """
     }
 }
 
+@Deprecated("use gradient {} instead")
 class LinearGradient(
     color0: ColorRGBa = ColorRGBa.BLACK,
     color1: ColorRGBa = ColorRGBa.WHITE,
@@ -87,6 +89,7 @@ class LinearGradient(
     exponent: Double = 1.0
 ): LinearGradientBase<ColorRGBa>(color0, color1, offset, rotation, exponent)
 
+@Deprecated("use gradient {} instead")
 class LinearGradientOKLab(
     color0: ColorOKLABa,
     color1: ColorOKLABa,
@@ -96,6 +99,7 @@ class LinearGradientOKLab(
 ): LinearGradientBase<ColorOKLABa>(color0, color1, offset, rotation, exponent)
 
 
+@Deprecated("use gradient {} instead")
 fun linearGradient(
     color0: ColorRGBa = ColorRGBa.BLACK,
     color1: ColorRGBa = ColorRGBa.WHITE,
@@ -106,6 +110,7 @@ fun linearGradient(
     return LinearGradient(color0, color1, offset, rotation, exponent)
 }
 
+@Deprecated("use gradient {} instead")
 fun linearGradient(
     color0: ColorOKLABa = ColorRGBa.BLACK.toOKLABa(),
     color1: ColorOKLABa = ColorRGBa.WHITE.toOKLABa(),

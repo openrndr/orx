@@ -17,7 +17,7 @@ import kotlin.math.pow
 
 @Description("Clustered field")
 class ClusteredField(decodeMode: DecodeMode = DecodeMode.DIRECTION,
-                     private val outputDistanceToContours: Boolean = true) : Filter1to1() {
+                     private val outputDistanceToContours: Boolean = true) : Filter1to1(null) {
     @DoubleParameter("threshold", 0.0, 1.0)
     var threshold = 0.5
 

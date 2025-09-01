@@ -22,6 +22,5 @@ void main() {
     vec3 whiteScale = 1.0f/Uncharted2Tonemap(vec3(W));
     vec3 color = curr*whiteScale;
 
-    vec3 retColor = pow(color, vec3(1.0/2.2));
-    o_output = vec4(retColor, 1);
+    o_output = vec4(color, 1);
 }

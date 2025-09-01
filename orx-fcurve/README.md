@@ -118,26 +118,25 @@ Drawing FCurves is useful for debugging, but their typical use is for animation.
 The FCurve sampler allows us to query values for the given time value like this:
 
 ```kotlin
-fun main() {
-    application {
-        program {
-            val xCurve = fcurve(
-                """
-                M320 H0.4 
-                S2,0, 2,320 
-                S2,0, 2,320 
-                S2,0, 2,320 
-                S2,0, 2,320 
-                T0.6,320
-                """.trimIndent()
-            ).sampler() // <--
-            extend {
-                drawer.circle(
-                    xCurve(seconds % 9.0), 
-                    height * 0.5, 
-                    20.0
-                )
-            }
+fun main() = application {
+    program {
+        val xCurve = fcurve(
+            """
+            M320 H0.4 
+            S2,0, 2,320 
+            S2,0, 2,320 
+            S2,0, 2,320 
+            S2,0, 2,320 
+            T0.6,320
+            """
+        )
+        val xCurveSampler = xCurve.sampler()
+        extend {
+            drawer.circle(
+                xCurveSampler(seconds % 9.0), 
+                240.0, 
+                20.0
+            )
         }
     }
 }
@@ -194,6 +193,7 @@ For example `(M0 (h1 m1)[3])[2]` expands to `M0 h1 m1 h1 m1 h1 m1 M0 h1 m1 h1 m1
 
 
 # References
+
  * https://x.com/ruby0x1/status/1258252352672247814
  * https://blender.stackexchange.com/questions/52403/what-is-the-mathematical-basis-for-f-curves/52468#52468
  * https://pomax.github.io/bezierinfo/#yforx
@@ -201,21 +201,33 @@ For example `(M0 (h1 m1)[3])[2]` expands to `M0 h1 m1 h1 m1 h1 m1 M0 h1 m1 h1 m1
 <!-- __demos__ -->
 ## Demos
 ### DemoFCurve01
-[source code](src/jvmDemo/kotlin/DemoFCurve01.kt)
+
+
 
 ![DemoFCurve01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoFCurve01Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoFCurve01.kt)
+
 ### DemoFCurve02
-[source code](src/jvmDemo/kotlin/DemoFCurve02.kt)
+
+
 
 ![DemoFCurve02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoFCurve02Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoFCurve02.kt)
+
 ### DemoFCurveSheet01
-[source code](src/jvmDemo/kotlin/DemoFCurveSheet01.kt)
+
+
 
 ![DemoFCurveSheet01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoFCurveSheet01Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoFCurveSheet01.kt)
+
 ### DemoMultiFCurve01
-[source code](src/jvmDemo/kotlin/DemoMultiFCurve01.kt)
+
+
 
 ![DemoMultiFCurve01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoMultiFCurve01Kt.png)
+
+[source code](src/jvmDemo/kotlin/DemoMultiFCurve01.kt)

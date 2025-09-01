@@ -18,8 +18,8 @@ import org.openrndr.shape.Rectangle
  */
 fun main() = application {
     configure {
-        width = 1024
-        height = 1024
+        width = 720
+        height = 720
     }
 
     program {

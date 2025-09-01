@@ -22,6 +22,7 @@ kotlin {
                 implementation(project(":orx-hash-grid"))
                 implementation(project(":orx-parameters"))
                 implementation(project(":orx-shader-phrases"))
+                api(project(":orx-math"))
             }
         }
 
@@ -37,6 +38,8 @@ kotlin {
                 implementation(project(":orx-hash-grid"))
                 implementation(project(":orx-noise"))
                 implementation(project(":orx-jvm:orx-gui"))
+                implementation(project(":orx-mesh-generators"))
+                implementation(project(":orx-camera"))
             }
         }
     }

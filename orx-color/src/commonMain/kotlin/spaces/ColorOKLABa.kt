@@ -8,11 +8,16 @@ import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sign
 
+
 /**
- * Color in OKLab color space.
- * [l] = lightness: black (0.0) to white (1.0),
- * [a] = red (-1.0) to green (1.0),
- * [b] = yellow (-1.0) to blue (1.0).
+ * Represents a color in the OKLAB color space with an optional alpha (transparency) value.
+ * OKLAB is a perceptual color space designed to represent colors in a way that aligns
+ * with human visual perception, offering an alternative to traditional color spaces like RGB.
+ *
+ * @property l The lightness component of the color. A value between 0 (black) and 1 (white).
+ * @property a The 'a' component in the OKLAB color space, representing the first chromatic axis.
+ * @property b The 'b' component in the OKLAB color space, representing the second chromatic axis.
+ * @property alpha The alpha (opacity) value of the color. A value between 0.0 (completely transparent) and 1.0 (completely opaque).
  */
 @Suppress("LocalVariableName")
 @Serializable

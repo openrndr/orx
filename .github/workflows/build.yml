@@ -20,9 +20,6 @@ jobs:
         with:
           path: ./orx
 
-      - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@v3
-
       - name: Checkout OPENRNDR repository
         uses: actions/checkout@v4
         with:
@@ -40,8 +37,10 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
-          cache: gradle
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Build OPENRNDR
         working-directory: ./openrndr

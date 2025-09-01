@@ -8,6 +8,10 @@ uniform sampler2D tex0;
 uniform sampler2D tex1;
 uniform bool clip;
 
+uniform float opacityA;
+uniform float opacityB;
+
+
 #ifndef OR_GL_FRAGCOLOR
 out vec4 o_color;
 #endif
@@ -21,14 +25,17 @@ void main() {
     vec4 b = texture2D(tex1, v_texCoord0);
     #endif
 
+    a *= opacityA;
+    b *= opacityB;
+
     float alpha = min(1.0, max(0.0, b.a));
 
     vec4 result;
     if (!clip) {
         result = a * (1.0 - alpha) + b;
-        result.a = clamp(o_color.a, 0.0, 1.0);
+        result.a = clamp(result.a, 0.0, 1.0);
     } else {
-        result = a * (1.0 - alpha) + b * a.a;
+        result = a * (1.0 - alpha) + b * clamp(a.a, 0.0, 1.0);
     }
 
     #ifdef OR_GL_FRAGCOLOR

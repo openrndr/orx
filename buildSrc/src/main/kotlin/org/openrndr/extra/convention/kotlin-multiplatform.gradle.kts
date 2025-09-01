@@ -4,10 +4,12 @@ import CollectScreenshotsTask
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
+import org.gradle.nativeplatform.platform.internal.DefaultOperatingSystem
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-
 
 val libs = the<LibrariesForLibs>()
 
@@ -31,14 +33,19 @@ repositories {
 
 group = "org.openrndr.extra"
 
-tasks.withType<KotlinCompile<*>> {
-    kotlinOptions.apiVersion = libs.versions.kotlinApi.get()
-    kotlinOptions.languageVersion = libs.versions.kotlinLanguage.get()
-    kotlinOptions.freeCompilerArgs += "-Xexpect-actual-classes"
-    kotlinOptions.freeCompilerArgs += "-Xjdk-release=${libs.versions.jvmTarget.get()}"
+tasks.withType<KotlinCompilationTask<*>> {
+    compilerOptions {
+        apiVersion.set(KotlinVersion.valueOf("KOTLIN_${libs.versions.kotlinApi.get().replace(".", "_")}"))
+        languageVersion.set(KotlinVersion.valueOf("KOTLIN_${libs.versions.kotlinLanguage.get().replace(".", "_")}"))
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
 }
+
 tasks.withType<KotlinJvmCompile>().configureEach {
-    compilerOptions.jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
+    compilerOptions {
+        jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
+        freeCompilerArgs.add("-Xjdk-release=${libs.versions.jvmTarget.get()}")
+    }
 }
 
 kotlin {
@@ -46,11 +53,11 @@ kotlin {
         compilations {
             val main by getting
 
-            @Suppress("UNUSED_VARIABLE")
             val demo by creating {
                 associateWith(main)
                 tasks.register<CollectScreenshotsTask>("collectScreenshots") {
-                    inputDir.set(output.classesDirs.singleFile)
+                    // since Kotlin 2.1.20 output.classesDirs no longer contains a single file
+                    inputDir.set(output.classesDirs.filter { it.path.contains("classes/kotlin") }.singleFile)
                     runtimeDependencies.set(runtimeDependencyFiles)
                     outputDir.set(project.file(project.projectDir.toString() + "/images"))
                     dependsOn(compileTaskProvider)
@@ -66,6 +73,12 @@ kotlin {
             useJUnitPlatform()
             testLogging.exceptionFormat = TestExceptionFormat.FULL
         }
+
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        mainRun {
+            classpath(kotlin.jvm().compilations.getByName("demo").output.allOutputs)
+            classpath(kotlin.jvm().compilations.getByName("demo").configurations.runtimeDependencyConfiguration!!)
+        }
     }
 
     js(IR) {
@@ -74,7 +87,6 @@ kotlin {
     }
 
     sourceSets {
-        @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
                 implementation(libs.kotlin.stdlib)
@@ -82,14 +94,12 @@ kotlin {
             }
         }
 
-        @Suppress("UNUSED_VARIABLE")
         val commonTest by getting {
             dependencies {
                 implementation(libs.kotlin.test)
             }
         }
 
-        @Suppress("UNUSED_VARIABLE")
         val jvmTest by getting {
             dependencies {
                 runtimeOnly(libs.bundles.jupiter)
@@ -97,7 +107,6 @@ kotlin {
             }
         }
 
-        @Suppress("UNUSED_VARIABLE")
         val jvmDemo by getting {
             dependencies {
                 implementation(libs.openrndr.application)
@@ -114,7 +123,7 @@ val isReleaseVersion = !(version.toString()).endsWith("SNAPSHOT")
 if (shouldPublish) {
     publishing {
         publications {
-            val fjdj = tasks.create("fakeJavaDocJar", Jar::class) {
+            val fjdj = tasks.register("fakeJavaDocJar", Jar::class) {
                 archiveClassifier.set("javadoc")
             }
             named("js") {
@@ -180,11 +189,10 @@ if (shouldPublish) {
     }
 }
 
-kotlin {
-    jvm().mainRun {
-        classpath(kotlin.jvm().compilations.getByName("demo").output.allOutputs)
-        classpath(kotlin.jvm().compilations.getByName("demo").configurations.runtimeDependencyConfiguration!!)
+tasks.withType<JavaExec>().matching { it.name == "jvmRun" }.configureEach {
+    workingDir = rootDir
+    val os: OperatingSystem? = DefaultNativePlatform.getCurrentOperatingSystem()
+    if (os?.name == "Mac OS X") {
+        setJvmArgs(listOf("-XstartOnFirstThread"))
     }
 }
-
-tasks.withType<JavaExec>().matching { it.name == "jvmRun" }.configureEach { workingDir = rootDir }

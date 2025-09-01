@@ -34,7 +34,7 @@ private class InnerGlowFilter : Filter(filterShaderFromCode(jf_inner_glow, "inne
 }
 
 @Description("Inner glow")
-class InnerGlow : Filter1to1() {
+class InnerGlow : Filter1to1(null) {
     @DoubleParameter("width", 0.0, 50.0)
     var width = 5.0
 

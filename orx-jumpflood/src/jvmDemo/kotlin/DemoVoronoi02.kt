@@ -1,6 +1,7 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
+import org.openrndr.extra.color.colormatrix.tint
 import org.openrndr.extra.jumpfill.*
 import kotlin.math.cos
 
@@ -10,11 +11,11 @@ fun main() = application {
         height = 512
     }
     program {
-        val rt = renderTarget(512, 512, 1.0) {
+        val rt = renderTarget(width, height, 1.0) {
             colorBuffer(type = ColorType.FLOAT32)
         }
 
-        val flowfield = colorBuffer(512, 512, type = ColorType.FLOAT32)
+        val flowfield = colorBuffer(width, height, type = ColorType.FLOAT32)
         val cluster = ClusteredField(decodeMode = DecodeMode.DISTANCE, outputDistanceToContours = true)
 
 

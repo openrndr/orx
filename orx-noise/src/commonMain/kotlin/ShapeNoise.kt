@@ -1,35 +1,34 @@
 package org.openrndr.extra.noise
 
 import org.openrndr.extra.hashgrid.HashGrid
+import org.openrndr.extra.noise.shapes.hash
+import org.openrndr.extra.noise.shapes.uniform
 import org.openrndr.math.Vector2
 import org.openrndr.shape.*
 import kotlin.random.Random
 
 /**
- * Returns a random [Vector2] point located inside a [ShapeProvider] while
- * maintaining a distance to the edge of the shape of [distanceToEdge] units.
+ * Generates a list of uniformly distributed points within the shape provided by the ShapeProvider.
+ *
+ * @param pointCount The number of points to generate.
+ * @param random An optional random number generator to influence the distribution.
+ * @return A list of Vector2 objects representing the uniformly distributed points.
  */
-fun ShapeProvider.uniform(distanceToEdge: Double = 0.0, random: Random = Random.Default): Vector2 {
-    val shape = shape
-    require(!shape.empty)
-    var attempts = 0
-    val innerBounds = shape.bounds.offsetEdges(-distanceToEdge.coerceAtLeast(0.0))
-    return Vector2.uniformSequence(innerBounds, random).first {
-        attempts++
-        require(attempts < 100)
-        if (distanceToEdge == 0.0) {
-            shape.contains(it)
-        } else {
-            shape.contains(it) && shape.contours.minOf { c -> c.nearest(it).position.distanceTo(it) } > distanceToEdge
-        }
-    }
+fun ShapeProvider.uniform(pointCount: Int, random: Random = Random.Default): List<Vector2> {
+    return shape.triangulation.uniform(pointCount, random)
 }
 
 /**
- * Generate [sampleCount] uniformly distributed points inside the area of [ShapeProvider]
+ * Generates a list of hashed points based on the shape's triangulation.
+ *
+ * @param pointCount The number of points to generate in the hashed result.
+ * @param seed The seed value used for randomization in the hashing process.
+ * @param x An additional parameter used in the hashing process to modify randomization.
+ * @return A list of vectors representing the hashed points.
  */
-fun ShapeProvider.uniform(sampleCount: Int, random: Random = Random.Default) : List<Vector2> = shape.triangulation.uniform(sampleCount, random)
-
+fun ShapeProvider.hash(pointCount: Int, seed: Int, x: Int): List<Vector2> {
+    return shape.triangulation.hash(pointCount, seed, x)
+}
 
 /**
  * Returns a list of pairs in which the first component is a radius and the

@@ -38,23 +38,39 @@ private fun Vector3.atan22(other: Vector3): Double {
 
 
 /**
- * Uses Hobby's algorithm to construct a [ShapeContour] through a given list of points.
- * @param points The list of points through which the curve should go.
- * @param closed Whether to construct a closed or open curve.
- * @param curl The 'curl' at the endpoints of the curve; this is only applicable when [closed] is false. Best results for values in [-1, 1], where a higher value makes segments closer to circular arcs.
- * @return A [ShapeContour] through [points].
+ * Generates a smooth contour passing through a set of points based on Hobby's algorithm.
+ *
+ * @param points A list of 2D points through which the curve should pass.
+ * @param closed A boolean value indicating whether the curve is closed (true)
+ *               forming a loop, or open (false). The default is false.
+ * @param curl A parameter that controls the curvature of the open-ended curve. Only
+ *             applicable if the curve is not closed. The default is 0.0.
+ * @param tensions A lambda function that accepts the chord index (an integer) and returns
+ *                 a pair of tension values (Double) for the curve's control points. These
+ *                 tensions influence how tightly the curve conforms to the points.
+ *                 The default lambda assigns both values as 1.0.
+ * @return A ShapeContour object representing the smoothed curve based on Hobby's algorithm.
  */
-fun hobbyCurve(points: List<Vector2>, closed: Boolean = false, curl: Double = 0.0): ShapeContour {
+fun hobbyCurve(
+    points: List<Vector2>, closed: Boolean = false, curl: Double = 0.0,
+    tensions: (chordIndex: Int, inAngleDegrees:Double, outAngleDegrees:Double) -> Pair<Double, Double> = { _, _, _ -> Pair(1.0, 1.0) },
+): ShapeContour {
     if (points.size <= 1) return ShapeContour.EMPTY
 
     val m = points.size
+
+    /** Chord count */
     val n = if (closed) m else m - 1
 
+    /** Chords array stores vectors representing line segments between consecutive points
+    Each chord is calculated as the vector difference between the next point and current point */
     val chords = Array(n) { points[(it + 1) % m] - points[it] }
     val distances = Array(n) { chords[it].length }
 
     require(distances.all { it > 0.0 })
 
+    /** Array storing turning angles (in radians) between adjacent chords at each point
+    For each point i, gamma[i] represents the angle between chord[i-1] and chord[i] */
     val gamma = DoubleArray(m)
     for (i in (if (closed) 0 else 1) until n) {
         gamma[i] = chords[(i - 1).mod(m)].atan22(chords[(i).mod(m)])
@@ -67,13 +83,12 @@ fun hobbyCurve(points: List<Vector2>, closed: Boolean = false, curl: Double = 0.
     val d = DoubleArray(m) { 0.0 }
 
     for (i in (if (closed) 0 else 1) until n) {
-        val j = (i + 1).mod(m)
-        val k = (i - 1).mod(m)
-
-        a[i] = 1 / distances[k]
-        b[i] = (2 * distances[k] + 2 * distances[i]) / (distances[k] * distances[i])
+        val next = (i + 1).mod(m)
+        val prev = (i - 1).mod(m)
+        a[i] = 1 / distances[prev]
+        b[i] = (2 * distances[prev] + 2 * distances[i]) / (distances[prev] * distances[i])
         c[i] = 1 / distances[i]
-        d[i] = -(2 * gamma[i] * distances[i] + gamma[j] * distances[k]) / (distances[k] * distances[i])
+        d[i] = -(2 * gamma[i] * distances[i] + gamma[next] * distances[prev]) / (distances[prev] * distances[i])
     }
 
     val alpha: DoubleArray
@@ -102,20 +117,21 @@ fun hobbyCurve(points: List<Vector2>, closed: Boolean = false, curl: Double = 0.
         val t = c[n - 1]
         c[n - 1] = 0.0
         alpha = sherman(a, b, c, d, s, t)
-        beta = DoubleArray(n) { 0.0 }
+        beta = DoubleArray(n)
         for (i in 0 until n) {
             val j = (i + 1) % n
             beta[i] = -gamma[j] - alpha[j]
         }
     }
 
-    val c1s = mutableListOf<Vector2>()
-    val c2s = mutableListOf<Vector2>()
+    val c1s = ArrayList<Vector2>(n)
+    val c2s = ArrayList<Vector2>(n)
     for (i in 0 until n) {
         val v1 = rotateAngle(chords[i], alpha[i]).normalized
         val v2 = rotateAngle(chords[i], -beta[i]).normalized
-        c1s.add(points[i % m] + v1 * rho(alpha[i], beta[i]) * distances[i] / 3.0)
-        c2s.add(points[(i + 1) % m] - v2 * rho(beta[i], alpha[i]) * distances[i] / 3.0)
+        val t = tensions(i, gamma[i].asDegrees, gamma[(i + 1).mod(m)].asDegrees)
+        c1s.add(points[i % m] + v1 * rho(alpha[i], beta[i]) * t.first * distances[i] / 3.0)
+        c2s.add(points[(i + 1) % m] - v2 * rho(beta[i], alpha[i]) * t.second * distances[i] / 3.0)
     }
     return ShapeContour(List(n) { Segment2D(points[it], c1s[it], c2s[it], points[(it + 1) % m]) }, closed = closed)
 }
@@ -132,7 +148,7 @@ fun hobbyCurve(
     points: List<Vector3>,
     closed: Boolean = false,
     curl: Double = 0.0,
-    tensions: (chordIndex: Int) -> Pair<Double, Double> = { _ -> Pair(1.0, 1.0) }
+    tensions: (chordIndex: Int, inAngleDegrees:Double, outAngleDegrees:Double) -> Pair<Double, Double> = { _, _, _ -> Pair(1.0, 1.0) },
 ): Path3D {
     if (points.size <= 1) return Path3D.EMPTY
 
@@ -205,14 +221,14 @@ fun hobbyCurve(
         }
     }
 
-    val c1s = mutableListOf<Vector3>()
-    val c2s = mutableListOf<Vector3>()
+    val c1s = ArrayList<Vector3>(n)
+    val c2s = ArrayList<Vector3>(n)
     for (i in 0 until n) {
         val r1 = buildTransform { rotate(normals[i], alpha[i].asDegrees) }
         val r2 = buildTransform { rotate(normals[(i + 1).mod(normals.size)], -beta[i].asDegrees) }
         val v1 = (r1 * chords[i].xyz0).xyz.normalized
         val v2 = (r2 * chords[i].xyz0).xyz.normalized
-        val t = tensions(i)
+        val t = tensions(i, gamma[i].asDegrees, gamma[(i + 1).mod(m)].asDegrees)
         c1s.add(points[i % m] + v1 * rho(alpha[i], beta[i]) * distances[i] * t.first / 3.0)
         c2s.add(points[(i + 1) % m] - v2 * rho(beta[i], alpha[i]) * distances[i] * t.second / 3.0)
     }
@@ -222,9 +238,14 @@ fun hobbyCurve(
     }, closed = closed)
 }
 
-
-/** The Thomas algorithm: solve a system of linear equations encoded in a tridiagonal matrix.
-https://en.wikipedia.org/wiki/Tridiagonal_matrix_algorithm
+/**
+ * Solves a tridiagonal system of equations using the Thomas algorithm.
+ * [Wikipedia](https://en.wikipedia.org/wiki/Tridiagonal_matrix_algorithm)
+ * @param a The subdiagonal elements of the tridiagonal matrix.
+ * @param b The diagonal elements of the tridiagonal matrix.
+ * @param c The superdiagonal elements of the tridiagonal matrix.
+ * @param d The right-hand side vector of the system.
+ * @return A double array representing the solution to the tridiagonal system.
  */
 private fun thomas(a: DoubleArray, b: DoubleArray, c: DoubleArray, d: DoubleArray): DoubleArray {
     val n = a.size
@@ -245,6 +266,18 @@ private fun thomas(a: DoubleArray, b: DoubleArray, c: DoubleArray, d: DoubleArra
     return x
 }
 
+/**
+ * Uses the Sherman-Morrison formula to solve a system of linear equations with a modified
+ * tridiagonal matrix, based on the Thomas algorithm.
+ *
+ * @param a The lower diagonal coefficients of the tridiagonal matrix.
+ * @param b The main diagonal coefficients of the tridiagonal matrix.
+ * @param c The upper diagonal coefficients of the tridiagonal matrix.
+ * @param d The right-hand side vector of the system of equations.
+ * @param s The value for the last row modification in the matrix.
+ * @param t The value for the first row modification in the matrix.
+ * @return A solution vector of the system of equations considering the specified matrix modifications.
+ */
 private fun sherman(
     a: DoubleArray,
     b: DoubleArray,
@@ -270,6 +303,13 @@ private fun sherman(
     }
 }
 
+/**
+ * Calculates a ratio used in Hobby's curve construction based on the angles between curve segments.
+ *
+ * @param a The angle (in radians) at the current point on the curve.
+ * @param b The angle (in radians) at the neighboring point on the curve.
+ * @return A calculated ratio used to control the curve's shape.
+ */
 private fun rho(a: Double, b: Double): Double {
     val sa = sin(a)
     val sb = sin(b)

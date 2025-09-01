@@ -6,6 +6,7 @@ import org.openrndr.draw.*
 import org.openrndr.extra.fx.ColorBufferDescription
 import org.openrndr.extra.fx.fx_approximate_gaussian_blur
 import org.openrndr.extra.fx.mppFilterShader
+import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
@@ -18,6 +19,14 @@ import org.openrndr.shape.Rectangle
  */
 @Description("Approximate Gaussian blur")
 class ApproximateGaussianBlur : Filter1to1(mppFilterShader(fx_approximate_gaussian_blur, "approximate gaussian blur")) {
+
+    @BooleanParameter("wrap u")
+    var wrapU = false
+
+    @BooleanParameter("wrap v")
+    var wrapV = false
+
+
     /**
      * blur sample window, default value is 5
      */
@@ -58,11 +67,19 @@ class ApproximateGaussianBlur : Filter1to1(mppFilterShader(fx_approximate_gaussi
         }
 
         intermediate.let {
+            parameters["wrapU"] = if (wrapU) 1 else 0
+            parameters["wrapV"] = if (wrapV) 1 else 0
             parameters["blurDirection"] = Vector2(1.0, 0.0)
             super.apply(source, arrayOf(it), clip)
 
             parameters["blurDirection"] = Vector2(0.0, 1.0)
             super.apply(arrayOf(it), target, clip)
         }
+    }
+
+    override fun close() {
+        intermediateCache.values.forEach { it.close() }
+        intermediateCache.clear()
+        super.close()
     }
 }

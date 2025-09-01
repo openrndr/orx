@@ -15,6 +15,7 @@ import org.openrndr.extra.shaderphrases.preprocess
 import org.openrndr.math.CastableToVector4
 import org.openrndr.math.Vector2
 
+@Deprecated("use gradient {} instead")
 @Description("Radial gradient")
 open class RadialGradientBase<C>(
         color0: C,
@@ -62,13 +63,14 @@ where C : ConvertibleToColorRGBa, C : AlgebraicColor<C>, C: CastableToVector4 {
             vec4 color1 = p_color1; 
 
             vec4 gradient = mix(color0, color1, pow(f, p_exponent));
-            ${generateColorTransform(color0::class)}
+            ${generateColorTransform(color0::class, "gradient")}
 
             x_fill *= gradient;
         """
     }
 }
 
+@Deprecated("use gradient {} instead")
 class RadialGradient(
     color0: ColorRGBa,
     color1: ColorRGBa,
@@ -78,6 +80,7 @@ class RadialGradient(
     exponent: Double = 1.0
 ): RadialGradientBase<ColorRGBa>(color0, color1, offset, rotation, length, exponent)
 
+@Deprecated("use gradient {} instead")
 class RadialGradientOKLab(
     color0: ColorOKLABa,
     color1: ColorOKLABa,
@@ -87,6 +90,7 @@ class RadialGradientOKLab(
     exponent: Double = 1.0
 ): RadialGradientBase<ColorOKLABa>(color0, color1, offset, rotation, length, exponent)
 
+@Deprecated("use gradient {} instead")
 fun radialGradient(
         color0: ColorRGBa,
         color1: ColorRGBa,
@@ -98,6 +102,7 @@ fun radialGradient(
     return RadialGradient(color0, color1, offset, rotation, length, exponent)
 }
 
+@Deprecated("use gradient {} instead")
 fun radialGradient(
     color0: ColorOKLABa,
     color1: ColorOKLABa,

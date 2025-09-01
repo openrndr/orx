@@ -201,38 +201,36 @@ import org.openrndr.extra.fx.edges.EdgesWork
 import org.openrndr.extra.gui.GUI
 import org.openrndr.math.Vector2
 
-fun main() {
-    application {
-        configure {
-            width = 768
-            height = 768
-        }
-        program {
-            val w2 = width / 2.0
-            val h2 = height / 2.0
+fun main() = application {
+    configure {
+        width = 768
+        height = 768
+    }
+    program {
+        val w2 = width / 2.0
+        val h2 = height / 2.0
 
-            val c = compose {
+        val c = compose {
+            draw {
+                drawer.fill = ColorRGBa.PINK
+                drawer.circle(width / 2.0, height / 2.0, 10.0)
+            }
+
+            layer {
+                blend(Add())
+
                 draw {
-                    drawer.fill = ColorRGBa.PINK
-                    drawer.circle(width / 2.0, height / 2.0, 10.0)
+                    drawer.circle(width / 2.0, height / 2.0, 100.0)
                 }
-    
-                layer {
-                    blend(Add())
-
-                    draw {
-                        drawer.circle(width / 2.0, height / 2.0, 100.0)
-                    }
-                    post(ApproximateGaussianBlur()) {
-                        window = 10
-                        sigma = Math.cos(seconds * 10.0) * 10.0 + 10.0
-                    }
+                post(ApproximateGaussianBlur()) {
+                    window = 10
+                    sigma = Math.cos(seconds * 10.0) * 10.0 + 10.0
                 }
             }
-            extend(gui)
-            extend {
-                c.draw(drawer)
-            }
+        }
+        extend(gui)
+        extend {
+            c.draw(drawer)
         }
     }
 }
@@ -240,16 +238,28 @@ fun main() {
 <!-- __demos__ -->
 ## Demos
 ### DemoAside01
-[source code](src/jvmDemo/kotlin/DemoAside01.kt)
+
+
 
 ![DemoAside01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-compositor/images/DemoAside01Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoAside01.kt)
+
 ### DemoCompositor01
-[source code](src/jvmDemo/kotlin/DemoCompositor01.kt)
+
+Compositor demo showing 3 layers of moving items
+with a different amount of blur in each layer,
+simulating depth of field
 
 ![DemoCompositor01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-compositor/images/DemoCompositor01Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoCompositor01.kt)
+
 ### DemoCompositor02
-[source code](src/jvmDemo/kotlin/DemoCompositor02.kt)
+
+Demonstration of using [BufferMultisample] on a per layer basis.
+Try changing which layer has multisampling applied and observe the results.
 
 ![DemoCompositor02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-compositor/images/DemoCompositor02Kt.png)
+
+[source code](src/jvmDemo/kotlin/DemoCompositor02.kt)

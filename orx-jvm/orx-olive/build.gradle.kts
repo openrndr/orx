@@ -1,11 +1,5 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     org.openrndr.extra.convention.`kotlin-jvm`
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions.freeCompilerArgs = listOf("-opt-in=kotlin.RequiresOptIn")
 }
 
 tasks.test {
@@ -25,7 +19,6 @@ dependencies {
     implementation(libs.kotlin.scriptingJSR223)
     implementation(libs.kotlin.coroutines)
     demoImplementation(libs.kotlin.coroutines)
-    testImplementation(libs.kluent)
     testImplementation(libs.kotest.runner)
     testImplementation(libs.kotest.assertions)
     testRuntimeOnly(libs.kotlin.reflect)

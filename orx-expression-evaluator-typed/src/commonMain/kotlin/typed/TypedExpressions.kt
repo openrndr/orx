@@ -7,9 +7,12 @@ import org.openrndr.collections.pop
 import org.openrndr.collections.push
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.expressions.parser.KeyLangLexer
+import org.openrndr.extra.expressions.parser.KeyLangLexer.Tokens.RANGE_DOWNTO
+import org.openrndr.extra.expressions.parser.KeyLangLexer.Tokens.RANGE_EXCLUSIVE
+import org.openrndr.extra.expressions.parser.KeyLangLexer.Tokens.RANGE_EXCLUSIVE_UNTIL
+import org.openrndr.extra.expressions.parser.KeyLangLexer.Tokens.RANGE_INCLUSIVE
 import org.openrndr.extra.expressions.parser.KeyLangParser
 import org.openrndr.extra.expressions.parser.KeyLangParserBaseListener
-import org.openrndr.extra.noise.uniform
 import org.openrndr.math.*
 import kotlin.math.PI
 import kotlin.math.roundToInt
@@ -59,6 +62,19 @@ enum class IDType {
     FUNCTION_ARGUMENT
 }
 
+/**
+ * A base class for handling typed expressions in a custom language parser.
+ * This class provides an extensive set of overrides for various parser rules
+ * to allow custom implementation when these rules are triggered during parsing.
+ *
+ * @property functions Represents a mapping of functions categorized by their arity.
+ * @property constants Tracks constants identified during parsing.
+ * @property state Maintains the current state of the listener, preserving contextual information.
+ *
+ * Methods primarily handle entering and exiting parser rules for expressions, statements, and
+ * function calls, offering hooks to extend or modify behavior for each parsing scenario. Additionally,
+ * utility methods are provided to handle and propagate errors during parsing.
+ */
 abstract class TypedExpressionListenerBase(
     val functions: TypedFunctionExtensions = TypedFunctionExtensions.EMPTY,
     val constants: (String) -> Any? = { null }
@@ -94,12 +110,53 @@ abstract class TypedExpressionListenerBase(
         s.reset()
     }
 
+    override fun exitRangeExpression(ctx: KeyLangParser.RangeExpressionContext) {
+        val s = state
+        if (s.inFunctionLiteral > 0) {
+            return
+        }
+
+        val step: Any?
+        if (ctx.step != null) {
+            step = s.valueStack.pop()
+        } else {
+            step = null
+        }
+
+        val right = s.valueStack.pop()
+        val left = s.valueStack.pop()
+
+
+        val lower = (left as Double).toInt()
+        val upper = (right as Double).toInt()
+        val list = if (step == null) {
+            when (ctx.operator?.type) {
+                RANGE_INCLUSIVE -> (lower..upper).toList().map { it.toDouble() }
+                RANGE_EXCLUSIVE -> (lower..<upper).toList().map { it.toDouble() }
+                RANGE_EXCLUSIVE_UNTIL -> (lower until upper).toList().map { it.toDouble() }
+                RANGE_DOWNTO -> (lower downTo upper).toList().map { it.toDouble() }
+                else -> error("unsupported operator: '${ctx.operator?.text}'")
+            }
+        } else {
+            val stepSize = (step as Double).toInt()
+            when (ctx.operator?.type) {
+                RANGE_INCLUSIVE -> (lower..upper step stepSize).toList().map { it.toDouble() }
+                RANGE_EXCLUSIVE -> (lower..<upper step stepSize).toList().map { it.toDouble() }
+                RANGE_EXCLUSIVE_UNTIL -> (lower until upper step stepSize).toList().map { it.toDouble() }
+                RANGE_DOWNTO -> (lower downTo upper step stepSize).toList().map { it.toDouble() }
+                else -> error("unsupported operator: '${ctx.operator?.text}'")
+            }
+        }
+        s.valueStack.push(list)
+
+    }
+
     override fun exitListLiteral(ctx: KeyLangParser.ListLiteralContext) {
         val s = state
         if (s.inFunctionLiteral > 0) {
             return
         }
-        val list = (0 until ctx.expression().size).map { s.valueStack.pop() }
+        val list = (0 until ctx.expressionRoot().size).map { s.valueStack.pop() }
         s.valueStack.push(list.reversed())
     }
 
@@ -111,9 +168,9 @@ abstract class TypedExpressionListenerBase(
         val index = (s.valueStack.pop() as? Double)?.roundToInt() ?: error("index is not a number")
         val listValue = s.valueStack.pop()
 
-        val value = when (listValue) {
+        @Suppress("UNCHECKED_CAST") val value = when (listValue) {
             is List<*> -> listValue[index] ?: error("got null")
-            is Function<*> -> (listValue as (Int)->Any)(index)
+            is Function<*> -> (listValue as (Int) -> Any)(index)
             else -> error("can't index on '$listValue'")
         }
         s.valueStack.push(value)
@@ -171,6 +228,7 @@ abstract class TypedExpressionListenerBase(
         )
     }
 
+    @Suppress("IMPLICIT_CAST_TO_ANY")
     override fun exitBinaryOperation1(ctx: KeyLangParser.BinaryOperation1Context) {
         val s = state
         if (s.inFunctionLiteral > 0) {
@@ -545,9 +603,9 @@ abstract class TypedExpressionListenerBase(
         if (s.inFunctionLiteral > 0) {
             return
         }
-
         s.idTypeStack.push(IDType.FUNCTION2)
     }
+
 
     override fun exitFunctionCall2Expression(ctx: KeyLangParser.FunctionCall2ExpressionContext) {
         val s = state
@@ -714,11 +772,38 @@ abstract class TypedExpressionListenerBase(
     }
 
 
+    @Suppress("MoveLambdaOutsideParentheses")
     override fun visitTerminal(node: TerminalNode) {
         val s = state
         if (s.inFunctionLiteral > 0) {
             return
         }
+
+
+        fun <T> handleFunction(
+            name: String,
+            dispatchFunction: (String, Map<String, T>) -> ((Array<Any>) -> Any)?,
+            functionMap: Map<String, T>,
+            adapter: (T) -> (Array<Any>) -> Any,
+            errorMessage: String
+        ) {
+            val function = dispatchFunction(name, functionMap)
+
+            if (function != null) {
+                s.functionStack.push(function)
+            } else {
+                val cfunction = constants(name) as? T
+                if (cfunction != null) {
+                    s.functionStack.push(adapter(cfunction))
+                } else {
+                    s.functionStack.push(errorValue("unresolved function: '$errorMessage'") { _ ->
+                        error("this is the error function")
+                    })
+                }
+            }
+        }
+
+
 
         val type = node.symbol.type
         if (type == KeyLangParser.Tokens.INTLIT) {
@@ -734,23 +819,12 @@ abstract class TypedExpressionListenerBase(
                 IDType.VARIABLE -> s.valueStack.pushChecked(
                     when (name) {
                         "PI" -> PI
-                        else -> constants(name) ?: errorValue("unresolved variable: '${name}'", 0.0 / 0.0)
+                        else -> constants(name)
+                            ?: errorValue("unresolved value: '${name}'. Available constant: ${constants}", Unit)
                     }
                 )
 
                 IDType.PROPERTY -> s.propertyStack.push(name)
-
-                IDType.FUNCTION0 -> {
-                    val function: (Array<Any>) -> Any =
-                        when (name) {
-                            "random" -> { _ -> Double.uniform(0.0, 1.0) }
-                            else -> functions.functions0[name]?.let { { _: Array<Any> -> it.invoke() } }
-                                ?: errorValue(
-                                    "unresolved function: '${name}()'"
-                                ) { _ -> error("this is the error function") }
-                        }
-                    s.functionStack.push(function)
-                }
 
                 IDType.MEMBER_FUNCTION0,
                 IDType.MEMBER_FUNCTION1,
@@ -775,89 +849,117 @@ abstract class TypedExpressionListenerBase(
                         is ColorRGBa -> {
                             when (idType) {
                                 IDType.MEMBER_FUNCTION1 -> {
-                                    s.functionStack.push(when (name) {
-                                        "shade" -> { x -> receiver.shade(x[0] as Double) }
-                                        "opacify" -> { x -> receiver.opacify(x[0] as Double) }
-                                        else -> error("no member function '$receiver.$name()'")
-                                    })
+                                    s.functionStack.push(
+                                        when (name) {
+                                            "shade" -> { x -> receiver.shade(x[0] as Double) }
+                                            "opacify" -> { x -> receiver.opacify(x[0] as Double) }
+                                            else -> error("no member function '$receiver.$name()'")
+                                        })
                                 }
 
                                 else -> error("no member function $idType '$receiver.$name()")
                             }
                         }
 
-
                         is Function<*> -> {
+
+                            fun input(): String {
+                                return "in '${node.getParent()?.text}'"
+                            }
+
                             @Suppress("UNCHECKED_CAST")
-                            receiver as (String) -> Any
-                            @Suppress("UNCHECKED_CAST") val function =
-                                receiver.invoke(name) ?: error("no such function $name")
+                            receiver as (String) -> Any?
+                            val function =
+                                receiver.invoke(name) ?: error("Unresolved function '${name} ${input()}")
 
                             when (idType) {
                                 IDType.MEMBER_FUNCTION0 -> {
+                                    @Suppress("UNCHECKED_CAST")
                                     function as () -> Any
                                     s.functionStack.push({ function() })
                                 }
 
                                 IDType.MEMBER_FUNCTION1 -> {
-                                    function as (Any) -> Any
+                                    @Suppress("UNCHECKED_CAST")
+                                    (function as? (Any) -> Any)
+                                        ?: error("Cannot cast function '$name' ($function) to (Any) -> Any ${input()}")
                                     s.functionStack.push({ x -> function(x[0]) })
                                 }
 
                                 IDType.MEMBER_FUNCTION2 -> {
-                                    function as (Any, Any) -> Any
+                                    @Suppress("UNCHECKED_CAST")
+                                    function as? (Any, Any) -> Any
+                                        ?: error("Cannot cast function '$name' ($function) to (Any, Any) -> Any ${input()}")
                                     s.functionStack.push({ x -> function(x[0], x[1]) })
                                 }
 
                                 IDType.MEMBER_FUNCTION3 -> {
-                                    function as (Any, Any, Any) -> Any
+                                    @Suppress("UNCHECKED_CAST")
+                                    function as? (Any, Any, Any) -> Any
+                                        ?: error("Cannot cast function '$name' ($function) to (Any, Any, Any) -> Any ${input()}")
                                     s.functionStack.push({ x -> function(x[0], x[1], x[2]) })
                                 }
 
                                 else -> error("unreachable")
                             }
                         }
-
-
-                        else -> error("receiver for '$name' '${receiver.toString().take(30)}' ${receiver::class} not supported")
+                        else -> error(
+                            "receiver for '$name' '${
+                                receiver.toString().take(30)
+                            }' ${receiver::class} not supported"
+                        )
                     }
                 }
 
-                IDType.FUNCTION1 -> {
-                    val s = state
-                    val function: (Array<Any>) -> Any =
-                        dispatchFunction1(name, functions.functions1)
-                            ?: errorValue(
-                                "unresolved function: '${name}(x0)'"
-                            ) { _ -> error("this is the error function") }
-                    s.functionStack.push(function)
-                }
+                IDType.FUNCTION0 ->  handleFunction(
+                    name,
+                    ::dispatchFunction0,
+                    functions.functions0,
+                    { f -> { x -> f() } },
+                    "${name}()"
+                )
 
-                IDType.FUNCTION2 -> {
-                    val function: (Array<Any>) -> Any =
-                        dispatchFunction2(name, functions.functions2)
-                            ?: errorValue(
-                                "unresolved function: '${name}(x0, x1)'"
-                            ) { _ -> error("this is the error function") }
-                    s.functionStack.push(function)
-                }
+                IDType.FUNCTION1 -> handleFunction(
+                    name,
+                    ::dispatchFunction1,
+                    functions.functions1,
+                    { f -> { x -> f(x[0]) } },
+                    "${name}(x0)"
+                )
 
-                IDType.FUNCTION3 -> {
-                    val function: (Array<Any>) -> Any =
-                        dispatchFunction3(name, functions.functions3)
-                            ?: errorValue(
-                                "unresolved function: '${name}(x0)'"
-                            ) { _ -> error("this is the error function") }
-                    s.functionStack.push(function)
-                }
+                IDType.FUNCTION2 -> handleFunction(
+                    name,
+                    ::dispatchFunction2,
+                    functions.functions2,
+                    { f -> { x -> f(x[0], x[1]) } },
+                    "${name}(x0, x1)"
+                )
 
-                IDType.FUNCTION4 -> {
-                    val function: (Array<Any>) -> Any =
-                        dispatchFunction4(name, functions.functions4)
-                            ?: errorValue(
-                                "unresolved function: '${name}(x0)'"
-                            ) { _ -> error("this is the error function") }
-                    s.functionStack.push(function)
+                IDType.FUNCTION3 -> handleFunction(
+                    name,
+                    ::dispatchFunction3,
+                    functions.functions3,
+                    { f -> { x -> f(x[0], x[1], x[2]) } },
+                    "${name}(x0, x1, x2)"
+                )
+
+                IDType.FUNCTION4 -> handleFunction(
+                    name,
+                    ::dispatchFunction4,
+                    functions.functions4,
+                    { f -> { x -> f(x[0], x[1], x[2], x[3]) } },
+                    "${name}(x0, x1, x2, x3)"
+                )
+
+                IDType.FUNCTION5 -> {
+                    val cfunction = constants(name) as? (Any, Any, Any, Any, Any) -> Any
+                    if (cfunction != null) {
+                        s.functionStack.push({ x -> cfunction(x[0], x[1], x[2], x[3], x[4]) })
+                    } else {
+                        s.functionStack.push(errorValue("unresolved function: '${name}(x0, x1, x2, x3, x4)'") { _ ->
+                            error("this is the error function")
+                        })
+                    }
                 }
 
                 IDType.FUNCTION_ARGUMENT -> {
@@ -880,6 +982,21 @@ expect class TypedExpressionListener(
 
 class ExpressionException(message: String) : RuntimeException(message)
 
+/**
+ * Evaluates a typed expression based on the provided string input, constants,
+ * and function definitions.
+ *
+ * @param expression The string representation of the expression to evaluate.
+ * @param constants A lambda function providing constant values for specific
+ * variables. Returns null if a constant is not found. Defaults to a function
+ * returning null for any input.
+ * @param functions A `TypedFunctionExtensions` instance encapsulating function
+ * definitions for 0 to 5 arguments. Defaults to an empty set of functions.
+ * @return The result of the evaluated expression as an `Any?` type.
+ *         Returns null if the evaluation produces no result.
+ * @throws ExpressionException If a syntax error occurs in the input expression
+ * or during expression evaluation.
+ */
 fun evaluateTypedExpression(
     expression: String,
     constants: (String) -> Any? = { null },
@@ -912,6 +1029,15 @@ fun evaluateTypedExpression(
     return listener.state.lastExpressionResult
 }
 
+/**
+ * Compiles a typed expression and returns a lambda that can execute the compiled expression.
+ *
+ * @param expression The string representation of the expression to compile.
+ * @param constants A lambda function to resolve constants by their names. Defaults to a resolver that returns null.
+ * @param functions An instance of `TypedFunctionExtensions` containing the supported custom functions for the expression. Defaults to an empty set of functions.
+ * @return A lambda function that evaluates the compiled expression and returns its result.
+ * @throws ExpressionException If there is a syntax error or a parsing issue in the provided expression.
+ */
 fun compileTypedExpression(
     expression: String,
     constants: (String) -> Any? = { null },
@@ -934,7 +1060,6 @@ fun compileTypedExpression(
     })
     val root = parser.keyLangFile()
     val listener = TypedExpressionListener(functions, constants)
-
 
     return {
         try {

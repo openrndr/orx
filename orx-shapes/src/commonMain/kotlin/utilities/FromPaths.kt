@@ -4,7 +4,12 @@ import org.openrndr.shape.Path3D
 import org.openrndr.shape.path3D
 
 /**
- * Create a [Path3D] from a list of paths
+ * Creates a new Path3D by combining multiple Path3D contours.
+ *
+ * @param contours a list of Path3D to be combined; empty paths are removed
+ * @param closed whether the resulting Path3D should be closed
+ * @param connectEpsilon the tolerance for connecting contours, default is 1E-6
+ * @return a new Path3D combining the input contours
  */
 fun Path3D.Companion.fromPaths(contours: List<Path3D>, closed: Boolean, connectEpsilon:Double=1E-6) : Path3D {
     @Suppress("NAME_SHADOWING") val contours = contours.filter { !it.empty }

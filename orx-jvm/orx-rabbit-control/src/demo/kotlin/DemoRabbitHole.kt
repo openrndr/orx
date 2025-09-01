@@ -1,7 +1,6 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.loadFont
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.parameters.*
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
@@ -15,13 +14,6 @@ fun main() = application {
     }
 
     program {
-        // -- this block is for automation purposes only
-        if (System.getProperty("takeScreenshot") == "true") {
-            extend(SingleScreenshot()) {
-                this.outputFile = System.getProperty("screenshotPath")
-            }
-        }
-
         /**
          * Start RabbitControlServer with a Rabbithole with key 'orxtest'
          * Please visit https://rabbithole.rabbitcontrol.cc for more information.

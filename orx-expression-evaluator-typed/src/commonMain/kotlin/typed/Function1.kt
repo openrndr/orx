@@ -18,6 +18,7 @@ internal fun vec2(x: Any): Vector2 {
         is List<*> -> {
             when (x.size) {
                 2 -> {
+                    @Suppress("UNCHECKED_CAST")
                     x as List<Double>; Vector2(x[0], x[1])
                 }
 
@@ -172,6 +173,7 @@ internal fun translate(translation: Any): Matrix44 {
 internal fun mat4(x: Any): Matrix44 {
     return when (x) {
         is List<*> -> {
+            @Suppress("UNCHECKED_CAST")
             when (x.size) {
                 16 -> Matrix44.fromDoubleArray((x as List<Double>).toDoubleArray())
                 4 -> {

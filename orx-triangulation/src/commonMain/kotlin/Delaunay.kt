@@ -222,5 +222,11 @@ class Delaunay(val points: DoubleArray) {
         return c
     }
 
+    /**
+     * Generates a Voronoi diagram based on the current Delaunay triangulation and the provided bounds.
+     *
+     * @param bounds A rectangle defining the boundaries within which the Voronoi diagram will be generated.
+     * @return A Voronoi instance representing the resulting Voronoi diagram.
+     */
     fun voronoi(bounds: Rectangle): Voronoi = Voronoi(this, bounds)
 }

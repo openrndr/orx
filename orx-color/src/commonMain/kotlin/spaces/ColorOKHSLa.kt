@@ -7,6 +7,16 @@ import org.openrndr.math.mixAngle
 import kotlin.jvm.JvmRecord
 import kotlin.math.*
 
+/**
+ * Represents a color in the OKHSL (hue, saturation, lightness) color space with an alpha channel.
+ * This color model is based on perceptual uniformity and is useful for hue, saturation, and
+ * lightness manipulations while maintaining consistency with human vision.
+ *
+ * @property h The hue of the color, represented as a value in degrees [0.0, 360.0).
+ * @property s The saturation of the color, where 0.0 is fully desaturated (gray) and 1.0 is fully saturated.
+ * @property l The lightness of the color, where 0.0 is completely dark and 1.0 is completely light.
+ * @property alpha The opacity of the color, where 0.0 is fully transparent and 1.0 is fully opaque.
+ */
 @Suppress("LocalVariableName")
 @Serializable
 @JvmRecord

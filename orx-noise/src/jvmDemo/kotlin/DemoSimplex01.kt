@@ -4,6 +4,14 @@ import org.openrndr.draw.LineJoin
 import org.openrndr.extra.noise.simplex
 import org.openrndr.shape.contour
 
+/**
+ * Demonstrates how to use the `simplex` method to obtain noise values based on a seed and an x value.
+ *
+ * The program creates 20 horizontal contours with 40 steps each in which each 2D step and each 2D control point
+ * is affected by noise.
+ *
+ * Time is used as a noise argument to produce an animated effect.
+ */
 fun main() = application {
     configure {
         width = 720

@@ -16,6 +16,7 @@ kotlin {
         val jvmDemo by getting {
             dependencies {
                 implementation(project(":orx-text-writer"))
+                implementation(project(":orx-shapes"))
             }
         }
     }

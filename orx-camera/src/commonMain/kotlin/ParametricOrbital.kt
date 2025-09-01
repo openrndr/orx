@@ -1,3 +1,5 @@
+@file:Suppress("RUNTIME_ANNOTATION_NOT_SUPPORTED")
+
 package org.openrndr.extra.camera
 
 import org.openrndr.Extension
@@ -90,7 +92,7 @@ class ParametricOrbital : Extension, ChangeEvents {
 
 
     override fun setup(program: Program) {
-
+        camera.setup(program)
     }
 
     override fun beforeDraw(drawer: Drawer, program: Program) {

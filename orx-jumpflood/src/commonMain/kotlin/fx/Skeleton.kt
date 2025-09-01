@@ -28,7 +28,7 @@ private class SkeletonFilter : Filter(filterShaderFromCode(jf_skeleton, "skeleto
 }
 
 @Description("Skeleton")
-class Skeleton : Filter() {
+class Skeleton : Filter(null) {
     @DoubleParameter("threshold", 0.0, 1.0, order = 0)
     var threshold = 0.5
 

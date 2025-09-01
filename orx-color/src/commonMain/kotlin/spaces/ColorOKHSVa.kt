@@ -7,6 +7,22 @@ import org.openrndr.math.mixAngle
 import kotlin.jvm.JvmRecord
 import kotlin.math.*
 
+/**
+ * Represents a color in the OKHSVa color model.
+ *
+ * The OKHSVa color model is derived from OKLABa and provides a perceptually uniform representation
+ * of colors using hue (h), saturation (s), value (v), and alpha (opacity).
+ *
+ * This class supports operations and transformations such as conversion to and from RGBa,
+ * hue shifting, saturation adjustment, shading, and algebraic operations like addition, subtraction,
+ * and scaling. It is ideal for working with colors in contexts requiring accurate color mixing
+ * and perceptual results.
+ *
+ * @property h Hue value in degrees (0.0 - 360.0), representing the color's angle on the color wheel.
+ * @property s Saturation value (0.0 - 1.0), representing the intensity or purity of the color.
+ * @property v Value (0.0 - 1.0), representing the color's brightness.
+ * @property alpha Opacity value (0.0 - 1.0), with 1.0 being fully opaque.
+ */
 @Suppress("LocalVariableName")
 @Serializable
 @JvmRecord

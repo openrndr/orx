@@ -1,6 +1,7 @@
 package org.openrndr.extra.meshgenerators
 
 import org.openrndr.draw.VertexBuffer
+import org.openrndr.math.Spherical
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import kotlin.math.sqrt
@@ -56,7 +57,7 @@ fun generateDodecahedron(
             // (±φ, 0, ±1/φ)
             -t, 0.0, -r, t, 0.0, -r,
             -t, 0.0, r, t, 0.0, r
-    );
+    )
 
     val indices = listOf(
             3, 11, 7, 3, 7, 15, 3, 15, 13,
@@ -71,13 +72,8 @@ fun generateDodecahedron(
             11, 9, 5, 11, 5, 19, 11, 19, 7,
             19, 5, 14, 19, 14, 4, 19, 4, 17,
             1, 12, 14, 1, 14, 5, 1, 5, 9
-    );
+    )
 
-    // TODO: assign texture uv coordinates
-    // cylindrical? spherical?
-    // billboarding pentagons?
-    // unwrap?
-    val uv = Vector2(0.0)
     val ii = indices.iterator()
     while (ii.hasNext()) {
         val tri = List(3) {
@@ -87,8 +83,20 @@ fun generateDodecahedron(
                     vertices[i * 3 + 2]) * radius
         }
         val up = (tri[1] - tri[0]).cross(tri[2] - tri[0]).normalized
-        writer(tri[0], up, uv)
-        writer(tri[1], up, uv)
-        writer(tri[2], up, uv)
+
+        writer(tri[0], up, tri[0].toUV())
+        writer(tri[1], up, tri[1].toUV())
+        writer(tri[2], up, tri[2].toUV())
     }
+}
+
+/**
+ * Converts a 3D vertex to a 2D UV coordinate using a spherical wrapping.
+ */
+private fun Vector3.toUV(): Vector2 {
+    val thetaMax = 180.0 * 2.0
+    val phiMax = 180.0
+
+    val spherical = Spherical.fromVector(this.normalized)
+    return Vector2(spherical.theta / thetaMax + 0.5, 1.0 - spherical.phi / phiMax)
 }

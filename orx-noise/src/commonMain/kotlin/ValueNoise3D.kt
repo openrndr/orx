@@ -28,11 +28,11 @@ inline fun value(seed: Int, x: Double, y: Double, z: Double, crossinline interpo
     val ys = interpolation(y - y0)
     val zs = interpolation(z - z0)
 
+    val xf00 = mix(fshash3D(seed, x0, y0, z0), fshash3D(seed, x1, y0, z0), xs)
+    val xf10 = mix(fshash3D(seed, x0, y1, z0), fshash3D(seed, x1, y1, z0), xs)
+    val xf01 = mix(fshash3D(seed, x0, y0, z1), fshash3D(seed, x1, y0, z1), xs)
+    val xf11 = mix(fshash3D(seed, x0, y1, z1), fshash3D(seed, x1, y1, z1), xs)
 
-    val xf00 = mix(valCoord3D(seed, x0, y0, z0), valCoord3D(seed, x1, y0, z0), xs)
-    val xf10 = mix(valCoord3D(seed, x0, y1, z0), valCoord3D(seed, x1, y1, z0), xs)
-    val xf01 = mix(valCoord3D(seed, x0, y0, z1), valCoord3D(seed, x1, y0, z1), xs)
-    val xf11 = mix(valCoord3D(seed, x0, y1, z1), valCoord3D(seed, x1, y1, z1), xs)
 
     val yf0 = mix(xf00, xf10, ys)
     val yf1 = mix(xf01, xf11, ys)

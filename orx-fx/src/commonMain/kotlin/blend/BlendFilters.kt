@@ -6,6 +6,7 @@ import org.openrndr.draw.Filter1to1
 import org.openrndr.draw.Filter2to1
 import org.openrndr.extra.fx.*
 import org.openrndr.extra.parameters.BooleanParameter
+import org.openrndr.extra.parameters.DoubleParameter
 
 class ColorBurn : Filter2to1(mppFilterShader(fx_color_burn, "color-burn")) {
     @BooleanParameter("source clip")
@@ -65,8 +66,16 @@ class Normal : Filter2to1(mppFilterShader(fx_normal, "normal")) {
     @BooleanParameter("source clip")
     var clip: Boolean by parameters
 
+    @DoubleParameter("opacity A", 0.0, 1.0)
+    var opacityA: Double by parameters
+
+    @DoubleParameter("opacity B", 0.0, 1.0)
+    var opacityB: Double by parameters
+
     init {
         clip = false
+        opacityA = 1.0
+        opacityB = 1.0
     }
 }
 

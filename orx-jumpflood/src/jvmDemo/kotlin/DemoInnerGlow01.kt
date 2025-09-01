@@ -8,6 +8,10 @@ import org.openrndr.extra.fx.patterns.Checkers
 import org.openrndr.extra.jumpfill.fx.InnerGlow
 
 fun main() = application {
+    configure {
+        width = 720
+        height = 720
+    }
     program {
         val c = compose {
             layer {

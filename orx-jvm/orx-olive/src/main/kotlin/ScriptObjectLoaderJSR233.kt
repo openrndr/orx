@@ -5,6 +5,7 @@ import java.io.File
 import java.io.InputStream
 import java.io.Reader
 import java.net.MalformedURLException
+import java.net.URI
 import java.net.URL
 import javax.script.ScriptEngineManager
 
