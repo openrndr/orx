@@ -286,7 +286,7 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
      * Use any methods and properties like contour(), segment(), fill, stroke, etc.
      */
     fun draw(f: CompositionDrawer.() -> Unit) {
-        design.draw(f)
+        design.draw(drawFunction = f)
     }
 
     private fun runCMD(args: List<String>, hold: Boolean = true) {
