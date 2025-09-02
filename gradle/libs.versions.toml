@@ -10,7 +10,6 @@ kotlinxSerialization = "1.9.0"
 kotest = "5.9.1"
 dokka = "2.0.0"
 nebulaRelease = "18.0.7"
-gradleNexusPublish = "2.0.0"
 boofcv = "1.2.3"
 junitJupiter = "5.13.4"
 slf4j = "2.0.17"
@@ -93,7 +92,6 @@ slf4j-simple = { group = "org.slf4j", name = "slf4j-simple", version.ref = "slf4
 [plugins]
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 nebula-release = { id = "nebula.release", version.ref = "nebulaRelease" }
-gradle-nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "gradleNexusPublish" }
 kotest-multiplatform = { id = "io.kotest.multiplatform", version.ref = "kotest" }
 antlr-kotlin = { id = "com.strumenta.antlr-kotlin", version.ref = "antlrKotlin" }
 nmcp = { id = "com.gradleup.nmcp.aggregation", version.ref = "nmcp" }
