@@ -64,6 +64,7 @@ To make use of these extensions clone the [OPENRNDR template](https://github.com
 
 | name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | description |
 | --- | --- |
+| [`orx-axidraw`](orx-jvm/orx-axidraw/) | GUI for configuring and plotting with an Axidraw pen-plotter. |
 | [`orx-boofcv`](orx-jvm/orx-boofcv/) | Helper functions to ease working with the BoofCV computer vision library and its data types. |
 | [`orx-chataigne`](orx-jvm/orx-chataigne/) | Expose variables to [Chataigne](http://benjamin.kuperberg.fr/chataigne/en) and any other applications that can interface with it. The current implementation makes use of the OSC protocol and supports `Double` and `ColorRGBa`. |
 | [`orx-depth-camera-calibrator`](orx-jvm/orx-depth-camera-calibrator/) | Class to help callibrate depth and transformation matrices when using one or more depth cameras. |
