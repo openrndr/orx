@@ -77,26 +77,49 @@ extend(paletteStudio)
 <!-- __demos__ -->
 ## Demos
 ### DemoColorBrewer2_01
-[source code](src/jvmDemo/kotlin/DemoColorBrewer2_01.kt)
+
+Demonstrates how to use a ColorBrewer2 palette.
+Finds the first available palette with 5 colors,
+then draws concentric circles filled with those colors.
 
 ![DemoColorBrewer2_01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-palette/images/DemoColorBrewer2_01Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoColorBrewer2_01.kt)
+
 ### DemoColorBrewer2_02
-[source code](src/jvmDemo/kotlin/DemoColorBrewer2_02.kt)
+
+Visualizes the ColorBrewer2 color palettes with 8 colors as circles
+made of colored arcs.
 
 ![DemoColorBrewer2_02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-palette/images/DemoColorBrewer2_02Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoColorBrewer2_02.kt)
+
 ### DemoColorBrewer2_03
-[source code](src/jvmDemo/kotlin/DemoColorBrewer2_03.kt)
+
+Visualizes 49 ColorBrewer2 color palettes of type "Diverging" as circles
+made of colored arcs. Since there are more palettes than grid cells,
+not all palettes are visualized.
 
 ![DemoColorBrewer2_03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-palette/images/DemoColorBrewer2_03Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoColorBrewer2_03.kt)
+
 ### DemoPaletteStudio01
-[source code](src/jvmDemo/kotlin/DemoPaletteStudio01.kt)
+
+Demonstrates how to access palette colors using PaletteStudio.
+A new random palette is loaded every 60 animation frames.
 
 ![DemoPaletteStudio01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-palette/images/DemoPaletteStudio01Kt.png)
 
+[source code](src/jvmDemo/kotlin/DemoPaletteStudio01.kt)
+
 ### DemoPaletteStudio02
-[source code](src/jvmDemo/kotlin/DemoPaletteStudio02.kt)
+
+Demonstrates how to create a design using PaletteStudio.
+Press the `c` key to load a random palette.
+
 
 ![DemoPaletteStudio02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-palette/images/DemoPaletteStudio02Kt.png)
+
+[source code](src/jvmDemo/kotlin/DemoPaletteStudio02.kt)
