@@ -51,4 +51,10 @@ publishing {
             }
         }
     }
+
+}
+val isReleaseVersion = !(version.toString()).endsWith("SNAPSHOT")
+signing {
+    setRequired({ isReleaseVersion && gradle.taskGraph.hasTask("publish") })
+    sign(publishing.publications)
 }
