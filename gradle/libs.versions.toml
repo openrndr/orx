@@ -30,6 +30,7 @@ javaosc = "0.9"
 jsoup = "1.21.1"
 mockk = "1.13.11"
 processing = "4.4.6"
+nmcp = "1.1.0"
 
 [libraries]
 kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging", version.ref = "kotlinLogging" }
@@ -95,6 +96,6 @@ nebula-release = { id = "nebula.release", version.ref = "nebulaRelease" }
 gradle-nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "gradleNexusPublish" }
 kotest-multiplatform = { id = "io.kotest.multiplatform", version.ref = "kotest" }
 antlr-kotlin = { id = "com.strumenta.antlr-kotlin", version.ref = "antlrKotlin" }
-
+nmcp = { id = "com.gradleup.nmcp.aggregation", version.ref = "nmcp" }
 [bundles]
 jupiter = ["jupiter-api", "jupiter-engine"]
