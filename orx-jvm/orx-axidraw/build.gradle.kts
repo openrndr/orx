@@ -6,7 +6,7 @@ dependencies {
     implementation(libs.openrndr.application)
     implementation(libs.openrndr.dialogs)
     implementation(project(":orx-jvm:orx-gui"))
-    implementation(project(":orx-composition"))
+    api(project(":orx-composition"))
     implementation(project(":orx-svg"))
     implementation(project(":orx-image-fit"))
     implementation(project(":orx-shapes"))
