@@ -64,6 +64,7 @@ openrndr-event = { group = "org.openrndr", name = "openrndr-event", version.ref 
 openrndr-filter = { group = "org.openrndr", name = "openrndr-filter", version.ref = "openrndr" }
 openrndr-dialogs = { group = "org.openrndr", name = "openrndr-dialogs", version.ref = "openrndr" }
 openrndr-ffmpeg = { group = "org.openrndr", name = "openrndr-ffmpeg", version.ref = "openrndr" }
+openrndr-nullgl = { group = "org.openrndr", name = "openrndr-nullgl", version.ref = "openrndr" }
 openrndr-gl3-core = { group = "org.openrndr", name = "openrndr-gl3", version.ref = "openrndr" }
 openrndr-gl3-natives-macos-arm64 = { group = "org.openrndr", name = "openrndr-gl3-natives-macos-arm64", version.ref = "openrndr" }
 
