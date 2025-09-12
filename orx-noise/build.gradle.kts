@@ -16,9 +16,9 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(libs.openrndr.math)
-                implementation(libs.openrndr.shape)
-                implementation(libs.openrndr.draw)
+                implementation(openrndr.math)
+                implementation(openrndr.shape)
+                implementation(openrndr.draw)
                 implementation(project(":orx-hash-grid"))
                 implementation(project(":orx-parameters"))
                 implementation(project(":orx-shader-phrases"))
@@ -28,8 +28,8 @@ kotlin {
 
         val jvmTest by getting {
             dependencies {
-                implementation(libs.kotest.assertions)
-                implementation(libs.kotest.framework.engine)
+                implementation(sharedLibs.kotest.assertions)
+                implementation(sharedLibs.kotest.framework.engine)
             }
         }
 

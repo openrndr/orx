@@ -3,8 +3,8 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.openrndr.application)
-    implementation(libs.openrndr.math)
+    implementation(openrndr.application)
+    implementation(openrndr.math)
     implementation(project(":orx-jvm:orx-kinect-v1"))
     implementation(project(":orx-jvm:orx-depth-camera-calibrator"))
     implementation(project(":orx-fx"))

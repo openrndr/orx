@@ -6,9 +6,9 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(libs.openrndr.shape)
-                implementation(libs.openrndr.draw)
-                implementation(libs.openrndr.application)
+                implementation(openrndr.shape)
+                implementation(openrndr.draw)
+                implementation(openrndr.application)
                 implementation(project(":orx-shapes"))
             }
         }

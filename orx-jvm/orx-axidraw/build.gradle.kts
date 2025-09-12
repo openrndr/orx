@@ -3,8 +3,8 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.openrndr.application)
-    implementation(libs.openrndr.dialogs)
+    implementation(openrndr.application)
+    implementation(openrndr.dialogs)
     implementation(project(":orx-jvm:orx-gui"))
     api(project(":orx-composition"))
     implementation(project(":orx-svg"))

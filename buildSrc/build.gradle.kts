@@ -1,5 +1,6 @@
 plugins {
     `kotlin-dsl`
+//    alias(sha)
 }
 
 val preload: SourceSet by sourceSets.creating
@@ -15,7 +16,7 @@ dependencies {
     implementation(libs.kotlin.serialization.gradle.plugin)
     // https://github.com/gradle/gradle/issues/15383#issuecomment-779893192
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
-    "preloadImplementation"(libs.openrndr.application)
+    "preloadImplementation"(openrndr.application)
     "preloadImplementation"(libs.openrndr.extensions)
 }
 kotlin {

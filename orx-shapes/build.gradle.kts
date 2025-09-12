@@ -11,11 +11,11 @@ kotlin {
                 implementation(project(":orx-shader-phrases"))
                 implementation(project(":orx-color"))
                 implementation(project(":orx-kdtree"))
-                implementation(libs.openrndr.application)
-                implementation(libs.openrndr.draw)
-                implementation(libs.openrndr.filter)
-                implementation(libs.kotlin.reflect)
-                implementation(libs.kotlin.coroutines)
+                implementation(openrndr.application)
+                implementation(openrndr.draw)
+                implementation(openrndr.filter)
+                implementation(sharedLibs.kotlin.reflect)
+                implementation(sharedLibs.kotlin.coroutines)
                 implementation(project(":orx-triangulation"))
             }
         }
@@ -29,10 +29,10 @@ kotlin {
 
         val jvmTest by getting {
             dependencies {
-                implementation(libs.kotest.assertions)
-                implementation(libs.kotest.framework.engine)
-                implementation(libs.kotlin.serialization.json)
-                runtimeOnly(libs.kotlin.reflect)
+                implementation(sharedLibs.kotest.assertions)
+                implementation(sharedLibs.kotest.framework.engine)
+                implementation(sharedLibs.kotlin.serialization.json)
+                runtimeOnly(sharedLibs.kotlin.reflect)
             }
         }
 

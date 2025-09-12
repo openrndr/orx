@@ -8,23 +8,23 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(project(":orx-composition"))
-                implementation(libs.openrndr.shape)
+                implementation(openrndr.shape)
             }
         }
 
         val jvmMain by getting {
             dependencies {
                 implementation(libs.jsoup)
-                implementation(libs.openrndr.draw)
+                implementation(openrndr.draw)
             }
         }
 
         val jvmTest by getting {
             dependencies {
-                implementation(libs.kotest.assertions)
-                implementation(libs.kotest.framework.engine)
-                implementation(libs.kotlin.serialization.json)
-                runtimeOnly(libs.kotlin.reflect)
+                implementation(sharedLibs.kotest.assertions)
+                implementation(sharedLibs.kotest.framework.engine)
+                implementation(sharedLibs.kotlin.serialization.json)
+                runtimeOnly(sharedLibs.kotlin.reflect)
             }
         }
 

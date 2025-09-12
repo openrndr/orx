@@ -3,8 +3,8 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.openrndr.application)
-    implementation(libs.openrndr.math)
+    implementation(openrndr.application)
+    implementation(openrndr.math)
     implementation(project(":orx-fx"))
     api(project(":orx-depth-camera"))
     api(project(":orx-jvm:orx-gui"))

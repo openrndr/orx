@@ -13,9 +13,9 @@ kotlin {
         @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
-                implementation(libs.openrndr.application)
-                implementation(libs.openrndr.math)
-                implementation(libs.kotlin.reflect)
+                implementation(openrndr.application)
+                implementation(openrndr.math)
+                implementation(sharedLibs.kotlin.reflect)
             }
         }
 
@@ -28,7 +28,7 @@ kotlin {
         @Suppress("UNUSED_VARIABLE")
         val jvmTest by getting {
             dependencies {
-                runtimeOnly(libs.kotlin.reflect)
+                runtimeOnly(sharedLibs.kotlin.reflect)
             }
         }
     }

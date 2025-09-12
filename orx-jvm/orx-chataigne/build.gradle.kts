@@ -3,10 +3,10 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.openrndr.application)
-    implementation(libs.openrndr.math)
+    implementation(openrndr.application)
+    implementation(openrndr.math)
     api(project(":orx-jvm:orx-osc"))
     implementation(libs.gson)
-    demoImplementation(libs.openrndr.ffmpeg)
+    demoImplementation(openrndr.ffmpeg)
     demoImplementation(project(":orx-fx"))
 }

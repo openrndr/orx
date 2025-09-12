@@ -3,11 +3,14 @@ package org.openrndr.extra.convention
 import ScreenshotsHelper.collectScreenshots
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.kotlin.dsl.the
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
+val sharedLibs = extensions.getByType(VersionCatalogsExtension::class.java).named("sharedLibs")
+val openrndr = extensions.getByType(VersionCatalogsExtension::class.java).named("openrndr")
 val libs = the<LibrariesForLibs>()
 
 val shouldPublish = project.name !in setOf("openrndr-demos", "orx-git-archiver-gradle")
@@ -51,19 +54,19 @@ val demo: SourceSet by sourceSets.creating {
 }
 
 dependencies {
-    implementation(libs.kotlin.stdlib)
-    implementation(libs.kotlin.logging)
-    testImplementation(libs.kotlin.test)
-    testRuntimeOnly(libs.slf4j.simple)
+    implementation(sharedLibs.findLibrary("kotlin-stdlib").get())
+    implementation(sharedLibs.findLibrary("kotlin-logging").get())
+    testImplementation(sharedLibs.findLibrary("kotlin-test").get())
+    testRuntimeOnly(sharedLibs.findLibrary("slf4j-simple").get())
     "demoImplementation"(main.output.classesDirs + main.runtimeClasspath)
-    "demoImplementation"(libs.openrndr.application)
+    "demoImplementation"(openrndr.findLibrary("application").get())
     "demoImplementation"(libs.openrndr.extensions)
 
     if (DefaultNativePlatform.getCurrentOperatingSystem().isMacOsX) {
         "demoRuntimeOnly"(libs.openrndr.gl3.natives.macos.arm64)
     }
     "demoRuntimeOnly"(libs.openrndr.gl3.core)
-    "demoRuntimeOnly"(libs.slf4j.simple)
+    "demoRuntimeOnly"(sharedLibs.findLibrary("slf4j.simple").get())
 }
 
 tasks {

@@ -32,9 +32,9 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.antlr.kotlin.runtime)
-                implementation(libs.openrndr.application)
-                implementation(libs.openrndr.math)
-                implementation(libs.kotlin.coroutines)
+                implementation(openrndr.application)
+                implementation(openrndr.math)
+                implementation(sharedLibs.kotlin.coroutines)
                 implementation(project(":orx-property-watchers"))
                 implementation(project(":orx-noise"))
             }

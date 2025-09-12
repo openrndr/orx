@@ -16,25 +16,25 @@ kotlin {
             dependencies {
                 implementation(project(":orx-parameters"))
                 implementation(project(":orx-shader-phrases"))
-                implementation(libs.openrndr.application)
-                implementation(libs.openrndr.draw)
-                implementation(libs.openrndr.filter)
-                implementation(libs.kotlin.reflect)
+                implementation(openrndr.application)
+                implementation(openrndr.draw)
+                implementation(openrndr.filter)
+                implementation(sharedLibs.kotlin.reflect)
             }
         }
 
         val commonTest by getting {
             dependencies {
-                implementation(libs.kotest.assertions)
-                implementation(libs.kotest.framework.engine)
+                implementation(sharedLibs.kotest.assertions)
+                implementation(sharedLibs.kotest.framework.engine)
             }
         }
 
         val jvmTest by getting {
             dependencies {
-                implementation(libs.kotest.assertions)
-                implementation(libs.kotest.framework.engine)
-                runtimeOnly(libs.kotlin.reflect)
+                implementation(sharedLibs.kotest.assertions)
+                implementation(sharedLibs.kotest.framework.engine)
+                runtimeOnly(sharedLibs.kotlin.reflect)
             }
         }
     }

@@ -3,13 +3,13 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.openrndr.application)
-    implementation(libs.openrndr.math)
-    implementation(libs.kotlin.reflect)
-    implementation(libs.kotlin.coroutines)
+    implementation(openrndr.application)
+    implementation(openrndr.math)
+    implementation(sharedLibs.kotlin.reflect)
+    implementation(sharedLibs.kotlin.coroutines)
     implementation(project(":orx-property-watchers"))
     implementation(project(":orx-parameters"))
 
     testImplementation(libs.mockk)
-    testImplementation(libs.kotest.assertions)
+    testImplementation(sharedLibs.kotest.assertions)
 }

@@ -3,10 +3,10 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.openrndr.application)
-    implementation(libs.openrndr.math)
+    implementation(openrndr.application)
+    implementation(openrndr.math)
     implementation(libs.gson)
-    implementation(libs.kotlin.reflect)
+    implementation(sharedLibs.kotlin.reflect)
     implementation(project(":orx-noise"))
     implementation(project(":orx-easing"))
     api(project(":orx-expression-evaluator"))

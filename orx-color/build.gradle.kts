@@ -14,27 +14,27 @@ kotlin {
             dependencies {
                 implementation(project(":orx-parameters"))
                 implementation(project(":orx-shader-phrases"))
-                implementation(libs.kotlin.serialization.core)
-                implementation(libs.openrndr.application)
-                implementation(libs.openrndr.draw)
-                implementation(libs.openrndr.filter)
-                implementation(libs.kotlin.reflect)
+                implementation(sharedLibs.kotlin.serialization.core)
+                implementation(openrndr.application)
+                implementation(openrndr.draw)
+                implementation(openrndr.filter)
+                implementation(sharedLibs.kotlin.reflect)
             }
         }
 
         val commonTest by getting {
             dependencies {
-                implementation(libs.kotlin.serialization.json)
-                implementation(libs.kotest.assertions)
-                implementation(libs.kotest.framework.engine)
+                implementation(sharedLibs.kotlin.serialization.json)
+                implementation(sharedLibs.kotest.assertions)
+                implementation(sharedLibs.kotest.framework.engine)
             }
         }
 
         val jvmTest by getting {
             dependencies {
-                implementation(libs.kotlin.serialization.json)
-                implementation(libs.kotest.assertions)
-                implementation(libs.kotest.framework.engine)
+                implementation(sharedLibs.kotlin.serialization.json)
+                implementation(sharedLibs.kotest.assertions)
+                implementation(sharedLibs.kotest.framework.engine)
             }
         }
 

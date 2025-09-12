@@ -7,9 +7,9 @@ dependencies {
         exclude(group = "org.jogamp.gluegen")
         exclude(group = "org.jogamp.jogl")
     }
-    implementation(libs.openrndr.application)
-    implementation(libs.openrndr.math)
-    implementation(libs.kotlin.reflect)
-    demoRuntimeOnly(libs.slf4j.simple)
+    implementation(openrndr.application)
+    implementation(openrndr.math)
+    implementation(sharedLibs.kotlin.reflect)
+    demoRuntimeOnly(sharedLibs.slf4j.simple)
     demoImplementation(project(":orx-shapes"))
 }

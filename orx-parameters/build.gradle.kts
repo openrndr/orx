@@ -8,9 +8,9 @@ kotlin {
         @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
-                implementation(libs.openrndr.application)
-                implementation(libs.openrndr.math)
-                implementation(libs.kotlin.reflect)
+                implementation(openrndr.application)
+                implementation(openrndr.math)
+                implementation(sharedLibs.kotlin.reflect)
 
             }
         }
@@ -19,10 +19,10 @@ kotlin {
         @Suppress("UNUSED_VARIABLE")
         val jvmTest by getting {
             dependencies {
-                implementation(libs.kotest.assertions)
-                implementation(libs.kotest.framework.engine)
-                implementation(libs.kotlin.serialization.json)
-                runtimeOnly(libs.kotlin.reflect)
+                implementation(sharedLibs.kotest.assertions)
+                implementation(sharedLibs.kotest.framework.engine)
+                implementation(sharedLibs.kotlin.serialization.json)
+                runtimeOnly(sharedLibs.kotlin.reflect)
             }
         }
     }

@@ -8,10 +8,10 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(project(":orx-parameters"))
-                implementation(libs.openrndr.application)
-                implementation(libs.openrndr.draw)
-                implementation(libs.openrndr.filter)
-                implementation(libs.kotlin.reflect)
+                implementation(openrndr.application)
+                implementation(openrndr.draw)
+                implementation(openrndr.filter)
+                implementation(sharedLibs.kotlin.reflect)
             }
         }
 

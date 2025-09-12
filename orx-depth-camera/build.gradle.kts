@@ -7,8 +7,8 @@ kotlin {
         @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
-                implementation(libs.openrndr.application)
-                implementation(libs.openrndr.math)
+                implementation(openrndr.application)
+                implementation(openrndr.math)
             }
         }
     }
