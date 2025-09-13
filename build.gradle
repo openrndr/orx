@@ -122,7 +122,7 @@ subprojects {
 
 dependencies {
     subprojects.findAll {
-        it.name.startsWith("orx-")
+        it.name.startsWith("orx-") && !it.name.contains("-catalog")
     }.each { subproject ->
         dokka(project(subproject.path))
     }
