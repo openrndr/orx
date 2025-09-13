@@ -64,9 +64,8 @@ kotlin {
                     dependsOn(compileTaskProvider)
                 }
                 dependencies {
-                    if (DefaultNativePlatform.getCurrentOperatingSystem().isMacOsX) {
-                        runtimeOnly(libs.findLibrary("openrndr-gl3-natives-macos-arm64").get())
-                    }
+                        runtimeOnly(openrndr.findLibrary("gl3").get())
+
                 }
             }
         }
@@ -112,7 +111,7 @@ kotlin {
             dependencies {
                 implementation(openrndr.findLibrary("application").get())
                 implementation(openrndr.findLibrary("orextensions").get())
-                runtimeOnly(libs.findLibrary("openrndr-gl3-core").get())
+                runtimeOnly(openrndr.findLibrary("gl3").get())
                 runtimeOnly(sharedLibs.findLibrary("slf4j-simple").get())
             }
         }

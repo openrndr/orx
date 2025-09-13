@@ -11,8 +11,6 @@ val sharedLibs = extensions.getByType(VersionCatalogsExtension::class.java).name
 val openrndr = extensions.getByType(VersionCatalogsExtension::class.java).named("openrndr")
 val libs = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
 
-println("all is well")
-
 val shouldPublish = project.name !in setOf("openrndr-demos", "orx-git-archiver-gradle")
 
 plugins {
@@ -34,7 +32,6 @@ repositories {
 
 group = "org.openrndr.extra"
 
-println("getting main sourceset")
 val main: SourceSet by project.sourceSets.getting
 
 @Suppress("UNUSED_VARIABLE")
@@ -60,16 +57,12 @@ dependencies {
     testImplementation(sharedLibs.findLibrary("kotlin-test").get())
     testRuntimeOnly(sharedLibs.findLibrary("slf4j-simple").get())
     "demoImplementation"(main.output.classesDirs + main.runtimeClasspath)
-    println("set up demo impl")
     "demoImplementation"(openrndr.findLibrary("application").get())
     "demoImplementation"(openrndr.findLibrary("orextensions").get())
-    println("done part 1")
-    if (DefaultNativePlatform.getCurrentOperatingSystem().isMacOsX) {
-        "demoRuntimeOnly"(libs.findLibrary("openrndr-gl3-natives-macos-arm64").get())
-    }
-    "demoRuntimeOnly"(libs.findLibrary("openrndr-gl3-core").get())
+
+    "demoRuntimeOnly"(openrndr.findLibrary("gl3").get())
+
     "demoRuntimeOnly"(sharedLibs.findLibrary("slf4j-simple").get())
-    println("still good")
 }
 
 tasks {

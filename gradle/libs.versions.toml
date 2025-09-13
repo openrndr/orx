@@ -39,10 +39,6 @@ mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk"}
 
 processing-core = { group = "org.processing", name = "core", version.ref = "processing"}
 
-openrndr-extensions = { group = "org.openrndr", name = "openrndr-extensions", version.ref = "openrndr" }
-openrndr-gl3-core = { group = "org.openrndr", name = "openrndr-gl3", version.ref = "openrndr" }
-openrndr-gl3-natives-macos-arm64 = { group = "org.openrndr", name = "openrndr-gl3-natives-macos-arm64", version.ref = "openrndr" }
-
 boofcv = { group = "org.boofcv", name = "boofcv-core", version.ref = "boofcv" }
 libfreenect = { group = "org.bytedeco", name = "libfreenect", version.ref = "libfreenect" }
 librealsense = { group = "org.bytedeco", name = "librealsense2", version.ref = "librealsense" }

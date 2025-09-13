@@ -4,5 +4,5 @@ plugins {
 
 dependencies {
     implementation(openrndr.application)
-    implementation(libs.openrndr.gl3.core)
+    implementation(openrndr.gl3)
 }
