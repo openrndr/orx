@@ -1,5 +1,5 @@
 plugins {
-    org.openrndr.extra.convention.`kotlin-multiplatform`
+    id("org.openrndr.extra.convention.kotlin-multiplatform")
     alias(libs.plugins.kotest.multiplatform)
 }
 

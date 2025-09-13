@@ -1,9 +1,7 @@
 package org.openrndr.extra.convention
 
 import ScreenshotsHelper.collectScreenshots
-import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.gradle.kotlin.dsl.the
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -11,7 +9,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 val sharedLibs = extensions.getByType(VersionCatalogsExtension::class.java).named("sharedLibs")
 val openrndr = extensions.getByType(VersionCatalogsExtension::class.java).named("openrndr")
-val libs = the<LibrariesForLibs>()
+val libs = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
 
 val shouldPublish = project.name !in setOf("openrndr-demos", "orx-git-archiver-gradle")
 
@@ -34,10 +32,10 @@ repositories {
 
 group = "org.openrndr.extra"
 
-val main: SourceSet by sourceSets.getting
+val main: SourceSet by project.sourceSets.getting
 
 @Suppress("UNUSED_VARIABLE")
-val demo: SourceSet by sourceSets.creating {
+val demo: SourceSet by project.sourceSets.creating {
     val skipDemos = setOf(
         "openrndr-demos",
         "orx-axidraw",
@@ -60,13 +58,11 @@ dependencies {
     testRuntimeOnly(sharedLibs.findLibrary("slf4j-simple").get())
     "demoImplementation"(main.output.classesDirs + main.runtimeClasspath)
     "demoImplementation"(openrndr.findLibrary("application").get())
-    "demoImplementation"(libs.openrndr.extensions)
+    "demoImplementation"(openrndr.findLibrary("orextensions").get())
 
-    if (DefaultNativePlatform.getCurrentOperatingSystem().isMacOsX) {
-        "demoRuntimeOnly"(libs.openrndr.gl3.natives.macos.arm64)
-    }
-    "demoRuntimeOnly"(libs.openrndr.gl3.core)
-    "demoRuntimeOnly"(sharedLibs.findLibrary("slf4j.simple").get())
+    "demoRuntimeOnly"(openrndr.findLibrary("gl3").get())
+
+    "demoRuntimeOnly"(sharedLibs.findLibrary("slf4j-simple").get())
 }
 
 tasks {
@@ -88,11 +84,11 @@ tasks {
     }
     withType<KotlinCompile> {
         compilerOptions {
-            jvmTarget.set(JvmTarget.valueOf("JVM_${libs.versions.jvmTarget.get()}"))
+            jvmTarget.set(JvmTarget.valueOf("JVM_${libs.findVersion("jvmTarget").get().displayName.replace(".", "_")}"))
             freeCompilerArgs.add("-Xexpect-actual-classes")
-            freeCompilerArgs.add("-Xjdk-release=${libs.versions.jvmTarget.get()}")
-            apiVersion.set(KotlinVersion.valueOf("KOTLIN_${libs.versions.kotlinApi.get().replace(".", "_")}"))
-            languageVersion.set(KotlinVersion.valueOf("KOTLIN_${libs.versions.kotlinLanguage.get().replace(".", "_")}"))
+            freeCompilerArgs.add("-Xjdk-release=${libs.findVersion("jvmTarget").get().displayName}")
+            apiVersion.set(KotlinVersion.valueOf("KOTLIN_${libs.findVersion("kotlinApi").get().displayName.replace(".", "_")}"))
+            languageVersion.set(KotlinVersion.valueOf("KOTLIN_${libs.findVersion("kotlinLanguage").get().displayName.replace(".", "_")}"))
         }
     }
 }
@@ -100,8 +96,8 @@ tasks {
 java {
     withJavadocJar()
     withSourcesJar()
-    targetCompatibility = JavaVersion.valueOf("VERSION_${libs.versions.jvmTarget.get()}")
-    sourceCompatibility = JavaVersion.valueOf("VERSION_${libs.versions.jvmTarget.get()}")
+    targetCompatibility = JavaVersion.valueOf("VERSION_${libs.findVersion("jvmTarget").get().displayName}")
+    sourceCompatibility = JavaVersion.valueOf("VERSION_${libs.findVersion("jvmTarget").get().displayName}")
 }
 
 val isReleaseVersion = !(version.toString()).endsWith("SNAPSHOT")

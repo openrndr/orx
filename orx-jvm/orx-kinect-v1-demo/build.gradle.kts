@@ -1,5 +1,5 @@
 plugins {
-    org.openrndr.extra.convention.`kotlin-jvm`
+    id("org.openrndr.extra.convention.kotlin-jvm")
 }
 
 dependencies {
@@ -9,6 +9,6 @@ dependencies {
     implementation(project(":orx-jvm:orx-depth-camera-calibrator"))
     implementation(project(":orx-fx"))
     implementation(project(":orx-jvm:orx-gui"))
-    runtimeOnly(project(":orx-jvm:orx-kinect-v1-${(gradle as ExtensionAware).extra["openrndrClassifier"]}"))
-    runtimeOnly(libs.openrndr.gl3.core)
+    runtimeOnly(project(":orx-jvm:orx-kinect-v1"))
+    runtimeOnly(openrndr.gl3)
 }

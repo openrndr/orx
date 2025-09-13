@@ -6,8 +6,6 @@ import org.gradle.nativeplatform.MachineArchitecture
 import org.gradle.nativeplatform.OperatingSystemFamily
 import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 
-data class JvmNativeVariant(val targetName: String, val os: String, val arch: String)
-
 val currentOperatingSystemName: String = DefaultNativePlatform.getCurrentOperatingSystem().toFamilyName()
 val currentArchitectureName: String = DefaultNativePlatform.getCurrentArchitecture().name
 
