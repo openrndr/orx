@@ -2,7 +2,7 @@ import com.strumenta.antlrkotlin.gradle.AntlrKotlinTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 plugins {
-    org.openrndr.extra.convention.`kotlin-multiplatform`
+    id("org.openrndr.extra.convention.kotlin-multiplatform")
     alias(libs.plugins.antlr.kotlin)
 }
 

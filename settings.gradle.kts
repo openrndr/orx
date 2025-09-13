@@ -13,6 +13,8 @@ val openrndrClassifier: String by (gradle as ExtensionAware).extra(
     }
 )
 
+includeBuild("build-logic")
+
 dependencyResolutionManagement {
     repositories {
         mavenCentral()

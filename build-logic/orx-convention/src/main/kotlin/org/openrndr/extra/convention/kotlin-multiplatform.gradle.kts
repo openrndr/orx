@@ -1,7 +1,6 @@
 package org.openrndr.extra.convention
 
 import CollectScreenshotsTask
-import org.gradle.accessors.dm.LibrariesForLibs
 
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
@@ -11,7 +10,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
-val libs = the<LibrariesForLibs>()
+val libs =  extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
 val sharedLibs = extensions.getByType(VersionCatalogsExtension::class.java).named("sharedLibs")
 val openrndr = extensions.getByType(VersionCatalogsExtension::class.java).named("openrndr")
 
@@ -37,16 +36,16 @@ group = "org.openrndr.extra"
 
 tasks.withType<KotlinCompilationTask<*>> {
     compilerOptions {
-        apiVersion.set(KotlinVersion.valueOf("KOTLIN_${libs.versions.kotlinApi.get().replace(".", "_")}"))
-        languageVersion.set(KotlinVersion.valueOf("KOTLIN_${libs.versions.kotlinLanguage.get().replace(".", "_")}"))
+        apiVersion.set(KotlinVersion.valueOf("KOTLIN_${libs.findVersion("kotlinApi").get().displayName.replace(".", "_")}"))
+        languageVersion.set(KotlinVersion.valueOf("KOTLIN_${libs.findVersion("kotlinLanguage").get().displayName.replace(".", "_")}"))
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 }
 
 tasks.withType<KotlinJvmCompile>().configureEach {
     compilerOptions {
-        jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
-        freeCompilerArgs.add("-Xjdk-release=${libs.versions.jvmTarget.get()}")
+        jvmTarget.set(JvmTarget.fromTarget(libs.findVersion("jvmTarget").get().displayName))
+        freeCompilerArgs.add("-Xjdk-release=${libs.findVersion("jvmTarget").get().displayName}")
     }
 }
 
@@ -66,7 +65,7 @@ kotlin {
                 }
                 dependencies {
                     if (DefaultNativePlatform.getCurrentOperatingSystem().isMacOsX) {
-                        runtimeOnly(libs.openrndr.gl3.natives.macos.arm64)
+                        runtimeOnly(libs.findLibrary("openrndr-gl3-natives-macos-arm64").get())
                     }
                 }
             }
@@ -91,14 +90,14 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(libs.kotlin.stdlib)
+                implementation(libs.findLibrary("kotlin-stdlib").get())
                 implementation(sharedLibs.findLibrary("kotlin-logging").get())
             }
         }
 
         val commonTest by getting {
             dependencies {
-                implementation(libs.kotlin.test)
+                implementation(libs.findLibrary("kotlin-test").get())
             }
         }
 
@@ -113,7 +112,7 @@ kotlin {
             dependencies {
                 implementation(openrndr.findLibrary("application").get())
                 implementation(openrndr.findLibrary("orextensions").get())
-                runtimeOnly(libs.openrndr.gl3.core)
+                runtimeOnly(libs.findLibrary("openrndr-gl3-core").get())
                 runtimeOnly(sharedLibs.findLibrary("slf4j-simple").get())
             }
         }
