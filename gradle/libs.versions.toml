@@ -3,22 +3,16 @@ kotlinApi = "2.2"
 kotlinLanguage = "2.2"
 kotlin = "2.2.10"
 jvmTarget = "17"
-openrndr = { require = "[0.4.2, 0.5.0)" }
-kotlinxCoroutines = "1.10.2"
-kotlinLogging = "7.0.13"
-kotlinxSerialization = "1.9.0"
+openrndr = { require = "[0.5,0.6.0)" }
 kotest = "5.9.1"
 dokka = "2.0.0"
 nebulaRelease = "18.0.7"
 boofcv = "1.2.3"
-junitJupiter = "5.13.4"
-slf4j = "2.0.17"
 libfreenect = "0.5.7-1.5.9"
 librealsense = "2.53.1-1.5.9"
 gson = "2.13.1"
 antlr = "4.13.2"
 antlrKotlin = "1.0.3"
-tensorflow = "0.5.0"
 minim = "2.2.2"
 netty = "4.2.4.Final"
 rabbitcontrol = "0.3.39"
@@ -32,13 +26,8 @@ processing = "4.4.6"
 nmcp = "1.1.0"
 
 [libraries]
-kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging", version.ref = "kotlinLogging" }
-kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
-kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
-kotlin-serialization-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version.ref = "kotlinxSerialization" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
-kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
 kotlin-scriptingJvm = { group = "org.jetbrains.kotlin", name = "kotlin-scripting-jvm", version.ref = "kotlin" }
 kotlin-scriptingJvmHost = { group = "org.jetbrains.kotlin", name = "kotlin-scripting-jvm-host", version.ref = "kotlin" }
 kotlin-scriptingJSR223 = { group = "org.jetbrains.kotlin", name = "kotlin-scripting-jsr223", version.ref = "kotlin" }
@@ -46,28 +35,14 @@ kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-p
 kotlin-serialization-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-serialization", version.ref = "kotlin" }
 dokka-gradle-plugin = { group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version.ref = "dokka" }
 
-kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
-kotest-runner = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
-kotest-framework-engine = { group = "io.kotest", name = "kotest-framework-engine", version.ref = "kotest" }
-
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk"}
 
 processing-core = { group = "org.processing", name = "core", version.ref = "processing"}
 
-openrndr-application = { group = "org.openrndr", name = "openrndr-application", version.ref = "openrndr" }
 openrndr-extensions = { group = "org.openrndr", name = "openrndr-extensions", version.ref = "openrndr" }
-openrndr-math = { group = "org.openrndr", name = "openrndr-math", version.ref = "openrndr" }
-openrndr-utils = { group = "org.openrndr", name = "openrndr-utils", version.ref = "openrndr" }
-openrndr-shape = { group = "org.openrndr", name = "openrndr-shape", version.ref = "openrndr" }
-openrndr-draw = { group = "org.openrndr", name = "openrndr-draw", version.ref = "openrndr" }
-openrndr-event = { group = "org.openrndr", name = "openrndr-event", version.ref = "openrndr" }
-openrndr-filter = { group = "org.openrndr", name = "openrndr-filter", version.ref = "openrndr" }
-openrndr-dialogs = { group = "org.openrndr", name = "openrndr-dialogs", version.ref = "openrndr" }
-openrndr-ffmpeg = { group = "org.openrndr", name = "openrndr-ffmpeg", version.ref = "openrndr" }
 openrndr-gl3-core = { group = "org.openrndr", name = "openrndr-gl3", version.ref = "openrndr" }
 openrndr-gl3-natives-macos-arm64 = { group = "org.openrndr", name = "openrndr-gl3-natives-macos-arm64", version.ref = "openrndr" }
 
-tensorflow = { group = "org.tensorflow", name = "tensorflow-core-api", version.ref = "tensorflow" }
 boofcv = { group = "org.boofcv", name = "boofcv-core", version.ref = "boofcv" }
 libfreenect = { group = "org.bytedeco", name = "libfreenect", version.ref = "libfreenect" }
 librealsense = { group = "org.bytedeco", name = "librealsense2", version.ref = "librealsense" }
@@ -85,15 +60,9 @@ antlr-runtime = { group = "org.antlr", name = "antlr4-runtime", version.ref = "a
 antlr-kotlin-runtime = { group = "com.strumenta", name = "antlr-kotlin-runtime", version.ref = "antlrKotlin" }
 jsoup = { group = "org.jsoup", name = "jsoup", version.ref = "jsoup" }
 
-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junitJupiter" }
-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junitJupiter" }
-slf4j-simple = { group = "org.slf4j", name = "slf4j-simple", version.ref = "slf4j" }
-
 [plugins]
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 nebula-release = { id = "nebula.release", version.ref = "nebulaRelease" }
 kotest-multiplatform = { id = "io.kotest.multiplatform", version.ref = "kotest" }
 antlr-kotlin = { id = "com.strumenta.antlr-kotlin", version.ref = "antlrKotlin" }
 nmcp = { id = "com.gradleup.nmcp.aggregation", version.ref = "nmcp" }
-[bundles]
-jupiter = ["jupiter-api", "jupiter-engine"]

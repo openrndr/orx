@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.openrndr.ffmpeg)
-    demoImplementation(libs.openrndr.ffmpeg)
+    implementation(openrndr.ffmpeg)
+    demoImplementation(openrndr.ffmpeg)
 }

@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.openrndr.application)
+    implementation(openrndr.application)
     implementation(libs.openrndr.gl3.core)
 }

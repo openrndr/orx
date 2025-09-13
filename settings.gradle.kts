@@ -13,6 +13,28 @@ val openrndrClassifier: String by (gradle as ExtensionAware).extra(
     }
 )
 
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        mavenLocal {
+            include("org.openrndr")
+        }
+    }
+    versionCatalogs {
+        // We use a regex to get the openrndr version from the primary catalog as there is no public Gradle API to parse catalogs.
+        val regEx = Regex("^openrndr[ ]*=[ ]*(?:\\{[ ]*require[ ]*=[ ]*)?\"(.*)\"[ ]*(?:\\})?", RegexOption.MULTILINE)
+        val openrndrVersion = regEx.find(File(rootDir,"gradle/libs.versions.toml").readText())?.groupValues?.get(1) ?: error("can't find openrndr version")
+        create("sharedLibs") {
+            from("org.openrndr:openrndr-dependency-catalog:$openrndrVersion")
+        }
+        create("openrndr") {
+            from("org.openrndr:openrndr-module-catalog:$openrndrVersion")
+        }
+    }
+}
+
+
+
 include(
     listOf(
         "openrndr-demos",
@@ -91,6 +113,8 @@ include(
         "orx-view-box",
         "orx-text-on-contour",
         "orx-text-writer",
-        "orx-turtle"
+        "orx-turtle",
+
+        "orx-module-catalog"
     )
 )

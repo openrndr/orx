@@ -12,24 +12,24 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(libs.kotlin.serialization.core)
-                implementation(libs.openrndr.math)
+                implementation(sharedLibs.kotlin.serialization.core)
+                implementation(openrndr.math)
             }
         }
 
         val commonTest by getting {
             dependencies {
-                implementation(libs.kotlin.serialization.json)
-                implementation(libs.kotest.assertions)
-                implementation(libs.kotest.framework.engine)
+                implementation(sharedLibs.kotlin.serialization.json)
+                implementation(sharedLibs.kotest.assertions)
+                implementation(sharedLibs.kotest.framework.engine)
             }
         }
 
         val jvmTest by getting {
             dependencies {
-                implementation(libs.kotlin.serialization.json)
-                implementation(libs.kotest.assertions)
-                implementation(libs.kotest.framework.engine)
+                implementation(sharedLibs.kotlin.serialization.json)
+                implementation(sharedLibs.kotest.assertions)
+                implementation(sharedLibs.kotest.framework.engine)
             }
         }
 

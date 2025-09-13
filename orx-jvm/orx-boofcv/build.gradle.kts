@@ -3,8 +3,8 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.openrndr.application)
-    implementation(libs.openrndr.math)
+    implementation(openrndr.application)
+    implementation(openrndr.math)
     demoImplementation(project(":orx-shapes"))
     api(libs.boofcv)
 }

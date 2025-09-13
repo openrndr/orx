@@ -2,9 +2,9 @@ package org.openrndr.extra.convention
 
 import CollectScreenshotsTask
 import org.gradle.accessors.dm.LibrariesForLibs
+
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
-import org.gradle.nativeplatform.platform.internal.DefaultOperatingSystem
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
@@ -12,6 +12,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 val libs = the<LibrariesForLibs>()
+val sharedLibs = extensions.getByType(VersionCatalogsExtension::class.java).named("sharedLibs")
+val openrndr = extensions.getByType(VersionCatalogsExtension::class.java).named("openrndr")
 
 val shouldPublish = project.name !in setOf("openrndr-demos")
 
@@ -90,7 +92,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.kotlin.stdlib)
-                implementation(libs.kotlin.logging)
+                implementation(sharedLibs.findLibrary("kotlin-logging").get())
             }
         }
 
@@ -102,17 +104,17 @@ kotlin {
 
         val jvmTest by getting {
             dependencies {
-                runtimeOnly(libs.bundles.jupiter)
-                runtimeOnly(libs.slf4j.simple)
+                runtimeOnly(sharedLibs.findBundle("jupiter").get())
+                runtimeOnly(sharedLibs.findLibrary("slf4j.simple").get())
             }
         }
 
         val jvmDemo by getting {
             dependencies {
-                implementation(libs.openrndr.application)
-                implementation(libs.openrndr.extensions)
+                implementation(openrndr.findLibrary("application").get())
+                implementation(openrndr.findLibrary("orextensions").get())
                 runtimeOnly(libs.openrndr.gl3.core)
-                runtimeOnly(libs.slf4j.simple)
+                runtimeOnly(sharedLibs.findLibrary("slf4j-simple").get())
             }
         }
     }

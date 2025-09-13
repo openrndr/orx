@@ -14,19 +14,19 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(libs.openrndr.application)
-                implementation(libs.openrndr.draw)
-                implementation(libs.kotlin.reflect)
+                implementation(openrndr.application)
+                implementation(openrndr.draw)
+                implementation(sharedLibs.kotlin.reflect)
             }
         }
 
         @Suppress("UNUSED_VARIABLE")
         val jvmTest by getting {
             dependencies {
-                runtimeOnly(libs.slf4j.simple)
-                runtimeOnly(libs.kotlin.reflect)
-                implementation(libs.kotest.assertions)
-                implementation(libs.kotest.framework.engine)
+                runtimeOnly(sharedLibs.slf4j.simple)
+                runtimeOnly(sharedLibs.kotlin.reflect)
+                implementation(sharedLibs.kotest.assertions)
+                implementation(sharedLibs.kotest.framework.engine)
             }
         }
     }

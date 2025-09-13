@@ -6,14 +6,14 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(libs.openrndr.application)
+                implementation(openrndr.application)
             }
         }
         val jvmMain by getting {
             dependencies {
                 implementation(project(":orx-noise"))
                 implementation(libs.gson)
-                implementation(libs.openrndr.math)
+                implementation(openrndr.math)
             }
         }
 

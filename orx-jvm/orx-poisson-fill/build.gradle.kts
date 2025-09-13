@@ -3,10 +3,10 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.openrndr.application)
-    implementation(libs.openrndr.math)
+    implementation(openrndr.application)
+    implementation(openrndr.math)
     implementation(project(":orx-fx"))
     implementation(project(":orx-noise"))
-    implementation(libs.openrndr.filter)
-    demoRuntimeOnly(libs.slf4j.simple)
+    implementation(openrndr.filter)
+    demoRuntimeOnly(sharedLibs.slf4j.simple)
 }
