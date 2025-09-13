@@ -9,6 +9,6 @@ dependencies {
     implementation(project(":orx-jvm:orx-depth-camera-calibrator"))
     implementation(project(":orx-fx"))
     implementation(project(":orx-jvm:orx-gui"))
-    runtimeOnly(project(":orx-jvm:orx-kinect-v1-${(gradle as ExtensionAware).extra["openrndrClassifier"]}"))
+    runtimeOnly(project(":orx-jvm:orx-kinect-v1"))
     runtimeOnly(openrndr.gl3)
 }

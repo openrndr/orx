@@ -1,4 +1,4 @@
-include("orx-convention")
+include("orx-convention", "orx-variant-plugin")
 
 dependencyResolutionManagement {
     repositories {
