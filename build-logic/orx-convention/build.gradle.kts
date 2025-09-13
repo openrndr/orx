@@ -2,8 +2,7 @@ plugins {
     `kotlin-dsl`
 }
 
-val preload: SourceSet by sourceSets.creating
-
+val preload: SourceSet by project.sourceSets.creating
 
 repositories {
     mavenCentral()
@@ -16,5 +15,9 @@ dependencies {
     "preloadImplementation"(openrndr.application)
     "preloadImplementation"(openrndr.orextensions)
 }
-
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xskip-metadata-version-check")
+    }
+}
 tasks.getByName("compileKotlin").dependsOn("compilePreloadKotlin")

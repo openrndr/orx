@@ -38,7 +38,7 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
 
     @TaskAction
     fun execute(inputChanges: InputChanges) {
-        val preloadClass = File(project.rootProject.projectDir, "buildSrc/build/classes/kotlin/preload")
+        val preloadClass = File(project.rootProject.projectDir, "build-logic/orx-convention/build/classes/kotlin/preload")
         require(preloadClass.exists()) {
             "preload class not found: '${preloadClass.absolutePath}'"
         }
