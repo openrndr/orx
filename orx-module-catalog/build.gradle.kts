@@ -5,16 +5,16 @@ plugins {
 
 catalog {
     versionCatalog {
-        library("camera", "org.openrnd.extra:orx-camera:$version")
-        library("color", "org.openrnd.extra:orx-color:$version")
+        library("camera", "org.openrndr.extra:orx-camera:$version")
+        library("color", "org.openrndr.extra:orx-color:$version")
         library("composition", "org.openrndr.extra:orx-composition:$version")
         library("compositor", "org.openrndr.extra:orx-compositor:$version")
         library("delegate-magic", "org.openrndr.extra:orx-delegate-magic:$version")
         library("depth-camera", "org.openrndr.extra:orx-depth-camera:$version")
         library("easing", "org.openrndr.extra:orx-easing:$version")
         library("envelopes", "org.openrndr.extra:orx-envelopes:$version")
-        library("expression-evaluator","org.openrndr.extra:orx-expression-evaluator:$version")
-        library("expression-evaluator-typed","org.openrndr.extra:orx-expression-evaluator-typed:$version")
+        library("expression-evaluator", "org.openrndr.extra:orx-expression-evaluator:$version")
+        library("expression-evaluator-typed", "org.openrndr.extra:orx-expression-evaluator-typed:$version")
         library("fcurve", "org.openrndr.extra:orx-fcurve:$version")
         library("fft", "org.openrndr.extra:orx-fft:$version")
         library("fx", "org.openrndr.extra:orx-fx:$version")
@@ -38,7 +38,7 @@ catalog {
         library("kotlin-parser", "org.openrndr.extra:orx-kotlin-parser:$version")
         library("midi", "org.openrndr.extra:orx-midi:$version")
         library("minim", "org.openrndr.extra:orx-minim:$version")
-        library("olive", "org.openrndr.extra.olive:orx-live:$version")
+        library("olive", "org.openrndr.extra:orx-olive:$version")
         library("osc", "org.openrndr.extra:orx-osc:$version")
         library("panel", "org.openrndr.extra:orx-panel:$version")
         library("poisson-fill", "org.openrndr.extra:orx-poisson-fill:$version")
@@ -72,6 +72,30 @@ catalog {
         library("triangulation", "org.openrndr.extra:orx-triangulation:$version")
         library("turtle", "org.openrndr.extra:orx-turtle:$version")
         library("view-box", "org.openrndr.extra:orx-view-box:$version")
+
+        bundle(
+            "basic",
+            listOf(
+                "camera",
+                "color",
+                "composition",
+                "compositor",
+                "fx",
+                "image-fit",
+                "panel",
+                "video-profiles",
+                "math",
+                "mesh-generators",
+                "no-clear",
+                "noise",
+                "shade-styles",
+                "shader-phrases",
+                "shapes",
+                "svg",
+                "text-on-contour",
+                "text-writer"
+            )
+        )
     }
 }
 

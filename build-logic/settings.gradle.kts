@@ -1,3 +1,5 @@
+include("orx-convention", "orx-variant-plugin")
+
 dependencyResolutionManagement {
     repositories {
         mavenCentral()

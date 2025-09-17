@@ -1,6 +1,6 @@
 plugins {
-    org.openrndr.extra.convention.`kotlin-multiplatform`
-    id(libs.plugins.kotlin.serialization.get().pluginId)
+    id("org.openrndr.extra.convention.kotlin-multiplatform")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
