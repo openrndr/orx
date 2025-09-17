@@ -1,6 +1,7 @@
 plugins {
     `version-catalog`
     `maven-publish`
+    signing
 }
 
 catalog {
@@ -135,6 +136,11 @@ publishing {
                 }
             }
         }
-
     }
+}
+
+signing {
+    val isReleaseVersion = !(version.toString()).endsWith("SNAPSHOT")
+    setRequired({ isReleaseVersion && gradle.taskGraph.hasTask("publish") })
+    sign(publishing.publications)
 }
