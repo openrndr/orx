@@ -187,14 +187,6 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 
 <!-- __demos__ -->
 ## Demos
-### DemoBla
-
-
-
-![DemoBlaKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoBlaKt.png)
-
-[source code](src/jvmDemo/kotlin/DemoBla.kt)
-
 ### DemoCubicNoise2D01
 
 Demonstrates how to render dynamic grayscale patterns using 3D cubic Hermite interpolation.
