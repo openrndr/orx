@@ -419,7 +419,18 @@ This demo shows a grid of 9 contours which are part circle and part 5-point star
 
 ### frames/DemoFrames01
 
+Demonstrates how to create a 3D path and attach cylinders to it at regular intervals with the correct orientation.
 
+- The path is constructed using the `path3D` builder.
+- A rectified copy is created to be able to sample it at equal-length intervals.
+- We call the `frames` method on the rectified contour to generate a list with 100 transformation matrices which
+make it possible to attach oriented 3D objects at specific locations in the curve.
+- We finally use the transformation matrices to draw cylinders along the 3D path.
+
+The orbital camera extension enables interactive 3D view manipulation.
+
+A fixed random seed is used to make sure this demo outputs a specific output. We can delete the
+`random` arguments to get a unique result each time the program runs.
 
 ![frames-DemoFrames01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/frames-DemoFrames01Kt.png)
 
@@ -427,7 +438,8 @@ This demo shows a grid of 9 contours which are part circle and part 5-point star
 
 ### hobbycurve/DemoHobbyCurve01
 
-
+Demonstrates how to use the hobbyCurve function to render a smooth closed contour
+passing through a predefined set of points.
 
 ![hobbycurve-DemoHobbyCurve01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve01Kt.png)
 
@@ -435,7 +447,8 @@ This demo shows a grid of 9 contours which are part circle and part 5-point star
 
 ### hobbycurve/DemoHobbyCurve02
 
-
+This demo creates a list of random 2D points, finds the alpha shape contour for those points,
+and finally makes that contour smooth by calling `hobbyCurve()`.
 
 ![hobbycurve-DemoHobbyCurve02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve02Kt.png)
 
@@ -443,7 +456,8 @@ This demo shows a grid of 9 contours which are part circle and part 5-point star
 
 ### hobbycurve/DemoHobbyCurve03
 
-
+This demo shows how the [org.openrndr.shape.ShapeContour]'s method `hobbyCurve()` can be used
+to round contours with linear segments.
 
 ![hobbycurve-DemoHobbyCurve03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve03Kt.png)
 
