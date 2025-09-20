@@ -11,6 +11,11 @@ import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
 import kotlin.math.cos
 
+/**
+ * Demonstrates the use of the `simplex` variant of the `noise` shade style.
+ * It generates a gray-scale pattern, which is then colorized by using a `luma`
+ * `gradient` shade style.
+ */
 fun main() {
     application {
         configure {
@@ -23,10 +28,13 @@ fun main() {
                 drawer.shadeStyle = noise {
                     phase = seconds * 0.01
                     simplex {
-
                     }
-                    domainWarpFunction =
-                        """vec3 domainWarp(vec3 p) {  float px = simplex13(p*4.0); float py = simplex13(p.yxz*-4.0); return p + 0.25 * vec3(px, py, px*py); }"""
+                    domainWarpFunction = """
+                        vec3 domainWarp(vec3 p) {  
+                            float px = simplex13(p*4.0); 
+                            float py = simplex13(p.yxz*-4.0); 
+                            return p + 0.25 * vec3(px, py, px*py); 
+                        }""".trimIndent()
 
                     anisotropicFbm {
                         octaves = 10
@@ -46,7 +54,6 @@ fun main() {
                     stops[0.75] = ColorRGBa.BLACK
                     stops[1.0] = ColorRGBa.PEACH_PUFF
                     luma {
-
                     }
                 }
                 drawer.circle(drawer.bounds.center, 300.0)

@@ -5,6 +5,11 @@ import org.openrndr.draw.loadImage
 import org.openrndr.extra.shadestyles.fills.SpreadMethod
 import org.openrndr.extra.shadestyles.fills.image.imageFill
 
+/**
+ * Demonstrates the use of the `domainWarpFunction` in an `imageFill` shade style, used to deform
+ * the coordinate system of the shader. A `time` parameter is passed to the shader and used
+ * to alter the deformation in real time.
+ */
 fun main() = application {
     configure {
         width = 720

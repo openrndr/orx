@@ -10,6 +10,17 @@ import org.openrndr.extra.imageFit.imageFit
 import org.openrndr.extra.shadestyles.fills.FillUnits
 import org.openrndr.extra.shadestyles.fills.patterns.pattern
 
+/**
+ * Demonstrates the use of the `checkers` variant of the `pattern` shade style.
+ *
+ * The style is used twice with different parameters: once for a background image
+ * and then for a text displayed on top of it.
+ *
+ * The text shade style features a `domainWarpFunction`, which is used to deform
+ * the coordinate system of the shade style.
+ *
+ * Try reducing the `scale` parameter to make the checkers more obvious.
+ */
 fun main() = application {
     configure {
         width = 720
@@ -23,7 +34,7 @@ fun main() = application {
                 backgroundColor = ColorRGBa.NAVY
                 foregroundColor = ColorRGBa.WHITE
                 patternUnits = FillUnits.WORLD
-                parameter("time", seconds*0.1)
+                parameter("time", seconds * 0.1)
 //                domainWarpFunction = """vec2 patternDomainWarp(vec2 uv) { return uv + vec2(cos(uv.y * 0.1 + p_time), sin(uv.x * 0.1 + p_time)) * 30.05; }"""
                 scale = 0.4
 
@@ -39,7 +50,8 @@ fun main() = application {
                 foregroundColor = ColorRGBa.WHITE
                 patternUnits = FillUnits.WORLD
                 parameter("time", seconds)
-                domainWarpFunction = """vec2 patternDomainWarp(vec2 uv) { return uv + vec2(cos(uv.y * 0.1 + p_time), sin(uv.x * 0.1 + p_time)) * 30.05; }"""
+                domainWarpFunction =
+                    """vec2 patternDomainWarp(vec2 uv) { return uv + vec2(cos(uv.y * 0.1 + p_time), sin(uv.x * 0.1 + p_time)) * 30.05; }"""
                 scale = 0.2
                 checkers {
                 }

@@ -7,6 +7,12 @@ import org.openrndr.extra.imageFit.imageFit
 import org.openrndr.extra.shaderphrases.noise.simplex13
 import org.openrndr.extra.shadestyles.fills.noise.noise
 
+/**
+ * Demonstrates the use of the `blueNois` variant of the `noise` shade style
+ * to render an image as black and white with a pointillist luma-based effect.
+ *
+ * More computationally heavy than other shade styles.
+ */
 fun main() {
     application {
         configure {
@@ -21,17 +27,23 @@ fun main() {
                     phase = seconds * 10.0
 
                     filterWindow = 5
-                    domainWarpFunction =
-                        """$simplex13
-                            vec3 domainWarp(vec3 p) { float px = simplex13(p*0.01); float py = simplex13(p.yxz*-0.01); return p + 10.25 * vec3(px, py, 0.0); }""".trimIndent()
+                    domainWarpFunction = """$simplex13
+                        vec3 domainWarp(vec3 p) { 
+                            float px = simplex13(p * 0.01); 
+                            float py = simplex13(p.yxz * -0.01); 
+                            return p + 10.25 * vec3(px, py, 0.0); 
+                        }
+                    """.trimIndent()
 
                     blueNoise {
                         bits = 17
                         bilinear()
                     }
 
-                    blendFunction = """vec4 blend(vec4 o, float n) { float luma = dot(o.rgb, vec3(1.0/3.0));
-                        |return vec4(vec3(smoothstep(luma+0.01, luma-0.01, n)), 1.0);
+                    blendFunction = """
+                        |vec4 blend(vec4 o, float n) { 
+                        |    float luma = dot(o.rgb, vec3(1.0 / 3.0));
+                        |    return vec4(vec3(smoothstep(luma + 0.01, luma - 0.01, n)), 1.0);
                         |}""".trimMargin()
 
                 }

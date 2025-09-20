@@ -11,6 +11,17 @@ import org.openrndr.extra.shadestyles.fills.SpreadMethod
 import org.openrndr.extra.shadestyles.fills.gradients.gradient
 import org.openrndr.extra.shadestyles.fills.patterns.pattern
 
+/**
+ * Demonstrates two types of shade styles: `pattern` and `luma`.
+ *
+ * The `pattern` shade style is used to generate a checkers-pattern.
+ *
+ * This example also loads and draws an image using the `luma` shade style
+ * to map pixel brightnesses to gradient colors. Dark colors are
+ * mapped to transparent, revealing the checkers-pattern behind it
+ * in parts of the image.
+ *
+ */
 fun main() = application {
     configure {
         width = 720

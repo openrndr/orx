@@ -2,27 +2,28 @@ package hobbycurve
 
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extra.noise.scatter
 import org.openrndr.extra.shapes.hobbycurve.hobbyCurve
-import org.openrndr.extra.shapes.ordering.hilbertOrder
-import kotlin.random.Random
+import org.openrndr.extra.shapes.primitives.regularStar
 
+/**
+ * This demo shows how the [org.openrndr.shape.ShapeContour]'s method `hobbyCurve()` can be used
+ * to round contours with linear segments.
+ */
 fun main() = application {
     configure {
         width = 720
         height = 720
     }
     program {
+        val star = regularStar(5, 100.0, 300.0, drawer.bounds.center)
+        val hobby = star.hobbyCurve()
         extend {
-            for (i in -20..20) {
-                val t = i / 10.0
-                val points = drawer.bounds.offsetEdges(-50.0).scatter(25.0, random = Random(0)).hilbertOrder()
-                drawer.stroke = ColorRGBa.WHITE.opacify(0.5)
-                drawer.fill = null
-                drawer.contour(hobbyCurve(points, closed = false, tensions = { i, inAngle, outAngle ->
-                    Pair(t, t)
-                }))
-            }
+            drawer.fill = ColorRGBa.PINK
+            drawer.contour(hobby)
+
+            drawer.fill = null
+            drawer.stroke = ColorRGBa.WHITE.opacify(0.5)
+            drawer.contour(star)
         }
     }
 }

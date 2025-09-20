@@ -12,6 +12,13 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.asDegrees
 import kotlin.math.atan2
 
+/**
+ * Demonstrates the creation of a grid-based design with 13x13 cells, each with an elliptic gradient
+ * pointing towards the center of the window. The center cell features a circular gradient (by having
+ * `radiusX` equal to `radiusY`). The farther a cell is from the center, the higher the aspect ratio
+ * of the ellipse is, becoming closer to a line than to a circle near the corners.
+ *
+ */
 fun main() =
     application {
         configure {
@@ -32,10 +39,10 @@ fun main() =
 
                             spreadMethod = SpreadMethod.REPEAT
                             elliptic {
-                                val v = Vector2(x-6.0, y-6.0)
-                                rotation = atan2(y- 6.0, x - 6.0).asDegrees + 180.0
+                                val v = Vector2(x - 6.0, y - 6.0)
+                                rotation = atan2(y - 6.0, x - 6.0).asDegrees + 180.0
                                 radiusX = 1.0
-                                radiusY = 1.0 / (1.0 + v.length*0.25)
+                                radiusY = 1.0 / (1.0 + v.length * 0.25)
                             }
                         }
                         drawer.rectangle(cell)

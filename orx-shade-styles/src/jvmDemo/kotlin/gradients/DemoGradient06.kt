@@ -10,6 +10,15 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * Demonstrates how to animate the `radiusX` and `radiusY` elliptic gradient arguments separately.
+ * They are animated in a circular fashion, making the ellipse transition between a thin vertical shape,
+ * a round shape, and a thin horizontal shape.
+ *
+ * The `SpreadMethod.REPEAT` setting makes the gradient cover the available space repeating the gradient
+ * as many times as needed.
+ *
+ */
 fun main() = application {
     configure {
         width = 720

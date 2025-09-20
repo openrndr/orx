@@ -8,6 +8,11 @@ import org.openrndr.extra.objloader.loadOBJasVertexBuffer
 import org.openrndr.extra.shadestyles.spatial.visualizeNormals
 import org.openrndr.math.Vector3
 
+/**
+ * Demonstrates the use of the [visualizeNormals] shade style, which can help
+ * debug the normals of a 3D mesh.
+ *
+ */
 fun main() {
     application {
         configure {

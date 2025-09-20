@@ -4,6 +4,11 @@ import org.openrndr.application
 import org.openrndr.draw.loadImage
 import org.openrndr.extra.shadestyles.fills.image.imageFill
 
+/**
+ * A minimal demonstration of the `imageFill` shade style, used to texture
+ * shapes using a loaded image (or generated color buffer).
+ *
+ */
 fun main() = application {
     configure {
         width = 720

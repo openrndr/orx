@@ -10,6 +10,17 @@ import org.openrndr.extra.shapes.primitives.placeIn
 import org.openrndr.math.Vector2
 import org.openrndr.math.transforms.transform
 
+/**
+ * Animated demonstration on how to use the `clip` shade style to mask-out
+ * part of an image (or anything else drawn while the shade style is active).
+ * The clipping uses different fit modes on each row, and different aspect
+ * ratios in each column.
+ *
+ * This example uses a rotating `ellipse`-shaped clipping.
+ * Other available clipping shapes are `circle`, `rectangle`, `line` and `star`.
+ *
+ * Press a mouse button to toggle the `feather` property between 0.0 and 0.5.
+ */
 fun main() = application {
     configure {
         width = 720

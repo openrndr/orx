@@ -15,6 +15,20 @@ import org.openrndr.math.Vector3
 import org.openrndr.shape.path3D
 import kotlin.random.Random
 
+/**
+ * Demonstrates how to create a 3D path and attach cylinders to it at regular intervals with the correct orientation.
+ *
+ * - The path is constructed using the `path3D` builder.
+ * - A rectified copy is created to be able to sample it at equal-length intervals.
+ * - We call the `frames` method on the rectified contour to generate a list with 100 transformation matrices which
+ *   make it possible to attach oriented 3D objects at specific locations in the curve.
+ * - We finally use the transformation matrices to draw cylinders along the 3D path.
+ *
+ * The orbital camera extension enables interactive 3D view manipulation.
+ *
+ * A fixed random seed is used to make sure this demo outputs a specific output. We can delete the
+ * `random` arguments to get a unique result each time the program runs.
+ */
 fun main() = application {
     configure {
         width = 720

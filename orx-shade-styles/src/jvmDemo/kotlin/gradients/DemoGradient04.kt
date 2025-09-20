@@ -11,6 +11,15 @@ import org.openrndr.extra.shapes.primitives.grid
 import org.openrndr.extra.shapes.primitives.placeIn
 import org.openrndr.math.Vector2
 
+/**
+ * Creates a 3x3 grid of gradients demonstrating how the same gradient can look different depending on
+ * the aspect ratio of the target shape and the fit method used.
+ *
+ * The first column features a vertical rectangle.
+ * The second one, a square, and the third one a horizontal rectangle.
+ *
+ * The rows feature the different fit methods: `FillFit.STRETCH`, `FillFit.COVER` and `FillFit.CONTAIN`.
+ */
 fun main() {
     application {
         configure {

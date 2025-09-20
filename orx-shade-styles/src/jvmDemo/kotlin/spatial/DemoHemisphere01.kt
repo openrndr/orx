@@ -10,6 +10,11 @@ import org.openrndr.extra.objloader.loadOBJasVertexBuffer
 import org.openrndr.extra.shadestyles.spatial.HemisphereLight
 import org.openrndr.math.Vector3
 
+/**
+ * Demonstrates the [HemisphereLight] shade style, a simple shader
+ * that can be used for simple illumination of 3D meshes.
+ *
+ */
 fun main() {
     application {
         configure {

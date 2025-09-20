@@ -7,6 +7,14 @@ import org.openrndr.extra.shadestyles.fills.gradients.gradient
 import org.openrndr.math.Vector2
 import kotlin.math.cos
 
+/**
+ * Demonstrates how to create 4 animated gradient shade-styles with 5 colors:
+ * - a linear gradient
+ * - a stellar gradient
+ * - a radial gradient
+ * - a linear gradient with `SpreadMethod.REPEAT`
+ * Each gradient style has different adjustable attributes.
+ */
 fun main() {
     application {
         configure {
@@ -25,7 +33,6 @@ fun main() {
                     linear {
                         start = Vector2(0.1, 0.1).rotate(seconds * 36.0, Vector2(0.5, 0.5))
                         end = Vector2(0.9, 0.9).rotate(seconds * 36.0, Vector2(0.5, 0.5))
-
                     }
                 }
                 drawer.rectangle(0.0, 0.0, 360.0, 360.0)

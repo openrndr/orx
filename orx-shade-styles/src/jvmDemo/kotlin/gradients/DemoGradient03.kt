@@ -8,6 +8,11 @@ import org.openrndr.extra.shadestyles.fills.SpreadMethod
 import org.openrndr.extra.shadestyles.fills.gradients.gradient
 import org.openrndr.math.Vector2
 
+/**
+ * Demonstrates how to create a rainbow-like rotating `conic` gradient in `OKHSV` color space.
+ * The gradient consists of ten evenly spaced colors, achieved by shifting the hue of a base color.
+ * Since the conic gradient covers 360 degrees, changing the `spreadMethod` does not affect the result.
+ */
 fun main() {
     application {
         configure {

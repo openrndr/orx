@@ -8,6 +8,10 @@ import org.openrndr.extra.color.presets.PEACH_PUFF
 import org.openrndr.extra.shadestyles.fills.FillUnits
 import org.openrndr.extra.shadestyles.fills.patterns.pattern
 
+/**
+ * Demonstrates the use of the `xorMod2` variant of the `pattern` shade style;
+ * an algorithmic and intricate pattern.
+ */
 fun main() = application {
     configure {
         width = 720
