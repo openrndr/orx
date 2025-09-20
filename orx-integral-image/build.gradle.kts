@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     implementation(project(":orx-fx"))
-    implementation(openrndr.application)
+    implementation(openrndr.application.core)
     implementation(openrndr.math)
     demoImplementation(project(":orx-image-fit"))
 }

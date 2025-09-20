@@ -6,7 +6,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(openrndr.application)
+                api(openrndr.application.core)
                 api(openrndr.math)
                 api(openrndr.shape)
                 api(project(":orx-mesh"))

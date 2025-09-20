@@ -23,7 +23,7 @@ variants {
     }
 }
 dependencies {
-    implementation(openrndr.application)
+    implementation(openrndr.application.core)
     implementation(openrndr.math)
     api(libs.librealsense)
     demoRuntimeOnly(project(":orx-jvm:orx-realsense2"))

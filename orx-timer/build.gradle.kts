@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation(openrndr.application)
+    implementation(openrndr.application.core)
     implementation(openrndr.math)
     implementation(sharedLibs.kotlin.coroutines)
 }

@@ -32,7 +32,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.antlr.kotlin.runtime)
-                implementation(openrndr.application)
+                implementation(openrndr.application.core)
                 implementation(openrndr.math)
                 implementation(sharedLibs.kotlin.coroutines)
                 implementation(project(":orx-property-watchers"))

@@ -64,7 +64,7 @@ kotlin {
                     dependsOn(compileTaskProvider)
                 }
                 dependencies {
-                        runtimeOnly(openrndr.findLibrary("gl3").get())
+                        runtimeOnly(openrndr.findLibrary("application-glfw").get())
 
                 }
             }
@@ -109,9 +109,9 @@ kotlin {
 
         val jvmDemo by getting {
             dependencies {
-                implementation(openrndr.findLibrary("application").get())
+                implementation(openrndr.findLibrary("application-core").get())
                 implementation(openrndr.findLibrary("orextensions").get())
-                runtimeOnly(openrndr.findLibrary("gl3").get())
+                runtimeOnly(openrndr.findLibrary("application-glfw").get())
                 runtimeOnly(sharedLibs.findLibrary("slf4j-simple").get())
             }
         }

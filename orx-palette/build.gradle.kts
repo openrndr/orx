@@ -6,7 +6,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(openrndr.application)
+                implementation(openrndr.application.core)
             }
         }
         val jvmMain by getting {

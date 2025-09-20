@@ -11,7 +11,7 @@ dependencies {
     implementation(project(":orx-jvm:orx-file-watcher"))
     implementation(project(":orx-jvm:orx-kotlin-parser"))
     demoImplementation(project(":orx-jvm:orx-gui"))
-    implementation(openrndr.application)
+    implementation(openrndr.application.core)
     implementation(openrndr.math)
     implementation(libs.kotlin.scriptingJvm)
     implementation(libs.kotlin.scriptingJvmHost)

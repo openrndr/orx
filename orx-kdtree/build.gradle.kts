@@ -7,7 +7,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(openrndr.application)
+                implementation(openrndr.application.core)
                 api(openrndr.math)
                 implementation(sharedLibs.kotlin.coroutines)
                 api(openrndr.utils)

@@ -11,7 +11,7 @@ dependencies {
     implementation(project(":orx-expression-evaluator"))
     implementation(project(":orx-color"))
     implementation(project(":orx-text-writer"))
-    implementation(openrndr.application)
+    implementation(openrndr.application.core)
     implementation(openrndr.math)
     implementation(sharedLibs.kotlin.coroutines)
     implementation(sharedLibs.kotlin.reflect)

@@ -11,7 +11,7 @@ kotlin {
                 implementation(project(":orx-shader-phrases"))
                 implementation(project(":orx-color"))
                 implementation(project(":orx-kdtree"))
-                implementation(openrndr.application)
+                implementation(openrndr.application.core)
                 implementation(openrndr.draw)
                 implementation(openrndr.filter)
                 implementation(sharedLibs.kotlin.reflect)
