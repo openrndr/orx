@@ -3,6 +3,7 @@ package org.openrndr.panel.elements
 import org.openrndr.*
 import org.openrndr.color.ColorHSVa
 import org.openrndr.color.ColorRGBa
+import org.openrndr.color.Linearity
 import org.openrndr.draw.ColorBuffer
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.colorBuffer
@@ -121,7 +122,7 @@ class Colorpicker : Element {
                     val g = (number shr 8) and 0xff
                     val b = number and 0xff
                     val oldColor = color
-                    color = ColorRGBa(r / 255.0, g / 255.0, b / 255.0)
+                    color = ColorRGBa(r / 255.0, g / 255.0, b / 255.0, 1.0, Linearity.SRGB)
                     events.colorChanged.trigger(ColorChangedEvent(this, oldColor, realColor))
                     keyboardInput = ""
                     draw.dirty = true
