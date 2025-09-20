@@ -4,6 +4,14 @@ The OPENRNDR UI toolkit. Provides buttons, sliders, text, a color picker and muc
 
 <!-- __demos__ -->
 ## Demos
+### DemoColorPickerButton01
+
+A simple demonstration of a ColorPickerButton
+
+![DemoColorPickerButton01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoColorPickerButton01Kt.png)
+
+[source code](src/demo/kotlin/DemoColorPickerButton01.kt)
+
 ### DemoHorizontalLayout01
 
 
