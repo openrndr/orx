@@ -8,7 +8,7 @@ kotlin {
             dependencies {
                 implementation(openrndr.shape)
                 implementation(openrndr.draw)
-                implementation(openrndr.application)
+                implementation(openrndr.application.core)
                 implementation(project(":orx-shapes"))
             }
         }

@@ -7,7 +7,7 @@ dependencies {
     implementation(project(":orx-compositor"))
     implementation(project(":orx-image-fit"))
     implementation(project(":orx-fx"))
-    implementation(openrndr.application)
+    implementation(openrndr.application.core)
     implementation(openrndr.math)
     implementation(libs.rabbitcontrol.rcp)
     implementation(libs.netty.all)

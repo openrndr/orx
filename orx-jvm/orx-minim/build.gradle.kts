@@ -8,7 +8,7 @@ dependencies {
     api(libs.minim) {
         exclude(group = "org.apache.maven.plugins", module = "maven-javadoc-plugin")
     }
-    implementation(openrndr.application)
+    implementation(openrndr.application.core)
     implementation(openrndr.math)
     implementation(sharedLibs.kotlin.reflect)
     demoRuntimeOnly(sharedLibs.slf4j.simple)

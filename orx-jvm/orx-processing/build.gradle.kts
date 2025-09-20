@@ -7,7 +7,7 @@ dependencies {
         exclude(group = "org.jogamp.gluegen")
         exclude(group = "org.jogamp.jogl")
     }
-    implementation(openrndr.application)
+    implementation(openrndr.application.core)
     implementation(openrndr.math)
     implementation(sharedLibs.kotlin.reflect)
     demoRuntimeOnly(sharedLibs.slf4j.simple)

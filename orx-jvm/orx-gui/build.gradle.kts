@@ -8,7 +8,7 @@ dependencies {
     api(project(":orx-noise"))
     demoImplementation(project(":orx-property-watchers"))
     implementation(sharedLibs.kotlin.coroutines)
-    implementation(openrndr.application)
+    implementation(openrndr.application.core)
     implementation(openrndr.math)
     implementation(openrndr.filter)
     implementation(openrndr.dialogs)

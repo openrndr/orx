@@ -57,10 +57,10 @@ dependencies {
     testImplementation(sharedLibs.findLibrary("kotlin-test").get())
     testRuntimeOnly(sharedLibs.findLibrary("slf4j-simple").get())
     "demoImplementation"(main.output.classesDirs + main.runtimeClasspath)
-    "demoImplementation"(openrndr.findLibrary("application").get())
+    "demoImplementation"(openrndr.findLibrary("application-core").get())
     "demoImplementation"(openrndr.findLibrary("orextensions").get())
 
-    "demoRuntimeOnly"(openrndr.findLibrary("gl3").get())
+    "demoRuntimeOnly"(openrndr.findLibrary("application-glfw").get())
 
     "demoRuntimeOnly"(sharedLibs.findLibrary("slf4j-simple").get())
 }

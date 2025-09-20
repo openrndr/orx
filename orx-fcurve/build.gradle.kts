@@ -10,7 +10,7 @@ kotlin {
             dependencies {
                 implementation(project(":orx-parameters"))
                 implementation(project(":orx-expression-evaluator"))
-                implementation(openrndr.application)
+                implementation(openrndr.application.core)
                 implementation(openrndr.draw)
                 implementation(openrndr.filter)
                 implementation(sharedLibs.kotlin.reflect)

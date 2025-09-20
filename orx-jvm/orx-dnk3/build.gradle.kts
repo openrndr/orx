@@ -9,7 +9,7 @@ dependencies {
     implementation(project(":orx-easing"))
     implementation(project(":orx-shader-phrases"))
     implementation(project(":orx-mesh-generators"))
-    implementation(openrndr.application)
+    implementation(openrndr.application.core)
     implementation(openrndr.math)
     implementation(sharedLibs.kotlin.coroutines)
     demoImplementation(project(":orx-mesh-generators"))

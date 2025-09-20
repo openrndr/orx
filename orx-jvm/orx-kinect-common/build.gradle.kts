@@ -3,6 +3,6 @@ plugins {
 }
 dependencies {
     api(project(":orx-depth-camera"))
-    implementation(openrndr.application)
+    implementation(openrndr.application.core)
     implementation(openrndr.math)
 }

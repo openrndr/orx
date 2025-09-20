@@ -7,7 +7,7 @@ kotlin {
         @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
-                api(openrndr.application)
+                api(openrndr.application.core)
                 api(openrndr.math)
                 implementation(project(":orx-shapes"))
                 api(project(":orx-mesh"))
