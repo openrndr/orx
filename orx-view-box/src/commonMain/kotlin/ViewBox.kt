@@ -78,7 +78,7 @@ class ViewBox(
         program.keyboard
     }
 
-    override val pointers: Pointers by lazy { program.pointers }
+    override val pointers: PointerEvents by lazy { program.pointers }
 
     var hasInputFocus = false
 
