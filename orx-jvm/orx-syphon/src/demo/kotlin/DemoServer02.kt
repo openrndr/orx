@@ -7,6 +7,8 @@ import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
 
+/* This demo uses an alternate RenderTarget to send frames to Syphon (instead of the entire screen).
+* */
 fun main() {
     // force to use GL driver
     System.setProperty("org.openrndr.gl3.gl_type", "gl")
