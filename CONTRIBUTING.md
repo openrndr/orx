@@ -9,6 +9,10 @@ the [guide](https://github.com/openrndr/openrndr-guide/) and the [template](http
 Please read the [general information about contributing to OPENRNDR](https://github.com/openrndr/openrndr/blob/master/CONTRIBUTING.md).
 This document focuses on specific details about the ORX repository.
 
+## How to build ORX
+
+[See the main readme](https://github.com/openrndr/orx/tree/master?tab=readme-ov-file#publish-and-use-local-builds-of-the-library-in-your-applications).
+
 ## Overview
 
 There are two types of ORX extras: 
