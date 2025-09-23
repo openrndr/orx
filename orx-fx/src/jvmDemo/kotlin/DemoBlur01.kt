@@ -5,6 +5,14 @@ import org.openrndr.extra.fx.blur.*
 import org.openrndr.math.Polar
 import kotlin.math.sin
 
+/**
+ * Demonstrates 9 different blur effects.
+ * The program draws two moving circles into a [RenderTarget],
+ * then applies various blurs drawing them in 3 columns and 3 rows.
+ *
+ * Each type of blur has different parameters.
+ * Not all parameters are demonstrated.
+ */
 fun main() = application {
     program {
         // In this buffer we will draw some simple shapes
@@ -21,7 +29,8 @@ fun main() = application {
             GaussianBloom(),
             FrameBlur(),
             ZoomBlur(),
-            LaserBlur()
+            LaserBlur(),
+            LineBlur()
         )
 
         // On this buffer we will draw the dry buffer with an effect applied
@@ -32,15 +41,17 @@ fun main() = application {
         extend {
             // Draw two moving circles
             drawer.isolatedWithTarget(dry) {
+                ortho(dry)
+
                 clear(ColorRGBa.BLACK)
 
                 fill = null
                 stroke = ColorRGBa.PINK
-                strokeWeight = 25.0
+                strokeWeight = 20.0
                 circle(
                     bounds.center +
                             Polar(seconds * 50.0, 100.0).cartesian,
-                    200.0 + 50.0 * sin(seconds * 2.0)
+                    100.0 + 50.0 * sin(seconds * 2.0)
                 )
 
                 fill = ColorRGBa.PINK
@@ -48,7 +59,7 @@ fun main() = application {
                 circle(
                     bounds.center +
                             Polar(seconds * 50.0 + 60, 100.0).cartesian,
-                    100.0 + 20.0 * sin(seconds * 2.0 + 1)
+                    70.0 + 20.0 * sin(seconds * 2.0 + 1)
                 )
             }
 
@@ -99,6 +110,10 @@ fun main() = application {
                         blur.aberration = 0.03
                         blur.radius = 0.5
 
+                    }
+                    is LineBlur -> {
+                        blur.blurAngle = seconds * 30.0
+                        blur.spread = 8.0
                     }
                 }
 

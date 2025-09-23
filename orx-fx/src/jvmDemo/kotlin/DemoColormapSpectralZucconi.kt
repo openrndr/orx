@@ -5,6 +5,13 @@ import org.openrndr.draw.loadImage
 import org.openrndr.extra.fx.colormap.SpectralZucconiColormap
 import kotlin.math.sin
 
+/**
+ * Demonstrates the [SpectralZucconiColormap], which
+ * maps values of the RED color channel to the natural light dispersion
+ * spectrum as described by Alan Zucconi in his
+ * [Improving the Rainbow](https://www.alanzucconi.com/2017/07/15/improving-the-rainbow/)
+ * article.
+ */
 fun main() = application {
     program {
         val colormap = SpectralZucconiColormap()

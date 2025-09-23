@@ -5,6 +5,12 @@ import org.openrndr.draw.loadImage
 import org.openrndr.extra.fx.colormap.TurboColormap
 import kotlin.math.sin
 
+/**
+ * Demonstrates the use of the [TurboColormap] effect, which
+ * maps values of the RED color channel to Turbo Colormap according to
+ * [Turbo, An Improved Rainbow Colormap for Visualization](https://ai.googleblog.com/2019/08/turbo-improved-rainbow-colormap-for.html)
+ * by Google.
+ */
 fun main() = application {
     program {
         val colormap = TurboColormap()

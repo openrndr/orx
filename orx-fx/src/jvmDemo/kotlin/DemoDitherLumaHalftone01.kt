@@ -3,6 +3,12 @@ import org.openrndr.draw.createEquivalent
 import org.openrndr.draw.loadImage
 import org.openrndr.extra.fx.dither.LumaHalftone
 
+/**
+ * Demonstrates the [LumaHalftone] effect and moste of its parameters.
+ * The `invert` parameter toggles between true and false once per second.
+ * The `phase0` and `phase1` parameters depend on `seconds`, which makes
+ * the pattern wobble slowly.
+ */
 fun main() = application {
     program {
         val image = loadImage("demo-data/images/image-001.png")

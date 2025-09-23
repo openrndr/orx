@@ -5,6 +5,10 @@ import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.fx.distort.FluidDistort
 import org.openrndr.extra.fx.patterns.Checkers
 
+/**
+ * Demonstrates [FluidDistort], a fluid simulation real time effect.
+ * All pixels are slowly displaced in a turbulent manner as if they were a gas or a liquid.
+ */
 fun main() = application {
     program {
         val fd = FluidDistort()

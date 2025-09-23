@@ -3,6 +3,13 @@ import org.openrndr.draw.createEquivalent
 import org.openrndr.draw.loadImage
 import org.openrndr.extra.fx.color.Duotone
 
+/**
+ * This demo shows how to use the [Duotone] filter,
+ * toggling the `labInterpolation` parameter every second on and off.
+ *
+ * The `foregroundColor` and `backgroundColor` parameters are
+ * left to their defaults.
+ */
 fun main() = application {
     program {
 

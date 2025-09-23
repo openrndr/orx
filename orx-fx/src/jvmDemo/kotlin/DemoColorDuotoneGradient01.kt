@@ -4,6 +4,15 @@ import org.openrndr.draw.createEquivalent
 import org.openrndr.draw.loadImage
 import org.openrndr.extra.fx.color.DuotoneGradient
 
+/**
+ * The [DuotoneGradient] effect combines the Duotone effect
+ * and a linear gradient: two duotone colors are applied on
+ * one part of the image, and those colors are interpolated
+ * to two other colors, applied in a different part of the image.
+ *
+ * The `rotation` parameter lets us specify in which direction
+ * the interpolation happens (vertical, horizontal, or something else).
+ */
 fun main() = application {
     program {
         val image = loadImage("demo-data/images/image-001.png")

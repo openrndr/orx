@@ -4,6 +4,14 @@ import org.openrndr.draw.loadImage
 import org.openrndr.extra.fx.blur.ApproximateGaussianBlur
 import org.openrndr.extra.imageFit.imageFit
 
+/**
+ * Demonstrates how to use the [ApproximateGaussianBlur] effect to blur
+ * a `colorBuffer`, in this case, an image loaded from disk.
+ *
+ * Notice the use of `createEquivalent()`, which creates a new `colorBuffer`
+ * with the same size and properties as a source `colorBuffer`.
+ *
+ */
 fun main() = application {
     configure {
         width = 720

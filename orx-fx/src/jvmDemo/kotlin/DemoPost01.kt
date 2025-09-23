@@ -4,6 +4,15 @@ import org.openrndr.extra.fx.blend.Add
 import org.openrndr.extra.fx.blur.ApproximateGaussianBlur
 import kotlin.math.cos
 
+/**
+ * Demonstrates how to create an `extend` block to apply a post-processing effect.
+ * The effect is an [ApproximateGaussianBlur] and its `sigma` parameter
+ * is animated. The Blur effect is combined with whatever the user draws
+ * in the regular `extend` block using the `Add` filter, resulting in
+ * an additive composition.
+ *
+ * This demo also shows how to make a program window resizable.
+ */
 fun main() = application {
     configure {
         windowResizable = true
