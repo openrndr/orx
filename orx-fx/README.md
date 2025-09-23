@@ -195,6 +195,11 @@ shaping `curve` within this range:
 ## Demos
 ### DemoApproximateGaussianBlur01
 
+Demonstrates how to use the [ApproximateGaussianBlur] effect to blur
+a `colorBuffer`, in this case, an image loaded from disk.
+
+Notice the use of `createEquivalent()`, which creates a new `colorBuffer`
+with the same size and properties as a source `colorBuffer`.
 
 
 ![DemoApproximateGaussianBlur01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoApproximateGaussianBlur01Kt.png)
@@ -203,7 +208,12 @@ shaping `curve` within this range:
 
 ### DemoBlur01
 
+Demonstrates 9 different blur effects.
+The program draws two moving circles into a [RenderTarget],
+then applies various blurs drawing them in 3 columns and 3 rows.
 
+Each type of blur has different parameters.
+Not all parameters are demonstrated.
 
 ![DemoBlur01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoBlur01Kt.png)
 
@@ -211,7 +221,8 @@ shaping `curve` within this range:
 
 ### DemoCannyEdgeDetector01
 
-
+Demonstrates the [CannyEdgeDetector] effect applied to a loaded
+color photograph.
 
 ![DemoCannyEdgeDetector01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoCannyEdgeDetector01Kt.png)
 
@@ -219,7 +230,11 @@ shaping `curve` within this range:
 
 ### DemoColorDuotone01
 
+This demo shows how to use the [Duotone] filter,
+toggling the `labInterpolation` parameter every second on and off.
 
+The `foregroundColor` and `backgroundColor` parameters are
+left to their defaults.
 
 ![DemoColorDuotone01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColorDuotone01Kt.png)
 
@@ -227,7 +242,13 @@ shaping `curve` within this range:
 
 ### DemoColorDuotoneGradient01
 
+The [DuotoneGradient] effect combines the Duotone effect
+and a linear gradient: two duotone colors are applied on
+one part of the image, and those colors are interpolated
+to two other colors, applied in a different part of the image.
 
+The `rotation` parameter lets us specify in which direction
+the interpolation happens (vertical, horizontal, or something else).
 
 ![DemoColorDuotoneGradient01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColorDuotoneGradient01Kt.png)
 
@@ -235,7 +256,10 @@ shaping `curve` within this range:
 
 ### DemoColormapGrayscale
 
-
+The [GrayscaleColormap] uses the red channel of a colorBuffer
+to produce a gray scale image. The `curve` parameter is used as
+an exponent to bias the result up or down. 1.0 produces a linear
+transformation.
 
 ![DemoColormapGrayscaleKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColormapGrayscaleKt.png)
 
@@ -243,7 +267,11 @@ shaping `curve` within this range:
 
 ### DemoColormapSpectralZucconi
 
-
+Demonstrates the [SpectralZucconiColormap], which
+maps values of the RED color channel to the natural light dispersion
+spectrum as described by Alan Zucconi in his
+[Improving the Rainbow](https://www.alanzucconi.com/2017/07/15/improving-the-rainbow/)
+article.
 
 ![DemoColormapSpectralZucconiKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColormapSpectralZucconiKt.png)
 
@@ -251,7 +279,10 @@ shaping `curve` within this range:
 
 ### DemoColormapTurbo
 
-
+Demonstrates the use of the [TurboColormap] effect, which
+maps values of the RED color channel to Turbo Colormap according to
+[Turbo, An Improved Rainbow Colormap for Visualization](https://ai.googleblog.com/2019/08/turbo-improved-rainbow-colormap-for.html)
+by Google.
 
 ![DemoColormapTurboKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColormapTurboKt.png)
 
@@ -259,7 +290,8 @@ shaping `curve` within this range:
 
 ### DemoColorPosterize01
 
-
+Demonstration of the [Posterize] effect to reduce the number of colors
+present in an image.
 
 ![DemoColorPosterize01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColorPosterize01Kt.png)
 
@@ -267,7 +299,21 @@ shaping `curve` within this range:
 
 ### DemoCompositeFilter01
 
+Advanced demonstration of composite filters, created by chaining
+several filters together using the `.then()` operator.
 
+The demo applies a [FilmGrain] effect and a [DirectionalBlur] effect twice
+with different parameters.
+
+The [DirectionalBlur] requires a color buffer to define the displacement
+directions. In this program, the direction color buffer is populated by writing
+into its `shadow` property pixel by pixel.
+
+Notice the use of `frameCount` and `seconds` to animate the effects.
+
+The composite effect is installed as a post-processing effect
+using `extend(Post())`, so anything drawn in following `extend`
+blocks is affected by it.
 
 ![DemoCompositeFilter01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoCompositeFilter01Kt.png)
 
@@ -275,8 +321,18 @@ shaping `curve` within this range:
 
 ### DemoContour01
 
-Demonstrate the Contour filter
+Demonstrates the [Contour] filter.
 @author Edwin Jakobs
+
+This demo creates a grid of 2x2 to draw a loaded image four times,
+each using the [Contour] effect with different parameters.
+
+`actions` is a variable containing a list of 4 functions.
+Each of these functions sets the effect parameters to different values.
+
+The 4 grid cells and the 4 actions are used in pairs:
+first the action is called to set the effect parameters, the
+effect is applied, and the result is drawn in a cell.
 
 ![DemoContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoContour01Kt.png)
 
@@ -329,7 +385,10 @@ on the overlapping areas. Those colors specify where the
 
 ### DemoDistortLenses01
 
-
+Demonstrates the [Lenses] effect, which by default subdivides a color buffer
+in 8 columns and 6 rows, and displaces the source texture inside each rectangle.
+Try experimenting with some of the other parameters, like `distort`.
+You can even animate them.
 
 ![DemoDistortLenses01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDistortLenses01Kt.png)
 
@@ -337,7 +396,10 @@ on the overlapping areas. Those colors specify where the
 
 ### DemoDitherLumaHalftone01
 
-
+Demonstrates the [LumaHalftone] effect and moste of its parameters.
+The `invert` parameter toggles between true and false once per second.
+The `phase0` and `phase1` parameters depend on `seconds`, which makes
+the pattern wobble slowly.
 
 ![DemoDitherLumaHalftone01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDitherLumaHalftone01Kt.png)
 
@@ -345,7 +407,8 @@ on the overlapping areas. Those colors specify where the
 
 ### DemoFluidDistort01
 
-
+Demonstrates [FluidDistort], a fluid simulation real time effect.
+All pixels are slowly displaced in a turbulent manner as if they were a gas or a liquid.
 
 ![DemoFluidDistort01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoFluidDistort01Kt.png)
 
@@ -362,7 +425,13 @@ filters. The (OK)Lab representation is signed and requires a floating point repr
 
 ### DemoPost01
 
+Demonstrates how to create an `extend` block to apply a post-processing effect.
+The effect is an [ApproximateGaussianBlur] and its `sigma` parameter
+is animated. The Blur effect is combined with whatever the user draws
+in the regular `extend` block using the `Add` filter, resulting in
+an additive composition.
 
+This demo also shows how to make a program window resizable.
 
 ![DemoPost01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoPost01Kt.png)
 
@@ -370,7 +439,18 @@ filters. The (OK)Lab representation is signed and requires a floating point repr
 
 ### DemoSpectralBlend01
 
+Demonstration of how to use the [BlendSpectral] filter to combine two images, using
+this pigment-simulation color mixing approach.
 
+The program:
+- generates two images
+- blurs one of them
+- creates and draws a checkers-pattern as the background
+- mixes and draws both images
+
+The `fill` factor, which controls how the top and the bottom colors are mixed, is animated.
+
+The `clip` parameter is also animated and toggles every 6 seconds.
 
 ![DemoSpectralBlend01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoSpectralBlend01Kt.png)
 

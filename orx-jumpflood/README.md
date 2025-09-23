@@ -196,22 +196,6 @@ Hold down a mouse button to see the raw animation.
 
 [source code](src/jvmDemo/kotlin/DemoDistanceField01.kt)
 
-### DemoInnerGlow01
-
-
-
-![DemoInnerGlow01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoInnerGlow01Kt.png)
-
-[source code](src/jvmDemo/kotlin/DemoInnerGlow01.kt)
-
-### DemoInnerGlow02
-
-
-
-![DemoInnerGlow02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoInnerGlow02Kt.png)
-
-[source code](src/jvmDemo/kotlin/DemoInnerGlow02.kt)
-
 ### DemoShapeSDF01
 
 
