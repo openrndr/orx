@@ -53,11 +53,13 @@ class SyphonServer(private val name: String = "OPENRNDR", var providedTarget: Re
 
         val glBuffer = targetToSend?.colorBuffer(0) as ColorBufferGL3
 
-        // Send to Syphon
-        server.publishFrameTexture(
-            glBuffer.texture, glBuffer.target, 0, 0,
-            program.width, program.height, program.width, program.height, false
-        )
+        targetToSend?.let { targetToSend ->
+            // Send to Syphon
+            server.publishFrameTexture(
+                glBuffer.texture, glBuffer.target, 0, 0,
+                targetToSend.width, targetToSend.height, targetToSend.width, targetToSend.height, false
+            )
+        }
     }
 
     override fun shutdown(program: Program) {
