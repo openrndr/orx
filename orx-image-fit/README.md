@@ -72,7 +72,15 @@ fun main() = application {
 ## Demos
 ### DemoImageFit01
 
-Tests `drawer.imageFit()` with all FitMethods for portrait and landscape images.
+This program uses `drawer.imageFit()` to draw images using nested grid layout.
+The main grid features 4 columns for the `Cover`, `Contain`, `Fill` and `None` fit methods,
+and two rows for portrait and landscape images.
+Each of those 8 cells feature a 3x3 grid, with cells combining `left`, `center` and `right` alignment
+with `top`, `center` and `bottom` alignment.
+
+The image drawn in each cell is a simple image with a white background and two touching circles:
+a pink one and a gray one. In some of the cells part of this image is cropped out (due to the fit method used).
+In other cells the image does not fully cover the available area, revealing a dark gray background.
 
 ![DemoImageFit01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-image-fit/images/DemoImageFit01Kt.png)
 
@@ -80,7 +88,15 @@ Tests `drawer.imageFit()` with all FitMethods for portrait and landscape images.
 
 ### DemoImageFitSub01
 
+Demonstrates the `imageFitSub()` method, which allows specifying not only a target `Rectangle`,
+but also a source `Rectangle`, which is used to set the area of the original image we want to fit
+into the target.
 
+The program also demonstrates the `Rectangle.uniformSub` method, which returns a random sub-rectangle
+taking into consideration the minimum and maximum width and height arguments.
+
+Notice the trick used to generate unique random results changing only once per second by using
+the current seconds as an integer seed.
 
 ![DemoImageFitSub01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-image-fit/images/DemoImageFitSub01Kt.png)
 

@@ -75,16 +75,19 @@ The program performs the following steps:
 - Filters the generated points to enforce a minimum distance of 20.0 units between them.
 - Visualizes the filtered points as circles with a radius of 10.0 units on the canvas.
 
+The `filter` method is provided by `orx-hash-grid`.
+
 ![DemoFilter01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-hash-grid/images/DemoFilter01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoFilter01.kt)
 
 ### DemoFilter3D01
 
-This demo sets up and renders a 3D visualization of filtered random points displayed as small spheres.
+Demonstrates how to use a 3D hash-grid `filter` operation to remove points from a random 3D point-collection
+that are too close to each other. The resulting points are displayed as small spheres.
 
 The program performs the following key steps:
-- Generates 10,000 random 3D points within a ring defined by a minimum and maximum radius.
+- Generates 10,000 random 3D points located between a minimum and maximum radius.
 - Filters the points to ensure a minimum distance between any two points using a spatial hash grid.
 - Creates a small sphere mesh that will be instanced for each filtered point.
 - Sets up an orbital camera to allow viewing the 3D scene interactively.
@@ -96,13 +99,15 @@ The program performs the following key steps:
 
 ### DemoHashGrid01
 
-This demo sets up an interactive graphics application with a configurable
-display window and visualization logic. It uses a `HashGrid` to manage points
-in a 2D space and randomly generates points within the drawable area. These
-points are then inserted into the grid if they satisfy certain spatial conditions.
+This demo creates a `HashGrid` to manage points in a 2D space.
+Notice the desired cell size in the HashGrid constructor.
+
+On every animation frame, it attempts to insert 100 random points into the HashGrid.
+When a HashGrid cell is free, a point is inserted.
+
 The visual output includes:
-- Rectangles representing the bounds of the cells in the grid.
-- Circles representing the generated points.
+- Rectangles representing the bounds of the occupied cells in the grid.
+- Circles representing the generated random points.
 
 ![DemoHashGrid01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-hash-grid/images/DemoHashGrid01Kt.png)
 
