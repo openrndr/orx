@@ -7,6 +7,18 @@ import org.openrndr.math.Vector2
 import kotlin.math.PI
 import kotlin.math.cos
 
+/**
+ * Demonstrates using Marching Squares while reading the pixel colors of a loaded image.
+ *
+ * Notice how the area defined when calling `findContours` is larger than the window.
+ *
+ * Using point coordinates from such an area to read from image pixels might cause problems when points are
+ * outside the image bounds, therefore the `f` function checks whether the requested `v` is within bounds,
+ * and only reads from the image when it is.
+ *
+ * The `seconds` built-in variable is used to generate an animated effect, serving as a shifting cut-off point
+ * that specifies at which brightness level to create curves.
+ */
 fun main() = application {
     configure {
         width = 720

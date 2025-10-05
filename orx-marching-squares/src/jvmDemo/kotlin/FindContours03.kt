@@ -6,6 +6,13 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * Demonstrates how Marching Squares can be used to generate animations, by using a time-related
+ * variable like `seconds`. The evaluated function is somewhat more complex than previous ones,
+ * but one can arrive to such functions by exploration and experimentation, nesting trigonometrical
+ * functions and making use of `seconds`, v.x and v.y.
+ *
+ */
 fun main() = application {
     configure {
         width = 720
