@@ -9,6 +9,16 @@ import org.openrndr.shape.Rectangle
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * Demonstrates how to create a `LinearRange2D` out of two `LinearRange1D` instances.
+ * The first range interpolates a horizontal rectangle into a vertical one.
+ * The second range interpolates two smaller squares of equal size, one placed
+ * higher along the y-axis and another one lower.
+ *
+ * A grid of such rectangles is displayed, animating the `u` and `v` parameters based on
+ * `seconds`, `x` and `y` indices. The second range results in a vertical wave effect.
+ *
+ */
 fun main() {
     application {
         configure {

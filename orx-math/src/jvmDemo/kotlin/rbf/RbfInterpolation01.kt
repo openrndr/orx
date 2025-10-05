@@ -22,6 +22,29 @@ import kotlin.ranges.until
 import kotlin.text.trimIndent
 import kotlin.text.trimMargin
 
+/**
+ * Demonstrates using a two-dimensional Radial Basis Function (RBF) interpolator
+ * with the user provided 2D input points, their corresponding values (colors in this demo),
+ * a smoothing factor, and a radial basis function kernel.
+ *
+ * The program chooses 14 random points in the window area leaving a 100 pixels
+ * margin around the borders and assigns a randomized color to each point.
+ *
+ * Next it creates the interpolator using those points and colors, a smoothing factor
+ * and the RBF function used for interpolation. This function takes a squared distance
+ * as input and returns a scalar value representing the influence of points at that distance.
+ *
+ * A ShadeStyle implementing the RBF interpolation is created next, used to render
+ * the background gradient interpolating all points and their colors.
+ *
+ * After rendering the background, the original points and their colors are
+ * drawn as circles for reference.
+ *
+ * Finally, the current mouse position is used for sampling a color
+ * from the interpolator and displayed for comparison. Notice that even if
+ * the fill color is flat, it may look like a gradient due to the changing
+ * colors in the surrounding pixels.
+ */
 fun main() {
     application {
         configure {
@@ -32,7 +55,7 @@ fun main() {
             val r = Random(0)
             val points = drawer.bounds.offsetEdges(-100.0).uniform(14, r)
 
-            val colors = (0 until points.size).map {
+            val colors = points.map {
                 ColorRGBa.PINK
                     .shiftHue<OKHSV>(Double.uniform(-180.0, 180.0, r))
                     .shadeLuminosity<OKLab>(Double.uniform(0.4, 1.0, r))
@@ -50,12 +73,13 @@ fun main() {
 
             /**
              * Shader style that implements RBF interpolation in the fragment shader.
-             * Uses Gaussian RBF function to interpolate colors between given points.
+             * Uses a Gaussian RBF function to interpolate colors between given points.
              * Includes custom distance calculation and color interpolation functions.
              */
             val ss = shadeStyle {
-                fragmentPreamble = """${fhash12Phrase}
-                    |${rbfGaussianPhrase}
+                fragmentPreamble = """
+                    |$fhash12Phrase
+                    |$rbfGaussianPhrase
                     |float squaredDistance(vec2 p, vec2 q) { 
                     |    vec2 d = p - q;
                     |    return dot(d, d);
@@ -64,9 +88,7 @@ fun main() {
                     |    vec3 c = p_mean;
                     |    for (int i = 0; i < p_weights_SIZE; ++i) {
                     |       float r = rbfGaussian(squaredDistance(p_points[i], p), $scale);
-                    |       c.r += p_weights[i].r * r;
-                    |       c.g += p_weights[i].g * r;
-                    |       c.b += p_weights[i].b * r;
+                    |       c += p_weights[i].rgb * r;
                     |   }
                     |   return c;
                     |}
@@ -74,8 +96,8 @@ fun main() {
 
                 fragmentTransform = """
                     x_fill.rgb = rbfInterpolate(c_boundsPosition.xy * vec2(720.0, 720.0));
-                    
                 """.trimIndent()
+
                 val weights = (0 until points.size).map {
                     Vector3(interpolator.weights[it][0], interpolator.weights[it][1], interpolator.weights[it][2])
                 }.toTypedArray()

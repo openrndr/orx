@@ -1,6 +1,8 @@
 # orx-math
 
-Mathematical utilities
+Mathematical utilities, including complex numbers,
+linear ranges, simplex ranges, matrices and radial basis functions (RBF).
+
 
 <!-- __demos__ -->
 ## Demos

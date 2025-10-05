@@ -9,6 +9,19 @@ import org.openrndr.extra.meshgenerators.boxMesh
 import org.openrndr.extra.math.simplexrange.SimplexRange3D
 import org.openrndr.math.Vector3
 
+/**
+ * Demonstrates the use of the `SimplexRange3D` class. Its constructor takes 4 instances of a `LinearType`
+ * (something that can be interpolated linearly, like `ColorRGBa`). The `SimplexRange3D` instance provides
+ * a `value()` method that returns a `LinearType` interpolated across the 4 constructor arguments using
+ * a normalized 3D coordinate.
+ *
+ * This demo program creates a 3D grid of 20x20x20 unit 3D cubes. Their color is set by interpolating
+ * their XYZ index across the 4 input colors.
+ *
+ * 2D, 4D and ND varieties are also provided by `SimplexRange`.
+ *
+ * *Simplex Range* is not to be confused with *Simplex Noise*.
+ */
 fun main() {
     application {
         configure {
