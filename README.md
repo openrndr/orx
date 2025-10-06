@@ -37,7 +37,7 @@ To make use of these extensions clone the [OPENRNDR template](https://github.com
 | [`orx-jumpflood`](orx-jumpflood/) | Calculates distance or direction fields from an image. GPU accelerated, 2D. Results are provided as an image. |
 | [`orx-kdtree`](orx-kdtree/) | Fast search of points closest to the queried point in a data set. 2D, 3D and 4D. |
 | [`orx-marching-squares`](orx-marching-squares/) | Tools for extracting contours from functions |
-| [`orx-math`](orx-math/) | Mathematical utilities |
+| [`orx-math`](orx-math/) | Mathematical utilities, including complex numbers, linear ranges, simplex ranges, matrices and radial basis functions (RBF). |
 | [`orx-mesh-generators`](orx-mesh-generators/) | 3D-mesh generating functions and DSL. |
 | [`orx-mesh-noise`](orx-mesh-noise/) | Generate random samples on the surface of a mesh <!-- __demos__ --> ## Demos ### DemoMeshNoise01 |
 | [`orx-no-clear`](orx-no-clear/) | Provides the classical "draw-without-clearing-the-screen" functionality. |
