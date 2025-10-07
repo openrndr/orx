@@ -7,7 +7,7 @@ import java.io.InputStream
 
 class MinimObject {
     @Suppress("UNUSED_PARAMETER")
-    fun sketchPath(fileName: String) = "./"
+    fun sketchPath(fileName: String) = fileName
     fun createInput(fileName: String) = File(fileName).inputStream() as InputStream
 }
 
