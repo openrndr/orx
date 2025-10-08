@@ -26,7 +26,7 @@ jobs:
           fetch-depth: 0
           repository: openrndr/openrndr
           path: ./openrndr
-          ref: master
+          ref: feature-wasm-support
 
       - name: Test glxinfo
         run: |
