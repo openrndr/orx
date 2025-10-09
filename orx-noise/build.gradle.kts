@@ -1,6 +1,6 @@
 plugins {
     id("org.openrndr.extra.convention.kotlin-multiplatform")
-    alias(libs.plugins.kotest.multiplatform)
+    //alias(libs.plugins.kotest.multiplatform)
 }
 
 val embedShaders = tasks.register<EmbedShadersTask>("embedShaders") {

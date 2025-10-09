@@ -2,7 +2,7 @@
 plugins {
     id("org.openrndr.extra.convention.kotlin-multiplatform")
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.kotest.multiplatform)
+//    alias(libs.plugins.kotest.multiplatform)
 }
 
 kotlin {
@@ -21,17 +21,17 @@ kotlin {
 
         val commonTest by getting {
             dependencies {
-                implementation(sharedLibs.kotlin.serialization.json)
-                implementation(sharedLibs.kotest.assertions)
-                implementation(sharedLibs.kotest.framework.engine)
+//                implementation(sharedLibs.kotlin.serialization.json)
+//                implementation(sharedLibs.kotest.assertions)
+//                implementation(sharedLibs.kotest.framework.engine)
             }
         }
 
         val jvmTest by getting {
             dependencies {
-                implementation(sharedLibs.kotlin.serialization.json)
-                implementation(sharedLibs.kotest.assertions)
-                implementation(sharedLibs.kotest.framework.engine)
+//                implementation(sharedLibs.kotlin.serialization.json)
+//                implementation(sharedLibs.kotest.assertions)
+//                implementation(sharedLibs.kotest.framework.engine)
             }
         }
 

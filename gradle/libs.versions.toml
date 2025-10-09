@@ -4,7 +4,6 @@ kotlinLanguage = "2.2"
 kotlin = "2.2.20"
 jvmTarget = "17"
 openrndr = { require = "[0.5,0.6.0)" }
-kotest = "5.9.1"
 dokka = "2.0.0"
 nebulaRelease = "18.0.7"
 boofcv = "1.2.3"
@@ -59,6 +58,5 @@ jsoup = { group = "org.jsoup", name = "jsoup", version.ref = "jsoup" }
 [plugins]
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 nebula-release = { id = "nebula.release", version.ref = "nebulaRelease" }
-kotest-multiplatform = { id = "io.kotest.multiplatform", version.ref = "kotest" }
 antlr-kotlin = { id = "com.strumenta.antlr-kotlin", version.ref = "antlrKotlin" }
 nmcp = { id = "com.gradleup.nmcp.aggregation", version.ref = "nmcp" }

@@ -50,6 +50,7 @@ tasks.withType<KotlinJvmCompile>().configureEach {
 }
 
 kotlin {
+    applyDefaultHierarchyTemplate()
     jvm {
         compilations {
             val main by getting
@@ -82,6 +83,11 @@ kotlin {
     }
 
     js(IR) {
+        browser()
+        nodejs()
+    }
+
+    wasmJs() {
         browser()
         nodejs()
     }
