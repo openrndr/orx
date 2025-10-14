@@ -7,7 +7,7 @@ openrndr = { require = "[0.5,0.6.0)" }
 kotest = "5.9.1"
 dokka = "2.0.0"
 nebulaRelease = "18.0.7"
-boofcv = "1.2.3"
+boofcv = "1.2.4"
 libfreenect = "0.5.7-1.5.9"
 librealsense = "2.53.1-1.5.9"
 gson = "2.13.1"

@@ -44,7 +44,7 @@ fun main() = application {
         // Convert the bitmap buffer into ShapeContours
         val vectorized = imageToContours(rt.colorBuffer(0))
 
-        // Show amount of segments in each shape (high number)
+        // Print the number of segments in each shape (high number)
         vectorized.forEachIndexed { i, it ->
             println("boofcv shape $i: ${it.segments.size} segments")
         }
@@ -64,7 +64,7 @@ fun main() = application {
             ShapeContour.fromPoints(it, true)
         }
 
-        // Show amount of segments in simplified shapes (low number).
+        // Print the number of segments in simplified shapes (low number).
         // Note: `smooth` and `polygonal` have the same number of segments
         smooth.forEachIndexed { i, it ->
             println("simplified shape $i: ${it.segments.size} segments")
