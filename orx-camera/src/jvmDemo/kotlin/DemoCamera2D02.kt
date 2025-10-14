@@ -10,9 +10,10 @@ import org.openrndr.shape.Rectangle
 import kotlin.math.sin
 
 /**
- * # Camera2D demo with static elements
+ * #### Camera2D demo with static elements
  *
- * An approach for having certain elements not affected by the camera
+ * An approach for having certain elements not affected by the camera.
+ * See DemoCamera2DManual01.kt for a new and simpler approach
  */
 fun main() = application {
     program {

@@ -61,6 +61,7 @@ fun main() = application {
 
             // Reset the camera to its default state
             camera.defaults()
+            camera.rotationCenter = it.position
 
             // Make the contour under the mouse the active contour
             activeContour = contours.indexOfLast { mouse.position in it }

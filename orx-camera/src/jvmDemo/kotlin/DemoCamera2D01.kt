@@ -4,7 +4,7 @@ import org.openrndr.draw.loadFont
 import org.openrndr.extra.camera.Camera2D
 
 /**
- * # Camera2D demo
+ * #### Camera2D demo
  *
  * click and drag the mouse for panning, use the mouse wheel for zooming
  */

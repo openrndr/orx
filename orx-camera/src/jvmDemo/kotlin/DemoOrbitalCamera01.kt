@@ -10,6 +10,11 @@ import org.openrndr.extra.meshgenerators.boxMesh
 import org.openrndr.extra.meshgenerators.sphereMesh
 import org.openrndr.math.Vector3
 
+/**
+ * Demonstrate the use of `OrbitalCamera`, `OrbitalControls`, `AxisHelper` and `GridHelper`.
+ *
+ * Press the `t` key to toggle camera interaction, or `r` to reset the camera to its defaults.
+ */
 fun main() = application {
     configure {
         width = 720
@@ -38,9 +43,6 @@ fun main() = application {
         extend(controls)
 
         extend {
-            // mouse and keyboard input can be toggled on and off
-            controls.userInteraction = true
-
             drawer.vertexBuffer(sphere, DrawPrimitive.LINE_LOOP)
             drawer.vertexBuffer(cube, DrawPrimitive.LINE_LOOP)
 
@@ -57,6 +59,10 @@ fun main() = application {
         keyboard.keyDown.listen {
             if (it.name == "r") {
                 camera.defaults()
+            }
+            if (it.name == "t") {
+                // mouse and keyboard input can be toggled on and off
+                controls.userInteraction = !controls.userInteraction
             }
         }
     }

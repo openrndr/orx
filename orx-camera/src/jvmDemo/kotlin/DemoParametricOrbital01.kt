@@ -8,6 +8,17 @@ import org.openrndr.extra.gui.GUI
 import org.openrndr.extra.gui.addTo
 import org.openrndr.extra.meshgenerators.boxMesh
 
+/**
+ * Demonstrates the use of a `ParametricOrbital` camera.
+ * This 3D camera can't be directly interacted with a mouse or a keyboard,
+ * but only via a GUI (or via code).
+ *
+ * The GUI state is saved when closing the program and loaded
+ * when running it again.
+ *
+ * The GUI also allows randomizing, loading and saving
+ * its state to a file via the top buttons it displays.
+ */
 fun main() = application {
     configure {
         multisample = WindowMultisample.SampleCount(8)
