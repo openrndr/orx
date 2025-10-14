@@ -60,7 +60,7 @@ fun main() = application {
 ## Demos
 ### DemoCamera2D01
 
-# Camera2D demo
+#### Camera2D demo
 
 click and drag the mouse for panning, use the mouse wheel for zooming
 
@@ -70,9 +70,10 @@ click and drag the mouse for panning, use the mouse wheel for zooming
 
 ### DemoCamera2D02
 
-# Camera2D demo with static elements
+#### Camera2D demo with static elements
 
-An approach for having certain elements not affected by the camera
+An approach for having certain elements not affected by the camera.
+See DemoCamera2DManual01.kt for a new and simpler approach
 
 ![DemoCamera2D02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoCamera2D02Kt.png)
 
@@ -80,15 +81,12 @@ An approach for having certain elements not affected by the camera
 
 ### DemoCamera2DManual01
 
-Demonstrate the use of `Camera2DManual` for manual camera control.
+Demonstrates how to use `Camera2DManual` to have
+some elements affected by an interactive 2D camera combined with
+other elements not affected by it.
 
-The application is configured with a 720x720 window size. Within the program, a custom camera (`Camera2DManual`)
-is initialized and used to create isolated drawing scopes. The `isolated` method is used to overlay different
-drawing operations while maintaining individual camera states, ensuring proper transformations for specific elements.
-
-Three circles are drawn on the canvas: a small pink one, a medium white one and a large pink one.
-Only the pink ones are affected by the interactive `Camera2DManual`, while the middle white circle is outside
-the camera's isolated scope.
+In this example both PINK circles can be dragged, scaled and rotated
+while the white circle in the middle is static.
 
 ![DemoCamera2DManual01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoCamera2DManual01Kt.png)
 
@@ -110,9 +108,20 @@ how the active contour is rendered.
 
 [source code](src/jvmDemo/kotlin/DemoCamera2DManual02.kt)
 
+### DemoOrbital01
+
+Demonstrate the use of `Orbital`, an interactive 3D camera
+that can be controlled with a mouse and a keyboard.
+
+![DemoOrbital01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoOrbital01Kt.png)
+
+[source code](src/jvmDemo/kotlin/DemoOrbital01.kt)
+
 ### DemoOrbitalCamera01
 
+Demonstrate the use of `OrbitalCamera`, `OrbitalControls`, `AxisHelper` and `GridHelper`.
 
+Press the `t` key to toggle camera interaction, or `r` to reset the camera to its defaults.
 
 ![DemoOrbitalCamera01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoOrbitalCamera01Kt.png)
 
@@ -136,7 +145,15 @@ Functionality:
 
 ### DemoParametricOrbital01
 
+Demonstrates the use of a `ParametricOrbital` camera.
+This 3D camera can't be directly interacted with a mouse or a keyboard,
+but only via a GUI (or via code).
 
+The GUI state is saved when closing the program and loaded
+when running it again.
+
+The GUI also allows randomizing, loading and saving
+its state to a file via the top buttons it displays.
 
 ![DemoParametricOrbital01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoParametricOrbital01Kt.png)
 

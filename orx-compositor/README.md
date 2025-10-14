@@ -239,7 +239,17 @@ fun main() = application {
 ## Demos
 ### DemoAside01
 
+Demonstrates how to reuse a layer in the Compositor by using `aside { }`.
 
+The `aside` block can make use of `draw`, `mask` and `post`. In this demo
+only the latter is used to apply a full-window animated `Checkers` effect.
+The `aside` is not displayed by default.
+
+Next, a white, centered circle is drawn.
+
+Finally, a `HashBlurDynamic` post-processing effect is applied. The dynamic
+version of the HashBlur effect multiplies its `radius` argument by the red component
+of the provided texture (containing the animated checkers in this case).
 
 ![DemoAside01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-compositor/images/DemoAside01Kt.png)
 
