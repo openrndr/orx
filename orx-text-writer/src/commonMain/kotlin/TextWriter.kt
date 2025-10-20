@@ -3,6 +3,7 @@ package org.openrndr.extra.textwriter
 import org.openrndr.draw.DrawStyle
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.FontImageMap
+import org.openrndr.internal.GlyphOutput
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 import kotlin.contracts.ExperimentalContracts
@@ -181,6 +182,20 @@ class TextWriter(val drawerRef: Drawer?) {
 
     var style = WriteStyle()
     val styleStack = ArrayDeque<WriteStyle>()
+
+    /**
+     * Stores the output of glyph positioning and rendering processes within the text drawing operations.
+     *
+     * This variable is used internally to maintain a collection of calculated glyph positions and associated
+     * bounding rectangles. It consists of two mutable lists:
+     * - One for glyph characters, represented by their positions.
+     * - One for glyph bounding rectangles, which define the area occupied by each glyph.
+     *
+     * The `glyphOutput` is primarily utilized in text rendering pipelines to calculate, store, and later
+     * process glyph information for visual rendering or additional transformations such as custom effects.
+     */
+    val glyphOutput = GlyphOutput(mutableListOf(), mutableListOf())
+
 
     var leading
         get() = style.leading
@@ -380,7 +395,7 @@ class TextWriter(val drawerRef: Drawer?) {
                 val first = renderTokens.filter { it != TextToken.END_OF_LINE }.first()
                 val last = renderTokens.last()
                 renderTokens.split().flatMap {
-                    val sy =  first.y - (fontMap?.ascenderLength ?: 0.0)
+                    val sy = first.y - (fontMap?.ascenderLength ?: 0.0)
                     val ey = last.y + (fontMap?.descenderLength ?: 0.0)
 
                     val th = ey - sy
@@ -390,9 +405,7 @@ class TextWriter(val drawerRef: Drawer?) {
         }
 
 
-        if (visible) {
-            drawTextTokens(renderTokens)
-        }
+        drawTextTokens(renderTokens, visible)
         return renderTokens
     }
 
@@ -401,7 +414,9 @@ class TextWriter(val drawerRef: Drawer?) {
      * @param tokens a list of [TextToken] instances
      * @since 0.4.3
      */
-    fun drawTextTokens(tokens: List<TextToken>) {
+    fun drawTextTokens(tokens: List<TextToken>, visible: Boolean) {
+        glyphOutput.characters.clear()
+        glyphOutput.rectangles.clear()
         drawerRef?.let { d ->
             val renderer = d.fontImageMapDrawer
             val queue = renderer.getQueue(tokens.sumOf { it.token.length })
@@ -414,10 +429,14 @@ class TextWriter(val drawerRef: Drawer?) {
                     tracking = style.tracking,
                     kerning = drawStyle.kerning,
                     textSetting = drawStyle.textSetting,
-                    queue
+                    queue,
+                    visible,
+                    glyphOutput
                 )
             }
-            renderer.flush(d.context, d.drawStyle, queue)
+            if (visible) {
+                renderer.flush(d.context, d.drawStyle, queue)
+            }
         }
     }
 
@@ -496,8 +515,6 @@ class TextWriter(val drawerRef: Drawer?) {
         }
         return emptyList()
     }
-
-
 }
 
 /**
