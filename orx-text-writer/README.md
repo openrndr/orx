@@ -8,6 +8,21 @@ Find usage examples [in the guide](https://guide.openrndr.org/drawing/text.html#
 _The code in `orx-text-writer` was previously found under `openrndr-draw` in the `openrndr` repository._
 <!-- __demos__ -->
 ## Demos
+### DemoGlyphOutput01
+
+This demo implements a drawing program utilizing custom text rendering with a wave-like animation effect.
+It allows for manipulating text position and scaling over time.
+
+Key elements of the program:
+- A centered rectangle on the drawing canvas.
+- Text rendering with properties such as horizontal alignment, vertical alignment, and tracking,
+dynamically changing over time.
+- Custom text animation implementing wave-like movement and scaling.
+
+![DemoGlyphOutput01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/DemoGlyphOutput01Kt.png)
+
+[source code](src/jvmDemo/kotlin/DemoGlyphOutput01.kt)
+
 ### DemoTextWriter01
 
 This demo features the drawing of a centered rectangle and the addition of styled text inside
