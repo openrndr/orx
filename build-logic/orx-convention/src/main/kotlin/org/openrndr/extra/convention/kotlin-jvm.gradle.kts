@@ -45,6 +45,7 @@ val demo: SourceSet by project.sourceSets.creating {
         "orx-runway",
         "orx-syphon",
         "orx-video-profiles",
+        "orx-crash-handler"
     )
     if (project.name !in skipDemos) {
         collectScreenshots(project, this@creating) { }

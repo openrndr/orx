@@ -24,8 +24,10 @@ jsoup = "1.21.2"
 mockk = "1.14.2"
 processing = "4.4.10"
 nmcp = "1.1.0"
+okhttp = "5.2.1"
 
 [libraries]
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
 kotlin-scriptingJvm = { group = "org.jetbrains.kotlin", name = "kotlin-scripting-jvm", version.ref = "kotlin" }

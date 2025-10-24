@@ -39,6 +39,7 @@ include(
         "orx-color",
         "orx-composition",
         "orx-compositor",
+        "orx-jvm:orx-crash-handler",
         "orx-delegate-magic",
         "orx-jvm:orx-dnk3",
         "orx-easing",
