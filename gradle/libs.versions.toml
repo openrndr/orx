@@ -1,7 +1,7 @@
 [versions]
 kotlinApi = "2.2"
 kotlinLanguage = "2.2"
-kotlin = "2.2.20"
+kotlin = "2.2.21"
 jvmTarget = "17"
 openrndr = { require = "[0.5,0.6.0)" }
 kotest = "5.9.1"
