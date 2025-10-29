@@ -6,6 +6,10 @@ import org.openrndr.extra.shapes.primitives.Pulley
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
 
+/**
+ * Demonstrates how to create and render a [Pulley]: a system defined by two circles
+ * connected by their outer tangents.
+ */
 fun main() = application {
     configure {
         width = 720
@@ -14,6 +18,7 @@ fun main() = application {
     program {
         extend {
             drawer.clear(ColorRGBa.BLACK)
+            drawer.strokeWeight = 8.0
             drawer.stroke = ColorRGBa.WHITE
             drawer.fill = ColorRGBa.PINK
             val pulley = Pulley(

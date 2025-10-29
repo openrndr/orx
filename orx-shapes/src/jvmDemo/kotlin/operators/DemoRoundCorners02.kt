@@ -5,6 +5,18 @@ import org.openrndr.extra.shapes.adjust.adjustContour
 import org.openrndr.extra.shapes.operators.roundCorners
 import org.openrndr.shape.Rectangle
 
+/**
+ * Demonstrates how, with the current implementation of `roundCorners`, only pairs of consecutive linear segments
+ * are rounded. If one of the segments in the pair is a quadratic or cubic Bezier, no rounding is applied.
+ *
+ * The program creates a list with two rectangular contours. In the second of them a vertex is rotated,
+ * causing two segments to become curved.
+ *
+ * Next, rounded versions of both contours are stored in a new list.
+ *
+ * Finally, all 4 shapes are displayed for comparison.
+ *
+ */
 fun main() = application {
     program {
         extend {

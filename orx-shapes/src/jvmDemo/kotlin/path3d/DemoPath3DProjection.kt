@@ -7,8 +7,17 @@ import org.openrndr.extra.camera.Orbital
 import org.openrndr.extra.shapes.path3d.projectToContour
 import org.openrndr.math.Spherical
 import org.openrndr.math.Vector3
+import org.openrndr.shape.ShapeContour
 import org.openrndr.shape.path3D
 
+/**
+ * Demonstrates how to convert a 3D path as seen by an [Orbital] camera to a 2D [ShapeContour].
+ *
+ * Among other uses, this can be useful when working with pen plotters,
+ * to export a 3D path to an SVG file, or to apply 2D contour post-processing with
+ * [org.openrndr.extra.shapes.adjust.adjustContour].
+ *
+ */
 fun main() = application {
     program {
         val path = path3D {

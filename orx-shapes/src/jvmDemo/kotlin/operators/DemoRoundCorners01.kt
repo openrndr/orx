@@ -5,6 +5,13 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.shapes.operators.roundCorners
 import org.openrndr.extra.shapes.primitives.regularStar
 
+/**
+ * Demonstrates how to use the `roundCorners` method to round the sharp corners
+ * of a [org.openrndr.shape.ShapeContour] made out of linear segments.
+ *
+ * The program creates a regular start with 7 points, then draws 7 variations
+ * of this star with various levels of rounding.
+ */
 fun main() = application {
     configure {
         width = 720

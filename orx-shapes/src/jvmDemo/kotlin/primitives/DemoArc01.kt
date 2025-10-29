@@ -4,6 +4,16 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.shapes.primitives.Arc
 
+/**
+ * Shows how to create an `Arc` centered on the window. The start and end angles of the arc increase 36 degrees
+ * per second, resulting in an animated effect.
+ *
+ * The `contour` property of the arc is used for rendering.
+ *
+ * The start, mid and end points of the arc are queried using it's `position()` method
+ * to draw small circles at those locations.
+ *
+ */
 fun main() = application {
     configure {
         width = 720

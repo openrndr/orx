@@ -6,6 +6,16 @@ import org.openrndr.extra.noise.uniform
 import org.openrndr.extra.shapes.ordering.hilbertOrder
 import kotlin.random.Random
 
+/**
+ * Shows the difference between sorting the same random points in 2D (in red) and in 3D (in blue).
+ *
+ * To be able to sort the points in 3D, the 2D points are temporarily converted to 3D with 0.0 as the `z` component,
+ * sorted, then converted back to 2D discarding the `z` component.
+ *
+ * Try out the alternative `mortonOrder` as well.
+ *
+ * Note that the `bits` argument can be either 5 or 16 in 2D, and 5 or 10 in 3D, other values are not supported.
+ */
 fun main() = application {
     configure {
         width = 720

@@ -7,6 +7,15 @@ import org.openrndr.extra.camera.Camera2D
 import org.openrndr.extra.shapes.bounds.bounds
 import org.openrndr.extra.shapes.text.shapesFromText
 
+/**
+ * Demonstrates how to create vector-based shapes based on a font face file, a text and a size.
+ *
+ * Try to zoom and pan with the 2D camera to verify that the text is actually rendered as vectors.
+ *
+ * [shapesFromText] returns a `List<Shape>`, where each letter is an element in that list,
+ * making it possible to style or manipulate each letter independently.
+ *
+ */
 fun main() = application {
     configure {
         width = 720

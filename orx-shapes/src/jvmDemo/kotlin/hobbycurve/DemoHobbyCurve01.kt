@@ -8,6 +8,8 @@ import org.openrndr.math.Vector2
 /**
  * Demonstrates how to use the hobbyCurve function to render a smooth closed contour
  * passing through a predefined set of points.
+ *
+ * See Hobby, John. D., “Smooth, Easy to Compute Interpolating Splines”, Discrete and Computational Geometry, 1986, vol. 1
  */
 fun main() = application {
     program {

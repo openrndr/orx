@@ -11,6 +11,20 @@ import org.openrndr.math.Vector3
 import kotlin.math.cos
 import kotlin.random.Random
 
+/**
+ * Demonstrates how to use the 3D implementation of the `hobbyCurve` method, to draw a smooth curve passing
+ * through various 3D points in space.
+ *
+ * The program first creates a random set of 2D points at least 200 pixels away from the window borders.
+ *
+ * Then, on every animation frame, it recreates a 3D hobby curve by giving depth to each 2D point.
+ * The same seed is used for randomness, so the same depths are assigned on every animation frame, although
+ * varying tensions are applied to each segment, based on cosines of the current time in seconds.
+ *
+ * Commenting out the camera rotation (`camera.rotate`) reveals how the segment tensions change over time.
+ *
+ * The last few lines of the program enable a rotating 3D camera and draw the 3D path.
+ */
 fun main() = application {
     configure {
         width = 720

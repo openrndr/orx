@@ -6,6 +6,16 @@ import org.openrndr.extra.shapes.primitives.Net
 import org.openrndr.shape.Circle
 import kotlin.math.sin
 
+/**
+ * Shows how to create and render a [Net]: a structure
+ * that connects two points with a circle in between,
+ * forming a string-like shape.
+ *
+ * The main circle moves following an invisible infinite sign,
+ * formed by a pair of sine functions. The moving circle is connected to
+ * two smaller static circles via a [Net], rendered as a white
+ * contour with a stroke weight 2 pixels wide.
+ */
 fun main() = application {
     program {
         extend {
