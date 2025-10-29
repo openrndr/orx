@@ -441,6 +441,8 @@ A fixed random seed is used to make sure this demo outputs a specific output. We
 Demonstrates how to use the hobbyCurve function to render a smooth closed contour
 passing through a predefined set of points.
 
+See Hobby, John. D., “Smooth, Easy to Compute Interpolating Splines”, Discrete and Computational Geometry, 1986, vol. 1
+
 ![hobbycurve-DemoHobbyCurve01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve01Kt.png)
 
 [source code](src/jvmDemo/kotlin/hobbycurve/DemoHobbyCurve01.kt)
@@ -465,7 +467,18 @@ to round contours with linear segments.
 
 ### hobbycurve/DemoHobbyCurve3D01
 
+Demonstrates how to use the 3D implementation of the `hobbyCurve` method, to draw a smooth curve passing
+through various 3D points in space.
 
+The program first creates a random set of 2D points at least 200 pixels away from the window borders.
+
+Then, on every animation frame, it recreates a 3D hobby curve by giving depth to each 2D point.
+The same seed is used for randomness, so the same depths are assigned on every animation frame, although
+varying tensions are applied to each segment, based on cosines of the current time in seconds.
+
+Commenting out the camera rotation (`camera.rotate`) reveals how the segment tensions change over time.
+
+The last few lines of the program enable a rotating 3D camera and draw the 3D path.
 
 ![hobbycurve-DemoHobbyCurve3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve3D01Kt.png)
 
@@ -473,7 +486,11 @@ to round contours with linear segments.
 
 ### operators/DemoRoundCorners01
 
+Demonstrates how to use the `roundCorners` method to round the sharp corners
+of a [org.openrndr.shape.ShapeContour] made out of linear segments.
 
+The program creates a regular start with 7 points, then draws 7 variations
+of this star with various levels of rounding.
 
 ![operators-DemoRoundCorners01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/operators-DemoRoundCorners01Kt.png)
 
@@ -481,6 +498,15 @@ to round contours with linear segments.
 
 ### operators/DemoRoundCorners02
 
+Demonstrates how, with the current implementation of `roundCorners`, only pairs of consecutive linear segments
+are rounded. If one of the segments in the pair is a quadratic or cubic Bezier, no rounding is applied.
+
+The program creates a list with two rectangular contours. In the second of them a vertex is rotated,
+causing two segments to become curved.
+
+Next, rounded versions of both contours are stored in a new list.
+
+Finally, all 4 shapes are displayed for comparison.
 
 
 ![operators-DemoRoundCorners02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/operators-DemoRoundCorners02Kt.png)
@@ -489,6 +515,14 @@ to round contours with linear segments.
 
 ### ordering/DemoHilbertOrder01
 
+Demonstrates the use of the `hilbertOrder` method to sort 2D points in a list of random points.
+
+When drawing the sorted points as a line strip, this line crosses itself fewer times than if the
+points were drawn in a random order (sometimes zero crossings, depending on the number and layout of the points).
+
+The Hilbert curve (also known as the Hilbert space-filling curve) is a continuous fractal
+space-filling curve first described by the German mathematician David Hilbert in 1891
+https://en.wikipedia.org/wiki/Hilbert_curve
 
 
 ![ordering-DemoHilbertOrder01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/ordering-DemoHilbertOrder01Kt.png)
@@ -497,7 +531,14 @@ to round contours with linear segments.
 
 ### ordering/DemoHilbertOrder02
 
+Shows the difference between sorting the same random points in 2D (in red) and in 3D (in blue).
 
+To be able to sort the points in 3D, the 2D points are temporarily converted to 3D with 0.0 as the `z` component,
+sorted, then converted back to 2D discarding the `z` component.
+
+Try out the alternative `mortonOrder` as well.
+
+Note that the `bits` argument can be either 5 or 16 in 2D, and 5 or 10 in 3D, other values are not supported.
 
 ![ordering-DemoHilbertOrder02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/ordering-DemoHilbertOrder02Kt.png)
 
@@ -505,6 +546,11 @@ to round contours with linear segments.
 
 ### path3d/DemoPath3DProjection
 
+Demonstrates how to convert a 3D path as seen by an [Orbital] camera to a 2D [ShapeContour].
+
+Among other uses, this can be useful when working with pen plotters,
+to export a 3D path to an SVG file, or to apply 2D contour post-processing with
+[org.openrndr.extra.shapes.adjust.adjustContour].
 
 
 ![path3d-DemoPath3DProjectionKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/path3d-DemoPath3DProjectionKt.png)
@@ -513,6 +559,13 @@ to round contours with linear segments.
 
 ### primitives/DemoArc01
 
+Shows how to create an `Arc` centered on the window. The start and end angles of the arc increase 36 degrees
+per second, resulting in an animated effect.
+
+The `contour` property of the arc is used for rendering.
+
+The start, mid and end points of the arc are queried using it's `position()` method
+to draw small circles at those locations.
 
 
 ![primitives-DemoArc01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoArc01Kt.png)
@@ -545,7 +598,14 @@ to round contours with linear segments.
 
 ### primitives/DemoNet01
 
+Shows how to create and render a [Net]: a structure
+that connects two points with a circle in between,
+forming a string-like shape.
 
+The main circle moves following an invisible infinite sign,
+formed by a pair of sine functions. The moving circle is connected to
+two smaller static circles via a [Net], rendered as a white
+contour with a stroke weight 2 pixels wide.
 
 ![primitives-DemoNet01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoNet01Kt.png)
 
@@ -553,7 +613,8 @@ to round contours with linear segments.
 
 ### primitives/DemoPulley01
 
-
+Demonstrates how to create and render a [Pulley]: a system defined by two circles
+connected by their outer tangents.
 
 ![primitives-DemoPulley01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoPulley01Kt.png)
 
@@ -730,6 +791,12 @@ This serves as a demonstration of positioning and rendering shapes in a structur
 
 ### text/DemoText01
 
+Demonstrates how to create vector-based shapes based on a font face file, a text and a size.
+
+Try to zoom and pan with the 2D camera to verify that the text is actually rendered as vectors.
+
+[shapesFromText] returns a `List<Shape>`, where each letter is an element in that list,
+making it possible to style or manipulate each letter independently.
 
 
 ![text-DemoText01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/text-DemoText01Kt.png)
