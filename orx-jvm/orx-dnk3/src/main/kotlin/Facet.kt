@@ -109,7 +109,7 @@ class ViewDepthFacet : ColorBufferFacetCombiner(setOf(FacetType.VIEW_POSITION), 
     override fun generateShader(): String = "o_$targetOutput.r = v_viewPosition.z;"
 }
 class ClipDepthFacet : ColorBufferFacetCombiner(setOf(FacetType.CLIP_POSITION), "clipDepth", ColorFormat.R, ColorType.FLOAT32) {
-    override fun generateShader(): String = "o_$targetOutput.r = gl_FragCoord.z;"
+    override fun generateShader(): String = "o_$targetOutput = gl_FragCoord.z;"
 }
 
 

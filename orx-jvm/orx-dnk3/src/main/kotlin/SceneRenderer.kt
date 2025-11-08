@@ -86,8 +86,6 @@ class SceneRenderer {
                     val mapSize = (shadowLight.shadows as Shadows.MappedShadows).mapSize
                     pass.createPassTarget(mapSize, mapSize, DepthFormat.DEPTH_STENCIL)
                 }
-                target.clearDepth(depth = 1.0)
-
                 val look = shadowLight.view(it.node)
                 val materialContext = MaterialContext(pass, context.lights, context.fogs, shadowLightTargets, emptyMap(), 0)
                 drawer.isolatedWithTarget(target) {

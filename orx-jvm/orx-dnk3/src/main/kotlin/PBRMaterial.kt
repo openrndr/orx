@@ -644,7 +644,7 @@ class PBRMaterial : Material {
                                         light.projection(it) * look)
 
                                 if (light.shadows is Shadows.DepthMappedShadows) {
-                                    shadeStyle.parameter("lightShadowMap$index", it.depthBuffer ?: TODO())
+                                    shadeStyle.parameter("lightShadowMap$index", it.depthBuffer?:error("no depth buffer for $it"))
                                 }
 
                                 if (light.shadows is Shadows.ColorMappedShadows) {

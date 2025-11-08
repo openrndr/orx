@@ -20,7 +20,7 @@ val IrradianceProbePass = RenderPass(listOf(DiffuseIrradianceFacet()))
 
 val DefaultOpaquePass = RenderPass(listOf(LDRColorFacet()), renderOpaque = true, renderTransparent = false)
 val DefaultTransparentPass = RenderPass(listOf(LDRColorFacet()), renderOpaque = false, renderTransparent = true, depthWrite = false)
-val LightPass = RenderPass(emptyList())
+val LightPass = RenderPass(listOf(ClipDepthFacet()))
 val VSMLightPass = RenderPass(listOf(MomentsFacet()))
 
 fun RenderPass.createPassTarget(width: Int, height: Int, depthFormat: DepthFormat = DepthFormat.DEPTH24, multisample: BufferMultisample = this.multisample): RenderTarget {
@@ -30,6 +30,10 @@ fun RenderPass.createPassTarget(width: Int, height: Int, depthFormat: DepthForma
                 is ColorBufferFacetCombiner ->
                     colorBuffer(combiner.targetOutput, combiner.format, combiner.type)
             }
+        }
+        // Temporary fix for GLES back-end
+        if (combiners.isEmpty()) {
+            colorBuffer()
         }
         depthBuffer(depthFormat)
     }
