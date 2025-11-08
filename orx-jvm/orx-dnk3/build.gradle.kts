@@ -1,9 +1,12 @@
 plugins {
     id("org.openrndr.extra.convention.kotlin-jvm")
+    alias(libs.plugins.kotlin.serialization)
+
 }
 
 dependencies {
-    implementation(libs.gson)
+    implementation(sharedLibs.kotlin.serialization.core)
+    implementation(sharedLibs.kotlin.serialization.json)
     implementation(project(":orx-fx"))
     implementation(project(":orx-jvm:orx-keyframer"))
     implementation(project(":orx-easing"))

@@ -1,6 +1,6 @@
 package org.openrndr.extra.dnk3.gltf
 
-import com.google.gson.Gson
+import kotlinx.serialization.json.Json
 import java.io.File
 import java.io.RandomAccessFile
 import java.nio.ByteBuffer
@@ -37,11 +37,11 @@ fun loadGltfFromGlbFile(file: File): GltfFile {
     val jsonByteArray = ByteArray(jsonBuffer.capacity())
     jsonBuffer.get(jsonByteArray)
     val json = String(jsonByteArray)
-    val gson = Gson()
     val bufferBuffer = if (channel.position() < length) readChunk() else null
 
-    return gson.fromJson(json, GltfFile::class.java).apply {
-        this.file = file
-        this.bufferBuffer = bufferBuffer
-    }
+    val gltFile = Json { ignoreUnknownKeys = true }.decodeFromString<GltfFile>(json)
+    gltFile.file = file
+    gltFile.bufferBuffer = bufferBuffer
+
+    return gltFile
 }

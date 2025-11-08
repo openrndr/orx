@@ -238,7 +238,7 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
             0,
             drawCommand.vertexCount
         )
-        val material = materials.getOrNull(material)?.createSceneMaterial() ?: PBRMaterial()
+        val material = materials.getOrNull(material ?: -1 )?.createSceneMaterial() ?: PBRMaterial()
         return MeshPrimitive(geometry, material)
     }
 
@@ -278,16 +278,9 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
             ibmData.order(ByteOrder.nativeOrder())
             (ibmData as Buffer).position(ibmAccessor.byteOffset + (ibmBufferView.byteOffset ?: 0))
 
-            require(ibmAccessor.type == "MAT4") {
-                "Unsupported inverse bind matrix type: ${ibmAccessor.type}"
-            }
-            require(ibmAccessor.componentType == GLTF_FLOAT) {
-                "Unsupported inverse bind matrix component type: ${ibmAccessor.componentType}"
-            }
-            require(ibmAccessor.count == joints.size) {
-                "Mismatch between inverse bind matrix count (${ibmAccessor.count}) and joints size (${joints.size})"
-
-            }
+            require(ibmAccessor.type == "MAT4")
+            require(ibmAccessor.componentType == GLTF_FLOAT)
+            require(ibmAccessor.count == joints.size)
             val ibms = (0 until ibmAccessor.count).map {
                 val array = DoubleArray(16)
                 for (i in 0 until 16) {
