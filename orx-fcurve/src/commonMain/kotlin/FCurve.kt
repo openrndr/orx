@@ -138,6 +138,45 @@ data class FCurve(val segments: List<Segment2D>) {
         }
     }
 
+    /**
+     * Shifts the FCurve along the x-axis by a specified amount.
+     *
+     * @param x The amount to shift the FCurve along the x-axis.
+     * @return A new FCurve instance with all segments shifted by the specified amount.
+     */
+    fun shift(x: Double): FCurve {
+        val t = buildTransform {
+            translate(x, 0.0)
+        }
+        return FCurve(segments.map { it.transform(t) })
+    }
+
+    /**
+     * Offsets the FCurve by a specified amount along the y-axis.
+     *
+     * @param y The amount to offset the FCurve along the y-axis.
+     * @return A new FCurve instance with all segments transformed by the offset.
+     */
+    fun offset(y: Double): FCurve {
+        val t = buildTransform {
+            translate(0.0, y)
+        }
+        return FCurve(segments.map { it.transform(t) })
+    }
+
+    /**
+     * Scales the FCurve by the specified factors along the x-axis and y-axis.
+     *
+     * @param sx The scaling factor along the x-axis.
+     * @param sy The scaling factor along the y-axis.
+     * @return A new FCurve instance with all segments scaled by the specified factors.
+     */
+    fun scale(sx: Double, sy: Double): FCurve {
+        val t = buildTransform {
+            scale(sx, sy)
+        }
+        return FCurve(segments.map { it.transform(t) })
+    }
 
     /**
      * Creates a function to sample the FCurve at a specific time.
