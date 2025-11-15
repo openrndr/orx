@@ -8,6 +8,13 @@ import org.openrndr.math.Polar
 import org.openrndr.shape.contour
 import kotlin.math.sin
 
+/**
+ * By default, OPENRNDR clears the canvas on each animation
+ * frame. [NoClear] disables that behavior, letting you
+ * draw on top of what you drew in previous animation frames.
+ *
+ * That's the default in some other frameworks.
+ */
 fun main() = application {
     configure {
         width = 720
@@ -22,14 +29,8 @@ fun main() = application {
             }
         }
 
-        // ------------------------------------------------------------
-        // By default OPENRNDR clears the canvas on each animation
-        // frame. NoClear disables that behavior, letting you
-        // draw on top of what you drew previously.
-        // That's the default in some other frameworks.
-        // ------------------------------------------------------------
         extend(NoClear()) {
-            // backdrop is optional, and it sets the initial state
+            // `backdrop` is optional, and it sets the initial state
             // of the canvas. It can be code generated or an image
             // loaded from disk. In this case we start with dark gray.
             backdrop = { drawer.clear(rgb(0.15)) }
