@@ -55,7 +55,11 @@ NB! any submitted _lambda expression_ must be valid within the `renderTarget` co
 ## Demos
 ### DemoNoClear
 
+By default, OPENRNDR clears the canvas on each animation
+frame. [NoClear] disables that behavior, letting you
+draw on top of what you drew in previous animation frames.
 
+That's the default in some other frameworks.
 
 ![DemoNoClearKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-no-clear/images/DemoNoClearKt.png)
 
