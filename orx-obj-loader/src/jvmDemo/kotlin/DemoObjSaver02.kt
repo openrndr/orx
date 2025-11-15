@@ -4,6 +4,12 @@ import org.openrndr.extra.meshgenerators.buildTriangleMesh
 import org.openrndr.extra.meshgenerators.sphere
 import org.openrndr.extra.objloader.saveOBJ
 
+/**
+ * Demonstrates saving a `VertexBuffer` generated via code as an OBJ file.
+ *
+ * This file can be loaded in a 3D modelling / rendering program.
+ *
+ */
 fun main() = application {
     configure {
         width = 720

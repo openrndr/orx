@@ -1,6 +1,3 @@
-/**
-Display wireframe and non-planar faces
- */
 import org.openrndr.WindowMultisample
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
@@ -16,6 +13,20 @@ import org.openrndr.shape.Path3D
 import java.io.File
 import kotlin.math.cos
 
+/**
+ * Demonstrates two approaches for loading an OBJ file: as a `VertexBuffer` and as `CompoundMeshData`.
+ *
+ * A `CompoundMeshData` object contains vertices, texture coordinates, colors, normals, tangents, and bitangents,
+ * alongside their associated face indices, grouped into meshes.
+ *
+ * In this demo `CompoundMeshData.wireframe()` is called to generate a wireframe representation of the loaded mesh.
+ *
+ * When rendering the wireframe, a shade style is used to displace the lines slightly towards the camera, to ensure
+ * the lines do not end up occluded by the mesh rendered as triangles.
+ *
+ * Finally, the `sub` method is called on the `Path3D` instances to draw only parts of the wireframe, creating
+ * an animated effect.
+ */
 fun main() = application {
     configure {
         width = 720

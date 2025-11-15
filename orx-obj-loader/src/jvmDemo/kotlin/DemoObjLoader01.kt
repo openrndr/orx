@@ -6,6 +6,12 @@ import org.openrndr.draw.shadeStyle
 import org.openrndr.extra.objloader.loadOBJasVertexBuffer
 import org.openrndr.math.Vector3
 
+/**
+ * Demonstrates how to load a `.obj` file as a `VertexBuffer`.
+ *
+ * The `loadOBJasVertexBuffer()` function expects the path to the `.obj` file as an argument.
+ *
+ */
 fun main() = application {
     configure {
         width = 720
