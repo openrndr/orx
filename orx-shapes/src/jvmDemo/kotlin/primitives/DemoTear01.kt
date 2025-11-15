@@ -8,6 +8,9 @@ import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
 import kotlin.random.Random
 
+/**
+ * Demonstrates the use of `Tear()` to create drop-like shapes out of a Vector2 point and a Circle.
+ */
 fun main() = application {
     configure {
         width = 720
@@ -16,7 +19,10 @@ fun main() = application {
     program {
         val points = drawer.bounds.scatter(40.0, distanceToEdge = 150.0, random = Random(0))
         val tears = points.map {
-            Tear(it - Vector2(0.0, 20.0), Circle(it + Vector2(0.0, 20.0), 20.0))
+            Tear(
+                it - Vector2(0.0, 20.0),
+                Circle(it + Vector2(0.0, 20.0), 20.0)
+            )
         }
 
         extend {

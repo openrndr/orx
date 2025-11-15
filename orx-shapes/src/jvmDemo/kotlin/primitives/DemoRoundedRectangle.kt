@@ -5,6 +5,12 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.shapes.primitives.RoundedRectangle
 import kotlin.math.cos
 
+/**
+ * Demonstrates the use of `RoundedRectangle()` to create a rectangle in which the corners
+ * are rounded by the provided `radius`
+ *
+ * The radius is animated between 0.0 and 40.0 using the cosine of the current time in seconds.
+ */
 fun main() = application {
     program {
         extend {

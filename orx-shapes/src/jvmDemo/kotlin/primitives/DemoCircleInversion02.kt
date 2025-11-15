@@ -7,6 +7,25 @@ import org.openrndr.extra.shapes.primitives.invertConformal
 import org.openrndr.math.Polar
 import org.openrndr.shape.Circle
 
+/**
+ * Demonstrates the use of the `Circle`'s `.invertConformal()` method:
+ * a special type of circle inversion that preserves tangency
+ * between circles. If two circles are tangent, their images
+ * under conformal inversion will also be tangent.
+ *
+ * The program calculates a moving circle (`mc`) traveling around the
+ * center of the screen.
+ *
+ * It then calculates a grid of 10x10 circles covering the window
+ * area. Those circles are inverted using `.invertConformal()`
+ * against `mc`.
+ *
+ * This calculation is performed twice: the first pass draws those
+ * grid circles that contain the moving circle's center in black.
+ *
+ * The second pass draws grid circles that do not contain the moving
+ * circle's center in white.
+ */
 fun main() = application {
     configure {
         width = 720
@@ -47,8 +66,16 @@ fun main() = application {
                             is Circle -> drawer.circle(ci)
                         }
                     }
+                    // show the static grid of circles
+                    //drawer.circle(c)
                 }
             }
+
+            // show the moving circle
+            //drawer.stroke = ColorRGBa.PINK
+            //drawer.strokeWeight = 2.0
+            //drawer.fill = null
+            //drawer.circle(mc)
         }
     }
 }

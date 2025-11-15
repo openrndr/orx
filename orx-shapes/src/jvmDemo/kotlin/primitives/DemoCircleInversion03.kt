@@ -12,6 +12,17 @@ import org.openrndr.shape.LineSegment
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * Demonstrates one of the implementations of `Circle.invert()`
+ * which takes a `LineSegment` and returns a `Circle`, an `Arc`
+ * or a `LineSegment`.
+ *
+ * The program generates 10 evenly spaced vertical line segments
+ * and 10 horizontal line segments. An animated `sub` segment
+ * is calculated using the sine of the current time in seconds.
+ * These `sub` segments are then inverted using
+ * an animated circle moving around the center of the screen.
+ */
 fun main() = application {
     configure {
         width = 720
