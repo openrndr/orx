@@ -105,7 +105,15 @@ Demonstrate decal generation and rendering
 
 ### DemoAll
 
+Demonstrates how to create various types of 3D meshes:
+box, sphere, dodecahedron, cylinder, plane, cap and resolve.
 
+Two textures are used: one generative with gradients, and the second
+one is an image loaded from disk. The horizontal mouse position is used
+to select which of the two textures to use.
+
+The meshes are positioned in space using a 2D mesh, and displayed
+rotating on the X and Y axes at different speeds.
 
 ![DemoAllKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoAllKt.png)
 
@@ -113,6 +121,18 @@ Demonstrate decal generation and rendering
 
 ### DemoBox
 
+Demonstrates how to create a 3D mesh box by specifying its width, height and depth.
+
+The `box` is a `VertexBuffer` and contains texture coordinates which can be
+used to apply a texture to its faces.
+
+After creating the box, the program creates a texture with a gradient.
+In it, the red component increases along the x-axis and the green component
+along the y-axis.
+
+The scene is rendered with an interactive `Orbital` 3D camera.
+
+A shade style is used to apply the texture to the box.
 
 
 ![DemoBoxKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoBoxKt.png)
@@ -121,7 +141,15 @@ Demonstrate decal generation and rendering
 
 ### DemoComplex01
 
+Demonstrates how to use `buildTriangleMesh` to construct composite 3D meshes.
 
+A DSL allows specifying the color and transformations of each mesh, in this case,
+of a sphere and a box.
+
+An interactive 3D Orbital camera is defined, specifying the location of its `eye` and
+`lookAt` properties.
+
+A minimal shade style is used to simulate a uni-directional light pointing along the view Z axis.
 
 ![DemoComplex01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex01Kt.png)
 
@@ -129,7 +157,7 @@ Demonstrate decal generation and rendering
 
 ### DemoComplex02
 
-
+Demonstrates the creation of a 3D mesh composed of two hemispheres, a cylinder and 12 legs.
 
 ![DemoComplex02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex02Kt.png)
 
@@ -137,7 +165,14 @@ Demonstrate decal generation and rendering
 
 ### DemoComplex03
 
+Demonstrates the creation of a 3D mesh composed of two hemispheres, a cylinder and 12 legs.
+Additionally, the body of the shape features 5 ridges on the sides
+of the cylinder.
 
+The code reveals DSL keywords under `buildTriangleMesh`
+affecting transformation matrices, for instance `isolated`, `translate` and `rotate`,
+and mesh generating keywords like
+`hemisphere`, `taperedCylinder` and `cylinder`.
 
 ![DemoComplex03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex03Kt.png)
 
@@ -145,7 +180,9 @@ Demonstrate decal generation and rendering
 
 ### DemoComplex04
 
-
+Demonstrates the use of `buildTriangleMesh` to create
+a composite 3D mesh and introduces a new mesh generating keyword:
+`cap`.
 
 ![DemoComplex04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex04Kt.png)
 
@@ -153,6 +190,9 @@ Demonstrate decal generation and rendering
 
 ### DemoComplex05
 
+Demonstrates how to create a 3D grid of extruded shapes
+(short cylinders), then applies three 3D twists to the
+composition to deform it.
 
 
 ![DemoComplex05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex05Kt.png)
@@ -161,8 +201,11 @@ Demonstrate decal generation and rendering
 
 ### DemoComplex06
 
-Generates a grid of grids of boxes.
-Interactive orbital camera.
+Generates a grid of grids of 3D boxes using `buildTriangleMesh` and
+renders them using an interactive orbital camera.
+
+The cubes ar colorized using a shade style that sets colors based
+on vertex positions in space, converting XYZ coordinates into RGB colors.
 
 
 ![DemoComplex06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex06Kt.png)
@@ -270,7 +313,13 @@ for a radial-symmetry effect.
 
 ### tangents/DemoTangents01
 
+Tangent and bitangent vectors are used in shader programs for tangent space normal mapping / lighting
+and certain forms of displacement mapping.
 
+This demo shows:
+- how to create a triangulated `MeshData`.
+- how to estimate the tangents of this MeshData.
+- How to use the tangent and bitangent attributes in GLSL code.
 
 ![tangents-DemoTangents01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/tangents-DemoTangents01Kt.png)
 

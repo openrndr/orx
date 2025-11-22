@@ -465,6 +465,31 @@ to round contours with linear segments.
 
 [source code](src/jvmDemo/kotlin/hobbycurve/DemoHobbyCurve03.kt)
 
+### hobbycurve/DemoHobbyCurve04
+
+Demonstrates the use of the `tensions` argument when creating a Hobby curve.
+
+The program starts by creating a random set of scattered points with enough separation between them.
+The points are sorted using `hilbertOrder` to minimize the travel distance when visiting all the points.
+Finally, we draw a set of 40 hobby translucent curves using those same points but with varying tensions.
+
+![hobbycurve-DemoHobbyCurve04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve04Kt.png)
+
+[source code](src/jvmDemo/kotlin/hobbycurve/DemoHobbyCurve04.kt)
+
+### hobbycurve/DemoHobbyCurve05
+
+Demonstrates the creation of a 40 hobby curves with 10 points each.
+The control points in all hobby curves are almost identical, varying only
+due to a slight increase in one of the arguments of a simplex noise call.
+
+The program shows that minor displacements in control points can have
+a large impact in the resulting curve.
+
+![hobbycurve-DemoHobbyCurve05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve05Kt.png)
+
+[source code](src/jvmDemo/kotlin/hobbycurve/DemoHobbyCurve05.kt)
+
 ### hobbycurve/DemoHobbyCurve3D01
 
 Demonstrates how to use the 3D implementation of the `hobbyCurve` method, to draw a smooth curve passing
@@ -678,6 +703,22 @@ Demonstrate rectangle-rectangle intersection
 
 [source code](src/jvmDemo/kotlin/primitives/DemoRectangleIntersection01.kt)
 
+### primitives/DemoRectangleIrregularGrid02
+
+Demonstrates how to use `Rectangle.irregularGrid()` to create a grid with varying column widths
+and row heights. The widths and heights are specified as a list of 13 `Double` values, each
+picked randomly between the values 1.0 and 4.0. This produces two types of columns and two
+types of rows only: wide ones and narrow ones.
+
+The program also demonstrates how to query a `row()` and a `column()` from a `RectangleGrid` instance,
+both of which return a `List<Rectangle>`. Both `Rectangle` lists are rendered with translucent
+colors, which makes the intersection of the column and the row slightly brighter.
+
+
+![primitives-DemoRectangleIrregularGrid02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleIrregularGrid02Kt.png)
+
+[source code](src/jvmDemo/kotlin/primitives/DemoRectangleIrregularGrid02.kt)
+
 ### primitives/DemoRectangleIrregularGrid
 
 
@@ -748,6 +789,21 @@ This serves as a demonstration of positioning and rendering shapes in a structur
 ![primitives-DemoTear01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoTear01Kt.png)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoTear01.kt)
+
+### primitives/DemoTear02
+
+Demonstrates the use of `Tear()` to create drop-like shapes out of a Vector2 point and a Circle.
+
+The tear locations are calculated using the `Rectangle.scatter()` function. Locations near the
+center of the window are filtered out.
+
+The radii of each tear is randomly chosen between three values. The orientation of each tear
+is calculated by getting the normalized difference between the tear and the center of the window,
+making them look as being emitted at the center of the window.
+
+![primitives-DemoTear02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoTear02Kt.png)
+
+[source code](src/jvmDemo/kotlin/primitives/DemoTear02.kt)
 
 ### rectify/DemoRectifiedContour01
 
