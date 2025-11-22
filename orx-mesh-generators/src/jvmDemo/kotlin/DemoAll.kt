@@ -8,6 +8,17 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.shape.Rectangle
 
+/**
+ * Demonstrates how to create various types of 3D meshes:
+ * box, sphere, dodecahedron, cylinder, plane, cap and resolve.
+ *
+ * Two textures are used: one generative with gradients, and the second
+ * one is an image loaded from disk. The horizontal mouse position is used
+ * to select which of the two textures to use.
+ *
+ * The meshes are positioned in space using a 2D mesh, and displayed
+ * rotating on the X and Y axes at different speeds.
+ */
 fun main() = application {
     configure {
         width = 720

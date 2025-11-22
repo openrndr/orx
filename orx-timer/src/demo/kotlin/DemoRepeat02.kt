@@ -4,7 +4,7 @@ import org.openrndr.events.Event
 import org.openrndr.extra.timer.repeat
 
 /**
- * This demonstrates how to combine `repeat {}` with a postponed event to trigger drawing
+ * This demonstrates how to combine `repeat {}` with a postponed event to trigger drawing.
  */
 
 fun main() = application {

@@ -7,6 +7,11 @@ import org.openrndr.extra.meshgenerators.*
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 
+/**
+ * Demonstrates the use of `buildTriangleMesh` to create
+ * a composite 3D mesh and introduces a new mesh generating keyword:
+ * `cap`.
+ */
 fun main() = application {
     configure {
         width = 720

@@ -8,12 +8,14 @@ import org.openrndr.extra.parameters.OptionParameter
  * A simple demonstration of a GUI with a drop-down menu.
  *
  * The entries in the drop-down menu are taken from an `enum class`.
+ * The `enum class` entries contain both a name (used in the drop-down)
+ * and a `ColorRGBa` instance (used for rendering).
  */
 
-enum class BackgroundColors {
-    Pink,
-    Black,
-    Yellow
+enum class BackgroundColors2(val color: ColorRGBa) {
+    Pink(ColorRGBa.PINK),
+    Black(ColorRGBa.BLACK),
+    Yellow(ColorRGBa.YELLOW)
 }
 
 fun main() = application {
@@ -26,7 +28,7 @@ fun main() = application {
         gui.compartmentsCollapsedByDefault = false
         val settings = @Description("Settings") object {
             @OptionParameter("Background color")
-            var option = BackgroundColors.Pink
+            var option = BackgroundColors2.Pink
         }
 
         gui.add(settings)
@@ -35,11 +37,7 @@ fun main() = application {
             println("$name: $value")
         }
         extend {
-            when (settings.option) {
-                BackgroundColors.Pink -> drawer.clear(ColorRGBa.PINK)
-                BackgroundColors.Black -> drawer.clear(ColorRGBa.BLACK)
-                BackgroundColors.Yellow -> drawer.clear(ColorRGBa.YELLOW)
-            }
+            drawer.clear(settings.option.color)
         }
     }
 }

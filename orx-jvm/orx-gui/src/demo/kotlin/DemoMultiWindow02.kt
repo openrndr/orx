@@ -4,7 +4,7 @@ import org.openrndr.extra.parameters.DoubleParameter
 import kotlin.system.exitProcess
 
 /**
- * Demonstration of multi window GUI using WindowedGUI extension
+ * Demonstration of a multi window GUI using the `WindowedGUI` extension
  */
 fun main() {
     // skip this demo on CI

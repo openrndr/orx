@@ -12,6 +12,18 @@ import org.openrndr.draw.loadImage
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * Demonstrates how to convert a PNG image into `ShapeContour`s using BoofCV.
+ *
+ * Two helper methods help convert data types between BoofCV and OPENRNDR.
+ *
+ * The `ColorBuffer.toGrayF32()` method converts an OPENRNDR `ColorBuffer` to `GrayF32` format,
+ * required by BoofCV.
+ *
+ * The `.toShapeContours()` converts BoofCV contours to OPENRNDR `ShapeContour` instances.
+ *
+ * The resulting contours are animated zooming in and out while their colors change slowly.
+ */
 fun main() = application {
     program {
         // Load an image, convert to BoofCV format using orx-boofcv

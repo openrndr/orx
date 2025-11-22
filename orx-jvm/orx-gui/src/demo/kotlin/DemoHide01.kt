@@ -6,7 +6,7 @@ import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
 
 /**
- * A simple demonstration of a GUI for drawing some circles
+ * Demonstrates how to hide the GUI when the mouse pointer is outside of it.
  */
 fun main() = application {
     program {
@@ -29,7 +29,7 @@ fun main() = application {
         gui.add(settings)
         extend(gui)
 
-        // note we can only change the visibility after the extend
+        // note we can only change the visibility after the `extend`
         gui.visible = false
 
         extend {

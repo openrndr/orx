@@ -8,6 +8,9 @@ import org.openrndr.extra.meshgenerators.cylinder
 import org.openrndr.extra.meshgenerators.hemisphere
 import org.openrndr.math.Vector3
 
+/**
+ * Demonstrates the creation of a 3D mesh composed of two hemispheres, a cylinder and 12 legs.
+ */
 fun main() = application {
     configure {
         width = 720

@@ -6,11 +6,22 @@ import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
 
 /**
- * A simple demonstration of a GUI for drawing some circles
+ * Demonstrates how to create a simple GUI with 4 inputs:
+ * - A `ColorParameter` which creates a color picker.
+ * - A `DoubleParameter` to control the radius of a circle.
+ * - A `Vector2Parameter` to set the position of that circle.
+ * - A `DoubleListParameter` which sets the radii of six circles.
+ *
+ * The demo also shows how to use the variables controlled by the GUI
+ * inside the program, so changes to those variables affect
+ * the rendering in real time.
  */
 fun main() = application {
+    configure {
+        width = 720
+        height = 450
+    }
     program {
-
         val gui = GUI()
         gui.compartmentsCollapsedByDefault = false
 

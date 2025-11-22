@@ -9,6 +9,17 @@ import org.openrndr.extra.meshgenerators.buildTriangleMesh
 import org.openrndr.extra.meshgenerators.sphere
 import org.openrndr.math.Vector3
 
+/**
+ * Demonstrates how to use `buildTriangleMesh` to construct composite 3D meshes.
+ *
+ * A DSL allows specifying the color and transformations of each mesh, in this case,
+ * of a sphere and a box.
+ *
+ * An interactive 3D Orbital camera is defined, specifying the location of its `eye` and
+ * `lookAt` properties.
+ *
+ * A minimal shade style is used to simulate a uni-directional light pointing along the view Z axis.
+ */
 fun main() = application {
     configure {
         width = 720

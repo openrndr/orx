@@ -17,6 +17,18 @@ import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 import org.openrndr.shape.ShapeContour
 
+/**
+ * When converting a `ColorBuffer` to `ShapeContour` instances using
+ * `BoofCV`, simple shapes can have hundreds of segments and vertices.
+ *
+ * This demo shows how to use the `simplify()` method to greatly
+ * reduce the number of vertices.
+ *
+ * Then it uses the simplified vertex lists to create smooth curves
+ * (using `CatmullRomChain2`) and polygonal curves (using `ShapeContour.fromPoints`).
+ *
+ * Study the console to learn about the number of segments before and after simplification.
+ */
 fun main() = application {
     program {
         // Create a buffer where to draw something for boofcv
@@ -41,6 +53,7 @@ fun main() = application {
             rectangle(0.0, -200.0, 60.0, 60.0)
             circle(0.0, 190.0, 60.0)
         }
+
         // Convert the bitmap buffer into ShapeContours
         val vectorized = imageToContours(rt.colorBuffer(0))
 
@@ -73,8 +86,11 @@ fun main() = application {
         extend {
             drawer.run {
                 fill = null // ColorRGBa.PINK.opacify(0.15)
+
                 stroke = ColorRGBa.PINK.opacify(0.7)
                 contours(polygonal)
+
+                stroke = ColorRGBa.GREEN.opacify(0.7)
                 contours(smooth)
             }
         }

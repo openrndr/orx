@@ -9,8 +9,11 @@ import org.openrndr.extra.noise.simplex
 import org.openrndr.math.Vector3
 
 /**
- * Generates a grid of grids of boxes.
- * Interactive orbital camera.
+ * Generates a grid of grids of 3D boxes using `buildTriangleMesh` and
+ * renders them using an interactive orbital camera.
+ *
+ * The cubes ar colorized using a shade style that sets colors based
+ * on vertex positions in space, converting XYZ coordinates into RGB colors.
  *
  */
 fun main() = application {

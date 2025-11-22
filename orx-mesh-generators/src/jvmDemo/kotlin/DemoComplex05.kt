@@ -11,6 +11,12 @@ import org.openrndr.extra.meshgenerators.twist
 import org.openrndr.math.Vector3
 import org.openrndr.shape.Circle
 
+/**
+ * Demonstrates how to create a 3D grid of extruded shapes
+ * (short cylinders), then applies three 3D twists to the
+ * composition to deform it.
+ *
+ */
 fun main() = application {
     configure {
         width = 720

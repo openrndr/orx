@@ -7,12 +7,18 @@ import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.IntParameter
 
 /**
- * Shows how to store and retrieve in-memory gui presets.
+ * Shows how to store and retrieve in-memory GUI presets,
+ * each containing two integer values and two colors.
+ *
  * Keyboard controls:
- * [Left Shift] + [0]..[9] => store current gui values to a preset
+ * [Left Shift] + [0]..[9] => store current GUI values to a preset
  *                [0]..[9] => recall a preset
  */
 fun main() = application {
+    configure {
+        width = 720
+        height = 480
+    }
     program {
         val gui = GUI()
         gui.compartmentsCollapsedByDefault = false
@@ -43,9 +49,9 @@ fun main() = application {
             // Draw a pattern based on modulo
             for (i in 0 until 100) {
                 if (i % settings.a == 0 || i % settings.b == 0) {
-                    val x = (i % 10) * 64.0
+                    val x = (i % 10) * 72.0
                     val y = (i / 10) * 48.0
-                    drawer.rectangle(x, y, 64.0, 48.0)
+                    drawer.rectangle(x, y, 72.0, 48.0)
                 }
             }
         }

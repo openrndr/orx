@@ -6,7 +6,15 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
 
-
+/**
+ * Starts the RabbitControlServer with a `Rabbithole` using the key 'orxtest'.
+ *
+ * `Rabbithole` allows you to access your exposed parameters from Internet
+ * connected computers that are not in the same network.
+ *
+ * To use it with this example use 'orxtest' as the tunnel-name in https://rabbithole.rabbitcontrol.cc
+ *
+ */
 fun main() = application {
     configure {
         width = 800
@@ -14,13 +22,6 @@ fun main() = application {
     }
 
     program {
-        /**
-         * Start RabbitControlServer with a Rabbithole with key 'orxtest'
-         * Please visit https://rabbithole.rabbitcontrol.cc for more information.
-         *
-         * Rabbithole allows you to access your exposed parameter from the internet.
-         * To use it with this example just use 'orxtest' as tunnel-name on the main page.
-         */
         val rabbit = RabbitControlServer(false, 10000, 8080, "wss://rabbithole.rabbitcontrol.cc/public/rcpserver/connect?key=orxtest")
         val font = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 20.0)
         val settings = object {

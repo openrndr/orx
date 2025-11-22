@@ -14,6 +14,20 @@ import org.openrndr.extra.color.spaces.toXSLUVa
 import org.openrndr.extra.meshgenerators.sphereMesh
 import org.openrndr.math.Vector3
 
+/**
+ * A visualization of color interpolations inside a 3D RGB cube with an interactive 3D `Orbital` camera.
+ *
+ * The hues of the source and target colors are animated over time.
+ *
+ * The color interpolations are shown simultaneously in nine different color spaces, revealing how in
+ * each case they share common starting and ending points in 3D, but have unique paths going from
+ * start to end.
+ *
+ * By rotating the cube 90 degrees towards the left and slightly zooming out, one can appreciate how
+ * one of the points moves along the edges of the cube, while the other moves on the edges of a
+ * smaller, invisible cube.
+ *
+ */
 fun main() = application {
     configure {
         width = 720
@@ -44,9 +58,6 @@ fun main() = application {
                 "XSLUV" to (colorA.toXSLUVa()..colorB.toXSLUVa() blend stepCount),
             )
 
-            drawer.stroke = null
-
-            drawer.fontMap = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 16.0)
             for ((_, steps) in allSteps) {
                 for (i in steps.indices) {
                     val srgb = steps[i].toSRGB().clip()

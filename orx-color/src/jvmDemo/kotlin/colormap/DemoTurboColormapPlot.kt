@@ -8,6 +8,13 @@ import org.openrndr.extra.color.colormaps.turboColormap
 import org.openrndr.extra.shaderphrases.preprocess
 import org.openrndr.math.Vector2
 
+/**
+ * This demo uses the shader based `turbo_colormap()` function to fill the background,
+ * then visualizes the red, green and blue components of the colors used in the background
+ * as red, green and blue line strips.
+ *
+ * The Vector2 points for the line strips are calculated only once when the program starts.
+ */
 fun main() = application {
     configure {
         width = 720
@@ -23,10 +30,8 @@ fun main() = application {
             block: ColorRGBa.() -> Double
         ) = List(width) { x ->
             Vector2(
-                x = x.toDouble(),
-                y = height.toDouble()
-                    - block(turboColormap(x / width.toDouble()))
-                    * height.toDouble()
+                x.toDouble(),
+                (1.0 - block(turboColormap(x / width.toDouble()))) * height
             )
         }
         val redPoints = getColormapPoints { r }
@@ -37,11 +42,13 @@ fun main() = application {
                 shadeStyle = backgroundStyle
                 rectangle(bounds)
                 shadeStyle = null
-                strokeWeight = 1.0
+
                 stroke = ColorRGBa.RED
                 lineStrip(redPoints)
+
                 stroke = ColorRGBa.GREEN
                 lineStrip(greenPoints)
+
                 stroke = ColorRGBa.BLUE
                 lineStrip(bluePoints)
             }

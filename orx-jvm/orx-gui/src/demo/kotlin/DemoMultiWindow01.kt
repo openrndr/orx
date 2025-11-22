@@ -6,7 +6,7 @@ import org.openrndr.window
 import kotlin.system.exitProcess
 
 /**
- * Demonstration of multi window GUI in the manual way
+ * Demonstration of a multi window GUI in the manual way
  */
 fun main() {
     // skip this demo on CI

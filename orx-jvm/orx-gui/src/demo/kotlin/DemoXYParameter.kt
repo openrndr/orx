@@ -4,6 +4,13 @@ import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.XYParameter
 import org.openrndr.math.Vector2
 
+/**
+ * Demonstrates the use of the `@XYParameter` annotation applied to a `Vector2` variable.
+ *
+ * This annotation creates an interactive XY control in a GUI that can be used to update
+ * a `Vector2` variable. In this demo it sets the position of a circle.
+ *
+ */
 fun main() = application {
     configure {
         width = 800

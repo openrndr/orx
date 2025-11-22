@@ -6,6 +6,16 @@ import org.openrndr.extra.camera.Orbital
 import org.openrndr.extra.meshgenerators.*
 import org.openrndr.math.Vector3
 
+/**
+ * Demonstrates the creation of a 3D mesh composed of two hemispheres, a cylinder and 12 legs.
+ * Additionally, the body of the shape features 5 ridges on the sides
+ * of the cylinder.
+ *
+ * The code reveals DSL keywords under `buildTriangleMesh`
+ * affecting transformation matrices, for instance `isolated`, `translate` and `rotate`,
+ * and mesh generating keywords like
+ * `hemisphere`, `taperedCylinder` and `cylinder`.
+ */
 fun main() = application {
     configure {
         width = 720

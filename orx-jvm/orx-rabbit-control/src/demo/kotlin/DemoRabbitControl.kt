@@ -6,7 +6,17 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
 
-
+/**
+ * Demonstrates how to use RabbitControl to create a web-based user interface for your program.
+ *
+ * A `settings` object is created using the same syntax used for `orx-gui`, including
+ * annotations for different variable types.
+ *
+ * The program then passes these `settings` to the `RabbitControlServer`. A QR-code is displayed
+ * to open the web user interface. A clickable URL is also displayed in the console.
+ *
+ * Once the UI is visible in a web browser we can use it to control the OPENRNDR program.
+ */
 fun main() = application {
     configure {
         width = 800

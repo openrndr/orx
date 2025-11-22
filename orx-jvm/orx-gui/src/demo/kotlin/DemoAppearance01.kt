@@ -7,7 +7,10 @@ import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
 
 /**
- * A simple demonstration of a GUI for drawing some circles
+ * Demonstrates how to customize the appearance of the GUI by using
+ * `GUIAppearance()`.
+ *
+ * In this demo, we make the GUI wider (400 pixels) and translucent.
  */
 fun main() = application {
     program {

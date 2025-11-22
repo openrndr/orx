@@ -9,6 +9,21 @@ import org.openrndr.extra.camera.Orbital
 import org.openrndr.extra.meshgenerators.boxMesh
 import org.openrndr.math.Vector3
 
+/**
+ * Demonstrates how to create a 3D mesh box by specifying its width, height and depth.
+ *
+ * The `box` is a `VertexBuffer` and contains texture coordinates which can be
+ * used to apply a texture to its faces.
+ *
+ * After creating the box, the program creates a texture with a gradient.
+ * In it, the red component increases along the x-axis and the green component
+ * along the y-axis.
+ *
+ * The scene is rendered with an interactive `Orbital` 3D camera.
+ *
+ * A shade style is used to apply the texture to the box.
+ *
+ */
 fun main() = application {
     configure {
         width = 720

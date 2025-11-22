@@ -4,6 +4,12 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.parameters.BooleanParameter
 
 
+/**
+ * Demonstrates how the QR-code pointing at the Rabbit Control web-based user interface
+ * can be displayed and hidden manually.
+ *
+ * To display the QR-code overlay in this demo, hold down the HOME key in the keyboard.
+ */
 fun main() = application {
     configure {
         width = 800

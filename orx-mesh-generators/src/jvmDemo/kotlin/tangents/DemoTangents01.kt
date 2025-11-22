@@ -10,6 +10,15 @@ import org.openrndr.extra.objloader.loadOBJMeshData
 import org.openrndr.math.Vector3
 import java.io.File
 
+/**
+ * Tangent and bitangent vectors are used in shader programs for tangent space normal mapping / lighting
+ * and certain forms of displacement mapping.
+ *
+ * This demo shows:
+ * - how to create a triangulated `MeshData`.
+ * - how to estimate the tangents of this MeshData.
+ * - How to use the tangent and bitangent attributes in GLSL code.
+ */
 fun main() = application {
     configure {
         width = 720
@@ -29,12 +38,11 @@ fun main() = application {
                 fragmentTransform = """
                     vec3 viewTangent = (u_viewNormalMatrix * u_modelNormalMatrix * vec4(va_tangent, 0.0)).xyz;
                     vec3 viewBitangent = (u_viewNormalMatrix * u_modelNormalMatrix * vec4(va_bitangent, 0.0)).xyz;
-                    float c = cos(100.0*dot(v_worldPosition, va_normal)) * 0.5 + 0.5;
+                    float c = cos(100.0 * dot(v_worldPosition, va_normal)) * 0.5 + 0.5;
                     
-                    //x_fill.rgb = normalize(viewTangent)*0.5+0.5;
-                     x_fill.rgb = vec3(c); 
-                     """.trimIndent()
-
+                    //x_fill.rgb = normalize(viewTangent) * 0.5 + 0.5;
+                    x_fill.rgb = vec3(c); 
+                    """.trimIndent()
             }
 
             drawer.vertexBuffer(objVB, DrawPrimitive.TRIANGLES)
