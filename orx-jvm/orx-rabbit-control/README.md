@@ -42,7 +42,15 @@ More info about the web client:
 ## Demos
 ### DemoRabbitControl
 
+Demonstrates how to use RabbitControl to create a web-based user interface for your program.
 
+A `settings` object is created using the same syntax used for `orx-gui`, including
+annotations for different variable types.
+
+The program then passes these `settings` to the `RabbitControlServer`. A QR-code is displayed
+to open the web user interface. A clickable URL is also displayed in the console.
+
+Once the UI is visible in a web browser we can use it to control the OPENRNDR program.
 
 ![DemoRabbitControlKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-rabbit-control/images/DemoRabbitControlKt.png)
 
@@ -50,7 +58,10 @@ More info about the web client:
 
 ### DemoRabbitControlManualOverlay
 
+Demonstrates how the QR-code pointing at the Rabbit Control web-based user interface
+can be displayed and hidden manually.
 
+To display the QR-code overlay in this demo, hold down the HOME key in the keyboard.
 
 ![DemoRabbitControlManualOverlayKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-rabbit-control/images/DemoRabbitControlManualOverlayKt.png)
 
@@ -58,6 +69,12 @@ More info about the web client:
 
 ### DemoRabbitHole
 
+Starts the RabbitControlServer with a `Rabbithole` using the key 'orxtest'.
+
+`Rabbithole` allows you to access your exposed parameters from Internet
+connected computers that are not in the same network.
+
+To use it with this example use 'orxtest' as the tunnel-name in https://rabbithole.rabbitcontrol.cc
 
 
 ![DemoRabbitHoleKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-rabbit-control/images/DemoRabbitHoleKt.png)

@@ -26,7 +26,16 @@ this addon provides some helper functions to convert them to OPENRNDR types:
 ## Demos
 ### DemoContours01
 
+Demonstrates how to convert a PNG image into `ShapeContour`s using BoofCV.
 
+Two helper methods help convert data types between BoofCV and OPENRNDR.
+
+The `ColorBuffer.toGrayF32()` method converts an OPENRNDR `ColorBuffer` to `GrayF32` format,
+required by BoofCV.
+
+The `.toShapeContours()` converts BoofCV contours to OPENRNDR `ShapeContour` instances.
+
+The resulting contours are animated zooming in and out while their colors change slowly.
 
 ![DemoContours01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-boofcv/images/DemoContours01Kt.png)
 
@@ -34,7 +43,8 @@ this addon provides some helper functions to convert them to OPENRNDR types:
 
 ### DemoResize01
 
-
+Demonstrates how to scale down images using the `resizeBy` BoofCV-based
+method.
 
 ![DemoResize01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-boofcv/images/DemoResize01Kt.png)
 
@@ -42,7 +52,11 @@ this addon provides some helper functions to convert them to OPENRNDR types:
 
 ### DemoResize02
 
+Demonstrates how to scale down images using the `resizeTo` BoofCV-based
+method.
 
+If only the `newWidth` or the `newHeight` arguments are specified,
+the resizing happens maintaining the original aspect ratio.
 
 ![DemoResize02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-boofcv/images/DemoResize02Kt.png)
 
@@ -50,7 +64,16 @@ this addon provides some helper functions to convert them to OPENRNDR types:
 
 ### DemoSimplified01
 
+When converting a `ColorBuffer` to `ShapeContour` instances using
+`BoofCV`, simple shapes can have hundreds of segments and vertices.
 
+This demo shows how to use the `simplify()` method to greatly
+reduce the number of vertices.
+
+Then it uses the simplified vertex lists to create smooth curves
+(using `CatmullRomChain2`) and polygonal curves (using `ShapeContour.fromPoints`).
+
+Study the console to learn about the number of segments before and after simplification.
 
 ![DemoSimplified01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-boofcv/images/DemoSimplified01Kt.png)
 

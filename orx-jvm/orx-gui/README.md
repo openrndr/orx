@@ -178,7 +178,10 @@ import org.openrndr.extra.parameters.DoubleParameter
 ## Demos
 ### DemoAppearance01
 
-A simple demonstration of a GUI for drawing some circles
+Demonstrates how to customize the appearance of the GUI by using
+`GUIAppearance()`.
+
+In this demo, we make the GUI wider (400 pixels) and translucent.
 
 ![DemoAppearance01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoAppearance01Kt.png)
 
@@ -186,7 +189,7 @@ A simple demonstration of a GUI for drawing some circles
 
 ### DemoHide01
 
-A simple demonstration of a GUI for drawing some circles
+Demonstrates how to hide the GUI when the mouse pointer is outside of it.
 
 ![DemoHide01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoHide01Kt.png)
 
@@ -194,15 +197,38 @@ A simple demonstration of a GUI for drawing some circles
 
 ### DemoOptions01
 
-A simple demonstration of a GUI with a drop down menu
+A simple demonstration of a GUI with a drop-down menu.
+
+The entries in the drop-down menu are taken from an `enum class`.
 
 ![DemoOptions01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoOptions01Kt.png)
 
 [source code](src/demo/kotlin/DemoOptions01.kt)
 
+### DemoOptions02
+
+A simple demonstration of a GUI with a drop-down menu.
+
+The entries in the drop-down menu are taken from an `enum class`.
+The `enum class` entries contain both a name (used in the drop-down)
+and a `ColorRGBa` instance (used for rendering).
+
+![DemoOptions02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoOptions02Kt.png)
+
+[source code](src/demo/kotlin/DemoOptions02.kt)
+
 ### DemoPath01
 
+Demonstrates how to include a button for loading images in a GUI, and how to display
+the loaded image.
 
+The program applies the `@PathParameter` annotation to a `String` variable, which gets
+rendered by the GUI as an image-picker button. Note the allowed file `extensions`.
+
+This mechanism only updates the `String` containing the path of an image file.
+
+The `watchingImagePath()` delegate property is used to automatically load an image
+when its `String` argument changes.
 
 ![DemoPath01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoPath01Kt.png)
 
@@ -210,9 +236,11 @@ A simple demonstration of a GUI with a drop down menu
 
 ### DemoPresets01
 
-Shows how to store and retrieve in-memory gui presets.
+Shows how to store and retrieve in-memory GUI presets,
+each containing two integer values and two colors.
+
 Keyboard controls:
-[Left Shift] + [0]..[9] => store current gui values to a preset
+[Left Shift] + [0]..[9] => store current GUI values to a preset
 [0]..[9] => recall a preset
 
 ![DemoPresets01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoPresets01Kt.png)
@@ -221,7 +249,17 @@ Keyboard controls:
 
 ### DemoSideCanvas01
 
-A simple demonstration of a GUI for drawing some circles
+Demonstrates the `GUI.enableSideCanvas` feature.
+
+When set to true, the `GUI` provides a `canvas` property where one can draw.
+The size of this canvas is the window size minus the GUI size.
+
+That's why if we draw a circle at `drawer.width / 2.0` it is centered
+on the `canvas`, not on the window.
+
+This demo sets the window to resizable, so if you resize the window
+you should see tha the circle stays at the center of the canvas.
+
 
 ![DemoSideCanvas01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoSideCanvas01Kt.png)
 
@@ -229,7 +267,15 @@ A simple demonstration of a GUI for drawing some circles
 
 ### DemoSimple01
 
-A simple demonstration of a GUI for drawing some circles
+Demonstrates how to create a simple GUI with 4 inputs:
+- A `ColorParameter` which creates a color picker.
+- A `DoubleParameter` to control the radius of a circle.
+- A `Vector2Parameter` to set the position of that circle.
+- A `DoubleListParameter` which sets the radii of six circles.
+
+The demo also shows how to use the variables controlled by the GUI
+inside the program, so changes to those variables affect
+the rendering in real time.
 
 ![DemoSimple01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoSimple01Kt.png)
 
@@ -237,6 +283,10 @@ A simple demonstration of a GUI for drawing some circles
 
 ### DemoXYParameter
 
+Demonstrates the use of the `@XYParameter` annotation applied to a `Vector2` variable.
+
+This annotation creates an interactive XY control in a GUI that can be used to update
+a `Vector2` variable. In this demo it sets the position of a circle.
 
 
 ![DemoXYParameterKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoXYParameterKt.png)
