@@ -35,7 +35,6 @@ The language also holds some tools to manage the position and orientation of the
 ## Demos
 ### DemoTurtle01
 
-/*
 Drawing a square using the turtle interface.
 
 ![DemoTurtle01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-turtle/images/DemoTurtle01Kt.png)
@@ -44,7 +43,6 @@ Drawing a square using the turtle interface.
 
 ### DemoTurtle02
 
-/*
 A simple random walk made using the turtle interface.
 
 ![DemoTurtle02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-turtle/images/DemoTurtle02Kt.png)
@@ -53,7 +51,6 @@ A simple random walk made using the turtle interface.
 
 ### DemoTurtle03
 
-/*
 Drawing shape contours aligned to the turtle's orientation.
 
 ![DemoTurtle03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-turtle/images/DemoTurtle03Kt.png)

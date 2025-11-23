@@ -391,13 +391,6 @@ The rendering process includes:
 
 ### histogram/DemoHistogram01
 
-package histogram
-
-import org.openrndr.application
-import org.openrndr.draw.loadImage
-import org.openrndr.extra.color.statistics.calculateHistogramRGB
-
-/*
 Demonstrates how to generate a palette with the top 32 colors
 of a loaded image, sorted by luminosity. The colors are displayed
 as rectangles overlayed on top of the image.
@@ -408,14 +401,6 @@ as rectangles overlayed on top of the image.
 
 ### histogram/DemoHistogram02
 
-package histogram
-
-import org.openrndr.application
-import org.openrndr.draw.loadImage
-import org.openrndr.extra.color.statistics.calculateHistogramRGB
-import kotlin.math.pow
-
-/*
 Show the color histogram of an image using non-uniform weighting,
 prioritizing bright colors.
 
@@ -425,13 +410,6 @@ prioritizing bright colors.
 
 ### histogram/DemoHistogram03
 
-package histogram
-
-import org.openrndr.application
-import org.openrndr.draw.loadImage
-import org.openrndr.extra.color.statistics.calculateHistogramRGB
-
-/*
 Create a simple grid-like composition based on colors sampled from image.
 The cells are 32 by 32 pixels in size and are filled with a random sample
 taken from the color histogram of the image.
