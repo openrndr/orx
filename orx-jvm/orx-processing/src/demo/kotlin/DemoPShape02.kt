@@ -4,6 +4,16 @@ import org.openrndr.extra.processing.PShape
 import org.openrndr.extra.processing.toShape
 import org.openrndr.extra.shapes.primitives.regularStarRounded
 
+/**
+ * Demonstrates how to convert a `ShapeContour` into a Processing
+ * `PShape`, then converts the `PShape` to a `Shape`.
+ *
+ * The program renders both the original `ShapeContour` and
+ * the resulting `Shape` after being a `PShape`.
+ *
+ * Both elements are rendered with translucency and a slight offset
+ * so they can be visually compared.
+ */
 fun main() = application {
     program {
         val c = regularStarRounded(
@@ -15,10 +25,11 @@ fun main() = application {
             center = drawer.bounds.center
         )
         val ps = PShape(c)
-        val rc = ps.toShape()
+        val rs = ps.toShape()
         extend {
             drawer.fill = ColorRGBa.PINK.opacify(0.5)
-            drawer.shape(rc)
+            drawer.shape(rs)
+
             drawer.translate(15.0, 15.0)
             drawer.contour(c)
         }

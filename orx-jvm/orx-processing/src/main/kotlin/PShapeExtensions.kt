@@ -92,8 +92,8 @@ fun PShape(shape: Shape): PShape {
     } else {
         val ps = PShape(PShape.PATH)
         ps.beginShape()
-        for (contour in shape.contours) {
-            ps.beginContour()
+        shape.contours.forEachIndexed { i, contour ->
+            if(i > 0) ps.beginContour()
             ps.vertex(contour.segments[0].start)
             for (segment in contour.segments) {
                 when (segment.type) {
@@ -102,7 +102,7 @@ fun PShape(shape: Shape): PShape {
                     SegmentType.CUBIC -> ps.bezierVertex(segment.control[0], segment.control[1], segment.end)
                 }
             }
-            ps.endContour()
+            if(i > 0) ps.endContour()
         }
         ps.endShape(PShape.CLOSE)
         return ps
