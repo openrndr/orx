@@ -15,6 +15,10 @@ APIs of both Processing and OPENRNDR, simplifying interoperability and reducing 
 ## Demos
 ### DemoPShape01
 
+Demonstrates how to construct a Processing `PShape` out of an OPENRNDR
+`Shape` instance, and how to convert a `PShape` back into a `Shape.
+
+The program renders a rectangular `Shape` after converting to PShape and back.
 
 
 ![DemoPShape01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-processing/images/DemoPShape01Kt.png)
@@ -23,8 +27,29 @@ APIs of both Processing and OPENRNDR, simplifying interoperability and reducing 
 
 ### DemoPShape02
 
+Demonstrates how to convert a `ShapeContour` into a Processing
+`PShape`, then converts the `PShape` to a `Shape`.
 
+The program renders both the original `ShapeContour` and
+the resulting `Shape` after being a `PShape`.
+
+Both elements are rendered with translucency and a slight offset
+so they can be visually compared.
 
 ![DemoPShape02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-processing/images/DemoPShape02Kt.png)
 
 [source code](src/demo/kotlin/DemoPShape02.kt)
+
+### DemoPShape03
+
+Demonstrates how to convert a `Shape` with multiple `ShapeContour`s
+(an outer contour and two holes) into a Processing `PShape`,
+then converts it back to a `Shape`.
+
+The program renders both the original `Shape` and
+the resulting `Shape` with translucency and a slight offset
+so they can be visually compared.
+
+![DemoPShape03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-processing/images/DemoPShape03Kt.png)
+
+[source code](src/demo/kotlin/DemoPShape03.kt)
