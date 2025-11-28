@@ -9,6 +9,15 @@ import org.openrndr.extra.shapes.primitives.irregularGrid
 import org.openrndr.extra.shapes.primitives.row
 import kotlin.random.Random
 
+/**
+ * Demonstrates how to use `Rectangle.irregularGrid()` to create a grid with varying column widths
+ * and row heights. The widths and heights are specified as a list of `Double` each.
+ *
+ * The program also demonstrates how to query a `row()` and a `column()` from a `RectangleGrid` instance,
+ * both of which return a `List<Rectangle>`. Both `Rectangle` lists are rendered with translucent
+ * colors, which makes the intersection of the column and the row slightly brighter.
+ *
+ */
 fun main() = application {
     configure {
         width = 720
