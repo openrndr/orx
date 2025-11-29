@@ -1,12 +1,21 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.rectangleBatch
-import org.openrndr.extra.noise.Random
 import org.openrndr.extra.noise.gaussian
 import org.openrndr.extra.quadtree.Quadtree
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
+import kotlin.random.Random
 
+/**
+ * This demo shows how to query `QuadTree` points within a given radius
+ * from a given point, using the `QuadTree.nearest()` method.
+ *
+ * It also demonstrates how to iterate over the data returned by
+ * `.nearest()`, including the `nearest` point, the `neighbours` points,
+ * and the quads with borders within or touching the requested radius.
+ *
+ */
 fun main() = application {
     configure {
         width = 800
@@ -15,9 +24,10 @@ fun main() = application {
     }
     program {
         val box = Rectangle.fromCenter(Vector2(400.0), 750.0)
+        val rnd = Random(1)
 
         val points = (0 until 100).map {
-            Vector2.gaussian(box.center, Vector2(95.0), Random.rnd)
+            Vector2.gaussian(box.center, Vector2(95.0), rnd)
         }
 
         val quadTree = Quadtree<Vector2>(box) { it }

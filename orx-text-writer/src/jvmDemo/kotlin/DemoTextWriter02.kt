@@ -5,6 +5,17 @@ import org.openrndr.extra.textwriter.writer
 import kotlin.math.PI
 import kotlin.math.cos
 
+/**
+ * Demonstrates the `writer`s `style.horizontalAlign` property,
+ * which enables left (0.0), center (0.5), right (1.0) text alignment
+ * and any values in between.
+ *
+ * The program creates a 3x3 grid of texts and interpolates their alignments
+ * between left and right using the cosine of the current time in seconds.
+ *
+ * A time offset is included in each cell to distribute them over the
+ * cosine wave, so the text lines move at different speeds and directions.
+ */
 fun main() {
     application {
         configure {

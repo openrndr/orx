@@ -2,6 +2,16 @@ import org.openrndr.application
 import org.openrndr.extra.delegatemagic.dynamics.springForcing
 import kotlin.random.Random
 
+/**
+ * Demonstrates the use of `springForcing` to animate the `x`, `y` and `radius`
+ * properties of a circle simulating spring physics.
+ *
+ * The target values of all three properties change randomly with a 1% chance.
+ * Note how the spring stiffness is higher for the `x` value.
+ *
+ * Since `springForcing` is a method of `Clock`, there is no need to call any
+ * update methods for the values to be interpolated over time.
+ */
 fun main() = application {
     program {
         val state = object {

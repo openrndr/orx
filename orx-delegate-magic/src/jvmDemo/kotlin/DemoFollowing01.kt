@@ -27,6 +27,9 @@ import kotlin.random.Random
  * modified after its creation and even be linked to a UI
  * to modify the behavior of the delegate function in real time.
  * The `Property` argument overrides the other.
+ *
+ * Notice how the discontinuities present while using `smoothing`
+ * are not there when using `following`.
  */
 fun main() = application {
     program {
