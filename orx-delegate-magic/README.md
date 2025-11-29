@@ -41,7 +41,25 @@ val radiusHistory by tracking(state::radius)
 ## Demos
 ### DemoDifferencing01
 
+Demonstrates the use of the `differencing`, `tracking` and `aggregating` delegates.
 
+All three are used to track changes to a variable. Try changing the `radius` parameter
+in the GUI.
+
+The `difference` between the previous value and the current one will be displayed as a red line
+that starts in the center of the screen and grows right when the value increases, or left
+when the value decreases. As soon as `radius` stops changing, the line becomes invisible
+due to having a length of zero.
+
+`tracking` is used to keep track of recent values. The number of samples kept is passed
+in its constructor. `tracking` can't be used directly, but it can be passed to an `aggregating`
+delegate. In this case it is used to find the maximum value among the last 50 samples
+and rendered as a blue line.
+
+Note that new values keep being added to `differenceHistory` and old values discarded.
+Therefore, a large increase or decrease in `radius` followed lack of change will be visualized
+as a blue line for a short while, until the large value gets replaced by newer values.
+How long the large value is visible depends on the `length` parameter passed to `tracking`.
 
 ![DemoDifferencing01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-delegate-magic/images/DemoDifferencing01Kt.png)
 
@@ -71,13 +89,31 @@ modified after its creation and even be linked to a UI
 to modify the behavior of the delegate function in real time.
 The `Property` argument overrides the other.
 
+Notice how the discontinuities present while using `smoothing`
+are not there when using `following`.
+
 ![DemoFollowing01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-delegate-magic/images/DemoFollowing01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoFollowing01.kt)
 
 ### DemoSmoothing01
 
+Demonstrates the use of the `smoothing` delegate, which interpolates
+properties over time towards a target value.
 
+In this program, the state of the object is kept in an `object` with
+three properties: `x`, `y` and `radius`.
+
+A second set of variables is used to track and smooth changes to
+the `state` object: `sx`, `sy` and `sradius`. The `smoothing` factor
+is not provided in the constructor, assuming its default value.
+
+The properties in the `state` object are randomly (and independently)
+updated with a 1% probability.
+
+By the nature of the used interpolation, changed properties interpolate
+first faster and then at a decreasing rate (decelerating) until
+reaching the target value.
 
 ![DemoSmoothing01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-delegate-magic/images/DemoSmoothing01Kt.png)
 
@@ -85,7 +121,14 @@ The `Property` argument overrides the other.
 
 ### DemoSpring01
 
+Demonstrates the use of `springForcing` to animate the `x`, `y` and `radius`
+properties of a circle simulating spring physics.
 
+The target values of all three properties change randomly with a 1% chance.
+Note how the spring stiffness is higher for the `x` value.
+
+Since `springForcing` is a method of `Clock`, there is no need to call any
+update methods for the values to be interpolated over time.
 
 ![DemoSpring01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-delegate-magic/images/DemoSpring01Kt.png)
 

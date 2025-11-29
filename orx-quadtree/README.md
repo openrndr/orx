@@ -24,7 +24,16 @@ Ricardo Matias / [@ricardomatias](https://github.com/ricardomatias)
 ## Demos
 ### DemoQuadTree01
 
+Demonstrates how to create a `QuadTree` data structure,
+how to add 2D points to it, and how to visualize all the quads
+created for the current set of points.
 
+The demo creates 1000 points using a Gaussian distribution, which
+creates a higher density of points in the center of the window.
+
+The `QuadTree` algorithm tries to keep the number of points
+per quad balanced, which in this case leads to larger quads
+near the edges of the window, and small quads at the center.
 
 ![DemoQuadTree01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-quadtree/images/DemoQuadTree01Kt.png)
 
@@ -32,6 +41,12 @@ Ricardo Matias / [@ricardomatias](https://github.com/ricardomatias)
 
 ### DemoQuadTree02
 
+This demo shows how to query `QuadTree` points within a given radius
+from a given point, using the `QuadTree.nearest()` method.
+
+It also demonstrates how to iterate over the data returned by
+`.nearest()`, including the `nearest` point, the `neighbours` points,
+and the quads with borders within or touching the requested radius.
 
 
 ![DemoQuadTree02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-quadtree/images/DemoQuadTree02Kt.png)

@@ -48,7 +48,15 @@ Key Components:
 
 ### DemoTextWriter02
 
+Demonstrates the `writer`s `style.horizontalAlign` property,
+which enables left (0.0), center (0.5), right (1.0) text alignment
+and any values in between.
 
+The program creates a 3x3 grid of texts and interpolates their alignments
+between left and right using the cosine of the current time in seconds.
+
+A time offset is included in each cell to distribute them over the
+cosine wave, so the text lines move at different speeds and directions.
 
 ![DemoTextWriter02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/DemoTextWriter02Kt.png)
 
@@ -56,7 +64,10 @@ Key Components:
 
 ### DemoTextWriter03
 
+This demo shows how to align texts to the left, center, right, top, center and bottom of a container box.
 
+It creates a grid of 3x3 cells to demonstrate all alignment combinations by setting the
+`style.verticalAlign` and the `style.horizontalAlign` to 0.0, 0.5 and 1.0.
 
 ![DemoTextWriter03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/DemoTextWriter03Kt.png)
 
