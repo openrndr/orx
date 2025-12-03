@@ -1,5 +1,6 @@
 plugins {
     id("org.openrndr.extra.convention.kotlin-jvm")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 dependencies {
@@ -14,5 +15,6 @@ dependencies {
     implementation(openrndr.dialogs)
     implementation(libs.gson)
     implementation(sharedLibs.kotlin.reflect)
+    implementation(sharedLibs.kotlin.serialization.core)
     demoRuntimeOnly(sharedLibs.slf4j.simple)
 }

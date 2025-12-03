@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.serialization.Serializable
 import org.openrndr.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.dialogs.*
@@ -810,6 +811,7 @@ open class GUI(
         }
     }
 
+    @Serializable
     class ParameterValue(
         var doubleValue: Double? = null,
         var intValue: Int? = null,
