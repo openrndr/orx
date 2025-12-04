@@ -53,6 +53,7 @@ fun defaultStyles(
             marginRight = 5.px
             marginTop = 5.px
             marginBottom = 5.px
+            fontSize = controlFontSize.px
 
             and(has state "hover") {
                 background = Color.RGBa(controlHoverBackground)
@@ -70,7 +71,7 @@ fun defaultStyles(
         },
 
         styleSheet(has type "body") {
-            fontSize = 18.px
+            fontSize = (controlFontSize * 18.0 / 14.0).px
             fontFamily = "default"
         },
 
@@ -111,6 +112,7 @@ fun defaultStyles(
             marginLeft = 5.px
             marginRight = 5.px
             color = controlTextColor
+            fontSize = controlFontSize.px
             and(has state "active") {
                 color = controlActiveColor
             }
@@ -159,28 +161,28 @@ fun defaultStyles(
         },
 
         styleSheet(has type "h1") {
-            fontSize = 24.px
+            fontSize = (controlFontSize * 24.0 / 14.0).px
             width = 100.percent
             height = LinearDimension.Auto
             display = Display.BLOCK
         },
 
         styleSheet(has type "h2") {
-            fontSize = 20.px
+            fontSize = (controlFontSize * 20.0 / 14.0).px
             width = 100.percent
             height = LinearDimension.Auto
             display = Display.BLOCK
         },
 
         styleSheet(has type "h3") {
-            fontSize = 16.px
+            fontSize = (controlFontSize * 16.0 / 14.0).px
             width = 100.percent
             height = LinearDimension.Auto
             display = Display.BLOCK
         },
 
         styleSheet(has type "p") {
-            fontSize = 16.px
+            fontSize = (controlFontSize * 16.0 / 14.0).px
             width = 100.percent
             height = LinearDimension.Auto
             display = Display.BLOCK
