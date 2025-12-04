@@ -2,12 +2,14 @@ package org.openrndr.panel.style
 
 import org.openrndr.color.ColorRGBa
 
+private const val defaultFontSize = 14.0
+
 fun defaultStyles(
         controlBackground: ColorRGBa = ColorRGBa(0.5, 0.5, 0.5),
         controlHoverBackground: ColorRGBa = controlBackground.shade(1.5),
         controlTextColor: Color = Color.RGBa(ColorRGBa.WHITE.shade(0.8)),
         controlActiveColor : Color = Color.RGBa(ColorRGBa.fromHex(0xf88379 )),
-        controlFontSize: Double = 14.0
+        controlFontSize: Double = defaultFontSize
 ) = listOf(
         styleSheet(has type "item") {
             display = Display.NONE
@@ -71,7 +73,7 @@ fun defaultStyles(
         },
 
         styleSheet(has type "body") {
-            fontSize = (controlFontSize * 18.0 / 14.0).px
+            fontSize = (controlFontSize * 18.0 / defaultFontSize).px
             fontFamily = "default"
         },
 
@@ -161,28 +163,28 @@ fun defaultStyles(
         },
 
         styleSheet(has type "h1") {
-            fontSize = (controlFontSize * 24.0 / 14.0).px
+            fontSize = (controlFontSize * 24.0 / defaultFontSize).px
             width = 100.percent
             height = LinearDimension.Auto
             display = Display.BLOCK
         },
 
         styleSheet(has type "h2") {
-            fontSize = (controlFontSize * 20.0 / 14.0).px
+            fontSize = (controlFontSize * 20.0 / defaultFontSize).px
             width = 100.percent
             height = LinearDimension.Auto
             display = Display.BLOCK
         },
 
         styleSheet(has type "h3") {
-            fontSize = (controlFontSize * 16.0 / 14.0).px
+            fontSize = (controlFontSize * 16.0 / defaultFontSize).px
             width = 100.percent
             height = LinearDimension.Auto
             display = Display.BLOCK
         },
 
         styleSheet(has type "p") {
-            fontSize = (controlFontSize * 16.0 / 14.0).px
+            fontSize = (controlFontSize * 16.0 / defaultFontSize).px
             width = 100.percent
             height = LinearDimension.Auto
             display = Display.BLOCK
