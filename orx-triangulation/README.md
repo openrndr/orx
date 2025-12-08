@@ -66,18 +66,19 @@ Edwin Jakobs / [@edwinRNDR](https://github.com/edwinRNDR)
 ## Demos
 ### DemoDelaunay01
 
-This method sets up a graphical application using the OPENRNDR framework
-to visually demonstrate Delaunay triangulation on a set of points scattered
-along a circle with Poisson disk sampling.
+This demo shows how to use Delaunay triangulation to convert a Shape into a list of triangular ShapeContours.
 
-The application features the following:
-- A central circle with a defined radius.
+The program starts by creating a Circle, then creates two sets of points:
 - Points generated within the circle using a scatter algorithm that
 maintains specific spacing and avoids clustering.
-- Delaunay triangulation computed from the combined point set.
-- Rendering of triangles that are part of the Delaunay triangulation.
-- Visual styling with dynamic color shading for better clarity of layers
-and triangle order.
+- Points sampled along the contour of the circle.
+
+The `delaunayTriangulation()` method is called on the combined point set.
+Next, it queries the resulting triangles and converts them into ShapeContour
+instances.
+
+Finally, it renders the triangles assigning unique fill and stroke colors
+based on the triangle's index.
 
 This method demonstrates concepts of computational geometry and procedural
 rendering.
@@ -88,7 +89,12 @@ rendering.
 
 ### DemoDelaunay02
 
+Demonstrates the `DelaunayTriangulation.halfedges()` method,
+which returns the boundaries between the triangles in the set.
 
+Commented out one can also discover the `hull()` method,
+which returns a ShapeContour of a convex hull containing
+all the points in the set.
 
 ![DemoDelaunay02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoDelaunay02Kt.png)
 
@@ -112,7 +118,22 @@ The program performs the following:
 
 ### DemoVoronoi02
 
+A demo rendering four layers including a Voronoi diagram and a Delaunay triangulation,
+producing a complex pattern.
 
+A 8x8 grid of rectangles is produced, leaving a 50 pixel margin around the bounds of the window.
+Those rectangles are mapped to circles, and each circle contour sampled in 6 locations.
+This is the set of points used for the Delaunay triangulation.
+
+Next, the four layers are rendered:
+
+1. A white dot for each point in the set.
+2. Pink contours for the Delaunay half edges.
+3. Yellow contours with a Voronoi diagram discarding the ones touching the edges
+4. Gray contours with the Delaunay triangles.
+
+The structure is recalculated on every animation frame, making it easy
+to animate some of the parameters.
 
 ![DemoVoronoi02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoVoronoi02Kt.png)
 
@@ -120,7 +141,24 @@ The program performs the following:
 
 ### DemoVoronoi03
 
+A variation of DemoVoronoi02.kt, also rendering four layers including
+a Voronoi diagram and a Delaunay triangulation,
+producing a complex pattern.
 
+A 3x6 grid of rectangles is produced, leaving a 100 pixel margin around the bounds of the window.
+Those rectangles are mapped to circles, and each circle contour sampled in 16 locations.
+This is the set of points used for the Delaunay triangulation.
+
+Next, four layers are rendered:
+
+1. A white dot for each point in the set.
+2. Pink contours for the Delaunay half edges.
+3. A Voronoi diagram with yellow contours with translucent fill.
+4. Gray contours with the Delaunay triangles.
+
+The structure is recalculated on every animation frame, making it easy
+to animate some of the parameters. Try replacing the 0.0 rotation
+of the circles by other values or even `seconds` and observe what happens.
 
 ![DemoVoronoi03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoVoronoi03Kt.png)
 

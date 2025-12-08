@@ -45,6 +45,10 @@ extend(TemporalBlur()) {
 ## Demos
 ### DemoBasic01
 
+A minimal demonstration of `TemporalBlur`.
+
+Each animation frame will be rendered 10 times
+sampling and mixing 0.9 seconds of animation.
 
 
 ![DemoBasic01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-temporal-blur/images/DemoBasic01Kt.png)
@@ -53,7 +57,16 @@ extend(TemporalBlur()) {
 
 ### DemoColorShift01
 
+A more advance demonstration of `TemporalBlur`,
+showing how a function can be used to apply a varying
+`colorMatrix` transformation across the sampling
+duration.
 
+This example makes the samples fade
+from white to blue in each frame.
+
+The `gain` parameter is used to increase the brightness
+of the resulting pixels.
 
 ![DemoColorShift01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-temporal-blur/images/DemoColorShift01Kt.png)
 

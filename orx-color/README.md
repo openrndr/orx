@@ -383,7 +383,15 @@ The rendering process includes:
 
 ### DemoXSLUV01
 
+Visualize the XSLUV color space by drawing a recursively subdivided set of arcs.
 
+The provided `Arc` class provides a `contour` getter, which creates a "thick" arc with
+its thickness defined by the `height` argument. This is created by two arcs and two
+connecting lines.
+
+The mouse x coordinate controls the saturation, while the y coordinate controls the luminosity.
+The two if-statements check whether the program is taking a screenshot (this happens when
+it runs on GitHub actions) to set fixed saturation and luminosity values.
 
 ![DemoXSLUV01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoXSLUV01Kt.png)
 
