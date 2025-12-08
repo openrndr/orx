@@ -24,7 +24,6 @@ class SDFStrokeFill : Filter(filterShaderFromCode(jf_sdf_stroke_fill, "sdf-strok
     @DoubleParameter("fill feather", 0.0, 20.0, order = 0)
     var fillFeather: Double by parameters
 
-
     @ColorParameter("fill color", order = 2)
     var fillColor: ColorRGBa by parameters
     init {

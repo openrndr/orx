@@ -3,6 +3,14 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.noise.scatter
 import org.openrndr.extra.triangulation.delaunayTriangulation
 
+/**
+ * Demonstrates the `DelaunayTriangulation.halfedges()` method,
+ * which returns the boundaries between the triangles in the set.
+ *
+ * Commented out one can also discover the `hull()` method,
+ * which returns a ShapeContour of a convex hull containing
+ * all the points in the set.
+ */
 fun main() = application {
     configure {
         width = 720
@@ -14,6 +22,7 @@ fun main() = application {
 
         val delaunay = points.delaunayTriangulation()
         val halfedges = delaunay.halfedges()
+
         //val hull = delaunay.hull()
 
         extend {

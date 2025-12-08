@@ -15,9 +15,21 @@ import org.openrndr.poissonfill.PoissonFill
 import org.openrndr.shape.Rectangle
 import kotlin.math.sin
 
-
+/**
+ * Demonstrates how the `PoisonFill()` effect fills the transparent pixels of a
+ * `ColorBuffer` using the surrounding opaque pixels.
+ *
+ * The program creates a collection of `ColoredMovingPoint`s, then updates and
+ * renders them into a `RenderTarget` on every animation frame.
+ *
+ * If the mouse pointer is on the right half of the window, the render target
+ * is displayed as-is. Otherwise, the `PoisonFill` effect is applied, the
+ * result stored into the `wet` `ColorBuffer`, then displayed.
+ *
+ * A sharp white rectangle is drawn on top just for contrast against the blurry background. *
+ */
 fun main() {
-    data class Thing(val color: ColorRGBa, var pos: Polar, val speed: Polar)
+    data class ColoredMovingPoint(val color: ColorRGBa, var pos: Polar, val speed: Polar)
     application {
         program {
             val dry = renderTarget(width, height) {
@@ -29,16 +41,21 @@ fun main() {
 
             var borderOpacity = 0.0
 
-            // Create a list of things with
+            // Create a list of points with
             // color, polar position and polar speed
-            val things = List(10) {
-                Thing(
-                        ColorHSVa(it * 182.0,
-                                Double.uniform(0.3, 0.6),
-                                Double.uniform(0.1, 0.9)).toRGBa(),
-                        Polar(Double.uniform(0.0, 360.0),
-                                100.0 + it * 10.0),
-                        Polar(Double.uniform(-1.0, 1.0), 0.0))
+            val points = List(10) {
+                ColoredMovingPoint(
+                    ColorHSVa(
+                        it * 182.0,
+                        Double.uniform(0.3, 0.6),
+                        Double.uniform(0.1, 0.9)
+                    ).toRGBa(),
+                    Polar(
+                        Double.uniform(0.0, 360.0),
+                        100.0 + it * 10.0
+                    ),
+                    Polar(Double.uniform(-1.0, 1.0), 0.0)
+                )
             }
             val mouseTracker = MouseTracker(mouse)
 
@@ -48,15 +65,13 @@ fun main() {
                     clear(ColorRGBa.TRANSPARENT)
 
                     // draw color circles
-                    things.forEach { thing ->
-                        fill = thing.color.shade(0.9 +
-                                0.1 * sin(thing.pos.theta * 0.3))
-                        circle(thing.pos.cartesian + bounds.center, 5.0)
-                        // A. Use after fix in Polar.kt
-                        //thing.pos += thing.speed
-                        // B. temporary solution
-                        thing.pos = Polar(thing.pos.theta +
-                                thing.speed.theta, thing.pos.radius)
+                    points.forEach { point ->
+                        fill = point.color.shade(
+                            0.9 +
+                                    0.1 * sin(point.pos.theta * 0.3)
+                        )
+                        circle(point.pos.cartesian + bounds.center, 5.0)
+                        point.pos += point.speed
                     }
 
                     // draw dark gray window border.
@@ -69,15 +84,23 @@ fun main() {
                     rectangle(bounds)
                 }
 
-                fx.apply(dry.colorBuffer(0), wet)
-                drawer.image(wet)
+                if (mouse.position.x > width * 0.5)
+                    drawer.image(dry.colorBuffer(0))
+                else {
+                    fx.apply(dry.colorBuffer(0), wet)
+                    drawer.image(wet)
+                }
 
                 // draw white rectangle
                 drawer.stroke = ColorRGBa.WHITE.opacify(0.9)
                 drawer.fill = null
                 drawer.strokeWeight = 6.0
-                drawer.rectangle(Rectangle.fromCenter(drawer.bounds.center,
-                        300.0, 300.0))
+                drawer.rectangle(
+                    Rectangle.fromCenter(
+                        drawer.bounds.center,
+                        300.0, 300.0
+                    )
+                )
             }
         }
     }

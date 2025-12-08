@@ -11,6 +11,22 @@ import org.openrndr.extra.jumpfill.ops.SDFSmoothDifference
 import org.openrndr.extra.svg.loadSVG
 import org.openrndr.shape.Circle
 
+/**
+ * Demonstrates using tow `ShapeSDF` filters. One contairs a vector shape loaded
+ * from disk, the other a circular shape.
+ *
+ * A `Perturb` effect is used to generate a noise UV map, which is then fed into
+ * the `ShapeSDF` filters.
+ *
+ * The two resulting `ColorBuffer`s are combined using a `SDFSmoothDifference` filter,
+ * which erases the distorted circular shape from the loaded shape.
+ *
+ * The `SDFStrokeFill` is used to render the result.
+ *
+ * A GUI is available to tweak the parameters of the `Perturb` effect.
+ * Lowering its `gain` to zero disables the effect, revealing the circle and the
+ * smoothness (round corners) of the difference effect.
+ */
 fun main() = application {
     configure {
         width = 720

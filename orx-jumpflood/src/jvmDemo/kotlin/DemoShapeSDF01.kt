@@ -6,6 +6,15 @@ import org.openrndr.draw.colorBuffer
 import org.openrndr.extra.jumpfill.ShapeSDF
 import org.openrndr.extra.svg.loadSVG
 
+/**
+ * Demonstrates the use of the `ShapeSDF()` effect, which takes vector shapes
+ * (either `Shape` or `ShapeContour` instances) and produces a `ColorBuffer`
+ * texture containing a signed distance field pointing at the closest vector edge
+ * encoded in its RGB channels.
+ *
+ * Hold down any mouse button to observe the original vector shape in black and white,
+ * without the effect applied.
+ */
 fun main() =  application {
     configure {
         width = 720

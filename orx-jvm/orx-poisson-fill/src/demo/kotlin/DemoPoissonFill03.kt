@@ -1,3 +1,4 @@
+import org.openrndr.ExtensionStage
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.fx.Post
@@ -5,13 +6,19 @@ import org.openrndr.math.Polar
 import org.openrndr.poissonfill.PoissonFill
 
 /**
- * Demonstrates how to apply a `PoissonFill` effect to the whole window by using the `Post` extension.
- * This simplifies the program by not having to manually create and update a `RenderTarget`.
- *
- * Clearing the window to transparent is expected when using `PoisonFill`.
+ * Demonstrates how to draw graphics not affected by a `Post` extension
+ * by including them in an `extend(stage = ExtensionStage.AFTER_DRAW) { ... }` block
+ * **before** the `Post` effect.
  */
 fun main() = application {
     program {
+        extend(stage = ExtensionStage.AFTER_DRAW) {
+            drawer.stroke = ColorRGBa.WHITE.opacify(0.9)
+            drawer.fill = null
+            drawer.strokeWeight = 6.0
+            drawer.circle(drawer.bounds.center, 150.0)
+        }
+
         extend(Post()) {
             val pf = PoissonFill()
             post { input, output ->

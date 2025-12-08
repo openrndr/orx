@@ -2,6 +2,13 @@ import org.openrndr.application
 import org.openrndr.extra.temporalblur.TemporalBlur
 import org.openrndr.math.Polar
 
+/**
+ * A minimal demonstration of `TemporalBlur`.
+ *
+ * Each animation frame will be rendered 10 times
+ * sampling and mixing 0.9 seconds of animation.
+ *
+ */
 fun main() = application {
     program {
         extend(TemporalBlur()) {

@@ -14,6 +14,11 @@ import org.openrndr.shape.Circle
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * Variation of DemoShapeSDF04, in which `Perturb` is applied twice with different
+ * parameters for a more complex UV map, and with four effects added to the GUI
+ * for further customization and exploration.
+ */
 fun main() = application {
     configure {
         width = 720
@@ -44,8 +49,8 @@ fun main() = application {
         sdf0.useUV = true
         gui.add(sdf0)
         gui.add(perturb)
-        gui.add(strokeFill)
         gui.add(difference)
+        gui.add(strokeFill)
 
         extend(gui)
         extend {

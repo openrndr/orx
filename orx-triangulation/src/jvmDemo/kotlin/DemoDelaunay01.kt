@@ -6,18 +6,19 @@ import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
 
 /**
- * This method sets up a graphical application using the OPENRNDR framework
- * to visually demonstrate Delaunay triangulation on a set of points scattered
- * along a circle with Poisson disk sampling.
+ * This demo shows how to use Delaunay triangulation to convert a Shape into a list of triangular ShapeContours.
  *
- * The application features the following:
- * - A central circle with a defined radius.
+ * The program starts by creating a Circle, then creates two sets of points:
  * - Points generated within the circle using a scatter algorithm that
  *   maintains specific spacing and avoids clustering.
- * - Delaunay triangulation computed from the combined point set.
- * - Rendering of triangles that are part of the Delaunay triangulation.
- * - Visual styling with dynamic color shading for better clarity of layers
- *   and triangle order.
+ * - Points sampled along the contour of the circle.
+ *
+ * The `delaunayTriangulation()` method is called on the combined point set.
+ * Next, it queries the resulting triangles and converts them into ShapeContour
+ * instances.
+ *
+ * Finally, it renders the triangles assigning unique fill and stroke colors
+ * based on the triangle's index.
  *
  * This method demonstrates concepts of computational geometry and procedural
  * rendering.
@@ -30,9 +31,11 @@ fun main() = application {
     }
     program {
         val circle = Circle(Vector2(400.0), 250.0)
-        val points = circle.shape.scatter(30.0)
 
-        val delaunay = (points + circle.contour.equidistantPositions(40)).delaunayTriangulation()
+        val innerPoints = circle.shape.scatter(30.0)
+        val edgePoints = circle.contour.equidistantPositions(40)
+
+        val delaunay = (innerPoints + edgePoints).delaunayTriangulation()
         val triangles = delaunay.triangles().map { it.contour }
 
         extend {

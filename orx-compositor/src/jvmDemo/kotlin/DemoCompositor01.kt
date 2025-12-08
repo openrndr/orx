@@ -36,9 +36,11 @@ fun main() = application {
         }
 
         val items = List(50) {
-            val pos = Vector3(Random.nextDouble() * width,
-                    Random.nextDouble(0.3, 0.7) * height,
-                    Random.nextDouble())
+            val pos = Vector3(
+                Random.nextDouble() * width,
+                Random.nextDouble(0.3, 0.7) * height,
+                Random.nextDouble()
+            )
             Item(pos, ColorRGBa.PINK.shade(Random.nextDouble(0.2, 0.9)))
         }.sortedBy { it.pos.z }
 

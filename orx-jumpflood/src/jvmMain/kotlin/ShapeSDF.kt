@@ -3,6 +3,7 @@ package org.openrndr.extra.jumpfill
 import org.openrndr.draw.*
 import org.openrndr.extra.jumpflood.jf_shape_sdf
 import org.openrndr.extra.parameters.BooleanParameter
+import org.openrndr.extra.parameters.Description
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector4
 import org.openrndr.shape.Rectangle
@@ -10,6 +11,7 @@ import org.openrndr.shape.Shape
 import org.openrndr.shape.ShapeContour
 
 
+@Description("ShapeSDF")
 class ShapeSDF : Filter(filterShaderFromCode(jf_shape_sdf, "shape-sdf")) {
     private val fromBuffer = bufferTexture(1024, format = ColorFormat.RGBa, type = ColorType.FLOAT32)
     private val toBuffer = bufferTexture(1024, format = ColorFormat.RGBa, type = ColorType.FLOAT32)

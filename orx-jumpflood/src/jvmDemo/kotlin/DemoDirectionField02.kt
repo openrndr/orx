@@ -12,7 +12,17 @@ import org.openrndr.math.Vector3
 import org.openrndr.math.clamp
 
 /**
- * Create directional distance field and demonstrate signed distance
+ * Demonstrates how use the `DirectionalField` effect to create
+ * a `ColorBuffer` in which the RGB components encode direction and distance to the closest
+ * edge of every pixel in an input `ColorBuffer`.
+ *
+ * The program draws scattered white circles on a `ColorBuffer`, then applies the `DistanceField()`
+ * effect and renders the static result on every animation frame.
+ *
+ * Additionally, it uses the shadow (CPU version of the texture) to query the distance field texture
+ * at current mouse position. The resulting blue color component is used as the radius of a circle
+ * centered at the mouse position. The red and green components are used to draw a line to the
+ * black/white edge closest to the mouse pointer.
  */
 fun main() = application {
     configure {
@@ -26,12 +36,12 @@ fun main() = application {
             drawer.circles(points, 50.0)
         }
 
-        val filter = DirectionalField()
+        val directionalField = DirectionalField()
         val ddf = input.createEquivalent(type = ColorType.FLOAT32)
 
-        filter.signedMagnitude = true
-        filter.unitDirection = true
-        filter.apply(input, ddf)
+        directionalField.signedMagnitude = true
+        directionalField.unitDirection = true
+        directionalField.apply(input, ddf)
 
         ddf.shadow.download()
         extend {

@@ -12,7 +12,8 @@ import org.openrndr.shape.Rectangle
  * Shows how to use the [DirectionalField] filter.
  * Draws moving white shapes on black background,
  * then applies the DirectionalField filter which returns a [ColorBuffer] in which
- * the red and green components encode the direction to the closest black/white edge.
+ * the red and green components encode the direction to the closest black/white edge,
+ * and the blue component the distance to that edge.
  *
  * Hold down a mouse button to see the raw animation.
  */

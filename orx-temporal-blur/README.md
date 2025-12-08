@@ -1,7 +1,9 @@
 # orx-temporal-blur
 
-Post-processing temporal-blur video effect. CPU intense, therefore not intended 
-for use with the `ScreenRecorder` extension or other real-time uses.
+Post-processing temporal-blur video effect. CPU intense, not intended for real-time uses.
+
+If using `ScreenRecorder` make sure to enable the `frameClock` and `frameRate` in its properties.
+This will make `seconds` be based on the current frame count instead of the real time.
 
 This extension uses multi-sampling to accumulate and average the final image. 
 

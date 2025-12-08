@@ -25,10 +25,11 @@ fun main() = application {
         val circle = Circle(Vector2(400.0), 250.0)
         val frame = drawer.bounds.offsetEdges(-50.0)
 
-        val points = poissonDiskSampling(drawer.bounds, 30.0)
+        val innerPoints = poissonDiskSampling(drawer.bounds, 30.0)
             .filter { circle.contains(it) }
+        val edgePoints = circle.contour.equidistantPositions(40)
 
-        val delaunay = (points + circle.contour.equidistantPositions(40)).delaunayTriangulation()
+        val delaunay = (innerPoints + edgePoints).delaunayTriangulation()
         val voronoi = delaunay.voronoiDiagram(frame)
 
         val cells = voronoi.cellPolygons()

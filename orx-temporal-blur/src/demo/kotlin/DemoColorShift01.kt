@@ -5,6 +5,18 @@ import org.openrndr.extra.temporalblur.TemporalBlur
 import org.openrndr.math.Polar
 import kotlin.math.cos
 
+/**
+ * A more advance demonstration of `TemporalBlur`,
+ * showing how a function can be used to apply a varying
+ * `colorMatrix` transformation across the sampling
+ * duration.
+ *
+ * This example makes the samples fade
+ * from white to blue in each frame.
+ *
+ * The `gain` parameter is used to increase the brightness
+ * of the resulting pixels.
+ */
 fun main() = application {
     program {
         extend(TemporalBlur()) {
