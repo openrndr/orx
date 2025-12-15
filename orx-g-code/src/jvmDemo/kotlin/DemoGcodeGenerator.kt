@@ -1,5 +1,5 @@
 import org.openrndr.application
-import org.openrndr.drawComposition
+import org.openrndr.extra.composition.drawComposition
 import org.openrndr.extra.gcode.asCommands
 import org.openrndr.extra.gcode.basicGrblSetup
 import org.openrndr.extra.gcode.extensions.toCommands

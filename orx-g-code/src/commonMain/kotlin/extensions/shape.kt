@@ -3,8 +3,8 @@ package org.openrndr.extra.gcode.extensions
 import org.openrndr.extra.gcode.Command
 import org.openrndr.extra.gcode.Commands
 import org.openrndr.extra.gcode.Generator
-import org.openrndr.shape.Composition
-import org.openrndr.shape.Segment
+import org.openrndr.extra.composition.Composition
+import org.openrndr.shape.Segment2D
 import org.openrndr.shape.ShapeContour
 
 fun List<Composition>.toCommands(generator: Generator, distanceTolerance: Double): Commands = this
@@ -64,7 +64,7 @@ fun ShapeContour.toCommands(generator: Generator, distanceTolerance: Double): Co
     return sequence.toList()
 }
 
-fun Segment.toCommands(generator: Generator, distanceTolerance: Double): Commands {
+fun Segment2D.toCommands(generator: Generator, distanceTolerance: Double): Commands {
     return if (this.control.isEmpty()) {
         generator.drawTo(this.end)
     } else {

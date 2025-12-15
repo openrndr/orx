@@ -1,18 +1,19 @@
 package org.openrndr.extra.gcode
 
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.openrndr.Extension
 import org.openrndr.PresentationMode
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.isolated
+import org.openrndr.extra.composition.Composition
 import org.openrndr.extra.gcode.extensions.toCommands
 import org.openrndr.math.Vector2
-import org.openrndr.shape.Composition
-import org.openrndr.shape.CompositionDrawer
+import org.openrndr.extra.composition.CompositionDrawer
+import org.openrndr.extra.composition.composition
 import org.openrndr.shape.Rectangle
-import org.openrndr.shape.drawComposition
+import org.openrndr.extra.composition.drawComposition
 import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

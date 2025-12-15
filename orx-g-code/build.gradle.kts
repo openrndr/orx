@@ -1,8 +1,8 @@
 import ScreenshotsHelper.collectScreenshots
+import org.gradle.kotlin.dsl.project
 
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    org.openrndr.extra.convention.`kotlin-multiplatform`
+    id("org.openrndr.extra.convention.kotlin-multiplatform")
 }
 
 kotlin {
@@ -17,25 +17,21 @@ kotlin {
         @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
-                implementation(libs.openrndr.application)
-                implementation(libs.openrndr.draw)
-                implementation(libs.openrndr.shape)
-                implementation(libs.openrndr.extensions)
+                implementation(openrndr.application.core)
+                implementation(openrndr.draw)
+                implementation(openrndr.shape)
+                api(project(":orx-composition"))
             }
         }
 
         @Suppress("UNUSED_VARIABLE")
         val jvmTest by getting {
-            dependencies {
-                runtimeOnly(libs.slf4j.simple)
-            }
+            dependencies { }
         }
 
         @Suppress("UNUSED_VARIABLE")
         val jvmDemo by getting {
-            dependencies {
-                runtimeOnly(libs.slf4j.simple)
-            }
+            dependencies { }
         }
     }
 }
