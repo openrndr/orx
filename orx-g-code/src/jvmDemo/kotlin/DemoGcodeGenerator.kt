@@ -1,7 +1,6 @@
 import org.openrndr.application
 import org.openrndr.extra.composition.drawComposition
 import org.openrndr.extra.gcode.*
-import org.openrndr.extra.gcode.extensions.render
 
 fun main() = application {
     configure {

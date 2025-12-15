@@ -1,7 +1,6 @@
-package org.openrndr.extra.gcode.extensions
+package org.openrndr.extra.gcode
 
 import org.openrndr.extra.composition.Composition
-import org.openrndr.extra.gcode.GeneratorContext
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Segment2D
 import org.openrndr.shape.Shape

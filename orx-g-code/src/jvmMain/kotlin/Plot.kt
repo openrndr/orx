@@ -11,7 +11,6 @@ import org.openrndr.extra.composition.Composition
 import org.openrndr.extra.composition.CompositionDrawer
 import org.openrndr.extra.composition.composition
 import org.openrndr.extra.composition.drawComposition
-import org.openrndr.extra.gcode.extensions.render
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 import java.io.File

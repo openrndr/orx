@@ -5,49 +5,24 @@ import org.openrndr.extra.composition.Composition
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Shape
 import org.openrndr.shape.ShapeContour
-import kotlin.math.absoluteValue
-import kotlin.math.pow
-import kotlin.math.roundToInt
-
-typealias Command = String
-typealias Commands = List<Command>
-
-fun Command.asCommands(): Commands = listOf(this)
-
-fun Commands.toGcode(): String = StringBuilder()
-    .also { sb -> this.forEach { sb.appendLine(it) } }
-    .toString()
 
 /**
- * Consecutive identical commands are removed, ignoring comments.
- * Comments are lines starting with ";" or "(".
+ * Simple factory for [GeneratorContext] instances.
  */
-fun Commands.withoutDuplicates(): Commands {
-    var lastCommand = 0
-    return this.filterIndexed { i, c ->
-        when (i) {
-            0 -> true
-            else -> {
-                if (c.startsWith(';') || c.startsWith('(')) {
-                    true
-                } else {
-                    !c.contentEquals(this[lastCommand]).also { lastCommand = i }
-                }
-            }
-        }
-    }
+fun interface Generator {
+    fun createContext(): GeneratorContext
 }
 
 /**
- * Double to String rounded to absolute value of [decimals].
- * Helper to be used in generator functions.
+ * Opens a new [GeneratorContext] and calls [block] with it.
+ * The context is initialized with [GeneratorContext.beginFile] and finalized with [GeneratorContext.endFile].
+ * @return all commands generated in the context.
  */
-fun Double.roundedTo(decimals: Int = 3): String {
-    val f = 10.0.pow(decimals.absoluteValue)
-    return when {
-        decimals != 0 -> "${this.times(f).roundToInt().div(f)}"
-        else -> "${this.roundToInt()}"
-    }
+fun Generator.file(block: GeneratorContext.() -> Unit): Commands = with(createContext()) {
+    beginFile()
+    block()
+    endFile()
+    commands()
 }
 
 /**
@@ -171,17 +146,6 @@ abstract class BaseGeneratorContext(
     } else {
         commands
     }
-}
-
-fun interface Generator {
-    fun createContext(): GeneratorContext
-}
-
-fun Generator.file(block: GeneratorContext.() -> Unit): Commands = with(createContext()) {
-    beginFile()
-    block()
-    endFile()
-    commands()
 }
 
 /**

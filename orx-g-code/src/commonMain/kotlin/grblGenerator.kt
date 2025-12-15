@@ -4,6 +4,9 @@ import org.openrndr.extra.composition.Composition
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Shape
 import org.openrndr.shape.ShapeContour
+import kotlin.math.absoluteValue
+import kotlin.math.pow
+import kotlin.math.roundToInt
 
 class GrblGeneratorContext(
     val drawRate: Double?,
@@ -128,3 +131,15 @@ fun basicGrblSetup(
     drawRate: Double = 500.0,
     moveRate: Double? = null,
 ): BasicGrblGenerator = BasicGrblGenerator()
+
+/**
+ * Double to String rounded to absolute value of [decimals].
+ * Helper to be used in generator functions.
+ */
+fun Double.roundedTo(decimals: Int = 3): String {
+    val f = 10.0.pow(decimals.absoluteValue)
+    return when {
+        decimals != 0 -> "${this.times(f).roundToInt().div(f)}"
+        else -> "${this.roundToInt()}"
+    }
+}
