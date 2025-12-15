@@ -231,6 +231,11 @@ class Plot(
     fun scaled(v: Double) = v * scale
 
     /**
+     * Vector [v] scaled from document space to screen space.
+      */
+    fun scaled(v: Vector2) = v * scale
+
+    /**
      * Scale from document space to screen space.
      */
     fun scale() = scale
