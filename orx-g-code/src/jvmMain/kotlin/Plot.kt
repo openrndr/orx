@@ -8,12 +8,12 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.isolated
 import org.openrndr.extra.composition.Composition
-import org.openrndr.extra.gcode.extensions.toCommands
-import org.openrndr.math.Vector2
 import org.openrndr.extra.composition.CompositionDrawer
 import org.openrndr.extra.composition.composition
-import org.openrndr.shape.Rectangle
 import org.openrndr.extra.composition.drawComposition
+import org.openrndr.extra.gcode.extensions.render
+import org.openrndr.math.Vector2
+import org.openrndr.shape.Rectangle
 import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -69,9 +69,9 @@ class Plot(
      * The folder where the g-code will be saved to. Default value is "gcode", saves in current working
      * directory when set to null.
      */
-    var folder: String? = "gcode"
+    var folder: String? = "gcode",
 
-) : Extension {
+    ) : Extension {
     companion object {
         val logger = KotlinLogging.logger {}
     }
@@ -81,7 +81,8 @@ class Plot(
     val docBounds = when (origin) {
         Origin.CENTER -> Rectangle(-dimensions.times(.5), dimensions.x, dimensions.y)
         Origin.BOTTOM_LEFT,
-        Origin.TOP_LEFT -> Rectangle(0.0, 0.0, dimensions.x, dimensions.y)
+        Origin.TOP_LEFT,
+            -> Rectangle(0.0, 0.0, dimensions.x, dimensions.y)
     }
 
     val layers: MutableMap<String, Composition> = mutableMapOf()
@@ -97,7 +98,7 @@ class Plot(
         // Scale to fit in viewport
         scale = min(program.width / docBounds.width, program.height / docBounds.height)
 
-        if (name == null ) {
+        if (name == null) {
             name = program.name
         }
 
@@ -117,17 +118,7 @@ class Plot(
             }
 
             if (gCodeBind != null && event.name == gCodeBind) {
-                when (layerMode) {
-                    LayerMode.SINGLE_FILE -> {
-                        writeFile(name ?: "plot", toCombinedGcode())
-                    }
-
-                    LayerMode.MULTI_FILE -> {
-                        toSplitGcode().forEach {
-                            writeFile("${name?:""}-${it.key}", it.value)
-                        }
-                    }
-                }
+                writeGcode()
             }
         }
     }
@@ -173,21 +164,32 @@ class Plot(
     }
 
     /**
+     * Executes block once for each layer in the order they were added.
+     */
+    fun forEachLayer(block: (layer: String, composition: Composition) -> Unit) = order.forEach { name ->
+        layers[name]?.also { layer ->
+            block(name, layer)
+        }
+    }
+
+    /**
      * Renders this plot to the given drawer.
      */
     fun render(drawer: Drawer) = scaled(drawer) { scaled ->
 
-        // Draw background surface
+        // Draw the background surface
         drawer.isolated {
             strokeWeight = 0.0
             fill = backgroundColor
             rectangle(docBounds)
         }
 
-        // Layers
-        order.mapNotNull { layers[it] }
-            .forEach { scaled.composition(it) }
+        // Draw layers
+        forEachLayer { _, composition ->
+            scaled.composition(composition)
+        }
     }
+
 
     /**
      * Drawer scaled to document space, to fit to the window.
@@ -222,7 +224,7 @@ class Plot(
         return when (origin) {
             Origin.BOTTOM_LEFT -> Vector2(p.x * s, docBounds.height - p.y * s)
             Origin.TOP_LEFT -> p.times(s)
-            Origin.CENTER -> p.times(Vector2(s,-s)).plus(Vector2(-docBounds.width, docBounds.height) *.5)
+            Origin.CENTER -> p.times(Vector2(s, -s)).plus(Vector2(-docBounds.width, docBounds.height) * .5)
         }
     }
 
@@ -233,7 +235,7 @@ class Plot(
 
     /**
      * Vector [v] scaled from document space to screen space.
-      */
+     */
     fun scaled(v: Vector2) = v * scale
 
     /**
@@ -241,32 +243,60 @@ class Plot(
      */
     fun scale() = scale
 
-    /**
-     * Converts all layers to a single g-code string in the order they were added.
-     */
-    fun toCombinedGcode(): String = order
-        .mapNotNull { l -> layers[l] }
-        .toCommands(generator, distanceTolerance).withoutDuplicates()
-        .toGcode()
+    fun writeGcode() = when (layerMode) {
+        LayerMode.SINGLE_FILE -> {
+            writeAllLayersToSingleFile()
+        }
+
+        LayerMode.MULTI_FILE -> {
+            writeEachLayerToFile()
+        }
+    }
 
     /**
-     * Converts each layer to a g-code string.
+     * Combines the gcode of all layers.
      */
-    fun toSplitGcode(): Map<String, String> = layers.mapValues { e ->
-        val commands = e.value.toCommands(generator, distanceTolerance).withoutDuplicates()
-        (generator.setup + commands + generator.end).toGcode()
+    fun toCombinedGcode() = generator.file {
+        forEachLayer { layer, composition ->
+            render(layer, composition)
+        }
+    }.toGcode()
+
+    /**
+     * Writes all layers to a single file.
+     */
+    fun writeAllLayersToSingleFile() = writeFile(name ?: "plot") {
+        toCombinedGcode()
     }
+
+    /**
+     * Returns a map of layer names to gcode.
+     */
+    fun toSplitGcode() = mutableMapOf<String, String>().apply {
+        forEachLayer { layer, composition ->
+            val gcode = generator.file { render(layer, composition) }.toGcode()
+            put(layer, gcode)
+        }
+    }
+
+    /**
+     * Writes each layer to a separate file.
+     */
+    fun writeEachLayerToFile() =
+        toSplitGcode().forEach {
+            (layerName, gcode) -> writeFile("${name ?: ""}-${layerName}") { gcode }
+        }
 
     /**
      * Writes [content] to file "[folder]/timestamp-[name].[extension]"
      */
-    fun writeFile(name: String, content: String, extension: String = "gcode") {
+    fun writeFile(name: String, extension: String = "gcode", content: () -> String) {
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmSS")
         val timestamp = formatter.format(LocalDateTime.now())
         val fileName = "$timestamp-$name.$extension"
 
         File(File(folder ?: "."), fileName)
             .also { logger.info { "💾Writing g-code $name to ${it.path}" } }
-            .writeText(content)
+            .writeText(content())
     }
 }

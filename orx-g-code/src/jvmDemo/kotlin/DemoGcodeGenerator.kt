@@ -1,10 +1,7 @@
 import org.openrndr.application
 import org.openrndr.extra.composition.drawComposition
-import org.openrndr.extra.gcode.asCommands
-import org.openrndr.extra.gcode.basicGrblSetup
-import org.openrndr.extra.gcode.extensions.toCommands
-import org.openrndr.extra.gcode.toGcode
-import org.openrndr.extra.gcode.withoutDuplicates
+import org.openrndr.extra.gcode.*
+import org.openrndr.extra.gcode.extensions.render
 
 fun main() = application {
     configure {
@@ -24,7 +21,9 @@ fun main() = application {
         }
 
         // Convert composition to g-code, print to console and exit
-        val commands = generator.setup + comp.toCommands(generator, 0.05) + generator.end
+        val commands = generator.file {
+            render("composition", comp)
+        }
         val gCode = commands.withoutDuplicates().toGcode()
         println(gCode)
         application.exit()
@@ -32,8 +31,8 @@ fun main() = application {
         /* Output:
         G21
         G90
-        ;begin composition
-        ;begin shape: 0
+        ;begin layer: composition
+        ;begin shape
         G0 X10.0 Y10.0
         M3 S40
         G4 P0.08
@@ -55,8 +54,8 @@ fun main() = application {
         G4 P0.08
         G1 X20.0 Y20.0 F500.0
         M3 S40
-        ;end shape: 0
-        ;end composition
+        ;end shape
+        ;end layer: composition
         G0 X0 Y0
         G90
         */

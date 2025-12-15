@@ -1,6 +1,10 @@
 package org.openrndr.extra.gcode
 
+import io.github.oshai.kotlinlogging.KotlinLogging
+import org.openrndr.extra.composition.Composition
 import org.openrndr.math.Vector2
+import org.openrndr.shape.Shape
+import org.openrndr.shape.ShapeContour
 import kotlin.math.absoluteValue
 import kotlin.math.pow
 import kotlin.math.roundToInt
@@ -47,83 +51,159 @@ fun Double.roundedTo(decimals: Int = 3): String {
 }
 
 /**
- * Generates g-code for defined operations.
+ * Generates g-code commands for defined operations.
  */
-data class Generator(
+interface GeneratorContext {
 
     /**
-     * Setup code at the beginning of a file.
+     * Distance tolerance used for [org.openrndr.shape.Segment2D.adaptivePositions] when approximating curves.
      */
-    val setup: Commands,
+    val distanceTolerance: Double
 
     /**
-     * A move operation to the given location.
+     * Minimum distance for two points to be considered distinct.
+     * Consecutive points with a distance smaller than this are considered duplicates and skipped.
      */
-    val moveTo: (Vector2) -> Commands,
+    val minSquaredDistance: Double
 
     /**
-     * Start drawing sequence. Pen down, laser on, etc.
+     * @return all commands added in this context.
      */
-    val preDraw: Commands,
+    fun commands(): Commands
 
     /**
-     * A draw operation to the given location.
+     * Called at the beginning of a new file.
+     *
+     * Should perform machine setup, such as homing, setting up units or positioning mode.
      */
-    val drawTo: (Vector2) -> Commands,
+    fun beginFile()
 
     /**
-     * End draw sequence. Lift pen, turn laser off, etc.
-     * Called after a draw action before a move is performed.
+     * Called at the beginning of a new layer.
+     *
+     * @param layer name of the layer.
+     * @param composition composition of the layer.
+     *
+     * Implementation is optional.
      */
-    val postDraw: Commands,
+    fun beginLayer(layer: String, composition: Composition) = Unit
 
     /**
-     * End of file sequence.
+     * Called at the beginning of a new shape.
+     *
+     * Implementation is optional.
      */
-    val end: Commands = emptyList(),
+    fun beginShape(shape: Shape) = Unit
 
     /**
-     * Insert a comment.
+     * Called at the beginning of a new contour.
+     *
+     * Expected to **move to the first point** of the contour and **enable the drawing tool**,
+     * for example, pen down, laser on, etc.
+     *
+     * @param start start position of the contour.
+     * @param contour contour that is about to be drawn.
      */
-    val comment: (String) -> Commands
-)
+    fun beginContour(start: Vector2, contour: ShapeContour)
+
+    /**
+     * Drawing move from the current to the given position.
+     * Called for each point of a contour, excluding the start point.
+     *
+     * - For linear segments: It is called with the end of each segment.
+     * - For bezier segments: Called for all points of the curve, approximated with adaptivepositions using [distanceTolerance].
+     */
+    fun drawTo(p: Vector2)
+
+    /**
+     * Called at the end of a contour.
+     * Expected to disable the drawing tool, for example, lift pen, turn laser off, etc.
+     */
+    fun endContour(contour: ShapeContour)
+
+    /**
+     * Called at the end of a shape.
+     *
+     * Implementation is optional.
+     */
+    fun endShape(shape: Shape) = Unit
+
+    /**
+     * Called at the end of a composition.
+     *
+     * @param layer name of the layer.
+     * @param composition composition of the layer.
+     *
+     * Implementation is optional.
+     */
+    fun endLayer(layer: String, composition: Composition) = Unit
+
+    /**
+     * Called at the end of a file.
+     *
+     * Should perform final operations, such as returning to the home position, turning off the laser, etc.
+     */
+    fun endFile()
+}
 
 /**
- * All operations are empty command lists on default and have to be defined explicitly.
+ * Base implementation of [GeneratorContext] that collects commands in a list.
  */
-fun noopGenerator() = Generator(
-    setup = emptyList(),
-    moveTo = { _ -> emptyList() },
-    preDraw = emptyList(),
-    drawTo = { _ -> emptyList() },
-    postDraw = emptyList(),
-) { _ -> emptyList() }
+abstract class BaseGeneratorContext(
+    val deduplicateCommands: Boolean = true,
+) : GeneratorContext {
+    private val commands = mutableListOf<Command>()
+
+    fun add(command: Command) {
+        commands.add(command)
+    }
+
+    fun add(commands: Commands) {
+        this.commands.addAll(commands)
+    }
+
+    fun add(vararg commands: Command) {
+        this.commands.addAll(commands)
+    }
+
+    override fun commands(): Commands = if (deduplicateCommands) {
+        commands.withoutDuplicates()
+    } else {
+        commands
+    }
+}
+
+fun interface Generator {
+    fun createContext(): GeneratorContext
+}
+
+fun Generator.file(block: GeneratorContext.() -> Unit): Commands = with(createContext()) {
+    beginFile()
+    block()
+    endFile()
+    commands()
+}
 
 /**
- * Creates a [Generator] to be used by grbl controlled pen plotters.
- * [drawRate] sets the feed rate used for drawing operations.
- * Moves are performed with G0. When [moveRate] is set, moves are instead
- * done with G1 and the given rate as feedRate.
- * Can be customized by overwriting individual fields with *.copy*.
+ * NOOP GCode Generator used as default.
  */
-fun basicGrblSetup(
-    drawRate: Double = 500.0,
-    moveRate: Double? = null,
-) = Generator(
-    setup = listOf(
-        "G21", // mm
-        "G90", // Absolute positioning
-    ),
-    moveTo = when (moveRate) {
-        null -> { p -> "G0 X${p.x.roundedTo()} Y${p.y.roundedTo()}".asCommands() }
-        else -> { p -> "G1 X${p.x.roundedTo()} Y${p.y.roundedTo()} F$drawRate".asCommands() }
-    },
-    preDraw = listOf("M3 S255"),
-    drawTo = { p -> "G1 X${p.x.roundedTo()} Y${p.y.roundedTo()} F$drawRate".asCommands() },
-    postDraw = listOf("M3 S0"),
-    end = listOf(
-        "G0 X0 Y0",
-        "G90",
-    ),
-    comment = { c -> listOf(";$c") }
-)
+fun noopGenerator() = Generator {
+    object : GeneratorContext {
+
+        val logger = KotlinLogging.logger {}
+
+        override val distanceTolerance: Double = 0.0
+        override val minSquaredDistance: Double = 0.0
+        override fun commands(): Commands = emptyList()
+        override fun beginFile() {
+            logger.warn { "Using NOOP generator. No g-code will be generated." }
+        }
+        override fun beginContour(start: Vector2, contour: ShapeContour) {}
+
+        override fun drawTo(p: Vector2) {}
+
+        override fun endContour(contour: ShapeContour) {}
+
+        override fun endFile() = Unit
+    }
+}

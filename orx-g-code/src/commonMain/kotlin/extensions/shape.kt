@@ -1,75 +1,65 @@
 package org.openrndr.extra.gcode.extensions
 
-import org.openrndr.extra.gcode.Command
-import org.openrndr.extra.gcode.Commands
-import org.openrndr.extra.gcode.Generator
 import org.openrndr.extra.composition.Composition
+import org.openrndr.extra.gcode.GeneratorContext
+import org.openrndr.math.Vector2
 import org.openrndr.shape.Segment2D
+import org.openrndr.shape.Shape
 import org.openrndr.shape.ShapeContour
 
-fun List<Composition>.toCommands(generator: Generator, distanceTolerance: Double): Commands = this
-    .flatMap {it.toCommands(generator, distanceTolerance) }
-    .let { commands -> (generator.setup + commands + generator.end) }
-
-fun Composition.toCommands(generator: Generator, distanceTolerance: Double): Commands {
-
-    val sequence = generator.comment("begin composition").toMutableList()
-
-    this.findShapes().forEachIndexed { index, shapeNode ->
-        sequence += generator.comment("begin shape: $index")
-        shapeNode.shape.contours.forEach {
-            sequence += it.toCommands(generator, distanceTolerance)
-        }
-        sequence += generator.comment("end shape: $index")
+/**
+ * Renders the [composition] to the generator context.
+ */
+fun GeneratorContext.render(layer: String, composition: Composition) {
+    beginLayer(layer, composition)
+    composition.findShapes().forEachIndexed { index, shapeNode ->
+        render(shapeNode.shape)
     }
-
-    sequence += generator.comment("end composition")
-
-    return sequence
+    endLayer(layer, composition)
 }
 
-fun ShapeContour.toCommands(generator: Generator, distanceTolerance: Double): Commands {
-
-    val sequence = mutableListOf<Command>()
-
-    val isDot =
-        this.segments.size == 1 && this.segments.first().start.squaredDistanceTo(this.segments.first().end) < distanceTolerance
-    if (isDot) {
-        sequence += generator.moveTo(this.segments.first().start)
-        sequence += generator.preDraw
-        sequence += generator.comment("dot")
-        sequence += generator.postDraw
-        return sequence
-    }
-
-    this.segments.forEachIndexed { i, segment ->
-
-        // On first segment, move to beginning of segment and tool down
-        if (i == 0) {
-            sequence += generator.moveTo(segment.start)
-            sequence += generator.preDraw
-        }
-
-        // Draw segment
-        sequence += segment.toCommands(generator, distanceTolerance)
-    }
-
-    // Close after last segment
-    if (this.closed) {
-        generator.drawTo(this.segments.first().start)
-    }
-
-    sequence += generator.postDraw
-
-    return sequence.toList()
+fun GeneratorContext.render(shape: Shape) {
+    beginShape(shape)
+    shape.contours.forEach { render(it) }
+    endShape(shape)
 }
 
-fun Segment2D.toCommands(generator: Generator, distanceTolerance: Double): Commands {
-    return if (this.control.isEmpty()) {
-        generator.drawTo(this.end)
+/**
+ * Renders the contour to the generator context.
+ *
+ * NOOP when the contour has no segments.
+ */
+fun GeneratorContext.render(contour: ShapeContour) {
+    val start = contour.segments.firstOrNull()?.start ?: return
+    beginContour(start, contour)
+
+    with(contour.segments) {
+        val isDot = size == 1 && first().start.squaredDistanceTo(first().end) < minSquaredDistance
+        if (!isDot) {
+            flatMap { it.points(distanceTolerance) }
+                .removeClosePoints(minSquaredDistance)
+                .forEach { drawTo(it) }
+        }
+    }
+
+    endContour(contour)
+}
+
+/**
+ * Returns the points of the segment, excluding the start point.
+ * Bezier segments are approximated with adaptive positions.
+ */
+fun Segment2D.points(distanceTolerance: Double) = if (control.isEmpty()) {
+    listOf(end)
+} else {
+    adaptivePositions(distanceTolerance).drop(1)
+}
+
+fun List<Vector2>.removeClosePoints(minSquaredDistance: Double) = fold(emptyList<Vector2>()) { acc, v ->
+    val dist = acc.lastOrNull()?.squaredDistanceTo(v) ?: Double.POSITIVE_INFINITY
+    if ( dist >= minSquaredDistance) {
+        acc + v
     } else {
-        this.adaptivePositions(distanceTolerance).flatMap {
-            generator.drawTo(it)
-        }
+        acc
     }
 }

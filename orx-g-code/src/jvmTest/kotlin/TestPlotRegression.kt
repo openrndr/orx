@@ -13,6 +13,8 @@ class TestPlotRegression {
 
     lateinit var multilayerPlot: Plot
 
+    lateinit var dotPlot: Plot
+
 
     @BeforeTest
     fun setup() {
@@ -43,11 +45,10 @@ class TestPlotRegression {
         val expected = """
                 G21
                 G90
-                ;begin composition
-                ;begin shape: 0
+                ;begin layer: default
+                ;begin shape
                 G0 X70.0 Y100.0
                 M3 S255
-                G1 X70.0 Y100.0 F500.0
                 G1 X70.105 Y96.918 F500.0
                 G1 X71.304 Y91.059 F500.0
                 G1 X73.581 Y85.675 F500.0
@@ -85,8 +86,8 @@ class TestPlotRegression {
                 G1 X70.105 Y103.082 F500.0
                 G1 X70.0 Y100.0 F500.0
                 M3 S0
-                ;end shape: 0
-                ;end composition
+                ;end shape
+                ;end layer: default
                 G0 X0 Y0
                 G90
                 
@@ -99,31 +100,31 @@ class TestPlotRegression {
     @Test
     fun `multiple files from layers`() {
         val default = """
-               G21
-               G90
-               ;begin composition
-               ;begin shape: 0
-               G0 X0.0 Y20.0
-               M3 S255
-               G1 X100.0 Y200.0 F500.0
-               M3 S0
-               ;end shape: 0
-               ;begin shape: 1
-               G0 X0.5 Y20.5
-               M3 S255
-               G1 X100.5 Y200.5 F500.0
-               M3 S0
-               ;end shape: 1
-               ;end composition
-               G0 X0 Y0
-               G90
+                G21
+                G90
+                ;begin layer: default
+                ;begin shape
+                G0 X0.0 Y20.0
+                M3 S255
+                G1 X100.0 Y200.0 F500.0
+                M3 S0
+                ;end shape
+                ;begin shape
+                G0 X0.5 Y20.5
+                M3 S255
+                G1 X100.5 Y200.5 F500.0
+                M3 S0
+                ;end shape
+                ;end layer: default
+                G0 X0 Y0
+                G90
                
                 """.trimIndent()
         val rect = """
                 G21
                 G90
-                ;begin composition
-                ;begin shape: 0
+                ;begin layer: rect
+                ;begin shape
                 G0 X10.123 Y30.123
                 M3 S255
                 G1 X60.247 Y30.123 F500.0
@@ -131,8 +132,8 @@ class TestPlotRegression {
                 G1 X10.123 Y100.247 F500.0
                 G1 X10.123 Y30.123 F500.0
                 M3 S0
-                ;end shape: 0
-                ;end composition
+                ;end shape
+                ;end layer: rect
                 G0 X0 Y0
                 G90
                 
@@ -141,14 +142,13 @@ class TestPlotRegression {
         val dot = """
                 G21
                 G90
-                ;begin composition
-                ;begin shape: 0
+                ;begin layer: dot
+                ;begin shape
                 G0 X25.556 Y35.556
                 M3 S255
-                ;dot
                 M3 S0
-                ;end shape: 0
-                ;end composition
+                ;end shape
+                ;end layer: dot
                 G0 X0 Y0
                 G90
                
@@ -163,45 +163,44 @@ class TestPlotRegression {
     @Test
     fun `single file from layers`() {
         val expected = """
-               G21
-               G90
-               ;begin composition
-               ;begin shape: 0
-               G0 X0.0 Y20.0
-               M3 S255
-               G1 X100.0 Y200.0 F500.0
-               M3 S0
-               ;end shape: 0
-               ;begin shape: 1
-               G0 X0.5 Y20.5
-               M3 S255
-               G1 X100.5 Y200.5 F500.0
-               M3 S0
-               ;end shape: 1
-               ;end composition
-               ;begin composition
-               ;begin shape: 0
-               G0 X10.123 Y30.123
-               M3 S255
-               G1 X60.247 Y30.123 F500.0
-               G1 X60.247 Y100.247 F500.0
-               G1 X10.123 Y100.247 F500.0
-               G1 X10.123 Y30.123 F500.0
-               M3 S0
-               ;end shape: 0
-               ;end composition
-               ;begin composition
-               ;begin shape: 0
-               G0 X25.556 Y35.556
-               M3 S255
-               ;dot
-               M3 S0
-               ;end shape: 0
-               ;end composition
-               G0 X0 Y0
-               G90
-               
-                """.trimIndent()
+                G21
+                G90
+                ;begin layer: default
+                ;begin shape
+                G0 X0.0 Y20.0
+                M3 S255
+                G1 X100.0 Y200.0 F500.0
+                M3 S0
+                ;end shape
+                ;begin shape
+                G0 X0.5 Y20.5
+                M3 S255
+                G1 X100.5 Y200.5 F500.0
+                M3 S0
+                ;end shape
+                ;end layer: default
+                ;begin layer: rect
+                ;begin shape
+                G0 X10.123 Y30.123
+                M3 S255
+                G1 X60.247 Y30.123 F500.0
+                G1 X60.247 Y100.247 F500.0
+                G1 X10.123 Y100.247 F500.0
+                G1 X10.123 Y30.123 F500.0
+                M3 S0
+                ;end shape
+                ;end layer: rect
+                ;begin layer: dot
+                ;begin shape
+                G0 X25.556 Y35.556
+                M3 S255
+                M3 S0
+                ;end shape
+                ;end layer: dot
+                G0 X0 Y0
+                G90
+
+               """.trimIndent()
         assertEquals(expected, multilayerPlot.toCombinedGcode())
     }
 
