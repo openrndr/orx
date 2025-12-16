@@ -242,6 +242,11 @@ class Plot(
      */
     fun scale() = scale
 
+    /**
+     * Writes the gcode to file(s) based on
+     * [layerMode], [name] and [folder].
+     *
+     */
     fun writeGcode() = when (layerMode) {
         LayerMode.SINGLE_FILE -> {
             writeAllLayersToSingleFile()
