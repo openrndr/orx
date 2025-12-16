@@ -1,11 +1,8 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-
+import org.openrndr.extra.gcode.BasicGrblGenerator
 import org.openrndr.extra.gcode.LayerMode
 import org.openrndr.extra.gcode.Plot
-
-import org.openrndr.extra.gcode.basicGrblSetup
-
 import org.openrndr.math.Vector2
 
 fun main() = application {
@@ -19,7 +16,7 @@ fun main() = application {
 
         // A4 Portrait
         extend(Plot(dimensions = Vector2(210.0, 297.0))) {
-            generator = basicGrblSetup()
+            generator = BasicGrblGenerator()
 
             // Export each layer to separate file
             layerMode = LayerMode.MULTI_FILE

@@ -121,18 +121,6 @@ data class BasicGrblGenerator(
 }
 
 /**
- * Creates a [Generator] to be used by grbl controlled pen plotters.
- * [drawRate] sets the feed rate used for drawing operations.
- * Moves are performed with G0. When [moveRate] is set, moves are instead
- * done with G1 and the given rate as feedRate.
- * Can be customized by overwriting individual fields with *.copy*.
- */
-fun basicGrblSetup(
-    drawRate: Double = 500.0,
-    moveRate: Double? = null,
-): BasicGrblGenerator = BasicGrblGenerator()
-
-/**
  * Double to String rounded to absolute value of [decimals].
  * Helper to be used in generator functions.
  */

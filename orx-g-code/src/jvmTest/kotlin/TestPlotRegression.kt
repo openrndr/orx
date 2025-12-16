@@ -1,10 +1,12 @@
 package test
 
 
+import org.openrndr.extra.gcode.BasicGrblGenerator
 import org.openrndr.extra.gcode.Plot
-import org.openrndr.extra.gcode.basicGrblSetup
 import org.openrndr.math.Vector2
-import kotlin.test.*
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 
 class TestPlotRegression {
@@ -19,12 +21,12 @@ class TestPlotRegression {
     @BeforeTest
     fun setup() {
 
-        simplePlot = Plot(dimensions = Vector2(210.0, 297.0),generator = basicGrblSetup())
+        simplePlot = Plot(dimensions = Vector2(210.0, 297.0),generator = BasicGrblGenerator())
         simplePlot.draw {
             circle(100.0, 100.0, 30.0)
         }
 
-        multilayerPlot = Plot(dimensions = Vector2(210.0, 297.0),generator = basicGrblSetup())
+        multilayerPlot = Plot(dimensions = Vector2(210.0, 297.0),generator = BasicGrblGenerator())
         multilayerPlot.draw {
             lineSegment(0.0, 20.0, 100.0, 200.0)
             lineSegment(0.5, 20.5, 100.5, 200.5)

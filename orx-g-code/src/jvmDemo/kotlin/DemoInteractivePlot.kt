@@ -1,8 +1,8 @@
 import org.openrndr.application
 import org.openrndr.extensions.Screenshots
+import org.openrndr.extra.gcode.BasicGrblGenerator
 import org.openrndr.extra.gcode.Origin
 import org.openrndr.extra.gcode.Plot
-import org.openrndr.extra.gcode.basicGrblSetup
 import org.openrndr.math.Vector2
 import org.openrndr.shape.ContourBuilder
 
@@ -21,7 +21,7 @@ fun main() = application {
             origin = Origin.CENTER
         )
         extend(plot) {
-            generator = basicGrblSetup()
+            generator = BasicGrblGenerator()
 
             // Set output files to be exported to tmp
             // "g" to export g-code.

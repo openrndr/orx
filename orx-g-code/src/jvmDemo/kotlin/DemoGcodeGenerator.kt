@@ -10,7 +10,8 @@ fun main() = application {
 
     program {
 
-        val generator = basicGrblSetup(drawRate = 500.0).copy(
+        val generator = BasicGrblGenerator(
+            drawRate = 500.0,
             preDraw = (40..80 step 5).flatMap { listOf("M3 S$it", "G4 P0.08") },
             postDraw = "M3 S40".asCommands(),
         )
