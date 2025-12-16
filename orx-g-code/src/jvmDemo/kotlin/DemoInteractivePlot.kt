@@ -6,6 +6,15 @@ import org.openrndr.extra.gcode.Plot
 import org.openrndr.math.Vector2
 import org.openrndr.shape.ContourBuilder
 
+/**
+ * This demo shows how to use the [Plot] class to draw using user input and render the result to G-code.
+ *
+ * You can use the mouse drag to draw contours on the plot.
+ *
+ * The input handling code shows how to convert mouse coordinates from the screen space to the document space.
+ *
+ * Pressing the `g` key will render the g-code and write it to `/tmp`.
+ */
 fun main() = application {
     configure {
         width = 600
@@ -16,15 +25,15 @@ fun main() = application {
         extend(Screenshots())
 
         val plot = Plot(
-            dimensions = Vector2(210.0, 297.0),
+            dimensions = Vector2(210.0, 297.0), // A4 Portrait
             manualRedraw = false,
             origin = Origin.CENTER
         )
         extend(plot) {
             generator = BasicGrblGenerator()
 
-            // Set output files to be exported to tmp
-            // "g" to export g-code.
+            // Set output files to be exported to /tmp
+            // Press "g" t export g-code.
             folder = "/tmp"
 
             draw {
@@ -37,7 +46,7 @@ fun main() = application {
 
         val cb = ContourBuilder(true)
 
-        // Handle mouse events and restrict drawing to drawing area
+        // Handle mouse events and restrict drawing to the drawing area
         mouse.buttonDown.listen {
             val p = plot.toDocumentSpace(it.position)
             if (drawingArea.contains(p)) {
@@ -55,7 +64,7 @@ fun main() = application {
             }
         }
 
-        // Draw contours of contour builder on every frame
+        // Draw contours of the contour builder on every frame
         extend {
             plot.layer("drawing") {
                 strokeWeight = .5

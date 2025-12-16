@@ -2,6 +2,32 @@ import org.openrndr.application
 import org.openrndr.extra.composition.drawComposition
 import org.openrndr.extra.gcode.*
 
+/**
+ * Demonstrates how to use a [Generator], in this case the [BasicGrblGenerator] to generate G-code directly
+ * from a composition.
+ *
+ * First, the generator is configured with a drawRate pre- and post-draw commands. These are executed before and after each contour is draw.
+ *
+ * The preDraw commands show how this parameter can be used to slowly enable the tool. In this case it would be lowering the pen
+ * in 8 steps, waiting 0.08 seconds between each step.
+ *
+ * `M3 SX` sets the servo and `G4 PX` waits for X seconds.
+ *
+ * Then a composition is created. It consists of a single line segment.
+ *
+ * Finally, the composition is rendered to G-code, which is printed to the console.
+ *
+ * The resulting G-code will:
+ * - Setting the machine to absolute coordinates and milimeters
+ * - Move to the beginning of the line segment (X10 Y10)
+ * - Slowly set down the pen
+ * - Draw the line segment
+ * - Lift the pen back up
+ * - Move to the origin (X0 Y0)
+ * - Set the machine to absolute coordinates again
+ *
+ * Using the generatr does not require the JVM only [Plot] class and can be used in any environment.
+ */
 fun main() = application {
     configure {
         width = 800
@@ -12,8 +38,8 @@ fun main() = application {
 
         val generator = BasicGrblGenerator(
             drawRate = 500.0,
-            preDraw = (40..80 step 5).flatMap { listOf("M3 S$it", "G4 P0.08") },
-            postDraw = "M3 S40".asCommands(),
+            preDraw = (0..80 step 10).flatMap { listOf("M3 S$it", "G4 P0.08") },
+            postDraw = "M3 S0".asCommands(),
         )
 
         val comp = drawComposition {
