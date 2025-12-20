@@ -35,6 +35,8 @@ enum class Origin {
 
 typealias DrawFunction = CompositionDrawer.() -> Unit
 
+private val logger = KotlinLogging.logger {}
+
 /**
  * Configuration:
  * When [manualRedraw] is true, the programs presentation mode is set to Manual on startup.
@@ -71,9 +73,6 @@ class Plot(
     var folder: String? = "gcode",
 
     ) : Extension {
-    companion object {
-        val logger = KotlinLogging.logger {}
-    }
 
     override var enabled: Boolean = true
 
