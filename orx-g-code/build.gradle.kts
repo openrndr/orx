@@ -1,6 +1,3 @@
-import ScreenshotsHelper.collectScreenshots
-import org.gradle.kotlin.dsl.project
-
 plugins {
     id("org.openrndr.extra.convention.kotlin-multiplatform")
 }
