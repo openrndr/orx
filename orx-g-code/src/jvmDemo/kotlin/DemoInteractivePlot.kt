@@ -5,6 +5,7 @@ import org.openrndr.extra.gcode.Origin
 import org.openrndr.extra.gcode.Plot
 import org.openrndr.math.Vector2
 import org.openrndr.shape.ContourBuilder
+import org.openrndr.shape.clamp
 
 /**
  * This demo shows how to use the [Plot] class to draw using user input and render the result to G-code.
@@ -49,19 +50,11 @@ fun main() = application {
         // Handle mouse events and restrict drawing to the drawing area
         mouse.buttonDown.listen {
             val p = plot.toDocumentSpace(it.position)
-            if (drawingArea.contains(p)) {
-                cb.moveTo(p)
-            } else {
-                cb.moveTo(drawingArea.contour.nearest(p).position)
-            }
+            cb.moveTo(p.clamp(drawingArea))
         }
         mouse.dragged.listen {
             val p = plot.toDocumentSpace(it.position)
-            if (drawingArea.contains(p)) {
-                cb.moveOrLineTo(p)
-            } else {
-                cb.moveOrLineTo(drawingArea.contour.nearest(p).position)
-            }
+            cb.moveOrLineTo(p.clamp(drawingArea))
         }
 
         // Draw contours of the contour builder on every frame
