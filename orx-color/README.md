@@ -327,7 +327,18 @@ The rendering process includes:
 
 ### DemoFettePalette01
 
+Demonstrates `generateColorRamp()`, a function with numerous parameters to generate color ramps.
 
+The first argument is the number of base colors to produce.
+
+Two other arguments are set based on the mouse x and y coordinates,
+letting the user affect the hue interactively.
+
+The created ramp contains `baseColors`, `lightColors` and `darkColors`. All three collections
+are rendered as small colored rectangles.
+
+In the center of the window, four colors from those collections are rendered as larger rectangles,
+using a random base color, a random light color, and two random dark colors.
 
 ![DemoFettePalette01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoFettePalette01Kt.png)
 
@@ -343,7 +354,14 @@ The rendering process includes:
 
 ### DemoHSLUV01
 
+Interactive program comparing the HSLUV and the HSL color spaces.
 
+The program draws two series of rotated rectangles with hues increasing
+from 0 to 360 in steps of 12 degrees. The saturation depends on the horizontal
+mouse position; the luminosity on its vertical position.
+
+By exploring various saturation and luminosity values, one can appreciate
+whether adjacent colors are more similar in HSLUV or in HSL.
 
 ![DemoHSLUV01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHSLUV01Kt.png)
 
@@ -351,7 +369,14 @@ The rendering process includes:
 
 ### DemoHSLUV02
 
+Visualizes the HSLUV color space by drawing a phyllotaxis pattern.
 
+The program also demonstrates how to create a function that returns a `sequence`.
+Unlike collections, sequences don't contain elements, they produce them while iterating.
+https://kotlinlang.org/docs/sequences.html
+
+Each position in the phyllotaxis is rendered as a spherical gradient by repeatedly drawing
+each circle with different sizes and a fill color.
 
 ![DemoHSLUV02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHSLUV02Kt.png)
 
@@ -375,7 +400,11 @@ The rendering process includes:
 
 ### DemoOKHSV01
 
+Shows the color green shifted in hue over 360 degrees in 36 steps, side by side in 4 color spaces:
+OKHSV, HSV, HSL and OKHSL.
 
+To shift hues the method `shiftHue()` is applied. The resulting colors are then converted
+from each color space to RGB so they can be used for drawing.
 
 ![DemoOKHSV01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoOKHSV01Kt.png)
 

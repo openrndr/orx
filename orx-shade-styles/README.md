@@ -171,7 +171,6 @@ pointing towards the center of the window. The center cell features a circular g
 `radiusX` equal to `radiusY`). The farther a cell is from the center, the higher the aspect ratio
 of the ellipse is, becoming closer to a line than to a circle near the corners.
 
-
 ![gradients-DemoGradient08Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient08Kt.png)
 
 [source code](src/jvmDemo/kotlin/gradients/DemoGradient08.kt)
@@ -191,6 +190,18 @@ in parts of the image.
 ![gradients-DemoGradient09Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient09Kt.png)
 
 [source code](src/jvmDemo/kotlin/gradients/DemoGradient09.kt)
+
+### gradients/DemoGradient10
+
+Demonstrates how to query the `parameterTypes` and the `parameterValues` exposed
+by a `ShadeStyle`. Both are `Map`s indexed by the names of the parameters.
+
+Useful when using `ShadeStyle`s made by others to discover what parameters
+are available for us to adjust.
+
+![gradients-DemoGradient10Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient10Kt.png)
+
+[source code](src/jvmDemo/kotlin/gradients/DemoGradient10.kt)
 
 ### image/DemoImageFill01
 

@@ -484,7 +484,12 @@ The control points in all hobby curves are almost identical, varying only
 due to a slight increase in one of the arguments of a simplex noise call.
 
 The program shows that minor displacements in control points can have
-a large impact in the resulting curve.
+a large impact in the resulting curve. Notice how in some parts,
+all curves travel together, while in other parts the curves separate
+in two or three groups.
+
+The bounds of the rectangle containing all contours is used to
+center them in the window.
 
 ![hobbycurve-DemoHobbyCurve05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve05Kt.png)
 
