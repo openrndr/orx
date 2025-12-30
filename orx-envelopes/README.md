@@ -4,7 +4,8 @@ ADSR (Attack, Decay, Sustain, Release) envelopes and tools.
 
 ## ADSR
 
-Attack, decay, sustain, release
+Attack, decay, sustain, release.
+
 <!-- __demos__ -->
 ## Demos
 ### DemoADSRTracker01

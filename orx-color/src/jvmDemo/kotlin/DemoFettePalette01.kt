@@ -6,6 +6,20 @@ import org.openrndr.extra.color.fettepalette.generateColorRamp
 import org.openrndr.math.Vector2
 import kotlin.random.Random
 
+/**
+ * Demonstrates `generateColorRamp()`, a function with numerous parameters to generate color ramps.
+ *
+ * The first argument is the number of base colors to produce.
+ *
+ * Two other arguments are set based on the mouse x and y coordinates,
+ * letting the user affect the hue interactively.
+ *
+ * The created ramp contains `baseColors`, `lightColors` and `darkColors`. All three collections
+ * are rendered as small colored rectangles.
+ *
+ * In the center of the window, four colors from those collections are rendered as larger rectangles,
+ * using a random base color, a random light color, and two random dark colors.
+ */
 fun main() = application {
     configure {
         width = 720
@@ -53,7 +67,7 @@ fun main() = application {
 
 
             drawer.isolated {
-                for ((index, i) in ramp.lightColors.withIndex()) {
+                for (i in ramp.lightColors) {
                     drawer.stroke = null
                     drawer.fill = i.toRGBa()
                     drawer.rectangle(20.0, 20.0, 50.0, 50.0)
@@ -61,7 +75,7 @@ fun main() = application {
                 }
             }
             drawer.isolated {
-                for ((index, i) in ramp.baseColors.withIndex()) {
+                for (i in ramp.baseColors) {
                     drawer.stroke = null
                     drawer.fill = i.toRGBa()
                     drawer.rectangle(20.0, 70.0, 50.0, 50.0)
@@ -69,7 +83,7 @@ fun main() = application {
                 }
             }
             drawer.isolated {
-                for ((index, i) in ramp.darkColors.withIndex()) {
+                for (i in ramp.darkColors) {
                     drawer.stroke = null
                     drawer.fill = i.toRGBa()
                     drawer.rectangle(20.0, 120.0, 50.0, 50.0)

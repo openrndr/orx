@@ -4,6 +4,34 @@ import org.openrndr.extra.envelopes.ADSRTracker
 import org.openrndr.extra.noise.shapes.uniform
 import org.openrndr.shape.Rectangle
 
+/**
+ * Demonstrates using `ADSRTracker`. The core difference
+ * with `DemoADSRTracker01` is how shapes are rendered.
+ *
+ * Both programs listen to key presses, but the first
+ * program renders tracked shapes inside the `extend` block,
+ * while this program attaches a unique rendering block
+ * to each tracked shape.
+ *
+ * The `ADSRTracker` maintains a mutable list of trackers,
+ * but they do not have a stable ID. The element with index 3
+ * will have index 2 when elements with lower indices expire.
+ * This is the reason why visualized elements jump left when
+ * an older tracker runs through its complete cycle.
+ *
+ * Attaching a function to each `triggerOn` event allows
+ * rendered shapes to have a stable position on the window.
+ *
+ * Notice how the program works with two different `triggerId`s:
+ * one used when pressing the `t` key, and the other for the `r`
+ * key.
+ *
+ * This is needed on the `triggerOff` calls: to tell the tracker
+ * which type of element should wind down. If several items
+ * with that same `triggerId` exist (when we repeatedly pressed
+ * the same keyboard key), the most recent of them will receive
+ * the event.
+ */
 fun main() = application {
     program {
         val tracker = ADSRTracker(this)

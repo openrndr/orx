@@ -10,6 +10,16 @@ import org.openrndr.extra.color.spaces.ColorHSLUVa
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 
+/**
+ * Interactive program comparing the HSLUV and the HSL color spaces.
+ *
+ * The program draws two series of rotated rectangles with hues increasing
+ * from 0 to 360 in steps of 12 degrees. The saturation depends on the horizontal
+ * mouse position; the luminosity on its vertical position.
+ *
+ * By exploring various saturation and luminosity values, one can appreciate
+ * whether adjacent colors are more similar in HSLUV or in HSL.
+ */
 fun main() = application {
     configure {
         width = 720

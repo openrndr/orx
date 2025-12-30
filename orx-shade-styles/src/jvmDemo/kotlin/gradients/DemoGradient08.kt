@@ -2,6 +2,7 @@ package gradients
 
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
+import org.openrndr.draw.Session
 import org.openrndr.extra.color.presets.CRIMSON
 import org.openrndr.extra.color.presets.DODGER_BLUE
 import org.openrndr.extra.color.presets.LIME_GREEN
@@ -17,7 +18,6 @@ import kotlin.math.atan2
  * pointing towards the center of the window. The center cell features a circular gradient (by having
  * `radiusX` equal to `radiusY`). The farther a cell is from the center, the higher the aspect ratio
  * of the ellipse is, becoming closer to a line than to a circle near the corners.
- *
  */
 fun main() =
     application {
@@ -40,7 +40,7 @@ fun main() =
                             spreadMethod = SpreadMethod.REPEAT
                             elliptic {
                                 val v = Vector2(x - 6.0, y - 6.0)
-                                rotation = atan2(y - 6.0, x - 6.0).asDegrees + 180.0
+                                rotation = atan2(y - 6.0, x - 6.0).asDegrees + 180.0 + seconds * 30.0
                                 radiusX = 1.0
                                 radiusY = 1.0 / (1.0 + v.length * 0.25)
                             }
@@ -48,6 +48,11 @@ fun main() =
                         drawer.rectangle(cell)
                     }
                 }
+                // Show the source of the current shader in the console
+                // if(frameCount == 10) {
+                //     println(drawer.shadeStyle?.fragmentPreamble)
+                //     println(drawer.shadeStyle?.fragmentTransform)
+                // }
             }
         }
     }

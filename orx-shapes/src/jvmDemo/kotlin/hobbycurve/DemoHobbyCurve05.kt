@@ -5,6 +5,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.color.presets.WHITE_SMOKE
 import org.openrndr.extra.noise.simplex
 import org.openrndr.extra.noise.uniform
+import org.openrndr.extra.shapes.bounds.bounds
 import org.openrndr.extra.shapes.hobbycurve.hobbyCurve
 import org.openrndr.extra.shapes.ordering.hilbertOrder
 import org.openrndr.math.Vector2
@@ -15,11 +16,16 @@ import org.openrndr.math.Vector2
  * due to a slight increase in one of the arguments of a simplex noise call.
  *
  * The program shows that minor displacements in control points can have
- * a large impact in the resulting curve.
+ * a large impact in the resulting curve. Notice how in some parts,
+ * all curves travel together, while in other parts the curves separate
+ * in two or three groups.
+ *
+ * The bounds of the rectangle containing all contours is used to
+ * center them in the window.
  */
 fun main() = application {
     program {
-        val seed = 68040
+        val seed = 68060
         val curves = List(40) { n ->
             hobbyCurve(List(10) {
                 Vector2(
@@ -28,10 +34,12 @@ fun main() = application {
                 )
             }.hilbertOrder(), true)
         }
+        val bounds = curves.bounds
         extend {
             drawer.clear(ColorRGBa.WHITE_SMOKE)
             drawer.fill = null
             drawer.stroke = ColorRGBa.BLACK.opacify(0.3)
+            drawer.translate(drawer.bounds.center - bounds.center)
             drawer.contours(curves)
         }
     }
