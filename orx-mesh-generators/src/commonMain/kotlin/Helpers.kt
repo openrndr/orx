@@ -72,7 +72,7 @@ fun triangulationWithFrame(
 ) {
     val normalFrame = normalMatrix(frame)
     val normalScale = if (!flipNormals) -1.0 else 1.0
-    val normal = ((normalFrame * Vector4(0.0, 0.0, normalScale, 0.0)).xyz)
+    val normal = ((normalFrame * Vector4(0.0, 0.0, -normalScale, 0.0)).xyz)
     for (triangle in triangulation) {
         val t = if (!flipNormals) triangle else Triangle(triangle.x3, triangle.x2, triangle.x1)
         writer((frame * t.x1.xy01).xyz, normal, Vector2.ZERO)
