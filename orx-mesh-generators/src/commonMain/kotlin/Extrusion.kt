@@ -4,6 +4,7 @@ import org.openrndr.extra.shapes.frames.frames
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
+import org.openrndr.math.transforms.normalMatrix
 import org.openrndr.shape.Path3D
 import org.openrndr.shape.Shape
 import org.openrndr.shape.ShapeContour
@@ -18,23 +19,38 @@ import org.openrndr.shape.ShapeContour
  * @param frame1 a transformation matrix that defines a final position
  * @param writer the vertex writer function
  */
-fun contourSegment(
+fun contourSegmentWithNormals(
     linearContour: List<Vector2>,
+    linearContourNormals: List<Vector2>,
     frame0: Matrix44,
     frame1: Matrix44,
-    writer: VertexWriter
+    writer: VertexWriter,
+    useFaceNormals: Boolean = false
 ) {
     for (i in linearContour.indices) {
         val v0 = linearContour[i]
         val v1 = linearContour[(i + 1).mod(linearContour.size)]
+
+        val n0 = linearContourNormals[i]
+        val n1 = linearContourNormals[(i + 1).mod(linearContourNormals.size)]
+
+        val nframe0 = normalMatrix(frame0)
+        val nframe1 = normalMatrix(frame1)
 
         val v00 = (frame0 * v0.xy01).xyz
         val v01 = (frame0 * v1.xy01).xyz
 
         val v10 = (frame1 * v0.xy01).xyz
         val v11 = (frame1 * v1.xy01).xyz
+
         val faceNormal = ((v10 - v00).normalized cross (v01 - v00).normalized).normalized
-        quadToTris(v00, v01, v10, v11, faceNormal, writer)
+        val n00 = if (useFaceNormals) faceNormal else (nframe0 * n0.xy01).xyz
+        val n01 = if (useFaceNormals) faceNormal else (nframe0 * n1.xy01).xyz
+
+        val n10 = if (useFaceNormals) faceNormal else (nframe1 * n0.xy01).xyz
+        val n11 = if (useFaceNormals) faceNormal else  (nframe1 * n1.xy01).xyz
+
+        quadToTris(v00, v01, v10, v11, n00, n01, n10, n11, writer)
     }
 }
 
@@ -73,7 +89,9 @@ fun extrudeContourSteps(
     writer: VertexWriter
 ) {
     val linearContour = contour.sampleLinear(contourDistanceTolerance)
-    val linearContourPoints = linearContour.adaptivePositions()
+    val linearContourPointsWithT = contour.adaptivePositionsWithT(contourDistanceTolerance)
+    val linearContourPoints = linearContourPointsWithT.map { it.first }
+    val linearContourNormals = linearContourPointsWithT.map { contour.normal(it.second) }
     val finalFrames = if (path.closed) frames + frames.first() else frames
 
     // First add caps
@@ -81,7 +99,7 @@ fun extrudeContourSteps(
 
     // Then add sides
     finalFrames.windowed(2, 1).forEach {
-        contourSegment(linearContourPoints, it[0], it[1], writer)
+        contourSegmentWithNormals(linearContourPoints,  linearContourNormals, it[0], it[1], writer)
     }
 }
 
@@ -116,7 +134,10 @@ fun extrudeContourAdaptive(
     writer: VertexWriter
 ) {
     val linearContour = contour.sampleLinear(contourDistanceTolerance)
-    val linearContourPoints = linearContour.adaptivePositions()
+    val linearContourPointsWithT = contour.adaptivePositionsWithT(contourDistanceTolerance)
+    val linearContourPoints = linearContourPointsWithT.map { it.first }
+    val linearContourNormals = linearContourPointsWithT.map { contour.normal(it.second) }
+
     val finalFrames = if (path.closed) frames + frames.first() else frames
 
     // First add caps
@@ -124,7 +145,7 @@ fun extrudeContourAdaptive(
 
     // Then add sides
     finalFrames.windowed(2, 1).forEach {
-        contourSegment(linearContourPoints, it[0], it[1], writer)
+        contourSegmentWithNormals(linearContourPoints, linearContourNormals,it[0], it[1], writer)
     }
 }
 
