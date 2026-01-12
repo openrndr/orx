@@ -102,6 +102,7 @@ include(
         "orx-text-on-contour",
         "orx-text-writer",
         "orx-turtle",
+        "orx-g-code",
 
         "orx-module-catalog"
     )
