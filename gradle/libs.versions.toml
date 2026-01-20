@@ -22,7 +22,7 @@ jgit = "7.3.0.202506031305-r"
 javaosc = "0.9"
 jsoup = "1.21.2"
 mockk = "1.14.2"
-processing = "4.4.10"
+processing = "4.5.1"
 nmcp = "1.2.0"
 okhttp = "5.2.1"
 
