@@ -2,7 +2,6 @@
 plugins {
     id("org.openrndr.extra.convention.kotlin-multiplatform")
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.kotest.multiplatform)
 }
 
 kotlin {

@@ -308,7 +308,7 @@ fun Slider.bind(property: KMutableProperty0<Double>) {
                     if (property.get() != currentValue) {
                         val lcur = property.get()
                         currentValue = lcur
-                        value = lcur.toDouble()
+                        value = lcur
                     }
                 }
                 update()

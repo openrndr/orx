@@ -1,10 +1,10 @@
 [versions]
-kotlinApi = "2.2"
-kotlinLanguage = "2.2"
-kotlin = "2.2.21"
+kotlinApi = "2.3"
+kotlinLanguage = "2.3"
+kotlin = "2.3.0"
 jvmTarget = "17"
 openrndr = { require = "[0.5,0.6.0)" }
-kotest = "5.9.1"
+kotest = "6.1.0"
 dokka = "2.1.0"
 nebulaRelease = "18.0.7"
 boofcv = "1.2.4"

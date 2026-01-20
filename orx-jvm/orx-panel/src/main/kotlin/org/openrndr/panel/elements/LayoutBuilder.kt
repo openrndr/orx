@@ -59,7 +59,7 @@ fun Element.slider(vararg classes: String, init: Slider.() -> Unit) : Slider {
     contract {
         callsInPlace(init, InvocationKind.EXACTLY_ONCE)
     }
-    return initElement(classes, Slider(), init) as Slider
+    return initElement(classes, Slider(), init)
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -67,7 +67,7 @@ fun Element.toggle(vararg classes: String, init: Toggle.() -> Unit): Toggle {
     contract {
         callsInPlace(init, InvocationKind.EXACTLY_ONCE)
     }
-    return initElement(classes, Toggle(), init) as Toggle
+    return initElement(classes, Toggle(), init)
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -92,7 +92,7 @@ fun Element.xyPad(vararg classes: String, init: XYPad.() -> Unit): XYPad {
     contract {
         callsInPlace(init, InvocationKind.EXACTLY_ONCE)
     }
-    return initElement(classes, XYPad(), init) as XYPad
+    return initElement(classes, XYPad(), init)
 }
 
 fun Canvas.draw(f: (Drawer) -> Unit) {

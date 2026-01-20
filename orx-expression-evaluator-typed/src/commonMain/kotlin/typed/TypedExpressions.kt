@@ -792,7 +792,7 @@ abstract class TypedExpressionListenerBase(
             if (function != null) {
                 s.functionStack.push(function)
             } else {
-                val cfunction = constants(name) as? T
+                @Suppress("UNCHECKED_CAST") val cfunction = constants(name) as? T
                 if (cfunction != null) {
                     s.functionStack.push(adapter(cfunction))
                 } else {
@@ -899,8 +899,6 @@ abstract class TypedExpressionListenerBase(
                                         ?: error("Cannot cast function '$name' ($function) to (Any, Any, Any) -> Any ${input()}")
                                     s.functionStack.push({ x -> function(x[0], x[1], x[2]) })
                                 }
-
-                                else -> error("unreachable")
                             }
                         }
                         else -> error(
@@ -952,7 +950,7 @@ abstract class TypedExpressionListenerBase(
                 )
 
                 IDType.FUNCTION5 -> {
-                    val cfunction = constants(name) as? (Any, Any, Any, Any, Any) -> Any
+                    @Suppress("UNCHECKED_CAST") val cfunction = constants(name) as? (Any, Any, Any, Any, Any) -> Any
                     if (cfunction != null) {
                         s.functionStack.push({ x -> cfunction(x[0], x[1], x[2], x[3], x[4]) })
                     } else {
@@ -965,8 +963,6 @@ abstract class TypedExpressionListenerBase(
                 IDType.FUNCTION_ARGUMENT -> {
 
                 }
-
-                else -> error("unsupported id-type $idType")
             }
         }
     }

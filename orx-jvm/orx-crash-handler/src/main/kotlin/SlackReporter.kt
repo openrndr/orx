@@ -85,7 +85,7 @@ class SlackReporter(handler: CrashHandler) : Reporter(handler) {
     private fun slackMessage(client: OkHttpClient, endpoint: String, error: Boolean = false, errorLog: String? = null) {
 
         val messageRequest = if (error) {
-            ChatPostMessageRequest(channel = channelId!!, thread_ts = null,
+            ChatPostMessageRequest(channel = channelId, thread_ts = null,
                 blocks = listOf(
                     BlockResponse("section", plainText("There is a problem with $endpoint. Please check.")),
                     BlockResponse("actions", elements = listOfNotNull(
@@ -102,7 +102,7 @@ class SlackReporter(handler: CrashHandler) : Reporter(handler) {
                 )
             )
         } else {
-            ChatPostMessageRequest(channel = channelId!!, thread_ts = null,
+            ChatPostMessageRequest(channel = channelId, thread_ts = null,
                 blocks = listOf(BlockResponse("section", plainText("$endpoint is back online!")))
             )
         }
@@ -111,7 +111,7 @@ class SlackReporter(handler: CrashHandler) : Reporter(handler) {
 
 
         if (error && response.isSuccessful) {
-            val cmr = monitorJson.decodeFromString<ChatPostMessageResponse>(response.body?.string() ?: "")
+            val cmr = monitorJson.decodeFromString<ChatPostMessageResponse>(response.body.string())
 
             val logMessage = errorLog ?: "No log could be retrieved. Machine is likely unreachable"
 
