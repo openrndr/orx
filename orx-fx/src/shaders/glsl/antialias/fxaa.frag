@@ -19,7 +19,7 @@ void main(void) {
     const int u_showEdges = 0;
     const int u_fxaaOn = 1;
 
-    vec2 u_texelStep = 1.0 / textureSize(tex0, 0);
+    vec2 u_texelStep = 1.0 / vec2(textureSize(tex0, 0));
     vec3 rgbM = min(vec3(1), texture(tex0, v_texCoord0).rgb);
 
 	// Possibility to toggle FXAA on and off.
