@@ -486,7 +486,7 @@ private fun spectralUpsampling(rgb: ColorRGBa): DoubleArray {
  * @param rgb The linear RGB color to be converted, represented as a `ColorRGBa` object.
  * @return A `DoubleArray` containing 38 reflectance values corresponding to the wavelengths.
  */
-internal fun linearToReflectance(rgb: ColorRGBa): DoubleArray {
+fun linearToReflectance(rgb: ColorRGBa): DoubleArray {
     val eps = 0.00000001
     val weights = spectralUpsampling(rgb)
     val reflectance = DoubleArray(38)
@@ -545,7 +545,7 @@ private fun DoubleArray.dot(other: DoubleArray): Double {
  *                    This is represented as a `DoubleArray` with 38 wavelength samples.
  * @return A `ColorXYZa` object representing the corresponding color in the CIE XYZ color space.
  */
-internal fun reflectanceToXYZ(reflectance: DoubleArray): ColorXYZa {
+fun reflectanceToXYZ(reflectance: DoubleArray): ColorXYZa {
     val x = reflectance.dot(CIE_CMF_X)
     val y = reflectance.dot(CIE_CMF_Y)
     val z = reflectance.dot(CIE_CMF_Z)
