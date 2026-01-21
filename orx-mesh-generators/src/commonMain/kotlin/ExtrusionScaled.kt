@@ -44,6 +44,7 @@ fun extrudeContourStepsScaled(
     startCap: Boolean = true,
     endCap: Boolean = true,
     scale: (Double) -> Double = { _ -> 1.0 },
+    useFaceNormals: Boolean,
     writer: VertexWriter
 ) {
     val finalFrames = if (path.closed) frames + frames.first() else frames
@@ -101,7 +102,8 @@ fun TriangleMeshBuilder.extrudeContourStepsScaled(
     pathDistanceTolerance: Double = 0.5,
     startCap: Boolean = true,
     endCap: Boolean = true,
-    scale: (Double) -> Double = { _ -> 1.0 }
+    scale: (Double) -> Double = { _ -> 1.0 },
+    useFaceNormals: Boolean = false
 ) = extrudeContourStepsScaled(
     contour,
     path,
@@ -112,6 +114,7 @@ fun TriangleMeshBuilder.extrudeContourStepsScaled(
     startCap = startCap,
     endCap = endCap,
     scale = scale,
-    writer = this::write
+    writer = this::write,
+    useFaceNormals =  useFaceNormals
 )
 

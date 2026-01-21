@@ -13,6 +13,7 @@ kotlin {
                 implementation(openrndr.application.core)
                 implementation(openrndr.draw)
                 implementation(openrndr.filter)
+                implementation(project(":orx-math"))
                 implementation(sharedLibs.kotlin.reflect)
                 implementation(sharedLibs.kotlin.coroutines)
                 implementation(project(":orx-triangulation"))

@@ -166,10 +166,10 @@ internal fun extrudeCaps(
     if ((startCap || endCap) && !path.closed) {
         val capTriangles = linearShape.triangulation
         if (startCap) {
-            triangulationWithFrame(capTriangles, frames.first(), false, writer)
+            triangulationWithFrame(capTriangles, frames.first(), true, writer)
         }
         if (endCap) {
-            triangulationWithFrame(capTriangles, frames.last(), true, writer)
+            triangulationWithFrame(capTriangles, frames.last(), false, writer)
         }
     }
 }
