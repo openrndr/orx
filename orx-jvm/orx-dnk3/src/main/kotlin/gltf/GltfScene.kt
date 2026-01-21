@@ -2,7 +2,24 @@ package org.openrndr.extra.dnk3.gltf
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
-import org.openrndr.extra.dnk3.*
+import org.openrndr.extra.dnk3.Camera
+import org.openrndr.extra.dnk3.DirectionalLight
+import org.openrndr.extra.dnk3.Geometry
+import org.openrndr.extra.dnk3.Material
+import org.openrndr.extra.dnk3.Mesh
+import org.openrndr.extra.dnk3.MeshBase
+import org.openrndr.extra.dnk3.MeshPrimitive
+import org.openrndr.extra.dnk3.ModelCoordinates
+import org.openrndr.extra.dnk3.OrthographicCamera
+import org.openrndr.extra.dnk3.PBRMaterial
+import org.openrndr.extra.dnk3.PerspectiveCamera
+import org.openrndr.extra.dnk3.PointLight
+import org.openrndr.extra.dnk3.SceneNode
+import org.openrndr.extra.dnk3.Shadows
+import org.openrndr.extra.dnk3.SkinnedMesh
+import org.openrndr.extra.dnk3.SpotLight
+import org.openrndr.extra.dnk3.TextureTarget
+
 import org.openrndr.extra.keyframer.KeyframerChannelQuaternion
 import org.openrndr.extra.keyframer.KeyframerChannelVector3
 import org.openrndr.math.Matrix44
@@ -133,7 +150,7 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
                 cb.filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
                 cb.wrapU = WrapMode.REPEAT
                 cb.wrapV = WrapMode.REPEAT
-                val sceneTexture = Texture(
+                val sceneTexture = org.openrndr.extra.dnk3.Texture(
                     ModelCoordinates(texture = cb, pre = "x_texCoord.y = 1.0-x_texCoord.y;"),
                     TextureTarget.COLOR
                 )
@@ -144,7 +161,7 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
                 cb.filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
                 cb.wrapU = WrapMode.REPEAT
                 cb.wrapV = WrapMode.REPEAT
-                val sceneTexture = Texture(
+                val sceneTexture = org.openrndr.extra.dnk3.Texture(
                     ModelCoordinates(texture = cb, pre = "x_texCoord.y = 1.0-x_texCoord.y;"),
                     TextureTarget.METALNESS_ROUGHNESS
                 )
@@ -157,7 +174,7 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
             cb.filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
             cb.wrapU = WrapMode.REPEAT
             cb.wrapV = WrapMode.REPEAT
-            val sceneTexture = Texture(
+            val sceneTexture = org.openrndr.extra.dnk3.Texture(
                 ModelCoordinates(texture = cb, pre = "x_texCoord.y = 1.0-x_texCoord.y;"),
                 TextureTarget.AMBIENT_OCCLUSION
             )
@@ -170,7 +187,7 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
             cb.wrapU = WrapMode.REPEAT
             cb.wrapV = WrapMode.REPEAT
 
-            val sceneTexture = Texture(
+            val sceneTexture = org.openrndr.extra.dnk3.Texture(
                 ModelCoordinates(
                     texture = cb,
                     tangentInput = "va_tangent",
@@ -186,7 +203,7 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
 
         emissiveTexture?.let {
             val cb = images!![textures!![it.index].source].createSceneImage()
-            val sceneTexture = Texture(
+            val sceneTexture = org.openrndr.extra.dnk3.Texture(
                 ModelCoordinates(texture = cb, pre = "x_texCoord.y = 1.0-x_texCoord.y;"),
                 TextureTarget.EMISSION
             )
@@ -203,7 +220,7 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
                     cb.filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
                     cb.wrapU = WrapMode.REPEAT
                     cb.wrapV = WrapMode.REPEAT
-                    val sceneTexture = Texture(
+                    val sceneTexture = org.openrndr.extra.dnk3.Texture(
                         ModelCoordinates(texture = cb, pre = "x_texCoord.y = 1.0-x_texCoord.y;"),
                         TextureTarget.COLOR
                     )
@@ -214,7 +231,7 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
                     cb.filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
                     cb.wrapU = WrapMode.REPEAT
                     cb.wrapV = WrapMode.REPEAT
-                    val sceneTexture = Texture(
+                    val sceneTexture = org.openrndr.extra.dnk3.Texture(
                         ModelCoordinates(texture = cb, pre = "x_texCoord.y = 1.0-x_texCoord.y;"),
                         TextureTarget.AMBIENT_OCCLUSION
                     )
@@ -343,7 +360,7 @@ fun GltfFile.buildSceneNodes(): GltfSceneData {
                         }
                         "directional" -> {
                             DirectionalLight().apply {
-                                shadows = Shadows.PCF()
+                                shadows = Shadows.Simple()
                             }
                         }
                         "spot" -> {

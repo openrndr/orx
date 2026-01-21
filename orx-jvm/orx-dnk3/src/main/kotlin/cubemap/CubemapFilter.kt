@@ -61,7 +61,7 @@ open class CubemapFilter(private val shader: Shader? = null) {
             }
 
             for (i in 1 until target.size) {
-                renderTarget.blendMode(i, BlendMode.REPLACE)
+                renderTarget.setBlendMode(i, BlendMode.REPLACE)
             }
 
             apply(source, renderTarget)
@@ -148,7 +148,7 @@ open class CubemapFilter(private val shader: Shader? = null) {
 
                 is ColorBuffer -> {
                     shader.uniform("$uniform", textureIndex)
-                    value.bind(textureIndex)
+                    shader.textureBindings[textureIndex] = value
                     textureIndex++
                 }
 
@@ -160,7 +160,7 @@ open class CubemapFilter(private val shader: Shader? = null) {
 
                 is ArrayTexture -> {
                     shader.uniform("$uniform", textureIndex)
-                    value.bind(textureIndex)
+                    shader.textureBindings[textureIndex] = value
                     textureIndex++
                 }
 

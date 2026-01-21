@@ -94,7 +94,7 @@ class SceneRenderer {
                     drawer.model = Matrix44.IDENTITY
 
                     drawer.clear(ColorRGBa.BLACK)
-                    drawer.cullTestPass = CullTestPass.FRONT
+                    drawer.cullTestPass = CullTestPass.BACK
                     drawPass(drawer, pass, materialContext, context)
                 }
                 when (shadowLight.shadows) {
@@ -141,7 +141,7 @@ class SceneRenderer {
                         if (it is ColorBufferFacetCombiner) {
                             val index = target.colorAttachmentIndexByName(it.targetOutput)
                                     ?: error("attachment not found ${it.targetOutput}")
-                            target.blendMode(index, it.blendMode)
+                            target.setBlendMode(index, it.blendMode)
                         }
                     }
                 }

@@ -8,7 +8,6 @@ import org.openrndr.math.Matrix44
 import org.openrndr.math.transforms.perspective
 import org.openrndr.shape.Path3D
 
-
 class Geometry(val vertexBuffers: List<VertexBuffer>,
                val indexBuffer: IndexBuffer?,
                val primitive: DrawPrimitive,
@@ -30,7 +29,10 @@ class Geometry(val vertexBuffers: List<VertexBuffer>,
 
 val DummyGeometry = Geometry(emptyList(), null, DrawPrimitive.TRIANGLES, 0, 0)
 
-sealed class Entity
+sealed class Entity {
+    var userData: Any? = null
+    var update: (() -> Unit)? = null
+}
 class MeshPrimitive(var geometry: Geometry, var material: Material) {
     override fun toString(): String {
         return "MeshPrimitive(geometry: $geometry, material: $material)"

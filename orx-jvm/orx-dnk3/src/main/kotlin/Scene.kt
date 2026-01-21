@@ -25,6 +25,9 @@ open class SceneNode {
     val children = mutableListOf<SceneNode>()
     var disposed = false
 
+    var userData: Any? = null
+    var update: (() -> Unit)? = null
+
     override fun hashCode(): Int {
         var result = name.hashCode()
         result = 31 * result + entities.hashCode()
