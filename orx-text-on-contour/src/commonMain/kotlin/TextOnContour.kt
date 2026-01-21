@@ -117,7 +117,6 @@ private class OnContourImageMapDrawer {
 
             Driver.instance.setState(drawStyle)
             drawStyle.applyToShader(shader)
-            (drawStyle.fontMap as FontImageMap).texture.bind(0)
             Driver.instance.drawVertexBuffer(
                 shader,
                 listOf(vertices),
