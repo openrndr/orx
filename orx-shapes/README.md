@@ -514,6 +514,22 @@ The last few lines of the program enable a rotating 3D camera and draw the 3D pa
 
 [source code](src/jvmDemo/kotlin/hobbycurve/DemoHobbyCurve3D01.kt)
 
+### loft/DemoLoftNormals01
+
+
+
+![loft-DemoLoftNormals01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/loft-DemoLoftNormals01Kt.png)
+
+[source code](src/jvmDemo/kotlin/loft/DemoLoftNormals01.kt)
+
+### loft/DemoLoftNormals02
+
+
+
+![loft-DemoLoftNormals02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/loft-DemoLoftNormals02Kt.png)
+
+[source code](src/jvmDemo/kotlin/loft/DemoLoftNormals02.kt)
+
 ### operators/DemoRoundCorners01
 
 Demonstrates how to use the `roundCorners` method to round the sharp corners
