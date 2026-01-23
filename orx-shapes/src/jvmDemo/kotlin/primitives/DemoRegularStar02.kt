@@ -8,6 +8,11 @@ import org.openrndr.shape.contains
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * Demonstrates how to create a 12-point regular star, and one approach to filling
+ * the star with a grid of circles: testing whether various Vector2 coordinates are `in` the
+ * `ShapeContour` or not.
+ */
 fun main() = application {
     program {
         extend {
