@@ -28,13 +28,13 @@ class OrbitalControls(
         if (userInteraction && !event.propagationCancelled) {
             val rot = event.rotation
             if (orbitalCamera.projectionType == ProjectionType.PERSPECTIVE) {
-                if (abs(rot.x) > 0.1) return
+                if (abs(rot.x) > abs(rot.y)) return
                 when {
                     rot.y > 0 -> orbitalCamera.dollyIn(rot.y)
                     rot.y < 0 -> orbitalCamera.dollyOut(rot.y)
                 }
             } else {
-                if (abs(rot.x) > 0.1) return
+                if (abs(rot.x) > abs(rot.y)) return
                 when {
                     rot.y > 0 -> orbitalCamera.scale(1.0)
                     rot.y < 0 -> orbitalCamera.scale(-1.0)
@@ -77,11 +77,14 @@ class OrbitalControls(
                 MouseButton.LEFT -> {
                     state = STATE.ROTATE
                 }
+
                 MouseButton.RIGHT -> {
                     state = STATE.PAN
                 }
+
                 MouseButton.CENTER -> {
                 }
+
                 MouseButton.NONE -> {
                 }
             }
