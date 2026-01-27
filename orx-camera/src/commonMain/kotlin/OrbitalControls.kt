@@ -26,18 +26,18 @@ class OrbitalControls(
 
     private fun mouseScrolled(event: MouseEvent) {
         if (userInteraction && !event.propagationCancelled) {
-
+            val rot = event.rotation
             if (orbitalCamera.projectionType == ProjectionType.PERSPECTIVE) {
-                if (abs(event.rotation.x) > 0.1) return
+                if (abs(rot.x) > 0.1) return
                 when {
-                    event.rotation.y > 0 -> orbitalCamera.dollyIn()
-                    event.rotation.y < 0 -> orbitalCamera.dollyOut()
+                    rot.y > 0 -> orbitalCamera.dollyIn(rot.y)
+                    rot.y < 0 -> orbitalCamera.dollyOut(rot.y)
                 }
             } else {
-                if (abs(event.rotation.x) > 0.1) return
+                if (abs(rot.x) > 0.1) return
                 when {
-                    event.rotation.y > 0 -> orbitalCamera.scale(1.0)
-                    event.rotation.y < 0 -> orbitalCamera.scale(-1.0)
+                    rot.y > 0 -> orbitalCamera.scale(1.0)
+                    rot.y < 0 -> orbitalCamera.scale(-1.0)
                 }
             }
         }

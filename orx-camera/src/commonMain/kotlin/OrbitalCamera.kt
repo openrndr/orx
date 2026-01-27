@@ -162,10 +162,11 @@ class OrbitalCamera(
      * parameter is set to `true`, the zoom effect is applied immediately; otherwise, it
      * will interpolate the change over time.
      *
+     * @param amount a normalized value controlling the zoom intensity (default is `1.0`)
      * @param instant whether the zoom-in effect should occur instantly (default is `false`)
      */
-    fun dollyIn(instant: Boolean = false) {
-        val zoomScale = pow(0.95, zoomSpeed)
+    fun dollyIn(amount: Double = 1.0, instant: Boolean = false) {
+        val zoomScale = pow(1.0 - abs(amount * 0.05), zoomSpeed)
         dolly(sphericalEnd.radius * zoomScale - sphericalEnd.radius, instant)
     }
 
@@ -173,10 +174,11 @@ class OrbitalCamera(
      * Zooms the camera out by increasing the distance to the target. The zoom operation
      * is based on an exponential scale factor determined by the `zoomSpeed` field.
      *
+     * @param amount a normalized value controlling the zoom intensity (default is `1.0`)
      * @param instant whether the zoom-out effect should occur instantly (default is `false`)
      */
-    fun dollyOut(instant: Boolean = false) {
-        val zoomScale = pow(0.95, zoomSpeed)
+    fun dollyOut(amount: Double = 1.0, instant: Boolean = false) {
+        val zoomScale = pow(1.0 - abs(amount * 0.05), zoomSpeed)
         dolly(sphericalEnd.radius / zoomScale - sphericalEnd.radius, instant)
     }
 
