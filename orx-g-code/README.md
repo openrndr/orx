@@ -69,7 +69,13 @@ tailored to your hardware or g-code flavor.
 ## Demos
 ### DemoInteractivePlot
 
+This demo shows how to use the [Plot] class to draw using user input and render the result to G-code.
 
+You can use the mouse drag to draw contours on the plot.
+
+The input handling code shows how to convert mouse coordinates from the screen space to the document space.
+
+Pressing the `g` key will render the g-code and write it to `/tmp`.
 
 ![DemoInteractivePlotKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-g-code/images/DemoInteractivePlotKt.png)
 
@@ -77,7 +83,23 @@ tailored to your hardware or g-code flavor.
 
 ### DemoSimplePlot
 
+A minimal example of how to use the [Plot].
 
+The Plot is set up to A4 Portrait paper, to generate grbl compatible g-code, to write each layer to a separate file
+and to export the g-code to `/tmp`.
+
+The default layer can be drawn to with the `draw` block.
+Additional named layers can be created with `layer` block.
+
+The application window shows a preview of the plot.
+In this case a black rectrangle 1cm from the paper edges and 9 circles with radii from 10mm to 90mm.
+
+Pressing `g` will write two files to the `/tmp` directory.
+Note that setting the stroke will not affect the generated g-code.
+It could be a hint to what pen color is used to draw each layer.
+
+This does not use the olive orx to keep the example minimal. But using a program with live reloading,
+you can quickly preview your plot.
 
 ![DemoSimplePlotKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-g-code/images/DemoSimplePlotKt.png)
 
