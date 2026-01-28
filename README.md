@@ -31,6 +31,7 @@ To make use of these extensions clone the [OPENRNDR template](https://github.com
 | [`orx-fcurve`](orx-fcurve/) | FCurves are 1 dimensional function curves constructed from 2D bezier functions. They are often used to control a property over time.  `x` values don't have any units, but they often represent a duration in seconds. |
 | [`orx-fft`](orx-fft/) | Simple forward and inverse FFT routine |
 | [`orx-fx`](orx-fx/) | Ready-to-use GPU-based visual effects or filters. Most include [orx-parameters](https://github.com/openrndr/orx/tree/master/orx-parameters) annotations  so they can be easily controlled via orx-gui. |
+| [`orx-g-code`](orx-g-code/) | Utilities for generating g-code for CNC Machines such as pen plotters, laser engravers, 3D printers, and more. |
 | [`orx-gradient-descent`](orx-gradient-descent/) | Finds equation inputs that output a minimum value: easy to use gradient descent based minimizer. |
 | [`orx-hash-grid`](orx-hash-grid/) | 2D space partitioning for fast point queries. |
 | [`orx-image-fit`](orx-image-fit/) | Draws an image ensuring it fits or covers the specified `Rectangle`. |
