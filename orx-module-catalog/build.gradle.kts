@@ -73,6 +73,7 @@ catalog {
         library("triangulation", "org.openrndr.extra:orx-triangulation:$version")
         library("turtle", "org.openrndr.extra:orx-turtle:$version")
         library("view-box", "org.openrndr.extra:orx-view-box:$version")
+        library("gcode", "org.openrndr.extra:orx-g-code:$version")
 
         bundle(
             "basic",
