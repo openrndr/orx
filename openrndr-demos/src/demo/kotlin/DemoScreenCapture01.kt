@@ -12,6 +12,8 @@ fun main() = application {
     program {
         val cube = boxMesh()
         val screen = VideoPlayerFFMPEG.fromScreen(
+            audioDevice = null,
+            //screenName = ":0",
             frameRate = 15.0,
             imageWidth = 300,
             imageHeight = 300
