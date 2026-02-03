@@ -20,7 +20,7 @@ import org.openrndr.math.clamp
  * effect and renders the static result on every animation frame.
  *
  * Additionally, it uses the shadow (CPU version of the texture) to query the distance field texture
- * at current mouse position. The resulting blue color component is used as the radius of a circle
+ * at the current mouse position. The resulting blue color component is used as the radius of a circle
  * centered at the mouse position. The red and green components are used to draw a line to the
  * black/white edge closest to the mouse pointer.
  */

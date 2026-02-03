@@ -11,7 +11,7 @@ import org.openrndr.shape.Rectangle
 /**
  * Shows how to use the [DistanceField] filter.
  *
- * Draws moving white shapes on black background,
+ * Draws moving white shapes on a black background,
  * then applies the DistanceField filter which returns a [ColorBuffer] in which
  * the red component encodes the distance to the closest black/white edge.
  *
