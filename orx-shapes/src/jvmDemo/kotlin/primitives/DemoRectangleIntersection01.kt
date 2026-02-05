@@ -5,8 +5,8 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.shapes.primitives.intersection
 
 /**
- * Demonstrate rectangle-rectangle intersection
- * @see <img src="https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleIntersection01Kt.png">
+ * Demonstrates how to calculate a rectangle-rectangle intersection.
+ * @see <img src="https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleIntersection01Kt.png" width="500">
  */
 fun main() = application {
     configure {

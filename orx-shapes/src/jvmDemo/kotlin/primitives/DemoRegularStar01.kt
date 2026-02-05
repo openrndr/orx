@@ -6,6 +6,13 @@ import org.openrndr.extra.shapes.primitives.regularStar
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * Demonstrates the use of `regularStar()` to produce a `ShapeContour`.
+ * The two required radii are calculated using the cosine and the sine of the time in seconds.
+ *
+ * In one brief instant, when both radii are equal, the 5-point star is rendered as a Decagon.
+ *
+ */
 fun main() = application {
     program {
         extend {
