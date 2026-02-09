@@ -617,6 +617,7 @@ open class GUI(
                                     obj,
                                     resolvedPath
                                 )
+                                onChangeListener?.invoke(parameter.property!!.name, resolvedPath)
                             }
                         } else {
                             openFolderDialog(contextID = parameter.pathContext ?: "null") {
@@ -631,6 +632,7 @@ open class GUI(
                                     obj,
                                     resolvedPath
                                 )
+                                onChangeListener?.invoke(parameter.property!!.name, resolvedPath)
                             }
                         }
                     }
