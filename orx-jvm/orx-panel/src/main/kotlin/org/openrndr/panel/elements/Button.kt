@@ -1,5 +1,6 @@
 package org.openrndr.panel.elements
 
+import org.openrndr.KEY_SPACEBAR
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 
@@ -38,7 +39,7 @@ class Button : Element(ElementType("button")) {
         }
 
         keyboard.pressed.listen {
-            if (it.key == 32) {
+            if (it.key == KEY_SPACEBAR) {
                 it.cancelPropagation()
                 if (disabled !in pseudoClasses) {
                     events.clicked.trigger(ButtonEvent(this))

@@ -156,6 +156,9 @@ fun defaultStyles(
             marginRight = 5.px
             fontSize = controlFontSize.px
             color = controlTextColor
+            and(has state "active") {
+                color = controlActiveColor
+            }
         },
 
         styleSheet(has type "h1") {

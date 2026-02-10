@@ -1,6 +1,7 @@
 package org.openrndr.panel.elements
 
 import kotlinx.coroutines.*
+import org.openrndr.KEY_SPACEBAR
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.LineCap
 import org.openrndr.draw.loadFont
@@ -15,6 +16,8 @@ import kotlin.reflect.KMutableProperty0
 
 class Toggle : Element(ElementType("toggle")), DisposableElement {
     override var disposed = false
+
+    override val handlesKeyboardFocus = true
 
     var label = ""
     var value = false
@@ -61,6 +64,15 @@ class Toggle : Element(ElementType("toggle")), DisposableElement {
             draw.dirty = true
             events.valueChanged.trigger(Toggle.ValueChangedEvent(this, !value, value))
             it.cancelPropagation()
+        }
+
+        keyboard.pressed.listen {
+            if (it.key == KEY_SPACEBAR) {
+                value = !value
+                it.cancelPropagation()
+                draw.dirty = true
+                events.valueChanged.trigger(Toggle.ValueChangedEvent(this, !value, value))
+            }
         }
     }
 
