@@ -9,21 +9,10 @@ import org.openrndr.panel.hash.watchHash
 class WatchObjectDiv<T:Any>(
     val watchObject: T,
     private val builder: WatchObjectDiv<T>.(T) -> Unit
-) : Div(),
-    DisposableElement {
-    override var disposed: Boolean = false
+) : Div()
+    {
     private var objectStateHash = watchHash(watchObject)
     private var watchJob: Job? = null
-
-
-    override fun dispose() {
-        super.dispose()
-        for (child in children) {
-            child.parent = null
-            (child as? DisposableElement)?.dispose()
-        }
-        children.clear()
-    }
 
     fun regenerate(force: Boolean = false) {
         var regenerate = force
@@ -34,7 +23,7 @@ class WatchObjectDiv<T:Any>(
         if (regenerate) {
             for (child in children) {
                 child.parent = null
-                (child as? DisposableElement)?.dispose()
+                child.close()
             }
             objectStateHash = watchHash(watchObject)
             children.clear()
@@ -58,6 +47,11 @@ class WatchObjectDiv<T:Any>(
     override fun draw(drawer: Drawer) {
         checkJob()
         super.draw(drawer)
+    }
+
+    override fun close() {
+        super.close()
+        watchJob?.cancel()
     }
 }
 

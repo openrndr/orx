@@ -13,8 +13,7 @@ import org.openrndr.panel.style.*
 
 import kotlin.reflect.KMutableProperty0
 
-class ColorpickerButton : Element(ElementType("colorpicker-button")), DisposableElement {
-    override var disposed: Boolean = false
+class ColorpickerButton : Element(ElementType("colorpicker-button")) {
 
     var label: String = "OK"
     var color: ColorRGBa = ColorRGBa(0.5, 0.5, 0.5, linearity = Linearity.SRGB)
@@ -28,8 +27,11 @@ class ColorpickerButton : Element(ElementType("colorpicker-button")), Disposable
 
     class ColorChangedEvent(val source: ColorpickerButton, val color: ColorRGBa)
 
-    class Events {
+    class Events: AutoCloseable {
         val valueChanged = Event<ColorChangedEvent>()
+        override fun close() {
+            valueChanged.close()
+        }
     }
 
     val events = Events()
@@ -50,6 +52,11 @@ class ColorpickerButton : Element(ElementType("colorpicker-button")), Disposable
             else -> throw RuntimeException("only item and slideout")
         }
         super.append(element)
+    }
+
+    override fun close() {
+        super.close()
+        events.close()
     }
 
     fun items(): List<Item> = children.filter { it is Item }.map { it as Item }

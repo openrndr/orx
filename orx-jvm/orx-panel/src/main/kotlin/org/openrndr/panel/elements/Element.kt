@@ -25,15 +25,11 @@ val disabled = ElementPseudoClass("disabled")
 
 class FocusEvent
 
-interface DisposableElement {
-    var disposed: Boolean
 
-    fun dispose() {
-        disposed = true
-    }
-}
+open class Element(val type: ElementType): AutoCloseable {
 
-open class Element(val type: ElementType) {
+    var disposed = false
+        private set
 
     var scrollTop = 0.0
     open val handlesDoubleClick = false
@@ -50,7 +46,7 @@ open class Element(val type: ElementType) {
             return null
         }
 
-    class MouseObservables {
+    class MouseObservables: AutoCloseable {
         val clicked = Event<MouseEvent>("element-mouse-clicked")
         val doubleClicked = Event<MouseEvent>("element-mouse-double-clicked")
         val entered = Event<MouseEvent>("element-mouse-entered")
@@ -59,22 +55,46 @@ open class Element(val type: ElementType) {
         val moved = Event<MouseEvent>("element-mouse-moved")
         val scrolled = Event<MouseEvent>("element-mouse-scrolled")
         val pressed = Event<MouseEvent>("element-mouse-pressed")
+
+        override fun close() {
+            clicked.close()
+            doubleClicked.close()
+            entered.close()
+            exited.close()
+            dragged.close()
+            moved.close()
+            scrolled.close()
+            pressed.close()
+        }
     }
 
-    class DropObserverables {
+    class DropObserverables: AutoCloseable {
         val dropped = Event<DropEvent>("element-dropped")
+
+        override fun close() {
+            dropped.close()
+        }
     }
 
     val drop = DropObserverables()
     val mouse = MouseObservables()
 
-    class KeyboardObservables {
+    class KeyboardObservables : AutoCloseable {
         val pressed = Event<KeyEvent>("element-keyboard-pressed")
         val released = Event<KeyEvent>("element-keyboard-released")
         val repeated = Event<KeyEvent>("element-keyboard-repeated")
         val character = Event<CharacterEvent>("element-keyboard-character")
         val focusGained = Event<FocusEvent>("element-keyboard-focus-gained")
         val focusLost = Event<FocusEvent>("element-keyboard-focus-lost")
+
+        override fun close() {
+            pressed.close()
+            released.close()
+            repeated.close()
+            character.close()
+            focusGained.close()
+            focusLost.close()
+        }
     }
 
     val keyboard = KeyboardObservables()
@@ -100,9 +120,14 @@ open class Element(val type: ElementType) {
     val layout = Layout()
 
     class ClassEvent(val source: Element, val `class`: ElementClass)
-    class ClassObserverables {
+    class ClassObserverables : AutoCloseable {
         val classAdded = Event<ClassEvent>("element-class-added")
         val classRemoved = Event<ClassEvent>("element-class-removed")
+
+        override fun close() {
+            classAdded.close()
+            classRemoved.close()
+        }
     }
 
     val classEvents = ClassObserverables()
@@ -324,6 +349,20 @@ open class Element(val type: ElementType) {
                 layout.screenWidth,
                 layout.screenHeight)
 
+
+    override fun close() {
+        disposed = true
+        classes.close()
+        pseudoClasses.close()
+        classEvents.close()
+        mouse.close()
+        keyboard.close()
+        drop.close()
+        for (child in children) {
+            child.close()
+        }
+        children.clear()
+    }
 
 }
 

@@ -20,7 +20,12 @@ class Button : Element(ElementType("button")) {
     var label: String = "OK"
 
     class ButtonEvent(val source: Button)
-    class Events(val clicked: Event<ButtonEvent> = Event())
+    class Events: AutoCloseable {
+        val clicked: Event<ButtonEvent> = Event()
+        override fun close() {
+            clicked.close()
+        }
+    }
 
     var data: Any? = null
 
@@ -105,5 +110,10 @@ class Button : Element(ElementType("button")) {
             drawer.popStyle()
             drawer.popTransforms()
         }
+    }
+
+    override fun close() {
+        super.close()
+        events.close()
     }
 }

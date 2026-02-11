@@ -32,8 +32,8 @@ enum class SliderMode {
     SEGMENT
 }
 
-class Slider : Element(ElementType("slider")), DisposableElement {
-    override var disposed = false
+class Slider : Element(ElementType("slider")) {
+
     override val handlesKeyboardFocus = true
 
     var label = ""
@@ -81,8 +81,11 @@ class Slider : Element(ElementType("slider")), DisposableElement {
                             val oldValue: Double,
                             val newValue: Double)
 
-    class Events {
+    class Events: AutoCloseable {
         val valueChanged = Event<ValueChangedEvent>("slider-value-changed")
+        override fun close() {
+            valueChanged.close()
+        }
     }
 
     val events = Events()
@@ -289,6 +292,11 @@ class Slider : Element(ElementType("slider")), DisposableElement {
                 writer.text(keyboardInput)
             }
         }
+    }
+
+    override fun close() {
+        super.close()
+        events.close()
     }
 }
 

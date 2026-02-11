@@ -3,7 +3,7 @@ package org.openrndr.panel.collections
 import org.openrndr.events.Event
 import java.util.*
 
-class ObservableHashSet<E> : HashSet<E>() {
+class ObservableHashSet<E> : HashSet<E>(), AutoCloseable {
 
     class ChangeEvent<E>(val source: ObservableHashSet<E>, val added: Set<E>, val removed: Set<E>)
 
@@ -31,6 +31,10 @@ class ObservableHashSet<E> : HashSet<E>() {
         val old = this.toSet()
         super.clear()
         changed.trigger(ChangeEvent(this, emptySet(), old))
+    }
+
+    override fun close() {
+        changed.close()
     }
 
 }

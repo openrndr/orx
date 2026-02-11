@@ -14,14 +14,18 @@ import org.openrndr.launch
 import org.openrndr.shape.Rectangle
 import kotlin.reflect.KMutableProperty0
 
-class Textfield : Element(ElementType("textfield")), DisposableElement {
+class Textfield : Element(ElementType("textfield")) {
 
     var value: String = ""
     var label: String = "label"
 
     class ValueChangedEvent(val source: Textfield, val oldValue: String, val newValue: String)
-    class Events {
+    class Events : AutoCloseable {
         val valueChanged = Event<ValueChangedEvent>("textfield-value-changed")
+        override fun close() {
+            valueChanged.close()
+        }
+
     }
 
     val events = Events()
@@ -134,7 +138,10 @@ class Textfield : Element(ElementType("textfield")), DisposableElement {
         }
     }
 
-    override var disposed: Boolean = false
+    override fun close() {
+        super.close()
+        events.close()
+    }
 }
 
 @OptIn(DelicateCoroutinesApi::class)

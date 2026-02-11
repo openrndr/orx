@@ -7,19 +7,25 @@ import org.openrndr.math.Vector2
 import org.openrndr.KeyModifier
 import org.openrndr.events.Event
 
-class Envelope(constant:Double = 0.5) {
+class Envelope(constant:Double = 0.5) : AutoCloseable {
 
     val points = mutableListOf(Vector2(0.5, constant))
     var activePoint: Vector2? = null
 
-    var offset:Double = 0.0
-        set(value) { field = value; events.envelopeChanged.trigger(EnvelopeChangedEvent(this))}
+    var offset: Double = 0.0
+        set(value) {
+            field = value; events.envelopeChanged.trigger(EnvelopeChangedEvent(this))
+        }
 
     class EnvelopeChangedEvent(val envelope: Envelope)
 
-    class Events {
+    class Events : AutoCloseable {
         val envelopeChanged = Event<EnvelopeChangedEvent>("envelope-changed")
+        override fun close() {
+            envelopeChanged.close()
+        }
     }
+
     val events = Events()
 
     fun insertPoint(v: Vector2) {
@@ -51,19 +57,19 @@ class Envelope(constant:Double = 0.5) {
     private fun fixBounds() {
         if (points.size >= 2) {
             if (points[0].x != 0.0) {
-                points[0].copy(x=0.0).let {
+                points[0].copy(x = 0.0).let {
                     if (activePoint === points[0]) {
                         activePoint = it
                     }
                     points[0] = it
                 }
             }
-            if (points[points.size-1].x != 1.0) {
-                points[points.size-1].copy(x=1.0).let {
-                    if (activePoint === points[points.size-1]) {
+            if (points[points.size - 1].x != 1.0) {
+                points[points.size - 1].copy(x = 1.0).let {
+                    if (activePoint === points[points.size - 1]) {
                         activePoint = it
                     }
-                    points[points.size-1] = it
+                    points[points.size - 1] = it
                 }
             }
         }
@@ -89,26 +95,25 @@ class Envelope(constant:Double = 0.5) {
 
         if (points.size == 1) {
             return points[0].y
-        }
-        else if (points.size == 2) {
-            return points[0].y * (1.0-st) + points[1].y * st
+        } else if (points.size == 2) {
+            return points[0].y * (1.0 - st) + points[1].y * st
         } else {
             if (st == 0.0) {
                 return points[0].y
             }
             if (st == 1.0) {
-                return points[points.size-1].y
+                return points[points.size - 1].y
             }
 
-            for (i in 0 until points.size-1) {
-                if (points[i].x <= st && points[i+1].x > st) {
+            for (i in 0 until points.size - 1) {
+                if (points[i].x <= st && points[i + 1].x > st) {
                     val left = points[i]
-                    var right = points[i+1]
+                    var right = points[i + 1]
 
                     val dt = right.x - left.x
                     if (dt > 0.0) {
                         val f = (t - left.x) / dt
-                        return left.y * (1.0-f) + right.y * f
+                        return left.y * (1.0 - f) + right.y * f
                     } else {
                         return left.y
                     }
@@ -121,6 +126,9 @@ class Envelope(constant:Double = 0.5) {
 
     }
 
+    override fun close() {
+        events.close()
+    }
 }
 
 // --
@@ -225,5 +233,10 @@ class EnvelopeEditor : Element(ElementType("envelope-editor")) {
             drawer.stroke = null
             drawer.circle(m[0], 4.0)
         }
+    }
+
+    override fun close() {
+        super.close()
+        envelope.close()
     }
 }

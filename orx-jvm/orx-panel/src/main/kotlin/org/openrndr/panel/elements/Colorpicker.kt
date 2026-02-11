@@ -36,8 +36,11 @@ class Colorpicker : Element {
                             val oldColor: ColorRGBa,
                             val newColor: ColorRGBa)
 
-    class Events {
+    class Events: AutoCloseable {
         val colorChanged = Event<ColorChangedEvent>()
+        override fun close() {
+            colorChanged.close()
+        }
     }
 
     val events = Events()
@@ -168,5 +171,10 @@ class Colorpicker : Element {
         if (keyboardInput.isNotBlank()) {
             drawer.text("input: $keyboardInput", 0.0, layout.screenHeight)
         }
+    }
+
+    override fun close() {
+        super.close()
+        events.close()
     }
 }

@@ -14,8 +14,7 @@ import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.launch
 import kotlin.reflect.KMutableProperty0
 
-class Toggle : Element(ElementType("toggle")), DisposableElement {
-    override var disposed = false
+class Toggle : Element(ElementType("toggle")) {
 
     override val handlesKeyboardFocus = true
 
@@ -26,8 +25,13 @@ class Toggle : Element(ElementType("toggle")), DisposableElement {
                             val oldValue: Boolean,
                             val newValue: Boolean)
 
-    class Events {
+    class Events: AutoCloseable {
+
         val valueChanged = Event<ValueChangedEvent>("toggle-value-changed")
+
+        override fun close() {
+            valueChanged.close()
+        }
     }
 
     val events = Events()
@@ -109,6 +113,11 @@ class Toggle : Element(ElementType("toggle")), DisposableElement {
         drawer.stroke = null
         drawer.fill = computedStyle.effectiveColor
         drawer.text(label, 0.0, 0.0)
+    }
+
+    override fun close() {
+        super.close()
+        events.close()
     }
 }
 

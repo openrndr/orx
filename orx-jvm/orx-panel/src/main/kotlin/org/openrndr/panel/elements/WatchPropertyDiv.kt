@@ -9,21 +9,10 @@ import kotlin.reflect.KMutableProperty0
 class WatchPropertyDiv<T : Any>(
     private val watchProperty: KMutableProperty0<T>,
     private val builder: WatchPropertyDiv<T>.(T) -> Unit
-) : Div(),
-    DisposableElement {
-    override var disposed: Boolean = false
+) : Div() {
+
     private var propertyState = watchProperty.get()
     private var watchJob: Job? = null
-
-
-    override fun dispose() {
-        super.dispose()
-        for (child in children) {
-            child.parent = null
-            (child as? DisposableElement)?.dispose()
-        }
-        children.clear()
-    }
 
     fun regenerate(force: Boolean = false) {
         var regenerate = force
@@ -34,7 +23,7 @@ class WatchPropertyDiv<T : Any>(
         if (regenerate) {
             for (child in children) {
                 child.parent = null
-                (child as? DisposableElement)?.dispose()
+                child.close()
             }
             propertyState = watchProperty.get()
             children.clear()
@@ -59,6 +48,7 @@ class WatchPropertyDiv<T : Any>(
         checkJob()
         super.draw(drawer)
     }
+
 }
 
 fun <T : Any> Element.watchPropertyDiv(

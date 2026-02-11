@@ -5,19 +5,10 @@ import kotlinx.coroutines.yield
 import org.openrndr.draw.Drawer
 import org.openrndr.launch
 
-class WatchListDiv<T : Any>(private val watchList: List<T>, private val builder: WatchListDiv<T>.(T) -> Unit) : Div(), DisposableElement {
-    override var disposed: Boolean = false
+class WatchListDiv<T : Any>(private val watchList: List<T>, private val builder: WatchListDiv<T>.(T) -> Unit) : Div() {
     private var listState = emptyList<T>()
     private var watchJob: Job? = null
 
-    override fun dispose() {
-        super.dispose()
-        for (child in children) {
-            child.parent = null
-            (child as? DisposableElement)?.dispose()
-        }
-        children.clear()
-    }
 
     fun regenerate() {
         var regenerate = false
@@ -35,7 +26,7 @@ class WatchListDiv<T : Any>(private val watchList: List<T>, private val builder:
         if (regenerate) {
             for (child in children) {
                 child.parent = null
-                (child as? DisposableElement)?.dispose()
+                child.close()
             }
             children.clear()
             listState = watchList.map { it }
@@ -60,6 +51,7 @@ class WatchListDiv<T : Any>(private val watchList: List<T>, private val builder:
         checkJob()
         super.draw(drawer)
     }
+
 }
 
 fun <T : Any> Element.watchListDiv(vararg classes: String, watchList: List<T>, builder: WatchListDiv<T>.(T) -> Unit) {

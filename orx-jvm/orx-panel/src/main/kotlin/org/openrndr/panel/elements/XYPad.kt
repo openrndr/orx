@@ -86,8 +86,12 @@ class XYPad : Element(ElementType("xy-pad")) {
 
     val events = Events()
 
-    class Events {
+    class Events: AutoCloseable {
         val valueChanged = Event<ValueChangedEvent>("xypad-value-changed")
+
+        override fun close() {
+            valueChanged.close()
+        }
     }
 
 

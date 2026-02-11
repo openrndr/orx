@@ -34,16 +34,23 @@ class Item : Element(ElementType("item")) {
     }
 }
 
-class DropdownButton : Element(ElementType("dropdown-button")), DisposableElement {
-    override var disposed = false
+class DropdownButton : Element(ElementType("dropdown-button")) {
 
     var label: String = "OK"
     var value: Item? = null
 
     class ValueChangedEvent(val source: DropdownButton, val value: Item)
 
-    class Events {
+    override fun close() {
+        super.close()
+        events.close()
+    }
+
+    class Events: AutoCloseable {
         val valueChanged = Event<ValueChangedEvent>()
+        override fun close() {
+            valueChanged.close()
+        }
     }
 
     val events = Events()
@@ -257,6 +264,7 @@ class DropdownButton : Element(ElementType("dropdown-button")), DisposableElemen
             parent?.remove(this)
         }
     }
+
 }
 
 fun <E : Enum<E>> DropdownButton.bind(property: KMutableProperty0<E>, map: Map<E, String>) {

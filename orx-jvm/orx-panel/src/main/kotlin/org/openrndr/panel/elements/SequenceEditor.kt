@@ -30,8 +30,11 @@ class SequenceEditor : SequenceEditorBase("sequence-editor") {
                             val oldValue: List<Double>,
                             val newValue: List<Double>)
 
-    class Events {
+    class Events: AutoCloseable {
         val valueChanged = Event<ValueChangedEvent>("sequence-editor-value-changed")
+        override fun close() {
+            valueChanged.close()
+        }
     }
 
     val events = Events()
@@ -41,11 +44,15 @@ class SequenceEditor : SequenceEditorBase("sequence-editor") {
             events.valueChanged.trigger(ValueChangedEvent(this, it.oldValue, it.newValue))
         }
     }
+
+    override fun close() {
+        super.close()
+        events.close()
+    }
 }
 
 @OptIn(DelicateCoroutinesApi::class)
-open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(ElementType(type)), DisposableElement {
-    override var disposed = false
+open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(ElementType(type)) {
 
     internal var baseValue = mutableListOf(0.0)
     var label = "sequence"
@@ -63,8 +70,11 @@ open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(E
         val oldValue: List<Double>,
         val newValue: List<Double>)
 
-    internal class Events {
+    internal class Events: AutoCloseable {
         val valueChanged = Event<ValueChangedEvent>("sequence-editor-base-value-changed")
+        override fun close() {
+            valueChanged.close()
+        }
     }
 
     internal val baseEvents = Events()
@@ -209,5 +219,10 @@ open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(E
         }
 
         tooltip?.draw(drawer)
+    }
+
+    override fun close() {
+        super.close()
+        baseEvents.close()
     }
 }

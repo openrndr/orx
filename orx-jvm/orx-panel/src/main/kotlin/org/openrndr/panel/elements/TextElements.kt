@@ -42,7 +42,7 @@ class TextNode(var text: String) : Element(ElementType("text")) {
             writer.box = Rectangle(layout.screenX,
                        layout.screenY,
                        layout.screenWidth,
-                       layout.screenHeight)
+                       1E9)
 
             writer.drawStyle.fontMap = fontMap
             writer.newLine()
@@ -104,3 +104,4 @@ fun TextElement.bind(property: KMutableProperty0<String>) {
         }
     }
 }
+
