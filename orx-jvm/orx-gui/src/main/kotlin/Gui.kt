@@ -127,8 +127,9 @@ open class GUI(
 
     private var sidebar: Div? = null
     private val collapsibles = mutableSetOf<Div>()
-    private fun addCollapsible(parent: Element, labeledObject: LabeledObject, binding: TrackedObjectBinding) {
+    private val elementsForObject = mutableMapOf<Any, List<Element>>()
 
+    private fun addCollapsible(parent: Element, labeledObject: LabeledObject, binding: TrackedObjectBinding) {
         parent.append {
 
             val (label, _) = labeledObject
@@ -141,6 +142,7 @@ open class GUI(
                 }
             }
             collapsibles.add(collapsible)
+            elementsForObject[labeledObject.obj] = listOf(h3Header, collapsible)
             val collapseClass = ElementClass("collapsed")
 
             /* this is guaranteed to be in the dictionary after insertion through add() */
@@ -1207,6 +1209,25 @@ open class GUI(
 
         }
         return objectWithParameters
+    }
+
+    /**
+     * Remove an object from the GUI.
+     *
+     * @param objectWithParameters the original object added to the GUI using the `add()` method.
+     */
+    fun <T : Any> remove(objectWithParameters: T) {
+        val found = trackedObjects.filter { it.key.obj == objectWithParameters }
+        val collapseStates = persistentCompartmentStates.getOrPut(Driver.instance.contextID) {
+            mutableMapOf()
+        }
+        found.forEach { (labeledObject, binding) ->
+            collapseStates.remove(labeledObject.label)
+            trackedObjects.remove(labeledObject, binding)
+        }
+        elementsForObject[objectWithParameters]?.forEach {
+            it.parent?.remove(it)?.close()
+        }
     }
 
     /**
