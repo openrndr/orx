@@ -198,10 +198,13 @@ open class Element(val type: ElementType): AutoCloseable {
         }
     }
 
-    fun remove(element: Element) {
-        if (element in children) {
+    fun remove(element: Element): Element? {
+        return if (element in children) {
             element.parent = null
             children.remove(element)
+            element
+        } else {
+            null
         }
     }
 
