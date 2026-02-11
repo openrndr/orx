@@ -187,6 +187,10 @@ open class Element(val type: ElementType): AutoCloseable {
         return parent?.root() ?: this
     }
 
+    open fun append(builder: Element.() -> Unit) {
+        this.builder()
+    }
+
     open fun append(element: Element) {
         if (element !in children) {
             element.parent = this
