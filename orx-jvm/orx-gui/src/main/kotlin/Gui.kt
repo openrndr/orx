@@ -18,6 +18,7 @@ import org.openrndr.panel.elements.*
 import org.openrndr.panel.style.*
 import org.openrndr.panel.style.Display
 import java.io.File
+import kotlin.collections.set
 import kotlin.math.roundToInt
 import kotlin.reflect.KMutableProperty1
 
@@ -123,6 +124,59 @@ open class GUI(
     }
 
     val collapsed = ElementClass("collapsed")
+
+    private var sidebar: Div? = null
+    private val collapsibles = mutableSetOf<Div>()
+    private fun addCollapsible(parent: Element, labeledObject: LabeledObject, binding: TrackedObjectBinding) {
+
+        parent.append {
+
+            val (label, _) = labeledObject
+
+            val h3Header = h3 { label }
+            val collapsible = div("compartment") {
+                for (parameter in binding.parameters) {
+                    val element = addControl(labeledObject, parameter)
+                    binding.parameterControls[parameter] = element
+                }
+            }
+            collapsibles.add(collapsible)
+            val collapseClass = ElementClass("collapsed")
+
+            /* this is guaranteed to be in the dictionary after insertion through add() */
+            val collapseState = compartmentState()[label]!!
+            if (collapseState.collapsed) {
+                collapsible.classes.add(collapseClass)
+            }
+
+            h3Header.mouse.pressed.listen {
+                it.cancelPropagation()
+            }
+            h3Header.mouse.clicked.listen { me ->
+
+                if (KeyModifier.CTRL in me.modifiers) {
+                    collapsible.classes.remove(collapseClass)
+                    compartmentState().forEach {
+                        it.value.collapsed = true
+                    }
+                    collapseState.collapsed = false
+
+                    (collapsibles - collapsible).forEach {
+                        it.classes.add(collapseClass)
+                    }
+                } else {
+
+                    if (collapseClass in collapsible.classes) {
+                        collapsible.classes.remove(collapseClass)
+                        collapseState.collapsed = false
+                    } else {
+                        collapsible.classes.add(collapseClass)
+                        collapseState.collapsed = true
+                    }
+                }
+            }
+        }
+    }
 
     override fun setup(program: Program) {
         if (persistState) {
@@ -346,57 +400,16 @@ open class GUI(
 
                         }
 
-                        val collapsibles = mutableSetOf<Div>()
-                        val sidebar = div("sidebar") {
+
+                        sidebar = div("sidebar") {
                             id = "sidebar"
                             scrollTop = sidebarState().scrollTop
                             for ((labeledObject, binding) in trackedObjects) {
-                                val (label, _) = labeledObject
-
-                                val h3Header = h3 { label }
-                                val collapsible = div("compartment") {
-                                    for (parameter in binding.parameters) {
-                                        val element = addControl(labeledObject, parameter)
-                                        binding.parameterControls[parameter] = element
-                                    }
-                                }
-                                collapsibles.add(collapsible)
-                                val collapseClass = ElementClass("collapsed")
-
-                                /* this is guaranteed to be in the dictionary after insertion through add() */
-                                val collapseState = compartmentState()[label]!!
-                                if (collapseState.collapsed) {
-                                    collapsible.classes.add(collapseClass)
-                                }
-
-                                h3Header.mouse.pressed.listen {
-                                    it.cancelPropagation()
-                                }
-                                h3Header.mouse.clicked.listen { me ->
-
-                                    if (KeyModifier.CTRL in me.modifiers) {
-                                        collapsible.classes.remove(collapseClass)
-                                        compartmentState().forEach {
-                                            it.value.collapsed = true
-                                        }
-                                        collapseState.collapsed = false
-
-                                        (collapsibles - collapsible).forEach {
-                                            it.classes.add(collapseClass)
-                                        }
-                                    } else {
-
-                                        if (collapseClass in collapsible.classes) {
-                                            collapsible.classes.remove(collapseClass)
-                                            collapseState.collapsed = false
-                                        } else {
-                                            collapsible.classes.add(collapseClass)
-                                            collapseState.collapsed = true
-                                        }
-                                    }
-                                }
+                                addCollapsible(this, labeledObject, binding)
                             }
                         }
+                        val sidebar = sidebar!!
+
                         collapseBorder.mouse.pressed.listen {
                             it.cancelPropagation()
                         }
@@ -412,6 +425,7 @@ open class GUI(
                             }
                             it.cancelPropagation()
                         }
+
                         sidebar.mouse.scrolled.listen {
                             sidebarState().scrollTop = sidebar.scrollTop
                         }
@@ -1182,7 +1196,15 @@ open class GUI(
             collapseStates.getOrPut(uniqueLabel) {
                 CompartmentState(compartmentsCollapsedByDefault)
             }
-            trackedObjects[LabeledObject(uniqueLabel, objectWithParameters)] = TrackedObjectBinding(parameters)
+
+            val labeledObject = LabeledObject(uniqueLabel, objectWithParameters)
+            val binding = TrackedObjectBinding(parameters)
+            trackedObjects[labeledObject] = binding
+            sidebar?.let {
+                addCollapsible(it, labeledObject, binding)
+
+            }
+
         }
         return objectWithParameters
     }
