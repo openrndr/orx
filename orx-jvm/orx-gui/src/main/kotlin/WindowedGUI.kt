@@ -14,6 +14,7 @@ class WindowedGUI(
     val defaultStyles: List<StyleSheet> = defaultStyles(),
     val windowClosable: Boolean = false,
     val windowAlwaysOntop: Boolean = false,
+    val windowResizable: Boolean = false,
 ) : Extension {
     override var enabled: Boolean = true
     val gui: GUI = GUI(appearance, defaultStyles)
@@ -51,6 +52,7 @@ class WindowedGUI(
                     alwaysOnTop = windowAlwaysOntop,
                     width = appearance.barWidth,
                     height = program.height,
+                    resizable = windowResizable,
                     position = program.window.position.toInt() - IntVector2(200, 0)
                 )
             ) {
