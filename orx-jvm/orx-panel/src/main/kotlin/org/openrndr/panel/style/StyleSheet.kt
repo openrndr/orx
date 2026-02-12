@@ -44,6 +44,15 @@ sealed class LinearDimension(inherit: Boolean = false) : PropertyValue(inherit) 
     class Calculate(val function: (CalculateContext) -> Double) : LinearDimension()
     object Auto : LinearDimension()
     object Inherit : LinearDimension(inherit = true)
+
+    fun inPixels(parentLengthInPx: Double): Double {
+        return when (this) {
+            is PX -> value
+            is Percent -> parentLengthInPx * (value / 100.0)
+            Auto, Inherit -> error("unresolvable")
+            else -> TODO()
+        }
+    }
 }
 
 @JvmRecord
@@ -78,6 +87,7 @@ enum class Display {
     INLINE,
     BLOCK,
     FLEX,
+    GRID,
     NONE
 }
 
@@ -168,6 +178,13 @@ var StyleSheet.paddingRight by PropertyHandler<LinearDimension>("padding-right",
 
 var StyleSheet.position by PropertyHandler("position", RESET, Position.STATIC)
 var StyleSheet.display by PropertyHandler("display", RESET, Display.BLOCK) // css default is inline
+
+var StyleSheet.columnGap by PropertyHandler<LinearDimension>(
+    "column-gap",
+    PropertyInheritance.RESET,
+    LinearDimension.PX(0.0)
+)
+var StyleSheet.rowGap by PropertyHandler<LinearDimension>("row-gap", PropertyInheritance.RESET, LinearDimension.PX(0.0))
 
 var StyleSheet.flexDirection by PropertyHandler<FlexDirection>("flex-direction", RESET, FlexDirection.Row)
 var StyleSheet.flexGrow by PropertyHandler<FlexGrow>("flex-grow", RESET, FlexGrow.Ratio(0.0))
