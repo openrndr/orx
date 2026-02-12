@@ -24,8 +24,9 @@ class TextNode(var text: String) : Element(ElementType("text")) {
             val writer = TextWriter(drawer)
             drawer.fontMap = (fontMap)
 
-            writer.box = Rectangle(Vector2(layout.screenX * 0.0, layout.screenY * 0.0), layout.screenWidth, layout.screenHeight)
-            writer.newLine()
+            writer.box = layout.boundsAtOriginPadded(computedStyle)// Rectangle(Vector2(layout.screenX * 0.0, layout.screenY * 0.0), layout.screenWidth, layout.screenHeight)
+            writer.horizontalAlign = computedStyle.computedTextHorizontalAlign
+            writer.verticalAlign = computedStyle.computedTextVerticalAlign
             writer.text(text)
         }
     }
@@ -41,7 +42,7 @@ class TextNode(var text: String) : Element(ElementType("text")) {
 
             writer.box = Rectangle(layout.screenX,
                        layout.screenY,
-                       layout.screenWidth,
+                       layout.screenWidth - (computedStyle.effectivePaddingLeft+computedStyle.effectivePaddingRight),
                        1E9)
 
             writer.drawStyle.fontMap = fontMap

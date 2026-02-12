@@ -14,8 +14,10 @@ enum class PropertyInheritance {
 }
 
 @JvmRecord
-data class Property(val name: String,
-                    val value: Any?)
+data class Property(
+    val name: String,
+    val value: Any?
+)
 
 open class PropertyValue(val inherit: Boolean = false)
 
@@ -53,7 +55,7 @@ object PropertyBehaviours {
 }
 
 class PropertyHandler<T>(
-        val name: String, val inheritance: PropertyInheritance, val initial: T
+    val name: String, val inheritance: PropertyInheritance, val initial: T
 ) {
 
     init {
@@ -111,6 +113,11 @@ sealed class ZIndex(inherit: Boolean = false) : PropertyValue(inherit) {
 sealed class FlexGrow(inherit: Boolean = false) : PropertyValue(inherit) {
     class Ratio(val value: Double) : FlexGrow()
     object Inherit : FlexGrow(inherit = true)
+}
+
+sealed class TextAlign(inherit: Boolean = false) : PropertyValue(inherit) {
+    class Value(val value: Double) : TextAlign()
+    object Inherit : TextAlign(inherit = false)
 }
 
 private val dummySelector = CompoundSelector()
@@ -205,10 +212,28 @@ val StyleSheet.effectiveBorderColor: ColorRGBa?
     get() = (borderColor as? Color.RGBa)?.color
 
 
+val StyleSheet.computedTextVerticalAlign: Double
+    get() = (textVerticalAlign as? TextAlign.Value)?.value ?: 0.0
+
+val StyleSheet.computedTextHorizontalAlign: Double
+    get() = (textHorizontalAlign as? TextAlign.Value)?.value ?: 0.0
+
+
 var StyleSheet.fontSize by PropertyHandler<LinearDimension>("font-size", INHERIT, 14.px)
 var StyleSheet.fontFamily by PropertyHandler("font-family", INHERIT, "default")
 var StyleSheet.overflow by PropertyHandler<Overflow>("overflow", RESET, Overflow.Visible)
 var StyleSheet.zIndex by PropertyHandler<ZIndex>("z-index", RESET, ZIndex.Auto)
+
+var StyleSheet.textVerticalAlign by PropertyHandler<TextAlign>(
+    "text-vertical-align", PropertyInheritance.RESET,
+    TextAlign.Value(0.0)
+)
+
+var StyleSheet.textHorizontalAlign by PropertyHandler<TextAlign>(
+    "text-horizontal-align", PropertyInheritance.RESET,
+    TextAlign.Value(0.0)
+)
+
 
 val Number.px: LinearDimension.PX get() = LinearDimension.PX(this.toDouble())
 val Number.percent: LinearDimension.Percent get() = LinearDimension.Percent(this.toDouble())

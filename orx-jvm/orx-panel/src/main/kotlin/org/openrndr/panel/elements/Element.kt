@@ -10,9 +10,14 @@ import org.openrndr.panel.style.CompoundSelector
 import org.openrndr.panel.style.Display
 import org.openrndr.panel.style.StyleSheet
 import org.openrndr.panel.style.display
+import org.openrndr.panel.style.effectivePaddingBottom
+import org.openrndr.panel.style.effectivePaddingLeft
+import org.openrndr.panel.style.effectivePaddingRight
+import org.openrndr.panel.style.effectivePaddingTop
 import org.openrndr.shape.Rectangle
 
 import java.util.*
+import kotlin.math.max
 
 @JvmRecord
 data class ElementClass(val name: String)
@@ -110,7 +115,27 @@ open class Element(val type: ElementType): AutoCloseable {
         override fun toString(): String {
             return "Layout(screenX=$screenX, screenY=$screenY, screenWidth=$screenWidth, screenHeight=$screenHeight, growWidth=$growWidth, growHeight=$growHeight)"
         }
+
+        val bounds: Rectangle
+            get() {
+                return Rectangle(screenWidth, screenHeight, screenWidth, screenHeight)
+            }
+
+        val boundsAtOrigin: Rectangle
+            get() {
+                return Rectangle(0.0, 0.0, screenWidth, screenHeight)
+            }
+
+        fun boundsAtOriginPadded(computedStyle: StyleSheet): Rectangle {
+            return Rectangle(
+                computedStyle.effectivePaddingLeft,
+                computedStyle.effectivePaddingTop,
+                screenWidth - (computedStyle.effectivePaddingLeft + computedStyle.effectivePaddingRight),
+                max(0.0, screenHeight - (computedStyle.effectivePaddingTop + computedStyle.effectivePaddingBottom))
+                )
+        }
     }
+
 
     class Draw {
         var dirty = true

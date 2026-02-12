@@ -166,6 +166,7 @@ fun defaultStyles(
             width = 100.percent
             height = LinearDimension.Auto
             display = Display.BLOCK
+            paddingTop = 1.0.px
         },
 
         styleSheet(has type "h2") {
@@ -173,6 +174,7 @@ fun defaultStyles(
             width = 100.percent
             height = LinearDimension.Auto
             display = Display.BLOCK
+            paddingTop = 1.0.px
         },
 
         styleSheet(has type "h3") {
@@ -180,6 +182,7 @@ fun defaultStyles(
             width = 100.percent
             height = LinearDimension.Auto
             display = Display.BLOCK
+            paddingTop = 1.0.px
         },
 
         styleSheet(has type "p") {
@@ -187,14 +190,21 @@ fun defaultStyles(
             width = 100.percent
             height = LinearDimension.Auto
             display = Display.BLOCK
+            paddingTop = 1.0.px
         },
         styleSheet(has type "button") {
             display = Display.BLOCK
             background = Color.RGBa(controlBackground)
             width = LinearDimension.Auto
             height = 32.px
-            paddingLeft = 10.px
-            paddingRight = 10.px
+            paddingTop = 5.px
+            paddingBottom = 5.px
+            paddingLeft = 5.px
+            paddingRight = 5.px
+
+            textVerticalAlign = TextAlign.Value(0.5)
+            textHorizontalAlign = TextAlign.Value(0.5)
+
             marginLeft = 5.px
             marginRight = 5.px
             marginTop = 5.px

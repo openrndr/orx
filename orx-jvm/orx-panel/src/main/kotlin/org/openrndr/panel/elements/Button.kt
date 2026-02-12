@@ -88,12 +88,16 @@ class Button : Element(ElementType("button")) {
             drawer.isolated {
                 drawer.stroke = computedStyle.effectiveBorderColor
                 drawer.strokeWeight = computedStyle.effectiveBorderWidth
-                drawer.rectangle(0.0, 0.0, layout.screenWidth, layout.screenHeight)
+                drawer.rectangle(layout.boundsAtOrigin)
             }
 
             (root() as? Body)?.controlManager?.fontManager?.let {
                 val font = it.font(computedStyle)
                 val writer = TextWriter(drawer)
+                writer.box = layout.boundsAtOriginPadded(computedStyle).let { it.copy(width = it.width + 1.0, height = it.height + 1.0) }
+                writer.verticalAlign =  computedStyle.computedTextVerticalAlign
+                writer.horizontalAlign = computedStyle.computedTextHorizontalAlign
+
                 drawer.fontMap = (font)
                 val textWidth = writer.textWidth(label)
                 val textHeight = font.ascenderLength
@@ -104,7 +108,8 @@ class Button : Element(ElementType("button")) {
                 drawer.fill = ((computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE).opacify(
                         if (disabled in pseudoClasses) 0.25 else 1.0
                 )
-                drawer.text(label, 0.0 + offset, 0.0 + yOffset)
+                //drawer.text(label, 0.0 + offset, 0.0 + yOffset)
+                writer.text(label)
             }
 
             drawer.popStyle()

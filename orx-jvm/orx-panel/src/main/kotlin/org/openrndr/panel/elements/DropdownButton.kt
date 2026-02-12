@@ -212,7 +212,7 @@ class DropdownButton : Element(ElementType("dropdown-button")) {
             }
 
             mouse.scrolled.listen {
-                scrollTop -= it.rotation.y
+                scrollTop -= it.rotation.y * 2.0
                 scrollTop = max(0.0, scrollTop)
                 draw.dirty = true
                 it.cancelPropagation()
