@@ -27,6 +27,8 @@ import kotlin.contracts.contract
 class Camera2D : Extension, ChangeEvents {
     override var enabled = true
 
+    var userInteraction = true
+
     private lateinit var program: Program
     private var controlInitialized = false
 
@@ -158,13 +160,15 @@ class Camera2D : Extension, ChangeEvents {
      */
     var controls = { mouse: MouseEvents, keyboard: KeyEvents ->
         mouse.buttonDown.listen {
-            rotationCenter = it.position
-            if (it.button == MouseButton.CENTER) {
-                defaults()
+            if(userInteraction) {
+                rotationCenter = it.position
+                if (it.button == MouseButton.CENTER) {
+                    defaults()
+                }
             }
         }
         mouse.dragged.listen {
-            if (!it.propagationCancelled) {
+            if (!it.propagationCancelled && userInteraction) {
                 when (it.button) {
                     MouseButton.LEFT -> pan(it.dragDisplacement)
                     MouseButton.RIGHT -> rotate(it.dragDisplacement.x + it.dragDisplacement.y)
@@ -173,7 +177,7 @@ class Camera2D : Extension, ChangeEvents {
             }
         }
         mouse.scrolled.listen {
-            if (!it.propagationCancelled) {
+            if (!it.propagationCancelled && userInteraction) {
                 val scaleFactor = 1.0 - it.rotation.y * 0.03
                 zoom(it.position, scaleFactor)
             }

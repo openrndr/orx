@@ -28,6 +28,10 @@ class Orbital : Extension, ChangeEvents {
     var far = 1000.0
     var fov = 90.0
     var userInteraction = true
+        set(value) {
+            controls.userInteraction = value
+            field = value
+        }
     var keySpeed = 1.0
     var projectionType = ProjectionType.PERSPECTIVE
 
