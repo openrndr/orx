@@ -21,8 +21,10 @@ import kotlin.math.max
 
 @JvmRecord
 data class ElementClass(val name: String)
+
 @JvmRecord
 data class ElementPseudoClass(val name: String)
+
 @JvmRecord
 data class ElementType(val name: String)
 
@@ -31,7 +33,7 @@ val disabled = ElementPseudoClass("disabled")
 class FocusEvent
 
 
-open class Element(val type: ElementType): AutoCloseable {
+open class Element(val type: ElementType) : AutoCloseable {
 
     var disposed = false
         private set
@@ -51,7 +53,7 @@ open class Element(val type: ElementType): AutoCloseable {
             return null
         }
 
-    class MouseObservables: AutoCloseable {
+    class MouseObservables : AutoCloseable {
         val clicked = Event<MouseEvent>("element-mouse-clicked")
         val doubleClicked = Event<MouseEvent>("element-mouse-double-clicked")
         val entered = Event<MouseEvent>("element-mouse-entered")
@@ -73,7 +75,7 @@ open class Element(val type: ElementType): AutoCloseable {
         }
     }
 
-    class DropObserverables: AutoCloseable {
+    class DropObserverables : AutoCloseable {
         val dropped = Event<DropEvent>("element-dropped")
 
         override fun close() {
@@ -105,11 +107,19 @@ open class Element(val type: ElementType): AutoCloseable {
     val keyboard = KeyboardObservables()
 
     class Layout {
+        var widthSetByParent = false
+        var heightSetByParent = false
         var zIndex = 0
         var screenX = 0.0
         var screenY = 0.0
         var screenWidth = 0.0
         var screenHeight = 0.0
+
+        var paddingLeft = 0.0
+        var paddingTop = 0.0
+        var paddingRight = 0.0
+        var paddingBottom = 0.0
+
         var growWidth = 0.0
         var growHeight = 0.0
         override fun toString(): String {
@@ -132,8 +142,25 @@ open class Element(val type: ElementType): AutoCloseable {
                 computedStyle.effectivePaddingTop,
                 screenWidth - (computedStyle.effectivePaddingLeft + computedStyle.effectivePaddingRight),
                 max(0.0, screenHeight - (computedStyle.effectivePaddingTop + computedStyle.effectivePaddingBottom))
-                )
+            )
         }
+
+        val contentBounds: Rectangle
+            get() = Rectangle(
+                screenX + paddingLeft,
+                screenY + paddingTop,
+                screenWidth - paddingLeft - paddingRight,
+                screenHeight - paddingTop - paddingBottom
+            )
+
+        val contentBoundsAtOrigin: Rectangle
+            get() = Rectangle(
+                paddingLeft,
+                paddingTop,
+                screenWidth - paddingLeft - paddingRight,
+                screenHeight - paddingTop - paddingBottom
+            )
+
     }
 
 
@@ -195,7 +222,7 @@ open class Element(val type: ElementType): AutoCloseable {
      *
      * @return `true` if the element or any of its ancestors is hidden (has `Display.NONE` style), `false` otherwise.
      */
-    fun isHidden() : Boolean {
+    fun isHidden(): Boolean {
         var current: Element? = this
 
         while (current != null) {
@@ -376,10 +403,14 @@ open class Element(val type: ElementType): AutoCloseable {
         get() = Vector2(layout.screenX, layout.screenY)
 
     val screenArea: Rectangle
-        get() = Rectangle(Vector2(layout.screenX,
-                layout.screenY),
-                layout.screenWidth,
-                layout.screenHeight)
+        get() = Rectangle(
+            Vector2(
+                layout.screenX,
+                layout.screenY
+            ),
+            layout.screenWidth,
+            layout.screenHeight
+        )
 
 
     override fun close() {
@@ -444,4 +475,19 @@ fun Element.visitVisible(function: Element.() -> Unit) {
         this.function()
         children.forEach { it.visitVisible(function) }
     }
+}
+
+/**
+ * Applies the provided styling function to the element's stylesheet. If the element does not
+ * already have a stylesheet, a new one is created and the function is applied to it.
+ *
+ * @param function A lambda function defining the style rules to be applied to the element's stylesheet.
+ * @return The updated or newly created stylesheet associated with the element.
+ */
+fun Element.style(function: StyleSheet.() -> Unit): StyleSheet {
+    if (style == null) {
+        style = StyleSheet(CompoundSelector.DUMMY)
+    }
+    style!!.function()
+    return style!!
 }

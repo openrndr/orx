@@ -1,6 +1,7 @@
 package org.openrndr.panel.style
 
 import org.openrndr.color.ColorRGBa
+import org.openrndr.color.ConvertibleToColorRGBa
 import org.openrndr.panel.style.PropertyInheritance.INHERIT
 import org.openrndr.panel.style.PropertyInheritance.RESET
 import java.util.*
@@ -29,7 +30,21 @@ sealed class Color(inherit: Boolean = false) : PropertyValue(inherit) {
     }
 
     object Inherit : Color(inherit = true)
+
+    companion object {
+        val inherit = Inherit
+
+        operator fun invoke(f: Companion.() -> Any): Color {
+            return when (val r = f()) {
+                is ConvertibleToColorRGBa -> RGBa(r.toRGBa())
+                is Color -> r
+                else -> error("Can't resolve Color from '$r'")
+            }
+        }
+    }
 }
+typealias color = Color
+
 
 class CalculateContext(val elementWidth: Double?, val elementHeight: Double?)
 
@@ -40,8 +55,13 @@ sealed class LinearDimension(inherit: Boolean = false) : PropertyValue(inherit) 
         }
     }
 
+    class Fraction(val value: Double) : LinearDimension()
+
     class Percent(val value: Double) : LinearDimension()
     class Calculate(val function: (CalculateContext) -> Double) : LinearDimension()
+
+    class MinMax(val min: LinearDimension, val max: LinearDimension) : LinearDimension()
+
     object Auto : LinearDimension()
     object Inherit : LinearDimension(inherit = true)
 
@@ -53,7 +73,37 @@ sealed class LinearDimension(inherit: Boolean = false) : PropertyValue(inherit) 
             else -> TODO()
         }
     }
+
+    companion object {
+        val x = 0.0
+        val auto by lazy { Auto }
+        val inherit by lazy { Inherit }
+
+        val Number.px: PX
+            get() {
+                return PX(this.toDouble())
+            }
+
+        val Number.fr: Fraction
+            get() {
+                return Fraction(this.toDouble())
+            }
+
+        fun minmax(min: LinearDimension, max: LinearDimension) = MinMax(min, max)
+
+
+        operator fun invoke(f: Companion.() -> Any): LinearDimension {
+            return when (val r = f()) {
+                is Number -> PX(r.toDouble())
+                is LinearDimension -> r
+                else -> error("Can't resolve LinearDimension from '$r'")
+            }
+        }
+    }
 }
+
+typealias length = LinearDimension.Companion
+
 
 @JvmRecord
 data class PropertyBehaviour(val inheritance: PropertyInheritance, val intitial: Any)
@@ -123,12 +173,90 @@ sealed class ZIndex(inherit: Boolean = false) : PropertyValue(inherit) {
 sealed class FlexGrow(inherit: Boolean = false) : PropertyValue(inherit) {
     class Ratio(val value: Double) : FlexGrow()
     object Inherit : FlexGrow(inherit = true)
+
+    companion object {
+        val inherit = Inherit
+        operator fun invoke(f: FlexGrow.Companion.() -> Any): FlexGrow {
+            return when (val r = f()) {
+                is Number -> Ratio(r.toDouble())
+                is FlexGrow -> r
+                else -> error("Can't resolve FlexGrow from '$r'")
+            }
+        }
+    }
 }
+typealias flex = FlexGrow
+
+sealed class GridTemplate(inherit: Boolean = false) : PropertyValue(inherit) {
+    class LengthList(val value: List<LinearDimension>) : GridTemplate()
+    object Inherit : GridTemplate(inherit = true)
+    object None : GridTemplate()
+
+    companion object {
+        val inherit = Inherit
+        val none = None
+        operator fun invoke(f: Companion.() -> Any): GridTemplate {
+            return when (val r = f()) {
+                is LinearDimension -> LengthList(listOf(r))
+                is List<*> -> LengthList(r.map { it as LinearDimension })
+                is GridTemplate -> r
+                else -> error("Can't resolve GridTemplate from '$r'")
+            }
+        }
+    }
+}
+
+typealias gridTemplate = GridTemplate
+
+sealed class GridPopulation(inherit: Boolean = false) : PropertyValue(inherit) {
+    class Position(val value: Int) : GridPopulation()
+    class Length(val value: Int) : GridPopulation()
+    class Span(val value: IntRange) : GridPopulation()
+    object Auto : GridPopulation()
+    object Inherit : GridPopulation(inherit = true)
+
+    companion object {
+        val auto = Auto
+        val inherit = Inherit
+        fun length(value: Int) = Length(value)
+        val Int.rows: Length get() = length(this)
+        val Int.columns: Length get() = length(this)
+        operator fun invoke(f: Companion.() -> Any): GridPopulation {
+            return when (val r = f()) {
+                is Int -> Position(r)
+                is IntRange -> Span(r)
+                is GridPopulation -> r
+                else -> error("Can't resolve GridPosition from '$r'")
+            }
+        }
+    }
+}
+
+typealias gridPopulation = GridPopulation
 
 sealed class TextAlign(inherit: Boolean = false) : PropertyValue(inherit) {
     class Value(val value: Double) : TextAlign()
     object Inherit : TextAlign(inherit = false)
+
+    companion object {
+        val inherit = Inherit
+        val left = Value(0.0)
+        val right = Value(1.0)
+        val center = Value(0.5)
+        val top = Value(0.0)
+        val bottom = Value(1.0)
+
+        operator fun invoke(f: Companion.() -> Any): TextAlign {
+            return when (val r = f()) {
+                is Number -> Value(r.toDouble())
+                is TextAlign -> r
+                else -> error("Can't resolve TextAlign from '$r'")
+            }
+        }
+    }
 }
+typealias textAlign = TextAlign
+
 
 private val dummySelector = CompoundSelector()
 
@@ -185,6 +313,11 @@ var StyleSheet.columnGap by PropertyHandler<LinearDimension>(
     LinearDimension.PX(0.0)
 )
 var StyleSheet.rowGap by PropertyHandler<LinearDimension>("row-gap", PropertyInheritance.RESET, LinearDimension.PX(0.0))
+
+var StyleSheet.gridTemplateColumns by PropertyHandler<GridTemplate>("grid-template-columns", RESET, GridTemplate.None)
+var StyleSheet.gridTemplateRows by PropertyHandler<GridTemplate>("grid-template-rows", RESET, GridTemplate.None)
+var StyleSheet.gridColumn by PropertyHandler<GridPopulation>("grid-column", RESET, GridPopulation.Auto)
+var StyleSheet.gridRow by PropertyHandler<GridPopulation>("grid-row", RESET, GridPopulation.Auto)
 
 var StyleSheet.flexDirection by PropertyHandler<FlexDirection>("flex-direction", RESET, FlexDirection.Row)
 var StyleSheet.flexGrow by PropertyHandler<FlexGrow>("flex-grow", RESET, FlexGrow.Ratio(0.0))
@@ -254,6 +387,7 @@ var StyleSheet.textHorizontalAlign by PropertyHandler<TextAlign>(
 
 val Number.px: LinearDimension.PX get() = LinearDimension.PX(this.toDouble())
 val Number.percent: LinearDimension.Percent get() = LinearDimension.Percent(this.toDouble())
+
 
 fun StyleSheet.child(selector: CompoundSelector, init: StyleSheet.() -> Unit) {
     val stylesheet = StyleSheet(selector).apply(init)

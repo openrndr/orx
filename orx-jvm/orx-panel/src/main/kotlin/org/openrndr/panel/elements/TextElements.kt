@@ -24,7 +24,8 @@ class TextNode(var text: String) : Element(ElementType("text")) {
             val writer = TextWriter(drawer)
             drawer.fontMap = (fontMap)
 
-            writer.box = layout.boundsAtOriginPadded(computedStyle)// Rectangle(Vector2(layout.screenX * 0.0, layout.screenY * 0.0), layout.screenWidth, layout.screenHeight)
+            writer.box =
+                layout.boundsAtOriginPadded(computedStyle)// Rectangle(Vector2(layout.screenX * 0.0, layout.screenY * 0.0), layout.screenWidth, layout.screenHeight)
             writer.horizontalAlign = computedStyle.computedTextHorizontalAlign
             writer.verticalAlign = computedStyle.computedTextVerticalAlign
             writer.text(text)
@@ -33,26 +34,30 @@ class TextNode(var text: String) : Element(ElementType("text")) {
 
     fun sizeHint(): Rectangle {
         computedStyle.let { style ->
-            val fontUrl = (root() as? Body)?.controlManager?.fontManager?.resolve(style.fontFamily)?:"broken"
-            val fontSize = (style.fontSize as? LinearDimension.PX)?.value?: 14.0
+            val fontUrl = (root() as? Body)?.controlManager?.fontManager?.resolve(style.fontFamily) ?: "broken"
+            val fontSize = (style.fontSize as? LinearDimension.PX)?.value ?: 14.0
             val program = (root() as? Body)?.controlManager?.program ?: error("no program")
-            val fontMap =  program.loadFont(fontUrl, fontSize)
+            val fontMap = program.loadFont(fontUrl, fontSize)
 
             val writer = TextWriter(null)
 
-            writer.box = Rectangle(layout.screenX,
-                       layout.screenY,
-                       layout.screenWidth - (computedStyle.effectivePaddingLeft+computedStyle.effectivePaddingRight),
-                       1E9)
+            writer.box = Rectangle(
+                layout.screenX,
+                layout.screenY,
+                layout.screenWidth - (computedStyle.effectivePaddingLeft + computedStyle.effectivePaddingRight),
+                1E9
+            )
 
             writer.drawStyle.fontMap = fontMap
             writer.newLine()
             writer.text(text, visible = false)
 
-            return Rectangle(layout.screenX,
-                             layout.screenY,
-                             layout.screenWidth,
-                    (writer.cursor.y - layout.screenY) - fontMap.descenderLength*2)
+            return Rectangle(
+                layout.screenX,
+                layout.screenY,
+                layout.screenWidth,
+                (writer.cursor.y - layout.screenY) - fontMap.descenderLength * 2
+            )
         }
 
     }
@@ -75,7 +80,8 @@ abstract class TextElement(et: ElementType) : Element(et) {
         append(TextNode(text))
         requestRedraw()
     }
-    fun replaceText(text : String) {
+
+    fun replaceText(text: String) {
         if (children.isEmpty()) {
             text(text)
         } else {

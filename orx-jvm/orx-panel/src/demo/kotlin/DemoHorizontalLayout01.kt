@@ -10,6 +10,10 @@ import org.openrndr.panel.elements.h1
 import org.openrndr.panel.style.*
 
 fun main() = application {
+
+    configure {
+        windowResizable = true
+    }
     program {
         val cm = controlManager {
             styleSheet(has class_ "horizontal") {
@@ -21,7 +25,12 @@ fun main() = application {
                 // ----------------------------------------------
                 display = Display.FLEX
                 flexDirection = FlexDirection.Row
+                columnGap = 5.px
                 width = 100.percent
+            }
+            styleSheet(has type "button") {
+                marginLeft = 0.px
+                marginRight = 0.px
             }
 
             styleSheet(has type "h1") {
@@ -58,6 +67,7 @@ fun main() = application {
                                     // into "CSS" format:
                                     background = Color.RGBa(rgb)
                                 }
+
 
                                 // When the button is clicked replace
                                 // the header text with the button's label

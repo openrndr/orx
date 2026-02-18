@@ -88,7 +88,7 @@ class Button : Element(ElementType("button")) {
             drawer.isolated {
                 drawer.stroke = computedStyle.effectiveBorderColor
                 drawer.strokeWeight = computedStyle.effectiveBorderWidth
-                drawer.rectangle(layout.boundsAtOrigin)
+                drawer.rectangle(layout.contentBoundsAtOrigin)
             }
 
             (root() as? Body)?.controlManager?.fontManager?.let {

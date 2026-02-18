@@ -1,5 +1,6 @@
 plugins {
     id("org.openrndr.extra.convention.kotlin-jvm")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 tasks.test {
@@ -19,4 +20,6 @@ dependencies {
     demoImplementation(openrndr.dialogs)
     demoImplementation(libs.gson)
     demoImplementation(project(":orx-jvm:orx-panel"))
+    demoImplementation(project(":orx-shapes"))
+    demoImplementation(sharedLibs.kotlin.serialization.json)
 }

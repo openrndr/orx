@@ -9,17 +9,17 @@ fun main() = application {
     program {
         val cm = controlManager {
             styleSheet(has class_ "side-bar") {
-                this.height = 100.percent
-                this.width = 200.px
+                this.height = length { 100.percent }
+                this.width = length { 200 }
                 this.display = Display.FLEX
                 this.flexDirection = FlexDirection.Column
-                this.paddingLeft = 10.px
-                this.paddingRight = 10.px
-                this.background = Color.RGBa(ColorRGBa.GRAY)
+                this.paddingLeft = length { 10 }
+                this.paddingRight = length { 10 }
+                this.background = color { ColorRGBa.GRAY }
             }
             styleSheet(has type "slider") {
-                this.marginTop = 25.px
-                this.marginBottom = 25.px
+                this.marginTop = length { 25 }
+                this.marginBottom = length { 25 }
             }
             layout {
                 div("side-bar") {

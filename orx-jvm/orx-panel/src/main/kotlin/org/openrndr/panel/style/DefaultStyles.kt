@@ -194,21 +194,21 @@ fun defaultStyles(
         },
         styleSheet(has type "button") {
             display = Display.BLOCK
-            background = Color.RGBa(controlBackground)
+            background = color { controlBackground }
             width = LinearDimension.Auto
             height = 32.px
-            paddingTop = 5.px
-            paddingBottom = 5.px
-            paddingLeft = 5.px
-            paddingRight = 5.px
+//            paddingTop = 5.px
+//            paddingBottom = 5.px
+//            paddingLeft = 5.px
+//            paddingRight = 5.px
 
             textVerticalAlign = TextAlign.Value(0.5)
             textHorizontalAlign = TextAlign.Value(0.5)
 
-            marginLeft = 5.px
-            marginRight = 5.px
-            marginTop = 5.px
-            marginBottom = 5.px
+//            marginLeft = 5.px
+//            marginRight = 5.px
+//            marginTop = 5.px
+//            marginBottom = 5.px
             fontSize = controlFontSize.px
 
             and(has state "active") {
