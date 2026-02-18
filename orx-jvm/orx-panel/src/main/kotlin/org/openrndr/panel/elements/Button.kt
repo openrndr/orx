@@ -73,7 +73,7 @@ class Button : Element(ElementType("button")) {
                 writer.newLine()
                 writer.text(label, visible = false)
 
-                return writer.cursor.x
+                return writer.cursor.x + style.paddingLeft.inPixels(0.0) + style.paddingRight.inPixels(0.0)
             }
         }
 

@@ -9,6 +9,11 @@ import org.openrndr.panel.elements.*
 import org.openrndr.panel.style.*
 import java.io.File
 
+/**
+ * Demonstrates the use of grid layouts, property-control binding, and JSON serialization/deserialization for
+ * model persistence.
+ */
+
 @Serializable
 private class Model {
     var radius = 100.0

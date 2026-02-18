@@ -4,6 +4,9 @@ import org.openrndr.panel.controlManager
 import org.openrndr.panel.elements.*
 import org.openrndr.panel.style.*
 
+/**
+ * Demonstrates the use of grid layouts
+ */
 fun main() {
     application {
         configure {
