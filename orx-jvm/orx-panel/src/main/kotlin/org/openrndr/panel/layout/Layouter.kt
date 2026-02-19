@@ -308,11 +308,11 @@ class Layouter {
                         child.layout.screenX = cellX + child.computedStyle.marginLeft.inPixels(cellWidth)
                         child.layout.screenY = cellY + child.computedStyle.marginTop.inPixels(cellWidth) - element.scrollTop
                         if (child.computedStyle.width == LinearDimension.Auto) {
-                            child.layout.screenWidth = cellWidth
+                            child.layout.screenWidth = cellWidth - child.computedStyle.marginLeft.inPixels(cellWidth) - child.computedStyle.marginRight.inPixels(cellWidth)
                             child.layout.widthSetByParent = true
                         }
                         if (child.computedStyle.height == LinearDimension.Auto) {
-                            child.layout.screenHeight = cellHeight
+                            child.layout.screenHeight = cellHeight - child.computedStyle.marginTop.inPixels(cellWidth) - child.computedStyle.marginBottom.inPixels(cellWidth)
                             child.layout.heightSetByParent = true
                         }
                         x += (ex - sx) + 1
@@ -383,6 +383,7 @@ class Layouter {
                 element.computedStyle = it.cascadeOnto(element.computedStyle)
             }
         }
+
         element.computedStyle.let { cs ->
 
             element.parent?.let { p ->

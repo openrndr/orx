@@ -7,6 +7,7 @@ import org.openrndr.panel.controlManager
 import org.openrndr.panel.elements.button
 import org.openrndr.panel.elements.div
 import org.openrndr.panel.elements.h1
+import org.openrndr.panel.elements.style
 import org.openrndr.panel.style.*
 
 fun main() = application {
@@ -17,26 +18,33 @@ fun main() = application {
     program {
         val cm = controlManager {
             styleSheet(has class_ "horizontal") {
-                paddingLeft = 10.px
-                paddingTop = 10.px
+                paddingLeft = length { 10 }
+                paddingTop = length { 10 }
 
                 // ----------------------------------------------
                 // The next two lines produce a horizontal layout
                 // ----------------------------------------------
                 display = Display.FLEX
                 flexDirection = FlexDirection.Row
-                columnGap = 5.px
-                width = 100.percent
-            }
-            styleSheet(has type "button") {
-                marginLeft = 0.px
-                marginRight = 0.px
+                columnGap = length { 5 }
+                width = length { 100.percent }
+
+                child(has type "button") {
+                    margins(length { 0 })
+
+                    and(has state "hover") {
+                        background = color(true) { ColorRGBa.BLACK }
+                        borderColor = color { ColorRGBa.WHITE }
+                        borderWidth = length { 2 }
+                    }
+                }
             }
 
+
             styleSheet(has type "h1") {
-                marginTop = 10.px
-                marginLeft = 7.px
-                marginBottom = 10.px
+                marginTop = length { 10 }
+                marginLeft = length { 7 }
+                marginBottom = length { 10 }
             }
 
             layout {
@@ -57,15 +65,14 @@ fun main() = application {
                             val pos = Vector3.fromSpherical(
                                 Spherical(i * 19.0, i * 17.0, 0.4)
                             )
-                            val rgb = ColorRGBa.fromVector(pos + 0.4)
 
                             button {
                                 label = word
-                                style = styleSheet {
-                                    // Use Color.RGBa() to convert a ColorRGBa
+                                style {
+                                    // Use color {} to convert a ColorRGBa
                                     // color (the standard color datatype)
                                     // into "CSS" format:
-                                    background = Color.RGBa(rgb)
+                                    background = color { ColorRGBa.fromVector(pos + 0.4) }
                                 }
 
 

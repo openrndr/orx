@@ -12,6 +12,7 @@ import org.openrndr.launch
 import org.openrndr.panel.style.*
 
 import kotlin.reflect.KMutableProperty0
+import kotlin.reflect.KMutableProperty1
 
 class ColorpickerButton : Element(ElementType("colorpicker-button")) {
 
@@ -149,6 +150,33 @@ fun ColorpickerButton.bind(property: KMutableProperty0<ColorRGBa>) {
     fun update() {
         if (property.get() != currentValue) {
             val lcur = property.get()
+            currentValue = lcur
+            color = lcur
+        }
+    }
+    update()
+    (root() as? Body)?.controlManager?.program?.launch {
+        while (!disposed) {
+            update()
+            yield()
+        }
+    }
+}
+
+fun ColorpickerButton.bind(container: Any, property: KMutableProperty1<Any, ColorRGBa>) {
+    var currentValue: ColorRGBa? = null
+
+    events.valueChanged.listen {
+        currentValue = color
+        property.set(container, it.color)
+    }
+    if (root() as? Body == null) {
+        throw RuntimeException("no body")
+    }
+
+    fun update() {
+        if (property.get(container) != currentValue) {
+            val lcur = property.get(container)
             currentValue = lcur
             color = lcur
         }

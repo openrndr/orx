@@ -18,10 +18,7 @@ fun main() {
 
             val cm = controlManager {
                 styleSheet(has class_ "grid") {
-                    paddingLeft = length { 10 }
-                    paddingTop = length { 10 }
-                    paddingRight = length { 10 }
-                    paddingBottom = length { 10 }
+                    padding(length { 10 })
 
                     display = Display.GRID
                     gridTemplateColumns = gridTemplate { listOf(length { minmax(100.px, 1.fr) }, length { 3.fr }) }

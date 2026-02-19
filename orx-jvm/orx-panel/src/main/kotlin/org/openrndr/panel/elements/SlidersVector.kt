@@ -7,9 +7,10 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
 import kotlin.reflect.KMutableProperty0
+import kotlin.reflect.KMutableProperty1
 
 class SlidersVector2 : SequenceEditorBase("sliders-vector2") {
-    var value : Vector2
+    var value: Vector2
         get() {
             return Vector2(baseValue[0], baseValue[1])
         }
@@ -19,9 +20,11 @@ class SlidersVector2 : SequenceEditorBase("sliders-vector2") {
             requestRedraw()
         }
 
-    class ValueChangedEvent(val source: SequenceEditorBase,
-                            val oldValue: Vector2,
-                            val newValue: Vector2)
+    class ValueChangedEvent(
+        val source: SequenceEditorBase,
+        val oldValue: Vector2,
+        val newValue: Vector2
+    )
 
     class Events {
         val valueChanged = Event<ValueChangedEvent>("sequence-editor-value-changed")
@@ -34,9 +37,12 @@ class SlidersVector2 : SequenceEditorBase("sliders-vector2") {
         minimumSequenceLength = 2
         maximumSequenceLength = 2
         baseEvents.valueChanged.listen {
-            events.valueChanged.trigger(ValueChangedEvent(this,
+            events.valueChanged.trigger(
+                ValueChangedEvent(
+                    this,
                     Vector2(it.oldValue[0], it.oldValue[1]),
-                    Vector2(it.newValue[0], it.newValue[1]))
+                    Vector2(it.newValue[0], it.newValue[1])
+                )
             )
         }
     }
@@ -68,21 +74,59 @@ fun SlidersVector2.bind(property: KMutableProperty0<Vector2>) {
     }
 }
 
-class SlidersVector3 : SequenceEditorBase("sliders-vector3") {
-    var value : Vector3
-    get() {
-        return Vector3(baseValue[0], baseValue[1], baseValue[2])
-    }
-    set(value) {
-        baseValue[0] = value.x
-        baseValue[1] = value.y
-        baseValue[2] = value.z
-        requestRedraw()
-    }
+/**
+ * Binds the `SlidersVector2` component to a property within a container object. Updates are propagated between the
+ * slider’s value and the specified property, ensuring synchronization in both directions. The method listens to
+ * changes in the slider's value and modifies the container's property accordingly. Additionally, it ensures that the
+ * slider reflects the current value of the bound property.
+ *
+ * @param container The object containing the property to be bound to the slider.
+ * @param property The mutable property within the container to bind with the slider's value.
+ * @throws RuntimeException If the slider is not part of a `Body`.
+ */
+fun SlidersVector2.bind(container: Any, property: KMutableProperty1<Any, Vector2>) {
+    var currentValue: Vector2? = null
 
-    class ValueChangedEvent(val source: SequenceEditorBase,
-                            val oldValue: Vector3,
-                            val newValue: Vector3)
+    events.valueChanged.listen {
+        currentValue = value
+        property.set(container, it.newValue)
+    }
+    if (root() as? Body == null) {
+        throw RuntimeException("no body")
+    }
+    fun update() {
+        if (property.get(container) != currentValue) {
+            val lcur = property.get(container)
+            currentValue = lcur
+            value = lcur
+        }
+    }
+    update()
+    (root() as? Body)?.controlManager?.program?.launch {
+        while (!disposed) {
+            update()
+            yield()
+        }
+    }
+}
+
+class SlidersVector3 : SequenceEditorBase("sliders-vector3") {
+    var value: Vector3
+        get() {
+            return Vector3(baseValue[0], baseValue[1], baseValue[2])
+        }
+        set(value) {
+            baseValue[0] = value.x
+            baseValue[1] = value.y
+            baseValue[2] = value.z
+            requestRedraw()
+        }
+
+    class ValueChangedEvent(
+        val source: SequenceEditorBase,
+        val oldValue: Vector3,
+        val newValue: Vector3
+    )
 
     class Events {
         val valueChanged = Event<ValueChangedEvent>("sliders-vector3-value-changed")
@@ -95,9 +139,12 @@ class SlidersVector3 : SequenceEditorBase("sliders-vector3") {
         minimumSequenceLength = 3
         maximumSequenceLength = 3
         baseEvents.valueChanged.listen {
-            events.valueChanged.trigger(ValueChangedEvent(this,
+            events.valueChanged.trigger(
+                ValueChangedEvent(
+                    this,
                     Vector3(it.oldValue[0], it.oldValue[1], it.oldValue[2]),
-                    Vector3(it.newValue[0], it.newValue[1], it.newValue[2]))
+                    Vector3(it.newValue[0], it.newValue[1], it.newValue[2])
+                )
             )
         }
     }
@@ -129,8 +176,35 @@ fun SlidersVector3.bind(property: KMutableProperty0<Vector3>) {
     }
 }
 
+fun SlidersVector3.bind(container: Any, property: KMutableProperty1<Any, Vector3>) {
+    var currentValue: Vector3? = null
+
+    events.valueChanged.listen {
+        currentValue = value
+        property.set(container, it.newValue)
+    }
+    if (root() as? Body == null) {
+        throw RuntimeException("no body")
+    }
+    fun update() {
+        if (property.get(container) != currentValue) {
+            val lcur = property.get(container)
+            currentValue = lcur
+            value = lcur
+        }
+    }
+    update()
+    (root() as? Body)?.controlManager?.program?.launch {
+        while (!disposed) {
+            update()
+            yield()
+        }
+    }
+}
+
+
 class SlidersVector4 : SequenceEditorBase("sliders-vector4") {
-    var value : Vector4
+    var value: Vector4
         get() {
             return Vector4(baseValue[0], baseValue[1], baseValue[2], baseValue[3])
         }
@@ -142,9 +216,11 @@ class SlidersVector4 : SequenceEditorBase("sliders-vector4") {
             requestRedraw()
         }
 
-    class ValueChangedEvent(val source: SequenceEditorBase,
-                            val oldValue: Vector4,
-                            val newValue: Vector4)
+    class ValueChangedEvent(
+        val source: SequenceEditorBase,
+        val oldValue: Vector4,
+        val newValue: Vector4
+    )
 
     class Events {
         val valueChanged = Event<ValueChangedEvent>("sliders-vector4-value-changed")
@@ -157,9 +233,12 @@ class SlidersVector4 : SequenceEditorBase("sliders-vector4") {
         minimumSequenceLength = 4
         maximumSequenceLength = 4
         baseEvents.valueChanged.listen {
-            events.valueChanged.trigger(ValueChangedEvent(this,
+            events.valueChanged.trigger(
+                ValueChangedEvent(
+                    this,
                     Vector4(it.oldValue[0], it.oldValue[1], it.oldValue[2], it.oldValue[3]),
-                    Vector4(it.newValue[0], it.newValue[1], it.newValue[2], it.newValue[3]))
+                    Vector4(it.newValue[0], it.newValue[1], it.newValue[2], it.newValue[3])
+                )
             )
         }
     }
@@ -178,6 +257,32 @@ fun SlidersVector4.bind(property: KMutableProperty0<Vector4>) {
     fun update() {
         if (property.get() != currentValue) {
             val lcur = property.get()
+            currentValue = lcur
+            value = lcur
+        }
+    }
+    update()
+    (root() as? Body)?.controlManager?.program?.launch {
+        while (!disposed) {
+            update()
+            yield()
+        }
+    }
+}
+
+fun SlidersVector4.bind(container: Any, property: KMutableProperty1<Any, Vector4>) {
+    var currentValue: Vector4? = null
+
+    events.valueChanged.listen {
+        currentValue = value
+        property.set(container, it.newValue)
+    }
+    if (root() as? Body == null) {
+        throw RuntimeException("no body")
+    }
+    fun update() {
+        if (property.get(container) != currentValue) {
+            val lcur = property.get(container)
             currentValue = lcur
             value = lcur
         }

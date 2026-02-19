@@ -73,14 +73,13 @@ class Button : Element(ElementType("button")) {
                 writer.newLine()
                 writer.text(label, visible = false)
 
-                return writer.cursor.x + style.paddingLeft.inPixels(0.0) + style.paddingRight.inPixels(0.0)
+                return writer.cursor.x //+ style.paddingLeft.inPixels(0.0) + style.paddingRight.inPixels(0.0)
             }
         }
 
     override fun draw(drawer: Drawer) {
 
         computedStyle.let {
-
             drawer.pushTransforms()
             drawer.pushStyle()
             drawer.fill = ((it.background as? Color.RGBa)?.color ?: ColorRGBa.PINK)
@@ -88,7 +87,7 @@ class Button : Element(ElementType("button")) {
             drawer.isolated {
                 drawer.stroke = computedStyle.effectiveBorderColor
                 drawer.strokeWeight = computedStyle.effectiveBorderWidth
-                drawer.rectangle(layout.contentBoundsAtOrigin)
+                drawer.rectangle(layout.boundsAtOrigin)
             }
 
             (root() as? Body)?.controlManager?.fontManager?.let {

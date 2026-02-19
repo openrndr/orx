@@ -60,7 +60,7 @@ enum class Combinator {
 
 class IdentitySelector(val id: String) : Selector() {
     override fun accept(element: Element): Boolean = if (element.id != null) {
-        element.id.equals(id)
+        element.id == id
     } else {
         false
     }
@@ -125,6 +125,12 @@ object has {
     infix fun type(q: String): CompoundSelector {
         val active = CompoundSelector()
         active.selectors.add(TypeSelector(ElementType(q)))
+        return active
+    }
+
+    infix fun id(q: String): CompoundSelector {
+        val active = CompoundSelector()
+        active.selectors.add(IdentitySelector(q))
         return active
     }
 

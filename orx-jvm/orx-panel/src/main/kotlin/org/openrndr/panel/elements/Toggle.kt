@@ -13,6 +13,7 @@ import org.openrndr.events.Event
 import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.launch
 import kotlin.reflect.KMutableProperty0
+import kotlin.reflect.KMutableProperty1
 
 class Toggle : Element(ElementType("toggle")) {
 
@@ -137,6 +138,39 @@ fun Toggle.bind(property: KMutableProperty0<Boolean>) {
                 fun update() {
                     if (property.get() != currentValue) {
                         val lcur = property.get()
+                        currentValue = lcur
+                        value = lcur
+                    }
+                }
+                update()
+                (root() as Body).controlManager.program.launch {
+                    while (!disposed) {
+                        update()
+                        yield()
+                    }
+                }
+                break
+            }
+        }
+    }
+}
+
+@OptIn(DelicateCoroutinesApi::class)
+fun Toggle.bind(container: Any, property: KMutableProperty1<Any, Boolean>) {
+    var currentValue = property.get(container)
+    value = currentValue
+
+    events.valueChanged.listen {
+        currentValue = it.newValue
+        property.set(container, it.newValue)
+    }
+    GlobalScope.launch {
+        while (!disposed) {
+            val body = (root() as? Body)
+            if (body != null) {
+                fun update() {
+                    if (property.get(container) != currentValue) {
+                        val lcur = property.get(container)
                         currentValue = lcur
                         value = lcur
                     }

@@ -19,8 +19,9 @@ import org.openrndr.shape.Rectangle
 import java.util.*
 import kotlin.math.max
 
-@JvmRecord
-data class ElementClass(val name: String)
+
+@JvmInline
+value class ElementClass(val name: String)
 
 @JvmRecord
 data class ElementPseudoClass(val name: String)

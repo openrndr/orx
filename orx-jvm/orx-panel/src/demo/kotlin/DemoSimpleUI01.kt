@@ -48,10 +48,19 @@ fun main() {
                 }
 
                 styleSheet(has class_ "padding") {
-                    paddingLeft = length { 5 }
-                    paddingTop = length { 5 }
-                    paddingRight = length { 5 }
-                    paddingBottom = length { 5 }
+                    padding(length { 5 })
+                }
+
+                styleSheet(has id "io-toolbar") {
+                    display = Display.GRID
+                    gridTemplateColumns = gridTemplate { listOf(length { 1.fr }, length { 1.fr }) }
+                    gridTemplateRows = gridTemplate { listOf(length { 1.fr }) }
+                    columnGap = length { 5 }
+
+                    child(has type "button") {
+                        margins(length { 0 })
+                        padding(length { 0 })
+                    }
                 }
 
                 layout {
@@ -105,18 +114,9 @@ fun main() {
                                 drawer.circle(drawer.bounds.center, model.radius)
                             }
                         }
-                        div {
+                        div("no-margins") {
                             id = "io-toolbar"
-                            style {
-                                display = Display.GRID
-                                gridTemplateColumns = gridTemplate { listOf(length { 1.fr }, length { 1.fr }) }
-                                gridTemplateRows = gridTemplate { listOf(length { 1.fr }) }
-                                columnGap = length { 5 }
 
-                                and(has type "button") {
-                                    background = color { ColorRGBa.PINK }
-                                }
-                            }
                             button {
                                 label = "Load settings"
                                 events.clicked.listen {

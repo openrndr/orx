@@ -13,6 +13,7 @@ import org.openrndr.extra.textwriter.writer
 import org.openrndr.launch
 import org.openrndr.shape.Rectangle
 import kotlin.reflect.KMutableProperty0
+import kotlin.reflect.KMutableProperty1
 
 class Textfield : Element(ElementType("textfield")) {
 
@@ -155,6 +156,36 @@ fun Textfield.bind(property: KMutableProperty0<String>) {
                 }
                 fun update() {
                     val propertyValue = property.get()
+                    if (propertyValue != value) {
+                        value = propertyValue
+                    }
+                }
+                update()
+                (root() as Body).controlManager.program.launch {
+                    while (!disposed) {
+                        update()
+                        yield()
+                    }
+                }
+                break@install
+            }
+            yield()
+        }
+    }
+}
+
+
+@OptIn(DelicateCoroutinesApi::class)
+fun Textfield.bind(container: Any, property: KMutableProperty1<Any, String>) {
+    GlobalScope.launch {
+        install@ while (!disposed) {
+            val body = (root() as? Body)
+            if (body != null) {
+                events.valueChanged.listen {
+                    property.set(container, it.newValue)
+                }
+                fun update() {
+                    val propertyValue = property.get(container)
                     if (propertyValue != value) {
                         value = propertyValue
                     }

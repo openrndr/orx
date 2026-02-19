@@ -20,10 +20,10 @@ data class Property(
     val value: Any?
 )
 
-open class PropertyValue(val inherit: Boolean = false)
+open class PropertyValue(val inherit: Boolean = false, val important: Boolean = false)
 
-sealed class Color(inherit: Boolean = false) : PropertyValue(inherit) {
-    class RGBa(val color: ColorRGBa) : Color() {
+sealed class Color(inherit: Boolean = false,  important: Boolean = false) : PropertyValue(inherit, important) {
+    class RGBa(val color: ColorRGBa, important: Boolean = false) : Color(important = important) {
         override fun toString(): String {
             return "RGBa(color=$color)"
         }
@@ -34,9 +34,9 @@ sealed class Color(inherit: Boolean = false) : PropertyValue(inherit) {
     companion object {
         val inherit = Inherit
 
-        operator fun invoke(f: Companion.() -> Any): Color {
+        operator fun invoke(important: Boolean = false, f: Companion.() -> Any): Color {
             return when (val r = f()) {
-                is ConvertibleToColorRGBa -> RGBa(r.toRGBa())
+                is ConvertibleToColorRGBa -> RGBa(r.toRGBa(), important)
                 is Color -> r
                 else -> error("Can't resolve Color from '$r'")
             }
@@ -133,12 +133,12 @@ class PropertyHandler<T>(
     }
 }
 
-enum class Display {
-    INLINE,
-    BLOCK,
-    FLEX,
-    GRID,
-    NONE
+sealed class Display : PropertyValue(false) {
+    object INLINE : Display()
+    object BLOCK : Display()
+    object FLEX : Display()
+    object GRID : Display()
+    object NONE : Display()
 }
 
 enum class Position {
@@ -176,7 +176,7 @@ sealed class FlexGrow(inherit: Boolean = false) : PropertyValue(inherit) {
 
     companion object {
         val inherit = Inherit
-        operator fun invoke(f: FlexGrow.Companion.() -> Any): FlexGrow {
+        operator fun invoke(f: Companion.() -> Any): FlexGrow {
             return when (val r = f()) {
                 is Number -> Ratio(r.toDouble())
                 is FlexGrow -> r
@@ -279,6 +279,10 @@ class StyleSheet(val selector: CompoundSelector = CompoundSelector.DUMMY) {
 
         cascaded.properties.putAll(onto.properties)
         cascaded.properties.putAll(properties)
+
+        // re-apply properties with important flag set
+        val important = onto.properties.filterValues { (it.value as? PropertyValue)?.important == true }
+        cascaded.properties.putAll(important)
         return cascaded
     }
 
@@ -289,13 +293,13 @@ class StyleSheet(val selector: CompoundSelector = CompoundSelector.DUMMY) {
 
 var StyleSheet.width by PropertyHandler<LinearDimension>("width", RESET, LinearDimension.Auto)
 var StyleSheet.height by PropertyHandler<LinearDimension>("height", RESET, LinearDimension.Auto)
-var StyleSheet.top by PropertyHandler<LinearDimension>("top", RESET, 0.px) // css default is auto
-var StyleSheet.left by PropertyHandler<LinearDimension>("left", RESET, 0.px) // css default is auto
+var StyleSheet.top by PropertyHandler<LinearDimension>("top", RESET, length { 0 }) // css default is auto
+var StyleSheet.left by PropertyHandler<LinearDimension>("left", RESET, length { 0 }) // css default is auto
 
-var StyleSheet.marginTop by PropertyHandler<LinearDimension>("margin-top", RESET, 0.px)
-var StyleSheet.marginBottom by PropertyHandler<LinearDimension>("margin-bottom", RESET, 0.px)
-var StyleSheet.marginLeft by PropertyHandler<LinearDimension>("margin-left", RESET, 0.px)
-var StyleSheet.marginRight by PropertyHandler<LinearDimension>("margin-right", RESET, 0.px)
+var StyleSheet.marginTop by PropertyHandler<LinearDimension>("margin-top", RESET, length { 0 })
+var StyleSheet.marginBottom by PropertyHandler<LinearDimension>("margin-bottom", RESET, length { 0 })
+var StyleSheet.marginLeft by PropertyHandler<LinearDimension>("margin-left", RESET, length { 0 })
+var StyleSheet.marginRight by PropertyHandler<LinearDimension>("margin-right", RESET, length { 0 })
 
 
 var StyleSheet.paddingTop by PropertyHandler<LinearDimension>("padding-top", RESET, 0.px)
@@ -305,7 +309,7 @@ var StyleSheet.paddingRight by PropertyHandler<LinearDimension>("padding-right",
 
 
 var StyleSheet.position by PropertyHandler("position", RESET, Position.STATIC)
-var StyleSheet.display by PropertyHandler("display", RESET, Display.BLOCK) // css default is inline
+var StyleSheet.display by PropertyHandler<Display>("display", RESET, Display.BLOCK) // css default is inline
 
 var StyleSheet.columnGap by PropertyHandler<LinearDimension>(
     "column-gap",
@@ -375,12 +379,12 @@ var StyleSheet.overflow by PropertyHandler<Overflow>("overflow", RESET, Overflow
 var StyleSheet.zIndex by PropertyHandler<ZIndex>("z-index", RESET, ZIndex.Auto)
 
 var StyleSheet.textVerticalAlign by PropertyHandler<TextAlign>(
-    "text-vertical-align", PropertyInheritance.RESET,
+    "text-vertical-align", RESET,
     TextAlign.Value(0.0)
 )
 
 var StyleSheet.textHorizontalAlign by PropertyHandler<TextAlign>(
-    "text-horizontal-align", PropertyInheritance.RESET,
+    "text-horizontal-align", RESET,
     TextAlign.Value(0.0)
 )
 
@@ -388,6 +392,19 @@ var StyleSheet.textHorizontalAlign by PropertyHandler<TextAlign>(
 val Number.px: LinearDimension.PX get() = LinearDimension.PX(this.toDouble())
 val Number.percent: LinearDimension.Percent get() = LinearDimension.Percent(this.toDouble())
 
+fun StyleSheet.margins(all: LinearDimension) {
+    marginTop = all
+    marginBottom = all
+    marginLeft = all
+    marginRight = all
+}
+
+fun StyleSheet.padding(all: LinearDimension) {
+    paddingTop = all
+    paddingBottom = all
+    paddingLeft = all
+    paddingRight = all
+}
 
 fun StyleSheet.child(selector: CompoundSelector, init: StyleSheet.() -> Unit) {
     val stylesheet = StyleSheet(selector).apply(init)

@@ -18,6 +18,7 @@ import org.openrndr.shape.Rectangle
 import java.text.NumberFormat
 import java.text.ParseException
 import kotlin.reflect.KMutableProperty0
+import kotlin.reflect.KMutableProperty1
 
 private val logger = KotlinLogging.logger {}
 
@@ -310,11 +311,48 @@ fun Slider.bind(property: KMutableProperty0<Double>) {
     }
     GlobalScope.launch {
         while(!disposed) {
+            println("cycle")
             val body = (root() as? Body)
             if (body != null) {
                 fun update() {
                     if (property.get() != currentValue) {
                         val lcur = property.get()
+                        currentValue = lcur
+                        value = lcur
+                    }
+                }
+                update()
+                body.controlManager.program.launch {
+                    println("launching a thing")
+                    while (!disposed) {
+                        update()
+                        yield()
+                    }
+                }
+                break
+            }
+            yield()
+        }
+        println("end?")
+    }
+}
+
+@OptIn(DelicateCoroutinesApi::class)
+fun Slider.bind(container: Any, property: KMutableProperty1<Any, Double>) {
+    var currentValue: Double? = null
+
+    events.valueChanged.listen {
+        currentValue = it.newValue
+        property.set(container, it.newValue)
+    }
+    GlobalScope.launch {
+        while(!disposed) {
+            val body = (root() as? Body)
+            if (body != null) {
+                fun update() {
+
+                    if (property.get(container) != currentValue) {
+                        val lcur = property.get(container)
                         currentValue = lcur
                         value = lcur
                     }
@@ -348,6 +386,39 @@ fun Slider.bind(property: KMutableProperty0<Int>) {
                 fun update() {
                     if (property.get() != currentValue) {
                         val lcur = property.get()
+                        currentValue = lcur
+                        value = lcur.toDouble()
+                    }
+                }
+                update()
+                body.controlManager.program.launch {
+                    while (!disposed) {
+                        update()
+                        yield()
+                    }
+                }
+                break
+            }
+            yield()
+        }
+    }
+}
+
+@OptIn(DelicateCoroutinesApi::class)
+@JvmName("bindInt")
+fun Slider.bind(container: Any, property: KMutableProperty1<Any, Int>) {
+    var currentValue: Int? = null
+    events.valueChanged.listen {
+        currentValue = it.newValue.toInt()
+        property.set(container, it.newValue.toInt())
+    }
+    GlobalScope.launch {
+        while(!disposed) {
+            val body = (root() as? Body)
+            if (body != null) {
+                fun update() {
+                    if (property.get(container) != currentValue) {
+                        val lcur = property.get(container)
                         currentValue = lcur
                         value = lcur.toDouble()
                     }
