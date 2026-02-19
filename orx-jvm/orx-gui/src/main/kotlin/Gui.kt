@@ -48,9 +48,10 @@ private class TrackedObjectBinding(
 private val persistentCompartmentStates = mutableMapOf<Long, MutableMap<String, CompartmentState>>()
 private val persistentSidebarStates = mutableMapOf<Long, SidebarState>()
 
-private fun compartmentState(): MutableMap<String, CompartmentState> = persistentCompartmentStates.getOrPut(Driver.instance.contextID) {
-    mutableMapOf()
-}
+private fun compartmentState(): MutableMap<String, CompartmentState> =
+    persistentCompartmentStates.getOrPut(Driver.instance.contextID) {
+        mutableMapOf()
+    }
 
 private fun sidebarState(): SidebarState = persistentSidebarStates.getOrPut(Driver.instance.contextID) {
     SidebarState()
@@ -72,7 +73,8 @@ private fun <T : Any> getPersistedOrDefault(
 
 private fun <T : Any> setAndPersist(compartmentLabel: String, property: KMutableProperty1<Any, T>, obj: Any, value: T) {
     property.set(obj, value)
-    val state = compartmentState()[compartmentLabel] ?: error("item '$compartmentLabel' not in state (${compartmentState()}. ContextID ${Driver.instance.contextID} )")
+    val state = compartmentState()[compartmentLabel]
+        ?: error("item '$compartmentLabel' not in state (${compartmentState()}. ContextID ${Driver.instance.contextID} )")
     state.parameterValues[property.name] = value
 }
 
@@ -81,7 +83,8 @@ private val logger = KotlinLogging.logger { }
 
 class GUIAppearance(
     val baseColor: ColorRGBa = ColorRGBa.GRAY.opacify(0.99),
-    val barWidth: Int = 200)
+    val barWidth: Int = 200
+)
 
 @Suppress("unused", "UNCHECKED_CAST")
 open class GUI(
@@ -227,45 +230,51 @@ open class GUI(
 
         panel = program.controlManager(defaultStyles = defaultStyles) {
             styleSheet(has class_ "fullscreen") {
-                this.width = 100.percent
-                this.height = 100.percent
+                this.width = length { 100.percent }
+                this.height = length { 100.percent }
                 this.flexDirection = FlexDirection.Row
                 this.display = Display.FLEX
             }
             styleSheet(has class_ "full-canvas") {
-                this.background = Color.RGBa(ColorRGBa.RED)
-
-                this.flexShrink = FlexGrow.Ratio(1.0)
-                this.flexGrow = FlexGrow.Ratio(1.0)
-                this.height = 100.percent
-                this.width = 100.px
+                this.background = color { ColorRGBa.RED }
+                this.flexShrink = flex { 1 }
+                this.flexGrow = flex { 1 }
+                this.height = length { 100.percent }
+                this.width = length { 100 }
             }
 
             styleSheet(has class_ "container") {
                 this.display = Display.FLEX
                 this.flexDirection = FlexDirection.Column
-                this.width = appearance.barWidth.px
-                this.height = 100.percent
+                this.width = length { appearance.barWidth }
+                this.height = length { 100.percent }
             }
 
             styleSheet(has class_ "collapse-border") {
                 this.display = Display.FLEX
                 this.flexDirection = FlexDirection.Column
-                this.height = 5.px
-                this.width = 100.percent
-                this.background = Color.RGBa(appearance.baseColor.shade(0.9))
+                this.height = length { 5 }
+                this.width = length { 100.percent }
+                this.background = color { appearance.baseColor.shade(0.9) }
 
                 and(has state "hover") {
-                    this.background = Color.RGBa(appearance.baseColor.shade(1.1))
+                    this.background = color { appearance.baseColor.shade(1.1) }
                 }
             }
 
             styleSheet(has class_ "toolbar") {
-                this.height = 42.px
-                this.width = 100.percent
+                this.height = length { 42 }
+                this.width = length { 100.percent }
                 this.display = Display.FLEX
                 this.flexDirection = FlexDirection.Row
-                this.background = Color.RGBa(appearance.baseColor)
+                this.background = color { appearance.baseColor }
+                this.columnGap = length { 5 }
+
+                child(has type "button") {
+                    marginLeft = length { 0 }
+                    marginRight = length { 0 }
+                    this.flexGrow = flex { 1 }
+                }
             }
 
             styleSheet(has class_ "collapsed") {
@@ -273,44 +282,44 @@ open class GUI(
             }
 
             styleSheet(has class_ "compartment") {
-                this.paddingBottom = 20.px
+                this.paddingBottom = length { 20 }
             }
 
             styleSheet(has class_ "sidebar") {
-                this.width = appearance.barWidth.px
-                this.paddingBottom = 20.px
-                this.paddingTop = 10.px
-                this.paddingLeft = 10.px
-                this.paddingRight = 10.px
-                this.marginRight = 2.px
-                this.height = 100.percent
-                this.background = Color.RGBa(appearance.baseColor)
+                this.width = length { appearance.barWidth }
+                this.paddingBottom = length { 20 }
+                this.paddingTop = length { 10 }
+                this.paddingLeft = length { 10 }
+                this.paddingRight = length { 10 }
+                this.marginRight = length { 2 }
+                this.height = length { 100.percent }
+                this.background = color { appearance.baseColor }
                 this.overflow = Overflow.Scroll
 
                 //<editor-fold desc="1) setup control style">
                 descendant(has type "colorpicker-button") {
-                    this.width = (appearance.barWidth - 25).px
+                    this.width = length { appearance.barWidth - 25 }
                 }
 
                 descendant(has type "slider") {
-                    this.width = (appearance.barWidth - 25).px
+                    this.width = length { appearance.barWidth - 25 }
                 }
 
                 descendant(has type "button") {
-                    this.width = (appearance.barWidth - 25).px
+                    this.width = length { appearance.barWidth - 25 }
                 }
 
                 descendant(has type "textfield") {
-                    this.width = (appearance.barWidth - 25).px
+                    this.width = length { appearance.barWidth - 25 }
                 }
 
                 descendant(has type "toggle") {
-                    this.width = (appearance.barWidth - 25).px
+                    this.width = length { appearance.barWidth - 25 }
                 }
 
                 descendant(has type "xy-pad") {
-                    this.width = (appearance.barWidth - 25).px
-                    this.height = (appearance.barWidth - 25).px
+                    this.width = length { appearance.barWidth - 25 }
+                    this.height = length { appearance.barWidth - 25 }
                 }
 
                 descendant(
@@ -321,18 +330,18 @@ open class GUI(
                         "sliders-vector4"
                     )
                 ) {
-                    this.width = (appearance.barWidth - 25).px
-                    this.height = 100.px
+                    this.width = length { appearance.barWidth - 25 }
+                    this.height = length { 100 }
                 }
                 //</editor-fold>
             }
 
             styleSheet(has class_ "randomize-strong") {
-                color = Color.RGBa(ColorRGBa.PINK)
+                color = color { ColorRGBa.PINK }
 
                 and(has state "hover") {
-                    color = Color.RGBa(ColorRGBa.BLACK)
-                    background = Color.RGBa(ColorRGBa.PINK)
+                    color = color { ColorRGBa.BLACK }
+                    background = color { ColorRGBa.PINK }
                 }
             }
 

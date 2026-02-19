@@ -8,6 +8,8 @@ dependencies {
     api(project(":orx-jvm:orx-panel"))
     api(project(":orx-noise"))
     demoImplementation(project(":orx-property-watchers"))
+    demoImplementation(project(":orx-shapes"))
+    demoImplementation(sharedLibs.kotlin.serialization.json)
     implementation(sharedLibs.kotlin.coroutines)
     implementation(openrndr.application.core)
     implementation(openrndr.math)
@@ -17,4 +19,5 @@ dependencies {
     implementation(sharedLibs.kotlin.reflect)
     implementation(sharedLibs.kotlin.serialization.core)
     demoRuntimeOnly(sharedLibs.slf4j.simple)
+
 }
