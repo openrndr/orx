@@ -469,7 +469,7 @@ class TextWriter(val drawerRef: Drawer?) {
                     val tokenWidth = token.sumOf {
                         (font.glyphMetrics[it]?.advanceWidth ?: 0.0)
                     } + style.tracking * (token.length - 1).coerceAtLeast(0)
-                    if (localCursor.x + tokenWidth < box.x + box.width && localCursor.y <= box.y + box.height) run {
+                    if (localCursor.x == box.x || localCursor.x + tokenWidth < box.x + box.width && localCursor.y <= box.y + box.height) run {
                         val textToken = TextToken(token, localCursor.x, localCursor.y, tokenWidth, style.tracking)
                         textTokens.add(textToken)
                     } else {
