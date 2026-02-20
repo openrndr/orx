@@ -7,6 +7,7 @@ import org.openrndr.draw.*
 import org.openrndr.internal.Driver
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
+import org.openrndr.panel.document.Document
 import org.openrndr.panel.elements.*
 import org.openrndr.panel.layout.Layouter
 import org.openrndr.panel.style.*
@@ -20,8 +21,19 @@ import kotlin.contracts.contract
 private val logger = KotlinLogging.logger {}
 
 class ControlManager : Extension {
+    var document: Document? = null
+        set(value) {
+            if (field !== value) {
+                field = value
+                body = value?.body
+                layouter = value?.layouter
+                value?.body?.controlManager = this
+            }
+        }
+
     var body: Element? = null
-    val layouter = Layouter()
+    var layouter: Layouter? = null
+
     val fontManager = FontManager()
     lateinit var window: Window
     private val renderTargetCache = HashMap<Element, RenderTarget>()
@@ -34,7 +46,7 @@ class ControlManager : Extension {
 
     init {
         fontManager.register("default", resourceUrl("/fonts/Roboto-Regular.ttf"))
-        layouter.styleSheets.addAll(defaultStyles().flatMap { it.flatten() })
+//        layouter.styleSheets.addAll(defaultStyles().flatMap { it.flatten() })
     }
 
     class DropInput {
@@ -51,7 +63,7 @@ class ControlManager : Extension {
         private var lastTarget: Element? = null
         var target: Element? = null
             set(value) {
-                if (value != field) {
+                if (value !== field) {
                     field?.pseudoClasses?.remove(ElementPseudoClass("active"))
                     field?.keyboard?.focusLost?.trigger(FocusEvent())
                     value?.keyboard?.focusGained?.trigger(FocusEvent())
@@ -435,8 +447,7 @@ class ControlManager : Extension {
 
                     body?.let {
                         program.drawer.clear(ColorRGBa.BLACK.opacify(0.0))
-                        layouter.computeStyles(it)
-                        layouter.layout(it)
+                        document?.layout()
                         drawElement(it, program.drawer, 0, 0)
                         drawElement(it, program.drawer, 1, 0)
                         drawElement(it, program.drawer, 1000, 0)
@@ -458,15 +469,29 @@ class ControlManager : Extension {
     }
 }
 
+private fun ControlManager.existingOrNewDocumentWithDefaultStyleSheets(): Document {
+    return if (document == null) {
+        val document = Document()
+        document.styleSheets.addAll(defaultStyles())
+        document
+    } else {
+        document!!
+    }
+}
+
 class ControlManagerBuilder(val controlManager: ControlManager) {
     fun styleSheet(selector: CompoundSelector, init: StyleSheet.() -> Unit): StyleSheet {
+        val document = controlManager.existingOrNewDocumentWithDefaultStyleSheets()
         val styleSheet = StyleSheet(selector).apply { init() }
-        controlManager.layouter.styleSheets.addAll(styleSheet.flatten())
+        document.styleSheets.add(styleSheet)
+        controlManager.document = document
         return styleSheet
     }
 
     fun styleSheets(styleSheets: List<StyleSheet>) {
-        controlManager.layouter.styleSheets.addAll(styleSheets.flatMap { it.flatten() })
+        val document = controlManager.existingOrNewDocumentWithDefaultStyleSheets()
+        controlManager.layouter?.styleSheets?.addAll(styleSheets)
+        controlManager.document = document
     }
 
     @OptIn(ExperimentalContracts::class)
@@ -474,27 +499,33 @@ class ControlManagerBuilder(val controlManager: ControlManager) {
         contract {
             callsInPlace(init, InvocationKind.EXACTLY_ONCE)
         }
-        val body = Body(controlManager)
-        body.init()
-        controlManager.body = body
+
+        val document = controlManager.existingOrNewDocumentWithDefaultStyleSheets()
+        document.body.init()
+
+        controlManager.document = document
     }
 }
 
 
 fun ControlManager.styleSheet(selector: CompoundSelector, init: StyleSheet.() -> Unit): StyleSheet {
+    val document = existingOrNewDocumentWithDefaultStyleSheets()
     val styleSheet = StyleSheet(selector).apply { init() }
-    layouter.styleSheets.addAll(styleSheet.flatten())
+    document.styleSheets.add(styleSheet)
+    this.document = document
     return styleSheet
 }
 
 fun ControlManager.styleSheets(styleSheets: List<StyleSheet>) {
-    layouter.styleSheets.addAll(styleSheets.flatMap { it.flatten() })
+    val document = existingOrNewDocumentWithDefaultStyleSheets()
+    document.styleSheets.addAll(styleSheets)
+    this.document = document
 }
 
 fun ControlManager.layout(init: Body.() -> Unit) {
-    val body = Body(this)
-    body.init()
-    this.body = body
+    val document = existingOrNewDocumentWithDefaultStyleSheets()
+    document.body.init()
+    this.document = document
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -508,7 +539,7 @@ fun Program.controlManager(
     val cm = ControlManager()
     cm.program = this
     cm.fontManager.register("default", resourceUrl("/fonts/Roboto-Regular.ttf"))
-    cm.layouter.styleSheets.addAll(defaultStyles.flatMap { it.flatten() })
+    cm.layouter?.styleSheets?.addAll(defaultStyles.flatMap { it.flatten() })
     val cmb = ControlManagerBuilder(cm)
     cmb.builder()
     return cm

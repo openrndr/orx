@@ -14,7 +14,7 @@ import kotlin.math.max
 class Tooltip(val parent: Element, val position: Vector2, val message: String) {
     fun draw(drawer: Drawer) {
 
-        val fontUrl = (parent.root() as Body).controlManager.fontManager.resolve("default") ?: error("no font")
+        val fontUrl = (parent.root() as Body).controlManager?.fontManager?.resolve("default") ?: error("no font")
         val fontSize = 14.0
         val program = (parent.root() as? Body)?.controlManager?.program ?: error("no program")
         val fontMap =  program.loadFont(fontUrl, fontSize)

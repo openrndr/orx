@@ -93,7 +93,7 @@ class Colorpicker : Element {
 
             if (KeyModifier.CTRL in it.modifiers || KeyModifier.SUPER in it.modifiers) {
                 if (it.name == "v") {
-                    (root() as Body).controlManager.program.clipboard.contents?.let {
+                    (root() as Body).controlManager?.program?.clipboard?.contents?.let {
                         keyboardInput += it
                         draw.dirty = true
                     }

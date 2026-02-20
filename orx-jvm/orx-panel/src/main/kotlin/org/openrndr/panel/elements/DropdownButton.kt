@@ -68,11 +68,11 @@ class DropdownButton : Element(ElementType("dropdown-button")) {
                 if (screenPosition.y < root().layout.screenHeight - height) {
                     val so = SlideOut(0.0, screenArea.height, screenArea.width, height, this, value)
                     append(so)
-                    (root() as Body).controlManager.keyboardInput.requestFocus(so)
+                    (root() as Body).controlManager?.keyboardInput?.requestFocus(so)
                 } else {
                     val so = SlideOut(0.0, screenArea.height - height, screenArea.width, height, this, value)
                     append(so)
-                    (root() as Body).controlManager.keyboardInput.requestFocus(so)
+                    (root() as Body).controlManager?.keyboardInput?.requestFocus(so)
                 }
             } else {
                 (children.first { it is SlideOut } as SlideOut?)?.dispose()

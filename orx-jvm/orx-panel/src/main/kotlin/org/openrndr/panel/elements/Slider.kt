@@ -322,7 +322,7 @@ fun Slider.bind(property: KMutableProperty0<Double>) {
                     }
                 }
                 update()
-                body.controlManager.program.launch {
+                body.controlManager?.program?.launch {
                     println("launching a thing")
                     while (!disposed) {
                         update()
@@ -358,7 +358,7 @@ fun Slider.bind(container: Any, property: KMutableProperty1<Any, Double>) {
                     }
                 }
                 update()
-                body.controlManager.program.launch {
+                body.controlManager?.program?.launch {
                     while (!disposed) {
                         update()
                         yield()
@@ -391,7 +391,7 @@ fun Slider.bind(property: KMutableProperty0<Int>) {
                     }
                 }
                 update()
-                body.controlManager.program.launch {
+                body.controlManager?.program?.launch {
                     while (!disposed) {
                         update()
                         yield()
@@ -424,7 +424,7 @@ fun Slider.bind(container: Any, property: KMutableProperty1<Any, Int>) {
                     }
                 }
                 update()
-                body.controlManager.program.launch {
+                body.controlManager?.program?.launch {
                     while (!disposed) {
                         update()
                         yield()

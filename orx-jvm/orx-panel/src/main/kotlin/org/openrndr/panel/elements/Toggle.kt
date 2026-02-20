@@ -143,7 +143,7 @@ fun Toggle.bind(property: KMutableProperty0<Boolean>) {
                     }
                 }
                 update()
-                (root() as Body).controlManager.program.launch {
+                (root() as Body).controlManager?.program?.launch {
                     while (!disposed) {
                         update()
                         yield()
@@ -176,7 +176,7 @@ fun Toggle.bind(container: Any, property: KMutableProperty1<Any, Boolean>) {
                     }
                 }
                 update()
-                (root() as Body).controlManager.program.launch {
+                (root() as Body).controlManager?.program?.launch {
                     while (!disposed) {
                         update()
                         yield()

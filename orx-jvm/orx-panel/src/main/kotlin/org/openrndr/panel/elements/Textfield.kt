@@ -49,7 +49,7 @@ class Textfield : Element(ElementType("textfield")) {
             if (KeyModifier.CTRL in it.modifiers || KeyModifier.SUPER in it.modifiers) {
                 if (it.name == "v") {
                     val oldValue = value
-                    (root() as Body).controlManager.program.clipboard.contents?.let {
+                    (root() as Body).controlManager?.program?.clipboard?.contents?.let {
                         value += it
 
                     }
@@ -161,7 +161,7 @@ fun Textfield.bind(property: KMutableProperty0<String>) {
                     }
                 }
                 update()
-                (root() as Body).controlManager.program.launch {
+                (root() as Body).controlManager?.program?.launch {
                     while (!disposed) {
                         update()
                         yield()
@@ -191,7 +191,7 @@ fun Textfield.bind(container: Any, property: KMutableProperty1<Any, String>) {
                     }
                 }
                 update()
-                (root() as Body).controlManager.program.launch {
+                (root() as Body).controlManager?.program?.launch {
                     while (!disposed) {
                         update()
                         yield()

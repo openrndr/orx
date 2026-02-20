@@ -39,7 +39,7 @@ class WatchListDiv<T : Any>(private val watchList: List<T>, private val builder:
 
     fun checkJob() {
         if (watchJob == null) {
-            watchJob = (root() as Body).controlManager.program.launch {
+            watchJob = (root() as Body).controlManager?.program?.launch {
                 while (!disposed) {
                     regenerate()
                     yield()

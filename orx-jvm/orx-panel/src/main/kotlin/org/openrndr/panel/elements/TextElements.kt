@@ -20,7 +20,7 @@ class TextNode(var text: String) : Element(ElementType("text")) {
                 val fill = (it as? Color.RGBa)?.color ?: ColorRGBa.WHITE
                 drawer.fill = (fill)
             }
-            val fontMap = (root() as Body).controlManager.fontManager.font(computedStyle)
+            val fontMap = (root() as Body).controlManager?.fontManager?.font(computedStyle)
             val writer = TextWriter(drawer)
             drawer.fontMap = (fontMap)
 

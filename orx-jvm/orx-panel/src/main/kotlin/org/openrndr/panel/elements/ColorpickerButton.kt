@@ -125,7 +125,7 @@ class ColorpickerButton : Element(ElementType("colorpicker-button")) {
         }
 
         override fun draw(drawer: Drawer) {
-            (root() as Body).controlManager.keyboardInput.requestFocus(children[0])
+            (root() as Body).controlManager?.keyboardInput?.requestFocus(children[0])
             drawer.fill = ((computedStyle.background as? Color.RGBa)?.color ?: ColorRGBa.PINK)
             drawer.rectangle(0.0, 0.0, screenArea.width, screenArea.height)
         }
