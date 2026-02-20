@@ -1,7 +1,7 @@
 [versions]
 kotlinApi = "2.3"
 kotlinLanguage = "2.3"
-kotlin = "2.3.0"
+kotlin = "2.3.10"
 jvmTarget = "17"
 openrndr = { require = "[0.5,0.6.0)" }
 kotest = "6.1.0"
@@ -12,7 +12,7 @@ libfreenect = "0.5.7-1.5.9"
 librealsense = "2.53.1-1.5.9"
 gson = "2.13.2"
 antlr = "4.13.2"
-antlrKotlin = "1.0.8"
+antlrKotlin = "1.0.9"
 minim = "2.2.2"
 netty = "4.2.9.Final"
 rabbitcontrol = "0.3.39"
@@ -24,7 +24,7 @@ jsoup = "1.22.1"
 mockk = "1.14.9"
 processing = "4.5.2"
 nmcp = "1.2.0"
-okhttp = "5.2.1"
+okhttp = "5.3.2"
 
 [libraries]
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
