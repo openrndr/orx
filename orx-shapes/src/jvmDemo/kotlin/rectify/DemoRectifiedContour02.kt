@@ -7,6 +7,12 @@ import org.openrndr.extra.shapes.hobbycurve.hobbyCurve
 import org.openrndr.extra.shapes.rectify.rectified
 import kotlin.random.Random
 
+/**
+ * Demonstrates how calling `ShapeContour.position(t)` and `RectifiedContour.position(t)`
+ * returns different values for the same `t`, and how a sub-contour with a fixed `t`-length
+ * (0.01 in this case), returns longer and shorter contours depending on the position
+ * along a `ShapeContour`, but constant length contours for `RectifiedContour`.
+ */
 fun main() = application {
     configure {
         width = 720

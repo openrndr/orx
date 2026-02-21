@@ -7,6 +7,11 @@ import org.openrndr.extra.shapes.hobbycurve.hobbyCurve
 import org.openrndr.extra.shapes.rectify.rectified
 import kotlin.random.Random
 
+/**
+ * Demonstrates how to query a hobby contour at regular intervals and draw
+ * 100 evenly spaced circles on it.
+ *
+ */
 fun main() = application {
     configure {
         width = 720
@@ -26,7 +31,6 @@ fun main() = application {
                 rectified.position(it / 100.0)
             }
             drawer.circles(points, 5.0)
-
         }
     }
 }

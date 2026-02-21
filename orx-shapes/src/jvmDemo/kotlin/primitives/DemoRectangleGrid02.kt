@@ -3,8 +3,19 @@ package primitives
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.noise.Random
+import org.openrndr.extra.noise.primitives.random
+import org.openrndr.extra.noise.uniform
 import org.openrndr.extra.shapes.primitives.grid
 
+/**
+ * Demonstrates the use of the `Rectangle.grid()` method to create Rectangle grids
+ * both with `Double` values to specify cell dimensions, and with `Int` values
+ * to specify cell counts.
+ *
+ * The program creates a grid of squares of side 50.0, then maps each resulting
+ * cell to a grid between 1 and 3 columns and rows, then discards half of
+ * the resulting cells by using the `List.filter { }` method.
+ */
 fun main() = application {
     // Try changing the resolution. The design will use the available space.
     configure {
@@ -25,9 +36,9 @@ fun main() = application {
             // in the parent grid cells. Notice how we don't specify cell
             // sizes here but counts instead (between 1 and 3 columns and
             // rows)
-            val count = Random.int(1, 4)
+            val count = Int.uniform(1, 4)
             rect.grid(count, count, 5.0, 5.0, 5.0, 5.0).flatten()
-        }.flatten().filter { Random.bool(0.5) }
+        }.flatten().filter { Boolean.random(0.5) }
 
         extend {
             drawer.clear(ColorRGBa.PINK)
