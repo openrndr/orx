@@ -1,0 +1,556 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>org.openrndr.extra.triangulation</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../images/logo-icon.svg">
+<link href="../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.0-dev.70+e4c3ecc
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-triangulation/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-triangulation/commonMain" data-filter=":orx-triangulation/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageids="orx-triangulation::org.openrndr.extra.triangulation////PointingToDeclaration//-1935396496">
+  <div class="breadcrumbs"><a href="../index.html">orx-triangulation</a><span class="delimiter">/</span><span class="current">org.openrndr.extra.triangulation</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button><button class="section-tab" data-togglable="PROPERTY,EXTENSION_PROPERTY">Properties</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="-1179319522%2FClasslikes%2F-1935396496" anchor-label="Delaunator" id="-1179319522%2FClasslikes%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-delaunator/index.html"><span><span>Delaunator</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1179319522%2FClasslikes%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-delaunator/index.html">Delaunator</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>coords<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A Kotlin port of Mapbox's Delaunator incredibly fast JavaScript library for Delaunay triangulation of 2D points.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-335481028%2FClasslikes%2F-1935396496" anchor-label="Delaunay" id="-335481028%2FClasslikes%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-delaunay/index.html"><span><span>Delaunay</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-335481028%2FClasslikes%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-delaunay/index.html">Delaunay</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>points<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Use <a href="-delaunay/-companion/from.html">from</a> static method to use the delaunay triangulation</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-328695177%2FClasslikes%2F-1935396496" anchor-label="DelaunayTriangulation" id="-328695177%2FClasslikes%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-delaunay-triangulation/index.html"><span>Delaunay</span><wbr><span><span>Triangulation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-328695177%2FClasslikes%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-delaunay-triangulation/index.html">DelaunayTriangulation</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>points<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Kotlin/OPENRNDR idiomatic interface to <code class="lang-kotlin">Delaunay</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2051224211%2FClasslikes%2F-1935396496" anchor-label="Voronoi" id="-2051224211%2FClasslikes%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-voronoi/index.html"><span><span>Voronoi</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2051224211%2FClasslikes%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-voronoi/index.html">Voronoi</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>delaunay<span class="token operator">: </span><a href="-delaunay/index.html">Delaunay</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>bounds<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">This is a fast library for computing the Voronoi diagram of a set of two-dimensional points. The Voronoi diagram is constructed by connecting the circumcenters of adjacent triangles in the Delaunay triangulation.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1314088414%2FClasslikes%2F-1935396496" anchor-label="VoronoiDiagram" id="-1314088414%2FClasslikes%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-voronoi-diagram/index.html"><span>Voronoi</span><wbr><span><span>Diagram</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1314088414%2FClasslikes%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-voronoi-diagram/index.html">VoronoiDiagram</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>delaunayTriangulation<span class="token operator">: </span><a href="-delaunay-triangulation/index.html">DelaunayTriangulation</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>bounds<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="60436084%2FProperties%2F-1935396496" anchor-label="EPSILON" id="60436084%2FProperties%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-e-p-s-i-l-o-n.html"><span><span>EPSILON</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="60436084%2FProperties%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="-e-p-s-i-l-o-n.html">EPSILON</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="725182872%2FProperties%2F-1935396496" anchor-label="f" id="725182872%2FProperties%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="f.html"><span><span>f</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="725182872%2FProperties%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="f.html">f</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">134217729</span></div><div class="brief "><p class="paragraph">=== 2^Math.ceil(p/2) + 1 where p is the # of significand bits in a double === 53.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="473465445%2FFunctions%2F-1935396496" anchor-label="circumcenter" id="473465445%2FFunctions%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="circumcenter.html"><span><span>circumcenter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="473465445%2FFunctions%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="circumcenter.html"><span class="token function">circumcenter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ax<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">ay<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">bx<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">by<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">cx<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">cy<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-980544734%2FFunctions%2F-1935396496" anchor-label="circumradius" id="-980544734%2FFunctions%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="circumradius.html"><span><span>circumradius</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-980544734%2FFunctions%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="circumradius.html"><span class="token function">circumradius</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ax<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">ay<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">bx<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">by<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">cx<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">cy<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-253311614%2FFunctions%2F-1935396496" anchor-label="ddAddDd" id="-253311614%2FFunctions%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="dd-add-dd.html"><span>dd</span><wbr><span>Add</span><wbr><span><span>Dd</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-253311614%2FFunctions%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="dd-add-dd.html"><span class="token function">ddAddDd</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a><span class="token punctuation">, </span></span><span class="parameter ">y<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">Returns the result of adding two double-double-precision floating point numbers.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1514117560%2FFunctions%2F-1935396496" anchor-label="ddDiffDd" id="-1514117560%2FFunctions%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="dd-diff-dd.html"><span>dd</span><wbr><span>Diff</span><wbr><span><span>Dd</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1514117560%2FFunctions%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="dd-diff-dd.html"><span class="token function">ddDiffDd</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a><span class="token punctuation">, </span></span><span class="parameter ">y<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">Returns the result of subtracting the second given double-double-precision floating point number from the first.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="809882483%2FFunctions%2F-1935396496" anchor-label="ddMultDd" id="809882483%2FFunctions%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="dd-mult-dd.html"><span>dd</span><wbr><span>Mult</span><wbr><span><span>Dd</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="809882483%2FFunctions%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="dd-mult-dd.html"><span class="token function">ddMultDd</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a><span class="token punctuation">, </span></span><span class="parameter ">y<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">Returns the product of two double-double-precision floating point numbers.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1174180494%2FFunctions%2F-1935396496" anchor-label="ddMultDouble1" id="1174180494%2FFunctions%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="dd-mult-double1.html"><span>dd</span><wbr><span>Mult</span><wbr><span><span>Double1</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1174180494%2FFunctions%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="dd-mult-double1.html"><span class="token function">ddMultDouble1</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">y<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">Returns the product of a double-double-precision floating point number and a double.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-903958351%2FFunctions%2F-1935396496" anchor-label="delaunayTriangulation" id="-903958351%2FFunctions%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="delaunay-triangulation.html"><span>delaunay</span><wbr><span><span>Triangulation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-903958351%2FFunctions%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="delaunay-triangulation.html"><span class="token function">delaunayTriangulation</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-delaunay-triangulation/index.html">DelaunayTriangulation</a></div><div class="brief "><p class="paragraph">Computes the Delaunay triangulation for the list of 2D points.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1405031072%2FFunctions%2F-1935396496" anchor-label="fastTwoDiff" id="1405031072%2FFunctions%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="fast-two-diff.html"><span>fast</span><wbr><span>Two</span><wbr><span><span>Diff</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1405031072%2FFunctions%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="fast-two-diff.html"><span class="token function">fastTwoDiff</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">a<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">b<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">Returns the difference and exact error of subtracting two floating point numbers. Uses an EFT (error-free transformation), i.e. <code class="lang-kotlin">a-b === x+y</code> exactly. The returned result is a non-overlapping expansion (smallest value first!).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1872307432%2FFunctions%2F-1935396496" anchor-label="fastTwoSum" id="1872307432%2FFunctions%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="fast-two-sum.html"><span>fast</span><wbr><span>Two</span><wbr><span><span>Sum</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1872307432%2FFunctions%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="fast-two-sum.html"><span class="token function">fastTwoSum</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">a<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">b<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">Returns the sum and exact error of adding two floating point numbers. Uses an EFT (error-free transformation), i.e. a+b === x+y exactly. The returned sum is a non-overlapping expansion (smallest value first!).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1989896408%2FFunctions%2F-1935396496" anchor-label="orient2d" id="1989896408%2FFunctions%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="orient2d.html"><span><span>orient2d</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1989896408%2FFunctions%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="orient2d.html"><span class="token function">orient2d</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">bx<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">by<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">ax<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">ay<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">cx<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">cy<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-32107348%2FFunctions%2F-1935396496" anchor-label="quicksort" id="-32107348%2FFunctions%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="quicksort.html"><span><span>quicksort</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-32107348%2FFunctions%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="quicksort.html"><span class="token function">quicksort</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ids<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int-array/index.html">IntArray</a><span class="token punctuation">, </span></span><span class="parameter ">dists<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a><span class="token punctuation">, </span></span><span class="parameter ">left<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">right<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1212657818%2FFunctions%2F-1935396496" anchor-label="reduceSignificand" id="1212657818%2FFunctions%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="reduce-significand.html"><span>reduce</span><wbr><span><span>Significand</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1212657818%2FFunctions%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="reduce-significand.html"><span class="token function">reduceSignificand</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">a<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">bits<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">Truncates a floating point value's significand and returns the result. Similar to split, but with the ability to specify the number of bits to keep.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1817834786%2FFunctions%2F-1935396496" anchor-label="smoothScatter" id="1817834786%2FFunctions%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="smooth-scatter.html"><span>smooth</span><wbr><span><span>Scatter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1817834786%2FFunctions%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/ShapeProvider///PointingToDeclaration/">ShapeProvider</span><span class="token punctuation">.</span><a href="smooth-scatter.html"><span class="token function">smoothScatter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">placementRadius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">distanceToEdge<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span>placementRadius * 2.0<span class="token punctuation">, </span></span><span class="parameter ">iterations<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">10</span><span class="token punctuation">, </span></span><span class="parameter ">smoothing<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.5</span><span class="token punctuation">, </span></span><span class="parameter ">random<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.random/-random/index.html">Random</a><span class="token operator"> = </span>Random.Default</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-107567758%2FFunctions%2F-1935396496" anchor-label="smoothScatterSeq" id="-107567758%2FFunctions%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="smooth-scatter-seq.html"><span>smooth</span><wbr><span>Scatter</span><wbr><span><span>Seq</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-107567758%2FFunctions%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/ShapeProvider///PointingToDeclaration/">ShapeProvider</span><span class="token punctuation">.</span><a href="smooth-scatter-seq.html"><span class="token function">smoothScatterSeq</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">placementRadius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">distanceToEdge<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span>placementRadius * 2.0<span class="token punctuation">, </span></span><span class="parameter ">smoothing<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.5</span><span class="token punctuation">, </span></span><span class="parameter ">random<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.random/-random/index.html">Random</a><span class="token operator"> = </span>Random.Default</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.sequences/-sequence/index.html">Sequence</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1085120279%2FFunctions%2F-1935396496" anchor-label="smoothScatterWeightedSeq" id="-1085120279%2FFunctions%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="smooth-scatter-weighted-seq.html"><span>smooth</span><wbr><span>Scatter</span><wbr><span>Weighted</span><wbr><span><span>Seq</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1085120279%2FFunctions%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/ShapeProvider///PointingToDeclaration/">ShapeProvider</span><span class="token punctuation">.</span><a href="smooth-scatter-weighted-seq.html"><span class="token function">smoothScatterWeightedSeq</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">placementRadius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">distanceToEdge<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span>placementRadius * 2.0<span class="token punctuation">, </span></span><span class="parameter ">smoothing<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.5</span><span class="token punctuation">, </span></span><span class="parameter ">random<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.random/-random/index.html">Random</a><span class="token operator"> = </span>Random.Default</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.sequences/-sequence/index.html">Sequence</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="370079456%2FFunctions%2F-1935396496" anchor-label="split" id="370079456%2FFunctions%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="split.html"><span><span>split</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="370079456%2FFunctions%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="split.html"><span class="token function">split</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">a<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">Returns the result of splitting a double into 2 26-bit doubles.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2033701916%2FFunctions%2F-1935396496" anchor-label="twoDiff" id="2033701916%2FFunctions%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="two-diff.html"><span>two</span><wbr><span><span>Diff</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2033701916%2FFunctions%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="two-diff.html"><span class="token function">twoDiff</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">a<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">b<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">Returns the exact result of subtracting b from a.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-315542000%2FFunctions%2F-1935396496" anchor-label="twoProduct" id="-315542000%2FFunctions%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="two-product.html"><span>two</span><wbr><span><span>Product</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-315542000%2FFunctions%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="two-product.html"><span class="token function">twoProduct</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">a<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">b<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">Returns the exact result of multiplying two doubles.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="33916815%2FFunctions%2F-1935396496" anchor-label="twoSquare" id="33916815%2FFunctions%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="two-square.html"><span>two</span><wbr><span><span>Square</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="33916815%2FFunctions%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="two-square.html"><span class="token function">twoSquare</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">a<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1199850476%2FFunctions%2F-1935396496" anchor-label="twoSum" id="1199850476%2FFunctions%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="two-sum.html"><span>two</span><wbr><span><span>Sum</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1199850476%2FFunctions%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="two-sum.html"><span class="token function">twoSum</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">a<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">b<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">Returns the exact result of adding two doubles.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-152566748%2FFunctions%2F-1935396496" anchor-label="voronoiDiagram" id="-152566748%2FFunctions%2F-1935396496" data-filterable-set=":orx-triangulation/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-triangulation/commonMain" data-filterable-set=":orx-triangulation/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="voronoi-diagram.html"><span>voronoi</span><wbr><span><span>Diagram</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-152566748%2FFunctions%2F-1935396496"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-triangulation/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="voronoi-diagram.html"><span class="token function">voronoiDiagram</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">bounds<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator"> = </span>this.bounds</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-voronoi-diagram/index.html">VoronoiDiagram</a></div><div class="brief "><p class="paragraph">Generates a Voronoi diagram based on the points in the list and the provided bounds.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

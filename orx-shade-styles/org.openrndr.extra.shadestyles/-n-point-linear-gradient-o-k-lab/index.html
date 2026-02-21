@@ -1,0 +1,707 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>NPointLinearGradientOKLab</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../../images/logo-icon.svg">
+<link href="../../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.0-dev.70+e4c3ecc
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-shade-styles/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-shade-styles/commonMain" data-filter=":orx-shade-styles/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="orx-shade-styles::org.openrndr.extra.shadestyles/NPointLinearGradientOKLab///PointingToDeclaration//-1246251867">
+  <div class="breadcrumbs"><a href="../../index.html">orx-shade-styles</a><span class="delimiter">/</span><a href="../index.html">org.openrndr.extra.shadestyles</a><span class="delimiter">/</span><span class="current">NPointLinearGradientOKLab</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>NPoint</span><wbr><span>Linear</span><wbr><span>Gradient</span><wbr><span><span>OKLab</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">NPointLinearGradientOKLab</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">colors<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><a href="../../../orx-color/org.openrndr.extra.color.spaces/-color-o-k-l-a-ba/index.html">ColorOKLABa</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">points<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token operator"> = </span>Array(colors.size) { it / (colors.size - 1.0) }<span class="token punctuation">, </span></span><span class="parameter ">offset<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>Vector2.ZERO<span class="token punctuation">, </span></span><span class="parameter ">rotation<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span></span></span><span class="token punctuation">)</span> : <a href="../-n-point-linear-gradient-base/index.html">NPointLinearGradientBase</a><span class="token operator">&lt;</span><a href="../../../orx-color/org.openrndr.extra.color.spaces/-color-o-k-l-a-ba/index.html">ColorOKLABa</a><span class="token operator">&gt; </span><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/openrndr/orx/blob/master/orx-shade-styles/src/commonMain/kotlin/NPointLinearGradient.kt#L79">source</a>)</span></span></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="-967187905%2FConstructors%2F-1246251867" anchor-label="NPointLinearGradientOKLab" id="-967187905%2FConstructors%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-n-point-linear-gradient-o-k-lab.html"><span>NPoint</span><wbr><span>Linear</span><wbr><span>Gradient</span><wbr><span><span>OKLab</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-967187905%2FConstructors%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">colors<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><a href="../../../orx-color/org.openrndr.extra.color.spaces/-color-o-k-l-a-ba/index.html">ColorOKLABa</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">points<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token operator"> = </span>Array(colors.size) { it / (colors.size - 1.0) }<span class="token punctuation">, </span></span><span class="parameter ">offset<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>Vector2.ZERO<span class="token punctuation">, </span></span><span class="parameter ">rotation<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="1966560374%2FProperties%2F-1246251867" anchor-label="attributes" id="1966560374%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1966560374%2FProperties%2F-1246251867"><span><span>attributes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1966560374%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1966560374%2FProperties%2F-1246251867">attributes</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.draw/VertexBuffer///PointingToDeclaration/">VertexBuffer</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2105479337%2FProperties%2F-1246251867" anchor-label="bufferAccess" id="2105479337%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#2105479337%2FProperties%2F-1246251867"><span>buffer</span><wbr><span><span>Access</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2105479337%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#2105479337%2FProperties%2F-1246251867">bufferAccess</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><span data-unresolved-link="org.openrndr.draw.font/BufferAccess///PointingToDeclaration/">BufferAccess</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2094319430%2FProperties%2F-1246251867" anchor-label="bufferFlags" id="2094319430%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#2094319430%2FProperties%2F-1246251867"><span>buffer</span><wbr><span><span>Flags</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2094319430%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#2094319430%2FProperties%2F-1246251867">bufferFlags</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.draw.font/BufferFlag///PointingToDeclaration/">BufferFlag</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1647473338%2FProperties%2F-1246251867" anchor-label="buffers" id="1647473338%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1647473338%2FProperties%2F-1246251867"><span><span>buffers</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1647473338%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1647473338%2FProperties%2F-1246251867">buffers</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1223823764%2FProperties%2F-1246251867" anchor-label="bufferTypes" id="1223823764%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1223823764%2FProperties%2F-1246251867"><span>buffer</span><wbr><span><span>Types</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1223823764%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1223823764%2FProperties%2F-1246251867">bufferTypes</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1850819925%2FProperties%2F-1246251867" anchor-label="bufferValues" id="-1850819925%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1850819925%2FProperties%2F-1246251867"><span>buffer</span><wbr><span><span>Values</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1850819925%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1850819925%2FProperties%2F-1246251867">bufferValues</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="353274004%2FProperties%2F-1246251867" anchor-label="colors" id="353274004%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-n-point-linear-gradient-base/colors.html"><span><span>colors</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="353274004%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="../-n-point-linear-gradient-base/colors.html">colors</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><a href="../../../orx-color/org.openrndr.extra.color.spaces/-color-o-k-l-a-ba/index.html">ColorOKLABa</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="876541947%2FProperties%2F-1246251867" anchor-label="dirty" id="876541947%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#876541947%2FProperties%2F-1246251867"><span><span>dirty</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="876541947%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#876541947%2FProperties%2F-1246251867">dirty</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-567994863%2FProperties%2F-1246251867" anchor-label="fragmentPreamble" id="-567994863%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-567994863%2FProperties%2F-1246251867"><span>fragment</span><wbr><span><span>Preamble</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-567994863%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-567994863%2FProperties%2F-1246251867">fragmentPreamble</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2127715311%2FProperties%2F-1246251867" anchor-label="fragmentTransform" id="-2127715311%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-2127715311%2FProperties%2F-1246251867"><span>fragment</span><wbr><span><span>Transform</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2127715311%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-2127715311%2FProperties%2F-1246251867">fragmentTransform</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1135918127%2FProperties%2F-1246251867" anchor-label="geometryPreamble" id="1135918127%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1135918127%2FProperties%2F-1246251867"><span>geometry</span><wbr><span><span>Preamble</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1135918127%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1135918127%2FProperties%2F-1246251867">geometryPreamble</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-846020173%2FProperties%2F-1246251867" anchor-label="geometryTransform" id="-846020173%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-846020173%2FProperties%2F-1246251867"><span>geometry</span><wbr><span><span>Transform</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-846020173%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-846020173%2FProperties%2F-1246251867">geometryTransform</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-767216178%2FProperties%2F-1246251867" anchor-label="imageAccess" id="-767216178%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-767216178%2FProperties%2F-1246251867"><span>image</span><wbr><span><span>Access</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-767216178%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-767216178%2FProperties%2F-1246251867">imageAccess</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><span data-unresolved-link="org.openrndr.draw/ImageAccess///PointingToDeclaration/">ImageAccess</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1249463255%2FProperties%2F-1246251867" anchor-label="imageArrayLength" id="-1249463255%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1249463255%2FProperties%2F-1246251867"><span>image</span><wbr><span>Array</span><wbr><span><span>Length</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1249463255%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1249463255%2FProperties%2F-1246251867">imageArrayLength</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1803541852%2FProperties%2F-1246251867" anchor-label="imageBindings" id="-1803541852%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1803541852%2FProperties%2F-1246251867"><span>image</span><wbr><span><span>Bindings</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1803541852%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1803541852%2FProperties%2F-1246251867">imageBindings</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2016220799%2FProperties%2F-1246251867" anchor-label="imageFlags" id="-2016220799%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-2016220799%2FProperties%2F-1246251867"><span>image</span><wbr><span><span>Flags</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2016220799%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-2016220799%2FProperties%2F-1246251867">imageFlags</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.draw/ImageFlag///PointingToDeclaration/">ImageFlag</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1408250831%2FProperties%2F-1246251867" anchor-label="imageTypes" id="1408250831%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1408250831%2FProperties%2F-1246251867"><span>image</span><wbr><span><span>Types</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1408250831%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1408250831%2FProperties%2F-1246251867">imageTypes</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-428548144%2FProperties%2F-1246251867" anchor-label="imageValues" id="-428548144%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-428548144%2FProperties%2F-1246251867"><span>image</span><wbr><span><span>Values</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-428548144%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-428548144%2FProperties%2F-1246251867">imageValues</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword">out </span><span data-unresolved-link="org.openrndr.draw/ImageBinding///PointingToDeclaration/">ImageBinding</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-301588783%2FProperties%2F-1246251867" anchor-label="offset" id="-301588783%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-n-point-linear-gradient-base/offset.html"><span><span>offset</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-301588783%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="../-n-point-linear-gradient-base/offset.html">offset</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1927845947%2FProperties%2F-1246251867" anchor-label="outputs" id="1927845947%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1927845947%2FProperties%2F-1246251867"><span><span>outputs</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1927845947%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1927845947%2FProperties%2F-1246251867">outputs</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ObservableHashmap///PointingToDeclaration/">ObservableHashmap</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><span data-unresolved-link="org.openrndr.draw/ShadeStyleOutput///PointingToDeclaration/">ShadeStyleOutput</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1061890461%2FProperties%2F-1246251867" anchor-label="parameterTypes" id="1061890461%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1061890461%2FProperties%2F-1246251867"><span>parameter</span><wbr><span><span>Types</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1061890461%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1061890461%2FProperties%2F-1246251867">parameterTypes</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ObservableHashmap///PointingToDeclaration/">ObservableHashmap</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1719182274%2FProperties%2F-1246251867" anchor-label="parameterValues" id="1719182274%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1719182274%2FProperties%2F-1246251867"><span>parameter</span><wbr><span><span>Values</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1719182274%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1719182274%2FProperties%2F-1246251867">parameterValues</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="717365377%2FProperties%2F-1246251867" anchor-label="points" id="717365377%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-n-point-linear-gradient-base/points.html"><span><span>points</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="717365377%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="../-n-point-linear-gradient-base/points.html">points</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1335948154%2FProperties%2F-1246251867" anchor-label="rotation" id="-1335948154%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-n-point-linear-gradient-base/rotation.html"><span><span>rotation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1335948154%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="../-n-point-linear-gradient-base/rotation.html">rotation</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="67158592%2FProperties%2F-1246251867" anchor-label="suppressDefaultOutput" id="67158592%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#67158592%2FProperties%2F-1246251867"><span>suppress</span><wbr><span>Default</span><wbr><span><span>Output</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="67158592%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#67158592%2FProperties%2F-1246251867">suppressDefaultOutput</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1988420857%2FProperties%2F-1246251867" anchor-label="textureBaseIndex" id="-1988420857%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1988420857%2FProperties%2F-1246251867"><span>texture</span><wbr><span>Base</span><wbr><span><span>Index</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1988420857%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1988420857%2FProperties%2F-1246251867">textureBaseIndex</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-82227907%2FProperties%2F-1246251867" anchor-label="vertexPreamble" id="-82227907%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-82227907%2FProperties%2F-1246251867"><span>vertex</span><wbr><span><span>Preamble</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-82227907%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-82227907%2FProperties%2F-1246251867">vertexPreamble</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="46158437%2FProperties%2F-1246251867" anchor-label="vertexTransform" id="46158437%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#46158437%2FProperties%2F-1246251867"><span>vertex</span><wbr><span><span>Transform</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="46158437%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#46158437%2FProperties%2F-1246251867">vertexTransform</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="1232595320%2FFunctions%2F-1246251867" anchor-label="attributes" id="1232595320%2FFunctions%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1232595320%2FFunctions%2F-1246251867"><span><span>attributes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1232595320%2FFunctions%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1232595320%2FFunctions%2F-1246251867"><span class="token function">attributes</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">attributesBuffer<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/VertexBuffer///PointingToDeclaration/">VertexBuffer</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-639458677%2FFunctions%2F-1246251867" anchor-label="buffer" id="-639458677%2FFunctions%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#16185086%2FFunctions%2F-1246251867"><span><span>buffer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-639458677%2FFunctions%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#16185086%2FFunctions%2F-1246251867"><span class="token function">buffer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">buffer<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/AtomicCounterBuffer///PointingToDeclaration/">AtomicCounterBuffer</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1883669607%2FFunctions%2F-1246251867"><span class="token function">buffer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">buffer<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ShaderStorageBuffer///PointingToDeclaration/">ShaderStorageBuffer</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2106816998%2FFunctions%2F-1246251867" anchor-label="image" id="2106816998%2FFunctions%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-142607889%2FFunctions%2F-1246251867"><span><span>image</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2106816998%2FFunctions%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-142607889%2FFunctions%2F-1246251867"><span class="token function">image</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">values<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword">out </span><span data-unresolved-link="org.openrndr.draw/ImageBinding///PointingToDeclaration/">ImageBinding</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1607671445%2FFunctions%2F-1246251867"><span class="token function">image</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ImageBinding///PointingToDeclaration/">ImageBinding</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#877918732%2FFunctions%2F-1246251867"><span class="token function">image</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">arrayTextures<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.draw/ArrayTexture///PointingToDeclaration/">ArrayTexture</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">levels<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#2036670317%2FFunctions%2F-1246251867"><span class="token function">image</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">colorBuffers<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.draw/ColorBuffer///PointingToDeclaration/">ColorBuffer</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">levels<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1790298345%2FFunctions%2F-1246251867"><span class="token function">image</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">cubemaps<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.draw/Cubemap///PointingToDeclaration/">Cubemap</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">levels<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1259377615%2FFunctions%2F-1246251867"><span class="token function">image</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">volumeTextures<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.draw/VolumeTexture///PointingToDeclaration/">VolumeTexture</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">levels<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#973117036%2FFunctions%2F-1246251867"><span class="token function">image</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">arrayCubemap<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ArrayCubemap///PointingToDeclaration/">ArrayCubemap</span><span class="token punctuation">, </span></span><span class="parameter ">level<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#47312256%2FFunctions%2F-1246251867"><span class="token function">image</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">arrayTexture<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ArrayTexture///PointingToDeclaration/">ArrayTexture</span><span class="token punctuation">, </span></span><span class="parameter ">level<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1597234781%2FFunctions%2F-1246251867"><span class="token function">image</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">colorBuffer<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ColorBuffer///PointingToDeclaration/">ColorBuffer</span><span class="token punctuation">, </span></span><span class="parameter ">level<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1294613535%2FFunctions%2F-1246251867"><span class="token function">image</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">cubemap<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/Cubemap///PointingToDeclaration/">Cubemap</span><span class="token punctuation">, </span></span><span class="parameter ">level<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#13430395%2FFunctions%2F-1246251867"><span class="token function">image</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">volumeTexture<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/VolumeTexture///PointingToDeclaration/">VolumeTexture</span><span class="token punctuation">, </span></span><span class="parameter ">level<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="735602969%2FFunctions%2F-1246251867" anchor-label="imageBindingType" id="735602969%2FFunctions%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#735602969%2FFunctions%2F-1246251867"><span>image</span><wbr><span>Binding</span><wbr><span><span>Type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="735602969%2FFunctions%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#735602969%2FFunctions%2F-1246251867"><span class="token function">imageBindingType</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ImageBinding///PointingToDeclaration/">ImageBinding</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1252765560%2FFunctions%2F-1246251867" anchor-label="output" id="-1252765560%2FFunctions%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1252765560%2FFunctions%2F-1246251867"><span><span>output</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1252765560%2FFunctions%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1252765560%2FFunctions%2F-1246251867"><span class="token function">output</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">output<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ShadeStyleOutput///PointingToDeclaration/">ShadeStyleOutput</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1402827911%2FFunctions%2F-1246251867" anchor-label="Parameter" id="-1402827911%2FFunctions%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1402827911%2FFunctions%2F-1246251867"><span><span>Parameter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1402827911%2FFunctions%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1402827911%2FFunctions%2F-1246251867">R</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1402827911%2FFunctions%2F-1246251867"><span class="token function">Parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">customName<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">initialValue<span class="token operator">: </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1402827911%2FFunctions%2F-1246251867">R</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/Parameter///PointingToDeclaration/">Parameter</span><span class="token operator">&lt;</span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1402827911%2FFunctions%2F-1246251867">R</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1372389041%2FFunctions%2F-1246251867" anchor-label="parameter" id="1372389041%2FFunctions%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-102177017%2FFunctions%2F-1246251867"><span><span>parameter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1372389041%2FFunctions%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-102177017%2FFunctions%2F-1246251867"><span class="token function"><strike>parameter</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ImageBinding///PointingToDeclaration/">ImageBinding</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-9593844%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1710259687%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Matrix33///PointingToDeclaration/">Matrix33</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-335929849%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Matrix44///PointingToDeclaration/">Matrix44</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1385358129%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-691851214%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1525906739%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector4///PointingToDeclaration/">Vector4</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-404227709%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#959474502%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1657582685%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-19830961%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#571529948%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1439225395%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int-array/index.html">IntArray</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1036236670%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#70161686%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ArrayCubemap///PointingToDeclaration/">ArrayCubemap</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1974672766%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ArrayTexture///PointingToDeclaration/">ArrayTexture</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1633240541%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/BufferTexture///PointingToDeclaration/">BufferTexture</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#451475355%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ColorBuffer///PointingToDeclaration/">ColorBuffer</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1899896297%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/Cubemap///PointingToDeclaration/">Cubemap</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-265709509%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/DepthBuffer///PointingToDeclaration/">DepthBuffer</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1251283837%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/VolumeTexture///PointingToDeclaration/">VolumeTexture</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#163004769%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/BooleanVector2///PointingToDeclaration/">BooleanVector2</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#95998016%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/BooleanVector3///PointingToDeclaration/">BooleanVector3</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#28991263%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/BooleanVector4///PointingToDeclaration/">BooleanVector4</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1133906536%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/IntVector2///PointingToDeclaration/">IntVector2</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1066899783%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/IntVector3///PointingToDeclaration/">IntVector3</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#999893030%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/IntVector4///PointingToDeclaration/">IntVector4</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-837663353%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Matrix33///PointingToDeclaration/">Matrix33</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1313087847%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Matrix44///PointingToDeclaration/">Matrix44</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#6189195%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-60817558%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-127824311%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector4///PointingToDeclaration/">Vector4</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1947856725%2FFunctions%2F-1246251867" anchor-label="plus" id="1947856725%2FFunctions%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1947856725%2FFunctions%2F-1246251867"><span><span>plus</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1947856725%2FFunctions%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1947856725%2FFunctions%2F-1246251867"><span class="token function">plus</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ShadeStyle///PointingToDeclaration/">ShadeStyle</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ShadeStyle///PointingToDeclaration/">ShadeStyle</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1502789741%2FFunctions%2F-1246251867" anchor-label="registerImageBinding" id="1502789741%2FFunctions%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1502789741%2FFunctions%2F-1246251867"><span>register</span><wbr><span>Image</span><wbr><span><span>Binding</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1502789741%2FFunctions%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.draw/StyleImageBindings///PointingToDeclaration/">StyleImageBindings</span><span class="token punctuation">.</span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1502789741%2FFunctions%2F-1246251867"><span class="token function">registerImageBinding</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">access<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ImageAccess///PointingToDeclaration/">ImageAccess</span><span class="token punctuation">, </span></span><span class="parameter ">flags<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.draw/ImageFlag///PointingToDeclaration/">ImageFlag</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">arrayLength<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

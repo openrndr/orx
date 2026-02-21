@@ -1,0 +1,232 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>org.openrndr.extra.propertywatchers</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../images/logo-icon.svg">
+<link href="../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.0-dev.70+e4c3ecc
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-property-watchers/commonMain">common</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":orx-property-watchers/jvmMain">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-property-watchers/commonMain" data-filter=":orx-property-watchers/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-property-watchers/jvmMain" data-filter=":orx-property-watchers/jvmMain">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageids="orx-property-watchers::org.openrndr.extra.propertywatchers////PointingToDeclaration//347778922">
+  <div class="breadcrumbs"><a href="../index.html">orx-property-watchers</a><span class="delimiter">/</span><span class="current">org.openrndr.extra.propertywatchers</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="-613120966%2FClasslikes%2F1175346576" anchor-label="PropertyWatcherDelegate" id="-613120966%2FClasslikes%2F1175346576" data-filterable-set=":orx-property-watchers/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-property-watchers/commonMain" data-filterable-set=":orx-property-watchers/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-property-watcher-delegate/index.html"><span>Property</span><wbr><span>Watcher</span><wbr><span><span>Delegate</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-613120966%2FClasslikes%2F1175346576"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-property-watchers/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-property-watcher-delegate/index.html">PropertyWatcherDelegate</a><span class="token operator">&lt;</span><a href="-property-watcher-delegate/index.html">V</a><span class="token punctuation">, </span><a href="-property-watcher-delegate/index.html">R</a><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">property<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.reflect/-k-property0/index.html">KProperty0</a><span class="token operator">&lt;</span><a href="-property-watcher-delegate/index.html">V</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">valueChangedEvent<span class="token operator">: </span><span data-unresolved-link="org.openrndr.events/Event///PointingToDeclaration/">Event</span><span class="token operator">&lt;</span><a href="-property-watcher-delegate/index.html">R</a><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">cleaner<span class="token operator">: </span><span class="token punctuation">(</span><a href="-property-watcher-delegate/index.html">R</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>function<span class="token operator">: </span><span class="token punctuation">(</span><a href="-property-watcher-delegate/index.html">V</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="-property-watcher-delegate/index.html">R</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Property watcher delegate</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="370681174%2FClasslikes%2F1175346576" anchor-label="PropertyWatcherDelegate2" id="370681174%2FClasslikes%2F1175346576" data-filterable-set=":orx-property-watchers/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-property-watchers/commonMain" data-filterable-set=":orx-property-watchers/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-property-watcher-delegate2/index.html"><span>Property</span><wbr><span>Watcher</span><wbr><span><span>Delegate2</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="370681174%2FClasslikes%2F1175346576"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-property-watchers/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-property-watcher-delegate2/index.html">PropertyWatcherDelegate2</a><span class="token operator">&lt;</span><a href="-property-watcher-delegate2/index.html">V0</a><span class="token punctuation">, </span><a href="-property-watcher-delegate2/index.html">V1</a><span class="token punctuation">, </span><a href="-property-watcher-delegate2/index.html">R</a><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">toWatch0<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.reflect/-k-property0/index.html">KProperty0</a><span class="token operator">&lt;</span><a href="-property-watcher-delegate2/index.html">V0</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">toWatch1<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.reflect/-k-property0/index.html">KProperty0</a><span class="token operator">&lt;</span><a href="-property-watcher-delegate2/index.html">V1</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">valueChangedEvent<span class="token operator">: </span><span data-unresolved-link="org.openrndr.events/Event///PointingToDeclaration/">Event</span><span class="token operator">&lt;</span><a href="-property-watcher-delegate2/index.html">R</a><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">cleaner<span class="token operator">: </span><span class="token punctuation">(</span><a href="-property-watcher-delegate2/index.html">R</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">function<span class="token operator">: </span><span class="token punctuation">(</span><a href="-property-watcher-delegate2/index.html">V0</a><span class="token punctuation">, </span><a href="-property-watcher-delegate2/index.html">V1</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="-property-watcher-delegate2/index.html">R</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Property watcher delegate</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="401700981%2FClasslikes%2F1175346576" anchor-label="PropertyWatcherDelegate3" id="401700981%2FClasslikes%2F1175346576" data-filterable-set=":orx-property-watchers/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-property-watchers/commonMain" data-filterable-set=":orx-property-watchers/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-property-watcher-delegate3/index.html"><span>Property</span><wbr><span>Watcher</span><wbr><span><span>Delegate3</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="401700981%2FClasslikes%2F1175346576"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-property-watchers/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-property-watcher-delegate3/index.html">PropertyWatcherDelegate3</a><span class="token operator">&lt;</span><a href="-property-watcher-delegate3/index.html">V0</a><span class="token punctuation">, </span><a href="-property-watcher-delegate3/index.html">V1</a><span class="token punctuation">, </span><a href="-property-watcher-delegate3/index.html">V2</a><span class="token punctuation">, </span><a href="-property-watcher-delegate3/index.html">R</a><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">toWatch0<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.reflect/-k-property0/index.html">KProperty0</a><span class="token operator">&lt;</span><a href="-property-watcher-delegate3/index.html">V0</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">toWatch1<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.reflect/-k-property0/index.html">KProperty0</a><span class="token operator">&lt;</span><a href="-property-watcher-delegate3/index.html">V1</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">toWatch2<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.reflect/-k-property0/index.html">KProperty0</a><span class="token operator">&lt;</span><a href="-property-watcher-delegate3/index.html">V2</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">valueChangedEvent<span class="token operator">: </span><span data-unresolved-link="org.openrndr.events/Event///PointingToDeclaration/">Event</span><span class="token operator">&lt;</span><a href="-property-watcher-delegate3/index.html">R</a><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">cleaner<span class="token operator">: </span><span class="token punctuation">(</span><a href="-property-watcher-delegate3/index.html">R</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">function<span class="token operator">: </span><span class="token punctuation">(</span><a href="-property-watcher-delegate3/index.html">V0</a><span class="token punctuation">, </span><a href="-property-watcher-delegate3/index.html">V1</a><span class="token punctuation">, </span><a href="-property-watcher-delegate3/index.html">V2</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="-property-watcher-delegate3/index.html">R</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Property watcher delegate</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-363417927%2FFunctions%2F1138981734" anchor-label="watchingImagePath" id="-363417927%2FFunctions%2F1138981734" data-filterable-set=":orx-property-watchers/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-property-watchers/jvmMain" data-filterable-set=":orx-property-watchers/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="watching-image-path.html"><span>watching</span><wbr><span>Image</span><wbr><span><span>Path</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-363417927%2FFunctions%2F1138981734"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-property-watchers/jvmMain" data-filterable-set=":orx-property-watchers/jvmMain" data-active="" data-toggle=":orx-property-watchers/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-property-watchers/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="watching-image-path.html"><span class="token function">watchingImagePath</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">pathProperty<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.reflect/-k-property0/index.html">KProperty0</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">imageChangedEvent<span class="token operator">: </span><span data-unresolved-link="org.openrndr.events/Event///PointingToDeclaration/">Event</span><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.draw/ColorBuffer///PointingToDeclaration/">ColorBuffer</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">imageTransform<span class="token operator">: </span><span class="token punctuation">(</span><span data-unresolved-link="org.openrndr.draw/ColorBuffer///PointingToDeclaration/">ColorBuffer</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span data-unresolved-link="org.openrndr.draw/ColorBuffer///PointingToDeclaration/">ColorBuffer</span><span class="token operator"> = </span>{ it }</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-property-watcher-delegate/index.html">PropertyWatcherDelegate</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><span data-unresolved-link="org.openrndr.draw/ColorBuffer///PointingToDeclaration/">ColorBuffer</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Delegate property value by watching a path property</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2020232364%2FFunctions%2F1175346576" anchor-label="watchingProperties" id="2020232364%2FFunctions%2F1175346576" data-filterable-set=":orx-property-watchers/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-property-watchers/commonMain" data-filterable-set=":orx-property-watchers/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="watching-properties.html"><span>watching</span><wbr><span><span>Properties</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2020232364%2FFunctions%2F1175346576"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-property-watchers/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="watching-properties.html">V0</a><span class="token punctuation">, </span><a href="watching-properties.html">V1</a><span class="token punctuation">, </span><a href="watching-properties.html">R</a><span class="token operator">&gt; </span><a href="watching-properties.html"><span class="token function">watchingProperties</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">property0<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.reflect/-k-property0/index.html">KProperty0</a><span class="token operator">&lt;</span><a href="watching-properties.html">V0</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">property1<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.reflect/-k-property0/index.html">KProperty0</a><span class="token operator">&lt;</span><a href="watching-properties.html">V1</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">valueChangedEvent<span class="token operator">: </span><span data-unresolved-link="org.openrndr.events/Event///PointingToDeclaration/">Event</span><span class="token operator">&lt;</span><a href="watching-properties.html">R</a><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">cleaner<span class="token operator">: </span><span class="token punctuation">(</span><a href="watching-properties.html">R</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">function<span class="token operator">: </span><span class="token punctuation">(</span>value0<span class="token operator">: </span><a href="watching-properties.html">V0</a><span class="token punctuation">, </span>value1<span class="token operator">: </span><a href="watching-properties.html">V1</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="watching-properties.html">R</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-property-watcher-delegate2/index.html">PropertyWatcherDelegate2</a><span class="token operator">&lt;</span><a href="watching-properties.html">V0</a><span class="token punctuation">, </span><a href="watching-properties.html">V1</a><span class="token punctuation">, </span><a href="watching-properties.html">R</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Delegate property value to a function for which the values of 2 properties are watched</p></div><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="watching-properties.html">V0</a><span class="token punctuation">, </span><a href="watching-properties.html">V1</a><span class="token punctuation">, </span><a href="watching-properties.html">V2</a><span class="token punctuation">, </span><a href="watching-properties.html">R</a><span class="token operator">&gt; </span><a href="watching-properties.html"><span class="token function">watchingProperties</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">property0<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.reflect/-k-property0/index.html">KProperty0</a><span class="token operator">&lt;</span><a href="watching-properties.html">V0</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">property1<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.reflect/-k-property0/index.html">KProperty0</a><span class="token operator">&lt;</span><a href="watching-properties.html">V1</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">property2<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.reflect/-k-property0/index.html">KProperty0</a><span class="token operator">&lt;</span><a href="watching-properties.html">V2</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">valueChangedEvent<span class="token operator">: </span><span data-unresolved-link="org.openrndr.events/Event///PointingToDeclaration/">Event</span><span class="token operator">&lt;</span><a href="watching-properties.html">R</a><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">cleaner<span class="token operator">: </span><span class="token punctuation">(</span><a href="watching-properties.html">R</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">function<span class="token operator">: </span><span class="token punctuation">(</span>value0<span class="token operator">: </span><a href="watching-properties.html">V0</a><span class="token punctuation">, </span>value1<span class="token operator">: </span><a href="watching-properties.html">V1</a><span class="token punctuation">, </span>value2<span class="token operator">: </span><a href="watching-properties.html">V2</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="watching-properties.html">R</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-property-watcher-delegate3/index.html">PropertyWatcherDelegate3</a><span class="token operator">&lt;</span><a href="watching-properties.html">V0</a><span class="token punctuation">, </span><a href="watching-properties.html">V1</a><span class="token punctuation">, </span><a href="watching-properties.html">V2</a><span class="token punctuation">, </span><a href="watching-properties.html">R</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Delegate property value to a function for which the values of 3 properties are watched</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1081925122%2FFunctions%2F1175346576" anchor-label="watchingProperty" id="-1081925122%2FFunctions%2F1175346576" data-filterable-set=":orx-property-watchers/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-property-watchers/commonMain" data-filterable-set=":orx-property-watchers/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="watching-property.html"><span>watching</span><wbr><span><span>Property</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1081925122%2FFunctions%2F1175346576"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-property-watchers/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="watching-property.html">V</a><span class="token punctuation">, </span><a href="watching-property.html">R</a><span class="token operator">&gt; </span><a href="watching-property.html"><span class="token function">watchingProperty</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">property<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.reflect/-k-property0/index.html">KProperty0</a><span class="token operator">&lt;</span><a href="watching-property.html">V</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">valueChangedEvent<span class="token operator">: </span><span data-unresolved-link="org.openrndr.events/Event///PointingToDeclaration/">Event</span><span class="token operator">&lt;</span><a href="watching-property.html">R</a><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">cleaner<span class="token operator">: </span><span class="token punctuation">(</span><a href="watching-property.html">R</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">function<span class="token operator">: </span><span class="token punctuation">(</span>value<span class="token operator">: </span><a href="watching-property.html">V</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="watching-property.html">R</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-property-watcher-delegate/index.html">PropertyWatcherDelegate</a><span class="token operator">&lt;</span><a href="watching-property.html">V</a><span class="token punctuation">, </span><a href="watching-property.html">R</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Delegate property value to a function for which the value of a single property is watched</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

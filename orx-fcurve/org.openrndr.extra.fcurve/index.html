@@ -1,0 +1,597 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>org.openrndr.extra.fcurve</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../images/logo-icon.svg">
+<link href="../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.0-dev.70+e4c3ecc
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-fcurve/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-fcurve/commonMain" data-filter=":orx-fcurve/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageids="orx-fcurve::org.openrndr.extra.fcurve////PointingToDeclaration//-1327282516">
+  <div class="breadcrumbs"><a href="../index.html">orx-fcurve</a><span class="delimiter">/</span><span class="current">org.openrndr.extra.fcurve</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="959759128%2FClasslikes%2F-1327282516" anchor-label="BooleanFCurve" id="959759128%2FClasslikes%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-boolean-f-curve/index.html"><span>Boolean</span><wbr><span><span>FCurve</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="959759128%2FClasslikes%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-boolean-f-curve/index.html">BooleanFCurve</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>default<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span></span></span><span class="token punctuation">)</span> : <a href="-compound-f-curve/index.html">CompoundFCurve</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1509797947%2FClasslikes%2F-1327282516" anchor-label="CompoundFCurve" id="-1509797947%2FClasslikes%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-compound-f-curve/index.html"><span>Compound</span><wbr><span><span>FCurve</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1509797947%2FClasslikes%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-compound-f-curve/index.html">CompoundFCurve</a><span class="token operator">&lt;</span><a href="-compound-f-curve/index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>compounds<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>compoundNames<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-619549985%2FClasslikes%2F-1327282516" anchor-label="DoubleFCurve" id="-619549985%2FClasslikes%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-double-f-curve/index.html"><span>Double</span><wbr><span><span>FCurve</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-619549985%2FClasslikes%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-double-f-curve/index.html">DoubleFCurve</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>default<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span></span></span><span class="token punctuation">)</span> : <a href="-compound-f-curve/index.html">CompoundFCurve</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-933110032%2FClasslikes%2F-1327282516" anchor-label="FCurve" id="-933110032%2FClasslikes%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-f-curve/index.html"><span><span>FCurve</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-933110032%2FClasslikes%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="kotlinx.serialization/Serializable///PointingToDeclaration/"><span class="token annotation builtin">Serializable</span></span></div></div><span class="token keyword">data </span><span class="token keyword">class </span><a href="-f-curve/index.html">FCurve</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>segments<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Segment2D///PointingToDeclaration/">Segment2D</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Represents a functional curve composed of multiple 2D segments. It provides utilities to manipulate and query the curve, such as reversing its direction, changing its speed, sampling values, and visualizing it as contours.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1188130441%2FClasslikes%2F-1327282516" anchor-label="FCurveBuilder" id="-1188130441%2FClasslikes%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-f-curve-builder/index.html"><span>FCurve</span><wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1188130441%2FClasslikes%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-f-curve-builder/index.html">FCurveBuilder</a></div><div class="brief "><p class="paragraph">Fcurve builder</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1032930703%2FClasslikes%2F-1327282516" anchor-label="IntFCurve" id="-1032930703%2FClasslikes%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-int-f-curve/index.html"><span>Int</span><wbr><span><span>FCurve</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1032930703%2FClasslikes%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-int-f-curve/index.html">IntFCurve</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>default<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">0</span></span></span><span class="token punctuation">)</span> : <a href="-compound-f-curve/index.html">CompoundFCurve</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2142807527%2FClasslikes%2F-1327282516" anchor-label="MultiFCurve" id="2142807527%2FClasslikes%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-multi-f-curve/index.html"><span>Multi</span><wbr><span><span>FCurve</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2142807527%2FClasslikes%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-multi-f-curve/index.html">MultiFCurve</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>compounds<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Represents a collection of named <code class="lang-kotlin">FCurve</code> objects, enabling the manipulation and querying of multiple functional curves as a unified entity. Each <code class="lang-kotlin">FCurve</code> in the collection is identified by a unique string key, allowing structured access and control.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-435086526%2FClasslikes%2F-1327282516" anchor-label="PolarFCurve" id="-435086526%2FClasslikes%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-polar-f-curve/index.html"><span>Polar</span><wbr><span><span>FCurve</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-435086526%2FClasslikes%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-polar-f-curve/index.html">PolarFCurve</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">angleInDegrees<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">radius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>default<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Polar///PointingToDeclaration/">Polar</span><span class="token operator"> = </span>Polar(0.0, 1.0)</span></span><span class="token punctuation">)</span> : <a href="-compound-f-curve/index.html">CompoundFCurve</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Polar///PointingToDeclaration/">Polar</span><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2039829732%2FClasslikes%2F-1327282516" anchor-label="RgbaFCurve" id="-2039829732%2FClasslikes%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-rgba-f-curve/index.html"><span>Rgba</span><wbr><span><span>FCurve</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2039829732%2FClasslikes%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-rgba-f-curve/index.html">RgbaFCurve</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">r<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">g<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">b<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">a<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>default<span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator"> = </span>ColorRGBa.WHITE</span></span><span class="token punctuation">)</span> : <a href="-compound-f-curve/index.html">CompoundFCurve</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-465437229%2FClasslikes%2F-1327282516" anchor-label="RgbFCurve" id="-465437229%2FClasslikes%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-rgb-f-curve/index.html"><span>Rgb</span><wbr><span><span>FCurve</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-465437229%2FClasslikes%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-rgb-f-curve/index.html">RgbFCurve</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">r<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">g<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">b<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>default<span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator"> = </span>ColorRGBa.WHITE</span></span><span class="token punctuation">)</span> : <a href="-compound-f-curve/index.html">CompoundFCurve</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1014742973%2FClasslikes%2F-1327282516" anchor-label="SphericalFCurve" id="-1014742973%2FClasslikes%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-spherical-f-curve/index.html"><span>Spherical</span><wbr><span><span>FCurve</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1014742973%2FClasslikes%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-spherical-f-curve/index.html">SphericalFCurve</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">thetaInDegrees<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">phiInDegrees<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">radius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>default<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Spherical///PointingToDeclaration/">Spherical</span><span class="token operator"> = </span>Spherical(0.0, 1.0, 1.0)</span></span><span class="token punctuation">)</span> : <a href="-compound-f-curve/index.html">CompoundFCurve</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Spherical///PointingToDeclaration/">Spherical</span><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1507048687%2FClasslikes%2F-1327282516" anchor-label="Vector2FCurve" id="-1507048687%2FClasslikes%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-vector2-f-curve/index.html"><span><span>Vector2FCurve</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1507048687%2FClasslikes%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-vector2-f-curve/index.html">Vector2FCurve</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">y<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>default<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>Vector2.ZERO</span></span><span class="token punctuation">)</span> : <a href="-compound-f-curve/index.html">CompoundFCurve</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="777814768%2FClasslikes%2F-1327282516" anchor-label="Vector3FCurve" id="777814768%2FClasslikes%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-vector3-f-curve/index.html"><span><span>Vector3FCurve</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="777814768%2FClasslikes%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-vector3-f-curve/index.html">Vector3FCurve</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">y<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">z<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>default<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator"> = </span>Vector3.ZERO</span></span><span class="token punctuation">)</span> : <a href="-compound-f-curve/index.html">CompoundFCurve</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1232289073%2FClasslikes%2F-1327282516" anchor-label="Vector4FCurve" id="-1232289073%2FClasslikes%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-vector4-f-curve/index.html"><span><span>Vector4FCurve</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1232289073%2FClasslikes%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-vector4-f-curve/index.html">Vector4FCurve</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">y<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">z<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">w<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-f-curve/index.html">FCurve</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>default<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector4///PointingToDeclaration/">Vector4</span><span class="token operator"> = </span>Vector4.ZERO</span></span><span class="token punctuation">)</span> : <a href="-compound-f-curve/index.html">CompoundFCurve</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector4///PointingToDeclaration/">Vector4</span><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="397850843%2FFunctions%2F-1327282516" anchor-label="boolean" id="397850843%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="boolean.html"><span><span>boolean</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="397850843%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-multi-f-curve/index.html">MultiFCurve</a><span class="token punctuation">.</span><a href="boolean.html"><span class="token function">boolean</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">default<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-boolean-f-curve/index.html">BooleanFCurve</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="395113559%2FFunctions%2F-1327282516" anchor-label="double" id="395113559%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="double.html"><span><span>double</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="395113559%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-multi-f-curve/index.html">MultiFCurve</a><span class="token punctuation">.</span><a href="double.html"><span class="token function">double</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">default<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-double-f-curve/index.html">DoubleFCurve</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1620558213%2FFunctions%2F-1327282516" anchor-label="efcurve" id="1620558213%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="efcurve.html"><span><span>efcurve</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1620558213%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="efcurve.html"><span class="token function">efcurve</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ef<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">constants<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyMap()<span class="token punctuation">, </span></span><span class="parameter ">functions<span class="token operator">: </span><a href="../../orx-expression-evaluator/org.openrndr.extra.expressions/-function-extensions/index.html">FunctionExtensions</a><span class="token operator"> = </span>FunctionExtensions.EMPTY</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Processes and expands a formatted string based on specific expressions and rules such as comments, lists, and repetitions. The method allows for recursive evaluation of expressions within the string.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="589056442%2FFunctions%2F-1327282516" anchor-label="fcurve" id="589056442%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="fcurve.html"><span><span>fcurve</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="589056442%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="fcurve.html"><span class="token function">fcurve</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">builder<span class="token operator">: </span><a href="-f-curve-builder/index.html">FCurveBuilder</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-f-curve/index.html">FCurve</a></div><div class="brief "><p class="paragraph">build an Fcurve</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="fcurve.html"><span class="token function">fcurve</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">d<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-f-curve/index.html">FCurve</a></div><div class="brief "><p class="paragraph">Parses the provided string to create an FCurve. This function attempts to either interpret the input as a constant value or evaluate it as a series of functional curve commands.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1390277391%2FFunctions%2F-1327282516" anchor-label="fCurveCommands" id="1390277391%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="f-curve-commands.html"><span>f</span><wbr><span>Curve</span><wbr><span><span>Commands</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1390277391%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="f-curve-commands.html"><span class="token function">fCurveCommands</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">d<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Splits an input string containing fcurve path commands and numbers into individual components, preserving the order of commands and associated numbers. The splitting considers the relations between commands and numbers, ensuring proper separation.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="591587131%2FFunctions%2F-1327282516" anchor-label="int" id="591587131%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="int.html"><span><span>int</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="591587131%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-multi-f-curve/index.html">MultiFCurve</a><span class="token punctuation">.</span><a href="int.html"><span class="token function">int</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">default<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">0</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-int-f-curve/index.html">IntFCurve</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1032680557%2FFunctions%2F-1327282516" anchor-label="main" id="1032680557%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="main.html"><span><span>main</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1032680557%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="main.html"><span class="token function">main</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="755126157%2FFunctions%2F-1327282516" anchor-label="mfcurve" id="755126157%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="mfcurve.html"><span><span>mfcurve</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="755126157%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="mfcurve.html"><span class="token function">mfcurve</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">mf<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">constants<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyMap()<span class="token punctuation">, </span></span><span class="parameter ">functions<span class="token operator">: </span><a href="../../orx-expression-evaluator/org.openrndr.extra.expressions/-function-extensions/index.html">FunctionExtensions</a><span class="token operator"> = </span>FunctionExtensions.EMPTY</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">expand mfcurve to fcurve</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1934348147%2FFunctions%2F-1327282516" anchor-label="modifyFCurve" id="-1934348147%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="modify-f-curve.html"><span>modify</span><wbr><span><span>FCurve</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1934348147%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="modify-f-curve.html"><span class="token function">modifyFCurve</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">fcurve<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">modifiers<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">constants<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyMap()<span class="token punctuation">, </span></span><span class="parameter ">functions<span class="token operator">: </span><a href="../../orx-expression-evaluator/org.openrndr.extra.expressions/-function-extensions/index.html">FunctionExtensions</a><span class="token operator"> = </span>FunctionExtensions.EMPTY</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Modify an <a href="modify-f-curve.html">fcurve</a> string using a <a href="modify-f-curve.html">modifiers</a> string</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2023812813%2FFunctions%2F-1327282516" anchor-label="polar" id="-2023812813%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="polar.html"><span><span>polar</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2023812813%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-multi-f-curve/index.html">MultiFCurve</a><span class="token punctuation">.</span><a href="polar.html"><span class="token function">polar</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">angleInDegrees<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">radius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">default<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Polar///PointingToDeclaration/">Polar</span><span class="token operator"> = </span>Polar(0.0, 1.0)</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-polar-f-curve/index.html">PolarFCurve</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="381954869%2FFunctions%2F-1327282516" anchor-label="rgb" id="381954869%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="rgb.html"><span><span>rgb</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="381954869%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-multi-f-curve/index.html">MultiFCurve</a><span class="token punctuation">.</span><a href="rgb.html"><span class="token function">rgb</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">r<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">g<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">b<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">default<span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator"> = </span>ColorRGBa.WHITE</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-rgb-f-curve/index.html">RgbFCurve</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="792493093%2FFunctions%2F-1327282516" anchor-label="rgba" id="792493093%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="rgba.html"><span><span>rgba</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="792493093%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-multi-f-curve/index.html">MultiFCurve</a><span class="token punctuation">.</span><a href="rgba.html"><span class="token function">rgba</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">r<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">g<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">b<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">a<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">default<span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator"> = </span>ColorRGBa.WHITE</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-rgba-f-curve/index.html">RgbaFCurve</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-420164827%2FFunctions%2F-1327282516" anchor-label="scaleTangents" id="-420164827%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="scale-tangents.html"><span>scale</span><wbr><span><span>Tangents</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-420164827%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Segment2D///PointingToDeclaration/">Segment2D</span><span class="token punctuation">.</span><a href="scale-tangents.html"><span class="token function">scaleTangents</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">axis<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>Vector2.UNIT_X</span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Segment2D///PointingToDeclaration/">Segment2D</span></div><div class="brief "><p class="paragraph">Scale tangents such that tangent lines do not overlap</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-711378534%2FFunctions%2F-1327282516" anchor-label="spherical" id="-711378534%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="spherical.html"><span><span>spherical</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-711378534%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-multi-f-curve/index.html">MultiFCurve</a><span class="token punctuation">.</span><a href="spherical.html"><span class="token function">spherical</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">thetaInDegrees<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">phiInDegrees<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">radius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">default<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Spherical///PointingToDeclaration/">Spherical</span><span class="token operator"> = </span>Spherical(0.0, 0.0, 1.0)</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-spherical-f-curve/index.html">SphericalFCurve</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2004735121%2FFunctions%2F-1327282516" anchor-label="vector2" id="2004735121%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="vector2.html"><span><span>vector2</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2004735121%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-multi-f-curve/index.html">MultiFCurve</a><span class="token punctuation">.</span><a href="vector2.html"><span class="token function">vector2</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">y<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">default<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>Vector2.ZERO</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-vector2-f-curve/index.html">Vector2FCurve</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1320689652%2FFunctions%2F-1327282516" anchor-label="vector3" id="1320689652%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="vector3.html"><span><span>vector3</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1320689652%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-multi-f-curve/index.html">MultiFCurve</a><span class="token punctuation">.</span><a href="vector3.html"><span class="token function">vector3</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">y<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">z<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">default<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator"> = </span>Vector3.ZERO</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-vector3-f-curve/index.html">Vector3FCurve</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="286396951%2FFunctions%2F-1327282516" anchor-label="vector4" id="286396951%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="vector4.html"><span><span>vector4</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="286396951%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-multi-f-curve/index.html">MultiFCurve</a><span class="token punctuation">.</span><a href="vector4.html"><span class="token function">vector4</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">y<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">z<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">w<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">default<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector4///PointingToDeclaration/">Vector4</span><span class="token operator"> = </span>Vector4.ZERO</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-vector4-f-curve/index.html">Vector4FCurve</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

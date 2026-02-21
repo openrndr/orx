@@ -1,0 +1,871 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>org.openrndr.extra.shapes.primitives</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../images/logo-icon.svg">
+<link href="../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.0-dev.70+e4c3ecc
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-shapes/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-shapes/commonMain" data-filter=":orx-shapes/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageids="orx-shapes::org.openrndr.extra.shapes.primitives////PointingToDeclaration//-1455291947">
+  <div class="breadcrumbs"><a href="../index.html">orx-shapes</a><span class="delimiter">/</span><span class="current">org.openrndr.extra.shapes.primitives</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button><button class="section-tab" data-togglable="PROPERTY,EXTENSION_PROPERTY">Properties</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="-1901618508%2FClasslikes%2F-1455291947" anchor-label="Arc" id="-1901618508%2FClasslikes%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-arc/index.html"><span><span>Arc</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1901618508%2FClasslikes%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-record/index.html"><span class="token annotation builtin">JvmRecord</span></a></div></div><span class="token keyword">data </span><span class="token keyword">class </span><a href="-arc/index.html">Arc</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>center<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>radius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>angle0<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>angle1<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.openrndr.math/LinearType///PointingToDeclaration/">LinearType</span><span class="token operator">&lt;</span><a href="-arc/index.html">Arc</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.math/GeometricPrimitive2D///PointingToDeclaration/">GeometricPrimitive2D</span></div><div class="brief "><p class="paragraph">Represents an arc defined by a center point, a radius, and a range of angles.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-6969911%2FClasslikes%2F-1455291947" anchor-label="Net" id="-6969911%2FClasslikes%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-net/index.html"><span><span>Net</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-6969911%2FClasslikes%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-record/index.html"><span class="token annotation builtin">JvmRecord</span></a></div></div><span class="token keyword">data </span><span class="token keyword">class </span><a href="-net/index.html">Net</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>point0<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>point1<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>circle<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Circle///PointingToDeclaration/">Circle</span></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.openrndr.math/LinearType///PointingToDeclaration/">LinearType</span><span class="token operator">&lt;</span><a href="-net/index.html">Net</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.math/GeometricPrimitive2D///PointingToDeclaration/">GeometricPrimitive2D</span></div><div class="brief "><p class="paragraph">Represents a net defined by two points and a circle. The net can be seen as a structure that connects the two points with the circle in between, forming a string-like shape.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="596502499%2FClasslikes%2F-1455291947" anchor-label="Pulley" id="596502499%2FClasslikes%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pulley/index.html"><span><span>Pulley</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="596502499%2FClasslikes%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-record/index.html"><span class="token annotation builtin">JvmRecord</span></a></div></div><span class="token keyword">data </span><span class="token keyword">class </span><a href="-pulley/index.html">Pulley</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>circle0<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Circle///PointingToDeclaration/">Circle</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>circle1<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Circle///PointingToDeclaration/">Circle</span></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.openrndr.math/LinearType///PointingToDeclaration/">LinearType</span><span class="token operator">&lt;</span><a href="-pulley/index.html">Pulley</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.math/GeometricPrimitive2D///PointingToDeclaration/">GeometricPrimitive2D</span></div><div class="brief "><p class="paragraph">Represents a pulley system defined by two circles.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1829528879%2FClasslikes%2F-1455291947" anchor-label="RectangleGrid" id="-1829528879%2FClasslikes%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-rectangle-grid/index.html"><span>Rectangle</span><wbr><span><span>Grid</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1829528879%2FClasslikes%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-rectangle-grid/index.html">RectangleGrid</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>grid<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Represents a rectangular grid structure composed of lists of <span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span> instances.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-677924166%2FClasslikes%2F-1455291947" anchor-label="RoundedRectangle" id="-677924166%2FClasslikes%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-rounded-rectangle/index.html"><span>Rounded</span><wbr><span><span>Rectangle</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-677924166%2FClasslikes%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-record/index.html"><span class="token annotation builtin">JvmRecord</span></a></div></div><span class="token keyword">data </span><span class="token keyword">class </span><a href="-rounded-rectangle/index.html">RoundedRectangle</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>corner<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>width<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>height<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>radius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1555359206%2FClasslikes%2F-1455291947" anchor-label="Tear" id="-1555359206%2FClasslikes%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-tear/index.html"><span><span>Tear</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1555359206%2FClasslikes%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-record/index.html"><span class="token annotation builtin">JvmRecord</span></a></div></div><span class="token keyword">data </span><span class="token keyword">class </span><a href="-tear/index.html">Tear</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>point<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>circle<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Circle///PointingToDeclaration/">Circle</span></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.openrndr.math/LinearType///PointingToDeclaration/">LinearType</span><span class="token operator">&lt;</span><a href="-tear/index.html">Tear</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.math/GeometricPrimitive2D///PointingToDeclaration/">GeometricPrimitive2D</span></div><div class="brief "><p class="paragraph">Represents a "Tear" consisting of a point and a circle.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="EXTENSION_PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-1274393458%2FProperties%2F-1455291947" anchor-label="bounds" id="-1274393458%2FProperties%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="bounds.html"><span><span>bounds</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1274393458%2FProperties%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@get:</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"getRectangleListBounds"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">val </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="bounds.html">bounds</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span></div><div class="brief "><p class="paragraph">Computes the bounding rectangle that encompasses all the rectangles contained in the lists.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="58752748%2FFunctions%2F-1455291947" anchor-label="adjacent" id="58752748%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="adjacent.html"><span><span>adjacent</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="58752748%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">.</span><a href="adjacent.html"><span class="token function">adjacent</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">left<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">right<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">top<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">bottom<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">width<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">height<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span></div><div class="brief "><p class="paragraph">Adjusts the dimensions and position of the rectangle based on the provided parameters. The method calculates the new dimensions and coordinates of the rectangle based on specified values for left, right, top, bottom, width, or height. If conflicting parameters are provided (e.g., both <code class="lang-kotlin">left</code> and <code class="lang-kotlin">right</code> or <code class="lang-kotlin">top</code> and <code class="lang-kotlin">bottom</code>), an error is thrown.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="191974269%2FFunctions%2F-1455291947" anchor-label="alignToHorizontally" id="191974269%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="align-to-horizontally.html"><span>align</span><wbr><span>To</span><wbr><span><span>Horizontally</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="191974269%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="align-to-horizontally.html"><span class="token function">alignToHorizontally</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">to<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">, </span></span><span class="parameter ">anchor<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.5</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Aligns a list of rectangles horizontally relative to a specified rectangle.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="489393615%2FFunctions%2F-1455291947" anchor-label="alignToVertically" id="489393615%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="align-to-vertically.html"><span>align</span><wbr><span>To</span><wbr><span><span>Vertically</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="489393615%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="align-to-vertically.html"><span class="token function">alignToVertically</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">to<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">, </span></span><span class="parameter ">anchor<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.5</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Aligns the rectangles in the list vertically to a reference rectangle. The vertical position of each rectangle is determined based on the reference rectangle and the specified vertical anchor point.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1175474732%2FFunctions%2F-1455291947" anchor-label="block" id="-1175474732%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="block.html"><span><span>block</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1175474732%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-rectangle-grid/index.html">RectangleGrid</a><span class="token punctuation">.</span><a href="block.html"><span class="token function">block</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">y<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">width<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">height<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-rectangle-grid/index.html">RectangleGrid</a></div><div class="brief "><p class="paragraph">Extracts a sub-block from a 2D list of rectangles based on the specified coordinates and dimensions.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="670372395%2FFunctions%2F-1455291947" anchor-label="column" id="670372395%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="column.html"><span><span>column</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="670372395%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="column.html"><span class="token function">column</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Retrieves a column of rectangles from a 2D list of rectangles.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="585256378%2FFunctions%2F-1455291947" anchor-label="contour" id="585256378%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="contour.html"><span><span>contour</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="585256378%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Circle///PointingToDeclaration/">Circle</span><span class="token punctuation">.</span><a href="contour.html"><span class="token function">contour</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">segments<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/ShapeContour///PointingToDeclaration/">ShapeContour</span></div><div class="brief "><p class="paragraph">Convert <span data-unresolved-link="org.openrndr.shape/Circle///PointingToDeclaration/">Circle</span> to <span data-unresolved-link="org.openrndr.shape/ShapeContour///PointingToDeclaration/">ShapeContour</span> with a number of segments equal to <a href="contour.html">segments</a></p></div><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Ellipse///PointingToDeclaration/">Ellipse</span><span class="token punctuation">.</span><a href="contour.html"><span class="token function">contour</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">segments<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/ShapeContour///PointingToDeclaration/">ShapeContour</span></div><div class="brief "><p class="paragraph">Convert <span data-unresolved-link="org.openrndr.shape/Ellipse///PointingToDeclaration/">Ellipse</span> to <span data-unresolved-link="org.openrndr.shape/ShapeContour///PointingToDeclaration/">ShapeContour</span> with a number of segments equal to <a href="contour.html">segments</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="238329485%2FFunctions%2F-1455291947" anchor-label="distributeHorizontally" id="238329485%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="distribute-horizontally.html"><span>distribute</span><wbr><span><span>Horizontally</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="238329485%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="distribute-horizontally.html"><span class="token function">distributeHorizontally</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">within<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator"> = </span>bounds</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Distributes the rectangles in the list horizontally within a specified bounding rectangle.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="421495199%2FFunctions%2F-1455291947" anchor-label="distributeVertically" id="421495199%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="distribute-vertically.html"><span>distribute</span><wbr><span><span>Vertically</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="421495199%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="distribute-vertically.html"><span class="token function">distributeVertically</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">within<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator"> = </span>bounds</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Distributes the rectangles in the list vertically within the given bounding rectangle. The rectangles are spaced evenly, ensuring an equal distance between them, while maintaining their original height and width.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="134749832%2FFunctions%2F-1455291947" anchor-label="dropColumns" id="134749832%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="drop-columns.html"><span>drop</span><wbr><span><span>Columns</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="134749832%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-rectangle-grid/index.html">RectangleGrid</a><span class="token punctuation">.</span><a href="drop-columns.html"><span class="token function">dropColumns</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">n<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-rectangle-grid/index.html">RectangleGrid</a></div><div class="brief "><p class="paragraph">Drops the first n columns from a 2D list of Rectangles.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="684530622%2FFunctions%2F-1455291947" anchor-label="dropLastColumns" id="684530622%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="drop-last-columns.html"><span>drop</span><wbr><span>Last</span><wbr><span><span>Columns</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="684530622%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-rectangle-grid/index.html">RectangleGrid</a><span class="token punctuation">.</span><a href="drop-last-columns.html"><span class="token function">dropLastColumns</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">n<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-rectangle-grid/index.html">RectangleGrid</a></div><div class="brief "><p class="paragraph">Removes the last <code class="lang-kotlin">n</code> columns from each row (inner list) within a two-dimensional list.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="890369454%2FFunctions%2F-1455291947" anchor-label="fitHorizontally" id="890369454%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="fit-horizontally.html"><span>fit</span><wbr><span><span>Horizontally</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="890369454%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="fit-horizontally.html"><span class="token function">fitHorizontally</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">within<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator"> = </span>bounds<span class="token punctuation">, </span></span><span class="parameter ">gutter<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Distributes a list of rectangles horizontally within a given container rectangle, maintaining their relative width proportions and adding an optional gutter between them.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-962392000%2FFunctions%2F-1455291947" anchor-label="fitVertically" id="-962392000%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="fit-vertically.html"><span>fit</span><wbr><span><span>Vertically</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-962392000%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="fit-vertically.html"><span class="token function">fitVertically</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">within<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator"> = </span>bounds<span class="token punctuation">, </span></span><span class="parameter ">gutter<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Fits a list of rectangles within a given vertical rectangular area. Each rectangle's height is adjusted proportionally based on its original height relative to the total height of all rectangles in the list. The rectangles are then distributed vertically, with an optional gutter spacing between them.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="596523774%2FFunctions%2F-1455291947" anchor-label="get" id="596523774%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get.html"><span><span>get</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="596523774%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="-rectangle-grid/index.html">RectangleGrid</a><span class="token punctuation">.</span><a href="get.html"><span class="token function">get</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">y<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span></div><div class="brief "><p class="paragraph">Retrieves a <span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span> from a two-dimensional list of <span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span>s based on the specified x and y indices.</p></div><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="-rectangle-grid/index.html">RectangleGrid</a><span class="token punctuation">.</span><a href="get.html"><span class="token function">get</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">yRange<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.ranges/-int-range/index.html">IntRange</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Retrieves a list of rectangles at a specific x-coordinate for a range of y-coordinates from a 2D list of rectangles.</p></div><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="-rectangle-grid/index.html">RectangleGrid</a><span class="token punctuation">.</span><a href="get.html"><span class="token function">get</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">xRange<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.ranges/-int-range/index.html">IntRange</a><span class="token punctuation">, </span></span><span class="parameter ">y<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Retrieves a sublist of <span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span> objects from a two-dimensional <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a> given a range of indices for rows and a specific column index.</p></div><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="-rectangle-grid/index.html">RectangleGrid</a><span class="token punctuation">.</span><a href="get.html"><span class="token function">get</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">xRange<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.ranges/-int-range/index.html">IntRange</a><span class="token punctuation">, </span></span><span class="parameter ">yRange<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.ranges/-int-range/index.html">IntRange</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-rectangle-grid/index.html">RectangleGrid</a></div><div class="brief "><p class="paragraph">Retrieves a subgrid from a 2D list of <span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span>s based on the specified ranges.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="395117548%2FFunctions%2F-1455291947" anchor-label="grid" id="395117548%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="grid.html"><span><span>grid</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="395117548%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">.</span><a href="grid.html"><span class="token function">grid</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">cellWidth<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">cellHeight<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">minMarginX<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span><span class="token punctuation">, </span></span><span class="parameter ">minMarginY<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span><span class="token punctuation">, </span></span><span class="parameter ">gutterX<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span><span class="token punctuation">, </span></span><span class="parameter ">gutterY<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-rectangle-grid/index.html">RectangleGrid</a></div><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">.</span><a href="grid.html"><span class="token function">grid</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">columns<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">rows<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">marginX<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span><span class="token punctuation">, </span></span><span class="parameter ">marginY<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span><span class="token punctuation">, </span></span><span class="parameter ">gutterX<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span><span class="token punctuation">, </span></span><span class="parameter ">gutterY<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-rectangle-grid/index.html">RectangleGrid</a></div><div class="brief "><p class="paragraph">Splits <span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span> into a grid of <span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span>s</p></div><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span><span class="token punctuation">.</span><a href="grid.html"><span class="token function">grid</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">cellWidth<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">cellHeight<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">cellDepth<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">minMarginX<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span><span class="token punctuation">, </span></span><span class="parameter ">minMarginY<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span><span class="token punctuation">, </span></span><span class="parameter ">minMarginZ<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span><span class="token punctuation">, </span></span><span class="parameter ">gutterX<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span><span class="token punctuation">, </span></span><span class="parameter ">gutterY<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span><span class="token punctuation">, </span></span><span class="parameter ">gutterZ<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span><span class="token punctuation">.</span><a href="grid.html"><span class="token function">grid</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">columns<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">rows<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">slices<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">marginX<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span><span class="token punctuation">, </span></span><span class="parameter ">marginY<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span><span class="token punctuation">, </span></span><span class="parameter ">marginZ<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span><span class="token punctuation">, </span></span><span class="parameter ">gutterX<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span><span class="token punctuation">, </span></span><span class="parameter ">gutterY<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span><span class="token punctuation">, </span></span><span class="parameter ">gutterZ<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Split <span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span> into a grid of <span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span>es</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1949054580%2FFunctions%2F-1455291947" anchor-label="intersection" id="-1949054580%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="intersection.html"><span><span>intersection</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1949054580%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span><span class="token punctuation">.</span><a href="intersection.html"><span class="token function">intersection</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span></div><div class="brief "><p class="paragraph">Computes the intersection of the current box with another box. If the two boxes intersect, the resulting box represents the overlapping region. If the two boxes do not intersect, an empty box is returned.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">.</span><a href="intersection.html"><span class="token function">intersection</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span></div><div class="brief "><p class="paragraph">Computes the intersection of two rectangles and returns the resulting rectangle. If the rectangles do not intersect, an empty rectangle is returned.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="283472198%2FFunctions%2F-1455291947" anchor-label="invert" id="283472198%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="invert.html"><span><span>invert</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="283472198%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Circle///PointingToDeclaration/">Circle</span><span class="token punctuation">.</span><a href="invert.html"><span class="token function">invert</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">point<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span></div><div class="brief "><p class="paragraph">Performs circle inversion of a point.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Circle///PointingToDeclaration/">Circle</span><span class="token punctuation">.</span><a href="invert.html"><span class="token function">invert</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">circle<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Circle///PointingToDeclaration/">Circle</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/GeometricPrimitive2D///PointingToDeclaration/">GeometricPrimitive2D</span></div><div class="brief "><p class="paragraph">Performs circle inversion of another circle.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Circle///PointingToDeclaration/">Circle</span><span class="token punctuation">.</span><a href="invert.html"><span class="token function">invert</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">segment<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/LineSegment///PointingToDeclaration/">LineSegment</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/GeometricPrimitive2D///PointingToDeclaration/">GeometricPrimitive2D</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1315482232%2FFunctions%2F-1455291947" anchor-label="invertConformal" id="-1315482232%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="invert-conformal.html"><span>invert</span><wbr><span><span>Conformal</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1315482232%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Circle///PointingToDeclaration/">Circle</span><span class="token punctuation">.</span><a href="invert-conformal.html"><span class="token function">invertConformal</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">circle<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Circle///PointingToDeclaration/">Circle</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/GeometricPrimitive2D///PointingToDeclaration/">GeometricPrimitive2D</span></div><div class="brief "><p class="paragraph">Performs conformal inversion of another circle.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-45942311%2FFunctions%2F-1455291947" anchor-label="irregularGrid" id="-45942311%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="irregular-grid.html"><span>irregular</span><wbr><span><span>Grid</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-45942311%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">.</span><a href="irregular-grid.html"><span class="token function">irregularGrid</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">columnWeights<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">rowWeights<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">marginX<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span><span class="token punctuation">, </span></span><span class="parameter ">marginY<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-rectangle-grid/index.html">RectangleGrid</a></div><div class="brief "><p class="paragraph">Divides a rectangle into a grid of sub-rectangles with irregular spacing, based on the specified column and row weights. Optionally, margins can be applied on both the horizontal and vertical directions.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="14213306%2FFunctions%2F-1455291947" anchor-label="place" id="14213306%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="place.html"><span><span>place</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="14213306%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span><span class="token punctuation">.</span><a href="place.html"><span class="token function">place</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">item<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span><span class="token punctuation">, </span></span><span class="parameter ">anchor<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator"> = </span>Vector3(0.5, 0.5, 0.5)<span class="token punctuation">, </span></span><span class="parameter ">itemAnchor<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator"> = </span>anchor</span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span></div><div class="brief "><p class="paragraph">Places a given box relative to this box using specified anchor points. This method computes the position of the placed box based on the anchor points of both the current box and the given box. The resulting box maintains the dimensions of the given box and is positioned at the calculated location.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">.</span><a href="place.html"><span class="token function">place</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">item<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">, </span></span><span class="parameter ">anchor<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>Vector2(0.5, 0.5)<span class="token punctuation">, </span></span><span class="parameter ">itemAnchor<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>anchor</span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span></div><div class="brief "><p class="paragraph">Places a given rectangle (<code class="lang-kotlin">item</code>) within the bounds of the current rectangle (<code class="lang-kotlin">this</code>), positioning it based on the specified anchor point.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1065473648%2FFunctions%2F-1455291947" anchor-label="placeIn" id="1065473648%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="place-in.html"><span>place</span><wbr><span><span>In</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1065473648%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span><span class="token punctuation">.</span><a href="place-in.html"><span class="token function">placeIn</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">container<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span><span class="token punctuation">, </span></span><span class="parameter ">anchor<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator"> = </span>Vector3(0.5, 0.5, 0.5)<span class="token punctuation">, </span></span><span class="parameter ">itemAnchor<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator"> = </span>anchor</span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span></div><div class="brief "><p class="paragraph">Places this box inside the specified container box using anchor points to determine the relative positioning.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">.</span><a href="place-in.html"><span class="token function">placeIn</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">container<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">, </span></span><span class="parameter ">anchor<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>Vector2(0.5, 0.5)<span class="token punctuation">, </span></span><span class="parameter ">itemAnchor<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>anchor</span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span></div><div class="brief "><p class="paragraph">Positions the current rectangle (<code class="lang-kotlin">this</code>) within the given <code class="lang-kotlin">container</code> rectangle. The placement is determined by aligning the <code class="lang-kotlin">itemAnchor</code> of the current rectangle to the <code class="lang-kotlin">anchor</code> point within the container rectangle.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2018512649%2FFunctions%2F-1455291947" anchor-label="regularPolygon" id="-2018512649%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="regular-polygon.html"><span>regular</span><wbr><span><span>Polygon</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2018512649%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="regular-polygon.html"><span class="token function">regularPolygon</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">sides<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">center<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>Vector2.ZERO<span class="token punctuation">, </span></span><span class="parameter ">radius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">100.0</span><span class="token punctuation">, </span></span><span class="parameter ">phase<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/ShapeContour///PointingToDeclaration/">ShapeContour</span></div><div class="brief "><p class="paragraph">Creates a regular polygon at <a href="regular-polygon.html">center</a> with the given <a href="regular-polygon.html">sides</a> and <a href="regular-polygon.html">radius</a>. Specify a <a href="regular-polygon.html">phase</a> in degrees to rotate it.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="899346995%2FFunctions%2F-1455291947" anchor-label="regularPolygonBeveled" id="899346995%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="regular-polygon-beveled.html"><span>regular</span><wbr><span>Polygon</span><wbr><span><span>Beveled</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="899346995%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="regular-polygon-beveled.html"><span class="token function">regularPolygonBeveled</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">sides<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">bevelFactor<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.5</span><span class="token punctuation">, </span></span><span class="parameter ">center<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>Vector2.ZERO<span class="token punctuation">, </span></span><span class="parameter ">radius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">100.0</span><span class="token punctuation">, </span></span><span class="parameter ">phase<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/ShapeContour///PointingToDeclaration/">ShapeContour</span></div><div class="brief "><p class="paragraph">Creates a beveled polygon at <a href="regular-polygon-beveled.html">center</a> with the given <a href="regular-polygon-beveled.html">sides</a> and <a href="regular-polygon-beveled.html">radius</a>. Specify a <a href="regular-polygon-beveled.html">phase</a> in degrees to rotate it. If 0.0 &lt;<a href="regular-polygon-beveled.html">bevelFactor</a>&lt; 1.0 the number of <a href="regular-polygon-beveled.html">sides</a> is doubled. Using 0.5 all sides have equal length. With other values <a href="regular-polygon-beveled.html">bevelFactor</a> determines the length ratio between even and odd sides.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="414242719%2FFunctions%2F-1455291947" anchor-label="regularPolygonRounded" id="414242719%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="regular-polygon-rounded.html"><span>regular</span><wbr><span>Polygon</span><wbr><span><span>Rounded</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="414242719%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="regular-polygon-rounded.html"><span class="token function">regularPolygonRounded</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">sides<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">roundFactor<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.5</span><span class="token punctuation">, </span></span><span class="parameter ">center<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>Vector2.ZERO<span class="token punctuation">, </span></span><span class="parameter ">radius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">100.0</span><span class="token punctuation">, </span></span><span class="parameter ">phase<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/ShapeContour///PointingToDeclaration/">ShapeContour</span></div><div class="brief "><p class="paragraph">Creates a rounded polygon at <a href="regular-polygon-rounded.html">center</a> with the given <a href="regular-polygon-rounded.html">sides</a> and <a href="regular-polygon-rounded.html">radius</a>. Specify a <a href="regular-polygon-rounded.html">phase</a> in degrees to rotate it. <a href="regular-polygon-rounded.html">roundFactor</a> 0.0 = no rounding, 0.5 = default, 1.0 = full rounding.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-110552256%2FFunctions%2F-1455291947" anchor-label="regularStar" id="-110552256%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="regular-star.html"><span>regular</span><wbr><span><span>Star</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-110552256%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="regular-star.html"><span class="token function">regularStar</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">points<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">innerRadius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">outerRadius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">center<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>Vector2.ZERO<span class="token punctuation">, </span></span><span class="parameter ">phase<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/ShapeContour///PointingToDeclaration/">ShapeContour</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1802970215%2FFunctions%2F-1455291947" anchor-label="regularStarBeveled" id="-1802970215%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="regular-star-beveled.html"><span>regular</span><wbr><span>Star</span><wbr><span><span>Beveled</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1802970215%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="regular-star-beveled.html"><span class="token function">regularStarBeveled</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">points<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">innerRadius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">outerRadius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">innerFactor<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">outerFactor<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">center<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>Vector2.ZERO<span class="token punctuation">, </span></span><span class="parameter ">phase<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/ShapeContour///PointingToDeclaration/">ShapeContour</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1690720507%2FFunctions%2F-1455291947" anchor-label="regularStarRounded" id="-1690720507%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="regular-star-rounded.html"><span>regular</span><wbr><span>Star</span><wbr><span><span>Rounded</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1690720507%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="regular-star-rounded.html"><span class="token function">regularStarRounded</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">points<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">innerRadius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">outerRadius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">innerFactor<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">outerFactor<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">center<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>Vector2.ZERO<span class="token punctuation">, </span></span><span class="parameter ">phase<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/ShapeContour///PointingToDeclaration/">ShapeContour</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1463395712%2FFunctions%2F-1455291947" anchor-label="roundedRectangle" id="1463395712%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="rounded-rectangle.html"><span>rounded</span><wbr><span><span>Rectangle</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1463395712%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">.</span><a href="rounded-rectangle.html"><span class="token function">roundedRectangle</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">roundedRectangle<span class="token operator">: </span><a href="-rounded-rectangle/index.html">RoundedRectangle</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">.</span><a href="rounded-rectangle.html"><span class="token function">roundedRectangle</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">position<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token punctuation">, </span></span><span class="parameter ">width<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">height<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">radius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">.</span><a href="rounded-rectangle.html"><span class="token function">roundedRectangle</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">y<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">width<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">height<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">radius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1605325285%2FFunctions%2F-1455291947" anchor-label="row" id="-1605325285%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="row.html"><span><span>row</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1605325285%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="row.html"><span class="token function">row</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Retrieves the row from a 2D list of <code class="lang-kotlin">Rectangle</code> objects at the specified index.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1467771941%2FFunctions%2F-1455291947" anchor-label="sliceColumns" id="-1467771941%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="slice-columns.html"><span>slice</span><wbr><span><span>Columns</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1467771941%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-rectangle-grid/index.html">RectangleGrid</a><span class="token punctuation">.</span><a href="slice-columns.html"><span class="token function">sliceColumns</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">indices<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-iterable/index.html">Iterable</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-rectangle-grid/index.html">RectangleGrid</a></div><div class="brief "><p class="paragraph">Selects specific columns from a two-dimensional list of rectangles. The method slices each inner list based on the provided column indices.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="-rectangle-grid/index.html">RectangleGrid</a><span class="token punctuation">.</span><a href="slice-columns.html"><span class="token function">sliceColumns</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">range<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.ranges/-int-range/index.html">IntRange</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-rectangle-grid/index.html">RectangleGrid</a></div><div class="brief "><p class="paragraph">Slices the specified range of columns from each row of a two-dimensional list.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-914973940%2FFunctions%2F-1455291947" anchor-label="splitAtX" id="-914973940%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="split-at-x.html"><span>split</span><wbr><span>At</span><wbr><span><span>X</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-914973940%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span><span class="token punctuation">.</span><a href="split-at-x.html"><span class="token function">splitAtX</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Splits the current Box into two smaller Boxes at the specified x-coordinate if the coordinate resides within the box's x-axis range.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">.</span><a href="split-at-x.html"><span class="token function">splitAtX</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Splits the current Rectangle into two smaller rectangles at a specified x-coordinate.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1513280242%2FFunctions%2F-1455291947" anchor-label="splitAtY" id="-1513280242%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="split-at-y.html"><span>split</span><wbr><span>At</span><wbr><span><span>Y</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1513280242%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span><span class="token punctuation">.</span><a href="split-at-y.html"><span class="token function">splitAtY</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">y<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Splits the current Box object into two separate boxes along the given Y-coordinate. If the Y-coordinate falls within the vertical range of the box, the method produces two new boxes divided at the specified Y-coordinate. If the Y-coordinate is outside the vertical range, the method returns the original box unchanged.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">.</span><a href="split-at-y.html"><span class="token function">splitAtY</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">y<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Splits the rectangle horizontally at the specified <code class="lang-kotlin">y</code> value if the value lies within the rectangle's vertical range.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1691059392%2FFunctions%2F-1455291947" anchor-label="splitAtZ" id="-1691059392%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="split-at-z.html"><span>split</span><wbr><span>At</span><wbr><span><span>Z</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1691059392%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span><span class="token punctuation">.</span><a href="split-at-z.html"><span class="token function">splitAtZ</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">z<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Splits the current Box into two smaller boxes along the z-axis at the specified position. If the provided z position lies outside the z-range of the current Box, the method returns a list containing only the original Box.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1143141534%2FFunctions%2F-1455291947" anchor-label="sub" id="-1143141534%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="sub.html"><span><span>sub</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1143141534%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span><span class="token punctuation">.</span><a href="sub.html"><span class="token function">sub</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">uvw<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span></div><div class="brief "><p class="paragraph">Creates a sub-box from the current box using the dimensions defined by another box.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">.</span><a href="sub.html"><span class="token function">sub</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">uv<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span></div><div class="brief "><p class="paragraph">Creates a sub-rectangle from the current rectangle using the dimensions defined by another rectangle.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-268788486%2FFunctions%2F-1455291947" anchor-label="subtract" id="-268788486%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="subtract.html"><span><span>subtract</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-268788486%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="subtract.html"><span class="token function">subtract</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Subtracts a given Box from each Box in the list and returns a list of the resulting Boxes.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="subtract.html"><span class="token function">subtract</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Subtracts a rectangle from a list of rectangles, removing overlapping areas and returning the non-overlapping parts of the original rectangles.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span><span class="token punctuation">.</span><a href="subtract.html"><span class="token function">subtract</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Subtracts the given Box from the current Box and returns the remaining parts of the current Box that do not intersect with the given Box.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">.</span><a href="subtract.html"><span class="token function">subtract</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Subtracts the given rectangle <code class="lang-kotlin">other</code> from the current rectangle, splitting and removing overlapping areas and returning the remaining non-overlapping parts as a list of rectangles.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-715572623%2FFunctions%2F-1455291947" anchor-label="take" id="-715572623%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="take.html"><span><span>take</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-715572623%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">.</span><a href="take.html"><span class="token function">take</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">left<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">top<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">right<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">bottom<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">width<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">height<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span></div><div class="brief "><p class="paragraph">Creates a new <span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span> by modifying its dimensions and position based on the provided parameters. The method adjusts the position and size of the rectangle depending on which of the optional parameters are supplied. Any omitted parameters are calculated to maintain the rectangle's overall layout.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1176277024%2FFunctions%2F-1455291947" anchor-label="takeColumns" id="1176277024%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="take-columns.html"><span>take</span><wbr><span><span>Columns</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1176277024%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-rectangle-grid/index.html">RectangleGrid</a><span class="token punctuation">.</span><a href="take-columns.html"><span class="token function">takeColumns</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">n<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-rectangle-grid/index.html">RectangleGrid</a></div><div class="brief "><p class="paragraph">Selects the first <code class="lang-kotlin">n</code> columns from each row in a 2D list of <code class="lang-kotlin">Rectangle</code> objects.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2107572566%2FFunctions%2F-1455291947" anchor-label="takeLastColumns" id="2107572566%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="take-last-columns.html"><span>take</span><wbr><span>Last</span><wbr><span><span>Columns</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2107572566%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-rectangle-grid/index.html">RectangleGrid</a><span class="token punctuation">.</span><a href="take-last-columns.html"><span class="token function">takeLastColumns</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">n<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-rectangle-grid/index.html">RectangleGrid</a></div><div class="brief "><p class="paragraph">Returns a new list where each sub-list contains only the last <code class="lang-kotlin">n</code> elements of the original sub-list.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1135304532%2FFunctions%2F-1455291947" anchor-label="tangents" id="-1135304532%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="tangents.html"><span><span>tangents</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1135304532%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Circle///PointingToDeclaration/">Circle</span><span class="token punctuation">.</span><a href="tangents.html"><span class="token function">tangents</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">point<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token punctuation">, </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Computes the tangent points from a given external point to a circle.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Circle///PointingToDeclaration/">Circle</span><span class="token punctuation">.</span><a href="tangents.html"><span class="token function">tangents</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Circle///PointingToDeclaration/">Circle</span><span class="token punctuation">, </span></span><span class="parameter ">isInner<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token punctuation">, </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Calculates the tangent lines between this circle and another circle.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="307524173%2FFunctions%2F-1455291947" anchor-label="toRounded" id="307524173%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="to-rounded.html"><span>to</span><wbr><span><span>Rounded</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="307524173%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">.</span><a href="to-rounded.html"><span class="token function">toRounded</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">radius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-rounded-rectangle/index.html">RoundedRectangle</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1729579455%2FFunctions%2F-1455291947" anchor-label="transpose" id="1729579455%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="transpose.html"><span><span>transpose</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1729579455%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-rectangle-grid/index.html">RectangleGrid</a><span class="token punctuation">.</span><a href="transpose.html"><span class="token function">transpose</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-rectangle-grid/index.html">RectangleGrid</a></div><div class="brief "><p class="paragraph">Transposes a 2D list of rectangles, switching rows and columns.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-706594238%2FFunctions%2F-1455291947" anchor-label="uniform" id="-706594238%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="uniform.html"><span><span>uniform</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-706594238%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="uniform.html"><span class="token function">uniform</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">random<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.random/-random/index.html">Random</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span></div><div class="brief "><p class="paragraph">Selects a random <span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span> from a nested list of rectangles using the provided random generator.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="497813930%2FFunctions%2F-1455291947" anchor-label="uniformBlock" id="497813930%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="uniform-block.html"><span>uniform</span><wbr><span><span>Block</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="497813930%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-rectangle-grid/index.html">RectangleGrid</a><span class="token punctuation">.</span><a href="uniform-block.html"><span class="token function">uniformBlock</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">minWidth<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">1</span><span class="token punctuation">, </span></span><span class="parameter ">maxWidth<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span>this[0].size<span class="token punctuation">, </span></span><span class="parameter ">minHeight<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">1</span><span class="token punctuation">, </span></span><span class="parameter ">maxHeight<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span>this.size<span class="token punctuation">, </span></span><span class="parameter ">random<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.random/-random/index.html">Random</a><span class="token operator"> = </span>Random.Default</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-rectangle-grid/index.html">RectangleGrid</a></div><div class="brief "><p class="paragraph">Extracts a uniform random sub-block of rectangles from a 2D list within the specified constraints.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

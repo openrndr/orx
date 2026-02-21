@@ -1,0 +1,638 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>org.openrndr.extra.shaderphrases.noise</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../images/logo-icon.svg">
+<link href="../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.0-dev.70+e4c3ecc
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-shader-phrases/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-shader-phrases/commonMain" data-filter=":orx-shader-phrases/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageids="orx-shader-phrases::org.openrndr.extra.shaderphrases.noise////PointingToDeclaration//693533397">
+  <div class="breadcrumbs"><a href="../index.html">orx-shader-phrases</a><span class="delimiter">/</span><span class="current">org.openrndr.extra.shaderphrases.noise</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="PROPERTY,EXTENSION_PROPERTY">Properties</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-513003229%2FProperties%2F693533397" anchor-label="fhash11Phrase" id="-513003229%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="fhash11-phrase.html"><span><span>fhash11Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-513003229%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="fhash11-phrase.html">fhash11Phrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">uniform hash shader phrase</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1771860226%2FProperties%2F693533397" anchor-label="fhash12Phrase" id="1771860226%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="fhash12-phrase.html"><span><span>fhash12Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1771860226%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="fhash12-phrase.html">fhash12Phrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">uniform hash shader phrase</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-238243615%2FProperties%2F693533397" anchor-label="fhash13Phrase" id="-238243615%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="fhash13-phrase.html"><span><span>fhash13Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-238243615%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="fhash13-phrase.html">fhash13Phrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">uniform hash shader phrase</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2046619840%2FProperties%2F693533397" anchor-label="fhash14Phrase" id="2046619840%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="fhash14-phrase.html"><span><span>fhash14Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2046619840%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="fhash14-phrase.html">fhash14Phrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">uniform hash shader phrase</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-977881199%2FProperties%2F693533397" anchor-label="grad4Phrase" id="-977881199%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="grad4-phrase.html"><span><span>grad4Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-977881199%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="grad4-phrase.html">grad4Phrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="521912492%2FProperties%2F693533397" anchor-label="hilbertR1BlueNoiseFloatPhrase" id="521912492%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hilbert-r1-blue-noise-float-phrase.html"><span>hilbert</span><wbr><span>R1Blue</span><wbr><span>Noise</span><wbr><span>Float</span><wbr><span><span>Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="521912492%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="hilbert-r1-blue-noise-float-phrase.html">hilbertR1BlueNoiseFloatPhrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1794889839%2FProperties%2F693533397" anchor-label="hilbertR1BlueNoiseFloatV3Phrase" id="1794889839%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hilbert-r1-blue-noise-float-v3-phrase.html"><span>hilbert</span><wbr><span>R1Blue</span><wbr><span>Noise</span><wbr><span>Float</span><wbr><span><span>V3Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1794889839%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="hilbert-r1-blue-noise-float-v3-phrase.html">hilbertR1BlueNoiseFloatV3Phrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-678243040%2FProperties%2F693533397" anchor-label="hilbertR1BlueNoisePhrase" id="-678243040%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hilbert-r1-blue-noise-phrase.html"><span>hilbert</span><wbr><span>R1Blue</span><wbr><span>Noise</span><wbr><span><span>Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-678243040%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="hilbert-r1-blue-noise-phrase.html">hilbertR1BlueNoisePhrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-503341085%2FProperties%2F693533397" anchor-label="hilbertR1BlueNoiseV3Phrase" id="-503341085%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hilbert-r1-blue-noise-v3-phrase.html"><span>hilbert</span><wbr><span>R1Blue</span><wbr><span>Noise</span><wbr><span><span>V3Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-503341085%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="hilbert-r1-blue-noise-v3-phrase.html">hilbertR1BlueNoiseV3Phrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-139296121%2FProperties%2F693533397" anchor-label="inverseKmhfPhrase" id="-139296121%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="inverse-kmhf-phrase.html"><span>inverse</span><wbr><span>Kmhf</span><wbr><span><span>Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-139296121%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="inverse-kmhf-phrase.html">inverseKmhfPhrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Represents a GLSL shader phrase that defines the inverse of Knuth's multiplicative hash function, commonly used in procedural noise generation or random value calculations.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-377582464%2FProperties%2F693533397" anchor-label="inverseR1BlueNoisePhrase" id="-377582464%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="inverse-r1-blue-noise-phrase.html"><span>inverse</span><wbr><span>R1Blue</span><wbr><span>Noise</span><wbr><span><span>Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-377582464%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="inverse-r1-blue-noise-phrase.html">inverseR1BlueNoisePhrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1095582161%2FProperties%2F693533397" anchor-label="kmhfPhrase" id="1095582161%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="kmhf-phrase.html"><span>kmhf</span><wbr><span><span>Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1095582161%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="kmhf-phrase.html">kmhfPhrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Represents a shader phrase implementing Knuth's multiplicative hash function as defined for unsigned integers.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1117937120%2FProperties%2F693533397" anchor-label="mod289Phrase" id="1117937120%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="mod289-phrase.html"><span><span>mod289Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1117937120%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="mod289-phrase.html">mod289Phrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1059043524%2FProperties%2F693533397" anchor-label="mod289V2Phrase" id="1059043524%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="mod289-v2-phrase.html"><span><span>mod289V2Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1059043524%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="mod289-v2-phrase.html">mod289V2Phrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-951060317%2FProperties%2F693533397" anchor-label="mod289V3Phrase" id="-951060317%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="mod289-v3-phrase.html"><span><span>mod289V3Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-951060317%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="mod289-v3-phrase.html">mod289V3Phrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1333803138%2FProperties%2F693533397" anchor-label="mod289V4Phrase" id="1333803138%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="mod289-v4-phrase.html"><span><span>mod289V4Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1333803138%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="mod289-v4-phrase.html">mod289V4Phrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1991063489%2FProperties%2F693533397" anchor-label="permutePhrase" id="1991063489%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="permute-phrase.html"><span>permute</span><wbr><span><span>Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1991063489%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="permute-phrase.html">permutePhrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1680105883%2FProperties%2F693533397" anchor-label="permuteV2Phrase" id="-1680105883%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="permute-v2-phrase.html"><span>permute</span><wbr><span><span>V2Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1680105883%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="permute-v2-phrase.html">permuteV2Phrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="604757572%2FProperties%2F693533397" anchor-label="permuteV3Phrase" id="604757572%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="permute-v3-phrase.html"><span>permute</span><wbr><span><span>V3Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="604757572%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="permute-v3-phrase.html">permuteV3Phrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1405346269%2FProperties%2F693533397" anchor-label="permuteV4Phrase" id="-1405346269%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="permute-v4-phrase.html"><span>permute</span><wbr><span><span>V4Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1405346269%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="permute-v4-phrase.html">permuteV4Phrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="771611049%2FProperties%2F693533397" anchor-label="simplex12" id="771611049%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="simplex12.html"><span><span>simplex12</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="771611049%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="simplex12.html">simplex12</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="802630856%2FProperties%2F693533397" anchor-label="simplex13" id="802630856%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="simplex13.html"><span><span>simplex13</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="802630856%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="simplex13.html">simplex13</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="833650663%2FProperties%2F693533397" anchor-label="simplex14" id="833650663%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="simplex14.html"><span><span>simplex14</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="833650663%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="simplex14.html">simplex14</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1733225066%2FProperties%2F693533397" anchor-label="simplex22" id="1733225066%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="simplex22.html"><span><span>simplex22</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1733225066%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="simplex22.html">simplex22</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1569108406%2FProperties%2F693533397" anchor-label="simplex33" id="-1569108406%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="simplex33.html"><span><span>simplex33</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1569108406%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="simplex33.html">simplex33</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1538088599%2FProperties%2F693533397" anchor-label="simplex34" id="-1538088599%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="simplex34.html"><span><span>simplex34</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1538088599%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="simplex34.html">simplex34</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-24790999%2FProperties%2F693533397" anchor-label="taylorInvSqrtPhrase" id="-24790999%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="taylor-inv-sqrt-phrase.html"><span>taylor</span><wbr><span>Inv</span><wbr><span>Sqrt</span><wbr><span><span>Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-24790999%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="taylor-inv-sqrt-phrase.html">taylorInvSqrtPhrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1886018355%2FProperties%2F693533397" anchor-label="taylorInvSqrtV2Phrase" id="-1886018355%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="taylor-inv-sqrt-v2-phrase.html"><span>taylor</span><wbr><span>Inv</span><wbr><span>Sqrt</span><wbr><span><span>V2Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1886018355%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="taylor-inv-sqrt-v2-phrase.html">taylorInvSqrtV2Phrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="398845100%2FProperties%2F693533397" anchor-label="taylorInvSqrtV3Phrase" id="398845100%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="taylor-inv-sqrt-v3-phrase.html"><span>taylor</span><wbr><span>Inv</span><wbr><span>Sqrt</span><wbr><span><span>V3Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="398845100%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="taylor-inv-sqrt-v3-phrase.html">taylorInvSqrtV3Phrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1611258741%2FProperties%2F693533397" anchor-label="taylorInvSqrtV4Phrase" id="-1611258741%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="taylor-inv-sqrt-v4-phrase.html"><span>taylor</span><wbr><span>Inv</span><wbr><span>Sqrt</span><wbr><span><span>V4Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1611258741%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="taylor-inv-sqrt-v4-phrase.html">taylorInvSqrtV4Phrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1790747020%2FProperties%2F693533397" anchor-label="uhash11Phrase" id="-1790747020%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="uhash11-phrase.html"><span><span>uhash11Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1790747020%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="uhash11-phrase.html">uhash11Phrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">uniform hash shader phrase</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="494116435%2FProperties%2F693533397" anchor-label="uhash12Phrase" id="494116435%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="uhash12-phrase.html"><span><span>uhash12Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="494116435%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="uhash12-phrase.html">uhash12Phrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">uniform hash shader phrase</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1515987406%2FProperties%2F693533397" anchor-label="uhash13Phrase" id="-1515987406%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="uhash13-phrase.html"><span><span>uhash13Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1515987406%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="uhash13-phrase.html">uhash13Phrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">uniform hash shader phrase</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="768876049%2FProperties%2F693533397" anchor-label="uhash14Phrase" id="768876049%2FProperties%2F693533397" data-filterable-set=":orx-shader-phrases/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shader-phrases/commonMain" data-filterable-set=":orx-shader-phrases/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="uhash14-phrase.html"><span><span>uhash14Phrase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="768876049%2FProperties%2F693533397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shader-phrases/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="uhash14-phrase.html">uhash14Phrase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">uniform hash shader phrase</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

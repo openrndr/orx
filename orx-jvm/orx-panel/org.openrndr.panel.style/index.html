@@ -1,0 +1,1501 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>org.openrndr.panel.style</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../../images/logo-icon.svg">
+<link href="../../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.0-dev.70+e4c3ecc
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":orx-jvm:orx-panel/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-jvm:orx-panel/main" data-filter=":orx-jvm:orx-panel/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageids="orx-panel::org.openrndr.panel.style////PointingToDeclaration//1278250025">
+  <div class="breadcrumbs"><a href="../index.html">orx-panel</a><span class="delimiter">/</span><span class="current">org.openrndr.panel.style</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button><button class="section-tab" data-togglable="PROPERTY,EXTENSION_PROPERTY">Properties</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="105167600%2FClasslikes%2F1278250025" anchor-label="CalculateContext" id="105167600%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-calculate-context/index.html"><span>Calculate</span><wbr><span><span>Context</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="105167600%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-calculate-context/index.html">CalculateContext</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>elementWidth<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>elementHeight<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1425074798%2FClasslikes%2F1278250025" anchor-label="ClassSelector" id="-1425074798%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-class-selector/index.html"><span>Class</span><wbr><span><span>Selector</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1425074798%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-class-selector/index.html">ClassSelector</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>c<span class="token operator">: </span><a href="../org.openrndr.panel.elements/-element-class/index.html">ElementClass</a></span></span><span class="token punctuation">)</span> : <a href="-selector/index.html">Selector</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1918216486%2FClasslikes%2F1278250025" anchor-label="Color" id="1918216486%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-color/index.html"><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1918216486%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="-color/index.html">Color</a> : <a href="-property-value/index.html">PropertyValue</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2014634746%2FClasslikes%2F1278250025" anchor-label="color" id="-2014634746%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="color/index.html"><span><span>color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2014634746%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="color/index.html">color</a><span class="token operator"> = </span><a href="-color/index.html">Color</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1608058499%2FClasslikes%2F1278250025" anchor-label="Combinator" id="-1608058499%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-combinator/index.html"><span><span>Combinator</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1608058499%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-combinator/index.html">Combinator</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-combinator/index.html">Combinator</a><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-633324849%2FClasslikes%2F1278250025" anchor-label="CompoundSelector" id="-633324849%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-compound-selector/index.html"><span>Compound</span><wbr><span><span>Selector</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-633324849%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-compound-selector/index.html">CompoundSelector</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="807033511%2FClasslikes%2F1278250025" anchor-label="Display" id="807033511%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-display/index.html"><span><span>Display</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="807033511%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="-display/index.html">Display</a> : <a href="-property-value/index.html">PropertyValue</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1453218688%2FClasslikes%2F1278250025" anchor-label="flex" id="-1453218688%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="flex/index.html"><span><span>flex</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1453218688%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="flex/index.html">flex</a><span class="token operator"> = </span><a href="-flex-grow/index.html">FlexGrow</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-291590557%2FClasslikes%2F1278250025" anchor-label="FlexDirection" id="-291590557%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-flex-direction/index.html"><span>Flex</span><wbr><span><span>Direction</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-291590557%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="-flex-direction/index.html">FlexDirection</a> : <a href="-property-value/index.html">PropertyValue</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="316011533%2FClasslikes%2F1278250025" anchor-label="FlexGrow" id="316011533%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-flex-grow/index.html"><span>Flex</span><wbr><span><span>Grow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="316011533%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="-flex-grow/index.html">FlexGrow</a> : <a href="-property-value/index.html">PropertyValue</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-197761946%2FClasslikes%2F1278250025" anchor-label="GridPopulation" id="-197761946%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-grid-population/index.html"><span>Grid</span><wbr><span><span>Population</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-197761946%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="-grid-population/index.html">GridPopulation</a> : <a href="-property-value/index.html">PropertyValue</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="341134470%2FClasslikes%2F1278250025" anchor-label="gridPopulation" id="341134470%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="grid-population/index.html"><span>grid</span><wbr><span><span>Population</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="341134470%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="grid-population/index.html">gridPopulation</a><span class="token operator"> = </span><a href="-grid-population/index.html">GridPopulation</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1556146087%2FClasslikes%2F1278250025" anchor-label="GridTemplate" id="-1556146087%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-grid-template/index.html"><span>Grid</span><wbr><span><span>Template</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1556146087%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="-grid-template/index.html">GridTemplate</a> : <a href="-property-value/index.html">PropertyValue</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="406423673%2FClasslikes%2F1278250025" anchor-label="gridTemplate" id="406423673%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="grid-template/index.html"><span>grid</span><wbr><span><span>Template</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="406423673%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="grid-template/index.html">gridTemplate</a><span class="token operator"> = </span><a href="-grid-template/index.html">GridTemplate</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1835185233%2FClasslikes%2F1278250025" anchor-label="has" id="-1835185233%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has/index.html"><span><span>has</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1835185233%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="has/index.html">has</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1190460900%2FClasslikes%2F1278250025" anchor-label="IdentitySelector" id="-1190460900%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-identity-selector/index.html"><span>Identity</span><wbr><span><span>Selector</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1190460900%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-identity-selector/index.html">IdentitySelector</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>id<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span> : <a href="-selector/index.html">Selector</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1349923891%2FClasslikes%2F1278250025" anchor-label="length" id="1349923891%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="length/index.html"><span><span>length</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1349923891%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="length/index.html">length</a><span class="token operator"> = </span><a href="-linear-dimension/-companion/index.html">LinearDimension.Companion</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1345367928%2FClasslikes%2F1278250025" anchor-label="LinearDimension" id="-1345367928%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-linear-dimension/index.html"><span>Linear</span><wbr><span><span>Dimension</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1345367928%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="-linear-dimension/index.html">LinearDimension</a> : <a href="-property-value/index.html">PropertyValue</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1328760887%2FClasslikes%2F1278250025" anchor-label="Matcher" id="1328760887%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-matcher/index.html"><span><span>Matcher</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1328760887%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-matcher/index.html">Matcher</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="688425079%2FClasslikes%2F1278250025" anchor-label="Overflow" id="688425079%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-overflow/index.html"><span><span>Overflow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="688425079%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="-overflow/index.html">Overflow</a> : <a href="-property-value/index.html">PropertyValue</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1803480368%2FClasslikes%2F1278250025" anchor-label="Position" id="1803480368%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-position/index.html"><span><span>Position</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1803480368%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-position/index.html">Position</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-position/index.html">Position</a><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-205782524%2FClasslikes%2F1278250025" anchor-label="Property" id="-205782524%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-property/index.html"><span><span>Property</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-205782524%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-record/index.html"><span class="token annotation builtin">JvmRecord</span></a></div></div><span class="token keyword">data </span><span class="token keyword">class </span><a href="-property/index.html">Property</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span> : <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Record.html">Record</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1421964863%2FClasslikes%2F1278250025" anchor-label="PropertyBehaviour" id="-1421964863%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-property-behaviour/index.html"><span>Property</span><wbr><span><span>Behaviour</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1421964863%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-record/index.html"><span class="token annotation builtin">JvmRecord</span></a></div></div><span class="token keyword">data </span><span class="token keyword">class </span><a href="-property-behaviour/index.html">PropertyBehaviour</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>inheritance<span class="token operator">: </span><a href="-property-inheritance/index.html">PropertyInheritance</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>intitial<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a></span></span><span class="token punctuation">)</span> : <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Record.html">Record</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1212355698%2FClasslikes%2F1278250025" anchor-label="PropertyBehaviours" id="-1212355698%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-property-behaviours/index.html"><span>Property</span><wbr><span><span>Behaviours</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1212355698%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-property-behaviours/index.html">PropertyBehaviours</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1448551660%2FClasslikes%2F1278250025" anchor-label="PropertyHandler" id="-1448551660%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-property-handler/index.html"><span>Property</span><wbr><span><span>Handler</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1448551660%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-property-handler/index.html">PropertyHandler</a><span class="token operator">&lt;</span><a href="-property-handler/index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>inheritance<span class="token operator">: </span><a href="-property-inheritance/index.html">PropertyInheritance</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>initial<span class="token operator">: </span><a href="-property-handler/index.html">T</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="871089940%2FClasslikes%2F1278250025" anchor-label="PropertyInheritance" id="871089940%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-property-inheritance/index.html"><span>Property</span><wbr><span><span>Inheritance</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="871089940%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-property-inheritance/index.html">PropertyInheritance</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-property-inheritance/index.html">PropertyInheritance</a><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2051350003%2FClasslikes%2F1278250025" anchor-label="PropertyValue" id="-2051350003%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-property-value/index.html"><span>Property</span><wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2051350003%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-property-value/index.html">PropertyValue</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>inherit<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>important<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-188503312%2FClasslikes%2F1278250025" anchor-label="PseudoClassSelector" id="-188503312%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pseudo-class-selector/index.html"><span>Pseudo</span><wbr><span>Class</span><wbr><span><span>Selector</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-188503312%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-pseudo-class-selector/index.html">PseudoClassSelector</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>c<span class="token operator">: </span><a href="../org.openrndr.panel.elements/-element-pseudo-class/index.html">ElementPseudoClass</a></span></span><span class="token punctuation">)</span> : <a href="-selector/index.html">Selector</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1608127686%2FClasslikes%2F1278250025" anchor-label="Selector" id="-1608127686%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-selector/index.html"><span><span>Selector</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1608127686%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-selector/index.html">Selector</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2049394416%2FClasslikes%2F1278250025" anchor-label="SelectorPrecedence" id="-2049394416%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-selector-precedence/index.html"><span>Selector</span><wbr><span><span>Precedence</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2049394416%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-selector-precedence/index.html">SelectorPrecedence</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">var </span>inlineStyle<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">0</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>id<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">0</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>classOrAttribute<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">0</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>type<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">0</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-588272181%2FClasslikes%2F1278250025" anchor-label="StyleSheet" id="-588272181%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-style-sheet/index.html"><span>Style</span><wbr><span><span>Sheet</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-588272181%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>selector<span class="token operator">: </span><a href="-compound-selector/index.html">CompoundSelector</a><span class="token operator"> = </span>CompoundSelector.DUMMY</span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1296448431%2FClasslikes%2F1278250025" anchor-label="TextAlign" id="-1296448431%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-text-align/index.html"><span>Text</span><wbr><span><span>Align</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1296448431%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="-text-align/index.html">TextAlign</a> : <a href="-property-value/index.html">PropertyValue</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1454524465%2FClasslikes%2F1278250025" anchor-label="textAlign" id="1454524465%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="text-align/index.html"><span>text</span><wbr><span><span>Align</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1454524465%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="text-align/index.html">textAlign</a><span class="token operator"> = </span><a href="-text-align/index.html">TextAlign</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1467422944%2FClasslikes%2F1278250025" anchor-label="TypeSelector" id="-1467422944%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-type-selector/index.html"><span>Type</span><wbr><span><span>Selector</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1467422944%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-type-selector/index.html">TypeSelector</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>type<span class="token operator">: </span><a href="../org.openrndr.panel.elements/-element-type/index.html">ElementType</a></span></span><span class="token punctuation">)</span> : <a href="-selector/index.html">Selector</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1357580977%2FClasslikes%2F1278250025" anchor-label="TypesSelector" id="1357580977%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-types-selector/index.html"><span>Types</span><wbr><span><span>Selector</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1357580977%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-types-selector/index.html">TypesSelector</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">types<span class="token operator">: </span><a href="../org.openrndr.panel.elements/-element-type/index.html">ElementType</a></span></span><span class="token punctuation">)</span> : <a href="-selector/index.html">Selector</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1265141055%2FClasslikes%2F1278250025" anchor-label="ZIndex" id="-1265141055%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-z-index/index.html"><span><span>ZIndex</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1265141055%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="-z-index/index.html">ZIndex</a> : <a href="-property-value/index.html">PropertyValue</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="EXTENSION_PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-298067031%2FProperties%2F1278250025" anchor-label="background" id="-298067031%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="background.html"><span><span>background</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-298067031%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="background.html">background</a><span class="token operator">: </span><a href="-color/index.html">Color</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="692858436%2FProperties%2F1278250025" anchor-label="borderColor" id="692858436%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="border-color.html"><span>border</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="692858436%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="border-color.html">borderColor</a><span class="token operator">: </span><a href="-color/index.html">Color</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1176452647%2FProperties%2F1278250025" anchor-label="borderWidth" id="1176452647%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="border-width.html"><span>border</span><wbr><span><span>Width</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1176452647%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="border-width.html">borderWidth</a><span class="token operator">: </span><a href="-linear-dimension/index.html">LinearDimension</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="168396752%2FProperties%2F1278250025" anchor-label="color" id="168396752%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="color.html"><span><span>color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="168396752%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="color.html">color</a><span class="token operator">: </span><a href="-color/index.html">Color</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1714267661%2FProperties%2F1278250025" anchor-label="columnGap" id="1714267661%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="column-gap.html"><span>column</span><wbr><span><span>Gap</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1714267661%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="column-gap.html">columnGap</a><span class="token operator">: </span><a href="-linear-dimension/index.html">LinearDimension</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1263313484%2FProperties%2F1278250025" anchor-label="computedTextHorizontalAlign" id="-1263313484%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="computed-text-horizontal-align.html"><span>computed</span><wbr><span>Text</span><wbr><span>Horizontal</span><wbr><span><span>Align</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1263313484%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="computed-text-horizontal-align.html">computedTextHorizontalAlign</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="443290722%2FProperties%2F1278250025" anchor-label="computedTextVerticalAlign" id="443290722%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="computed-text-vertical-align.html"><span>computed</span><wbr><span>Text</span><wbr><span>Vertical</span><wbr><span><span>Align</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="443290722%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="computed-text-vertical-align.html">computedTextVerticalAlign</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2067006063%2FProperties%2F1278250025" anchor-label="display" id="2067006063%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="display.html"><span><span>display</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2067006063%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="display.html">display</a><span class="token operator">: </span><a href="-display/index.html">Display</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-592636958%2FProperties%2F1278250025" anchor-label="effectiveBackground" id="-592636958%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="effective-background.html"><span>effective</span><wbr><span><span>Background</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-592636958%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="effective-background.html">effectiveBackground</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="151125291%2FProperties%2F1278250025" anchor-label="effectiveBorderColor" id="151125291%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="effective-border-color.html"><span>effective</span><wbr><span>Border</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="151125291%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="effective-border-color.html">effectiveBorderColor</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="634719502%2FProperties%2F1278250025" anchor-label="effectiveBorderWidth" id="634719502%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="effective-border-width.html"><span>effective</span><wbr><span>Border</span><wbr><span><span>Width</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="634719502%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="effective-border-width.html">effectiveBorderWidth</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1637724169%2FProperties%2F1278250025" anchor-label="effectiveColor" id="-1637724169%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="effective-color.html"><span>effective</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1637724169%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="effective-color.html">effectiveColor</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-490807632%2FProperties%2F1278250025" anchor-label="effectivePaddingBottom" id="-490807632%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="effective-padding-bottom.html"><span>effective</span><wbr><span>Padding</span><wbr><span><span>Bottom</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-490807632%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="effective-padding-bottom.html">effectivePaddingBottom</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1787898964%2FProperties%2F1278250025" anchor-label="effectivePaddingHeight" id="-1787898964%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="effective-padding-height.html"><span>effective</span><wbr><span>Padding</span><wbr><span><span>Height</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1787898964%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="effective-padding-height.html">effectivePaddingHeight</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="711493324%2FProperties%2F1278250025" anchor-label="effectivePaddingLeft" id="711493324%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="effective-padding-left.html"><span>effective</span><wbr><span>Padding</span><wbr><span><span>Left</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="711493324%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="effective-padding-left.html">effectivePaddingLeft</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1314550207%2FProperties%2F1278250025" anchor-label="effectivePaddingRight" id="1314550207%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="effective-padding-right.html"><span>effective</span><wbr><span>Padding</span><wbr><span><span>Right</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1314550207%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="effective-padding-right.html">effectivePaddingRight</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="699461944%2FProperties%2F1278250025" anchor-label="effectivePaddingTop" id="699461944%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="effective-padding-top.html"><span>effective</span><wbr><span>Padding</span><wbr><span><span>Top</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="699461944%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="effective-padding-top.html">effectivePaddingTop</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="768799337%2FProperties%2F1278250025" anchor-label="effectivePaddingWidth" id="768799337%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="effective-padding-width.html"><span>effective</span><wbr><span>Padding</span><wbr><span><span>Width</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="768799337%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="effective-padding-width.html">effectivePaddingWidth</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-437993357%2FProperties%2F1278250025" anchor-label="flexDirection" id="-437993357%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="flex-direction.html"><span>flex</span><wbr><span><span>Direction</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-437993357%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="flex-direction.html">flexDirection</a><span class="token operator">: </span><a href="-flex-direction/index.html">FlexDirection</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="55622375%2FProperties%2F1278250025" anchor-label="flexGrow" id="55622375%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="flex-grow.html"><span>flex</span><wbr><span><span>Grow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="55622375%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="flex-grow.html">flexGrow</a><span class="token operator">: </span><a href="-flex-grow/index.html">FlexGrow</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1717351389%2FProperties%2F1278250025" anchor-label="flexShrink" id="1717351389%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="flex-shrink.html"><span>flex</span><wbr><span><span>Shrink</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1717351389%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="flex-shrink.html">flexShrink</a><span class="token operator">: </span><a href="-flex-grow/index.html">FlexGrow</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1485829518%2FProperties%2F1278250025" anchor-label="fontFamily" id="1485829518%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="font-family.html"><span>font</span><wbr><span><span>Family</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1485829518%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="font-family.html">fontFamily</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1171447253%2FProperties%2F1278250025" anchor-label="fontSize" id="-1171447253%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="font-size.html"><span>font</span><wbr><span><span>Size</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1171447253%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="font-size.html">fontSize</a><span class="token operator">: </span><a href="-linear-dimension/index.html">LinearDimension</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="446368695%2FProperties%2F1278250025" anchor-label="gridColumn" id="446368695%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="grid-column.html"><span>grid</span><wbr><span><span>Column</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="446368695%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="grid-column.html">gridColumn</a><span class="token operator">: </span><a href="-grid-population/index.html">GridPopulation</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1106719903%2FProperties%2F1278250025" anchor-label="gridRow" id="-1106719903%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="grid-row.html"><span>grid</span><wbr><span><span>Row</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1106719903%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="grid-row.html">gridRow</a><span class="token operator">: </span><a href="-grid-population/index.html">GridPopulation</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-54988918%2FProperties%2F1278250025" anchor-label="gridTemplateColumns" id="-54988918%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="grid-template-columns.html"><span>grid</span><wbr><span>Template</span><wbr><span><span>Columns</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-54988918%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="grid-template-columns.html">gridTemplateColumns</a><span class="token operator">: </span><a href="-grid-template/index.html">GridTemplate</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="70118036%2FProperties%2F1278250025" anchor-label="gridTemplateRows" id="70118036%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="grid-template-rows.html"><span>grid</span><wbr><span>Template</span><wbr><span><span>Rows</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="70118036%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="grid-template-rows.html">gridTemplateRows</a><span class="token operator">: </span><a href="-grid-template/index.html">GridTemplate</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1113991262%2FProperties%2F1278250025" anchor-label="height" id="-1113991262%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="height.html"><span><span>height</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1113991262%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="height.html">height</a><span class="token operator">: </span><a href="-linear-dimension/index.html">LinearDimension</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1370484670%2FProperties%2F1278250025" anchor-label="left" id="-1370484670%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="left.html"><span><span>left</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1370484670%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="left.html">left</a><span class="token operator">: </span><a href="-linear-dimension/index.html">LinearDimension</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-680217676%2FProperties%2F1278250025" anchor-label="marginBottom" id="-680217676%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="margin-bottom.html"><span>margin</span><wbr><span><span>Bottom</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-680217676%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="margin-bottom.html">marginBottom</a><span class="token operator">: </span><a href="-linear-dimension/index.html">LinearDimension</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1037552848%2FProperties%2F1278250025" anchor-label="marginLeft" id="1037552848%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="margin-left.html"><span>margin</span><wbr><span><span>Left</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1037552848%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="margin-left.html">marginLeft</a><span class="token operator">: </span><a href="-linear-dimension/index.html">LinearDimension</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1462506437%2FProperties%2F1278250025" anchor-label="marginRight" id="-1462506437%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="margin-right.html"><span>margin</span><wbr><span><span>Right</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1462506437%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="margin-right.html">marginRight</a><span class="token operator">: </span><a href="-linear-dimension/index.html">LinearDimension</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-536945996%2FProperties%2F1278250025" anchor-label="marginTop" id="-536945996%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="margin-top.html"><span>margin</span><wbr><span><span>Top</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-536945996%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="margin-top.html">marginTop</a><span class="token operator">: </span><a href="-linear-dimension/index.html">LinearDimension</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-559743427%2FProperties%2F1278250025" anchor-label="overflow" id="-559743427%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="overflow.html"><span><span>overflow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-559743427%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="overflow.html">overflow</a><span class="token operator">: </span><a href="-overflow/index.html">Overflow</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="423701897%2FProperties%2F1278250025" anchor-label="paddingBottom" id="423701897%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="padding-bottom.html"><span>padding</span><wbr><span><span>Bottom</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="423701897%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="padding-bottom.html">paddingBottom</a><span class="token operator">: </span><a href="-linear-dimension/index.html">LinearDimension</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1253226469%2FProperties%2F1278250025" anchor-label="paddingLeft" id="1253226469%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="padding-left.html"><span>padding</span><wbr><span><span>Left</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1253226469%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="padding-left.html">paddingLeft</a><span class="token operator">: </span><a href="-linear-dimension/index.html">LinearDimension</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="928408518%2FProperties%2F1278250025" anchor-label="paddingRight" id="928408518%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="padding-right.html"><span>padding</span><wbr><span><span>Right</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="928408518%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="padding-right.html">paddingRight</a><span class="token operator">: </span><a href="-linear-dimension/index.html">LinearDimension</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="994031871%2FProperties%2F1278250025" anchor-label="paddingTop" id="994031871%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="padding-top.html"><span>padding</span><wbr><span><span>Top</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="994031871%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="padding-top.html">paddingTop</a><span class="token operator">: </span><a href="-linear-dimension/index.html">LinearDimension</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1207637437%2FProperties%2F1278250025" anchor-label="percent" id="-1207637437%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="percent.html"><span><span>percent</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1207637437%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-number/index.html">Number</a><span class="token punctuation">.</span><a href="percent.html">percent</a><span class="token operator">: </span><a href="-linear-dimension/-percent/index.html">LinearDimension.Percent</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="203544292%2FProperties%2F1278250025" anchor-label="position" id="203544292%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="position.html"><span><span>position</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="203544292%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="position.html">position</a><span class="token operator">: </span><a href="-position/index.html">Position</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-7510508%2FProperties%2F1278250025" anchor-label="px" id="-7510508%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="px.html"><span><span>px</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-7510508%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-number/index.html">Number</a><span class="token punctuation">.</span><a href="px.html">px</a><span class="token operator">: </span><a href="-linear-dimension/-p-x/index.html">LinearDimension.PX</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1824651159%2FProperties%2F1278250025" anchor-label="rowGap" id="1824651159%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="row-gap.html"><span>row</span><wbr><span><span>Gap</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1824651159%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="row-gap.html">rowGap</a><span class="token operator">: </span><a href="-linear-dimension/index.html">LinearDimension</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1103777407%2FProperties%2F1278250025" anchor-label="textHorizontalAlign" id="-1103777407%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="text-horizontal-align.html"><span>text</span><wbr><span>Horizontal</span><wbr><span><span>Align</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1103777407%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="text-horizontal-align.html">textHorizontalAlign</a><span class="token operator">: </span><a href="-text-align/index.html">TextAlign</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-736430225%2FProperties%2F1278250025" anchor-label="textVerticalAlign" id="-736430225%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="text-vertical-align.html"><span>text</span><wbr><span>Vertical</span><wbr><span><span>Align</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-736430225%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="text-vertical-align.html">textVerticalAlign</a><span class="token operator">: </span><a href="-text-align/index.html">TextAlign</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1030266622%2FProperties%2F1278250025" anchor-label="top" id="-1030266622%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="top.html"><span><span>top</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1030266622%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="top.html">top</a><span class="token operator">: </span><a href="-linear-dimension/index.html">LinearDimension</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="651990963%2FProperties%2F1278250025" anchor-label="width" id="651990963%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="width.html"><span><span>width</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="651990963%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="width.html">width</a><span class="token operator">: </span><a href="-linear-dimension/index.html">LinearDimension</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2119304051%2FProperties%2F1278250025" anchor-label="zIndex" id="2119304051%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="z-index.html"><span>z</span><wbr><span><span>Index</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2119304051%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="z-index.html">zIndex</a><span class="token operator">: </span><a href="-z-index/index.html">ZIndex</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-95653165%2FFunctions%2F1278250025" anchor-label="and" id="-95653165%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="and.html"><span><span>and</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-95653165%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">infix </span><span class="token keyword">fun </span><a href="-compound-selector/index.html">CompoundSelector</a><span class="token punctuation">.</span><a href="and.html"><span class="token function">and</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><a href="-compound-selector/index.html">CompoundSelector</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-compound-selector/index.html">CompoundSelector</a></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="and.html"><span class="token function">and</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">selector<span class="token operator">: </span><a href="-compound-selector/index.html">CompoundSelector</a><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1055440839%2FFunctions%2F1278250025" anchor-label="child" id="-1055440839%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="child.html"><span><span>child</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1055440839%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="child.html"><span class="token function">child</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">selector<span class="token operator">: </span><a href="-compound-selector/index.html">CompoundSelector</a><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1836809805%2FFunctions%2F1278250025" anchor-label="defaultStyles" id="-1836809805%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="default-styles.html"><span>default</span><wbr><span><span>Styles</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1836809805%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="default-styles.html"><span class="token function">defaultStyles</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">controlBackground<span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator"> = </span>ColorRGBa(0.5, 0.5, 0.5)<span class="token punctuation">, </span></span><span class="parameter ">controlHoverBackground<span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator"> = </span>controlBackground.shade(1.5)<span class="token punctuation">, </span></span><span class="parameter ">controlTextColor<span class="token operator">: </span><a href="-color/index.html">Color</a><span class="token operator"> = </span>Color.RGBa(ColorRGBa.WHITE.shade(0.8))<span class="token punctuation">, </span></span><span class="parameter ">controlActiveColor<span class="token operator">: </span><a href="-color/index.html">Color</a><span class="token operator"> = </span>Color.RGBa(ColorRGBa.fromHex(0xf88379 ))<span class="token punctuation">, </span></span><span class="parameter ">controlFontSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span>defaultFontSize</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-style-sheet/index.html">StyleSheet</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1605040150%2FFunctions%2F1278250025" anchor-label="descendant" id="-1605040150%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="descendant.html"><span><span>descendant</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1605040150%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="descendant.html"><span class="token function">descendant</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">selector<span class="token operator">: </span><a href="-compound-selector/index.html">CompoundSelector</a><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-574935887%2FFunctions%2F1278250025" anchor-label="flatten" id="-574935887%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="flatten.html"><span><span>flatten</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-574935887%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="flatten.html"><span class="token function">flatten</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-style-sheet/index.html">StyleSheet</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1924174728%2FFunctions%2F1278250025" anchor-label="margins" id="1924174728%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="margins.html"><span><span>margins</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1924174728%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="margins.html"><span class="token function">margins</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">all<span class="token operator">: </span><a href="-linear-dimension/index.html">LinearDimension</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1493723412%2FFunctions%2F1278250025" anchor-label="padding" id="1493723412%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="padding.html"><span><span>padding</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1493723412%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><a href="padding.html"><span class="token function">padding</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">all<span class="token operator">: </span><a href="-linear-dimension/index.html">LinearDimension</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1652123318%2FFunctions%2F1278250025" anchor-label="styleSheet" id="-1652123318%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="style-sheet.html"><span>style</span><wbr><span><span>Sheet</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1652123318%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="style-sheet.html"><span class="token function">styleSheet</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">selector<span class="token operator">: </span><a href="-compound-selector/index.html">CompoundSelector</a><span class="token operator"> = </span>CompoundSelector.DUMMY<span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-style-sheet/index.html">StyleSheet</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

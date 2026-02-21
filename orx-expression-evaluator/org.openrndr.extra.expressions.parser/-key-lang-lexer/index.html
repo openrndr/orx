@@ -1,0 +1,1026 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>KeyLangLexer</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../../images/logo-icon.svg">
+<link href="../../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.0-dev.70+e4c3ecc
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-expression-evaluator/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-expression-evaluator/commonMain" data-filter=":orx-expression-evaluator/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="orx-expression-evaluator::org.openrndr.extra.expressions.parser/KeyLangLexer///PointingToDeclaration//1955833437">
+  <div class="breadcrumbs"><a href="../../index.html">orx-expression-evaluator</a><span class="delimiter">/</span><a href="../index.html">org.openrndr.extra.expressions.parser</a><span class="delimiter">/</span><span class="current">KeyLangLexer</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Key</span><wbr><span>Lang</span><wbr><span><span>Lexer</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="index.html">KeyLangLexer</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">input<span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime/CharStream///PointingToDeclaration/">CharStream</span></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.antlr.v4.kotlinruntime/Lexer///PointingToDeclaration/">Lexer</span></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="-189833389%2FConstructors%2F1955833437" anchor-label="KeyLangLexer" id="-189833389%2FConstructors%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-key-lang-lexer.html"><span>Key</span><wbr><span>Lang</span><wbr><span><span>Lexer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-189833389%2FConstructors%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">input<span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime/CharStream///PointingToDeclaration/">CharStream</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="1683577857%2FClasslikes%2F1955833437" anchor-label="Channels" id="1683577857%2FClasslikes%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-channels/index.html"><span><span>Channels</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1683577857%2FClasslikes%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">object </span><a href="-channels/index.html">Channels</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="822424929%2FClasslikes%2F1955833437" anchor-label="Modes" id="822424929%2FClasslikes%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-modes/index.html"><span><span>Modes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="822424929%2FClasslikes%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">object </span><a href="-modes/index.html">Modes</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2143492471%2FClasslikes%2F1955833437" anchor-label="Tokens" id="2143492471%2FClasslikes%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-tokens/index.html"><span><span>Tokens</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2143492471%2FClasslikes%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">object </span><a href="-tokens/index.html">Tokens</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="574514677%2FProperties%2F1955833437" anchor-label="_hitEOF" id="574514677%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#574514677%2FProperties%2F1955833437"><span>_</span><wbr><span>hitEOF</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="574514677%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html#574514677%2FProperties%2F1955833437">_hitEOF</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1228126779%2FProperties%2F1955833437" anchor-label="_mode" id="1228126779%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1228126779%2FProperties%2F1955833437"><span>_</span><wbr><span>mode</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1228126779%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html#1228126779%2FProperties%2F1955833437">_mode</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="892214935%2FProperties%2F1955833437" anchor-label="_modeStack" id="892214935%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#892214935%2FProperties%2F1955833437"><span>_</span><wbr><span>modeStack</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="892214935%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="index.html#892214935%2FProperties%2F1955833437">_modeStack</a><span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime.misc/IntegerStack///PointingToDeclaration/">IntegerStack</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1739989519%2FProperties%2F1955833437" anchor-label="_text" id="-1739989519%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1739989519%2FProperties%2F1955833437"><span>_</span><wbr><span>text</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1739989519%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html#-1739989519%2FProperties%2F1955833437">_text</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2040382217%2FProperties%2F1955833437" anchor-label="_tokenStartCharIndex" id="2040382217%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#2040382217%2FProperties%2F1955833437"><span>_</span><wbr><span>token</span><wbr><span>Start</span><wbr><span>Char</span><wbr><span><span>Index</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2040382217%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html#2040382217%2FProperties%2F1955833437">_tokenStartCharIndex</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="486652573%2FProperties%2F1955833437" anchor-label="_tokenStartCharPositionInLine" id="486652573%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#486652573%2FProperties%2F1955833437"><span>_</span><wbr><span>token</span><wbr><span>Start</span><wbr><span>Char</span><wbr><span>Position</span><wbr><span>In</span><wbr><span><span>Line</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="486652573%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html#486652573%2FProperties%2F1955833437">_tokenStartCharPositionInLine</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1680075361%2FProperties%2F1955833437" anchor-label="_tokenStartLine" id="1680075361%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1680075361%2FProperties%2F1955833437"><span>_</span><wbr><span>token</span><wbr><span>Start</span><wbr><span><span>Line</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1680075361%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html#1680075361%2FProperties%2F1955833437">_tokenStartLine</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1350794306%2FProperties%2F1955833437" anchor-label="allTokens" id="1350794306%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1350794306%2FProperties%2F1955833437"><span>all</span><wbr><span><span>Tokens</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1350794306%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="index.html#1350794306%2FProperties%2F1955833437">allTokens</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.antlr.v4.kotlinruntime/Token///PointingToDeclaration/">Token</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-160036285%2FProperties%2F1955833437" anchor-label="atn" id="-160036285%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="atn.html"><span><span>atn</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-160036285%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="atn.html">atn</a><span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime.atn/ATN///PointingToDeclaration/">ATN</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="175022810%2FProperties%2F1955833437" anchor-label="channel" id="175022810%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#175022810%2FProperties%2F1955833437"><span><span>channel</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="175022810%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html#175022810%2FProperties%2F1955833437">channel</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1978215351%2FProperties%2F1955833437" anchor-label="channelNames" id="1978215351%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="channel-names.html"><span>channel</span><wbr><span><span>Names</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1978215351%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="channel-names.html">channelNames</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-478477599%2FProperties%2F1955833437" anchor-label="charIndex" id="-478477599%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-478477599%2FProperties%2F1955833437"><span>char</span><wbr><span><span>Index</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-478477599%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="index.html#-478477599%2FProperties%2F1955833437">charIndex</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1399665211%2FProperties%2F1955833437" anchor-label="charPositionInLine" id="-1399665211%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1399665211%2FProperties%2F1955833437"><span>char</span><wbr><span>Position</span><wbr><span>In</span><wbr><span><span>Line</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1399665211%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="index.html#-1399665211%2FProperties%2F1955833437">charPositionInLine</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="961002901%2FProperties%2F1955833437" anchor-label="errorListenerDispatch" id="961002901%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-key-lang-parser/index.html#961002901%2FProperties%2F1955833437"><span>error</span><wbr><span>Listener</span><wbr><span><span>Dispatch</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="961002901%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="../-key-lang-parser/index.html#961002901%2FProperties%2F1955833437">errorListenerDispatch</a><span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime/ANTLRErrorListener///PointingToDeclaration/">ANTLRErrorListener</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1837478472%2FProperties%2F1955833437" anchor-label="errorListeners" id="-1837478472%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-key-lang-parser/index.html#-1837478472%2FProperties%2F1955833437"><span>error</span><wbr><span><span>Listeners</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1837478472%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="../-key-lang-parser/index.html#-1837478472%2FProperties%2F1955833437">errorListeners</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.antlr.v4.kotlinruntime/ANTLRErrorListener///PointingToDeclaration/">ANTLRErrorListener</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-290364464%2FProperties%2F1955833437" anchor-label="grammarFileName" id="-290364464%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="grammar-file-name.html"><span>grammar</span><wbr><span>File</span><wbr><span><span>Name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-290364464%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="grammar-file-name.html">grammarFileName</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1439273517%2FProperties%2F1955833437" anchor-label="inputStream" id="-1439273517%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1439273517%2FProperties%2F1955833437"><span>input</span><wbr><span><span>Stream</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1439273517%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="index.html#-1439273517%2FProperties%2F1955833437">inputStream</a><span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime/CharStream///PointingToDeclaration/">CharStream</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1720007100%2FProperties%2F1955833437" anchor-label="interpreter" id="-1720007100%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="interpreter.html"><span><span>interpreter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1720007100%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="interpreter.html">interpreter</a><span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime.atn/LexerATNSimulator///PointingToDeclaration/">LexerATNSimulator</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="650388361%2FProperties%2F1955833437" anchor-label="line" id="650388361%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#650388361%2FProperties%2F1955833437"><span><span>line</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="650388361%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="index.html#650388361%2FProperties%2F1955833437">line</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="550341625%2FProperties%2F1955833437" anchor-label="modeNames" id="550341625%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="mode-names.html"><span>mode</span><wbr><span><span>Names</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="550341625%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="mode-names.html">modeNames</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1594761834%2FProperties%2F1955833437" anchor-label="parseInfo" id="1594761834%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1594761834%2FProperties%2F1955833437"><span>parse</span><wbr><span><span>Info</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1594761834%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="index.html#1594761834%2FProperties%2F1955833437">parseInfo</a><span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime.atn/ParseInfo///PointingToDeclaration/">ParseInfo</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="150733801%2FProperties%2F1955833437" anchor-label="ruleIndexMap" id="150733801%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-key-lang-parser/index.html#150733801%2FProperties%2F1955833437"><span>rule</span><wbr><span>Index</span><wbr><span><span>Map</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="150733801%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="../-key-lang-parser/index.html#150733801%2FProperties%2F1955833437">ruleIndexMap</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2030254190%2FProperties%2F1955833437" anchor-label="ruleNames" id="-2030254190%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="rule-names.html"><span>rule</span><wbr><span><span>Names</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2030254190%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="rule-names.html">ruleNames</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="113257639%2FProperties%2F1955833437" anchor-label="serializedATN" id="113257639%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="serialized-a-t-n.html"><span>serialized</span><wbr><span><span>ATN</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="113257639%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="serialized-a-t-n.html">serializedATN</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="278385271%2FProperties%2F1955833437" anchor-label="sourceName" id="278385271%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#278385271%2FProperties%2F1955833437"><span>source</span><wbr><span><span>Name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="278385271%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="index.html#278385271%2FProperties%2F1955833437">sourceName</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1417824038%2FProperties%2F1955833437" anchor-label="state" id="-1417824038%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-key-lang-parser/index.html#-1417824038%2FProperties%2F1955833437"><span><span>state</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1417824038%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="../-key-lang-parser/index.html#-1417824038%2FProperties%2F1955833437">state</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="115716208%2FProperties%2F1955833437" anchor-label="text" id="115716208%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#115716208%2FProperties%2F1955833437"><span><span>text</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="115716208%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html#115716208%2FProperties%2F1955833437">text</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="816740004%2FProperties%2F1955833437" anchor-label="token" id="816740004%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#816740004%2FProperties%2F1955833437"><span><span>token</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="816740004%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">var </span><a href="index.html#816740004%2FProperties%2F1955833437">token</a><span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime/Token///PointingToDeclaration/">Token</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1106034356%2FProperties%2F1955833437" anchor-label="tokenFactory" id="-1106034356%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1106034356%2FProperties%2F1955833437"><span>token</span><wbr><span><span>Factory</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1106034356%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="index.html#-1106034356%2FProperties%2F1955833437">tokenFactory</a><span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime/TokenFactory///PointingToDeclaration/">TokenFactory</span><span class="token operator">&lt;</span><span class="token keyword">out </span><span data-unresolved-link="org.antlr.v4.kotlinruntime/Token///PointingToDeclaration/">Token</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="589397774%2FProperties%2F1955833437" anchor-label="tokenNames" id="589397774%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#589397774%2FProperties%2F1955833437"><span>token</span><wbr><span><span>Names</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="589397774%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="index.html#589397774%2FProperties%2F1955833437"><strike>tokenNames</strike></a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="416620550%2FProperties%2F1955833437" anchor-label="tokenTypeMap" id="416620550%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-key-lang-parser/index.html#416620550%2FProperties%2F1955833437"><span>token</span><wbr><span>Type</span><wbr><span><span>Map</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="416620550%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="../-key-lang-parser/index.html#416620550%2FProperties%2F1955833437">tokenTypeMap</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-252322045%2FProperties%2F1955833437" anchor-label="type" id="-252322045%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-252322045%2FProperties%2F1955833437"><span><span>type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-252322045%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html#-252322045%2FProperties%2F1955833437">type</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-366671434%2FProperties%2F1955833437" anchor-label="vocabulary" id="-366671434%2FProperties%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="vocabulary.html"><span><span>vocabulary</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-366671434%2FProperties%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="vocabulary.html">vocabulary</a><span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime/Vocabulary///PointingToDeclaration/">Vocabulary</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-311335839%2FFunctions%2F1955833437" anchor-label="action" id="-311335839%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-key-lang-parser/index.html#-311335839%2FFunctions%2F1955833437"><span><span>action</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-311335839%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../-key-lang-parser/index.html#-311335839%2FFunctions%2F1955833437"><span class="token function">action</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">_localctx<span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime/RuleContext///PointingToDeclaration/">RuleContext</span><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">ruleIndex<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">actionIndex<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="7200899%2FFunctions%2F1955833437" anchor-label="addErrorListener" id="7200899%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-key-lang-parser/index.html#7200899%2FFunctions%2F1955833437"><span>add</span><wbr><span>Error</span><wbr><span><span>Listener</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="7200899%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-key-lang-parser/index.html#7200899%2FFunctions%2F1955833437"><span class="token function">addErrorListener</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">listener<span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime/ANTLRErrorListener///PointingToDeclaration/">ANTLRErrorListener</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1468012875%2FFunctions%2F1955833437" anchor-label="emit" id="1468012875%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-973108086%2FFunctions%2F1955833437"><span><span>emit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1468012875%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-973108086%2FFunctions%2F1955833437"><span class="token function">emit</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime/Token///PointingToDeclaration/">Token</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#1027088973%2FFunctions%2F1955833437"><span class="token function">emit</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">token<span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime/Token///PointingToDeclaration/">Token</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1142174092%2FFunctions%2F1955833437" anchor-label="emitEOF" id="-1142174092%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1142174092%2FFunctions%2F1955833437"><span>emit</span><wbr><span><span>EOF</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1142174092%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1142174092%2FFunctions%2F1955833437"><span class="token function">emitEOF</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime/Token///PointingToDeclaration/">Token</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="864011925%2FFunctions%2F1955833437" anchor-label="getCharErrorDisplay" id="864011925%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#864011925%2FFunctions%2F1955833437"><span>get</span><wbr><span>Char</span><wbr><span>Error</span><wbr><span><span>Display</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="864011925%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#864011925%2FFunctions%2F1955833437"><span class="token function">getCharErrorDisplay</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">c<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1108259594%2FFunctions%2F1955833437" anchor-label="getErrorDisplay" id="-1108259594%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#165836235%2FFunctions%2F1955833437"><span>get</span><wbr><span>Error</span><wbr><span><span>Display</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1108259594%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#165836235%2FFunctions%2F1955833437"><span class="token function">getErrorDisplay</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">c<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1152218697%2FFunctions%2F1955833437"><span class="token function">getErrorDisplay</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">s<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="368749374%2FFunctions%2F1955833437" anchor-label="getErrorHeader" id="368749374%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-key-lang-parser/index.html#368749374%2FFunctions%2F1955833437"><span>get</span><wbr><span>Error</span><wbr><span><span>Header</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="368749374%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-key-lang-parser/index.html#368749374%2FFunctions%2F1955833437"><span class="token function">getErrorHeader</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">e<span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime/RecognitionException///PointingToDeclaration/">RecognitionException</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1727983918%2FFunctions%2F1955833437" anchor-label="getTokenErrorDisplay" id="1727983918%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-key-lang-parser/index.html#1727983918%2FFunctions%2F1955833437"><span>get</span><wbr><span>Token</span><wbr><span>Error</span><wbr><span><span>Display</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1727983918%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-key-lang-parser/index.html#1727983918%2FFunctions%2F1955833437"><span class="token function"><strike>getTokenErrorDisplay</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">t<span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime/Token///PointingToDeclaration/">Token</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-45701550%2FFunctions%2F1955833437" anchor-label="getTokenType" id="-45701550%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-key-lang-parser/index.html#-45701550%2FFunctions%2F1955833437"><span>get</span><wbr><span>Token</span><wbr><span><span>Type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-45701550%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-key-lang-parser/index.html#-45701550%2FFunctions%2F1955833437"><span class="token function">getTokenType</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">tokenName<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2145360424%2FFunctions%2F1955833437" anchor-label="mode" id="-2145360424%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-2145360424%2FFunctions%2F1955833437"><span><span>mode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2145360424%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-2145360424%2FFunctions%2F1955833437"><span class="token function">mode</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">m<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-633440440%2FFunctions%2F1955833437" anchor-label="more" id="-633440440%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-633440440%2FFunctions%2F1955833437"><span><span>more</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-633440440%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-633440440%2FFunctions%2F1955833437"><span class="token function">more</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="611172983%2FFunctions%2F1955833437" anchor-label="nextToken" id="611172983%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#611172983%2FFunctions%2F1955833437"><span>next</span><wbr><span><span>Token</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="611172983%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#611172983%2FFunctions%2F1955833437"><span class="token function">nextToken</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime/Token///PointingToDeclaration/">Token</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2094114947%2FFunctions%2F1955833437" anchor-label="notifyListeners" id="2094114947%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#2094114947%2FFunctions%2F1955833437"><span>notify</span><wbr><span><span>Listeners</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2094114947%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#2094114947%2FFunctions%2F1955833437"><span class="token function">notifyListeners</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">e<span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime/LexerNoViableAltException///PointingToDeclaration/">LexerNoViableAltException</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-392190615%2FFunctions%2F1955833437" anchor-label="popMode" id="-392190615%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-392190615%2FFunctions%2F1955833437"><span>pop</span><wbr><span><span>Mode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-392190615%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-392190615%2FFunctions%2F1955833437"><span class="token function">popMode</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="269742342%2FFunctions%2F1955833437" anchor-label="precpred" id="269742342%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#269742342%2FFunctions%2F1955833437"><span><span>precpred</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="269742342%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#269742342%2FFunctions%2F1955833437"><span class="token function">precpred</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">localctx<span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime/RuleContext///PointingToDeclaration/">RuleContext</span><span class="token punctuation">, </span></span><span class="parameter ">precedence<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1673804450%2FFunctions%2F1955833437" anchor-label="pushMode" id="-1673804450%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1673804450%2FFunctions%2F1955833437"><span>push</span><wbr><span><span>Mode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1673804450%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1673804450%2FFunctions%2F1955833437"><span class="token function">pushMode</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">m<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-933147170%2FFunctions%2F1955833437" anchor-label="recover" id="-933147170%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1144638165%2FFunctions%2F1955833437"><span><span>recover</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-933147170%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#1144638165%2FFunctions%2F1955833437"><span class="token function">recover</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">e<span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime/LexerNoViableAltException///PointingToDeclaration/">LexerNoViableAltException</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-648069931%2FFunctions%2F1955833437"><span class="token function">recover</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">re<span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime/RecognitionException///PointingToDeclaration/">RecognitionException</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="259880932%2FFunctions%2F1955833437" anchor-label="removeErrorListener" id="259880932%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-key-lang-parser/index.html#259880932%2FFunctions%2F1955833437"><span>remove</span><wbr><span>Error</span><wbr><span><span>Listener</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="259880932%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-key-lang-parser/index.html#259880932%2FFunctions%2F1955833437"><span class="token function">removeErrorListener</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">listener<span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime/ANTLRErrorListener///PointingToDeclaration/">ANTLRErrorListener</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-374803692%2FFunctions%2F1955833437" anchor-label="removeErrorListeners" id="-374803692%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-key-lang-parser/index.html#-374803692%2FFunctions%2F1955833437"><span>remove</span><wbr><span>Error</span><wbr><span><span>Listeners</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-374803692%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-key-lang-parser/index.html#-374803692%2FFunctions%2F1955833437"><span class="token function">removeErrorListeners</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="601251854%2FFunctions%2F1955833437" anchor-label="reset" id="601251854%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#601251854%2FFunctions%2F1955833437"><span><span>reset</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="601251854%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#601251854%2FFunctions%2F1955833437"><span class="token function">reset</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1936770997%2FFunctions%2F1955833437" anchor-label="sempred" id="-1936770997%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1936770997%2FFunctions%2F1955833437"><span><span>sempred</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1936770997%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1936770997%2FFunctions%2F1955833437"><span class="token function">sempred</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">_localctx<span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime/RuleContext///PointingToDeclaration/">RuleContext</span><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">ruleIndex<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">predIndex<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="525774942%2FFunctions%2F1955833437" anchor-label="skip" id="525774942%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#525774942%2FFunctions%2F1955833437"><span><span>skip</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="525774942%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#525774942%2FFunctions%2F1955833437"><span class="token function">skip</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

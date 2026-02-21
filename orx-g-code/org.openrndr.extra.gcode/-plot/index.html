@@ -1,0 +1,717 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>Plot</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../../images/logo-icon.svg">
+<link href="../../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.0-dev.70+e4c3ecc
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":orx-g-code/jvmMain">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-g-code/jvmMain" data-filter=":orx-g-code/jvmMain">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="orx-g-code::org.openrndr.extra.gcode/Plot///PointingToDeclaration//5498688">
+  <div class="breadcrumbs"><a href="../../index.html">orx-g-code</a><span class="delimiter">/</span><a href="../index.html">org.openrndr.extra.gcode</a><span class="delimiter">/</span><span class="current">Plot</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Plot</span></span></h1>
+    <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+      <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">Plot</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">dimensions<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>origin<span class="token operator">: </span><a href="../-origin/index.html">Origin</a><span class="token operator"> = </span>Origin.BOTTOM_LEFT<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>generator<span class="token operator">: </span><a href="../-generator/index.html">Generator</a><span class="token operator"> = </span>noopGenerator()<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>distanceTolerance<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.5</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>layerMode<span class="token operator">: </span><a href="../-layer-mode/index.html">LayerMode</a><span class="token operator"> = </span>LayerMode.SINGLE_FILE<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>defaultDrawColor<span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator"> = </span>ColorRGBa.BLACK<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>defaultPenWeight<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1.0</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>backgroundColor<span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator"> = </span>ColorRGBa.WHITE<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>manualRedraw<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>renderMode<span class="token operator">: </span><a href="../-render-mode/index.html">RenderMode</a><span class="token operator"> = </span>RenderMode.AFTER<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>gCodeBind<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span><span class="token string">"g"</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>redrawBind<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span><span class="token string">"r"</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>folder<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span><span class="token string">"gcode"</span></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.openrndr/Extension///PointingToDeclaration/">Extension</span><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/openrndr/orx/blob/master/orx-g-code/src/jvmMain/kotlin/Plot.kt#L47">source</a>)</span></span></div><p class="paragraph">Configuration: When <a href="../../../orx-g-code/org.openrndr.extra.gcode/-plot/--root--.html">manualRedraw</a> is true, the programs presentation mode is set to Manual on startup. "r" to trigger redraw. When <a href="../../../orx-g-code/org.openrndr.extra.gcode/-plot/--root--.html">renderMode</a> is set to manual, the plot will not be rendered to the programms drawer. Then <a href="render.html">render</a> has to be called to draw the plot. <a href="../../../orx-g-code/org.openrndr.extra.gcode/-plot/--root--.html">origin</a></p></div>    </div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="-1151251282%2FConstructors%2F5498688" anchor-label="Plot" id="-1151251282%2FConstructors%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-plot.html"><span><span>Plot</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1151251282%2FConstructors%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">dimensions<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token punctuation">, </span></span><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">origin<span class="token operator">: </span><a href="../-origin/index.html">Origin</a><span class="token operator"> = </span>Origin.BOTTOM_LEFT<span class="token punctuation">, </span></span><span class="parameter ">generator<span class="token operator">: </span><a href="../-generator/index.html">Generator</a><span class="token operator"> = </span>noopGenerator()<span class="token punctuation">, </span></span><span class="parameter ">distanceTolerance<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.5</span><span class="token punctuation">, </span></span><span class="parameter ">layerMode<span class="token operator">: </span><a href="../-layer-mode/index.html">LayerMode</a><span class="token operator"> = </span>LayerMode.SINGLE_FILE<span class="token punctuation">, </span></span><span class="parameter ">defaultDrawColor<span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator"> = </span>ColorRGBa.BLACK<span class="token punctuation">, </span></span><span class="parameter ">defaultPenWeight<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1.0</span><span class="token punctuation">, </span></span><span class="parameter ">backgroundColor<span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator"> = </span>ColorRGBa.WHITE<span class="token punctuation">, </span></span><span class="parameter ">manualRedraw<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span><span class="token punctuation">, </span></span><span class="parameter ">renderMode<span class="token operator">: </span><a href="../-render-mode/index.html">RenderMode</a><span class="token operator"> = </span>RenderMode.AFTER<span class="token punctuation">, </span></span><span class="parameter ">gCodeBind<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span><span class="token string">"g"</span><span class="token punctuation">, </span></span><span class="parameter ">redrawBind<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span><span class="token string">"r"</span><span class="token punctuation">, </span></span><span class="parameter ">folder<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span><span class="token string">"gcode"</span></span></span><span class="token punctuation">)</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-961908755%2FProperties%2F5498688" anchor-label="backgroundColor" id="-961908755%2FProperties%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="background-color.html"><span>background</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-961908755%2FProperties%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="background-color.html">backgroundColor</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1804437126%2FProperties%2F5498688" anchor-label="defaultDrawColor" id="-1804437126%2FProperties%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="default-draw-color.html"><span>default</span><wbr><span>Draw</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1804437126%2FProperties%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="default-draw-color.html">defaultDrawColor</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="952815944%2FProperties%2F5498688" anchor-label="defaultPenWeight" id="952815944%2FProperties%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="default-pen-weight.html"><span>default</span><wbr><span>Pen</span><wbr><span><span>Weight</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="952815944%2FProperties%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="default-pen-weight.html">defaultPenWeight</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1912097610%2FProperties%2F5498688" anchor-label="distanceTolerance" id="1912097610%2FProperties%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="distance-tolerance.html"><span>distance</span><wbr><span><span>Tolerance</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1912097610%2FProperties%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="distance-tolerance.html">distanceTolerance</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="227608437%2FProperties%2F5498688" anchor-label="docBounds" id="227608437%2FProperties%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="doc-bounds.html"><span>doc</span><wbr><span><span>Bounds</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="227608437%2FProperties%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="doc-bounds.html">docBounds</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2015452671%2FProperties%2F5498688" anchor-label="enabled" id="-2015452671%2FProperties%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="enabled.html"><span><span>enabled</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2015452671%2FProperties%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="enabled.html">enabled</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="355454986%2FProperties%2F5498688" anchor-label="folder" id="355454986%2FProperties%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="folder.html"><span><span>folder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="355454986%2FProperties%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="folder.html">folder</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The folder where the g-code will be saved to. Default value is "gcode", saves in current working directory when set to null.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2025456817%2FProperties%2F5498688" anchor-label="gCodeBind" id="2025456817%2FProperties%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="g-code-bind.html"><span>g</span><wbr><span>Code</span><wbr><span><span>Bind</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2025456817%2FProperties%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="g-code-bind.html">gCodeBind</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1908004207%2FProperties%2F5498688" anchor-label="generator" id="1908004207%2FProperties%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="generator.html"><span><span>generator</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1908004207%2FProperties%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="generator.html">generator</a><span class="token operator">: </span><a href="../-generator/index.html">Generator</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="154437838%2FProperties%2F5498688" anchor-label="layerMode" id="154437838%2FProperties%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="layer-mode.html"><span>layer</span><wbr><span><span>Mode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="154437838%2FProperties%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="layer-mode.html">layerMode</a><span class="token operator">: </span><a href="../-layer-mode/index.html">LayerMode</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2114579894%2FProperties%2F5498688" anchor-label="layers" id="2114579894%2FProperties%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="layers.html"><span><span>layers</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2114579894%2FProperties%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="layers.html">layers</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="../../../orx-composition/org.openrndr.extra.composition/-composition/index.html">Composition</a><span class="token operator">&gt;</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2076495291%2FProperties%2F5498688" anchor-label="manualRedraw" id="2076495291%2FProperties%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="manual-redraw.html"><span>manual</span><wbr><span><span>Redraw</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2076495291%2FProperties%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="manual-redraw.html">manualRedraw</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1804361907%2FProperties%2F5498688" anchor-label="name" id="-1804361907%2FProperties%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="name.html"><span><span>name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1804361907%2FProperties%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="name.html">name</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="130497618%2FProperties%2F5498688" anchor-label="origin" id="130497618%2FProperties%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="origin.html"><span><span>origin</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="130497618%2FProperties%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="origin.html">origin</a><span class="token operator">: </span><a href="../-origin/index.html">Origin</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2112706844%2FProperties%2F5498688" anchor-label="redrawBind" id="-2112706844%2FProperties%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="redraw-bind.html"><span>redraw</span><wbr><span><span>Bind</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2112706844%2FProperties%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="redraw-bind.html">redrawBind</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2049175807%2FProperties%2F5498688" anchor-label="renderMode" id="2049175807%2FProperties%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="render-mode.html"><span>render</span><wbr><span><span>Mode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2049175807%2FProperties%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="render-mode.html">renderMode</a><span class="token operator">: </span><a href="../-render-mode/index.html">RenderMode</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="1619917748%2FFunctions%2F5498688" anchor-label="afterDraw" id="1619917748%2FFunctions%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="after-draw.html"><span>after</span><wbr><span><span>Draw</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1619917748%2FFunctions%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="after-draw.html"><span class="token function">afterDraw</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">drawer<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">, </span></span><span class="parameter ">program<span class="token operator">: </span><span data-unresolved-link="org.openrndr/Program///PointingToDeclaration/">Program</span></span></span><span class="token punctuation">)</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="740355841%2FFunctions%2F5498688" anchor-label="beforeDraw" id="740355841%2FFunctions%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="before-draw.html"><span>before</span><wbr><span><span>Draw</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="740355841%2FFunctions%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="before-draw.html"><span class="token function">beforeDraw</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">drawer<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">, </span></span><span class="parameter ">program<span class="token operator">: </span><span data-unresolved-link="org.openrndr/Program///PointingToDeclaration/">Program</span></span></span><span class="token punctuation">)</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="919036660%2FFunctions%2F5498688" anchor-label="draw" id="919036660%2FFunctions%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="draw.html"><span><span>draw</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="919036660%2FFunctions%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="draw.html"><span class="token function">draw</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">drawFunction<span class="token operator">: </span><a href="../-draw-function/index.html">DrawFunction</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Draws to the "default" layer. See <a href="layer.html">layer</a>.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2033158515%2FFunctions%2F5498688" anchor-label="forEachLayer" id="-2033158515%2FFunctions%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="for-each-layer.html"><span>for</span><wbr><span>Each</span><wbr><span><span>Layer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2033158515%2FFunctions%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="for-each-layer.html"><span class="token function">forEachLayer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">block<span class="token operator">: </span><span class="token punctuation">(</span>layer<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span>composition<span class="token operator">: </span><a href="../../../orx-composition/org.openrndr.extra.composition/-composition/index.html">Composition</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Executes block once for each layer in the order they were added.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="535133612%2FFunctions%2F5498688" anchor-label="layer" id="535133612%2FFunctions%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="layer.html"><span><span>layer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="535133612%2FFunctions%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="layer.html"><span class="token function">layer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">drawFunction<span class="token operator">: </span><a href="../-draw-function/index.html">DrawFunction</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Draws to the given layer. If the layer with given name already exists, it is replaced.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-761481065%2FFunctions%2F5498688" anchor-label="render" id="-761481065%2FFunctions%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="render.html"><span><span>render</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-761481065%2FFunctions%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="render.html"><span class="token function">render</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">drawer<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Renders this plot to the given drawer.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-622647976%2FFunctions%2F5498688" anchor-label="scale" id="-622647976%2FFunctions%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="scale.html"><span><span>scale</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-622647976%2FFunctions%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="scale.html"><span class="token function">scale</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">Scale from document space to screen space.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-739215929%2FFunctions%2F5498688" anchor-label="scaled" id="-739215929%2FFunctions%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="scaled.html"><span><span>scaled</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-739215929%2FFunctions%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="scaled.html"><span class="token function">scaled</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">v<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">Double <a href="scaled.html">v</a> scaled from document space to screen space.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="scaled.html"><span class="token function">scaled</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">v<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span></div><div class="brief "><p class="paragraph">Vector <a href="scaled.html">v</a> scaled from document space to screen space.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="scaled.html"><span class="token function">scaled</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">drawer<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">, </span></span><span class="parameter ">drawFunction<span class="token operator">: </span><span class="token punctuation">(</span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Drawer scaled to document space, to fit to the window.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1736513103%2FFunctions%2F5498688" anchor-label="setup" id="-1736513103%2FFunctions%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="setup.html"><span><span>setup</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1736513103%2FFunctions%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="setup.html"><span class="token function">setup</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">program<span class="token operator">: </span><span data-unresolved-link="org.openrndr/Program///PointingToDeclaration/">Program</span></span></span><span class="token punctuation">)</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="245346354%2FFunctions%2F5498688" anchor-label="shutdown" id="245346354%2FFunctions%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#245346354%2FFunctions%2F5498688"><span><span>shutdown</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="245346354%2FFunctions%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#245346354%2FFunctions%2F5498688"><span class="token function">shutdown</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">program<span class="token operator">: </span><span data-unresolved-link="org.openrndr/Program///PointingToDeclaration/">Program</span></span></span><span class="token punctuation">)</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="43587470%2FFunctions%2F5498688" anchor-label="toCombinedGcode" id="43587470%2FFunctions%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="to-combined-gcode.html"><span>to</span><wbr><span>Combined</span><wbr><span><span>Gcode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="43587470%2FFunctions%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="to-combined-gcode.html"><span class="token function">toCombinedGcode</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Combines the gcode of all layers.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1520177001%2FFunctions%2F5498688" anchor-label="toDocumentSpace" id="-1520177001%2FFunctions%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="to-document-space.html"><span>to</span><wbr><span>Document</span><wbr><span><span>Space</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1520177001%2FFunctions%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="to-document-space.html"><span class="token function">toDocumentSpace</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span></div><div class="brief "><p class="paragraph">Scales and translates the given position from screen space to document space. Can be used to translate mouse events to draw to the plot.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1738591587%2FFunctions%2F5498688" anchor-label="toSplitGcode" id="1738591587%2FFunctions%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="to-split-gcode.html"><span>to</span><wbr><span>Split</span><wbr><span><span>Gcode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1738591587%2FFunctions%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="to-split-gcode.html"><span class="token function">toSplitGcode</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns a map of layer names to gcode.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="367697045%2FFunctions%2F5498688" anchor-label="writeAllLayersToSingleFile" id="367697045%2FFunctions%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="write-all-layers-to-single-file.html"><span>write</span><wbr><span>All</span><wbr><span>Layers</span><wbr><span>To</span><wbr><span>Single</span><wbr><span><span>File</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="367697045%2FFunctions%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="write-all-layers-to-single-file.html"><span class="token function">writeAllLayersToSingleFile</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Writes all layers to a single file.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1326057008%2FFunctions%2F5498688" anchor-label="writeEachLayerToFile" id="-1326057008%2FFunctions%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="write-each-layer-to-file.html"><span>write</span><wbr><span>Each</span><wbr><span>Layer</span><wbr><span>To</span><wbr><span><span>File</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1326057008%2FFunctions%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="write-each-layer-to-file.html"><span class="token function">writeEachLayerToFile</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Writes each layer to a separate file.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="793312438%2FFunctions%2F5498688" anchor-label="writeFile" id="793312438%2FFunctions%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="write-file.html"><span>write</span><wbr><span><span>File</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="793312438%2FFunctions%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="write-file.html"><span class="token function">writeFile</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">extension<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"gcode"</span><span class="token punctuation">, </span></span><span class="parameter ">content<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Writes <a href="write-file.html">content</a> to file "<a href="../../../orx-g-code/org.openrndr.extra.gcode/-plot/--root--.html">folder</a>/timestamp-<a href="write-file.html">name</a>.<a href="write-file.html">extension</a>"</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="346474147%2FFunctions%2F5498688" anchor-label="writeGcode" id="346474147%2FFunctions%2F5498688" data-filterable-set=":orx-g-code/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="write-gcode.html"><span>write</span><wbr><span><span>Gcode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="346474147%2FFunctions%2F5498688"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-g-code/jvmMain" data-filterable-set=":orx-g-code/jvmMain" data-active="" data-toggle=":orx-g-code/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="write-gcode.html"><span class="token function">writeGcode</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Writes the gcode to file(s) based on <a href="../../../orx-g-code/org.openrndr.extra.gcode/-plot/--root--.html">layerMode</a>, <a href="../../../orx-g-code/org.openrndr.extra.gcode/-plot/--root--.html">name</a> and <a href="../../../orx-g-code/org.openrndr.extra.gcode/-plot/--root--.html">folder</a>.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

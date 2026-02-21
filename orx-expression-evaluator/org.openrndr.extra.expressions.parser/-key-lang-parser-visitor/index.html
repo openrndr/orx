@@ -1,0 +1,714 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>KeyLangParserVisitor</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../../images/logo-icon.svg">
+<link href="../../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.0-dev.70+e4c3ecc
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-expression-evaluator/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-expression-evaluator/commonMain" data-filter=":orx-expression-evaluator/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="orx-expression-evaluator::org.openrndr.extra.expressions.parser/KeyLangParserVisitor///PointingToDeclaration//1955833437">
+  <div class="breadcrumbs"><a href="../../index.html">orx-expression-evaluator</a><span class="delimiter">/</span><a href="../index.html">org.openrndr.extra.expressions.parser</a><span class="delimiter">/</span><span class="current">KeyLangParserVisitor</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Key</span><wbr><span>Lang</span><wbr><span>Parser</span><wbr><span><span>Visitor</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">KeyLangParserVisitor</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt;</span> : <span data-unresolved-link="org.antlr.v4.kotlinruntime.tree/ParseTreeVisitor///PointingToDeclaration/">ParseTreeVisitor</span><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt; </span></div><p class="paragraph">This interface defines a complete generic visitor for a parse tree produced by <a href="../-key-lang-parser/index.html">KeyLangParser</a>.</p><h4 class="tableheader">Parameters</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>T</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The return type of the visit operation. Use <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a> for operations with no return type</p></div></div></div></div></div><h4 class="tableheader">Inheritors</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-key-lang-parser-base-visitor/index.html">KeyLangParserBaseVisitor</a></div></span></div><div></div></div></div></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="907055094%2FFunctions%2F1955833437" anchor-label="visit" id="907055094%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#907055094%2FFunctions%2F1955833437"><span><span>visit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="907055094%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="index.html#907055094%2FFunctions%2F1955833437"><span class="token function">visit</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">tree<span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime.tree/ParseTree///PointingToDeclaration/">ParseTree</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1848865289%2FFunctions%2F1955833437" anchor-label="visitBinaryOperation1" id="1848865289%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-binary-operation1.html"><span>visit</span><wbr><span>Binary</span><wbr><span><span>Operation1</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1848865289%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-binary-operation1.html"><span class="token function">visitBinaryOperation1</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-binary-operation1-context/index.html">KeyLangParser.BinaryOperation1Context</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">binaryOperation1</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-601389621%2FFunctions%2F1955833437" anchor-label="visitBinaryOperation2" id="-601389621%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-binary-operation2.html"><span>visit</span><wbr><span>Binary</span><wbr><span><span>Operation2</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-601389621%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-binary-operation2.html"><span class="token function">visitBinaryOperation2</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-binary-operation2-context/index.html">KeyLangParser.BinaryOperation2Context</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">binaryOperation2</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1148738498%2FFunctions%2F1955833437" anchor-label="visitChildren" id="-1148738498%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1148738498%2FFunctions%2F1955833437"><span>visit</span><wbr><span><span>Children</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1148738498%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="index.html#-1148738498%2FFunctions%2F1955833437"><span class="token function">visitChildren</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">node<span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime.tree/RuleNode///PointingToDeclaration/">RuleNode</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="56727467%2FFunctions%2F1955833437" anchor-label="visitComparisonOperation" id="56727467%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-comparison-operation.html"><span>visit</span><wbr><span>Comparison</span><wbr><span><span>Operation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="56727467%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-comparison-operation.html"><span class="token function">visitComparisonOperation</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-comparison-operation-context/index.html">KeyLangParser.ComparisonOperationContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">comparisonOperation</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-741518481%2FFunctions%2F1955833437" anchor-label="visitDecimalLiteral" id="-741518481%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-decimal-literal.html"><span>visit</span><wbr><span>Decimal</span><wbr><span><span>Literal</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-741518481%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-decimal-literal.html"><span class="token function">visitDecimalLiteral</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-decimal-literal-context/index.html">KeyLangParser.DecimalLiteralContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">decimalLiteral</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1528214005%2FFunctions%2F1955833437" anchor-label="visitErrorNode" id="-1528214005%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1528214005%2FFunctions%2F1955833437"><span>visit</span><wbr><span>Error</span><wbr><span><span>Node</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1528214005%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="index.html#-1528214005%2FFunctions%2F1955833437"><span class="token function">visitErrorNode</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">node<span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime.tree/ErrorNode///PointingToDeclaration/">ErrorNode</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2119260775%2FFunctions%2F1955833437" anchor-label="visitExpressionRoot" id="2119260775%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-expression-root.html"><span>visit</span><wbr><span>Expression</span><wbr><span><span>Root</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2119260775%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-expression-root.html"><span class="token function">visitExpressionRoot</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-expression-root-context/index.html">KeyLangParser.ExpressionRootContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by <a href="../-key-lang-parser/expression-root.html">KeyLangParser.expressionRoot</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-688260149%2FFunctions%2F1955833437" anchor-label="visitExpressionStatement" id="-688260149%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-expression-statement.html"><span>visit</span><wbr><span>Expression</span><wbr><span><span>Statement</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-688260149%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-expression-statement.html"><span class="token function">visitExpressionStatement</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-expression-statement-context/index.html">KeyLangParser.ExpressionStatementContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">expressionStatement</code> labeled alternative in <a href="../-key-lang-parser/statement.html">KeyLangParser.statement</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-32884693%2FFunctions%2F1955833437" anchor-label="visitFunctionCall0Expression" id="-32884693%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-function-call0-expression.html"><span>visit</span><wbr><span>Function</span><wbr><span><span>Call0Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-32884693%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-function-call0-expression.html"><span class="token function">visitFunctionCall0Expression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-function-call0-expression-context/index.html">KeyLangParser.FunctionCall0ExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">functionCall0Expression</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-742299189%2FFunctions%2F1955833437" anchor-label="visitFunctionCall1Expression" id="-742299189%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-function-call1-expression.html"><span>visit</span><wbr><span>Function</span><wbr><span><span>Call1Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-742299189%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-function-call1-expression.html"><span class="token function">visitFunctionCall1Expression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-function-call1-expression-context/index.html">KeyLangParser.FunctionCall1ExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">functionCall1Expression</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1451713685%2FFunctions%2F1955833437" anchor-label="visitFunctionCall2Expression" id="-1451713685%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-function-call2-expression.html"><span>visit</span><wbr><span>Function</span><wbr><span><span>Call2Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1451713685%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-function-call2-expression.html"><span class="token function">visitFunctionCall2Expression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-function-call2-expression-context/index.html">KeyLangParser.FunctionCall2ExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">functionCall2Expression</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2133839115%2FFunctions%2F1955833437" anchor-label="visitFunctionCall3Expression" id="2133839115%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-function-call3-expression.html"><span>visit</span><wbr><span>Function</span><wbr><span><span>Call3Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2133839115%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-function-call3-expression.html"><span class="token function">visitFunctionCall3Expression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-function-call3-expression-context/index.html">KeyLangParser.FunctionCall3ExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">functionCall3Expression</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1424424619%2FFunctions%2F1955833437" anchor-label="visitFunctionCall4Expression" id="1424424619%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-function-call4-expression.html"><span>visit</span><wbr><span>Function</span><wbr><span><span>Call4Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1424424619%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-function-call4-expression.html"><span class="token function">visitFunctionCall4Expression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-function-call4-expression-context/index.html">KeyLangParser.FunctionCall4ExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">functionCall4Expression</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="715010123%2FFunctions%2F1955833437" anchor-label="visitFunctionCall5Expression" id="715010123%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-function-call5-expression.html"><span>visit</span><wbr><span>Function</span><wbr><span><span>Call5Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="715010123%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-function-call5-expression.html"><span class="token function">visitFunctionCall5Expression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-function-call5-expression-context/index.html">KeyLangParser.FunctionCall5ExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">functionCall5Expression</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1158689611%2FFunctions%2F1955833437" anchor-label="visitFunctionLiteral" id="1158689611%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-function-literal.html"><span>visit</span><wbr><span>Function</span><wbr><span><span>Literal</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1158689611%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-function-literal.html"><span class="token function">visitFunctionLiteral</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-function-literal-context/index.html">KeyLangParser.FunctionLiteralContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">functionLiteral</code> labeled alternative in <a href="../-key-lang-parser/lambda.html">KeyLangParser.lambda</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-45228245%2FFunctions%2F1955833437" anchor-label="visitIndexExpression" id="-45228245%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-index-expression.html"><span>visit</span><wbr><span>Index</span><wbr><span><span>Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-45228245%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-index-expression.html"><span class="token function">visitIndexExpression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-index-expression-context/index.html">KeyLangParser.IndexExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">indexExpression</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1815073357%2FFunctions%2F1955833437" anchor-label="visitIntLiteral" id="-1815073357%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-int-literal.html"><span>visit</span><wbr><span>Int</span><wbr><span><span>Literal</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1815073357%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-int-literal.html"><span class="token function">visitIntLiteral</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-int-literal-context/index.html">KeyLangParser.IntLiteralContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">intLiteral</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1664728395%2FFunctions%2F1955833437" anchor-label="visitJoinOperation" id="1664728395%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-join-operation.html"><span>visit</span><wbr><span>Join</span><wbr><span><span>Operation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1664728395%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-join-operation.html"><span class="token function">visitJoinOperation</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-join-operation-context/index.html">KeyLangParser.JoinOperationContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">joinOperation</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1103861003%2FFunctions%2F1955833437" anchor-label="visitKeyLangFile" id="1103861003%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-key-lang-file.html"><span>visit</span><wbr><span>Key</span><wbr><span>Lang</span><wbr><span><span>File</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1103861003%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-key-lang-file.html"><span class="token function">visitKeyLangFile</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-key-lang-file-context/index.html">KeyLangParser.KeyLangFileContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by <a href="../-key-lang-parser/key-lang-file.html">KeyLangParser.keyLangFile</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="671333233%2FFunctions%2F1955833437" anchor-label="visitLambdaExpression" id="671333233%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-lambda-expression.html"><span>visit</span><wbr><span>Lambda</span><wbr><span><span>Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="671333233%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-lambda-expression.html"><span class="token function">visitLambdaExpression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-lambda-expression-context/index.html">KeyLangParser.LambdaExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">lambdaExpression</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1005719141%2FFunctions%2F1955833437" anchor-label="visitLine" id="-1005719141%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-line.html"><span>visit</span><wbr><span><span>Line</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1005719141%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-line.html"><span class="token function">visitLine</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-line-context/index.html">KeyLangParser.LineContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by <a href="../-key-lang-parser/line.html">KeyLangParser.line</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1715971573%2FFunctions%2F1955833437" anchor-label="visitListLiteral" id="-1715971573%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-list-literal.html"><span>visit</span><wbr><span>List</span><wbr><span><span>Literal</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1715971573%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-list-literal.html"><span class="token function">visitListLiteral</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-list-literal-context/index.html">KeyLangParser.ListLiteralContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">listLiteral</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-75961493%2FFunctions%2F1955833437" anchor-label="visitMemberFunctionCall0Expression" id="-75961493%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-member-function-call0-expression.html"><span>visit</span><wbr><span>Member</span><wbr><span>Function</span><wbr><span><span>Call0Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-75961493%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-member-function-call0-expression.html"><span class="token function">visitMemberFunctionCall0Expression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-member-function-call0-expression-context/index.html">KeyLangParser.MemberFunctionCall0ExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">memberFunctionCall0Expression</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="203751115%2FFunctions%2F1955833437" anchor-label="visitMemberFunctionCall0LambdaExpression" id="203751115%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-member-function-call0-lambda-expression.html"><span>visit</span><wbr><span>Member</span><wbr><span>Function</span><wbr><span>Call0Lambda</span><wbr><span><span>Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="203751115%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-member-function-call0-lambda-expression.html"><span class="token function">visitMemberFunctionCall0LambdaExpression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-member-function-call0-lambda-expression-context/index.html">KeyLangParser.MemberFunctionCall0LambdaExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">memberFunctionCall0LambdaExpression</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1538102837%2FFunctions%2F1955833437" anchor-label="visitMemberFunctionCall1Expression" id="-1538102837%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-member-function-call1-expression.html"><span>visit</span><wbr><span>Member</span><wbr><span>Function</span><wbr><span><span>Call1Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1538102837%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-member-function-call1-expression.html"><span class="token function">visitMemberFunctionCall1Expression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-member-function-call1-expression-context/index.html">KeyLangParser.MemberFunctionCall1ExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">memberFunctionCall1Expression</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1294723115%2FFunctions%2F1955833437" anchor-label="visitMemberFunctionCall2Expression" id="1294723115%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-member-function-call2-expression.html"><span>visit</span><wbr><span>Member</span><wbr><span>Function</span><wbr><span><span>Call2Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1294723115%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-member-function-call2-expression.html"><span class="token function">visitMemberFunctionCall2Expression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-member-function-call2-expression-context/index.html">KeyLangParser.MemberFunctionCall2ExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">memberFunctionCall2Expression</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-167418229%2FFunctions%2F1955833437" anchor-label="visitMemberFunctionCall3Expression" id="-167418229%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-member-function-call3-expression.html"><span>visit</span><wbr><span>Member</span><wbr><span>Function</span><wbr><span><span>Call3Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-167418229%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-member-function-call3-expression.html"><span class="token function">visitMemberFunctionCall3Expression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-member-function-call3-expression-context/index.html">KeyLangParser.MemberFunctionCall3ExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">memberFunctionCall3Expression</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1629559573%2FFunctions%2F1955833437" anchor-label="visitMemberFunctionCall4Expression" id="-1629559573%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-member-function-call4-expression.html"><span>visit</span><wbr><span>Member</span><wbr><span>Function</span><wbr><span><span>Call4Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1629559573%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-member-function-call4-expression.html"><span class="token function">visitMemberFunctionCall4Expression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-member-function-call4-expression-context/index.html">KeyLangParser.MemberFunctionCall4ExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">memberFunctionCall4Expression</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-356048405%2FFunctions%2F1955833437" anchor-label="visitMinusExpression" id="-356048405%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-minus-expression.html"><span>visit</span><wbr><span>Minus</span><wbr><span><span>Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-356048405%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-minus-expression.html"><span class="token function">visitMinusExpression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-minus-expression-context/index.html">KeyLangParser.MinusExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">minusExpression</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="210600871%2FFunctions%2F1955833437" anchor-label="visitNegateExpression" id="210600871%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-negate-expression.html"><span>visit</span><wbr><span>Negate</span><wbr><span><span>Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="210600871%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-negate-expression.html"><span class="token function">visitNegateExpression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-negate-expression-context/index.html">KeyLangParser.NegateExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">negateExpression</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1587936725%2FFunctions%2F1955833437" anchor-label="visitParenExpression" id="-1587936725%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-paren-expression.html"><span>visit</span><wbr><span>Paren</span><wbr><span><span>Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1587936725%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-paren-expression.html"><span class="token function">visitParenExpression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-paren-expression-context/index.html">KeyLangParser.ParenExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">parenExpression</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="642057579%2FFunctions%2F1955833437" anchor-label="visitPropReference" id="642057579%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-prop-reference.html"><span>visit</span><wbr><span>Prop</span><wbr><span><span>Reference</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="642057579%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-prop-reference.html"><span class="token function">visitPropReference</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-prop-reference-context/index.html">KeyLangParser.PropReferenceContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">propReference</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-144973301%2FFunctions%2F1955833437" anchor-label="visitRangeExpression" id="-144973301%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-range-expression.html"><span>visit</span><wbr><span>Range</span><wbr><span><span>Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-144973301%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-range-expression.html"><span class="token function">visitRangeExpression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-range-expression-context/index.html">KeyLangParser.RangeExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by <a href="../-key-lang-parser/range-expression.html">KeyLangParser.rangeExpression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1838788181%2FFunctions%2F1955833437" anchor-label="visitStringLiteral" id="-1838788181%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-string-literal.html"><span>visit</span><wbr><span>String</span><wbr><span><span>Literal</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1838788181%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-string-literal.html"><span class="token function">visitStringLiteral</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-string-literal-context/index.html">KeyLangParser.StringLiteralContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">stringLiteral</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1248219881%2FFunctions%2F1955833437" anchor-label="visitStringLiteralContent" id="1248219881%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-string-literal-content.html"><span>visit</span><wbr><span>String</span><wbr><span>Literal</span><wbr><span><span>Content</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1248219881%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-string-literal-content.html"><span class="token function">visitStringLiteralContent</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-string-literal-content-context/index.html">KeyLangParser.StringLiteralContentContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by <a href="../-key-lang-parser/string-literal-content.html">KeyLangParser.stringLiteralContent</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="331707617%2FFunctions%2F1955833437" anchor-label="visitTerminal" id="331707617%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#331707617%2FFunctions%2F1955833437"><span>visit</span><wbr><span><span>Terminal</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="331707617%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="index.html#331707617%2FFunctions%2F1955833437"><span class="token function">visitTerminal</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">node<span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime.tree/TerminalNode///PointingToDeclaration/">TerminalNode</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="824309771%2FFunctions%2F1955833437" anchor-label="visitTernaryExpression" id="824309771%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-ternary-expression.html"><span>visit</span><wbr><span>Ternary</span><wbr><span><span>Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="824309771%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-ternary-expression.html"><span class="token function">visitTernaryExpression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-ternary-expression-context/index.html">KeyLangParser.TernaryExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">ternaryExpression</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1736434457%2FFunctions%2F1955833437" anchor-label="visitValueReference" id="-1736434457%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-value-reference.html"><span>visit</span><wbr><span>Value</span><wbr><span><span>Reference</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1736434457%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="visit-value-reference.html"><span class="token function">visitValueReference</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-value-reference-context/index.html">KeyLangParser.ValueReferenceContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Visit a parse tree produced by the <code class="lang-kotlin">valueReference</code> labeled alternative in <a href="../-key-lang-parser/expression.html">KeyLangParser.expression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

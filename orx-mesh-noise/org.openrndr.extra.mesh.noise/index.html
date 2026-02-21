@@ -1,0 +1,391 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>org.openrndr.extra.mesh.noise</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../images/logo-icon.svg">
+<link href="../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.0-dev.70+e4c3ecc
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-mesh-noise/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-mesh-noise/commonMain" data-filter=":orx-mesh-noise/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageids="orx-mesh-noise::org.openrndr.extra.mesh.noise////PointingToDeclaration//-712672355">
+  <div class="breadcrumbs"><a href="../index.html">orx-mesh-noise</a><span class="delimiter">/</span><span class="current">org.openrndr.extra.mesh.noise</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button><button class="section-tab" data-togglable="PROPERTY,EXTENSION_PROPERTY">Properties</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="1015701691%2FClasslikes%2F-712672355" anchor-label="Barycentric" id="1015701691%2FClasslikes%2F-712672355" data-filterable-set=":orx-mesh-noise/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-mesh-noise/commonMain" data-filterable-set=":orx-mesh-noise/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-barycentric/index.html"><span><span>Barycentric</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1015701691%2FClasslikes%2F-712672355"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-mesh-noise/commonMain"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-barycentric/index.html">Barycentric</a><span class="token operator"> = </span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-694044121%2FClasslikes%2F-712672355" anchor-label="SampleFunction" id="-694044121%2FClasslikes%2F-712672355" data-filterable-set=":orx-mesh-noise/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-mesh-noise/commonMain" data-filterable-set=":orx-mesh-noise/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-sample-function/index.html"><span>Sample</span><wbr><span><span>Function</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-694044121%2FClasslikes%2F-712672355"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-mesh-noise/commonMain"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-sample-function/index.html">SampleFunction</a><span class="token operator">&lt;</span><a href="-sample-function/index.html">T</a><span class="token operator">&gt;</span><span class="token operator"> = </span><span class="token punctuation">(</span>polygon<span class="token operator">: </span><a href="../../orx-mesh/org.openrndr.extra.mesh/-i-indexed-polygon/index.html">IIndexedPolygon</a><span class="token punctuation">, </span>vertexData<span class="token operator">: </span><a href="../../orx-mesh/org.openrndr.extra.mesh/-i-vertex-data/index.html">IVertexData</a><span class="token punctuation">, </span>barycentric<span class="token operator">: </span><a href="-barycentric/index.html">Barycentric</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="-sample-function/index.html">T</a></div><div class="brief "><p class="paragraph">Represents a type alias for a function that processes data associated with a polygon and vertex data, producing a result of type <a href="-sample-function/index.html">T</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="345063193%2FClasslikes%2F-712672355" anchor-label="WeightFunction" id="345063193%2FClasslikes%2F-712672355" data-filterable-set=":orx-mesh-noise/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-mesh-noise/commonMain" data-filterable-set=":orx-mesh-noise/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-weight-function/index.html"><span>Weight</span><wbr><span><span>Function</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="345063193%2FClasslikes%2F-712672355"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-mesh-noise/commonMain"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-weight-function/index.html">WeightFunction</a><span class="token operator"> = </span><span class="token punctuation">(</span>vertexData<span class="token operator">: </span><a href="../../orx-mesh/org.openrndr.extra.mesh/-i-vertex-data/index.html">IVertexData</a><span class="token punctuation">, </span>polygon<span class="token operator">: </span><a href="../../orx-mesh/org.openrndr.extra.mesh/-i-indexed-polygon/index.html">IIndexedPolygon</a><span class="token punctuation">, </span>vertexIndex<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">A type alias representing a weight function for vertices in a polygon.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="1534629416%2FProperties%2F-712672355" anchor-label="identityWeightFunction" id="1534629416%2FProperties%2F-712672355" data-filterable-set=":orx-mesh-noise/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-mesh-noise/commonMain" data-filterable-set=":orx-mesh-noise/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="identity-weight-function.html"><span>identity</span><wbr><span>Weight</span><wbr><span><span>Function</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1534629416%2FProperties%2F-712672355"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-mesh-noise/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="identity-weight-function.html">identityWeightFunction</a><span class="token operator">: </span><a href="-weight-function/index.html">WeightFunction</a></div><div class="brief "><p class="paragraph">A constant weight function for barycentric coordinates that always returns a weight of 1.0.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-295810094%2FProperties%2F-712672355" anchor-label="pointSampleFunction" id="-295810094%2FProperties%2F-712672355" data-filterable-set=":orx-mesh-noise/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-mesh-noise/commonMain" data-filterable-set=":orx-mesh-noise/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="point-sample-function.html"><span>point</span><wbr><span>Sample</span><wbr><span><span>Function</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-295810094%2FProperties%2F-712672355"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-mesh-noise/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="point-sample-function.html">pointSampleFunction</a><span class="token operator">: </span><a href="-sample-function/index.html">SampleFunction</a><span class="token operator">&lt;</span><a href="../../orx-mesh/org.openrndr.extra.mesh/-point/index.html">Point</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A lambda function that extracts a <a href="../../orx-mesh/org.openrndr.extra.mesh/-point/index.html">Point</a> from a given <a href="../../orx-mesh/org.openrndr.extra.mesh/-i-indexed-polygon/index.html">IIndexedPolygon</a>, <a href="../../orx-mesh/org.openrndr.extra.mesh/-i-vertex-data/index.html">IVertexData</a>, and <a href="-barycentric/index.html">Barycentric</a> coordinate.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1959106155%2FProperties%2F-712672355" anchor-label="positionSampleFunction" id="1959106155%2FProperties%2F-712672355" data-filterable-set=":orx-mesh-noise/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-mesh-noise/commonMain" data-filterable-set=":orx-mesh-noise/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="position-sample-function.html"><span>position</span><wbr><span>Sample</span><wbr><span><span>Function</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1959106155%2FProperties%2F-712672355"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-mesh-noise/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="position-sample-function.html">positionSampleFunction</a><span class="token operator">: </span><a href="-sample-function/index.html">SampleFunction</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A lambda function that computes the 3D position within an indexed polygon given vertex data and barycentric coordinates.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="892477631%2FFunctions%2F-712672355" anchor-label="hash" id="892477631%2FFunctions%2F-712672355" data-filterable-set=":orx-mesh-noise/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-mesh-noise/commonMain" data-filterable-set=":orx-mesh-noise/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hash.html"><span><span>hash</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="892477631%2FFunctions%2F-712672355"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-mesh-noise/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../orx-mesh/org.openrndr.extra.mesh/-i-mesh-data/index.html">IMeshData</a><span class="token punctuation">.</span><a href="hash.html"><span class="token function">hash</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">count<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">seed<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Generate points on the surface described by the mesh data</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-104258037%2FFunctions%2F-712672355" anchor-label="hashBarycentric" id="-104258037%2FFunctions%2F-712672355" data-filterable-set=":orx-mesh-noise/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-mesh-noise/commonMain" data-filterable-set=":orx-mesh-noise/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hash-barycentric.html"><span>hash</span><wbr><span><span>Barycentric</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-104258037%2FFunctions%2F-712672355"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-mesh-noise/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="hash-barycentric.html"><span class="token function">hashBarycentric</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">seed<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-barycentric/index.html">Barycentric</a></div><div class="brief "><p class="paragraph">Computes a barycentric coordinate vector derived from hashing operations.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="669420306%2FFunctions%2F-712672355" anchor-label="nonuniform" id="669420306%2FFunctions%2F-712672355" data-filterable-set=":orx-mesh-noise/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-mesh-noise/commonMain" data-filterable-set=":orx-mesh-noise/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="nonuniform.html"><span><span>nonuniform</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="669420306%2FFunctions%2F-712672355"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-mesh-noise/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../orx-mesh/org.openrndr.extra.mesh/-i-mesh-data/index.html">IMeshData</a><span class="token punctuation">.</span><a href="nonuniform.html"><span class="token function">nonuniform</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">count<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">random<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.random/-random/index.html">Random</a><span class="token operator"> = </span>Random.Default<span class="token punctuation">, </span></span><span class="parameter ">weightFunction<span class="token operator">: </span><a href="-weight-function/index.html">WeightFunction</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Generates a list of points within the mesh using a non-uniform distribution. The points are sampled according to a provided weight function, where each point is influenced by the weights of the vertices of the triangulated polygons.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2108941503%2FFunctions%2F-712672355" anchor-label="nonuniformEx" id="-2108941503%2FFunctions%2F-712672355" data-filterable-set=":orx-mesh-noise/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-mesh-noise/commonMain" data-filterable-set=":orx-mesh-noise/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="nonuniform-ex.html"><span>nonuniform</span><wbr><span><span>Ex</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2108941503%2FFunctions%2F-712672355"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-mesh-noise/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="nonuniform-ex.html">T</a><span class="token operator">&gt; </span><a href="../../orx-mesh/org.openrndr.extra.mesh/-i-mesh-data/index.html">IMeshData</a><span class="token punctuation">.</span><a href="nonuniform-ex.html"><span class="token function">nonuniformEx</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">randomValuesUnsorted<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">randomPoints<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">weightFunction<span class="token operator">: </span><a href="-weight-function/index.html">WeightFunction</a><span class="token punctuation">, </span></span><span class="parameter ">sampleFunction<span class="token operator">: </span><span class="token punctuation">(</span><a href="../../orx-mesh/org.openrndr.extra.mesh/-i-indexed-polygon/index.html">IIndexedPolygon</a><span class="token punctuation">, </span><a href="../../orx-mesh/org.openrndr.extra.mesh/-i-vertex-data/index.html">IVertexData</a><span class="token punctuation">, </span><a href="-barycentric/index.html">Barycentric</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="nonuniform-ex.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="nonuniform-ex.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Generates a list of samples by distributing random points across the mesh using weighted areas of triangles and a provided sample function.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1636783917%2FFunctions%2F-712672355" anchor-label="nonuniformHammersley" id="-1636783917%2FFunctions%2F-712672355" data-filterable-set=":orx-mesh-noise/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-mesh-noise/commonMain" data-filterable-set=":orx-mesh-noise/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="nonuniform-hammersley.html"><span>nonuniform</span><wbr><span><span>Hammersley</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1636783917%2FFunctions%2F-712672355"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-mesh-noise/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../orx-mesh/org.openrndr.extra.mesh/-i-mesh-data/index.html">IMeshData</a><span class="token punctuation">.</span><a href="nonuniform-hammersley.html"><span class="token function">nonuniformHammersley</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">count<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">shuffle<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span><span class="token punctuation">, </span></span><span class="parameter ">random<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.random/-random/index.html">Random</a><span class="token operator"> = </span>Random.Default<span class="token punctuation">, </span></span><span class="parameter ">weightFunction<span class="token operator">: </span><a href="-weight-function/index.html">WeightFunction</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Generates a list of 3D points distributed on a mesh surface using a nonuniform sampling strategy with Hammersley sequence and a custom weight function.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1818463125%2FFunctions%2F-712672355" anchor-label="nonuniformPoints" id="1818463125%2FFunctions%2F-712672355" data-filterable-set=":orx-mesh-noise/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-mesh-noise/commonMain" data-filterable-set=":orx-mesh-noise/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="nonuniform-points.html"><span>nonuniform</span><wbr><span><span>Points</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1818463125%2FFunctions%2F-712672355"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-mesh-noise/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../orx-mesh/org.openrndr.extra.mesh/-i-mesh-data/index.html">IMeshData</a><span class="token punctuation">.</span><a href="nonuniform-points.html"><span class="token function">nonuniformPoints</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">count<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">random<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.random/-random/index.html">Random</a><span class="token operator"> = </span>Random.Default<span class="token punctuation">, </span></span><span class="parameter ">weightFunction<span class="token operator">: </span><a href="-weight-function/index.html">WeightFunction</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../orx-mesh/org.openrndr.extra.mesh/-point/index.html">Point</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Generates a list of non-uniformly distributed points on the mesh based on a specified weight function.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1390530279%2FFunctions%2F-712672355" anchor-label="nonuniformRSeq" id="-1390530279%2FFunctions%2F-712672355" data-filterable-set=":orx-mesh-noise/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-mesh-noise/commonMain" data-filterable-set=":orx-mesh-noise/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="nonuniform-r-seq.html"><span>nonuniform</span><wbr><span><span>RSeq</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1390530279%2FFunctions%2F-712672355"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-mesh-noise/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../orx-mesh/org.openrndr.extra.mesh/-i-mesh-data/index.html">IMeshData</a><span class="token punctuation">.</span><a href="nonuniform-r-seq.html"><span class="token function">nonuniformRSeq</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">count<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">shuffle<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span><span class="token punctuation">, </span></span><span class="parameter ">random<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.random/-random/index.html">Random</a><span class="token operator"> = </span>Random.Default<span class="token punctuation">, </span></span><span class="parameter ">weightFunction<span class="token operator">: </span><a href="-weight-function/index.html">WeightFunction</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Generates a non-uniform sequence of 3D points based on the provided weight function, using a combination of randomized values and the R2 low-discrepancy quasirandom sequence.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-495668377%2FFunctions%2F-712672355" anchor-label="uniform" id="-495668377%2FFunctions%2F-712672355" data-filterable-set=":orx-mesh-noise/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-mesh-noise/commonMain" data-filterable-set=":orx-mesh-noise/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="uniform.html"><span><span>uniform</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-495668377%2FFunctions%2F-712672355"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-mesh-noise/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../orx-mesh/org.openrndr.extra.mesh/-i-mesh-data/index.html">IMeshData</a><span class="token punctuation">.</span><a href="uniform.html"><span class="token function">uniform</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">count<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">random<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.random/-random/index.html">Random</a><span class="token operator"> = </span>Random.Default</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Generates a list of uniformly distributed points on the surface of the given mesh.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-111439491%2FFunctions%2F-712672355" anchor-label="uniformBarycentric" id="-111439491%2FFunctions%2F-712672355" data-filterable-set=":orx-mesh-noise/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-mesh-noise/commonMain" data-filterable-set=":orx-mesh-noise/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="uniform-barycentric.html"><span>uniform</span><wbr><span><span>Barycentric</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-111439491%2FFunctions%2F-712672355"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-mesh-noise/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="uniform-barycentric.html"><span class="token function">uniformBarycentric</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">u<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">v<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-barycentric/index.html">Barycentric</a></div><div class="brief "><p class="paragraph">Generates a 3D vector with components representing uniform barycentric coordinates over a standard triangle. The barycentric coordinates are computed based on two input parameters, <code class="lang-kotlin">u</code> and <code class="lang-kotlin">v</code>, which are random values typically ranging between 0 and 1.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-839403132%2FFunctions%2F-712672355" anchor-label="uniformPoints" id="-839403132%2FFunctions%2F-712672355" data-filterable-set=":orx-mesh-noise/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-mesh-noise/commonMain" data-filterable-set=":orx-mesh-noise/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="uniform-points.html"><span>uniform</span><wbr><span><span>Points</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-839403132%2FFunctions%2F-712672355"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-mesh-noise/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../orx-mesh/org.openrndr.extra.mesh/-i-mesh-data/index.html">IMeshData</a><span class="token punctuation">.</span><a href="uniform-points.html"><span class="token function">uniformPoints</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">count<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">random<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.random/-random/index.html">Random</a><span class="token operator"> = </span>Random.Default</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../orx-mesh/org.openrndr.extra.mesh/-point/index.html">Point</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Generates a uniformly distributed set of points over the surface of the mesh.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="996047033%2FFunctions%2F-712672355" anchor-label="weightBarycentric" id="996047033%2FFunctions%2F-712672355" data-filterable-set=":orx-mesh-noise/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-mesh-noise/commonMain" data-filterable-set=":orx-mesh-noise/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="weight-barycentric.html"><span>weight</span><wbr><span><span>Barycentric</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="996047033%2FFunctions%2F-712672355"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-mesh-noise/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="weight-barycentric.html"><span class="token function">weightBarycentric</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">barycentric<span class="token operator">: </span><a href="-barycentric/index.html">Barycentric</a><span class="token punctuation">, </span></span><span class="parameter ">weight0<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">weight1<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">weight2<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-barycentric/index.html">Barycentric</a></div><div class="brief "><p class="paragraph">Adjusts a barycentric coordinate based on weights for each component and normalizes the result.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,1231 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>org.openrndr.extra.composition</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../images/logo-icon.svg">
+<link href="../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.0-dev.70+e4c3ecc
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-composition/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-composition/commonMain" data-filter=":orx-composition/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageids="orx-composition::org.openrndr.extra.composition////PointingToDeclaration//-354277685">
+  <div class="breadcrumbs"><a href="../index.html">orx-composition</a><span class="delimiter">/</span><span class="current">org.openrndr.extra.composition</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button><button class="section-tab" data-togglable="PROPERTY,EXTENSION_PROPERTY">Properties</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="-705510497%2FClasslikes%2F-354277685" anchor-label="Align" id="-705510497%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-align/index.html"><span><span>Align</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-705510497%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-align/index.html">Align</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-align/index.html">Align</a><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-563779183%2FClasslikes%2F-354277685" anchor-label="AspectRatio" id="-563779183%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-aspect-ratio/index.html"><span>Aspect</span><wbr><span><span>Ratio</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-563779183%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-record/index.html"><span class="token annotation builtin">JvmRecord</span></a></div></div><span class="token keyword">data </span><span class="token keyword">class </span><a href="-aspect-ratio/index.html">AspectRatio</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>align<span class="token operator">: </span><a href="-align/index.html">Align</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>meetOrSlice<span class="token operator">: </span><a href="-meet-or-slice/index.html">MeetOrSlice</a></span></span><span class="token punctuation">)</span> : <a href="-attribute-or-property-value/index.html">AttributeOrPropertyValue</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1284606707%2FClasslikes%2F-354277685" anchor-label="AttributeOrPropertyKey" id="1284606707%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-attribute-or-property-key/index.html"><span>Attribute</span><wbr><span>Or</span><wbr><span>Property</span><wbr><span><span>Key</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1284606707%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-attribute-or-property-key/index.html">AttributeOrPropertyKey</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-attribute-or-property-key/index.html">AttributeOrPropertyKey</a><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1408254945%2FClasslikes%2F-354277685" anchor-label="AttributeOrPropertyValue" id="1408254945%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-attribute-or-property-value/index.html"><span>Attribute</span><wbr><span>Or</span><wbr><span>Property</span><wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1408254945%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">interface </span><a href="-attribute-or-property-value/index.html">AttributeOrPropertyValue</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="438329035%2FClasslikes%2F-354277685" anchor-label="ClipMode" id="438329035%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-clip-mode/index.html"><span>Clip</span><wbr><span><span>Mode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="438329035%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-clip-mode/index.html">ClipMode</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-clip-mode/index.html">ClipMode</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Specifies in which way to combine <span data-unresolved-link="org.openrndr.shape/Shape///PointingToDeclaration/">Shape</span>s to form a <a href="-composition/index.html">Composition</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1906458739%2FClasslikes%2F-354277685" anchor-label="ClipOp" id="-1906458739%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-clip-op/index.html"><span>Clip</span><wbr><span><span>Op</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1906458739%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-clip-op/index.html">ClipOp</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-clip-op/index.html">ClipOp</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Used internally to define <a href="-clip-mode/index.html">ClipMode</a>s.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1195637338%2FClasslikes%2F-354277685" anchor-label="Composition" id="1195637338%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-composition/index.html"><span><span>Composition</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1195637338%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-composition/index.html">Composition</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>root<span class="token operator">: </span><a href="-composition-node/index.html">CompositionNode</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>bounds<span class="token operator">: </span><a href="-composition-dimensions/index.html">CompositionDimensions</a><span class="token operator"> = </span>defaultCompositionDimensions</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A vector composition.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1444533197%2FClasslikes%2F-354277685" anchor-label="CompositionDimensions" id="1444533197%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-composition-dimensions/index.html"><span>Composition</span><wbr><span><span>Dimensions</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1444533197%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-composition-dimensions/index.html">CompositionDimensions</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>x<span class="token operator">: </span><a href="-length/index.html">Length</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>y<span class="token operator">: </span><a href="-length/index.html">Length</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>width<span class="token operator">: </span><a href="-length/index.html">Length</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>height<span class="token operator">: </span><a href="-length/index.html">Length</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-96159831%2FClasslikes%2F-354277685" anchor-label="CompositionDrawer" id="-96159831%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-composition-drawer/index.html"><span>Composition</span><wbr><span><span>Drawer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-96159831%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-composition-drawer/index.html">CompositionDrawer</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">documentBounds<span class="token operator">: </span><a href="-composition-dimensions/index.html">CompositionDimensions</a><span class="token operator"> = </span>defaultCompositionDimensions<span class="token punctuation">, </span></span><span class="parameter ">composition<span class="token operator">: </span><a href="-composition/index.html">Composition</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">cursor<span class="token operator">: </span><a href="-group-node/index.html">GroupNode</a><span class="token operator">?</span><span class="token operator"> = </span>composition?.root as? GroupNode</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A Drawer-like interface for the creation of Compositions This should be easier than creating Compositions manually</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="460711416%2FClasslikes%2F-354277685" anchor-label="CompositionNode" id="460711416%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-composition-node/index.html"><span>Composition</span><wbr><span><span>Node</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="460711416%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="-composition-node/index.html">CompositionNode</a></div><div class="brief "><p class="paragraph">Describes a node in a composition</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2143213506%2FClasslikes%2F-354277685" anchor-label="Display" id="2143213506%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-display/index.html"><span><span>Display</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2143213506%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">interface </span><a href="-display/index.html">Display</a> : <a href="-attribute-or-property-value/index.html">AttributeOrPropertyValue</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2131496814%2FClasslikes%2F-354277685" anchor-label="DocumentStyle" id="2131496814%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-document-style/index.html"><span>Document</span><wbr><span><span>Style</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2131496814%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-document-style/index.html">DocumentStyle</a> : <a href="-styleable/index.html">Styleable</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1885818755%2FClasslikes%2F-354277685" anchor-label="GroupNode" id="1885818755%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-group-node/index.html"><span>Group</span><wbr><span><span>Node</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1885818755%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-group-node/index.html">GroupNode</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>children<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><a href="-composition-node/index.html">CompositionNode</a><span class="token operator">&gt;</span><span class="token operator"> = </span>mutableListOf()</span></span><span class="token punctuation">)</span> : <a href="-composition-node/index.html">CompositionNode</a></div><div class="brief "><p class="paragraph">Represents a group node in a composition hierarchy. A <code class="lang-kotlin">GroupNode</code> itself does not have explicit contents but serves as a container for managing child nodes. It allows grouping of multiple <code class="lang-kotlin">CompositionNode</code> instances and provides functionalities like calculating the bounds for all its child elements and copying itself with overrides.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1197513567%2FClasslikes%2F-354277685" anchor-label="GroupNodeStop" id="-1197513567%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-group-node-stop/index.html"><span>Group</span><wbr><span>Node</span><wbr><span><span>Stop</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1197513567%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-group-node-stop/index.html">GroupNodeStop</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">children<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><a href="-composition-node/index.html">CompositionNode</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span> : <a href="-group-node/index.html">GroupNode</a></div><div class="brief "><p class="paragraph">Represents a specialized type of <code class="lang-kotlin">GroupNode</code> in a composition hierarchy, serving as a container for child nodes.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-693741017%2FClasslikes%2F-354277685" anchor-label="ImageNode" id="-693741017%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-image-node/index.html"><span>Image</span><wbr><span><span>Node</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-693741017%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-image-node/index.html">ImageNode</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">var </span>image<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ColorBuffer///PointingToDeclaration/">ColorBuffer</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>y<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>width<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>height<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span> : <a href="-composition-node/index.html">CompositionNode</a></div><div class="brief "><p class="paragraph">a <a href="-composition-node/index.html">CompositionNode</a> that holds a single image <span data-unresolved-link="org.openrndr.draw/ColorBuffer///PointingToDeclaration/">ColorBuffer</span></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1315083462%2FClasslikes%2F-354277685" anchor-label="Inheritance" id="-1315083462%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-inheritance/index.html"><span><span>Inheritance</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1315083462%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-inheritance/index.html">Inheritance</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-inheritance/index.html">Inheritance</a><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-688447592%2FClasslikes%2F-354277685" anchor-label="Length" id="-688447592%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-length/index.html"><span><span>Length</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-688447592%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">interface </span><a href="-length/index.html">Length</a> : <a href="-attribute-or-property-value/index.html">AttributeOrPropertyValue</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1431605446%2FClasslikes%2F-354277685" anchor-label="LineCap" id="1431605446%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-line-cap/index.html"><span>Line</span><wbr><span><span>Cap</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1431605446%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">interface </span><a href="-line-cap/index.html">LineCap</a> : <a href="-attribute-or-property-value/index.html">AttributeOrPropertyValue</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="42948352%2FClasslikes%2F-354277685" anchor-label="LineJoin" id="42948352%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-line-join/index.html"><span>Line</span><wbr><span><span>Join</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="42948352%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">interface </span><a href="-line-join/index.html">LineJoin</a> : <a href="-attribute-or-property-value/index.html">AttributeOrPropertyValue</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1494343012%2FClasslikes%2F-354277685" anchor-label="MeetOrSlice" id="-1494343012%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-meet-or-slice/index.html"><span>Meet</span><wbr><span>Or</span><wbr><span><span>Slice</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1494343012%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-meet-or-slice/index.html">MeetOrSlice</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-meet-or-slice/index.html">MeetOrSlice</a><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1221685207%2FClasslikes%2F-354277685" anchor-label="Numeric" id="1221685207%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-numeric/index.html"><span><span>Numeric</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1221685207%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">interface </span><a href="-numeric/index.html">Numeric</a> : <a href="-attribute-or-property-value/index.html">AttributeOrPropertyValue</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1242470298%2FClasslikes%2F-354277685" anchor-label="Paint" id="-1242470298%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-paint/index.html"><span><span>Paint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1242470298%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">interface </span><a href="-paint/index.html">Paint</a> : <a href="-attribute-or-property-value/index.html">AttributeOrPropertyValue</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-105387657%2FClasslikes%2F-354277685" anchor-label="Shade" id="-105387657%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-shade/index.html"><span><span>Shade</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-105387657%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">interface </span><a href="-shade/index.html">Shade</a> : <a href="-attribute-or-property-value/index.html">AttributeOrPropertyValue</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2133040735%2FClasslikes%2F-354277685" anchor-label="ShapeNode" id="-2133040735%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-shape-node/index.html"><span>Shape</span><wbr><span><span>Node</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2133040735%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-shape-node/index.html">ShapeNode</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">var </span>shape<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Shape///PointingToDeclaration/">Shape</span></span></span><span class="token punctuation">)</span> : <a href="-composition-node/index.html">CompositionNode</a></div><div class="brief "><p class="paragraph">a <a href="-composition-node/index.html">CompositionNode</a> that holds a single <span data-unresolved-link="org.openrndr.shape/Shape///PointingToDeclaration/">Shape</span></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1005659368%2FClasslikes%2F-354277685" anchor-label="ShapeNodeIntersection" id="-1005659368%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-shape-node-intersection/index.html"><span>Shape</span><wbr><span>Node</span><wbr><span><span>Intersection</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1005659368%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-record/index.html"><span class="token annotation builtin">JvmRecord</span></a></div></div><span class="token keyword">data </span><span class="token keyword">class </span><a href="-shape-node-intersection/index.html">ShapeNodeIntersection</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>node<span class="token operator">: </span><a href="-shape-node/index.html">ShapeNode</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>intersection<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/ContourIntersection///PointingToDeclaration/">ContourIntersection</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Data structure containing intersection information.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1065459813%2FClasslikes%2F-354277685" anchor-label="ShapeNodeNearestContour" id="1065459813%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-shape-node-nearest-contour/index.html"><span>Shape</span><wbr><span>Node</span><wbr><span>Nearest</span><wbr><span><span>Contour</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1065459813%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-record/index.html"><span class="token annotation builtin">JvmRecord</span></a></div></div><span class="token keyword">data </span><span class="token keyword">class </span><a href="-shape-node-nearest-contour/index.html">ShapeNodeNearestContour</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>node<span class="token operator">: </span><a href="-shape-node/index.html">ShapeNode</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>point<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/ContourPoint///PointingToDeclaration/">ContourPoint</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>distanceDirection<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>distance<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Data structure containing information about a point in a <span data-unresolved-link="org.openrndr.shape/ShapeContour///PointingToDeclaration/">ShapeContour</span> closest to some other 2D point.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1201133171%2FClasslikes%2F-354277685" anchor-label="Style" id="1201133171%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-style/index.html"><span><span>Style</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1201133171%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-style/index.html">Style</a> : <a href="-styleable/index.html">Styleable</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2025138521%2FClasslikes%2F-354277685" anchor-label="Styleable" id="2025138521%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-styleable/index.html"><span><span>Styleable</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2025138521%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="-styleable/index.html">Styleable</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="566782607%2FClasslikes%2F-354277685" anchor-label="TextNode" id="566782607%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-text-node/index.html"><span>Text</span><wbr><span><span>Node</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="566782607%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-text-node/index.html">TextNode</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">var </span>text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>contour<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/ShapeContour///PointingToDeclaration/">ShapeContour</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span> : <a href="-composition-node/index.html">CompositionNode</a></div><div class="brief "><p class="paragraph">a <a href="-composition-node/index.html">CompositionNode</a> that holds a single text</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1732231272%2FClasslikes%2F-354277685" anchor-label="Transform" id="-1732231272%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-transform/index.html"><span><span>Transform</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1732231272%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">interface </span><a href="-transform/index.html">Transform</a> : <a href="-attribute-or-property-value/index.html">AttributeOrPropertyValue</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-178161739%2FClasslikes%2F-354277685" anchor-label="TransformMode" id="-178161739%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-transform-mode/index.html"><span>Transform</span><wbr><span><span>Mode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-178161739%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-transform-mode/index.html">TransformMode</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-transform-mode/index.html">TransformMode</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Specifies if transformations should be kept separate or applied to the clipped object and reset to identity.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1220664329%2FClasslikes%2F-354277685" anchor-label="UserData" id="1220664329%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-user-data/index.html"><span>User</span><wbr><span><span>Data</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1220664329%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-user-data/index.html">UserData</a><span class="token operator">&lt;</span><a href="-user-data/index.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>initial<span class="token operator">: </span><a href="-user-data/index.html">T</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">org.openrndr.shape.UserData delegate</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-919890914%2FClasslikes%2F-354277685" anchor-label="ViewBox" id="-919890914%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-view-box/index.html"><span>View</span><wbr><span><span>Box</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-919890914%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">interface </span><a href="-view-box/index.html">ViewBox</a> : <a href="-attribute-or-property-value/index.html">AttributeOrPropertyValue</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1713982868%2FClasslikes%2F-354277685" anchor-label="Visibility" id="-1713982868%2FClasslikes%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-visibility/index.html"><span><span>Visibility</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1713982868%2FClasslikes%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">interface </span><a href="-visibility/index.html">Visibility</a> : <a href="-attribute-or-property-value/index.html">AttributeOrPropertyValue</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-160691701%2FProperties%2F-354277685" anchor-label="defaultCompositionDimensions" id="-160691701%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="default-composition-dimensions.html"><span>default</span><wbr><span>Composition</span><wbr><span><span>Dimensions</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-160691701%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="default-composition-dimensions.html">defaultCompositionDimensions</a><span class="token operator">: </span><a href="-composition-dimensions/index.html">CompositionDimensions</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="101254966%2FProperties%2F-354277685" anchor-label="display" id="101254966%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="display.html"><span><span>display</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="101254966%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style/index.html">Style</a><span class="token punctuation">.</span><a href="display.html">display</a><span class="token operator">: </span><a href="-display/index.html">Display</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2064327075%2FProperties%2F-354277685" anchor-label="fill" id="-2064327075%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="fill.html"><span><span>fill</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2064327075%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style/index.html">Style</a><span class="token punctuation">.</span><a href="fill.html">fill</a><span class="token operator">: </span><a href="-paint/index.html">Paint</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-925694288%2FProperties%2F-354277685" anchor-label="fillOpacity" id="-925694288%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="fill-opacity.html"><span>fill</span><wbr><span><span>Opacity</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-925694288%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style/index.html">Style</a><span class="token punctuation">.</span><a href="fill-opacity.html">fillOpacity</a><span class="token operator">: </span><a href="-numeric/index.html">Numeric</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1643052089%2FProperties%2F-354277685" anchor-label="height" id="1643052089%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="height.html"><span><span>height</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1643052089%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style/index.html">Style</a><span class="token punctuation">.</span><a href="height.html">height</a><span class="token operator">: </span><a href="-length/index.html">Length</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="194350650%2FProperties%2F-354277685" anchor-label="lineCap" id="194350650%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="line-cap.html"><span>line</span><wbr><span><span>Cap</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="194350650%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style/index.html">Style</a><span class="token punctuation">.</span><a href="line-cap.html">lineCap</a><span class="token operator">: </span><a href="-line-cap/index.html">LineCap</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-832437118%2FProperties%2F-354277685" anchor-label="lineJoin" id="-832437118%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="line-join.html"><span>line</span><wbr><span><span>Join</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-832437118%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style/index.html">Style</a><span class="token punctuation">.</span><a href="line-join.html">lineJoin</a><span class="token operator">: </span><a href="-line-join/index.html">LineJoin</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="688462858%2FProperties%2F-354277685" anchor-label="miterLimit" id="688462858%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="miter-limit.html"><span>miter</span><wbr><span><span>Limit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="688462858%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style/index.html">Style</a><span class="token punctuation">.</span><a href="miter-limit.html">miterLimit</a><span class="token operator">: </span><a href="-numeric/index.html">Numeric</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-276800371%2FProperties%2F-354277685" anchor-label="opacity" id="-276800371%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="opacity.html"><span><span>opacity</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-276800371%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style/index.html">Style</a><span class="token punctuation">.</span><a href="opacity.html">opacity</a><span class="token operator">: </span><a href="-numeric/index.html">Numeric</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1410753702%2FProperties%2F-354277685" anchor-label="percent" id="1410753702%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="percent.html"><span><span>percent</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1410753702%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">.</span><a href="percent.html">percent</a><span class="token operator">: </span><a href="-length/-percent/index.html">Length.Percent</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2144673478%2FProperties%2F-354277685" anchor-label="pixels" id="2144673478%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="pixels.html"><span><span>pixels</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2144673478%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">.</span><a href="pixels.html">pixels</a><span class="token operator">: </span><a href="-length/-pixels/index.html">Length.Pixels</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1954004458%2FProperties%2F-354277685" anchor-label="preserveAspectRatio" id="-1954004458%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="preserve-aspect-ratio.html"><span>preserve</span><wbr><span>Aspect</span><wbr><span><span>Ratio</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1954004458%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="-document-style/index.html">DocumentStyle</a><span class="token punctuation">.</span><a href="preserve-aspect-ratio.html">preserveAspectRatio</a><span class="token operator">: </span><a href="-aspect-ratio/index.html">AspectRatio</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-352774916%2FProperties%2F-354277685" anchor-label="shadeStyle" id="-352774916%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="shade-style.html"><span>shade</span><wbr><span><span>Style</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-352774916%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style/index.html">Style</a><span class="token punctuation">.</span><a href="shade-style.html">shadeStyle</a><span class="token operator">: </span><a href="-shade/index.html">Shade</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-439246648%2FProperties%2F-354277685" anchor-label="stroke" id="-439246648%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="stroke.html"><span><span>stroke</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-439246648%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style/index.html">Style</a><span class="token punctuation">.</span><a href="stroke.html">stroke</a><span class="token operator">: </span><a href="-paint/index.html">Paint</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="127256037%2FProperties%2F-354277685" anchor-label="strokeOpacity" id="127256037%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="stroke-opacity.html"><span>stroke</span><wbr><span><span>Opacity</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="127256037%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style/index.html">Style</a><span class="token punctuation">.</span><a href="stroke-opacity.html">strokeOpacity</a><span class="token operator">: </span><a href="-numeric/index.html">Numeric</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-676247504%2FProperties%2F-354277685" anchor-label="strokeWeight" id="-676247504%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="stroke-weight.html"><span>stroke</span><wbr><span><span>Weight</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-676247504%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style/index.html">Style</a><span class="token punctuation">.</span><a href="stroke-weight.html">strokeWeight</a><span class="token operator">: </span><a href="-length/index.html">Length</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2050597428%2FProperties%2F-354277685" anchor-label="transform" id="-2050597428%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="transform.html"><span><span>transform</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2050597428%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style/index.html">Style</a><span class="token punctuation">.</span><a href="transform.html">transform</a><span class="token operator">: </span><a href="-transform/index.html">Transform</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2134383415%2FProperties%2F-354277685" anchor-label="viewBox" id="2134383415%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="view-box.html"><span>view</span><wbr><span><span>Box</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2134383415%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="-document-style/index.html">DocumentStyle</a><span class="token punctuation">.</span><a href="view-box.html">viewBox</a><span class="token operator">: </span><a href="-view-box/index.html">ViewBox</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1029746734%2FProperties%2F-354277685" anchor-label="visibility" id="1029746734%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visibility.html"><span><span>visibility</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1029746734%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style/index.html">Style</a><span class="token punctuation">.</span><a href="visibility.html">visibility</a><span class="token operator">: </span><a href="-visibility/index.html">Visibility</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1567901618%2FProperties%2F-354277685" anchor-label="width" id="1567901618%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="width.html"><span><span>width</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1567901618%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style/index.html">Style</a><span class="token punctuation">.</span><a href="width.html">width</a><span class="token operator">: </span><a href="-length/index.html">Length</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1806204864%2FProperties%2F-354277685" anchor-label="x" id="-1806204864%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="x.html"><span><span>x</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1806204864%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style/index.html">Style</a><span class="token punctuation">.</span><a href="x.html">x</a><span class="token operator">: </span><a href="-length/index.html">Length</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="680914911%2FProperties%2F-354277685" anchor-label="y" id="680914911%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="y.html"><span><span>y</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="680914911%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="-style/index.html">Style</a><span class="token punctuation">.</span><a href="y.html">y</a><span class="token operator">: </span><a href="-length/index.html">Length</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="632342850%2FFunctions%2F-354277685" anchor-label="composition" id="632342850%2FFunctions%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="composition.html"><span><span>composition</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="632342850%2FFunctions%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">.</span><a href="composition.html"><span class="token function">composition</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">composition<span class="token operator">: </span><a href="-composition/index.html">Composition</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Renders a vector <code class="lang-kotlin">Composition</code> onto the <code class="lang-kotlin">Drawer</code>. This method applies transformations, styles, and renders the hierarchy of nodes from the given <code class="lang-kotlin">Composition</code> object.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1242106242%2FFunctions%2F-354277685" anchor-label="draw" id="1242106242%2FFunctions%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="draw.html"><span><span>draw</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1242106242%2FFunctions%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-composition/index.html">Composition</a><span class="token punctuation">.</span><a href="draw.html"><span class="token function">draw</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">cursor<span class="token operator">: </span><a href="-group-node/index.html">GroupNode</a><span class="token operator">?</span><span class="token operator"> = </span>this.root as? GroupNode<span class="token punctuation">, </span></span><span class="parameter ">drawFunction<span class="token operator">: </span><a href="-composition-drawer/index.html">CompositionDrawer</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Draws content into an existing composition using the provided drawing function.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-145494974%2FFunctions%2F-354277685" anchor-label="drawComposition" id="-145494974%2FFunctions%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="draw-composition.html"><span>draw</span><wbr><span><span>Composition</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-145494974%2FFunctions%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="draw-composition.html"><span class="token function">drawComposition</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">documentBounds<span class="token operator">: </span><a href="-composition-dimensions/index.html">CompositionDimensions</a><span class="token operator"> = </span>defaultCompositionDimensions<span class="token punctuation">, </span></span><span class="parameter ">composition<span class="token operator">: </span><a href="-composition/index.html">Composition</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">cursor<span class="token operator">: </span><a href="-group-node/index.html">GroupNode</a><span class="token operator">?</span><span class="token operator"> = </span>composition?.root as? GroupNode<span class="token punctuation">, </span></span><span class="parameter ">drawFunction<span class="token operator">: </span><a href="-composition-drawer/index.html">CompositionDrawer</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-composition/index.html">Composition</a></div><div class="brief "><p class="paragraph">Draws a vector composition by applying a provided drawing function.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="706028473%2FFunctions%2F-354277685" anchor-label="drawComposition" id="706028473%2FFunctions%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="draw-composition.html"><span>draw</span><wbr><span><span>Composition</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="706028473%2FFunctions%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr/Program///PointingToDeclaration/">Program</span><span class="token punctuation">.</span><a href="draw-composition.html"><span class="token function">drawComposition</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">documentBounds<span class="token operator">: </span><a href="-composition-dimensions/index.html">CompositionDimensions</a><span class="token operator"> = </span>CompositionDimensions(0.0.pixels, 0.0.pixels, this.drawer.width.toDouble().pixels, this.drawer.height.toDouble().pixels)<span class="token punctuation">, </span></span><span class="parameter ">composition<span class="token operator">: </span><a href="-composition/index.html">Composition</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">cursor<span class="token operator">: </span><a href="-group-node/index.html">GroupNode</a><span class="token operator">?</span><span class="token operator"> = </span>composition?.root as? GroupNode<span class="token punctuation">, </span></span><span class="parameter ">drawFunction<span class="token operator">: </span><a href="-composition-drawer/index.html">CompositionDrawer</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-composition/index.html">Composition</a></div><div class="brief "><p class="paragraph">Draws a composition within the specified document bounds or an existing composition. This function utilizes a customizable draw function to define the drawing behavior.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr/Program///PointingToDeclaration/">Program</span><span class="token punctuation">.</span><a href="draw-composition.html"><span class="token function">drawComposition</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">documentBounds<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">, </span></span><span class="parameter ">composition<span class="token operator">: </span><a href="-composition/index.html">Composition</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">cursor<span class="token operator">: </span><a href="-group-node/index.html">GroupNode</a><span class="token operator">?</span><span class="token operator"> = </span>composition?.root as? GroupNode<span class="token punctuation">, </span></span><span class="parameter ">drawFunction<span class="token operator">: </span><a href="-composition-drawer/index.html">CompositionDrawer</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-composition/index.html">Composition</a></div><div class="brief "><p class="paragraph">Draws a composition using the specified document bounds and drawing logic. Optionally, an existing composition and cursor can be passed to update or build upon them.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-497232608%2FFunctions%2F-354277685" anchor-label="filter" id="-497232608%2FFunctions%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="filter.html"><span><span>filter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-497232608%2FFunctions%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-composition-node/index.html">CompositionNode</a><span class="token punctuation">.</span><a href="filter.html"><span class="token function">filter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">filter<span class="token operator">: </span><span class="token punctuation">(</span><a href="-composition-node/index.html">CompositionNode</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-composition-node/index.html">CompositionNode</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Filters a <code class="lang-kotlin">CompositionNode</code> and its hierarchy based on the provided filter function. The method recursively applies the filter to the node and its children, creating a new hierarchy that contains only the nodes for which the filter returns true. If the filter condition fails for the root node, null is returned.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1650249633%2FFunctions%2F-354277685" anchor-label="find" id="1650249633%2FFunctions%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="find.html"><span><span>find</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1650249633%2FFunctions%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-composition-node/index.html">CompositionNode</a><span class="token punctuation">.</span><a href="find.html"><span class="token function">find</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">predicate<span class="token operator">: </span><span class="token punctuation">(</span><a href="-composition-node/index.html">CompositionNode</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-composition-node/index.html">CompositionNode</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Finds first <a href="-composition-node/index.html">CompositionNode</a> to match the given <a href="find.html">predicate</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1364200728%2FFunctions%2F-354277685" anchor-label="findAll" id="1364200728%2FFunctions%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="find-all.html"><span>find</span><wbr><span><span>All</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1364200728%2FFunctions%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-composition-node/index.html">CompositionNode</a><span class="token punctuation">.</span><a href="find-all.html"><span class="token function">findAll</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">filter<span class="token operator">: </span><span class="token punctuation">(</span><a href="-composition-node/index.html">CompositionNode</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-composition-node/index.html">CompositionNode</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Finds all <code class="lang-kotlin">CompositionNode</code> instances in the current node hierarchy that satisfy the given filter. Traverses the hierarchy recursively, evaluating each node and its children.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1801915214%2FFunctions%2F-354277685" anchor-label="findGroups" id="1801915214%2FFunctions%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="find-groups.html"><span>find</span><wbr><span><span>Groups</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1801915214%2FFunctions%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-composition-node/index.html">CompositionNode</a><span class="token punctuation">.</span><a href="find-groups.html"><span class="token function">findGroups</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-group-node/index.html">GroupNode</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">find all descendant <a href="-group-node/index.html">GroupNode</a> nodes, including potentially this node</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1331249706%2FFunctions%2F-354277685" anchor-label="findImages" id="1331249706%2FFunctions%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="find-images.html"><span>find</span><wbr><span><span>Images</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1331249706%2FFunctions%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-composition-node/index.html">CompositionNode</a><span class="token punctuation">.</span><a href="find-images.html"><span class="token function">findImages</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-image-node/index.html">ImageNode</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">find all descendant <a href="-image-node/index.html">ImageNode</a> nodes, including potentially this node</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-84995472%2FFunctions%2F-354277685" anchor-label="findShapes" id="-84995472%2FFunctions%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="find-shapes.html"><span>find</span><wbr><span><span>Shapes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-84995472%2FFunctions%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-composition-node/index.html">CompositionNode</a><span class="token punctuation">.</span><a href="find-shapes.html"><span class="token function">findShapes</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-shape-node/index.html">ShapeNode</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">find all descendant <a href="-shape-node/index.html">ShapeNode</a> nodes, including potentially this node</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1217560622%2FFunctions%2F-354277685" anchor-label="findTerminals" id="1217560622%2FFunctions%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="find-terminals.html"><span>find</span><wbr><span><span>Terminals</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1217560622%2FFunctions%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-composition-node/index.html">CompositionNode</a><span class="token punctuation">.</span><a href="find-terminals.html"><span class="token function">findTerminals</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">filter<span class="token operator">: </span><span class="token punctuation">(</span><a href="-composition-node/index.html">CompositionNode</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-composition-node/index.html">CompositionNode</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Recursively finds all terminal nodes within the composition tree starting from the current node and applies the provided filter to determine which nodes to include in the result.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="458300331%2FFunctions%2F-354277685" anchor-label="map" id="458300331%2FFunctions%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="map.html"><span><span>map</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="458300331%2FFunctions%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-composition-node/index.html">CompositionNode</a><span class="token punctuation">.</span><a href="map.html"><span class="token function">map</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">mapper<span class="token operator">: </span><span class="token punctuation">(</span><a href="-composition-node/index.html">CompositionNode</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="-composition-node/index.html">CompositionNode</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-composition-node/index.html">CompositionNode</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="992466301%2FFunctions%2F-354277685" anchor-label="merge" id="992466301%2FFunctions%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="merge.html"><span><span>merge</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="992466301%2FFunctions%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-shape-node-intersection/index.html">ShapeNodeIntersection</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="merge.html"><span class="token function">merge</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">threshold<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.5</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-shape-node-intersection/index.html">ShapeNodeIntersection</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Merges two lists of <a href="-shape-node-intersection/index.html">ShapeNodeIntersection</a> removing duplicates under the given <a href="merge.html">threshold</a>. Used internally by <span data-unresolved-link="org.openrndr.shape//intersections/org.openrndr.shape.Segment2D#org.openrndr.shape.Segment2D/PointingToDeclaration/">intersections</span>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1461042729%2FFunctions%2F-354277685" anchor-label="remove" id="-1461042729%2FFunctions%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="remove.html"><span><span>remove</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1461042729%2FFunctions%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-composition-node/index.html">CompositionNode</a><span class="token punctuation">.</span><a href="remove.html"><span class="token function">remove</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">remove node from its parent <a href="-composition-node/index.html">CompositionNode</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="430133422%2FFunctions%2F-354277685" anchor-label="setValue" id="430133422%2FFunctions%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-value.html"><span>set</span><wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="430133422%2FFunctions%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.reflect/-k-mutable-property0/index.html">KMutableProperty0</a><span class="token operator">&lt;</span><a href="-shade/index.html">Shade</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="set-value.html"><span class="token function">setValue</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">thisRef<span class="token operator">: </span><a href="-style/index.html">Style</a><span class="token punctuation">, </span></span><span class="parameter ">property<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.reflect/-k-property/index.html">KProperty</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ShadeStyle///PointingToDeclaration/">ShadeStyle</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="495336115%2FFunctions%2F-354277685" anchor-label="transform" id="495336115%2FFunctions%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="transform.html"><span><span>transform</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="495336115%2FFunctions%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="transform.html"><span class="token function">transform</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">node<span class="token operator">: </span><a href="-composition-node/index.html">CompositionNode</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Matrix44///PointingToDeclaration/">Matrix44</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="611914390%2FFunctions%2F-354277685" anchor-label="visitAll" id="611914390%2FFunctions%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-all.html"><span>visit</span><wbr><span><span>All</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="611914390%2FFunctions%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-composition-node/index.html">CompositionNode</a><span class="token punctuation">.</span><a href="visit-all.html"><span class="token function">visitAll</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">visitor<span class="token operator">: </span><a href="-composition-node/index.html">CompositionNode</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">visit this <a href="-composition-node/index.html">CompositionNode</a> and all descendant nodes and execute <a href="visit-all.html">visitor</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

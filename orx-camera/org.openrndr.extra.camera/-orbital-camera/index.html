@@ -1,0 +1,831 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>OrbitalCamera</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../../images/logo-icon.svg">
+<link href="../../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.0-dev.70+e4c3ecc
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-camera/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-camera/commonMain" data-filter=":orx-camera/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="orx-camera::org.openrndr.extra.camera/OrbitalCamera///PointingToDeclaration//-957816952">
+  <div class="breadcrumbs"><a href="../../index.html">orx-camera</a><span class="delimiter">/</span><a href="../index.html">org.openrndr.extra.camera</a><span class="delimiter">/</span><span class="current">OrbitalCamera</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Orbital</span><wbr><span><span>Camera</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">OrbitalCamera</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">eye<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator"> = </span>Vector3.ZERO<span class="token punctuation">, </span></span><span class="parameter ">lookAt<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator"> = </span>Vector3.UNIT_Z<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>fov<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">90.0</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>near<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.1</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>far<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1000.0</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>projectionType<span class="token operator">: </span><a href="../-projection-type/index.html">ProjectionType</a><span class="token operator"> = </span>ProjectionType.PERSPECTIVE</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.openrndr/Extension///PointingToDeclaration/">Extension</span>, <a href="../-change-events/index.html">ChangeEvents</a><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/openrndr/orx/blob/master/orx-camera/src/commonMain/kotlin/OrbitalCamera.kt#L25">source</a>)</span></span></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="-954339121%2FConstructors%2F-957816952" anchor-label="OrbitalCamera" id="-954339121%2FConstructors%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-orbital-camera.html"><span>Orbital</span><wbr><span><span>Camera</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-954339121%2FConstructors%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">eye<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator"> = </span>Vector3.ZERO<span class="token punctuation">, </span></span><span class="parameter ">lookAt<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator"> = </span>Vector3.UNIT_Z<span class="token punctuation">, </span></span><span class="parameter ">fov<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">90.0</span><span class="token punctuation">, </span></span><span class="parameter ">near<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.1</span><span class="token punctuation">, </span></span><span class="parameter ">far<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1000.0</span><span class="token punctuation">, </span></span><span class="parameter ">projectionType<span class="token operator">: </span><a href="../-projection-type/index.html">ProjectionType</a><span class="token operator"> = </span>ProjectionType.PERSPECTIVE</span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="-93076843%2FClasslikes%2F-957816952" anchor-label="Companion" id="-93076843%2FClasslikes%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-companion/index.html"><span><span>Companion</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-93076843%2FClasslikes%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">object </span><a href="-companion/index.html">Companion</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-1160482470%2FProperties%2F-957816952" anchor-label="changed" id="-1160482470%2FProperties%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="changed.html"><span><span>changed</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1160482470%2FProperties%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="changed.html">changed</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.events/Event///PointingToDeclaration/">Event</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="853584125%2FProperties%2F-957816952" anchor-label="dampingFactor" id="853584125%2FProperties%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="damping-factor.html"><span>damping</span><wbr><span><span>Factor</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="853584125%2FProperties%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="damping-factor.html">dampingFactor</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1942762745%2FProperties%2F-957816952" anchor-label="depthTest" id="1942762745%2FProperties%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="depth-test.html"><span>depth</span><wbr><span><span>Test</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1942762745%2FProperties%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="depth-test.html">depthTest</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="218108269%2FProperties%2F-957816952" anchor-label="enabled" id="218108269%2FProperties%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="enabled.html"><span><span>enabled</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="218108269%2FProperties%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="enabled.html">enabled</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-533358724%2FProperties%2F-957816952" anchor-label="eyeDefault" id="-533358724%2FProperties%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="eye-default.html"><span>eye</span><wbr><span><span>Default</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-533358724%2FProperties%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="eye-default.html">eyeDefault</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1771569449%2FProperties%2F-957816952" anchor-label="far" id="-1771569449%2FProperties%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="far.html"><span><span>far</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1771569449%2FProperties%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="far.html">far</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1069795871%2FProperties%2F-957816952" anchor-label="fov" id="-1069795871%2FProperties%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="fov.html"><span><span>fov</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1069795871%2FProperties%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="fov.html">fov</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1059334680%2FProperties%2F-957816952" anchor-label="fovDefault" id="1059334680%2FProperties%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="fov-default.html"><span>fov</span><wbr><span><span>Default</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1059334680%2FProperties%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="fov-default.html">fovDefault</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1030936254%2FProperties%2F-957816952" anchor-label="fovEnd" id="1030936254%2FProperties%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="fov-end.html"><span>fov</span><wbr><span><span>End</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1030936254%2FProperties%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="fov-end.html">fovEnd</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="764413650%2FProperties%2F-957816952" anchor-label="hasChanged" id="764413650%2FProperties%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has-changed.html"><span>has</span><wbr><span><span>Changed</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="764413650%2FProperties%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="has-changed.html">hasChanged</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1662296282%2FProperties%2F-957816952" anchor-label="lookAt" id="1662296282%2FProperties%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="look-at.html"><span>look</span><wbr><span><span>At</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1662296282%2FProperties%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="look-at.html">lookAt</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2145723647%2FProperties%2F-957816952" anchor-label="lookAtDefault" id="2145723647%2FProperties%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="look-at-default.html"><span>look</span><wbr><span>At</span><wbr><span><span>Default</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2145723647%2FProperties%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="look-at-default.html">lookAtDefault</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="463606078%2FProperties%2F-957816952" anchor-label="magnitude" id="463606078%2FProperties%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="magnitude.html"><span><span>magnitude</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="463606078%2FProperties%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="magnitude.html">magnitude</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1773192165%2FProperties%2F-957816952" anchor-label="magnitudeDefault" id="-1773192165%2FProperties%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="magnitude-default.html"><span>magnitude</span><wbr><span><span>Default</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1773192165%2FProperties%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="magnitude-default.html">magnitudeDefault</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1336238657%2FProperties%2F-957816952" anchor-label="magnitudeEnd" id="1336238657%2FProperties%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="magnitude-end.html"><span>magnitude</span><wbr><span><span>End</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1336238657%2FProperties%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="magnitude-end.html">magnitudeEnd</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-780479388%2FProperties%2F-957816952" anchor-label="near" id="-780479388%2FProperties%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="near.html"><span><span>near</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-780479388%2FProperties%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="near.html">near</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="833732781%2FProperties%2F-957816952" anchor-label="orthoFar" id="833732781%2FProperties%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="ortho-far.html"><span>ortho</span><wbr><span><span>Far</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="833732781%2FProperties%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="ortho-far.html">orthoFar</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1620488882%2FProperties%2F-957816952" anchor-label="orthoNear" id="-1620488882%2FProperties%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="ortho-near.html"><span>ortho</span><wbr><span><span>Near</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1620488882%2FProperties%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="ortho-near.html">orthoNear</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2072521411%2FProperties%2F-957816952" anchor-label="projectionType" id="2072521411%2FProperties%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="projection-type.html"><span>projection</span><wbr><span><span>Type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2072521411%2FProperties%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="projection-type.html">projectionType</a><span class="token operator">: </span><a href="../-projection-type/index.html">ProjectionType</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1744087441%2FProperties%2F-957816952" anchor-label="spherical" id="1744087441%2FProperties%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="spherical.html"><span><span>spherical</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1744087441%2FProperties%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="spherical.html">spherical</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Spherical///PointingToDeclaration/">Spherical</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1158317158%2FProperties%2F-957816952" anchor-label="zoomSpeed" id="-1158317158%2FProperties%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="zoom-speed.html"><span>zoom</span><wbr><span><span>Speed</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1158317158%2FProperties%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="zoom-speed.html">zoomSpeed</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="1459156680%2FFunctions%2F-957816952" anchor-label="afterDraw" id="1459156680%2FFunctions%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="after-draw.html"><span>after</span><wbr><span><span>Draw</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1459156680%2FFunctions%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="after-draw.html"><span class="token function">afterDraw</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">drawer<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">, </span></span><span class="parameter ">program<span class="token operator">: </span><span data-unresolved-link="org.openrndr/Program///PointingToDeclaration/">Program</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="223846987%2FFunctions%2F-957816952" anchor-label="applyTo" id="223846987%2FFunctions%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="apply-to.html"><span>apply</span><wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="223846987%2FFunctions%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">OrbitalCamera</a><span class="token punctuation">.</span><a href="apply-to.html"><span class="token function">applyTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">drawer<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Enables the perspective camera. Use this faster method instead of .isolated() if you don't need to revert back to the orthographic projection.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="51730029%2FFunctions%2F-957816952" anchor-label="beforeDraw" id="51730029%2FFunctions%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="before-draw.html"><span>before</span><wbr><span><span>Draw</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="51730029%2FFunctions%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="before-draw.html"><span class="token function">beforeDraw</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">drawer<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">, </span></span><span class="parameter ">program<span class="token operator">: </span><span data-unresolved-link="org.openrndr/Program///PointingToDeclaration/">Program</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-741296193%2FFunctions%2F-957816952" anchor-label="defaults" id="-741296193%2FFunctions%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="defaults.html"><span><span>defaults</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-741296193%2FFunctions%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="defaults.html"><span class="token function">defaults</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">instant<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Reinitialize the camera to its initial state.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1896702784%2FFunctions%2F-957816952" anchor-label="dolly" id="-1896702784%2FFunctions%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="dolly.html"><span><span>dolly</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1896702784%2FFunctions%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="dolly.html"><span class="token function">dolly</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">distance<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">instant<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Adjusts the camera's distance from the target by the specified amount. The change in distance is applied immediately if <code class="lang-kotlin">instant</code> is set to <code class="lang-kotlin">true</code>, otherwise it will be interpolated over time with smoothing.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1901449253%2FFunctions%2F-957816952" anchor-label="dollyIn" id="-1901449253%2FFunctions%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="dolly-in.html"><span>dolly</span><wbr><span><span>In</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1901449253%2FFunctions%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="dolly-in.html"><span class="token function">dollyIn</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">amount<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1.0</span><span class="token punctuation">, </span></span><span class="parameter ">instant<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Zooms the camera in by decreasing the distance to the target. The zoom is based on an exponential scale factor determined by the <code class="lang-kotlin">zoomSpeed</code> field. If the <code class="lang-kotlin">instant</code> parameter is set to <code class="lang-kotlin">true</code>, the zoom effect is applied immediately; otherwise, it will interpolate the change over time.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="187558380%2FFunctions%2F-957816952" anchor-label="dollyOut" id="187558380%2FFunctions%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="dolly-out.html"><span>dolly</span><wbr><span><span>Out</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="187558380%2FFunctions%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="dolly-out.html"><span class="token function">dollyOut</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">amount<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1.0</span><span class="token punctuation">, </span></span><span class="parameter ">instant<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Zooms the camera out by increasing the distance to the target. The zoom operation is based on an exponential scale factor determined by the <code class="lang-kotlin">zoomSpeed</code> field.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1868912709%2FFunctions%2F-957816952" anchor-label="dollyTo" id="1868912709%2FFunctions%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="dolly-to.html"><span>dolly</span><wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1868912709%2FFunctions%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="dolly-to.html"><span class="token function">dollyTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">distance<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">instant<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Adjusts the camera's distance (radius) to the specified value. If the <code class="lang-kotlin">instant</code> parameter is set to true, the distance change is applied immediately; otherwise, it will be interpolated over time during updates.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-236858014%2FFunctions%2F-957816952" anchor-label="isolated" id="-236858014%2FFunctions%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../isolated.html"><span><span>isolated</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-236858014%2FFunctions%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">OrbitalCamera</a><span class="token punctuation">.</span><a href="../isolated.html"><span class="token function">isolated</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">drawer<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">, </span></span><span class="parameter ">function<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Temporarily enables this camera, calls function to draw using that camera, then disables it by popping the last matrix changes. It makes it easy to combine perspective and orthographic projections in the same program.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1044345337%2FFunctions%2F-957816952" anchor-label="pan" id="-1044345337%2FFunctions%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="pan.html"><span><span>pan</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1044345337%2FFunctions%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="pan.html"><span class="token function">pan</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">y<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">z<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">instant<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="485074162%2FFunctions%2F-957816952" anchor-label="panTo" id="485074162%2FFunctions%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="pan-to.html"><span>pan</span><wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="485074162%2FFunctions%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="pan-to.html"><span class="token function">panTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">target<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token punctuation">, </span></span><span class="parameter ">instant<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Smoothly pans the camera to a specified target position. If the <code class="lang-kotlin">instant</code> parameter is set to <code class="lang-kotlin">true</code>, the panning occurs immediately; otherwise, it will be interpolated over time.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1335022220%2FFunctions%2F-957816952" anchor-label="rotate" id="1335022220%2FFunctions%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="rotate.html"><span><span>rotate</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1335022220%2FFunctions%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="rotate.html"><span class="token function">rotate</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">degreesX<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">degreesY<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">instant<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Rotates the orbital camera by the specified angles in the horizontal and vertical directions. The rotation can be applied instantly or smoothly interpolated over time.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="547764237%2FFunctions%2F-957816952" anchor-label="rotateTo" id="547764237%2FFunctions%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="rotate-to.html"><span>rotate</span><wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="547764237%2FFunctions%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="rotate-to.html"><span class="token function">rotateTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">eye<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token punctuation">, </span></span><span class="parameter ">instant<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Rotates the orbital camera to the specified position defined by the <code class="lang-kotlin">eye</code> vector. The rotation can either occur instantly or smoothly interpolated over time, depending on the <code class="lang-kotlin">instant</code> parameter.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="rotate-to.html"><span class="token function">rotateTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">degreesX<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">degreesY<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">instant<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Rotates the camera to the specified spherical angles. The rotation can occur instantly or smoothly over time based on the <code class="lang-kotlin">instant</code> parameter.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-160753788%2FFunctions%2F-957816952" anchor-label="scale" id="-160753788%2FFunctions%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="scale.html"><span><span>scale</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-160753788%2FFunctions%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="scale.html"><span class="token function">scale</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">scale<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">instant<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Adjusts the magnitude of the orbital camera by the specified scale factor. If the <code class="lang-kotlin">instant</code> parameter is set to true, the adjustment is applied immediately; otherwise, it will be interpolated over time during updates.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-626380279%2FFunctions%2F-957816952" anchor-label="scaleTo" id="-626380279%2FFunctions%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="scale-to.html"><span>scale</span><wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-626380279%2FFunctions%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="scale-to.html"><span class="token function">scaleTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">scale<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">instant<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Adjusts the camera's scaling factor to the specified value. The scaling can either be applied instantly or interpolated over time during updates.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="463722013%2FFunctions%2F-957816952" anchor-label="setup" id="463722013%2FFunctions%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="setup.html"><span><span>setup</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="463722013%2FFunctions%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="setup.html"><span class="token function">setup</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">program<span class="token operator">: </span><span data-unresolved-link="org.openrndr/Program///PointingToDeclaration/">Program</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1834761470%2FFunctions%2F-957816952" anchor-label="setView" id="-1834761470%2FFunctions%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-view.html"><span>set</span><wbr><span><span>View</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1834761470%2FFunctions%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="set-view.html"><span class="token function">setView</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">lookAt<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token punctuation">, </span></span><span class="parameter ">spherical<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Spherical///PointingToDeclaration/">Spherical</span><span class="token punctuation">, </span></span><span class="parameter ">fov<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Sets the view for the orbital camera by updating the look-at position, spherical coordinates, and field of view (FOV). This method initializes both the target and current states of these properties.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="245346354%2FFunctions%2F-957816952" anchor-label="shutdown" id="245346354%2FFunctions%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-parametric-orbital/index.html#245346354%2FFunctions%2F-957816952"><span><span>shutdown</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="245346354%2FFunctions%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../-parametric-orbital/index.html#245346354%2FFunctions%2F-957816952"><span class="token function">shutdown</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">program<span class="token operator">: </span><span data-unresolved-link="org.openrndr/Program///PointingToDeclaration/">Program</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-870155519%2FFunctions%2F-957816952" anchor-label="update" id="-870155519%2FFunctions%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="update.html"><span><span>update</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-870155519%2FFunctions%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="update.html"><span class="token function">update</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">timeDelta<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Updates the orbital camera state by iteratively applying updates to the camera's parameters based on a fixed time step. The method ensures smooth interpolation of the camera properties (e.g., position, orientation) over a specified time delta.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2146674669%2FFunctions%2F-957816952" anchor-label="updateStep" id="2146674669%2FFunctions%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="update-step.html"><span>update</span><wbr><span><span>Step</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2146674669%2FFunctions%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="update-step.html"><span class="token function">updateStep</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">timeDelta<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Updates the camera position, orientation, and view properties such as spherical coordinates, look-at point, field of view, and magnitude based on damping factors and time delta.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1527405498%2FFunctions%2F-957816952" anchor-label="viewMatrix" id="-1527405498%2FFunctions%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="view-matrix.html"><span>view</span><wbr><span><span>Matrix</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1527405498%2FFunctions%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="view-matrix.html"><span class="token function">viewMatrix</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Matrix44///PointingToDeclaration/">Matrix44</span></div><div class="brief "><p class="paragraph">Computes and returns the view matrix for the orbital camera. The view matrix is calculated using the current spherical coordinates, look-at position, and the up vector (Vector3.UNIT_Y).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="239080793%2FFunctions%2F-957816952" anchor-label="zoom" id="239080793%2FFunctions%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="zoom.html"><span><span>zoom</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="239080793%2FFunctions%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="zoom.html"><span class="token function">zoom</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">degrees<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">instant<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Adjusts the camera's field of view (FOV) by the specified number of degrees. The transition can either happen instantly or be interpolated over time during updates.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1362562718%2FFunctions%2F-957816952" anchor-label="zoomTo" id="1362562718%2FFunctions%2F-957816952" data-filterable-set=":orx-camera/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-camera/commonMain" data-filterable-set=":orx-camera/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="zoom-to.html"><span>zoom</span><wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1362562718%2FFunctions%2F-957816952"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-camera/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="zoom-to.html"><span class="token function">zoomTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">degrees<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">instant<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Adjusts the camera's field of view (FOV) to the specified number of degrees. If the <code class="lang-kotlin">instant</code> parameter is set to <code class="lang-kotlin">true</code>, the FOV immediately transitions to the specified value; otherwise, it will be interpolated over time during updates.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

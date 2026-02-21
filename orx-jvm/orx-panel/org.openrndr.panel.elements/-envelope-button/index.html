@@ -1,0 +1,1371 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>EnvelopeButton</title>
+<link href="../../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../../styles/style.css" rel="Stylesheet">
+<link href="../../../../styles/main.css" rel="Stylesheet">
+<link href="../../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../../../images/logo-icon.svg">
+<link href="../../../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.0-dev.70+e4c3ecc
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":orx-jvm:orx-panel/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-jvm:orx-panel/main" data-filter=":orx-jvm:orx-panel/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="orx-panel::org.openrndr.panel.elements/EnvelopeButton///PointingToDeclaration//1278250025">
+  <div class="breadcrumbs"><a href="../../index.html">orx-panel</a><span class="delimiter">/</span><a href="../index.html">org.openrndr.panel.elements</a><span class="delimiter">/</span><span class="current">EnvelopeButton</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Envelope</span><wbr><span><span>Button</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">EnvelopeButton</a> : <a href="../-element/index.html">Element</a><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/openrndr/orx/blob/master/orx-panel/src/main/kotlin/org/openrndr/panel/elements/EnvelopeButton.kt#L12">source</a>)</span></span></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="-182306804%2FConstructors%2F1278250025" anchor-label="EnvelopeButton" id="-182306804%2FConstructors%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-envelope-button.html"><span>Envelope</span><wbr><span><span>Button</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-182306804%2FConstructors%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="-1790472506%2FClasslikes%2F1278250025" anchor-label="SlideOut" id="-1790472506%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-slide-out/index.html"><span>Slide</span><wbr><span><span>Out</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1790472506%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-slide-out/index.html">SlideOut</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>y<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>width<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>height<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">parent<span class="token operator">: </span><a href="index.html">EnvelopeButton</a></span></span><span class="token punctuation">)</span> : <a href="../-element/index.html">Element</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="164889677%2FProperties%2F1278250025" anchor-label="children" id="164889677%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/children.html"><span><span>children</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="164889677%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="../-element/children.html">children</a><span class="token operator">: </span><a href="../../org.openrndr.panel.collections/-observable-copy-on-write-array-list/index.html">ObservableCopyOnWriteArrayList</a><span class="token operator">&lt;</span><a href="../-element/index.html">Element</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1597308616%2FProperties%2F1278250025" anchor-label="classes" id="1597308616%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/classes.html"><span><span>classes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1597308616%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="../-element/classes.html">classes</a><span class="token operator">: </span><a href="../../org.openrndr.panel.collections/-observable-hash-set/index.html">ObservableHashSet</a><span class="token operator">&lt;</span><a href="../-element-class/index.html">ElementClass</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1682553885%2FProperties%2F1278250025" anchor-label="classEvents" id="1682553885%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/class-events.html"><span>class</span><wbr><span><span>Events</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1682553885%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="../-element/class-events.html">classEvents</a><span class="token operator">: </span><a href="../-element/-class-observerables/index.html">Element.ClassObserverables</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-102237878%2FProperties%2F1278250025" anchor-label="computedStyle" id="-102237878%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/computed-style.html"><span>computed</span><wbr><span><span>Style</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-102237878%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="../-element/computed-style.html">computedStyle</a><span class="token operator">: </span><a href="../../org.openrndr.panel.style/-style-sheet/index.html">StyleSheet</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2006377753%2FProperties%2F1278250025" anchor-label="disposed" id="-2006377753%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/disposed.html"><span><span>disposed</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2006377753%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="../-element/disposed.html">disposed</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1684778024%2FProperties%2F1278250025" anchor-label="draw" id="1684778024%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/draw.html"><span><span>draw</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1684778024%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="../-element/draw.html">draw</a><span class="token operator">: </span><a href="../-element/-draw/index.html">Element.Draw</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2045333725%2FProperties%2F1278250025" anchor-label="drop" id="2045333725%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/drop.html"><span><span>drop</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2045333725%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="../-element/drop.html">drop</a><span class="token operator">: </span><a href="../-element/-drop-observerables/index.html">Element.DropObserverables</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-44161026%2FProperties%2F1278250025" anchor-label="envelope" id="-44161026%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="envelope.html"><span><span>envelope</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-44161026%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="envelope.html">envelope</a><span class="token operator">: </span><a href="../-envelope/index.html">Envelope</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1443852319%2FProperties%2F1278250025" anchor-label="envelopeSubscription" id="-1443852319%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="envelope-subscription.html"><span>envelope</span><wbr><span><span>Subscription</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1443852319%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="envelope-subscription.html">envelopeSubscription</a><span class="token operator">: </span><span class="token punctuation">(</span><a href="../-envelope/-envelope-changed-event/index.html">Envelope.EnvelopeChangedEvent</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="535883840%2FProperties%2F1278250025" anchor-label="handlesDoubleClick" id="535883840%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/handles-double-click.html"><span>handles</span><wbr><span>Double</span><wbr><span><span>Click</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="535883840%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="../-element/handles-double-click.html">handlesDoubleClick</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="643734022%2FProperties%2F1278250025" anchor-label="handlesKeyboardFocus" id="643734022%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/handles-keyboard-focus.html"><span>handles</span><wbr><span>Keyboard</span><wbr><span><span>Focus</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="643734022%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="../-element/handles-keyboard-focus.html">handlesKeyboardFocus</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="139632926%2FProperties%2F1278250025" anchor-label="heightHint" id="139632926%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/height-hint.html"><span>height</span><wbr><span><span>Hint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="139632926%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="../-element/height-hint.html">heightHint</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1178272783%2FProperties%2F1278250025" anchor-label="id" id="-1178272783%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/id.html"><span><span>id</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1178272783%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="../-element/id.html">id</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1190978405%2FProperties%2F1278250025" anchor-label="keyboard" id="1190978405%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/keyboard.html"><span><span>keyboard</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1190978405%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="../-element/keyboard.html">keyboard</a><span class="token operator">: </span><a href="../-element/-keyboard-observables/index.html">Element.KeyboardObservables</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-546793768%2FProperties%2F1278250025" anchor-label="label" id="-546793768%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="label.html"><span><span>label</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-546793768%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="label.html">label</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="215326018%2FProperties%2F1278250025" anchor-label="layout" id="215326018%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/layout.html"><span><span>layout</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="215326018%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="../-element/layout.html">layout</a><span class="token operator">: </span><a href="../-element/-layout/index.html">Element.Layout</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-508223639%2FProperties%2F1278250025" anchor-label="mouse" id="-508223639%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/mouse.html"><span><span>mouse</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-508223639%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="../-element/mouse.html">mouse</a><span class="token operator">: </span><a href="../-element/-mouse-observables/index.html">Element.MouseObservables</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1172815810%2FProperties%2F1278250025" anchor-label="parent" id="1172815810%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/parent.html"><span><span>parent</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1172815810%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="../-element/parent.html">parent</a><span class="token operator">: </span><a href="../-element/index.html">Element</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1785508838%2FProperties%2F1278250025" anchor-label="pseudoClasses" id="1785508838%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/pseudo-classes.html"><span>pseudo</span><wbr><span><span>Classes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1785508838%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="../-element/pseudo-classes.html">pseudoClasses</a><span class="token operator">: </span><a href="../../org.openrndr.panel.collections/-observable-hash-set/index.html">ObservableHashSet</a><span class="token operator">&lt;</span><a href="../-element-pseudo-class/index.html">ElementPseudoClass</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1107383475%2FProperties%2F1278250025" anchor-label="screenArea" id="1107383475%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/screen-area.html"><span>screen</span><wbr><span><span>Area</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1107383475%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="../-element/screen-area.html">screenArea</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-673248745%2FProperties%2F1278250025" anchor-label="screenPosition" id="-673248745%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/screen-position.html"><span>screen</span><wbr><span><span>Position</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-673248745%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="../-element/screen-position.html">screenPosition</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="916682150%2FProperties%2F1278250025" anchor-label="scrollTop" id="916682150%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/scroll-top.html"><span>scroll</span><wbr><span><span>Top</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="916682150%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="../-element/scroll-top.html">scrollTop</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-430095395%2FProperties%2F1278250025" anchor-label="style" id="-430095395%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/style.html"><span><span>style</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-430095395%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="../-element/style.html">style</a><span class="token operator">: </span><a href="../../org.openrndr.panel.style/-style-sheet/index.html">StyleSheet</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-912700686%2FProperties%2F1278250025" anchor-label="type" id="-912700686%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/type.html"><span><span>type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-912700686%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="../-element/type.html">type</a><span class="token operator">: </span><a href="../-element-type/index.html">ElementType</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-781951199%2FProperties%2F1278250025" anchor-label="widthHint" id="-781951199%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/width-hint.html"><span>width</span><wbr><span><span>Hint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-781951199%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="../-element/width-hint.html">widthHint</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-310118674%2FFunctions%2F1278250025" anchor-label="ancestors" id="-310118674%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/ancestors.html"><span><span>ancestors</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-310118674%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/ancestors.html"><span class="token function">ancestors</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-element/index.html">Element</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1973164275%2FFunctions%2F1278250025" anchor-label="append" id="1973164275%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/append.html"><span><span>append</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1973164275%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../-element/append.html"><span class="token function">append</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">builder<span class="token operator">: </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="append.html"><span class="token function">append</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">element<span class="token operator">: </span><a href="../-element/index.html">Element</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1351383709%2FFunctions%2F1278250025" anchor-label="button" id="1351383709%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../button.html"><span><span>button</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1351383709%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../button.html"><span class="token function">button</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">label<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"button"</span><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="../-button/index.html">Button</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-button/index.html">Button</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1813419886%2FFunctions%2F1278250025" anchor-label="canvas" id="1813419886%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../canvas.html"><span><span>canvas</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1813419886%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../canvas.html"><span class="token function">canvas</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="../-canvas/index.html">Canvas</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-canvas/index.html">Canvas</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1269496019%2FFunctions%2F1278250025" anchor-label="childIndex" id="-1269496019%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/child-index.html"><span>child</span><wbr><span><span>Index</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1269496019%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/child-index.html"><span class="token function">childIndex</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">element<span class="token operator">: </span><a href="../-element/index.html">Element</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1172270730%2FFunctions%2F1278250025" anchor-label="close" id="-1172270730%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/close.html"><span><span>close</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1172270730%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-element/close.html"><span class="token function">close</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="670199350%2FFunctions%2F1278250025" anchor-label="colorpicker" id="670199350%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../colorpicker.html"><span><span>colorpicker</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="670199350%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../colorpicker.html"><span class="token function">colorpicker</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="../-colorpicker/index.html">Colorpicker</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-colorpicker/index.html">Colorpicker</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2089170250%2FFunctions%2F1278250025" anchor-label="colorpickerButton" id="-2089170250%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../colorpicker-button.html"><span>colorpicker</span><wbr><span><span>Button</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2089170250%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../colorpicker-button.html"><span class="token function">colorpickerButton</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="../-colorpicker-button/index.html">ColorpickerButton</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-colorpicker-button/index.html">ColorpickerButton</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-467680363%2FFunctions%2F1278250025" anchor-label="disable" id="-467680363%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../disable.html"><span><span>disable</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-467680363%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../disable.html"><span class="token function">disable</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-616427722%2FFunctions%2F1278250025" anchor-label="div" id="-616427722%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../div.html"><span><span>div</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-616427722%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../div.html"><span class="token function">div</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="../-div/index.html">Div</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-div/index.html">Div</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1866792511%2FFunctions%2F1278250025" anchor-label="draw" id="1866792511%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="draw.html"><span><span>draw</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1866792511%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="draw.html"><span class="token function">draw</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">drawer<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-212880059%2FFunctions%2F1278250025" anchor-label="dropdownButton" id="-212880059%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../dropdown-button.html"><span>dropdown</span><wbr><span><span>Button</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-212880059%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../dropdown-button.html"><span class="token function">dropdownButton</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">id<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">label<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"button"</span><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="../-dropdown-button/index.html">DropdownButton</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-dropdown-button/index.html">DropdownButton</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1545055539%2FFunctions%2F1278250025" anchor-label="elementWithId" id="1545055539%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/element-with-id.html"><span>element</span><wbr><span>With</span><wbr><span><span>Id</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1545055539%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../-element/element-with-id.html">T</a><span class="token operator">&gt; </span><a href="../-element/element-with-id.html"><span class="token function">elementWithId</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">id<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-element/element-with-id.html">T</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="678966706%2FFunctions%2F1278250025" anchor-label="enable" id="678966706%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../enable.html"><span><span>enable</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="678966706%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../enable.html"><span class="token function">enable</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="264368514%2FFunctions%2F1278250025" anchor-label="envelopeButton" id="264368514%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../envelope-button.html"><span>envelope</span><wbr><span><span>Button</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="264368514%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../envelope-button.html"><span class="token function">envelopeButton</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="index.html">EnvelopeButton</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">EnvelopeButton</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1057621064%2FFunctions%2F1278250025" anchor-label="envelopeEditor" id="-1057621064%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../envelope-editor.html"><span>envelope</span><wbr><span><span>Editor</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1057621064%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../envelope-editor.html"><span class="token function">envelopeEditor</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="../-envelope-editor/index.html">EnvelopeEditor</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-envelope-editor/index.html">EnvelopeEditor</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-652561010%2FFunctions%2F1278250025" anchor-label="filter" id="-652561010%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/filter.html"><span><span>filter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-652561010%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/filter.html"><span class="token function">filter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">f<span class="token operator">: </span><span class="token punctuation">(</span><a href="../-element/index.html">Element</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-element/index.html">Element</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="970086959%2FFunctions%2F1278250025" anchor-label="findAll" id="970086959%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../find-all.html"><span>find</span><wbr><span><span>All</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="970086959%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../find-all.html"><span class="token function">findAll</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">predicate<span class="token operator">: </span><span class="token punctuation">(</span><a href="../-element/index.html">Element</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-element/index.html">Element</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-932947149%2FFunctions%2F1278250025" anchor-label="findAllVisible" id="-932947149%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../find-all-visible.html"><span>find</span><wbr><span>All</span><wbr><span><span>Visible</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-932947149%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../find-all-visible.html"><span class="token function">findAllVisible</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">predicate<span class="token operator">: </span><span class="token punctuation">(</span><a href="../-element/index.html">Element</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-element/index.html">Element</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1603791821%2FFunctions%2F1278250025" anchor-label="findFirst" id="1603791821%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/find-first.html"><span>find</span><wbr><span><span>First</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1603791821%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/find-first.html"><span class="token function">findFirst</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">element<span class="token operator">: </span><a href="../-element/index.html">Element</a><span class="token punctuation">, </span></span><span class="parameter ">matches<span class="token operator">: </span><span class="token punctuation">(</span><a href="../-element/index.html">Element</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-element/index.html">Element</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1843621510%2FFunctions%2F1278250025" anchor-label="findNext" id="-1843621510%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/find-next.html"><span>find</span><wbr><span><span>Next</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1843621510%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/find-next.html"><span class="token function">findNext</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">premise<span class="token operator">: </span><span class="token punctuation">(</span><a href="../-element/index.html">Element</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-element/index.html">Element</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-83458826%2FFunctions%2F1278250025" anchor-label="findPrevious" id="-83458826%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/find-previous.html"><span>find</span><wbr><span><span>Previous</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-83458826%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/find-previous.html"><span class="token function">findPrevious</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">premise<span class="token operator">: </span><span class="token punctuation">(</span><a href="../-element/index.html">Element</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-element/index.html">Element</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="145230506%2FFunctions%2F1278250025" anchor-label="flatten" id="145230506%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/flatten.html"><span><span>flatten</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="145230506%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/flatten.html"><span class="token function">flatten</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-element/index.html">Element</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="139043229%2FFunctions%2F1278250025" anchor-label="h1" id="139043229%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../h1.html"><span><span>h1</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="139043229%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../h1.html"><span class="token function">h1</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="../-h1/index.html">H1</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-h1/index.html">H1</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-748816417%2FFunctions%2F1278250025" anchor-label="h2" id="-748816417%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../h2.html"><span><span>h2</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-748816417%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../h2.html"><span class="token function">h2</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="../-h2/index.html">H2</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-h2/index.html">H2</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1636676063%2FFunctions%2F1278250025" anchor-label="h3" id="-1636676063%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../h3.html"><span><span>h3</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1636676063%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../h3.html"><span class="token function">h3</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="../-h3/index.html">H3</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-h3/index.html">H3</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1022385222%2FFunctions%2F1278250025" anchor-label="initElement" id="-1022385222%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../init-element.html"><span>init</span><wbr><span><span>Element</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1022385222%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../init-element.html">T</a><span class="token operator"> : </span><a href="../-element/index.html">Element</a><span class="token operator">&gt; </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../init-element.html"><span class="token function">initElement</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">element<span class="token operator">: </span><a href="../init-element.html">T</a><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="../init-element.html">T</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../init-element.html">T</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1885766389%2FFunctions%2F1278250025" anchor-label="isDisabled" id="1885766389%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../is-disabled.html"><span>is</span><wbr><span><span>Disabled</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1885766389%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../is-disabled.html"><span class="token function">isDisabled</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-142675848%2FFunctions%2F1278250025" anchor-label="isHidden" id="-142675848%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/is-hidden.html"><span>is</span><wbr><span><span>Hidden</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-142675848%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/is-hidden.html"><span class="token function">isHidden</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Determines whether the current element, or any of its ancestors, has a display style of <code class="lang-kotlin">Display.NONE</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1740805236%2FFunctions%2F1278250025" anchor-label="items" id="-1740805236%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="items.html"><span><span>items</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1740805236%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="items.html"><span class="token function">items</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-item/index.html">Item</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="328518145%2FFunctions%2F1278250025" anchor-label="layout" id="328518145%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../layout.html"><span><span>layout</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="328518145%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../layout.html"><span class="token function">layout</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">init<span class="token operator">: </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="587846169%2FFunctions%2F1278250025" anchor-label="move" id="587846169%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/move.html"><span><span>move</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="587846169%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/move.html"><span class="token function">move</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">steps<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-408305319%2FFunctions%2F1278250025" anchor-label="next" id="-408305319%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/next.html"><span><span>next</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-408305319%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/next.html"><span class="token function">next</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-element/index.html">Element</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1800041885%2FFunctions%2F1278250025" anchor-label="p" id="-1800041885%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../p.html"><span><span>p</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1800041885%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../p.html"><span class="token function">p</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="../-p/index.html">P</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-p/index.html">P</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="221425237%2FFunctions%2F1278250025" anchor-label="previous" id="221425237%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/previous.html"><span><span>previous</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="221425237%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/previous.html"><span class="token function">previous</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-element/index.html">Element</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1400805827%2FFunctions%2F1278250025" anchor-label="previousSibling" id="1400805827%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/previous-sibling.html"><span>previous</span><wbr><span><span>Sibling</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1400805827%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/previous-sibling.html"><span class="token function">previousSibling</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-element/index.html">Element</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-718478821%2FFunctions%2F1278250025" anchor-label="remove" id="-718478821%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/remove.html"><span><span>remove</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-718478821%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/remove.html"><span class="token function">remove</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">element<span class="token operator">: </span><a href="../-element/index.html">Element</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-element/index.html">Element</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-824477229%2FFunctions%2F1278250025" anchor-label="requestRedraw" id="-824477229%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../request-redraw.html"><span>request</span><wbr><span><span>Redraw</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-824477229%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../request-redraw.html"><span class="token function">requestRedraw</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-247855542%2FFunctions%2F1278250025" anchor-label="root" id="-247855542%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-element/root.html"><span><span>root</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-247855542%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/root.html"><span class="token function">root</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-element/index.html">Element</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1705950042%2FFunctions%2F1278250025" anchor-label="sequenceEditor" id="1705950042%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../sequence-editor.html"><span>sequence</span><wbr><span><span>Editor</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1705950042%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../sequence-editor.html"><span class="token function">sequenceEditor</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="../-sequence-editor/index.html">SequenceEditor</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-sequence-editor/index.html">SequenceEditor</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1059346752%2FFunctions%2F1278250025" anchor-label="slider" id="-1059346752%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../slider.html"><span><span>slider</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1059346752%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../slider.html"><span class="token function">slider</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="../-slider/index.html">Slider</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-slider/index.html">Slider</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1027412104%2FFunctions%2F1278250025" anchor-label="slidersVector2" id="-1027412104%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../sliders-vector2.html"><span>sliders</span><wbr><span><span>Vector2</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1027412104%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../sliders-vector2.html"><span class="token function">slidersVector2</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="../-sliders-vector2/index.html">SlidersVector2</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-sliders-vector2/index.html">SlidersVector2</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="267916474%2FFunctions%2F1278250025" anchor-label="slidersVector3" id="267916474%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../sliders-vector3.html"><span>sliders</span><wbr><span><span>Vector3</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="267916474%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../sliders-vector3.html"><span class="token function">slidersVector3</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="../-sliders-vector3/index.html">SlidersVector3</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-sliders-vector3/index.html">SlidersVector3</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1563245052%2FFunctions%2F1278250025" anchor-label="slidersVector4" id="1563245052%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../sliders-vector4.html"><span>sliders</span><wbr><span><span>Vector4</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1563245052%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../sliders-vector4.html"><span class="token function">slidersVector4</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="../-sliders-vector4/index.html">SlidersVector4</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-sliders-vector4/index.html">SlidersVector4</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1840943710%2FFunctions%2F1278250025" anchor-label="style" id="-1840943710%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../style.html"><span><span>style</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1840943710%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../style.html"><span class="token function">style</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">function<span class="token operator">: </span><a href="../../org.openrndr.panel.style/-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../org.openrndr.panel.style/-style-sheet/index.html">StyleSheet</a></div><div class="brief "><p class="paragraph">Applies the provided styling function to the element's stylesheet. If the element does not already have a stylesheet, a new one is created and the function is applied to it.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1087542167%2FFunctions%2F1278250025" anchor-label="textElement" id="1087542167%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../text-element.html"><span>text</span><wbr><span><span>Element</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1087542167%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../text-element.html">T</a><span class="token operator"> : </span><a href="../-text-element/index.html">TextElement</a><span class="token operator">&gt; </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../text-element.html"><span class="token function">textElement</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="../text-element.html">T</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../text-element.html">T</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1575748362%2FFunctions%2F1278250025" anchor-label="textfield" id="-1575748362%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../textfield.html"><span><span>textfield</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1575748362%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../textfield.html"><span class="token function">textfield</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="../-textfield/index.html">Textfield</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-textfield/index.html">Textfield</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="292997734%2FFunctions%2F1278250025" anchor-label="toggle" id="292997734%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../toggle.html"><span><span>toggle</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="292997734%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../toggle.html"><span class="token function">toggle</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="../-toggle/index.html">Toggle</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-toggle/index.html">Toggle</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-348131202%2FFunctions%2F1278250025" anchor-label="viewBox" id="-348131202%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../view-box.html"><span>view</span><wbr><span><span>Box</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-348131202%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../view-box.html"><span class="token function">viewBox</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">viewBox<span class="token operator">: </span><a href="../../../../orx-view-box/org.openrndr.extra.viewbox/-view-box/index.html">ViewBox</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../view-box.html"><span class="token function">viewBox</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">program<span class="token operator">: </span><span data-unresolved-link="org.openrndr/Program///PointingToDeclaration/">Program</span><span class="token punctuation">, </span></span><span class="parameter ">f<span class="token operator">: </span><a href="../../../../orx-view-box/org.openrndr.extra.viewbox/-view-box/index.html">ViewBox</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-view-box-element/index.html">ViewBoxElement</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="796448130%2FFunctions%2F1278250025" anchor-label="visit" id="796448130%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../visit.html"><span><span>visit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="796448130%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../visit.html"><span class="token function">visit</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">function<span class="token operator">: </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1045854620%2FFunctions%2F1278250025" anchor-label="visitVisible" id="-1045854620%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../visit-visible.html"><span>visit</span><wbr><span><span>Visible</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1045854620%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../visit-visible.html"><span class="token function">visitVisible</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">function<span class="token operator">: </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-372731091%2FFunctions%2F1278250025" anchor-label="watchListDiv" id="-372731091%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../watch-list-div.html"><span>watch</span><wbr><span>List</span><wbr><span><span>Div</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-372731091%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../watch-list-div.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../watch-list-div.html"><span class="token function">watchListDiv</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">watchList<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../watch-list-div.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">builder<span class="token operator">: </span><a href="../-watch-list-div/index.html">WatchListDiv</a><span class="token operator">&lt;</span><a href="../watch-list-div.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><span class="token punctuation">(</span><a href="../watch-list-div.html">T</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1716676871%2FFunctions%2F1278250025" anchor-label="watchObjectDiv" id="1716676871%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../watch-object-div.html"><span>watch</span><wbr><span>Object</span><wbr><span><span>Div</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1716676871%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../watch-object-div.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../watch-object-div.html"><span class="token function">watchObjectDiv</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">watchObject<span class="token operator">: </span><a href="../watch-object-div.html">T</a><span class="token punctuation">, </span></span><span class="parameter ">builder<span class="token operator">: </span><a href="../-watch-object-div/index.html">WatchObjectDiv</a><span class="token operator">&lt;</span><a href="../watch-object-div.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><span class="token punctuation">(</span><a href="../watch-object-div.html">T</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-watch-object-div/index.html">WatchObjectDiv</a><span class="token operator">&lt;</span><a href="../watch-object-div.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1413463383%2FFunctions%2F1278250025" anchor-label="watchPropertyDiv" id="-1413463383%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../watch-property-div.html"><span>watch</span><wbr><span>Property</span><wbr><span><span>Div</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1413463383%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../watch-property-div.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../watch-property-div.html"><span class="token function">watchPropertyDiv</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">watchProperty<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.reflect/-k-mutable-property0/index.html">KMutableProperty0</a><span class="token operator">&lt;</span><a href="../watch-property-div.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">builder<span class="token operator">: </span><a href="../-watch-property-div/index.html">WatchPropertyDiv</a><span class="token operator">&lt;</span><a href="../watch-property-div.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><span class="token punctuation">(</span><a href="../watch-property-div.html">T</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="867974326%2FFunctions%2F1278250025" anchor-label="xyPad" id="867974326%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../xy-pad.html"><span>xy</span><wbr><span><span>Pad</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="867974326%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-element/index.html">Element</a><span class="token punctuation">.</span><a href="../xy-pad.html"><span class="token function">xyPad</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="../-x-y-pad/index.html">XYPad</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-x-y-pad/index.html">XYPad</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

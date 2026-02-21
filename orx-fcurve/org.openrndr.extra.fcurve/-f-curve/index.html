@@ -1,0 +1,392 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>FCurve</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../../images/logo-icon.svg">
+<link href="../../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.0-dev.70+e4c3ecc
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-fcurve/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-fcurve/commonMain" data-filter=":orx-fcurve/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="orx-fcurve::org.openrndr.extra.fcurve/FCurve///PointingToDeclaration//-1327282516">
+  <div class="breadcrumbs"><a href="../../index.html">orx-fcurve</a><span class="delimiter">/</span><a href="../index.html">org.openrndr.extra.fcurve</a><span class="delimiter">/</span><span class="current">FCurve</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>FCurve</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="kotlinx.serialization/Serializable///PointingToDeclaration/"><span class="token annotation builtin">Serializable</span></span></div></div><span class="token keyword">data </span><span class="token keyword">class </span><a href="index.html">FCurve</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>segments<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Segment2D///PointingToDeclaration/">Segment2D</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/openrndr/orx/blob/master/orx-fcurve/src/commonMain/kotlin/FCurve.kt#L85">source</a>)</span></span></div><p class="paragraph">Represents a functional curve composed of multiple 2D segments. It provides utilities to manipulate and query the curve, such as reversing its direction, changing its speed, sampling values, and visualizing it as contours.</p><h4 class="tableheader">Parameters</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>segments</span></span></u></div></span></div><div><div class="title"><p class="paragraph">a list of 2D segments that define the curve</p></div></div></div></div></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="1576663166%2FConstructors%2F-1327282516" anchor-label="FCurve" id="1576663166%2FConstructors%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-f-curve.html"><span><span>FCurve</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1576663166%2FConstructors%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">segments<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Segment2D///PointingToDeclaration/">Segment2D</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-389161222%2FProperties%2F-1327282516" anchor-label="bounds" id="-389161222%2FProperties%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="bounds.html"><span><span>bounds</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-389161222%2FProperties%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="bounds.html">bounds</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1143348101%2FProperties%2F-1327282516" anchor-label="duration" id="-1143348101%2FProperties%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="duration.html"><span><span>duration</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1143348101%2FProperties%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="duration.html">duration</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">The duration of the FCurve, calculated as the difference between its start and end points. Returns 0.0 if the FCurve has no segments.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1571503152%2FProperties%2F-1327282516" anchor-label="end" id="1571503152%2FProperties%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="end.html"><span><span>end</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1571503152%2FProperties%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="end.html">end</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">Represents the x-coordinate of the endpoint of the last segment in the FCurve.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="537926599%2FProperties%2F-1327282516" anchor-label="max" id="537926599%2FProperties%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="max.html"><span><span>max</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="537926599%2FProperties%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="max.html">max</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">Represents the maximum y-coordinate value of the FCurve at its bounds.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-669293927%2FProperties%2F-1327282516" anchor-label="min" id="-669293927%2FProperties%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="min.html"><span><span>min</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-669293927%2FProperties%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="min.html">min</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">Represents the minimum value of the curve.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="718016495%2FProperties%2F-1327282516" anchor-label="segments" id="718016495%2FProperties%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="segments.html"><span><span>segments</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="718016495%2FProperties%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="segments.html">segments</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/Segment2D///PointingToDeclaration/">Segment2D</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1117238025%2FProperties%2F-1327282516" anchor-label="start" id="1117238025%2FProperties%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="start.html"><span><span>start</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1117238025%2FProperties%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="start.html">start</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">Represents the starting x-coordinate of the first segment in the FCurve. If the <code class="lang-kotlin">segments</code> list is empty, it defaults to <code class="lang-kotlin">0.0</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="813500848%2FFunctions%2F-1327282516" anchor-label="changeSpeed" id="813500848%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="change-speed.html"><span>change</span><wbr><span><span>Speed</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="813500848%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="change-speed.html"><span class="token function">changeSpeed</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">speed<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FCurve</a></div><div class="brief "><p class="paragraph">Change the duration of the Fcurve</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="115719069%2FFunctions%2F-1327282516" anchor-label="contours" id="115719069%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="contours.html"><span><span>contours</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="115719069%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="contours.html"><span class="token function">contours</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">scale<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>Vector2(1.0, -1.0)<span class="token punctuation">, </span></span><span class="parameter ">offset<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>Vector2.ZERO</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.shape/ShapeContour///PointingToDeclaration/">ShapeContour</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Return a list of contours that can be used to visualize the Fcurve</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-792814616%2FFunctions%2F-1327282516" anchor-label="offset" id="-792814616%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="offset.html"><span><span>offset</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-792814616%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="offset.html"><span class="token function">offset</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">y<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FCurve</a></div><div class="brief "><p class="paragraph">Offsets the FCurve by a specified amount along the y-axis.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-560017143%2FFunctions%2F-1327282516" anchor-label="reverse" id="-560017143%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="reverse.html"><span><span>reverse</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-560017143%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="reverse.html"><span class="token function">reverse</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FCurve</a></div><div class="brief "><p class="paragraph">Reverse the fcurve</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1101535064%2FFunctions%2F-1327282516" anchor-label="sampler" id="-1101535064%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="sampler.html"><span><span>sampler</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1101535064%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="sampler.html"><span class="token function">sampler</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">normalized<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">Creates a function to sample the FCurve at a specific time.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-642182232%2FFunctions%2F-1327282516" anchor-label="scale" id="-642182232%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="scale.html"><span><span>scale</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-642182232%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="scale.html"><span class="token function">scale</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">sx<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">sy<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FCurve</a></div><div class="brief "><p class="paragraph">Scales the FCurve by the specified factors along the x-axis and y-axis.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-60714757%2FFunctions%2F-1327282516" anchor-label="shift" id="-60714757%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="shift.html"><span><span>shift</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-60714757%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="shift.html"><span class="token function">shift</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FCurve</a></div><div class="brief "><p class="paragraph">Shifts the FCurve along the x-axis by a specified amount.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1727050742%2FFunctions%2F-1327282516" anchor-label="value" id="1727050742%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="value.html"><span><span>value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1727050742%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="value.html"><span class="token function">value</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">t<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">segment<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Segment2D///PointingToDeclaration/">Segment2D</span><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">Evaluate the Fcurve at <a href="value.html">t</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1224062083%2FFunctions%2F-1327282516" anchor-label="valueWithSegment" id="-1224062083%2FFunctions%2F-1327282516" data-filterable-set=":orx-fcurve/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-fcurve/commonMain" data-filterable-set=":orx-fcurve/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="value-with-segment.html"><span>value</span><wbr><span>With</span><wbr><span><span>Segment</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1224062083%2FFunctions%2F-1327282516"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-fcurve/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="value-with-segment.html"><span class="token function">valueWithSegment</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">t<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">cachedSegment<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Segment2D///PointingToDeclaration/">Segment2D</span><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span><span data-unresolved-link="org.openrndr.shape/Segment2D///PointingToDeclaration/">Segment2D</span><span class="token operator">?</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Evaluate the Fcurve at <a href="value-with-segment.html">t</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

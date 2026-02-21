@@ -1,0 +1,512 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>GrblGeneratorContext</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../../images/logo-icon.svg">
+<link href="../../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.0-dev.70+e4c3ecc
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-g-code/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-g-code/commonMain" data-filter=":orx-g-code/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="orx-g-code::org.openrndr.extra.gcode/GrblGeneratorContext///PointingToDeclaration//1081124598">
+  <div class="breadcrumbs"><a href="../../index.html">orx-g-code</a><span class="delimiter">/</span><a href="../index.html">org.openrndr.extra.gcode</a><span class="delimiter">/</span><span class="current">GrblGeneratorContext</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Grbl</span><wbr><span>Generator</span><wbr><span><span>Context</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">GrblGeneratorContext</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>drawRate<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>moveRate<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>setup<span class="token operator">: </span><a href="../-commands/index.html">Commands</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>preDraw<span class="token operator">: </span><a href="../-commands/index.html">Commands</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>postDraw<span class="token operator">: </span><a href="../-commands/index.html">Commands</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>comment<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="../-commands/index.html">Commands</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>end<span class="token operator">: </span><a href="../-commands/index.html">Commands</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>distanceTolerance<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>minSquaredDistance<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">deduplicateCommands<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span></span></span><span class="token punctuation">)</span> : <a href="../-base-generator-context/index.html">BaseGeneratorContext</a><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/openrndr/orx/blob/master/orx-g-code/src/commonMain/kotlin/grblGenerator.kt#L11">source</a>)</span></span></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="-222299418%2FConstructors%2F1081124598" anchor-label="GrblGeneratorContext" id="-222299418%2FConstructors%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-grbl-generator-context.html"><span>Grbl</span><wbr><span>Generator</span><wbr><span><span>Context</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-222299418%2FConstructors%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">drawRate<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">moveRate<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">setup<span class="token operator">: </span><a href="../-commands/index.html">Commands</a><span class="token punctuation">, </span></span><span class="parameter ">preDraw<span class="token operator">: </span><a href="../-commands/index.html">Commands</a><span class="token punctuation">, </span></span><span class="parameter ">postDraw<span class="token operator">: </span><a href="../-commands/index.html">Commands</a><span class="token punctuation">, </span></span><span class="parameter ">comment<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="../-commands/index.html">Commands</a><span class="token punctuation">, </span></span><span class="parameter ">end<span class="token operator">: </span><a href="../-commands/index.html">Commands</a><span class="token punctuation">, </span></span><span class="parameter ">distanceTolerance<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">minSquaredDistance<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">deduplicateCommands<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-78575213%2FProperties%2F1081124598" anchor-label="comment" id="-78575213%2FProperties%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="comment.html"><span><span>comment</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-78575213%2FProperties%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="comment.html">comment</a><span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="../-commands/index.html">Commands</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1458003292%2FProperties%2F1081124598" anchor-label="deduplicateCommands" id="-1458003292%2FProperties%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-base-generator-context/deduplicate-commands.html"><span>deduplicate</span><wbr><span><span>Commands</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1458003292%2FProperties%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="../-base-generator-context/deduplicate-commands.html">deduplicateCommands</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="728009786%2FProperties%2F1081124598" anchor-label="distanceTolerance" id="728009786%2FProperties%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="distance-tolerance.html"><span>distance</span><wbr><span><span>Tolerance</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="728009786%2FProperties%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="distance-tolerance.html">distanceTolerance</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">Distance tolerance used for <span data-unresolved-link="org.openrndr.shape/Segment2D/adaptivePositions/#kotlin.Double/PointingToDeclaration/">org.openrndr.shape.Segment2D.adaptivePositions</span> when approximating curves.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1996801212%2FProperties%2F1081124598" anchor-label="drawRate" id="-1996801212%2FProperties%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="draw-rate.html"><span>draw</span><wbr><span><span>Rate</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1996801212%2FProperties%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="draw-rate.html">drawRate</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="452977943%2FProperties%2F1081124598" anchor-label="end" id="452977943%2FProperties%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="end.html"><span><span>end</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="452977943%2FProperties%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="end.html">end</a><span class="token operator">: </span><a href="../-commands/index.html">Commands</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="759468350%2FProperties%2F1081124598" anchor-label="minSquaredDistance" id="759468350%2FProperties%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="min-squared-distance.html"><span>min</span><wbr><span>Squared</span><wbr><span><span>Distance</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="759468350%2FProperties%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="min-squared-distance.html">minSquaredDistance</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">Minimum distance for two points to be considered distinct. Consecutive points with a distance smaller than this are considered duplicates and skipped.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="133460951%2FProperties%2F1081124598" anchor-label="moveRate" id="133460951%2FProperties%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="move-rate.html"><span>move</span><wbr><span><span>Rate</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="133460951%2FProperties%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="move-rate.html">moveRate</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-391776892%2FProperties%2F1081124598" anchor-label="postDraw" id="-391776892%2FProperties%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="post-draw.html"><span>post</span><wbr><span><span>Draw</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-391776892%2FProperties%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="post-draw.html">postDraw</a><span class="token operator">: </span><a href="../-commands/index.html">Commands</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-665245077%2FProperties%2F1081124598" anchor-label="preDraw" id="-665245077%2FProperties%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="pre-draw.html"><span>pre</span><wbr><span><span>Draw</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-665245077%2FProperties%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="pre-draw.html">preDraw</a><span class="token operator">: </span><a href="../-commands/index.html">Commands</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="365481077%2FProperties%2F1081124598" anchor-label="setup" id="365481077%2FProperties%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="setup.html"><span><span>setup</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="365481077%2FProperties%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="setup.html">setup</a><span class="token operator">: </span><a href="../-commands/index.html">Commands</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="1006994343%2FFunctions%2F1081124598" anchor-label="add" id="1006994343%2FFunctions%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-base-generator-context/add.html"><span><span>add</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1006994343%2FFunctions%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-base-generator-context/add.html"><span class="token function">add</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">command<span class="token operator">: </span><a href="../-command/index.html">Command</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-base-generator-context/add.html"><span class="token function">add</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>commands<span class="token operator">: </span><a href="../-command/index.html">Command</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-base-generator-context/add.html"><span class="token function">add</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">commands<span class="token operator">: </span><a href="../-commands/index.html">Commands</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1008603578%2FFunctions%2F1081124598" anchor-label="addComment" id="1008603578%2FFunctions%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add-comment.html"><span>add</span><wbr><span><span>Comment</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1008603578%2FFunctions%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="add-comment.html"><span class="token function">addComment</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">comment<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="386000767%2FFunctions%2F1081124598" anchor-label="beginContour" id="386000767%2FFunctions%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="begin-contour.html"><span>begin</span><wbr><span><span>Contour</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="386000767%2FFunctions%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="begin-contour.html"><span class="token function">beginContour</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">start<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token punctuation">, </span></span><span class="parameter ">contour<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/ShapeContour///PointingToDeclaration/">ShapeContour</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Called at the beginning of a new contour.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-137818195%2FFunctions%2F1081124598" anchor-label="beginFile" id="-137818195%2FFunctions%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="begin-file.html"><span>begin</span><wbr><span><span>File</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-137818195%2FFunctions%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="begin-file.html"><span class="token function">beginFile</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Called at the beginning of a new file.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="396982083%2FFunctions%2F1081124598" anchor-label="beginLayer" id="396982083%2FFunctions%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="begin-layer.html"><span>begin</span><wbr><span><span>Layer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="396982083%2FFunctions%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="begin-layer.html"><span class="token function">beginLayer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">layer<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">composition<span class="token operator">: </span><a href="../../../orx-composition/org.openrndr.extra.composition/-composition/index.html">Composition</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Called at the beginning of a new layer.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1294017388%2FFunctions%2F1081124598" anchor-label="beginShape" id="1294017388%2FFunctions%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="begin-shape.html"><span>begin</span><wbr><span><span>Shape</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1294017388%2FFunctions%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="begin-shape.html"><span class="token function">beginShape</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">shape<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Shape///PointingToDeclaration/">Shape</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Called at the beginning of a new shape.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-520102180%2FFunctions%2F1081124598" anchor-label="commands" id="-520102180%2FFunctions%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-base-generator-context/commands.html"><span><span>commands</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-520102180%2FFunctions%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-base-generator-context/commands.html"><span class="token function">commands</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-commands/index.html">Commands</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1465155040%2FFunctions%2F1081124598" anchor-label="drawTo" id="1465155040%2FFunctions%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="draw-to.html"><span>draw</span><wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1465155040%2FFunctions%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="draw-to.html"><span class="token function">drawTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Drawing move from the current to the given position. Called for each point of a contour, excluding the start point.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="694100067%2FFunctions%2F1081124598" anchor-label="endContour" id="694100067%2FFunctions%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="end-contour.html"><span>end</span><wbr><span><span>Contour</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="694100067%2FFunctions%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="end-contour.html"><span class="token function">endContour</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">contour<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/ShapeContour///PointingToDeclaration/">ShapeContour</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Called at the end of a contour. Expected to disable the drawing tool, for example, lift pen, turn laser off, etc.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-630127109%2FFunctions%2F1081124598" anchor-label="endFile" id="-630127109%2FFunctions%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="end-file.html"><span>end</span><wbr><span><span>File</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-630127109%2FFunctions%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="end-file.html"><span class="token function">endFile</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Called at the end of a file.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1331121333%2FFunctions%2F1081124598" anchor-label="endLayer" id="1331121333%2FFunctions%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="end-layer.html"><span>end</span><wbr><span><span>Layer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1331121333%2FFunctions%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="end-layer.html"><span class="token function">endLayer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">layer<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">composition<span class="token operator">: </span><a href="../../../orx-composition/org.openrndr.extra.composition/-composition/index.html">Composition</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Called at the end of a composition.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1248936158%2FFunctions%2F1081124598" anchor-label="endShape" id="1248936158%2FFunctions%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="end-shape.html"><span>end</span><wbr><span><span>Shape</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1248936158%2FFunctions%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="end-shape.html"><span class="token function">endShape</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">shape<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Shape///PointingToDeclaration/">Shape</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Called at the end of a shape.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="476139501%2FFunctions%2F1081124598" anchor-label="moveTo" id="476139501%2FFunctions%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="move-to.html"><span>move</span><wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="476139501%2FFunctions%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="move-to.html"><span class="token function">moveTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1716197080%2FFunctions%2F1081124598" anchor-label="render" id="-1716197080%2FFunctions%2F1081124598" data-filterable-set=":orx-g-code/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-g-code/commonMain" data-filterable-set=":orx-g-code/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../render.html"><span><span>render</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1716197080%2FFunctions%2F1081124598"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-g-code/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-generator-context/index.html">GeneratorContext</a><span class="token punctuation">.</span><a href="../render.html"><span class="token function">render</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">shape<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Shape///PointingToDeclaration/">Shape</span></span></span><span class="token punctuation">)</span></div><br><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-generator-context/index.html">GeneratorContext</a><span class="token punctuation">.</span><a href="../render.html"><span class="token function">render</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">contour<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/ShapeContour///PointingToDeclaration/">ShapeContour</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Renders the contour to the generator context.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-generator-context/index.html">GeneratorContext</a><span class="token punctuation">.</span><a href="../render.html"><span class="token function">render</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">layer<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">composition<span class="token operator">: </span><a href="../../../orx-composition/org.openrndr.extra.composition/-composition/index.html">Composition</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Renders the <a href="../render.html">composition</a> to the generator context.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

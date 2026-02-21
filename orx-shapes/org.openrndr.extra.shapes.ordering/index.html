@@ -1,0 +1,507 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>org.openrndr.extra.shapes.ordering</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../images/logo-icon.svg">
+<link href="../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.0-dev.70+e4c3ecc
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-shapes/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-shapes/commonMain" data-filter=":orx-shapes/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageids="orx-shapes::org.openrndr.extra.shapes.ordering////PointingToDeclaration//-1455291947">
+  <div class="breadcrumbs"><a href="../index.html">orx-shapes</a><span class="delimiter">/</span><span class="current">org.openrndr.extra.shapes.ordering</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="51322475%2FClasslikes%2F-1455291947" anchor-label="Axis2DPermutation" id="51322475%2FClasslikes%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-axis2-d-permutation/index.html"><span><span>Axis2DPermutation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="51322475%2FClasslikes%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-axis2-d-permutation/index.html">Axis2DPermutation</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-axis2-d-permutation/index.html">Axis2DPermutation</a><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1684126474%2FClasslikes%2F-1455291947" anchor-label="Axis3DPermutation" id="1684126474%2FClasslikes%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-axis3-d-permutation/index.html"><span><span>Axis3DPermutation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1684126474%2FClasslikes%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-axis3-d-permutation/index.html">Axis3DPermutation</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-axis3-d-permutation/index.html">Axis3DPermutation</a><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-665956232%2FFunctions%2F-1455291947" anchor-label="hilbert2dDecode16Bit" id="-665956232%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hilbert2d-decode16-bit.html"><span>hilbert2d</span><wbr><span><span>Decode16Bit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-665956232%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="hilbert2d-decode16-bit.html"><span class="token function">hilbert2dDecode16Bit</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">hilbert<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int-array/index.html">UIntArray</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1294403516%2FFunctions%2F-1455291947" anchor-label="hilbert2dDecode5Bit" id="-1294403516%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hilbert2d-decode5-bit.html"><span>hilbert2d</span><wbr><span><span>Decode5Bit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1294403516%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="hilbert2d-decode5-bit.html"><span class="token function">hilbert2dDecode5Bit</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">hilbert<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int-array/index.html">UIntArray</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1935780396%2FFunctions%2F-1455291947" anchor-label="hilbert2dEncode16Bit" id="1935780396%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hilbert2d-encode16-bit.html"><span>hilbert2d</span><wbr><span><span>Encode16Bit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1935780396%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="hilbert2d-encode16-bit.html"><span class="token function">hilbert2dEncode16Bit</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index1<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a><span class="token punctuation">, </span></span><span class="parameter ">index2<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="849922888%2FFunctions%2F-1455291947" anchor-label="hilbert2dEncode5Bit" id="849922888%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hilbert2d-encode5-bit.html"><span>hilbert2d</span><wbr><span><span>Encode5Bit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="849922888%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="hilbert2d-encode5-bit.html"><span class="token function">hilbert2dEncode5Bit</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index1<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a><span class="token punctuation">, </span></span><span class="parameter ">index2<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-853260993%2FFunctions%2F-1455291947" anchor-label="hilbert3dDecode10Bit" id="-853260993%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hilbert3d-decode10-bit.html"><span>hilbert3d</span><wbr><span><span>Decode10Bit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-853260993%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="hilbert3d-decode10-bit.html"><span class="token function">hilbert3dDecode10Bit</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">hilbert<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int-array/index.html">UIntArray</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-324822493%2FFunctions%2F-1455291947" anchor-label="hilbert3dDecode5Bit" id="-324822493%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hilbert3d-decode5-bit.html"><span>hilbert3d</span><wbr><span><span>Decode5Bit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-324822493%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="hilbert3d-decode5-bit.html"><span class="token function">hilbert3dDecode5Bit</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">hilbert<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int-array/index.html">UIntArray</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="387074255%2FFunctions%2F-1455291947" anchor-label="hilbert3dEncode10Bit" id="387074255%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hilbert3d-encode10-bit.html"><span>hilbert3d</span><wbr><span><span>Encode10Bit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="387074255%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="hilbert3d-encode10-bit.html"><span class="token function">hilbert3dEncode10Bit</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index1<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a><span class="token punctuation">, </span></span><span class="parameter ">index2<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a><span class="token punctuation">, </span></span><span class="parameter ">index3<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-813071101%2FFunctions%2F-1455291947" anchor-label="hilbert3dEncode5Bit" id="-813071101%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hilbert3d-encode5-bit.html"><span>hilbert3d</span><wbr><span><span>Encode5Bit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-813071101%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="hilbert3d-encode5-bit.html"><span class="token function">hilbert3dEncode5Bit</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index1<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a><span class="token punctuation">, </span></span><span class="parameter ">index2<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a><span class="token punctuation">, </span></span><span class="parameter ">index3<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-58759208%2FFunctions%2F-1455291947" anchor-label="hilbertOrder" id="-58759208%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hilbert-order.html"><span>hilbert</span><wbr><span><span>Order</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-58759208%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="hilbert-order.html"><span class="token function">hilbertOrder</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">scale<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1.0</span><span class="token punctuation">, </span></span><span class="parameter ">permutation<span class="token operator">: </span><a href="-axis2-d-permutation/index.html">Axis2DPermutation</a><span class="token operator"> = </span>Axis2DPermutation.XY<span class="token punctuation">, </span></span><span class="parameter ">bits<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">16</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt;</span></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="hilbert-order.html"><span class="token function">hilbertOrder</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">scale<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1.0</span><span class="token punctuation">, </span></span><span class="parameter ">permutation<span class="token operator">: </span><a href="-axis3-d-permutation/index.html">Axis3DPermutation</a><span class="token operator"> = </span>Axis3DPermutation.XYZ<span class="token punctuation">, </span></span><span class="parameter ">bits<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="130159105%2FFunctions%2F-1455291947" anchor-label="hilbertToMorton2d" id="130159105%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hilbert-to-morton2d.html"><span>hilbert</span><wbr><span>To</span><wbr><span><span>Morton2d</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="130159105%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="hilbert-to-morton2d.html"><span class="token function">hilbertToMorton2d</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">hilbert<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a><span class="token punctuation">, </span></span><span class="parameter ">bits<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="122399746%2FFunctions%2F-1455291947" anchor-label="hilbertToMorton3d" id="122399746%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hilbert-to-morton3d.html"><span>hilbert</span><wbr><span>To</span><wbr><span><span>Morton3d</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="122399746%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="hilbert-to-morton3d.html"><span class="token function">hilbertToMorton3d</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">hilbertIndex<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a><span class="token punctuation">, </span></span><span class="parameter ">bits<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">10</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-34163294%2FFunctions%2F-1455291947" anchor-label="main" id="-34163294%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="main.html"><span><span>main</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-34163294%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="main.html"><span class="token function">main</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="113484961%2FFunctions%2F-1455291947" anchor-label="morton2dDecode16Bit" id="113484961%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="morton2d-decode16-bit.html"><span>morton2d</span><wbr><span><span>Decode16Bit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="113484961%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="morton2d-decode16-bit.html"><span class="token function">morton2dDecode16Bit</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">morton<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int-array/index.html">UIntArray</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1640233723%2FFunctions%2F-1455291947" anchor-label="morton2dDecode5Bit" id="1640233723%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="morton2d-decode5-bit.html"><span>morton2d</span><wbr><span><span>Decode5Bit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1640233723%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="morton2d-decode5-bit.html"><span class="token function">morton2dDecode5Bit</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">morton<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int-array/index.html">UIntArray</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-881522475%2FFunctions%2F-1455291947" anchor-label="morton2dEncode16Bit" id="-881522475%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="morton2d-encode16-bit.html"><span>morton2d</span><wbr><span><span>Encode16Bit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-881522475%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="morton2d-encode16-bit.html"><span class="token function">morton2dEncode16Bit</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index1<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a><span class="token punctuation">, </span></span><span class="parameter ">index2<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1590326143%2FFunctions%2F-1455291947" anchor-label="morton2dEncode5Bit" id="1590326143%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="morton2d-encode5-bit.html"><span>morton2d</span><wbr><span><span>Encode5Bit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1590326143%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="morton2d-encode5-bit.html"><span class="token function">morton2dEncode5Bit</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index1<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a><span class="token punctuation">, </span></span><span class="parameter ">index2<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-73819800%2FFunctions%2F-1455291947" anchor-label="morton3dDecode10Bit" id="-73819800%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="morton3d-decode10-bit.html"><span>morton3d</span><wbr><span><span>Decode10Bit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-73819800%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="morton3d-decode10-bit.html"><span class="token function">morton3dDecode10Bit</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">morton<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int-array/index.html">UIntArray</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1685152550%2FFunctions%2F-1455291947" anchor-label="morton3dDecode5Bit" id="-1685152550%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="morton3d-decode5-bit.html"><span>morton3d</span><wbr><span><span>Decode5Bit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1685152550%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="morton3d-decode5-bit.html"><span class="token function">morton3dDecode5Bit</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">morton<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int-array/index.html">UIntArray</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2072506872%2FFunctions%2F-1455291947" anchor-label="morton3dEncode10Bit" id="2072506872%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="morton3d-encode10-bit.html"><span>morton3d</span><wbr><span><span>Encode10Bit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2072506872%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="morton3d-encode10-bit.html"><span class="token function">morton3dEncode10Bit</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index1<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a><span class="token punctuation">, </span></span><span class="parameter ">index2<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a><span class="token punctuation">, </span></span><span class="parameter ">index3<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="211129018%2FFunctions%2F-1455291947" anchor-label="morton3dEncode5Bit" id="211129018%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="morton3d-encode5-bit.html"><span>morton3d</span><wbr><span><span>Encode5Bit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="211129018%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="morton3d-encode5-bit.html"><span class="token function">morton3dEncode5Bit</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index1<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a><span class="token punctuation">, </span></span><span class="parameter ">index2<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a><span class="token punctuation">, </span></span><span class="parameter ">index3<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1574459698%2FFunctions%2F-1455291947" anchor-label="mortonOrder" id="-1574459698%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="morton-order.html"><span>morton</span><wbr><span><span>Order</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1574459698%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="morton-order.html"><span class="token function">mortonOrder</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">scale<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1.0</span><span class="token punctuation">, </span></span><span class="parameter ">permutation<span class="token operator">: </span><a href="-axis2-d-permutation/index.html">Axis2DPermutation</a><span class="token operator"> = </span>Axis2DPermutation.XY<span class="token punctuation">, </span></span><span class="parameter ">bits<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">16</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt;</span></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="morton-order.html"><span class="token function">mortonOrder</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">scale<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1.0</span><span class="token punctuation">, </span></span><span class="parameter ">permutation<span class="token operator">: </span><a href="-axis3-d-permutation/index.html">Axis3DPermutation</a><span class="token operator"> = </span>Axis3DPermutation.XYZ<span class="token punctuation">, </span></span><span class="parameter ">bits<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">10</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="367543613%2FFunctions%2F-1455291947" anchor-label="mortonToHilbert2d" id="367543613%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="morton-to-hilbert2d.html"><span>morton</span><wbr><span>To</span><wbr><span><span>Hilbert2d</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="367543613%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="morton-to-hilbert2d.html"><span class="token function">mortonToHilbert2d</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">morton<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a><span class="token punctuation">, </span></span><span class="parameter ">bits<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="359784254%2FFunctions%2F-1455291947" anchor-label="mortonToHilbert3d" id="359784254%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="morton-to-hilbert3d.html"><span>morton</span><wbr><span>To</span><wbr><span><span>Hilbert3d</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="359784254%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="morton-to-hilbert3d.html"><span class="token function">mortonToHilbert3d</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">mortonIndex<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a><span class="token punctuation">, </span></span><span class="parameter ">bits<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">10</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-u-int/index.html">UInt</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,531 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>NoiseBuilder</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../../images/logo-icon.svg">
+<link href="../../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.0-dev.70+e4c3ecc
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-shade-styles/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-shade-styles/commonMain" data-filter=":orx-shade-styles/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="orx-shade-styles::org.openrndr.extra.shadestyles.fills.noise/NoiseBuilder///PointingToDeclaration//-1246251867">
+  <div class="breadcrumbs"><a href="../../index.html">orx-shade-styles</a><span class="delimiter">/</span><a href="../index.html">org.openrndr.extra.shadestyles.fills.noise</a><span class="delimiter">/</span><span class="current">NoiseBuilder</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Noise</span><wbr><span><span>Builder</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">NoiseBuilder</a> : <span data-unresolved-link="org.openrndr.draw/StyleParameters///PointingToDeclaration/">StyleParameters</span><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/openrndr/orx/blob/master/orx-shade-styles/src/commonMain/kotlin/fills/noise/NoiseBuilder.kt#L12">source</a>)</span></span></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="1897218414%2FConstructors%2F-1246251867" anchor-label="NoiseBuilder" id="1897218414%2FConstructors%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-noise-builder.html"><span>Noise</span><wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1897218414%2FConstructors%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="-1378190493%2FClasslikes%2F-1246251867" anchor-label="AnisotropicFBMBuilder" id="-1378190493%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-anisotropic-f-b-m-builder/index.html"><span>Anisotropic</span><wbr><span><span>FBMBuilder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1378190493%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">inner </span><span class="token keyword">class </span><a href="-anisotropic-f-b-m-builder/index.html">AnisotropicFBMBuilder</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1786578313%2FClasslikes%2F-1246251867" anchor-label="BlueNoiseBuilder" id="1786578313%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-blue-noise-builder/index.html"><span>Blue</span><wbr><span>Noise</span><wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1786578313%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">inner </span><span class="token keyword">class </span><a href="-blue-noise-builder/index.html">BlueNoiseBuilder</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1374174182%2FClasslikes%2F-1246251867" anchor-label="FBMBuilder" id="-1374174182%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-f-b-m-builder/index.html"><span><span>FBMBuilder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1374174182%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">inner </span><span class="token keyword">class </span><a href="-f-b-m-builder/index.html">FBMBuilder</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1298887569%2FClasslikes%2F-1246251867" anchor-label="SimplexBuilder" id="-1298887569%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-simplex-builder/index.html"><span>Simplex</span><wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1298887569%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">inner </span><span class="token keyword">class </span><a href="-simplex-builder/index.html">SimplexBuilder</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1211600300%2FClasslikes%2F-1246251867" anchor-label="WhiteNoiseBuilder" id="-1211600300%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-white-noise-builder/index.html"><span>White</span><wbr><span>Noise</span><wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1211600300%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">inner </span><span class="token keyword">class </span><a href="-white-noise-builder/index.html">WhiteNoiseBuilder</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="1526453506%2FProperties%2F-1246251867" anchor-label="blendFunction" id="1526453506%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="blend-function.html"><span>blend</span><wbr><span><span>Function</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1526453506%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="blend-function.html">blendFunction</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-843540693%2FProperties%2F-1246251867" anchor-label="domainWarpFunction" id="-843540693%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="domain-warp-function.html"><span>domain</span><wbr><span>Warp</span><wbr><span><span>Function</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-843540693%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="domain-warp-function.html">domainWarpFunction</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1468074402%2FProperties%2F-1246251867" anchor-label="fbmFunction" id="1468074402%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="fbm-function.html"><span>fbm</span><wbr><span><span>Function</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1468074402%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="fbm-function.html">fbmFunction</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1345496825%2FProperties%2F-1246251867" anchor-label="filterWindow" id="-1345496825%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="filter-window.html"><span>filter</span><wbr><span><span>Window</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1345496825%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="filter-window.html">filterWindow</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-818219641%2FProperties%2F-1246251867" anchor-label="levelWarpFunction" id="-818219641%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="level-warp-function.html"><span>level</span><wbr><span>Warp</span><wbr><span><span>Function</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-818219641%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="level-warp-function.html">levelWarpFunction</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="908790617%2FProperties%2F-1246251867" anchor-label="noiseFunction" id="908790617%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="noise-function.html"><span>noise</span><wbr><span><span>Function</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="908790617%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="noise-function.html">noiseFunction</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1399054145%2FProperties%2F-1246251867" anchor-label="parameterTypes" id="-1399054145%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="parameter-types.html"><span>parameter</span><wbr><span><span>Types</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1399054145%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="parameter-types.html">parameterTypes</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ObservableHashmap///PointingToDeclaration/">ObservableHashmap</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1555656480%2FProperties%2F-1246251867" anchor-label="parameterValues" id="-1555656480%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="parameter-values.html"><span>parameter</span><wbr><span><span>Values</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1555656480%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="parameter-values.html">parameterValues</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1269158640%2FProperties%2F-1246251867" anchor-label="phase" id="-1269158640%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="phase.html"><span><span>phase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1269158640%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="phase.html">phase</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-300717211%2FProperties%2F-1246251867" anchor-label="scaleToSize" id="-300717211%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="scale-to-size.html"><span>scale</span><wbr><span>To</span><wbr><span><span>Size</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-300717211%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="scale-to-size.html">scaleToSize</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-429207127%2FProperties%2F-1246251867" anchor-label="textureBaseIndex" id="-429207127%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="texture-base-index.html"><span>texture</span><wbr><span>Base</span><wbr><span><span>Index</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-429207127%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="texture-base-index.html">textureBaseIndex</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-496351937%2FProperties%2F-1246251867" anchor-label="transform" id="-496351937%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="transform.html"><span><span>transform</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-496351937%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="transform.html">transform</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Matrix44///PointingToDeclaration/">Matrix44</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-1695390727%2FFunctions%2F-1246251867" anchor-label="anisotropicFbm" id="-1695390727%2FFunctions%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="anisotropic-fbm.html"><span>anisotropic</span><wbr><span><span>Fbm</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1695390727%2FFunctions%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="anisotropic-fbm.html"><span class="token function">anisotropicFbm</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">builder<span class="token operator">: </span><a href="-anisotropic-f-b-m-builder/index.html">NoiseBuilder.AnisotropicFBMBuilder</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1944638955%2FFunctions%2F-1246251867" anchor-label="blueNoise" id="1944638955%2FFunctions%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="blue-noise.html"><span>blue</span><wbr><span><span>Noise</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1944638955%2FFunctions%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="blue-noise.html"><span class="token function">blueNoise</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">builder<span class="token operator">: </span><a href="-blue-noise-builder/index.html">NoiseBuilder.BlueNoiseBuilder</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1217472643%2FFunctions%2F-1246251867" anchor-label="build" id="-1217472643%2FFunctions%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="build.html"><span><span>build</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1217472643%2FFunctions%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="build.html"><span class="token function">build</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ShadeStyle///PointingToDeclaration/">ShadeStyle</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1546781065%2FFunctions%2F-1246251867" anchor-label="fbm" id="1546781065%2FFunctions%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="fbm.html"><span><span>fbm</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1546781065%2FFunctions%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="fbm.html"><span class="token function">fbm</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">builder<span class="token operator">: </span><a href="-f-b-m-builder/index.html">NoiseBuilder.FBMBuilder</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1402827911%2FFunctions%2F-1246251867" anchor-label="Parameter" id="-1402827911%2FFunctions%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1402827911%2FFunctions%2F-1246251867"><span><span>Parameter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1402827911%2FFunctions%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1402827911%2FFunctions%2F-1246251867">R</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1402827911%2FFunctions%2F-1246251867"><span class="token function">Parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">customName<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">initialValue<span class="token operator">: </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1402827911%2FFunctions%2F-1246251867">R</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/Parameter///PointingToDeclaration/">Parameter</span><span class="token operator">&lt;</span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1402827911%2FFunctions%2F-1246251867">R</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1008774604%2FFunctions%2F-1246251867" anchor-label="parameter" id="1008774604%2FFunctions%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-9593844%2FFunctions%2F-1246251867"><span><span>parameter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1008774604%2FFunctions%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-9593844%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1710259687%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Matrix33///PointingToDeclaration/">Matrix33</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-335929849%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Matrix44///PointingToDeclaration/">Matrix44</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1385358129%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-691851214%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1525906739%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector4///PointingToDeclaration/">Vector4</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-404227709%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#959474502%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1657582685%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-19830961%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#571529948%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1439225395%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int-array/index.html">IntArray</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1036236670%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#70161686%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ArrayCubemap///PointingToDeclaration/">ArrayCubemap</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1974672766%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ArrayTexture///PointingToDeclaration/">ArrayTexture</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1633240541%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/BufferTexture///PointingToDeclaration/">BufferTexture</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#451475355%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ColorBuffer///PointingToDeclaration/">ColorBuffer</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-1899896297%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/Cubemap///PointingToDeclaration/">Cubemap</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-265709509%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/DepthBuffer///PointingToDeclaration/">DepthBuffer</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1251283837%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/VolumeTexture///PointingToDeclaration/">VolumeTexture</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#163004769%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/BooleanVector2///PointingToDeclaration/">BooleanVector2</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#95998016%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/BooleanVector3///PointingToDeclaration/">BooleanVector3</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#28991263%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/BooleanVector4///PointingToDeclaration/">BooleanVector4</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1133906536%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/IntVector2///PointingToDeclaration/">IntVector2</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1066899783%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/IntVector3///PointingToDeclaration/">IntVector3</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#999893030%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/IntVector4///PointingToDeclaration/">IntVector4</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-837663353%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Matrix33///PointingToDeclaration/">Matrix33</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#1313087847%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Matrix44///PointingToDeclaration/">Matrix44</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#6189195%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-60817558%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../org.openrndr.extra.shadestyles.spatial/-hemisphere-light/index.html#-127824311%2FFunctions%2F-1246251867"><span class="token function">parameter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector4///PointingToDeclaration/">Vector4</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="855336159%2FFunctions%2F-1246251867" anchor-label="simplex" id="855336159%2FFunctions%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="simplex.html"><span><span>simplex</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="855336159%2FFunctions%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="simplex.html"><span class="token function">simplex</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">builder<span class="token operator">: </span><a href="-simplex-builder/index.html">NoiseBuilder.SimplexBuilder</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="698815705%2FFunctions%2F-1246251867" anchor-label="whiteNoise" id="698815705%2FFunctions%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="white-noise.html"><span>white</span><wbr><span><span>Noise</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="698815705%2FFunctions%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="white-noise.html"><span class="token function">whiteNoise</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">builder<span class="token operator">: </span><a href="-white-noise-builder/index.html">NoiseBuilder.WhiteNoiseBuilder</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

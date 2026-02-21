@@ -1,0 +1,733 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>KeyLangParserBaseVisitor</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../../images/logo-icon.svg">
+<link href="../../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.0-dev.70+e4c3ecc
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-expression-evaluator/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-expression-evaluator/commonMain" data-filter=":orx-expression-evaluator/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="orx-expression-evaluator::org.openrndr.extra.expressions.parser/KeyLangParserBaseVisitor///PointingToDeclaration//1955833437">
+  <div class="breadcrumbs"><a href="../../index.html">orx-expression-evaluator</a><span class="delimiter">/</span><a href="../index.html">org.openrndr.extra.expressions.parser</a><span class="delimiter">/</span><span class="current">KeyLangParserBaseVisitor</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Key</span><wbr><span>Lang</span><wbr><span>Parser</span><wbr><span>Base</span><wbr><span><span>Visitor</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="index.html">KeyLangParserBaseVisitor</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt;</span> : <span data-unresolved-link="org.antlr.v4.kotlinruntime.tree/AbstractParseTreeVisitor///PointingToDeclaration/">AbstractParseTreeVisitor</span><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt; </span>, <a href="../-key-lang-parser-visitor/index.html">KeyLangParserVisitor</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt; </span></div><p class="paragraph">This class provides an empty implementation of <a href="../-key-lang-parser-visitor/index.html">KeyLangParserVisitor</a>, which can be extended to create a visitor which only needs to handle a subset of the available methods.</p><h4 class="tableheader">Parameters</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>T</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The return type of the visit operation. Use <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a> for operations with no return type</p></div></div></div></div></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="-26237571%2FConstructors%2F1955833437" anchor-label="KeyLangParserBaseVisitor" id="-26237571%2FConstructors%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-key-lang-parser-base-visitor.html"><span>Key</span><wbr><span>Lang</span><wbr><span>Parser</span><wbr><span>Base</span><wbr><span><span>Visitor</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-26237571%2FConstructors%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="838977848%2FFunctions%2F1955833437" anchor-label="visit" id="838977848%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#838977848%2FFunctions%2F1955833437"><span><span>visit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="838977848%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#838977848%2FFunctions%2F1955833437"><span class="token function">visit</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">tree<span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime.tree/ParseTree///PointingToDeclaration/">ParseTree</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1642611784%2FFunctions%2F1955833437" anchor-label="visitBinaryOperation1" id="-1642611784%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-binary-operation1.html"><span>visit</span><wbr><span>Binary</span><wbr><span><span>Operation1</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1642611784%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-binary-operation1.html"><span class="token function">visitBinaryOperation1</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-binary-operation1-context/index.html">KeyLangParser.BinaryOperation1Context</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-binary-operation1.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="202100602%2FFunctions%2F1955833437" anchor-label="visitBinaryOperation2" id="202100602%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-binary-operation2.html"><span>visit</span><wbr><span>Binary</span><wbr><span><span>Operation2</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="202100602%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-binary-operation2.html"><span class="token function">visitBinaryOperation2</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-binary-operation2-context/index.html">KeyLangParser.BinaryOperation2Context</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-binary-operation2.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1987978052%2FFunctions%2F1955833437" anchor-label="visitChildren" id="-1987978052%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1987978052%2FFunctions%2F1955833437"><span>visit</span><wbr><span><span>Children</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1987978052%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-1987978052%2FFunctions%2F1955833437"><span class="token function">visitChildren</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">node<span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime.tree/RuleNode///PointingToDeclaration/">RuleNode</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2003983846%2FFunctions%2F1955833437" anchor-label="visitComparisonOperation" id="-2003983846%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-comparison-operation.html"><span>visit</span><wbr><span>Comparison</span><wbr><span><span>Operation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2003983846%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-comparison-operation.html"><span class="token function">visitComparisonOperation</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-comparison-operation-context/index.html">KeyLangParser.ComparisonOperationContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-comparison-operation.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1090505886%2FFunctions%2F1955833437" anchor-label="visitDecimalLiteral" id="1090505886%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-decimal-literal.html"><span>visit</span><wbr><span>Decimal</span><wbr><span><span>Literal</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1090505886%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-decimal-literal.html"><span class="token function">visitDecimalLiteral</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-decimal-literal-context/index.html">KeyLangParser.DecimalLiteralContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-decimal-literal.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-583573751%2FFunctions%2F1955833437" anchor-label="visitErrorNode" id="-583573751%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-583573751%2FFunctions%2F1955833437"><span>visit</span><wbr><span>Error</span><wbr><span><span>Node</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-583573751%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-583573751%2FFunctions%2F1955833437"><span class="token function">visitErrorNode</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">node<span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime.tree/ErrorNode///PointingToDeclaration/">ErrorNode</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-343682154%2FFunctions%2F1955833437" anchor-label="visitExpressionRoot" id="-343682154%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-expression-root.html"><span>visit</span><wbr><span>Expression</span><wbr><span><span>Root</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-343682154%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-expression-root.html"><span class="token function">visitExpressionRoot</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-expression-root-context/index.html">KeyLangParser.ExpressionRootContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-expression-root.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1545995834%2FFunctions%2F1955833437" anchor-label="visitExpressionStatement" id="1545995834%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-expression-statement.html"><span>visit</span><wbr><span>Expression</span><wbr><span><span>Statement</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1545995834%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-expression-statement.html"><span class="token function">visitExpressionStatement</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-expression-statement-context/index.html">KeyLangParser.ExpressionStatementContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-expression-statement.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1925684326%2FFunctions%2F1955833437" anchor-label="visitFunctionCall0Expression" id="-1925684326%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-function-call0-expression.html"><span>visit</span><wbr><span>Function</span><wbr><span><span>Call0Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1925684326%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-function-call0-expression.html"><span class="token function">visitFunctionCall0Expression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-function-call0-expression-context/index.html">KeyLangParser.FunctionCall0ExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-function-call0-expression.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1659868474%2FFunctions%2F1955833437" anchor-label="visitFunctionCall1Expression" id="1659868474%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-function-call1-expression.html"><span>visit</span><wbr><span>Function</span><wbr><span><span>Call1Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1659868474%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-function-call1-expression.html"><span class="token function">visitFunctionCall1Expression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-function-call1-expression-context/index.html">KeyLangParser.FunctionCall1ExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-function-call1-expression.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="950453978%2FFunctions%2F1955833437" anchor-label="visitFunctionCall2Expression" id="950453978%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-function-call2-expression.html"><span>visit</span><wbr><span>Function</span><wbr><span><span>Call2Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="950453978%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-function-call2-expression.html"><span class="token function">visitFunctionCall2Expression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-function-call2-expression-context/index.html">KeyLangParser.FunctionCall2ExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-function-call2-expression.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="241039482%2FFunctions%2F1955833437" anchor-label="visitFunctionCall3Expression" id="241039482%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-function-call3-expression.html"><span>visit</span><wbr><span>Function</span><wbr><span><span>Call3Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="241039482%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-function-call3-expression.html"><span class="token function">visitFunctionCall3Expression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-function-call3-expression-context/index.html">KeyLangParser.FunctionCall3ExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-function-call3-expression.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-468375014%2FFunctions%2F1955833437" anchor-label="visitFunctionCall4Expression" id="-468375014%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-function-call4-expression.html"><span>visit</span><wbr><span>Function</span><wbr><span><span>Call4Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-468375014%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-function-call4-expression.html"><span class="token function">visitFunctionCall4Expression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-function-call4-expression-context/index.html">KeyLangParser.FunctionCall4ExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-function-call4-expression.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1177789510%2FFunctions%2F1955833437" anchor-label="visitFunctionCall5Expression" id="-1177789510%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-function-call5-expression.html"><span>visit</span><wbr><span>Function</span><wbr><span><span>Call5Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1177789510%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-function-call5-expression.html"><span class="token function">visitFunctionCall5Expression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-function-call5-expression-context/index.html">KeyLangParser.FunctionCall5ExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-function-call5-expression.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="797514938%2FFunctions%2F1955833437" anchor-label="visitFunctionLiteral" id="797514938%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-function-literal.html"><span>visit</span><wbr><span>Function</span><wbr><span><span>Literal</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="797514938%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-function-literal.html"><span class="token function">visitFunctionLiteral</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-function-literal-context/index.html">KeyLangParser.FunctionLiteralContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-function-literal.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-406402918%2FFunctions%2F1955833437" anchor-label="visitIndexExpression" id="-406402918%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-index-expression.html"><span>visit</span><wbr><span>Index</span><wbr><span><span>Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-406402918%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-index-expression.html"><span class="token function">visitIndexExpression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-index-expression-context/index.html">KeyLangParser.IndexExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-index-expression.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="940197346%2FFunctions%2F1955833437" anchor-label="visitIntLiteral" id="940197346%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-int-literal.html"><span>visit</span><wbr><span>Int</span><wbr><span><span>Literal</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="940197346%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-int-literal.html"><span class="token function">visitIntLiteral</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-int-literal-context/index.html">KeyLangParser.IntLiteralContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-int-literal.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1077496262%2FFunctions%2F1955833437" anchor-label="visitJoinOperation" id="-1077496262%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-join-operation.html"><span>visit</span><wbr><span>Join</span><wbr><span><span>Operation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1077496262%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-join-operation.html"><span class="token function">visitJoinOperation</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-join-operation-context/index.html">KeyLangParser.JoinOperationContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-join-operation.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1075815046%2FFunctions%2F1955833437" anchor-label="visitKeyLangFile" id="-1075815046%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-key-lang-file.html"><span>visit</span><wbr><span>Key</span><wbr><span>Lang</span><wbr><span><span>File</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1075815046%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-key-lang-file.html"><span class="token function">visitKeyLangFile</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-key-lang-file-context/index.html">KeyLangParser.KeyLangFileContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-key-lang-file.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1474823456%2FFunctions%2F1955833437" anchor-label="visitLambdaExpression" id="1474823456%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-lambda-expression.html"><span>visit</span><wbr><span>Lambda</span><wbr><span><span>Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1474823456%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-lambda-expression.html"><span class="token function">visitLambdaExpression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-lambda-expression-context/index.html">KeyLangParser.LambdaExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-lambda-expression.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-939550646%2FFunctions%2F1955833437" anchor-label="visitLine" id="-939550646%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-line.html"><span>visit</span><wbr><span><span>Line</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-939550646%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-line.html"><span class="token function">visitLine</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-line-context/index.html">KeyLangParser.LineContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-line.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="399319674%2FFunctions%2F1955833437" anchor-label="visitListLiteral" id="399319674%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-list-literal.html"><span>visit</span><wbr><span>List</span><wbr><span><span>Literal</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="399319674%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-list-literal.html"><span class="token function">visitListLiteral</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-list-literal-context/index.html">KeyLangParser.ListLiteralContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-list-literal.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1567725478%2FFunctions%2F1955833437" anchor-label="visitMemberFunctionCall0Expression" id="-1567725478%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-member-function-call0-expression.html"><span>visit</span><wbr><span>Member</span><wbr><span>Function</span><wbr><span><span>Call0Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1567725478%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-member-function-call0-expression.html"><span class="token function">visitMemberFunctionCall0Expression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-member-function-call0-expression-context/index.html">KeyLangParser.MemberFunctionCall0ExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-member-function-call0-expression.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-550269638%2FFunctions%2F1955833437" anchor-label="visitMemberFunctionCall0LambdaExpression" id="-550269638%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-member-function-call0-lambda-expression.html"><span>visit</span><wbr><span>Member</span><wbr><span>Function</span><wbr><span>Call0Lambda</span><wbr><span><span>Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-550269638%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-member-function-call0-lambda-expression.html"><span class="token function">visitMemberFunctionCall0LambdaExpression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-member-function-call0-lambda-expression-context/index.html">KeyLangParser.MemberFunctionCall0LambdaExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-member-function-call0-lambda-expression.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1265100474%2FFunctions%2F1955833437" anchor-label="visitMemberFunctionCall1Expression" id="1265100474%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-member-function-call1-expression.html"><span>visit</span><wbr><span>Member</span><wbr><span>Function</span><wbr><span><span>Call1Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1265100474%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-member-function-call1-expression.html"><span class="token function">visitMemberFunctionCall1Expression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-member-function-call1-expression-context/index.html">KeyLangParser.MemberFunctionCall1ExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-member-function-call1-expression.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-197040870%2FFunctions%2F1955833437" anchor-label="visitMemberFunctionCall2Expression" id="-197040870%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-member-function-call2-expression.html"><span>visit</span><wbr><span>Member</span><wbr><span>Function</span><wbr><span><span>Call2Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-197040870%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-member-function-call2-expression.html"><span class="token function">visitMemberFunctionCall2Expression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-member-function-call2-expression-context/index.html">KeyLangParser.MemberFunctionCall2ExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-member-function-call2-expression.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1659182214%2FFunctions%2F1955833437" anchor-label="visitMemberFunctionCall3Expression" id="-1659182214%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-member-function-call3-expression.html"><span>visit</span><wbr><span>Member</span><wbr><span>Function</span><wbr><span><span>Call3Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1659182214%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-member-function-call3-expression.html"><span class="token function">visitMemberFunctionCall3Expression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-member-function-call3-expression-context/index.html">KeyLangParser.MemberFunctionCall3ExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-member-function-call3-expression.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1173643738%2FFunctions%2F1955833437" anchor-label="visitMemberFunctionCall4Expression" id="1173643738%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-member-function-call4-expression.html"><span>visit</span><wbr><span>Member</span><wbr><span>Function</span><wbr><span><span>Call4Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1173643738%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-member-function-call4-expression.html"><span class="token function">visitMemberFunctionCall4Expression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-member-function-call4-expression-context/index.html">KeyLangParser.MemberFunctionCall4ExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-member-function-call4-expression.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-717223078%2FFunctions%2F1955833437" anchor-label="visitMinusExpression" id="-717223078%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-minus-expression.html"><span>visit</span><wbr><span>Minus</span><wbr><span><span>Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-717223078%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-minus-expression.html"><span class="token function">visitMinusExpression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-minus-expression-context/index.html">KeyLangParser.MinusExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-minus-expression.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1014091094%2FFunctions%2F1955833437" anchor-label="visitNegateExpression" id="1014091094%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-negate-expression.html"><span>visit</span><wbr><span>Negate</span><wbr><span><span>Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1014091094%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-negate-expression.html"><span class="token function">visitNegateExpression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-negate-expression-context/index.html">KeyLangParser.NegateExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-negate-expression.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1949111398%2FFunctions%2F1955833437" anchor-label="visitParenExpression" id="-1949111398%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-paren-expression.html"><span>visit</span><wbr><span>Paren</span><wbr><span><span>Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1949111398%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-paren-expression.html"><span class="token function">visitParenExpression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-paren-expression-context/index.html">KeyLangParser.ParenExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-paren-expression.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2100167078%2FFunctions%2F1955833437" anchor-label="visitPropReference" id="-2100167078%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-prop-reference.html"><span>visit</span><wbr><span>Prop</span><wbr><span><span>Reference</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2100167078%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-prop-reference.html"><span class="token function">visitPropReference</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-prop-reference-context/index.html">KeyLangParser.PropReferenceContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-prop-reference.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-506147974%2FFunctions%2F1955833437" anchor-label="visitRangeExpression" id="-506147974%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-range-expression.html"><span>visit</span><wbr><span>Range</span><wbr><span><span>Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-506147974%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-range-expression.html"><span class="token function">visitRangeExpression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-range-expression-context/index.html">KeyLangParser.RangeExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-range-expression.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-286045542%2FFunctions%2F1955833437" anchor-label="visitStringLiteral" id="-286045542%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-string-literal.html"><span>visit</span><wbr><span>String</span><wbr><span><span>Literal</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-286045542%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-string-literal.html"><span class="token function">visitStringLiteral</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-string-literal-context/index.html">KeyLangParser.StringLiteralContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-string-literal.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="884571544%2FFunctions%2F1955833437" anchor-label="visitStringLiteralContent" id="884571544%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-string-literal-content.html"><span>visit</span><wbr><span>String</span><wbr><span>Literal</span><wbr><span><span>Content</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="884571544%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-string-literal-content.html"><span class="token function">visitStringLiteralContent</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-string-literal-content-context/index.html">KeyLangParser.StringLiteralContentContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-string-literal-content.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1892892255%2FFunctions%2F1955833437" anchor-label="visitTerminal" id="1892892255%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1892892255%2FFunctions%2F1955833437"><span>visit</span><wbr><span><span>Terminal</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1892892255%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#1892892255%2FFunctions%2F1955833437"><span class="token function">visitTerminal</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">node<span class="token operator">: </span><span data-unresolved-link="org.antlr.v4.kotlinruntime.tree/TerminalNode///PointingToDeclaration/">TerminalNode</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-115699206%2FFunctions%2F1955833437" anchor-label="visitTernaryExpression" id="-115699206%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-ternary-expression.html"><span>visit</span><wbr><span>Ternary</span><wbr><span><span>Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-115699206%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-ternary-expression.html"><span class="token function">visitTernaryExpression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-ternary-expression-context/index.html">KeyLangParser.TernaryExpressionContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-ternary-expression.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="95589910%2FFunctions%2F1955833437" anchor-label="visitValueReference" id="95589910%2FFunctions%2F1955833437" data-filterable-set=":orx-expression-evaluator/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-expression-evaluator/commonMain" data-filterable-set=":orx-expression-evaluator/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="visit-value-reference.html"><span>visit</span><wbr><span>Value</span><wbr><span><span>Reference</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="95589910%2FFunctions%2F1955833437"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-expression-evaluator/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="visit-value-reference.html"><span class="token function">visitValueReference</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ctx<span class="token operator">: </span><a href="../-key-lang-parser/-value-reference-context/index.html">KeyLangParser.ValueReferenceContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The default implementation returns the result of calling <a href="../../../orx-expression-evaluator/org.openrndr.extra.expressions.parser/-key-lang-parser-base-visitor/visit-children.html">visitChildren</a> on <a href="visit-value-reference.html">ctx</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

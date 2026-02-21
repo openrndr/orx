@@ -1,0 +1,717 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>org.openrndr.extra.color.spaces</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../images/logo-icon.svg">
+<link href="../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.0-dev.70+e4c3ecc
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-color/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-color/commonMain" data-filter=":orx-color/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageids="orx-color::org.openrndr.extra.color.spaces////PointingToDeclaration//-454829500">
+  <div class="breadcrumbs"><a href="../index.html">orx-color</a><span class="delimiter">/</span><span class="current">org.openrndr.extra.color.spaces</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="-301459922%2FClasslikes%2F-454829500" anchor-label="CIEXYZ" id="-301459922%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-c-i-e-x-y-z/index.html"><span><span>CIEXYZ</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-301459922%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-c-i-e-x-y-z/index.html">CIEXYZ</a><span class="token operator"> = </span><span data-unresolved-link="org.openrndr.color/ColorXYZa///PointingToDeclaration/">ColorXYZa</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="934050331%2FClasslikes%2F-454829500" anchor-label="ColorHPLUVa" id="934050331%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-color-h-p-l-u-va/index.html"><span>Color</span><wbr><span><span>HPLUVa</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="934050331%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="kotlinx.serialization/Serializable///PointingToDeclaration/"><span class="token annotation builtin">Serializable</span></span></div><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-record/index.html"><span class="token annotation builtin">JvmRecord</span></a></div></div><span class="token keyword">data </span><span class="token keyword">class </span><a href="-color-h-p-l-u-va/index.html">ColorHPLUVa</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>h<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>s<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>l<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>alpha<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1.0</span></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.openrndr.color/ColorModel///PointingToDeclaration/">ColorModel</span><span class="token operator">&lt;</span><a href="-color-h-p-l-u-va/index.html">ColorHPLUVa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/HueShiftableColor///PointingToDeclaration/">HueShiftableColor</span><span class="token operator">&lt;</span><a href="-color-h-p-l-u-va/index.html">ColorHPLUVa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/SaturatableColor///PointingToDeclaration/">SaturatableColor</span><span class="token operator">&lt;</span><a href="-color-h-p-l-u-va/index.html">ColorHPLUVa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/ShadableColor///PointingToDeclaration/">ShadableColor</span><span class="token operator">&lt;</span><a href="-color-h-p-l-u-va/index.html">ColorHPLUVa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/LuminosityColor///PointingToDeclaration/">LuminosityColor</span><span class="token operator">&lt;</span><a href="-color-h-p-l-u-va/index.html">ColorHPLUVa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/AlgebraicColor///PointingToDeclaration/">AlgebraicColor</span><span class="token operator">&lt;</span><a href="-color-h-p-l-u-va/index.html">ColorHPLUVa</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Represents a color in the HPLUVa (Hue, Perceptual Lightness, Saturation, Alpha) color space. This color space is based on perceptual uniformity, making it suitable for operations like interpolation, shading, and manipulation of hue, saturation, and lightness values.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="967998712%2FClasslikes%2F-454829500" anchor-label="ColorHSLUVa" id="967998712%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-color-h-s-l-u-va/index.html"><span>Color</span><wbr><span><span>HSLUVa</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="967998712%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="kotlinx.serialization/Serializable///PointingToDeclaration/"><span class="token annotation builtin">Serializable</span></span></div><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-record/index.html"><span class="token annotation builtin">JvmRecord</span></a></div></div><span class="token keyword">data </span><span class="token keyword">class </span><a href="-color-h-s-l-u-va/index.html">ColorHSLUVa</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>h<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>s<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>l<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>alpha<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1.0</span></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.openrndr.color/ColorModel///PointingToDeclaration/">ColorModel</span><span class="token operator">&lt;</span><a href="-color-h-s-l-u-va/index.html">ColorHSLUVa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/HueShiftableColor///PointingToDeclaration/">HueShiftableColor</span><span class="token operator">&lt;</span><a href="-color-h-s-l-u-va/index.html">ColorHSLUVa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/SaturatableColor///PointingToDeclaration/">SaturatableColor</span><span class="token operator">&lt;</span><a href="-color-h-s-l-u-va/index.html">ColorHSLUVa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/ShadableColor///PointingToDeclaration/">ShadableColor</span><span class="token operator">&lt;</span><a href="-color-h-s-l-u-va/index.html">ColorHSLUVa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/LuminosityColor///PointingToDeclaration/">LuminosityColor</span><span class="token operator">&lt;</span><a href="-color-h-s-l-u-va/index.html">ColorHSLUVa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/AlgebraicColor///PointingToDeclaration/">AlgebraicColor</span><span class="token operator">&lt;</span><a href="-color-h-s-l-u-va/index.html">ColorHSLUVa</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Represents a color in the HSLuv color space with an alpha transparency component. HSLuv is a perceptually uniform color space, where hues are uniformly distributed and the perception of color is consistent across the spectrum.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="43929979%2FClasslikes%2F-454829500" anchor-label="ColorOKHSLa" id="43929979%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-color-o-k-h-s-la/index.html"><span>Color</span><wbr><span><span>OKHSLa</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="43929979%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="kotlinx.serialization/Serializable///PointingToDeclaration/"><span class="token annotation builtin">Serializable</span></span></div><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-record/index.html"><span class="token annotation builtin">JvmRecord</span></a></div></div><span class="token keyword">data </span><span class="token keyword">class </span><a href="-color-o-k-h-s-la/index.html">ColorOKHSLa</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>h<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>s<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>l<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>alpha<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1.0</span></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.openrndr.color/ColorModel///PointingToDeclaration/">ColorModel</span><span class="token operator">&lt;</span><a href="-color-o-k-h-s-la/index.html">ColorOKHSLa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/HueShiftableColor///PointingToDeclaration/">HueShiftableColor</span><span class="token operator">&lt;</span><a href="-color-o-k-h-s-la/index.html">ColorOKHSLa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/SaturatableColor///PointingToDeclaration/">SaturatableColor</span><span class="token operator">&lt;</span><a href="-color-o-k-h-s-la/index.html">ColorOKHSLa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/ShadableColor///PointingToDeclaration/">ShadableColor</span><span class="token operator">&lt;</span><a href="-color-o-k-h-s-la/index.html">ColorOKHSLa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/AlgebraicColor///PointingToDeclaration/">AlgebraicColor</span><span class="token operator">&lt;</span><a href="-color-o-k-h-s-la/index.html">ColorOKHSLa</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Represents a color in the OKHSL (hue, saturation, lightness) color space with an alpha channel. This color model is based on perceptual uniformity and is useful for hue, saturation, and lightness manipulations while maintaining consistency with human vision.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1070135557%2FClasslikes%2F-454829500" anchor-label="ColorOKHSVa" id="1070135557%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-color-o-k-h-s-va/index.html"><span>Color</span><wbr><span><span>OKHSVa</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1070135557%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="kotlinx.serialization/Serializable///PointingToDeclaration/"><span class="token annotation builtin">Serializable</span></span></div><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-record/index.html"><span class="token annotation builtin">JvmRecord</span></a></div></div><span class="token keyword">data </span><span class="token keyword">class </span><a href="-color-o-k-h-s-va/index.html">ColorOKHSVa</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>h<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>s<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>v<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>alpha<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1.0</span></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.openrndr.color/ColorModel///PointingToDeclaration/">ColorModel</span><span class="token operator">&lt;</span><a href="-color-o-k-h-s-va/index.html">ColorOKHSVa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/HueShiftableColor///PointingToDeclaration/">HueShiftableColor</span><span class="token operator">&lt;</span><a href="-color-o-k-h-s-va/index.html">ColorOKHSVa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/SaturatableColor///PointingToDeclaration/">SaturatableColor</span><span class="token operator">&lt;</span><a href="-color-o-k-h-s-va/index.html">ColorOKHSVa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/ShadableColor///PointingToDeclaration/">ShadableColor</span><span class="token operator">&lt;</span><a href="-color-o-k-h-s-va/index.html">ColorOKHSVa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/AlgebraicColor///PointingToDeclaration/">AlgebraicColor</span><span class="token operator">&lt;</span><a href="-color-o-k-h-s-va/index.html">ColorOKHSVa</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Represents a color in the OKHSVa color model.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2080421703%2FClasslikes%2F-454829500" anchor-label="ColorOKLABa" id="2080421703%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-color-o-k-l-a-ba/index.html"><span>Color</span><wbr><span><span>OKLABa</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2080421703%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="kotlinx.serialization/Serializable///PointingToDeclaration/"><span class="token annotation builtin">Serializable</span></span></div><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-record/index.html"><span class="token annotation builtin">JvmRecord</span></a></div></div><span class="token keyword">data </span><span class="token keyword">class </span><a href="-color-o-k-l-a-ba/index.html">ColorOKLABa</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>l<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>a<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>b<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>alpha<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1.0</span></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.openrndr.color/ColorModel///PointingToDeclaration/">ColorModel</span><span class="token operator">&lt;</span><a href="-color-o-k-l-a-ba/index.html">ColorOKLABa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/ShadableColor///PointingToDeclaration/">ShadableColor</span><span class="token operator">&lt;</span><a href="-color-o-k-l-a-ba/index.html">ColorOKLABa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/LuminosityColor///PointingToDeclaration/">LuminosityColor</span><span class="token operator">&lt;</span><a href="-color-o-k-l-a-ba/index.html">ColorOKLABa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/AlgebraicColor///PointingToDeclaration/">AlgebraicColor</span><span class="token operator">&lt;</span><a href="-color-o-k-l-a-ba/index.html">ColorOKLABa</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Represents a color in the OKLAB color space with an optional alpha (transparency) value. OKLAB is a perceptual color space designed to represent colors in a way that aligns with human visual perception, offering an alternative to traditional color spaces like RGB.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1249301877%2FClasslikes%2F-454829500" anchor-label="ColorOKLCHa" id="-1249301877%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-color-o-k-l-c-ha/index.html"><span>Color</span><wbr><span><span>OKLCHa</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1249301877%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="kotlinx.serialization/Serializable///PointingToDeclaration/"><span class="token annotation builtin">Serializable</span></span></div><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-record/index.html"><span class="token annotation builtin">JvmRecord</span></a></div></div><span class="token keyword">data </span><span class="token keyword">class </span><a href="-color-o-k-l-c-ha/index.html">ColorOKLCHa</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>l<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>c<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>h<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>alpha<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1.0</span></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.openrndr.color/ColorModel///PointingToDeclaration/">ColorModel</span><span class="token operator">&lt;</span><a href="-color-o-k-l-c-ha/index.html">ColorOKLCHa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/ShadableColor///PointingToDeclaration/">ShadableColor</span><span class="token operator">&lt;</span><a href="-color-o-k-l-c-ha/index.html">ColorOKLCHa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/ChromaColor///PointingToDeclaration/">ChromaColor</span><span class="token operator">&lt;</span><a href="-color-o-k-l-c-ha/index.html">ColorOKLCHa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/HueShiftableColor///PointingToDeclaration/">HueShiftableColor</span><span class="token operator">&lt;</span><a href="-color-o-k-l-c-ha/index.html">ColorOKLCHa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/LuminosityColor///PointingToDeclaration/">LuminosityColor</span><span class="token operator">&lt;</span><a href="-color-o-k-l-c-ha/index.html">ColorOKLCHa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/AlgebraicColor///PointingToDeclaration/">AlgebraicColor</span><span class="token operator">&lt;</span><a href="-color-o-k-l-c-ha/index.html">ColorOKLCHa</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Represents a color in the OKLCH color space, which is based on the OKLab color space with added polar coordinates for chroma and hue.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2009136888%2FClasslikes%2F-454829500" anchor-label="ColorXSLUVa" id="-2009136888%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-color-x-s-l-u-va/index.html"><span>Color</span><wbr><span><span>XSLUVa</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2009136888%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="kotlinx.serialization/Serializable///PointingToDeclaration/"><span class="token annotation builtin">Serializable</span></span></div><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-record/index.html"><span class="token annotation builtin">JvmRecord</span></a></div></div><span class="token keyword">data </span><span class="token keyword">class </span><a href="-color-x-s-l-u-va/index.html">ColorXSLUVa</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>s<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>l<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>alpha<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1.0</span></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.openrndr.color/ColorModel///PointingToDeclaration/">ColorModel</span><span class="token operator">&lt;</span><a href="-color-x-s-l-u-va/index.html">ColorXSLUVa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/HueShiftableColor///PointingToDeclaration/">HueShiftableColor</span><span class="token operator">&lt;</span><a href="-color-x-s-l-u-va/index.html">ColorXSLUVa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/SaturatableColor///PointingToDeclaration/">SaturatableColor</span><span class="token operator">&lt;</span><a href="-color-x-s-l-u-va/index.html">ColorXSLUVa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/ShadableColor///PointingToDeclaration/">ShadableColor</span><span class="token operator">&lt;</span><a href="-color-x-s-l-u-va/index.html">ColorXSLUVa</a><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.color/AlgebraicColor///PointingToDeclaration/">AlgebraicColor</span><span class="token operator">&lt;</span><a href="-color-x-s-l-u-va/index.html">ColorXSLUVa</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Represents a color in the XSLUV color space with an optional alpha transparency value. XSLUV is a cylindrical representation of the HSLUV color space using an alternative X coordinate instead of the standard hue. It provides a perceptually uniform color representation.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1449012693%2FClasslikes%2F-454829500" anchor-label="HPLuv" id="1449012693%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-h-p-luv/index.html"><span><span>HPLuv</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1449012693%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-h-p-luv/index.html">HPLuv</a><span class="token operator"> = </span><a href="-color-h-p-l-u-va/index.html">ColorHPLUVa</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1121981223%2FClasslikes%2F-454829500" anchor-label="HSL" id="-1121981223%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-h-s-l/index.html"><span><span>HSL</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1121981223%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-h-s-l/index.html">HSL</a><span class="token operator"> = </span><span data-unresolved-link="org.openrndr.color/ColorHSLa///PointingToDeclaration/">ColorHSLa</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-766649512%2FClasslikes%2F-454829500" anchor-label="HSLuv" id="-766649512%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-h-s-luv/index.html"><span><span>HSLuv</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-766649512%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-h-s-luv/index.html">HSLuv</a><span class="token operator"> = </span><a href="-color-h-s-l-u-va/index.html">ColorHSLUVa</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-811783153%2FClasslikes%2F-454829500" anchor-label="HSV" id="-811783153%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-h-s-v/index.html"><span><span>HSV</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-811783153%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-h-s-v/index.html">HSV</a><span class="token operator"> = </span><span data-unresolved-link="org.openrndr.color/ColorHSVa///PointingToDeclaration/">ColorHSVa</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1714658701%2FClasslikes%2F-454829500" anchor-label="LAB" id="1714658701%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-l-a-b/index.html"><span><span>LAB</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1714658701%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-l-a-b/index.html">LAB</a><span class="token operator"> = </span><span data-unresolved-link="org.openrndr.color/ColorLABa///PointingToDeclaration/">ColorLABa</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-579971384%2FClasslikes%2F-454829500" anchor-label="LCHab" id="-579971384%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-l-c-hab/index.html"><span><span>LCHab</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-579971384%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-l-c-hab/index.html">LCHab</a><span class="token operator"> = </span><span data-unresolved-link="org.openrndr.color/ColorLCHABa///PointingToDeclaration/">ColorLCHABa</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2092835912%2FClasslikes%2F-454829500" anchor-label="LCHuv" id="2092835912%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-l-c-huv/index.html"><span><span>LCHuv</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2092835912%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-l-c-huv/index.html">LCHuv</a><span class="token operator"> = </span><span data-unresolved-link="org.openrndr.color/ColorLCHUVa///PointingToDeclaration/">ColorLCHUVa</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="92498701%2FClasslikes%2F-454829500" anchor-label="LUV" id="92498701%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-l-u-v/index.html"><span><span>LUV</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="92498701%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-l-u-v/index.html">LUV</a><span class="token operator"> = </span><span data-unresolved-link="org.openrndr.color/ColorLUVa///PointingToDeclaration/">ColorLUVa</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-556306827%2FClasslikes%2F-454829500" anchor-label="OKHSL" id="-556306827%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-o-k-h-s-l/index.html"><span><span>OKHSL</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-556306827%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-o-k-h-s-l/index.html">OKHSL</a><span class="token operator"> = </span><a href="-color-o-k-h-s-la/index.html">ColorOKHSLa</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-246108757%2FClasslikes%2F-454829500" anchor-label="OKHSV" id="-246108757%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-o-k-h-s-v/index.html"><span><span>OKHSV</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-246108757%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-o-k-h-s-v/index.html">OKHSV</a><span class="token operator"> = </span><a href="-color-o-k-h-s-va/index.html">ColorOKHSVa</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-315122903%2FClasslikes%2F-454829500" anchor-label="OKLab" id="-315122903%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-o-k-lab/index.html"><span><span>OKLab</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-315122903%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-o-k-lab/index.html">OKLab</a><span class="token operator"> = </span><a href="-color-o-k-l-a-ba/index.html">ColorOKLABa</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="94712677%2FClasslikes%2F-454829500" anchor-label="OKLCH" id="94712677%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-o-k-l-c-h/index.html"><span><span>OKLCH</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="94712677%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-o-k-l-c-h/index.html">OKLCH</a><span class="token operator"> = </span><a href="-color-o-k-l-c-ha/index.html">ColorOKLCHa</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1660956237%2FClasslikes%2F-454829500" anchor-label="RGB" id="1660956237%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-r-g-b/index.html"><span><span>RGB</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1660956237%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-r-g-b/index.html">RGB</a><span class="token operator"> = </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-902798647%2FClasslikes%2F-454829500" anchor-label="XSL" id="-902798647%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-x-s-l/index.html"><span><span>XSL</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-902798647%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-x-s-l/index.html">XSL</a><span class="token operator"> = </span><span data-unresolved-link="org.openrndr.color/ColorXSLa///PointingToDeclaration/">ColorXSLa</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-585591480%2FClasslikes%2F-454829500" anchor-label="XSLuv" id="-585591480%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-x-s-luv/index.html"><span><span>XSLuv</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-585591480%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-x-s-luv/index.html">XSLuv</a><span class="token operator"> = </span><a href="-color-x-s-l-u-va/index.html">ColorXSLUVa</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-592600577%2FClasslikes%2F-454829500" anchor-label="XSV" id="-592600577%2FClasslikes%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-x-s-v/index.html"><span><span>XSV</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-592600577%2FClasslikes%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="-x-s-v/index.html">XSV</a><span class="token operator"> = </span><span data-unresolved-link="org.openrndr.color/ColorXSVa///PointingToDeclaration/">ColorXSVa</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-1561339440%2FFunctions%2F-454829500" anchor-label="find_gamut_intersection" id="-1561339440%2FFunctions%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="find_gamut_intersection.html"><span>find_</span><wbr><span>gamut_</span><wbr><span><span>intersection</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1561339440%2FFunctions%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="find_gamut_intersection.html"><span class="token function">find_gamut_intersection</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">a<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">b<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">L1<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">C1<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">L0<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">cusp<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1075743440%2FFunctions%2F-454829500" anchor-label="get_Cs" id="-1075743440%2FFunctions%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get_-cs.html"><span>get_</span><wbr><span>Cs</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1075743440%2FFunctions%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get_-cs.html"><span class="token function">get_Cs</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">L<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">a_<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">b_<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-501465691%2FFunctions%2F-454829500" anchor-label="get_ST_mid" id="-501465691%2FFunctions%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get_-s-t_mid.html"><span>get_</span><wbr><span>ST_</span><wbr><span>mid</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-501465691%2FFunctions%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get_-s-t_mid.html"><span class="token function">get_ST_mid</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">a_<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">b_<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1245464242%2FFunctions%2F-454829500" anchor-label="hueToX" id="1245464242%2FFunctions%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hue-to-x.html"><span>hue</span><wbr><span>To</span><wbr><span><span>X</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1245464242%2FFunctions%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="hue-to-x.html"><span class="token function">hueToX</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">hue<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1533831844%2FFunctions%2F-454829500" anchor-label="mix" id="1533831844%2FFunctions%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="mix.html"><span><span>mix</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1533831844%2FFunctions%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="mix.html"><span class="token function">mix</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">left<span class="token operator">: </span><a href="-color-h-p-l-u-va/index.html">ColorHPLUVa</a><span class="token punctuation">, </span></span><span class="parameter ">right<span class="token operator">: </span><a href="-color-h-p-l-u-va/index.html">ColorHPLUVa</a><span class="token punctuation">, </span></span><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-color-h-p-l-u-va/index.html">ColorHPLUVa</a></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="mix.html"><span class="token function">mix</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">left<span class="token operator">: </span><a href="-color-h-s-l-u-va/index.html">ColorHSLUVa</a><span class="token punctuation">, </span></span><span class="parameter ">right<span class="token operator">: </span><a href="-color-h-s-l-u-va/index.html">ColorHSLUVa</a><span class="token punctuation">, </span></span><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-color-h-s-l-u-va/index.html">ColorHSLUVa</a></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="mix.html"><span class="token function">mix</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">left<span class="token operator">: </span><a href="-color-o-k-l-c-ha/index.html">ColorOKLCHa</a><span class="token punctuation">, </span></span><span class="parameter ">right<span class="token operator">: </span><a href="-color-o-k-l-c-ha/index.html">ColorOKLCHa</a><span class="token punctuation">, </span></span><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-color-o-k-l-c-ha/index.html">ColorOKLCHa</a></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="mix.html"><span class="token function">mix</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">left<span class="token operator">: </span><a href="-color-x-s-l-u-va/index.html">ColorXSLUVa</a><span class="token punctuation">, </span></span><span class="parameter ">right<span class="token operator">: </span><a href="-color-x-s-l-u-va/index.html">ColorXSLUVa</a><span class="token punctuation">, </span></span><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-color-x-s-l-u-va/index.html">ColorXSLUVa</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="311393163%2FFunctions%2F-454829500" anchor-label="toe" id="311393163%2FFunctions%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="toe.html"><span><span>toe</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="311393163%2FFunctions%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="toe.html"><span class="token function">toe</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">Computes a modified version of the Toe mapping function, used in color space transformations.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="971361876%2FFunctions%2F-454829500" anchor-label="toeInv" id="971361876%2FFunctions%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="toe-inv.html"><span>toe</span><wbr><span><span>Inv</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="971361876%2FFunctions%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="toe-inv.html"><span class="token function">toeInv</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">Computes the toe inverse transformation of a given input value based on specific constants. This function is typically used for calculations involving perceptual transformations or non-linear scaling in color spaces or other mathematical models.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2065342617%2FFunctions%2F-454829500" anchor-label="toHPLUVa" id="-2065342617%2FFunctions%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="to-h-p-l-u-va.html"><span>to</span><wbr><span><span>HPLUVa</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2065342617%2FFunctions%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.color/ColorLCHUVa///PointingToDeclaration/">ColorLCHUVa</span><span class="token punctuation">.</span><a href="to-h-p-l-u-va.html"><span class="token function">toHPLUVa</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-color-h-p-l-u-va/index.html">ColorHPLUVa</a></div><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token punctuation">.</span><a href="to-h-p-l-u-va.html"><span class="token function">toHPLUVa</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-color-h-p-l-u-va/index.html">ColorHPLUVa</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="56683233%2FFunctions%2F-454829500" anchor-label="toHSLUVa" id="56683233%2FFunctions%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="to-h-s-l-u-va.html"><span>to</span><wbr><span><span>HSLUVa</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="56683233%2FFunctions%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.color/ColorLCHUVa///PointingToDeclaration/">ColorLCHUVa</span><span class="token punctuation">.</span><a href="to-h-s-l-u-va.html"><span class="token function">toHSLUVa</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-color-h-s-l-u-va/index.html">ColorHSLUVa</a></div><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token punctuation">.</span><a href="to-h-s-l-u-va.html"><span class="token function">toHSLUVa</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-color-h-s-l-u-va/index.html">ColorHSLUVa</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="547226364%2FFunctions%2F-454829500" anchor-label="toOKHSLa" id="547226364%2FFunctions%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="to-o-k-h-s-la.html"><span>to</span><wbr><span><span>OKHSLa</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="547226364%2FFunctions%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token punctuation">.</span><a href="to-o-k-h-s-la.html"><span class="token function">toOKHSLa</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-color-o-k-h-s-la/index.html">ColorOKHSLa</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1108781178%2FFunctions%2F-454829500" anchor-label="toOKHSVa" id="-1108781178%2FFunctions%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="to-o-k-h-s-va.html"><span>to</span><wbr><span><span>OKHSVa</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1108781178%2FFunctions%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token punctuation">.</span><a href="to-o-k-h-s-va.html"><span class="token function">toOKHSVa</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-color-o-k-h-s-va/index.html">ColorOKHSVa</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="64028360%2FFunctions%2F-454829500" anchor-label="toOKLABa" id="64028360%2FFunctions%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="to-o-k-l-a-ba.html"><span>to</span><wbr><span><span>OKLABa</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="64028360%2FFunctions%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token punctuation">.</span><a href="to-o-k-l-a-ba.html"><span class="token function">toOKLABa</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-color-o-k-l-a-ba/index.html">ColorOKLABa</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-29907956%2FFunctions%2F-454829500" anchor-label="toOKLCHa" id="-29907956%2FFunctions%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="to-o-k-l-c-ha.html"><span>to</span><wbr><span><span>OKLCHa</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-29907956%2FFunctions%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token punctuation">.</span><a href="to-o-k-l-c-ha.html"><span class="token function">toOKLCHa</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-color-o-k-l-c-ha/index.html">ColorOKLCHa</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1416826121%2FFunctions%2F-454829500" anchor-label="toXSLUVa" id="1416826121%2FFunctions%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="to-x-s-l-u-va.html"><span>to</span><wbr><span><span>XSLUVa</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1416826121%2FFunctions%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token punctuation">.</span><a href="to-x-s-l-u-va.html"><span class="token function">toXSLUVa</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-color-x-s-l-u-va/index.html">ColorXSLUVa</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-574236558%2FFunctions%2F-454829500" anchor-label="xToHue" id="-574236558%2FFunctions%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="x-to-hue.html"><span>x</span><wbr><span>To</span><wbr><span><span>Hue</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-574236558%2FFunctions%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="x-to-hue.html"><span class="token function">xToHue</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,662 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>OliveProgram</title>
+<link href="../../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../../styles/style.css" rel="Stylesheet">
+<link href="../../../../styles/main.css" rel="Stylesheet">
+<link href="../../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../../../images/logo-icon.svg">
+<link href="../../../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.0-dev.70+e4c3ecc
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":orx-jvm:orx-olive/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-jvm:orx-olive/main" data-filter=":orx-jvm:orx-olive/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="orx-olive::org.openrndr.extra.olive/OliveProgram///PointingToDeclaration//-751155200">
+  <div class="breadcrumbs"><a href="../../index.html">orx-olive</a><span class="delimiter">/</span><a href="../index.html">org.openrndr.extra.olive</a><span class="delimiter">/</span><span class="current">OliveProgram</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Olive</span><wbr><span><span>Program</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="index.html">OliveProgram</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">sourceLocation<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">scriptHost<span class="token operator">: </span><a href="../-olive-script-host/index.html">OliveScriptHost</a><span class="token punctuation">, </span></span><span class="parameter ">resources<span class="token operator">: </span><a href="../-resources/index.html">Resources</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.openrndr/ProgramImplementation///PointingToDeclaration/">ProgramImplementation</span><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/openrndr/orx/blob/master/orx-olive/src/main/kotlin/OliveProgram.kt#L10">source</a>)</span></span></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="546950246%2FConstructors%2F-751155200" anchor-label="OliveProgram" id="546950246%2FConstructors%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-olive-program.html"><span>Olive</span><wbr><span><span>Program</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="546950246%2FConstructors%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">sourceLocation<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">scriptHost<span class="token operator">: </span><a href="../-olive-script-host/index.html">OliveScriptHost</a><span class="token punctuation">, </span></span><span class="parameter ">resources<span class="token operator">: </span><a href="../-resources/index.html">Resources</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-858453129%2FProperties%2F-751155200" anchor-label="application" id="-858453129%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-858453129%2FProperties%2F-751155200"><span><span>application</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-858453129%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">lateinit override </span><span class="token keyword">var </span><a href="index.html#-858453129%2FProperties%2F-751155200">application</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr/Application///PointingToDeclaration/">Application</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1629009640%2FProperties%2F-751155200" anchor-label="assetMetadata" id="1629009640%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1629009640%2FProperties%2F-751155200"><span>asset</span><wbr><span><span>Metadata</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1629009640%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="index.html#1629009640%2FProperties%2F-751155200">assetMetadata</a><span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span data-unresolved-link="org.openrndr/AssetMetadata///PointingToDeclaration/">AssetMetadata</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2107032860%2FProperties%2F-751155200" anchor-label="assetProperties" id="-2107032860%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-2107032860%2FProperties%2F-751155200"><span>asset</span><wbr><span><span>Properties</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2107032860%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="index.html#-2107032860%2FProperties%2F-751155200">assetProperties</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="263574674%2FProperties%2F-751155200" anchor-label="backgroundColor" id="263574674%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#263574674%2FProperties%2F-751155200"><span>background</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="263574674%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="index.html#263574674%2FProperties%2F-751155200">backgroundColor</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-782620559%2FProperties%2F-751155200" anchor-label="clipboard" id="-782620559%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-782620559%2FProperties%2F-751155200"><span><span>clipboard</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-782620559%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="index.html#-782620559%2FProperties%2F-751155200">clipboard</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr/ProgramImplementation.ApplicationClipboard///PointingToDeclaration/">ProgramImplementation.ApplicationClipboard</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1733216775%2FProperties%2F-751155200" anchor-label="clock" id="-1733216775%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1733216775%2FProperties%2F-751155200"><span><span>clock</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1733216775%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="index.html#-1733216775%2FProperties%2F-751155200">clock</a><span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1753604542%2FProperties%2F-751155200" anchor-label="deltaTime" id="-1753604542%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1753604542%2FProperties%2F-751155200"><span>delta</span><wbr><span><span>Time</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1753604542%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="index.html#-1753604542%2FProperties%2F-751155200">deltaTime</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1636869804%2FProperties%2F-751155200" anchor-label="dispatcher" id="1636869804%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1636869804%2FProperties%2F-751155200"><span><span>dispatcher</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1636869804%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="index.html#1636869804%2FProperties%2F-751155200">dispatcher</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr/Dispatcher///PointingToDeclaration/">Dispatcher</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="670816930%2FProperties%2F-751155200" anchor-label="drawer" id="670816930%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#670816930%2FProperties%2F-751155200"><span><span>drawer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="670816930%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">lateinit override </span><span class="token keyword">var </span><a href="index.html#670816930%2FProperties%2F-751155200">drawer</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2119567541%2FProperties%2F-751155200" anchor-label="driver" id="-2119567541%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-2119567541%2FProperties%2F-751155200"><span><span>driver</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2119567541%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">lateinit override </span><span class="token keyword">var </span><a href="index.html#-2119567541%2FProperties%2F-751155200">driver</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.internal/Driver///PointingToDeclaration/">Driver</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-111157043%2FProperties%2F-751155200" anchor-label="ended" id="-111157043%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-111157043%2FProperties%2F-751155200"><span><span>ended</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-111157043%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="index.html#-111157043%2FProperties%2F-751155200">ended</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.events/Event///PointingToDeclaration/">Event</span><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr/ProgramEvent///PointingToDeclaration/">ProgramEvent</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1552295457%2FProperties%2F-751155200" anchor-label="extensions" id="-1552295457%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1552295457%2FProperties%2F-751155200"><span><span>extensions</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1552295457%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="index.html#-1552295457%2FProperties%2F-751155200">extensions</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr/Extension///PointingToDeclaration/">Extension</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1210232337%2FProperties%2F-751155200" anchor-label="frameCount" id="1210232337%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1210232337%2FProperties%2F-751155200"><span>frame</span><wbr><span><span>Count</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1210232337%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="index.html#1210232337%2FProperties%2F-751155200">frameCount</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1609485100%2FProperties%2F-751155200" anchor-label="height" id="1609485100%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1609485100%2FProperties%2F-751155200"><span><span>height</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1609485100%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="index.html#1609485100%2FProperties%2F-751155200">height</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="229004626%2FProperties%2F-751155200" anchor-label="isNested" id="229004626%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#229004626%2FProperties%2F-751155200"><span>is</span><wbr><span><span>Nested</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="229004626%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="index.html#229004626%2FProperties%2F-751155200">isNested</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2082515692%2FProperties%2F-751155200" anchor-label="keyboard" id="2082515692%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#2082515692%2FProperties%2F-751155200"><span><span>keyboard</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2082515692%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="index.html#2082515692%2FProperties%2F-751155200">keyboard</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr/Keyboard///PointingToDeclaration/">Keyboard</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1245633858%2FProperties%2F-751155200" anchor-label="mouse" id="1245633858%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1245633858%2FProperties%2F-751155200"><span><span>mouse</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1245633858%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="index.html#1245633858%2FProperties%2F-751155200">mouse</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr/ApplicationMouse///PointingToDeclaration/">ApplicationMouse</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1123594184%2FProperties%2F-751155200" anchor-label="name" id="1123594184%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1123594184%2FProperties%2F-751155200"><span><span>name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1123594184%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="index.html#1123594184%2FProperties%2F-751155200">name</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2055776474%2FProperties%2F-751155200" anchor-label="olive" id="-2055776474%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="olive.html"><span><span>olive</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2055776474%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="olive.html">olive</a><span class="token operator">: </span><a href="../-olive/index.html">Olive</a><span class="token operator">&lt;</span><a href="index.html">OliveProgram</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1437282339%2FProperties%2F-751155200" anchor-label="pointers" id="-1437282339%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1437282339%2FProperties%2F-751155200"><span><span>pointers</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1437282339%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="index.html#-1437282339%2FProperties%2F-751155200">pointers</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr/Pointers///PointingToDeclaration/">Pointers</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="152756516%2FProperties%2F-751155200" anchor-label="produceAssets" id="152756516%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#152756516%2FProperties%2F-751155200"><span>produce</span><wbr><span><span>Assets</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="152756516%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">override </span><span class="token keyword">val </span><a href="index.html#152756516%2FProperties%2F-751155200">produceAssets</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.events/Event///PointingToDeclaration/">Event</span><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr/ProduceAssetsEvent///PointingToDeclaration/">ProduceAssetsEvent</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1823738307%2FProperties%2F-751155200" anchor-label="program" id="1823738307%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1823738307%2FProperties%2F-751155200"><span><span>program</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1823738307%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="index.html#1823738307%2FProperties%2F-751155200">program</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr/Program///PointingToDeclaration/">Program</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1888434795%2FProperties%2F-751155200" anchor-label="requestAssets" id="-1888434795%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1888434795%2FProperties%2F-751155200"><span>request</span><wbr><span><span>Assets</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1888434795%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">override </span><span class="token keyword">val </span><a href="index.html#-1888434795%2FProperties%2F-751155200">requestAssets</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.events/Event///PointingToDeclaration/">Event</span><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr/RequestAssetsEvent///PointingToDeclaration/">RequestAssetsEvent</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="731954728%2FProperties%2F-751155200" anchor-label="seconds" id="731954728%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#731954728%2FProperties%2F-751155200"><span><span>seconds</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="731954728%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="index.html#731954728%2FProperties%2F-751155200">seconds</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1482516235%2FProperties%2F-751155200" anchor-label="suspend" id="1482516235%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1482516235%2FProperties%2F-751155200"><span><span>suspend</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1482516235%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="index.html#1482516235%2FProperties%2F-751155200">suspend</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-896987435%2FProperties%2F-751155200" anchor-label="userProperties" id="-896987435%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-896987435%2FProperties%2F-751155200"><span>user</span><wbr><span><span>Properties</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-896987435%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="index.html#-896987435%2FProperties%2F-751155200">userProperties</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1709587647%2FProperties%2F-751155200" anchor-label="width" id="-1709587647%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1709587647%2FProperties%2F-751155200"><span><span>width</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1709587647%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="index.html#-1709587647%2FProperties%2F-751155200">width</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="790955139%2FProperties%2F-751155200" anchor-label="window" id="790955139%2FProperties%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#790955139%2FProperties%2F-751155200"><span><span>window</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="790955139%2FProperties%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="index.html#790955139%2FProperties%2F-751155200">window</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr/ProgramImplementation.Window///PointingToDeclaration/">ProgramImplementation.Window</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-1417714981%2FFunctions%2F-751155200" anchor-label="animate" id="-1417714981%2FFunctions%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1417714981%2FFunctions%2F-751155200"><span><span>animate</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1417714981%2FFunctions%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html#-1417714981%2FFunctions%2F-751155200"><span class="token function">animate</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">animationFunction<span class="token operator">: </span><span data-unresolved-link="org.openrndr.animatable/Animatable///PointingToDeclaration/">Animatable</span><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="355880751%2FFunctions%2F-751155200" anchor-label="draw" id="355880751%2FFunctions%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#355880751%2FFunctions%2F-751155200"><span><span>draw</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="355880751%2FFunctions%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#355880751%2FFunctions%2F-751155200"><span class="token function">draw</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-769787921%2FFunctions%2F-751155200" anchor-label="drawImpl" id="-769787921%2FFunctions%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-769787921%2FFunctions%2F-751155200"><span>draw</span><wbr><span><span>Impl</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-769787921%2FFunctions%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-769787921%2FFunctions%2F-751155200"><span class="token function">drawImpl</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-299150639%2FFunctions%2F-751155200" anchor-label="extend" id="-299150639%2FFunctions%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#624154390%2FFunctions%2F-751155200"><span><span>extend</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-299150639%2FFunctions%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="index.html#624154390%2FFunctions%2F-751155200">T</a><span class="token operator"> : </span><span data-unresolved-link="org.openrndr/Extension///PointingToDeclaration/">Extension</span><span class="token operator">&gt; </span><a href="index.html#624154390%2FFunctions%2F-751155200"><span class="token function">extend</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">extension<span class="token operator">: </span><a href="index.html#624154390%2FFunctions%2F-751155200">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html#624154390%2FFunctions%2F-751155200">T</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="index.html#-1958209373%2FFunctions%2F-751155200">T</a><span class="token operator"> : </span><span data-unresolved-link="org.openrndr/Extension///PointingToDeclaration/">Extension</span><span class="token operator">&gt; </span><a href="index.html#-1958209373%2FFunctions%2F-751155200"><span class="token function">extend</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">extension<span class="token operator">: </span><a href="index.html#-1958209373%2FFunctions%2F-751155200">T</a><span class="token punctuation">, </span></span><span class="parameter ">configure<span class="token operator">: </span><a href="index.html#-1958209373%2FFunctions%2F-751155200">T</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html#-1958209373%2FFunctions%2F-751155200">T</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-381367120%2FFunctions%2F-751155200"><span class="token function">extend</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">stage<span class="token operator">: </span><span data-unresolved-link="org.openrndr/ExtensionStage///PointingToDeclaration/">ExtensionStage</span><span class="token punctuation">, </span></span><span class="parameter ">userDraw<span class="token operator">: </span><span data-unresolved-link="org.openrndr/Program///PointingToDeclaration/">Program</span><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1196663402%2FFunctions%2F-751155200" anchor-label="setup" id="1196663402%2FFunctions%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1196663402%2FFunctions%2F-751155200"><span><span>setup</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1196663402%2FFunctions%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">suspend override </span><span class="token keyword">fun </span><a href="index.html#1196663402%2FFunctions%2F-751155200"><span class="token function">setup</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2020255266%2FFunctions%2F-751155200" anchor-label="updateFrameSecondsFromClock" id="-2020255266%2FFunctions%2F-751155200" data-filterable-set=":orx-jvm:orx-olive/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-olive/main" data-filterable-set=":orx-jvm:orx-olive/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-2020255266%2FFunctions%2F-751155200"><span>update</span><wbr><span>Frame</span><wbr><span>Seconds</span><wbr><span>From</span><wbr><span><span>Clock</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2020255266%2FFunctions%2F-751155200"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-olive/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-2020255266%2FFunctions%2F-751155200"><span class="token function">updateFrameSecondsFromClock</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
