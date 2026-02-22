@@ -38,6 +38,12 @@ class DropdownButton : Element(ElementType("dropdown-button")) {
 
     var label: String = "OK"
     var value: Item? = null
+        set(value) {
+            if(field != value && value != null) {
+                field = value
+                events.valueChanged.trigger(ValueChangedEvent(this, value))
+            }
+        }
 
     class ValueChangedEvent(val source: DropdownButton, val value: Item)
 

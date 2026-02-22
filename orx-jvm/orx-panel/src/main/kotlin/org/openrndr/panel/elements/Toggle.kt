@@ -21,6 +21,14 @@ class Toggle : Element(ElementType("toggle")) {
 
     var label = ""
     var value = false
+        set(v) {
+            val oldValue = value
+            if(v != oldValue) {
+                field = v
+                requestRedraw()
+                events.valueChanged.trigger(ValueChangedEvent(this, oldValue, v))
+            }
+        }
 
     class ValueChangedEvent(val source: Toggle,
                             val oldValue: Boolean,
@@ -66,8 +74,6 @@ class Toggle : Element(ElementType("toggle")) {
         }
         mouse.clicked.listen {
             value = !value
-            draw.dirty = true
-            events.valueChanged.trigger(Toggle.ValueChangedEvent(this, !value, value))
             it.cancelPropagation()
         }
 
@@ -75,8 +81,6 @@ class Toggle : Element(ElementType("toggle")) {
             if (it.key == KEY_SPACEBAR) {
                 value = !value
                 it.cancelPropagation()
-                draw.dirty = true
-                events.valueChanged.trigger(Toggle.ValueChangedEvent(this, !value, value))
             }
         }
     }
@@ -84,9 +88,9 @@ class Toggle : Element(ElementType("toggle")) {
     /**
      * Emits the current value through the valueChanged event
      */
-    fun emit() {
-        events.valueChanged.trigger(Toggle.ValueChangedEvent(this, value, value))
-    }
+//    fun emit() {
+//        events.valueChanged.trigger(Toggle.ValueChangedEvent(this, value, value))
+//    }
 
     override fun draw(drawer: Drawer) {
         drawer.pushModel()

@@ -9,6 +9,7 @@ import org.openrndr.extra.textwriter.Cursor
 import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.math.Vector2
 import org.openrndr.math.map
+import org.openrndr.panel.elements.SequenceEditorBase.ValueChangedEvent
 import org.openrndr.panel.style.effectiveColor
 import org.openrndr.panel.tools.Tooltip
 import org.openrndr.shape.Rectangle
@@ -19,8 +20,13 @@ import kotlin.math.roundToInt
 class SequenceEditor : SequenceEditorBase("sequence-editor") {
     var value
         get() = baseValue
-        set(value) {
-            baseValue = value
+        set(v) {
+            val oldValue = baseValue.toList()
+            baseValue = v
+            if(oldValue != v) {
+                requestRedraw()
+                events.valueChanged.trigger(ValueChangedEvent(this, oldValue, baseValue))
+            }
         }
 
     public override var maximumSequenceLength = 16
@@ -135,9 +141,7 @@ open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(E
         }
 
         mouse.moved.listen {
-            hoverJob?.let { job ->
-                job.cancel()
-            }
+            hoverJob?.cancel()
             if (tooltip != null) {
                 tooltip = null
                 requestRedraw()

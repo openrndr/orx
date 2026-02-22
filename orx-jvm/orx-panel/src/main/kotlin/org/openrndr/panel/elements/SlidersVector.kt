@@ -6,6 +6,7 @@ import org.openrndr.launch
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
+import org.openrndr.panel.elements.SlidersVector3.ValueChangedEvent
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KMutableProperty1
 
@@ -14,10 +15,15 @@ class SlidersVector2 : SequenceEditorBase("sliders-vector2") {
         get() {
             return Vector2(baseValue[0], baseValue[1])
         }
-        set(value) {
-            baseValue[0] = value.x
-            baseValue[1] = value.y
-            requestRedraw()
+        set(v) {
+            val oldValue = Vector2(baseValue[0], baseValue[1])
+            baseValue[0] = v.x
+            baseValue[1] = v.y
+            if(oldValue != v) {
+                events.valueChanged.trigger(
+                    ValueChangedEvent(this, oldValue, v)
+                )
+            }
         }
 
     class ValueChangedEvent(
@@ -116,11 +122,16 @@ class SlidersVector3 : SequenceEditorBase("sliders-vector3") {
             return Vector3(baseValue[0], baseValue[1], baseValue[2])
         }
         set(value) {
+            val oldValue = Vector3(baseValue[0], baseValue[1], baseValue[2])
             baseValue[0] = value.x
             baseValue[1] = value.y
             baseValue[2] = value.z
-            requestRedraw()
-        }
+            if(oldValue.x != value.x || oldValue.y != value.y || oldValue.z != value.z) {
+                events.valueChanged.trigger(
+                    ValueChangedEvent(this, oldValue, value)
+                )
+            }
+         }
 
     class ValueChangedEvent(
         val source: SequenceEditorBase,
@@ -209,11 +220,16 @@ class SlidersVector4 : SequenceEditorBase("sliders-vector4") {
             return Vector4(baseValue[0], baseValue[1], baseValue[2], baseValue[3])
         }
         set(value) {
+            val oldValue = Vector4(baseValue[0], baseValue[1], baseValue[2], baseValue[3])
             baseValue[0] = value.x
             baseValue[1] = value.y
             baseValue[2] = value.z
             baseValue[3] = value.w
-            requestRedraw()
+            if(oldValue.x != value.x || oldValue.y != value.y || oldValue.z != value.z || oldValue.w != value.w) {
+                events.valueChanged.trigger(
+                    ValueChangedEvent(this, oldValue, value)
+                )
+            }
         }
 
     class ValueChangedEvent(

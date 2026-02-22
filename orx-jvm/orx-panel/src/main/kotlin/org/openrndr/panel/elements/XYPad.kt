@@ -4,7 +4,6 @@ import kotlinx.coroutines.yield
 import org.openrndr.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
-
 import org.openrndr.events.Event
 import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.math.Vector2
@@ -45,20 +44,27 @@ class XYPad : Element(ElementType("xy-pad")) {
     var invertY = true
 
     // The value is derived from the normalized value...
-    var normalizedValue = Vector2(0.0, 0.0)
+    var normalizedValue = Vector2.ZERO
 
     var value: Vector2
         get() = Vector2(
-                map(-1.0, 1.0, minX, maxX, normalizedValue.x).round(precision),
-                map(-1.0, 1.0, minY, maxY, normalizedValue.y).round(precision)
+            map(-1.0, 1.0, minX, maxX, normalizedValue.x).round(precision),
+            map(-1.0, 1.0, minY, maxY, normalizedValue.y).round(precision)
         )
         set(newValue) {
+            val oldValue = realValue
             normalizedValue = Vector2(
-                    clamp(map(minX, maxX, -1.0, 1.0, newValue.x), -1.0, 1.0),
-                    clamp(map(minY, maxY, -1.0, 1.0, newValue.y), -1.0, 1.0)
+                clamp(map(minX, maxX, -1.0, 1.0, newValue.x), -1.0, 1.0),
+                clamp(map(minY, maxY, -1.0, 1.0, newValue.y), -1.0, 1.0)
             )
-            requestRedraw()
+            realValue = newValue
+            if (oldValue.x != newValue.x || oldValue.y != newValue.y) {
+                requestRedraw()
+                events.valueChanged.trigger(ValueChangedEvent(this, oldValue, newValue))
+            }
         }
+
+    private var realValue = Vector2.ZERO
 
     init {
         mouse.clicked.listen {
@@ -79,14 +85,13 @@ class XYPad : Element(ElementType("xy-pad")) {
         keyboard.repeated.listen { handleKeyEvent(it) }
     }
 
-    class ValueChangedEvent(val source: XYPad,
-                            val oldValue: Vector2,
-                            val newValue: Vector2)
-
+    class ValueChangedEvent(
+        val source: XYPad, val oldValue: Vector2, val newValue: Vector2
+    )
 
     val events = Events()
 
-    class Events: AutoCloseable {
+    class Events : AutoCloseable {
         val valueChanged = Event<ValueChangedEvent>("xypad-value-changed")
 
         override fun close() {
@@ -108,44 +113,27 @@ class XYPad : Element(ElementType("xy-pad")) {
             10.0.pow(-(precision - 0.0))
         }
 
-        val old = value
-
-        if (keyEvent.key == KEY_ARROW_RIGHT) {
-            value = Vector2(value.x + keyboardIncrementX, value.y)
+        when(keyEvent.key) {
+            KEY_ARROW_RIGHT -> value = Vector2(value.x + keyboardIncrementX, value.y)
+            KEY_ARROW_LEFT -> value = Vector2(value.x - keyboardIncrementX, value.y)
+            KEY_ARROW_UP -> value = Vector2(value.x, value.y - keyboardIncrementY * if (invertY) -1.0 else 1.0)
+            KEY_ARROW_DOWN -> value = Vector2(value.x, value.y + keyboardIncrementY * if (invertY) -1.0 else 1.0)
         }
 
-        if (keyEvent.key == KEY_ARROW_LEFT) {
-            value = Vector2(value.x - keyboardIncrementX, value.y)
-        }
-
-        if (keyEvent.key == KEY_ARROW_UP) {
-            value = Vector2(value.x, value.y - keyboardIncrementY * if (invertY) -1.0 else 1.0)
-        }
-
-        if (keyEvent.key == KEY_ARROW_DOWN) {
-            value = Vector2(value.x, value.y + keyboardIncrementY * if (invertY) -1.0 else 1.0)
-        }
-
-        requestRedraw()
-        events.valueChanged.trigger(ValueChangedEvent(this, old, value))
         keyEvent.cancelPropagation()
     }
 
     private fun pick(e: MouseEvent) {
-        val old = value
-
         // Difference
         val dx = e.position.x - layout.screenX
         val dy = e.position.y - layout.screenY
 
-        // Normalize to -1 - 1
-        val nx = clamp(dx / layout.screenWidth * 2.0 - 1.0, -1.0, 1.0)
-        val ny = clamp(dy / layout.screenHeight * 2.0 - 1.0, -1.0, 1.0) * if (invertY) -1.0 else 1.0
+        // Map to minX,minY ~ maxX,maxY
+        val nx = (dx / layout.screenWidth).map(0.0, 1.0, minX, maxX, true)
+        val before = if(invertY) Vector2(1.0, 0.0) else Vector2(0.0, 1.0)
+        val ny = (dy / layout.screenHeight).map(before.x, before.y, minY, maxY, true)
 
-        normalizedValue = Vector2(nx, ny)
-
-        events.valueChanged.trigger(ValueChangedEvent(this, old, value))
-        requestRedraw()
+        value = Vector2(nx, ny)
     }
 
     override val widthHint: Double?
@@ -154,33 +142,26 @@ class XYPad : Element(ElementType("xy-pad")) {
 
     private val ballPosition: Vector2
         get() = Vector2(
-                map(-1.0, 1.0, 0.0, layout.screenWidth, normalizedValue.x),
-                if (invertY) {
-                    map(1.0, -1.0, 0.0, layout.screenHeight, normalizedValue.y)
-                } else {
-                    map(-1.0, 1.0, 0.0, layout.screenHeight, normalizedValue.y)
-                }
+            map(-1.0, 1.0, 0.0, layout.screenWidth, normalizedValue.x), if (invertY) {
+                map(1.0, -1.0, 0.0, layout.screenHeight, normalizedValue.y)
+            } else {
+                map(-1.0, 1.0, 0.0, layout.screenHeight, normalizedValue.y)
+            }
         )
 
     private val grid = mutableListOf<LineSegment>()
 
     override fun draw(drawer: Drawer) {
-        if(grid.isEmpty()) {
+        if (grid.isEmpty()) {
             repeat(21) { n ->
                 grid.add(
                     LineSegment(
-                        0.0,
-                        layout.screenHeight / 20 * n,
-                        layout.screenWidth - 1.0,
-                        layout.screenHeight / 20 * n
+                        0.0, layout.screenHeight / 20 * n, layout.screenWidth - 1.0, layout.screenHeight / 20 * n
                     )
                 )
                 grid.add(
                     LineSegment(
-                        layout.screenWidth / 20 * n,
-                        0.0,
-                        layout.screenWidth / 20 * n,
-                        layout.screenHeight - 1.0
+                        layout.screenWidth / 20 * n, 0.0, layout.screenWidth / 20 * n, layout.screenHeight - 1.0
                     )
                 )
             }
@@ -215,7 +196,8 @@ class XYPad : Element(ElementType("xy-pad")) {
             drawer.stroke = ColorRGBa.WHITE
             drawer.circle(ballPosition, 8.0)
 
-            val valueLabel = "${String.format("%.0${precision}f", value.x)}, ${String.format("%.0${precision}f", value.y)}"
+            val valueLabel =
+                "${String.format("%.0${precision}f", value.x)}, ${String.format("%.0${precision}f", value.y)}"
 
             (root() as? Body)?.controlManager?.fontManager?.let {
                 val writer = TextWriter(drawer)
@@ -223,10 +205,10 @@ class XYPad : Element(ElementType("xy-pad")) {
                 val textWidth = writer.textWidth(valueLabel)
 
                 drawer.fill = ((computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE).opacify(
-                        if (disabled in pseudoClasses) 0.25 else 1.0
+                    if (disabled in pseudoClasses) 0.25 else 1.0
                 )
 
-                drawer.text(valueLabel,layout.screenWidth - textWidth - 4.0, layout.screenHeight - 4.0)
+                drawer.text(valueLabel, layout.screenWidth - textWidth - 4.0, layout.screenHeight - 4.0)
                 drawer.text(label, 0.0, layout.screenHeight + 18.0)
             }
 

@@ -18,6 +18,14 @@ import kotlin.reflect.KMutableProperty1
 class Textfield : Element(ElementType("textfield")) {
 
     var value: String = ""
+        set(v) {
+            val oldValue = value
+            if(v != oldValue) {
+                field = v
+                requestRedraw()
+                events.valueChanged.trigger(ValueChangedEvent(this, oldValue, v))
+            }
+        }
     var label: String = "label"
 
     class ValueChangedEvent(val source: Textfield, val oldValue: String, val newValue: String)
@@ -35,12 +43,8 @@ class Textfield : Element(ElementType("textfield")) {
         keyboard.repeated.listen {
             if (it.key == KEY_BACKSPACE) {
                 if (value.isNotEmpty()) {
-                    val oldValue = value
                     value = value.substring(0, value.length - 1)
-                    events.valueChanged.trigger(ValueChangedEvent(this, oldValue, value))
-                    requestRedraw()
                 }
-
             }
             it.cancelPropagation()
         }
@@ -48,31 +52,21 @@ class Textfield : Element(ElementType("textfield")) {
         keyboard.pressed.listen {
             if (KeyModifier.CTRL in it.modifiers || KeyModifier.SUPER in it.modifiers) {
                 if (it.name == "v") {
-                    val oldValue = value
-                    (root() as Body).controlManager?.program?.clipboard?.contents?.let {
-                        value += it
-
+                    (root() as Body).controlManager?.program?.clipboard?.contents?.let { text ->
+                        value += text
                     }
-                    events.valueChanged.trigger(ValueChangedEvent(this, oldValue, value))
-                    it.cancelPropagation()
                 }
             }
             if (it.key == KEY_BACKSPACE) {
                 if (value.isNotEmpty()) {
-                    val oldValue = value
                     value = value.substring(0, value.length - 1)
-                    events.valueChanged.trigger(ValueChangedEvent(this, oldValue, value))
                 }
             }
-            requestRedraw()
             it.cancelPropagation()
         }
 
         keyboard.character.listen {
-            val oldValue = value
             value += it.character
-            events.valueChanged.trigger(ValueChangedEvent(this, oldValue, value))
-            requestRedraw()
             it.cancelPropagation()
         }
 
