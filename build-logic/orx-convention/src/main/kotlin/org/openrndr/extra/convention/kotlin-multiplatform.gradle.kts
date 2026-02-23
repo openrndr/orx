@@ -63,10 +63,11 @@ kotlin {
                     outputDir.set(project.file(project.projectDir.toString() + "/images"))
                     dependsOn(compileTaskProvider)
                 }
-                dependencies {
-                        runtimeOnly(openrndr.findLibrary("application-glfw").get())
 
-                }
+//                dependencies {
+//                        runtimeOnly(openrndr.findLibrary("application-glfw").get())
+//
+//                }
             }
         }
         testRuns["test"].executionTask {
@@ -111,7 +112,14 @@ kotlin {
             dependencies {
                 implementation(openrndr.findLibrary("application-core").get())
                 implementation(openrndr.findLibrary("orextensions").get())
-                runtimeOnly(openrndr.findLibrary("application-glfw").get())
+
+                if (findProperty("openrndr.application.backend") == null) {
+                    runtimeOnly(openrndr.findLibrary("application-sdl").get())
+                } else {
+                    runtimeOnly(openrndr.findLibrary(findProperty("openrndr.application.backend") as String).get())
+                }
+
+                runtimeOnly(openrndr.findLibrary("application-sdl").get())
                 runtimeOnly(sharedLibs.findLibrary("slf4j-simple").get())
             }
         }

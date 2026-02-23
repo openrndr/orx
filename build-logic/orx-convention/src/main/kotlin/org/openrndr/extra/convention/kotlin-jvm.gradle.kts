@@ -61,7 +61,11 @@ dependencies {
     "demoImplementation"(openrndr.findLibrary("application-core").get())
     "demoImplementation"(openrndr.findLibrary("orextensions").get())
 
-    "demoRuntimeOnly"(openrndr.findLibrary("application-glfw").get())
+    if (findProperty("openrndr.application.backend") == null) {
+        "demoRuntimeOnly"(openrndr.findLibrary("application-sdl").get())
+    } else {
+        "demoRuntimeOnly"(openrndr.findLibrary(findProperty("openrndr.application.backend") as String).get())
+    }
 
     "demoRuntimeOnly"(sharedLibs.findLibrary("slf4j-simple").get())
 }
