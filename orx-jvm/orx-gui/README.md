@@ -187,6 +187,26 @@ In this demo, we make the GUI wider (400 pixels) and translucent.
 
 [source code](src/demo/kotlin/DemoAppearance01.kt)
 
+### DemoAppearance02
+
+Demonstrates how to customize the appearance of the GUI by using
+`GUIAppearance()` and `defaultStyles()`.
+
+This demo not only changes the background color and the panel width,
+but also the widget colors and font size.
+
+![DemoAppearance02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoAppearance02Kt.png)
+
+[source code](src/demo/kotlin/DemoAppearance02.kt)
+
+### DemoCustom01
+
+
+
+![DemoCustom01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoCustom01Kt.png)
+
+[source code](src/demo/kotlin/DemoCustom01.kt)
+
 ### DemoHide01
 
 Demonstrates how to hide the GUI when the mouse pointer is outside of it.
