@@ -78,7 +78,7 @@ fun main() = application {
                 slider {
                     label = "rows"
                     precision = 0
-                    bind(programState::rows)
+                    bind(programState::rows, program)
 
                     events.valueChanged.listen {
                         while (programState.matrix.size > programState.rows) {
@@ -93,7 +93,7 @@ fun main() = application {
                 slider {
                     label = "columns"
                     precision = 0
-                    bind(programState::columns)
+                    bind(programState::columns, program)
                     events.valueChanged.listen {
                         for (row in programState.matrix) {
                             while (row.size > programState.columns) {
@@ -111,7 +111,7 @@ fun main() = application {
                         this.id = "some-row"
                         slider {
                             label = "value"
-                            bind(item::value)
+                            bind(item::value, program)
                         }
                     }
                 }

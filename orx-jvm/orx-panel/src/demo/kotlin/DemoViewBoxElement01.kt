@@ -48,7 +48,7 @@ fun main() {
                             slider {
                                 label = "Radius"
                                 range = Range(0.0, 400.0)
-                                bind(model::radius)
+                                bind(model::radius, program)
                             }
                         }
                         viewBox(this@program) {

@@ -36,13 +36,13 @@ fun main() = application {
                 slider {
                     label = "x"
                     precision = 0
-                    bind(programState::x)
+                    bind(programState::x, program)
                 }
 
                 slider {
                     label = "y"
                     precision = 0
-                    bind(programState::y)
+                    bind(programState::y, program)
                 }
 
                 watchObjectDiv("matrix", watchObject = object {

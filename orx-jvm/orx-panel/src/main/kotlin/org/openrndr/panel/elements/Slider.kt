@@ -306,8 +306,8 @@ class Slider : Element(ElementType("slider")) {
 
 @OptIn(DelicateCoroutinesApi::class)
 fun Slider.bind(property: KMutableProperty0<Double>, program: Program? = null): Binding0<Slider.ValueChangedEvent, Double> {
-    val program = program ?: (root() as? Body)?.controlManager?.program
-    return Binding0(program ?: error("no program"), this, this.events.valueChanged, property, { it.newValue }, { value = it })
+    val program = program ?: (root() as? Body)?.controlManager?.program ?: error("no program")
+    return Binding0(program, this, this.events.valueChanged, property, { it.newValue }, { value = it })
 }
 
 @JvmName("bindInt")

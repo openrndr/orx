@@ -2,7 +2,6 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.camera.Camera2D
 import org.openrndr.extra.viewbox.viewBox
-import org.openrndr.launch
 import org.openrndr.panel.ControlManager
 import org.openrndr.panel.document.body
 import org.openrndr.panel.document.document
@@ -77,7 +76,7 @@ fun main() {
                             slider {
                                 label = "Radius"
                                 range = Range(0.0, 400.0)
-                                bind(model::radius)
+                                bind(model::radius, program)
                             }
                         }
                         viewBox(vb)
