@@ -482,16 +482,16 @@ private fun ControlManager.existingOrNewDocumentWithDefaultStyleSheets(): Docume
 class ControlManagerBuilder(val controlManager: ControlManager) {
     fun styleSheet(selector: CompoundSelector, init: StyleSheet.() -> Unit): StyleSheet {
         val document = controlManager.existingOrNewDocumentWithDefaultStyleSheets()
+        controlManager.document = document
         val styleSheet = StyleSheet(selector).apply { init() }
         document.styleSheets.add(styleSheet)
-        controlManager.document = document
         return styleSheet
     }
 
     fun styleSheets(styleSheets: List<StyleSheet>) {
         val document = controlManager.existingOrNewDocumentWithDefaultStyleSheets()
-        controlManager.layouter?.styleSheets?.addAll(styleSheets)
         controlManager.document = document
+        controlManager.layouter?.styleSheets?.addAll(styleSheets)
     }
 
     @OptIn(ExperimentalContracts::class)
@@ -501,9 +501,8 @@ class ControlManagerBuilder(val controlManager: ControlManager) {
         }
 
         val document = controlManager.existingOrNewDocumentWithDefaultStyleSheets()
-        document.body.init()
-
         controlManager.document = document
+        document.body.init()
     }
 }
 
