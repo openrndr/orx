@@ -158,7 +158,7 @@ fun main() = application {
 ### DemoDirectionField01
 
 Shows how to use the [DirectionalField] filter.
-Draws moving white shapes on black background,
+Draws moving white shapes on a black background,
 then applies the DirectionalField filter which returns a [ColorBuffer] in which
 the red and green components encode the direction to the closest black/white edge,
 and the blue component the distance to that edge.
@@ -179,7 +179,7 @@ The program draws scattered white circles on a `ColorBuffer`, then applies the `
 effect and renders the static result on every animation frame.
 
 Additionally, it uses the shadow (CPU version of the texture) to query the distance field texture
-at current mouse position. The resulting blue color component is used as the radius of a circle
+at the current mouse position. The resulting blue color component is used as the radius of a circle
 centered at the mouse position. The red and green components are used to draw a line to the
 black/white edge closest to the mouse pointer.
 
@@ -191,7 +191,7 @@ black/white edge closest to the mouse pointer.
 
 Shows how to use the [DistanceField] filter.
 
-Draws moving white shapes on black background,
+Draws moving white shapes on a black background,
 then applies the DistanceField filter which returns a [ColorBuffer] in which
 the red component encodes the distance to the closest black/white edge.
 

@@ -620,7 +620,15 @@ to draw small circles at those locations.
 
 ### primitives/DemoCircleInversion01
 
+Demonstrates how to use a Circle's `invert()` method, to map a point
+(in this case, the mouse position) to another point along the same
+ray from the center, but at a distance that is inversely proportional
+to the original distance.
 
+If the distance from the center of the circle to the point being inverted
+is zero, an `IllegalArgumentException` is thrown. Since the mouse position
+is rounded to whole numbers, we ensure that exception will not happen by slightly
+offsetting the center of the circle.
 
 ![primitives-DemoCircleInversion01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoCircleInversion01Kt.png)
 
@@ -628,7 +636,23 @@ to draw small circles at those locations.
 
 ### primitives/DemoCircleInversion02
 
+Demonstrates the use of the `Circle`'s `.invertConformal()` method:
+a special type of circle inversion that preserves tangency
+between circles. If two circles are tangent, their images
+under conformal inversion will also be tangent.
 
+The program calculates a moving circle (`mc`) traveling around the
+center of the screen.
+
+It then calculates a grid of 10x10 circles covering the window
+area. Those circles are inverted using `.invertConformal()`
+against `mc`.
+
+This calculation is performed twice: the first pass draws those
+grid circles that contain the moving circle's center in black.
+
+The second pass draws grid circles that do not contain the moving
+circle's center in white.
 
 ![primitives-DemoCircleInversion02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoCircleInversion02Kt.png)
 
@@ -636,7 +660,15 @@ to draw small circles at those locations.
 
 ### primitives/DemoCircleInversion03
 
+Demonstrates one of the implementations of `Circle.invert()`
+which takes a `LineSegment` and returns a `Circle`, an `Arc`
+or a `LineSegment`.
 
+The program generates 10 evenly spaced vertical line segments
+and 10 horizontal line segments. An animated `sub` segment
+is calculated using the sine of the current time in seconds.
+These `sub` segments are then inverted using
+an animated circle moving around the center of the screen.
 
 ![primitives-DemoCircleInversion03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoCircleInversion03Kt.png)
 
@@ -668,16 +700,23 @@ connected by their outer tangents.
 
 ### primitives/DemoRectangleDistribute01
 
-of rectangles, which are generated and manipulated based on time and random parameters. The application
-follows these steps:
+This program demonstrates three Rectangle-related methods:
+`uniformSub()`, `distributeHorizontally()` and `alignToVertically()`.
 
-1. Initializes a random generator seeded with the elapsed seconds since the start of the program.
-2. Creates a sequence of rectangles using the `uniformSub` function to generate random sub-rectangles
-within the bounding rectangle of the canvas.
-3. Distributes the generated rectangles horizontally within the canvas using the `distributeHorizontally` method.
-4. Aligns the rectangles vertically according to their position in relation to the bounding rectangle
-and a dynamic anchor point derived from the cosine of elapsed time.
-5. Renders the rectangles on the canvas in the output window.
+`uniformSub` is used to create a sub Rectangle of the window bounds. By default, its arguments
+allow any width and height between 0.0 and 1.0 (full width). In this program we override
+the minimum and maximum random widths. `uniformSub` takes a `random` parameter, which
+we change only once per second by rounding `seconds` to an integer. This randomizes
+the widths every second.
+
+At this point in the program we have a List with 7 random sub rectangles, potentially
+overlapping each other. By calling `.distributeHorizontally()` we displace the
+rectangles so the horizontal space between them is equal.
+
+Finally, we call `alignToVertically()` with a sine wave of time as an argument, to interpolate
+their vertical position between being top-aligned and bottom-aligned.
+
+Try commenting out one or both of the last two function calls to observe the resulting changes.
 
 ![primitives-DemoRectangleDistribute01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleDistribute01Kt.png)
 
@@ -685,7 +724,19 @@ and a dynamic anchor point derived from the cosine of elapsed time.
 
 ### primitives/DemoRectangleFitHorizontally
 
+This program animates two sets of 7 rectangles.
 
+The first set contains vertical rectangles with random widths.
+The call to `fitHorizontally()` adjusts the widths of the rectangles
+so they cover the available horizontal space, leaving a gutter space
+between the shapes. In this demo the gutter space is adjusted based
+on the vertical mouse position.
+The vertical position of the rectangles is animated between
+top-aligned and bottom-aligned using `seconds` and the sine function.
+
+The second set contains horizontal rectangles, their heights are
+adjusted using `fitVertically()` to cover the available vertical space,
+and are animated horizontally between left-aligned and right-aligned.
 
 ![primitives-DemoRectangleFitHorizontallyKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleFitHorizontallyKt.png)
 
@@ -693,7 +744,14 @@ and a dynamic anchor point derived from the cosine of elapsed time.
 
 ### primitives/DemoRectangleGrid01
 
+Demonstrates the use of `Rectangle.grid()` to produce a list of lists of Rectangles.
+When calling `grid()` this demo specifies the number of columns and rows, the horizontal
+and vertical margin around the grid, and the horizontal and vertical gutter space
+between the grid cells.
 
+The rectangles are rendered with reduced opacity to reveal the overlaps produced
+by the negative gutter spaces. A diagonal line is rendered between the top-left
+and bottom-right corners of each cell.
 
 ![primitives-DemoRectangleGrid01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleGrid01Kt.png)
 
@@ -701,7 +759,13 @@ and a dynamic anchor point derived from the cosine of elapsed time.
 
 ### primitives/DemoRectangleGrid02
 
+Demonstrates the use of the `Rectangle.grid()` method to create Rectangle grids
+both with `Double` values to specify cell dimensions, and with `Int` values
+to specify cell counts.
 
+The program creates a grid of squares of side 50.0, then maps each resulting
+cell to a grid between 1 and 3 columns and rows, then discards half of
+the resulting cells by using the `List.filter { }` method.
 
 ![primitives-DemoRectangleGrid02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleGrid02Kt.png)
 
@@ -709,7 +773,16 @@ and a dynamic anchor point derived from the cosine of elapsed time.
 
 ### primitives/DemoRectangleGrid03
 
+Demonstrates the use of the `Rectangle`'s `get()` method,
+which can be accessed using the square bracket notation.
 
+`get()` takes two `IntRange` arguments and returns a `Rectangle`
+that covers those cell ranges.
+
+This program first creates a grid of rectangles covering the whole
+window and renders it with white borders.
+
+Next, it renders five cell ranges in different colors.
 
 ![primitives-DemoRectangleGrid03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleGrid03Kt.png)
 
@@ -717,12 +790,26 @@ and a dynamic anchor point derived from the cosine of elapsed time.
 
 ### primitives/DemoRectangleIntersection01
 
-Demonstrate rectangle-rectangle intersection
+Demonstrates how to calculate a rectangle-rectangle intersection.
 
 
 ![primitives-DemoRectangleIntersection01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleIntersection01Kt.png)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoRectangleIntersection01.kt)
+
+### primitives/DemoRectangleIrregularGrid01
+
+Demonstrates how to use `Rectangle.irregularGrid()` to create a grid with varying column widths
+and row heights. The widths and heights are specified as a list of `Double` each.
+
+The program also demonstrates how to query a `row()` and a `column()` from a `RectangleGrid` instance,
+both of which return a `List<Rectangle>`. Both `Rectangle` lists are rendered with translucent
+colors, which makes the intersection of the column and the row slightly brighter.
+
+
+![primitives-DemoRectangleIrregularGrid01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleIrregularGrid01Kt.png)
+
+[source code](src/jvmDemo/kotlin/primitives/DemoRectangleIrregularGrid01.kt)
 
 ### primitives/DemoRectangleIrregularGrid02
 
@@ -740,24 +827,22 @@ colors, which makes the intersection of the column and the row slightly brighter
 
 [source code](src/jvmDemo/kotlin/primitives/DemoRectangleIrregularGrid02.kt)
 
-### primitives/DemoRectangleIrregularGrid
-
-
-
-![primitives-DemoRectangleIrregularGridKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleIrregularGridKt.png)
-
-[source code](src/jvmDemo/kotlin/primitives/DemoRectangleIrregularGrid.kt)
-
 ### primitives/DemoRectanglePlace01
 
-Demo for rendering a 10x10 grid of rectangles within the bounds
-of the canvas. Each rectangle's position is calculated relative to its anchors, filling the entire
+Demonstrates the use of the `Rectangle.place()` method which can be used to place rectangles
+relative to another rectangle (the drawer bounds in this case).
+
+The program renders a 10x10 grid of rectangles within the bounds of the canvas.
+Each rectangle's position is calculated relative to its anchors, filling the entire
 canvas with evenly placed items.
 
-The rectangles are drawn using the default white color. The `place` function is applied to each
+The rectangles are drawn using the default white color. The `Rectangle.place()` function is applied to each
 rectangle to position them dynamically based on their relative anchor points within the bounding area.
 
 This serves as a demonstration of positioning and rendering shapes in a structured grid layout.
+
+Note that `place()` has `anchor` and `itemAnchor` arguments.
+By default `itemAnchor` equals `anchor`.
 
 ![primitives-DemoRectanglePlace01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectanglePlace01Kt.png)
 
@@ -765,6 +850,16 @@ This serves as a demonstration of positioning and rendering shapes in a structur
 
 ### primitives/DemoRegularPolygon
 
+Demonstrates how to use `regularPolygon()` to create regular `ShapeContour`s.
+By specifying the number of side the program creates a triangle, a square,
+a pentagon, a hexagon, a heptagon and an octagon.
+
+The radius is animated with the cosine of time.
+
+The position is calculated by converting the shape index into columns and rows
+(using modulo and the integer division), then mapped to window coordinates.
+
+A continuous rotation is applied to all polygons for an animated effect.
 
 
 ![primitives-DemoRegularPolygonKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRegularPolygonKt.png)
@@ -773,6 +868,10 @@ This serves as a demonstration of positioning and rendering shapes in a structur
 
 ### primitives/DemoRegularStar01
 
+Demonstrates the use of `regularStar()` to produce a `ShapeContour`.
+The two required radii are calculated using the cosine and the sine of the time in seconds.
+
+In one brief instant, when both radii are equal, the 5-point star is rendered as a Decagon.
 
 
 ![primitives-DemoRegularStar01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRegularStar01Kt.png)
@@ -781,7 +880,9 @@ This serves as a demonstration of positioning and rendering shapes in a structur
 
 ### primitives/DemoRegularStar02
 
-
+Demonstrates how to create a 12-point regular star, and one approach to filling
+the star with a grid of circles: testing whether various Vector2 coordinates are `in` the
+`ShapeContour` or not.
 
 ![primitives-DemoRegularStar02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRegularStar02Kt.png)
 
@@ -789,7 +890,10 @@ This serves as a demonstration of positioning and rendering shapes in a structur
 
 ### primitives/DemoRoundedRectangle
 
+Demonstrates the use of `RoundedRectangle()` to create a rectangle in which the corners
+are rounded by the provided `radius`
 
+The radius is animated between 0.0 and 40.0 using the cosine of the current time in seconds.
 
 ![primitives-DemoRoundedRectangleKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRoundedRectangleKt.png)
 
@@ -797,7 +901,12 @@ This serves as a demonstration of positioning and rendering shapes in a structur
 
 ### primitives/DemoSplit01
 
+Demonstrates how to split a `ShapeContour` into parts using the
+`ShapeContour.splitAt` method. The method takes a list of ascending normalized
+values that specify where to split the contour.
 
+In addition to the specified T values, closed shapes are also split between
+the 0.0 and 1.0 boundary, therefore specifying two T values returns 3 `ShapeContour` instances
 
 ![primitives-DemoSplit01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoSplit01Kt.png)
 
@@ -805,7 +914,7 @@ This serves as a demonstration of positioning and rendering shapes in a structur
 
 ### primitives/DemoTear01
 
-
+Demonstrates the use of `Tear()` to create drop-like shapes out of a Vector2 point and a Circle.
 
 ![primitives-DemoTear01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoTear01Kt.png)
 
@@ -828,7 +937,18 @@ making them look as being emitted at the center of the window.
 
 ### rectify/DemoRectifiedContour01
 
+Demonstrates how calling `ShapeContour.position(t)` and `RectifiedContour.position(t)`
+return different values.
 
+The program creates a random hobbyCurve `ShapeContour` and a `RectifiedContour` based on it.
+Then animates a point traveling on each of them, by querying `.position(t)` and increasing
+`t` at a constant speed.
+
+Observing the animation reveals that with `ShapeContour` the moving point moves faster or slower
+depending on the length of the contour's segments, but with `RectifiedContour` the speed is constant.
+
+Use `RectifiedContour` when you need to evenly distribute points along a contour, or for smooth
+animations along the contour, and `ShapeContour` by default or when performance is essential.
 
 ![rectify-DemoRectifiedContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/rectify-DemoRectifiedContour01Kt.png)
 
@@ -836,7 +956,10 @@ making them look as being emitted at the center of the window.
 
 ### rectify/DemoRectifiedContour02
 
-
+Demonstrates how calling `ShapeContour.position(t)` and `RectifiedContour.position(t)`
+returns different values for the same `t`, and how a sub-contour with a fixed `t`-length
+(0.01 in this case), returns longer and shorter contours depending on the position
+along a `ShapeContour`, but constant length contours for `RectifiedContour`.
 
 ![rectify-DemoRectifiedContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/rectify-DemoRectifiedContour02Kt.png)
 
@@ -844,6 +967,8 @@ making them look as being emitted at the center of the window.
 
 ### rectify/DemoRectifiedContour03
 
+Demonstrates how to query a hobby contour at regular intervals and draw
+100 evenly spaced circles on it.
 
 
 ![rectify-DemoRectifiedContour03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/rectify-DemoRectifiedContour03Kt.png)
@@ -852,6 +977,21 @@ making them look as being emitted at the center of the window.
 
 ### rectify/DemoRectifiedContour04
 
+Demonstrates the use of `RectifiedContour.position()` and
+`RectifiedContour.normal()`.
+
+The program creates a circle out of 5 Polar points with a fixed radius
+but a slightly randomized theta value. This results in a circle with
+varying segment lengths.
+
+If we use `Circle` to create a circular contour, the contour contains
+4 segments of equal length and 4 points evenly spaced. The
+difference between `ShapeContour` and `RectifiedContour` is not
+obvious in this case.
+
+When the points are not evenly distributed like with the hobby curve
+below, commenting out `.rectified()` will reveal how the two
+approaches result in different arrangements.
 
 
 ![rectify-DemoRectifiedContour04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/rectify-DemoRectifiedContour04Kt.png)
@@ -860,7 +1000,18 @@ making them look as being emitted at the center of the window.
 
 ### rectify/DemoRectifiedPath3D01
 
+Demonstrates the 3D equivalents of `ShapeContour` and `RectifiedContour`:
+`Path3D` and `RectifiedPath3D`.
 
+The program creates a `Path3D` starting at the 3D origin and then adds ten 3D segments
+with a position and two control points each. The random points are picked from
+a 3D space, in the space between a sphere of radius 1.0 and a sphere of radius 10.0.
+The segments in this 3D path are not of equal length.
+
+The 3D path is then rectified, and sampled at 500 equally spaced locations, and a
+small sphere drawn at those locations.
+
+Try commenting out `.rectified(0.01, 100.0)` to observe the difference it makes.
 
 ![rectify-DemoRectifiedPath3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/rectify-DemoRectifiedPath3D01Kt.png)
 
@@ -882,7 +1033,17 @@ making it possible to style or manipulate each letter independently.
 
 ### tunni/DemoTunniAdjuster01
 
+Demonstrates how to use `adjustContour` in combination of
+`ContourAdjusterEdge.withTunniLine()`.
 
+Tunni lines are a concept devised by Eduardo Tunni and Fontlab Ltd.,
+described at https://github.com/OliverLeenders/Tunni-Lines
+
+This program creates a circular contour `c` and renders it in pink for reference.
+
+Then uses `adjustContour` to alter the 4 edges of that contour, shifting their
+control points outwards and inwards along the normal using `withTunniLine()`
+and the cosine of the current time in seconds, then renders the resulting deformed contour.
 
 ![tunni-DemoTunniAdjuster01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/tunni-DemoTunniAdjuster01Kt.png)
 
@@ -890,7 +1051,17 @@ making it possible to style or manipulate each letter independently.
 
 ### tunni/DemoTunniPoint01
 
+Demonstrates how to use `Segment2D.withTunniLine()` and how to visualize
+Tunni points.
 
+Tunni lines are a concept devised by Eduardo Tunni and Fontlab Ltd.,
+described at https://github.com/OliverLeenders/Tunni-Lines
+
+This program creates a circular contour `c`, then processes each of
+its four segments one by one: it visualizes their Tunni point,
+draws the segment's control points as a line and
+finally draws a copy of the segment with its control points
+altered with `withTunniLine()` along the segment's normal.
 
 ![tunni-DemoTunniPoint01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/tunni-DemoTunniPoint01Kt.png)
 
