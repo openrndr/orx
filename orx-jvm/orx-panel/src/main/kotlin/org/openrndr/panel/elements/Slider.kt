@@ -11,6 +11,8 @@ import org.openrndr.events.Event
 import org.openrndr.extra.textwriter.Cursor
 import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.math.Vector2
+import org.openrndr.panel.binding.Binding0
+import org.openrndr.panel.binding.Binding1
 import org.openrndr.panel.style.Color
 import org.openrndr.panel.style.color
 import org.openrndr.panel.style.effectiveColor
@@ -77,12 +79,14 @@ class Slider : Element(ElementType("slider")) {
         return quantized
     }
 
-    class ValueChangedEvent(val source: Slider,
-                            val interactive: Boolean,
-                            val oldValue: Double,
-                            val newValue: Double)
+    class ValueChangedEvent(
+        val source: Slider,
+        val interactive: Boolean,
+        val oldValue: Double,
+        val newValue: Double
+    )
 
-    class Events: AutoCloseable {
+    class Events : AutoCloseable {
         val valueChanged = Event<ValueChangedEvent>("slider-value-changed")
         override fun close() {
             valueChanged.close()
@@ -243,8 +247,8 @@ class Slider : Element(ElementType("slider")) {
         if (mode == SliderMode.SEGMENT) {
             drawer.stroke = ((computedStyle.color as Color.RGBa).color.opacify(1.0))
 
-            val sx = ((value - range.min) / (range.span+1.0)) * (layout.screenWidth - 2 * margin) + margin
-            val ex = (((value+1) - range.min) / (range.span+1.0)) * (layout.screenWidth - 2 * margin) + margin
+            val sx = ((value - range.min) / (range.span + 1.0)) * (layout.screenWidth - 2 * margin) + margin
+            val ex = (((value + 1) - range.min) / (range.span + 1.0)) * (layout.screenWidth - 2 * margin) + margin
 
             drawer.strokeWeight = 8.0
             drawer.lineSegment(sx, 2.0, ex, 2.0)
@@ -252,10 +256,9 @@ class Slider : Element(ElementType("slider")) {
             drawer.stroke = null
             drawer.strokeWeight = 0.0
 
-
             val lineSegments = mutableListOf<Vector2>()
-            for (i in range.min.toInt()..(range.max.toInt()+1)) {
-                val lx = ((i - range.min) / (range.span+1.0)) * (layout.screenWidth - 2 * margin)
+            for (i in range.min.toInt()..(range.max.toInt() + 1)) {
+                val lx = ((i - range.min) / (range.span + 1.0)) * (layout.screenWidth - 2 * margin)
                 drawer.strokeWeight = 1.0
                 drawer.stroke = ((computedStyle.color as Color.RGBa).color.opacify(0.5))
                 lineSegments.add(Vector2(margin + lx, -2.0))
@@ -302,137 +305,26 @@ class Slider : Element(ElementType("slider")) {
 }
 
 @OptIn(DelicateCoroutinesApi::class)
-fun Slider.bind(property: KMutableProperty0<Double>) {
-    var currentValue: Double? = null
-
-    events.valueChanged.listen {
-        currentValue = it.newValue
-        property.set(it.newValue)
-    }
-    GlobalScope.launch {
-        while(!disposed) {
-            println("cycle")
-            val body = (root() as? Body)
-            if (body != null) {
-                fun update() {
-                    if (property.get() != currentValue) {
-                        val lcur = property.get()
-                        currentValue = lcur
-                        value = lcur
-                    }
-                }
-                update()
-                body.controlManager?.program?.launch {
-                    println("launching a thing")
-                    while (!disposed) {
-                        update()
-                        yield()
-                    }
-                }
-                break
-            }
-            yield()
-        }
-        println("end?")
-    }
+fun Slider.bind(property: KMutableProperty0<Double>, program: Program? = null): Binding0<Slider.ValueChangedEvent, Double> {
+    val program = program ?: (root() as? Body)?.controlManager?.program
+    return Binding0(program ?: error("no program"), this, this.events.valueChanged, property, { it.newValue }, { value = it })
 }
 
-@OptIn(DelicateCoroutinesApi::class)
-fun Slider.bind(container: Any, property: KMutableProperty1<Any, Double>) {
-    var currentValue: Double? = null
-
-    events.valueChanged.listen {
-        currentValue = it.newValue
-        property.set(container, it.newValue)
-    }
-    GlobalScope.launch {
-        while(!disposed) {
-            val body = (root() as? Body)
-            if (body != null) {
-                fun update() {
-
-                    if (property.get(container) != currentValue) {
-                        val lcur = property.get(container)
-                        currentValue = lcur
-                        value = lcur
-                    }
-                }
-                update()
-                body.controlManager?.program?.launch {
-                    while (!disposed) {
-                        update()
-                        yield()
-                    }
-                }
-                break
-            }
-            yield()
-        }
-    }
-}
-
-@OptIn(DelicateCoroutinesApi::class)
 @JvmName("bindInt")
-fun Slider.bind(property: KMutableProperty0<Int>) {
-    var currentValue: Int? = null
-    events.valueChanged.listen {
-        currentValue = it.newValue.toInt()
-        property.set(it.newValue.toInt())
-    }
-    GlobalScope.launch {
-        while(!disposed) {
-            val body = (root() as? Body)
-            if (body != null) {
-                fun update() {
-                    if (property.get() != currentValue) {
-                        val lcur = property.get()
-                        currentValue = lcur
-                        value = lcur.toDouble()
-                    }
-                }
-                update()
-                body.controlManager?.program?.launch {
-                    while (!disposed) {
-                        update()
-                        yield()
-                    }
-                }
-                break
-            }
-            yield()
-        }
-    }
+fun Slider.bind(property: KMutableProperty0<Int>, program: Program? = null): Binding0<Slider.ValueChangedEvent, Int> {
+    val program = program ?: (root() as? Body)?.controlManager?.program
+    return Binding0(program ?: error("no program"), this, this.events.valueChanged, property, { it.newValue.toInt() }, { value = it.toDouble() })
 }
 
 @OptIn(DelicateCoroutinesApi::class)
+fun Slider.bind(container:Any, property: KMutableProperty1<Any, Double>, program: Program? = null): Binding1<Slider.ValueChangedEvent, Double> {
+    val program = program ?: (root() as? Body)?.controlManager?.program
+    return Binding1(program ?: error("no program"), this, this.events.valueChanged,  container, property, { it.newValue }, { value = it })
+}
+
 @JvmName("bindInt")
-fun Slider.bind(container: Any, property: KMutableProperty1<Any, Int>) {
-    var currentValue: Int? = null
-    events.valueChanged.listen {
-        currentValue = it.newValue.toInt()
-        property.set(container, it.newValue.toInt())
-    }
-    GlobalScope.launch {
-        while(!disposed) {
-            val body = (root() as? Body)
-            if (body != null) {
-                fun update() {
-                    if (property.get(container) != currentValue) {
-                        val lcur = property.get(container)
-                        currentValue = lcur
-                        value = lcur.toDouble()
-                    }
-                }
-                update()
-                body.controlManager?.program?.launch {
-                    while (!disposed) {
-                        update()
-                        yield()
-                    }
-                }
-                break
-            }
-            yield()
-        }
-    }
+@OptIn(DelicateCoroutinesApi::class)
+fun Slider.bind(container:Any, property: KMutableProperty1<Any, Int>, program: Program? = null): Binding1<Slider.ValueChangedEvent, Int> {
+    val program = program ?: (root() as? Body)?.controlManager?.program
+    return Binding1(program ?: error("no program"), this, this.events.valueChanged,  container, property, { it.newValue.toInt() }, { value = it.toDouble() })
 }

@@ -9,7 +9,6 @@ class WatchListDiv<T : Any>(private val watchList: List<T>, private val builder:
     private var listState = emptyList<T>()
     private var watchJob: Job? = null
 
-
     fun regenerate() {
         var regenerate = false
         if (listState.size != watchList.size) {
@@ -51,7 +50,6 @@ class WatchListDiv<T : Any>(private val watchList: List<T>, private val builder:
         checkJob()
         super.draw(drawer)
     }
-
 }
 
 fun <T : Any> Element.watchListDiv(vararg classes: String, watchList: List<T>, builder: WatchListDiv<T>.(T) -> Unit) {

@@ -7,10 +7,12 @@ import org.openrndr.draw.Drawer
 import org.openrndr.draw.LineCap
 import org.openrndr.panel.style.*
 import org.openrndr.KeyModifier
+import org.openrndr.Program
 import org.openrndr.events.Event
 import org.openrndr.extra.textwriter.Cursor
 import org.openrndr.extra.textwriter.writer
-import org.openrndr.launch
+import org.openrndr.panel.binding.Binding0
+import org.openrndr.panel.binding.Binding1
 import org.openrndr.shape.Rectangle
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KMutableProperty1
@@ -102,9 +104,19 @@ class Textfield : Element(ElementType("textfield")) {
             drawer.text(label, 0.0 + offset, 0.0 + yOffset - textHeight * 1.5)
 
             drawer.fill = (((computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE).opacify(0.05))
-            drawer.rectangle(0.0 + offset, 0.0 + yOffset - (textHeight + 2), layout.screenWidth - 10.0, textHeight + 8.0)
+            drawer.rectangle(
+                0.0 + offset,
+                0.0 + yOffset - (textHeight + 2),
+                layout.screenWidth - 10.0,
+                textHeight + 8.0
+            )
 
-            drawer.drawStyle.clip = Rectangle(screenPosition.x + offset, screenPosition.y + yOffset - (textHeight + 2), layout.screenWidth - 10.0, textHeight + 8.0)
+            drawer.drawStyle.clip = Rectangle(
+                screenPosition.x + offset,
+                screenPosition.y + yOffset - (textHeight + 2),
+                layout.screenWidth - 10.0,
+                textHeight + 8.0
+            )
 
             drawer.fill = ((computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE)
 
@@ -115,11 +127,11 @@ class Textfield : Element(ElementType("textfield")) {
                 text(value, visible = false)
                 val width = cursor.x - offset
                 val scroll =
-                        if (width > screenArea.width - emWidth) {
-                            screenArea.width - emWidth - width
-                        } else {
-                            0.0
-                        }
+                    if (width > screenArea.width - emWidth) {
+                        screenArea.width - emWidth - width
+                    } else {
+                        0.0
+                    }
                 cursor = Cursor(offset + scroll, yOffset)
                 text(value)
                 cursorX = cursor.x
@@ -145,61 +157,19 @@ class Textfield : Element(ElementType("textfield")) {
     }
 }
 
-@OptIn(DelicateCoroutinesApi::class)
-fun Textfield.bind(property: KMutableProperty0<String>) {
-    GlobalScope.launch {
-        install@ while (!disposed) {
-            val body = (root() as? Body)
-            if (body != null) {
-                events.valueChanged.listen {
-                    property.set(it.newValue)
-                }
-                fun update() {
-                    val propertyValue = property.get()
-                    if (propertyValue != value) {
-                        value = propertyValue
-                    }
-                }
-                update()
-                (root() as Body).controlManager?.program?.launch {
-                    while (!disposed) {
-                        update()
-                        yield()
-                    }
-                }
-                break@install
-            }
-            yield()
-        }
-    }
+fun Textfield.bind(property: KMutableProperty0<String>, program: Program? = null) {
+    val program = program ?: (root() as? Body)?.controlManager?.program
+    Binding0(program ?: error("no program"), this, this.events.valueChanged, property, { it.newValue }, { value = it })
 }
 
-
-@OptIn(DelicateCoroutinesApi::class)
-fun Textfield.bind(container: Any, property: KMutableProperty1<Any, String>) {
-    GlobalScope.launch {
-        install@ while (!disposed) {
-            val body = (root() as? Body)
-            if (body != null) {
-                events.valueChanged.listen {
-                    property.set(container, it.newValue)
-                }
-                fun update() {
-                    val propertyValue = property.get(container)
-                    if (propertyValue != value) {
-                        value = propertyValue
-                    }
-                }
-                update()
-                (root() as Body).controlManager?.program?.launch {
-                    while (!disposed) {
-                        update()
-                        yield()
-                    }
-                }
-                break@install
-            }
-            yield()
-        }
-    }
+fun Textfield.bind(container: Any, property: KMutableProperty1<Any, String>, program: Program? = null) {
+    val program = program ?: (root() as? Body)?.controlManager?.program
+    Binding1(
+        program ?: error("no program"),
+        this,
+        this.events.valueChanged,
+        container,
+        property,
+        { it.newValue },
+        { value = it })
 }

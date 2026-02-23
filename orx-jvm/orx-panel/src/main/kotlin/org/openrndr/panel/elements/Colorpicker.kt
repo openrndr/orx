@@ -8,8 +8,12 @@ import org.openrndr.draw.ColorBuffer
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.colorBuffer
 import org.openrndr.events.Event
+import org.openrndr.panel.binding.Binding0
+import org.openrndr.panel.binding.Binding1
 import org.openrndr.panel.style.Color
 import org.openrndr.panel.style.color
+import kotlin.reflect.KMutableProperty0
+import kotlin.reflect.KMutableProperty1
 
 class Colorpicker : Element {
 
@@ -32,11 +36,13 @@ class Colorpicker : Element {
     private var realColor = ColorRGBa.WHITE
     private var focussed = false
 
-    class ColorChangedEvent(val source: Colorpicker,
-                            val oldColor: ColorRGBa,
-                            val newColor: ColorRGBa)
+    class ColorChangedEvent(
+        val source: Colorpicker,
+        val oldColor: ColorRGBa,
+        val newColor: ColorRGBa
+    )
 
-    class Events: AutoCloseable {
+    class Events : AutoCloseable {
         val colorChanged = Event<ColorChangedEvent>()
         override fun close() {
             colorChanged.close()
@@ -58,6 +64,7 @@ class Colorpicker : Element {
         events.colorChanged.trigger(ColorChangedEvent(this, oldColor, realColor))
         e.cancelPropagation()
     }
+
     constructor() : super(ElementType("colorpicker")) {
         generateColorMap()
 
@@ -177,4 +184,21 @@ class Colorpicker : Element {
         super.close()
         events.close()
     }
+}
+
+fun Colorpicker.bind(
+    property: KMutableProperty0<ColorRGBa>,
+    program: Program? = null
+): Binding0<Colorpicker.ColorChangedEvent, ColorRGBa> {
+    val program = program ?: (root() as? Body)?.controlManager?.program ?: error("no program")
+    return Binding0(program, this, events.colorChanged, property, { it.newColor }, { color = it })
+}
+
+fun Colorpicker.bind(
+    container: Any,
+    property: KMutableProperty1<Any, ColorRGBa>,
+    program: Program? = null
+): Binding1<Colorpicker.ColorChangedEvent, ColorRGBa> {
+    val program = program ?: (root() as? Body)?.controlManager?.program ?: error("no program")
+    return Binding1(program, this, events.colorChanged, container, property, { it.newColor }, { color = it })
 }

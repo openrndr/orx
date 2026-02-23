@@ -1,11 +1,12 @@
 package org.openrndr.panel.elements
 
-import kotlinx.coroutines.yield
+import org.openrndr.Program
 import org.openrndr.events.Event
-import org.openrndr.launch
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
+import org.openrndr.panel.binding.Binding0
+import org.openrndr.panel.binding.Binding1
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KMutableProperty1
 
@@ -48,66 +49,21 @@ class SlidersVector2 : SequenceEditorBase("sliders-vector2") {
     }
 }
 
-fun SlidersVector2.bind(property: KMutableProperty0<Vector2>) {
-    var currentValue: Vector2? = null
-
-    events.valueChanged.listen {
-        currentValue = value
-        property.set(it.newValue)
-    }
-    if (root() as? Body == null) {
-        throw RuntimeException("no body")
-    }
-    fun update() {
-        if (property.get() != currentValue) {
-            val lcur = property.get()
-            currentValue = lcur
-            value = lcur
-        }
-    }
-    update()
-    (root() as? Body)?.controlManager?.program?.launch {
-        while (!disposed) {
-            update()
-            yield()
-        }
-    }
+fun SlidersVector2.bind(property: KMutableProperty0<Vector2>, program: Program? = null): Binding0<SlidersVector2.ValueChangedEvent, Vector2> {
+    val program = program ?: (root() as? Body)?.controlManager?.program
+    return Binding0(program ?: error("no program"), this, this.events.valueChanged, property, { it.newValue }, { value = it })
 }
 
-/**
- * Binds the `SlidersVector2` component to a property within a container object. Updates are propagated between the
- * slider’s value and the specified property, ensuring synchronization in both directions. The method listens to
- * changes in the slider's value and modifies the container's property accordingly. Additionally, it ensures that the
- * slider reflects the current value of the bound property.
- *
- * @param container The object containing the property to be bound to the slider.
- * @param property The mutable property within the container to bind with the slider's value.
- * @throws RuntimeException If the slider is not part of a `Body`.
- */
-fun SlidersVector2.bind(container: Any, property: KMutableProperty1<Any, Vector2>) {
-    var currentValue: Vector2? = null
-
-    events.valueChanged.listen {
-        currentValue = value
-        property.set(container, it.newValue)
-    }
-    if (root() as? Body == null) {
-        throw RuntimeException("no body")
-    }
-    fun update() {
-        if (property.get(container) != currentValue) {
-            val lcur = property.get(container)
-            currentValue = lcur
-            value = lcur
-        }
-    }
-    update()
-    (root() as? Body)?.controlManager?.program?.launch {
-        while (!disposed) {
-            update()
-            yield()
-        }
-    }
+fun SlidersVector2.bind(container: Any, property: KMutableProperty1<Any, Vector2>,  program: Program? = null): Binding1<SlidersVector2.ValueChangedEvent, Vector2> {
+    val program = program ?: (root() as? Body)?.controlManager?.program
+    return Binding1(
+        program ?: error("no program"),
+        this,
+        this.events.valueChanged,
+        container,
+        property,
+        { it.newValue },
+        { value = it })
 }
 
 class SlidersVector3 : SequenceEditorBase("sliders-vector3") {
@@ -150,58 +106,22 @@ class SlidersVector3 : SequenceEditorBase("sliders-vector3") {
     }
 }
 
-fun SlidersVector3.bind(property: KMutableProperty0<Vector3>) {
-    var currentValue: Vector3? = null
-
-    events.valueChanged.listen {
-        currentValue = value
-        property.set(it.newValue)
-    }
-    if (root() as? Body == null) {
-        throw RuntimeException("no body")
-    }
-    fun update() {
-        if (property.get() != currentValue) {
-            val lcur = property.get()
-            currentValue = lcur
-            value = lcur
-        }
-    }
-    update()
-    (root() as? Body)?.controlManager?.program?.launch {
-        while (!disposed) {
-            update()
-            yield()
-        }
-    }
+fun SlidersVector3.bind(property: KMutableProperty0<Vector3>, program: Program? = null): Binding0<SlidersVector3.ValueChangedEvent, Vector3> {
+    val program = program ?: (root() as? Body)?.controlManager?.program
+    return Binding0(program ?: error("no program"), this, this.events.valueChanged, property, { it.newValue }, { value = it })
 }
 
-fun SlidersVector3.bind(container: Any, property: KMutableProperty1<Any, Vector3>) {
-    var currentValue: Vector3? = null
-
-    events.valueChanged.listen {
-        currentValue = value
-        property.set(container, it.newValue)
-    }
-    if (root() as? Body == null) {
-        throw RuntimeException("no body")
-    }
-    fun update() {
-        if (property.get(container) != currentValue) {
-            val lcur = property.get(container)
-            currentValue = lcur
-            value = lcur
-        }
-    }
-    update()
-    (root() as? Body)?.controlManager?.program?.launch {
-        while (!disposed) {
-            update()
-            yield()
-        }
-    }
+fun SlidersVector3.bind(container: Any, property: KMutableProperty1<Any, Vector3>, program: Program? = null): Binding1<SlidersVector3.ValueChangedEvent, Vector3> {
+    val program = program ?: (root() as? Body)?.controlManager?.program
+    return Binding1(
+        program ?: error("no program"),
+        this,
+        this.events.valueChanged,
+        container,
+        property,
+        { it.newValue },
+        { value = it })
 }
-
 
 class SlidersVector4 : SequenceEditorBase("sliders-vector4") {
     var value: Vector4
@@ -244,54 +164,19 @@ class SlidersVector4 : SequenceEditorBase("sliders-vector4") {
     }
 }
 
-fun SlidersVector4.bind(property: KMutableProperty0<Vector4>) {
-    var currentValue: Vector4? = null
-
-    events.valueChanged.listen {
-        currentValue = value
-        property.set(it.newValue)
-    }
-    if (root() as? Body == null) {
-        throw RuntimeException("no body")
-    }
-    fun update() {
-        if (property.get() != currentValue) {
-            val lcur = property.get()
-            currentValue = lcur
-            value = lcur
-        }
-    }
-    update()
-    (root() as? Body)?.controlManager?.program?.launch {
-        while (!disposed) {
-            update()
-            yield()
-        }
-    }
+fun SlidersVector4.bind(property: KMutableProperty0<Vector4>, program: Program? = null): Binding0<SlidersVector4.ValueChangedEvent, Vector4> {
+    val program = program ?: (root() as? Body)?.controlManager?.program
+    return Binding0(program ?: error("no program"), this, this.events.valueChanged, property, { it.newValue }, { value = it })
 }
 
-fun SlidersVector4.bind(container: Any, property: KMutableProperty1<Any, Vector4>) {
-    var currentValue: Vector4? = null
-
-    events.valueChanged.listen {
-        currentValue = value
-        property.set(container, it.newValue)
-    }
-    if (root() as? Body == null) {
-        throw RuntimeException("no body")
-    }
-    fun update() {
-        if (property.get(container) != currentValue) {
-            val lcur = property.get(container)
-            currentValue = lcur
-            value = lcur
-        }
-    }
-    update()
-    (root() as? Body)?.controlManager?.program?.launch {
-        while (!disposed) {
-            update()
-            yield()
-        }
-    }
+fun SlidersVector4.bind(container: Any, property: KMutableProperty1<Any, Vector4>, program: Program? = null): Binding1<SlidersVector4.ValueChangedEvent, Vector4> {
+    val program = program ?: (root() as? Body)?.controlManager?.program
+    return Binding1(
+        program ?: error("no program"),
+        this,
+        this.events.valueChanged,
+        container,
+        property,
+        { it.newValue },
+        { value = it })
 }

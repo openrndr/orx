@@ -10,12 +10,15 @@ import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.math.Vector2
 import org.openrndr.math.clamp
 import org.openrndr.math.map
+import org.openrndr.panel.binding.Binding0
+import org.openrndr.panel.binding.Binding1
 import org.openrndr.panel.style.Color
 import org.openrndr.panel.style.color
 import org.openrndr.shape.LineSegment
 import kotlin.math.pow
 import kotlin.math.round
 import kotlin.reflect.KMutableProperty0
+import kotlin.reflect.KMutableProperty1
 
 
 class XYPad : Element(ElementType("xy-pad")) {
@@ -49,13 +52,13 @@ class XYPad : Element(ElementType("xy-pad")) {
 
     var value: Vector2
         get() = Vector2(
-                map(-1.0, 1.0, minX, maxX, normalizedValue.x).round(precision),
-                map(-1.0, 1.0, minY, maxY, normalizedValue.y).round(precision)
+            map(-1.0, 1.0, minX, maxX, normalizedValue.x).round(precision),
+            map(-1.0, 1.0, minY, maxY, normalizedValue.y).round(precision)
         )
         set(newValue) {
             normalizedValue = Vector2(
-                    clamp(map(minX, maxX, -1.0, 1.0, newValue.x), -1.0, 1.0),
-                    clamp(map(minY, maxY, -1.0, 1.0, newValue.y), -1.0, 1.0)
+                clamp(map(minX, maxX, -1.0, 1.0, newValue.x), -1.0, 1.0),
+                clamp(map(minY, maxY, -1.0, 1.0, newValue.y), -1.0, 1.0)
             )
             requestRedraw()
         }
@@ -79,14 +82,16 @@ class XYPad : Element(ElementType("xy-pad")) {
         keyboard.repeated.listen { handleKeyEvent(it) }
     }
 
-    class ValueChangedEvent(val source: XYPad,
-                            val oldValue: Vector2,
-                            val newValue: Vector2)
+    class ValueChangedEvent(
+        val source: XYPad,
+        val oldValue: Vector2,
+        val newValue: Vector2
+    )
 
 
     val events = Events()
 
-    class Events: AutoCloseable {
+    class Events : AutoCloseable {
         val valueChanged = Event<ValueChangedEvent>("xypad-value-changed")
 
         override fun close() {
@@ -154,18 +159,18 @@ class XYPad : Element(ElementType("xy-pad")) {
 
     private val ballPosition: Vector2
         get() = Vector2(
-                map(-1.0, 1.0, 0.0, layout.screenWidth, normalizedValue.x),
-                if (invertY) {
-                    map(1.0, -1.0, 0.0, layout.screenHeight, normalizedValue.y)
-                } else {
-                    map(-1.0, 1.0, 0.0, layout.screenHeight, normalizedValue.y)
-                }
+            map(-1.0, 1.0, 0.0, layout.screenWidth, normalizedValue.x),
+            if (invertY) {
+                map(1.0, -1.0, 0.0, layout.screenHeight, normalizedValue.y)
+            } else {
+                map(-1.0, 1.0, 0.0, layout.screenHeight, normalizedValue.y)
+            }
         )
 
     private val grid = mutableListOf<LineSegment>()
 
     override fun draw(drawer: Drawer) {
-        if(grid.isEmpty()) {
+        if (grid.isEmpty()) {
             repeat(21) { n ->
                 grid.add(
                     LineSegment(
@@ -215,7 +220,8 @@ class XYPad : Element(ElementType("xy-pad")) {
             drawer.stroke = ColorRGBa.WHITE
             drawer.circle(ballPosition, 8.0)
 
-            val valueLabel = "${String.format("%.0${precision}f", value.x)}, ${String.format("%.0${precision}f", value.y)}"
+            val valueLabel =
+                "${String.format("%.0${precision}f", value.x)}, ${String.format("%.0${precision}f", value.y)}"
 
             (root() as? Body)?.controlManager?.fontManager?.let {
                 val writer = TextWriter(drawer)
@@ -223,10 +229,10 @@ class XYPad : Element(ElementType("xy-pad")) {
                 val textWidth = writer.textWidth(valueLabel)
 
                 drawer.fill = ((computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE).opacify(
-                        if (disabled in pseudoClasses) 0.25 else 1.0
+                    if (disabled in pseudoClasses) 0.25 else 1.0
                 )
 
-                drawer.text(valueLabel,layout.screenWidth - textWidth - 4.0, layout.screenHeight - 4.0)
+                drawer.text(valueLabel, layout.screenWidth - textWidth - 4.0, layout.screenHeight - 4.0)
                 drawer.text(label, 0.0, layout.screenHeight + 18.0)
             }
 
@@ -236,30 +242,21 @@ class XYPad : Element(ElementType("xy-pad")) {
     }
 }
 
-fun XYPad.bind(property: KMutableProperty0<Vector2>) {
-    var currentValue: Vector2? = null
+fun XYPad.bind(
+    property: KMutableProperty0<Vector2>,
+    program: Program? = null
+): Binding0<XYPad.ValueChangedEvent, Vector2> {
+    val program = program ?: (root() as? Body)?.controlManager?.program ?: error("no program")
+    return Binding0(program, this, this.events.valueChanged, property, { it.newValue }, { value = it })
+}
 
-    events.valueChanged.listen {
-        currentValue = it.newValue
-        property.set(it.newValue)
-    }
-    if (root() as? Body == null) {
-        throw RuntimeException("no body")
-    }
-    fun update() {
-        if (property.get() != currentValue) {
-            val lcur = property.get()
-            currentValue = lcur
-            value = lcur
-        }
-    }
-    update()
-    (root() as? Body)?.controlManager?.program?.launch {
-        while (true) {
-            update()
-            yield()
-        }
-    }
+fun XYPad.bind(
+    container: Any,
+    property: KMutableProperty1<Any, Vector2>,
+    program: Program? = null
+): Binding1<XYPad.ValueChangedEvent, Vector2> {
+    val program = program ?: (root() as? Body)?.controlManager?.program ?: error("no program")
+    return Binding1(program, this, this.events.valueChanged, container, property, { it.newValue }, { value = it })
 }
 
 fun Double.round(decimals: Int): Double {

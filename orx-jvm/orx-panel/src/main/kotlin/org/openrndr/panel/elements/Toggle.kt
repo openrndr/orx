@@ -1,7 +1,7 @@
 package org.openrndr.panel.elements
 
-import kotlinx.coroutines.*
 import org.openrndr.KEY_SPACEBAR
+import org.openrndr.Program
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.LineCap
 import org.openrndr.draw.loadFont
@@ -11,7 +11,8 @@ import org.openrndr.shape.Rectangle
 
 import org.openrndr.events.Event
 import org.openrndr.extra.textwriter.TextWriter
-import org.openrndr.launch
+import org.openrndr.panel.binding.Binding0
+import org.openrndr.panel.binding.Binding1
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KMutableProperty1
 
@@ -22,11 +23,13 @@ class Toggle : Element(ElementType("toggle")) {
     var label = ""
     var value = false
 
-    class ValueChangedEvent(val source: Toggle,
-                            val oldValue: Boolean,
-                            val newValue: Boolean)
+    class ValueChangedEvent(
+        val source: Toggle,
+        val oldValue: Boolean,
+        val newValue: Boolean
+    )
 
-    class Events: AutoCloseable {
+    class Events : AutoCloseable {
 
         val valueChanged = Event<ValueChangedEvent>("toggle-value-changed")
 
@@ -43,14 +46,16 @@ class Toggle : Element(ElementType("toggle")) {
                 val fontUrl = (root() as? Body)?.controlManager?.fontManager?.resolve(style.fontFamily) ?: "broken"
                 val fontSize = (style.fontSize as? LinearDimension.PX)?.value ?: 14.0
                 val program = (root() as? Body)?.controlManager?.program ?: error("no program")
-                val fontMap =  program.loadFont(fontUrl, fontSize)
+                val fontMap = program.loadFont(fontUrl, fontSize)
 
                 val writer = TextWriter(null)
 
-                writer.box = Rectangle(0.0,
-                        0.0,
-                        Double.POSITIVE_INFINITY,
-                        Double.POSITIVE_INFINITY)
+                writer.box = Rectangle(
+                    0.0,
+                    0.0,
+                    Double.POSITIVE_INFINITY,
+                    Double.POSITIVE_INFINITY
+                )
 
                 writer.drawStyle.fontMap = fontMap
                 writer.newLine()
@@ -103,7 +108,12 @@ class Toggle : Element(ElementType("toggle")) {
             drawer.fill = null
             drawer.lineCap = LineCap.ROUND
             drawer.lineSegment(5.0, 5.0, checkBoxSize / 2.0 - 2.0, checkBoxSize / 2.0 - 2.0)
-            drawer.lineSegment(checkBoxSize / 2.0 + 2.0, checkBoxSize / 2.0 + 2.0, checkBoxSize - 5.0, checkBoxSize - 5.0)
+            drawer.lineSegment(
+                checkBoxSize / 2.0 + 2.0,
+                checkBoxSize / 2.0 + 2.0,
+                checkBoxSize - 5.0,
+                checkBoxSize - 5.0
+            )
             drawer.lineSegment(checkBoxSize - 5.0, 5.0, checkBoxSize / 2.0 + 2.0, checkBoxSize / 2.0 - 2.0)
             drawer.lineSegment(checkBoxSize / 2.0 - 2.0, checkBoxSize / 2.0 + 2.0, 5.0, checkBoxSize - 5.0)
         }
@@ -122,68 +132,19 @@ class Toggle : Element(ElementType("toggle")) {
     }
 }
 
-@OptIn(DelicateCoroutinesApi::class)
-fun Toggle.bind(property: KMutableProperty0<Boolean>) {
-    var currentValue = property.get()
-    value = currentValue
-
-    events.valueChanged.listen {
-        currentValue = it.newValue
-        property.set(it.newValue)
-    }
-    GlobalScope.launch {
-        while (!disposed) {
-            val body = (root() as? Body)
-            if (body != null) {
-                fun update() {
-                    if (property.get() != currentValue) {
-                        val lcur = property.get()
-                        currentValue = lcur
-                        value = lcur
-                    }
-                }
-                update()
-                (root() as Body).controlManager?.program?.launch {
-                    while (!disposed) {
-                        update()
-                        yield()
-                    }
-                }
-                break
-            }
-        }
-    }
+fun Toggle.bind(property: KMutableProperty0<Boolean>, program: Program? = null) {
+    val program = program ?: (root() as? Body)?.controlManager?.program
+    Binding0(program ?: error("no program"), this, this.events.valueChanged, property, { it.newValue }, { value = it })
 }
 
-@OptIn(DelicateCoroutinesApi::class)
-fun Toggle.bind(container: Any, property: KMutableProperty1<Any, Boolean>) {
-    var currentValue = property.get(container)
-    value = currentValue
-
-    events.valueChanged.listen {
-        currentValue = it.newValue
-        property.set(container, it.newValue)
-    }
-    GlobalScope.launch {
-        while (!disposed) {
-            val body = (root() as? Body)
-            if (body != null) {
-                fun update() {
-                    if (property.get(container) != currentValue) {
-                        val lcur = property.get(container)
-                        currentValue = lcur
-                        value = lcur
-                    }
-                }
-                update()
-                (root() as Body).controlManager?.program?.launch {
-                    while (!disposed) {
-                        update()
-                        yield()
-                    }
-                }
-                break
-            }
-        }
-    }
+fun Toggle.bind(container: Any, property: KMutableProperty1<Any, Boolean>, program: Program? = null) {
+    val program = program ?: (root() as? Body)?.controlManager?.program
+    Binding1(
+        program ?: error("no program"),
+        this,
+        this.events.valueChanged,
+        container,
+        property,
+        { it.newValue },
+        { value = it })
 }

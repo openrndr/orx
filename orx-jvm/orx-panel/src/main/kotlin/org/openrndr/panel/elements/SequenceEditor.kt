@@ -2,6 +2,7 @@ package org.openrndr.panel.elements
 
 import kotlinx.coroutines.*
 import org.openrndr.KeyModifier
+import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.events.Event
@@ -9,12 +10,16 @@ import org.openrndr.extra.textwriter.Cursor
 import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.math.Vector2
 import org.openrndr.math.map
+import org.openrndr.panel.binding.Binding0
+import org.openrndr.panel.binding.Binding1
 import org.openrndr.panel.style.effectiveColor
 import org.openrndr.panel.tools.Tooltip
 import org.openrndr.shape.Rectangle
 import kotlin.math.abs
 import kotlin.math.round
 import kotlin.math.roundToInt
+import kotlin.reflect.KMutableProperty0
+import kotlin.reflect.KMutableProperty1
 
 class SequenceEditor : SequenceEditorBase("sequence-editor") {
     var value
@@ -26,11 +31,13 @@ class SequenceEditor : SequenceEditorBase("sequence-editor") {
     public override var maximumSequenceLength = 16
     public override var minimumSequenceLength = 1
 
-    class ValueChangedEvent(val source: SequenceEditorBase,
-                            val oldValue: List<Double>,
-                            val newValue: List<Double>)
+    class ValueChangedEvent(
+        val source: SequenceEditorBase,
+        val oldValue: List<Double>,
+        val newValue: List<Double>
+    )
 
-    class Events: AutoCloseable {
+    class Events : AutoCloseable {
         val valueChanged = Event<ValueChangedEvent>("sequence-editor-value-changed")
         override fun close() {
             valueChanged.close()
@@ -66,11 +73,13 @@ open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(E
 
     private val footerHeight = 20.0
 
-    internal class ValueChangedEvent(val source: SequenceEditorBase,
+    internal class ValueChangedEvent(
+        val source: SequenceEditorBase,
         val oldValue: List<Double>,
-        val newValue: List<Double>)
+        val newValue: List<Double>
+    )
 
-    internal class Events: AutoCloseable {
+    internal class Events : AutoCloseable {
         val valueChanged = Event<ValueChangedEvent>("sequence-editor-base-value-changed")
         override fun close() {
             valueChanged.close()
@@ -155,7 +164,11 @@ open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(E
                         val readIndex = index.roundToInt() - 1
                         if (readIndex >= 0 && readIndex < baseValue.size) {
                             val value = String.format("%.0${precision}f", baseValue[readIndex])
-                            tooltip = Tooltip(this@SequenceEditorBase, it.position - Vector2(layout.screenX, layout.screenY), "$value")
+                            tooltip = Tooltip(
+                                this@SequenceEditorBase,
+                                it.position - Vector2(layout.screenX, layout.screenY),
+                                "$value"
+                            )
                             requestRedraw()
                         }
                     }
@@ -183,15 +196,22 @@ open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(E
         drawer.strokeWeight = (1.0)
 
 
-        val zeroHeight = 0.0.map(range.start, range.endInclusive, -1.0, 1.0).coerceIn(-1.0, 1.0) * controlArea.height / -2.0
-        drawer.lineSegment(0.0, controlArea.height / 2.0 + zeroHeight, layout.screenWidth, controlArea.height / 2.0 + zeroHeight)
+        val zeroHeight =
+            0.0.map(range.start, range.endInclusive, -1.0, 1.0).coerceIn(-1.0, 1.0) * controlArea.height / -2.0
+        drawer.lineSegment(
+            0.0,
+            controlArea.height / 2.0 + zeroHeight,
+            layout.screenWidth,
+            controlArea.height / 2.0 + zeroHeight
+        )
 
         drawer.strokeWeight = 7.0
         drawer.fill = computedStyle.effectiveColor
 
         for (i in baseValue.indices) {
             val dx = layout.screenWidth / (baseValue.size + 1)
-            val height = -baseValue[i].map(range.start, range.endInclusive, -1.0, 1.0).coerceIn(-1.0, 1.0) * controlArea.height / 2.0
+            val height = -baseValue[i].map(range.start, range.endInclusive, -1.0, 1.0)
+                .coerceIn(-1.0, 1.0) * controlArea.height / 2.0
 
             val x = dx * (i + 1)
             drawer.lineCap = LineCap.ROUND
@@ -225,4 +245,28 @@ open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(E
         super.close()
         baseEvents.close()
     }
+}
+
+fun SequenceEditor.bind(
+    property: KMutableProperty0<List<Double>>,
+    program: Program? = null
+): Binding0<SequenceEditor.ValueChangedEvent, List<Double>> {
+    val program = program ?: (root() as? Body)?.controlManager?.program ?: error("no program")
+    return Binding0(program, this, events.valueChanged, property, { it.newValue }, { value = it.toMutableList() })
+}
+
+fun SequenceEditor.bind(
+    container: Any,
+    property: KMutableProperty1<Any, List<Double>>,
+    program: Program? = null
+): Binding1<SequenceEditor.ValueChangedEvent, List<Double>> {
+    val program = program ?: (root() as? Body)?.controlManager?.program ?: error("no program")
+    return Binding1(
+        program,
+        this,
+        events.valueChanged,
+        container,
+        property,
+        { it.newValue },
+        { value = it.toMutableList() })
 }
