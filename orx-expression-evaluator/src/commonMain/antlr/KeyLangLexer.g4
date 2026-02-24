@@ -16,7 +16,7 @@ STEP : 'step' ;
 
 
 // Identifiers
-ID                 : [$_]*[a-zA-Z][A-Za-z0-9_]* | '`'[$_]*[A-Za-z0-9_-]*'`';
+ID                 : [_] | [$_]*[a-zA-Z][A-Za-z0-9_]* | '`'[$_]*[A-Za-z0-9_-]*'`';
 FUNCTION_ID        : [$_]*[a-z][A-Za-z0-9_]* ;
 
 // Literals
