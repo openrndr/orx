@@ -21,6 +21,10 @@ import kotlin.contracts.contract
 private val logger = KotlinLogging.logger {}
 
 class ControlManager : Extension {
+
+
+    var mousePosition = Vector2.INFINITY
+
     var document: Document? = null
         set(value) {
             if (field !== value) {
@@ -270,8 +274,10 @@ class ControlManager : Extension {
             checkForManualRedraw()
         }
 
+
         val insideElements = mutableSetOf<Element>()
         fun move(event: MouseEvent) {
+            mousePosition = event.position
             val hover = ElementPseudoClass("hover")
             val toRemove = insideElements.filter { (event.position !in it.screenArea) }
 
@@ -364,6 +370,15 @@ class ControlManager : Extension {
                     drawer.drawStyle.textSetting = TextSettingMode.PIXEL
                     drawer.translate(element.screenPosition)
                     if (newZComp == zIndex) {
+                        if (mousePosition in element.screenArea) {
+                            program.application.cursorType = when (element.computedStyle.cursor) {
+                                Cursor.Default -> CursorType.ARROW_CURSOR
+                                Cursor.Pointer -> CursorType.HAND_CURSOR
+                                Cursor.Text -> CursorType.IBEAM_CURSOR
+                                Cursor.Crosshair -> CursorType.CROSSHAIR_CURSOR
+                                else -> CursorType.ARROW_CURSOR
+                            }
+                        }
                         element.draw(drawer)
                     }
                 }

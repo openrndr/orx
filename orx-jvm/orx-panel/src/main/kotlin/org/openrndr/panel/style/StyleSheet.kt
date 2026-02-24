@@ -48,6 +48,28 @@ typealias color = Color
 
 class CalculateContext(val elementWidth: Double?, val elementHeight: Double?)
 
+sealed class Cursor(inherit: Boolean = false) : PropertyValue(inherit) {
+    object Default : Cursor()
+    object Pointer : Cursor()
+    object Text : Cursor()
+    object Crosshair : Cursor()
+    object Inherit : Cursor(inherit = true)
+    companion object {
+        val inherit = Inherit
+        val default = Default
+        val pointer = Pointer
+        val text = Text
+        val crosshair = Crosshair
+
+        operator fun invoke(f: Companion.() -> Any): Cursor {
+            return when (val r = f()) {
+                is Cursor -> r
+                else -> error("Can't resolve Cursor from '$r'")
+            }
+        }
+    }
+}
+
 sealed class LinearDimension(inherit: Boolean = false) : PropertyValue(inherit) {
     class PX(val value: Double) : LinearDimension() {
         override fun toString(): String {
@@ -392,6 +414,7 @@ var StyleSheet.textHorizontalAlign by PropertyHandler<TextAlign>(
 val Number.px: LinearDimension.PX get() = LinearDimension.PX(this.toDouble())
 val Number.percent: LinearDimension.Percent get() = LinearDimension.Percent(this.toDouble())
 
+var StyleSheet.cursor by PropertyHandler<Cursor>("cursor", RESET, Cursor.Default)
 fun StyleSheet.margins(all: LinearDimension) {
     marginTop = all
     marginBottom = all
