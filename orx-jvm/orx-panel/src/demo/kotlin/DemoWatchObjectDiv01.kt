@@ -31,6 +31,10 @@ fun main() = application {
                     child(has type "slider") {
                         this.width = 80.px
                     }
+
+                    child(has type "button") {
+                        this.width = 80.px
+                    }
                 }
 
                 slider {

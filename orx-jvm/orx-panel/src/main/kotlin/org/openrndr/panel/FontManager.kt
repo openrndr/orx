@@ -2,6 +2,7 @@ package org.openrndr.panel
 
 import org.openrndr.Program
 import org.openrndr.draw.FontImageMap
+import org.openrndr.draw.font.fontEmScaler
 import org.openrndr.draw.loadFont
 import org.openrndr.panel.style.LinearDimension
 import org.openrndr.panel.style.StyleSheet
@@ -18,7 +19,7 @@ class FontManager() {
     fun font(cs: StyleSheet): FontImageMap {
         val fontUrl = resolve(cs.fontFamily) ?: "cp:fonts/Roboto-Medium.ttf"
         val fontSize = (cs.fontSize as? LinearDimension.PX)?.value ?: 16.0
-        return program?.loadFont(fontUrl, fontSize) ?: error("no program")
+        return program?.loadFont(fontUrl, fontSize, fontScaler = ::fontEmScaler) ?: error("no program")
     }
 
     fun register(name: String, url: String) {

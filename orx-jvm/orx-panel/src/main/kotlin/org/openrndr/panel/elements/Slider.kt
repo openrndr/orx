@@ -8,6 +8,8 @@ import org.openrndr.draw.Drawer
 import org.openrndr.draw.LineCap
 
 import org.openrndr.events.Event
+import org.openrndr.extra.expressions.ExpressionException
+import org.openrndr.extra.expressions.evaluateExpression
 import org.openrndr.extra.textwriter.Cursor
 import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.math.Vector2
@@ -17,8 +19,8 @@ import org.openrndr.panel.style.Color
 import org.openrndr.panel.style.color
 import org.openrndr.panel.style.effectiveColor
 import org.openrndr.shape.Rectangle
-import java.text.NumberFormat
-import java.text.ParseException
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KMutableProperty1
 
@@ -97,6 +99,7 @@ class Slider : Element(ElementType("slider")) {
 
     private val margin = 7.0
     private var keyboardInput = ""
+    private var inputIndex = -1
 
     init {
         mouse.pressed.listen {
@@ -124,20 +127,20 @@ class Slider : Element(ElementType("slider")) {
 
         keyboard.focusLost.listen {
             keyboardInput = ""
+            inputIndex = -1
             draw.dirty = true
         }
 
         keyboard.character.listen {
-            if (it.character in setOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', ',', '-')) {
-                try {
-                    val candidate = keyboardInput + it.character.toString()
-                    if (candidate.length > 1) {
-                        NumberFormat.getInstance().parse(candidate).toDouble()
-                    }
-                    keyboardInput = candidate
-                    requestRedraw()
-                } catch (e: ParseException) {
-                }
+            if (true || it.character in setOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', ',', '-')) {
+
+                val candidate =
+                    keyboardInput.take(inputIndex + 1) + it.character.toString() + keyboardInput.drop(inputIndex + 1)
+
+                keyboardInput = candidate
+                inputIndex = inputIndex + 1
+                requestRedraw()
+
             }
             it.cancelPropagation()
         }
@@ -151,7 +154,9 @@ class Slider : Element(ElementType("slider")) {
             }
 
             if (it.key == KEY_ARROW_LEFT) {
-                interactiveValue -= delta
+                if (keyboardInput.isEmpty()) {
+                    interactiveValue -= delta
+                }
                 it.cancelPropagation()
             }
 
@@ -160,18 +165,35 @@ class Slider : Element(ElementType("slider")) {
             val delta = Math.pow(10.0, -(precision - 0.0))
 
             if (it.key == KEY_ARROW_RIGHT) {
-                interactiveValue += delta
+                if (keyboardInput.isEmpty()) {
+                    interactiveValue += delta
+
+                } else {
+                    inputIndex = min(keyboardInput.length - 1, inputIndex + 1)
+                    requestRedraw()
+                }
                 it.cancelPropagation()
             }
 
             if (it.key == KEY_ARROW_LEFT) {
-                interactiveValue -= delta
-                it.cancelPropagation()
+                if (keyboardInput.isEmpty()) {
+                    interactiveValue -= delta
+                    it.cancelPropagation()
+                } else {
+                    inputIndex = max(-1, inputIndex - 1)
+                    println("input index: $inputIndex")
+                    requestRedraw()
+                }
             }
 
             if (it.key == KEY_BACKSPACE) {
                 if (!keyboardInput.isEmpty()) {
-                    keyboardInput = keyboardInput.substring(0, keyboardInput.length - 1)
+                    if (inputIndex > 1) {
+                        keyboardInput = keyboardInput.substring(0, inputIndex - 1) + keyboardInput.substring(inputIndex)
+                    } else {
+                        keyboardInput = keyboardInput.drop(1)
+                    }
+                    inputIndex = max(-1, inputIndex - 1)
                     draw.dirty = true
                 }
                 it.cancelPropagation()
@@ -179,18 +201,21 @@ class Slider : Element(ElementType("slider")) {
 
             if (it.key == KEY_ESCAPE) {
                 keyboardInput = ""
+                inputIndex = -1
                 draw.dirty = true
                 it.cancelPropagation()
             }
 
             if (it.key == KEY_ENTER) {
                 try {
-                    val number = NumberFormat.getInstance().parse(keyboardInput).toDouble()
+                    //val number = NumberFormat.getInstance().parse(keyboardInput).toDouble()
+                    val number = evaluateExpression(keyboardInput, constants = mapOf("_" to value)) ?: value
                     interactiveValue = number.coerceIn(range.min, range.max)
-                } catch (e: ParseException) {
+                } catch (e: ExpressionException) {
                     // -- silently (but safely) ignore the exception
                 }
                 keyboardInput = ""
+                inputIndex = -1
                 draw.dirty = true
                 it.cancelPropagation()
             }
@@ -294,6 +319,20 @@ class Slider : Element(ElementType("slider")) {
                 val tw = writer.textWidth(keyboardInput)
                 writer.cursor.x = (layout.screenWidth - tw)
                 writer.text(keyboardInput)
+                drawer.stroke = drawer.fill
+                drawer.strokeWeight = 1.0
+
+                if (inputIndex >= 0) {
+                    val last = writer.glyphOutput.rectangles.getOrNull(inputIndex) ?: writer.glyphOutput.rectangles.last()
+                    drawer.lineSegment(last.second.vertical(1.0))
+                } else {
+
+                    if (writer.glyphOutput.rectangles.isNotEmpty()) {
+                        val last = writer.glyphOutput.rectangles.first()
+                        drawer.lineSegment(last.second.vertical(0.0))
+                    }
+                }
+                //drawer.rectangle(last.second)
             }
         }
     }
@@ -305,7 +344,10 @@ class Slider : Element(ElementType("slider")) {
 }
 
 @OptIn(DelicateCoroutinesApi::class)
-fun Slider.bind(property: KMutableProperty0<Double>, program: Program? = null): Binding0<Slider.ValueChangedEvent, Double> {
+fun Slider.bind(
+    property: KMutableProperty0<Double>,
+    program: Program? = null
+): Binding0<Slider.ValueChangedEvent, Double> {
     val program = program ?: (root() as? Body)?.controlManager?.program ?: error("no program")
     return Binding0(program, this, this.events.valueChanged, property, { it.newValue }, { value = it })
 }
@@ -313,18 +355,46 @@ fun Slider.bind(property: KMutableProperty0<Double>, program: Program? = null): 
 @JvmName("bindInt")
 fun Slider.bind(property: KMutableProperty0<Int>, program: Program? = null): Binding0<Slider.ValueChangedEvent, Int> {
     val program = program ?: (root() as? Body)?.controlManager?.program
-    return Binding0(program ?: error("no program"), this, this.events.valueChanged, property, { it.newValue.toInt() }, { value = it.toDouble() })
+    return Binding0(
+        program ?: error("no program"),
+        this,
+        this.events.valueChanged,
+        property,
+        { it.newValue.toInt() },
+        { value = it.toDouble() })
 }
 
 @OptIn(DelicateCoroutinesApi::class)
-fun Slider.bind(container:Any, property: KMutableProperty1<Any, Double>, program: Program? = null): Binding1<Slider.ValueChangedEvent, Double> {
+fun Slider.bind(
+    container: Any,
+    property: KMutableProperty1<Any, Double>,
+    program: Program? = null
+): Binding1<Slider.ValueChangedEvent, Double> {
     val program = program ?: (root() as? Body)?.controlManager?.program
-    return Binding1(program ?: error("no program"), this, this.events.valueChanged,  container, property, { it.newValue }, { value = it })
+    return Binding1(
+        program ?: error("no program"),
+        this,
+        this.events.valueChanged,
+        container,
+        property,
+        { it.newValue },
+        { value = it })
 }
 
 @JvmName("bindInt")
 @OptIn(DelicateCoroutinesApi::class)
-fun Slider.bind(container:Any, property: KMutableProperty1<Any, Int>, program: Program? = null): Binding1<Slider.ValueChangedEvent, Int> {
+fun Slider.bind(
+    container: Any,
+    property: KMutableProperty1<Any, Int>,
+    program: Program? = null
+): Binding1<Slider.ValueChangedEvent, Int> {
     val program = program ?: (root() as? Body)?.controlManager?.program
-    return Binding1(program ?: error("no program"), this, this.events.valueChanged,  container, property, { it.newValue.toInt() }, { value = it.toDouble() })
+    return Binding1(
+        program ?: error("no program"),
+        this,
+        this.events.valueChanged,
+        container,
+        property,
+        { it.newValue.toInt() },
+        { value = it.toDouble() })
 }
