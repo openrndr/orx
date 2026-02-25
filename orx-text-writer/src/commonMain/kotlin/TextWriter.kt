@@ -448,13 +448,12 @@ class TextWriter(val drawerRef: Drawer?) {
             val lines = text.split("((?<=\n)|(?=\n))".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             val tokens = mutableListOf<String>()
             lines.forEach { line ->
-                val lineTokens = line.split(" ")
+                val lineTokens = Regex("\\S+|\\s+").findAll(line).map { it.value }.toList()
                 tokens.addAll(lineTokens)
             }
 
             val localCursor = Cursor(cursor)
 
-            val spaceWidth = (font.glyphMetrics[' ']?.advanceWidth ?: error("no metrics for space"))
             val verticalSpace = style.leading + font.leading
 
             val textTokens = mutableListOf<TextToken>()
@@ -481,6 +480,8 @@ class TextWriter(val drawerRef: Drawer?) {
                             localCursor.y += verticalSpace
                             localCursor.x = box.x
 
+                            if (token == " ")
+                                continue@tokenLoop
                             textTokens.add(
                                 TextToken(token, localCursor.x, localCursor.y, tokenWidth, style.tracking)
                             )
@@ -501,7 +502,7 @@ class TextWriter(val drawerRef: Drawer?) {
                     localCursor.x += tokenWidth
 
                     if (i != tokens.lastIndex) {
-                        localCursor.x += spaceWidth + tracking
+                        localCursor.x += tracking
                     }
                 }
             }
