@@ -132,16 +132,12 @@ class Slider : Element(ElementType("slider")) {
         }
 
         keyboard.character.listen {
-            if (true || it.character in setOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', ',', '-')) {
+            val candidate =
+                keyboardInput.take(inputIndex + 1) + it.character.toString() + keyboardInput.drop(inputIndex + 1)
 
-                val candidate =
-                    keyboardInput.take(inputIndex + 1) + it.character.toString() + keyboardInput.drop(inputIndex + 1)
-
-                keyboardInput = candidate
-                inputIndex = inputIndex + 1
-                requestRedraw()
-
-            }
+            keyboardInput = candidate
+            inputIndex = inputIndex + 1
+            requestRedraw()
             it.cancelPropagation()
         }
 
@@ -181,7 +177,6 @@ class Slider : Element(ElementType("slider")) {
                     it.cancelPropagation()
                 } else {
                     inputIndex = max(-1, inputIndex - 1)
-                    println("input index: $inputIndex")
                     requestRedraw()
                 }
             }
@@ -208,7 +203,6 @@ class Slider : Element(ElementType("slider")) {
 
             if (it.key == KEY_ENTER) {
                 try {
-                    //val number = NumberFormat.getInstance().parse(keyboardInput).toDouble()
                     val number = evaluateExpression(keyboardInput, constants = mapOf("_" to value)) ?: value
                     interactiveValue = number.coerceIn(range.min, range.max)
                 } catch (e: ExpressionException) {
@@ -310,6 +304,7 @@ class Slider : Element(ElementType("slider")) {
             writer.newLine()
             writer.text(label)
 
+            val th = font.height
             if (keyboardInput.isEmpty()) {
                 val valueFormatted = String.format("%.0${precision}f", value)
                 val tw = writer.textWidth(valueFormatted)
@@ -319,20 +314,21 @@ class Slider : Element(ElementType("slider")) {
                 val tw = writer.textWidth(keyboardInput)
                 writer.cursor.x = (layout.screenWidth - tw)
                 writer.text(keyboardInput)
-                drawer.stroke = drawer.fill
+                drawer.stroke = drawer.fill?.opacify(0.5)
                 drawer.strokeWeight = 1.0
 
                 if (inputIndex >= 0) {
-                    val last = writer.glyphOutput.rectangles.getOrNull(inputIndex) ?: writer.glyphOutput.rectangles.last()
-                    drawer.lineSegment(last.second.vertical(1.0))
+                    val last =
+                        writer.glyphOutput.rectangles.getOrNull(inputIndex) ?: writer.glyphOutput.rectangles.last()
+                    val x = last.second.x + last.second.width
+                    drawer.lineSegment(x, writer.cursor.y, x, writer.cursor.y - th)
                 } else {
-
                     if (writer.glyphOutput.rectangles.isNotEmpty()) {
                         val last = writer.glyphOutput.rectangles.first()
-                        drawer.lineSegment(last.second.vertical(0.0))
+                        val x = last.second.x
+                        drawer.lineSegment(x, writer.cursor.y, x, writer.cursor.y - th)
                     }
                 }
-                //drawer.rectangle(last.second)
             }
         }
     }
