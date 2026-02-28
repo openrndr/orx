@@ -65,6 +65,7 @@ class Binding0<E: Any, T: Any> (program: Program,
             }
         }
         currentValue = property.get()
+        setElementValue(currentValue)
         job = program.launch {
             while (this.isActive && !element.disposed && !closed) {
                 val candidate = property.get()
