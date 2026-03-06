@@ -49,7 +49,7 @@ class Binding0<E: Any, T: Any> (program: Program,
                                 setElementValue: (T) -> Unit
 
     ): AutoCloseable {
-    var currentValue: T
+    private var currentValue: T
     var closed: Boolean = false
         private set
 
@@ -57,6 +57,8 @@ class Binding0<E: Any, T: Any> (program: Program,
     private var listener: ((E) -> Unit)? = null
 
     init {
+        currentValue = property.get()
+        setElementValue(currentValue)
         listener = event.listen {
             val candidate = newValueFromEvent(it)
             if (candidate != currentValue) {
@@ -64,8 +66,6 @@ class Binding0<E: Any, T: Any> (program: Program,
                 property.set(currentValue)
             }
         }
-        currentValue = property.get()
-        setElementValue(currentValue)
         job = program.launch {
             while (this.isActive && !element.disposed && !closed) {
                 val candidate = property.get()
@@ -127,7 +127,7 @@ class Binding1<E: Any, T: Any> (program: Program,
         }
         currentValue = property.get(container)
         job = program.launch {
-            while (!this.isActive && !element.disposed && !closed) {
+            while (this.isActive && !element.disposed && !closed) {
                 val candidate = property.get(container)
                 if (candidate != currentValue) {
                     currentValue = candidate
