@@ -3,11 +3,12 @@ package org.openrndr.panel.elements
 import org.openrndr.*
 import org.openrndr.color.ColorHSVa
 import org.openrndr.color.ColorRGBa
-import org.openrndr.color.Linearity
 import org.openrndr.draw.ColorBuffer
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.colorBuffer
 import org.openrndr.events.Event
+import org.openrndr.extra.imageFit.imageFit
+import org.openrndr.math.smoothstep
 import org.openrndr.panel.binding.Binding0
 import org.openrndr.panel.binding.Binding1
 import org.openrndr.panel.style.Color
@@ -22,18 +23,24 @@ class Colorpicker : Element {
     var label: String = "Color"
 
     var saturation = 0.5
-    var color: ColorRGBa
         set(value) {
-            realColor = value
-            saturation = color.toHSVa().s
-            generateColorMap()
-            draw.dirty = true
+            if (field != value) {
+                field = value
+                generateColorMap()
+                color = color.toHSVa().copy(s = value).toRGBa()
+                draw.dirty = true
+            }
         }
-        get() {
-            return realColor
+    var color: ColorRGBa = ColorRGBa.WHITE
+        set(value) {
+            if (field != value) {
+                field = value
+                saturation = color.toHSVa().s
+                generateColorMap()
+                draw.dirty = true
+            }
         }
 
-    private var realColor = ColorRGBa.WHITE
     private var focussed = false
 
     class ColorChangedEvent(
@@ -51,17 +58,17 @@ class Colorpicker : Element {
 
     val events = Events()
 
-    private var keyboardInput = ""
     private fun pick(e: MouseEvent) {
-        val dx = e.position.x - layout.screenX
-        var dy = e.position.y - layout.screenY
+        val dx = (e.position.x - layout.screenX - layout.paddingLeft).coerceIn(0.0, layout.screenWidth -1)
+        var dy = (e.position.y - layout.screenY - layout.paddingTop).coerceIn(0.0, layout.screenHeight -1)
 
-        dy = 50.0 - dy
+        val h = colorMap!!.height - 1.0
+        dy = h - dy
         val oldColor = color
-        val hsv = ColorHSVa(360.0 / layout.screenWidth * dx, saturation, dy / 50.0)
-        realColor = hsv.toRGBa()
+        val hsv = ColorHSVa(360.0 / layout.screenWidth * dx, saturation, dy / h)
+        color = hsv.toRGBa()
         draw.dirty = true
-        events.colorChanged.trigger(ColorChangedEvent(this, oldColor, realColor))
+        events.colorChanged.trigger(ColorChangedEvent(this, oldColor, color))
         e.cancelPropagation()
     }
 
@@ -85,62 +92,31 @@ class Colorpicker : Element {
             }
         }
 
-        keyboard.focusLost.listen {
-            keyboardInput = ""
-            draw.dirty = true
-        }
-
-        keyboard.character.listen {
-            keyboardInput += it.character
-            draw.dirty = true
-            it.cancelPropagation()
-        }
-
         keyboard.pressed.listen {
-
-            if (KeyModifier.CTRL in it.modifiers || KeyModifier.SUPER in it.modifiers) {
-                if (it.name == "v") {
-                    (root() as Body).controlManager?.program?.clipboard?.contents?.let {
-                        keyboardInput += it
-                        draw.dirty = true
-                    }
-                    it.cancelPropagation()
+            val f = if (KeyModifier.SHIFT in it.modifiers) 0.1 else 1.0
+            when (it.key) {
+                KEY_ARROW_LEFT -> {
+                    val hue = (color.toHSVa().h - 10.0 * f).mod(360.0)
+                    color = ColorHSVa(hue, color.toHSVa().s, color.toHSVa().v).toRGBa()
+                    events.colorChanged.trigger(ColorChangedEvent(this, color, color))
                 }
-            }
-            if (it.key == KEY_BACKSPACE) {
-                if (!keyboardInput.isEmpty()) {
-                    keyboardInput = keyboardInput.substring(0, keyboardInput.length - 1)
-                    draw.dirty = true
-
+                KEY_ARROW_RIGHT -> {
+                    val hue = (color.toHSVa().h + 10.0 * f).mod(360.0)
+                    color = ColorHSVa(hue, color.toHSVa().s, color.toHSVa().v).toRGBa()
+                    events.colorChanged.trigger(ColorChangedEvent(this, color, color))
                 }
-                it.cancelPropagation()
-            }
-
-            if (it.key == KEY_ESCAPE) {
-                keyboardInput = ""
-                draw.dirty = true
-                it.cancelPropagation()
-            }
-
-
-            if (it.key == KEY_ENTER) {
-                val cleanKeyboardInput = keyboardInput.replace(Regex("^#"), "")
-                val number = if (cleanKeyboardInput.length == 6) cleanKeyboardInput.toIntOrNull(16) else null
-
-                number?.let {
-                    val r = (number shr 16) and 0xff
-                    val g = (number shr 8) and 0xff
-                    val b = number and 0xff
-                    val oldColor = color
-                    color = ColorRGBa(r / 255.0, g / 255.0, b / 255.0, 1.0, Linearity.SRGB)
-                    events.colorChanged.trigger(ColorChangedEvent(this, oldColor, realColor))
-                    keyboardInput = ""
-                    draw.dirty = true
+                KEY_ARROW_UP -> {
+                    val value = (color.toHSVa().v + 0.1 * f).coerceIn(0.0, 1.0)
+                    color = ColorHSVa(color.toHSVa().h, color.toHSVa().s, value).toRGBa()
+                    events.colorChanged.trigger(ColorChangedEvent(this, color, color))
                 }
-                it.cancelPropagation()
+                KEY_ARROW_DOWN -> {
+                    val value = (color.toHSVa().v - 0.1 * f).coerceIn(0.0, 1.0)
+                    color = ColorHSVa(color.toHSVa().h, color.toHSVa().s, value).toRGBa()
+                    events.colorChanged.trigger(ColorChangedEvent(this, color, color))
+                }
             }
         }
-
 
         mouse.pressed.listen { it.cancelPropagation(); focussed = true }
         mouse.clicked.listen { it.cancelPropagation(); pick(it); focussed = true; }
@@ -149,9 +125,12 @@ class Colorpicker : Element {
 
     private fun generateColorMap() {
         colorMap?.shadow?.let {
-            for (y in 0..49) {
+
+            val h = it.colorBuffer.height - 1.0
+
+            for (y in 0 until it.colorBuffer.height) {
                 for (x in 0 until it.colorBuffer.width) {
-                    val hsv = ColorHSVa(360.0 / it.colorBuffer.width * x, saturation, (49 - y) / 49.0)
+                    val hsv = ColorHSVa(360.0 / it.colorBuffer.width * x, saturation, (h - y) / h)
                     it.write(x, y, hsv.toRGBa().toLinear())
                 }
             }
@@ -161,23 +140,29 @@ class Colorpicker : Element {
 
     override fun draw(drawer: Drawer) {
         if (colorMap == null) {
-            colorMap = colorBuffer(layout.screenWidth.toInt(), 50, 1.0)
+
+            val contentBounds = layout.contentBoundsAtOrigin
+
+            colorMap = colorBuffer(contentBounds.width.toInt(), layout.contentBounds.height.toInt(), 1.0)
             generateColorMap()
         }
 
-        drawer.image(colorMap!!, 0.0, 0.0)
+        drawer.imageFit(colorMap!!, layout.contentBoundsAtOrigin)
         drawer.fill = color
         drawer.stroke = null
         drawer.shadeStyle = null
-        drawer.rectangle(0.0, 50.0, layout.screenWidth, 20.0)
+
+        drawer.stroke =  ColorRGBa.WHITE.mix(ColorRGBa.BLACK, smoothstep(0.45, 0.55, color.luminance))
+        drawer.strokeWeight = 2.0
+
+        val x = color.toHSVa().h/360.0 * colorMap!!.width.toDouble()
+        val y =(1.0 -  color.toHSVa().v/1.0) * colorMap!!.height.toDouble()
+        drawer.circle(x, y, 10.0)
 
         val f = (root() as? Body)?.controlManager?.fontManager?.font(computedStyle)!!
         drawer.fontMap = f
         drawer.fill = ((computedStyle.color as Color.RGBa).color)
 
-        if (keyboardInput.isNotBlank()) {
-            drawer.text("input: $keyboardInput", 0.0, layout.screenHeight)
-        }
     }
 
     override fun close() {

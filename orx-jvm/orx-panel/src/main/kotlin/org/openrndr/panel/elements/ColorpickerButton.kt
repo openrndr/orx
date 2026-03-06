@@ -1,8 +1,11 @@
 package org.openrndr.panel.elements
 
+import org.openrndr.KEY_ENTER
+import org.openrndr.KEY_ESCAPE
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.color.Linearity
+import org.openrndr.color.rgb
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.LineCap
 
@@ -29,7 +32,7 @@ class ColorpickerButton : Element(ElementType("colorpicker-button")) {
 
     class ColorChangedEvent(val source: ColorpickerButton, val color: ColorRGBa)
 
-    class Events: AutoCloseable {
+    class Events : AutoCloseable {
         val valueChanged = Event<ColorChangedEvent>()
         override fun close() {
             valueChanged.close()
@@ -43,7 +46,53 @@ class ColorpickerButton : Element(ElementType("colorpicker-button")) {
             it.cancelPropagation()
         }
         mouse.clicked.listen {
-            append(SlideOut(0.0, screenArea.height, screenArea.width, 200.0, color, this))
+            replace {
+                slideOut(0.0, screenArea.height, screenArea.width, 200.0) {
+
+                    val cp = colorpicker {
+                        style {
+                            padding(length { 0.px })
+                            margins(length { 0.px })
+                        }
+                        bind(this@ColorpickerButton::color)
+                    }
+                    textInput {
+                        value = ""
+                        style {
+                            width = LinearDimension.Percent(100.0)
+                            height = length { 32.px }
+                            padding(length { 0.px })
+                            paddingLeft = length { 5.px }
+                            paddingRight = length { 5.px }
+                            margins(length { 0.px })
+                        }
+                        keyboard.pressed.listen {
+                            if (it.key == KEY_ESCAPE) {
+                                value = ""
+                            }
+                            if (it.key == KEY_ENTER) {
+                                try {
+                                    this@ColorpickerButton.color = rgb(value)
+                                } catch (e: IllegalArgumentException) {
+                                    value = ""
+                                }
+
+                            }
+                        }
+                    }
+
+                    slider {
+                        style {
+                            width = LinearDimension.Percent(100.0)
+                            padding(length { 0.px })
+                            margins(length { 0.px })
+                        }
+                        label = "saturation"
+                        range = Range(0.0, 1.0)
+                        bind(cp::saturation)
+                    }
+                }
+            }
             it.cancelPropagation()
         }
     }
@@ -60,8 +109,6 @@ class ColorpickerButton : Element(ElementType("colorpicker-button")) {
         super.close()
         events.close()
     }
-
-    fun items(): List<Item> = children.filter { it is Item }.map { it as Item }
 
     override fun draw(drawer: Drawer) {
 
@@ -93,46 +140,6 @@ class ColorpickerButton : Element(ElementType("colorpicker-button")) {
             drawer.lineCap = LineCap.ROUND
             drawer.lineSegment(2.0, layout.screenHeight - 2.0, layout.screenWidth - 2.0, layout.screenHeight - 2.0)
             drawer.popStyle()
-        }
-    }
-
-    class SlideOut(val x: Double, val y: Double, val width: Double, val height: Double, color: ColorRGBa, parent: Element) : Element(ElementType("slide-out")) {
-
-        init {
-            style = StyleSheet(CompoundSelector.DUMMY).apply {
-                position = Position.ABSOLUTE
-                left = LinearDimension.PX(x)
-                top = LinearDimension.PX(y)
-                width = LinearDimension.PX(this@SlideOut.width)
-                height = LinearDimension.Auto//LinearDimension.PX(this@SlideOut.height)
-                overflow = Overflow.Scroll
-                zIndex = ZIndex.Value(1000)
-                background = Color.RGBa(ColorRGBa(0.3, 0.3, 0.3))
-            }
-
-            val colorPicker = Colorpicker().apply {
-                this.color = color
-                label = (parent as ColorpickerButton).label
-                events.colorChanged.listen {
-                    parent.color = it.newColor
-                    parent.events.valueChanged.trigger(ColorChangedEvent(parent, parent.color))
-                }
-            }
-            append(colorPicker)
-
-            mouse.exited.listen {
-                dispose()
-            }
-        }
-
-        override fun draw(drawer: Drawer) {
-            (root() as Body).controlManager?.keyboardInput?.requestFocus(children[0])
-            drawer.fill = ((computedStyle.background as? Color.RGBa)?.color ?: ColorRGBa.PINK)
-            drawer.rectangle(0.0, 0.0, screenArea.width, screenArea.height)
-        }
-
-        fun dispose() {
-            parent?.remove(this)
         }
     }
 }

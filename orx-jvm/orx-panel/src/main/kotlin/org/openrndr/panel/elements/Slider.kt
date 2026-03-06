@@ -317,16 +317,18 @@ class Slider : Element(ElementType("slider")) {
                 drawer.stroke = drawer.fill?.opacify(0.5)
                 drawer.strokeWeight = 1.0
 
-                if (inputIndex >= 0) {
-                    val last =
-                        writer.glyphOutput.rectangles.getOrNull(inputIndex) ?: writer.glyphOutput.rectangles.last()
-                    val x = last.second.x + last.second.width
-                    drawer.lineSegment(x, writer.cursor.y, x, writer.cursor.y - th)
-                } else {
-                    if (writer.glyphOutput.rectangles.isNotEmpty()) {
-                        val last = writer.glyphOutput.rectangles.first()
-                        val x = last.second.x
+                if (writer.glyphOutput.rectangles.isNotEmpty()) {
+                    if (inputIndex >= 0) {
+                        val last =
+                            writer.glyphOutput.rectangles.getOrNull(inputIndex) ?: writer.glyphOutput.rectangles.last()
+                        val x = last.second.x + last.second.width
                         drawer.lineSegment(x, writer.cursor.y, x, writer.cursor.y - th)
+                    } else {
+                        if (writer.glyphOutput.rectangles.isNotEmpty()) {
+                            val last = writer.glyphOutput.rectangles.first()
+                            val x = last.second.x
+                            drawer.lineSegment(x, writer.cursor.y, x, writer.cursor.y - th)
+                        }
                     }
                 }
             }

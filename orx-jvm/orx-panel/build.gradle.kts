@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":orx-color"))
     implementation(project(":orx-text-writer"))
     implementation(project(":orx-view-box"))
+    implementation(project(":orx-image-fit"))
     implementation(openrndr.application.core)
     implementation(openrndr.math)
     implementation(sharedLibs.kotlin.coroutines)

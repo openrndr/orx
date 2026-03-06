@@ -17,6 +17,9 @@ import org.openrndr.panel.style.effectivePaddingTop
 import org.openrndr.shape.Rectangle
 
 import java.util.*
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.math.max
 
 
@@ -240,7 +243,20 @@ open class Element(val type: ElementType) : AutoCloseable {
         return parent?.root() ?: this
     }
 
-    open fun append(builder: Element.() -> Unit) {
+    open fun replace(builder: Element.() -> Unit) {
+        for (child in children) {
+            child.close()
+        }
+        children.clear()
+        this.builder()
+    }
+
+
+    @OptIn(ExperimentalContracts::class)
+    inline fun append(builder: Element.() -> Unit) {
+        contract {
+            callsInPlace(builder, InvocationKind.EXACTLY_ONCE)
+        }
         this.builder()
     }
 

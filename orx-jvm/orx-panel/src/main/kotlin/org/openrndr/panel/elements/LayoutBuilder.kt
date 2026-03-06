@@ -185,6 +185,14 @@ fun Element.textfield(vararg classes: String, init: Textfield.() -> Unit): Textf
 }
 
 @OptIn(ExperimentalContracts::class)
+fun Element.textInput(vararg classes: String, init: TextInput.() -> Unit): TextInput {
+    contract {
+        callsInPlace(init, InvocationKind.EXACTLY_ONCE)
+    }
+    return initElement(classes, TextInput(), init)
+}
+
+@OptIn(ExperimentalContracts::class)
 fun DropdownButton.item(init: Item.() -> Unit): Item {
     contract {
         callsInPlace(init, InvocationKind.EXACTLY_ONCE)
@@ -246,3 +254,10 @@ fun Element.h3(vararg classes: String, init: H3.() -> String): H3 {
     return textElement(classes, init)
 }
 
+@OptIn(ExperimentalContracts::class)
+fun Element.label(vararg classes: String, init: Label.() -> String): Label {
+    contract {
+        callsInPlace(init, InvocationKind.EXACTLY_ONCE)
+    }
+    return textElement(classes, init)
+}

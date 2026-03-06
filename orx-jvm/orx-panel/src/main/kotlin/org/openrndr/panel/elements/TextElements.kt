@@ -74,6 +74,7 @@ class H4 : TextElement(ElementType("h4"))
 class H5 : TextElement(ElementType("h5"))
 
 class P : TextElement(ElementType("p"))
+class Label : TextElement(ElementType("label"))
 
 abstract class TextElement(et: ElementType) : Element(et) {
     fun text(text: String) {

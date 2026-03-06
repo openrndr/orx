@@ -28,8 +28,8 @@ open class Div : TextElement(ElementType("div")) {
         computedStyle.let { style ->
             style.background.let {
                 drawer.fill = ((it as? Color.RGBa)?.color ?: ColorRGBa.BLACK)
-                drawer.stroke = null
-                drawer.strokeWeight = 0.0
+                drawer.stroke = computedStyle.effectiveBorderColor
+                drawer.strokeWeight = computedStyle.effectiveBorderWidth
                 //drawer.smooth(false)
                 drawer.rectangle(0.0, 0.0, layout.screenWidth, layout.screenHeight)
                 //drawer.smooth(true)
