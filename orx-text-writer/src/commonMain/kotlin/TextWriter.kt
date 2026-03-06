@@ -329,7 +329,11 @@ class TextWriter(val drawerRef: Drawer?) {
      */
     fun textWidth(text: String): Double =
         text.sumOf {
-            ((drawStyle.fontMap as FontImageMap).glyphMetrics[it]?.advanceWidth ?: 0.0) + style.tracking
+            var char = it
+            if ((drawStyle.fontMap as FontImageMap).glyphMetrics[it] ==null) {
+                char = '�'
+            }
+            ((drawStyle.fontMap as FontImageMap).glyphMetrics[char]?.advanceWidth ?: 0.0) + style.tracking
         } - (text.count { it == ' ' } + 1) * style.tracking
 
     /**
@@ -465,8 +469,13 @@ class TextWriter(val drawerRef: Drawer?) {
                     localCursor.x = box.corner.x
                     localCursor.y += verticalSpace
                 } else {
+                    val token = token.map { if (font.glyphMetrics[it] == null) '�' else it }.joinToString("")
                     val tokenWidth = token.sumOf {
-                        (font.glyphMetrics[it]?.advanceWidth ?: 0.0)
+                        var char = it
+                        if (font.glyphMetrics[char] == null) {
+                            char = '�'
+                        }
+                        (font.glyphMetrics[char]?.advanceWidth ?: 0.0)
                     } + style.tracking * (token.length - 1).coerceAtLeast(0)
                     if (localCursor.x == box.x || localCursor.x + tokenWidth < box.x + box.width && localCursor.y <= box.y + box.height) run {
                         val textToken = TextToken(token, localCursor.x, localCursor.y, tokenWidth, style.tracking)
