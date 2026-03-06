@@ -22,6 +22,9 @@ fun defaultStyles(
         borderWidth = length { 1.0 }
 
         child(has type "label") {
+            width = 100.percent
+            height = length { 20.0 }
+
             color = color { controlTextColor }
             and(has state "active") {
                 color = color { controlActiveColor }

@@ -1,13 +1,14 @@
 package org.openrndr.panel.elements
 
 import kotlinx.coroutines.yield
+import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.loadFont
+import org.openrndr.events.Event
 import org.openrndr.extra.textwriter.TextWriter
 
-import org.openrndr.launch
-import org.openrndr.math.Vector2
+import org.openrndr.panel.binding.Binding0
 import org.openrndr.panel.style.*
 import org.openrndr.shape.Rectangle
 import kotlin.reflect.KMutableProperty0
@@ -92,24 +93,8 @@ abstract class TextElement(et: ElementType) : Element(et) {
     }
 }
 
-fun TextElement.bind(property: KMutableProperty0<String>) {
-    if (root() as? Body == null) {
-        throw RuntimeException("no body")
-    }
-    var lastText = ""
-    fun update() {
-        if (property.get() != lastText) {
-            replaceText(property.get())
-            lastText = property.get()
-        }
-    }
-
-    (root() as? Body)?.controlManager?.program?.launch {
-        update()
-        while (true) {
-            update()
-            yield()
-        }
-    }
+fun TextElement.bind(property: KMutableProperty0<String>, program: Program? = null): Binding0<Unit, String> {
+    val program = program ?: (root() as? Body)?.controlManager?.program ?: error("no program")
+    return Binding0(program, this, Event<Unit>(), property, { "" }, { this.replaceText(it) })
 }
 

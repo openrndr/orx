@@ -22,7 +22,7 @@ class Textfield : Element(ElementType("textfield")) {
             }
         }
 
-    var label: String = "label"
+    var label: String = ""
         set(value) {
             if (field != value) {
                 field = value
