@@ -396,8 +396,8 @@ class TextWriter(val drawerRef: Drawer?) {
             }
 
             else -> {
-                val first = renderTokens.filter { it != TextToken.END_OF_LINE }.first()
-                val last = renderTokens.last()
+                val first = renderTokens.filter { it != TextToken.END_OF_LINE }.firstOrNull() ?: return emptyList()
+                val last = renderTokens.lastOrNull() ?: return emptyList()
                 renderTokens.split().flatMap {
                     val sy = first.y - (fontMap?.ascenderLength ?: 0.0)
                     val ey = last.y + (fontMap?.descenderLength ?: 0.0)
