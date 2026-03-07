@@ -46,7 +46,7 @@ jobs:
         run: ./gradlew publishToMavenLocal snapshot
 
       - name: Build ORX
-        run: ./gradlew build
+        run: ./gradlew build -Popenrndr.application.backend=application-glfw
 
       - name: Collect screenshots without errors
-        run: xvfb-run ./gradlew collectScreenshots
+        run: xvfb-run ./gradlew collectScreenshots -Popenrndr.application.backend=application-glfw
