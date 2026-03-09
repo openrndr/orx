@@ -260,8 +260,8 @@ displayed.
 
 ### DemoShapeSDF04
 
-Demonstrates using tow `ShapeSDF` filters. One contairs a vector shape loaded
-from disk, the other a circular shape.
+Demonstrates using two `ShapeSDF` filters. One is a vector shape loaded
+from the disk; the other is a circular shape.
 
 A `Perturb` effect is used to generate a noise UV map, which is then fed into
 the `ShapeSDF` filters.
@@ -291,6 +291,13 @@ for further customization and exploration.
 
 ### DemoSkeleton01
 
+Demonstrates the use of the [Skeleton] filter.
+
+The program draws animated circles and a mouse-controlled ring onto a `RenderTarget`,
+then applies the `Skeleton` filter to the result, writing the result into a `ColorBuffer`.
+
+The `Skeleton` filter generates a texture in which inner parts of shapes are connected to
+the edges, creating a skeleton of the shape.
 
 
 ![DemoSkeleton01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoSkeleton01Kt.png)
@@ -299,7 +306,14 @@ for further customization and exploration.
 
 ### DemoStraightSkeleton01
 
+Demonstrates the use of the [StraightSkeleton] filter.
 
+The program draws animated circles and a mouse-controlled ring onto a `RenderTarget`,
+then applies the `StraightSkeleton` filter to the result, writing the result into a `ColorBuffer`.
+
+The `StraightSkeleton` filter generates a texture highlighting the "spine" of shapes:
+circles as a dot in their center, rectangles as lines, rings as circles, and more complex shapes
+as branching lines.
 
 ![DemoStraightSkeleton01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoStraightSkeleton01Kt.png)
 
@@ -307,7 +321,8 @@ for further customization and exploration.
 
 ### DemoVoronoi01
 
-
+Demonstrates using the [IdContourPoints] and [EncodePoints] filters and
+the [JumpFlooder] class.
 
 ![DemoVoronoi01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoVoronoi01Kt.png)
 
@@ -315,7 +330,25 @@ for further customization and exploration.
 
 ### DemoVoronoi02
 
+Demonstrates the use of the [ClusteredField] filter.
 
+The program updates a render target on every animation frame, then
+uses that render target as the input for the [ClusteredField] filter.
+The result is written into the `flowfield` `ColorBuffer`.
+
+The content drawn into the render target consists of small points with
+colors between red and black. Four sets of 20 aligned points are drawn:
+three static sets and one that oscillates horizontally using the cosine
+of time.
+
+The filter then renders an image calculating the distance for every pixel
+in the render target to the closest non-empty pixel.
+
+Try commenting out the `tint` operation to make the calculated distances more obvious,
+displayed as a shade of blue.
+
+Moving the mouse to the right side of the window displays the RenderTarget with the
+point sets, otherwise the filtered result is shown.
 
 ![DemoVoronoi02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoVoronoi02Kt.png)
 
@@ -323,7 +356,31 @@ for further customization and exploration.
 
 ### DemoVoronoi03
 
+Demonstrates the use of the [ClusteredField] filter.
 
+The program updates a render target on every animation frame, then
+uses that render target as the input for the [ClusteredField] filter.
+The result is written into the `flowfield` `ColorBuffer`.
+
+To give the user more time to appreciate what the program does,
+a random seed is updated only once per second.
+
+The content drawn into the render target consists of small points with
+colors between red and black. First, scattered points with a minimum
+distance between them are calculated in the program window. Then, for each
+of those, 30 random points inside a ring are drawn.
+
+The filter then renders an image calculating the distance for every pixel
+in the render target to the closest non-empty pixel.
+
+Try commenting out the `tint` operation to make the calculated distances more obvious,
+displayed as a shade of blue.
+
+You can also make the `innerRadius` and the `outerRadius` in `.uniformRing()`
+equal to make the `Voronoi` effect more obvious and less glitchy.
+
+Moving the mouse to the right side of the window displays the RenderTarget,
+otherwise the filtered result is shown.
 
 ![DemoVoronoi03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoVoronoi03Kt.png)
 
