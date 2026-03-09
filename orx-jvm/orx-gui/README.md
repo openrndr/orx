@@ -176,6 +176,41 @@ import org.openrndr.extra.parameters.DoubleParameter
 
 <!-- __demos__ -->
 ## Demos
+### DemoAddRemove01
+
+Demonstrates how to add and remove object instances from a gui.
+
+The instances have three parameters: a 2D position, a color, and a radius.
+
+Click an empty area in the canvas to add visible circles.
+Each circle is also added to the gui, making it possible to adjust its properties.
+
+Click an existing circle to remove it from the collection and from the gui.
+
+![DemoAddRemove01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoAddRemove01Kt.png)
+
+[source code](src/demo/kotlin/DemoAddRemove01.kt)
+
+### DemoAddRemove02
+
+Advanced demonstration on how to add and remove filters from a collection and from a GUI.
+
+The program draws 10 circles and then applies the Post() filter.
+Initially, the `filters` collection to apply is empty.
+
+To add filters, press one of the "bgaphcde" keys in the keyboard.
+
+Press the DELETE key to remove the most recently added filter.
+
+Pressing the "s" key shuffles the order in which the filters are applied.
+This will rarely produce interesting visual effects, but it reveals that
+the filter's order of application can be modified after creation.
+Note that the order in the gui will not change.
+
+![DemoAddRemove02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoAddRemove02Kt.png)
+
+[source code](src/demo/kotlin/DemoAddRemove02.kt)
+
 ### DemoAppearance01
 
 Demonstrates how to customize the appearance of the GUI by using

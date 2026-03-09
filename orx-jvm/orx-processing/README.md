@@ -53,3 +53,17 @@ so they can be visually compared.
 ![DemoPShape03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-processing/images/DemoPShape03Kt.png)
 
 [source code](src/demo/kotlin/DemoPShape03.kt)
+
+### DemoPShape04
+
+Demonstrates how to convert a `ShapeContour` into a Processing
+`PShape`, then converts the `PShape` to a `Shape`.
+
+The program creates a `ShapeContour` with quadratic, cubic, and straight segments.
+
+Both elements are rendered with translucency and a slight offset
+so they can be visually compared.
+
+![DemoPShape04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-processing/images/DemoPShape04Kt.png)
+
+[source code](src/demo/kotlin/DemoPShape04.kt)
