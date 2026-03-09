@@ -9,6 +9,7 @@ dependencies {
     api(project(":orx-noise"))
     demoImplementation(project(":orx-property-watchers"))
     demoImplementation(project(":orx-shapes"))
+    demoImplementation(project(":orx-fx"))
     demoImplementation(sharedLibs.kotlin.serialization.json)
     implementation(sharedLibs.kotlin.coroutines)
     implementation(openrndr.application.core)
