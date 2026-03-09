@@ -7,6 +7,16 @@ import org.openrndr.draw.renderTarget
 import org.openrndr.extra.jumpfill.fx.StraightSkeleton
 import org.openrndr.extra.noise.simplex
 
+/**
+ * Demonstrates the use of the [StraightSkeleton] filter.
+ *
+ * The program draws animated circles and a mouse-controlled ring onto a `RenderTarget`,
+ * then applies the `StraightSkeleton` filter to the result, writing the result into a `ColorBuffer`.
+ *
+ * The `StraightSkeleton` filter generates a texture highlighting the "spine" of shapes:
+ * circles as a dot in their center, rectangles as lines, rings as circles, and more complex shapes
+ * as branching lines.
+ */
 fun main() = application {
     configure {
         width = 720
@@ -14,11 +24,11 @@ fun main() = application {
     }
     program {
         val straightSkeleton = StraightSkeleton()
+
         val input = renderTarget(width, height) {
             colorBuffer()
         }
         val field = input.colorBuffer(0).createEquivalent(type = ColorType.FLOAT32)
-
         extend {
             drawer.isolatedWithTarget(input) {
                 // -- draw something interesting

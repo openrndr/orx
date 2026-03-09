@@ -11,6 +11,15 @@ import org.openrndr.math.Spherical
 import org.openrndr.math.Vector3
 import java.io.File
 
+/**
+ * Demonstrates how to load a .glb file from disk containing an animated scene.
+ * The scene contains a floor, a cube and a moving light???
+ * When rendered, the light casts the shadow of the cube onto the floor.
+ *
+ * The scene contains a list of animations, which need to be updated using the `.applyToTargets()` method,
+ * otherwise the time in the animation is still.
+ *
+ */
 fun main() = application {
     configure {
         width = 1280

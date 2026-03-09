@@ -12,8 +12,8 @@ import org.openrndr.extra.svg.loadSVG
 import org.openrndr.shape.Circle
 
 /**
- * Demonstrates using tow `ShapeSDF` filters. One contairs a vector shape loaded
- * from disk, the other a circular shape.
+ * Demonstrates using two `ShapeSDF` filters. One is a vector shape loaded
+ * from the disk; the other is a circular shape.
  *
  * A `Perturb` effect is used to generate a noise UV map, which is then fed into
  * the `ShapeSDF` filters.

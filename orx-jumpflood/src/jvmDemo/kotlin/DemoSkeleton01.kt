@@ -7,6 +7,16 @@ import org.openrndr.draw.renderTarget
 import org.openrndr.extra.jumpfill.fx.Skeleton
 import org.openrndr.extra.noise.simplex
 
+/**
+ * Demonstrates the use of the [Skeleton] filter.
+ *
+ * The program draws animated circles and a mouse-controlled ring onto a `RenderTarget`,
+ * then applies the `Skeleton` filter to the result, writing the result into a `ColorBuffer`.
+ *
+ * The `Skeleton` filter generates a texture in which inner parts of shapes are connected to
+ * the edges, creating a skeleton of the shape.
+ *
+ */
 fun main() = application {
     configure {
         width = 720

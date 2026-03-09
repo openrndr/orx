@@ -7,6 +7,10 @@ import org.openrndr.extra.jumpfill.IdContourPoints
 import org.openrndr.extra.jumpfill.JumpFlooder
 import kotlin.math.cos
 
+/**
+ * Demonstrates using the [IdContourPoints] and [EncodePoints] filters and
+ * the [JumpFlooder] class.
+ */
 fun main() = application {
     configure {
         width = 512
@@ -29,40 +33,39 @@ fun main() = application {
 
             drawer.isolatedWithTarget(rt) {
                 drawer.clear(ColorRGBa(-1.0, -1.0, -1.0, 0.0))
-                val o = cos(seconds) * 200.0 + 200.0
 
+                val o = cos(seconds) * 200.0 + 200.0
                 for (i in 0 until 20) {
                     plot(o + 100.0 + i * 4, 100.0, 0.25)
                 }
-
                 for (i in 0 until 20) {
                     plot(200.0 + i * 4, 150.0 + i, 0.5)
                 }
                 for (i in 0 until 20) {
                     plot(300.0 + i * 4, 250.0 + i, 0.7)
                 }
-
                 for (i in 0 until 20) {
                     plot(400.0 + i * 4, 250.0 + i, 0.75)
                 }
             }
             encoder.apply(rt.colorBuffer(0), rt.colorBuffer(0))
+
             val flooded = jf.jumpFlood(rt.colorBuffer(0))
             drawer.image(flooded)
+
             idcontours.apply(flooded, contoured)
+
             drawer.image(contoured)
             val flooded2 = jf2.jumpFlood(contoured)
 
-            drawer.image(flooded2, width * 1.0, 0.0)
-
+            // Try disabling this shade style for a different effect
             drawer.shadeStyle = shadeStyle {
                 fragmentTransform = """
                     float d = length(va_texCoord0.xy - x_fill.xy);
-                    x_fill = vec4(d,d,x_fill.z, 1.0);
+                    x_fill = vec4(d, d, x_fill.z, 1.0);
                 """.trimIndent()
             }
             drawer.image(flooded2, 0.0, 0.0)
-
         }
     }
 }
