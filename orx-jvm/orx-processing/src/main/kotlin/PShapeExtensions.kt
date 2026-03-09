@@ -2,11 +2,9 @@ package org.openrndr.extra.processing
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.math.Vector2
-import org.openrndr.shape.Segment2D
-import org.openrndr.shape.SegmentType
-import org.openrndr.shape.Shape
-import org.openrndr.shape.ShapeContour
+import org.openrndr.shape.*
 import processing.core.PShape
+import kotlin.math.PI
 
 /**
  * Appends a vertex to the current shape using a 2D vector.
@@ -93,7 +91,7 @@ fun PShape(shape: Shape): PShape {
         val ps = PShape(PShape.PATH)
         ps.beginShape()
         shape.contours.forEachIndexed { i, contour ->
-            if(i > 0) ps.beginContour()
+            if (i > 0) ps.beginContour()
             ps.vertex(contour.segments[0].start)
             for (segment in contour.segments) {
                 when (segment.type) {
@@ -102,7 +100,7 @@ fun PShape(shape: Shape): PShape {
                     SegmentType.CUBIC -> ps.bezierVertex(segment.control[0], segment.control[1], segment.end)
                 }
             }
-            if(i > 0) ps.endContour()
+            if (i > 0) ps.endContour()
         }
         ps.endShape(PShape.CLOSE)
         return ps
@@ -131,10 +129,9 @@ fun PShape(contour: ShapeContour): PShape {
                         ps.vertex(segment.end)
                     }
                 }
+
                 SegmentType.QUADRATIC -> ps.quadraticVertex(segment.control[0], segment.end)
-                SegmentType.CUBIC -> {
-                    ps.bezierVertex(segment.control[0], segment.control[1], segment.end)
-                }
+                SegmentType.CUBIC -> ps.bezierVertex(segment.control[0], segment.control[1], segment.end)
             }
         }
         ps.endShape(if (contour.closed) PShape.CLOSE else PShape.OPEN)
@@ -172,7 +169,7 @@ fun PShape.pathToShapeContours(): List<ShapeContour> {
 
         var segments = mutableListOf<Segment2D>()
         var vertexIndex = 0
-        var vertex:Vector2? = null
+        var vertex: Vector2? = null
 
         for (i in 0 until vertexCodeCount) {
             val code = vertexCodes[i]
@@ -185,25 +182,29 @@ fun PShape.pathToShapeContours(): List<ShapeContour> {
                     }
                     vertex = pv
                 }
+
                 PShape.BEZIER_VERTEX -> {
                     val c0 = getVertex(vertexIndex).toVector2(); vertexIndex++
                     val c1 = getVertex(vertexIndex).toVector2(); vertexIndex++
                     val pv = getVertex(vertexIndex).toVector2(); vertexIndex++
-                   segments.add(Segment2D(vertex ?: error("no vertex set"), c0, c1, pv))
+                    segments.add(Segment2D(vertex ?: error("no vertex set"), c0, c1, pv))
                     vertex = pv
                 }
+
                 PShape.QUADRATIC_VERTEX -> {
                     val c0 = getVertex(vertexIndex).toVector2(); vertexIndex++
                     val pv = getVertex(vertexIndex).toVector2(); vertexIndex++
-                    segments.add(Segment2D(vertex ?: error("no vertex set"), c0,  pv))
+                    segments.add(Segment2D(vertex ?: error("no vertex set"), c0, pv))
                     vertex = pv
                 }
+
                 PShape.BREAK -> {
                     segments.add(Segment2D(vertex ?: error("no vertex set"), segments.first().start))
                     result.add(ShapeContour(segments, closed = isClosed))
                     segments = mutableListOf()
                     vertex = getVertex(vertexIndex).toVector2()
                 }
+
                 else -> error("unsupported code $code")
             }
         }
@@ -244,19 +245,70 @@ fun PShape.toShapeContours(): List<ShapeContour> {
             val contourPoints = mutableListOf<MutableList<Vector2>>()
             //https://github.com/processing/processing4/blob/d35f4de58936d41946d253f37986127fd100654c/core/src/processing/core/PShape.java#L1772
 
-            var codeIndex = 0
             var activeContour = mutableListOf<Vector2>()
             for (i in 0 until vertexCount) {
-                if (vertexCodes[codeIndex++] == PShape.BREAK) {
+                if (vertexCodes[i] == PShape.BREAK) { // 4
                     contourPoints.add(activeContour)
                     activeContour = mutableListOf()
-                    codeIndex++
                 }
+                activeContour.add(getVertex(i).toVector2())
             }
             if (activeContour.isNotEmpty()) {
                 contourPoints.add(activeContour)
             }
-            contourPoints.map { ShapeContour.fromPoints(it, false) }
+            contourPoints.map { ShapeContour.fromPoints(it, isClosed) }
+        }
+
+        PShape.PRIMITIVE -> {
+            listOf( // 101
+                when (kind) {
+                    // Incomplete. We need access to `rectMode` but it's protected.
+                    //PShape.RECT -> Rectangle( // 30
+                    //    params[0] * 1.0, params[1] * 1.0,
+                    //    params[2] * 1.0, params[3] * 1.0
+                    //).contour
+
+                    // Incomplete. We need access to `ellipseMode` but it's protected.
+                    //PShape.ELLIPSE -> Ellipse( // 31
+                    //    params[0] * 1.0, params[1] * 1.0,
+                    //    params[2] * 0.5, params[3] * 0.5
+                    //).contour
+
+                    // Incomplete. We need access to `ellipseMode` but it's protected.
+                    //PShape.ARC -> Ellipse( // 31
+                    //    params[0] * 1.0, params[1] * 1.0,
+                    //    params[2] * 0.5, params[3] * 0.5
+                    //).contour.sub(params[4] / (PI * 2) - 0.5, params[5] / (PI * 2) - 0.5)
+
+                    PShape.LINE -> LineSegment(
+                        params[0] * 1.0, params[1] * 1.0,
+                        params[2] * 1.0, params[3] * 1.0
+                    ).contour
+
+                    PShape.TRIANGLE -> ShapeContour.fromPoints(
+                        listOf(
+                            Vector2(params[0] * 1.0, params[1] * 1.0),
+                            Vector2(params[2] * 1.0, params[3] * 1.0),
+                            Vector2(params[4] * 1.0, params[5] * 1.0)
+                        ), true
+                    )
+
+                    PShape.QUAD -> ShapeContour.fromPoints(
+                        listOf(
+                            Vector2(params[0] * 1.0, params[1] * 1.0),
+                            Vector2(params[2] * 1.0, params[3] * 1.0),
+                            Vector2(params[4] * 1.0, params[5] * 1.0),
+                            Vector2(params[6] * 1.0, params[7] * 1.0),
+                        ), true
+                    )
+
+                    // PShape.SPHERE -> (3D)
+
+                    // PShape.BOX -> (3D)
+
+                    else -> error("unsupported primitive kind: $kind")
+                }
+            )
         }
 
         else -> error("unsupported shape family: ${this.family}")
