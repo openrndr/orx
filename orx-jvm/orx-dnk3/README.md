@@ -54,6 +54,12 @@ Supported Gltf features
 
 ### DemoLights02
 
+Demonstrates how to load a .glb file from disk containing an animated scene.
+The scene contains a floor, a cube and a moving light???
+When rendered, the light casts the shadow of the cube onto the floor.
+
+The scene contains a list of animations, which need to be updated using the `.applyToTargets()` method,
+otherwise the time in the animation is still.
 
 
 ![DemoLights02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoLights02Kt.png)
