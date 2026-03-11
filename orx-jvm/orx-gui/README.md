@@ -272,6 +272,17 @@ and a `ColorRGBa` instance (used for rendering).
 
 [source code](src/demo/kotlin/DemoOptions02.kt)
 
+### DemoOptions03
+
+A simple demonstration of a GUI with a drop-down menu.
+
+The entries in the drop-down menu are taken from the `BlendMode` enum class.
+The selected blend mode is used to render a circle on top of an image.
+
+![DemoOptions03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoOptions03Kt.png)
+
+[source code](src/demo/kotlin/DemoOptions03.kt)
+
 ### DemoPath01
 
 Demonstrates how to include a button for loading images in a GUI, and how to display
