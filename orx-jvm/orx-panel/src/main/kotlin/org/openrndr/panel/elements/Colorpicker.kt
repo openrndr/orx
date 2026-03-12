@@ -74,7 +74,6 @@ class Colorpicker : Element {
     }
 
     constructor() : super(ElementType("colorpicker")) {
-        generateColorMap()
 
         mouse.exited.listen {
             focussed = false
@@ -82,10 +81,7 @@ class Colorpicker : Element {
 
         mouse.scrolled.listen {
             if (colorMap != null) {
-                //if (focussed) {
                 saturation = (saturation - it.rotation.y * 0.01).coerceIn(0.0, 1.0)
-                generateColorMap()
-                colorMap?.shadow?.upload()
                 it.cancelPropagation()
                 pick(it)
                 requestRedraw()
