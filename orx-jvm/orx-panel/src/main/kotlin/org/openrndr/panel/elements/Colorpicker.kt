@@ -21,13 +21,14 @@ class Colorpicker : Element {
     internal var colorMap: ColorBuffer? = null
 
     var label: String = "Color"
+    private var dirtyColorMap = true
 
     var saturation = 0.5
         set(value) {
             if (field != value) {
                 field = value
-                generateColorMap()
                 color = color.toHSVa().copy(s = value).toRGBa()
+                dirtyColorMap = true
                 draw.dirty = true
             }
         }
@@ -36,7 +37,7 @@ class Colorpicker : Element {
             if (field != value) {
                 field = value
                 saturation = color.toHSVa().s
-                generateColorMap()
+                dirtyColorMap = true
                 draw.dirty = true
             }
         }
@@ -140,11 +141,14 @@ class Colorpicker : Element {
 
     override fun draw(drawer: Drawer) {
         if (colorMap == null) {
-
             val contentBounds = layout.contentBoundsAtOrigin
-
             colorMap = colorBuffer(contentBounds.width.toInt(), layout.contentBounds.height.toInt(), 1.0)
+            dirtyColorMap = true
+        }
+
+        if (dirtyColorMap) {
             generateColorMap()
+            dirtyColorMap = false
         }
 
         drawer.imageFit(colorMap!!, layout.contentBoundsAtOrigin)
