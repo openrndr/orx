@@ -9,6 +9,7 @@ import org.openrndr.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.dialogs.*
 import org.openrndr.draw.Drawer
+import org.openrndr.events.Event
 import org.openrndr.extra.noise.uniform
 import org.openrndr.extra.parameters.*
 import org.openrndr.internal.Driver
@@ -86,11 +87,22 @@ class GUIAppearance(
     val barWidth: Int = 200
 )
 
+class GUIEvent()
+
 @Suppress("unused", "UNCHECKED_CAST")
 open class GUI(
     val appearance: GUIAppearance = GUIAppearance(),
     val defaultStyles: List<StyleSheet> = defaultStyles(),
 ) : Extension {
+
+    /**
+     * Represents an event that is triggered when the GUI state has been loaded or restored
+     *
+     * Example scenarios where this event is triggered include:
+     * - After loading parameters from a file via the `loadParameters` function.
+     */
+    val loaded = Event<GUIEvent>()
+
     private var onChangeListener: ((name: String, value: Any?) -> Unit)? = null
     override var enabled = true
 
@@ -1021,6 +1033,7 @@ open class GUI(
         }
 
         fromObject(labeledValues)
+        loaded.trigger(GUIEvent())
     }
 
     private fun updateControl(labeledObject: LabeledObject, parameter: Parameter, control: Element) {
@@ -1270,6 +1283,7 @@ open class GUI(
                 }
             }
         }
+        loaded.close()
     }
 }
 

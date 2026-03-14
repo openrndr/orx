@@ -38,6 +38,11 @@ fun main() = application {
             @DoubleListParameter("radii", 5.0, 30.0)
             var radii = mutableListOf(5.0, 6.0, 8.0, 14.0, 20.0, 30.0)
         }
+        gui.loaded.listen {
+            println("loaded settings")
+            settings.radius = 100.0
+        }
+
         gui.add(settings)
         extend(gui)
         extend {
