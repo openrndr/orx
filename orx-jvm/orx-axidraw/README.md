@@ -1,5 +1,7 @@
 # orx-axidraw
 
+![orx-axidraw screenshot](images/orx-axidraw.png)
+
 GUI for configuring and plotting with an Axidraw pen-plotter.
 
 Uses the [AxiCLI](https://axidraw.com/doc/cli_api/#introduction) command line tool 

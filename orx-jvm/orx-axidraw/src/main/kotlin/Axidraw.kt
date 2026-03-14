@@ -357,7 +357,10 @@ class Axidraw(
      */
     private fun runCMD(args: List<String>): ExecutionResult {
         val python = venvPython(File(virtualEnvName))
-        return invokePython(listOf("-m", "axicli") + args, python)
+        val result = invokePython(listOf("-m", "axicli") + args, python)
+        plotPaused = result.output.contains("Plot paused programmatically.") ||
+                result.output.contains("Plot paused by button press.")
+        return result
     }
 
     /**
@@ -448,17 +451,24 @@ class Axidraw(
     }
 
     /**
-     * Plot the current design using the current settings
+     * Becomes true when pressing the hardware pause button on the Axidraw, resets to false after a successful plot
+     * or by calling [goHome] or [resume].
+     */
+    var plotPaused = false
+
+    /**
+     * Plot a design using the current settings
      */
     @ActionParameter("plot", 350)
     fun onPlot(): ExecutionResult {
+        if (plotPaused) {
+            val errorMsg = "The device is paused. Please resume plotting or resume to home"
+            println(errorMsg)
+            return ExecutionResult(1, errorMsg)
+        }
         val svgFile = makeTempSVGFile()
         save(svgFile)
-        val result = runCMD(plotArgs(svgFile, makeTempSVGFile()))
-        println("# result")
-        println(result.errorCode)
-        println(result.output)
-        return result
+        return runCMD(plotArgs(svgFile, makeTempSVGFile()))
     }
 
     /**
@@ -466,6 +476,7 @@ class Axidraw(
      */
     @ActionParameter("resume to home", 360)
     fun goHome(): ExecutionResult {
+        plotPaused = false
         return runCMD(plotArgs(lastOutputFile, makeTempSVGFile()) + listOf("--mode", "res_home"))
     }
 
@@ -476,6 +487,7 @@ class Axidraw(
      */
     @ActionParameter("resume plotting", 370)
     fun resume(): ExecutionResult {
+        plotPaused = false
         return runCMD(plotArgs(lastOutputFile, makeTempSVGFile()) + listOf("--mode", "res_plot"))
     }
 
