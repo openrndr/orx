@@ -110,15 +110,13 @@ open class GUI(
 
     var visible = true
         set(value) {
-            if (field != value) {
-                field = value
-                if (field) {
-                    panel?.body?.classes?.remove(collapsed)
-                } else {
-                    panel?.body?.classes?.add(collapsed)
-                }
-                sidebarState().hidden = !field
+            field = value
+            if (field) {
+                panel?.body?.classes?.remove(collapsed)
+            } else {
+                panel?.body?.classes?.add(collapsed)
             }
+            sidebarState().hidden = !field
         }
 
     var compartmentsCollapsedByDefault = true
@@ -465,8 +463,8 @@ open class GUI(
                 }
             }
         }
-
-        visible = !sidebarState().hidden
+        // trigger class updates
+        visible = visible
 
         program.extend(panel ?: error("no panel"))
     }
@@ -798,7 +796,7 @@ open class GUI(
                     // -- (that I know of, at least)
                     @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN") val jEnum = value as java.lang.Enum<*>
                     // -- we don't use the property syntax here because that leads to compilation errors
-                    @Suppress("UsePropertyAccessSyntax") val constants = jEnum.getDeclaringClass().getEnumConstants()
+                    val constants = jEnum.getDeclaringClass().getEnumConstants()
                     constants.forEach {
                         item {
                             label = it.name
@@ -951,7 +949,7 @@ open class GUI(
             val v = (this as KMutableProperty1<Any, Enum<*>>).get(obj)
 
             try {
-                @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN", "UsePropertyAccessSyntax")
+                @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
                 val enumValue =
                     (v as java.lang.Enum<*>).getDeclaringClass().getEnumConstants().find { it.name == value }
                         ?: error("cannot map value $value to enum")
