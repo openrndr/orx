@@ -26,14 +26,12 @@ fun main() = application {
         val gui = WindowedGUI()
         gui.add(axi)
 
-        // By default, the state of the gui is loaded from disk
-        // when the program starts. This can override our
-        // attempt to set a property like `axi.margin`.
-        // Here we disable the persist-behavior to be able
-        // to set properties via code.
-        gui.gui.persistState = false
-        axi.margin = 15
-        axi.occlusion = true
+        // By default, the gui state is loaded from disk
+        // when the program starts. Use the `gui.loaded` event to override loaded values.
+        gui.gui.loaded.listenOnce {
+            axi.margin = 15
+            axi.occlusion = true
+        }
 
         axi.clear()
         axi.draw {
