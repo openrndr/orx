@@ -33,11 +33,16 @@ private const val virtualEnvName = "axidraw-venv"
 private const val mmPerInch = 25.4
 private const val pointsPerInch = 96.0
 
-// TODO: If plotting is paused and the user presses `plot`, show a confirmation dialog.
-// One should click one of the two resume buttons first! Otherwise a mess is likely.
 // TODO: Add feature to reprint specific contours
+// The temporary SVG file, when plotting is paused, contains at the end a line that specifies where in the plot
+// it was when paused. I think the information is given in micromillimeters, so 50000 means it printed 50 mm
+// when it was paused. Allowing to re-print specific contours can be challenging, because the stored state
+// includes the position of the pen. If I change the position of the pen, resuming later won't work, unless
+// I restore that position somehow. Probably doable but tricky.
+
 // TODO: Allow choosing pen order. Sortable GUI?
-// TODO: simulate line thickness and ink overlap?
+
+// TODO: simulate line thickness and ink overlap (via opacity or blend mode, but not ink bleed) in preview?
 
 /**
  * Axidraw reordering optimization types.
