@@ -5,7 +5,7 @@ Automatic UI (sliders, buttons, etc.) generated from annotated classes and prope
 A quick-and-dirty user interface toolkit.
 
 `orx-gui` uses class and property annotations to generate simple interfaces. The annotations used 
-are provided by [`orx-parameters`](../orx-parameters/README.md) and most filters in [`orx-fx`](../orx-fx/README.md) have been annotated.
+are provided by [`orx-parameters`](../../orx-parameters/README.md) and most filters in [`orx-fx`](../../orx-fx/README.md) have been annotated.
 
 `orx-gui` is made with an [`orx-olive`](../orx-olive/README.md) workflow in mind but can be used in normal OPENRNDR programs
 just as well.
