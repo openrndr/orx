@@ -10,21 +10,34 @@ import org.openrndr.draw.Drawer
 import org.openrndr.draw.isolated
 import org.openrndr.extra.camera.Camera2D
 import org.openrndr.extra.composition.*
+import org.openrndr.extra.composition.Length.Pixels
+import org.openrndr.extra.imageFit.FitMethod
 import org.openrndr.extra.imageFit.fit
+import org.openrndr.extra.imageFit.fitRectangle
 import org.openrndr.extra.parameters.*
 import org.openrndr.extra.svg.loadSVG
 import org.openrndr.extra.svg.toSVG
-import org.openrndr.math.IntVector2
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
-import org.openrndr.shape.IntRectangle
+import org.openrndr.shape.Rectangle
 import org.openrndr.shape.SegmentJoin
 import org.openrndr.shape.Shape
+import org.openrndr.shape.bounds
 import java.io.File
 import java.util.*
 import kotlin.io.path.createTempFile
 
 private val logger = KotlinLogging.logger {}
+private const val virtualEnvName = "axidraw-venv"
+
+private const val mmPerInch = 25.4
+private const val pointsPerInch = 96.0
+
+// TODO: If plotting is paused and the user presses `plot`, show a confirmation dialog.
+// One should click one of the two resume buttons first! Otherwise a mess is likely.
+// TODO: Add feature to reprint specific contours
+// TODO: Allow choosing pen order. Sortable GUI?
+// TODO: simulate line thickness and ink overlap?
 
 /**
  * Axidraw reordering optimization types.
@@ -53,6 +66,10 @@ enum class AxidrawOptimizationTypes(val id: Int) {
     ReversePaths(2)
 }
 
+/**
+ * Axidraw models.
+ * See: https://axidraw.com/doc/cli_api/#model
+ */
 @Suppress("unused")
 enum class AxidrawModel(val id: Int) {
     AxiDrawV2(1),
@@ -67,68 +84,107 @@ enum class AxidrawModel(val id: Int) {
     AxiDrawV3_B6(7),
 }
 
+/**
+ * Pen-lift mechanism.
+ * See: https://axidraw.com/doc/cli_api/#penlift
+ */
 @Suppress("unused")
 enum class AxidrawServo(val id: Int) {
     Standard(2),
     Brushless(3),
 }
 
+/**
+ * Represents common paper sizes using the A-series standard.
+ */
 @Suppress("unused")
-enum class PaperSize(val size: IntVector2) {
-    `A-1`(IntVector2(1682, 2378)),
-    `A-2`(IntVector2(1189, 1682)),
-    A0(IntVector2(841, 1189)),
-    A1(IntVector2(594, 841)),
-    A2(IntVector2(420, 594)),
-    A3(IntVector2(297, 420)),
-    A4(IntVector2(210, 297)),
-    A5(IntVector2(148, 210)),
-    A6(IntVector2(105, 148)),
-    A7(IntVector2(74, 105)),
-    A8(IntVector2(52, 74)),
-    A9(IntVector2(37, 52)),
-    A10(IntVector2(26, 37))
-}
-
-enum class PaperOrientation {
-    LANDSCAPE,
-    PORTRAIT
+enum class PaperSize(val size: Vector2) {
+    AMinus2(Vector2(1682.0, 2378.0)),
+    AMinus1(Vector2(1189.0, 1682.0)),
+    A0(Vector2(841.0, 1189.0)),
+    A1(Vector2(594.0, 841.0)),
+    A2(Vector2(420.0, 594.0)),
+    A3(Vector2(297.0, 420.0)),
+    A4(Vector2(210.0, 297.0)),
+    A5(Vector2(148.0, 210.0)),
+    A6(Vector2(105.0, 148.0)),
+    A7(Vector2(74.0, 105.0)),
+    A8(Vector2(52.0, 74.0)),
+    A9(Vector2(37.0, 52.0)),
+    A10(Vector2(26.0, 37.0))
 }
 
 /**
- * Class to talk to the axicli command line program
+ * Data class containing the output text and error code resulting from executing command line programs.
+ */
+data class ExecutionResult(val errorCode: Int, val output: String)
+
+/**
+ * Class for working with Axidraw pen plotters. It communicates with the `axicli` command line program,
+ * which is installed automatically using Python. Provides an extensive GUI to configure the pen plotter,
+ * to save and load designs, preview them, layout designs using a Camera2D, plot, resume and more.
  *
+ * @property program (often `this`)
+ * @property paperSizeInMm A Vector2 specifying the paper size in mm.
+ *                         For convenient a constant like `PaperSize.A5.size` can be used.
+ * @property drawBounds A Rectangle specifying the window area where to draw the plot simulation.
+ *                      The default is `drawer.bounds`.
+ * @param fit A Vector 2 specifying where inside [drawBounds] to draw the plot simulation.
+ *            The default is `Vector2.ZERO`, which means `centered`. Use values between -1.0 and 1.0
+ *            for aligning to the left/top or to the right/bottom of [drawBounds].
  */
 @Description("Axidraw")
-class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrientation = PaperOrientation.PORTRAIT) {
+class Axidraw(
+    private val program: Program,
+    val paperSizeInMm: Vector2,
+    val drawBounds: Rectangle = program.drawer.bounds,
+    fit: Vector2 = Vector2.ZERO
+) {
 
-    fun setupAxidrawCli() {
+    private val paper = Rectangle(Vector2.ZERO, paperSizeInMm.x, paperSizeInMm.y)
+    private val paperStretchedInPx = fitRectangle(
+        paper, drawBounds,
+        fit.x, fit.y,
+        FitMethod.Contain
+    ).second
+    private val scaleFactor = (paperSizeInMm.x * pointsPerInch / mmPerInch) / paperStretchedInPx.width
 
-        if (!File("axidraw-venv").exists()) {
-            logger.info { "installing axidraw-cli virtual environment" }
-            invokePython(listOf("-m", "venv", "axidraw-venv"))
+    /**
+     * This method is called automatically when instantiating [org.openrndr.extra.axidraw.Axidraw] to set up
+     * a Python virtual environment. Call it with `true` as an argument to manually reinstall the virtual environment.
+     */
+    fun setupVirtualEnv(reinstall: Boolean = false) {
+        if (!File(virtualEnvName).exists() || reinstall) {
+            logger.info { "setting up $virtualEnvName Python virtual environment" }
+            invokePython(listOf("-m", "venv", virtualEnvName))
         }
-        val python = venvPython(File("axidraw-venv"))
-        logger.info { "installing axidraw-cli in virtual environment $python" }
-        invokePython(
-            listOf("-m", "pip", "install", "https://cdn.evilmadscientist.com/dl/ad/public/AxiDraw_API.zip"),
-            python
-        )
+    }
+
+    /**
+     * This method is called automatically when instantiating [org.openrndr.extra.axidraw.Axidraw] to set up
+     * the `axicli` program. Call it with `true` as an argument to manually reinstall axicli.`
+     */
+    fun setupAxidrawCli(reinstall: Boolean = false) {
+        val python = venvPython(File(virtualEnvName))
+        val axicli = File(python).resolveSibling("axicli")
+        if (!axicli.exists() || reinstall) {
+            logger.info { "installing axidraw-cli in virtual environment $python" }
+            invokePython(
+                listOf("-m", "pip", "install", "https://cdn.evilmadscientist.com/dl/ad/public/AxiDraw_API.zip"),
+                python
+            )
+        }
     }
 
     init {
+        setupVirtualEnv()
         setupAxidrawCli()
-    }
-
-    val actualPaperSize = when (orientation) {
-        PaperOrientation.LANDSCAPE -> paperSize.size.yx.vector2
-        PaperOrientation.PORTRAIT -> paperSize.size.vector2
     }
 
     /**
      * API URL to call once plotting is complete. If the string contains
      * `[filename]` it will be replaced by the name of the file being plotted.
-     * This URL should be URL encoded (for instance use %20 instead of a space).
+     * This URL should be URL encoded (for instance, use %20 instead of a space).
      */
     var apiURL = ""
 
@@ -162,7 +218,7 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
                 "--model", model.id.toString(),
                 "--pen_pos_down", "$penPosDown",
                 "--pen_pos_up", "$penPosUp",
-            ), false
+            )
         )
     }
 
@@ -191,10 +247,13 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
     var randomStart = false
 
     @BooleanParameter("fills occlude strokes", 200)
-    var occlusion = false
+    var occlusion = true
 
     @IntParameter("margin", 0, 100, 205)
-    var margin = 0
+    var margin = 2
+
+    //@BooleanParameter("auto rotate", 208)
+    var autoRotate = false
 
     @BooleanParameter("preview", 210)
     var preview = false
@@ -220,6 +279,9 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
      */
     private var lastOutputFile = makeTempSVGFile()
 
+    /**
+     * Constructs a list of String arguments for `axicli`, based on the current GUI settings.
+     */
     private fun plotArgs(plotFile: File, outputFile: File): List<String> {
         lastOutputFile = outputFile
         return listOf(
@@ -229,6 +291,7 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
             "--reordering", optimization.id.toString(),
             if (randomStart) "--random_start" else "",
             if (occlusion) "--hiding" else "",
+            if (autoRotate) "" else "--no_rotate",
             if (preview) "--preview" else "",
             if (webhook && apiURL.isNotEmpty())
                 "--webhook" else "",
@@ -250,48 +313,51 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
         ).filter { it.isNotEmpty() }
     }
 
-    private fun compositionDimensions(): CompositionDimensions {
-        return CompositionDimensions(
-            0.0.pixels,
-            0.0.pixels,
-            Length.Pixels.fromMillimeters(actualPaperSize.x),
-            Length.Pixels.fromMillimeters(actualPaperSize.y)
-        )
-    }
+    /**
+     * Creates a `CompositionDimensions` to be used by `drawComposition` based
+     * on the `paperSizeInMm` argument received in the `Axidraw` constructor.
+     * This will set the size in the SVG file.
+     */
+    private val compositionDimensions = CompositionDimensions(
+        0.0.pixels,
+        0.0.pixels,
+        Pixels.fromMillimeters(paperSizeInMm.x),
+        Pixels.fromMillimeters(paperSizeInMm.y)
+    )
 
     /**
      * Main variable holding the design to save or plot.
      */
-    private val design = drawComposition(compositionDimensions()) { }
+    private val design = drawComposition(compositionDimensions) { }
+
 
     /**
      * Returns the bounds of the drawable area so user code can draw things
-     * whithout leaving the paper.
+     * without leaving the paper.
      */
-    val bounds = IntRectangle(
-        0, 0,
-        (96.0 * actualPaperSize.x / 25.4).toInt(),
-        (96.0 * actualPaperSize.y / 25.4).toInt()
-    ).rectangle
+    val bounds
+        get() = paperStretchedInPx
 
     /**
-     * Clears the current design wiping any shapes the user might have
-     * added.
-     *
+     * Clears the current design wiping any shapes the user might have added.
      */
     fun clear() = design.clear()
 
     /**
      * The core method that allows the user to append content to the design.
-     * Use any methods and properties like contour(), segment(), fill, stroke, etc.
+     * Use any methods and properties available in `CompositionDrawer`,
+     * like contour(), segment(), fill, stroke, etc.
      */
     fun draw(f: CompositionDrawer.() -> Unit) {
         design.draw(drawFunction = f)
     }
 
-    private fun runCMD(args: List<String>, hold: Boolean = true) {
-        val python = venvPython(File("axidraw-venv"))
-        invokePython(listOf("-m", "axicli") + args, python)
+    /**
+     * Private function used to run command line programs and return an [ExecutionResult].
+     */
+    private fun runCMD(args: List<String>): ExecutionResult {
+        val python = venvPython(File(virtualEnvName))
+        return invokePython(listOf("-m", "axicli") + args, python)
     }
 
     /**
@@ -306,12 +372,27 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
     @ActionParameter("info: system", 310)
     fun sysInfo() = runCMD(listOf("--mode", "sysinfo"))
 
+    /**
+     * Pans the camera to center items found in the current [design].
+     */
+    @ActionParameter("center on paper", 320)
+    fun centerOnPaper() {
+        val c = (camera.view * design.findShapes().map { it.bounds }.bounds.center.xy01).xy
+        val c2 = paperStretchedInPx.center
+        camera.pan(c2 - c)
+    }
+
+    /**
+     * Show a file-selector dialog to load an SVG file, then loads the content of the selected SVG file.
+     */
     @ActionParameter("load", 330)
     fun onLoad() = openFileDialog(supportedExtensions = listOf("SVG" to listOf("svg"))) {
         clear()
         camera.view = Matrix44.IDENTITY
         val loaded = loadSVG(it)
         draw {
+            translate(paperStretchedInPx.corner)
+            scale(1.0 / scaleFactor)
             loaded.findGroups().forEach { gn ->
                 if (gn.findGroups().size == 1) {
                     val g = group {
@@ -337,8 +418,11 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
 
     private fun save(svgFile: File) {
         // Create a new SVG with the frame and camera applied
-        val designRendered = drawComposition(compositionDimensions()) {
+        val designRendered = drawComposition(compositionDimensions) {
             val m = camera.view
+
+            scale(scaleFactor)
+            translate(-paperStretchedInPx.corner)
 
             design.findGroups().forEach { gn ->
                 if (gn.findGroups().size == 1) {
@@ -364,30 +448,35 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
     }
 
     /**
-     * Plot design using the current settings
+     * Plot the current design using the current settings
      */
     @ActionParameter("plot", 350)
-    fun onPlot() {
+    fun onPlot(): ExecutionResult {
         val svgFile = makeTempSVGFile()
         save(svgFile)
-        runCMD(plotArgs(svgFile, makeTempSVGFile()))
+        val result = runCMD(plotArgs(svgFile, makeTempSVGFile()))
+        println("# result")
+        println(result.errorCode)
+        println(result.output)
+        return result
     }
 
     /**
      * After hitting pause, use this to move the pen home
      */
     @ActionParameter("resume to home", 360)
-    fun goHome() {
-        runCMD(plotArgs(lastOutputFile, makeTempSVGFile()) + listOf("--mode", "res_home"))
+    fun goHome(): ExecutionResult {
+        return runCMD(plotArgs(lastOutputFile, makeTempSVGFile()) + listOf("--mode", "res_home"))
     }
+
 
     /**
      * After hitting pause, use this to continue plotting
      *
      */
     @ActionParameter("resume plotting", 370)
-    fun resume() {
-        runCMD(plotArgs(lastOutputFile, makeTempSVGFile()) + listOf("--mode", "res_plot"))
+    fun resume(): ExecutionResult {
+        return runCMD(plotArgs(lastOutputFile, makeTempSVGFile()) + listOf("--mode", "res_plot"))
     }
 
     /**
@@ -414,6 +503,9 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
     /**
      * Makes a white frame to cover the borders of the page, to avoid plotting
      * on the edge of papers, which may damage the pen or make a mess.
+     * The frame is created by shifting `bounds.contour` inwards `width` pixels,
+     * and outwards 1000 pixels.
+     * Used when [occlusion] is true.
      */
     private val makeFrame = { width: Double ->
         Shape(
@@ -425,7 +517,7 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
     }.lastArgMemo()
 
     /**
-     * Display the composition using [drawer].
+     * Display the composition using [drawer]. Call this method from inside your `extend {}` block.
      */
     fun display(drawer: Drawer) {
         drawer.isolated {
@@ -443,29 +535,31 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
                 shape(makeFrame(margin.toDouble()))
             }
         }
+        // Draw bounds TMP
+        drawer.isolated {
+            fill = null
+            stroke = ColorRGBa.PINK
+            rectangle(paperStretchedInPx)
+        }
     }
 
     /**
-     * Resizes the program window to match
-     * the paper size according to the
-     * [ppi] (Pixels Per Inch) value.
+     * An interactive camera you can use to position your design in the paper.
+     * Allows panning, scaling and rotating.
      */
-    fun resizeWindow(ppi: Double = 96.0) {
-        val app = program.application
-        val resizable = app.windowResizable
-        app.windowResizable = true
-        app.windowSize = Vector2(
-            ppi * actualPaperSize.x / 25.4,
-            ppi * actualPaperSize.y / 25.4
-        )
-        app.windowResizable = resizable
-    }
-
     val camera by lazy {
         Camera2D().also {
             it.setup(program)
         }
     }
+
+    /**
+     * Returns the length of one millimeter in the drawing assuming
+     * the camera has not been zoomed in or out
+     */
+    val oneMm: Double
+        get() = pointsPerInch / mmPerInch / scaleFactor
+
 
     /**
      * Rebuilds the design putting shapes under groups based on stroke colors and inserts a pause
@@ -474,12 +568,15 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
      * Call this method after creating a draw composition that uses several stroke colors.
      * When plotting, change pens after each pause, then click "resume plotting".
      *
-     * NOTE: this method changes line order. Therefore, avoid it if order is important,
-     * for instance with designs using fill colors to occlude.
+     * The method returns a list of colors in the order they will be plotted.
+     * You can render these colors in your program so you know which pens to use.
      *
+     * NOTE: this method changes line order. Therefore, avoid it if order is important,
+     * for instance, with designs using fill colors to occlude.
      */
-    fun groupStrokeColors() {
+    fun groupStrokeColors(): List<ColorRGBa> {
         val colorGroups = design.findShapes().filter { it.stroke != null }.groupBy { it.stroke!! }
+        val colors = mutableListOf<ColorRGBa>()
         design.clear()
         design.draw {
             var i = 0
@@ -490,11 +587,13 @@ class Axidraw(val program: Program, paperSize: PaperSize, orientation: PaperOrie
                 group { cursor.children.addAll(nodes) }.configure(hexColor)
 
                 // Add a pause if it's not the last layer
-                if(++i < colorGroups.size) {
+                if (++i < colorGroups.size) {
                     group { }.configure(layerMode = AxiLayerMode.PAUSE)
                 }
+                colors.add(color)
             }
         }
+        return colors
     }
 
     /**

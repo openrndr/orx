@@ -1,6 +1,5 @@
 package org.openrndr.extra.axidraw
 
-import java.io.BufferedInputStream
 import java.io.File
 import java.io.IOException
 
@@ -37,35 +36,46 @@ fun venvPython(venv: File): String {
 }
 
 
-fun invokePython(arguments: List<String>, executable: String = systemPython()): String {
-    val result: String
+fun invokePython(arguments: List<String>, executable: String = systemPython()): ExecutionResult {
+    var result: String
+    var errorCode: Int
     try {
 
-    val pb = ProcessBuilder()
-        .let {
-            it.command(listOf(executable) + arguments)
-            //it.redirectError(File("python.error.txt"))
-            it.inheritIO()
-        }
-        .start()
-        .let {
-            val `is` = it.inputStream
-            val bis = BufferedInputStream(`is`)
-            val br = bis.bufferedReader()
-            result = br.readText().trim()
-            val error = it.waitFor()
-            println("Python returned: $error")
+        val pb = ProcessBuilder()
+            .command(listOf(executable) + arguments)
 
-            // Error detection disabled because pressing the pause button on the Axidraw
-            // returns "1", and we don't want the program to close when that happens.
-            // There's no obvious way to distinguish between actual errors and pressing the pause button.
-            // if (error != 0) {
-            //     error("Python invoke failed with error $error")
-            // }
-        }
+        val process = pb.start()
+
+        val stdoutBuilder = StringBuilder()
+        val stderrBuilder = StringBuilder()
+
+        Thread {
+            process.inputStream.bufferedReader().use { reader ->
+                reader.lineSequence().forEach { line ->
+                    stdoutBuilder.appendLine(line)
+                    println("stdout: $line")  // Optional: print to console
+                }
+            }
+        }.start()
+
+        Thread {
+            process.errorStream.bufferedReader().use { reader ->
+                reader.lineSequence().forEach { line ->
+                    stderrBuilder.appendLine(line)
+                    println("stderr: $line")  // Optional: print to console
+                }
+            }
+        }.start()
+
+        errorCode = process.waitFor()
+
+        result = buildString {
+            append(stdoutBuilder.toString())
+            append(stderrBuilder.toString())
+        }.trim()
     } catch (e: IOException) {
         error("\n\nPython 3.8 or higher is required but failed to run. Is it installed?\n\n")
     }
 
-    return result
+    return ExecutionResult(errorCode, result)
 }

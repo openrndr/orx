@@ -7,15 +7,14 @@ to communicate with the pen plotter.
 
 Requires: Python 3.8 or higher.
 
-This orx create a Python virtual environment and downloads AxiCLI automatically. 
+This orx creates a Python virtual environment and downloads AxiCLI automatically.
 
 ## Usage
 
 ```kotlin
 fun main() = application {
     program {
-        val axi = Axidraw(this, PaperSize.A5)
-        axi.resizeWindow()
+        val axi = Axidraw(this, PaperSize.A5.size)
 
         val gui = WindowedGUI()
         gui.add(axi)
@@ -37,6 +36,8 @@ fun main() = application {
 ```
 
 Study the inputs available in the GUI. Most are explained in the [AxiCLI](https://axidraw.com/doc/cli_api/#introduction) documentation page.
+
+The `PaperSize` presets are all in portrait mode. If you prefer landscape, use something like `PaperSize.A5.size.yx`. Pass a `Vector2` for custom paper sizes in millimeters.
 
 ### Important
 
@@ -64,3 +65,10 @@ The `Load` and `Save` buttons *at the top of the GUI* can be used to load and sa
 orx-axidraw makes it easy to create multi-pen plots. To do that, use two or more stroke colors in your design. The order of the lines does not matter. Then, before plotting, call `axi.groupStrokeColors()`. This will group curves into layers based on their stroke colors and insert a pause between layers, allowing you to change the pen. 
 
 When the plotter pauses during plotting, change the pen and click `resume plotting` to continue.
+
+### Axidraw() constructor arguments
+
+- program: a Program instance (usually `this`).
+- paperSizeInMm: A Vector2 specifying the paper size in mm. Use a constant like `PaperSize.A5.size` for convenience.
+- drawBounds: A Rectangle specifying the window area where to draw the plot simulation. The default is `drawer.bounds`
+- fit: A Vector 2 specifying where inside `drawBounds` to draw the plot simulation. The default is `Vector2.ZERO`, which means `centered`. Use values between -1.0 and 1.0 for aligning to the left/top or to the right/bottom.

@@ -101,11 +101,13 @@ fun Composition.saveToInkscapeFile(
             inkscape:window-x="0"
             inkscape:window-y="0"
             inkscape:window-maximized="1"
-            inkscape:current-layer="openrndr-svg" />        
+            inkscape:current-layer="openrndr-svg" 
+            inkscape:document-units="mm" 
+            />        
     """.trimIndent()
 
     // Remove the wrapping <g>, otherwise layers don't work.
-    // Also remove duplicated <g><g> and </g></g> which show up when
+    // Also remove duplicated <g><g> and </g></g> which appear when
     // drawing a composition into another composition.
     val updated = svg.replace(
         Regex("""(<g\s?>(.*)</g>)""", RegexOption.DOT_MATCHES_ALL), "$2"

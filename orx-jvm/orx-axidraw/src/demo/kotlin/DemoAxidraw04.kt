@@ -10,6 +10,9 @@ import org.openrndr.extra.shapes.primitives.grid
  * - How to randomize the order of those items
  * - How to take chunks of 10 items, then make
  *   a pause to change the pen after plotting each chunk
+ * - How to leave a safety margin around the plot to avoid
+ *   plotting outside the paper (by setting `axi.margin`
+ *   and `axi.occlusion`).
  *
  * Operation: After plotting ten circles, plotting will stop to let you change the pen.
  * With the second pen installed, click `resume`. It will plot ten circles more.
@@ -18,11 +21,19 @@ import org.openrndr.extra.shapes.primitives.grid
  */
 fun main() = application {
     program {
-        val axi = Axidraw(this, PaperSize.A5, PaperOrientation.PORTRAIT)
-        axi.resizeWindow(100.0)
+        val axi = Axidraw(this, PaperSize.A5.size, drawer.bounds)
 
         val gui = WindowedGUI()
         gui.add(axi)
+
+        // By default, the state of the gui is loaded from disk
+        // when the program starts. This can override our
+        // attempt to set a property like `axi.margin`.
+        // Here we disable the persist-behavior to be able
+        // to set properties via code.
+        gui.gui.persistState = false
+        axi.margin = 15
+        axi.occlusion = true
 
         axi.clear()
         axi.draw {
