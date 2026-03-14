@@ -177,7 +177,7 @@ class DropdownButton : Element(ElementType("dropdown-button")) {
                     parent.value = newValue
                     parent.events.valueChanged.trigger(ValueChangedEvent(parent, newValue))
                     newValue.picked()
-                    draw.dirty = true
+                    requestRedraw()
 
                     val ypos = 24.0 * activeIndex
                     if (ypos >= scrollTop + 10 * 24.0) {
@@ -212,7 +212,7 @@ class DropdownButton : Element(ElementType("dropdown-button")) {
             }
 
             mouse.scrolled.listen {
-                scrollTop -= it.rotation.y * 2.0
+                scrollTop -= it.rotation.y * 10.0
                 scrollTop = max(0.0, scrollTop)
                 draw.dirty = true
                 it.cancelPropagation()
