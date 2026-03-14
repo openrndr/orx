@@ -255,5 +255,9 @@ fun defaultStyles(
             display = Display.BLOCK
             background = Color.RGBa(controlHoverBackground)
         }
+        and(has state "selected") {
+            display = Display.BLOCK
+            background = controlActiveColor
+        }
     }
 )
