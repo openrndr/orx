@@ -950,10 +950,15 @@ open class GUI(
         fun KMutableProperty1<out Any, Any?>?.enumSet(obj: Any, value: String) {
             val v = (this as KMutableProperty1<Any, Enum<*>>).get(obj)
 
-            @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN", "UsePropertyAccessSyntax")
-            val enumValue = (v as java.lang.Enum<*>).getDeclaringClass().getEnumConstants().find { it.name == value }
-                ?: error("cannot map value $value to enum")
-            (this as KMutableProperty1<Any, Enum<*>>).set(obj, enumValue)
+            try {
+                @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN", "UsePropertyAccessSyntax")
+                val enumValue =
+                    (v as java.lang.Enum<*>).getDeclaringClass().getEnumConstants().find { it.name == value }
+                        ?: error("cannot map value $value to enum")
+                (this as KMutableProperty1<Any, Enum<*>>).set(obj, enumValue)
+            } catch (e: Throwable) {
+                logger.warn { e.message }
+            }
         }
 
         labeledValues.forEach { (label, ps) ->
