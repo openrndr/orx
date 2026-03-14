@@ -38,7 +38,11 @@ Demonstrates the use of grid layouts
 
 ### DemoHorizontalLayout01
 
+Demonstrates how to create a `styleSheet` using `Display.FLEX` and `FlexDirection.Row`
+to create a horizontal layout featuring 10 clickable buttons with various colors.
 
+The `controlManager { }` DSL includes `styleSheet { }`, which uses a syntax inspired
+by CSS, and `layout { }`, which is structured similarly to HTML.
 
 ![DemoHorizontalLayout01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoHorizontalLayout01Kt.png)
 
@@ -63,7 +67,11 @@ model persistence.
 
 ### DemoVerticalLayout01
 
+Demonstrates how `Display.FLEX` can be used to create vertical arrangements by
+using `FlexDirection.Column` instead of `FlexDirection.Row`.
 
+The program also shows common `styleSheet` properties to control `width`, `height`,
+padding and background color.
 
 ![DemoVerticalLayout01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoVerticalLayout01Kt.png)
 
