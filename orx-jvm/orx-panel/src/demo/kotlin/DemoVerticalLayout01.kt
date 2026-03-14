@@ -5,6 +5,13 @@ import org.openrndr.panel.elements.div
 import org.openrndr.panel.elements.slider
 import org.openrndr.panel.style.*
 
+/**
+ * Demonstrates how `Display.FLEX` can be used to create vertical arrangements by
+ * using `FlexDirection.Column` instead of `FlexDirection.Row`.
+ *
+ * The program also shows common `styleSheet` properties to control `width`, `height`,
+ * padding and background color.
+ */
 fun main() = application {
     program {
         val cm = controlManager {

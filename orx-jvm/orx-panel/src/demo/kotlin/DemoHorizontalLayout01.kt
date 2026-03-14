@@ -10,8 +10,14 @@ import org.openrndr.panel.elements.h1
 import org.openrndr.panel.elements.style
 import org.openrndr.panel.style.*
 
+/**
+ * Demonstrates how to create a `styleSheet` using `Display.FLEX` and `FlexDirection.Row`
+ * to create a horizontal layout featuring 10 clickable buttons with various colors.
+ *
+ * The `controlManager { }` DSL includes `styleSheet { }`, which uses a syntax inspired
+ * by CSS, and `layout { }`, which is structured similarly to HTML.
+ */
 fun main() = application {
-
     configure {
         windowResizable = true
     }
@@ -55,34 +61,33 @@ fun main() = application {
                     listOf(
                         "load", "save", "redo", "stretch", "bounce",
                         "twist", "swim", "roll", "fly", "dance"
-                    )
-                        .forEachIndexed { i, word ->
+                    ).forEachIndexed { i, word ->
 
-                            // A fun way of generating a set of colors
-                            // of similar brightness:
-                            // Grab a point on the surface of a sphere
-                            // and treat its coordinates as an rgb color.
-                            val pos = Vector3.fromSpherical(
-                                Spherical(i * 19.0, i * 17.0, 0.4)
-                            )
+                        // A fun way of generating a set of colors
+                        // of similar brightness:
+                        // Grab a point on the surface of a sphere
+                        // and treat its coordinates as an RGB color.
+                        val pos = Vector3.fromSpherical(
+                            Spherical(i * 19.0, i * 17.0, 0.4)
+                        )
 
-                            button {
-                                label = word
-                                style {
-                                    // Use color {} to convert a ColorRGBa
-                                    // color (the standard color datatype)
-                                    // into "CSS" format:
-                                    background = color { ColorRGBa.fromVector(pos + 0.4) }
-                                }
+                        button {
+                            label = word
+                            style {
+                                // Use color {} to convert a ColorRGBa
+                                // color (the standard color datatype)
+                                // into "CSS" format:
+                                background = color { ColorRGBa.fromVector(pos + 0.4) }
+                            }
 
 
-                                // When the button is clicked replace
-                                // the header text with the button's label
-                                events.clicked.listen {
-                                    header.replaceText(it.source.label)
-                                }
+                            // When the button is clicked, replace
+                            // the header text with the button's label
+                            events.clicked.listen {
+                                header.replaceText(it.source.label)
                             }
                         }
+                    }
                 }
             }
         }
