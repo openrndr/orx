@@ -11,6 +11,13 @@ import org.openrndr.math.Spherical
 import org.openrndr.math.Vector3
 import java.io.File
 
+/**
+ * Demonstrates how to load a .glb file containing a scene with a floor, a cube, a sphere and a directional light.
+ * The light hits the cube, which casts a shadow onto the sphere and the floor.
+ *
+ * An interactive orbital camera is enabled, letting you use the mouse to control the camera position,
+ * direction, and zoom.
+ */
 fun main() = application {
     configure {
         width = 1280
@@ -22,6 +29,7 @@ fun main() = application {
         val gltf = loadGltfFromFile(File("demo-data/gltf-models/directional-light/Scene.glb"))
         val scene = Scene(SceneNode())
 
+        // Add a light to tint the objects in the scene
         scene.root.entities.add(HemisphereLight().apply {
             upColor = ColorRGBa(0.1, 0.1, 0.4)
             downColor = ColorRGBa(0.1, 0.0, 0.0)

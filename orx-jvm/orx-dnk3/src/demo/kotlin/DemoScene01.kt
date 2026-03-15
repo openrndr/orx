@@ -12,6 +12,11 @@ import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
 import java.io.File
 
+/**
+ * Demonstrates how to create a 3D Scene and add children to it:
+ * one child containing two lights, and another containing a loaded 3D model.
+ * The model contains two textures: one is the base color and another is its metallic roughness.
+ */
 fun main() = application {
     configure {
         width = 1280
@@ -30,6 +35,7 @@ fun main() = application {
             rotate(Vector3.UNIT_X, -65.0)
         }
         lightNode.entities.add(DirectionalLight())
+
         scene.root.entities.add(HemisphereLight().apply {
             upColor = ColorRGBa.BLUE.shade(0.4)
             downColor = ColorRGBa.GRAY.shade(0.1)

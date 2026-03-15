@@ -10,6 +10,14 @@ import org.openrndr.extra.dnk3.renderers.dryRenderer
 import org.openrndr.math.Vector3
 import java.io.File
 
+/**
+ * Demonstrate the use of the dry renderer
+ * to render an animated 3D fox loaded
+ * from a .glb file.
+ *
+ * Note that the file contains 3 animations.
+ * Try animations 0, 1, and 2.
+ */
 fun main() = application {
     configure {
         width = 1280
@@ -39,7 +47,8 @@ fun main() = application {
         }
 
         extend {
-            sceneData.animations[2].applyToTargets(seconds.mod(sceneData.animations[2].duration))
+            val anim = sceneData.animations[2]
+            anim.applyToTargets(seconds.mod(anim.duration))
             drawer.clear(ColorRGBa.PINK)
             renderer.draw(drawer, scene)
         }

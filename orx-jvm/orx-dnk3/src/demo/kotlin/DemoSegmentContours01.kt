@@ -11,6 +11,10 @@ import org.openrndr.extra.dnk3.renderers.segmentContourRenderer
 import org.openrndr.math.Vector3
 import java.io.File
 
+/**
+ * Demonstrate the use of a custom renderer, in this case a `segmentContourRenderer`,
+ * which renders the outline of a 3D object, an animated 3D fox loaded  from a .glb file.
+ */
 fun main() = application {
     configure {
         width = 1280
@@ -19,7 +23,6 @@ fun main() = application {
     }
 
     program {
-
         val gltf = loadGltfFromFile(File("demo-data/gltf-models/fox/Fox.glb"))
         val scene = Scene(SceneNode())
 
@@ -27,7 +30,7 @@ fun main() = application {
         scene.root.children.addAll(sceneData.scenes.first())
 
         // -- create a renderer, try it with BufferMultisample.SampleCount(8) for better results
-        val renderer = segmentContourRenderer(BufferMultisample.Disabled)
+        val renderer = segmentContourRenderer(BufferMultisample.SampleCount(8))
         extend(Orbital()) {
             far = 500.0
             lookAt = Vector3(0.0, 40.0, 0.0)

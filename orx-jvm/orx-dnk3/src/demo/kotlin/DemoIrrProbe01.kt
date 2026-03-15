@@ -21,6 +21,10 @@ import java.io.File
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * Advanced lighting demonstration featuring irradiance probes, a dynamic node animated via code,
+ * and an interactive Orbital camera.
+ */
 fun main() = application {
     configure {
         width = 1280
@@ -38,13 +42,11 @@ fun main() = application {
         val c = 5
         scene.addIrradianceSH(c, c, c, 3.0 / c, cubemapSize = 32, offset = Vector3(0.0, 0.0, 0.0))
 
-
         val sceneData = gltf.buildSceneNodes()
         scene.root.children.addAll(sceneData.scenes.first())
 
         // -- create a renderer
         val renderer = postRenderer()
-
 
 //        renderer.postSteps.add(
 //                FilterPostStep(1.0, ScreenspaceReflections(), listOf("color", "clipDepth", "viewNormal"), "reflections", ColorFormat.RGB, ColorType.FLOAT16) {
@@ -63,12 +65,15 @@ fun main() = application {
 //        )
 
         renderer.postSteps.add(
-                FilterPostStep(1.0, Delinearize(), listOf("color"), "ldr", ColorFormat.RGB, ColorType.FLOAT16)
+            FilterPostStep(1.0, Delinearize(), listOf("color"), "ldr", ColorFormat.RGB, ColorType.FLOAT16)
         )
 
         val orb = extend(Orbital()) {
-            this.fov = 20.0
-            camera.setView(Vector3(-0.49, -0.24, 0.20), Spherical(26.56, 90.0, 6.533), 40.0)
+            fov = 20.0
+            camera.setView(
+                Vector3(-0.49, -0.24, 0.20),
+                Spherical(26.56, 60.0, 4.533), 40.0
+            )
         }
 
         renderer.draw(drawer, scene)
@@ -94,7 +99,6 @@ fun main() = application {
             drawer.clear(ColorRGBa.BLACK)
             renderer.draw(drawer, scene)
             drawer.defaults()
-
         }
     }
 }

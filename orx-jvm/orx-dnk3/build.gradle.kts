@@ -1,7 +1,6 @@
 plugins {
     id("org.openrndr.extra.convention.kotlin-jvm")
     alias(libs.plugins.kotlin.serialization)
-
 }
 
 dependencies {

@@ -10,6 +10,11 @@ import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
 import java.io.File
 
+/**
+ * Demonstrates how to create a 3D Scene and add children to it:
+ * one child containing two lights, and another containing a loaded 3D model of a rubber duck.
+ * The model contains two textures: one is the base color and another is its metallic roughness.
+ */
 fun main() = application {
     configure {
         width = 1280

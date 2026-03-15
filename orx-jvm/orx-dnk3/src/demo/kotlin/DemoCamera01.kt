@@ -1,11 +1,16 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
+import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.dnk3.*
 import org.openrndr.extra.dnk3.gltf.buildSceneNodes
 import org.openrndr.extra.dnk3.gltf.loadGltfFromFile
 import org.openrndr.extra.dnk3.renderers.dryRenderer
 import java.io.File
 
+/**
+ * Demonstrates how the view and projection matrices used for rendering in OPENRNDR can
+ * be controlled using an animated camera found in a loaded .glb file.
+ */
 fun main() = application {
     configure {
         width = 1280
@@ -29,6 +34,11 @@ fun main() = application {
 
         val cameras = scene.root.findContent { this as? PerspectiveCamera }
 
+        if (System.getProperty("takeScreenshot") == "true") {
+            extensions.filterIsInstance<SingleScreenshot>().forEach {
+                it.delayFrames = 5
+            }
+        }
         extend {
             sceneData.animations[0].applyToTargets(seconds.mod(sceneData.animations[0].duration))
             drawer.view = cameras[0].content.viewMatrix

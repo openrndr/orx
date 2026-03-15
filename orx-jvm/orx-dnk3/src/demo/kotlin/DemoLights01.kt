@@ -11,6 +11,19 @@ import org.openrndr.math.Spherical
 import org.openrndr.math.Vector3
 import java.io.File
 
+/**
+ * Demonstrates how to load a .glb file containing an animated scene.
+ * The scene contains a cube and an animated point-light.
+ *
+ * The scene contains a list of animations, which need to be updated using the `.applyToTargets()` method,
+ * otherwise the time in the animation is still. The method expects a time in seconds. In this demo,
+ * we pass a time that loops based on the duration of the animation. Note that it would be easy to
+ * pass a different time, slower or faster than real time, play it backwards or even travel back and forth
+ * in time.
+ *
+ * An interactive orbital camera is enabled, letting you use the mouse to control the camera position,
+ * direction, and zoom.
+ */
 fun main() = application {
     configure {
         width = 1280
@@ -22,6 +35,7 @@ fun main() = application {
         val gltf = loadGltfFromFile(File("demo-data/gltf-models/point-light/Scene.glb"))
         val scene = Scene(SceneNode())
 
+        // Add a light to tint the objects in the scene
         scene.root.entities.add(HemisphereLight().apply {
             upColor = ColorRGBa(0.1, 0.1, 0.4)
             downColor = ColorRGBa(0.1, 0.0, 0.0)

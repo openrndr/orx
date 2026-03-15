@@ -12,6 +12,12 @@ import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
 import java.io.File
 
+/**
+ * Demonstrates how to load and play an animated .glb file.
+ *
+ * The `applyToTargets()` method expects an argument with a time in seconds.
+ * The 0.6 offset is used just to get a more interesting screenshot to include in the README.md file in GitHub.
+ */
 fun main() = application {
     configure {
         width = 1280
@@ -42,11 +48,11 @@ fun main() = application {
         val renderer = dryRenderer()
         extend(Orbital()) {
             far = 50.0
-            eye = Vector3(1.5, 0.0, 3.0)
+            eye = Vector3(1.5, 2.0, 3.0)
             fov = 40.0
         }
         extend {
-            sceneData.animations[0].applyToTargets(seconds.mod(sceneData.animations[0].duration))
+            sceneData.animations[0].applyToTargets((seconds + 0.6).mod(sceneData.animations[0].duration))
             drawer.clear(ColorRGBa.PINK)
             renderer.draw(drawer, scene)
         }

@@ -2,12 +2,19 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.DrawPrimitive
 import org.openrndr.extra.camera.Orbital
+import org.openrndr.extra.color.presets.ORANGE
 import org.openrndr.extra.dnk3.*
 import org.openrndr.extra.dnk3.renderers.dryRenderer
 import org.openrndr.extra.meshgenerators.sphereMesh
 import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
 
+/**
+ * Demonstrates how to create a 3D Scene and add children to it:
+ * one child contains lights, another contains a spherical 3D mesh
+ * generated via code. A PBR (Physically Based Rendering) material
+ * is created, configured, and applied to the mesh.
+ */
 fun main() = application {
     configure {
         width = 1280
@@ -16,7 +23,6 @@ fun main() = application {
     }
 
     program {
-
         val root = SceneNode()
         val scene = Scene(root)
 
@@ -29,9 +35,11 @@ fun main() = application {
         scene.root.children.add(lightNode)
 
         val meshNode = SceneNode()
-        val box = sphereMesh(32, 32)
-        val geometry = Geometry(listOf(box), null, DrawPrimitive.TRIANGLES, 0, box.vertexCount)
+        val sphere = sphereMesh(32, 32)
+        val geometry = Geometry(listOf(sphere), null, DrawPrimitive.TRIANGLES, 0, sphere.vertexCount)
         val material = PBRMaterial()
+        material.color = ColorRGBa.ORANGE
+        material.roughness = 0.2
         val primitive = MeshPrimitive(geometry, material)
         val mesh = Mesh(listOf(primitive))
         meshNode.entities.add(mesh)
