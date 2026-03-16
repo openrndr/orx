@@ -84,7 +84,14 @@ xFunction(1.0)
 ## Demos
 ### DemoExpressionEvaluator01
 
+Demonstrates the use of `evaluateExpression` to process strings containing mathematical expressions.
 
+In this demo, expressions are evaluated on every animation frame. Notice how the `t`, `width`,
+and `height` values are passed to the evaluator, allowing these variables to be used directly
+within the expressions.
+
+Evaluating expressions enables dynamic behavior adjustments at runtime, eliminating the need
+to recompile the program.
 
 ![DemoExpressionEvaluator01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-expression-evaluator/images/DemoExpressionEvaluator01Kt.png)
 
@@ -95,6 +102,25 @@ xFunction(1.0)
 Improved version of DemoExpressionEvaluator01, it uses [watchingExpression1] to automatically convert an expression
 string into a function with a parameter "t".
 
+By using [watchingExpression1], the resulting function is only updated when the content of its first argument
+(a String) changes, which uses less CPU.
+
 ![DemoExpressionEvaluator02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-expression-evaluator/images/DemoExpressionEvaluator02Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoExpressionEvaluator02.kt)
+
+### DemoExpressionEvaluator03
+
+Spirograph-like demo of orx-expression-evaluator, using [watchingExpression1] to automatically convert an expression
+String into a function with a parameter "t".
+
+The program generates a list with 2000 points and draws a line strip connecting them.
+
+Editing the expression may make it temporarily invalid. When this happens, it returns 0.0 (for instance,
+due to non-matching parenthesis). This is normally not an issue, but the `lineStrip()` method fails
+when consecutive points are identical, which is the case if all points are Vector2(0.0).
+Therefore, we wrap it in a try/catch to keep the program running even while the expressions are not valid.
+
+![DemoExpressionEvaluator03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-expression-evaluator/images/DemoExpressionEvaluator03Kt.png)
+
+[source code](src/jvmDemo/kotlin/DemoExpressionEvaluator03.kt)
