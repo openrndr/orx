@@ -7,6 +7,9 @@ import org.openrndr.extra.parameters.TextParameter
 /**
  * Improved version of DemoExpressionEvaluator01, it uses [watchingExpression1] to automatically convert an expression
  * string into a function with a parameter "t".
+ *
+ * By using [watchingExpression1], the resulting function is only updated when the content of its first argument
+ * (a String) changes, which uses less CPU.
  */
 fun main() = application {
     program {

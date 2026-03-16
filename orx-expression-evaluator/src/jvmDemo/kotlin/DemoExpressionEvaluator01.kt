@@ -4,6 +4,16 @@ import org.openrndr.extra.gui.GUI
 import org.openrndr.extra.gui.addTo
 import org.openrndr.extra.parameters.TextParameter
 
+/**
+ * Demonstrates the use of `evaluateExpression` to process strings containing mathematical expressions.
+ *
+ * In this demo, expressions are evaluated on every animation frame. Notice how the `t`, `width`,
+ * and `height` values are passed to the evaluator, allowing these variables to be used directly
+ * within the expressions.
+ *
+ * Evaluating expressions enables dynamic behavior adjustments at runtime, eliminating the need
+ * to recompile the program.
+ */
 fun main() = application {
     program {
         val gui = GUI()
@@ -37,7 +47,6 @@ fun main() = application {
             val x = eval(settings.xExpression)
             val y = eval(settings.yExpression)
             val radius = eval(settings.radiusExpression)
-
             drawer.circle(x, y, radius)
         }
     }
