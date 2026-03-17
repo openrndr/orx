@@ -9,7 +9,7 @@ import org.openrndr.panel.elements.colorpickerButton
 fun main() = application {
     configure {
         width = 720
-        height = 720
+        height = 300
     }
     program {
         var bgColor = ColorRGBa.PINK

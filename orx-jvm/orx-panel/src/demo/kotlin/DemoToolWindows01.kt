@@ -1,37 +1,26 @@
-import org.openrndr.Hit
-import org.openrndr.WindowConfiguration
-import org.openrndr.application
+import org.openrndr.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.math.Vector2
 import org.openrndr.panel.ControlManager
 import org.openrndr.panel.document.body
 import org.openrndr.panel.document.document
-import org.openrndr.panel.elements.button
-import org.openrndr.panel.elements.div
-import org.openrndr.panel.elements.h1
-import org.openrndr.panel.elements.h3
-import org.openrndr.panel.elements.slider
-import org.openrndr.panel.elements.style
+import org.openrndr.panel.elements.*
+import org.openrndr.panel.style.*
 import org.openrndr.panel.style.Display
-import org.openrndr.panel.style.FlexDirection
-import org.openrndr.panel.style.background
-import org.openrndr.panel.style.color
-import org.openrndr.panel.style.columnGap
-import org.openrndr.panel.style.defaultStyles
-import org.openrndr.panel.style.display
-import org.openrndr.panel.style.flexDirection
-import org.openrndr.panel.style.height
-import org.openrndr.panel.style.length
-import org.openrndr.panel.style.padding
-import org.openrndr.panel.style.percent
-import org.openrndr.panel.style.textAlign
-import org.openrndr.panel.style.textHorizontalAlign
-import org.openrndr.panel.style.textVerticalAlign
-import org.openrndr.panel.style.width
 import org.openrndr.shape.Rectangle
-import org.openrndr.window
 
+/**
+ * Demonstrates how to create a simple UI with a button to open a secondary tool window with multiple sliders.
+ *
+ * A `hitTest` area at the top of the tool window makes it possible to drag it with the mouse.
+ *
+ * The tool window can be closed by clicking its `close` button, or by pressing the ESC key.
+ */
 fun main() = application {
+    configure {
+        width = 720
+        height = 360
+    }
     program {
 
         fun createToolWindow() = window(
@@ -45,13 +34,7 @@ fun main() = application {
         ) {
             val toolWindow = this.window
             toolWindow.hitTest = { v: Vector2 ->
-                if (v in Rectangle(
-                        0.0,
-                        0.0,
-                        200.0,
-                        24.0
-                    )
-                ) Hit.DRAG else Hit.NORMAL
+                if (v in Rectangle(0.0, 0.0, 200.0, 24.0)) Hit.DRAG else Hit.NORMAL
             }
             val document = document {
                 styleSheets.addAll(defaultStyles())
@@ -93,12 +76,16 @@ fun main() = application {
                         }
                     }
                 }
+                keyboard.keyDown.listen {
+                    if (it.key == KEY_ESCAPE) toolWindow.close()
+                }
             }
             val cm = ControlManager()
             cm.document = document
             extend(cm)
         }
 
+        // Main window UI
         val document = document {
             styleSheets.addAll(defaultStyles())
             body {

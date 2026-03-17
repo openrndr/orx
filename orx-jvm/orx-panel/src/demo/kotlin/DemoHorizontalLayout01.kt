@@ -19,6 +19,8 @@ import org.openrndr.panel.style.*
  */
 fun main() = application {
     configure {
+        width = 720
+        height = 200
         windowResizable = true
     }
     program {

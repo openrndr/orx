@@ -13,6 +13,10 @@ import org.openrndr.panel.style.*
  * padding and background color.
  */
 fun main() = application {
+    configure {
+        width = 720
+        height = 360
+    }
     program {
         val cm = controlManager {
             styleSheet(has class_ "side-bar") {

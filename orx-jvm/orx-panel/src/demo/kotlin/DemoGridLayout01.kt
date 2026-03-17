@@ -5,7 +5,10 @@ import org.openrndr.panel.elements.*
 import org.openrndr.panel.style.*
 
 /**
- * Demonstrates the use of grid layouts
+ * Demonstrates the use of grid layouts.
+ *
+ * The program creates a grid of 2 columns and 4 rows. The first two rows are merged together by using
+ * `gridPopulation { 2.columns }`.
  */
 fun main() {
     application {
@@ -65,7 +68,7 @@ fun main() {
                     div("grid") {
                         div("cell", "padding") {
                             style = StyleSheet()
-                            style!!.gridColumn = gridPopulation { 2.rows }
+                            style!!.gridColumn = gridPopulation { 2.columns }
 
                             h1 {
                                 style = StyleSheet()

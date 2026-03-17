@@ -3,7 +3,23 @@ import org.openrndr.panel.controlManager
 import org.openrndr.panel.elements.*
 import org.openrndr.panel.style.*
 
-
+/**
+ * A demonstration of `watchObjectDiv`.
+ *
+ * `watchObjecDiv` creates a Div element with the provided `classes`, and runs a `builder` function
+ * to populate the Div any time the `watchObject` argument changes.
+ *
+ * This demo creates a panel with two sliders bound to two integer values, representing the number of columns
+ * and rows.
+ *
+ * The `watchObjectDiv` expects three arguments: the classes to apply to the Div, an object to watch, and a
+ * builder function to populate the Div object when the watched object changes.
+ *
+ * The builder function creates a Div for every row, containing a Button for every column.
+ * The label for each button is its coordinates. A `clicked` event is attached to the buttons to print
+ * those coordinates.
+ *
+ */
 fun main() = application {
     configure {
         width = 900
@@ -57,8 +73,9 @@ fun main() = application {
                     for (y in 0 until watchObject.y.get()) {
                         div("row") {
                             for (x in 0 until watchObject.x.get()) {
-                                button() {
+                                button {
                                     label = "$x, $y"
+                                    clicked { println(label) }
                                 }
                             }
                         }

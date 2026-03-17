@@ -3,37 +3,18 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.panel.controlManager
 import org.openrndr.panel.document.body
 import org.openrndr.panel.document.document
-import org.openrndr.panel.elements.Div
-import org.openrndr.panel.elements.button
-import org.openrndr.panel.elements.div
-import org.openrndr.panel.elements.dropdownButton
-import org.openrndr.panel.elements.item
-import org.openrndr.panel.elements.slider
-import org.openrndr.panel.elements.style
-import org.openrndr.panel.style.Display
-import org.openrndr.panel.style.FlexDirection
-import org.openrndr.panel.style.LinearDimension.Companion.fr
-import org.openrndr.panel.style.background
-import org.openrndr.panel.style.color
-import org.openrndr.panel.style.defaultStyles
-import org.openrndr.panel.style.display
-import org.openrndr.panel.style.flexDirection
-import org.openrndr.panel.style.gridColumn
-import org.openrndr.panel.style.gridPopulation
-import org.openrndr.panel.style.gridRow
-import org.openrndr.panel.style.gridTemplate
-import org.openrndr.panel.style.gridTemplateColumns
-import org.openrndr.panel.style.gridTemplateRows
-import org.openrndr.panel.style.height
-import org.openrndr.panel.style.length
-import org.openrndr.panel.style.percent
-import org.openrndr.panel.style.width
+import org.openrndr.panel.elements.*
+import org.openrndr.panel.style.*
 
+/**
+ * Demonstrates how to create a UI with a drop-down menu. When an option is picked,
+ * the content of a Div is replaced by a button and some sliders.
+ */
 fun main() {
     application {
         configure {
-            width = 800
-            height = 600
+            width = 720
+            height = 300
         }
         program {
             val cm = controlManager { }
@@ -81,7 +62,8 @@ fun main() {
                                 label = "pick thing"
                                 item {
                                     label = "hi"
-                                    this.events.picked.listen { println("picked")
+                                    this.events.picked.listen {
+                                        println("picked hi")
                                         div2.replace {
                                             button {
                                                 label = "some thing 1"
@@ -91,26 +73,17 @@ fun main() {
                                 }
                                 item {
                                     label = "hi2"
-                                    this.events.picked.listen { println("picked")
+                                    this.events.picked.listen {
+                                        println("picked hi2")
                                         div2.replace {
                                             button {
                                                 label = "some thing 2"
                                             }
-                                            slider {
-
-                                            }
-                                            slider {
-
-                                            }
-                                            slider {
-
-                                            }
-                                            slider {
-
-                                            }
-                                            slider {
-
-                                            }
+                                            slider {}
+                                            slider {}
+                                            slider {}
+                                            slider {}
+                                            slider {}
                                         }
                                     }
                                 }

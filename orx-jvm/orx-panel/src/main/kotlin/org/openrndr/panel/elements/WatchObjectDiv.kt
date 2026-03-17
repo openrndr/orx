@@ -55,6 +55,10 @@ class WatchObjectDiv<T:Any>(
     }
 }
 
+/**
+ * Creates a Div element with the provided [classes], and runs [builder] to populate the Div
+ * any time [watchObject] changes.
+ */
 fun <T : Any> Element.watchObjectDiv(
     vararg classes: String,
     watchObject: T,

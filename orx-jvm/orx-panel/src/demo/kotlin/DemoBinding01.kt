@@ -11,7 +11,19 @@ import org.openrndr.panel.elements.div
 import org.openrndr.panel.elements.slider
 import org.openrndr.panel.style.*
 
+/**
+ * Demonstrates how to create a UI with two sliders and a button, and how to bind
+ * the value of the sliders with properties of an object's instance.
+ *
+ * `styleSheet` is used to control the looks and placement of the inputs
+ * (equivalent to CSS in web pages) and `layout` represents the content of the UI,
+ * including names, ID and slider ranges (equivalent to HTML in web pages).
+ */
 fun main() = application {
+    configure {
+        width = 720
+        height = 300
+    }
     program {
         val cm = controlManager {
             styleSheet(has class_ "side-bar") {
@@ -47,7 +59,7 @@ fun main() = application {
             }
         }
         class Model {
-            var a = 0.0
+            var a = 30.0
             var b = 10.0
         }
         val model = Model()

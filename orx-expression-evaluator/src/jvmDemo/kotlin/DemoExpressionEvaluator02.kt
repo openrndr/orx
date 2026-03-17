@@ -9,7 +9,7 @@ import org.openrndr.extra.parameters.TextParameter
  * string into a function with a parameter "t".
  *
  * By using [watchingExpression1], the resulting function is only updated when the content of its first argument
- * (a String) changes, which uses less CPU.
+ * (a String) changes, which uses less CPU than evaluating the expression on every animation frame.
  */
 fun main() = application {
     program {

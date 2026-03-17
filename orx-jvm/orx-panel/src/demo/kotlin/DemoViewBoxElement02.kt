@@ -33,11 +33,11 @@ import org.openrndr.shape.Rectangle
  * allowing OPENRNDR drawing operations to be integrated alongside other UI components in a grid layout.
  * The ViewBox element responds interactively to UI controls (slider) and mouse input.
  */
-
-
 fun main() {
     application {
         configure {
+            width = 720
+            height = 360
             windowResizable = true
         }
         program {

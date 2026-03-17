@@ -33,6 +33,12 @@ private class ProgramState {
     }
 }
 
+/**
+ * Demonstrates how to create a GUI with a persistent state (can be saved and loaded)
+ * and a variable number of inputs arranged in a grid. The user can adjust
+ * the number of columns and rows of the grid, and each cell features a slider
+ * to control its value between 0.0 and 10.0 (the default range).
+ */
 fun main() = application {
     configure {
         width = 900
@@ -111,6 +117,7 @@ fun main() = application {
                         this.id = "some-row"
                         slider {
                             label = "value"
+                            //range = Range(0.0, 1.0)
                             bind(item::value, program)
                         }
                     }
