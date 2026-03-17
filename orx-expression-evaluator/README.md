@@ -103,7 +103,7 @@ Improved version of DemoExpressionEvaluator01, it uses [watchingExpression1] to 
 string into a function with a parameter "t".
 
 By using [watchingExpression1], the resulting function is only updated when the content of its first argument
-(a String) changes, which uses less CPU.
+(a String) changes, which uses less CPU than evaluating the expression on every animation frame.
 
 ![DemoExpressionEvaluator02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-expression-evaluator/images/DemoExpressionEvaluator02Kt.png)
 
