@@ -12,6 +12,14 @@ class NoClear(val multisample: BufferMultisample = BufferMultisample.Disabled) :
     private var resolvedColorBuffer: ColorBuffer? = null
 
     /**
+     * Defines the type of the color buffer used for rendering operations within the `NoClear` class.
+     *
+     * The default value is `ColorType.UINT8_SRGB`, which represents an 8-bit unsigned integer
+     * per channel in standard RGB color space with sRGB gamma correction.
+     */
+    var colorType = ColorType.UINT8_SRGB
+
+    /**
      * code-block to draw an optional custom backdrop
      */
     var backdrop: (() -> Unit)? = null
@@ -19,14 +27,10 @@ class NoClear(val multisample: BufferMultisample = BufferMultisample.Disabled) :
     override fun beforeDraw(drawer: Drawer, program: Program) {
         if (program.width > 0 && program.height > 0) {    // only if the window is not minimised
             if (renderTarget == null || renderTarget?.width != program.width || renderTarget?.height != program.height) {
-                renderTarget?.let {
-                    it.colorBuffer(0).destroy()
-                    it.detachColorAttachments()
-                    it.destroy()
-                }
+                renderTarget?.destroy()
 
                 renderTarget = renderTarget(program.width, program.height, program.window.contentScale, multisample) {
-                    colorBuffer()
+                    colorBuffer(type = colorType)
                     depthBuffer()
                 }
 
