@@ -6,7 +6,12 @@ The OPENRNDR UI toolkit. Provides buttons, sliders, text, a color picker and muc
 ## Demos
 ### DemoBinding01
 
+Demonstrates how to create a UI with two sliders and a button, and how to bind
+the value of the sliders with properties of an object's instance.
 
+`styleSheet` is used to control the looks and placement of the inputs
+(equivalent to CSS in web pages) and `layout` represents the content of the UI,
+including names, ID and slider ranges (equivalent to HTML in web pages).
 
 ![DemoBinding01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoBinding01Kt.png)
 
@@ -22,7 +27,8 @@ A simple demonstration of a ColorPickerButton
 
 ### DemoComplex01
 
-
+Demonstrates how to create a UI with a drop-down menu. When an option is picked,
+the content of a Div is replaced by a button and some sliders.
 
 ![DemoComplex01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoComplex01Kt.png)
 
@@ -30,7 +36,10 @@ A simple demonstration of a ColorPickerButton
 
 ### DemoGridLayout01
 
-Demonstrates the use of grid layouts
+Demonstrates the use of grid layouts.
+
+The program creates a grid of 2 columns and 4 rows. The first two rows are merged together by using
+`gridPopulation { 2.columns }`.
 
 ![DemoGridLayout01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoGridLayout01Kt.png)
 
@@ -59,7 +68,11 @@ model persistence.
 
 ### DemoToolWindows01
 
+Demonstrates how to create a simple UI with a button to open a secondary tool window with multiple sliders.
 
+A `hitTest` area at the top of the tool window makes it possible to drag it with the mouse.
+
+The tool window can be closed by clicking its `close` button, or by pressing the ESC key.
 
 ![DemoToolWindows01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoToolWindows01Kt.png)
 
@@ -99,7 +112,10 @@ The ViewBox element responds interactively to UI controls (slider) and mouse inp
 
 ### DemoWatchDiv01
 
-
+Demonstrates how to create a GUI with a persistent state (can be saved and loaded)
+and a variable number of inputs arranged in a grid. The user can adjust
+the number of columns and rows of the grid, and each cell features a slider
+to control its value between 0.0 and 10.0 (the default range).
 
 ![DemoWatchDiv01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoWatchDiv01Kt.png)
 
@@ -107,6 +123,20 @@ The ViewBox element responds interactively to UI controls (slider) and mouse inp
 
 ### DemoWatchObjectDiv01
 
+A demonstration of `watchObjectDiv`.
+
+`watchObjecDiv` creates a Div element with the provided `classes`, and runs a `builder` function
+to populate the Div any time the `watchObject` argument changes.
+
+This demo creates a panel with two sliders bound to two integer values, representing the number of columns
+and rows.
+
+The `watchObjectDiv` expects three arguments: the classes to apply to the Div, an object to watch, and a
+builder function to populate the Div object when the watched object changes.
+
+The builder function creates a Div for every row, containing a Button for every column.
+The label for each button is its coordinates. A `clicked` event is attached to the buttons to print
+those coordinates.
 
 
 ![DemoWatchObjectDiv01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoWatchObjectDiv01Kt.png)
