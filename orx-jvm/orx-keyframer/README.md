@@ -191,7 +191,10 @@ Supported functions in expressions:
 ## Demos
 ### DemoEvelope01
 
+Demonstrates loading a JSON file with keyframe animation information
+and applying it to the position of a circle.
 
+The JSON file contains times, coordinates, easing functions and envelopes.
 
 ![DemoEvelope01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoEvelope01Kt.png)
 
@@ -199,7 +202,8 @@ Supported functions in expressions:
 
 ### DemoFull01
 
-
+Loads and plays the animation described in `demo-full-01.json`.
+The keyframes contained in that file control the position, radius, and color of a circle.
 
 ![DemoFull01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoFull01Kt.png)
 
@@ -207,7 +211,10 @@ Supported functions in expressions:
 
 ### DemoScrub01
 
+Sets up a simple UI with a slider. This slider visualizes the current time in seconds but
+also allows controlling time by dragging the play head with the mouse.
 
+The result behaves like a typical video player where we can scrub the current time.
 
 ![DemoScrub01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoScrub01Kt.png)
 
@@ -215,7 +222,11 @@ Supported functions in expressions:
 
 ### DemoSimple01
 
+A minimal orx-keyframe demo. It creates a class extending `Keyframer()` and specifies the variables to control
+(a Vector2 in this case), instantiates this class, then loads a JSON file containing animation information.
 
+In the `extend { }` block, the current time is passed to the `Keyframer` and its properties are used
+to draw on the window.
 
 ![DemoSimple01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoSimple01Kt.png)
 
@@ -223,7 +234,12 @@ Supported functions in expressions:
 
 ### DemoSimple02
 
+A minimal orx-keyframe demo. It creates a class extending `Keyframer()` and specifies the variables to control
+(a Vector2, a Double, and a ColorRGBa in this case), instantiates this class,
+then loads a JSON file containing animation information.
 
+In the `extend { }` block, the current time is passed to the `Keyframer` and its properties are used
+to draw on the window.
 
 ![DemoSimple02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoSimple02Kt.png)
 
@@ -231,7 +247,13 @@ Supported functions in expressions:
 
 ### DemoSimpleExpressions01
 
+Demonstrates using simple expressions in the keyframer JSON file.
 
+A value called `cycleDuration` is passed via `parameters.
+The JSON file uses this value for the duration of certain animations
+and to specify the time of each keyframe.
+
+Note the multiplication operations in the JSON file.
 
 ![DemoSimpleExpressions01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoSimpleExpressions01Kt.png)
 
