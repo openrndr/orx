@@ -6,7 +6,7 @@ highly reusable.
 
 What this allows you to do:
 
-1. Create a keyframed animation in a json file.
+1. Create a keyframed animation in a JSON file.
 
 ```json
 [
@@ -170,8 +170,8 @@ the [example full format .json](src/demo/resources/demo-full-01.json) and
 the [example program](src/demo/kotlin/DemoFull01.kt). The full format adds a `parameters` block and a `prototypes`
 block.
 
-[Expressions](src/demo/resources/demo-simple-expressions-01.json), expression mechanism. Currently uses values `r` to
-indicate repeat index and `t` the last used key time, `v` the last used value (for the animated attribute).
+[Expressions](src/demo/resources/demo-simple-expressions-01.json), expression mechanism. Currently, it uses values `t` to
+indicate the last used key time and `v` the last used value (for the animated attribute).
 
 Supported functions in expressions:
 

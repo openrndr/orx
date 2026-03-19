@@ -7,6 +7,12 @@ import org.openrndr.panel.elements.slider
 import org.openrndr.resourceUrl
 import java.net.URL
 
+/**
+ * Sets up a simple UI with a slider. This slider visualizes the current time in seconds but
+ * also allows controlling time by dragging the play head with the mouse.
+ *
+ * The result behaves like a typical video player where we can scrub the current time.
+ */
 fun main() = application {
     program {
 
@@ -16,7 +22,7 @@ fun main() = application {
         clock = { oldClock() - clockOffset }
         var clockSlider: Slider? = null
 
-        // -- setup a simple UI
+        // -- set up a simple UI
         val cm = controlManager {
             layout {
                 clockSlider = slider {

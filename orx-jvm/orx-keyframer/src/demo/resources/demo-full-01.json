@@ -3,11 +3,10 @@
   // in the parameters block you can add custom values, which can be used in expressions
   "parameters": {
     "smallRadius": 5.0,
-    "repetitionCount": 10,
     "width": 640.0,
     "height": 480.0,
     // you can have expressions inside parameters too, they are evaluated once, on load
-    "resolvedOnLoad" : "width * 2.0"
+    "resolvedOnLoad": "width * 2.0"
   },
   // in the prototypes you can set up key prototypes
   "prototypes": {
@@ -45,7 +44,7 @@
       "g": 1.0,
       "b": 0.0,
       "radius": 50,
-      "foo" : 0.0
+      "foo": 0.0
     },
     {
       "time": 2.0,
@@ -55,20 +54,13 @@
     },
     {
       "time": 3.0,
-      "repeat": {
-        "count": "repetitionCount",
-        "keys": [
-          {
-            "time": "(rep * 2.0) + 3.0",
-            "prototypes": "blue large",
-            "easing": "cubic-in-out"
-          },
-          {
-            "time": "t + 1.0",
-            "prototypes": "red small"
-          }
-        ]
-      }
+      "prototypes": "blue large",
+      "easing": "cubic-in-out"
+    },
+    {
+      "time": "5.0",
+      "easing": "cubic-in",
+      "prototypes": "red small"
     }
   ]
 }

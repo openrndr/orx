@@ -3,6 +3,13 @@ import org.openrndr.extra.keyframer.Keyframer
 import org.openrndr.resourceUrl
 import java.net.URL
 
+/**
+ * A minimal orx-keyframe demo. It creates a class extending `Keyframer()` and specifies the variables to control
+ * (a Vector2 in this case), instantiates this class, then loads a JSON file containing animation information.
+ *
+ * In the `extend { }` block, the current time is passed to the `Keyframer` and its properties are used
+ * to draw on the window.
+ */
 fun main() = application {
     program {
         class Animation: Keyframer() {

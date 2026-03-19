@@ -3,28 +3,54 @@
     "time": 0.0,
     "x": 320.0,
     "y": 240.0,
-    "radius": 0.0
+    "radius": 1.0
   },
   {
-    "time": 3.0,
-    "repeat": {
-      "count": 5,
-      "keys": [
-        {
-          "duration": "cycleDuration * 0.5",
-          "easing": "cubic-in-out",
-          "x": 10.0,
-          "y": 4.0,
-          "radius": 400
-        },
-        {
-          "duration": "cycleDuration * 0.5",
-          "easing": "cubic-in-out",
-          "x": 630.0,
-          "y": 470.0,
-          "radius": 40
-        }
-      ]
-    }
+    "time": "cycleDuration * 1 ",
+    "duration": "cycleDuration",
+    "easing": "cubic-in-out",
+    "x": 420.0,
+    "y": 240.0,
+    "radius": 100.0
+  },
+  {
+    "time": "cycleDuration * 2",
+    "duration": "cycleDuration",
+    "easing": "cubic-in-out",
+    "x": 320.0,
+    "y": 240.0,
+    "radius": 40.0
+  },
+  {
+    "time": "cycleDuration * 3",
+    "duration": "cycleDuration",
+    "easing": "cubic-in-out",
+    "x": 420.0,
+    "y": 240.0,
+    "radius": 100.0
+  },
+  {
+    "time": "cycleDuration * 4",
+    "duration": "cycleDuration",
+    "easing": "cubic-in-out",
+    "x": 320.0,
+    "y": 240.0,
+    "radius": 40.0
+  },
+  {
+    "time": "cycleDuration * 5",
+    "duration": "cycleDuration",
+    "easing": "cubic-in-out",
+    "x": 420.0,
+    "y": 240.0,
+    "radius": 100.0
+  },
+  {
+    "time": "cycleDuration * 6",
+    "duration": "cycleDuration",
+    "easing": "cubic-in-out",
+    "x": 320.0,
+    "y": 240.0,
+    "radius": 40.0
   }
 ]

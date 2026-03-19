@@ -4,6 +4,10 @@ import org.openrndr.extra.keyframer.KeyframerFormat
 import org.openrndr.resourceUrl
 import java.net.URL
 
+/**
+ * Loads and plays the animation described in `demo-full-01.json`.
+ * The keyframes contained in that file control the position, radius, and color of a circle.
+ */
 fun main() = application {
     program {
         class Animation: Keyframer() {
