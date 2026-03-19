@@ -516,7 +516,21 @@ The last few lines of the program enable a rotating 3D camera and draw the 3D pa
 
 ### loft/DemoLoftNormals01
 
+Demonstrates the use of the `RectifiedContour.loft()` method.
 
+The program creates a list with random 3D points and uses `hobbyCurve` to
+convert them to a `Path3D` and a `PosePath3D`, needed by the `loft()` method.
+
+Next, the program creates a circular cross-section (a RectifiedContour).
+
+The `loft()` method does not produce a mesh or anything drawable, but a
+data structure that we can query at (u, v) coordinates to produce a mesh
+or another drawable item.
+
+In this case, a list containing `Segment3D` instances is produced.
+
+Finally, the core path and the segments are rendered using an interactive
+3D Orbital camera.
 
 ![loft-DemoLoftNormals01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/loft-DemoLoftNormals01Kt.png)
 
@@ -524,7 +538,11 @@ The last few lines of the program enable a rotating 3D camera and draw the 3D pa
 
 ### loft/DemoLoftNormals02
 
+A more advanced `Loft()` demo, which produces unique
+cross-sections by rotating an ellipse along the core.
 
+The resulting `Segment3D` are rendered using `BlendMode.ADD`
+to make the light of rendered segments accumulate.
 
 ![loft-DemoLoftNormals02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/loft-DemoLoftNormals02Kt.png)
 
