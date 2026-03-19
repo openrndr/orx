@@ -5,6 +5,18 @@ import org.openrndr.extra.color.spaces.OKHSV
 import org.openrndr.extra.color.tools.mixHue
 import org.openrndr.extra.color.tools.withHue
 
+/**
+ * Demonstrates the use of the `ColorRGBa` methods `.withHue()` and `.mixHue()`.
+ *
+ * `.withHue()` returns a new color by changing the hue of a source color,
+ * while maintaining other properties like saturation and value.
+ *
+ * `.mixHue()` returns a new color where the hue of a source color
+ * is interpolated towards a target color by the specified amount.
+ *
+ * In this demo, the target hue depends on the current time in seconds,
+ * resulting in an animated effect.
+ */
 fun main() = application {
     configure {
         width = 720

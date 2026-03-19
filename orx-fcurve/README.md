@@ -1,6 +1,6 @@
 # orx-fcurve
 
-FCurves are 1 dimensional function curves constructed from 2D bezier functions.
+FCurves are 1-dimensional function curves constructed from 2D bezier functions.
 They are often used to control a property over time. 
 `x` values don't have any units, but they often represent a duration in seconds.
 
@@ -22,7 +22,7 @@ The language to express FCurves is similar to SVG's path language.
 This is an example of a flat horizontal FCurve:
 
 ```kotlin
-// set the initial value to 0.5, hold that value for 1 seconds
+// set the initial value to 0.5, hold that value for 1 second
 val sizeCurve = fcurve("M0.5 h1")
 ```
 
@@ -42,7 +42,7 @@ For `y` values, lower case commands are relative and upper case commands are abs
 We can interpolate from height 0.2 to 0.8 in 2 seconds like this:
 
 ```kotlin
-// set initial value to 0.2, then interpolate linearly to value 0.8 over 2 seconds
+// set the initial value to 0.2, then interpolate linearly to value 0.8 over 2 seconds
 val sizeCurve = fcurve("M0.2 L2,0.8")
 ```
 
@@ -95,11 +95,11 @@ one control point is automatically calculated to maintain the curve direction. T
 commands require the presence of a previous segment, otherwise the program will not run.
 
 ```kotlin
-// Hold the value 0.5 during 0.2 seconds
-// then draw a smooth curve down to 0.5, up to 0.7 down to 0.3 and up to 0.7
+// Hold the value 0.5 during 0.2 seconds, 
+// then draw a smooth curve down to 0.5, up to 0.7, down to 0.3 and up to 0.7
 val smoothCurveT = fcurve("M0.5 h0.2 T0.2,0.3 T0.2,0.7 T0.2,0.3 T0.2,0.7")
 
-// Hold the value 0.5 during 0.2 seconds
+// Hold the value 0.5 during 0.2 seconds, 
 // then draw a smooth with 4 repetitions where we move up slowly and down quickly
 val smoothCurveS = fcurve("M0.5 h0.2 S0.2,0.0,0.2,0.5 S0.2,0.0,0.2,0.5 S0.2,0.0,0.2,0.5 S0.2,0.0,0.2,0.5")
 ```
