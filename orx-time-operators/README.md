@@ -57,7 +57,9 @@ drawer.circle(0.0, 0.0, size.sine(freq, phase))
 ## Demos
 ### DemoEnvelope
 
+Demonstrates the use of an Attack/Decay `Envelope` to control the size and rotation of a rectangle.
 
+The size envelope is triggered every 1.3 seconds, and the rotation one every 0.8 seconds.
 
 ![DemoEnvelopeKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-time-operators/images/DemoEnvelopeKt.png)
 
@@ -65,7 +67,13 @@ drawer.circle(0.0, 0.0, size.sine(freq, phase))
 
 ### DemoLFO
 
+This demo uses `LFO()` to produce two cyclic animations.
+The first one generates a sawtooth and controls the size of a rectangle.
+The second one uses a sine wave to control the rotation.
 
+When sampling the LFO one can specify the `frequency` and `phase`,
+which makes it possible to use the same LFO to produce animations
+with various loop durations.
 
 ![DemoLFOKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-time-operators/images/DemoLFOKt.png)
 

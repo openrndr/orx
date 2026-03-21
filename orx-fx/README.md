@@ -423,6 +423,19 @@ filters. The (OK)Lab representation is signed and requires a floating point repr
 
 [source code](src/jvmDemo/kotlin/DemoOkLab01.kt)
 
+### DemoPerturb01
+
+Demonstrates how to use the [Perturb] effect to distort
+a `colorBuffer`, in this case, an image loaded from disk.
+
+Notice the use of `createEquivalent()`, which creates a new `colorBuffer`
+with the same size and properties as a source `colorBuffer`.
+
+
+![DemoPerturb01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoPerturb01Kt.png)
+
+[source code](src/jvmDemo/kotlin/DemoPerturb01.kt)
+
 ### DemoPost01
 
 Demonstrates how to create an `extend` block to apply a post-processing effect.

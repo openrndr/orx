@@ -202,7 +202,17 @@ For example `(M0 (h1 m1)[3])[2]` expands to `M0 h1 m1 h1 m1 h1 m1 M0 h1 m1 h1 m1
 ## Demos
 ### DemoFCurve01
 
+Demonstrates how to create two `FCurve` instances, and a sampler function out of each.
 
+The first `FCurve` is used to control the horizontal position of a circle. It starts
+at the left edge of the window (0.0), reaches the center of the program window (360.0)
+after 4 seconds, and the right edge of the window (720.0) at 5 seconds.
+
+The second `FCurve` controls the vertical position, and it starts at the vertical center
+of the window (360.0) and holds that position for 5 seconds.
+
+By using `seconds.mod(5.0)` the time repeats in a loop that starts at 0.0 and ends at 5.0,
+producing an animation that repeats every 5 seconds.
 
 ![DemoFCurve01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoFCurve01Kt.png)
 
@@ -210,7 +220,10 @@ For example `(M0 (h1 m1)[3])[2]` expands to `M0 h1 m1 h1 m1 h1 m1 M0 h1 m1 h1 m1
 
 ### DemoFCurve02
 
-
+Does everything that `DemoFCurve01.kt` does and
+additionally renders both `FCurve` instances
+as contours and visualizing the current
+time as a vertical line.
 
 ![DemoFCurve02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoFCurve02Kt.png)
 
@@ -218,7 +231,15 @@ For example `(M0 (h1 m1)[3])[2]` expands to `M0 h1 m1 h1 m1 h1 m1 M0 h1 m1 h1 m1
 
 ### DemoFCurveSheet01
 
+A more advanced `FCurve` example creating 6 curves with various
+easing curves (in, out, in-out). In the `FCurve` expressions,
+`c` is used to create cubic segments. Two control points in
+each are specified with percentages. The cubic segments are followed
+by a hold `h` command, and then a repetition expressed as `[4]`,
+which means: repeat the previous block 4 times.
 
+This program is interactive: instead of using the current time
+in seconds to query the `FCurve`, the mouse position is used.
 
 ![DemoFCurveSheet01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoFCurveSheet01Kt.png)
 
@@ -226,7 +247,15 @@ For example `(M0 (h1 m1)[3])[2]` expands to `M0 h1 m1 h1 m1 h1 m1 M0 h1 m1 h1 m1
 
 ### DemoMultiFCurve01
 
+Demonstrates the use of `MultiFCurve`, which enables
+combining multiple `FCurve` definitions and produce
+one or more variables of various types, including
+`Vector2` (in this example), `ColorRGBa` and more.
 
+This demo produces the same animation as found in
+`DemoFCurve01.kt` and `DemoFCurve02.kt`, but instead
+of sampling the `x` and `y` curves separately, they
+are returned as a `Vector2` for convenience.
 
 ![DemoMultiFCurve01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoMultiFCurve01Kt.png)
 
