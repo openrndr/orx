@@ -15,6 +15,7 @@ uniform int xSegments;
 uniform int ySegments;
 
 uniform bool outputUV;
+uniform bool clampEdges;
 uniform vec2 offset;
 
 // varyings
@@ -158,7 +159,7 @@ void main() {
     vec2 distCoord = v_texCoord0 + vec2(tx, ty);
 
     if (!outputUV) {
-        if (distCoord.x >= 0.0 && distCoord.y >= 0.0 && distCoord.x < 1.0 && distCoord.y < 1.0) {
+        if (!clampEdges || (distCoord.x >= 0.0 && distCoord.y >= 0.0 && distCoord.x < 1.0 && distCoord.y < 1.0)) {
             if (xSegments == 0 && ySegments == 0) {
                 o_output = texture(tex0, distCoord);
             } else {

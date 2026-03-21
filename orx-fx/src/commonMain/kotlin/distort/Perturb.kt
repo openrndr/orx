@@ -14,7 +14,7 @@ import org.openrndr.shape.Rectangle
 class Perturb : Filter1to1(mppFilterShader(fx_perturb, "perturb")) {
     var seed: Vector3 by parameters
     /**
-     * base noise scale, default is Vector3(1.0, 1.0, 1.0)
+     * base noise scale, the default is Vector3(1.0, 1.0, 1.0)
      */
     @DoubleParameter("scale", 0.01, 8.0, order = 0)
     var scale: Double by parameters
@@ -52,9 +52,11 @@ class Perturb : Filter1to1(mppFilterShader(fx_perturb, "perturb")) {
     @BooleanParameter("output UV", order = 8)
     var outputUV: Boolean by parameters
 
-    @Vector2Parameter("offset", -1.0, 1.0, order = 9)
-    var offset: Vector2 by parameters
+    @BooleanParameter("clamp edges", order = 9)
+    var clampEdges: Boolean by parameters
 
+    @Vector2Parameter("offset", -1.0, 1.0, order = 10)
+    var offset: Vector2 by parameters
 
     init {
         seed = Vector3.ZERO
@@ -67,6 +69,7 @@ class Perturb : Filter1to1(mppFilterShader(fx_perturb, "perturb")) {
         xSegments = 0
         ySegments = 0
         outputUV = false
+        clampEdges = true
         offset = Vector2.ZERO
         radius = 1.0
 
