@@ -6,6 +6,15 @@ import org.openrndr.extra.timeoperators.LFO
 import org.openrndr.extra.timeoperators.LFOWave
 import org.openrndr.extra.timeoperators.TimeOperators
 
+/**
+ * This demo uses `LFO()` to produce two cyclic animations.
+ * The first one generates a sawtooth and controls the size of a rectangle.
+ * The second one uses a sine wave to control the rotation.
+ *
+ * When sampling the LFO one can specify the `frequency` and `phase`,
+ * which makes it possible to use the same LFO to produce animations
+ * with various loop durations.
+ */
 fun main() = application {
     program {
         val size = LFO()

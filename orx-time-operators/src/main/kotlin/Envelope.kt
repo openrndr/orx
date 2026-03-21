@@ -34,18 +34,17 @@ private fun exponentialEasing(x: Double, a: Double): Double {
 }
 
 class Envelope(
-        var restValue: Double = 0.0,
-        var targetValue: Double = 1.0,
-        @DoubleParameter("Attack Duration", 0.0, 5.0, 3, 0)
-        var attack: Double = 0.3,
-        @DoubleParameter("Decay Duration", 0.0, 5.0, 3, 1)
-        var decay: Double = 0.5,
-        @DoubleParameter("Easing Factor", 0.0, 1.0, 3, 2)
-        var easingFactor: Double = 0.3,
-        @BooleanParameter("Re-trigger", 3)
-        var reTrigger: Boolean = false
-) : TimeTools
-{
+    var restValue: Double = 0.0,
+    var targetValue: Double = 1.0,
+    @DoubleParameter("Attack Duration", 0.0, 5.0, 3, 0)
+    var attack: Double = 0.3,
+    @DoubleParameter("Decay Duration", 0.0, 5.0, 3, 1)
+    var decay: Double = 0.5,
+    @DoubleParameter("Easing Factor", 0.0, 1.0, 3, 2)
+    var easingFactor: Double = 0.3,
+    @BooleanParameter("Re-trigger", 3)
+    var reTrigger: Boolean = false
+) : TimeTools {
     var phase = EnvelopePhase.Rest
         set(value) {
             if (value == EnvelopePhase.Rest) {

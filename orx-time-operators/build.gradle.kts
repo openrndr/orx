@@ -6,4 +6,5 @@ dependencies {
     implementation(openrndr.application.core)
     implementation(openrndr.math)
     implementation(project(":orx-parameters"))
+    demoImplementation(project(":orx-timer"))
 }
