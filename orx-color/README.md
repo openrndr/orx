@@ -280,6 +280,7 @@ Visualizes a plane of ColorOKLCH colors as small 3D spheres
 inside a 3D box. The plane represents all available hues and chromas.
 The luminosity used to create the colors is modulated over time
 with a slow sine wave.
+
 Instanced rendering is used to render 90 x 100 colored spheres,
 each with a unique position based on the RGB components of the color.
 
@@ -293,7 +294,22 @@ actually clipped to the walls.
 
 ### DemoColorPlane02
 
+Visualizes a plane of ColorOKLCH colors as small 3D spheres
+inside a 3D box. The plane represents all available lightness and chroma
+values. The hue used to create the colors is modulated over time
+with a slow sine wave.
 
+This demo is similar to `DemoColorPlane01.kt`. The difference is that
+the first demo shows all hues and chroma values while animating
+luminosity, and this demo shows all luminosity and chroma values while
+animating the hue.
+
+Instanced rendering is used to render 100 x 100 colored spheres,
+each with a unique position based on the RGB components of the color.
+
+Since the OKLCH color space is larger than the RGB space, some
+spheres would be outside the 3D box, but they are
+actually clipped to the walls.
 
 ![DemoColorPlane02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorPlane02Kt.png)
 
@@ -319,7 +335,25 @@ The rendering process includes:
 
 ### DemoDeltaE
 
+Demonstrates the use of the `.deltaE76()` method to
+compute the CIE76 color difference (ΔE*76) between two colors.
 
+The method calculates the Euclidean distance between the two colors in the
+LAB color space and returns it as a Double. If either of the colors is not
+in LAB format, it is converted to LAB before computation.
+
+The `startColor` is a fully saturated color with an animated hue that
+increases 36 degrees per second.
+
+The program renders 36 evenly spaced hues starting at `startColor`,
+in steps of 10 degrees.
+
+For each hue, 100 steps are rendered as small circles using polar coordinates.
+An `endColor` is calculated for each step. The step number controls the color's
+saturation.
+
+The result is an animated effect featuring rotating, growing, and shrinking
+lines rendered with colored gradients.
 
 ![DemoDeltaEKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoDeltaEKt.png)
 
@@ -327,7 +361,7 @@ The rendering process includes:
 
 ### DemoFettePalette01
 
-Demonstrates `generateColorRamp()`, a function with numerous parameters to generate color ramps.
+Demonstrates `generateColorRamp()`, a function with many parameters to generate color ramps.
 
 The first argument is the number of base colors to produce.
 
@@ -339,6 +373,7 @@ are rendered as small colored rectangles.
 
 In the center of the window, four colors from those collections are rendered as larger rectangles,
 using a random base color, a random light color, and two random dark colors.
+A random seed based in `seconds` is used for an animated effect.
 
 ![DemoFettePalette01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoFettePalette01Kt.png)
 
@@ -346,7 +381,22 @@ using a random base color, a random light color, and two random dark colors.
 
 ### DemoFettePalette02
 
+Demonstrates how to create a GUI to control a `Fette Palette` color ramp.
 
+The `ColorRampParameters()` method is used to create an object containing
+the parameters needed by `generateColorRamp()`. We pass this object
+to the GUI, which creates sliders and other needed to explore
+the creation of color palettes.
+
+The GUI's built-in `random` button can be used to randomize palettes.
+`shift + click` on `random` for wilder results.
+
+The created color ramps contain `baseColors`, `lightColors` and `darkColors`. All three collections
+are rendered as small colored rectangles.
+
+In the center of the window, four colors from those collections are rendered as larger rectangles,
+using a random base color, a random light color, and two random dark colors.
+A random seed based in `seconds` is used for an animated effect.
 
 ![DemoFettePalette02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoFettePalette02Kt.png)
 
@@ -401,7 +451,11 @@ resulting in an animated effect.
 
 ### DemoMixSpectral01
 
+Demonstrates the use of `mixSpectral()` to blend two colors spectrally by interpolating their reflectance spectra
+and returning the resulting color. This method uses spectral upsampling, Saunderson correction, and concentration
+factors to compute the resulting color in the RGB color space.
 
+A plain `mix()` of the same two colors is shown at the bottom for comparison.
 
 ![DemoMixSpectral01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoMixSpectral01Kt.png)
 
