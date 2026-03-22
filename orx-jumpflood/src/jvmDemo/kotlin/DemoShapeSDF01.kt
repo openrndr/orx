@@ -15,7 +15,7 @@ import org.openrndr.extra.svg.loadSVG
  * Hold down any mouse button to observe the original vector shape in black and white,
  * without the effect applied.
  */
-fun main() =  application {
+fun main() = application {
     configure {
         width = 720
         height = 405
@@ -24,14 +24,16 @@ fun main() =  application {
         val sdf = ShapeSDF()
         val df = colorBuffer(width, height, format = ColorFormat.RGBa, type = ColorType.FLOAT32)
 
-            val shapes = loadSVG("orx-jumpflood/src/jvmDemo/resources/name.svg").findShapes().map { it.shape }
-            sdf.setShapes(shapes)
-            sdf.apply(emptyArray(), df)
+        val shapes = loadSVG("orx-jumpflood/src/jvmDemo/resources/name.svg").findShapes().map { it.shape }
+        sdf.setShapes(shapes)
 
         val mouseTracker = MouseTracker(mouse)
 
         extend {
-            if(mouseTracker.pressedButtons.isEmpty())
+            if (frameCount == 0)
+                sdf.apply(emptyArray(), df)
+
+            if (mouseTracker.pressedButtons.isEmpty())
                 drawer.image(df)
             else
                 drawer.shapes(shapes)
