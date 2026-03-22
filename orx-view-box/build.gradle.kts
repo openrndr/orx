@@ -26,6 +26,7 @@ kotlin {
                 implementation(project(":orx-fx"))
                 implementation(project(":orx-mesh-generators"))
                 implementation(project(":orx-view-box"))
+                implementation(project(":orx-shapes"))
             }
         }
     }

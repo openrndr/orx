@@ -13,6 +13,8 @@ class ViewBox(
     override val program: Program, var clientArea: Rectangle,
     translateMouse: Boolean = true,
     translateKeyboard: Boolean = true,
+    translatePointers: Boolean = true,
+    translateGestures: Boolean = true,
     val colorType: ColorType? = null,
     val contentScale: Double? = null,
     val multisample: BufferMultisample? = null
@@ -62,6 +64,13 @@ class ViewBox(
 
         override val scrolled = Event<MouseEvent>()
     }
+    inner class TranslatedPointerEvents: PointerEvents {
+        override val cancelled = Event<PointerEvent>()
+        override val moved = Event<PointerEvent>()
+        override val pointerDown = Event<PointerEvent>()
+        override val pointerUp = Event<PointerEvent>()
+
+    }
 
     override val mouse: MouseEvents = if (translateMouse) {
         TranslatedMouseEvents()
@@ -78,8 +87,25 @@ class ViewBox(
         program.keyboard
     }
 
-    override val pointers: PointerEvents by lazy { program.pointers }
+    override val pointers: PointerEvents by lazy {
+        if (translatePointers) {
+            TranslatedPointerEvents()
+        } else {
+            program.pointers
+        }
+    }
 
+    override val gestures by lazy {
+        if (translateGestures) {
+            object : GestureEvents {
+                override val pinchStarted: Event<PinchEvent> = Event()
+                override val pinchUpdated: Event<PinchEvent> = Event()
+                override val pinchEnded: Event<PinchEvent> = Event()
+            }
+        } else {
+            program.gestures
+        }
+    }
     var hasInputFocus = false
 
     init {
@@ -150,6 +176,58 @@ class ViewBox(
                     it.cancelPropagation()
                 }
             }
+        }
+
+        if (translatePointers) {
+            program.pointers.pointerDown.listen {
+                if (hasInputFocus && !it.propagationCancelled) {
+                    pointers.pointerDown.trigger(it.copy(position = it.position - clientArea.corner))
+                    it.cancelPropagation()
+                }
+            }
+            program.pointers.pointerUp.listen {
+                if (true) {
+                    pointers.pointerUp.trigger(it.copy(position = it.position - clientArea.corner))
+                    it.cancelPropagation()
+                }
+            }
+            program.pointers.cancelled.listen {
+                if (true) {
+                    pointers.cancelled.trigger(it.copy(position = it.position - clientArea.corner))
+                    it.cancelPropagation()
+                }
+            }
+            program.pointers.moved.listen {
+                if (true) {
+                    pointers.moved.trigger(it.copy(position = it.position - clientArea.corner))
+                }
+            }
+        }
+
+        if (translateGestures) {
+            println("translating gestures")
+            program.gestures.pinchStarted.listen {
+                println("vb: pinch started")
+                if (hasInputFocus && !it.propagationCancelled) {
+                    gestures.pinchStarted.trigger(it)
+                    it.cancelPropagation()
+                }
+            }
+            program.gestures.pinchUpdated.listen {
+                println("vb: pinch updated")
+                if (hasInputFocus && !it.propagationCancelled) {
+                    gestures.pinchUpdated.trigger(it)
+                    it.cancelPropagation()
+                }
+            }
+
+            program.gestures.pinchEnded.listen {
+                if (!it.propagationCancelled) {
+                    gestures.pinchEnded.trigger(it)
+                    it.cancelPropagation()
+                }
+            }
+
         }
     }
 
@@ -289,12 +367,14 @@ fun Program.viewBox(
     area: Rectangle,
     translateMouse: Boolean = true,
     translateKeyboard: Boolean = true,
+    translatePointers: Boolean = true,
+    translateGestures: Boolean = true,
     colorType: ColorType? = null,
     contentScale: Double? = null,
     multisample: BufferMultisample? = null,
     f: ViewBox.() -> Unit = {}
 ): ViewBox {
-    val viewBox = ViewBox(this, area, translateMouse, translateKeyboard, colorType, contentScale, multisample)
+    val viewBox = ViewBox(this, area, translateMouse, translateKeyboard, translatePointers, translateGestures, colorType, contentScale, multisample)
     val rt = viewBox.configureRenderTarget()
     drawer.isolatedWithTarget(rt) {
         viewBox.f()
