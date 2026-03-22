@@ -1,9 +1,9 @@
 package org.openrndr.panel.elements
 
-import kotlinx.coroutines.yield
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
+import org.openrndr.draw.isolated
 import org.openrndr.draw.loadFont
 import org.openrndr.events.Event
 import org.openrndr.extra.textwriter.TextWriter
@@ -22,9 +22,11 @@ class TextNode(var text: String) : Element(ElementType("text")) {
                 drawer.fill = (fill)
             }
             val fontMap = (root() as Body).controlManager?.fontManager?.font(computedStyle)
-            val writer = TextWriter(drawer)
             drawer.fontMap = (fontMap)
 
+            val writer = TextWriter(drawer)
+
+            writer.ellipsis = null
             writer.box =
                 layout.boundsAtOriginPadded(computedStyle)// Rectangle(Vector2(layout.screenX * 0.0, layout.screenY * 0.0), layout.screenWidth, layout.screenHeight)
             writer.horizontalAlign = computedStyle.computedTextHorizontalAlign

@@ -404,6 +404,7 @@ class TextWriter(val drawerRef: Drawer?) {
 
                     val th = ey - sy
                     it.map { it.shift(0.0, (fontMap?.height ?: 0.0) + (box.height - th) * align) }
+
                 }
             }
         }
@@ -477,14 +478,21 @@ class TextWriter(val drawerRef: Drawer?) {
                         }
                         (font.glyphMetrics[char]?.advanceWidth ?: 0.0)
                     } + style.tracking * (token.length - 1).coerceAtLeast(0)
-                    if (localCursor.x == box.x || localCursor.x + tokenWidth < box.x + box.width && localCursor.y <= box.y + box.height) run {
+                    if (localCursor.x == box.x || localCursor.x + tokenWidth < box.x + box.width && localCursor.y <= box.y + box.height) {
                         val textToken = TextToken(token, localCursor.x, localCursor.y, tokenWidth, style.tracking)
                         textTokens.add(textToken)
                     } else {
                         if (localCursor.y > box.corner.y + box.height) {
                             fits = false
                         }
-                        if (localCursor.y + verticalSpace <= box.y + box.height) {
+
+                        val hasSpace = if (verticalAlign == null) {
+                            localCursor.y + verticalSpace <= box.y + box.height
+                        } else {
+                            localCursor.y - box.y + verticalSpace <= box.height - font.height
+                        }
+
+                        if (hasSpace) {
                             textTokens.add(TextToken.END_OF_LINE)
                             localCursor.y += verticalSpace
                             localCursor.x = box.x
