@@ -7,7 +7,7 @@ import org.openrndr.math.Vector2
 import kotlin.random.Random
 
 /**
- * Demonstrates `generateColorRamp()`, a function with numerous parameters to generate color ramps.
+ * Demonstrates `generateColorRamp()`, a function with many parameters to generate color ramps.
  *
  * The first argument is the number of base colors to produce.
  *
@@ -19,6 +19,7 @@ import kotlin.random.Random
  *
  * In the center of the window, four colors from those collections are rendered as larger rectangles,
  * using a random base color, a random light color, and two random dark colors.
+ * A random seed based in `seconds` is used for an animated effect.
  */
 fun main() = application {
     configure {

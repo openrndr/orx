@@ -7,6 +7,24 @@ import org.openrndr.extra.meshgenerators.sphereMesh
 import org.openrndr.math.Vector3
 import kotlin.math.cos
 
+/**
+ * Visualizes a plane of ColorOKLCH colors as small 3D spheres
+ * inside a 3D box. The plane represents all available lightness and chroma
+ * values. The hue used to create the colors is modulated over time
+ * with a slow sine wave.
+ *
+ * This demo is similar to `DemoColorPlane01.kt`. The difference is that
+ * the first demo shows all hues and chroma values while animating
+ * luminosity, and this demo shows all luminosity and chroma values while
+ * animating the hue.
+ *
+ * Instanced rendering is used to render 100 x 100 colored spheres,
+ * each with a unique position based on the RGB components of the color.
+ *
+ * Since the OKLCH color space is larger than the RGB space, some
+ * spheres would be outside the 3D box, but they are
+ * actually clipped to the walls.
+ */
 fun main() = application {
     configure {
         width = 720
@@ -25,9 +43,7 @@ fun main() = application {
         extend(Orbital())
         extend {
             drawer.clear(ColorRGBa.WHITE)
-
             drawer.stroke = null
-
             drawer.fontMap = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 16.0)
 
             instanceData.put {
@@ -52,6 +68,7 @@ fun main() = application {
                 drawer.vertexBufferInstances(listOf(mesh), listOf(instanceData), DrawPrimitive.TRIANGLES, 90 * 100)
             }
 
+            // Draw the edges of a 3D cube
             drawer.stroke = ColorRGBa.BLACK.opacify(0.25)
             drawer.strokeWeight = 10.0
             drawer.lineSegments(

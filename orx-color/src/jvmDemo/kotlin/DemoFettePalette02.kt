@@ -8,6 +8,24 @@ import org.openrndr.extra.gui.addTo
 import org.openrndr.math.Vector2
 import kotlin.random.Random
 
+/**
+ * Demonstrates how to create a GUI to control a `Fette Palette` color ramp.
+ *
+ * The `ColorRampParameters()` method is used to create an object containing
+ * the parameters needed by `generateColorRamp()`. We pass this object
+ * to the GUI, which creates sliders and other needed to explore
+ * the creation of color palettes.
+ *
+ * The GUI's built-in `random` button can be used to randomize palettes.
+ * `shift + click` on `random` for wilder results.
+ *
+ * The created color ramps contain `baseColors`, `lightColors` and `darkColors`. All three collections
+ * are rendered as small colored rectangles.
+ *
+ * In the center of the window, four colors from those collections are rendered as larger rectangles,
+ * using a random base color, a random light color, and two random dark colors.
+ * A random seed based in `seconds` is used for an animated effect.
+ */
 fun main() = application {
     configure {
         width = 720
@@ -44,25 +62,25 @@ fun main() = application {
             drawer.translate(200.0, 0.0)
 
             drawer.isolated {
-                for ((index, i) in ramp.lightColors.withIndex()) {
+                for ((index, c) in ramp.lightColors.withIndex()) {
                     drawer.stroke = null
-                    drawer.fill = i.toRGBa()
+                    drawer.fill = c
                     drawer.rectangle(20.0, 20.0, 50.0, 50.0)
                     drawer.translate(50.0, 0.0)
                 }
             }
             drawer.isolated {
-                for ((index, i) in ramp.baseColors.withIndex()) {
+                for ((index, c) in ramp.baseColors.withIndex()) {
                     drawer.stroke = null
-                    drawer.fill = i.toRGBa()
+                    drawer.fill = c
                     drawer.rectangle(20.0, 70.0, 50.0, 50.0)
                     drawer.translate(50.0, 0.0)
                 }
             }
             drawer.isolated {
-                for ((index, i) in ramp.darkColors.withIndex()) {
+                for ((index, c) in ramp.darkColors.withIndex()) {
                     drawer.stroke = null
-                    drawer.fill = i.toRGBa()
+                    drawer.fill = c
                     drawer.rectangle(20.0, 120.0, 50.0, 50.0)
                     drawer.translate(50.0, 0.0)
                 }

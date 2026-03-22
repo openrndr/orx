@@ -12,6 +12,7 @@ import kotlin.math.cos
  * inside a 3D box. The plane represents all available hues and chromas.
  * The luminosity used to create the colors is modulated over time
  * with a slow sine wave.
+ *
  * Instanced rendering is used to render 90 x 100 colored spheres,
  * each with a unique position based on the RGB components of the color.
  *
@@ -54,7 +55,6 @@ fun main() = application {
             }
             drawer.isolated {
                 drawer.shadeStyle = shadeStyle {
-
                     vertexTransform = """
                             x_position += i_instancePosition;
                         """.trimIndent()
@@ -62,7 +62,6 @@ fun main() = application {
                             x_fill = vi_instanceColor;
                         """.trimIndent()
                 }
-
                 drawer.vertexBufferInstances(listOf(mesh), listOf(instanceData), DrawPrimitive.TRIANGLES, 90 * 100)
             }
 
