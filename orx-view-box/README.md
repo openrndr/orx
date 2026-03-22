@@ -4,6 +4,34 @@ To create independent views inside one program window.
 
 <!-- __demos__ -->
 ## Demos
+### DemoGestures01
+
+Demonstrates how to draw multiple view boxes. The first two feature
+interactive 2D cameras, the third one uses an Orbital 3D camera.
+All three can be controlled with the mouse wheel and buttons.
+
+The `shouldDraw` viewBox variable is used to avoid re-rendering the view
+unnecessarily when the camera has not changed.
+
+
+![DemoGestures01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-view-box/images/DemoGestures01Kt.png)
+
+[source code](src/jvmDemo/kotlin/DemoGestures01.kt)
+
+### DemoPointers01
+
+Demonstrates how to draw multiple view boxes. The first two feature
+interactive 2D cameras, the third one uses an Orbital 3D camera.
+All three can be controlled with the mouse wheel and buttons.
+
+The `shouldDraw` viewBox variable is used to avoid re-rendering the view
+unnecessarily when the camera has not changed.
+
+
+![DemoPointers01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-view-box/images/DemoPointers01Kt.png)
+
+[source code](src/jvmDemo/kotlin/DemoPointers01.kt)
+
 ### DemoProxyProgram01
 
 Demonstrates how to use a proxy program inside a [viewBox],

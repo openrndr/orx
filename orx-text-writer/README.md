@@ -23,6 +23,29 @@ dynamically changing over time.
 
 [source code](src/jvmDemo/kotlin/DemoGlyphOutput01.kt)
 
+### DemoTextBreaker01
+
+This demo features the drawing of a centered rectangle and the addition of styled text inside
+the rectangle. The application manages the drawing of shapes and implementation of text rendering
+with specific font and settings.
+
+The following operations are performed:
+- A rectangle is created from the center of the drawing bounds.
+- The rectangle is drawn without a fill and with a white stroke.
+- A custom font is loaded and applied to the drawer.
+- A `TextWriter` is utilized to display the text "hello world" inside the rectangle, adhering to
+specific styling and formatting rules.
+
+Key Components:
+- `application` establishes the visual environment.
+- `Rectangle` provides a way to define the rectangular area.
+- `drawer` enables isolated operations for drawing elements.
+- `writer` facilitates text rendering with alignment and spacing adjustments.
+
+![DemoTextBreaker01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/DemoTextBreaker01Kt.png)
+
+[source code](src/jvmDemo/kotlin/DemoTextBreaker01.kt)
+
 ### DemoTextWriter01
 
 This demo features the drawing of a centered rectangle and the addition of styled text inside
