@@ -133,3 +133,14 @@ update methods for the values to be interpolated over time.
 ![DemoSpring01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-delegate-magic/images/DemoSpring01Kt.png)
 
 [source code](src/jvmDemo/kotlin/DemoSpring01.kt)
+
+### DemoTracking01
+
+Demonstrates the use of the `tracking` delegate.
+
+In this case it is used to visualize the history of a variable
+which changes based on the simplex noise of the current time in seconds.
+
+![DemoTracking01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-delegate-magic/images/DemoTracking01Kt.png)
+
+[source code](src/jvmDemo/kotlin/DemoTracking01.kt)
