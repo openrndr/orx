@@ -64,7 +64,8 @@ class ViewBox(
 
         override val scrolled = Event<MouseEvent>()
     }
-    inner class TranslatedPointerEvents: PointerEvents {
+
+    inner class TranslatedPointerEvents : PointerEvents {
         override val cancelled = Event<PointerEvent>()
         override val moved = Event<PointerEvent>()
         override val pointerDown = Event<PointerEvent>()
@@ -109,138 +110,241 @@ class ViewBox(
     var hasInputFocus = false
 
     init {
+
+        val previousProgram = Program.active
+        Program.active = this
+
         if (translateMouse) {
             program.mouse.moved.listen {
-                mouse as TranslatedMouseEvents
-                mouse.position = it.position - clientArea.corner
-                if (it.position in clientArea && !it.propagationCancelled) {
-                    hasInputFocus = true
-                    mouse.moved.trigger(it.copy(position = it.position - clientArea.corner))
-                    it.cancelPropagation()
-                } else if (it.position !in clientArea) {
-                    hasInputFocus = false
+                val previousProgram = Program.active
+                Program.active = this
+                try {
+                    mouse as TranslatedMouseEvents
+                    mouse.position = it.position - clientArea.corner
+                    if (it.position in clientArea && !it.propagationCancelled) {
+                        hasInputFocus = true
+                        mouse.moved.trigger(it.copy(position = it.position - clientArea.corner))
+                        it.cancelPropagation()
+                    } else if (it.position !in clientArea) {
+                        hasInputFocus = false
+                    }
+                } finally {
+                    Program.active = previousProgram
                 }
             }
 
             program.mouse.buttonUp.listen {
-                if (it.position in clientArea && !it.propagationCancelled) {
-                    mouse.buttonUp.trigger(it.copy(position = it.position - clientArea.corner))
-                    it.cancelPropagation()
+                val previousProgram = Program.active
+                Program.active = this
+                try {
+                    if (it.position in clientArea && !it.propagationCancelled) {
+                        mouse.buttonUp.trigger(it.copy(position = it.position - clientArea.corner))
+                        it.cancelPropagation()
+                    }
+                } finally {
+                    Program.active = previousProgram
                 }
             }
             program.mouse.dragged.listen {
-                if (it.position in clientArea && !it.propagationCancelled) {
-                    mouse.dragged.trigger(it.copy(position = it.position - clientArea.corner))
-                    it.cancelPropagation()
+                val previousProgram = Program.active
+                Program.active = this
+                try {
+                    if (it.position in clientArea && !it.propagationCancelled) {
+                        mouse.dragged.trigger(it.copy(position = it.position - clientArea.corner))
+                        it.cancelPropagation()
+                    }
+                } finally {
+                    Program.active = previousProgram
                 }
             }
             program.mouse.buttonDown.listen {
-                if (it.position in clientArea && !it.propagationCancelled) {
-                    mouse.buttonDown.trigger(it.copy(position = it.position - clientArea.corner))
-                    it.cancelPropagation()
+                val previousProgram = Program.active
+                Program.active = this
+                try {
+                    if (it.position in clientArea && !it.propagationCancelled) {
+                        mouse.buttonDown.trigger(it.copy(position = it.position - clientArea.corner))
+                        it.cancelPropagation()
+                    }
+                } finally {
+                    Program.active = previousProgram
                 }
             }
 
             program.mouse.scrolled.listen {
-                if (it.position in clientArea && !it.propagationCancelled) {
-                    mouse.scrolled.trigger(it.copy(position = it.position - clientArea.corner))
-                    it.cancelPropagation()
+                val previousProgram = Program.active
+                Program.active = this
+                try {
+                    if (it.position in clientArea && !it.propagationCancelled) {
+                        mouse.scrolled.trigger(it.copy(position = it.position - clientArea.corner))
+                        it.cancelPropagation()
+                    }
+                } finally {
+                    Program.active = previousProgram
                 }
             }
         }
         if (translateKeyboard) {
             program.keyboard.keyDown.listen {
-                if (hasInputFocus && !it.propagationCancelled) {
-                    keyboard.keyDown.trigger(it)
-                    it.cancelPropagation()
+                val previousProgram = Program.active
+                Program.active = this
+                try {
+                    if (hasInputFocus && !it.propagationCancelled) {
+                        keyboard.keyDown.trigger(it)
+                        it.cancelPropagation()
+                    }
+                } finally {
+                    Program.active = previousProgram
                 }
             }
 
             program.keyboard.keyUp.listen {
-                if (hasInputFocus && !it.propagationCancelled) {
-                    keyboard.keyUp.trigger(it)
-                    it.cancelPropagation()
+                val previousProgram = Program.active
+                Program.active = this
+                try {
+                    if (hasInputFocus && !it.propagationCancelled) {
+                        keyboard.keyUp.trigger(it)
+                        it.cancelPropagation()
+                    }
+                } finally {
+                    Program.active = previousProgram
                 }
             }
 
             program.keyboard.keyRepeat.listen {
-                if (hasInputFocus && !it.propagationCancelled) {
-                    keyboard.keyRepeat.trigger(it)
-                    it.cancelPropagation()
+                val previousProgram = Program.active
+                Program.active = this
+                try {
+                    if (hasInputFocus && !it.propagationCancelled) {
+                        keyboard.keyRepeat.trigger(it)
+                        it.cancelPropagation()
+                    }
+                } finally {
+                    Program.active = previousProgram
                 }
             }
 
             program.keyboard.character.listen {
-                if (hasInputFocus && !it.propagationCancelled) {
-                    keyboard.character.trigger(it)
-                    it.cancelPropagation()
+                val previousProgram = Program.active
+                Program.active = this
+                try {
+                    if (hasInputFocus && !it.propagationCancelled) {
+                        keyboard.character.trigger(it)
+                        it.cancelPropagation()
+                    }
+                } finally {
+                    Program.active = previousProgram
                 }
             }
         }
 
         if (translatePointers) {
             program.pointers.pointerDown.listen {
-                if (hasInputFocus && !it.propagationCancelled) {
-                    pointers.pointerDown.trigger(it.copy(position = it.position - clientArea.corner))
-                    it.cancelPropagation()
+                val previousProgram = Program.active
+                Program.active = this
+                try {
+                    if (hasInputFocus && !it.propagationCancelled) {
+                        pointers.pointerDown.trigger(it.copy(position = it.position - clientArea.corner))
+                        it.cancelPropagation()
+                    }
+                } finally {
+                    Program.active = previousProgram
                 }
             }
             program.pointers.pointerUp.listen {
-                if (true) {
+                val previousProgram = Program.active
+                Program.active = this
+                try {
                     pointers.pointerUp.trigger(it.copy(position = it.position - clientArea.corner))
                     it.cancelPropagation()
+                } finally {
+                    Program.active = previousProgram
                 }
             }
             program.pointers.cancelled.listen {
-                if (true) {
+                val previousProgram = Program.active
+                Program.active = this
+                try {
                     pointers.cancelled.trigger(it.copy(position = it.position - clientArea.corner))
                     it.cancelPropagation()
+                } finally {
+                    Program.active = previousProgram
                 }
             }
             program.pointers.moved.listen {
-                if (true) {
+                val previousProgram = Program.active
+                Program.active = this
+                try {
                     pointers.moved.trigger(it.copy(position = it.position - clientArea.corner))
+                } finally {
+                    Program.active = previousProgram
                 }
             }
         }
 
         if (translateGestures) {
-            println("translating gestures")
             program.gestures.pinchStarted.listen {
-                println("vb: pinch started")
-                if (hasInputFocus && !it.propagationCancelled) {
-                    gestures.pinchStarted.trigger(it)
-                    it.cancelPropagation()
+                val previousProgram = Program.active
+                Program.active = this
+                try {
+                    if (hasInputFocus && !it.propagationCancelled) {
+                        gestures.pinchStarted.trigger(it)
+                        it.cancelPropagation()
+                    }
+                } finally {
+                    Program.active = previousProgram
                 }
             }
             program.gestures.pinchUpdated.listen {
-                println("vb: pinch updated")
-                if (hasInputFocus && !it.propagationCancelled) {
-                    gestures.pinchUpdated.trigger(it)
-                    it.cancelPropagation()
+                val previousProgram = Program.active
+                Program.active = this
+                try {
+                    if (hasInputFocus && !it.propagationCancelled) {
+                        gestures.pinchUpdated.trigger(it)
+                        it.cancelPropagation()
+                    }
+                } finally {
+                    Program.active = previousProgram
                 }
             }
 
             program.gestures.pinchEnded.listen {
-                if (!it.propagationCancelled) {
-                    gestures.pinchEnded.trigger(it)
-                    it.cancelPropagation()
+                val previousProgram = Program.active
+                Program.active = this
+                try {
+                    if (!it.propagationCancelled) {
+                        gestures.pinchEnded.trigger(it)
+                        it.cancelPropagation()
+                    }
+                } finally {
+                    Program.active = previousProgram
                 }
             }
-
         }
+        Program.active = previousProgram
     }
 
     override fun <T : Extension> extend(extension: T): T {
         extensions.add(extension)
-        extension.setup(this)
+        val previousProgram = Program.active
+        Program.active = this
+        try {
+            extension.setup(this)
+        } finally {
+            Program.active = previousProgram
+        }
         return extension
     }
 
     override fun <T : Extension> extend(extension: T, configure: T.() -> Unit): T {
         extensions.add(extension)
-        extension.configure()
-        extension.setup(this)
+        val previousProgram = Program.active
+        Program.active = this
+        try {
+            extension.configure()
+            extension.setup(this)
+        } finally {
+            Program.active = previousProgram
+        }
         return extension
     }
 
@@ -319,12 +423,18 @@ class ViewBox(
 
     override fun draw() {
         update()
-        program.drawer.isolated {
-            if (resolved == null) {
-                program.drawer.image(renderTarget!!.colorBuffer(0), clientArea.corner)
-            } else {
-                program.drawer.image(resolved!!, clientArea.corner)
+        val previousProgram = Program.active
+
+        try {
+            program.drawer.isolated {
+                if (resolved == null) {
+                    program.drawer.image(renderTarget!!.colorBuffer(0), clientArea.corner)
+                } else {
+                    program.drawer.image(resolved!!, clientArea.corner)
+                }
             }
+        } finally {
+            Program.active = previousProgram
         }
     }
 
@@ -332,25 +442,33 @@ class ViewBox(
      * Updates the view box by executing all the extension draw stages. [Update] will not visualize the results
      */
     fun update() {
-        configureRenderTarget()
-        if (viewBoxReconfigured || shouldDraw()) {
-            program.drawer.isolatedWithTarget(renderTarget!!) {
-                drawer.clear(ColorRGBa.BLACK)
-                drawer.defaults()
-                drawer.ortho(renderTarget!!)
-                for (extension in extensions) {
-                    extension.beforeDraw(program.drawer, this@ViewBox)
-                }
-                for (extension in extensions.reversed()) {
-                    extension.afterDraw(program.drawer, this@ViewBox)
-                }
-                program.drawer.defaults()
 
-                viewBoxReconfigured = false
+        val previousProgram = Program.active
+        Program.active = this
+
+        try {
+            configureRenderTarget()
+            if (viewBoxReconfigured || shouldDraw()) {
+                program.drawer.isolatedWithTarget(renderTarget!!) {
+                    drawer.clear(ColorRGBa.BLACK)
+                    drawer.defaults()
+                    drawer.ortho(renderTarget!!)
+                    for (extension in extensions) {
+                        extension.beforeDraw(program.drawer, this@ViewBox)
+                    }
+                    for (extension in extensions.reversed()) {
+                        extension.afterDraw(program.drawer, this@ViewBox)
+                    }
+                    program.drawer.defaults()
+
+                    viewBoxReconfigured = false
+                }
+                if (resolved != null) {
+                    renderTarget!!.colorBuffer(0).copyTo(resolved!!)
+                }
             }
-            if (resolved != null) {
-                renderTarget!!.colorBuffer(0).copyTo(resolved!!)
-            }
+        } finally {
+            Program.active = previousProgram
         }
     }
 }
@@ -374,10 +492,26 @@ fun Program.viewBox(
     multisample: BufferMultisample? = null,
     f: ViewBox.() -> Unit = {}
 ): ViewBox {
-    val viewBox = ViewBox(this, area, translateMouse, translateKeyboard, translatePointers, translateGestures, colorType, contentScale, multisample)
-    val rt = viewBox.configureRenderTarget()
-    drawer.isolatedWithTarget(rt) {
-        viewBox.f()
+    val viewBox = ViewBox(
+        this,
+        area,
+        translateMouse,
+        translateKeyboard,
+        translatePointers,
+        translateGestures,
+        colorType,
+        contentScale,
+        multisample
+    )
+    val previousProgram = Program.active
+    Program.active = viewBox
+    try {
+        val rt = viewBox.configureRenderTarget()
+        drawer.isolatedWithTarget(rt) {
+            viewBox.f()
+        }
+    } finally {
+        Program.active = previousProgram
     }
     return viewBox
 }
