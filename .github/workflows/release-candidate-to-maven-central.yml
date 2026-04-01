@@ -7,17 +7,21 @@ jobs:
   release_candidate_to_maven_central:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 21
+
       - name: Build ORX
         run: ./gradlew -Prelease.useLastTag=true build
+
       - name: Decode
         run: |
           echo "${{secrets.SIGNING_SECRET_KEY_RING_FILE}}" > ~/.gradle/secring.gpg.b64
           base64 -d ~/.gradle/secring.gpg.b64 > ~/.gradle/secring.gpg
+
       - name: Publish
         run: ./gradlew publishAggregationToCentralPortal -Prelease.useLastTag=true -Psigning.keyId=${{secrets.SIGNING_KEY_ID}} -Psigning.password=openrndr -Psigning.secretKeyRingFile=$(echo ~/.gradle/secring.gpg)
         env:
