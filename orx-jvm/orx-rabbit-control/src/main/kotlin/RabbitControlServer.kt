@@ -127,7 +127,13 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
                 }
                 is RGBAParameter -> {
                     val c = it.value
-                    val cc = ColorRGBa(c.red.toDouble() / 255.0, c.green.toDouble() / 255.0, c.blue.toDouble() / 255.0, c.alpha.toDouble() / 255.0)
+                    val cc = ColorRGBa(
+                        c.red.toDouble() / 255.0,
+                        c.green.toDouble() / 255.0,
+                        c.blue.toDouble() / 255.0,
+                        c.alpha.toDouble() / 255.0,
+                        Linearity.SRGB
+                    )
                     orxParameter.property.qset(obj, cc)
                 }
                 is Vector2Float32Parameter -> {
