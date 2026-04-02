@@ -7,6 +7,7 @@ import io.ktor.server.routing.*
 import org.openrndr.Extension
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
+import org.openrndr.color.Linearity
 import org.openrndr.draw.*
 import org.openrndr.extra.compositor.*
 import org.openrndr.extra.fx.blend.Darken
