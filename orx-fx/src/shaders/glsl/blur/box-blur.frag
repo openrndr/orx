@@ -38,11 +38,9 @@ void main() {
     s = vec2(1.0 / s.x, 1.0 / s.y);
 
     #ifndef OR_WEBGL1
-    int w = window;
     int WS = -window;
     int WE = window;
     #else
-    int w = 3;
     #define WS -3
     #define WE 3
     #endif
