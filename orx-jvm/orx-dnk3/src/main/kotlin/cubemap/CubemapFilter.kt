@@ -104,7 +104,7 @@ open class CubemapFilter(private val shader: Shader? = null) {
         shader.begin()
 
         source.forEachIndexed { index, cubemap ->
-            cubemap.bind(index)
+            shader.textureBindings[index] = cubemap
             cubemap.filter(MinifyingFilter.LINEAR, MagnifyingFilter.LINEAR)
             shader.uniform("tex$index", index)
         }
@@ -141,20 +141,20 @@ open class CubemapFilter(private val shader: Shader? = null) {
                 }
 
                 is DepthBuffer -> {
+                    shader.textureBindings[textureIndex] = value
                     shader.uniform("$uniform", textureIndex)
-                    value.bind(textureIndex)
                     textureIndex++
                 }
 
                 is ColorBuffer -> {
-                    shader.uniform("$uniform", textureIndex)
                     shader.textureBindings[textureIndex] = value
+                    shader.uniform("$uniform", textureIndex)
                     textureIndex++
                 }
 
                 is Cubemap -> {
+                    shader.textureBindings[textureIndex] = value
                     shader.uniform("$uniform", textureIndex)
-                    value.bind(textureIndex)
                     textureIndex++
                 }
 
@@ -166,7 +166,7 @@ open class CubemapFilter(private val shader: Shader? = null) {
 
                 is BufferTexture -> {
                     shader.uniform("$uniform", textureIndex)
-                    value.bind(textureIndex)
+                    shader.textureBindings[textureIndex] = value
                     textureIndex++
                 }
             }
