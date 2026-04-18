@@ -130,3 +130,58 @@ fun invertMatrixCholesky(matrix: Matrix): Matrix {
 
     return inverse
 }
+
+/**
+ * Solves a system of linear equations Ax = b where A is a symmetric, positive-definite matrix.
+ *
+ * This method uses the Cholesky decomposition (A = L * L^T) to solve the system.
+ *
+ * @param matrix The symmetric, positive-definite matrix A.
+ * @param b The right-hand side vector.
+ * @return The solution vector x such that Ax = b.
+ * @throws IllegalArgumentException if the matrix is not square or not positive-definite.
+ */
+fun solveCholesky(matrix: Matrix, b: DoubleArray): DoubleArray {
+    val L = choleskyDecomposition(matrix)
+    val y = forwardSubstitution(L, b)
+    return backwardSubstitution(L, y)
+}
+
+/**
+ * Solves a system of linear equations AX = B where A is a symmetric, positive-definite matrix
+ * and B is a matrix of multiple right-hand side vectors.
+ *
+ * This method uses the Cholesky decomposition (A = L * L^T) to solve the system.
+ *
+ * @param matrix The symmetric, positive-definite matrix A.
+ * @param b The right-hand side matrix B.
+ * @return The solution matrix X such that AX = B.
+ * @throws IllegalArgumentException if the matrix A is not square or not positive-definite,
+ *         or if the number of rows in A does not match the number of rows in B.
+ */
+fun solveCholesky(matrix: Matrix, b: Matrix): Matrix {
+    if (matrix.rows != b.rows) {
+        throw IllegalArgumentException("The number of rows in A (${matrix.rows}) must match the number of rows in B (${b.rows})")
+    }
+
+    val n = matrix.rows
+    val m = b.cols
+    val L = choleskyDecomposition(matrix)
+    val X = Matrix.zeros(n, m)
+
+    for (col in 0 until m) {
+        val bCol = DoubleArray(n)
+        for (row in 0 until n) {
+            bCol[row] = b[row, col]
+        }
+
+        val y = forwardSubstitution(L, bCol)
+        val x = backwardSubstitution(L, y)
+
+        for (row in 0 until n) {
+            X[row, col] = x[row]
+        }
+    }
+
+    return X
+}

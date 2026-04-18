@@ -2,8 +2,8 @@ package org.openrndr.extra.math.rbf
 
 import org.openrndr.extra.math.matrix.Matrix
 import org.openrndr.extra.math.matrix.columnMean
-import org.openrndr.extra.math.matrix.invertMatrixCholesky
 import org.openrndr.extra.math.matrix.minus
+import org.openrndr.extra.math.matrix.solveCholesky
 import org.openrndr.math.EuclideanVector
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
@@ -105,8 +105,6 @@ fun <T: EuclideanVector<T>> RbfNDInterpolator(
         }
     }
 
-    val imat = invertMatrixCholesky(rmat)
-
     val vmat = Matrix(points.size, values[0].size)
     for (j in points.indices) {
         for (i in values[0].indices) {
@@ -116,7 +114,7 @@ fun <T: EuclideanVector<T>> RbfNDInterpolator(
     val mean = vmat.columnMean()
     val vwmat = vmat - mean
 
-    val wmat = imat * vwmat
+    val wmat = solveCholesky(rmat, vwmat)
     return RbfNDInterpolator(points, wmat.data, values, rbf, mean.data[0])
 }
 
