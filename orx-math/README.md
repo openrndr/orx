@@ -78,6 +78,14 @@ to the ground truth depending on the random values used.
 
 [source code](src/jvmDemo/kotlin/matrix/DemoLeastSquares02.kt)
 
+### rbf/RbfColorGrading01
+
+Demonstrates using a three-dimensional Radial Basis Function (RBF) interpolator for color grading.
+
+![rbf-RbfColorGrading01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/rbf-RbfColorGrading01Kt.png)
+
+[source code](src/jvmDemo/kotlin/rbf/RbfColorGrading01.kt)
+
 ### rbf/RbfInterpolation01
 
 Demonstrates using a two-dimensional Radial Basis Function (RBF) interpolator
