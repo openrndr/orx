@@ -4,7 +4,10 @@ import org.openrndr.extra.math.matrix.Matrix
 import org.openrndr.extra.math.matrix.columnMean
 import org.openrndr.extra.math.matrix.invertMatrixCholesky
 import org.openrndr.extra.math.matrix.minus
+import org.openrndr.math.EuclideanVector
 import org.openrndr.math.Vector2
+import org.openrndr.math.Vector3
+import org.openrndr.math.Vector4
 import kotlin.math.exp
 import kotlin.math.sqrt
 
@@ -54,29 +57,26 @@ fun rbfInverseMultiQuadratic(scale: Double): Rbf {
 }
 
 /**
- * A two-dimensional Radial Basis Function (RBF) interpolator.
+ * Represents a Radial Basis Function (RBF) interpolator for multidimensional data.
  *
- * This class provides functionality to interpolate values in a 2D space
- * using Radial Basis Functions (RBFs). It computes interpolated values for
- * input points based on given data points, their corresponding values, and
- * an RBF kernel that defines the basis function.
+ * This class implements an interpolator that takes a set of points in a multidimensional space,
+ * applies a radial basis function to interpolate values at new points.
  *
- * @constructor
- * @param points A list of 2D points representing the locations of the input data.
- * @param weights A 2D array of weights corresponding to each point for each output dimension.
- * @param values A 2D array of known function values at the given points.
- * @param rbf The radial basis function that defines how the influence of each point decreases with distance.
- *            It takes a squared distance as input and returns a scalar value.
- * @param mean The mean values for each output dimension, used to offset the interpolated results.
+ * @param T The type of vector used in the interpolation, which must implement the `EuclideanVector<T>` interface.
+ * @property points A list of vectors representing the input points in the multidimensional space.
+ * @property weights A 2D array containing the weights calculated for the RBF interpolation.
+ * @property values A 2D array of the target values corresponding to the input points, where each row maps to a point.
+ * @property rbf A radial basis function that computes values based on a squared distance (e.g., Gaussian, cubic, etc.).
+ * @property mean A 1D array representing the mean offset values applied to the interpolation result.
  */
-class Rbf2DInterpolator(
-    val points: List<Vector2>,
+class RbfNDInterpolator<T: EuclideanVector<T>>(
+    val points: List<T>,
     val weights: Array<DoubleArray>,
     val values: Array<DoubleArray>,
     val rbf: (Double) -> Double,
     val mean: DoubleArray
 ) {
-    fun interpolate(x: Vector2): DoubleArray {
+    fun interpolate(x: T): DoubleArray {
         val c = DoubleArray(values[0].size)
         for (j in points.indices) {
             val r = rbf(points[j].squaredDistanceTo(x))
@@ -91,29 +91,12 @@ class Rbf2DInterpolator(
     }
 }
 
-
-/**
- * Constructs a two-dimensional Radial Basis Function (RBF) interpolator using provided input points,
- * their corresponding values, a smoothing factor, and a radial basis function (RBF) kernel.
- *
- * The interpolator computes a weight matrix derived from the RBF kernel and the supplied data.
- * The resulting interpolator can be used to estimate the values at new locations in a 2D space.
- *
- * @param points A list of 2D points representing the input data locations.
- * @param values A 2D array of known function values corresponding to the input points.
- *               Each row corresponds to a point, and each column corresponds to a value in a specific dimension.
- * @param smoothing A non-negative smoothing factor to reduce interpolation sensitivity. Default is 0.0.
- *                  Larger values result in smoother interpolations.
- * @param rbf The radial basis function used for interpolation. This function takes a squared distance as input
- *            and returns a scalar value representing the influence of points at that distance.
- * @return An instance of `Rbf2DInterpolator` configured with the computed weight matrix and input data.
- */
-fun Rbf2DInterpolator(
-    points: List<Vector2>,
+fun <T: EuclideanVector<T>> RbfNDInterpolator(
+    points: List<T>,
     values: Array<DoubleArray>,
     smoothing: Double = 0.0,
     rbf: Rbf
-): Rbf2DInterpolator {
+): RbfNDInterpolator<T> {
 
     val rmat = Matrix(points.size, points.size)
     for (j in points.indices) {
@@ -134,5 +117,30 @@ fun Rbf2DInterpolator(
     val vwmat = vmat - mean
 
     val wmat = imat * vwmat
-    return Rbf2DInterpolator(points, wmat.data, values, rbf, mean.data[0])
+    return RbfNDInterpolator(points, wmat.data, values, rbf, mean.data[0])
 }
+
+typealias Rbf2DInterpolator = RbfNDInterpolator<Vector2>
+typealias Rbf3DInterpolator = RbfNDInterpolator<Vector3>
+typealias Rbf4DInterpolator = RbfNDInterpolator<Vector4>
+
+fun Rbf2DInterpolator(
+    points: List<Vector2>,
+    values: Array<DoubleArray>,
+    smoothing: Double = 0.0,
+    rbf: Rbf
+) = RbfNDInterpolator(points, values, smoothing, rbf)
+
+fun Rbf3DInterpolator(
+    points: List<Vector3>,
+    values: Array<DoubleArray>,
+    smoothing: Double = 0.0,
+    rbf: Rbf
+) = RbfNDInterpolator(points, values, smoothing, rbf)
+
+fun Rbf4DInterpolator(
+    points: List<Vector4>,
+    values: Array<DoubleArray>,
+    smoothing: Double = 0.0,
+    rbf: Rbf
+) = RbfNDInterpolator(points, values, smoothing, rbf)
