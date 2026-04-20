@@ -514,6 +514,22 @@ The last few lines of the program enable a rotating 3D camera and draw the 3D pa
 
 [source code](src/jvmDemo/kotlin/hobbycurve/DemoHobbyCurve3D01.kt)
 
+### hull/DemoConvexHull01
+
+Demonstrates the use of the `convexHull` method to create convex hulls of a growing set of points.
+
+![hull-DemoConvexHull01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hull-DemoConvexHull01Kt.png)
+
+[source code](src/jvmDemo/kotlin/hull/DemoConvexHull01.kt)
+
+### hull/DemoConvexHull02
+
+Demonstrates the use of the `convexHullSet` method to create a convex hull peeling
+
+![hull-DemoConvexHull02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hull-DemoConvexHull02Kt.png)
+
+[source code](src/jvmDemo/kotlin/hull/DemoConvexHull02.kt)
+
 ### loft/DemoLoftNormals01
 
 Demonstrates the use of the `RectifiedContour.loft()` method.
