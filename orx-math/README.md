@@ -6,6 +6,14 @@ linear ranges, simplex ranges, matrices and radial basis functions (RBF).
 
 <!-- __demos__ -->
 ## Demos
+### assignment/Assignment01
+
+
+
+![assignment-Assignment01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/assignment-Assignment01Kt.png)
+
+[source code](src/jvmDemo/kotlin/assignment/Assignment01.kt)
+
 ### linearrange/DemoLinearRange02
 
 Demonstrate how to create a 1D linear range between two instances of a `LinearType`, in this case,
@@ -85,6 +93,38 @@ Demonstrates using a three-dimensional Radial Basis Function (RBF) interpolator 
 ![rbf-RbfColorGrading01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/rbf-RbfColorGrading01Kt.png)
 
 [source code](src/jvmDemo/kotlin/rbf/RbfColorGrading01.kt)
+
+### rbf/RbfGlitch01
+
+Demonstrates using a two-dimensional Radial Basis Function (RBF) interpolator for glitching.
+
+![rbf-RbfGlitch01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/rbf-RbfGlitch01Kt.png)
+
+[source code](src/jvmDemo/kotlin/rbf/RbfGlitch01.kt)
+
+### rbf/RbfGrid01
+
+Demonstrates drawing a distorted grid using a two-dimensional Radial Basis Function (RBF) interpolator
+
+![rbf-RbfGrid01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/rbf-RbfGrid01Kt.png)
+
+[source code](src/jvmDemo/kotlin/rbf/RbfGrid01.kt)
+
+### rbf/RbfGridJacobian01
+
+Demonstrates visualizing the Jacobian of a two-dimensional Radial Basis Function (RBF) interpolator
+
+![rbf-RbfGridJacobian01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/rbf-RbfGridJacobian01Kt.png)
+
+[source code](src/jvmDemo/kotlin/rbf/RbfGridJacobian01.kt)
+
+### rbf/RbfGridJacobian02
+
+Demonstrates visualizing the Jacobian of a two-dimensional Radial Basis Function (RBF) interpolator
+
+![rbf-RbfGridJacobian02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/rbf-RbfGridJacobian02Kt.png)
+
+[source code](src/jvmDemo/kotlin/rbf/RbfGridJacobian02.kt)
 
 ### rbf/RbfInterpolation01
 
