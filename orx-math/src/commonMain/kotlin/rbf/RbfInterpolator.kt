@@ -9,6 +9,7 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
 import kotlin.math.exp
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 typealias Rbf = (Double) -> Double
@@ -28,6 +29,21 @@ fun rbfGaussian(scale: Double): Rbf {
 }
 
 /**
+ * Generates the derivative of a Gaussian Radial Basis Function (RBF) kernel with respect to the distance.
+ * The Gaussian RBF is defined as `exp(-scale^2 * distance^2)`.
+ * Its derivative with respect to the distance `d` is `-scale^2 * exp(-scale^2 * d^2)`.
+ *
+ * @param scale The scale parameter of the Gaussian RBF. A larger scale results in a wider influence of the RBF.
+ * @return A function representing the derivative of the Gaussian RBF with respect to distance.
+ */
+fun rbfGaussianDerivative(scale: Double): Rbf {
+    val scale2 = scale * scale
+    return { d ->
+        -scale2 * exp(-d * scale2)
+    }
+}
+
+/**
  * Radial basis function (RBF) using the inverse quadratic formula.
  *
  * Creates an RBF that calculates the inverse quadratic function based on the given scale.
@@ -39,6 +55,14 @@ fun rbfInverseQuadratic(scale: Double): Rbf {
     val scale2 = scale * scale
     return { d ->
         1.0 / (1.0 + d * scale2)
+    }
+}
+
+fun rbfInverseQuadraticDerivative(scale: Double): Rbf {
+    val scale2 = scale * scale
+    return { d ->
+        val dn = (scale2 * d + 1)
+        -scale2 / (dn * dn)
     }
 }
 
@@ -56,6 +80,13 @@ fun rbfInverseMultiQuadratic(scale: Double): Rbf {
     }
 }
 
+fun rbfInverseMultiQuadraticDerivative(scale: Double): Rbf {
+    val scale2 = scale * scale
+    return { d ->
+        -(0.5 * scale2) / (scale2 * d + 1).pow(3.0 / 2.0)
+    }
+}
+
 /**
  * Represents a Radial Basis Function (RBF) interpolator for multidimensional data.
  *
@@ -69,13 +100,74 @@ fun rbfInverseMultiQuadratic(scale: Double): Rbf {
  * @property rbf A radial basis function that computes values based on a squared distance (e.g., Gaussian, cubic, etc.).
  * @property mean A 1D array representing the mean offset values applied to the interpolation result.
  */
-class RbfNDInterpolator<T: EuclideanVector<T>>(
+class RbfNDInterpolator<T : EuclideanVector<T>>(
     val points: List<T>,
     val weights: Array<DoubleArray>,
     val values: Array<DoubleArray>,
     val rbf: (Double) -> Double,
+    val rbfDerivative: (Double) -> Double,
     val mean: DoubleArray
 ) {
+
+    fun jacobian(x: T): Matrix {
+        val dims = when (x) {
+            is Vector2 -> 2
+            is Vector3 -> 3
+            is Vector4 -> 4
+            else -> error("unsupported vector type")
+        }
+        val outputDims = values[0].size
+        val jac = Matrix(outputDims, dims)
+
+        for (j in points.indices) {
+            val diff = x - points[j]
+            val diffArray = when (diff) {
+                is Vector2 -> doubleArrayOf(diff.x, diff.y)
+                is Vector3 -> doubleArrayOf(diff.x, diff.y, diff.z)
+                is Vector4 -> doubleArrayOf(diff.x, diff.y, diff.z, diff.w)
+                else -> error("unsupported vector type")
+            }
+            val sqDist = points[j].squaredDistanceTo(x)
+            val rbfDeriv = rbfDerivative(sqDist)
+
+            for (i in 0 until outputDims) {
+                for (k in 0 until dims) {
+                    jac[i, k] += 2.0 * weights[j][i] * rbfDeriv * diffArray[k]
+                }
+            }
+        }
+        return jac
+    }
+
+    fun gradient(x: T): DoubleArray {
+        val grad = DoubleArray(values[0].size)
+
+        for (j in points.indices) {
+            val diff = x - points[j]
+            val dims = when (diff) {
+                is Vector2 -> 2
+                is Vector3 -> 3
+                is Vector4 -> 4
+                else -> error("unsupported vector type")
+            }
+            val diffArray = when(diff) {
+                is Vector2 -> doubleArrayOf(diff.x, diff.y)
+                is Vector3 -> doubleArrayOf(diff.x, diff.y, diff.z)
+                is Vector4 -> doubleArrayOf(diff.x, diff.y, diff.z, diff.w)
+                else -> error("unsupported vector type")
+            }
+            val sqDist = points[j].squaredDistanceTo(x)
+            val rbfDeriv = rbfDerivative(sqDist)
+
+            for (i in 0 until grad.size) {
+                for (k in 0 until dims) {
+                    grad[i] += 2.0 * weights[j][i] * rbfDeriv * diffArray[k]
+                }
+            }
+        }
+        return grad
+    }
+
     fun interpolate(x: T): DoubleArray {
         val c = DoubleArray(values[0].size)
         for (j in points.indices) {
@@ -91,11 +183,12 @@ class RbfNDInterpolator<T: EuclideanVector<T>>(
     }
 }
 
-fun <T: EuclideanVector<T>> RbfNDInterpolator(
+fun <T : EuclideanVector<T>> RbfNDInterpolator(
     points: List<T>,
     values: Array<DoubleArray>,
     smoothing: Double = 0.0,
-    rbf: Rbf
+    rbf: Rbf,
+    rbfDerivative: Rbf,
 ): RbfNDInterpolator<T> {
 
     val rmat = Matrix(points.size, points.size)
@@ -115,7 +208,7 @@ fun <T: EuclideanVector<T>> RbfNDInterpolator(
     val vwmat = vmat - mean
 
     val wmat = solveCholesky(rmat, vwmat)
-    return RbfNDInterpolator(points, wmat.data, values, rbf, mean.data[0])
+    return RbfNDInterpolator(points, wmat.data, values, rbf, rbfDerivative, mean.data[0])
 }
 
 typealias Rbf2DInterpolator = RbfNDInterpolator<Vector2>
@@ -126,19 +219,22 @@ fun Rbf2DInterpolator(
     points: List<Vector2>,
     values: Array<DoubleArray>,
     smoothing: Double = 0.0,
-    rbf: Rbf
-) = RbfNDInterpolator(points, values, smoothing, rbf)
+    rbf: Rbf,
+    rbfDerivative: Rbf
+) = RbfNDInterpolator(points, values, smoothing, rbf, rbfDerivative)
 
 fun Rbf3DInterpolator(
     points: List<Vector3>,
     values: Array<DoubleArray>,
     smoothing: Double = 0.0,
-    rbf: Rbf
-) = RbfNDInterpolator(points, values, smoothing, rbf)
+    rbf: Rbf,
+    rbfDerivative: Rbf
+) = RbfNDInterpolator(points, values, smoothing, rbf, rbfDerivative)
 
 fun Rbf4DInterpolator(
     points: List<Vector4>,
     values: Array<DoubleArray>,
     smoothing: Double = 0.0,
-    rbf: Rbf
-) = RbfNDInterpolator(points, values, smoothing, rbf)
+    rbf: Rbf,
+    rbfDerivative: Rbf
+) = RbfNDInterpolator(points, values, smoothing, rbf, rbfDerivative)

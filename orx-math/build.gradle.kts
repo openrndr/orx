@@ -36,6 +36,7 @@ kotlin {
                 implementation(project(":orx-color"))
                 implementation(project(":orx-jvm:orx-gui"))
                 implementation(project(":orx-shade-styles"))
+                implementation(project(":orx-shapes"))
                 implementation(project(":orx-shader-phrases"))
                 implementation(project(":orx-image-fit"))
                 implementation(openrndr.ffmpeg)
