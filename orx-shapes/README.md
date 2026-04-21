@@ -530,6 +530,14 @@ Demonstrates the use of the `convexHullSet` method to create a convex hull peeli
 
 [source code](src/jvmDemo/kotlin/hull/DemoConvexHull02.kt)
 
+### hull/DemoConvexHull03
+
+Demonstrates the use of the `convexHullSet` method to create a convex hull peeling. Each peel is triangulated using an ear clipping triangulator.
+
+![hull-DemoConvexHull03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hull-DemoConvexHull03Kt.png)
+
+[source code](src/jvmDemo/kotlin/hull/DemoConvexHull03.kt)
+
 ### loft/DemoLoftNormals01
 
 Demonstrates the use of the `RectifiedContour.loft()` method.
