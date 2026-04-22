@@ -316,8 +316,8 @@ data class IndexedPolygon(
 data class MutableIndexedPolygon(
     override val positions: MutableList<Int>,
     override val textureCoords: MutableList<Int>,
-    override val normals: MutableList<Int>,
     override val colors: MutableList<Int>,
+    override val normals: MutableList<Int>,
     override val tangents: MutableList<Int>,
     override val bitangents: MutableList<Int>
 ) : IIndexedPolygon {

@@ -91,3 +91,7 @@ fun List<IIndexedPolygon>.bounds(vertexData: IVertexData): Box {
         return Box(nx, ny, nz, px - nx, py - ny, pz - nz)
     }
 }
+
+fun IIndexedPolygon.isConvex(meshData: IMeshData): Boolean {
+    return isConvex(meshData.vertexData)
+}
