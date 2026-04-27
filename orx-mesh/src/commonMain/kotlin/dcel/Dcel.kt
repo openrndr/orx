@@ -29,6 +29,7 @@ enum class DCELAttributes(val index: Int) {
     TANGENT(3),
     BITANGENT(4)
 }
+
 class Dcel {
     var halfEdges = mutableListOf<HalfEdge>()
     var faces = mutableListOf<Face>()
@@ -41,3 +42,13 @@ class Dcel {
     var bitangents = mutableListOf<Vector3>()
 
 }
+
+class Point(
+    val position: Vector3,
+    val textureCoordinate: Vector2? = null,
+    val color: ColorRGBa? = null,
+    val normal: Vector3? = null,
+    val tangent: Vector3? = null,
+    val bitangent: Vector3? = null,
+    val attributes: IntArray = IntArray(0)
+)

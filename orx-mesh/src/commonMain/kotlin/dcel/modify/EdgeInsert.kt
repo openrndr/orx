@@ -72,8 +72,10 @@ fun Dcel.edgeInsert(start: Int, end: Int) {
 
     // Update face property for all edges that now belong to newFaceIdx
     var curr = start
-    do {
+    var count = 0
+    while (curr != he1Idx && count < 1000) {
         halfEdges[curr].face = newFaceIdx
         curr = halfEdges[curr].nextEdge
-    } while (curr != he1Idx)
+        count++
+    }
 }

@@ -6,7 +6,7 @@ import org.openrndr.extra.mesh.dcel.HalfEdge
 import org.openrndr.extra.mesh.dcel.Vertex
 
 
-fun <T> interpolate(list: MutableList<T>, a: Int, b: Int, f: (T, T) -> T): Int {
+fun <T> Dcel.interpolate(list: MutableList<T>, a: Int, b: Int, f: (T, T) -> T): Int {
     if (a >= 0 && b >= 0) {
         val nextValue = f(list[a], list[b])
         list.add(nextValue)
@@ -67,7 +67,7 @@ fun Dcel.edgeSplit(e: HalfEdge): Int {
         val nextEdge = halfEdges[nextIdx]
 
         val newAttrs = IntArray(5)
-        newAttrs[DCELAttributes.COLOR.index] = interpolate(colors, edge.attributes[DCELAttributes.COLOR.index], nextEdge.attributes[DCELAttributes.COLOR.index]) { a, b -> (a + b) * 0.5 }
+        newAttrs[DCELAttributes.COLOR.index] = interpolate(colors, edge.attributes[DCELAttributes.COLOR.index], nextEdge.attributes[DCELAttributes.COLOR.index]) { a, b -> (a.toLinear() + b.toLinear()).toLinear() * 0.5 }
         newAttrs[DCELAttributes.TEXTURE_COORDINATE.index] = interpolate(textureCoordinates, edge.attributes[DCELAttributes.TEXTURE_COORDINATE.index], nextEdge.attributes[DCELAttributes.TEXTURE_COORDINATE.index]) { a, b -> (a + b) * 0.5 }
         newAttrs[DCELAttributes.NORMAL.index] = interpolate(normals, edge.attributes[DCELAttributes.NORMAL.index], nextEdge.attributes[DCELAttributes.NORMAL.index]) { a, b -> (a + b).normalized }
         newAttrs[DCELAttributes.TANGENT.index] = interpolate(tangents, edge.attributes[DCELAttributes.TANGENT.index], nextEdge.attributes[DCELAttributes.TANGENT.index]) { a, b -> (a + b).normalized }

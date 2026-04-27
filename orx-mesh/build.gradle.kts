@@ -10,6 +10,7 @@ kotlin {
                 api(openrndr.math)
                 api(openrndr.shape)
                 implementation(project(":orx-shapes"))
+                implementation(project(":orx-math"))
             }
         }
 
@@ -21,6 +22,9 @@ kotlin {
                 implementation(project(":orx-obj-loader"))
                 implementation(project(":orx-camera"))
                 implementation(project(":orx-noise"))
+                implementation(project(":orx-color"))
+                implementation(sharedLibs.kotlin.coroutines)
+                implementation(openrndr.ffmpeg)
             }
         }
     }

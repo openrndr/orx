@@ -33,7 +33,7 @@ class TestEdgesForFace {
         )
 
         val dcel = meshData.toDcel()
-        val edges = dcel.edgesForFace(0)
+        val edges = dcel.edgeObjectsForFace(0)
 
         assertEquals(4, edges.size)
         assertEquals(0, edges[0].vertex)
