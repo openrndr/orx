@@ -4,11 +4,13 @@ import org.openrndr.extra.mesh.IndexedPolygon
 import org.openrndr.extra.mesh.MeshData
 import org.openrndr.extra.mesh.VertexData
 import org.openrndr.extra.mesh.dcel.convert.toDcel
+import org.openrndr.extra.mesh.dcel.validate.isEulerMesh
 import org.openrndr.extra.mesh.generate.gridMesh
 import org.openrndr.math.Vector3
 import org.openrndr.shape.Rectangle
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class TestFaceSetSubdivide {
     @Test
@@ -34,7 +36,16 @@ class TestFaceSetSubdivide {
         )
 
         val dcel = meshData.toDcel()
+        assertTrue(dcel.isEulerMesh())
         val newFaces = dcel.convexFaceSetSubdivide(setOf(0))
+
+        assertTrue(dcel.isEulerMesh())
+
+
+        //      /\
+        //     /__\
+        //    / \/ \
+        //   ^^^^^^^^
 
         assertEquals(4, newFaces.size)
         assertEquals(4, dcel.faces.size)
@@ -66,8 +77,9 @@ class TestFaceSetSubdivide {
         )
 
         val dcel = meshData.toDcel()
+        assertTrue(dcel.isEulerMesh())
         val newFaces = dcel.convexFaceSetSubdivide(setOf(0))
-
+        assertTrue(dcel.isEulerMesh())
         assertEquals(4, newFaces.size)
         assertEquals(4, dcel.faces.size)
         // Original quad: 4 vertices. 
@@ -93,11 +105,15 @@ class TestFaceSetSubdivide {
         val meshData = gridMesh(Rectangle(0.0, 0.0, 100.0, 100.0), 2, 2)
         val dcel = meshData.toDcel()
 
+        assertTrue(dcel.isEulerMesh())
+
         assertEquals(4, dcel.faces.size)
 
         // Subdivide all faces
         val faceIds = dcel.faces.indices.toSet()
         val newFaces = dcel.convexFaceSetSubdivide(faceIds)
+        assertTrue(dcel.isEulerMesh())
+
 
         assertEquals(16, newFaces.size)
         assertEquals(16, dcel.faces.size)

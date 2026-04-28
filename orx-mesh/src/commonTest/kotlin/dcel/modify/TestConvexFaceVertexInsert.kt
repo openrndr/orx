@@ -4,9 +4,11 @@ import org.openrndr.extra.mesh.dcel.Dcel
 import org.openrndr.extra.mesh.dcel.Face
 import org.openrndr.extra.mesh.dcel.HalfEdge
 import org.openrndr.extra.mesh.dcel.Vertex
+import org.openrndr.extra.mesh.dcel.validate.isEulerMesh
 import org.openrndr.math.Vector3
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class TestConvexFaceVertexInsert {
     @Test
@@ -26,6 +28,8 @@ class TestConvexFaceVertexInsert {
 
         // Insert at center
         dcel.convexFaceVertexInsert(0, Vector3(0.5, 0.5, 0.0))
+
+        assertTrue(dcel.isEulerMesh())
 
         assertEquals(5, dcel.vertices.size)
         assertEquals(4, dcel.faces.size) // 1 original + 3 new

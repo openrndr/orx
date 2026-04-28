@@ -3,10 +3,12 @@ package org.openrndr.extra.mesh.dcel.modify
 import org.openrndr.extra.mesh.dcel.Dcel
 import org.openrndr.extra.mesh.generate.gridMesh
 import org.openrndr.extra.mesh.dcel.convert.toDcel
+import org.openrndr.extra.mesh.dcel.validate.isEulerMesh
 import org.openrndr.shape.Rectangle
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 
 class TestEdgeInsert {
     @Test
@@ -15,6 +17,7 @@ class TestEdgeInsert {
         val mesh = gridMesh(Rectangle(0.0, 0.0, 100.0, 100.0), 1, 1)
         val dcel = mesh.toDcel()
 
+        assertTrue(dcel.isEulerMesh())
         assertEquals(1, dcel.faces.size)
         assertEquals(4, dcel.halfEdges.filter { it.face == 0 }.size)
 
@@ -41,6 +44,7 @@ class TestEdgeInsert {
         // // inserting the edge will split the face
 
         dcel.edgeInsert(e0Idx, e2Idx)
+        assertTrue(dcel.isEulerMesh())
 
         // After split, we should have 2 faces
         assertEquals(2, dcel.faces.size)
@@ -106,6 +110,7 @@ class TestEdgeInsert {
         val e2 = dcel.halfEdges[e1].nextEdge
         
         dcel.edgeInsert(e0, e2)
+        assertTrue(dcel.isEulerMesh())
         
         assertEquals(3, dcel.faces.size)
     }

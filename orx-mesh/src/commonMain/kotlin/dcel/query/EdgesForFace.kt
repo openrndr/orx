@@ -12,8 +12,8 @@ fun Dcel.edgeForFaces(leftFace: Int, rightFace: Int): Int {
     if (rightFaceObj.edge == -1) return -1
 
     return edgesForFace(leftFace).find {
-        val other = halfEdges[halfEdges[it].otherEdge]
-        other.face == rightFace
+        val other = halfEdges.getOrNull(halfEdges[it].otherEdge)
+        other?.face == rightFace
     } ?: -1
 
 }

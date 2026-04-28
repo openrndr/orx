@@ -3,13 +3,43 @@ package org.openrndr.extra.mesh.dcel.modify
 import org.openrndr.extra.mesh.dcel.convert.toDcel
 import org.openrndr.extra.mesh.dcel.HalfEdge
 import org.openrndr.extra.mesh.dcel.query.bordersForEdge
+import org.openrndr.extra.mesh.dcel.query.edgeForFaces
+import org.openrndr.extra.mesh.dcel.query.faceCount
+import org.openrndr.extra.mesh.dcel.query.wholeEdgeCount
+import org.openrndr.extra.mesh.dcel.validate.isEulerMesh
 import org.openrndr.extra.mesh.generate.gridMesh
 import org.openrndr.shape.Rectangle
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
 class TestBorderRemove {
+
+    @Test
+    fun testBorderRemoveSimple() {
+        val grid = gridMesh(Rectangle(0.0, 0.0, 100.0, 100.0), 2, 1)
+        val dcel = grid.toDcel()
+        val edgeToRemove = dcel.edgeForFaces(0, 1)
+
+
+        assertEquals(2, dcel.faceCount())
+        assertEquals(7, dcel.wholeEdgeCount())
+        assertNotEquals(-1, edgeToRemove)
+
+        val borders = dcel.bordersForEdge(edgeToRemove)
+        assertEquals(1, borders.size)
+        assertEquals(1, borders.first().size)
+
+        dcel.bordersRemove(borders)
+        assertEquals(1, dcel.faceCount())
+        assertEquals(6, dcel.wholeEdgeCount())
+
+        assertTrue(dcel.isEulerMesh())
+
+    }
+
+
     @Test
     fun testBordersRemove() {
         val grid = gridMesh(Rectangle(0.0, 0.0, 100.0, 100.0), 3, 1)
@@ -26,8 +56,12 @@ class TestBorderRemove {
         val borders = dcel.bordersForEdge(e01Idx)
         assertEquals(1, borders.size)
         assertEquals(1, borders[0].size)
-        
+        val previousEdgeCount = dcel.wholeEdgeCount()
+
         dcel.bordersRemove(borders)
+
+        assertEquals(previousEdgeCount - 1, dcel.wholeEdgeCount())
+        assertTrue(dcel.isEulerMesh())
         
         // Faces 0 and 1 should be merged
         val activeFaces = dcel.halfEdges.map { it.face }.distinct().filter { it != -1 }.sorted()
@@ -40,6 +74,7 @@ class TestBorderRemove {
         
         val borders2 = dcel.bordersForEdge(eMerged2Idx)
         dcel.bordersRemove(borders2)
+        assertTrue(dcel.isEulerMesh())
         
         val activeFacesFinal = dcel.halfEdges.map { it.face }.distinct().filter { it != -1 }
         assertEquals(1, activeFacesFinal.size)
@@ -57,6 +92,7 @@ class TestBorderRemove {
         val e01Idx = dcel.halfEdges.indexOfFirst { it.face == 0 && it.otherEdge != -1 && dcel.halfEdges[it.otherEdge].face == 1 }
         val borders01 = dcel.bordersForEdge(e01Idx)
         dcel.bordersRemove(borders01)
+        assertTrue(dcel.isEulerMesh())
         
         // Merge (F0+F1) and F2
         val fMergedIdx = dcel.halfEdges[e01Idx].face // Oops, e01.face might be -1 now.
@@ -66,6 +102,7 @@ class TestBorderRemove {
         val eMerged2Idx = dcel.halfEdges.indexOfFirst { it.face == fMerged && it.otherEdge != -1 && dcel.halfEdges[it.otherEdge].face == 2 }
         val bordersMerged2 = dcel.bordersForEdge(eMerged2Idx)
         dcel.bordersRemove(bordersMerged2)
+        assertTrue(dcel.isEulerMesh())
         
         // Now we should have 2 faces left: merged(0,1,2) and 3
         val activeFaces = dcel.halfEdges.map { it.face }.distinct().filter { it != -1 }

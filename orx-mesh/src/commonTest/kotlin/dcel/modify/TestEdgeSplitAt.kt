@@ -4,10 +4,12 @@ import org.openrndr.extra.mesh.IndexedPolygon
 import org.openrndr.extra.mesh.MeshData
 import org.openrndr.extra.mesh.VertexData
 import org.openrndr.extra.mesh.dcel.convert.toDcel
+import org.openrndr.extra.mesh.dcel.validate.isEulerMesh
 import org.openrndr.math.Vector3
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 
 class TestEdgeSplitAt {
     @Test
@@ -41,7 +43,9 @@ class TestEdgeSplitAt {
         
         // Split at t=0.75
         val newEdgeIdx = dcel.edgeSplitAt(edgeIdx, 0.75)
-        
+
+        assertTrue(dcel.isEulerMesh())
+
         // New vertex should be at 0.75 between (0,0,0) and (2,0,0) -> (1.5, 0, 0)
         val newVertexIdx = dcel.halfEdges[newEdgeIdx].vertex
         assertEquals(Vector3(1.5, 0.0, 0.0), dcel.vertices[newVertexIdx].position)
@@ -107,6 +111,7 @@ class TestEdgeSplitAt {
         
         // Split at t=0.2
         val newEIdx = dcel.edgeSplitAt(e0Idx, 0.2)
+        assertTrue(dcel.isEulerMesh())
         val newVertexIdx = dcel.halfEdges[newEIdx].vertex
         
         assertEquals(Vector3(2.0, 0.0, 0.0), dcel.vertices[newVertexIdx].position)
@@ -168,6 +173,7 @@ class TestEdgeSplitAt {
         
         // Split at 0.5. Red + Blue at 0.5 should be (0.5, 0, 0.5, 1) in linear
         dcel.edgeSplitAt(edgeIdx, 0.5)
+        assertTrue(dcel.isEulerMesh())
         
         // New vertex is now vertices[3]. Let's find the edge starting at it.
         val newEdgeIdx = dcel.halfEdges.indexOfFirst { it.vertex == 3 }

@@ -49,9 +49,21 @@ fun main() {
             val e = dcel.edgeForFaces(85, 86)
             dcel.edgeRemove(dcel.halfEdges[e])
 
+
+            dcel.convexFaceSetSubdivide(setOf(42))
             dcel.apply {
                 var v = verticesForFace(42).first()
                 vertexChamfer(v, 10.0)
+                 v = verticesForFace(43).first()
+                vertexChamfer(v, 10.0)
+                v = verticesForFace(52).first()
+                vertexChamfer(v, 10.0)
+                v = verticesForFace(53).first()
+                val f = vertexChamfer(v, 10.0)
+                v = verticesForFace(f)[2]
+
+
+//                vertexChamfer(v, 1.0)
             }
 
 
