@@ -4,7 +4,10 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.mesh.dcel.convert.faceToShape
 import org.openrndr.extra.mesh.dcel.convert.toDcel
+import org.openrndr.extra.mesh.dcel.modify.convexFaceSetSubdivide
+import org.openrndr.extra.mesh.dcel.modify.convexFaceVertexInsert
 import org.openrndr.extra.mesh.dcel.modify.vertexChamfer
+import org.openrndr.extra.mesh.dcel.query.convexFaceCenter
 import org.openrndr.extra.mesh.generate.gridMesh
 import org.openrndr.extra.shapes.primitives.grid
 
@@ -34,14 +37,23 @@ fun main() {
             val grid = drawer.bounds.offsetEdges(-25.0).grid(2,2, gutterX = 25.0, gutterY = 25.0)
 
             val dcels = grid.flatten().map {
-                gridMesh(it, 2, 2).toDcel()
+                gridMesh(it, 3, 2).toDcel()
             }
 
             for ((index, dcel) in dcels.withIndex()) {
                 when (index) {
                     0 -> dcel.vertexChamfer(0, 20.0)
                     1 -> dcel.vertexChamfer(1, 20.0)
-                    2 -> dcel.vertexChamfer(4, 20.0)
+                    2 -> dcel.vertexChamfer(5, 20.0)
+                    3 -> {
+                        dcel.vertexChamfer(5, 20.0)
+                        //dcel.vertexChamfer(6, 20.0)
+//                        dcel.convexFaceSetSubdivide(setOf(3))
+//                        dcel.convexFaceVertexInsert(0, dcel.convexFaceCenter(0))
+//                        dcel.convexFaceVertexInsert(1, dcel.convexFaceCenter(1))
+//                        dcel.convexFaceVertexInsert(3, dcel.convexFaceCenter(3))
+//                        dcel.convexFaceVertexInsert(4, dcel.convexFaceCenter(4))
+                    }
                 }
 
             }

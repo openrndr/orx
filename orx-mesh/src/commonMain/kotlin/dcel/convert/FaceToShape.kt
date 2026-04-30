@@ -8,6 +8,10 @@ import org.openrndr.shape.ShapeContour
 
 fun Dcel.faceToShape(faceId: Int): Shape {
 
+    if (faceId < 0 || faceId >= faces.size) return Shape.EMPTY
+
+    if (faces[faceId].edge == -1) return Shape.EMPTY
+
     val face = faces[faceId]
     val outer = edgeObjectsForFace(faceId).map { vertices[it.vertex].position.xy }
 
