@@ -48,7 +48,7 @@ fun main() {
                     3 -> {
                         dcel.vertexChamfer(5, 20.0)
                         //dcel.vertexChamfer(6, 20.0)
-//                        dcel.convexFaceSetSubdivide(setOf(3))
+                        dcel.convexFaceSetSubdivide(setOf(3))
 //                        dcel.convexFaceVertexInsert(0, dcel.convexFaceCenter(0))
 //                        dcel.convexFaceVertexInsert(1, dcel.convexFaceCenter(1))
 //                        dcel.convexFaceVertexInsert(3, dcel.convexFaceCenter(3))

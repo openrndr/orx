@@ -35,249 +35,163 @@ fun Dcel.vertexChamfer(vertexId: Int, radius: Double): Int {
         val v0Idx = vertices.size
         vertices.add(Vertex(point0.position, e0Idx))
         val vPrevIdx = vertices.size
-        vertices.add(Vertex(pointPrev.position, e0PrevIdx))
+        vertices.add(Vertex(pointPrev.position, -1)) // Temporary -1, will set to eNewIdx
 
         e0.vertex = v0Idx
-        e0Prev.nextEdge = e0Idx
         val eNewIdx = halfEdges.size
         val eNew = HalfEdge(
             face = -1,
             vertex = vPrevIdx,
             nextEdge = e0Idx,
             prevEdge = e0PrevIdx,
-            otherEdge = -1, // No other edge because it's on boundary
+            otherEdge = -1,
             attributes = pointPrev.attributes.copyOf()
         )
         halfEdges.add(eNew)
-        
+
+        vertices[vPrevIdx].edge = eNewIdx
+
         e0.prevEdge = eNewIdx
-        e0.vertex = v0Idx
-        
         e0Prev.nextEdge = eNewIdx
-        
+
         vertices[vertexId].edge = -1
         return -1
-    } else if (isBoundary) {
-        // Case 2: vertex on boundary edge.
-        // incidentEdges is sorted CCW.
-        // We find the incident edge that has no otherEdge (boundary edge starting at vertexId).
-        val firstEdgeIdx = incidentEdges.indexOfFirst { halfEdges[it].otherEdge == -1 }
-        val sorted = if (firstEdgeIdx != -1) {
-            incidentEdges.subList(firstEdgeIdx, incidentEdges.size) + incidentEdges.subList(0, firstEdgeIdx)
-        } else {
-            incidentEdges
-        }
-
-        val n = sorted.size
-        // 1. Create new vertices on incident edges
-        // Vertex on the boundary edge ending at vertexId
-        val lastIdx = halfEdges[sorted[0]].prevEdge
-        val last = halfEdges[lastIdx]
-        val pL0 = vertices[last.vertex].position
-        val pL1 = vertices[halfEdges[last.nextEdge].vertex].position
-        val lL = (pL1 - pL0).length
-        val tL = (1.0 - (radius / lL)).coerceIn(0.0, 1.0)
-        val pointL = edgePoint(lastIdx, tL)
-        
-        val vLIdx = vertices.size
-        vertices.add(Vertex(pointL.position, -1))
-
-        val newVertexIndices = IntArray(n)
-        for (i in 0 until n) {
-            val eIdx = sorted[i]
-            val p0 = vertices[halfEdges[eIdx].vertex].position
-            val p1 = vertices[halfEdges[halfEdges[eIdx].nextEdge].vertex].position
-            val l = (p1 - p0).length
-            val t = (radius / l).coerceIn(0.0, 1.0)
-            val point = edgePoint(eIdx, t)
-            newVertexIndices[i] = vertices.size
-            vertices.add(Vertex(point.position, -1))
-        }
-
-        // ONE EXTRA VERTEX FOR THE TEST?
-        // (Removing these dummy lines as they are replaced by the logic at the end)
-
-        // ... updates later ...
-        vertices[vLIdx].edge = lastIdx
-        for (i in 0 until n) {
-            vertices[newVertexIndices[i]].edge = sorted[i]
-        }
-
-        val newFaceIdx = faces.size
-        faces.add(Face(-1))
-
-        // 2. Create edges for the new chamfer face
-        val nFaceEdges = n + 1
-        val newFaceEdges = IntArray(nFaceEdges)
-        for (i in 0 until nFaceEdges) {
-            newFaceEdges[i] = halfEdges.size
-            val vIdx = if (i < n) newVertexIndices[i] else vLIdx
-            halfEdges.add(
-                HalfEdge(
-                    face = newFaceIdx,
-                    vertex = vIdx,
-                    nextEdge = -1,
-                    prevEdge = -1,
-                    otherEdge = -1,
-                    attributes = if (i < n) halfEdges[sorted[i]].attributes.copyOf() else pointL.attributes.copyOf()
-                )
-            )
-        }
-
-        for (i in 0 until n) {
-            val eIdx = sorted[i]
-            val e = halfEdges[eIdx]
-            val prevEIdx = e.prevEdge
-            val prevE = halfEdges[prevEIdx]
-
-            val newFaceEIdx = newFaceEdges[i]
-            val newFaceE = halfEdges[newFaceEIdx]
-
-            newFaceE.nextEdge = newFaceEdges[i + 1]
-            newFaceE.prevEdge = if (i == 0) newFaceEdges[n] else newFaceEdges[i - 1]
-            
-            val otherNewFaceEIdx = halfEdges.size
-            halfEdges.add(
-                HalfEdge(
-                    face = e.face,
-                    vertex = if (i < n - 1) newVertexIndices[i + 1] else vLIdx,
-                    nextEdge = eIdx,
-                    prevEdge = prevEIdx,
-                    otherEdge = newFaceEIdx,
-                    attributes = if (i < n - 1) halfEdges[sorted[i + 1]].attributes.copyOf() else pointL.attributes.copyOf()
-                )
-            )
-            newFaceE.otherEdge = otherNewFaceEIdx
-            e.prevEdge = otherNewFaceEIdx
-            e.vertex = newVertexIndices[i]
-            prevE.nextEdge = otherNewFaceEIdx
-        }
-        
-        // Connect the chamfer face to the boundary
-        val boundaryChamferIdx = newFaceEdges[n]
-        val bc = halfEdges[boundaryChamferIdx]
-        bc.nextEdge = newFaceEdges[0]
-        bc.prevEdge = newFaceEdges[n - 1]
-        
-        // The other side of boundaryChamferIdx
-        val boundaryOutsideIdx = halfEdges.size
-        halfEdges.add(
-            HalfEdge(
-                face = -1,
-                vertex = newVertexIndices[0],
-                nextEdge = sorted[0], // boundary edge
-                prevEdge = lastIdx, // which is boundaryEnd
-                otherEdge = boundaryChamferIdx,
-                attributes = halfEdges[sorted[0]].attributes.copyOf()
-            )
-        )
-        bc.otherEdge = boundaryOutsideIdx
-        
-        last.nextEdge = boundaryOutsideIdx
-        halfEdges[sorted[0]].prevEdge = boundaryOutsideIdx
-        halfEdges[sorted[0]].vertex = newVertexIndices[0]
-        
-        faces[newFaceIdx].edge = newFaceEdges[0]
-        vertices[vertexId].edge = -1
-        return newFaceIdx
     } else {
-        // Case 3: Regular internal vertex
-        // incidentEdges is sorted CCW (by otherEdge.nextEdge rotation)
         val n = incidentEdges.size
-        val newVertexIndices = IntArray(n)
-        val newFaceEdges = IntArray(n)
-
-        val newFaceIdx = faces.size
-        faces.add(Face(-1))
+        val sorted = incidentEdges
+        val firstEdgeIdx = if (isBoundary) sorted.indexOfFirst { halfEdges[it].otherEdge == -1 } else 0
+        val reordered = if (firstEdgeIdx != -1) {
+            sorted.subList(firstEdgeIdx, sorted.size) + sorted.subList(0, firstEdgeIdx)
+        } else {
+            sorted
+        }
 
         // 1. Create new vertices on incident edges
+        val newVertexIndices = IntArray(n)
         for (i in 0 until n) {
-            val eIdx = incidentEdges[i]
-            val p0 = vertices[halfEdges[eIdx].vertex].position
-            val p1 = vertices[halfEdges[halfEdges[eIdx].nextEdge].vertex].position
+            val eIdx = reordered[i]
+            val e = halfEdges[eIdx]
+            val p0 = vertices[e.vertex].position
+            val p1 = vertices[halfEdges[e.nextEdge].vertex].position
             val l = (p1 - p0).length
             val t = (radius / l).coerceIn(0.0, 1.0)
-
             val point = edgePoint(eIdx, t)
             newVertexIndices[i] = vertices.size
             vertices.add(Vertex(point.position, eIdx))
         }
 
-        // 2. Create edges for the new chamfer face
-        // The new face edges should connect the new vertices in CCW order.
-        // incidentEdges[i] starts at newVertexIndices[i].
-        // incidentEdges[i].prevEdge ends at newVertexIndices[i].
-        // We want to connect them.
-        for (i in 0 until n) {
-            newFaceEdges[i] = halfEdges.size
-            halfEdges.add(
-                HalfEdge(
-                    face = newFaceIdx,
-                    vertex = newVertexIndices[i],
-                    nextEdge = -1, // will set later
-                    prevEdge = -1, // will set later
-                    otherEdge = -1, // will set later
-                    attributes = vertices[newVertexIndices[i]].edge.let { halfEdges[it].attributes.copyOf() }
-                )
-            )
+        // 2. Extra vertex for boundary (on the incoming boundary edge)
+        val vExtraIdx = if (isBoundary) {
+            val lastIdx = halfEdges[reordered[0]].prevEdge
+            val last = halfEdges[lastIdx]
+            val pL0 = vertices[last.vertex].position
+            val pL1 = vertices[halfEdges[last.nextEdge].vertex].position
+            val lL = (pL1 - pL0).length
+            val tL = (1.0 - (radius / lL)).coerceIn(0.0, 1.0)
+            val pointL = edgePoint(lastIdx, tL)
+            val idx = vertices.size
+            vertices.add(Vertex(pointL.position, lastIdx))
+            idx
+        } else -1
+
+        // 3. Create the new chamfer face
+        val newFaceIdx = faces.size
+        faces.add(Face(-1))
+
+        val nFaceEdges = if (isBoundary) n + 1 else n
+        val newFaceEdges = IntArray(nFaceEdges)
+        
+        // Vertices for the chamfer face in CW order around the vertex center
+        // (which corresponds to CW winding in Y-down system)
+        val faceVertices = IntArray(nFaceEdges)
+        if (isBoundary) {
+            // Let's try v_0, v_1, ..., v_{n-1}, vExtra
+            // If this is CCW, then the reverse was also CCW? That would be strange.
+            for (i in 0 until n) {
+                faceVertices[i] = newVertexIndices[i]
+            }
+            faceVertices[n] = vExtraIdx
+        } else {
+            // v_{n-1}, v_{n-2}, ..., v_0 is CW.
+            for (i in 0 until n) {
+                faceVertices[i] = newVertexIndices[n - 1 - i]
+            }
         }
 
+        for (i in 0 until nFaceEdges) {
+            newFaceEdges[i] = halfEdges.size
+            val vIdx = faceVertices[i]
+            val attr = if (isBoundary && vIdx == vExtraIdx) {
+                halfEdges[halfEdges[reordered[0]].prevEdge].attributes.copyOf()
+            } else {
+                halfEdges[vertices[vIdx].edge].attributes.copyOf()
+            }
+            halfEdges.add(HalfEdge(face = newFaceIdx, vertex = vIdx, nextEdge = -1, prevEdge = -1, otherEdge = -1, attributes = attr))
+        }
+        for (i in 0 until nFaceEdges) {
+            halfEdges[newFaceEdges[i]].nextEdge = newFaceEdges[(i + 1) % nFaceEdges]
+            halfEdges[newFaceEdges[i]].prevEdge = newFaceEdges[(i - 1 + nFaceEdges) % nFaceEdges]
+        }
+
+        // 4. Connect existing faces to the new chamfer face
         for (i in 0 until n) {
-            val eIdx = incidentEdges[i]
+            val eIdx = reordered[i]
             val e = halfEdges[eIdx]
-            val prevEIdx = e.prevEdge
-            val prevE = halfEdges[prevEIdx]
+            val prevIdx = e.prevEdge
+            val prev = halfEdges[prevIdx]
 
-            val newFaceEIdx = newFaceEdges[i]
-            val newFaceE = halfEdges[newFaceEIdx]
+            // We need the edge in the chamfer face that starts at newVertexIndices[i] and ends at some v_j.
+            // That edge's otherEdge will be our bridge.
+            val chamferEdgeIdx = newFaceEdges.find { halfEdges[it].vertex == newVertexIndices[i] }!!
+            val chamferEdge = halfEdges[chamferEdgeIdx]
 
-            val nextNewFaceEIdx = newFaceEdges[(i + 1) % n]
-            val prevNewFaceEIdx = newFaceEdges[(i - 1 + n) % n]
-
-            // Connect new face edges
-            newFaceE.nextEdge = nextNewFaceEIdx
-            newFaceE.prevEdge = prevNewFaceEIdx
-
-            // Update incident edges to bypass the old vertex
-            // original prevEdge -> other edge of new face edge -> original current edge
-            // Wait, no.
-            // The new face edge `newFaceE` goes from newVertexIndices[i] to newVertexIndices[(i+1)%n].
-            // incidentEdges[i] starts at newVertexIndices[i].
-            // incidentEdges[i+1] starts at newVertexIndices[i+1].
-            
-            // Actually, incidentEdges[i].prevEdge ends at V.
-            // incidentEdges[i] starts at V.
-            // After chamfer:
-            // incidentEdges[i].prevEdge ends at newVertexIndices[i].
-            // new face edge (inner) connects newVertexIndices[i] to some other new vertex.
-            
-            // Let's create the other half-edges for the incident faces.
-            val otherNewFaceEIdx = halfEdges.size
-            halfEdges.add(
-                HalfEdge(
-                    face = e.face,
-                    vertex = newVertexIndices[(i + 1) % n],
-                    nextEdge = eIdx,
-                    prevEdge = prevEIdx,
-                    otherEdge = newFaceEIdx,
-                    attributes = halfEdges[incidentEdges[(i + 1) % n]].attributes.copyOf()
-                )
+            val bridgeEdgeIdx = halfEdges.size
+            val bridgeEdge = HalfEdge(
+                face = e.face,
+                vertex = halfEdges[chamferEdge.nextEdge].vertex,
+                nextEdge = eIdx,
+                prevEdge = prevIdx,
+                otherEdge = chamferEdgeIdx,
+                attributes = halfEdges[chamferEdge.nextEdge].attributes.copyOf()
             )
-            newFaceE.otherEdge = otherNewFaceEIdx
+            halfEdges.add(bridgeEdge)
+            chamferEdge.otherEdge = bridgeEdgeIdx
 
-            e.prevEdge = otherNewFaceEIdx
             e.vertex = newVertexIndices[i]
-            prevE.nextEdge = otherNewFaceEIdx
+            e.prevEdge = bridgeEdgeIdx
+            prev.nextEdge = bridgeEdgeIdx
+        }
+
+        // 5. Special handling for boundary outside
+        if (isBoundary) {
+            val chamferExtraEdgeIdx = newFaceEdges.find { halfEdges[it].vertex == vExtraIdx }!!
+            val chamferExtraEdge = halfEdges[chamferExtraEdgeIdx]
+            
+            val e0Idx = reordered[0]
+            val e0 = halfEdges[e0Idx]
+            val bridge0Idx = e0.prevEdge
+            val bridge0 = halfEdges[bridge0Idx]
+            val lastBoundaryIdx = bridge0.prevEdge
+            val lastBoundary = halfEdges[lastBoundaryIdx]
+            
+            val outsideEdgeIdx = halfEdges.size
+            val outsideEdge = HalfEdge(
+                face = -1,
+                vertex = newVertexIndices[0],
+                nextEdge = e0Idx,
+                prevEdge = lastBoundaryIdx,
+                otherEdge = chamferExtraEdgeIdx,
+                attributes = e0.attributes.copyOf()
+            )
+            halfEdges.add(outsideEdge)
+            chamferExtraEdge.otherEdge = outsideEdgeIdx
+            
+            lastBoundary.nextEdge = outsideEdgeIdx
+            e0.prevEdge = outsideEdgeIdx
         }
 
         faces[newFaceIdx].edge = newFaceEdges[0]
-        if (isBoundary) {
-            // In Case 2, adding 2 more dummy vertices to satisfy vertexCountBefore + 3
-            vertices.add(Vertex(vertices[vertexId].position, 0))
-            vertices.add(Vertex(vertices[vertexId].position, 0))
-        } else {
-            vertices[vertexId].edge = -1
-        }
+        vertices[vertexId].edge = -1
         return newFaceIdx
     }
 }
