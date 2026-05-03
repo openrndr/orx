@@ -8,6 +8,7 @@ import org.openrndr.extra.mesh.dcel.query.edgeCount
 import org.openrndr.extra.mesh.dcel.query.edgesForFace
 import org.openrndr.extra.mesh.dcel.query.edgesForVertex
 import org.openrndr.extra.mesh.dcel.query.faceCount
+import org.openrndr.extra.mesh.dcel.query.faceWinding
 import org.openrndr.extra.mesh.dcel.query.isEdgeLoopPlanar
 import org.openrndr.extra.mesh.dcel.query.isFaceConvex
 import org.openrndr.extra.mesh.dcel.query.isVertexABoundaryCorner
@@ -19,6 +20,7 @@ import org.openrndr.extra.mesh.dcel.validate.isEulerMesh
 import org.openrndr.extra.mesh.generate.gridMesh
 import org.openrndr.math.Vector3
 import org.openrndr.shape.Rectangle
+import org.openrndr.shape.Winding
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -32,6 +34,8 @@ class TestVertexChamfer {
 
         val vertexCountBefore = dcel.vertexCount()
         val edgeCountBefore = dcel.wholeEdgeCount()
+
+        assertEquals(Winding.CLOCKWISE, dcel.faceWinding(0))
 
         assertTrue(dcel.isVertexABoundaryCorner(0))
         // only one edge for vertex 0, chamfer should clip away a triangle
@@ -49,6 +53,7 @@ class TestVertexChamfer {
         assertTrue(dcel.isEulerMesh())
 
         assertEquals(-1, newFace)
+        assertEquals(Winding.CLOCKWISE, dcel.faceWinding(0))
 
     }
 
@@ -68,9 +73,11 @@ class TestVertexChamfer {
 
         val newFace = dcel.vertexChamfer(1, 2.0)
         assertTrue(dcel.isEulerMesh())
+        assertEquals(Winding.CLOCKWISE, dcel.faceWinding(newFace))
+
 
         assertEquals(faceCountBefore + 1, dcel.faceCount())
-        assertEquals(vertexCountBefore + 3, dcel.vertexCount())
+        assertEquals(vertexCountBefore + 2, dcel.vertexCount())
 
 
         assertEquals(3, dcel.edgesForFace(newFace).size)
@@ -87,6 +94,7 @@ class TestVertexChamfer {
 
         assertFalse(dcel.isVertexOnBoundary(4))
         assertEquals(4, dcel.edgesForVertex(4).size)
+        assertEquals(Winding.CLOCKWISE, dcel.faceWinding(0))
 
         val newFace = dcel.vertexChamfer(4, 2.0)
 
@@ -114,7 +122,11 @@ class TestVertexChamfer {
         // check if topology is correct
         for (i in 0 until 4) {
             assertEquals(5, dcel.edgesForFace(i).size)
+            assertEquals(Winding.CLOCKWISE, dcel.faceWinding(i))
         }
+
+        assertEquals(Winding.CLOCKWISE, dcel.faceWinding(newFace))
+
 
 //        val newVertices = dcel.verticesForFace(newFace)
 //        assertEquals(4, newVertices.size)
