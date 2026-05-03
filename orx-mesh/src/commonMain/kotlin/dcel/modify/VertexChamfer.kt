@@ -56,10 +56,10 @@ fun Dcel.vertexChamfer(vertexId: Int, radius: Double): Int {
 
         vertices[vertexId].edge = -1
         return -1
-    } else {
+    } else if (!isBoundary){
         val n = incidentEdges.size
         val sorted = incidentEdges
-        val firstEdgeIdx = if (isBoundary) sorted.indexOfFirst { halfEdges[it].otherEdge == -1 } else 0
+        val firstEdgeIdx =  0
         val reordered = if (firstEdgeIdx != -1) {
             sorted.subList(firstEdgeIdx, sorted.size) + sorted.subList(0, firstEdgeIdx)
         } else {
@@ -81,51 +81,30 @@ fun Dcel.vertexChamfer(vertexId: Int, radius: Double): Int {
         }
 
         // 2. Extra vertex for boundary (on the incoming boundary edge)
-        val vExtraIdx = if (isBoundary) {
-            val lastIdx = halfEdges[reordered[0]].prevEdge
-            val last = halfEdges[lastIdx]
-            val pL0 = vertices[last.vertex].position
-            val pL1 = vertices[halfEdges[last.nextEdge].vertex].position
-            val lL = (pL1 - pL0).length
-            val tL = (1.0 - (radius / lL)).coerceIn(0.0, 1.0)
-            val pointL = edgePoint(lastIdx, tL)
-            val idx = vertices.size
-            vertices.add(Vertex(pointL.position, lastIdx))
-            idx
-        } else -1
+        val vExtraIdx = -1
 
         // 3. Create the new chamfer face
         val newFaceIdx = faces.size
         faces.add(Face(-1))
 
-        val nFaceEdges = if (isBoundary) n + 1 else n
+        val nFaceEdges = n
         val newFaceEdges = IntArray(nFaceEdges)
         
         // Vertices for the chamfer face in CW order around the vertex center
         // (which corresponds to CW winding in Y-down system)
         val faceVertices = IntArray(nFaceEdges)
-        if (isBoundary) {
-            // Let's try v_0, v_1, ..., v_{n-1}, vExtra
-            // If this is CCW, then the reverse was also CCW? That would be strange.
-            for (i in 0 until n) {
-                faceVertices[i] = newVertexIndices[i]
-            }
-            faceVertices[n] = vExtraIdx
-        } else {
-            // v_{n-1}, v_{n-2}, ..., v_0 is CW.
+
             for (i in 0 until n) {
                 faceVertices[i] = newVertexIndices[n - 1 - i]
             }
-        }
+
 
         for (i in 0 until nFaceEdges) {
             newFaceEdges[i] = halfEdges.size
             val vIdx = faceVertices[i]
-            val attr = if (isBoundary && vIdx == vExtraIdx) {
-                halfEdges[halfEdges[reordered[0]].prevEdge].attributes.copyOf()
-            } else {
+            val attr =
                 halfEdges[vertices[vIdx].edge].attributes.copyOf()
-            }
+
             halfEdges.add(HalfEdge(face = newFaceIdx, vertex = vIdx, nextEdge = -1, prevEdge = -1, otherEdge = -1, attributes = attr))
         }
         for (i in 0 until nFaceEdges) {
@@ -162,36 +141,13 @@ fun Dcel.vertexChamfer(vertexId: Int, radius: Double): Int {
             prev.nextEdge = bridgeEdgeIdx
         }
 
-        // 5. Special handling for boundary outside
-        if (isBoundary) {
-            val chamferExtraEdgeIdx = newFaceEdges.find { halfEdges[it].vertex == vExtraIdx }!!
-            val chamferExtraEdge = halfEdges[chamferExtraEdgeIdx]
-            
-            val e0Idx = reordered[0]
-            val e0 = halfEdges[e0Idx]
-            val bridge0Idx = e0.prevEdge
-            val bridge0 = halfEdges[bridge0Idx]
-            val lastBoundaryIdx = bridge0.prevEdge
-            val lastBoundary = halfEdges[lastBoundaryIdx]
-            
-            val outsideEdgeIdx = halfEdges.size
-            val outsideEdge = HalfEdge(
-                face = -1,
-                vertex = newVertexIndices[0],
-                nextEdge = e0Idx,
-                prevEdge = lastBoundaryIdx,
-                otherEdge = chamferExtraEdgeIdx,
-                attributes = e0.attributes.copyOf()
-            )
-            halfEdges.add(outsideEdge)
-            chamferExtraEdge.otherEdge = outsideEdgeIdx
-            
-            lastBoundary.nextEdge = outsideEdgeIdx
-            e0.prevEdge = outsideEdgeIdx
-        }
-
         faces[newFaceIdx].edge = newFaceEdges[0]
         vertices[vertexId].edge = -1
         return newFaceIdx
+    } else if (isBoundary) {
+       // handle
+        TODO("implement vertex on boundary chamfer")
+    } else {
+        error("unknown case")
     }
 }
