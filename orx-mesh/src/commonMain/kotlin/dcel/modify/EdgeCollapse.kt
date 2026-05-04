@@ -74,13 +74,13 @@ fun Dcel.edgeCollapse(e: HalfEdge) {
 
             // Mark face and edges as deleted
             faces[fIdx].edge = -1
-            he.face = -1
-            next.face = -1
-            prev.face = -1
-
             he.vertex = -1
             next.vertex = -1
             prev.vertex = -1
+
+            he.face = -1
+            next.face = -1
+            prev.face = -1
 
             he.attributes = IntArray(5) { -1 }
             next.attributes = IntArray(5) { -1 }

@@ -4,6 +4,7 @@ import org.openrndr.extra.mesh.dcel.convert.toDcel
 import org.openrndr.extra.mesh.dcel.HalfEdge
 import org.openrndr.extra.mesh.dcel.query.bordersForEdge
 import org.openrndr.extra.mesh.dcel.query.edgeForFaces
+import org.openrndr.extra.mesh.dcel.query.edgesForFace
 import org.openrndr.extra.mesh.dcel.query.faceCount
 import org.openrndr.extra.mesh.dcel.query.wholeEdgeCount
 import org.openrndr.extra.mesh.dcel.validate.isEulerMesh
@@ -34,6 +35,10 @@ class TestBorderRemove {
         dcel.bordersRemove(borders)
         assertEquals(1, dcel.faceCount())
         assertEquals(6, dcel.wholeEdgeCount())
+
+        for (face in dcel.faces.indices) {
+            println("Face ${face}: ${dcel.edgesForFace(face).size} edges")
+        }
 
         assertTrue(dcel.isEulerMesh())
 

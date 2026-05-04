@@ -64,6 +64,8 @@ fun Dcel.edgeRemove(e: HalfEdge) {
     // Mark removed edges and face
     e.face = -1
     other.face = -1
+    e.vertex = -1
+    other.vertex = -1
 
     // Face f2 is now gone
     faces[f2Idx].edge = -1
@@ -143,10 +145,12 @@ private fun Dcel.removeSingleEdge(e: HalfEdge) {
     e.nextEdge = -1
     e.prevEdge = -1
     e.otherEdge = -1
+    e.vertex = -1
     other.face = -1
     other.nextEdge = -1
     other.prevEdge = -1
     other.otherEdge = -1
+    other.vertex = -1
 }
 
 private fun Dcel.removeRedundantEdges(faceIdx: Int) {

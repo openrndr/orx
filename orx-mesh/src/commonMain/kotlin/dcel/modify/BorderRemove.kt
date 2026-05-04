@@ -124,11 +124,13 @@ fun Dcel.bordersRemove(borders: List<List<Int>>) {
             e.nextEdge = -1
             e.prevEdge = -1
             e.otherEdge = -1
+            e.vertex = -1
 
             o.face = -1
             o.nextEdge = -1
             o.prevEdge = -1
             o.otherEdge = -1
+            o.vertex = -1
         }
 
         // Face f2 is now gone

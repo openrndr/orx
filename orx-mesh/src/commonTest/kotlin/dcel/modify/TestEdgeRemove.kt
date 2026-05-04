@@ -5,6 +5,9 @@ import org.openrndr.math.Vector3
 import org.openrndr.shape.Rectangle
 import org.openrndr.extra.mesh.generate.gridMesh
 import org.openrndr.extra.mesh.dcel.convert.toDcel
+import org.openrndr.extra.mesh.dcel.query.faceWinding
+import org.openrndr.extra.mesh.dcel.validate.isEulerMesh
+import org.openrndr.shape.Winding
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -41,6 +44,8 @@ class TestEdgeRemove {
         val faceIdx = activeFaces[0]
         val edges = dcel.halfEdges.filter { it.face == faceIdx }
         assertEquals(6, edges.size)
+        assertEquals(Winding.CLOCKWISE, dcel.faceWinding(faceIdx))
+        assertTrue(dcel.isEulerMesh())
     }
 
     @Test
@@ -76,6 +81,8 @@ class TestEdgeRemove {
         // Total edges should be 8 (4 + 4 + 4 - 2 - 2 = 8)
         val face0Edges = dcel.halfEdges.filter { it.face == 0 }
         assertEquals(8, face0Edges.size)
+        assertEquals(Winding.CLOCKWISE, dcel.faceWinding(0))
+        assertTrue(dcel.isEulerMesh())
     }
 
     @Test

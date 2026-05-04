@@ -8,8 +8,10 @@ import org.openrndr.extra.color.tools.shiftHue
 import org.openrndr.extra.mesh.dcel.convert.faceToShape
 import org.openrndr.extra.mesh.dcel.convert.shapeToDcelNoTriangulation
 import org.openrndr.extra.mesh.dcel.convert.toDcel
+import org.openrndr.extra.mesh.dcel.modify.bordersRemove
 import org.openrndr.extra.mesh.dcel.modify.edgeInsert
 import org.openrndr.extra.mesh.dcel.modify.edgeRemove
+import org.openrndr.extra.mesh.dcel.query.bordersForEdge
 import org.openrndr.extra.mesh.dcel.query.edgeLoopIndices
 import org.openrndr.extra.mesh.generate.gridMesh
 import org.openrndr.extra.noise.uniform
@@ -42,7 +44,11 @@ fun main() {
                 }
 
                 for (i in 0 until 40) {
-                    dcel.edgeRemove(dcel.halfEdges.random())
+                    val e = dcel.halfEdges.indices.random()
+                    val halfEdge = dcel.halfEdges[e]
+                    val borders = dcel.bordersForEdge(e)
+                    //dcel.edgeRemove(dcel.halfEdges.random())
+                    dcel.bordersRemove(borders)
                 }
             }
             val shapes = (0 until dcel.faces.size).map { dcel.faceToShape(it) }

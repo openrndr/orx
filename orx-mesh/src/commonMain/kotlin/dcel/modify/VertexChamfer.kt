@@ -145,8 +145,113 @@ fun Dcel.vertexChamfer(vertexId: Int, radius: Double): Int {
         vertices[vertexId].edge = -1
         return newFaceIdx
     } else if (isBoundary) {
-       // handle
-        TODO("implement vertex on boundary chamfer")
+        val outgoingBoundaryEdgeIdx = incidentEdges.find { halfEdges[it].otherEdge == -1 }!!
+        val outgoingBoundaryEdge = halfEdges[outgoingBoundaryEdgeIdx]
+
+        var incomingBoundaryEdgeIdx = -1
+        for (i in 0 until halfEdges.size) {
+            val e = halfEdges[i]
+            if (e.otherEdge == -1 && halfEdges[e.nextEdge].vertex == vertexId) {
+                incomingBoundaryEdgeIdx = i
+                break
+            }
+        }
+        if (incomingBoundaryEdgeIdx == -1) error("Incoming boundary edge not found")
+        val incomingBoundaryEdge = halfEdges[incomingBoundaryEdgeIdx]
+
+        val internalEdges = mutableListOf<Int>()
+        var current = outgoingBoundaryEdgeIdx
+        while (true) {
+            val other = halfEdges[current].otherEdge
+            if (other == -1) break
+            current = halfEdges[other].nextEdge
+            if (halfEdges[current].otherEdge == -1) break
+            internalEdges.add(current)
+        }
+
+        val internalVertexIndices = IntArray(internalEdges.size)
+        for (i in internalEdges.indices) {
+            val eIdx = internalEdges[i]
+            val e = halfEdges[eIdx]
+            val p0 = vertices[e.vertex].position
+            val p1 = vertices[halfEdges[e.nextEdge].vertex].position
+            val l = (p1 - p0).length
+            val t = (radius / l).coerceIn(0.0, 1.0)
+            val point = edgePoint(eIdx, t)
+            internalVertexIndices[i] = vertices.size
+            vertices.add(Vertex(point.position, eIdx))
+        }
+
+        val pOut0 = vertices[outgoingBoundaryEdge.vertex].position
+        val pOut1 = vertices[halfEdges[outgoingBoundaryEdge.nextEdge].vertex].position
+        val lOut = (pOut1 - pOut0).length
+        val tOut = (radius / lOut).coerceIn(0.0, 1.0)
+        val pointOut = edgePoint(outgoingBoundaryEdgeIdx, tOut)
+        val vOutIdx = vertices.size
+        vertices.add(Vertex(pointOut.position, outgoingBoundaryEdgeIdx))
+
+        val pIn0 = vertices[incomingBoundaryEdge.vertex].position
+        val pIn1 = vertices[halfEdges[incomingBoundaryEdge.nextEdge].vertex].position
+        val lIn = (pIn1 - pIn0).length
+        val tIn = (1.0 - (radius / lIn)).coerceIn(0.0, 1.0)
+        val pointIn = edgePoint(incomingBoundaryEdgeIdx, tIn)
+        val vInIdx = vertices.size
+        vertices.add(Vertex(pointIn.position, -1))
+
+        val newFaceIdx = faces.size
+        faces.add(Face(-1))
+
+        val nFaceEdges = internalEdges.size + 2
+        val newFaceEdges = IntArray(nFaceEdges)
+        val faceVertices = IntArray(nFaceEdges)
+        faceVertices[0] = vInIdx
+        for (i in internalEdges.indices) {
+            faceVertices[i + 1] = internalVertexIndices[internalEdges.size - 1 - i]
+        }
+        faceVertices[nFaceEdges - 1] = vOutIdx
+
+        for (i in 0 until nFaceEdges) {
+            newFaceEdges[i] = halfEdges.size
+            halfEdges.add(HalfEdge(face = newFaceIdx, vertex = faceVertices[i], nextEdge = -1, prevEdge = -1, otherEdge = -1, attributes = IntArray(5) { -1 }))
+        }
+        for (i in 0 until nFaceEdges) {
+            halfEdges[newFaceEdges[i]].nextEdge = newFaceEdges[(i + 1) % nFaceEdges]
+            halfEdges[newFaceEdges[i]].prevEdge = newFaceEdges[(i - 1 + nFaceEdges) % nFaceEdges]
+        }
+        faces[newFaceIdx].edge = newFaceEdges[0]
+
+        for (i in internalEdges.indices) {
+            val eIdx = internalEdges[i]
+            val e = halfEdges[eIdx]
+            val prevIdx = e.prevEdge
+            val prev = halfEdges[prevIdx]
+            val vNewIdx = internalVertexIndices[i]
+            val chamferEdgeIdx = newFaceEdges.find { halfEdges[it].vertex == vNewIdx }!!
+            val chamferEdge = halfEdges[chamferEdgeIdx]
+            val bridgeIdx = halfEdges.size
+            val bridge = HalfEdge(face = e.face, vertex = halfEdges[chamferEdge.nextEdge].vertex, nextEdge = eIdx, prevEdge = prevIdx, otherEdge = chamferEdgeIdx, attributes = e.attributes.copyOf())
+            halfEdges.add(bridge)
+            chamferEdge.otherEdge = bridgeIdx
+            e.vertex = vNewIdx
+            e.prevEdge = bridgeIdx
+            prev.nextEdge = bridgeIdx
+        }
+
+        outgoingBoundaryEdge.vertex = vOutIdx
+        val boundaryChamferEdgeIdx = newFaceEdges.find { halfEdges[it].vertex == vOutIdx }!!
+        val boundaryChamferEdge = halfEdges[boundaryChamferEdgeIdx]
+        
+        val newBoundaryEdgeIdx = halfEdges.size
+        val newBoundaryEdge = HalfEdge(face = -1, vertex = vInIdx, nextEdge = outgoingBoundaryEdgeIdx, prevEdge = incomingBoundaryEdgeIdx, otherEdge = -1, attributes = outgoingBoundaryEdge.attributes.copyOf())
+        halfEdges.add(newBoundaryEdge)
+        // boundaryChamferEdge.otherEdge = newBoundaryEdgeIdx
+        
+        incomingBoundaryEdge.nextEdge = newBoundaryEdgeIdx
+        outgoingBoundaryEdge.prevEdge = newBoundaryEdgeIdx
+        
+        vertices[vInIdx].edge = newBoundaryEdgeIdx
+        vertices[vertexId].edge = -1
+        return newFaceIdx
     } else {
         error("unknown case")
     }
