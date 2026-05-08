@@ -51,7 +51,7 @@ fun Dcel.edgeloopContains(edgeId: Int, point: Vector3, planarEpsilon: Double = 1
 
     // Project points to 2D
     // Find an orthogonal basis for the plane
-    val tangent = if (abs(normal.x) < 0.9) Vector3.UNIT_X else Vector3.UNIT_Y
+    val tangent = if (abs(normal.z) < 0.9) Vector3.UNIT_Z else Vector3.UNIT_Y
     val bitangent = normal.cross(tangent).normalized
     val finalTangent = bitangent.cross(normal).normalized
 

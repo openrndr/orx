@@ -25,7 +25,7 @@ fun Dcel.isEdgeloopDiagonal(edgeId0: Int, edgeId1: Int): Boolean {
 
     val positions = loop.map { vertices[halfEdges[it].vertex].position }
 
-    // Find loop normal and check if it's planar (consistent with edgeloopContains)
+    // Find loop normal and check if it's planar
     var areaVector = Vector3.ZERO
     for (i in positions.indices) {
         val v0 = positions[i]
@@ -35,10 +35,9 @@ fun Dcel.isEdgeloopDiagonal(edgeId0: Int, edgeId1: Int): Boolean {
 
     if (areaVector.length < 1e-12) return false
     val normal = areaVector.normalized
-    val d = positions[0].dot(normal)
 
     // Project points to 2D
-    val tangent = if (abs(normal.x) < 0.9) Vector3.UNIT_X else Vector3.UNIT_Y
+    val tangent = if (abs(normal.z) < 0.9) Vector3.UNIT_Z else Vector3.UNIT_Y
     val bitangent = normal.cross(tangent).normalized
     val finalTangent = bitangent.cross(normal).normalized
 
@@ -62,7 +61,7 @@ fun Dcel.isEdgeloopDiagonal(edgeId0: Int, edgeId1: Int): Boolean {
             continue
         }
 
-        if (segmentsIntersect(p0, p1, e0, e1)) {
+        if (segmentsIntersect(p0, p1, e0, e1, includeEndpoints = true)) {
             return false
         }
     }
@@ -78,7 +77,24 @@ fun Dcel.isEdgeloopDiagonal(edgeId0: Int, edgeId1: Int): Boolean {
 
     // Midpoint check to ensure it's inside
     val mid = (positions[i0] + positions[i1]) * 0.5
-    if (!edgeloopContains(edgeId0, mid)) {
+    val p2d = project(mid)
+
+    // Ray casting algorithm for point-in-polygon using the same local projection
+    var inside = false
+    var j = positions2d.size - 1
+    for (i in positions2d.indices) {
+        val pi = positions2d[i]
+        val pj = positions2d[j]
+
+        if (((pi.y > p2d.y) != (pj.y > p2d.y)) &&
+            (p2d.x < (pj.x - pi.x) * (p2d.y - pi.y) / (pj.y - pi.y) + pi.x)
+        ) {
+            inside = !inside
+        }
+        j = i
+    }
+
+    if (!inside) {
         return false
     }
 
@@ -86,16 +102,104 @@ fun Dcel.isEdgeloopDiagonal(edgeId0: Int, edgeId1: Int): Boolean {
 }
 
 fun Dcel.isEdgeloopChord(edgeId0: Int, edgeT0: Double, edgeId1: Int, edgeT1: Double): Boolean {
-    // similar to isEdgeloopDiagonal, but using arbitrary edge positions instead of edge vertices
+    if (edgeId0 == edgeId1 && abs(edgeT0 - edgeT1) < 1e-9) return false
+    val faceId = halfEdges[edgeId0].face
+    if (faceId == -1 || halfEdges[edgeId1].face != faceId) return false
 
-    // compute the positions of the edges at given parameters
-    val edge0 = edgePosition(edgeId0, edgeT0)
-    val edge1 = edgePosition(edgeId1, edgeT1)
+    val loop = edgeLoopIndices(edgeId0)
+    if (edgeId1 !in loop) return false
+
+    val positions = loop.map { vertices[halfEdges[it].vertex].position }
+
+    // Find loop normal and check if it's planar
+    var areaVector = Vector3.ZERO
+    for (i in positions.indices) {
+        val v0 = positions[i]
+        val v1 = positions[(i + 1) % positions.size]
+        areaVector += v0.cross(v1)
+    }
+
+    if (areaVector.length < 1e-12) return false
+    val normal = areaVector.normalized
+
+    // Project points to 2D
+    val tangent = if (abs(normal.z) < 0.9) Vector3.UNIT_Z else Vector3.UNIT_Y
+    val bitangent = normal.cross(tangent).normalized
+    val finalTangent = bitangent.cross(normal).normalized
+
+    fun project(p: Vector3): Vector2 {
+        return Vector2(p.dot(finalTangent), p.dot(bitangent))
+    }
+
+    val positions2d = positions.map { project(it) }
+
+    val pos0 = edgePosition(edgeId0, edgeT0)
+    val pos1 = edgePosition(edgeId1, edgeT1)
+    val p0 = project(pos0)
+    val p1 = project(pos1)
+
+    // Check for intersections with loop edges
+    for (i in loop.indices) {
+        val loopEdgeId = loop[i]
+        val e0 = positions2d[i]
+        val e1 = positions2d[(i + 1) % positions2d.size]
+
+        if (segmentsIntersect(p0, p1, e0, e1, includeEndpoints = false)) {
+            return false
+        } else {
+             // segmentsIntersect(includeEndpoints=false) returns false if they only touch at endpoints.
+             // We still need to check if the chord is collinear with an edge that it's NOT supposed to be on.
+             if (onSegment(e0, e1, p0) && onSegment(e0, e1, p1)) {
+                 if (loopEdgeId != edgeId0 && loopEdgeId != edgeId1) {
+                     return false
+                 }
+             }
+        }
+    }
+
+    // Check if any vertex in the loop lies on the chord segment (excluding endpoints if they coincide)
+    for (i in positions2d.indices) {
+        val p = positions2d[i]
+        if ((p - p0).length > 1e-9 && (p - p1).length > 1e-9) {
+            if (onSegment(p0, p1, p)) {
+                return false
+            }
+        }
+    }
+
+    // Midpoint check to ensure it's inside
+    if (edgeId0 != edgeId1 || abs(edgeT0 - edgeT1) > 1e-9) {
+        val mid = (pos0 + pos1) * 0.5
+        val p2d = project(mid)
+
+        // Ray casting algorithm for point-in-polygon using the same local projection
+        var inside = false
+        var j = positions2d.size - 1
+        for (i in positions2d.indices) {
+            val pi = positions2d[i]
+            val pj = positions2d[j]
+
+            if (((pi.y > p2d.y) != (pj.y > p2d.y)) &&
+                (p2d.x < (pj.x - pi.x) * (p2d.y - pi.y) / (pj.y - pi.y) + pi.x)
+            ) {
+                inside = !inside
+            }
+            j = i
+        }
+
+        if (!inside) {
+            return false
+        }
+    }
+
+    return true
 }
+
 
 private fun segmentsIntersect(
     p1: Vector2, p2: Vector2,
-    p3: Vector2, p4: Vector2
+    p3: Vector2, p4: Vector2,
+    includeEndpoints: Boolean = true
 ): Boolean {
     fun ccw(a: Vector2, b: Vector2, c: Vector2): Int {
         val area = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)
@@ -115,10 +219,12 @@ private fun segmentsIntersect(
         ((ccw3 > 0 && ccw4 < 0) || (ccw3 < 0 && ccw4 > 0))
     ) return true
 
-    if (ccw1 == 0 && onSegment(p1, p2, p3)) return true
-    if (ccw2 == 0 && onSegment(p1, p2, p4)) return true
-    if (ccw3 == 0 && onSegment(p3, p4, p1)) return true
-    if (ccw4 == 0 && onSegment(p3, p4, p2)) return true
+    if (includeEndpoints) {
+        if (ccw1 == 0 && onSegment(p1, p2, p3)) return true
+        if (ccw2 == 0 && onSegment(p1, p2, p4)) return true
+        if (ccw3 == 0 && onSegment(p3, p4, p1)) return true
+        if (ccw4 == 0 && onSegment(p3, p4, p2)) return true
+    }
 
     return false
 }
