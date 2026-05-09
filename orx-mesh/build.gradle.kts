@@ -1,3 +1,7 @@
+import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
+
 plugins {
     id("org.openrndr.extra.convention.kotlin-multiplatform")
 }
@@ -27,5 +31,11 @@ kotlin {
                 implementation(openrndr.ffmpeg)
             }
         }
+    }
+}
+
+tasks.withType<KotlinCompilationTask<*>> {
+    compilerOptions {
+        freeCompilerArgs.add("-Xcontext-parameters")
     }
 }

@@ -18,6 +18,22 @@ fun Dcel.edgeForFaces(leftFace: Int, rightFace: Int): Int {
 
 }
 
+fun Dcel.edgesForFaces(faces: Set<Int>): Set<Int> {
+    val result = mutableSetOf<Int>()
+    for (face in faces) {
+        val edges = edgesForFace(face)
+        for (edgeIdx in edges) {
+            val otherEdgeIdx = halfEdges[edgeIdx].otherEdge
+            if (otherEdgeIdx != -1 && result.contains(otherEdgeIdx)) {
+                // edge already added by its other half-edge
+            } else {
+                result.add(edgeIdx)
+            }
+        }
+    }
+    return result
+}
+
 fun Dcel.edgesForFace(face: Int): List<Int> {
     val faceObj = faces.getOrNull(face) ?: return emptyList()
     val edges = mutableListOf<Int>()
