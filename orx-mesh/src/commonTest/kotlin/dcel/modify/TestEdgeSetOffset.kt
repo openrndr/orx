@@ -4,7 +4,16 @@ import org.openrndr.extra.mesh.dcel.Dcel
 import org.openrndr.extra.mesh.dcel.Face
 import org.openrndr.extra.mesh.dcel.HalfEdge
 import org.openrndr.extra.mesh.dcel.Vertex
+import org.openrndr.extra.mesh.dcel.convert.shapeToDcelNoTriangulation
+import org.openrndr.extra.mesh.dcel.navigate.filterEdges
+import org.openrndr.extra.mesh.dcel.navigate.isBoundary
+import org.openrndr.extra.mesh.dcel.query.edgesForFaces
+import org.openrndr.extra.mesh.dcel.query.faceWinding
+import org.openrndr.extra.mesh.dcel.validate.isEulerMesh
+import org.openrndr.extra.shapes.primitives.regularPolygon
+import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
+import org.openrndr.shape.Winding
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -71,6 +80,38 @@ class TestEdgeSetOffset {
         // My implementation: e0: nv0 -> nv1
         assertEquals(Vector3(1.0, -1.0, 0.0), v0)
         assertEquals(Vector3(0.0, -1.0, 0.0), v1)
+    }
+
+    @Test
+    fun testOffsetJoins() {
+        val shape = regularPolygon(6, Vector2.ZERO, 200.0).shape
+        val dcel = shapeToDcelNoTriangulation(shape, 0.5)
+        assertEquals(Winding.CLOCKWISE, dcel.faceWinding(0))
+        val faces = dcel.edgeSetOffset(setOf(0,1,2,3,4,5), -20.0, useJoins = true)
+
+        assertTrue(dcel.isEulerMesh())
+        assertTrue(faces.all { dcel.faceWinding(it) == Winding.CLOCKWISE })
+        assertEquals(12, faces.size)
+    }
+
+    @Test
+    fun testOffsetJoinsTwoIterations() {
+        val shape = regularPolygon(6, Vector2.ZERO, 200.0).shape
+        val dcel = shapeToDcelNoTriangulation(shape, 0.5)
+        assertEquals(Winding.CLOCKWISE, dcel.faceWinding(0))
+        val faces = dcel.edgeSetOffset(setOf(0,1,2,3,4,5), -20.0, useJoins = true)
+
+        assertTrue(dcel.isEulerMesh())
+        assertTrue(faces.all { dcel.faceWinding(it) == Winding.CLOCKWISE })
+        assertEquals(12, faces.size)
+
+        val edges = with(dcel) {
+            edgesForFaces(faces).toList().filterEdges { it.isBoundary }
+        }
+        assertEquals(12, edges.size)
+
+        val faces2 = dcel.edgeSetOffset(edges.toSet(), 20.0, useJoins = true)
+        assertEquals(24, faces2.size)
     }
 
     @Test

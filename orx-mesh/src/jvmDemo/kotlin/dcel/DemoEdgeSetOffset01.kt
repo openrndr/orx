@@ -20,12 +20,16 @@ fun main() {
 
 
             with(dcel) {
-                var faces = edgeSetOffset(setOf(0,1,2, 4), -20.0)
+                var faces = edgeSetOffset(setOf(0,1,2,3,4,5), -20.0, true)
+
                 var edges = edgesForFaces(faces).toList().filterEdges { it.isBoundary }.toSet()
-                faces = edgeSetOffset(edges, -20.0)
+                require(edges.size == 12)
+                faces = edgeSetOffset(edges, -20.0, true)
+                println(faces.size)
+
                 edges = edgesForFaces(faces)
-                    .toList().filterEdges { it.isBoundary && it.length > 30.0 }.toSet()
-                edgeSetOffset(edges, -20.0)
+                    .toList().filterEdges { it.isBoundary }.toSet()
+//                edgeSetOffset(edges, -20.0, true)
             }
 
             extend {
