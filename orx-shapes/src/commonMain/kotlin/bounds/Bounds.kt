@@ -24,7 +24,7 @@ val Iterable<Shape>.bounds : Rectangle
 
 
 /**
- * Evaluates the bounds around all [Segment] instances in the [Iterable]
+ * Evaluates the bounds around all [Segment2D] instances in the [Iterable]
  */
 val Iterable<Segment2D>.bounds : Rectangle
     @JvmName("segmentBounds")

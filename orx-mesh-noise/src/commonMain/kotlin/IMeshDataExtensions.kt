@@ -52,7 +52,7 @@ val pointSampleFunction: SampleFunction<Point> = { t: IIndexedPolygon, v: IVerte
  * Generates a list of uniformly distributed points on the surface of the given mesh.
  *
  * The method uses triangulation and computes areas of triangular polygons to ensure
- * uniform distribution of points across the surface.
+ * a uniform distribution of points across the surface.
  *
  * @param count the number of points to generate
  * @param random a random number generator instance, defaulting to [Random.Default]
@@ -186,7 +186,7 @@ fun IMeshData.nonuniformRSeq(
  * using weighted areas of triangles and a provided sample function.
  *
  * @param T The type of the sample produced by the sample function.
- * @param randomsUnsorted A list of random values in the range [0, 1), which are used to
+ * @param randomValuesUnsorted A list of random values in the range [0, 1), which are used to
  *        distribute points across the mesh based on weighted triangle areas.
  * @param randomPoints A list of random 2D points in barycentric coordinates, used to
  *        determine the position of generated samples within a triangle.

@@ -30,8 +30,10 @@ private fun pickLength(leftLength: Double, rightLength: Double, s0: Segment2D, s
 
 /**
  * Chamfers corners between linear segments
- * @param length the length of the chamfer
- * @param angleThreshold the maximum (smallest) angle between between linear segments
+ * @param lengths a function that determines the chamfer length based on segment index and adjacent segments
+ * @param expands a function that determines the expansion distance (default: 0.0)
+ * @param clip whether to clip the chamfer to segment bounds (default: true)
+ * @param angleThreshold the maximum (smallest) angle between linear segments (unused)
  * @param chamfer the chamfer function to apply
  */
 fun ShapeContour.chamferCorners(

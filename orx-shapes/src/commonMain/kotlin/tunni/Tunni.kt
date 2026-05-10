@@ -6,7 +6,7 @@ import org.openrndr.shape.Segment2D
 import org.openrndr.shape.intersection
 
 /**
- * Find the Tunni point for the [Segment]
+ * Find the Tunni point for the [Segment2D]
  * @since orx 0.4.5
  */
 val Segment2D.tunniPoint: Vector2
@@ -20,7 +20,7 @@ val Segment2D.tunniPoint: Vector2
     }
 
 /**
- * Find the Tunni line for the [Segment]
+ * Find the Tunni line for the [Segment2D]
  * @since orx 0.4.5
  */
 val Segment2D.tunniLine: LineSegment

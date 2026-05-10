@@ -284,7 +284,7 @@ fun List<Vector2>.catmullRom(alpha: Double = 0.5, closed: Boolean) = CatmullRomC
 fun List<Vector3>.catmullRom(alpha: Double = 0.5, closed: Boolean) = CatmullRomChain3(this, alpha, closed)
 
 
-/** Converts spline to a [Segment]. */
+/** Converts spline to a [Segment2D]. */
 fun CatmullRom2.toSegment(): Segment2D {
     val d1a2 = (p1 - p0).length.pow(2 * alpha)
     val d2a2 = (p2 - p1).length.pow(2 * alpha)

@@ -314,7 +314,7 @@ fun TriangleMeshBuilder.grid(
 
 /**
  * Twists a 3D mesh around an axis that starts at [Vector3.ZERO] and ends
- * at [axis]. [degreesPerUnit] controls the amount of  twist. [start] is
+ * at [axis]. [degreesPerUnit] controls the twist amount. [start] is
  * currently unused.
  */
 fun TriangleMeshBuilder.twist(
@@ -604,7 +604,7 @@ fun TriangleMeshBuilder.extrudeShapes(
  * Creates a triangle mesh builder
  *
  * @param vertexBuffer The optional [VertexBuffer] into which to write data.
- * If not provided one is created.
+ * If not provided, one is created.
  * @param builder A user function that adds 3D meshes to the [vertexBuffer]
  * @return The populated [VertexBuffer]
  */
@@ -633,9 +633,9 @@ fun buildTriangleMesh(
 
 /**
  * Creates a group. Can be used to avoid leaking mesh properties like `color`
- * and `transform` into following meshes or groups.
+ * and `transform` into any following meshes or groups.
  *
- * @param builder A user function that adds 3D meshes to the [vertexBuffer]
+ * @param builder A user function that adds 3D meshes to the `vertexBuffer`
  * @see [TriangleMeshBuilder.isolated]
  */
 fun TriangleMeshBuilder.group(

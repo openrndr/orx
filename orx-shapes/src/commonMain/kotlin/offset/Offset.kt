@@ -141,11 +141,11 @@ fun Segment2D.offset(
 
 
 /**
- * Offsets a [ShapeContour]'s [Segment]s by given [distance].
+ * Offsets a [ShapeContour]'s [Segment2D]s by given [distance].
  *
- * [Segment]s are moved outwards if [distance] is > 0 or inwards if [distance] is < 0.
+ * [Segment2D]s are moved outwards if [distance] is > 0 or inwards if [distance] is < 0.
  *
- * @param joinType Specifies how to join together the moved [Segment]s.
+ * @param joinType Specifies how to join together the moved [Segment2D]s.
  */
 fun ShapeContour.offset(distance: Double, joinType: SegmentJoin = SegmentJoin.ROUND): ShapeContour {
     val offsets =

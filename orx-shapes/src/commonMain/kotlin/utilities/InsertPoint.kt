@@ -4,7 +4,6 @@ import org.openrndr.shape.ShapeContour
 
 /**
  * Insert point at [t]
- * @param ascendingTs a list of ascending T values
  * @param weldEpsilon minimum distance between T values
  */
 fun ShapeContour.insertPointAt(t: Double, weldEpsilon: Double = 1E-6): ShapeContour {

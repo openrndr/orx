@@ -12,7 +12,7 @@ import org.openrndr.shape.triangulate
 typealias VertexWriter = (position: Vector3, normal: Vector3, texCoord: Vector2) -> Unit
 
 /**
- * create a [VertexWriter] that writes into a [java.nio.ByteBuffer] through [BufferWriter]
+ * create a [VertexWriter] that writes into a `java.nio.ByteBuffer` through [BufferWriter]
  */
 fun bufferWriter(bw: BufferWriter): VertexWriter {
     return { p, n, t ->

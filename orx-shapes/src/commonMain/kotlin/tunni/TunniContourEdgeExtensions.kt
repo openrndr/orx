@@ -5,11 +5,11 @@ import org.openrndr.extra.shapes.adjust.ContourEdge
 import org.openrndr.math.Vector2
 import org.openrndr.shape.LineSegment
 import org.openrndr.shape.ShapeContour
-
+import org.openrndr.shape.Segment2D
 
 /**
  * The Tunni-point for this [ContourEdge]
- * @see Segment.tunniPoint
+ * @see Segment2D.tunniPoint
  */
 val ContourEdge.tunniPoint: Vector2
     get() = contour.segments[segmentIndex].tunniPoint
@@ -17,7 +17,7 @@ val ContourEdge.tunniPoint: Vector2
 
 /**
  * The Tunni-line for this [ContourEdge]
- * @see Segment.tunniLine
+ * @see Segment2D.tunniLine
  */
 val ContourEdge.tunniLine: LineSegment
     get() = contour.segments[segmentIndex].tunniLine
@@ -51,11 +51,11 @@ fun ContourEdge.withTunniLine(pointOnLine: Vector2): ContourEdge {
 }
 
 /**
- * @see Segment.withTunniPoint
+ * @see Segment2D.withTunniPoint
  */
 fun ContourAdjusterEdge.withTunniPoint(tunniPoint: Vector2) = wrap { withTunniPoint(tunniPoint) }
 
 /**
- * @see Segment.withTunniLine
+ * @see Segment2D.withTunniLine
  */
 fun ContourAdjusterEdge.withTunniLine(pointOnLine: Vector2) = wrap { withTunniLine(pointOnLine) }
