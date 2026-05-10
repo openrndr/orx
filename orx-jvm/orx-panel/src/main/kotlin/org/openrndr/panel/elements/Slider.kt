@@ -1,12 +1,9 @@
 package org.openrndr.panel.elements
 
-import io.github.oshai.kotlinlogging.KotlinLogging
-import kotlinx.coroutines.*
+import kotlinx.coroutines.DelicateCoroutinesApi
 import org.openrndr.*
-
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.LineCap
-
 import org.openrndr.events.Event
 import org.openrndr.extra.expressions.ExpressionException
 import org.openrndr.extra.expressions.evaluateExpression
@@ -23,8 +20,6 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KMutableProperty1
-
-private val logger = KotlinLogging.logger {}
 
 @JvmRecord
 data class Range(val min: Double, val max: Double) {
@@ -205,7 +200,7 @@ class Slider : Element(ElementType("slider")) {
                 try {
                     val number = evaluateExpression(keyboardInput, constants = mapOf("_" to value)) ?: value
                     interactiveValue = number.coerceIn(range.min, range.max)
-                } catch (e: ExpressionException) {
+                } catch (_: ExpressionException) {
                     // -- silently (but safely) ignore the exception
                 }
                 keyboardInput = ""
