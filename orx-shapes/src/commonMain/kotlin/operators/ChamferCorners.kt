@@ -55,9 +55,6 @@ fun ShapeContour.chamferCorners(
             this@chamferCorners.segments
         }
 
-        var lengthIndex = sourceSegments.size - 1
-
-
         sourceSegments.first().let {
             if (it.control.size == 1) {
                 moveTo(position(0.0))
@@ -71,8 +68,7 @@ fun ShapeContour.chamferCorners(
             }
         }
 
-
-        lengthIndex = 0
+        var lengthIndex = 0
         for ((s0, s1) in sourceSegments.zipWithNext()) {
             lengthIndex++
             if (s0.control.size == 1) {
