@@ -3,6 +3,7 @@ package org.openrndr.extra.mesh.dcel
 import org.openrndr.color.ColorRGBa
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
+import kotlin.jvm.JvmInline
 
 class HalfEdge(
     var face: Int,
@@ -13,13 +14,30 @@ class HalfEdge(
     var attributes: IntArray
 )
 
-
 class Face(
     var edge: Int,
     var holeEdges: IntArray = IntArray(0),
 )
 
 class Vertex(var position: Vector3, var edge: Int)
+
+@JvmInline
+value class FaceList(val faceIds: List<Int>): List<Int> by faceIds
+
+@JvmInline
+value class FaceSet(val faceIds: Set<Int>): Set<Int> by faceIds
+
+@JvmInline
+value class EdgeList(val edgeIds: List<Int>): List<Int> by edgeIds
+
+@JvmInline
+value class EdgeSet(val edgeIds: Set<Int>): Set<Int> by edgeIds
+
+@JvmInline
+value class VertexList(val vertexIds: List<Int>): List<Int> by vertexIds
+
+@JvmInline
+value class VertexSet(val vertexIds: Set<Int>): Set<Int> by vertexIds
 
 
 enum class DCELAttributes(val index: Int) {

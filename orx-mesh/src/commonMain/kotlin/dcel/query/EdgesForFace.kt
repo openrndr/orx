@@ -1,10 +1,11 @@
 package org.openrndr.extra.mesh.dcel.query
 
 import org.openrndr.extra.mesh.dcel.Dcel
+import org.openrndr.extra.mesh.dcel.EdgeList
 import org.openrndr.extra.mesh.dcel.HalfEdge
 
 
-fun Dcel.edgeForFaces(leftFace: Int, rightFace: Int): Int {
+fun Dcel.edgeBetweenFaces(leftFace: Int, rightFace: Int): Int {
     if (leftFace == -1 || rightFace == -1) return -1
     val leftFaceObj = faces.getOrNull(leftFace) ?: return -1
     if (leftFaceObj.edge == -1) return -1
@@ -15,7 +16,10 @@ fun Dcel.edgeForFaces(leftFace: Int, rightFace: Int): Int {
         val other = halfEdges.getOrNull(halfEdges[it].otherEdge)
         other?.face == rightFace
     } ?: -1
+}
 
+fun Dcel.edgesForFaces(faces: List<Int>): EdgeList {
+    return EdgeList(edgesForFaces(faces.toSet()).toList())
 }
 
 fun Dcel.edgesForFaces(faces: Set<Int>): Set<Int> {

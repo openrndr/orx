@@ -1,9 +1,8 @@
 package org.openrndr.extra.mesh.dcel.modify
 
 import org.openrndr.extra.mesh.dcel.convert.toDcel
-import org.openrndr.extra.mesh.dcel.HalfEdge
 import org.openrndr.extra.mesh.dcel.query.bordersForEdge
-import org.openrndr.extra.mesh.dcel.query.edgeForFaces
+import org.openrndr.extra.mesh.dcel.query.edgeBetweenFaces
 import org.openrndr.extra.mesh.dcel.query.edgesForFace
 import org.openrndr.extra.mesh.dcel.query.faceCount
 import org.openrndr.extra.mesh.dcel.query.wholeEdgeCount
@@ -21,7 +20,7 @@ class TestBorderRemove {
     fun testBorderRemoveSimple() {
         val grid = gridMesh(Rectangle(0.0, 0.0, 100.0, 100.0), 2, 1)
         val dcel = grid.toDcel()
-        val edgeToRemove = dcel.edgeForFaces(0, 1)
+        val edgeToRemove = dcel.edgeBetweenFaces(0, 1)
 
 
         assertEquals(2, dcel.faceCount())

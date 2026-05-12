@@ -207,4 +207,55 @@ class TestEdgeSetOffset {
         val nv1Pos = dcel.vertices[5].position
         assertTrue((nv1Pos - Vector3(-1.0, -1.0, 0.0)).length < 1e-6)
     }
+
+    @Test
+    fun testChainingDifferentFaces() {
+        val dcel = Dcel()
+        // Two disjoint triangles sharing a vertex
+        // T1: (0,0) -> (1,0) -> (0,1)
+        // T2: (2,0) -> (0,0) -> (2,1)
+        // They share vertex (0,0).
+        
+        dcel.vertices.add(Vertex(Vector3(0.0, 0.0, 0.0), -1)) // 0: Shared
+        dcel.vertices.add(Vertex(Vector3(1.0, 0.0, 0.0), -1)) // 1
+        dcel.vertices.add(Vertex(Vector3(0.0, 1.0, 0.0), -1)) // 2
+        
+        dcel.vertices.add(Vertex(Vector3(2.0, 0.0, 0.0), -1)) // 3
+        dcel.vertices.add(Vertex(Vector3(2.0, 1.0, 0.0), -1)) // 4
+
+        // Face 0: 0->1, 1->2, 2->0
+        dcel.faces.add(Face(-1))
+        dcel.halfEdges.add(HalfEdge(0, 0, 1, 2, -1, IntArray(0))) // 0: 0->1
+        dcel.halfEdges.add(HalfEdge(0, 1, 2, 0, -1, IntArray(0))) // 1: 1->2
+        dcel.halfEdges.add(HalfEdge(0, 2, 0, 1, -1, IntArray(0))) // 2: 2->0
+        dcel.faces[0].edge = 0
+
+        // Face 1: 3->0, 0->4, 4->3
+        dcel.faces.add(Face(-1))
+        dcel.halfEdges.add(HalfEdge(1, 3, 4, 5, -1, IntArray(0))) // 3: 3->0
+        dcel.halfEdges.add(HalfEdge(1, 0, 5, 3, -1, IntArray(0))) // 4: 0->4
+        dcel.halfEdges.add(HalfEdge(1, 4, 3, 4, -1, IntArray(0))) // 5: 4->3
+        dcel.faces[1].edge = 3
+
+        // Edge 0 (0->1) and Edge 4 (0->4) are NOT chained by DCEL next/prev.
+        // But edge 3 ends at 0, and edge 0 starts at 0.
+        // Also edge 3 ends at 0, and edge 4 starts at 0.
+        // So [3, 0] should be a chain.
+        // And [3, 4] should be a chain.
+        
+        // Let's offset setOf(3, 0).
+        // Edge 3: 3->0. Edge 0: 0->1.
+        // They share vertex 0.
+        
+        val faces = dcel.edgeSetOffset(setOf(3, 0), 1.0)
+        // If they are chained, they should produce 2 faces in ONE chain processing.
+        // Actually the number of faces is same whether chained or not, but vertex 0 will be offset ONCE if chained.
+        // If not chained, vertex 0 will be offset twice (separately for each edge).
+        
+        assertEquals(2, faces.size)
+        // Since they are chained, there should be 3 new vertices total (v5 for start of 3, v6 for shared 0, v7 for end of 0).
+        // Wait, 5 vertices originally (0,1,2,3,4).
+        // New vertices: 5, 6, 7.
+        assertEquals(8, dcel.vertices.size)
+    }
 }

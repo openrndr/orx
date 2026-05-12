@@ -3,8 +3,12 @@ package org.openrndr.extra.mesh.dcel.modify
 import org.openrndr.extra.mesh.dcel.*
 import org.openrndr.math.Vector3
 
-fun Dcel.edgeSetOffset(edgeIds: Set<Int>, offset: Double, useJoins: Boolean = false): Set<Int> {
-    if (edgeIds.isEmpty()) return emptySet()
+fun Dcel.edgeSetOffset(edgeIds: List<Int>, offset: Double, useJoins: Boolean = false): FaceList {
+    return FaceList(edgeSetOffset(edgeIds.toSet(), offset, useJoins).toList())
+}
+
+fun Dcel.edgeSetOffset(edgeIds: Set<Int>, offset: Double, useJoins: Boolean = false): FaceSet {
+    if (edgeIds.isEmpty()) return FaceSet(emptySet())
 
     // 1. Group edgeIds into contiguous chains.
     // Each chain is a list of edge indices [e1, e2, ..., en] where e_{i+1} is halfEdges[e_i].nextEdge.
@@ -20,12 +24,13 @@ fun Dcel.edgeSetOffset(edgeIds: Set<Int>, offset: Double, useJoins: Boolean = fa
         // Forward
         var curr = startEdgeIdx
         while (true) {
-            val next = halfEdges[curr].nextEdge
-            if (next != -1 && next in remainingEdges) {
+            val currEndVertex = halfEdges[halfEdges[curr].nextEdge].vertex
+            val next = remainingEdges.find { halfEdges[it].vertex == currEndVertex }
+            if (next != null) {
                 chain.add(next)
                 remainingEdges.remove(next)
                 curr = next
-                if (curr == startEdgeIdx) break // Should not happen with remainingEdges check, but for safety
+                if (curr == startEdgeIdx) break
             } else {
                 break
             }
@@ -34,8 +39,9 @@ fun Dcel.edgeSetOffset(edgeIds: Set<Int>, offset: Double, useJoins: Boolean = fa
         // Backward
         curr = startEdgeIdx
         while (true) {
-            val prev = halfEdges[curr].prevEdge
-            if (prev != -1 && prev in remainingEdges) {
+            val currStartVertex = halfEdges[curr].vertex
+            val prev = remainingEdges.find { halfEdges[halfEdges[it].nextEdge].vertex == currStartVertex }
+            if (prev != null) {
                 chain.add(0, prev)
                 remainingEdges.remove(prev)
                 curr = prev
@@ -44,18 +50,17 @@ fun Dcel.edgeSetOffset(edgeIds: Set<Int>, offset: Double, useJoins: Boolean = fa
             }
         }
 
-        // Check if it's a closed loop
-        val first = chain.first()
-        val last = chain.last()
-        val closed = halfEdges[last].nextEdge == first
-
         chains.add(chain)
     }
 
     val newFaceIds = mutableSetOf<Int>()
 
     for (chain in chains) {
-        val isClosed = halfEdges[chain.last()].nextEdge == chain.first()
+        val isClosed = if (chain.size > 1) {
+            halfEdges[halfEdges[chain.last()].nextEdge].vertex == halfEdges[chain.first()].vertex
+        } else {
+            halfEdges[chain.last()].nextEdge == chain.first()
+        }
 
         // 2. Compute offset directions for each vertex in the chain.
         // For each edge in the chain, we want its "outer" normal.
@@ -95,26 +100,15 @@ fun Dcel.edgeSetOffset(edgeIds: Set<Int>, offset: Double, useJoins: Boolean = fa
 
         val vertexOffsetResults = mutableListOf<OffsetResult>()
 
-        fun computeOffset(nPrev: Vector3, nCurr: Vector3): OffsetResult {
+        fun computeOffset(nPrev: Vector3, nCurr: Vector3, edgeIdx: Int): OffsetResult {
             val dot = nPrev.dot(nCurr).coerceIn(-1.0, 1.0)
             val cross = nPrev.cross(nCurr)
-            // Assuming 2D work mainly, we use a reference "up" to determine if it's an outer corner.
-            // Actually, if we use the same "up" from getEdgeNormal, we can check.
-            // But let's simplify: if dot is near 1, it's straight.
-            // If we want joins only on outer corners, we need to know if it's "turning away" from the face.
-            
-            // For a boundary edge, the face is on the left.
-            // nPrev and nCurr are pointing OUTWARDS.
-            // If the polygon is CCW, boundary edges are CW.
-            // Example: (1,0) -> (0,0) (bottom edge). Normal is (0,-1).
-            // Next edge: (0,0) -> (0,1) (left edge). Normal is (-1,0).
-            // (0,-1) cross (-1,0) = (0,0,-1). Dot with Z is negative. This is an outer corner.
-            
-            // Try to find a face normal to determine "up"
+
+            // Try to find a face normal to determine "up" for THIS specific corner
             var up = Vector3.UNIT_Z
-            val firstEdge = halfEdges[chain.first()]
-            if (firstEdge.face != -1) {
-                val f = faces[firstEdge.face]
+            val edge = halfEdges[edgeIdx]
+            if (edge.face != -1) {
+                val f = faces[edge.face]
                 val e0 = halfEdges[f.edge]
                 val vA = vertices[e0.vertex].position
                 val vB = vertices[halfEdges[e0.nextEdge].vertex].position
@@ -124,9 +118,10 @@ fun Dcel.edgeSetOffset(edgeIds: Set<Int>, offset: Double, useJoins: Boolean = fa
                     up = fn
                 }
             }
-
+            
             val actualIsOuter = cross.dot(up) < -1e-6
-
+            
+            // For joins, we check if it's an outer corner based on THIS edge's face normal.
             if (useJoins && actualIsOuter && offset > 0.0) {
                 return OffsetResult(nPrev * offset, nCurr * offset, true)
             } else if (useJoins && !actualIsOuter && offset < 0.0) {
@@ -144,7 +139,7 @@ fun Dcel.edgeSetOffset(edgeIds: Set<Int>, offset: Double, useJoins: Boolean = fa
             for (i in chain.indices) {
                 val nPrev = edgeNormals[(i + chain.size - 1) % chain.size]
                 val nCurr = edgeNormals[i]
-                vertexOffsetResults.add(computeOffset(nPrev, nCurr))
+                vertexOffsetResults.add(computeOffset(nPrev, nCurr, chain[i]))
             }
         } else {
             // First vertex
@@ -153,7 +148,7 @@ fun Dcel.edgeSetOffset(edgeIds: Set<Int>, offset: Double, useJoins: Boolean = fa
             for (i in 1 until chain.size) {
                 val nPrev = edgeNormals[i - 1]
                 val nCurr = edgeNormals[i]
-                vertexOffsetResults.add(computeOffset(nPrev, nCurr))
+                vertexOffsetResults.add(computeOffset(nPrev, nCurr, chain[i]))
             }
             // Last vertex
             vertexOffsetResults.add(OffsetResult(edgeNormals.last() * offset, edgeNormals.last() * offset, false))
@@ -281,5 +276,5 @@ fun Dcel.edgeSetOffset(edgeIds: Set<Int>, offset: Double, useJoins: Boolean = fa
         }
     }
 
-    return newFaceIds
+    return FaceSet(newFaceIds)
 }
