@@ -8,7 +8,21 @@ linear ranges, simplex ranges, matrices and radial basis functions (RBF).
 ## Demos
 ### assignment/Assignment01
 
+Demonstrates how to solve an [Assignment Problem](https://en.wikipedia.org/wiki/Assignment_problem)
 
+The program
+- Generates two random point sets: two separate collections of scattered points within the drawable area.
+- Builds a cost matrix: calculates the distance between every point in the first set and every point in the second set.
+- Solves the assignment problem: uses the linearSumAssignment() algorithm to find the optimal pairing that minimizes
+the total distance between matched points.
+- Visualizes the results: white circles for points in the first set, black for points in the second set and
+lines connecting optimally matched pairs from one set to the other.
+
+This is a classic optimization problem where you want to match elements from two groups
+in a way that minimizes overall cost (in this case, spatial distance).
+
+The same algorithm can be used to optimize any other pairing of elements, not necessarily
+involving distances and 2D points.
 
 ![assignment-Assignment01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/assignment-Assignment01Kt.png)
 
@@ -104,7 +118,9 @@ Demonstrates using a two-dimensional Radial Basis Function (RBF) interpolator fo
 
 ### rbf/RbfGrid01
 
-Demonstrates drawing a distorted grid using a two-dimensional Radial Basis Function (RBF) interpolator
+Demonstrates drawing a grid and a rotating rectangle both distorted using a two-dimensional Radial Basis Function (RBF) interpolator.
+
+The first part of the code creates the interpolator which is later used to map 2D vectors to distorted coordinates.
 
 ![rbf-RbfGrid01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/rbf-RbfGrid01Kt.png)
 
@@ -114,6 +130,22 @@ Demonstrates drawing a distorted grid using a two-dimensional Radial Basis Funct
 
 Demonstrates visualizing the Jacobian of a two-dimensional Radial Basis Function (RBF) interpolator
 
+See: [Jacobian_matrix_and_determinant](https://en.wikipedia.org/wiki/Jacobian_matrix_and_determinant)
+
+> At each point where a function is differentiable, its Jacobian matrix can also be thought of as describing
+> the amount of "stretching", "rotating" or "transforming" that the function imposes locally near that point.
+
+This program generates a grid of 10x10 points flattened to a list, and a second list with the same points but
+shifted randomly up to 34 pixels away.
+
+Then an Rbf2DInterpolator is created using `rbfGaussianDerivative` to map
+the points from the first list to the second.
+
+Next, points in a grid of 40 columns and 40 rows are mapped using the interpolator.
+
+The `jacobian()` method is called at each of those 1600 locations to get a Matrix representing the local
+X and Y axis in the distorted space, and used to create short distorted horizontal and vertical line segments.
+
 ![rbf-RbfGridJacobian01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/rbf-RbfGridJacobian01Kt.png)
 
 [source code](src/jvmDemo/kotlin/rbf/RbfGridJacobian01.kt)
@@ -122,6 +154,23 @@ Demonstrates visualizing the Jacobian of a two-dimensional Radial Basis Function
 
 Demonstrates visualizing the Jacobian of a two-dimensional Radial Basis Function (RBF) interpolator
 
+See: [Jacobian_matrix_and_determinant](https://en.wikipedia.org/wiki/Jacobian_matrix_and_determinant)
+
+> At each point where a function is differentiable, its Jacobian matrix can also be thought of as describing
+> the amount of "stretching", "rotating" or "transforming" that the function imposes locally near that point.
+
+This program generates a grid of 4x4 points flattened to a list, and a second list with the same points but
+sorted using Hilbert Order.
+
+Then an Rbf2DInterpolator is created using `rbfInverseMultiQuadraticDerivative` to map
+the points from the first list to the second.
+
+Next, points in a grid of 50 columns and 50 rows are mapped using the interpolator, revealing the smooth resulting
+transformation, even when the interpolator was constructed using 16 points only.
+
+The `jacobian()` method is called at each of those 2500 locations to get a Matrix representing the local
+X and Y axis in the distorted space.
+
 ![rbf-RbfGridJacobian02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/rbf-RbfGridJacobian02Kt.png)
 
 [source code](src/jvmDemo/kotlin/rbf/RbfGridJacobian02.kt)
@@ -129,7 +178,7 @@ Demonstrates visualizing the Jacobian of a two-dimensional Radial Basis Function
 ### rbf/RbfInterpolation01
 
 Demonstrates using a two-dimensional Radial Basis Function (RBF) interpolator
-with the user provided 2D input points, their corresponding values (colors in this demo),
+with the user-provided 2D input points, their corresponding values (colors in this demo),
 a smoothing factor, and a radial basis function kernel.
 
 The program chooses 14 random points in the window area leaving a 100 pixels
