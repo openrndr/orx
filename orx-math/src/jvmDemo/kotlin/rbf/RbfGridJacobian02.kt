@@ -11,6 +11,23 @@ import org.openrndr.math.Vector2
 
 /**
  * Demonstrates visualizing the Jacobian of a two-dimensional Radial Basis Function (RBF) interpolator
+ *
+ * See: [Jacobian_matrix_and_determinant](https://en.wikipedia.org/wiki/Jacobian_matrix_and_determinant)
+ *
+ * > At each point where a function is differentiable, its Jacobian matrix can also be thought of as describing
+ * > the amount of "stretching", "rotating" or "transforming" that the function imposes locally near that point.
+ *
+ * This program generates a grid of 4x4 points flattened to a list, and a second list with the same points but
+ * sorted using Hilbert Order.
+ *
+ * Then an Rbf2DInterpolator is created using `rbfInverseMultiQuadraticDerivative` to map
+ * the points from the first list to the second.
+ *
+ * Next, points in a grid of 50 columns and 50 rows are mapped using the interpolator, revealing the smooth resulting
+ * transformation, even when the interpolator was constructed using 16 points only.
+ *
+ * The `jacobian()` method is called at each of those 2500 locations to get a Matrix representing the local
+ * X and Y axis in the distorted space.
  */
 fun main() = application {
     configure {
@@ -33,9 +50,9 @@ fun main() = application {
 
         extend {
             drawer.clear(ColorRGBa.PINK)
-            val res = 50
             drawer.stroke = ColorRGBa.RED
 
+            val res = 50
             for (j in 0 until res) {
                 for (i in 0 until res) {
                     val x = i / (res - 1.0) * drawer.bounds.width
@@ -44,11 +61,10 @@ fun main() = application {
                     val qr = rbf.interpolate(p)
                     val q = Vector2(qr[0], qr[1])
 
-                    val j = rbf.jacobian(p)
+                    val mat = rbf.jacobian(p)
 
-                    drawer.stroke = ColorRGBa.RED
-                    drawer.lineSegment(q - Vector2(j[0,0], j[1,0]) * 5.0, q + Vector2(j[0,0], j[1,0]) * 5.0)
-                    drawer.lineSegment(q  - Vector2(j[0,1], j[1,1]) * 5.0, q + Vector2(j[0,1], j[1,1]) * 5.0)
+                    drawer.lineSegment(q - Vector2(mat[0,0], mat[1,0]) * 5.0, q + Vector2(mat[0,0], mat[1,0]) * 5.0)
+                    drawer.lineSegment(q  - Vector2(mat[0,1], mat[1,1]) * 5.0, q + Vector2(mat[0,1], mat[1,1]) * 5.0)
                 }
             }
         }

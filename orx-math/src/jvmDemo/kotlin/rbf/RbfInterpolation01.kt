@@ -25,7 +25,7 @@ import kotlin.text.trimMargin
 
 /**
  * Demonstrates using a two-dimensional Radial Basis Function (RBF) interpolator
- * with the user provided 2D input points, their corresponding values (colors in this demo),
+ * with the user-provided 2D input points, their corresponding values (colors in this demo),
  * a smoothing factor, and a radial basis function kernel.
  *
  * The program chooses 14 random points in the window area leaving a 100 pixels

@@ -8,11 +8,16 @@ import org.openrndr.extra.math.rbf.rbfInverseQuadraticDerivative
 import org.openrndr.extra.noise.uniformRing
 import org.openrndr.extra.shapes.primitives.grid
 import org.openrndr.math.Vector2
+import org.openrndr.math.transforms.transform
+import org.openrndr.shape.Rectangle
+import org.openrndr.shape.ShapeContour
 import kotlin.math.exp
 import kotlin.random.Random
 
 /**
- * Demonstrates drawing a distorted grid using a two-dimensional Radial Basis Function (RBF) interpolator
+ * Demonstrates drawing a grid and a rotating rectangle both distorted using a two-dimensional Radial Basis Function (RBF) interpolator.
+ *
+ * The first part of the code creates the interpolator which is later used to map 2D vectors to distorted coordinates.
  */
 fun main() = application {
     configure {
@@ -22,6 +27,7 @@ fun main() = application {
     program {
         val grid = drawer.bounds.offsetEdges(-50.0).grid(10, 10)
 
+        // Create collections of points and distorted points
         val r = Random(0)
         val points = grid.flatten().map { it.center }
         val distorted = points.map {
@@ -29,6 +35,7 @@ fun main() = application {
             it + Vector2.uniformRing(exp(-d * 0.01) * 10.0, exp(-d * 0.01) * 50.0, r)
         }
 
+        // Create the interpolator to map points to distorted points
         val scale = 0.0055 / 1.0
         val rbf = Rbf2DInterpolator(
             points,
@@ -43,6 +50,9 @@ fun main() = application {
             val res = 50
             val sres = res * 10
 
+            // make use of the interpolator
+
+            // render horizontal grid lines
             for (j in 0 until res) {
                 val y = j / (res - 1.0) * drawer.bounds.height
                 val points = mutableListOf<Vector2>()
@@ -57,6 +67,7 @@ fun main() = application {
                 drawer.lineStrip(points)
             }
 
+            // render vertical grid lines
             for (i in 0 until res) {
                 val x = i / (res - 1.0) * drawer.bounds.height
                 val points = mutableListOf<Vector2>()
@@ -70,6 +81,18 @@ fun main() = application {
                 }
                 drawer.lineStrip(points)
             }
+
+            // render an interactive rotating rectangle
+            val points = Rectangle.fromCenter(Vector2.ZERO, 240.0, 120.0).contour.transform(
+                transform {
+                    translate(mouse.position)
+                    rotate(seconds * 30.0)
+                }
+            ).equidistantPositions(100).map {
+                val p = rbf.interpolate(it)
+                Vector2(p[0], p[1])
+            }
+            drawer.contour(ShapeContour.fromPoints(points, true))
         }
     }
 }
