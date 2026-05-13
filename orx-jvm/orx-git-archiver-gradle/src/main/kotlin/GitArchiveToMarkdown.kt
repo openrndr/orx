@@ -14,9 +14,11 @@ abstract class GitArchiveToMarkdown @Inject constructor() : DefaultTask() {
     abstract val outputDir: DirectoryProperty
 
     @get:InputDirectory
+    @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val gitDir: DirectoryProperty
 
     @get:InputDirectory
+    @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val screenshotsDir: DirectoryProperty
 
     @get:Input
