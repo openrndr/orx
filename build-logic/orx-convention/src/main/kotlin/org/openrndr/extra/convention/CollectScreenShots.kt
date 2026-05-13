@@ -60,7 +60,7 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
                     klassName = tempClass.name
                     val klass = ucl.loadClass(klassName)
                     klass.getMethod("main")
-                } catch (e: NoSuchMethodException) {
+                } catch (_: NoSuchMethodException) {
                     return@forEach
                 }
 

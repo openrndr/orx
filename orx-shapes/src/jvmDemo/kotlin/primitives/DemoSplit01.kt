@@ -2,7 +2,6 @@ package primitives
 
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extra.color.presets.MEDIUM_PURPLE
 import org.openrndr.extra.color.presets.PURPLE
 import org.openrndr.extra.shapes.utilities.splitAt
 import org.openrndr.shape.Circle

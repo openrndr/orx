@@ -2,7 +2,6 @@ package primitives
 
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extra.noise.Random
 import org.openrndr.extra.noise.primitives.random
 import org.openrndr.extra.noise.uniform
 import org.openrndr.extra.shapes.primitives.grid

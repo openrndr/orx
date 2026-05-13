@@ -2,40 +2,16 @@ package org.openrndr.panel.elements
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
-import org.openrndr.panel.style.Color
-import org.openrndr.panel.style.Display
-import org.openrndr.panel.style.FlexDirection
-import org.openrndr.panel.style.LinearDimension
-import org.openrndr.panel.style.Overflow
-import org.openrndr.panel.style.Position
-import org.openrndr.panel.style.ZIndex
-import org.openrndr.panel.style.background
-import org.openrndr.panel.style.borderColor
-import org.openrndr.panel.style.borderWidth
-import org.openrndr.panel.style.color
-import org.openrndr.panel.style.columnGap
-import org.openrndr.panel.style.display
-import org.openrndr.panel.style.effectiveBorderColor
-import org.openrndr.panel.style.effectiveBorderWidth
-import org.openrndr.panel.style.flexDirection
-import org.openrndr.panel.style.height
-import org.openrndr.panel.style.left
-import org.openrndr.panel.style.length
-import org.openrndr.panel.style.overflow
-import org.openrndr.panel.style.padding
-import org.openrndr.panel.style.paddingBottom
-import org.openrndr.panel.style.position
-import org.openrndr.panel.style.rowGap
-import org.openrndr.panel.style.top
-import org.openrndr.panel.style.width
-import org.openrndr.panel.style.zIndex
+import org.openrndr.panel.style.*
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
-class SlideOut(val x: Double, val y: Double, val width: Double, val height: Double) : Element(ElementType("slide-out")) {
+class SlideOut(val x: Double, val y: Double, val width: Double, val height: Double) :
+    Element(ElementType("slide-out")) {
 
     var dragging = false
+
     init {
         style {
             position = Position.ABSOLUTE
@@ -85,7 +61,14 @@ class SlideOut(val x: Double, val y: Double, val width: Double, val height: Doub
 }
 
 @OptIn(ExperimentalContracts::class)
-fun Element.slideOut(x: Double, y: Double, width: Double, height: Double, vararg classes: String, init: SlideOut.() -> Unit): SlideOut {
+fun Element.slideOut(
+    x: Double,
+    y: Double,
+    width: Double,
+    height: Double,
+    vararg classes: String,
+    init: SlideOut.() -> Unit
+): SlideOut {
     contract {
         callsInPlace(init, InvocationKind.EXACTLY_ONCE)
     }

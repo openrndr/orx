@@ -17,7 +17,7 @@ class FilmGrain : Filter1to1(mppFilterShader(fx_film_grain, "film-grain")) {
     @BooleanParameter("use color")
     var useColor: Boolean by parameters
 
-    var time: Double by parameters;
+    var time: Double by parameters
 
     @DoubleParameter("grain lift ratio", 0.0, 1.0)
     var grainLiftRatio: Double by parameters

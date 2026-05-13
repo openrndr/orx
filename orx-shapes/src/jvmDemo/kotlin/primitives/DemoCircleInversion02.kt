@@ -2,7 +2,6 @@ package primitives
 
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extra.shapes.primitives.invert
 import org.openrndr.extra.shapes.primitives.invertConformal
 import org.openrndr.math.Polar
 import org.openrndr.shape.Circle

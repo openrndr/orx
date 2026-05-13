@@ -1,7 +1,6 @@
 package org.openrndr.extra.math.matrix
 
 import kotlin.math.abs
-import kotlin.math.sign
 import kotlin.math.sqrt
 
 

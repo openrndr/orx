@@ -2,7 +2,6 @@ package gradients
 
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.Session
 import org.openrndr.extra.color.presets.CRIMSON
 import org.openrndr.extra.color.presets.DODGER_BLUE
 import org.openrndr.extra.color.presets.LIME_GREEN

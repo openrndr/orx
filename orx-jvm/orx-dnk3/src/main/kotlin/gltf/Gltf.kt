@@ -2,10 +2,10 @@
 
 package org.openrndr.extra.dnk3.gltf
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonBuilder
 import kotlinx.serialization.json.JsonIgnoreUnknownKeys
 import org.openrndr.draw.*
 import java.io.File
@@ -14,7 +14,6 @@ import java.nio.Buffer
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.util.*
-import kotlin.collections.LinkedHashMap
 import kotlin.math.max
 
 const val GLTF_FLOAT = 5126
@@ -242,6 +241,7 @@ data class GltfPrimitive(
         return GltfDrawCommand(vb, indexBuffer, drawPrimitive, indexBuffer?.indexCount ?: maxCount)
     }
 }
+
 @Serializable
 data class GltfMesh(val primitives: List<GltfPrimitive>, val name: String) {
     fun createDrawCommands(gltfFile: GltfFile): List<GltfDrawCommand> {
@@ -265,7 +265,12 @@ data class GltfMaterialTexture(val index: Int, val scale: Double? = null, val te
 data class GltfImage(val uri: String? = null, val bufferView: Int? = null)
 
 @Serializable
-data class GltfSampler(val magFilter: Int? = null, val minFilter: Int? = null, val wrapS: Int? = null, val wrapT: Int? = null)
+data class GltfSampler(
+    val magFilter: Int? = null,
+    val minFilter: Int? = null,
+    val wrapS: Int? = null,
+    val wrapT: Int? = null
+)
 
 @Serializable
 data class GltfTexture(val sampler: Int, val source: Int)
@@ -344,7 +349,11 @@ data class GltfAccessor(
 )
 
 @Serializable
-data class GltfAnimation(val name: String? = null, val channels: List<GltfChannel>, val samplers: List<GltfAnimationSampler>)
+data class GltfAnimation(
+    val name: String? = null,
+    val channels: List<GltfChannel>,
+    val samplers: List<GltfAnimationSampler>
+)
 
 @Serializable
 data class GltfAnimationSampler(val input: Int, val interpolation: String? = null, val output: Int)
@@ -374,12 +383,18 @@ data class KHRLightsPunctualLightSpot(val innerConeAngle: Double?, val outerCone
 @Serializable
 data class KHRLightsPunctual(val lights: List<KHRLightsPunctualLight>)
 
+@OptIn(ExperimentalSerializationApi::class)
 @Serializable
 @JsonIgnoreUnknownKeys
 data class GltfExtensions(val KHR_lights_punctual: KHRLightsPunctual? = null)
 
 @Serializable
-data class GltfCameraPerspective(val aspectRatio: Double? = null, val yfov: Double, val zfar: Double?, val znear: Double)
+data class GltfCameraPerspective(
+    val aspectRatio: Double? = null,
+    val yfov: Double,
+    val zfar: Double?,
+    val znear: Double
+)
 
 @Serializable
 data class GltfCameraOrthographic(val xmag: Double, val ymag: Double, val zfar: Double, val znear: Double)
@@ -422,7 +437,7 @@ class GltfFile(
 
 fun loadGltfFromFile(file: File): GltfFile = when (file.extension) {
     "gltf" -> {
-        val gltfFile = Json{
+        val gltfFile = Json {
             ignoreUnknownKeys = true
         }.decodeFromString<GltfFile>(file.readText())
         gltfFile.file = file

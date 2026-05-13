@@ -1,5 +1,3 @@
-import org.gradle.internal.os.OperatingSystem
-
 rootProject.name = "orx"
 
 
@@ -17,7 +15,8 @@ dependencyResolutionManagement {
     versionCatalogs {
         // We use a regex to get the openrndr version from the primary catalog as there is no public Gradle API to parse catalogs.
         val regEx = Regex("^openrndr[ ]*=[ ]*(?:\\{[ ]*require[ ]*=[ ]*)?\"(.*)\"[ ]*(?:\\})?", RegexOption.MULTILINE)
-        val openrndrVersion = regEx.find(File(rootDir,"gradle/libs.versions.toml").readText())?.groupValues?.get(1) ?: error("can't find openrndr version")
+        val openrndrVersion = regEx.find(File(rootDir, "gradle/libs.versions.toml").readText())?.groupValues?.get(1)
+            ?: error("can't find openrndr version")
         create("sharedLibs") {
             from("org.openrndr:openrndr-dependency-catalog:$openrndrVersion")
         }

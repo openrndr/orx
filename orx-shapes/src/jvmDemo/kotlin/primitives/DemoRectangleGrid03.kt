@@ -3,11 +3,9 @@ package primitives
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.color.presets.LIME_GREEN
-import org.openrndr.extra.color.presets.ORANGE
-import org.openrndr.extra.color.presets.YELLOW_GREEN
 import org.openrndr.extra.shapes.primitives.bounds
-import org.openrndr.extra.shapes.primitives.grid
 import org.openrndr.extra.shapes.primitives.get
+import org.openrndr.extra.shapes.primitives.grid
 import org.openrndr.shape.bounds
 
 /**

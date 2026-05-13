@@ -3,11 +3,9 @@ package org.openrndr.panel.elements
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
-import org.openrndr.draw.isolated
 import org.openrndr.draw.loadFont
 import org.openrndr.events.Event
 import org.openrndr.extra.textwriter.TextWriter
-
 import org.openrndr.panel.binding.Binding0
 import org.openrndr.panel.style.*
 import org.openrndr.shape.Rectangle

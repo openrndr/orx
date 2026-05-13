@@ -3,7 +3,6 @@ import org.openrndr.extra.composition.drawComposition
 import org.openrndr.extra.gcode.*
 import org.openrndr.math.Vector2
 import org.openrndr.shape.ShapeContour
-import org.openrndr.shape.Triangle
 
 
 /**
@@ -66,8 +65,7 @@ fun main() = application {
  * `beginLayer`, `beginShape`, `endShape` and `endLayer`.
  *
  */
-class CustomGcodeGeneratorContext()
-    : BaseGeneratorContext(
+class CustomGcodeGeneratorContext : BaseGeneratorContext(
     deduplicateCommands = false // Allow identical consecutive commands, set true to remove duplicates
 ) {
     override val distanceTolerance: Double = 1.0

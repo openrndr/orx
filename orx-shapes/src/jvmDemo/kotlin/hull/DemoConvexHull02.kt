@@ -5,7 +5,6 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.noise.scatter
 import org.openrndr.extra.shapes.hull.convexHull
 import org.openrndr.extra.shapes.hull.convexHullSet
-import org.openrndr.extra.shapes.ordering.hilbertOrder
 import org.openrndr.shape.ShapeContour
 
 /**

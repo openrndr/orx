@@ -4,7 +4,6 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.color.presets.WHITE_SMOKE
 import org.openrndr.extra.noise.simplex
-import org.openrndr.extra.noise.uniform
 import org.openrndr.extra.shapes.bounds.bounds
 import org.openrndr.extra.shapes.hobbycurve.hobbyCurve
 import org.openrndr.extra.shapes.ordering.hilbertOrder

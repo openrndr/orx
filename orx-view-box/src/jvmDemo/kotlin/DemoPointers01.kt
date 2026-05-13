@@ -1,17 +1,8 @@
 import org.openrndr.PointerTracker
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.BufferMultisample
-import org.openrndr.draw.DrawPrimitive
-import org.openrndr.extensions.Screenshots
-import org.openrndr.extra.camera.Camera2D
-import org.openrndr.extra.camera.Orbital
-import org.openrndr.extra.fx.Post
-import org.openrndr.extra.fx.blur.ApproximateGaussianBlur
-import org.openrndr.extra.meshgenerators.boxMesh
 import org.openrndr.extra.shapes.primitives.grid
 import org.openrndr.extra.viewbox.viewBox
-import org.openrndr.shape.Rectangle
 
 /**
  * Demonstrates how to draw multiple view boxes. The first two feature

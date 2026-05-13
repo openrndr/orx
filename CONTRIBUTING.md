@@ -147,7 +147,7 @@ extracted from comments written in ORX's source code. It goes like this:
 
 ORX'es often include a `jvmDemo` folder. This folder should contain small programs demonstrating
 how the ORX can be used. When the build system runs the 
-[`CollectScreenShots`](buildSrc/src/main/kotlin/CollectScreenShots.kt) task, 
+[`CollectScreenShots`](build-logic/orx-convention/src/main/kotlin/org/openrndr/extra/convention/CollectScreenShots.kt) task, 
 the `SingleScreenshot()` extension will be injected into each program found inside the `jvmDemo`
 folder, then executed. A PNG screenshot is saved and pushed into the [`media`](https://github.com/openrndr/orx/tree/media) brach. Finally, links to those PNG images are inserted into the README.md file of each ORX,
 together with a link to the source code that produced the screenshot.

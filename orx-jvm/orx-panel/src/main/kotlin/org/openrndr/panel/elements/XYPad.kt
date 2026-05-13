@@ -1,10 +1,8 @@
 package org.openrndr.panel.elements
 
-import kotlinx.coroutines.yield
 import org.openrndr.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
-
 import org.openrndr.events.Event
 import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.math.Vector2

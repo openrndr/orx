@@ -6,7 +6,6 @@ import org.openrndr.extra.noise.uniform
 import org.openrndr.extra.shapes.hobbycurve.hobbyCurve
 import org.openrndr.extra.shapes.rectify.rectified
 import org.openrndr.math.Polar
-import org.openrndr.shape.Circle
 import org.openrndr.shape.Segment2D
 
 /**

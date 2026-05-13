@@ -6,7 +6,6 @@ import org.openrndr.extra.color.presets.BLUE_STEEL
 import org.openrndr.extra.shadestyles.fills.FillUnits
 import org.openrndr.extra.shadestyles.fills.SpreadMethod
 import org.openrndr.extra.shadestyles.fills.gradients.gradient
-import org.openrndr.math.Vector2
 
 /**
  * Reveals the effect of using quantization on a `conic` gradient.

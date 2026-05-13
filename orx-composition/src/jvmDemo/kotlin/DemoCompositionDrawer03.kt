@@ -3,8 +3,6 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.composition.ClipMode
 import org.openrndr.extra.composition.composition
 import org.openrndr.extra.composition.drawComposition
-import org.openrndr.extra.svg.saveToFile
-import java.io.File
 
 /**
  * Draws a composition using 3 circles and `ClipMode.REVERSE_DIFFERENCE`.

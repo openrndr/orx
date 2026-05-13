@@ -3,8 +3,6 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.composition.composition
 import org.openrndr.extra.composition.drawComposition
 import org.openrndr.math.Vector2
-import org.openrndr.extra.svg.saveToFile
-import java.io.File
 
 /**
  * Demonstrates how to

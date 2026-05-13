@@ -4,7 +4,6 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.math.Vector2
 import org.openrndr.shape.*
 import processing.core.PShape
-import kotlin.math.PI
 
 /**
  * Appends a vertex to the current shape using a 2D vector.
