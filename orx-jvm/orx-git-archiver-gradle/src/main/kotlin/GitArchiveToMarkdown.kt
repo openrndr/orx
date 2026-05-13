@@ -8,6 +8,7 @@ import org.gradle.work.InputChanges
 import java.io.File
 import javax.inject.Inject
 
+@CacheableTask
 abstract class GitArchiveToMarkdown @Inject constructor() : DefaultTask() {
     @get:OutputDirectory
     abstract val outputDir: DirectoryProperty
