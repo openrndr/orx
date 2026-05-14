@@ -8,6 +8,7 @@ import org.openrndr.extra.mesh.dcel.convert.toDcel
 import org.openrndr.extra.mesh.dcel.navigate.allFaces
 import org.openrndr.extra.mesh.dcel.query.edgesForFace
 import org.openrndr.extra.mesh.dcel.query.faceCount
+import org.openrndr.extra.mesh.dcel.query.vertexCount
 import org.openrndr.extra.mesh.dcel.validate.isEulerMesh
 import org.openrndr.extra.mesh.generate.gridMesh
 import org.openrndr.extra.shapes.primitives.Plane
@@ -32,9 +33,12 @@ class TestFaceSetSplit {
 
         val dcel = shapeToDcelNoTriangulation(shapeWithHole, 1.0)
 
-        dcel.faceSetSplit(dcel.allFaces().toSet(), Plane(Vector3(1.0, 1.0, 0.0).normalized, 720*0.5*sqrt(2.0)))
+        dcel.faceSetSplit(dcel.allFaces().toSet(), Plane(Vector3(1.0, 1.0, 0.0).normalized, 720*0.5*sqrt(2.0)),
+        splitEpsilon = 1E-3,
+            weldEpsilon = 1.0)
 
         assertEquals(2, dcel.faceCount())
+        assertEquals(8, dcel.vertexCount())
 
         for (i in 0 until 2) {
             assertEquals(6,dcel.edgesForFace(i).size)
@@ -42,6 +46,30 @@ class TestFaceSetSplit {
         }
 
     }
+
+//    @Test
+//    fun testFaceSetSplitHole2() {
+//        val bounds = Rectangle(0.0, 0.0, 720.0, 720.0)
+//
+//        val outer = bounds.offsetEdges(-100.0).contour
+//        val inner = bounds.offsetEdges(-200.0).contour.contour.reversed
+//        val shapeWithHole = Shape(listOf(outer, inner))
+//
+//
+//        val dcel = shapeToDcelNoTriangulation(shapeWithHole, 1.0)
+//
+//        dcel.faceSetSplit(dcel.allFaces().toSet(), Plane(Vector3(1.0, 1.0, 0.0).normalized, 720*0.5*sqrt(2.0)))
+//        dcel.faceSetSplit(dcel.allFaces().toSet(), Plane(Vector3(-1.0, 1.0, 0.0).normalized, 0.0))
+//
+//        assertEquals(4, dcel.faceCount())
+//        assertEquals(8, dcel.vertexCount())
+//
+//        for (i in 0 until 4) {
+//            assertEquals(4,dcel.edgesForFace(i).size)
+//            assertEquals(0, dcel.faces[i].holeEdges.size)
+//        }
+//
+//    }
 
     @Test
     fun testFaceSplitGrid() {

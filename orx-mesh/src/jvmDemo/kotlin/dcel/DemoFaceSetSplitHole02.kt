@@ -2,6 +2,7 @@ package dcel
 
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
+import org.openrndr.extra.mesh.dcel.adjust.subdivide
 import org.openrndr.extra.mesh.dcel.convert.shapeToDcelNoTriangulation
 import org.openrndr.extra.mesh.dcel.convert.toDcel
 import org.openrndr.extra.mesh.dcel.modify.faceSetSplit
@@ -11,6 +12,7 @@ import org.openrndr.extra.mesh.dcel.navigate.toShape
 import org.openrndr.extra.mesh.dcel.query.edgesForFace
 import org.openrndr.extra.mesh.generate.gridMesh
 import org.openrndr.extra.shapes.primitives.Plane
+import org.openrndr.math.Polar
 import org.openrndr.math.Vector3
 import org.openrndr.shape.Rectangle
 import org.openrndr.shape.Shape
@@ -25,39 +27,27 @@ fun main() {
         program {
 
             val outer = drawer.bounds.offsetEdges(-100.0).contour
-            val inner = drawer.bounds.offsetEdges(-200.0).contour.contour.reversed
+            val inner = drawer.bounds.offsetEdges(-300.0).contour.contour.reversed
             val shapeWithHole = Shape(listOf(outer, inner))
 
             val dcel = shapeToDcelNoTriangulation(shapeWithHole, 1.0)
 
 
-            val plane0 = Plane.fromPoints(
-                drawer.bounds.position(0.5, 0.0),
-                drawer.bounds.position(0.5, 1.0)
-            )
-            val plane1 = Plane.fromPoints(
-                drawer.bounds.position(0.0, 0.5),
-                drawer.bounds.position(1.0, 0.5)
-            )
-            val plane2 = Plane.fromPoints(
-                drawer.bounds.position(0.0, 0.0),
-                drawer.bounds.position(1.0, 1.0 )
-            )
-            val plane3 = Plane.fromPoints(
-                drawer.bounds.position(1.0, 0.0),
-                drawer.bounds.position(0.0, 1.0 )
-            )
 
-            dcel.faceSetSplit(dcel.allFaces().toSet(), plane0)
-            dcel.faceSetSplit(dcel.allFaces().toSet(), plane1)
-            dcel.faceSetSplit(dcel.allFaces().toSet(), plane2)
-            dcel.faceSetSplit(dcel.allFaces().toSet(), plane3)
-            //dcel.faceSetSplit(dcel.allFaces().toSet(), Plane(Vector3(-1.0, 1.0, 0.0).normalized, -width*0.25*sqrt(2.0)))
-
-            for (i in dcel.faces.indices) {
-                println(dcel.faces[i].edge)
-                println(dcel.edgesForFace(i).size)
+            val steps = 3
+            for (i in 0 until steps) {
+                val p0 = drawer.bounds.center
+                val p1 = p0 + Polar(i * (180.0/steps), 20.0).cartesian
+                val p = Plane.fromPoints(p0, p1)
+                dcel.faceSetSplit(dcel.allFaces().toSet(), p)
             }
+
+
+//            with(dcel) {
+//                dcel.allFaces().subdivide()
+//            }
+
+
             extend {
                 drawer.clear(ColorRGBa.PINK)
                 with(dcel) {
