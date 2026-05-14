@@ -38,7 +38,7 @@ fun Polygon2D.intersects(other: Polygon2D): Boolean {
     return false
 }
 
-private fun segmentsIntersect(p1: Vector2, p2: Vector2, p3: Vector2, p4: Vector2): Boolean {
+internal fun segmentsIntersect(p1: Vector2, p2: Vector2, p3: Vector2, p4: Vector2): Boolean {
     fun ccw(a: Vector2, b: Vector2, c: Vector2): Int {
         val area = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)
         return when {
