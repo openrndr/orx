@@ -4,7 +4,6 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.*
-import org.gradle.work.InputChanges
 import java.io.File
 import javax.inject.Inject
 
@@ -25,23 +24,23 @@ abstract class GitArchiveToMarkdown @Inject constructor() : DefaultTask() {
     abstract val historySize: Property<Int>
 
     @TaskAction
-    fun execute(inputChanges: InputChanges) {
+    fun execute() {
         val parent = outputDir.asFile.get()
 
         val git = GitProvider.create()
         val references = git.logReferences(historySize.get())
 
-        val text = references.map { reference ->
+        val text = references.joinToString("\n") { reference ->
             val screenshots = screenshotsDir.asFile.get().listFiles().filter { file ->
                 file.extension == "png" && file.name.contains(reference)
             }
             println(screenshots)
             screenshots.forEach {
-                it.copyTo(File(outputDir.asFile.get(), it.name))
+                it.copyTo(File(outputDir.asFile.get(), it.name), true)
             }
-            val screenShotsMD = screenshots.map {
+            val screenShotsMD = screenshots.joinToString("\n") {
                 "![${it.nameWithoutExtension}](${it.name})"
-            }.joinToString("\n")
+            }
 
             """# $reference
                 |$screenShotsMD
@@ -49,7 +48,7 @@ abstract class GitArchiveToMarkdown @Inject constructor() : DefaultTask() {
                 |${git.show(reference)}}
                 |```
             """.trimMargin()
-        }.joinToString("\n")
+        }
         File(parent, "README.md").writeText(text)
     }
 
