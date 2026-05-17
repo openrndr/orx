@@ -74,7 +74,7 @@ catalog {
         library("turtle", "org.openrndr.extra:orx-turtle:$version")
         library("view-box", "org.openrndr.extra:orx-view-box:$version")
         library("gcode", "org.openrndr.extra:orx-g-code:$version")
-
+        library("rtree", "org.openrndr.extra:orx-rtree:$version")
         bundle(
             "basic",
             listOf(
