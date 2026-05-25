@@ -9,7 +9,7 @@ import org.openrndr.extra.mesh.dcel.query.isEdgeloop
 
 context(dcel: Dcel)
 fun EdgeList.offset(distance: Double, useJoins: Boolean = false): FaceList {
-    return dcel.edgeSetOffset(this, distance, useJoins)
+    return FaceList(dcel.edgeSetOffset(this, distance, useJoins))
 }
 
 context(dcel: Dcel)

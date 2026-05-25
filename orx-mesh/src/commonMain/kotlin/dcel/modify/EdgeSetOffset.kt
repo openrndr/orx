@@ -1,13 +1,15 @@
 package org.openrndr.extra.mesh.dcel.modify
 
 import org.openrndr.extra.mesh.dcel.*
+import org.openrndr.extra.shapes.polygon.Polygon3D
 import org.openrndr.math.Vector3
 
-fun Dcel.edgeSetOffset(edgeIds: List<Int>, offset: Double, useJoins: Boolean = false): FaceList {
-    return FaceList(edgeSetOffset(edgeIds.toSet(), offset, useJoins).toList())
+fun Dcel.edgeSetOffset(edgeIds: List<Int>, offset: Double, useJoins: Boolean = false): List<Int> {
+    return edgeSetOffset(edgeIds.toSet(), offset, useJoins).toList()
 }
 
-fun Dcel.edgeSetOffset(edgeIds: Set<Int>, offset: Double, useJoins: Boolean = false): FaceSet {
+fun Dcel.edgeSetOffset(edgeIds: Set<Int>, offset: Double, useJoins: Boolean = false,
+                       checkFace: (Polygon3D) -> Boolean = { true }): Set<Int> {
     if (edgeIds.isEmpty()) return FaceSet(emptySet())
 
     // 1. Group edgeIds into contiguous chains.
@@ -276,5 +278,5 @@ fun Dcel.edgeSetOffset(edgeIds: Set<Int>, offset: Double, useJoins: Boolean = fa
         }
     }
 
-    return FaceSet(newFaceIds)
+    return newFaceIds
 }
