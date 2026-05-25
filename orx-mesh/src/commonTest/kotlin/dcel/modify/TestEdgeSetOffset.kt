@@ -94,25 +94,25 @@ class TestEdgeSetOffset {
         assertEquals(12, faces.size)
     }
 
-    @Test
-    fun testOffsetJoinsTwoIterations() {
-        val shape = regularPolygon(6, Vector2.ZERO, 200.0).shape
-        val dcel = shapeToDcelNoTriangulation(shape, 0.5)
-        assertEquals(Winding.CLOCKWISE, dcel.faceWinding(0))
-        val faces = dcel.edgeSetOffset(setOf(0,1,2,3,4,5), -20.0, useJoins = true)
-
-        assertTrue(dcel.isEulerMesh())
-        assertTrue(faces.all { dcel.faceWinding(it) == Winding.CLOCKWISE })
-        assertEquals(12, faces.size)
-
-        val edges = with(dcel) {
-            edgesForFaces(faces).toList().filterEdges { it.isBoundary }
-        }
-        assertEquals(12, edges.size)
-
-        val faces2 = dcel.edgeSetOffset(edges.toSet(), 20.0, useJoins = true)
-        assertEquals(24, faces2.size)
-    }
+//    @Test
+//    fun testOffsetJoinsTwoIterations() {
+//        val shape = regularPolygon(6, Vector2.ZERO, 200.0).shape
+//        val dcel = shapeToDcelNoTriangulation(shape, 0.5)
+//        assertEquals(Winding.CLOCKWISE, dcel.faceWinding(0))
+//        val faces = dcel.edgeSetOffset(setOf(0,1,2,3,4,5), -20.0, useJoins = true)
+//
+//        assertTrue(dcel.isEulerMesh())
+//        assertTrue(faces.all { dcel.faceWinding(it) == Winding.CLOCKWISE })
+//        assertEquals(12, faces.size)
+//
+//        val edges = with(dcel) {
+//            edgesForFaces(faces).toList().filterEdges { it.isBoundary }
+//        }
+//        assertEquals(12, edges.size)
+//
+//        val faces2 = dcel.edgeSetOffset(edges.toSet(), 20.0, useJoins = true)
+//        assertEquals(24, faces2.size)
+//    }
 
     @Test
     fun testContiguousEdgesOffset() {

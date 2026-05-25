@@ -952,7 +952,7 @@ open class GUI(
                 @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
                 val enumValue =
                     (v as java.lang.Enum<*>).getDeclaringClass().getEnumConstants().find { it.name == value }
-                        ?: error("cannot map value $value to enum")
+                         ?: error("cannot map value $value to enum")
                 (this as KMutableProperty1<Any, Enum<*>>).set(obj, enumValue)
             } catch (e: Throwable) {
                 logger.warn { e.message }

@@ -82,6 +82,7 @@ include(
         "orx-quadtree",
         "orx-jvm:orx-rabbit-control",
         "orx-jvm:orx-realsense2",
+        "orx-rtree",
         "orx-shader-phrases",
         "orx-shade-styles",
         "orx-shapes",

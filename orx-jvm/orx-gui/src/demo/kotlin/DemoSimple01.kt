@@ -1,3 +1,4 @@
+import org.openrndr.Fullscreen
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.gui.GUI
@@ -5,6 +6,10 @@ import org.openrndr.extra.parameters.*
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
 
+
+enum class MyEnum {
+    A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z
+}
 /**
  * Demonstrates how to create a simple GUI with 4 inputs:
  * - A `ColorParameter` which creates a color picker.
@@ -25,7 +30,7 @@ fun main() = application {
         val gui = GUI()
         gui.compartmentsCollapsedByDefault = false
 
-        val settings = @Description("Settings") object {
+        val settings = @Description("Settings omg such long title") object {
             @DoubleParameter("radius", 0.0, 100.0)
             var radius = 50.0
 
@@ -37,6 +42,9 @@ fun main() = application {
 
             @DoubleListParameter("radii", 5.0, 30.0)
             var radii = mutableListOf(5.0, 6.0, 8.0, 14.0, 20.0, 30.0)
+
+            @OptionParameter("fullscreen")
+            var option = MyEnum.A
         }
         gui.loaded.listen {
             println("loaded settings")

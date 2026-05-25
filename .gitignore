@@ -10,3 +10,5 @@ gradle.properties
 /ShaderError.glsl
 /.kotlin
 /.lwjgl
+images/
+axidraw-venv

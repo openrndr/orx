@@ -29,7 +29,7 @@ fun main() {
             extend(ScreenRecorder()) {
                 frameClock = false
             }
-            val shape = regularPolygon(5, drawer.bounds.center, 60.0).shape
+            val shape = regularPolygon(6, drawer.bounds.center, 60.0).shape
             val dcel = shapeToDcelNoTriangulation(shape, 0.5)
 
             var op = "offset"
