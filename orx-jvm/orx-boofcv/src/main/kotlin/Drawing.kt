@@ -52,15 +52,13 @@ fun Drawer.lineSegments(segments: List<LineSegment2D_F64>) {
 
 fun Drawer.circle(circle: Circle2D_F32) {
     circle(
-        circle.center.x.toDouble(), circle.center.y.toDouble(),
-        circle.radius.toDouble()
+        circle.center.x.toDouble(), circle.center.y.toDouble(), circle.radius.toDouble()
     )
 }
 
 fun Drawer.circle(circle: Circle2D_F64) {
     circle(
-        circle.center.x, circle.center.y,
-        circle.radius
+        circle.center.x, circle.center.y, circle.radius
     )
 }
 
@@ -77,7 +75,7 @@ fun Drawer.circles(circles: List<Circle2D_F32>) {
 fun Drawer.circles(circles: List<Circle2D_F64>) {
     circles(
         circles.map {
-            Circle(it.center.x.toDouble(), it.center.y.toDouble(), it.radius.toDouble())
+            Circle(it.center.x, it.center.y, it.radius)
         }
     )
 }

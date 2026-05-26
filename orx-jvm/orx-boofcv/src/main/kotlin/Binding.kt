@@ -10,8 +10,16 @@ import org.openrndr.draw.ColorFormat
 import org.openrndr.draw.ColorType
 import org.openrndr.draw.colorBuffer
 
-fun ColorBuffer.toGrayF32() : GrayF32 {
-    val p = GrayF32(width, height)
+/**
+ * Converts this [ColorBuffer] to a grayscale image represented as a [GrayF32] object.
+ * The red channel of the color buffer is used to calculate the grayscale values.
+ *
+ * @param target An optional [GrayF32] instance to store the result.
+ * If not provided, a new instance will be created.
+ * @return A [GrayF32] instance containing the grayscale representation of the ColorBuffer.
+ */
+fun ColorBuffer.toGrayF32(target: GrayF32? = null) : GrayF32 {
+    val p = target ?: GrayF32(width, height)
     shadow.download()
 
     var offset = 0
@@ -25,8 +33,16 @@ fun ColorBuffer.toGrayF32() : GrayF32 {
     return p
 }
 
-fun ColorBuffer.toGrayF64() : GrayF64 {
-    val p = GrayF64(width, height)
+/**
+ * Converts this [ColorBuffer] to a grayscale image represented as a [GrayF64] object.
+ * The red channel of the color buffer is used to calculate the grayscale values.
+ *
+ * @param target An optional [GrayF64] instance to store the result.
+ * If not provided, a new instance will be created.
+ * @return A [GrayF64] instance containing the grayscale representation of the ColorBuffer.
+ */
+fun ColorBuffer.toGrayF64(target: GrayF64? = null) : GrayF64 {
+    val p = target ?: GrayF64(width, height)
     shadow.download()
 
     var offset = 0
@@ -40,8 +56,16 @@ fun ColorBuffer.toGrayF64() : GrayF64 {
     return p
 }
 
-fun ColorBuffer.toPlanarF32() : Planar<GrayF32> {
-    val p = Planar<GrayF32>(GrayF32::class.java, width, height, format.componentCount)
+/**
+ * Converts this [ColorBuffer] to an image represented as a Planar<GrayF32> object
+ * with the same number of channels (bands) as the original.
+ *
+ * @param target An optional `Planar<GrayF32>` instance to store the result.
+ * If not provided, a new instance will be created.
+ * @return A `Planar<GrayF32>` instance containing the representation of the ColorBuffer.
+ */
+fun ColorBuffer.toPlanarF32(target: Planar<GrayF32>? = null) : Planar<GrayF32> {
+    val p = target ?: Planar(GrayF32::class.java, width, height, format.componentCount)
     shadow.download()
 
     val bands = p.bands
@@ -59,8 +83,16 @@ fun ColorBuffer.toPlanarF32() : Planar<GrayF32> {
     return p
 }
 
-fun ColorBuffer.toPlanarU8() : Planar<GrayU8> {
-    val p = Planar<GrayU8>(GrayU8::class.java, width, height, format.componentCount)
+/**
+ * Converts this [ColorBuffer] to an image represented as a Planar<GrayU8> object
+ * with the same number of channels (bands) as the original.
+ *
+ * @param target An optional `Planar<GrayU8>` instance to store the result.
+ * If not provided, a new instance will be created.
+ * @return A `Planar<GrayU8>` instance containing the representation of the ColorBuffer.
+ */
+fun ColorBuffer.toPlanarU8(target: Planar<GrayU8>? = null) : Planar<GrayU8> {
+    val p = target ?: Planar(GrayU8::class.java, width, height, format.componentCount)
     shadow.download()
 
     val bands = p.bands
@@ -78,8 +110,16 @@ fun ColorBuffer.toPlanarU8() : Planar<GrayU8> {
     return p
 }
 
-fun ColorBuffer.toGrayU8() : GrayU8 {
-    val p = GrayU8(width, height)
+/**
+ * Converts this [ColorBuffer] to a grayscale image represented as a [GrayU8] object.
+ * The red channel of the color buffer is used to calculate the grayscale values.
+ *
+ * @param target An optional [GrayU8] instance to store the result.
+ * If not provided, a new instance will be created.
+ * @return A [GrayU8] instance containing the grayscale representation of the ColorBuffer.
+ */
+fun ColorBuffer.toGrayU8(target: GrayU8? = null) : GrayU8 {
+    val p = target ?: GrayU8(width, height)
     shadow.download()
 
     var offset = 0
@@ -94,8 +134,19 @@ fun ColorBuffer.toGrayU8() : GrayU8 {
 }
 
 
-fun GrayU8.toColorBuffer() : ColorBuffer {
-    val cb = colorBuffer(width, height, 1.0, ColorFormat.RGB, ColorType.UINT8)
+/**
+ * Converts a `GrayU8` object into a `ColorBuffer` where each pixel in the grayscale image
+ * is mapped to an RGB color with identical red, green, and blue values.
+ *
+ * If the `target` parameter is provided, the conversion is performed in-place within the specified `ColorBuffer`.
+ * Otherwise, a new `ColorBuffer` is created and returned. The returned or updated `ColorBuffer`
+ * has an RGB format and uses unsigned 8-bit integers for its color components.
+ *
+ * @param target An optional `ColorBuffer` to store the converted image. If `null`, a new `ColorBuffer` is created.
+ * @return A `ColorBuffer` containing the RGB representation of the `GrayU8` image.
+ */
+fun GrayU8.toColorBuffer(target: ColorBuffer? = null) : ColorBuffer {
+    val cb = target ?: colorBuffer(width, height, 1.0, ColorFormat.RGB, ColorType.UINT8)
     val shadow = cb.shadow
     shadow.buffer.rewind()
     var offset = 0
@@ -110,8 +161,19 @@ fun GrayU8.toColorBuffer() : ColorBuffer {
     return cb
 }
 
-fun GrayF32.toColorBuffer() : ColorBuffer {
-    val cb = colorBuffer(width, height, 1.0, ColorFormat.RGB, ColorType.FLOAT32)
+/**
+ * Converts a `GrayF32` object into a `ColorBuffer` where each pixel in the grayscale image
+ * is mapped to an RGB color with identical red, green, and blue values.
+ *
+ * If the `target` parameter is provided, the conversion is performed in-place within the specified `ColorBuffer`.
+ * Otherwise, a new `ColorBuffer` is created and returned. The returned or updated `ColorBuffer`
+ * has an RGB format and uses 32-bit floats for its color components.
+ *
+ * @param target An optional `ColorBuffer` to store the converted image. If `null`, a new `ColorBuffer` is created.
+ * @return A `ColorBuffer` containing the RGB representation of the `GrayF32` image.
+ */
+fun GrayF32.toColorBuffer(target: ColorBuffer? = null) : ColorBuffer {
+    val cb = target ?: colorBuffer(width, height, 1.0, ColorFormat.RGB, ColorType.FLOAT32)
     val shadow = cb.shadow
     shadow.buffer.rewind()
     var offset = 0
@@ -126,7 +188,17 @@ fun GrayF32.toColorBuffer() : ColorBuffer {
     return cb
 }
 
-fun Planar<GrayU8>.toColorBuffer() : ColorBuffer {
+/**
+ * Converts a `Planar<GrayU8>` object into a `ColorBuffer` with the same number of channels (bands).
+ *
+ * If the `target` parameter is provided, the conversion is performed in-place within the specified `ColorBuffer`.
+ * Otherwise, a new `ColorBuffer` is created and returned. The returned or updated `ColorBuffer`
+ * has an RGB format and uses unsigned 8-bit integers for its color components.
+ *
+ * @param target An optional `ColorBuffer` to store the converted image. If `null`, a new `ColorBuffer` is created.
+ * @return A `ColorBuffer` containing the RGB representation of the `Planar<GrayU8>` image.
+ */
+fun Planar<GrayU8>.toColorBuffer(target: ColorBuffer? = null) : ColorBuffer {
     val bandCount = bands.size
     val format = when (bandCount) {
         1 -> ColorFormat.R
@@ -137,7 +209,7 @@ fun Planar<GrayU8>.toColorBuffer() : ColorBuffer {
     }
 
     val bands = bands
-    val cb = colorBuffer(width, height, 1.0, format, ColorType.UINT8)
+    val cb = target ?: colorBuffer(width, height, 1.0, format, ColorType.UINT8)
     val shadow = cb.shadow
     shadow.buffer.rewind()
     var offset = 0
@@ -155,8 +227,18 @@ fun Planar<GrayU8>.toColorBuffer() : ColorBuffer {
     return cb
 }
 
+/**
+ * Converts a `Planar<GrayF32>` object into a `ColorBuffer` with the same number of channels (bands).
+ *
+ * If the `target` parameter is provided, the conversion is performed in-place within the specified `ColorBuffer`.
+ * Otherwise, a new `ColorBuffer` is created and returned. The returned or updated `ColorBuffer`
+ * has an RGB format and uses 32-bit floats for its color components.
+ *
+ * @param target An optional `ColorBuffer` to store the converted image. If `null`, a new `ColorBuffer` is created.
+ * @return A `ColorBuffer` containing the RGB representation of the `Planar<GrayF32>` image.
+ */
 @JvmName("grayF32ToColorBuffer")
-fun Planar<GrayF32>.toColorBuffer() : ColorBuffer {
+fun Planar<GrayF32>.toColorBuffer(target: ColorBuffer? = null) : ColorBuffer {
     val bandCount = bands.size
     val format = when (bandCount) {
         1 -> ColorFormat.R
@@ -167,7 +249,7 @@ fun Planar<GrayF32>.toColorBuffer() : ColorBuffer {
     }
 
     val bands = bands
-    val cb = colorBuffer(width, height, 1.0, format, ColorType.UINT8)
+    val cb = target ?: colorBuffer(width, height, 1.0, format, ColorType.UINT8)
     val shadow = cb.shadow
     shadow.buffer.rewind()
     var offset = 0
