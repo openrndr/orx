@@ -3,6 +3,8 @@ package org.openrndr.extra.rtree
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 import org.openrndr.extra.shapes.polygon.Polygon2D
+import org.openrndr.extra.shapes.polygon.intersects
+import org.openrndr.extra.shapes.polygon.isPointInConcavePolygon
 import kotlin.math.*
 
 
@@ -42,9 +44,19 @@ class RtreePolygon2D(minEntries: Int = 2, maxEntries: Int = 4) {
             minSqDist
         }
     }
+
+    fun findIntersecting(query: Polygon2D): List<Polygon2D> {
+        return rtree.findInRange(query.bounds()).filter { polygon -> polygon.intersects(query, true) }
+    }
+
+    fun findContaining(query: Vector2): List<Polygon2D> {
+        val result =  rtree.findInRange(Rectangle.fromCenter(query, 1.0, 1.0))
+        val result2 = result.filter { polygon -> polygon.isPointInConcavePolygon(query) }
+        return result2
+    }
 }
 
-private fun squaredDistanceToSegment(p: Vector2, a: Vector2, b: Vector2): Double {
+fun squaredDistanceToSegment(p: Vector2, a: Vector2, b: Vector2): Double {
     val ab = b - a
     val ap = p - a
     val bp = p - b
