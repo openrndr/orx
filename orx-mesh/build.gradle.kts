@@ -13,6 +13,7 @@ kotlin {
                 api(openrndr.application.core)
                 api(openrndr.math)
                 api(openrndr.shape)
+                implementation(project(":orx-rtree"))
                 implementation(project(":orx-shapes"))
                 implementation(project(":orx-math"))
             }

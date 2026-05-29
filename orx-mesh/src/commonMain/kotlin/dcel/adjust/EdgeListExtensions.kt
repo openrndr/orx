@@ -6,10 +6,12 @@ import org.openrndr.extra.mesh.dcel.FaceList
 import org.openrndr.extra.mesh.dcel.modify.edgeSetOffset
 import org.openrndr.extra.mesh.dcel.navigate.length
 import org.openrndr.extra.mesh.dcel.query.isEdgeloop
+import org.openrndr.extra.shapes.polygon.Polygon2D
+import org.openrndr.extra.shapes.polygon.Polygon3D
 
 context(dcel: Dcel)
-fun EdgeList.offset(distance: Double, useJoins: Boolean = false): FaceList {
-    return FaceList(dcel.edgeSetOffset(this, distance, useJoins))
+fun EdgeList.offset(distance: Double, useJoins: Boolean = false, checkFace: (List<Int>) -> Boolean = { true }): FaceList {
+    return FaceList(dcel.edgeSetOffset(this.toSet(), distance, useJoins, checkFace = checkFace).toList())
 }
 
 context(dcel: Dcel)

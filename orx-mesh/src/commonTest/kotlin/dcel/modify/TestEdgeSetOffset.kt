@@ -7,8 +7,10 @@ import org.openrndr.extra.mesh.dcel.Vertex
 import org.openrndr.extra.mesh.dcel.convert.shapeToDcelNoTriangulation
 import org.openrndr.extra.mesh.dcel.navigate.filterEdges
 import org.openrndr.extra.mesh.dcel.navigate.isBoundary
+import org.openrndr.extra.mesh.dcel.query.edgeCount
 import org.openrndr.extra.mesh.dcel.query.edgesForFaces
 import org.openrndr.extra.mesh.dcel.query.faceWinding
+import org.openrndr.extra.mesh.dcel.query.vertexCount
 import org.openrndr.extra.mesh.dcel.validate.isEulerMesh
 import org.openrndr.extra.shapes.primitives.regularPolygon
 import org.openrndr.math.Vector2
@@ -257,5 +259,33 @@ class TestEdgeSetOffset {
         // Wait, 5 vertices originally (0,1,2,3,4).
         // New vertices: 5, 6, 7.
         assertEquals(8, dcel.vertices.size)
+    }
+    @Test
+    fun testCheckFaceFilter() {
+        val dcel = Dcel()
+        // Create a single triangle (0,0,0), (1,0,0), (0,1,0)
+        dcel.vertices.add(Vertex(Vector3(0.0, 0.0, 0.0), 0))
+        dcel.vertices.add(Vertex(Vector3(1.0, 0.0, 0.0), 1))
+        dcel.vertices.add(Vertex(Vector3(0.0, 1.0, 0.0), 2))
+
+        dcel.faces.add(Face(0))
+        dcel.halfEdges.add(HalfEdge(0, 0, 1, 2, 3, IntArray(0)))
+        dcel.halfEdges.add(HalfEdge(0, 1, 2, 0, 4, IntArray(0)))
+        dcel.halfEdges.add(HalfEdge(0, 2, 0, 1, 5, IntArray(0)))
+
+        dcel.halfEdges.add(HalfEdge(-1, 1, 4, 5, 0, IntArray(0))) // 3: 1->0
+        dcel.halfEdges.add(HalfEdge(-1, 2, 5, 3, 1, IntArray(0))) // 4: 2->1
+        dcel.halfEdges.add(HalfEdge(-1, 0, 3, 4, 2, IntArray(0))) // 5: 0->2
+
+        val edgesBefore = dcel.edgeCount()
+        val verticesBefore = dcel.vertexCount()
+        // Offset all 3 boundary edges
+        // checkFace returns false for all, so no new faces should be created
+        val newFaces = dcel.edgeSetOffset(setOf(3, 4, 5), 1.0, checkFace = { false })
+
+
+        assertEquals(verticesBefore, dcel.vertexCount())
+        assertEquals(edgesBefore, dcel.edgeCount())
+        assertEquals(0, newFaces.size, "No faces should have been created because checkFace always returns false")
     }
 }

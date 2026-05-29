@@ -9,7 +9,7 @@ fun Dcel.edgeSetOffset(edgeIds: List<Int>, offset: Double, useJoins: Boolean = f
 }
 
 fun Dcel.edgeSetOffset(edgeIds: Set<Int>, offset: Double, useJoins: Boolean = false,
-                       checkFace: (Polygon3D) -> Boolean = { true }): Set<Int> {
+                       checkFace: (List<Int>) -> Boolean = { true }): Set<Int> {
     if (edgeIds.isEmpty()) return FaceSet(emptySet())
 
     // 1. Group edgeIds into contiguous chains.
@@ -184,44 +184,46 @@ fun Dcel.edgeSetOffset(edgeIds: Set<Int>, offset: Double, useJoins: Boolean = fa
         }
 
         // For each edge in chain, create a quad face
-        val edgeFaceIds = mutableListOf<Int>()
+        val edgeFaceIds = IntArray(chain.size) { -1 }
         for (i in chain.indices) {
             val eIdx = chain[i]
-            
+
             val v0 = originalVertexIndices[i]
             val v1 = originalVertexIndices[(i + 1) % originalVertexIndices.size]
-            
+
             val nv0 = newVertexIndices[i].second // Use the SECOND vertex of the start corner
             val nv1 = newVertexIndices[(i + 1) % newVertexIndices.size].first // Use the FIRST vertex of the end corner
 
-            val fIdx = faces.size
-            faces.add(Face(-1))
-            newFaceIds.add(fIdx)
-            edgeFaceIds.add(fIdx)
+            val proposedPolygon = listOf(v0, v1, nv1, nv0)
+            if (checkFace(proposedPolygon)) {
+                val fIdx = faces.size
+                faces.add(Face(-1))
+                newFaceIds.add(fIdx)
+                edgeFaceIds[i] = fIdx
 
-            val e0Idx = halfEdges.size
-            val e1Idx = halfEdges.size + 1
-            val e2Idx = halfEdges.size + 2
-            val e3Idx = halfEdges.size + 3
+                val e0Idx = halfEdges.size
+                val e1Idx = halfEdges.size + 1
+                val e2Idx = halfEdges.size + 2
+                val e3Idx = halfEdges.size + 3
 
-            val e0 = HalfEdge(fIdx, nv0, e1Idx, e3Idx, -1, halfEdges[eIdx].attributes.copyOf())
-            val e1 = HalfEdge(fIdx, nv1, e2Idx, e0Idx, -1, halfEdges[eIdx].attributes.copyOf())
-            val e2 = HalfEdge(fIdx, v1, e3Idx, e1Idx, eIdx, halfEdges[eIdx].attributes.copyOf())
-            val e3 = HalfEdge(fIdx, v0, e0Idx, e2Idx, -1, halfEdges[eIdx].attributes.copyOf())
+                val e0 = HalfEdge(fIdx, nv0, e1Idx, e3Idx, -1, halfEdges[eIdx].attributes.copyOf())
+                val e1 = HalfEdge(fIdx, nv1, e2Idx, e0Idx, -1, halfEdges[eIdx].attributes.copyOf())
+                val e2 = HalfEdge(fIdx, v1, e3Idx, e1Idx, eIdx, halfEdges[eIdx].attributes.copyOf())
+                val e3 = HalfEdge(fIdx, v0, e0Idx, e2Idx, -1, halfEdges[eIdx].attributes.copyOf())
 
-            halfEdges.addAll(listOf(e0, e1, e2, e3))
-            faces[fIdx].edge = e0Idx
-            halfEdges[eIdx].otherEdge = e2Idx
+                halfEdges.addAll(listOf(e0, e1, e2, e3))
+                faces[fIdx].edge = e0Idx
+                halfEdges[eIdx].otherEdge = e2Idx
 
-            if (vertices[nv0].edge == -1) vertices[nv0].edge = e0Idx
-            if (vertices[nv1].edge == -1) vertices[nv1].edge = e1Idx
+                if (vertices[nv0].edge == -1) vertices[nv0].edge = e0Idx
+                if (vertices[nv1].edge == -1) vertices[nv1].edge = e1Idx
+            }
         }
 
         // Create join faces
-        val allFaceIds = mutableListOf<Int>()
         for (i in originalVertexIndices.indices) {
             val res = vertexOffsetResults[i]
-            
+
             // Face before this vertex
             val prevEdgeFaceIdx = if (i > 0) edgeFaceIds[i - 1] else if (isClosed) edgeFaceIds.last() else -1
             // Face after this vertex
@@ -232,39 +234,42 @@ fun Dcel.edgeSetOffset(edgeIds: Set<Int>, offset: Double, useJoins: Boolean = fa
                 val v0 = originalVertexIndices[i]
                 val nv0 = newVertexIndices[i].first
                 val nv1 = newVertexIndices[i].second
-                
-                val fIdx = faces.size
-                faces.add(Face(-1))
-                newFaceIds.add(fIdx)
-                
-                val e0Idx = halfEdges.size
-                val e1Idx = halfEdges.size + 1
-                val e2Idx = halfEdges.size + 2
-                
-                // e0: nv0 -> nv1 (outer)
-                // e1: nv1 -> v0
-                // e2: v0 -> nv0
-                val e0 = HalfEdge(fIdx, nv0, e1Idx, e2Idx, -1, IntArray(0))
-                val e1 = HalfEdge(fIdx, nv1, e2Idx, e0Idx, -1, IntArray(0))
-                val e2 = HalfEdge(fIdx, v0, e0Idx, e1Idx, -1, IntArray(0))
-                
-                halfEdges.addAll(listOf(e0, e1, e2))
-                faces[fIdx].edge = e0Idx
-                
-                // Update vertex.edge if it was -1
-                if (vertices[nv0].edge == -1) vertices[nv0].edge = e0Idx
-                if (vertices[nv1].edge == -1) vertices[nv1].edge = e1Idx
-                
-                // Link to neighbors
-                if (prevEdgeFaceIdx != -1) {
-                    val e1OfPrev = faces[prevEdgeFaceIdx].edge + 1
-                    halfEdges[e1OfPrev].otherEdge = e2Idx
-                    halfEdges[e2Idx].otherEdge = e1OfPrev
-                }
-                if (nextEdgeFaceIdx != -1) {
-                    val e3OfNext = faces[nextEdgeFaceIdx].edge + 3
-                    halfEdges[e3OfNext].otherEdge = e1Idx
-                    halfEdges[e1Idx].otherEdge = e3OfNext
+
+                val proposedPolygon = listOf(v0, nv0, nv1)
+                if (checkFace(proposedPolygon)) {
+                    val fIdx = faces.size
+                    faces.add(Face(-1))
+                    newFaceIds.add(fIdx)
+
+                    val e0Idx = halfEdges.size
+                    val e1Idx = halfEdges.size + 1
+                    val e2Idx = halfEdges.size + 2
+
+                    // e0: nv0 -> nv1 (outer)
+                    // e1: nv1 -> v0
+                    // e2: v0 -> nv0
+                    val e0 = HalfEdge(fIdx, nv0, e1Idx, e2Idx, -1, IntArray(0))
+                    val e1 = HalfEdge(fIdx, nv1, e2Idx, e0Idx, -1, IntArray(0))
+                    val e2 = HalfEdge(fIdx, v0, e0Idx, e1Idx, -1, IntArray(0))
+
+                    halfEdges.addAll(listOf(e0, e1, e2))
+                    faces[fIdx].edge = e0Idx
+
+                    // Update vertex.edge if it was -1
+                    if (vertices[nv0].edge == -1) vertices[nv0].edge = e0Idx
+                    if (vertices[nv1].edge == -1) vertices[nv1].edge = e1Idx
+
+                    // Link to neighbors
+                    if (prevEdgeFaceIdx != -1) {
+                        val e1OfPrev = faces[prevEdgeFaceIdx].edge + 1
+                        halfEdges[e1OfPrev].otherEdge = e2Idx
+                        halfEdges[e2Idx].otherEdge = e1OfPrev
+                    }
+                    if (nextEdgeFaceIdx != -1) {
+                        val e3OfNext = faces[nextEdgeFaceIdx].edge + 3
+                        halfEdges[e3OfNext].otherEdge = e1Idx
+                        halfEdges[e1Idx].otherEdge = e3OfNext
+                    }
                 }
             } else {
                 // No join, link quads directly

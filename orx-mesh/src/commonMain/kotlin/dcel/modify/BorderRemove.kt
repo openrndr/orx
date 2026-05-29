@@ -2,7 +2,10 @@ package org.openrndr.extra.mesh.dcel.modify
 
 import org.openrndr.extra.mesh.dcel.Dcel
 
-fun Dcel.bordersRemove(borders: List<List<Int>>) {
+fun Dcel.bordersRemove(borders: List<List<Int>>): Int {
+
+    var resultFace = -1
+
     // remove lists of contiguous edges from the mesh
     // removing borders joins exactly two faces
     for (border in borders) {
@@ -23,6 +26,7 @@ fun Dcel.bordersRemove(borders: List<List<Int>>) {
         val f1Idx = eFirst.face
         val f2Idx = oFirst.face
 
+        resultFace = f1Idx
         if (f1Idx == -1 || f2Idx == -1 || f1Idx == f2Idx) continue
 
         val prevEIdx = eFirst.prevEdge
@@ -136,4 +140,5 @@ fun Dcel.bordersRemove(borders: List<List<Int>>) {
         // Face f2 is now gone
         faces[f2Idx].edge = -1
     }
+    return resultFace
 }
