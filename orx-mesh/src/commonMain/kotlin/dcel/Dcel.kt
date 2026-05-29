@@ -4,7 +4,9 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import kotlin.jvm.JvmInline
+import kotlinx.serialization.Serializable
 
+@Serializable
 class HalfEdge(
     var face: Int,
     var vertex: Int,
@@ -14,11 +16,13 @@ class HalfEdge(
     var attributes: IntArray
 )
 
+@Serializable
 class Face(
     var edge: Int,
     var holeEdges: IntArray = IntArray(0),
 )
 
+@Serializable
 class Vertex(var position: Vector3, var edge: Int)
 
 @JvmInline
@@ -48,6 +52,7 @@ enum class DCELAttributes(val index: Int) {
     BITANGENT(4)
 }
 
+@Serializable
 class Dcel {
     var halfEdges = mutableListOf<HalfEdge>()
     var faces = mutableListOf<Face>()
@@ -58,7 +63,6 @@ class Dcel {
     var normals = mutableListOf<Vector3>()
     var tangents = mutableListOf<Vector3>()
     var bitangents = mutableListOf<Vector3>()
-
 }
 
 class Point(
