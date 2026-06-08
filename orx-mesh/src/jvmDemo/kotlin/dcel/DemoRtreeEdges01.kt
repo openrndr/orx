@@ -28,7 +28,9 @@ fun main() {
                     drawer.lineSegment(dcel.vertices[vertices[0]].position, dcel.vertices[vertices[1]].position)
                 }
                 drawer.stroke = ColorRGBa.WHITE
-                val edges = rtree.findKNearest(mouse.position, 3)
+                drawer.strokeWeight = 2.0
+                val edges = rtree.findKNearest(mouse.position, 8)
+                require(edges.size == 8)
                 edges.forEach {
                     val vertices = dcel.verticesForEdge(it)
                     drawer.lineSegment(dcel.vertices[vertices[0]].position, dcel.vertices[vertices[1]].position)

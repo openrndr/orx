@@ -2,7 +2,7 @@ package org.openrndr.extra.shapes.polygon
 
 import org.openrndr.math.Vector2
 
-fun Polygon2D.isPointInConcavePolygon(point: Vector2): Boolean {
+fun Polygon2D.containsPoint(point: Vector2): Boolean {
     var intersections = 0
     for (i in points.indices) {
         val p1 = points[i]

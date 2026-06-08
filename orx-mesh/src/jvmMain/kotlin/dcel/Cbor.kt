@@ -29,6 +29,6 @@ fun Dcel.Companion.loadFromCborFile(file: File): Dcel {
 @OptIn(ExperimentalSerializationApi::class)
 fun Dcel.saveToCborFile(file: File) {
     file.outputStream().use { output ->
-        Cbor.encodeToByteArray(this@saveToCborFile)
+        output.write(Cbor.encodeToByteArray(this@saveToCborFile))
     }
 }

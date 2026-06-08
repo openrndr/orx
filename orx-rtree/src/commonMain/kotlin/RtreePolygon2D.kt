@@ -4,7 +4,7 @@ import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 import org.openrndr.extra.shapes.polygon.Polygon2D
 import org.openrndr.extra.shapes.polygon.intersects
-import org.openrndr.extra.shapes.polygon.isPointInConcavePolygon
+import org.openrndr.extra.shapes.polygon.containsPoint
 import kotlin.math.*
 
 
@@ -51,7 +51,7 @@ class RtreePolygon2D(minEntries: Int = 2, maxEntries: Int = 4) {
 
     fun findContaining(query: Vector2): List<Polygon2D> {
         val result =  rtree.findInRange(Rectangle.fromCenter(query, 1.0, 1.0))
-        val result2 = result.filter { polygon -> polygon.isPointInConcavePolygon(query) }
+        val result2 = result.filter { polygon -> polygon.containsPoint(query) }
         return result2
     }
 }

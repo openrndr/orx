@@ -2,18 +2,9 @@ package org.openrndr.extra.mesh.rtree
 
 import org.openrndr.extra.mesh.dcel.Dcel
 import org.openrndr.extra.mesh.dcel.EdgeList
-import org.openrndr.extra.mesh.dcel.FaceList
-import org.openrndr.extra.mesh.dcel.convert.faceToPolygon3D
-import org.openrndr.extra.mesh.dcel.convert.vertexListToPolygon3D
 import org.openrndr.extra.mesh.dcel.query.verticesForEdge
-import org.openrndr.extra.mesh.dcel.query.verticesForFace
 import org.openrndr.extra.rtree.RTree
-import org.openrndr.extra.rtree.bounds
 import org.openrndr.extra.rtree.squaredDistanceToSegment
-import org.openrndr.extra.shapes.polygon.Polygon2D
-import org.openrndr.extra.shapes.polygon.intersects
-import org.openrndr.extra.shapes.polygon.isPointInConcavePolygon
-import org.openrndr.extra.shapes.polygon.xy
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 import org.openrndr.shape.bounds

@@ -3,7 +3,6 @@ package polygon
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.shapes.polygon.intersects
-import org.openrndr.extra.shapes.polygon.intersectsSweep
 import org.openrndr.extra.shapes.polygon.toPolygon
 import org.openrndr.extra.shapes.primitives.regularStar
 import org.openrndr.shape.Rectangle
@@ -21,7 +20,7 @@ fun main() {
 
                 val start = System.currentTimeMillis()
                 for (i in 0 until 10000) {
-                    if (p0.intersectsSweep(p1)) {
+                    if (p0.intersects(p1)) {
                         drawer.stroke = ColorRGBa.RED
                     }
                 }

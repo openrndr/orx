@@ -176,12 +176,3 @@ fun Dcel.faceSetSplit(faceIds: Set<Int>, plane: Plane,
 
     return activeFaceIds
 }
-
-//fun Dcel.faceSetSplit(faceIds: Set<Int>, polygon: List<Vector3>, perpendicular: Vector3 = Vector3(0.0, 0.0, 1.0), splitEpsilon: Double = 1E-6): Set<Int> {
-//    // perform polygon-polygon clipping against the faces in faceIds and polygon.
-//    // the segments of the polygon are to be considered edge-wise planar strips.
-//    // the planar strips are in one direction bounded by the edges and infinte in the perpendicular direction
-//
-//    // return the new faces created by the split
-//
-//}

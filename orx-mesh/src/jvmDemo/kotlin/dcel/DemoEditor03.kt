@@ -3,11 +3,13 @@ package dcel
 import org.openrndr.KeyModifier
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
+import org.openrndr.draw.loadFont
 import org.openrndr.extra.mesh.dcel.convert.faceToPolygon3D
 import org.openrndr.extra.mesh.dcel.Face
 import org.openrndr.extra.mesh.dcel.FaceList
 import org.openrndr.extra.mesh.dcel.adjust.join
 import org.openrndr.extra.mesh.dcel.adjust.offset
+import org.openrndr.extra.mesh.dcel.adjust.relax
 import org.openrndr.extra.mesh.dcel.adjust.remove
 import org.openrndr.extra.mesh.dcel.adjust.subdivide
 import org.openrndr.extra.mesh.dcel.convert.shapeToDcelNoTriangulation
@@ -19,6 +21,7 @@ import org.openrndr.extra.mesh.dcel.navigate.filter
 import org.openrndr.extra.mesh.dcel.navigate.isBoundary
 import org.openrndr.extra.mesh.dcel.navigate.toShape
 import org.openrndr.extra.mesh.dcel.query.convexFaceCenter
+import org.openrndr.extra.mesh.dcel.saveToCborFile
 import org.openrndr.extra.mesh.rtree.RtreeDcelFace2D
 import org.openrndr.extra.rtree.RtreePolygon2D
 import org.openrndr.extra.shapes.polygon.Polygon2D
@@ -26,6 +29,7 @@ import org.openrndr.extra.shapes.polygon.xy
 import org.openrndr.extra.shapes.primitives.regularPolygon
 import org.openrndr.ffmpeg.ScreenRecorder
 import org.openrndr.shape.ShapeContour
+import java.io.File
 
 fun main() {
     application {
@@ -44,7 +48,7 @@ fun main() {
             val selectedFaces = mutableSetOf<Int>()
 
 
-            val shape = regularPolygon(8, drawer.bounds.center, 60.0).shape
+            val shape = regularPolygon(5, drawer.bounds.center, 60.0).shape
             val dcel = shapeToDcelNoTriangulation(shape, 0.5)
             var rtree = RtreeDcelFace2D(dcel)
 
@@ -65,7 +69,10 @@ fun main() {
                     'i' -> "insert"
                     'd' -> "delete"
                     'j' -> "join"
+                    'r' -> "relax"
                     'x' -> { selectedFaces.clear(); op }
+                    'a' -> { selectedFaces.addAll(dcel.allFaces()); op }
+                    'w' -> { dcel.saveToCborFile(File("dcel.cbor")); op }
                     else -> op
                 }
             }
@@ -147,6 +154,15 @@ fun main() {
                                 .join()
                         }
                     }
+                    "relax" -> with(dcel) {
+                        val face = allFaces().filter { f: Face ->
+                            f.contains(position)
+                        }
+                        if (face.isNotEmpty()) {
+                            FaceList((selectedFaces + listOf(face.first())).toList())
+                                .relax()
+                        }
+                    }
 
                 }
 
@@ -175,7 +191,12 @@ fun main() {
                 for (polygon in intersectingPolygons) {
                     drawer.contour(ShapeContour.fromPoints(polygon, true))
                 }
+                drawer.fill = ColorRGBa.WHITE
+                drawer.fontMap = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 16.0)
+                drawer.text("op: $op", 10.0, 40.0)
+
             }
+
         }
     }
 }

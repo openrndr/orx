@@ -10,7 +10,7 @@ import org.openrndr.extra.rtree.bounds
 import org.openrndr.extra.rtree.squaredDistanceToSegment
 import org.openrndr.extra.shapes.polygon.Polygon2D
 import org.openrndr.extra.shapes.polygon.intersects
-import org.openrndr.extra.shapes.polygon.isPointInConcavePolygon
+import org.openrndr.extra.shapes.polygon.containsPoint
 import org.openrndr.extra.shapes.polygon.xy
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
@@ -51,7 +51,7 @@ class RtreeDcelFace2D(val dcel: Dcel, minEntries: Int = 2, maxEntries: Int = 4) 
 
         return rtree.findInRange(bounds).filter {
             val p = dcel.faceToPolygon3D(it).xy
-            p.isPointInConcavePolygon(query)
+            p.containsPoint(query)
         }
     }
 
@@ -126,7 +126,7 @@ class RtreeDcelFace2D(val dcel: Dcel, minEntries: Int = 2, maxEntries: Int = 4) 
                 val i0 = u[(i + 0) % faceVertices.size]
                 val i1 = u[(i + 1) % faceVertices.size]
                 val mid = (i0 + i1) / 2.0
-                if (v.isPointInConcavePolygon(mid)) {
+                if (v.containsPoint(mid)) {
                     return@filter true
                 }
             }

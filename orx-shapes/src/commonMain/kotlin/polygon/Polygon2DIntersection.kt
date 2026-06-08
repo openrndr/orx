@@ -3,21 +3,6 @@ package org.openrndr.extra.shapes.polygon
 import org.openrndr.math.Vector2
 import org.openrndr.shape.bounds
 
-fun Polygon2D.isEdgeAdjacentTo(other: Polygon2D): Boolean {
-    // tests if the edge of this polygon is adjacent to the edge of the other polygon
-    for (i in points.indices) {
-        val a0 = points[i]
-        val a1 = points[(i + 1) % points.size]
-        for (j in other.points.indices) {
-            val b0 = other.points[j]
-            val b1 = other.points[(j + 1) % other.points.size]
-            if (a0.distanceTo(b0) < 1E-2 && a1.distanceTo(b1) < 1E-2) return true
-        }
-
-    }
-    return false
-}
-
 fun Polygon2D.intersects(other: Polygon2D, ignoreAdjacent: Boolean = false): Boolean {
     val bounds = bounds
     val otherBounds = other.bounds
@@ -68,7 +53,7 @@ fun Polygon2D.intersects(other: Polygon2D, ignoreAdjacent: Boolean = false): Boo
     // but we should avoid returning true if they only touch at boundaries when ignoreAdjacent is true.
     if (this.points.isNotEmpty()) {
         for (p in this.points) {
-            if (other.isPointInConcavePolygon(p)) {
+            if (other.containsPoint(p)) {
                 // isPointInConcavePolygon implementation may or may not return true for points on the boundary.
                 // However, if we reached here, it means no edges intersect (or they were ignored).
                 // If they were ignored, it means they are adjacent.
@@ -101,7 +86,7 @@ fun Polygon2D.intersects(other: Polygon2D, ignoreAdjacent: Boolean = false): Boo
 
     if (other.points.isNotEmpty()) {
         for (p in other.points) {
-            if (this.isPointInConcavePolygon(p)) {
+            if (this.containsPoint(p)) {
                 if (ignoreAdjacent) {
                     var onBoundary = false
                     for (i in points.indices) {

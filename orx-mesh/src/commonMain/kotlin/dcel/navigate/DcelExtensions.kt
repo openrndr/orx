@@ -5,6 +5,29 @@ import org.openrndr.extra.mesh.dcel.EdgeList
 import org.openrndr.extra.mesh.dcel.FaceList
 import org.openrndr.extra.mesh.dcel.VertexList
 
+fun Dcel.canonicalEdges(): EdgeList {
+    val visited = mutableSetOf<Int>()
+    val result = mutableListOf<Int>()
+
+    for (i in halfEdges.indices) {
+        if (i in visited) continue
+
+        val edge = halfEdges[i]
+        val otherEdgeIndex = edge.otherEdge
+
+        visited.add(i)
+
+        if (otherEdgeIndex == -1) {
+            result.add(i)
+        } else {
+            visited.add(otherEdgeIndex)
+            result.add(minOf(i, otherEdgeIndex))
+        }
+    }
+
+    return EdgeList(result)
+}
+
 fun Dcel.allEdges(): EdgeList {
     val result = mutableListOf<Int>()
     for (i in halfEdges.indices) {
