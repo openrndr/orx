@@ -113,6 +113,7 @@ private class OnContourImageMapDrawer {
             vertices.shadow.uploadElements(0, quadCount * 6)
             val shader = shaderManager.shader(drawStyle.shadeStyle, vertices.vertexFormat)
             shader.begin()
+            shader.textureBindings[0] = (drawStyle.fontMap as FontImageMap).texture
             context.applyToShader(shader)
 
             Driver.instance.setState(drawStyle)
