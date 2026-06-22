@@ -39,7 +39,9 @@ fun Element.uiForParameters(obj: Any): Div {
                         range = Range(parameter.intRange!!.start.toDouble(), parameter.intRange!!.endInclusive.toDouble())
                         label = parameter.label
                         precision = 0
+                        @Suppress("UNCHECKED_CAST")
                         value = (parameter.property as KMutableProperty1<Any, Int>).get(obj).toDouble()
+                        @Suppress("UNCHECKED_CAST")
                         bind(obj, parameter.property as KMutableProperty1<Any, Int>)
                     }
                 }
@@ -48,28 +50,38 @@ fun Element.uiForParameters(obj: Any): Div {
                         range = Range(parameter.doubleRange!!.start, parameter.doubleRange!!.endInclusive)
                         label = parameter.label
                         precision = parameter.precision!!
+                        @Suppress("UNCHECKED_CAST")
                         value = (parameter.property as KMutableProperty1<Any, Double>).get(obj)
+                        @Suppress("UNCHECKED_CAST")
+
                         bind(obj, parameter.property as KMutableProperty1<Any, Double>)
                     }
                 }
                 ParameterType.Color -> {
                     colorpickerButton {
                         label = parameter.label
+                        @Suppress("UNCHECKED_CAST")
                         color = (parameter.property as KMutableProperty1<Any, ColorRGBa>).get(obj)
+                        @Suppress("UNCHECKED_CAST")
+
                         bind(obj, parameter.property as KMutableProperty1<Any, ColorRGBa>)
                     }
                 }
                 ParameterType.Boolean -> {
                     toggle {
                         label = parameter.label
+                        @Suppress("UNCHECKED_CAST")
                         value = (parameter.property as KMutableProperty1<Any, Boolean>).get(obj)
+                        @Suppress("UNCHECKED_CAST")
                         bind(obj, parameter.property as KMutableProperty1<Any, Boolean>)
                     }
                 }
                 ParameterType.Text -> {
                     textfield {
                         label = parameter.label
+                        @Suppress("UNCHECKED_CAST")
                         value = (parameter.property as KMutableProperty1<Any, String>).get(obj)
+                        @Suppress("UNCHECKED_CAST")
                         bind(obj, parameter.property as KMutableProperty1<Any, String>)
                     }
                 }
@@ -79,7 +91,9 @@ fun Element.uiForParameters(obj: Any): Div {
                         label = parameter.label
                         range = parameter.doubleRange!!
                         precision = parameter.precision!!
+                        @Suppress("UNCHECKED_CAST")
                         value = (parameter.property as KMutableProperty1<Any, Vector2>).get(obj)
+                        @Suppress("UNCHECKED_CAST")
                         bind(obj, parameter.property as KMutableProperty1<Any, Vector2>)
                     }
                 }
@@ -89,7 +103,9 @@ fun Element.uiForParameters(obj: Any): Div {
                         label = parameter.label
                         range = parameter.doubleRange!!
                         precision = parameter.precision!!
+                        @Suppress("UNCHECKED_CAST")
                         value = (parameter.property as KMutableProperty1<Any, Vector3>).get(obj)
+                        @Suppress("UNCHECKED_CAST")
                         bind(obj, parameter.property as KMutableProperty1<Any, Vector3>)
                     }
                 }
@@ -99,7 +115,9 @@ fun Element.uiForParameters(obj: Any): Div {
                         label = parameter.label
                         range = parameter.doubleRange!!
                         precision = parameter.precision!!
+                        @Suppress("UNCHECKED_CAST")
                         value = (parameter.property as KMutableProperty1<Any, Vector4>).get(obj)
+                        @Suppress("UNCHECKED_CAST")
                         bind(obj, parameter.property as KMutableProperty1<Any, Vector4>)
                     }
                 }
