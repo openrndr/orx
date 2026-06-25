@@ -6,6 +6,27 @@ import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 import org.openrndr.shape.bounds
 
+/**
+ * A class that implements collision resolution between two bodies in a simulation using a
+ * Sweep and Prune (SAP) algorithm. This constraint resolves collisions by identifying and
+ * responding to intersections between the boundary nodes or edges of the two bodies.
+ *
+ * The algorithm ensures that the two objects maintain realistic physical interactions during
+ * collisions by applying positional corrections based on the configuration of their boundary
+ * elements (nodes and edges). These corrections are computed for both the static and dynamic
+ * components of the bodies based on their properties such as position, mass, and boundary geometry.
+ *
+ * Key Operations:
+ * - Detects the closest points or edges between the two bodies using a nearest-neighbor search approach.
+ * - Computes signed distances between points and edges for collision detection.
+ * - Checks for object intersections using boundary information, including points and circle approximations.
+ * - Applies contact resolution, moving the positions of points and edges based on inverse mass contributions
+ *   and penetration depth to prevent objects from overlapping.
+ *
+ * This class is designed to handle both static and dynamic bodies in the simulation, allowing for versatile
+ * interactions between different types of objects. The skin width parameter is used to define a tolerance
+ * for collision detection, ensuring stability in the resolution process.
+ */
 class SAPCollisionConstraint : CollisionConstraint {
 
     override suspend fun solve(body: Body, other: Body, dt: Double) {
@@ -134,6 +155,21 @@ class SAPCollisionConstraint : CollisionConstraint {
     }
 }
 
+/**
+ * Sets the collision resolution handler to a sweep-and-prune (SAP) based collision constraint.
+ *
+ * The SAP collision constraint enhances the simulation by applying an efficient algorithm to
+ * resolve collisions between bodies. This method modifies the [collisionConstraint] property
+ * of the [ForceSimulation] instance to utilize an instance of [SAPCollisionConstraint], which
+ * is specifically designed to handle collision detection and resolution using the sweep-and-prune
+ * approach.
+ *
+ * By leveraging this method, the simulation can benefit from an optimized collision detection
+ * process that is well-suited for scenarios with a significant number of interacting bodies.
+ *
+ * It is recommended to call this method before initiating a simulation to ensure proper collision
+ * handling is in place.
+ */
 fun ForceSimulation.sapCollisionConstraint() {
     collisionConstraint = SAPCollisionConstraint()
 }

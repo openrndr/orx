@@ -5,7 +5,23 @@ import org.openrndr.extra.bvh.findIntersectingPairs
 import org.openrndr.math.smoothstep
 import org.openrndr.shape.Rectangle
 
-
+/**
+ * Represents a repulsive force applied on nodes of a [Body] using a bounding volume hierarchy (BVH) for optimization.
+ *
+ * This force calculates mutual repulsion between nodes within a specified search radius to prevent overlap
+ * or maintain specific spatial relationships. The force magnitude decreases smoothly as the distance between
+ * nodes approaches the search radius, determined by a smoothstep function.
+ *
+ * @constructor Creates a [NodeRepulseForceBVH] for the specified [body].
+ * @property body The [Body] instance on which the repulsive force acts. This serves as the context for the force calculations.
+ * @property searchRadius The radius used to search for neighboring nodes to apply repulsion. Default is 10.0.
+ * @property strength The strength of the repulsive force. Default is 1.0.
+ * @property bvh A bounding volume hierarchy data structure used to efficiently detect pairs of intersecting nodes.
+ *
+ * Methods:
+ * - [initializeFrame]: Initializes the BVH structure using the current state of the nodes in the [Body].
+ * - [apply]: Applies the repulsive force between nodes based on their proximity, updating their velocities accordingly.
+ */
 class NodeRepulseForceBVH(val body: Body) : Force {
     var searchRadius = 10.0
     var strength = 1.0

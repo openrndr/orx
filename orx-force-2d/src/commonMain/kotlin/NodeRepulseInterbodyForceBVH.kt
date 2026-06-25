@@ -4,6 +4,21 @@ import org.openrndr.extra.bvh.BVHNode2D
 import org.openrndr.extra.bvh.findIntersectingPairs
 
 
+/**
+ * Implementation of the [InterbodyForce] interface that applies a repulsive force between the nodes
+ * of two physical bodies based on their proximity, utilizing a bounding volume hierarchy (BVH)
+ * for improved performance during pair detection.
+ *
+ * This class models interbody repulsion where nodes from two distinct bodies repel each other based
+ * on a defined search radius and strength. The BVH data structure accelerates the process of detecting
+ * intersecting nodes.
+ *
+ * @property searchRadius The maximum distance within which nodes of two bodies interact.
+ *                        Nodes beyond this radius have no effect on each other.
+ * @property strength The magnitude of the repulsive force applied between interacting nodes.
+ * @property bvhs A map used to cache BVH representations for bodies during a simulation frame,
+ *                improving performance by avoiding redundant BVH recomputations.
+ */
 class NodeRepulseInterbodyForceBVH : InterbodyForce {
 
     var searchRadius = 10.0
@@ -60,5 +75,16 @@ class NodeRepulseInterbodyForceBVH : InterbodyForce {
     }
 }
 
+/**
+ * Adds a repulsive interbody force using a bounding volume hierarchy (BVH) to the simulation.
+ *
+ * This method configures and applies the [NodeRepulseInterbodyForceBVH] to simulate repulsion
+ * between nodes across bodies in the [ForceSimulation]. The force uses a BVH structure
+ * to optimize the detection of node pairs within the specified search radius.
+ *
+ * @param configure A lambda expression used to configure the properties of [NodeRepulseInterbodyForceBVH].
+ *                  The configuration can include attributes such as `searchRadius` and `strength` to
+ *                  define the nature of the repulsive force.
+ */
 fun ForceSimulation.nodeRepulseInterbodyForceBVH(configure: NodeRepulseInterbodyForceBVH.() -> Unit) =
     interbodyForces.add(NodeRepulseInterbodyForceBVH().apply(configure))

@@ -2,6 +2,18 @@ package org.openrndr.extra.force2d
 
 import org.openrndr.math.Vector2
 
+/**
+ * Represents a constraint that maintains the area of triangles within a physical body.
+ *
+ * The `TriangleAreaConstraint` ensures that the signed areas of triangles in a [Body]
+ * remain consistent with their rest (initial) areas during simulations. This is achieved
+ * by applying correction steps to the positions of the associated nodes over multiple iterations.
+ * It is particularly useful in preserving the structural properties of deformable bodies.
+ *
+ * @property body the [Body] whose triangle areas are constrained.
+ * @property compliance a parameter controlling the softness of the constraint; a higher value allows more deformation.
+ * @property iterations the number of iterations to perform during the constraint-solving process.
+ */
 class TriangleAreaConstraint(val body: Body,
                              var compliance: Double = 0.0, var iterations: Int = 1) : Constraint {
 
@@ -59,6 +71,19 @@ class TriangleAreaConstraint(val body: Body,
     }
 }
 
+/**
+ * Adds a triangle area constraint to the body, ensuring that the areas of triangles
+ * in the body remain consistent with their initial (rest) areas during simulation.
+ *
+ * The constraint is applied by creating an instance of [TriangleAreaConstraint], which
+ * adjusts the positions of the nodes in the body to maintain the specified area properties.
+ * This function allows for optional configuration of the constraint's parameters
+ * (such as compliance and iterations) through the provided lambda.
+ *
+ * @param configure a lambda function to configure the properties of the
+ * [TriangleAreaConstraint] being added. Defaults to an empty lambda if no
+ * configuration is required.
+ */
 fun Body.triangleAreaConstraint(configure : TriangleAreaConstraint.() -> Unit = {}) {
     constraints.add(TriangleAreaConstraint(this).apply(configure))
 }

@@ -2,6 +2,19 @@ package org.openrndr.extra.force2d
 
 import org.openrndr.extra.bvh.sap.BoxedPointOrEdge
 
+/**
+ * Processes a collection of points and edges in a bipartite structure using a sweep-line algorithm
+ * to detect and handle intersections. The method categorizes objects into active points and edges,
+ * iteratively updates the active lists, and invokes the intersection callback when overlaps are detected.
+ *
+ * @param points a list of `BoxedPointOrEdge` instances representing points in the coordinate space.
+ * Objects with type `0` are considered points.
+ * @param edges a list of `BoxedPointOrEdge` instances representing edges in the coordinate space.
+ * Objects with type `1` are considered edges.
+ * @param onIntersect a callback function invoked with the indices of intersecting objects
+ * when a point and an edge intersect. The first parameter is the index of the intersecting point,
+ * and the second parameter is the index of the intersecting edge.
+ */
 
 fun sortAndSweepBipartite(
     points: List<BoxedPointOrEdge>,
@@ -78,5 +91,15 @@ class NodeRepulseInterbodyForce : InterbodyForce {
     }
 }
 
+/**
+ * Adds a `NodeRepulseInterbodyForce` to the list of interbody forces in the simulation.
+ *
+ * The `NodeRepulseInterbodyForce` applies a repulsion force between nodes of bodies within
+ * a configured search radius, encouraging them to remain apart. The strength and behavior
+ * of the force can be customized via the provided configuration block.
+ *
+ * @param configure A lambda to configure the `NodeRepulseInterbodyForce` instance.
+ * Use this block to customize properties such as `searchRadius` and `strength` for the force.
+ */
 fun ForceSimulation.nodeRepulseInterbodyForce(configure: NodeRepulseInterbodyForce.()->Unit) =
     interbodyForces.add(NodeRepulseInterbodyForce().apply(configure))

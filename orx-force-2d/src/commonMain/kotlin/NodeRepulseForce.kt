@@ -28,6 +28,19 @@ private fun findNear(
     }
 }
 
+/**
+ * Represents a repulsive force applied to nodes within a specified search radius.
+ *
+ * The `NodeRepulseForce` class implements the [Force] interface and applies a repelling force
+ * between nodes in a [Body], based on their proximity to each other. Nodes within the
+ * `searchRadius` experience a force proportional to their distance, aimed at pushing them apart.
+ *
+ * @property body The [Body] instance on which the force is applied.
+ * @property searchRadius The radius within which nodes repel each other.
+ * A larger value increases the distance at which nodes interact.
+ * @property strength The magnitude of the repulsive force.
+ * A higher value results in stronger repulsion between nodes.
+ */
 class NodeRepulseForce(val body: Body) : Force {
 
     private val index = body.nodes.indices.toMutableList()

@@ -62,6 +62,7 @@ fun main() {
                 drawer.clear(ColorRGBa.BLACK)
                 runBlocking {
                     sim.simulate(1.0 / 60.0, 10)
+                    6
                 }
                 val circles = sim.bodies[0].nodes.map { it.position }
                 drawer.circles(circles, 10.0)

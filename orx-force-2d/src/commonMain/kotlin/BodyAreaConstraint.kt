@@ -2,6 +2,19 @@ package org.openrndr.extra.force2d
 
 import org.openrndr.math.Vector2
 
+/**
+ * Represents a constraint that maintains a specified area for a deformable body.
+ *
+ * This class ensures that the area defined by the body's boundary remains close
+ * to a target rest area during simulation. The constraint is solved iteratively
+ * and includes compliance to allow some flexibility in maintaining the target area.
+ *
+ * @constructor Creates a BodyAreaConstraint for the specified body.
+ * @param body The deformable body whose area is constrained.
+ * @param compliance The compliance factor that governs the flexibility of the constraint.
+ *                   Higher values allow more deviation from the rest area.
+ * @param iterations The number of iterations for solving the constraint in each simulation step.
+ */
 class BodyAreaConstraint(val body: Body, var compliance: Double = 0.0, var iterations: Int = 1) : Constraint {
 
     var restArea: Double = area()
@@ -69,6 +82,14 @@ class BodyAreaConstraint(val body: Body, var compliance: Double = 0.0, var itera
     }
 }
 
+/**
+ * Adds a body area constraint to the body, ensuring that its area remains close
+ * to a target rest area during simulation. The constraint includes compliance
+ * and uses iterative solving to maintain this condition.
+ *
+ * @param configure A lambda function used to configure the `BodyAreaConstraint`
+ *                  instance before it is added to the body's constraints list.
+ */
 fun Body.bodyAreaConstraint(configure : BodyAreaConstraint.() -> Unit = {}) {
     constraints.add(BodyAreaConstraint(this).apply(configure))
 }

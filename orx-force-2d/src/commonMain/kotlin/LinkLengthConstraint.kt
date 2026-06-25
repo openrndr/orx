@@ -1,6 +1,23 @@
 package org.openrndr.extra.force2d
 
-class LinkLengthConstraint( val body: Body, var compliance: Double = 0.0, var iterations: Int = 1) :
+/**
+ * A constraint that enforces the lengths of links between nodes within a [Body].
+ *
+ * The [LinkLengthConstraint] ensures that links connecting nodes in the [Body] adhere to their
+ * defined rest lengths. It computes corrections over a number of iterations to resolve any
+ * deviations in length while considering compliance, which introduces flexibility into the system.
+ *
+ * @property body the [Body] that this constraint operates on.
+ * @property compliance a parameter controlling the flexibility of the links. Higher compliance
+ * allows greater deviation from the rest lengths.
+ * @property iterations the number of iterations to refine the resolution of the constraint for
+ * each time step.
+ *
+ * This constraint works by computing the deviation of each link's current length from its rest
+ * length and applying corrective forces iteratively to the connected nodes. It takes into
+ * account the mass of the nodes and compliance to distribute corrections appropriately.
+ */
+class LinkLengthConstraint(val body: Body, var compliance: Double = 0.0, var iterations: Int = 1) :
     Constraint {
 
     private var lambdas: DoubleArray = DoubleArray(body.links.size)
@@ -48,6 +65,6 @@ class LinkLengthConstraint( val body: Body, var compliance: Double = 0.0, var it
     }
 }
 
-fun Body.linkLengthConstraint(configure : LinkLengthConstraint.() -> Unit = {}) {
+fun Body.linkLengthConstraint(configure: LinkLengthConstraint.() -> Unit = {}) {
     constraints.add(LinkLengthConstraint(this).apply(configure))
 }
