@@ -23,6 +23,7 @@ kotlin {
                 implementation(project(":orx-shapes"))
                 implementation(project(":orx-color"))
                 implementation(project(":orx-noise"))
+                implementation(project(":orx-kdtree"))
             }
         }
     }
