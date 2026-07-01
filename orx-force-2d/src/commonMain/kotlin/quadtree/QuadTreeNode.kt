@@ -21,6 +21,10 @@ internal class QuadTreeNode(
                 return
             }
 
+            if (xmax - xmin < 1E-6 || ymax - ymin < 1E-6) {
+                return
+            }
+
             if (children == null) {
                 children = arrayOfNulls(4)
                 val existingNode = node!!

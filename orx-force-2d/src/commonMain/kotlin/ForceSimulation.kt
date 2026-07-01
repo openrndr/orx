@@ -213,13 +213,13 @@ class Body(
         }
     }
 
-    suspend fun solve(dt: Double) {
+    suspend fun solve(dt: Double, alpha: Double) {
 
         for (i in nodes.indices) {
             nodes[i].prevPosition = nodes[i].position
 
             if (!static) {
-                nodes[i].position += nodes[i].velocity * dt
+                nodes[i].position += nodes[i].velocity * dt * alpha
             }
         }
 
@@ -290,6 +290,8 @@ class ForceSimulation(val bodies: MutableList<Body> = mutableListOf()) {
 
     var context: CoroutineContext = Dispatchers.Default
 
+    var alpha = 1.0
+
     private fun partitionPairs(pairs: List<Pair<Int, Int>>): List<List<Pair<Int, Int>>> {
         val batches = mutableListOf<MutableList<Pair<Int, Int>>>()
         val usedInBatch = mutableListOf<MutableSet<Int>>()
@@ -354,7 +356,7 @@ class ForceSimulation(val bodies: MutableList<Body> = mutableListOf()) {
 
                     bodies.map { body ->
                         async {
-                            body.solve(sdt)
+                            body.solve(sdt, alpha)
                         }
                     }.awaitAll()
 
