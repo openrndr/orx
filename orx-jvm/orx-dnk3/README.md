@@ -40,6 +40,22 @@ be controlled using an animated camera found in a loaded .glb file.
 
 [source code](src/demo/kotlin/DemoCamera01.kt)
 
+### DemoDSL01
+
+
+
+![DemoDSL01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoDSL01Kt.png)
+
+[source code](src/demo/kotlin/DemoDSL01.kt)
+
+### DemoDSL02
+
+
+
+![DemoDSL02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoDSL02Kt.png)
+
+[source code](src/demo/kotlin/DemoDSL02.kt)
+
 ### DemoIrrProbe01
 
 Advanced lighting demonstration featuring irradiance probes, a dynamic node animated via code,
