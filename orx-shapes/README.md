@@ -930,16 +930,28 @@ the star with a grid of circles: testing whether various Vector2 coordinates are
 
 [source code](src/jvmDemo/kotlin/primitives/DemoRegularStar02.kt)
 
-### primitives/DemoRoundedRectangle
+### primitives/DemoRoundedRectangle01
 
 Demonstrates the use of `RoundedRectangle()` to create a rectangle in which the corners
 are rounded by the provided `radius`
 
 The radius is animated between 0.0 and 40.0 using the cosine of the current time in seconds.
 
-![primitives-DemoRoundedRectangleKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRoundedRectangleKt.png)
+![primitives-DemoRoundedRectangle01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRoundedRectangle01Kt.png)
 
-[source code](src/jvmDemo/kotlin/primitives/DemoRoundedRectangle.kt)
+[source code](src/jvmDemo/kotlin/primitives/DemoRoundedRectangle01.kt)
+
+### primitives/DemoRoundedRectangle02
+
+Demonstrates the use of `RoundedRectangle()` to create a rectangle in which the corners
+are rounded by four changing `radii`
+
+The radii are animated between 0.0 and 100.0 using the cosine of the current time in seconds
+and the corner index, demonstrating that corners can have differing radii.
+
+![primitives-DemoRoundedRectangle02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRoundedRectangle02Kt.png)
+
+[source code](src/jvmDemo/kotlin/primitives/DemoRoundedRectangle02.kt)
 
 ### primitives/DemoSplit01
 
