@@ -78,6 +78,7 @@ To make use of these extensions clone the [OPENRNDR template](https://github.com
 | [`orx-gui`](orx-jvm/orx-gui/) | Automatic UI (sliders, buttons, etc.) generated from annotated classes and properties. Uses `orx-panel` and `orx-parameters`. |
 | [`orx-keyframer`](orx-jvm/orx-keyframer/) | Create animated timelines by specifying properties and times in keyframes, then play it back at any speed (even backwards) automatically interpolating properties. Save, load, use mathematical expressions and callbacks. Powerful and highly reusable. |
 | [`orx-kinect-v1`](orx-jvm/orx-kinect-v1/) | Support for the Kinect V1 RGB and depth cameras. |
+| [`orx-kotlin-parser`](orx-jvm/orx-kotlin-parser/) | Tools for parsing .kt (Kotlin) files and processing the nodes found in their source code. |
 | [`orx-midi`](orx-jvm/orx-midi/) | MIDI support for keyboards and controllers. Send and receive note and control change events. Bind inputs to variables. |
 | [`orx-minim`](orx-jvm/orx-minim/) | Simplifies working with the Minim sound library. Provides sound synthesis and analysis. |
 | [`orx-olive`](orx-jvm/orx-olive/) | Provides live coding functionality: updates a running OPENRNDR program when you save your changes. |
