@@ -5,7 +5,7 @@ import org.antlr.v4.runtime.tree.Tree
 import org.antlr.v4.runtime.tree.Trees
 
 object TreeUtils {
-    /** Platform dependent end-of-line marker  */
+    /** Platform-dependent end-of-line marker  */
     val Eol = System.lineSeparator()
 
     /** The literal indent char(s) used for pretty-printing  */
@@ -22,13 +22,13 @@ object TreeUtils {
     }
 
     private fun process(t: Tree, ruleNames: List<String>): String {
-        if (t.getChildCount() == 0) return Utils.escapeWhitespace(Trees.getNodeText(t, ruleNames), false)
+        if (t.childCount == 0) return Utils.escapeWhitespace(Trees.getNodeText(t, ruleNames), false)
         val sb = StringBuilder()
         sb.append(lead(level))
         level++
         val s: String = Utils.escapeWhitespace(Trees.getNodeText(t, ruleNames), false)
         sb.append("$s ")
-        for (i in 0 until t.getChildCount()) {
+        for (i in 0 until t.childCount) {
             sb.append(process(t.getChild(i), ruleNames))
         }
         level--

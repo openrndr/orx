@@ -17,7 +17,8 @@ import kotlin.jvm.JvmRecord
  * @property angle1 The ending angle of the arc, in degrees.
  */
 @JvmRecord
-data class Arc(val center: Vector2, val radius: Double, val angle0: Double, val angle1: Double) : LinearType<Arc>, GeometricPrimitive2D {
+data class Arc(val center: Vector2, val radius: Double, val angle0: Double, val angle1: Double) : LinearType<Arc>,
+    GeometricPrimitive2D {
     /**
      * Calculates the position of a point along the arc at a specified parameter `t`.
      * The parameter `t` interpolates between the starting and ending angles of the arc.
@@ -31,7 +32,12 @@ data class Arc(val center: Vector2, val radius: Double, val angle0: Double, val 
         return Polar(angle, radius).cartesian + center
     }
 
-    fun conjugate() = Arc(center, radius, angle1-360.0, angle0)
+    /**
+     * Returns the conjugate of this arc, which traces the complementary portion of the circle
+     * starting where this arc ends and ending where this arc starts.
+     * Together, an arc and its conjugate form a full circle.
+     */
+    fun conjugate() = Arc(center, radius, angle1 - 360.0, angle0)
 
     /**
      * A computed property that provides a [ShapeContour] representation of the arc.

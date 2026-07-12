@@ -10,7 +10,7 @@ import org.openrndr.extra.shapes.primitives.Arc
  *
  * The `contour` property of the arc is used for rendering.
  *
- * The start, mid and end points of the arc are queried using it's `position()` method
+ * The start, mid, and end points of the arc are queried using it's `position()` method
  * to draw small circles at those locations.
  *
  */
@@ -23,6 +23,7 @@ fun main() = application {
         extend {
             val a = Arc(drawer.bounds.center, 100.0, 0.0 + seconds * 36.0, -180.0 + seconds * 36.0)
             drawer.clear(ColorRGBa.PINK)
+
             drawer.contour(a.contour)
             drawer.circle(a.position(0.0), 5.0)
             drawer.circle(a.position(0.5), 5.0)

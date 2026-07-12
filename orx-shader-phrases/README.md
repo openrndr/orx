@@ -13,7 +13,7 @@ We can use the `preprocessShader()` function to resolve `#pragma import` stateme
     val preprocessedSource = preprocessShader(originalSource)
 ```
 
-Alternatively loading and preprocessing can be combined in a single function call.
+Alternatively, loading and preprocessing can be combined in a single function call.
 
 ```kotlin
     val preprocessedSource = preprocessShaderFromUrl(resourceUrl("/some-shader.frag"))
@@ -29,8 +29,8 @@ import org.openrndr.extra.shaderphrases.ShaderPhraseBook
 import org.openrndr.extra.shaderphrases.preprocessShader
 
 // 1. Define GLSL functions to reuse in multiple files or programs.
-// Typically these will be larger blocks of code.
-// Note that the Kotlin variable name do not matter, but the used GLSL function name must match the #pragma import.
+// Typically, these will be larger blocks of code.
+// Note that the Kotlin variable names do not matter, but the used GLSL function name must match the #pragma import.
 class ColorShaderPhrases : ShaderPhraseBook("colors") {
     val fRed = ShaderPhrase(
         "vec3 red() { return vec3(1.0, 0.0, 0.0); }"

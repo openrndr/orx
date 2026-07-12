@@ -14,6 +14,5 @@ dependencies {
     demoImplementation(project(":orx-shapes"))
     demoImplementation(project(":orx-svg"))
     demoImplementation(sharedLibs.slf4j.simple)
-    demoImplementation(openrndr.ffmpeg)
     demoImplementation(openrndr.bundles.video)
 }

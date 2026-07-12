@@ -66,7 +66,6 @@ class Olive<P : Program>(val resources: Resources? = null, private var scriptMod
    //     watcher?.triggerChange()
     }
 
-    class ScriptWatcher
 
 
 
@@ -178,9 +177,7 @@ class Olive<P : Program>(val resources: Resources? = null, private var scriptMod
                         @Suppress("UNCHECKED_CAST")
                         func(program as P)
                         scriptLoaded.trigger(ScriptLoadedEvent(scriptFile))
-                        Unit
                     }
-                    Unit
                 } catch (e: Throwable) {
                     e.printStackTrace()
                 }
@@ -191,7 +188,7 @@ class Olive<P : Program>(val resources: Resources? = null, private var scriptMod
 
         if (resources != null) {
             val srcPath = "src/main/resources"
-            var src = File(srcPath)
+            val src = File(srcPath)
 
             resources.watch(src) { file ->
                 val dest = "build/resources/main"
