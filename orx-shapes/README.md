@@ -652,7 +652,7 @@ per second, resulting in an animated effect.
 
 The `contour` property of the arc is used for rendering.
 
-The start, mid and end points of the arc are queried using it's `position()` method
+The start, mid, and end points of the arc are queried using it's `position()` method
 to draw small circles at those locations.
 
 
@@ -952,6 +952,19 @@ and the corner index, demonstrating that corners can have differing radii.
 ![primitives-DemoRoundedRectangle02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRoundedRectangle02Kt.png)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoRoundedRectangle02.kt)
+
+### primitives/DemoSector01
+
+Demonstrates creating and animating `Sector` shapes (pie/pizza slices) that form
+a complete circle.
+
+Uses simplex noise to generate smoothly varying random values that control each sector's size.
+The sector sizes continuously change while always adding up to 360 degrees (a full circle).
+The entire composition slowly rotates over time.
+
+![primitives-DemoSector01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoSector01Kt.png)
+
+[source code](src/jvmDemo/kotlin/primitives/DemoSector01.kt)
 
 ### primitives/DemoSplit01
 
