@@ -11,6 +11,7 @@ tasks.generateGrammarSource {
 dependencies {
     antlr(libs.antlr.core)
     implementation(libs.antlr.runtime)
+    demoRuntimeOnly(sharedLibs.slf4j.simple)
 }
 
 tasks.getByName("compileDemoKotlin").dependsOn("generateDemoGrammarSource")

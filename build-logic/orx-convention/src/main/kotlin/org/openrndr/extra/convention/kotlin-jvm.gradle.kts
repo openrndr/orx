@@ -36,9 +36,11 @@ val main: SourceSet by project.sourceSets.getting
 
 @Suppress("UNUSED_VARIABLE")
 val demo: SourceSet by project.sourceSets.creating {
+    // avoid generating screenshots in these projects
     val skipDemos = setOf(
         "openrndr-demos",
         "orx-axidraw",
+        "orx-kotlin-parser",
         "orx-midi",
         "orx-minim",
         "orx-realsense2",
