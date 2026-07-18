@@ -10,6 +10,7 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.jvm.JvmRecord
+import kotlin.math.absoluteValue
 
 /**
  * Represents a 2D coordinate or position in a Cartesian space.
@@ -291,7 +292,7 @@ class TextWriter(val drawerRef: Drawer?) {
         require(style.verticalAlign == null) { "Not allowed to use newLine() with verticalAlign set" }
 
         cursor.x = box.corner.x
-        cursor.y += (drawStyle.fontMap?.leading ?: 0.0) + style.leading
+        cursor.y += ((drawStyle?.fontMap?.height?:0.0) + (drawStyle?.fontMap?.leading ?: 0.0)) + style.leading
     }
 
     /**
@@ -459,7 +460,7 @@ class TextWriter(val drawerRef: Drawer?) {
 
             val localCursor = Cursor(cursor)
 
-            val verticalSpace = style.leading + font.leading
+            val verticalSpace = style.leading + font.ascenderLength.absoluteValue + font.height + font.leading
 
             val textTokens = mutableListOf<TextToken>()
 
