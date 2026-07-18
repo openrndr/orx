@@ -23,8 +23,8 @@ fun main() = application {
     }
     program {
         val face =
-            loadFace("https://github.com/IBM/plex/raw/master/packages/plex-mono/fonts/complete/otf/IBMPlexMono-Bold.otf")
-        val shapes = shapesFromText(face, "SUCH\nVECTOR\nSUCH\nTEXT", 150.0)
+            loadFace("https://github.com/IBM/plex/raw/master/packages/plex-mono/fonts/complete/otf/IBMPlexMono-Bold.otf", 150.0, 2.0)
+        val shapes = shapesFromText(face, "SUCH\nVECTOR\nSUCH\nTEXT")
 
         val bounds = shapes.bounds
         extend(Camera2D())
