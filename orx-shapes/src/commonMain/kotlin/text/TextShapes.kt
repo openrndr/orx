@@ -1,7 +1,6 @@
 package org.openrndr.extra.shapes.text
 
 import org.openrndr.draw.font.Face
-import org.openrndr.draw.font.fontHeightScaler
 import org.openrndr.math.Vector2
 import org.openrndr.math.transforms.buildTransform
 import org.openrndr.shape.Shape
