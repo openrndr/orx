@@ -2,7 +2,6 @@ package org.openrndr.panel
 
 import org.openrndr.Program
 import org.openrndr.draw.FontImageMap
-import org.openrndr.draw.font.fontEmScaler
 import org.openrndr.draw.loadFont
 import org.openrndr.panel.style.LinearDimension
 import org.openrndr.panel.style.StyleSheet

@@ -1,7 +1,6 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.TextSettingMode
-import org.openrndr.draw.font.fontEmScaler
 import org.openrndr.draw.isolated
 import org.openrndr.draw.loadFont
 import org.openrndr.extra.textwriter.writer
