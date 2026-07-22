@@ -206,6 +206,34 @@ data class FCurve(val segments: List<Segment2D>) {
     }
 
     /**
+     * Creates a function to sample the FCurve in a looping manner across its defined duration.
+     *
+     * @param normalized Specifies whether the input time values should be normalized to the range [0, 1]. If `true`,
+     *                   the provided time will be scaled to the duration of the FCurve. If `false`, the input time is taken
+     *                   as-is but wrapped within the FCurve's duration.
+     * @return A lambda function that takes a `Double` representing the time and returns a `Double` evaluated from the FCurve,
+     *         ensuring the sampling respects the looping behavior.
+     */
+    fun loopSampler(normalized: Boolean = false): (Double) -> Double {
+        var cachedSegment: Segment2D? = null
+        if (!normalized) {
+            val d = duration
+            return { t ->
+                val r = valueWithSegment(t.mod(d), cachedSegment)
+                cachedSegment = r.second
+                r.first
+            }
+        } else {
+            val d = duration
+            return { t ->
+                val r = valueWithSegment(t.mod(1.0) * d, cachedSegment)
+                cachedSegment = r.second
+                r.first
+            }
+        }
+    }
+
+    /**
      * The duration of the FCurve, calculated as the difference between its start and end points.
      * Returns 0.0 if the FCurve has no segments.
      */
