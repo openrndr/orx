@@ -229,6 +229,20 @@ time as a vertical line.
 
 [source code](src/jvmDemo/kotlin/DemoFCurve02.kt)
 
+### DemoFCurve03
+
+Shows how to use `loopSampler()` to repeatedly sample an `fcurve` in a loop.
+
+Changing `normalized` has no visible effect in this demo because the
+curve duration is exactly 1.0, so normalized time and seconds are equivalent.
+
+The demo visualizes the sampled curve in two ways: as an animated circle
+and as a static contour.
+
+![DemoFCurve03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoFCurve03Kt.png)
+
+[source code](src/jvmDemo/kotlin/DemoFCurve03.kt)
+
 ### DemoFCurveSheet01
 
 A more advanced `FCurve` example creating 6 curves with various
