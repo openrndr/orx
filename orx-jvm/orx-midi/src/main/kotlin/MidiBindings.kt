@@ -379,3 +379,41 @@ fun Program.bindMidiControl(
         }
     }
 }
+
+/**
+ * Bind MIDI pitch bend to [Double] property
+ * @param property the [KMutableProperty0] to bind to
+ * @param transceiver the midi device to bind to
+ * @param channel the midi channel to use
+ * @since 0.5.0
+ */
+@JvmName("bindMidiPitchBendDouble")
+fun Program.bindMidiPitchBend(
+    property: KMutableProperty0<Double>,
+    transceiver: MidiTransceiver,
+    channel: Int
+)  {
+    val anno = property.findAnnotations(DoubleParameter::class).firstOrNull()
+
+    val low = anno?.low ?: 0.0
+    val high = anno?.high ?: 1.0
+    transceiver.pitchBend.listen {
+        if (it.eventType == MidiEventType.PITCH_BEND && it.channel == channel) {
+            val value = it.pitchBend.toDouble().map(-8192.0, 8191.0, low, high, clamp = true)
+            property.set(value)
+        }
+    }
+    launch {
+        var propertyValue = property.get()
+        while (true) {
+            val candidateValue = property.get()
+            if (candidateValue != propertyValue) {
+                propertyValue = candidateValue
+                val value = propertyValue.map(low, high, -8192.0, 8191.0, clamp = true).toInt()
+                transceiver.pitchBend(channel, value)
+            }
+            yield()
+        }
+    }
+}
+

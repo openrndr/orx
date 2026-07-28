@@ -168,9 +168,10 @@ class MidiTransceiver(program: Program, val receiverDevice: MidiDevice?, val tra
             // was verified to give the same results as the Linux
             // `midisnoop` program while using an `Alesis Vortex
             // Wireless 2` device. This MIDI device does not provide a
-            // full range 14 bit pitch-bend resolution though, so
+            // full range 14-bit pitch-bend resolution, though, so
             // a different device is needed to confirm the pitch bend
             // values slide as expected from -8192 to +8191.
+            // A different range of 0 to 16383 is sometimes described.
             MidiEventType.PITCH_BEND -> pitchBend.trigger(
                 MidiEvent.pitchBend(
                     channel,
