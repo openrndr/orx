@@ -67,3 +67,13 @@ so they can be visually compared.
 ![DemoPShape04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-processing/images/DemoPShape04Kt.png)
 
 [source code](src/demo/kotlin/DemoPShape04.kt)
+
+### DemoPShape06
+
+Demonstrates that a `Shape` can be converted to a
+`PShape` and back to a `Shape` while maintaining
+its looks.
+
+![DemoPShape06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-processing/images/DemoPShape06Kt.png)
+
+[source code](src/demo/kotlin/DemoPShape06.kt)
