@@ -169,7 +169,6 @@ fun PShape.pathToShapeContours(): List<ShapeContour> {
         var segments = mutableListOf<Segment2D>()
         var vertexIndex = 0
         var vertex: Vector2? = null
-
         for (i in 0 until vertexCodeCount) {
             val code = vertexCodes[i]
             when (code) {
@@ -198,10 +197,10 @@ fun PShape.pathToShapeContours(): List<ShapeContour> {
                 }
 
                 PShape.BREAK -> {
-                    segments.add(Segment2D(vertex ?: error("no vertex set"), segments.first().start))
+                    //segments.add(Segment2D(vertex ?: error("no vertex set"), segments.first().start))
                     result.add(ShapeContour(segments, closed = isClosed))
                     segments = mutableListOf()
-                    vertex = getVertex(vertexIndex).toVector2()
+                    vertex = null // getVertex(vertexIndex).toVector2()
                 }
 
                 else -> error("unsupported code $code")
