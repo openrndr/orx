@@ -5,6 +5,7 @@ import org.openrndr.math.IntVector2
 import org.openrndr.shape.Shape
 import processing.core.PApplet
 import processing.core.PShape
+import kotlin.system.exitProcess
 
 private const val winWidth = 320
 private const val winHeight = 640
@@ -157,6 +158,10 @@ class P5 : PApplet() {
  * Processing program time to initialize and run.
  */
 fun main() = application {
+    // skip this demo on CI
+    if (System.getProperty("takeScreenshot") == "true") {
+        exitProcess(0)
+    }
     configure {
         width = winWidth
         height = winHeight
@@ -172,10 +177,6 @@ fun main() = application {
         extend {
             if (frameCount == 5) {
                 shapes.addAll(p5.pShapes.map { it.toShape() })
-            }
-            // Quit after 30 frames on CI
-            if (System.getProperty("takeScreenshot") == "true" && frameCount == 30) {
-                p5.exit()
             }
             drawer.clear(ColorRGBa.PINK)
             drawer.fill = ColorRGBa.WHITE
