@@ -72,7 +72,7 @@ class RS2FrameEvent(private val frame: rs2_frame, val frameWidth: Int, val frame
     }
 
     fun copyTo(target : ColorBuffer) {
-        target.write(frameData)
+        target.writeBuffer(frameData)
     }
 }
 
