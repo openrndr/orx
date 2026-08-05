@@ -27,7 +27,7 @@ fun ImageFlow.toColorBuffer(): ColorBuffer {
     }
 
     (bb as Buffer).rewind()
-    cb.write(bb)
+    cb.writeBuffer(bb)
     cb.flipV = true
     return cb
 }

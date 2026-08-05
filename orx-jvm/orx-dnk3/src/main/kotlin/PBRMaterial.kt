@@ -24,7 +24,7 @@ private val noise128 by lazy {
         }
     }
     buffer.rewind()
-    cb.write(buffer)
+    cb.writeBuffer(buffer)
     cb.generateMipmaps()
     cb.filter(MinifyingFilter.LINEAR_MIPMAP_LINEAR, MagnifyingFilter.LINEAR)
     cb.wrapU = WrapMode.REPEAT

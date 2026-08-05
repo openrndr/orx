@@ -231,7 +231,7 @@ class Kinect1 : Kinect, Extension {
             // working on rendering thread
             private val frameReceiverJob: Job = program.launch {
                 bytesFlow.collect { bytes ->
-                    rawBuffer.write(bytes)
+                    rawBuffer.writeBuffer(bytes)
                     depthMappers.mapper?.apply(rawBuffer, processedFrameBuffer)
                     onFrameReceived(mutableCurrentFrame)
                 }
