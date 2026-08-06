@@ -21,10 +21,24 @@ jobs:
           path: ./orx
 
       - name: Checkout OPENRNDR repository
+        run: |
+          BRANCH_NAME=${{ github.head_ref || github.ref_name }}
+          echo "Checking for branch $BRANCH_NAME in openrndr/openrndr"
+          if git ls-remote --exit-code --heads https://github.com/openrndr/openrndr.git "$BRANCH_NAME" > /dev/null; then
+            echo "Branch $BRANCH_NAME found in openrndr/openrndr"
+            echo "OPENRNDR_BRANCH=$BRANCH_NAME" >> $GITHUB_ENV
+          else
+            echo "Branch $BRANCH_NAME not found in openrndr/openrndr, falling back to master"
+            echo "OPENRNDR_BRANCH=master" >> $GITHUB_ENV
+          fi
+        working-directory: .
+
+      - name: Checkout OPENRNDR
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
           repository: openrndr/openrndr
+          ref: ${{ env.OPENRNDR_BRANCH }}
           path: ./openrndr
 
       - name: Test glxinfo
