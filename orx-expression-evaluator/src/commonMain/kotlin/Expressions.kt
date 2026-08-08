@@ -352,6 +352,7 @@ internal class ExpressionListener(
                             "min" -> { x -> x.minOrNull()!! }
                             "max" -> { x -> x.maxOrNull()!! }
                             "sum" -> { x -> x.sum() }
+                            "length" -> { x -> Vector4(x[0], x[1], x[2], x[3]).length }
                             else -> functions.functions4[name]?.let {
                                 { x: DoubleArray ->
                                     it.invoke(

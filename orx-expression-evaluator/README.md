@@ -9,7 +9,14 @@ val expression = "x + y"
 val constants = mapOf("x" to 1.0, "y" to 2.0)
 evaluateExpression(expression, constants)
 ```
+## Built-in expression constants
+
+* `PI`
+
 ## Built-in expression functions
+
+Nullary functions:
+* `random()`, in [0.0, 1.0] range
 
 Unary functions:
  * `abs(x)`
@@ -19,11 +26,12 @@ Unary functions:
  * `ceil(x)`
  * `cos(x)`
  * `degrees(x)`
- * `exps(x)`
+ * `exp(x)`
  * `floor(x)`
  * `radians(x)`
  * `round(x)`
  * `saturate(x)`, clamp x to [0.0, 1.0]
+ * `sin(x)`
  * `sqrt(x)`
  * `tan(x)`
 
@@ -32,6 +40,7 @@ Binary functions:
  * `length(x, y)`, the Euclidean length of the vector (x,y)
  * `max(x, y)`,
  * `min(x, y)`,
+ * `mod(x, y)`,
  * `pow(x, n)`
  * `random(x, y)`, return a random number in [x, y)
  
