@@ -2,6 +2,7 @@ package org.openrndr.extra.shapes.rectify
 
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
+import org.openrndr.math.YPolarity
 import org.openrndr.shape.ShapeContour
 import kotlin.math.floor
 
@@ -24,12 +25,12 @@ class RectifiedContour(contour: ShapeContour, distanceTolerance: Double = 0.5, l
         }
     }
 
-    fun pose(t: Double): Matrix44 {
+    fun pose(t: Double, polarity: YPolarity = (originalPath as ShapeContour).polarity): Matrix44 {
         originalPath as ShapeContour
         return if (originalPath.empty) {
             Matrix44.IDENTITY
         } else {
-            originalPath.pose(rectify(safe(t)))
+            originalPath.pose(rectify(safe(t)), polarity)
         }
     }
 

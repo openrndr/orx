@@ -15,7 +15,9 @@ kotlin {
 
         val jvmDemo by getting {
             dependencies {
+                implementation(openrndr.ffmpeg)
                 implementation(project(":orx-text-on-contour"))
+                implementation(project(":orx-camera"))
             }
         }
     }
