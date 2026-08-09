@@ -11,8 +11,12 @@ kotlin {
             implementation(project(":orx-shapes"))
         }
 
-        jvmDemo.dependencies {
-            implementation(project(":orx-text-on-contour"))
+        val jvmDemo by getting {
+            dependencies {
+                implementation(openrndr.ffmpeg)
+                implementation(project(":orx-text-on-contour"))
+                implementation(project(":orx-camera"))
+            }
         }
     }
 }

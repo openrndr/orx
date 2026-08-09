@@ -21,7 +21,7 @@ fun main() = application {
             drawer.fontMap = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 32.0)
             val c = Circle(drawer.bounds.center, 200.0).contour.rectified()
             drawer.textOnContour("The wheels of the bus go round and round.", c)
-            drawer.textOnContour("The wheels of the bus go round and round.", c, c.contour.length / 2.0)
+            //drawer.textOnContour("The wheels of the bus go round and round.", c, c.contour.length / 2.0)
         }
     }
 }
