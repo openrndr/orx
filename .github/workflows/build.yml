@@ -1,7 +1,5 @@
 name: Build
-on:
-  # Trigger the workflow on any pull request
-  pull_request:
+on: [push, pull_request]
 
 concurrency:
   group: ${{ github.ref }}
