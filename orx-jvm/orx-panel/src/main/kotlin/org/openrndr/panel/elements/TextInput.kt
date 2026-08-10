@@ -3,6 +3,7 @@ package org.openrndr.panel.elements
 import org.openrndr.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
+import org.openrndr.draw.isolated
 import org.openrndr.events.Event
 import org.openrndr.extra.textwriter.Cursor
 import org.openrndr.extra.textwriter.writer
@@ -13,6 +14,7 @@ import org.openrndr.panel.style.borderColor
 import org.openrndr.panel.style.color
 import org.openrndr.panel.style.effectiveBackground
 import org.openrndr.shape.Rectangle
+import org.openrndr.shape.bounds
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.reflect.KMutableProperty0
@@ -27,14 +29,16 @@ class TextInput : Element(ElementType("text-input")) {
         set(value) {
             if (ivalue != value) {
                 ivalue = value
-                inputIndex = value.length - 1
+                selectionEnd = value.lastIndex
+                selectionStart = selectionEnd
                 requestRedraw()
             }
         }
         get() = ivalue
 
 
-    private var inputIndex = value.length - 1
+    private var selectionStart = value.lastIndex
+    private var selectionEnd = value.lastIndex
 
     class ValueChangedEvent(val source: TextInput, val oldValue: String, val newValue: String)
     class Events : AutoCloseable {
@@ -47,51 +51,96 @@ class TextInput : Element(ElementType("text-input")) {
 
     val events = Events()
 
+    // Used for jumping to the previous or next word in the text input
+    private fun nextCharTypeDiffers(direction: Int): Boolean {
+        val a = selectionEnd + if (direction < 0) 1 else 0
+        val b = a + direction
+        return a !in 0..value.lastIndex ||
+                b !in 0..value.lastIndex ||
+                value[a].isLetterOrDigit() != value[b].isLetterOrDigit()
+    }
+
+    // Updates inputIndex. direction 1 is right, -1 is left
+    private fun moveSelectionEnd(direction: Int, useWordBoundary: Boolean = false) {
+        do {
+            selectionEnd = (selectionEnd + direction).coerceIn(-1, value.lastIndex)
+        } while (useWordBoundary && !nextCharTypeDiffers(direction))
+    }
+
+    private fun String.dropRange(fromIndex: Int, toIndex: Int) = this.filterIndexed { i, _ ->
+        i !in fromIndex..toIndex
+    }
+
+    private fun deleteChars(direction: Int) {
+        if (value.isNotEmpty()) {
+            val oldValue = value
+
+            if (selectionStart == selectionEnd) {
+                selectionStart = (selectionEnd + direction).coerceIn(-1, value.lastIndex)
+            }
+
+            if (selectionStart > selectionEnd) {
+                selectionStart = selectionEnd.also { selectionEnd = selectionStart }
+            }
+
+            val a = (min(selectionStart, selectionEnd) + 1).coerceIn(0, value.lastIndex)
+            val b = (max(selectionStart, selectionEnd)).coerceIn(0, value.lastIndex)
+
+            ivalue = value.dropRange(a, b)
+            selectionEnd = selectionStart
+            events.valueChanged.trigger(ValueChangedEvent(this, oldValue, value))
+        }
+    }
+
     init {
         keyboard.pressed.listen {
             if (KeyModifier.CTRL in it.modifiers || KeyModifier.SUPER in it.modifiers) {
-                if (it.name == "v") {
-                    val oldValue = value
-                    (root() as Body).controlManager?.program?.clipboard?.contents?.let {
-                        ivalue += it
+                when (it.name) {
+                    "v" -> {
+                        // Paste
+                        val oldValue = value
+                        (root() as Body).controlManager?.program?.clipboard?.contents?.let {
+                            ivalue += it
+                        }
+                        events.valueChanged.trigger(ValueChangedEvent(this, oldValue, value))
+                        it.cancelPropagation()
                     }
-                    events.valueChanged.trigger(ValueChangedEvent(this, oldValue, value))
-                    it.cancelPropagation()
+
+                    "a" -> {
+                        // Select all
+                        selectionStart = -1
+                        selectionEnd = value.lastIndex
+                    }
                 }
             }
+
             when (it.key) {
-                KEY_HOME -> inputIndex = -1
-                KEY_END -> inputIndex = value.length - 1
-                KEY_ARROW_LEFT -> inputIndex = max(-1, inputIndex - 1)
-                KEY_ARROW_RIGHT -> inputIndex = min(value.length - 1, inputIndex + 1)
-
-                KEY_DELETE -> {
-                    if (value.isNotEmpty()) {
-                        val oldValue = value
-
-                        if (inputIndex == -1) {
-                            ivalue = value.drop(1)
-                        } else if (inputIndex < value.length - 1) {
-                            ivalue = value.take(inputIndex + 1) + value.drop(inputIndex + 2)
-                        }
-                        inputIndex = min(inputIndex, value.length - 1)
-                        events.valueChanged.trigger(ValueChangedEvent(this, oldValue, value))
-                    }
+                KEY_HOME -> {
+                    selectionEnd = -1
+                    if (KeyModifier.SHIFT !in it.modifiers) selectionStart = selectionEnd
                 }
 
-                KEY_BACKSPACE -> {
-                    if (value.isNotEmpty()) {
-                        val oldValue = value
-
-                        if (inputIndex == value.length - 1) {
-                            ivalue = value.dropLast(1)
-                        } else if (inputIndex > -1) {
-                            ivalue = value.take(inputIndex) + value.drop(inputIndex + 1)
-                        }
-                        inputIndex = max(-1, inputIndex - 1)
-                        events.valueChanged.trigger(ValueChangedEvent(this, oldValue, value))
-                    }
+                KEY_END -> {
+                    selectionEnd = value.length - 1
+                    if (KeyModifier.SHIFT !in it.modifiers) selectionStart = selectionEnd
                 }
+
+                KEY_ARROW_LEFT -> {
+                    moveSelectionEnd(
+                        -1, KeyModifier.CTRL in it.modifiers || KeyModifier.SUPER in it.modifiers
+                    )
+                    if (KeyModifier.SHIFT !in it.modifiers) selectionStart = selectionEnd
+                }
+
+                KEY_ARROW_RIGHT -> {
+                    moveSelectionEnd(
+                        1, KeyModifier.CTRL in it.modifiers || KeyModifier.SUPER in it.modifiers
+                    )
+                    if (KeyModifier.SHIFT !in it.modifiers) selectionStart = selectionEnd
+                }
+
+                KEY_DELETE -> deleteChars(1)
+                KEY_BACKSPACE -> deleteChars(-1)
             }
             requestRedraw()
             it.cancelPropagation()
@@ -100,8 +149,10 @@ class TextInput : Element(ElementType("text-input")) {
         keyboard.character.listen {
             it.cancelPropagation()
             val oldValue = value
-            ivalue = value.take(inputIndex + 1) + it.character.toString() + value.drop(inputIndex + 1)
-            inputIndex++
+            if (selectionStart != selectionEnd) deleteChars(0)
+            ivalue = value.take(selectionEnd + 1) + it.character.toString() + value.drop(selectionEnd + 1)
+            selectionEnd++
+            selectionStart = selectionEnd
             events.valueChanged.trigger(ValueChangedEvent(this, oldValue, value))
             requestRedraw()
         }
@@ -124,35 +175,46 @@ class TextInput : Element(ElementType("text-input")) {
             val font = it.font(computedStyle)
             val textHeight = font.ascenderLength
             val yOffset = ((layout.screenHeight / 2) + textHeight / 2.0 - 2.0).round(0)
+            val xOffset = layout.contentBoundsAtOrigin.x
+            var caretX: Double? = null
+            val isInputActive = ElementPseudoClass("active") in pseudoClasses
 
             //drawer.rectangle(layout.contentBoundsAtOrigin)
-
             drawer.drawStyle.clip = layout.contentBounds
             drawer.fontMap = font
             drawer.fill = ((computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE)
-
-            val xOffset = layout.contentBoundsAtOrigin.x
-            var caretX: Double? = null
+            var selectionArea: Rectangle? = null
             writer(drawer) {
                 cursor = Cursor(xOffset, yOffset)
                 text(value, visible = false)
                 glyphRectangles = glyphOutput.rectangles
 
                 var scroll = 2.0
-                if (ElementPseudoClass("active") in pseudoClasses) {
+                if (isInputActive) {
                     caretX = if (glyphRectangles.isNotEmpty()) {
-                        if (inputIndex == glyphRectangles.lastIndex)
+                        if (selectionEnd == glyphRectangles.lastIndex)
                             glyphRectangles.last().second.position(1.0, 0.0).x
                         else
-                            glyphRectangles[inputIndex + 1].second.position(0.0, 0.0).x
+                            glyphRectangles[selectionEnd + 1].second.position(0.0, 0.0).x
                     } else xOffset
                     // Calculate scroll value when the caret is outside the text box
                     val layoutMaxX = layout.contentBounds.position(1.0, 0.0).x
                     val rightPadding = textWidth("m") * 2
-                    if (caretX > layoutMaxX - rightPadding) {
-                        scroll = layoutMaxX - rightPadding - caretX
-                    }
+                    scroll = (layoutMaxX - rightPadding - caretX).coerceAtMost(2.0)
                     caretX += scroll
+                }
+
+                if (selectionStart != selectionEnd) {
+                    val a = min(selectionStart, selectionEnd) + 1
+                    val b = max(selectionStart, selectionEnd) + 1
+                    val selectionBounds = glyphRectangles.subList(a, b).map { it.second }.bounds
+                    val y = yOffset - font.descenderLength
+                    drawer.isolated {
+                        stroke = null
+                        fill = ColorRGBa.BLACK
+                        translate(scroll, 0.0)
+                        rectangle(selectionBounds.x, y, selectionBounds.width, -textHeight)
+                    }
                 }
 
                 cursor = Cursor(xOffset + scroll, yOffset)
