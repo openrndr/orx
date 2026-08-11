@@ -165,10 +165,17 @@ class TextInput : Element(ElementType("text-input")) {
         }
     }
 
+    /*
+    Possible improvements:
+    - Add "dirty" flag: Recalculate scroll, caretX, selectionRect only when the selection changes.
+    - Improve `scroll` calculation: only scroll if the caret is getting out of the visible area.
+    - Recalculate `glyphRectangles` only when `value` changes.
+    - Mouse click sets `selectionStart` and `selectionEnd`, double click selects the word under the mouse cursor,
+      mouse drag selects characters.
+    */
     override fun draw(drawer: Drawer) {
         drawer.fill = computedStyle.effectiveBackground
         drawer.stroke = ((computedStyle.borderColor as? Color.RGBa)?.color ?: ColorRGBa.TRANSPARENT)
-
         drawer.rectangle(layout.boundsAtOrigin)
 
         (root() as? Body)?.controlManager?.fontManager?.let {
@@ -176,6 +183,7 @@ class TextInput : Element(ElementType("text-input")) {
             val textHeight = font.ascenderLength
             val yOffset = ((layout.screenHeight / 2) + textHeight / 2.0 - 2.0).round(0)
             val xOffset = layout.contentBoundsAtOrigin.x
+            val baseY = yOffset - font.descenderLength
             var caretX: Double? = null
             val isInputActive = ElementPseudoClass("active") in pseudoClasses
 
@@ -183,7 +191,7 @@ class TextInput : Element(ElementType("text-input")) {
             drawer.drawStyle.clip = layout.contentBounds
             drawer.fontMap = font
             drawer.fill = ((computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE)
-            var selectionArea: Rectangle? = null
+
             writer(drawer) {
                 cursor = Cursor(xOffset, yOffset)
                 text(value, visible = false)
@@ -208,12 +216,11 @@ class TextInput : Element(ElementType("text-input")) {
                     val a = min(selectionStart, selectionEnd) + 1
                     val b = max(selectionStart, selectionEnd) + 1
                     val selectionBounds = glyphRectangles.subList(a, b).map { it.second }.bounds
-                    val y = yOffset - font.descenderLength
+                    val selectionRect = Rectangle(selectionBounds.x + scroll, baseY, selectionBounds.width, -textHeight)
                     drawer.isolated {
                         stroke = null
                         fill = ColorRGBa.BLACK
-                        translate(scroll, 0.0)
-                        rectangle(selectionBounds.x, y, selectionBounds.width, -textHeight)
+                        rectangle(selectionRect)
                     }
                 }
 
@@ -222,9 +229,8 @@ class TextInput : Element(ElementType("text-input")) {
             }
 
             caretX?.let { x ->
-                val y = yOffset - font.descenderLength
                 drawer.stroke = ColorRGBa.WHITE
-                drawer.lineSegment(x, y, x, y - textHeight)
+                drawer.lineSegment(x, baseY, x, baseY - textHeight)
             }
 
             drawer.drawStyle.clip = null
