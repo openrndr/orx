@@ -24,6 +24,7 @@ class TextInput : Element(ElementType("text-input")) {
 
     private var glyphRectangles: MutableList<Pair<Rectangle, Rectangle>> = mutableListOf()
     private var ivalue: String = ""
+    private var scroll = 2.0
 
     var value: String
         set(value) {
@@ -51,7 +52,12 @@ class TextInput : Element(ElementType("text-input")) {
 
     val events = Events()
 
-    // Used for jumping to the previous or next word in the text input
+    /**
+     * Compares [selectionEnd] with the next character towards [direction] using `isLetterOrDigit()`
+     *
+     * @param direction +1 for right, -1 for left
+     * @return `true` if the next character is of a different type
+     */
     private fun nextCharTypeDiffers(direction: Int): Boolean {
         val a = selectionEnd + if (direction < 0) 1 else 0
         val b = a + direction
@@ -60,17 +66,34 @@ class TextInput : Element(ElementType("text-input")) {
                 value[a].isLetterOrDigit() != value[b].isLetterOrDigit()
     }
 
-    // Updates inputIndex. direction 1 is right, -1 is left
+    /**
+     * Move [selectionEnd] towards [direction]
+     *
+     * @param direction +1 for right, -1 for left
+     * @param useWordBoundary if true it keeps advancing towards `direction` until the next character is of a different type
+     */
     private fun moveSelectionEnd(direction: Int, useWordBoundary: Boolean = false) {
         do {
             selectionEnd = (selectionEnd + direction).coerceIn(-1, value.lastIndex)
         } while (useWordBoundary && !nextCharTypeDiffers(direction))
     }
 
+    /**
+     * Removes a range of characters on the receiver [String]
+     *
+     * @param fromIndex first character to remove
+     * @param toIndex last character to remove
+     */
     private fun String.dropRange(fromIndex: Int, toIndex: Int) = this.filterIndexed { i, _ ->
         i !in fromIndex..toIndex
     }
 
+    /**
+     * Deletes characters from [ivalue] based on [selectionStart], [selectionEnd] and [direction]
+     *
+     * @param direction Use +1 when reacting to the KEY_DELETE, -1 with KEY_BACKSPACE and 0 when typing
+     * over an existing selection.
+     */
     private fun deleteChars(direction: Int) {
         if (value.isNotEmpty()) {
             val oldValue = value
@@ -168,7 +191,6 @@ class TextInput : Element(ElementType("text-input")) {
     /*
     Possible improvements:
     - Add "dirty" flag: Recalculate scroll, caretX, selectionRect only when the selection changes.
-    - Improve `scroll` calculation: only scroll if the caret is getting out of the visible area.
     - Recalculate `glyphRectangles` only when `value` changes.
     - Mouse click sets `selectionStart` and `selectionEnd`, double click selects the word under the mouse cursor,
       mouse drag selects characters.
@@ -178,8 +200,8 @@ class TextInput : Element(ElementType("text-input")) {
         drawer.stroke = ((computedStyle.borderColor as? Color.RGBa)?.color ?: ColorRGBa.TRANSPARENT)
         drawer.rectangle(layout.boundsAtOrigin)
 
-        (root() as? Body)?.controlManager?.fontManager?.let {
-            val font = it.font(computedStyle)
+        (root() as? Body)?.controlManager?.fontManager?.let { fm ->
+            val font = fm.font(computedStyle)
             val textHeight = font.ascenderLength
             val yOffset = ((layout.screenHeight / 2) + textHeight / 2.0 - 2.0).round(0)
             val xOffset = layout.contentBoundsAtOrigin.x
@@ -197,19 +219,26 @@ class TextInput : Element(ElementType("text-input")) {
                 text(value, visible = false)
                 glyphRectangles = glyphOutput.rectangles
 
-                var scroll = 2.0
                 if (isInputActive) {
-                    caretX = if (glyphRectangles.isNotEmpty()) {
-                        if (selectionEnd == glyphRectangles.lastIndex)
-                            glyphRectangles.last().second.position(1.0, 0.0).x
+                    if (glyphRectangles.isEmpty()) {
+                        caretX = xOffset
+                        scroll = 2.0
+                    } else {
+                        caretX = if (selectionEnd == glyphRectangles.lastIndex)
+                            glyphRectangles.last().second.let { it.x + it.width }
                         else
-                            glyphRectangles[selectionEnd + 1].second.position(0.0, 0.0).x
-                    } else xOffset
-                    // Calculate scroll value when the caret is outside the text box
-                    val layoutMaxX = layout.contentBounds.position(1.0, 0.0).x
-                    val rightPadding = textWidth("m") * 2
-                    scroll = (layoutMaxX - rightPadding - caretX).coerceAtMost(2.0)
-                    caretX += scroll
+                            glyphRectangles[selectionEnd + 1].second.x
+
+                        val padding = textWidth("m") * 1.0
+
+                        // Update scroll only when necessary
+                        if(caretX + scroll > layout.boundsAtOrigin.width - padding) {
+                            scroll = layout.boundsAtOrigin.width - padding - caretX
+                        }
+                        if(caretX + scroll < layout.boundsAtOrigin.x + padding) {
+                            scroll = (layout.boundsAtOrigin.x + padding + caretX).coerceAtMost(2.0)
+                        }
+                    }
                 }
 
                 if (selectionStart != selectionEnd) {
@@ -230,7 +259,7 @@ class TextInput : Element(ElementType("text-input")) {
 
             caretX?.let { x ->
                 drawer.stroke = ColorRGBa.WHITE
-                drawer.lineSegment(x, baseY, x, baseY - textHeight)
+                drawer.lineSegment(x + scroll, baseY, x + scroll, baseY - textHeight)
             }
 
             drawer.drawStyle.clip = null
