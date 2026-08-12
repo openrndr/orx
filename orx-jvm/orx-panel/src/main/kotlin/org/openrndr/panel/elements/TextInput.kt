@@ -15,6 +15,7 @@ import org.openrndr.panel.style.color
 import org.openrndr.panel.style.effectiveBackground
 import org.openrndr.shape.Rectangle
 import org.openrndr.shape.bounds
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.reflect.KMutableProperty0
@@ -24,7 +25,10 @@ class TextInput : Element(ElementType("text-input")) {
 
     private var glyphRectangles: MutableList<Pair<Rectangle, Rectangle>> = mutableListOf()
     private var ivalue: String = ""
-    private var scroll = 2.0
+    private var scroll = 0.0
+    private var firstDraw = true
+
+    override val handlesDoubleClick = true
 
     var value: String
         set(value) {
@@ -58,12 +62,20 @@ class TextInput : Element(ElementType("text-input")) {
      * @param direction +1 for right, -1 for left
      * @return `true` if the next character is of a different type
      */
-    private fun nextCharTypeDiffers(direction: Int): Boolean {
-        val a = selectionEnd + if (direction < 0) 1 else 0
+    private fun nextCharTypeDiffers(pos: Int, direction: Int): Boolean {
+        val a = pos + if (direction < 0) 1 else 0
         val b = a + direction
         return a !in 0..value.lastIndex ||
                 b !in 0..value.lastIndex ||
                 value[a].isLetterOrDigit() != value[b].isLetterOrDigit()
+    }
+
+    /**
+     * Returns true if the [pos] + [direction] character is a letter or digit
+     */
+    private fun nextCharIsLetterOrDigit(pos: Int, direction: Int): Boolean {
+        val a = pos + direction + if (direction < 0) 1 else 0
+        return a in 0..value.lastIndex && value[a].isLetterOrDigit()
     }
 
     /**
@@ -75,7 +87,7 @@ class TextInput : Element(ElementType("text-input")) {
     private fun moveSelectionEnd(direction: Int, useWordBoundary: Boolean = false) {
         do {
             selectionEnd = (selectionEnd + direction).coerceIn(-1, value.lastIndex)
-        } while (useWordBoundary && !nextCharTypeDiffers(direction))
+        } while (useWordBoundary && !nextCharTypeDiffers(selectionEnd, direction))
     }
 
     /**
@@ -180,21 +192,36 @@ class TextInput : Element(ElementType("text-input")) {
             requestRedraw()
         }
 
-        mouse.pressed.listen {
-            it.cancelPropagation()
+        mouse.pressed.listen { ev ->
+            ev.cancelPropagation()
         }
-        mouse.clicked.listen {
-            it.cancelPropagation()
+
+        mouse.clicked.listen { ev ->
+            if (glyphRectangles.isNotEmpty()) {
+                val boundaries = glyphRectangles.map { it.second.x } +
+                        glyphRectangles.last().second.let { it.x + it.width }
+
+                selectionStart = (boundaries.withIndex().minBy {
+                    abs(ev.position.x - layout.screenX - it.value)
+                }.index - 1).coerceAtLeast(-1)
+                selectionEnd = selectionStart
+                requestRedraw()
+            }
+            ev.cancelPropagation()
+        }
+
+        mouse.doubleClicked.listen { ev ->
+            do {
+                selectionStart = (selectionStart - 1).coerceAtLeast(-1)
+            } while (nextCharIsLetterOrDigit(selectionStart, -1))
+            do {
+                selectionEnd = (selectionEnd + 1).coerceAtMost(value.lastIndex)
+            } while (nextCharIsLetterOrDigit(selectionEnd, 1))
+            requestRedraw()
+            ev.cancelPropagation()
         }
     }
 
-    /*
-    Possible improvements:
-    - Add "dirty" flag: Recalculate scroll, caretX, selectionRect only when the selection changes.
-    - Recalculate `glyphRectangles` only when `value` changes.
-    - Mouse click sets `selectionStart` and `selectionEnd`, double click selects the word under the mouse cursor,
-      mouse drag selects characters.
-    */
     override fun draw(drawer: Drawer) {
         drawer.fill = computedStyle.effectiveBackground
         drawer.stroke = ((computedStyle.borderColor as? Color.RGBa)?.color ?: ColorRGBa.TRANSPARENT)
@@ -215,11 +242,11 @@ class TextInput : Element(ElementType("text-input")) {
             drawer.fill = ((computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE)
 
             writer(drawer) {
-                cursor = Cursor(xOffset, yOffset)
-                text(value, visible = false)
-                glyphRectangles = glyphOutput.rectangles
+                if (isInputActive || firstDraw) {
+                    cursor = Cursor(xOffset, yOffset)
+                    text(value, visible = false)
+                    glyphRectangles = glyphOutput.rectangles
 
-                if (isInputActive) {
                     if (glyphRectangles.isEmpty()) {
                         caretX = xOffset
                         scroll = 2.0
@@ -232,24 +259,29 @@ class TextInput : Element(ElementType("text-input")) {
                         val padding = textWidth("m") * 1.0
 
                         // Update scroll only when necessary
-                        if(caretX + scroll > layout.boundsAtOrigin.width - padding) {
+                        if (caretX + scroll > layout.boundsAtOrigin.width - padding) {
                             scroll = layout.boundsAtOrigin.width - padding - caretX
                         }
-                        if(caretX + scroll < layout.boundsAtOrigin.x + padding) {
+                        if (caretX + scroll < layout.boundsAtOrigin.x + padding) {
                             scroll = (layout.boundsAtOrigin.x + padding + caretX).coerceAtMost(2.0)
                         }
                     }
-                }
 
-                if (selectionStart != selectionEnd) {
-                    val a = min(selectionStart, selectionEnd) + 1
-                    val b = max(selectionStart, selectionEnd) + 1
-                    val selectionBounds = glyphRectangles.subList(a, b).map { it.second }.bounds
-                    val selectionRect = Rectangle(selectionBounds.x + scroll, baseY, selectionBounds.width, -textHeight)
-                    drawer.isolated {
-                        stroke = null
-                        fill = ColorRGBa.BLACK
-                        rectangle(selectionRect)
+                    if (selectionStart != selectionEnd) {
+                        val a = min(selectionStart, selectionEnd) + 1
+                        val b = max(selectionStart, selectionEnd) + 1
+                        val selectionBounds = glyphRectangles.subList(a, b).map { it.second }.bounds
+                        val selectionRect =
+                            Rectangle(selectionBounds.x + scroll, baseY, selectionBounds.width, -textHeight)
+                        drawer.isolated {
+                            stroke = null
+                            fill = computedStyle.effectiveBackground?.let {
+                                if(it.alpha > 0.0) {
+                                    ColorRGBa(1.0 - it.r, 1.0 - it.g, 1.0 - it.b, it.alpha)
+                                } else ColorRGBa.BLACK
+                            } ?: ColorRGBa.BLACK
+                            rectangle(selectionRect)
+                        }
                     }
                 }
 
@@ -257,12 +289,18 @@ class TextInput : Element(ElementType("text-input")) {
                 text(value)
             }
 
-            caretX?.let { x ->
-                drawer.stroke = ColorRGBa.WHITE
-                drawer.lineSegment(x + scroll, baseY, x + scroll, baseY - textHeight)
+            if (isInputActive) {
+                caretX?.let { x ->
+                    drawer.stroke = ColorRGBa.WHITE
+                    drawer.lineSegment(x + scroll, baseY, x + scroll, baseY - textHeight)
+                }
             }
 
             drawer.drawStyle.clip = null
+        }
+        if (firstDraw) {
+            firstDraw = false
+            requestRedraw()
         }
     }
 
