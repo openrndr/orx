@@ -506,7 +506,7 @@ class ControlManagerBuilder(val controlManager: ControlManager) {
     fun styleSheets(styleSheets: List<StyleSheet>) {
         val document = controlManager.existingOrNewDocumentWithDefaultStyleSheets()
         controlManager.document = document
-        controlManager.layouter?.styleSheets?.addAll(styleSheets)
+        document.styleSheets.addAll(styleSheets)
     }
 
     @OptIn(ExperimentalContracts::class)
@@ -553,7 +553,9 @@ fun Program.controlManager(
     val cm = ControlManager()
     cm.program = this
     cm.fontManager.register("default", resourceUrl("/fonts/Roboto-Regular.ttf"))
-    cm.layouter?.styleSheets?.addAll(defaultStyles.flatMap { it.flatten() })
+    val document = Document()
+    document.styleSheets.addAll(defaultStyles)
+    cm.document = document
     val cmb = ControlManagerBuilder(cm)
     cmb.builder()
     return cm
