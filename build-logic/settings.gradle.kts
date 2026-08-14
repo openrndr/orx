@@ -11,13 +11,14 @@ dependencyResolutionManagement {
     }
 
     versionCatalogs {
+        val versionsTomlFile = settingsDir.parentFile.resolve("gradle/libs.versions.toml")
         create("libs") {
-            from(files("../gradle/libs.versions.toml"))
+            from(files(versionsTomlFile))
         }
 
         // We use a regex to get the openrndr version from the primary catalog as there is no public Gradle API to parse catalogs.
         val regEx = Regex("^openrndr[ ]*=[ ]*(?:\\{[ ]*require[ ]*=[ ]*)?\"(.*)\"[ ]*(?:\\})?", RegexOption.MULTILINE)
-        val openrndrVersion = regEx.find(File(rootDir,"../gradle/libs.versions.toml").readText())?.groupValues?.get(1) ?: error("can't find openrndr version")
+        val openrndrVersion = regEx.find(versionsTomlFile.readText())?.groupValues?.get(1) ?: error("can't find openrndr version")
         create("sharedLibs") {
             from("org.openrndr:openrndr-dependency-catalog:$openrndrVersion")
         }
