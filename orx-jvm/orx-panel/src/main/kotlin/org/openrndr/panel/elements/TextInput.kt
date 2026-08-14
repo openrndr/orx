@@ -271,12 +271,14 @@ class TextInput : Element(ElementType("text-input")) {
                         val a = min(selectionStart, selectionEnd) + 1
                         val b = max(selectionStart, selectionEnd) + 1
                         val selectionBounds = glyphRectangles.subList(a, b).map { it.second }.bounds
-                        val selectionRect =
-                            Rectangle(selectionBounds.x + scroll, baseY, selectionBounds.width, -textHeight)
+                        val selectionRect = Rectangle(
+                            selectionBounds.x + scroll, baseY,
+                            selectionBounds.width, font.descenderLength - font.ascenderLength
+                        )
                         drawer.isolated {
                             stroke = null
                             fill = computedStyle.effectiveBackground?.let {
-                                if(it.alpha > 0.0) {
+                                if (it.alpha > 0.0) {
                                     ColorRGBa(1.0 - it.r, 1.0 - it.g, 1.0 - it.b, it.alpha)
                                 } else ColorRGBa.BLACK
                             } ?: ColorRGBa.BLACK
