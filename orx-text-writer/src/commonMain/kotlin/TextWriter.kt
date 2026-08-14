@@ -24,12 +24,13 @@ import kotlin.jvm.JvmRecord
  * @constructor Initializes the cursor using specific `x` and `y` coordinates.
  * @param x The horizontal position. Default is 0.0.
  * @param y The vertical position. Default is 0.0.
- *
- * @constructor Initializes the cursor using an existing `Cursor` instance.
- * Copies the `x` and `y` values from the provided cursor.
- * @param cursor The `Cursor` instance to duplicate.
  */
 class Cursor(var x: Double = 0.0, var y: Double = 0.0) {
+    /**
+     * @constructor Initializes the cursor using an existing `Cursor` instance.
+     * Copies the `x` and `y` values from the provided cursor.
+     * @param cursor The `Cursor` instance to duplicate.
+     */
     constructor(cursor: Cursor) : this(cursor.x, cursor.y)
 }
 

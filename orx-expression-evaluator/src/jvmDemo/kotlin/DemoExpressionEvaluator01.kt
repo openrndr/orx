@@ -1,8 +1,11 @@
 import org.openrndr.application
+import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.expressions.evaluateExpression
 import org.openrndr.extra.gui.GUI
-import org.openrndr.extra.gui.addTo
+import org.openrndr.extra.gui.GUIAppearance
+import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.TextParameter
+import org.openrndr.panel.style.defaultStyles
 
 /**
  * Demonstrates the use of `evaluateExpression` to process strings containing mathematical expressions.
@@ -16,10 +19,13 @@ import org.openrndr.extra.parameters.TextParameter
  */
 fun main() = application {
     program {
-        val gui = GUI()
+        val gui = GUI(
+            GUIAppearance(ColorRGBa.PINK.shade(0.2).opacify(0.9)),
+            defaultStyles(controlFontSize = 18.0)
+        )
         gui.compartmentsCollapsedByDefault = false
 
-        val settings = object {
+        val settings = @Description("Settings") object {
             @TextParameter("x expression", order = 10)
             var xExpression = "cos(t) * 50.0 + width / 2.0"
 
@@ -28,7 +34,8 @@ fun main() = application {
 
             @TextParameter("radius expression", order = 30)
             var radiusExpression = "cos(t) * 50.0 + 50.0"
-        }.addTo(gui)
+        }
+        gui.add(settings)
 
         extend(gui)
         extend {

@@ -18,24 +18,28 @@ fun defaultStyles(
     styleSheet(has type "textfield") {
         width = 100.percent
         height = length { auto }
-        margins(length { 5 })
+        marginBottom = (controlFontSize * 5.0 / defaultFontSize).px
+        marginTop = (controlFontSize * 5.0 / defaultFontSize).px
+        marginLeft = length { 5 }
+        marginRight = length { 5 }
         borderWidth = length { 1.0 }
 
         child(has type "label") {
             width = 100.percent
-            height = length { 20.0 }
-
+            height = length { controlFontSize * 20.0 / defaultFontSize }
             color = color { controlTextColor }
+            fontSize = controlFontSize.px
             and(has state "active") {
                 color = color { controlActiveColor }
             }
         }
         child(has type "text-input") {
             width = 100.percent
-            height = 24.px
+            height = (controlFontSize * 24.0 / defaultFontSize).px
             borderColor = color { controlTextColor }
             paddingLeft = length { 5 }
             paddingRight = length { 5 }
+            fontSize = controlFontSize.px
             and(has state "active") {
                 color = color { controlActiveColor }
             }
@@ -44,12 +48,12 @@ fun defaultStyles(
 
     styleSheet(has type "dropdown-button") {
         width = LinearDimension.Auto
-        height = 32.px
+        height = (controlFontSize * 32.0 / defaultFontSize).px
         background = Color.RGBa(controlBackground)
         marginLeft = 5.px
         marginRight = 5.px
-        marginTop = 5.px
-        marginBottom = 5.px
+        marginTop = (controlFontSize * 5.0 / defaultFontSize).px
+        marginBottom = (controlFontSize * 5.0 / defaultFontSize).px
         fontSize = controlFontSize.px
 
         and(has state "hover") {
@@ -68,12 +72,12 @@ fun defaultStyles(
 
     styleSheet(has type "colorpicker-button") {
         width = 100.px
-        height = 32.px
+        height = (controlFontSize * 32.0 / defaultFontSize).px
         background = Color.RGBa(controlBackground)
         marginLeft = 5.px
         marginRight = 5.px
-        marginTop = 5.px
-        marginBottom = 5.px
+        marginTop = (controlFontSize * 5.0 / defaultFontSize).px
+        marginBottom = (controlFontSize * 5.0 / defaultFontSize).px
         fontSize = controlFontSize.px
 
         and(has state "hover") {
@@ -87,8 +91,8 @@ fun defaultStyles(
         background = Color.RGBa(controlBackground)
         marginLeft = 5.px
         marginRight = 5.px
-        marginTop = 5.px
-        marginBottom = 5.px
+        marginTop = (controlFontSize * 5.0 / defaultFontSize).px
+        marginBottom = (controlFontSize * 5.0 / defaultFontSize).px
     },
 
     styleSheet(has type "body") {
@@ -97,10 +101,10 @@ fun defaultStyles(
     },
 
     styleSheet(has type "slider") {
-        height = 32.px
+        height = (controlFontSize * 32.0 / defaultFontSize).px
         width = 100.percent
-        marginTop = 5.px
-        marginBottom = 5.px
+        marginTop = (controlFontSize * 5.0 / defaultFontSize).px
+        marginBottom = (controlFontSize * 5.0 / defaultFontSize).px
         marginLeft = 5.px
         marginRight = 5.px
         fontSize = controlFontSize.px
@@ -114,8 +118,8 @@ fun defaultStyles(
     styleSheet(has type "envelope-editor") {
         height = 60.px
         width = 100.percent
-        marginTop = 5.px
-        marginBottom = 15.px
+        marginTop = (controlFontSize * 5.0 / defaultFontSize).px
+        marginBottom = (controlFontSize * 15.0 / defaultFontSize).px
         marginLeft = 5.px
         marginRight = 5.px
     },
@@ -130,8 +134,8 @@ fun defaultStyles(
     ) {
         height = 60.px
         width = 100.percent
-        marginTop = 5.px
-        marginBottom = 15.px
+        marginTop = (controlFontSize * 5.0 / defaultFontSize).px
+        marginBottom = (controlFontSize * 15.0 / defaultFontSize).px
         marginLeft = 5.px
         marginRight = 5.px
         color = controlTextColor
@@ -144,8 +148,8 @@ fun defaultStyles(
     styleSheet(has type "colorpicker") {
         height = 160.px
         width = 100.percent
-        marginTop = 5.px
-        marginBottom = 15.px
+        marginTop = (controlFontSize * 5.0 / defaultFontSize).px
+        marginBottom = (controlFontSize * 15.0 / defaultFontSize).px
         marginLeft = 5.px
         marginRight = 5.px
 
@@ -158,7 +162,6 @@ fun defaultStyles(
         and(has state "active") {
             cursor = Cursor.Text
         }
-
     },
 
     styleSheet(has type "xy-pad") {
@@ -168,8 +171,8 @@ fun defaultStyles(
         height = 175.px
         marginLeft = 5.px
         marginRight = 5.px
-        marginTop = 5.px
-        marginBottom = 25.px
+        marginTop = (controlFontSize * 5.0 / defaultFontSize).px
+        marginBottom = (controlFontSize * 25.0 / defaultFontSize).px
         fontFamily = "default"
         color = controlTextColor
 
@@ -184,10 +187,10 @@ fun defaultStyles(
     },
 
     styleSheet(has type "toggle") {
-        height = 32.px
+        height = (controlFontSize * 32.0 / defaultFontSize).px
         width = LinearDimension.Auto
-        marginTop = 5.px
-        marginBottom = 5.px
+        marginTop = (controlFontSize * 5.0 / defaultFontSize).px
+        marginBottom = (controlFontSize * 5.0 / defaultFontSize).px
         marginLeft = 5.px
         marginRight = 5.px
         fontSize = controlFontSize.px
@@ -232,7 +235,7 @@ fun defaultStyles(
         display = Display.BLOCK
         background = color { controlBackground }
         width = LinearDimension.Auto
-        height = 32.px
+        height = (controlFontSize * 32.0 / defaultFontSize).px
         paddingTop = 5.px
         paddingBottom = 5.px
         paddingLeft = 5.px
@@ -243,8 +246,8 @@ fun defaultStyles(
 
         marginLeft = 5.px
         marginRight = 5.px
-        marginTop = 5.px
-        marginBottom = 5.px
+        marginTop = (controlFontSize * 5.0 / defaultFontSize).px
+        marginBottom = (controlFontSize * 5.0 / defaultFontSize).px
         fontSize = controlFontSize.px
 
         and(has state "active") {

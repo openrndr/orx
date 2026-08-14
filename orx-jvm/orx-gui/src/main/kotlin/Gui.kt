@@ -273,7 +273,7 @@ open class GUI(
             }
 
             styleSheet(has class_ "toolbar") {
-                this.height = length { 42 }
+                this.height = LinearDimension.Auto
                 this.width = length { 100.percent }
                 this.display = Display.FLEX
                 this.flexDirection = FlexDirection.Row

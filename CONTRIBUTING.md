@@ -153,7 +153,7 @@ folder, then executed. A PNG screenshot is saved and pushed into the [`media`](h
 together with a link to the source code that produced the screenshot.
 
 This serves two purposes: it can be useful for the user to see images of what the ORX can produce,
-while it can also be usefu to detect breaking changes (in case the demo fails to run, or produces a
+while it can also be useful to detect breaking changes (in case the demo fails to run or produces a
 blank image).
 
 ## Gradle tasks
