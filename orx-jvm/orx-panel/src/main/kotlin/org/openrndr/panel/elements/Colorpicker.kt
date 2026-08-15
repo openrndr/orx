@@ -35,10 +35,12 @@ class Colorpicker : Element {
     var color: ColorRGBa = ColorRGBa.WHITE
         set(value) {
             if (field != value) {
+                val oldColor = field
                 field = value
                 saturation = color.toHSVa().s
                 dirtyColorMap = true
                 draw.dirty = true
+                events.colorChanged.trigger(ColorChangedEvent(this, oldColor, value))
             }
         }
 
@@ -65,11 +67,8 @@ class Colorpicker : Element {
 
         val h = colorMap!!.height - 1.0
         dy = h - dy
-        val oldColor = color
         val hsv = ColorHSVa(360.0 / layout.screenWidth * dx, saturation, dy / h)
         color = hsv.toRGBa()
-        draw.dirty = true
-        events.colorChanged.trigger(ColorChangedEvent(this, oldColor, color))
         e.cancelPropagation()
     }
 
@@ -85,7 +84,6 @@ class Colorpicker : Element {
                 it.cancelPropagation()
                 pick(it)
                 requestRedraw()
-                //}
             }
         }
 
