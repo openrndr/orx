@@ -38,7 +38,7 @@ class TextNode(var text: String) : Element(ElementType("text")) {
             val fontUrl = (root() as? Body)?.controlManager?.fontManager?.resolve(style.fontFamily) ?: "broken"
             val fontSize = (style.fontSize as? LinearDimension.PX)?.value ?: 14.0
             val program = (root() as? Body)?.controlManager?.program ?: error("no program")
-            val fontMap = program.loadFont(fontUrl, fontSize)
+            val fontMap = program.loadFont(fontUrl, fontSize, fontScaler = ::fontEmScaler)
 
             val writer = TextWriter(null)
 
