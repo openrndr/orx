@@ -234,6 +234,15 @@ but also the widget colors and font size.
 
 [source code](src/demo/kotlin/DemoAppearance02.kt)
 
+### DemoCompartments01
+
+Demonstrates using collapsible compartments in the GUI. Each one has a description
+visible (and clickable) in the panel.
+
+![DemoCompartments01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoCompartments01Kt.png)
+
+[source code](src/demo/kotlin/DemoCompartments01.kt)
+
 ### DemoCustom01
 
 
