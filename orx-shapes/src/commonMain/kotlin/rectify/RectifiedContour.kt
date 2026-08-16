@@ -17,6 +17,11 @@ class RectifiedContour(contour: ShapeContour, distanceTolerance: Double = 0.5, l
         }
     }
 
+    fun nearest(query: Vector2): Double {
+        return inverseRectify(contour.nearest(query).contourT)
+    }
+
+
     fun normal(t: Double): Vector2 {
         return if (originalPath.empty) {
             Vector2.UNIT_Y
