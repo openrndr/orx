@@ -45,6 +45,7 @@ kotlin {
                 implementation(project(":orx-noise"))
                 implementation(project(":orx-mesh-generators"))
                 implementation(project(":orx-fx"))
+                implementation(openrndr.ffmpeg)
             }
         }
     }

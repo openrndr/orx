@@ -18,5 +18,11 @@ kotlin {
                 implementation(project(":orx-shapes"))
             }
         }
+
+        getByName("jvmTest") {
+            dependencies {
+                implementation(project(":testing"))
+            }
+        }
     }
 }
