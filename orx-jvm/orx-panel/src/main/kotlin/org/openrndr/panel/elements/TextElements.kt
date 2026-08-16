@@ -45,7 +45,7 @@ class TextNode(var text: String) : Element(ElementType("text")) {
             writer.box = Rectangle(
                 layout.screenX,
                 layout.screenY,
-                layout.screenWidth - (computedStyle.effectivePaddingLeft + computedStyle.effectivePaddingRight),
+                layout.screenWidth,
                 1E9
             )
 
