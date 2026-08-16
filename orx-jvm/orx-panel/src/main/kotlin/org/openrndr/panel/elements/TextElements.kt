@@ -3,6 +3,7 @@ package org.openrndr.panel.elements
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
+import org.openrndr.draw.font.fontEmScaler
 import org.openrndr.draw.loadFont
 import org.openrndr.events.Event
 import org.openrndr.extra.textwriter.TextWriter
@@ -25,8 +26,9 @@ class TextNode(var text: String) : Element(ElementType("text")) {
             val writer = TextWriter(drawer)
 
             writer.ellipsis = null
-            writer.box =
-                layout.boundsAtOriginPadded(computedStyle)// Rectangle(Vector2(layout.screenX * 0.0, layout.screenY * 0.0), layout.screenWidth, layout.screenHeight)
+            // writer.box = Rectangle(Vector2(layout.screenX * 0.0, layout.screenY * 0.0), layout.screenWidth, layout.screenHeight)
+            writer.box = layout.boundsAtOriginPadded(computedStyle)
+
             writer.horizontalAlign = computedStyle.computedTextHorizontalAlign
             writer.verticalAlign = computedStyle.computedTextVerticalAlign
             writer.text(text)

@@ -6,8 +6,6 @@ import org.openrndr.panel.elements.Element
 import org.openrndr.panel.elements.TextNode
 import org.openrndr.panel.style.*
 import org.openrndr.shape.Rectangle
-import java.util.*
-import kotlin.comparisons.compareBy
 import kotlin.math.max
 
 private val logger = KotlinLogging.logger {}
@@ -235,9 +233,6 @@ class Layouter {
                     val columnGap = element.computedStyle.columnGap.inPixels(element.layout.screenWidth)
 
 
-
-
-
                     val columnWidths =
                         resolveGridTemplate(element.computedStyle.gridTemplateColumns, columnGap, contentBounds.width)
                     val columns = columnWidths.size
@@ -308,11 +303,15 @@ class Layouter {
                         child.layout.screenX = cellX + child.computedStyle.marginLeft.inPixels(cellWidth)
                         child.layout.screenY = cellY + child.computedStyle.marginTop.inPixels(cellWidth) - element.scrollTop
                         if (child.computedStyle.width == LinearDimension.Auto) {
-                            child.layout.screenWidth = cellWidth - child.computedStyle.marginLeft.inPixels(cellWidth) - child.computedStyle.marginRight.inPixels(cellWidth)
+                            child.layout.screenWidth = cellWidth -
+                                    child.computedStyle.marginLeft.inPixels(cellWidth) -
+                                    child.computedStyle.marginRight.inPixels(cellWidth)
                             child.layout.widthSetByParent = true
                         }
                         if (child.computedStyle.height == LinearDimension.Auto) {
-                            child.layout.screenHeight = cellHeight - child.computedStyle.marginTop.inPixels(cellWidth) - child.computedStyle.marginBottom.inPixels(cellWidth)
+                            child.layout.screenHeight = cellHeight -
+                                    child.computedStyle.marginTop.inPixels(cellWidth) -
+                                    child.computedStyle.marginBottom.inPixels(cellWidth)
                             child.layout.heightSetByParent = true
                         }
                         x += (ex - sx) + 1
@@ -439,7 +438,7 @@ class Layouter {
         }
 
         if (element is TextNode) {
-            return element.sizeHint().height + if (includeMargins) marginBottom(element) + marginTop(element) else 0.0
+            return element.sizeHint().height + if (includeMargins) (marginBottom(element) + marginTop(element)) else 0.0
         }
 
         return element.computedStyle.let {
@@ -467,8 +466,10 @@ class Layouter {
 
                     else -> throw RuntimeException("not supported")
                 }
-            } + if (includeMargins) ((it.marginTop as? LinearDimension.PX)?.value
-                ?: 0.0) + ((it.marginBottom as? LinearDimension.PX)?.value ?: 0.0) else 0.0
+            } + if (includeMargins)
+                ((it.marginTop as? LinearDimension.PX)?.value ?: 0.0) +
+                        ((it.marginBottom as? LinearDimension.PX)?.value ?: 0.0)
+            else 0.0
         }
     }
 

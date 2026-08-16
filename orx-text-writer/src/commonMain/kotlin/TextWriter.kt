@@ -172,8 +172,9 @@ class WriteStyle {
 class TextWriter(val drawerRef: Drawer?) {
     var cursor = Cursor()
     var box = Rectangle(
-        Vector2.ZERO, drawerRef?.width?.toDouble() ?: Double.POSITIVE_INFINITY, drawerRef?.height?.toDouble()
-            ?: Double.POSITIVE_INFINITY
+        Vector2.ZERO,
+        drawerRef?.width?.toDouble() ?: Double.POSITIVE_INFINITY,
+        drawerRef?.height?.toDouble() ?: Double.POSITIVE_INFINITY
     )
         set(value) {
             field = value
@@ -330,10 +331,7 @@ class TextWriter(val drawerRef: Drawer?) {
      */
     fun textWidth(text: String): Double =
         text.sumOf {
-            var char = it
-            if ((drawStyle.fontMap as FontImageMap).glyphMetrics[it] ==null) {
-                char = '�'
-            }
+            val char = if ((drawStyle.fontMap as FontImageMap).glyphMetrics[it] != null) it else '�'
             ((drawStyle.fontMap as FontImageMap).glyphMetrics[char]?.advanceWidth ?: 0.0) + style.tracking
         } - (text.count { it == ' ' } + 1) * style.tracking
 
@@ -355,7 +353,7 @@ class TextWriter(val drawerRef: Drawer?) {
     /**
      * Draw text
      * @param text the text to write, may contain newlines
-     * @param visible draw the text when set to true, when set to false only type setting is performed
+     * @param visible draw the text when set to true, otherwise perform type setting only
      * @return a list of [TextToken] instances
      */
     fun text(text: String, visible: Boolean = true): List<TextToken> {
@@ -397,7 +395,7 @@ class TextWriter(val drawerRef: Drawer?) {
             }
 
             else -> {
-                val first = renderTokens.filter { it != TextToken.END_OF_LINE }.firstOrNull() ?: return emptyList()
+                val first = renderTokens.firstOrNull { it != TextToken.END_OF_LINE } ?: return emptyList()
                 val last = renderTokens.lastOrNull() ?: return emptyList()
                 renderTokens.split().flatMap {
                     val sy = first.y - (fontMap?.ascenderLength ?: 0.0)
@@ -405,7 +403,6 @@ class TextWriter(val drawerRef: Drawer?) {
 
                     val th = ey - sy
                     it.map { it.shift(0.0, (fontMap?.height ?: 0.0) + (box.height - th) * align) }
-
                 }
             }
         }
@@ -448,7 +445,6 @@ class TextWriter(val drawerRef: Drawer?) {
 
     private fun makeTextTokens(text: String, mustFit: Boolean = false): List<TextToken> {
         drawStyle.fontMap?.let { font ->
-
             var fits = true
             font as FontImageMap
             val lines = text.split("((?<=\n)|(?=\n))".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
@@ -459,26 +455,19 @@ class TextWriter(val drawerRef: Drawer?) {
             }
 
             val localCursor = Cursor(cursor)
-
             val verticalSpace = style.leading + font.leading
-
             val textTokens = mutableListOf<TextToken>()
 
-            tokenLoop@ for (i in 0 until tokens.size) {
-                val token = tokens[i]
+            tokenLoop@ for ((i, token) in tokens.withIndex()) {
                 if (token == "\n") {
                     textTokens.add(TextToken.END_OF_LINE)
                     localCursor.x = box.corner.x
                     localCursor.y += verticalSpace
                 } else {
                     val token = token.map { if (font.glyphMetrics[it] == null) '�' else it }.joinToString("")
-                    val tokenWidth = token.sumOf {
-                        var char = it
-                        if (font.glyphMetrics[char] == null) {
-                            char = '�'
-                        }
-                        (font.glyphMetrics[char]?.advanceWidth ?: 0.0)
-                    } + style.tracking * (token.length - 1).coerceAtLeast(0)
+                    val tokenWidth = token.sumOf { font.glyphMetrics[it]?.advanceWidth ?: 0.0 } +
+                            style.tracking * (token.length - 1).coerceAtLeast(0)
+
                     if (localCursor.x == box.x || localCursor.x + tokenWidth < box.x + box.width && localCursor.y <= box.y + box.height) {
                         val textToken = TextToken(token, localCursor.x, localCursor.y, tokenWidth, style.tracking)
                         textTokens.add(textToken)
@@ -507,8 +496,8 @@ class TextWriter(val drawerRef: Drawer?) {
                             if (!mustFit && style.ellipsis != null && cursor.y <= box.y + box.height) {
                                 textTokens.add(
                                     TextToken(
-                                        style.ellipsis
-                                            ?: "", localCursor.x, localCursor.y, tokenWidth, style.tracking
+                                        style.ellipsis ?: "",
+                                        localCursor.x, localCursor.y, tokenWidth, style.tracking
                                     )
                                 )
                                 break@tokenLoop
