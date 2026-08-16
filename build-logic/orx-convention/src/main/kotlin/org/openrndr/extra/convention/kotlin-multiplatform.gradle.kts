@@ -14,7 +14,7 @@ val libs =  extensions.getByType(VersionCatalogsExtension::class.java).named("li
 val sharedLibs = extensions.getByType(VersionCatalogsExtension::class.java).named("sharedLibs")
 val openrndr = extensions.getByType(VersionCatalogsExtension::class.java).named("openrndr")
 
-val shouldPublish = project.name !in setOf("openrndr-demos")
+val shouldPublish = project.name !in setOf("openrndr-demos") || project.name.startsWith("orx-")
 
 plugins {
     kotlin("multiplatform")
