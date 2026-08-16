@@ -107,6 +107,7 @@ include(
         "orx-turtle",
         "orx-g-code",
 
-        "orx-module-catalog"
+        "orx-module-catalog",
+        "testing"
     )
 )
