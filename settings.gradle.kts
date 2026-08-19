@@ -31,6 +31,7 @@ dependencyResolutionManagement {
 include(
     listOf(
         "openrndr-demos",
+        "orx-bvh",
         "orx-jvm:orx-axidraw",
         "orx-jvm:orx-boofcv",
         "orx-camera",
@@ -49,6 +50,7 @@ include(
         "orx-fft",
         "orx-jvm:orx-file-watcher",
         "orx-parameters",
+        "orx-force-2d",
         "orx-fx",
         "orx-jvm:orx-git-archiver",
         "orx-jvm:orx-git-archiver-gradle",
