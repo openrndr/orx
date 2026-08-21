@@ -74,6 +74,7 @@ include(
         "orx-marching-squares",
         "orx-jvm:orx-olive",
         "orx-jvm:orx-osc",
+        "orx-jvm:orx-osc-query",
         "orx-palette",
         "orx-property-watchers",
         "orx-jvm:orx-panel",

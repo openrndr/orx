@@ -42,6 +42,7 @@ val demo: SourceSet by project.sourceSets.creating {
         "orx-axidraw",
         "orx-kotlin-parser",
         "orx-midi",
+        "orx-osc-query",
         "orx-minim",
         "orx-realsense2",
         "orx-runway",
