@@ -33,7 +33,7 @@ fun main() = application {
     }
     program {
         val noise = SimplexNoise3D()
-        val img = colorBuffer(width, height)
+        val img = colorBuffer(width, height, window.contentScale)
         val wav = List(21) { SinOsc() }
 
         extend {

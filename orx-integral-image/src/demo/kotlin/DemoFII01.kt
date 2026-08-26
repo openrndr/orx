@@ -15,7 +15,7 @@ fun main() = application {
     program {
         val fii = FastIntegralImage()
         val integralImage = colorBuffer(width, height, 1.0, ColorFormat.RGBa, ColorType.FLOAT32)
-        val rt = renderTarget(width, height) {
+        val rt = renderTarget(width, height, 1.0) {
             colorBuffer()
         }
         extend {

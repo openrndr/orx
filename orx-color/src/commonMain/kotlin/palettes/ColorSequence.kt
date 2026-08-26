@@ -48,7 +48,7 @@ class ColorSequence(val colors: List<Pair<Double, ConvertibleToColorRGBa>>) {
         format: ColorFormat = ColorFormat.RGBa
     ): ColorBuffer {
         val cb = colorBuffer(width, height, type = type, format = format)
-        val rt = renderTarget(width, height) {
+        val rt = renderTarget(width, height, 1.0) {
             colorBuffer(cb)
         }
 
