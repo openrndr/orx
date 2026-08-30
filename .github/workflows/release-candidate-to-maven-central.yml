@@ -15,7 +15,7 @@ jobs:
           java-version: 21
 
       - name: Build ORX
-        run: ./gradlew -Prelease.useLastTag=true build
+        run: xvfb-run ./gradlew -Prelease.useLastTag=true build
 
       - name: Decode
         run: |
