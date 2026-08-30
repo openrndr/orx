@@ -201,10 +201,7 @@ class Camera2D : Extension, ChangeEvents {
 
     override fun setup(program: Program) {
         this.program = program
-        if (!controlInitialized) {
-            setupControls(program.mouse, program.keyboard)
-        }
-        defaults()
+        setupControls(program.mouse, program.keyboard)
     }
 
     override fun beforeDraw(drawer: Drawer, program: Program) {
@@ -216,6 +213,10 @@ class Camera2D : Extension, ChangeEvents {
     override fun afterDraw(drawer: Drawer, program: Program) {
         dirty = false
         drawer.popTransforms()
+    }
+
+    override fun shutdown(program: Program) {
+        controlInitialized = false
     }
 }
 
