@@ -2,6 +2,7 @@ package org.openrndr.extra.midi
 
 import io.kotest.matchers.shouldBe
 import io.mockk.*
+import org.openrndr.Dispatcher
 import org.openrndr.Program
 import org.openrndr.extra.parameters.DoubleParameter
 import javax.sound.midi.MidiDevice
@@ -26,6 +27,7 @@ class MidiBindTest {
         every { receiverDevice.receiver } returns receiver
         every { receiver.send(capture(messageSlot), any()) } just runs
         every { transmitterDevice.transmitter } returns transmitter
+        every { program.dispatcher } returns Dispatcher()
     }
 
     val transceiver = MidiTransceiver(
@@ -35,7 +37,7 @@ class MidiBindTest {
     )
 
     @Test
-    fun `receiving a control change message should update the bound variable`() {
+    fun testReceive() {
         val settings = object {
             @DoubleParameter("radius", 0.0, 100.0)
             var radius = 0.0
