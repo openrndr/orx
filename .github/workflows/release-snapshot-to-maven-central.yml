@@ -48,7 +48,7 @@ jobs:
           EOF
 
       - name: Build ORX
-        run: ./gradlew build snapshot
+        run: xvfb-run ./gradlew build snapshot
 
       - name: Decode
         run: |
