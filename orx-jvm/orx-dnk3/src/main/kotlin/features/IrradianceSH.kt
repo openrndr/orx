@@ -72,7 +72,7 @@ private fun SceneRenderer.processIrradiance(drawer: Drawer, scene: Scene, featur
                     val position = node.worldPosition
 
                     for (side in CubemapSide.values()) {
-                        val target = renderTarget(feature.cubemapSize, feature.cubemapSize) {
+                        val target = renderTarget(feature.cubemapSize, feature.cubemapSize, 1.0) {
                             //this.colorBuffer(tempCubemap.side(side))
                             this.cubemap(tempCubemap, side)
                             this.depthBuffer(cubemapDepthBuffer)

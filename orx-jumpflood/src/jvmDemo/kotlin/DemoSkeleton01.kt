@@ -25,7 +25,7 @@ fun main() = application {
     program {
         val skeleton = Skeleton()
 
-        val input = renderTarget(width, height) {
+        val input = renderTarget(width, height, 1.0) {
             colorBuffer()
         }
         val field = input.colorBuffer(0).createEquivalent(type = ColorType.FLOAT32)

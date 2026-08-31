@@ -32,7 +32,7 @@ import org.openrndr.shape.ShapeContour
 fun main() = application {
     program {
         // Create a buffer where to draw something for boofcv
-        val rt = renderTarget(width, height) {
+        val rt = renderTarget(width, height, 1.0) {
             colorBuffer()
             depthBuffer()
         }

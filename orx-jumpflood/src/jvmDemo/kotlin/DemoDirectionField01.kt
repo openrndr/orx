@@ -30,7 +30,7 @@ fun main() = application {
         }
 
         // Needs to be FLOAT32 so we can have negative values
-        val result = colorBuffer(width, height, type = ColorType.FLOAT32)
+        val result = colorBuffer(width, height, rt.contentScale, type = ColorType.FLOAT32)
         val shader = shadeStyle {
             fragmentTransform = """
                 x_fill.rgb = vec3(x_fill.rg + 0.5, x_fill.b);
