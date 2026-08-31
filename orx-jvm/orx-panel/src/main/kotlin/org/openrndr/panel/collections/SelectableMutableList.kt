@@ -5,22 +5,50 @@ import java.util.function.Predicate
 import java.util.function.UnaryOperator
 
 /**
- * A specialized implementation of ArrayList that triggers an event whenever the list is modified.
- * This class supports observing additions, removals, and clear operations, and notifies listeners
- * via the `changed` event.
+ * A mutable list with selection capability.
+ * Similar to [ObservableArrayList] but with [selectedIndex] and [selected] properties.
+ * It triggers the [changed] event whenever the list is modified or [selectedIndex] changes.
  *
  * @param E the type of elements in this list
+ * @param elements the initial collection of elements
+ * @param selectedIndex the index of the currently selected element, or -1 if no element is selected
  */
-open class ObservableArrayList<E> : ArrayList<E>(), AutoCloseable {
+open class SelectableMutableList<E>(
+    elements: Collection<E> = emptyList(),
+    selectedIndex: Int = -1
+) : ArrayList<E>(elements), AutoCloseable {
 
-    val changed = Event<ObservableArrayList<E>>()
+    val changed = Event<SelectableMutableList<E>>()
 
-    private inline fun <T> triggerChangeEventIfNeeded(block: () -> T): T {
-        val result = block()
-        if (result !is Boolean || result) changed.trigger(this)
+    private inline fun <T> triggerChangeEventIfNeeded(f: () -> T): T {
+        val result = f()
+        _selectedIndex = _selectedIndex.coerceAtMost(lastIndex)
+        if (result !is Boolean || result)
+            changed.trigger(this)
 
         return result
     }
+    
+    private var _selectedIndex = selectedIndex
+
+    /**
+     * The index of the currently selected element.
+     * Setting this property will trigger the changed event.
+     */
+    var selectedIndex: Int
+        get() = _selectedIndex
+        set(value) {
+            if (value != _selectedIndex) {
+                _selectedIndex = value
+                changed.trigger(this)
+            }
+        }
+
+    /**
+     * The currently selected element, or null if no element is selected or the index is out of bounds.
+     */
+    val selected: E?
+        get() = if (_selectedIndex in indices) get(_selectedIndex) else null
 
     override fun add(element: E) = triggerChangeEventIfNeeded {
         super.add(element)
