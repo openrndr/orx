@@ -16,10 +16,11 @@ import org.openrndr.shape.Shape
  * @return A new Shape object containing the warped contours after applying the transformation process.
  */
 fun Shape.warp(
-    errorTolerance: Double = 0.5,
+
+    basis: RectifiedContour, warp: RectifiedContour, errorTolerance: Double = 0.5,
     maxDepth: Int = 6,
     samplesPerPiece: Int = 24,
-    basis: RectifiedContour, warp: RectifiedContour): Shape {
+): Shape {
     val rectified = shape.contours.map { it.rectified() }
     return Shape(rectified.map { it.warp(basis, warp, errorTolerance, maxDepth, samplesPerPiece) })
 }
