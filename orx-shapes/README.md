@@ -417,6 +417,136 @@ This demo shows a grid of 9 contours which are part circle and part 5-point star
 
 [source code](src/jvmDemo/kotlin/blend/DemoContourBlend02.kt)
 
+### deform/DemoDeformContour01
+
+
+
+![deform-DemoDeformContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/deform-DemoDeformContour01Kt.png)
+
+[source code](src/jvmDemo/kotlin/deform/DemoDeformContour01.kt)
+
+### deform/DemoDeformContour02
+
+
+
+![deform-DemoDeformContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/deform-DemoDeformContour02Kt.png)
+
+[source code](src/jvmDemo/kotlin/deform/DemoDeformContour02.kt)
+
+### deform/DemoDeformSegment01
+
+
+
+![deform-DemoDeformSegment01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/deform-DemoDeformSegment01Kt.png)
+
+[source code](src/jvmDemo/kotlin/deform/DemoDeformSegment01.kt)
+
+### distort/DemoConvoluteContour
+
+Creates a 1D convolution kernel that amplifies curvature-scale detail on a
+discretely sampled closed contour, using a Difference-of-Gaussians (DoG)
+band-pass filter.
+
+kernel = identity + amplification * (gaussian(sigmaNarrow) - gaussian(sigmaWide))
+
+Circularly convolving a contour's x/y coordinate sequence with this kernel
+pushes each point along the DoG "detail" signal, amplifying curvature at the
+spatial scale defined by sigmaNarrow/sigmaWide while leaving the low-frequency
+shape and position unchanged (the kernel sums to 1).
+
+@param size          Kernel length. Should be odd so it's centered on a sample;
+bumped up by one if even.
+@param sigmaNarrow   Std dev of the finer-scale Gaussian.
+@param sigmaWide     Std dev of the coarser-scale Gaussian. Should be > sigmaNarrow
+for a classic DoG band-pass shape.
+@param amplification Strength of enhancement (alpha). 0 = identity (no change),
+>0 amplifies curvature at the selected scale, <0 flattens it.
+@return DoubleArray of length `size`, centered at index size / 2.
+
+![distort-DemoConvoluteContourKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoConvoluteContourKt.png)
+
+[source code](src/jvmDemo/kotlin/distort/DemoConvoluteContour.kt)
+
+### distort/DemoDistortContour01
+
+
+
+![distort-DemoDistortContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoDistortContour01Kt.png)
+
+[source code](src/jvmDemo/kotlin/distort/DemoDistortContour01.kt)
+
+### distort/DemoDistortContour02
+
+
+
+![distort-DemoDistortContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoDistortContour02Kt.png)
+
+[source code](src/jvmDemo/kotlin/distort/DemoDistortContour02.kt)
+
+### distort/DemoDistortContour04
+
+Demonstrates distortion over the rectified (length proportional) t parameter
+
+![distort-DemoDistortContour04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoDistortContour04Kt.png)
+
+[source code](src/jvmDemo/kotlin/distort/DemoDistortContour04.kt)
+
+### distort/DemoDistortUniformContour01
+
+
+
+![distort-DemoDistortUniformContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoDistortUniformContour01Kt.png)
+
+[source code](src/jvmDemo/kotlin/distort/DemoDistortUniformContour01.kt)
+
+### distort/DemoEnvelopeShape01
+
+
+
+![distort-DemoEnvelopeShape01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoEnvelopeShape01Kt.png)
+
+[source code](src/jvmDemo/kotlin/distort/DemoEnvelopeShape01.kt)
+
+### distort/DemoWarpContour01
+
+
+
+![distort-DemoWarpContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoWarpContour01Kt.png)
+
+[source code](src/jvmDemo/kotlin/distort/DemoWarpContour01.kt)
+
+### distort/DemoWarpShape01
+
+
+
+![distort-DemoWarpShape01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoWarpShape01Kt.png)
+
+[source code](src/jvmDemo/kotlin/distort/DemoWarpShape01.kt)
+
+### fit/DemoFitContour01
+
+
+
+![fit-DemoFitContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/fit-DemoFitContour01Kt.png)
+
+[source code](src/jvmDemo/kotlin/fit/DemoFitContour01.kt)
+
+### fit/DemoFitContour02
+
+
+
+![fit-DemoFitContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/fit-DemoFitContour02Kt.png)
+
+[source code](src/jvmDemo/kotlin/fit/DemoFitContour02.kt)
+
+### fit/DemoFitContour03
+
+
+
+![fit-DemoFitContour03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/fit-DemoFitContour03Kt.png)
+
+[source code](src/jvmDemo/kotlin/fit/DemoFitContour03.kt)
+
 ### frames/DemoFrames01
 
 Demonstrates how to create a 3D path and attach cylinders to it at regular intervals with the correct orientation.
