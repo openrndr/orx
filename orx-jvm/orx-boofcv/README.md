@@ -41,6 +41,15 @@ The resulting contours are animated zooming in and out while their colors change
 
 [source code](src/demo/kotlin/DemoContours01.kt)
 
+### DemoOpticalFlow
+
+Demonstrates how to calculate the movement of pixels using an image flow algorithm.
+Not ideal for real-time purposes.
+
+![DemoOpticalFlowKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-boofcv/images/DemoOpticalFlowKt.png)
+
+[source code](src/demo/kotlin/DemoOpticalFlow.kt)
+
 ### DemoResize01
 
 Demonstrates how to scale down images using the `resizeBy` BoofCV-based
