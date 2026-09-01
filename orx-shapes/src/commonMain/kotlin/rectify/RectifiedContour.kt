@@ -2,6 +2,7 @@ package org.openrndr.extra.shapes.rectify
 
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
+import org.openrndr.math.YPolarity
 import org.openrndr.shape.ShapeContour
 import kotlin.math.floor
 
@@ -15,6 +16,11 @@ class RectifiedContour(contour: ShapeContour, distanceTolerance: Double = 0.5, l
             originalPath.segments[segment].direction(st)
         }
     }
+
+    fun nearest(query: Vector2): Double {
+        return inverseRectify(contour.nearest(query).contourT)
+    }
+
 
     fun normal(t: Double): Vector2 {
         return if (originalPath.empty) {
