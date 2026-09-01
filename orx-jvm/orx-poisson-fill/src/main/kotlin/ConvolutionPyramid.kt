@@ -65,11 +65,11 @@ internal class ConvolutionPyramid(width: Int, height: Int,
         var levelHeight = resolution.y + 2 * size
 
         for (i in 0 until depth) {
-            levelsIn.add(renderTarget(levelWidth, levelHeight) {
+            levelsIn.add(renderTarget(levelWidth, levelHeight, 1.0) {
                 colorBuffer(type = type)
             })
 
-            levelsOut.add(renderTarget(levelWidth, levelHeight) {
+            levelsOut.add(renderTarget(levelWidth, levelHeight, 1.0) {
                 colorBuffer(type = type)
             })
 

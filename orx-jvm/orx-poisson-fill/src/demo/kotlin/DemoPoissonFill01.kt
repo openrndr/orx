@@ -32,7 +32,7 @@ fun main() {
     data class ColoredMovingPoint(val color: ColorRGBa, var pos: Polar, val speed: Polar)
     application {
         program {
-            val dry = renderTarget(width, height) {
+            val dry = renderTarget(width, height, 1.0) {
                 colorBuffer(type = ColorType.FLOAT32)
             }
             val wet = colorBuffer(width, height, type = ColorType.FLOAT32)
