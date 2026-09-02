@@ -48,6 +48,9 @@ jobs:
       - name: Build main readme
         run: xvfb-run ./gradlew buildMainReadme -Popenrndr.application.backend=application-glfw
 
+      - name: Install ImageMagick
+        run: sudo apt-get update && sudo apt-get install -y imagemagick
+
       - name: Prepare media branch
         run: |
           git config --global user.email "actions@openrndr.org"
@@ -57,10 +60,12 @@ jobs:
           (git add [a-z-]*/README.md && git commit -m "add demos to README.md" && git push origin master) || true
           (git add orx-jvm/[a-z-]*/README.md && git commit -m "add orx-jvm demos to README.md" && git push origin master) || true
           git checkout --orphan media
-          git reset HEAD -- .
-          git add [a-z-]*/images/*.png
+          git reset HEAD -- .          
+          mogrify -format webp -define webp:lossless=1 [a-z-]*/images/*.png
+          mogrify -format webp -define webp:lossless=1 orx-jvm/[a-z-]*/images/*.png
+          git add [a-z-]*/images/*.webp
           cd orx-jvm
-          git add [a-z-]*/images/*.png
+          git add [a-z-]*/images/*.webp
           cd ..
           git commit -m "add auto-generated media"
           git push -f origin media

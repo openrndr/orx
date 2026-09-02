@@ -152,7 +152,7 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
                     |
                     |$description
                     |
-                    |![$demoImageBaseName](${url}images/$demoImageBaseName.png)
+                    |![$demoImageBaseName](${url}images/$demoImageBaseName.webp)
                     |
                     |[source code]($ktFilePath)
                     |
