@@ -12,6 +12,6 @@ Demo Functionality includes:
 - Rendering text along the rectified circle's contour.
 - Offsetting text positions, enabling repeated text rendering along the same contour.
 
-![DemoTextOnContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-on-contour/images/DemoTextOnContour01Kt.png)
+![DemoTextOnContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-on-contour/images/DemoTextOnContour01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoTextOnContour01.kt)

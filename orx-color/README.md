@@ -58,7 +58,7 @@ accurate spectral colormap developed by Alan Zucconi.
 It draws a varying number of vertical bands (between 16 and 48)
 filled with various hues.
 
-![colormap-DemoSpectralZucconiColormapKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoSpectralZucconiColormapKt.png)
+![colormap-DemoSpectralZucconiColormapKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoSpectralZucconiColormapKt.webp)
 
 [source code](src/jvmDemo/kotlin/colormap/DemoSpectralZucconiColormap.kt)
 
@@ -72,7 +72,7 @@ accurate spectral colormap developed by Alan Zucconi.
 It shades a full-window rectangle using its normalized `x` coordinate
 in a `ShadeStyle` to choose pixel colors.
 
-![colormap-DemoSpectralZucconiColormapPhraseKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoSpectralZucconiColormapPhraseKt.png)
+![colormap-DemoSpectralZucconiColormapPhraseKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoSpectralZucconiColormapPhraseKt.webp)
 
 [source code](src/jvmDemo/kotlin/colormap/DemoSpectralZucconiColormapPhrase.kt)
 
@@ -84,7 +84,7 @@ as red, green and blue line strips.
 
 The Vector2 points for the line strips are calculated only once when the program starts.
 
-![colormap-DemoSpectralZucconiColormapPlotKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoSpectralZucconiColormapPlotKt.png)
+![colormap-DemoSpectralZucconiColormapPlotKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoSpectralZucconiColormapPlotKt.webp)
 
 [source code](src/jvmDemo/kotlin/colormap/DemoSpectralZucconiColormapPlot.kt)
 
@@ -97,7 +97,7 @@ Turbo colormap developed by Google.
 It draws a varying number of vertical bands (between 16 and 48)
 filled with various hues.
 
-![colormap-DemoTurboColormapKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoTurboColormapKt.png)
+![colormap-DemoTurboColormapKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoTurboColormapKt.webp)
 
 [source code](src/jvmDemo/kotlin/colormap/DemoTurboColormap.kt)
 
@@ -111,7 +111,7 @@ Turbo colormap developed by Google.
 It shades a full-window rectangle using its normalized `x` coordinate
 in a `ShadeStyle` to choose pixel colors.
 
-![colormap-DemoTurboColormapPhraseKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoTurboColormapPhraseKt.png)
+![colormap-DemoTurboColormapPhraseKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoTurboColormapPhraseKt.webp)
 
 [source code](src/jvmDemo/kotlin/colormap/DemoTurboColormapPhrase.kt)
 
@@ -123,7 +123,7 @@ as red, green and blue line strips.
 
 The Vector2 points for the line strips are calculated only once when the program starts.
 
-![colormap-DemoTurboColormapPlotKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoTurboColormapPlotKt.png)
+![colormap-DemoTurboColormapPlotKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormap-DemoTurboColormapPlotKt.webp)
 
 [source code](src/jvmDemo/kotlin/colormap/DemoTurboColormapPlot.kt)
 
@@ -140,7 +140,7 @@ Functionality:
 - Applies different color matrix inversions (red, green, blue) based on the position index.
 - Fits the image into each grid cell while providing horizontal alignment adjustments.
 
-![colormatrix-DemoColorMatrix01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormatrix-DemoColorMatrix01Kt.png)
+![colormatrix-DemoColorMatrix01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormatrix-DemoColorMatrix01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/colormatrix/DemoColorMatrix01.kt)
 
@@ -157,7 +157,7 @@ Functionality:
 - Applies different color matrix inversions (red, green, blue) based on the position index.
 - Fits the image into each grid cell while providing horizontal alignment adjustments.
 
-![colormatrix-DemoColorMatrix02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormatrix-DemoColorMatrix02Kt.png)
+![colormatrix-DemoColorMatrix02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormatrix-DemoColorMatrix02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/colormatrix/DemoColorMatrix02.kt)
 
@@ -176,7 +176,7 @@ Key features:
 per cell index to create a colorful gradient effect.
 - Adjusts the positions of the images within each grid cell for aesthetic alignment.
 
-![colormatrix-DemoColorMatrix03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormatrix-DemoColorMatrix03Kt.png)
+![colormatrix-DemoColorMatrix03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormatrix-DemoColorMatrix03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/colormatrix/DemoColorMatrix03.kt)
 
@@ -195,7 +195,7 @@ channels are computed based on the index of the grid cell.
 - Displays the adjusted image in each grid cell with horizontal alignment modifications
 to position the images dynamically based on their index within the grid.
 
-![colormatrix-DemoColorMatrix04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormatrix-DemoColorMatrix04Kt.png)
+![colormatrix-DemoColorMatrix04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colormatrix-DemoColorMatrix04Kt.webp)
 
 [source code](src/jvmDemo/kotlin/colormatrix/DemoColorMatrix04.kt)
 
@@ -204,7 +204,7 @@ to position the images dynamically based on their index within the grid.
 Comparison of color lists generated by interpolating from
 `PINK` to `BLUE` in six different color spaces.
 
-![colorRange-DemoColorRange01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colorRange-DemoColorRange01Kt.png)
+![colorRange-DemoColorRange01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colorRange-DemoColorRange01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/colorRange/DemoColorRange01.kt)
 
@@ -218,7 +218,7 @@ one in the middle (0.5) and one at the end (1.0).
 The `ColorSpace.blend()` method is used to get a list with 18 interpolated `ColorRGBa` colors,
 then those colors are drawn as vertical rectangles covering the whole window.
 
-![colorRange-DemoColorRange02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colorRange-DemoColorRange02Kt.png)
+![colorRange-DemoColorRange02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colorRange-DemoColorRange02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/colorRange/DemoColorRange02.kt)
 
@@ -232,7 +232,7 @@ The window height is adjusted based on the number of interpolations to show.
 The resulting gradients differ in saturation and brightness and apparently include more
 `BLUE` or more `PINK` depending on the chosen color space.
 
-![colorRange-DemoColorRange03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colorRange-DemoColorRange03Kt.png)
+![colorRange-DemoColorRange03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colorRange-DemoColorRange03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/colorRange/DemoColorRange03.kt)
 
@@ -251,7 +251,7 @@ one of the points moves along the edges of the cube, while the other moves on th
 smaller, invisible cube.
 
 
-![colorRange-DemoColorRange04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colorRange-DemoColorRange04Kt.png)
+![colorRange-DemoColorRange04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/colorRange-DemoColorRange04Kt.webp)
 
 [source code](src/jvmDemo/kotlin/colorRange/DemoColorRange04.kt)
 
@@ -259,7 +259,7 @@ smaller, invisible cube.
 
 Demonstrates the creation of color palettes using various available methods
 
-![DemoColorPalette01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorPalette01Kt.png)
+![DemoColorPalette01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorPalette01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoColorPalette01.kt)
 
@@ -270,7 +270,7 @@ but similar brightness and saturation.
 Here we alter the brightness of each color using .shade() for
 an increased dynamic range.
 
-![DemoColorPalette02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorPalette02Kt.png)
+![DemoColorPalette02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorPalette02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoColorPalette02.kt)
 
@@ -288,7 +288,7 @@ Since the OKLCH color space is larger than the RGB space, some
 spheres would be outside the 3D box, but they are
 actually clipped to the walls.
 
-![DemoColorPlane01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorPlane01Kt.png)
+![DemoColorPlane01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorPlane01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoColorPlane01.kt)
 
@@ -311,7 +311,7 @@ Since the OKLCH color space is larger than the RGB space, some
 spheres would be outside the 3D box, but they are
 actually clipped to the walls.
 
-![DemoColorPlane02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorPlane02Kt.png)
+![DemoColorPlane02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorPlane02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoColorPlane02.kt)
 
@@ -329,7 +329,7 @@ The rendering process includes:
 - Applying a custom fragment shader with a palette-based shading style.
 - Rendering a grid of 3D spheres, each transformed and rotated to create a dynamic pattern.
 
-![DemoColorSequence01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorSequence01Kt.png)
+![DemoColorSequence01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoColorSequence01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoColorSequence01.kt)
 
@@ -355,7 +355,7 @@ saturation.
 The result is an animated effect featuring rotating, growing, and shrinking
 lines rendered with colored gradients.
 
-![DemoDeltaEKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoDeltaEKt.png)
+![DemoDeltaEKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoDeltaEKt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoDeltaE.kt)
 
@@ -375,7 +375,7 @@ In the center of the window, four colors from those collections are rendered as 
 using a random base color, a random light color, and two random dark colors.
 A random seed based in `seconds` is used for an animated effect.
 
-![DemoFettePalette01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoFettePalette01Kt.png)
+![DemoFettePalette01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoFettePalette01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoFettePalette01.kt)
 
@@ -398,7 +398,7 @@ In the center of the window, four colors from those collections are rendered as 
 using a random base color, a random light color, and two random dark colors.
 A random seed based in `seconds` is used for an animated effect.
 
-![DemoFettePalette02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoFettePalette02Kt.png)
+![DemoFettePalette02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoFettePalette02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoFettePalette02.kt)
 
@@ -413,7 +413,7 @@ mouse position; the luminosity on its vertical position.
 By exploring various saturation and luminosity values, one can appreciate
 whether adjacent colors are more similar in HSLUV or in HSL.
 
-![DemoHSLUV01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHSLUV01Kt.png)
+![DemoHSLUV01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHSLUV01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoHSLUV01.kt)
 
@@ -428,7 +428,7 @@ https://kotlinlang.org/docs/sequences.html
 Each position in the phyllotaxis is rendered as a spherical gradient by repeatedly drawing
 each circle with different sizes and a fill color.
 
-![DemoHSLUV02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHSLUV02Kt.png)
+![DemoHSLUV02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHSLUV02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoHSLUV02.kt)
 
@@ -445,7 +445,7 @@ is interpolated towards a target color by the specified amount.
 In this demo, the target hue depends on the current time in seconds,
 resulting in an animated effect.
 
-![DemoHueTools01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHueTools01Kt.png)
+![DemoHueTools01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoHueTools01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoHueTools01.kt)
 
@@ -457,7 +457,7 @@ factors to compute the resulting color in the RGB color space.
 
 A plain `mix()` of the same two colors is shown at the bottom for comparison.
 
-![DemoMixSpectral01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoMixSpectral01Kt.png)
+![DemoMixSpectral01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoMixSpectral01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoMixSpectral01.kt)
 
@@ -469,7 +469,7 @@ OKHSV, HSV, HSL and OKHSL.
 To shift hues the method `shiftHue()` is applied. The resulting colors are then converted
 from each color space to RGB so they can be used for drawing.
 
-![DemoOKHSV01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoOKHSV01Kt.png)
+![DemoOKHSV01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoOKHSV01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoOKHSV01.kt)
 
@@ -485,7 +485,7 @@ The mouse x coordinate controls the saturation, while the y coordinate controls 
 The two if-statements check whether the program is taking a screenshot (this happens when
 it runs on GitHub actions) to set fixed saturation and luminosity values.
 
-![DemoXSLUV01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoXSLUV01Kt.png)
+![DemoXSLUV01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoXSLUV01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoXSLUV01.kt)
 
@@ -495,7 +495,7 @@ Demonstrates how to generate a palette with the top 32 colors
 of a loaded image, sorted by luminosity. The colors are displayed
 as rectangles overlayed on top of the image.
 
-![histogram-DemoHistogram01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/histogram-DemoHistogram01Kt.png)
+![histogram-DemoHistogram01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/histogram-DemoHistogram01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/histogram/DemoHistogram01.kt)
 
@@ -504,7 +504,7 @@ as rectangles overlayed on top of the image.
 Show the color histogram of an image using non-uniform weighting,
 prioritizing bright colors.
 
-![histogram-DemoHistogram02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/histogram-DemoHistogram02Kt.png)
+![histogram-DemoHistogram02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/histogram-DemoHistogram02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/histogram/DemoHistogram02.kt)
 
@@ -516,6 +516,6 @@ taken from the color histogram of the image.
 
 Note: due to its random nature the resulting animation contains flickering colors.
 
-![histogram-DemoHistogram03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/histogram-DemoHistogram03Kt.png)
+![histogram-DemoHistogram03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/histogram-DemoHistogram03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/histogram/DemoHistogram03.kt)

@@ -251,7 +251,7 @@ Finally, a `HashBlurDynamic` post-processing effect is applied. The dynamic
 version of the HashBlur effect multiplies its `radius` argument by the red component
 of the provided texture (containing the animated checkers in this case).
 
-![DemoAside01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-compositor/images/DemoAside01Kt.png)
+![DemoAside01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-compositor/images/DemoAside01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoAside01.kt)
 
@@ -261,7 +261,7 @@ Compositor demo showing 3 layers of moving items
 with a different amount of blur in each layer,
 simulating depth of field
 
-![DemoCompositor01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-compositor/images/DemoCompositor01Kt.png)
+![DemoCompositor01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-compositor/images/DemoCompositor01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoCompositor01.kt)
 
@@ -270,6 +270,6 @@ simulating depth of field
 Demonstration of using [BufferMultisample] on a per layer basis.
 Try changing which layer has multisampling applied and observe the results.
 
-![DemoCompositor02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-compositor/images/DemoCompositor02Kt.png)
+![DemoCompositor02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-compositor/images/DemoCompositor02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoCompositor02.kt)

@@ -19,7 +19,7 @@ Key elements of the program:
 dynamically changing over time.
 - Custom text animation implementing wave-like movement and scaling.
 
-![DemoGlyphOutput01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/DemoGlyphOutput01Kt.png)
+![DemoGlyphOutput01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/DemoGlyphOutput01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoGlyphOutput01.kt)
 
@@ -42,7 +42,7 @@ Key Components:
 - `drawer` enables isolated operations for drawing elements.
 - `writer` facilitates text rendering with alignment and spacing adjustments.
 
-![DemoTextBreaker01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/DemoTextBreaker01Kt.png)
+![DemoTextBreaker01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/DemoTextBreaker01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoTextBreaker01.kt)
 
@@ -65,7 +65,7 @@ Key Components:
 - `drawer` enables isolated operations for drawing elements.
 - `writer` facilitates text rendering with alignment and spacing adjustments.
 
-![DemoTextWriter01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/DemoTextWriter01Kt.png)
+![DemoTextWriter01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/DemoTextWriter01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoTextWriter01.kt)
 
@@ -81,7 +81,7 @@ between left and right using the cosine of the current time in seconds.
 A time offset is included in each cell to distribute them over the
 cosine wave, so the text lines move at different speeds and directions.
 
-![DemoTextWriter02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/DemoTextWriter02Kt.png)
+![DemoTextWriter02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/DemoTextWriter02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoTextWriter02.kt)
 
@@ -92,6 +92,6 @@ This demo shows how to align texts to the left, center, right, top, center and b
 It creates a grid of 3x3 cells to demonstrate all alignment combinations by setting the
 `style.verticalAlign` and the `style.horizontalAlign` to 0.0, 0.5 and 1.0.
 
-![DemoTextWriter03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/DemoTextWriter03Kt.png)
+![DemoTextWriter03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/DemoTextWriter03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoTextWriter03.kt)

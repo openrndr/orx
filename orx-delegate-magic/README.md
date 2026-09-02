@@ -61,7 +61,7 @@ Therefore, a large increase or decrease in `radius` followed lack of change will
 as a blue line for a short while, until the large value gets replaced by newer values.
 How long the large value is visible depends on the `length` parameter passed to `tracking`.
 
-![DemoDifferencing01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-delegate-magic/images/DemoDifferencing01Kt.png)
+![DemoDifferencing01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-delegate-magic/images/DemoDifferencing01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoDifferencing01.kt)
 
@@ -92,7 +92,7 @@ The `Property` argument overrides the other.
 Notice how the discontinuities present while using `smoothing`
 are not there when using `following`.
 
-![DemoFollowing01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-delegate-magic/images/DemoFollowing01Kt.png)
+![DemoFollowing01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-delegate-magic/images/DemoFollowing01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoFollowing01.kt)
 
@@ -115,7 +115,7 @@ By the nature of the used interpolation, changed properties interpolate
 first faster and then at a decreasing rate (decelerating) until
 reaching the target value.
 
-![DemoSmoothing01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-delegate-magic/images/DemoSmoothing01Kt.png)
+![DemoSmoothing01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-delegate-magic/images/DemoSmoothing01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoSmoothing01.kt)
 
@@ -130,7 +130,7 @@ Note how the spring stiffness is higher for the `x` value.
 Since `springForcing` is a method of `Clock`, there is no need to call any
 update methods for the values to be interpolated over time.
 
-![DemoSpring01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-delegate-magic/images/DemoSpring01Kt.png)
+![DemoSpring01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-delegate-magic/images/DemoSpring01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoSpring01.kt)
 
@@ -141,6 +141,6 @@ Demonstrates the use of the `tracking` delegate.
 In this case it is used to visualize the history of a variable
 which changes based on the simplex noise of the current time in seconds.
 
-![DemoTracking01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-delegate-magic/images/DemoTracking01Kt.png)
+![DemoTracking01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-delegate-magic/images/DemoTracking01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoTracking01.kt)

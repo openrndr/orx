@@ -61,6 +61,6 @@ draw on top of what you drew in previous animation frames.
 
 That's the default in some other frameworks.
 
-![DemoNoClearKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-no-clear/images/DemoNoClearKt.png)
+![DemoNoClearKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-no-clear/images/DemoNoClearKt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoNoClear.kt)

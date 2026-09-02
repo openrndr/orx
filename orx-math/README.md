@@ -24,7 +24,7 @@ in a way that minimizes overall cost (in this case, spatial distance).
 The same algorithm can be used to optimize any other pairing of elements, not necessarily
 involving distances and 2D points.
 
-![assignment-Assignment01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/assignment-Assignment01Kt.png)
+![assignment-Assignment01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/assignment-Assignment01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/assignment/Assignment01.kt)
 
@@ -50,7 +50,7 @@ One can use the `LinearRange` class to construct
 (not demonstrated here)
 
 
-![linearrange-DemoLinearRange02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/linearrange-DemoLinearRange02Kt.png)
+![linearrange-DemoLinearRange02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/linearrange-DemoLinearRange02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/linearrange/DemoLinearRange02.kt)
 
@@ -65,7 +65,7 @@ A grid of such rectangles is displayed, animating the `u` and `v` parameters bas
 `seconds`, `x` and `y` indices. The second range results in a vertical wave effect.
 
 
-![linearrange-DemoLinearRange03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/linearrange-DemoLinearRange03Kt.png)
+![linearrange-DemoLinearRange03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/linearrange-DemoLinearRange03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/linearrange/DemoLinearRange03.kt)
 
@@ -78,7 +78,7 @@ The line drawn in red is the estimated line. The green one is the ground-truth.
 because `A` is likely inconsistent, we look for an approximate `x` based on `AᵀA`, which is consistent.
 `x̂ = (AᵀA)⁻¹ Aᵀb`
 
-![matrix-DemoLeastSquares01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/matrix-DemoLeastSquares01Kt.png)
+![matrix-DemoLeastSquares01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/matrix-DemoLeastSquares01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/matrix/DemoLeastSquares01.kt)
 
@@ -96,7 +96,7 @@ The result is drawn on every animation frame, revealing concentric circles that 
 to the ground truth depending on the random values used.
 
 
-![matrix-DemoLeastSquares02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/matrix-DemoLeastSquares02Kt.png)
+![matrix-DemoLeastSquares02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/matrix-DemoLeastSquares02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/matrix/DemoLeastSquares02.kt)
 
@@ -104,7 +104,7 @@ to the ground truth depending on the random values used.
 
 Demonstrates using a three-dimensional Radial Basis Function (RBF) interpolator for color grading.
 
-![rbf-RbfColorGrading01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/rbf-RbfColorGrading01Kt.png)
+![rbf-RbfColorGrading01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/rbf-RbfColorGrading01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/rbf/RbfColorGrading01.kt)
 
@@ -112,7 +112,7 @@ Demonstrates using a three-dimensional Radial Basis Function (RBF) interpolator 
 
 Demonstrates using a two-dimensional Radial Basis Function (RBF) interpolator for glitching.
 
-![rbf-RbfGlitch01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/rbf-RbfGlitch01Kt.png)
+![rbf-RbfGlitch01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/rbf-RbfGlitch01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/rbf/RbfGlitch01.kt)
 
@@ -122,7 +122,7 @@ Demonstrates drawing a grid and a rotating rectangle both distorted using a two-
 
 The first part of the code creates the interpolator which is later used to map 2D vectors to distorted coordinates.
 
-![rbf-RbfGrid01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/rbf-RbfGrid01Kt.png)
+![rbf-RbfGrid01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/rbf-RbfGrid01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/rbf/RbfGrid01.kt)
 
@@ -146,7 +146,7 @@ Next, points in a grid of 40 columns and 40 rows are mapped using the interpolat
 The `jacobian()` method is called at each of those 1600 locations to get a Matrix representing the local
 X and Y axis in the distorted space, and used to create short distorted horizontal and vertical line segments.
 
-![rbf-RbfGridJacobian01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/rbf-RbfGridJacobian01Kt.png)
+![rbf-RbfGridJacobian01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/rbf-RbfGridJacobian01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/rbf/RbfGridJacobian01.kt)
 
@@ -171,7 +171,7 @@ transformation, even when the interpolator was constructed using 16 points only.
 The `jacobian()` method is called at each of those 2500 locations to get a Matrix representing the local
 X and Y axis in the distorted space.
 
-![rbf-RbfGridJacobian02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/rbf-RbfGridJacobian02Kt.png)
+![rbf-RbfGridJacobian02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/rbf-RbfGridJacobian02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/rbf/RbfGridJacobian02.kt)
 
@@ -199,7 +199,7 @@ from the interpolator and displayed for comparison. Notice that even if
 the fill color is flat, it may look like a gradient due to the changing
 colors in the surrounding pixels.
 
-![rbf-RbfInterpolation01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/rbf-RbfInterpolation01Kt.png)
+![rbf-RbfInterpolation01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/rbf-RbfInterpolation01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/rbf/RbfInterpolation01.kt)
 
@@ -227,7 +227,7 @@ from the interpolator and displayed for comparison. Notice that even if
 the fill color is flat, it may look like a gradient due to the changing
 colors in the surrounding pixels.
 
-![rbf-RbfInterpolation02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/rbf-RbfInterpolation02Kt.png)
+![rbf-RbfInterpolation02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/rbf-RbfInterpolation02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/rbf/RbfInterpolation02.kt)
 
@@ -245,6 +245,6 @@ their XYZ index across the 4 input colors.
 
 Simplex Range* is not to be confused with *Simplex Noise*.
 
-![simplexrange-DemoSimplexRange3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/simplexrange-DemoSimplexRange3D01Kt.png)
+![simplexrange-DemoSimplexRange3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/simplexrange-DemoSimplexRange3D01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/simplexrange/DemoSimplexRange3D01.kt)

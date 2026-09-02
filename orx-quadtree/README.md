@@ -35,7 +35,7 @@ The `QuadTree` algorithm tries to keep the number of points
 per quad balanced, which in this case leads to larger quads
 near the edges of the window, and small quads at the center.
 
-![DemoQuadTree01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-quadtree/images/DemoQuadTree01Kt.png)
+![DemoQuadTree01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-quadtree/images/DemoQuadTree01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoQuadTree01.kt)
 
@@ -49,6 +49,6 @@ It also demonstrates how to iterate over the data returned by
 and the quads with borders within or touching the requested radius.
 
 
-![DemoQuadTree02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-quadtree/images/DemoQuadTree02Kt.png)
+![DemoQuadTree02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-quadtree/images/DemoQuadTree02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoQuadTree02.kt)

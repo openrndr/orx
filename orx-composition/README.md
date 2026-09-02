@@ -25,7 +25,7 @@ Demonstrates how to
 - Save it to an SVG file
 - Print the SVG content as text
 
-![DemoCompositionDrawer01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoCompositionDrawer01Kt.png)
+![DemoCompositionDrawer01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoCompositionDrawer01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoCompositionDrawer01.kt)
 
@@ -39,7 +39,7 @@ producing a shape that seems to be behind the first one.
 
 Without clipping, the second circle would cover part of the first one.
 
-![DemoCompositionDrawer02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoCompositionDrawer02Kt.png)
+![DemoCompositionDrawer02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoCompositionDrawer02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoCompositionDrawer02.kt)
 
@@ -54,7 +54,7 @@ One way to verify this is by saving the design as an SVG file and opening
 it in vector editing software.
 
 
-![DemoCompositionDrawer03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoCompositionDrawer03Kt.png)
+![DemoCompositionDrawer03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoCompositionDrawer03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoCompositionDrawer03.kt)
 
@@ -66,7 +66,7 @@ A number of circles are added when the program starts.
 Dragging the mouse button adds more circles.
 Right-clicking the mouse clears the Composition.
 
-![DemoCompositionDrawer04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoCompositionDrawer04Kt.png)
+![DemoCompositionDrawer04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoCompositionDrawer04Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoCompositionDrawer04.kt)
 
@@ -77,6 +77,6 @@ Demonstrates how to
 - Create a Composition with a group
 - Add XML attributes so the group appears as a layer in Inkscape
 
-![DemoCompositionDrawer05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoCompositionDrawer05Kt.png)
+![DemoCompositionDrawer05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoCompositionDrawer05Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoCompositionDrawer05.kt)

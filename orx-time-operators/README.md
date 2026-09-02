@@ -61,7 +61,7 @@ Demonstrates the use of an Attack/Decay `Envelope` to control the size and rotat
 
 The size envelope is triggered every 1.3 seconds, and the rotation one every 0.8 seconds.
 
-![DemoEnvelopeKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-time-operators/images/DemoEnvelopeKt.png)
+![DemoEnvelopeKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-time-operators/images/DemoEnvelopeKt.webp)
 
 [source code](src/demo/kotlin/DemoEnvelope.kt)
 
@@ -75,6 +75,6 @@ When sampling the LFO one can specify the `frequency` and `phase`,
 which makes it possible to use the same LFO to produce animations
 with various loop durations.
 
-![DemoLFOKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-time-operators/images/DemoLFOKt.png)
+![DemoLFOKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-time-operators/images/DemoLFOKt.webp)
 
 [source code](src/demo/kotlin/DemoLFO.kt)

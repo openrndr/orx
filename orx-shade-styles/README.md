@@ -19,7 +19,7 @@ Other available clipping shapes are `circle`, `rectangle`, `line` and `ellipse`.
 
 Press a mouse button to toggle the `feather` property between 0.0 and 0.5.
 
-![clip-DemoClip01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/clip-DemoClip01Kt.png)
+![clip-DemoClip01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/clip-DemoClip01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/clip/DemoClip01.kt)
 
@@ -35,7 +35,7 @@ Other available clipping shapes are `circle`, `rectangle`, `line` and `ellipse`.
 
 Press a mouse button to toggle the `feather` property between 0.0 and 0.5.
 
-![clip-DemoClip02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/clip-DemoClip02Kt.png)
+![clip-DemoClip02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/clip-DemoClip02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/clip/DemoClip02.kt)
 
@@ -51,7 +51,7 @@ Other available clipping shapes are `circle`, `rectangle`, `line` and `star`.
 
 Press a mouse button to toggle the `feather` property between 0.0 and 0.5.
 
-![clip-DemoClip03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/clip-DemoClip03Kt.png)
+![clip-DemoClip03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/clip-DemoClip03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/clip/DemoClip03.kt)
 
@@ -64,7 +64,7 @@ by using the `+` operator.
 The design is animated by applying a rotation transformation matrix
 based in the `seconds` variable.
 
-![composed-DemoComposed01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/composed-DemoComposed01Kt.png)
+![composed-DemoComposed01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/composed-DemoComposed01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/composed/DemoComposed01.kt)
 
@@ -77,7 +77,7 @@ Demonstrates how to create 4 animated gradient shade-styles with 5 colors:
 - a linear gradient with `SpreadMethod.REPEAT`
 Each gradient style has different adjustable attributes.
 
-![gradients-DemoGradient01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient01Kt.png)
+![gradients-DemoGradient01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/gradients/DemoGradient01.kt)
 
@@ -94,7 +94,7 @@ based on the current coordinates being processed, and the original level at this
 
 Without this difference, the shader would look identical, and the text would be invisible.
 
-![gradients-DemoGradient02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient02Kt.png)
+![gradients-DemoGradient02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/gradients/DemoGradient02.kt)
 
@@ -104,7 +104,7 @@ Demonstrates how to create a rainbow-like rotating `conic` gradient in `OKHSV` c
 The gradient consists of ten evenly spaced colors, achieved by shifting the hue of a base color.
 Since the conic gradient covers 360 degrees, changing the `spreadMethod` does not affect the result.
 
-![gradients-DemoGradient03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient03Kt.png)
+![gradients-DemoGradient03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/gradients/DemoGradient03.kt)
 
@@ -118,7 +118,7 @@ The second one, a square, and the third one a horizontal rectangle.
 
 The rows feature the different fit methods: `FillFit.STRETCH`, `FillFit.COVER` and `FillFit.CONTAIN`.
 
-![gradients-DemoGradient04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient04Kt.png)
+![gradients-DemoGradient04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient04Kt.webp)
 
 [source code](src/jvmDemo/kotlin/gradients/DemoGradient04.kt)
 
@@ -133,7 +133,7 @@ screen coordinates. To make this possible, we need to set the
 the gradient coordinates is `Vector2(0.5, 0.5)`.
 
 
-![gradients-DemoGradient05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient05Kt.png)
+![gradients-DemoGradient05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient05Kt.webp)
 
 [source code](src/jvmDemo/kotlin/gradients/DemoGradient05.kt)
 
@@ -147,7 +147,7 @@ The `SpreadMethod.REPEAT` setting makes the gradient cover the available space r
 as many times as needed.
 
 
-![gradients-DemoGradient06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient06Kt.png)
+![gradients-DemoGradient06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient06Kt.webp)
 
 [source code](src/jvmDemo/kotlin/gradients/DemoGradient06.kt)
 
@@ -160,7 +160,7 @@ with the exact value depending on the `quantization` value.
 
 Demonstrates how to produce a quantized gradient with a specific number of equal color bands.
 
-![gradients-DemoGradient07Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient07Kt.png)
+![gradients-DemoGradient07Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient07Kt.webp)
 
 [source code](src/jvmDemo/kotlin/gradients/DemoGradient07.kt)
 
@@ -171,7 +171,7 @@ pointing towards the center of the window. The center cell features a circular g
 `radiusX` equal to `radiusY`). The farther a cell is from the center, the higher the aspect ratio
 of the ellipse is, becoming closer to a line than to a circle near the corners.
 
-![gradients-DemoGradient08Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient08Kt.png)
+![gradients-DemoGradient08Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient08Kt.webp)
 
 [source code](src/jvmDemo/kotlin/gradients/DemoGradient08.kt)
 
@@ -187,7 +187,7 @@ mapped to transparent, revealing the checkers-pattern behind it
 in parts of the image.
 
 
-![gradients-DemoGradient09Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient09Kt.png)
+![gradients-DemoGradient09Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient09Kt.webp)
 
 [source code](src/jvmDemo/kotlin/gradients/DemoGradient09.kt)
 
@@ -199,7 +199,7 @@ by a `ShadeStyle`. Both are `Map`s indexed by the names of the parameters.
 Useful when using `ShadeStyle`s made by others to discover what parameters
 are available for us to adjust.
 
-![gradients-DemoGradient10Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient10Kt.png)
+![gradients-DemoGradient10Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/gradients-DemoGradient10Kt.webp)
 
 [source code](src/jvmDemo/kotlin/gradients/DemoGradient10.kt)
 
@@ -209,7 +209,7 @@ A minimal demonstration of the `imageFill` shade style, used to texture
 shapes using a loaded image (or generated color buffer).
 
 
-![image-DemoImageFill01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/image-DemoImageFill01Kt.png)
+![image-DemoImageFill01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/image-DemoImageFill01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/image/DemoImageFill01.kt)
 
@@ -219,7 +219,7 @@ Demonstrates the use of the `imageFill` shade style, applied to 10 concentric
 circles. The rotation of each circle depends on the cosine of time, with
 a varying time offset applied per circle, for a fun wavy effect.
 
-![image-DemoImageFill02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/image-DemoImageFill02Kt.png)
+![image-DemoImageFill02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/image-DemoImageFill02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/image/DemoImageFill02.kt)
 
@@ -229,7 +229,7 @@ Demonstrates the use of the `domainWarpFunction` in an `imageFill` shade style, 
 the coordinate system of the shader. A `time` parameter is passed to the shader and used
 to alter the deformation in real time.
 
-![image-DemoImageFill03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/image-DemoImageFill03Kt.png)
+![image-DemoImageFill03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/image-DemoImageFill03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/image/DemoImageFill03.kt)
 
@@ -240,7 +240,7 @@ to render an image as black and white with a pointillist luma-based effect.
 
 More computationally heavy than other shade styles.
 
-![noise-DemoBlueNoise01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/noise-DemoBlueNoise01Kt.png)
+![noise-DemoBlueNoise01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/noise-DemoBlueNoise01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/noise/DemoBlueNoise01.kt)
 
@@ -250,7 +250,7 @@ Demonstrates the use of the `simplex` variant of the `noise` shade style.
 It generates a gray-scale pattern, which is then colorized by using a `luma`
 `gradient` shade style.
 
-![noise-DemoSimplex01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/noise-DemoSimplex01Kt.png)
+![noise-DemoSimplex01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/noise-DemoSimplex01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/noise/DemoSimplex01.kt)
 
@@ -262,7 +262,7 @@ using the `whiteNoise` variant of the `noise` shade style.
 A custom `blendFunction` is used to control how pixel colors are
 transformed.
 
-![noise-DemoWhiteNoise01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/noise-DemoWhiteNoise01Kt.png)
+![noise-DemoWhiteNoise01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/noise-DemoWhiteNoise01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/noise/DemoWhiteNoise01.kt)
 
@@ -278,7 +278,7 @@ the coordinate system of the shade style.
 
 Try reducing the `scale` parameter to make the checkers more obvious.
 
-![patterns-DemoPatterns01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/patterns-DemoPatterns01Kt.png)
+![patterns-DemoPatterns01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/patterns-DemoPatterns01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/patterns/DemoPatterns01.kt)
 
@@ -287,7 +287,7 @@ Try reducing the `scale` parameter to make the checkers more obvious.
 Demonstrates the use of the `xorMod2` variant of the `pattern` shade style;
 an algorithmic and intricate pattern.
 
-![patterns-DemoPatterns02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/patterns-DemoPatterns02Kt.png)
+![patterns-DemoPatterns02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/patterns-DemoPatterns02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/patterns/DemoPatterns02.kt)
 
@@ -296,7 +296,7 @@ an algorithmic and intricate pattern.
 Demonstrates the use of a complex shade style made by combining an
 animated `pattern`, a `gradient` and a `clip`.
 
-![patterns-DemoPatterns03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/patterns-DemoPatterns03Kt.png)
+![patterns-DemoPatterns03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/patterns-DemoPatterns03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/patterns/DemoPatterns03.kt)
 
@@ -306,7 +306,7 @@ Demonstrates the [HemisphereLight] shade style, a simple shader
 that can be used for simple illumination of 3D meshes.
 
 
-![spatial-DemoHemisphere01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/spatial-DemoHemisphere01Kt.png)
+![spatial-DemoHemisphere01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/spatial-DemoHemisphere01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/spatial/DemoHemisphere01.kt)
 
@@ -316,6 +316,6 @@ Demonstrates the use of the [visualizeNormals] shade style, which can help
 debug the normals of a 3D mesh.
 
 
-![spatial-DemoVisualizeNormals01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/spatial-DemoVisualizeNormals01Kt.png)
+![spatial-DemoVisualizeNormals01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shade-styles/images/spatial-DemoVisualizeNormals01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/spatial/DemoVisualizeNormals01.kt)

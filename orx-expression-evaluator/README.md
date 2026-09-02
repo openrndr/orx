@@ -102,7 +102,7 @@ within the expressions.
 Evaluating expressions enables dynamic behavior adjustments at runtime, eliminating the need
 to recompile the program.
 
-![DemoExpressionEvaluator01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-expression-evaluator/images/DemoExpressionEvaluator01Kt.png)
+![DemoExpressionEvaluator01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-expression-evaluator/images/DemoExpressionEvaluator01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoExpressionEvaluator01.kt)
 
@@ -114,7 +114,7 @@ string into a function with a parameter "t".
 By using [watchingExpression1], the resulting function is only updated when the content of its first argument
 (a String) changes, which uses less CPU than evaluating the expression on every animation frame.
 
-![DemoExpressionEvaluator02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-expression-evaluator/images/DemoExpressionEvaluator02Kt.png)
+![DemoExpressionEvaluator02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-expression-evaluator/images/DemoExpressionEvaluator02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoExpressionEvaluator02.kt)
 
@@ -130,6 +130,6 @@ due to non-matching parenthesis). This is normally not an issue, but the `lineSt
 when consecutive points are identical, which is the case if all points are Vector2(0.0).
 Therefore, we wrap it in a try/catch to keep the program running even while the expressions are not valid.
 
-![DemoExpressionEvaluator03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-expression-evaluator/images/DemoExpressionEvaluator03Kt.png)
+![DemoExpressionEvaluator03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-expression-evaluator/images/DemoExpressionEvaluator03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoExpressionEvaluator03.kt)

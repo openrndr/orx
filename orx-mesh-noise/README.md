@@ -19,7 +19,7 @@ The following key processes are performed:
 The application runs with a window size of 720x720 pixels and positions the camera
 in front of the scene using the "Orbital" extension.
 
-![DemoMeshNoise01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-noise/images/DemoMeshNoise01Kt.png)
+![DemoMeshNoise01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-noise/images/DemoMeshNoise01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoMeshNoise01.kt)
 
@@ -27,7 +27,7 @@ in front of the scene using the "Orbital" extension.
 
 Demonstrate uniform point on mesh generation using hash functions
 
-![DemoMeshNoise02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-noise/images/DemoMeshNoise02Kt.png)
+![DemoMeshNoise02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-noise/images/DemoMeshNoise02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoMeshNoise02.kt)
 
@@ -41,7 +41,7 @@ It extends the rendering with an orbital camera for navigation and shaders for c
 effects. Cylinders represent transformed objects, with their scale animations based on time-dependent
 trigonometric functions.
 
-![DemoMeshNoise03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-noise/images/DemoMeshNoise03Kt.png)
+![DemoMeshNoise03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-noise/images/DemoMeshNoise03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoMeshNoise03.kt)
 
@@ -61,6 +61,6 @@ Key functionalities include:
 The rendering of spheres is performed by iterating over the sampled points and isolating each in the transformation matrix.
 This setup allows customization for complex rendering pipelines.
 
-![DemoNonUniformMeshNoise01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-noise/images/DemoNonUniformMeshNoise01Kt.png)
+![DemoNonUniformMeshNoise01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-noise/images/DemoNonUniformMeshNoise01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoNonUniformMeshNoise01.kt)

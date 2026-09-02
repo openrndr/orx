@@ -19,7 +19,7 @@ will be executed before calling `function`, ideal to free resources.
 Press the `ENTER` key to update the `state.path` variable, which will trigger an update of `state.image`, followed
 by an update to `state.redImage`.
 
-![DemoImagePathWatcher01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-property-watchers/images/DemoImagePathWatcher01Kt.png)
+![DemoImagePathWatcher01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-property-watchers/images/DemoImagePathWatcher01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoImagePathWatcher01.kt)
 
@@ -39,6 +39,6 @@ but are kept up to date nonetheless.
 The two variables are used to control the position and the thickness of a
 horizontal black line.
 
-![DemoPropertyWatchers01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-property-watchers/images/DemoPropertyWatchers01Kt.png)
+![DemoPropertyWatchers01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-property-watchers/images/DemoPropertyWatchers01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoPropertyWatchers01.kt)

@@ -37,7 +37,7 @@ In the center of the window one can see the added value of all current ADSR inst
 represented as the radius of a white circle.
 
 
-![DemoADSRTracker01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-envelopes/images/DemoADSRTracker01Kt.png)
+![DemoADSRTracker01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-envelopes/images/DemoADSRTracker01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoADSRTracker01.kt)
 
@@ -70,6 +70,6 @@ with that same `triggerId` exist (when we repeatedly pressed
 the same keyboard key), the most recent of them will receive
 the event.
 
-![DemoADSRTracker02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-envelopes/images/DemoADSRTracker02Kt.png)
+![DemoADSRTracker02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-envelopes/images/DemoADSRTracker02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoADSRTracker02.kt)

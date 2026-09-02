@@ -13,7 +13,7 @@ segments connecting 4 vertices.
 On every animation frame the circular contour is created and transformed
 using sines, cosines and the variable `seconds` for an animated effect.
 
-![adjust-DemoAdjustContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour01Kt.png)
+![adjust-DemoAdjustContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/adjust/DemoAdjustContour01.kt)
 
@@ -22,7 +22,7 @@ using sines, cosines and the variable `seconds` for an animated effect.
 Demonstrates how to use `adjustContour` to select and remove vertex 0
 from a circular contour, then select and animate the position and scale the new vertex 0.
 
-![adjust-DemoAdjustContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour02Kt.png)
+![adjust-DemoAdjustContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/adjust/DemoAdjustContour02.kt)
 
@@ -39,7 +39,7 @@ Then various edges are selected one by one and transformed over time using opera
 scale, rotate, splitAt and moveBy.
 
 
-![adjust-DemoAdjustContour03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour03Kt.png)
+![adjust-DemoAdjustContour03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/adjust/DemoAdjustContour03.kt)
 
@@ -53,7 +53,7 @@ The base contour used for the effect alternates every second
 between a rectangular and a circular contour.
 
 
-![adjust-DemoAdjustContour04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour04Kt.png)
+![adjust-DemoAdjustContour04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour04Kt.webp)
 
 [source code](src/jvmDemo/kotlin/adjust/DemoAdjustContour04.kt)
 
@@ -71,7 +71,7 @@ calculated using a cosine function involving the current time in seconds.
 
 The resulting contour is then drawn with a red stroke color.
 
-![adjust-DemoAdjustContour05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour05Kt.png)
+![adjust-DemoAdjustContour05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour05Kt.webp)
 
 [source code](src/jvmDemo/kotlin/adjust/DemoAdjustContour05.kt)
 
@@ -92,7 +92,7 @@ The selection of vertices happens automatically thanks to
 
 The modified animated contour is finally drawn.
 
-![adjust-DemoAdjustContour06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour06Kt.png)
+![adjust-DemoAdjustContour06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour06Kt.webp)
 
 [source code](src/jvmDemo/kotlin/adjust/DemoAdjustContour06.kt)
 
@@ -106,7 +106,7 @@ The program initializes a simple linear contour and applies transformations to i
 - That value is used to calculate an anchor point and to select all vertices to its right
 - The selected vertices are rotated around an anchor, as if rolling a straight line into a spiral.
 
-![adjust-DemoAdjustContour07Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour07Kt.png)
+![adjust-DemoAdjustContour07Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour07Kt.webp)
 
 [source code](src/jvmDemo/kotlin/adjust/DemoAdjustContour07.kt)
 
@@ -121,7 +121,7 @@ This method shows two approaches for transforming contours:
 
 For each approach, a red line is drawn representing the transformed contour.
 
-![adjust-DemoAdjustContour08Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour08Kt.png)
+![adjust-DemoAdjustContour08Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour08Kt.webp)
 
 [source code](src/jvmDemo/kotlin/adjust/DemoAdjustContour08.kt)
 
@@ -145,7 +145,7 @@ The resulting contour is drawn in black. Additionally:
 - Tunni points, marking the Tunni line's control, are emphasized with yellow-filled circles.
 
 
-![adjust-DemoAdjustContour09Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour09Kt.png)
+![adjust-DemoAdjustContour09Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContour09Kt.webp)
 
 [source code](src/jvmDemo/kotlin/adjust/DemoAdjustContour09.kt)
 
@@ -168,7 +168,7 @@ rendering the composition in its current state.
 
 The core elements to study to in this demo are `adjustContourSequence` and `launch`.
 
-![adjust-DemoAdjustContourContinue01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContourContinue01Kt.png)
+![adjust-DemoAdjustContourContinue01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/adjust-DemoAdjustContourContinue01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/adjust/DemoAdjustContourContinue01.kt)
 
@@ -179,7 +179,7 @@ of a collection of random [Vector2] points. Unlike the convex hull, an Alpha sha
 
 More details in [WikiPedia](https://en.wikipedia.org/wiki/Alpha_shape)
 
-![alphashape-DemoAlphaShape01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/alphashape-DemoAlphaShape01Kt.png)
+![alphashape-DemoAlphaShape01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/alphashape-DemoAlphaShape01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/alphashape/DemoAlphaShape01.kt)
 
@@ -198,7 +198,7 @@ the last one would be visible.
 An instance of [Random] with a fixed seed is used to ensure the resulting
 random shape is always the same.
 
-![alphashape-DemoAlphaShape02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/alphashape-DemoAlphaShape02Kt.png)
+![alphashape-DemoAlphaShape02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/alphashape-DemoAlphaShape02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/alphashape/DemoAlphaShape02.kt)
 
@@ -211,7 +211,7 @@ The Arrangement constructor takes as arguments instances of [org.openrndr.shape.
 Once constructed, we can request `originFaces`, `edges`, `vertices`, `boundaries` and `holes`,
 to render or manipulate them further as needed.
 
-![arrangement-DemoArrangement01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/arrangement-DemoArrangement01Kt.png)
+![arrangement-DemoArrangement01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/arrangement-DemoArrangement01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/arrangement/DemoArrangement01.kt)
 
@@ -224,7 +224,7 @@ The specific curve used results in 4 intersection points.
 
 This demo shows how we can query and visualize the neighborhoods of those 4 vertices.
 
-![arrangement-DemoArrangement02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/arrangement-DemoArrangement02Kt.png)
+![arrangement-DemoArrangement02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/arrangement-DemoArrangement02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/arrangement/DemoArrangement02.kt)
 
@@ -236,7 +236,7 @@ Demonstrates using the `boundedFaces` collection available in Arrangements.
 
 In this example, `faces` contains 25 items: 24 `bounded` and 1 `unbounded` faces.
 
-![arrangement-DemoArrangement04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/arrangement-DemoArrangement04Kt.png)
+![arrangement-DemoArrangement04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/arrangement-DemoArrangement04Kt.webp)
 
 [source code](src/jvmDemo/kotlin/arrangement/DemoArrangement04.kt)
 
@@ -250,7 +250,7 @@ Shows how to
 The created contours are horizontal and vertical in "bezier-patch space" but
 are rendered deformed following the shape of the bezier patch.
 
-![bezierpatch-DemoBezierPatch01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatch01Kt.png)
+![bezierpatch-DemoBezierPatch01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatch01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/bezierpatch/DemoBezierPatch01.kt)
 
@@ -264,7 +264,7 @@ such a contour with vertices at the cardinal points
 but one can manually create any other 4-segment closed contour
 to use in bezier patches.
 
-![bezierpatch-DemoBezierPatch02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatch02Kt.png)
+![bezierpatch-DemoBezierPatch02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatch02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/bezierpatch/DemoBezierPatch02.kt)
 
@@ -275,7 +275,7 @@ Shows how to distort [ShapeContour]s using a [bezierPatch]
 In this case the contours are regular stars and the bezier patch
 is created using a circular contour with the required 4 segments.
 
-![bezierpatch-DemoBezierPatch03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatch03Kt.png)
+![bezierpatch-DemoBezierPatch03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatch03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/bezierpatch/DemoBezierPatch03.kt)
 
@@ -287,7 +287,7 @@ from a [bezierPatch]
 You can think of bezierPatch.position() as requesting points
 in a wavy flag (the bezier patch) using normalized uv coordinates.
 
-![bezierpatch-DemoBezierPatch04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatch04Kt.png)
+![bezierpatch-DemoBezierPatch04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatch04Kt.webp)
 
 [source code](src/jvmDemo/kotlin/bezierpatch/DemoBezierPatch04.kt)
 
@@ -303,7 +303,7 @@ Shows how to
 The created contours are horizontal and vertical in "bezier-patch space" but
 are rendered deformed following the shape of the bezier patch.
 
-![bezierpatch-DemoBezierPatch05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatch05Kt.png)
+![bezierpatch-DemoBezierPatch05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatch05Kt.webp)
 
 [source code](src/jvmDemo/kotlin/bezierpatch/DemoBezierPatch05.kt)
 
@@ -314,7 +314,7 @@ Shows how to
 - apply an image texture to the patch using a shadeStyle
 
 
-![bezierpatch-DemoBezierPatch06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatch06Kt.png)
+![bezierpatch-DemoBezierPatch06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatch06Kt.webp)
 
 [source code](src/jvmDemo/kotlin/bezierpatch/DemoBezierPatch06.kt)
 
@@ -328,7 +328,7 @@ contours, which are rendered to visualize the structure of the bezier patch.
 The bezier patch constructor expects a contour with 4 segments, for example
 a rectangular contour or a circle, which in OPENRNDR is made out of 4 segments.
 
-![bezierpatch-DemoBezierPatchDrawer01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatchDrawer01Kt.png)
+![bezierpatch-DemoBezierPatchDrawer01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatchDrawer01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/bezierpatch/DemoBezierPatchDrawer01.kt)
 
@@ -344,7 +344,7 @@ the color space used in each. This method:
 The bezier patches are created from closed circular contours and colored by specifying
 a grid of colors matching the patch's vertices.
 
-![bezierpatch-DemoBezierPatchDrawer02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatchDrawer02Kt.png)
+![bezierpatch-DemoBezierPatchDrawer02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatchDrawer02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/bezierpatch/DemoBezierPatchDrawer02.kt)
 
@@ -358,7 +358,7 @@ factor calculated for each cell in the grid.
 The grid layout contains 4 columns and 4 rows with margins and gutters.
 Each cell's center serves as the drawing position for a blended bezier patch.
 
-![bezierpatch-DemoBezierPatchDrawer03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatchDrawer03Kt.png)
+![bezierpatch-DemoBezierPatchDrawer03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatchDrawer03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/bezierpatch/DemoBezierPatchDrawer03.kt)
 
@@ -371,7 +371,7 @@ drawer bounds, converted to a contour and deformed using `adjustContour`.
 The bezier patch uses 16 randomly generated colors chunked into 4 lists with 4 colors each.
 
 
-![bezierpatch-DemoBezierPatchDrawer04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatchDrawer04Kt.png)
+![bezierpatch-DemoBezierPatchDrawer04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatchDrawer04Kt.webp)
 
 [source code](src/jvmDemo/kotlin/bezierpatch/DemoBezierPatchDrawer04.kt)
 
@@ -385,7 +385,7 @@ such a contour with vertices at the cardinal points
 but one can manually create any other 4-segment closed contour
 to use in bezier patches.
 
-![bezierpatch-DemoBezierPatches01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatches01Kt.png)
+![bezierpatch-DemoBezierPatches01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatches01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/bezierpatch/DemoBezierPatches01.kt)
 
@@ -396,7 +396,7 @@ contours is created, it can be queried using the `.mix()` method to get a contou
 between the first one (when the blend argument is 0.0) and the second one (when the argument
 is 1.0)
 
-![blend-DemoContourBlend01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/blend-DemoContourBlend01Kt.png)
+![blend-DemoContourBlend01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/blend-DemoContourBlend01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/blend/DemoContourBlend01.kt)
 
@@ -413,7 +413,7 @@ This allows us, for instance, to morph one part of the shape first, then have ot
 
 This demo shows a grid of 9 contours which are part circle and part 5-point start.
 
-![blend-DemoContourBlend02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/blend-DemoContourBlend02Kt.png)
+![blend-DemoContourBlend02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/blend-DemoContourBlend02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/blend/DemoContourBlend02.kt)
 
@@ -421,7 +421,7 @@ This demo shows a grid of 9 contours which are part circle and part 5-point star
 
 
 
-![deform-DemoDeformContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/deform-DemoDeformContour01Kt.png)
+![deform-DemoDeformContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/deform-DemoDeformContour01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/deform/DemoDeformContour01.kt)
 
@@ -429,7 +429,7 @@ This demo shows a grid of 9 contours which are part circle and part 5-point star
 
 
 
-![deform-DemoDeformContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/deform-DemoDeformContour02Kt.png)
+![deform-DemoDeformContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/deform-DemoDeformContour02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/deform/DemoDeformContour02.kt)
 
@@ -437,7 +437,7 @@ This demo shows a grid of 9 contours which are part circle and part 5-point star
 
 
 
-![deform-DemoDeformSegment01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/deform-DemoDeformSegment01Kt.png)
+![deform-DemoDeformSegment01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/deform-DemoDeformSegment01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/deform/DemoDeformSegment01.kt)
 
@@ -463,7 +463,7 @@ for a classic DoG band-pass shape.
 >0 amplifies curvature at the selected scale, <0 flattens it.
 @return DoubleArray of length `size`, centered at index size / 2.
 
-![distort-DemoConvoluteContourKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoConvoluteContourKt.png)
+![distort-DemoConvoluteContourKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoConvoluteContourKt.webp)
 
 [source code](src/jvmDemo/kotlin/distort/DemoConvoluteContour.kt)
 
@@ -471,7 +471,7 @@ for a classic DoG band-pass shape.
 
 
 
-![distort-DemoDistortContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoDistortContour01Kt.png)
+![distort-DemoDistortContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoDistortContour01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/distort/DemoDistortContour01.kt)
 
@@ -479,7 +479,7 @@ for a classic DoG band-pass shape.
 
 
 
-![distort-DemoDistortContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoDistortContour02Kt.png)
+![distort-DemoDistortContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoDistortContour02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/distort/DemoDistortContour02.kt)
 
@@ -487,7 +487,7 @@ for a classic DoG band-pass shape.
 
 Demonstrates distortion over the rectified (length proportional) t parameter
 
-![distort-DemoDistortContour04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoDistortContour04Kt.png)
+![distort-DemoDistortContour04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoDistortContour04Kt.webp)
 
 [source code](src/jvmDemo/kotlin/distort/DemoDistortContour04.kt)
 
@@ -495,7 +495,7 @@ Demonstrates distortion over the rectified (length proportional) t parameter
 
 
 
-![distort-DemoDistortUniformContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoDistortUniformContour01Kt.png)
+![distort-DemoDistortUniformContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoDistortUniformContour01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/distort/DemoDistortUniformContour01.kt)
 
@@ -503,7 +503,7 @@ Demonstrates distortion over the rectified (length proportional) t parameter
 
 
 
-![distort-DemoEnvelopeShape01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoEnvelopeShape01Kt.png)
+![distort-DemoEnvelopeShape01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoEnvelopeShape01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/distort/DemoEnvelopeShape01.kt)
 
@@ -511,7 +511,7 @@ Demonstrates distortion over the rectified (length proportional) t parameter
 
 
 
-![distort-DemoWarpContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoWarpContour01Kt.png)
+![distort-DemoWarpContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoWarpContour01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/distort/DemoWarpContour01.kt)
 
@@ -519,7 +519,7 @@ Demonstrates distortion over the rectified (length proportional) t parameter
 
 
 
-![distort-DemoWarpShape01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoWarpShape01Kt.png)
+![distort-DemoWarpShape01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoWarpShape01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/distort/DemoWarpShape01.kt)
 
@@ -527,7 +527,7 @@ Demonstrates distortion over the rectified (length proportional) t parameter
 
 
 
-![fit-DemoFitContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/fit-DemoFitContour01Kt.png)
+![fit-DemoFitContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/fit-DemoFitContour01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/fit/DemoFitContour01.kt)
 
@@ -535,7 +535,7 @@ Demonstrates distortion over the rectified (length proportional) t parameter
 
 
 
-![fit-DemoFitContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/fit-DemoFitContour02Kt.png)
+![fit-DemoFitContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/fit-DemoFitContour02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/fit/DemoFitContour02.kt)
 
@@ -543,7 +543,7 @@ Demonstrates distortion over the rectified (length proportional) t parameter
 
 
 
-![fit-DemoFitContour03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/fit-DemoFitContour03Kt.png)
+![fit-DemoFitContour03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/fit-DemoFitContour03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/fit/DemoFitContour03.kt)
 
@@ -562,7 +562,7 @@ The orbital camera extension enables interactive 3D view manipulation.
 A fixed random seed is used to make sure this demo outputs a specific output. We can delete the
 `random` arguments to get a unique result each time the program runs.
 
-![frames-DemoFrames01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/frames-DemoFrames01Kt.png)
+![frames-DemoFrames01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/frames-DemoFrames01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/frames/DemoFrames01.kt)
 
@@ -573,7 +573,7 @@ passing through a predefined set of points.
 
 See Hobby, John. D., “Smooth, Easy to Compute Interpolating Splines”, Discrete and Computational Geometry, 1986, vol. 1
 
-![hobbycurve-DemoHobbyCurve01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve01Kt.png)
+![hobbycurve-DemoHobbyCurve01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/hobbycurve/DemoHobbyCurve01.kt)
 
@@ -582,7 +582,7 @@ See Hobby, John. D., “Smooth, Easy to Compute Interpolating Splines”, Discre
 This demo creates a list of random 2D points, finds the alpha shape contour for those points,
 and finally makes that contour smooth by calling `hobbyCurve()`.
 
-![hobbycurve-DemoHobbyCurve02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve02Kt.png)
+![hobbycurve-DemoHobbyCurve02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/hobbycurve/DemoHobbyCurve02.kt)
 
@@ -591,7 +591,7 @@ and finally makes that contour smooth by calling `hobbyCurve()`.
 This demo shows how the [org.openrndr.shape.ShapeContour]'s method `hobbyCurve()` can be used
 to round contours with linear segments.
 
-![hobbycurve-DemoHobbyCurve03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve03Kt.png)
+![hobbycurve-DemoHobbyCurve03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/hobbycurve/DemoHobbyCurve03.kt)
 
@@ -603,7 +603,7 @@ The program starts by creating a random set of scattered points with enough sepa
 The points are sorted using `hilbertOrder` to minimize the travel distance when visiting all the points.
 Finally, we draw a set of 40 hobby translucent curves using those same points but with varying tensions.
 
-![hobbycurve-DemoHobbyCurve04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve04Kt.png)
+![hobbycurve-DemoHobbyCurve04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve04Kt.webp)
 
 [source code](src/jvmDemo/kotlin/hobbycurve/DemoHobbyCurve04.kt)
 
@@ -621,7 +621,7 @@ in two or three groups.
 The bounds of the rectangle containing all contours is used to
 center them in the window.
 
-![hobbycurve-DemoHobbyCurve05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve05Kt.png)
+![hobbycurve-DemoHobbyCurve05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve05Kt.webp)
 
 [source code](src/jvmDemo/kotlin/hobbycurve/DemoHobbyCurve05.kt)
 
@@ -640,7 +640,7 @@ Commenting out the camera rotation (`camera.rotate`) reveals how the segment ten
 
 The last few lines of the program enable a rotating 3D camera and draw the 3D path.
 
-![hobbycurve-DemoHobbyCurve3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve3D01Kt.png)
+![hobbycurve-DemoHobbyCurve3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hobbycurve-DemoHobbyCurve3D01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/hobbycurve/DemoHobbyCurve3D01.kt)
 
@@ -648,7 +648,7 @@ The last few lines of the program enable a rotating 3D camera and draw the 3D pa
 
 Demonstrates the use of the `convexHull` method to create convex hulls of a growing set of points.
 
-![hull-DemoConvexHull01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hull-DemoConvexHull01Kt.png)
+![hull-DemoConvexHull01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hull-DemoConvexHull01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/hull/DemoConvexHull01.kt)
 
@@ -656,7 +656,7 @@ Demonstrates the use of the `convexHull` method to create convex hulls of a grow
 
 Demonstrates the use of the `convexHullSet` method to create a convex hull peeling
 
-![hull-DemoConvexHull02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hull-DemoConvexHull02Kt.png)
+![hull-DemoConvexHull02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hull-DemoConvexHull02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/hull/DemoConvexHull02.kt)
 
@@ -664,7 +664,7 @@ Demonstrates the use of the `convexHullSet` method to create a convex hull peeli
 
 Demonstrates the use of the `convexHullSet` method to create a convex hull peeling. Each peel is triangulated using an ear clipping triangulator.
 
-![hull-DemoConvexHull03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hull-DemoConvexHull03Kt.png)
+![hull-DemoConvexHull03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/hull-DemoConvexHull03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/hull/DemoConvexHull03.kt)
 
@@ -686,7 +686,7 @@ In this case, a list containing `Segment3D` instances is produced.
 Finally, the core path and the segments are rendered using an interactive
 3D Orbital camera.
 
-![loft-DemoLoftNormals01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/loft-DemoLoftNormals01Kt.png)
+![loft-DemoLoftNormals01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/loft-DemoLoftNormals01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/loft/DemoLoftNormals01.kt)
 
@@ -698,7 +698,7 @@ cross-sections by rotating an ellipse along the core.
 The resulting `Segment3D` are rendered using `BlendMode.ADD`
 to make the light of rendered segments accumulate.
 
-![loft-DemoLoftNormals02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/loft-DemoLoftNormals02Kt.png)
+![loft-DemoLoftNormals02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/loft-DemoLoftNormals02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/loft/DemoLoftNormals02.kt)
 
@@ -710,7 +710,7 @@ of a [org.openrndr.shape.ShapeContour] made out of linear segments.
 The program creates a regular start with 7 points, then draws 7 variations
 of this star with various levels of rounding.
 
-![operators-DemoRoundCorners01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/operators-DemoRoundCorners01Kt.png)
+![operators-DemoRoundCorners01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/operators-DemoRoundCorners01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/operators/DemoRoundCorners01.kt)
 
@@ -727,7 +727,7 @@ Next, rounded versions of both contours are stored in a new list.
 Finally, all 4 shapes are displayed for comparison.
 
 
-![operators-DemoRoundCorners02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/operators-DemoRoundCorners02Kt.png)
+![operators-DemoRoundCorners02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/operators-DemoRoundCorners02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/operators/DemoRoundCorners02.kt)
 
@@ -743,7 +743,7 @@ space-filling curve first described by the German mathematician David Hilbert in
 https://en.wikipedia.org/wiki/Hilbert_curve
 
 
-![ordering-DemoHilbertOrder01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/ordering-DemoHilbertOrder01Kt.png)
+![ordering-DemoHilbertOrder01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/ordering-DemoHilbertOrder01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/ordering/DemoHilbertOrder01.kt)
 
@@ -758,7 +758,7 @@ Try out the alternative `mortonOrder` as well.
 
 Note that the `bits` argument can be either 5 or 16 in 2D, and 5 or 10 in 3D, other values are not supported.
 
-![ordering-DemoHilbertOrder02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/ordering-DemoHilbertOrder02Kt.png)
+![ordering-DemoHilbertOrder02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/ordering-DemoHilbertOrder02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/ordering/DemoHilbertOrder02.kt)
 
@@ -771,7 +771,7 @@ to export a 3D path to an SVG file, or to apply 2D contour post-processing with
 [org.openrndr.extra.shapes.adjust.adjustContour].
 
 
-![path3d-DemoPath3DProjectionKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/path3d-DemoPath3DProjectionKt.png)
+![path3d-DemoPath3DProjectionKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/path3d-DemoPath3DProjectionKt.webp)
 
 [source code](src/jvmDemo/kotlin/path3d/DemoPath3DProjection.kt)
 
@@ -786,7 +786,7 @@ The start, mid, and end points of the arc are queried using it's `position()` me
 to draw small circles at those locations.
 
 
-![primitives-DemoArc01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoArc01Kt.png)
+![primitives-DemoArc01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoArc01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoArc01.kt)
 
@@ -802,7 +802,7 @@ is zero, an `IllegalArgumentException` is thrown. Since the mouse position
 is rounded to whole numbers, we ensure that exception will not happen by slightly
 offsetting the center of the circle.
 
-![primitives-DemoCircleInversion01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoCircleInversion01Kt.png)
+![primitives-DemoCircleInversion01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoCircleInversion01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoCircleInversion01.kt)
 
@@ -826,7 +826,7 @@ grid circles that contain the moving circle's center in black.
 The second pass draws grid circles that do not contain the moving
 circle's center in white.
 
-![primitives-DemoCircleInversion02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoCircleInversion02Kt.png)
+![primitives-DemoCircleInversion02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoCircleInversion02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoCircleInversion02.kt)
 
@@ -842,7 +842,7 @@ is calculated using the sine of the current time in seconds.
 These `sub` segments are then inverted using
 an animated circle moving around the center of the screen.
 
-![primitives-DemoCircleInversion03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoCircleInversion03Kt.png)
+![primitives-DemoCircleInversion03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoCircleInversion03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoCircleInversion03.kt)
 
@@ -857,7 +857,7 @@ formed by a pair of sine functions. The moving circle is connected to
 two smaller static circles via a [Net], rendered as a white
 contour with a stroke weight 2 pixels wide.
 
-![primitives-DemoNet01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoNet01Kt.png)
+![primitives-DemoNet01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoNet01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoNet01.kt)
 
@@ -866,7 +866,7 @@ contour with a stroke weight 2 pixels wide.
 Demonstrates how to create and render a [Pulley]: a system defined by two circles
 connected by their outer tangents.
 
-![primitives-DemoPulley01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoPulley01Kt.png)
+![primitives-DemoPulley01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoPulley01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoPulley01.kt)
 
@@ -890,7 +890,7 @@ their vertical position between being top-aligned and bottom-aligned.
 
 Try commenting out one or both of the last two function calls to observe the resulting changes.
 
-![primitives-DemoRectangleDistribute01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleDistribute01Kt.png)
+![primitives-DemoRectangleDistribute01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleDistribute01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoRectangleDistribute01.kt)
 
@@ -910,7 +910,7 @@ The second set contains horizontal rectangles, their heights are
 adjusted using `fitVertically()` to cover the available vertical space,
 and are animated horizontally between left-aligned and right-aligned.
 
-![primitives-DemoRectangleFitHorizontallyKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleFitHorizontallyKt.png)
+![primitives-DemoRectangleFitHorizontallyKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleFitHorizontallyKt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoRectangleFitHorizontally.kt)
 
@@ -925,7 +925,7 @@ The rectangles are rendered with reduced opacity to reveal the overlaps produced
 by the negative gutter spaces. A diagonal line is rendered between the top-left
 and bottom-right corners of each cell.
 
-![primitives-DemoRectangleGrid01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleGrid01Kt.png)
+![primitives-DemoRectangleGrid01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleGrid01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoRectangleGrid01.kt)
 
@@ -939,7 +939,7 @@ The program creates a grid of squares of side 50.0, then maps each resulting
 cell to a grid between 1 and 3 columns and rows, then discards half of
 the resulting cells by using the `List.filter { }` method.
 
-![primitives-DemoRectangleGrid02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleGrid02Kt.png)
+![primitives-DemoRectangleGrid02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleGrid02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoRectangleGrid02.kt)
 
@@ -956,7 +956,7 @@ window and renders it with white borders.
 
 Next, it renders five cell ranges in different colors.
 
-![primitives-DemoRectangleGrid03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleGrid03Kt.png)
+![primitives-DemoRectangleGrid03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleGrid03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoRectangleGrid03.kt)
 
@@ -965,7 +965,7 @@ Next, it renders five cell ranges in different colors.
 Demonstrates how to calculate a rectangle-rectangle intersection.
 
 
-![primitives-DemoRectangleIntersection01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleIntersection01Kt.png)
+![primitives-DemoRectangleIntersection01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleIntersection01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoRectangleIntersection01.kt)
 
@@ -979,7 +979,7 @@ both of which return a `List<Rectangle>`. Both `Rectangle` lists are rendered wi
 colors, which makes the intersection of the column and the row slightly brighter.
 
 
-![primitives-DemoRectangleIrregularGrid01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleIrregularGrid01Kt.png)
+![primitives-DemoRectangleIrregularGrid01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleIrregularGrid01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoRectangleIrregularGrid01.kt)
 
@@ -995,7 +995,7 @@ both of which return a `List<Rectangle>`. Both `Rectangle` lists are rendered wi
 colors, which makes the intersection of the column and the row slightly brighter.
 
 
-![primitives-DemoRectangleIrregularGrid02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleIrregularGrid02Kt.png)
+![primitives-DemoRectangleIrregularGrid02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectangleIrregularGrid02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoRectangleIrregularGrid02.kt)
 
@@ -1016,7 +1016,7 @@ This serves as a demonstration of positioning and rendering shapes in a structur
 Note that `place()` has `anchor` and `itemAnchor` arguments.
 By default `itemAnchor` equals `anchor`.
 
-![primitives-DemoRectanglePlace01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectanglePlace01Kt.png)
+![primitives-DemoRectanglePlace01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRectanglePlace01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoRectanglePlace01.kt)
 
@@ -1034,7 +1034,7 @@ The position is calculated by converting the shape index into columns and rows
 A continuous rotation is applied to all polygons for an animated effect.
 
 
-![primitives-DemoRegularPolygonKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRegularPolygonKt.png)
+![primitives-DemoRegularPolygonKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRegularPolygonKt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoRegularPolygon.kt)
 
@@ -1046,7 +1046,7 @@ The two required radii are calculated using the cosine and the sine of the time 
 In one brief instant, when both radii are equal, the 5-point star is rendered as a Decagon.
 
 
-![primitives-DemoRegularStar01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRegularStar01Kt.png)
+![primitives-DemoRegularStar01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRegularStar01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoRegularStar01.kt)
 
@@ -1056,7 +1056,7 @@ Demonstrates how to create a 12-point regular star, and one approach to filling
 the star with a grid of circles: testing whether various Vector2 coordinates are `in` the
 `ShapeContour` or not.
 
-![primitives-DemoRegularStar02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRegularStar02Kt.png)
+![primitives-DemoRegularStar02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRegularStar02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoRegularStar02.kt)
 
@@ -1067,7 +1067,7 @@ are rounded by the provided `radius`
 
 The radius is animated between 0.0 and 40.0 using the cosine of the current time in seconds.
 
-![primitives-DemoRoundedRectangle01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRoundedRectangle01Kt.png)
+![primitives-DemoRoundedRectangle01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRoundedRectangle01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoRoundedRectangle01.kt)
 
@@ -1079,7 +1079,7 @@ are rounded by four changing `radii`
 The radii are animated between 0.0 and 100.0 using the cosine of the current time in seconds
 and the corner index, demonstrating that corners can have differing radii.
 
-![primitives-DemoRoundedRectangle02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRoundedRectangle02Kt.png)
+![primitives-DemoRoundedRectangle02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoRoundedRectangle02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoRoundedRectangle02.kt)
 
@@ -1092,7 +1092,7 @@ Uses simplex noise to generate smoothly varying random values that control each 
 The sector sizes continuously change while always adding up to 360 degrees (a full circle).
 The entire composition slowly rotates over time.
 
-![primitives-DemoSector01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoSector01Kt.png)
+![primitives-DemoSector01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoSector01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoSector01.kt)
 
@@ -1105,7 +1105,7 @@ values that specify where to split the contour.
 In addition to the specified T values, closed shapes are also split between
 the 0.0 and 1.0 boundary, therefore specifying two T values returns 3 `ShapeContour` instances
 
-![primitives-DemoSplit01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoSplit01Kt.png)
+![primitives-DemoSplit01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoSplit01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoSplit01.kt)
 
@@ -1113,7 +1113,7 @@ the 0.0 and 1.0 boundary, therefore specifying two T values returns 3 `ShapeCont
 
 Demonstrates the use of `Tear()` to create drop-like shapes out of a Vector2 point and a Circle.
 
-![primitives-DemoTear01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoTear01Kt.png)
+![primitives-DemoTear01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoTear01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoTear01.kt)
 
@@ -1128,7 +1128,7 @@ The radii of each tear is randomly chosen between three values. The orientation 
 is calculated by getting the normalized difference between the tear and the center of the window,
 making them look as being emitted at the center of the window.
 
-![primitives-DemoTear02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoTear02Kt.png)
+![primitives-DemoTear02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/primitives-DemoTear02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/primitives/DemoTear02.kt)
 
@@ -1147,7 +1147,7 @@ depending on the length of the contour's segments, but with `RectifiedContour` t
 Use `RectifiedContour` when you need to evenly distribute points along a contour, or for smooth
 animations along the contour, and `ShapeContour` by default or when performance is essential.
 
-![rectify-DemoRectifiedContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/rectify-DemoRectifiedContour01Kt.png)
+![rectify-DemoRectifiedContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/rectify-DemoRectifiedContour01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/rectify/DemoRectifiedContour01.kt)
 
@@ -1158,7 +1158,7 @@ returns different values for the same `t`, and how a sub-contour with a fixed `t
 (0.01 in this case), returns longer and shorter contours depending on the position
 along a `ShapeContour`, but constant length contours for `RectifiedContour`.
 
-![rectify-DemoRectifiedContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/rectify-DemoRectifiedContour02Kt.png)
+![rectify-DemoRectifiedContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/rectify-DemoRectifiedContour02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/rectify/DemoRectifiedContour02.kt)
 
@@ -1168,7 +1168,7 @@ Demonstrates how to query a hobby contour at regular intervals and draw
 100 evenly spaced circles on it.
 
 
-![rectify-DemoRectifiedContour03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/rectify-DemoRectifiedContour03Kt.png)
+![rectify-DemoRectifiedContour03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/rectify-DemoRectifiedContour03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/rectify/DemoRectifiedContour03.kt)
 
@@ -1191,7 +1191,7 @@ below, commenting out `.rectified()` will reveal how the two
 approaches result in different arrangements.
 
 
-![rectify-DemoRectifiedContour04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/rectify-DemoRectifiedContour04Kt.png)
+![rectify-DemoRectifiedContour04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/rectify-DemoRectifiedContour04Kt.webp)
 
 [source code](src/jvmDemo/kotlin/rectify/DemoRectifiedContour04.kt)
 
@@ -1210,7 +1210,7 @@ small sphere drawn at those locations.
 
 Try commenting out `.rectified(0.01, 100.0)` to observe the difference it makes.
 
-![rectify-DemoRectifiedPath3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/rectify-DemoRectifiedPath3D01Kt.png)
+![rectify-DemoRectifiedPath3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/rectify-DemoRectifiedPath3D01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/rectify/DemoRectifiedPath3D01.kt)
 
@@ -1224,7 +1224,7 @@ Try to zoom and pan with the 2D camera to verify that the text is actually rende
 making it possible to style or manipulate each letter independently.
 
 
-![text-DemoText01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/text-DemoText01Kt.png)
+![text-DemoText01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/text-DemoText01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/text/DemoText01.kt)
 
@@ -1242,7 +1242,7 @@ Then uses `adjustContour` to alter the 4 edges of that contour, shifting their
 control points outwards and inwards along the normal using `withTunniLine()`
 and the cosine of the current time in seconds, then renders the resulting deformed contour.
 
-![tunni-DemoTunniAdjuster01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/tunni-DemoTunniAdjuster01Kt.png)
+![tunni-DemoTunniAdjuster01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/tunni-DemoTunniAdjuster01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/tunni/DemoTunniAdjuster01.kt)
 
@@ -1260,6 +1260,6 @@ draws the segment's control points as a line and
 finally draws a copy of the segment with its control points
 altered with `withTunniLine()` along the segment's normal.
 
-![tunni-DemoTunniPoint01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/tunni-DemoTunniPoint01Kt.png)
+![tunni-DemoTunniPoint01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/tunni-DemoTunniPoint01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/tunni/DemoTunniPoint01.kt)

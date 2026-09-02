@@ -14,7 +14,7 @@ The `shouldDraw` viewBox variable is used to avoid re-rendering the view
 unnecessarily when the camera has not changed.
 
 
-![DemoGestures01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-view-box/images/DemoGestures01Kt.png)
+![DemoGestures01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-view-box/images/DemoGestures01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoGestures01.kt)
 
@@ -28,7 +28,7 @@ The `shouldDraw` viewBox variable is used to avoid re-rendering the view
 unnecessarily when the camera has not changed.
 
 
-![DemoPointers01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-view-box/images/DemoPointers01Kt.png)
+![DemoPointers01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-view-box/images/DemoPointers01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoPointers01.kt)
 
@@ -38,7 +38,7 @@ Demonstrates how to use a proxy program inside a [viewBox],
 how the main program can access its variables and methods,
 and execute its `extend` block by calling its `draw()` method.
 
-![DemoProxyProgram01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-view-box/images/DemoProxyProgram01Kt.png)
+![DemoProxyProgram01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-view-box/images/DemoProxyProgram01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoProxyProgram01.kt)
 
@@ -56,7 +56,7 @@ position.
 Note that programA keeps listening to the key events
 even if programB is currently displayed.
 
-![DemoProxyProgram02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-view-box/images/DemoProxyProgram02Kt.png)
+![DemoProxyProgram02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-view-box/images/DemoProxyProgram02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoProxyProgram02.kt)
 
@@ -72,7 +72,7 @@ repeatedly, in a grid of 4 columns and 4 rows.
 The camera's initial rotation and scaling are specified as a transformation matrix.
 To control the camera use the mouse wheel and buttons on the top-left view.
 
-![DemoUpdate01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-view-box/images/DemoUpdate01Kt.png)
+![DemoUpdate01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-view-box/images/DemoUpdate01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoUpdate01.kt)
 
@@ -86,6 +86,6 @@ The `shouldDraw` viewBox variable is used to avoid re-rendering the view
 unnecessarily when the camera has not changed.
 
 
-![DemoViewBox01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-view-box/images/DemoViewBox01Kt.png)
+![DemoViewBox01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-view-box/images/DemoViewBox01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoViewBox01.kt)

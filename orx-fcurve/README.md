@@ -214,7 +214,7 @@ of the window (360.0) and holds that position for 5 seconds.
 By using `seconds.mod(5.0)` the time repeats in a loop that starts at 0.0 and ends at 5.0,
 producing an animation that repeats every 5 seconds.
 
-![DemoFCurve01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoFCurve01Kt.png)
+![DemoFCurve01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoFCurve01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoFCurve01.kt)
 
@@ -225,7 +225,7 @@ additionally renders both `FCurve` instances
 as contours and visualizing the current
 time as a vertical line.
 
-![DemoFCurve02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoFCurve02Kt.png)
+![DemoFCurve02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoFCurve02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoFCurve02.kt)
 
@@ -239,7 +239,7 @@ curve duration is exactly 1.0, so normalized time and seconds are equivalent.
 The demo visualizes the sampled curve in two ways: as an animated circle
 and as a static contour.
 
-![DemoFCurve03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoFCurve03Kt.png)
+![DemoFCurve03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoFCurve03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoFCurve03.kt)
 
@@ -255,7 +255,7 @@ which means: repeat the previous block 4 times.
 This program is interactive: instead of using the current time
 in seconds to query the `FCurve`, the mouse position is used.
 
-![DemoFCurveSheet01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoFCurveSheet01Kt.png)
+![DemoFCurveSheet01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoFCurveSheet01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoFCurveSheet01.kt)
 
@@ -271,6 +271,6 @@ This demo produces the same animation as found in
 of sampling the `x` and `y` curves separately, they
 are returned as a `Vector2` for convenience.
 
-![DemoMultiFCurve01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoMultiFCurve01Kt.png)
+![DemoMultiFCurve01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fcurve/images/DemoMultiFCurve01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoMultiFCurve01.kt)

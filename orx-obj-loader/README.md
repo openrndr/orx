@@ -30,7 +30,7 @@ This program loads an OBJ mesh as a CompoundMeshData and demonstrates
 how to convert it to a OBJ String representation, then
 draws the beginning of this String on the program window.
 
-![DemoObjCompoundRW01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-obj-loader/images/DemoObjCompoundRW01Kt.png)
+![DemoObjCompoundRW01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-obj-loader/images/DemoObjCompoundRW01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoObjCompoundRW01.kt)
 
@@ -41,7 +41,7 @@ Demonstrates how to load a `.obj` file as a `VertexBuffer`.
 The `loadOBJasVertexBuffer()` function expects the path to the `.obj` file as an argument.
 
 
-![DemoObjLoader01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-obj-loader/images/DemoObjLoader01Kt.png)
+![DemoObjLoader01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-obj-loader/images/DemoObjLoader01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoObjLoader01.kt)
 
@@ -52,7 +52,7 @@ Demonstrates how to save a `VertexBuffer` as an `.obj` file using the
 
 The program loads an existing OBJ file, then saves it with a new file name.
 
-![DemoObjSaver01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-obj-loader/images/DemoObjSaver01Kt.png)
+![DemoObjSaver01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-obj-loader/images/DemoObjSaver01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoObjSaver01.kt)
 
@@ -63,7 +63,7 @@ Demonstrates saving a `VertexBuffer` generated via code as an OBJ file.
 This file can be loaded in a 3D modelling / rendering program.
 
 
-![DemoObjSaver02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-obj-loader/images/DemoObjSaver02Kt.png)
+![DemoObjSaver02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-obj-loader/images/DemoObjSaver02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoObjSaver02.kt)
 
@@ -82,6 +82,6 @@ the lines do not end up occluded by the mesh rendered as triangles.
 Finally, the `sub` method is called on the `Path3D` instances to draw only parts of the wireframe, creating
 an animated effect.
 
-![DemoWireframe01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-obj-loader/images/DemoWireframe01Kt.png)
+![DemoWireframe01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-obj-loader/images/DemoWireframe01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoWireframe01.kt)

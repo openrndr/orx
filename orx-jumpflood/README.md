@@ -165,7 +165,7 @@ and the blue component the distance to that edge.
 
 Hold down a mouse button to see the raw animation.
 
-![DemoDirectionField01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoDirectionField01Kt.png)
+![DemoDirectionField01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoDirectionField01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoDirectionField01.kt)
 
@@ -183,7 +183,7 @@ at the current mouse position. The resulting blue color component is used as the
 centered at the mouse position. The red and green components are used to draw a line to the
 black/white edge closest to the mouse pointer.
 
-![DemoDirectionField02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoDirectionField02Kt.png)
+![DemoDirectionField02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoDirectionField02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoDirectionField02.kt)
 
@@ -203,7 +203,7 @@ The inverse of the distance is used to obtain a non-linear brightness.
 
 Hold down a mouse button to see the raw animation.
 
-![DemoDistanceField01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoDistanceField01Kt.png)
+![DemoDistanceField01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoDistanceField01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoDistanceField01.kt)
 
@@ -217,7 +217,7 @@ encoded in its RGB channels.
 Hold down any mouse button to observe the original vector shape in black and white,
 without the effect applied.
 
-![DemoShapeSDF01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF01Kt.png)
+![DemoShapeSDF01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoShapeSDF01.kt)
 
@@ -237,7 +237,7 @@ The vertical mouse position is used to control the radius of the `SDFSmoothInter
 The program finally renders the result of the previous operations as one color buffer
 thanks to the `SDFStrokeFill` effect.
 
-![DemoShapeSDF02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF02Kt.png)
+![DemoShapeSDF02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoShapeSDF02.kt)
 
@@ -254,7 +254,7 @@ rendering the result.
 The mouse horizontal position determines which of the three used color buffers is
 displayed.
 
-![DemoShapeSDF03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF03Kt.png)
+![DemoShapeSDF03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoShapeSDF03.kt)
 
@@ -275,7 +275,7 @@ A GUI is available to tweak the parameters of the `Perturb` effect.
 Lowering its `gain` to zero disables the effect, revealing the circle and the
 smoothness (round corners) of the difference effect.
 
-![DemoShapeSDF04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF04Kt.png)
+![DemoShapeSDF04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF04Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoShapeSDF04.kt)
 
@@ -285,7 +285,7 @@ Variation of DemoShapeSDF04, in which `Perturb` is applied twice with different
 parameters for a more complex UV map, and with four effects added to the GUI
 for further customization and exploration.
 
-![DemoShapeSDF05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF05Kt.png)
+![DemoShapeSDF05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoShapeSDF05Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoShapeSDF05.kt)
 
@@ -300,7 +300,7 @@ The `Skeleton` filter generates a texture in which inner parts of shapes are con
 the edges, creating a skeleton of the shape.
 
 
-![DemoSkeleton01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoSkeleton01Kt.png)
+![DemoSkeleton01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoSkeleton01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoSkeleton01.kt)
 
@@ -315,7 +315,7 @@ The `StraightSkeleton` filter generates a texture highlighting the "spine" of sh
 circles as a dot in their center, rectangles as lines, rings as circles, and more complex shapes
 as branching lines.
 
-![DemoStraightSkeleton01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoStraightSkeleton01Kt.png)
+![DemoStraightSkeleton01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoStraightSkeleton01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoStraightSkeleton01.kt)
 
@@ -324,7 +324,7 @@ as branching lines.
 Demonstrates using the [IdContourPoints] and [EncodePoints] filters and
 the [JumpFlooder] class.
 
-![DemoVoronoi01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoVoronoi01Kt.png)
+![DemoVoronoi01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoVoronoi01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoVoronoi01.kt)
 
@@ -350,7 +350,7 @@ displayed as a shade of blue.
 Moving the mouse to the right side of the window displays the RenderTarget with the
 point sets, otherwise the filtered result is shown.
 
-![DemoVoronoi02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoVoronoi02Kt.png)
+![DemoVoronoi02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoVoronoi02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoVoronoi02.kt)
 
@@ -382,6 +382,6 @@ equal to make the `Voronoi` effect more obvious and less glitchy.
 Moving the mouse to the right side of the window displays the RenderTarget,
 otherwise the filtered result is shown.
 
-![DemoVoronoi03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoVoronoi03Kt.png)
+![DemoVoronoi03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jumpflood/images/DemoVoronoi03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoVoronoi03.kt)

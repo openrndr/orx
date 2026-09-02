@@ -7,7 +7,7 @@ Implements 2D XPBD for simulating physical forces.
 
 
 
-![DemoBendyStar01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoBendyStar01Kt.png)
+![DemoBendyStar01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoBendyStar01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoBendyStar01.kt)
 
@@ -15,7 +15,7 @@ Implements 2D XPBD for simulating physical forces.
 
 
 
-![DemoBendyStar02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoBendyStar02Kt.png)
+![DemoBendyStar02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoBendyStar02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoBendyStar02.kt)
 
@@ -23,7 +23,7 @@ Implements 2D XPBD for simulating physical forces.
 
 
 
-![DemoBendyStar03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoBendyStar03Kt.png)
+![DemoBendyStar03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoBendyStar03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoBendyStar03.kt)
 
@@ -31,7 +31,7 @@ Implements 2D XPBD for simulating physical forces.
 
 
 
-![DemoBendyStar04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoBendyStar04Kt.png)
+![DemoBendyStar04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoBendyStar04Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoBendyStar04.kt)
 
@@ -39,7 +39,7 @@ Implements 2D XPBD for simulating physical forces.
 
 Demonstration soft body blobs
 
-![DemoBlob01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoBlob01Kt.png)
+![DemoBlob01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoBlob01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoBlob01.kt)
 
@@ -47,7 +47,7 @@ Demonstration soft body blobs
 
 
 
-![DemoBlob02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoBlob02Kt.png)
+![DemoBlob02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoBlob02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoBlob02.kt)
 
@@ -55,7 +55,7 @@ Demonstration soft body blobs
 
 
 
-![DemoBlob03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoBlob03Kt.png)
+![DemoBlob03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoBlob03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoBlob03.kt)
 
@@ -63,7 +63,7 @@ Demonstration soft body blobs
 
 
 
-![DemoBlobAndParticles01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoBlobAndParticles01Kt.png)
+![DemoBlobAndParticles01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoBlobAndParticles01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoBlobAndParticles01.kt)
 
@@ -71,7 +71,7 @@ Demonstration soft body blobs
 
 
 
-![DemoCircleConstraint01_ktKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoCircleConstraint01_ktKt.png)
+![DemoCircleConstraint01_ktKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoCircleConstraint01_ktKt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoCircleConstraint01_kt.kt)
 
@@ -79,7 +79,7 @@ Demonstration soft body blobs
 
 
 
-![DemoContourConstraint01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoContourConstraint01Kt.png)
+![DemoContourConstraint01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoContourConstraint01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoContourConstraint01.kt)
 
@@ -87,7 +87,7 @@ Demonstration soft body blobs
 
 
 
-![DemoDifferentialBlob01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoDifferentialBlob01Kt.png)
+![DemoDifferentialBlob01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoDifferentialBlob01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoDifferentialBlob01.kt)
 
@@ -95,7 +95,7 @@ Demonstration soft body blobs
 
 Demonstrates a simple force graph layout
 
-![DemoGraphLayout01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoGraphLayout01Kt.png)
+![DemoGraphLayout01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoGraphLayout01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoGraphLayout01.kt)
 
@@ -103,7 +103,7 @@ Demonstrates a simple force graph layout
 
 Demonstrates a simple force graph layout
 
-![DemoGraphLayout02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoGraphLayout02Kt.png)
+![DemoGraphLayout02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoGraphLayout02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoGraphLayout02.kt)
 
@@ -111,6 +111,6 @@ Demonstrates a simple force graph layout
 
 
 
-![DemoParticles01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoParticles01Kt.png)
+![DemoParticles01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoParticles01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoParticles01.kt)

@@ -90,7 +90,7 @@ Check out the [source code](src/commonMain/kotlin) to learn about function argum
 Demonstrate decal generator as an object slicer
 
 
-![decal-DemoDecal01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/decal-DemoDecal01Kt.png)
+![decal-DemoDecal01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/decal-DemoDecal01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/decal/DemoDecal01.kt)
 
@@ -99,7 +99,7 @@ Demonstrate decal generator as an object slicer
 Demonstrate decal generation and rendering
 
 
-![decal-DemoDecal02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/decal-DemoDecal02Kt.png)
+![decal-DemoDecal02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/decal-DemoDecal02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/decal/DemoDecal02.kt)
 
@@ -115,7 +115,7 @@ to select which of the two textures to use.
 The meshes are positioned in space using a 2D mesh, and displayed
 rotating on the X and Y axes at different speeds.
 
-![DemoAllKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoAllKt.png)
+![DemoAllKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoAllKt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoAll.kt)
 
@@ -135,7 +135,7 @@ The scene is rendered with an interactive `Orbital` 3D camera.
 A shade style is used to apply the texture to the box.
 
 
-![DemoBoxKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoBoxKt.png)
+![DemoBoxKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoBoxKt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoBox.kt)
 
@@ -151,7 +151,7 @@ An interactive 3D Orbital camera is defined, specifying the location of its `eye
 
 A minimal shade style is used to simulate a uni-directional light pointing along the view Z axis.
 
-![DemoComplex01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex01Kt.png)
+![DemoComplex01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoComplex01.kt)
 
@@ -159,7 +159,7 @@ A minimal shade style is used to simulate a uni-directional light pointing along
 
 Demonstrates the creation of a 3D mesh composed of two hemispheres, a cylinder and 12 legs.
 
-![DemoComplex02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex02Kt.png)
+![DemoComplex02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoComplex02.kt)
 
@@ -174,7 +174,7 @@ affecting transformation matrices, for instance `isolated`, `translate` and `rot
 and mesh generating keywords like
 `hemisphere`, `taperedCylinder` and `cylinder`.
 
-![DemoComplex03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex03Kt.png)
+![DemoComplex03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoComplex03.kt)
 
@@ -184,7 +184,7 @@ Demonstrates the use of `buildTriangleMesh` to create
 a composite 3D mesh and introduces a new mesh generating keyword:
 `cap`.
 
-![DemoComplex04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex04Kt.png)
+![DemoComplex04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex04Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoComplex04.kt)
 
@@ -195,7 +195,7 @@ Demonstrates how to create a 3D grid of extruded shapes
 composition to deform it.
 
 
-![DemoComplex05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex05Kt.png)
+![DemoComplex05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex05Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoComplex05.kt)
 
@@ -208,7 +208,7 @@ The cubes ar colorized using a shade style that sets colors based
 on vertex positions in space, converting XYZ coordinates into RGB colors.
 
 
-![DemoComplex06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex06Kt.png)
+![DemoComplex06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoComplex06Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoComplex06.kt)
 
@@ -223,7 +223,7 @@ The result is a [org.openrndr.draw.VertexBuffer] which can be rendered with
 An [Orbital] camera makes the scene interactive. A minimal `shadeStyle` is used
 to simulate a directional light.
 
-![DemoExtrude01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude01Kt.png)
+![DemoExtrude01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoExtrude01.kt)
 
@@ -238,7 +238,7 @@ The result is a [org.openrndr.draw.VertexBuffer] which can be rendered with
 An [Orbital] camera makes the scene interactive. A minimal `shadeStyle` is used
 to simulate a directional light.
 
-![DemoExtrude02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude02Kt.png)
+![DemoExtrude02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoExtrude02.kt)
 
@@ -256,7 +256,7 @@ The [Orbital] camera slowly rotates on its own while
 still being interactive.
 A minimal `shadeStyle` is used to simulate a directional light.
 
-![DemoExtrude03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude03Kt.png)
+![DemoExtrude03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoExtrude03.kt)
 
@@ -273,7 +273,7 @@ Demonstrates how to destroy a [org.openrndr.draw.VertexBuffer]
 on every animation frame to avoid filling out the memory.
 
 
-![DemoExtrude04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude04Kt.png)
+![DemoExtrude04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude04Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoExtrude04.kt)
 
@@ -290,7 +290,7 @@ Calls `destroy` on the [org.openrndr.draw.VertexBuffer]
 on every animation frame to free the used memory.
 
 
-![DemoExtrude05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude05Kt.png)
+![DemoExtrude05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude05Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoExtrude05.kt)
 
@@ -307,7 +307,7 @@ the shadeStyle.
 The mesh is rendered 5 times rotated around axis Z
 for a radial-symmetry effect.
 
-![DemoExtrude06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude06Kt.png)
+![DemoExtrude06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/DemoExtrude06Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoExtrude06.kt)
 
@@ -321,6 +321,6 @@ This demo shows:
 - how to estimate the tangents of this MeshData.
 - How to use the tangent and bitangent attributes in GLSL code.
 
-![tangents-DemoTangents01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/tangents-DemoTangents01Kt.png)
+![tangents-DemoTangents01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-mesh-generators/images/tangents-DemoTangents01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/tangents/DemoTangents01.kt)

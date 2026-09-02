@@ -82,7 +82,7 @@ The image drawn in each cell is a simple image with a white background and two t
 a pink one and a gray one. In some of the cells part of this image is cropped out (due to the fit method used).
 In other cells the image does not fully cover the available area, revealing a dark gray background.
 
-![DemoImageFit01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-image-fit/images/DemoImageFit01Kt.png)
+![DemoImageFit01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-image-fit/images/DemoImageFit01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoImageFit01.kt)
 
@@ -98,6 +98,6 @@ taking into consideration the minimum and maximum width and height arguments.
 Notice the trick used to generate unique random results changing only once per second by using
 the current seconds as an integer seed.
 
-![DemoImageFitSub01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-image-fit/images/DemoImageFitSub01Kt.png)
+![DemoImageFitSub01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-image-fit/images/DemoImageFitSub01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoImageFitSub01.kt)

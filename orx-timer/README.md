@@ -44,7 +44,7 @@ Note that drawing inside the repeat action has no effect.
 See DemoRepeat02.kt to learn how to trigger drawing.
 
 
-![DemoRepeat01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-timer/images/DemoRepeat01Kt.png)
+![DemoRepeat01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-timer/images/DemoRepeat01Kt.webp)
 
 [source code](src/demo/kotlin/DemoRepeat01.kt)
 
@@ -52,7 +52,7 @@ See DemoRepeat02.kt to learn how to trigger drawing.
 
 This demonstrates how to combine `repeat {}` with a postponed event to trigger drawing.
 
-![DemoRepeat02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-timer/images/DemoRepeat02Kt.png)
+![DemoRepeat02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-timer/images/DemoRepeat02Kt.webp)
 
 [source code](src/demo/kotlin/DemoRepeat02.kt)
 
@@ -63,7 +63,7 @@ for rendering. In this demo, the `opacity` variable is
 reduced on every animation frame, and increased to 1.0
 every 2 seconds, creating a pulsating animation effect.
 
-![DemoRepeat03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-timer/images/DemoRepeat03Kt.png)
+![DemoRepeat03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-timer/images/DemoRepeat03Kt.webp)
 
 [source code](src/demo/kotlin/DemoRepeat03.kt)
 
@@ -75,6 +75,6 @@ It is similar to the `repeat` function,
 but it runs only once after the specified delay in seconds.
 
 
-![DemoTimeOut01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-timer/images/DemoTimeOut01Kt.png)
+![DemoTimeOut01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-timer/images/DemoTimeOut01Kt.webp)
 
 [source code](src/demo/kotlin/DemoTimeOut01.kt)

@@ -83,7 +83,7 @@ based on the triangle's index.
 This method demonstrates concepts of computational geometry and procedural
 rendering.
 
-![DemoDelaunay01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoDelaunay01Kt.png)
+![DemoDelaunay01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoDelaunay01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoDelaunay01.kt)
 
@@ -96,7 +96,7 @@ Commented out one can also discover the `hull()` method,
 which returns a ShapeContour of a convex hull containing
 all the points in the set.
 
-![DemoDelaunay02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoDelaunay02Kt.png)
+![DemoDelaunay02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoDelaunay02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoDelaunay02.kt)
 
@@ -112,7 +112,7 @@ The program performs the following:
 - Extracts the cell polygons of the Voronoi diagram.
 - Renders the Voronoi cell polygons on the canvas, with a pink stroke on a black background.
 
-![DemoVoronoi01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoVoronoi01Kt.png)
+![DemoVoronoi01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoVoronoi01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoVoronoi01.kt)
 
@@ -135,7 +135,7 @@ Next, the four layers are rendered:
 The structure is recalculated on every animation frame, making it easy
 to animate some of the parameters.
 
-![DemoVoronoi02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoVoronoi02Kt.png)
+![DemoVoronoi02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoVoronoi02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoVoronoi02.kt)
 
@@ -160,6 +160,6 @@ The structure is recalculated on every animation frame, making it easy
 to animate some of the parameters. Try replacing the 0.0 rotation
 of the circles by other values or even `seconds` and observe what happens.
 
-![DemoVoronoi03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoVoronoi03Kt.png)
+![DemoVoronoi03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoVoronoi03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoVoronoi03.kt)

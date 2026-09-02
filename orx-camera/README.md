@@ -64,7 +64,7 @@ fun main() = application {
 
 click and drag the mouse for panning, use the mouse wheel for zooming
 
-![DemoCamera2D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoCamera2D01Kt.png)
+![DemoCamera2D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoCamera2D01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoCamera2D01.kt)
 
@@ -75,7 +75,7 @@ click and drag the mouse for panning, use the mouse wheel for zooming
 An approach for having certain elements not affected by the camera.
 See DemoCamera2DManual01.kt for a new and simpler approach
 
-![DemoCamera2D02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoCamera2D02Kt.png)
+![DemoCamera2D02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoCamera2D02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoCamera2D02.kt)
 
@@ -88,7 +88,7 @@ other elements not affected by it.
 In this example both PINK circles can be dragged, scaled and rotated
 while the white circle in the middle is static.
 
-![DemoCamera2DManual01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoCamera2DManual01Kt.png)
+![DemoCamera2DManual01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoCamera2DManual01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoCamera2DManual01.kt)
 
@@ -104,7 +104,7 @@ the new active contour.
 As the mouse is dragged or its wheel scrolled, the camera is updated, affecting
 how the active contour is rendered.
 
-![DemoCamera2DManual02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoCamera2DManual02Kt.png)
+![DemoCamera2DManual02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoCamera2DManual02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoCamera2DManual02.kt)
 
@@ -113,7 +113,7 @@ how the active contour is rendered.
 Demonstrate the use of `Orbital`, an interactive 3D camera
 that can be controlled with a mouse and a keyboard.
 
-![DemoOrbital01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoOrbital01Kt.png)
+![DemoOrbital01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoOrbital01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoOrbital01.kt)
 
@@ -123,7 +123,7 @@ Demonstrate the use of `OrbitalCamera`, `OrbitalControls`, `AxisHelper` and `Gri
 
 Press the `t` key to toggle camera interaction, or `r` to reset the camera to its defaults.
 
-![DemoOrbitalCamera01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoOrbitalCamera01Kt.png)
+![DemoOrbitalCamera01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoOrbitalCamera01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoOrbitalCamera01.kt)
 
@@ -139,7 +139,7 @@ Functionality:
 - Renders 3D wireframe shapes (sphere and cube) using the camera's isolated perspective.
 - Draws a static 2D pink circle overlay at the window center.
 
-![DemoOrbitalManual01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoOrbitalManual01Kt.png)
+![DemoOrbitalManual01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoOrbitalManual01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoOrbitalManual01.kt)
 
@@ -155,6 +155,6 @@ when running it again.
 The GUI also allows randomizing, loading and saving
 its state to a file via the top buttons it displays.
 
-![DemoParametricOrbital01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoParametricOrbital01Kt.png)
+![DemoParametricOrbital01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoParametricOrbital01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoParametricOrbital01.kt)

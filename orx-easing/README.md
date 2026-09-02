@@ -100,6 +100,6 @@ println(Easing.values().size)
 [grid] is used to layout graphs on rows and columns.
 
 
-![DemoEasings01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-easing/images/DemoEasings01Kt.png)
+![DemoEasings01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-easing/images/DemoEasings01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoEasings01.kt)

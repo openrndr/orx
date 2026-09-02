@@ -9,7 +9,7 @@ Bounding volume hierarchies
 
 
 
-![DemoBipartiteIntersections01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-bvh/images/DemoBipartiteIntersections01Kt.png)
+![DemoBipartiteIntersections01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-bvh/images/DemoBipartiteIntersections01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoBipartiteIntersections01.kt)
 
@@ -17,7 +17,7 @@ Bounding volume hierarchies
 
 
 
-![DemoIntersections01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-bvh/images/DemoIntersections01Kt.png)
+![DemoIntersections01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-bvh/images/DemoIntersections01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoIntersections01.kt)
 
@@ -25,6 +25,6 @@ Bounding volume hierarchies
 
 
 
-![DemoRectangleQuery01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-bvh/images/DemoRectangleQuery01Kt.png)
+![DemoRectangleQuery01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-bvh/images/DemoRectangleQuery01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoRectangleQuery01.kt)

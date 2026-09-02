@@ -202,7 +202,7 @@ Notice the use of `createEquivalent()`, which creates a new `colorBuffer`
 with the same size and properties as a source `colorBuffer`.
 
 
-![DemoApproximateGaussianBlur01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoApproximateGaussianBlur01Kt.png)
+![DemoApproximateGaussianBlur01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoApproximateGaussianBlur01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoApproximateGaussianBlur01.kt)
 
@@ -215,7 +215,7 @@ then applies various blurs drawing them in 3 columns and 3 rows.
 Each type of blur has different parameters.
 Not all parameters are demonstrated.
 
-![DemoBlur01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoBlur01Kt.png)
+![DemoBlur01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoBlur01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoBlur01.kt)
 
@@ -224,7 +224,7 @@ Not all parameters are demonstrated.
 Demonstrates the [CannyEdgeDetector] effect applied to a loaded
 color photograph.
 
-![DemoCannyEdgeDetector01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoCannyEdgeDetector01Kt.png)
+![DemoCannyEdgeDetector01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoCannyEdgeDetector01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoCannyEdgeDetector01.kt)
 
@@ -236,7 +236,7 @@ toggling the `labInterpolation` parameter every second on and off.
 The `foregroundColor` and `backgroundColor` parameters are
 left to their defaults.
 
-![DemoColorDuotone01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColorDuotone01Kt.png)
+![DemoColorDuotone01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColorDuotone01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoColorDuotone01.kt)
 
@@ -250,7 +250,7 @@ to two other colors, applied in a different part of the image.
 The `rotation` parameter lets us specify in which direction
 the interpolation happens (vertical, horizontal, or something else).
 
-![DemoColorDuotoneGradient01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColorDuotoneGradient01Kt.png)
+![DemoColorDuotoneGradient01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColorDuotoneGradient01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoColorDuotoneGradient01.kt)
 
@@ -261,7 +261,7 @@ to produce a gray scale image. The `curve` parameter is used as
 an exponent to bias the result up or down. 1.0 produces a linear
 transformation.
 
-![DemoColormapGrayscaleKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColormapGrayscaleKt.png)
+![DemoColormapGrayscaleKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColormapGrayscaleKt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoColormapGrayscale.kt)
 
@@ -273,7 +273,7 @@ spectrum as described by Alan Zucconi in his
 [Improving the Rainbow](https://www.alanzucconi.com/2017/07/15/improving-the-rainbow/)
 article.
 
-![DemoColormapSpectralZucconiKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColormapSpectralZucconiKt.png)
+![DemoColormapSpectralZucconiKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColormapSpectralZucconiKt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoColormapSpectralZucconi.kt)
 
@@ -284,7 +284,7 @@ maps values of the RED color channel to Turbo Colormap according to
 [Turbo, An Improved Rainbow Colormap for Visualization](https://ai.googleblog.com/2019/08/turbo-improved-rainbow-colormap-for.html)
 by Google.
 
-![DemoColormapTurboKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColormapTurboKt.png)
+![DemoColormapTurboKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColormapTurboKt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoColormapTurbo.kt)
 
@@ -293,7 +293,7 @@ by Google.
 Demonstration of the [Posterize] effect to reduce the number of colors
 present in an image.
 
-![DemoColorPosterize01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColorPosterize01Kt.png)
+![DemoColorPosterize01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoColorPosterize01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoColorPosterize01.kt)
 
@@ -315,7 +315,7 @@ The composite effect is installed as a post-processing effect
 using `extend(Post())`, so anything drawn in following `extend`
 blocks is affected by it.
 
-![DemoCompositeFilter01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoCompositeFilter01Kt.png)
+![DemoCompositeFilter01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoCompositeFilter01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoCompositeFilter01.kt)
 
@@ -334,7 +334,7 @@ The 4 grid cells and the 4 actions are used in pairs:
 first the action is called to set the effect parameters, the
 effect is applied, and the result is drawn in a cell.
 
-![DemoContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoContour01Kt.png)
+![DemoContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoContour01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoContour01.kt)
 
@@ -352,7 +352,7 @@ Every 60 animation frames the `centerWindow` property is toggled
 between true and false to demonstrate how the result changes.
 
 
-![DemoDirectionalBlur01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDirectionalBlur01Kt.png)
+![DemoDirectionalBlur01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDirectionalBlur01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoDirectionalBlur01.kt)
 
@@ -366,7 +366,7 @@ color based on simplex noise. The R and G channels of the colors
 control the direction of the sampling. By animating the sampling
 distance the result oscillates between no-effect and a noticeable one.
 
-![DemoDirectionalDisplace01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDirectionalDisplace01Kt.png)
+![DemoDirectionalDisplace01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDirectionalDisplace01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoDirectionalDisplace01.kt)
 
@@ -379,7 +379,7 @@ The program draws 12 overlapping translucent circles on the
 on the overlapping areas. Those colors specify where the
 `DirectionalDisplace` effect will sample pixels from.
 
-![DemoDirectionalDisplace02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDirectionalDisplace02Kt.png)
+![DemoDirectionalDisplace02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDirectionalDisplace02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoDirectionalDisplace02.kt)
 
@@ -390,7 +390,7 @@ in 8 columns and 6 rows, and displaces the source texture inside each rectangle.
 Try experimenting with some of the other parameters, like `distort`.
 You can even animate them.
 
-![DemoDistortLenses01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDistortLenses01Kt.png)
+![DemoDistortLenses01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDistortLenses01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoDistortLenses01.kt)
 
@@ -401,7 +401,7 @@ The `invert` parameter toggles between true and false once per second.
 The `phase0` and `phase1` parameters depend on `seconds`, which makes
 the pattern wobble slowly.
 
-![DemoDitherLumaHalftone01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDitherLumaHalftone01Kt.png)
+![DemoDitherLumaHalftone01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoDitherLumaHalftone01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoDitherLumaHalftone01.kt)
 
@@ -410,7 +410,7 @@ the pattern wobble slowly.
 Demonstrates [FluidDistort], a fluid simulation real time effect.
 All pixels are slowly displaced in a turbulent manner as if they were a gas or a liquid.
 
-![DemoFluidDistort01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoFluidDistort01Kt.png)
+![DemoFluidDistort01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoFluidDistort01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoFluidDistort01.kt)
 
@@ -419,7 +419,7 @@ All pixels are slowly displaced in a turbulent manner as if they were a gas or a
 This demonstrates converting a [ColorBuffer] from and to (OK)LAB color space using the [RgbToOkLab] and [OkLabToRgb]
 filters. The (OK)Lab representation is signed and requires a floating point representation.
 
-![DemoOkLab01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoOkLab01Kt.png)
+![DemoOkLab01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoOkLab01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoOkLab01.kt)
 
@@ -432,7 +432,7 @@ Notice the use of `createEquivalent()`, which creates a new `colorBuffer`
 with the same size and properties as a source `colorBuffer`.
 
 
-![DemoPerturb01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoPerturb01Kt.png)
+![DemoPerturb01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoPerturb01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoPerturb01.kt)
 
@@ -446,7 +446,7 @@ an additive composition.
 
 This demo also shows how to make a program window resizable.
 
-![DemoPost01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoPost01Kt.png)
+![DemoPost01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoPost01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoPost01.kt)
 
@@ -465,6 +465,6 @@ The `fill` factor, which controls how the top and the bottom colors are mixed, i
 
 The `clip` parameter is also animated and toggles every 6 seconds.
 
-![DemoSpectralBlend01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoSpectralBlend01Kt.png)
+![DemoSpectralBlend01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoSpectralBlend01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoSpectralBlend01.kt)

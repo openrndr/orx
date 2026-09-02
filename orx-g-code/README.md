@@ -77,7 +77,7 @@ The input handling code shows how to convert mouse coordinates from the screen s
 
 Pressing the `g` key will render the g-code and write it to `/tmp`.
 
-![DemoInteractivePlotKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-g-code/images/DemoInteractivePlotKt.png)
+![DemoInteractivePlotKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-g-code/images/DemoInteractivePlotKt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoInteractivePlot.kt)
 
@@ -101,6 +101,6 @@ It could be a hint to what pen color is used to draw each layer.
 This does not use the olive orx to keep the example minimal. But using a program with live reloading,
 you can quickly preview your plot.
 
-![DemoSimplePlotKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-g-code/images/DemoSimplePlotKt.png)
+![DemoSimplePlotKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-g-code/images/DemoSimplePlotKt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoSimplePlot.kt)

@@ -77,7 +77,7 @@ The program performs the following steps:
 
 The `filter` method is provided by `orx-hash-grid`.
 
-![DemoFilter01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-hash-grid/images/DemoFilter01Kt.png)
+![DemoFilter01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-hash-grid/images/DemoFilter01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoFilter01.kt)
 
@@ -93,7 +93,7 @@ The program performs the following key steps:
 - Sets up an orbital camera to allow viewing the 3D scene interactively.
 - Renders the filtered points by translating the sphere mesh to each point's position and applying a shader that modifies the fragment color based on the view normal.
 
-![DemoFilter3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-hash-grid/images/DemoFilter3D01Kt.png)
+![DemoFilter3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-hash-grid/images/DemoFilter3D01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoFilter3D01.kt)
 
@@ -109,6 +109,6 @@ The visual output includes:
 - Rectangles representing the bounds of the occupied cells in the grid.
 - Circles representing the generated random points.
 
-![DemoHashGrid01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-hash-grid/images/DemoHashGrid01Kt.png)
+![DemoHashGrid01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-hash-grid/images/DemoHashGrid01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoHashGrid01.kt)

@@ -38,7 +38,7 @@ Try increasing the cell size to see how the precision of the circle reduces.
 The circular contour created in this program has over 90 segments. The number of segments depends on the cell
 size, and the resulting radius.
 
-![FindContours01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-marching-squares/images/FindContours01Kt.png)
+![FindContours01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-marching-squares/images/FindContours01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/FindContours01.kt)
 
@@ -53,7 +53,7 @@ equivalent to 0.06. Increasing or decreasing this value will change how close th
 parallel curves are to each other.
 
 
-![FindContours02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-marching-squares/images/FindContours02Kt.png)
+![FindContours02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-marching-squares/images/FindContours02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/FindContours02.kt)
 
@@ -65,7 +65,7 @@ but one can arrive to such functions by exploration and experimentation, nesting
 functions and making use of `seconds`, v.x and v.y.
 
 
-![FindContours03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-marching-squares/images/FindContours03Kt.png)
+![FindContours03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-marching-squares/images/FindContours03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/FindContours03.kt)
 
@@ -82,6 +82,6 @@ and only reads from the image when it is.
 The `seconds` built-in variable is used to generate an animated effect, serving as a shifting cut-off point
 that specifies at which brightness level to create curves.
 
-![FindContours04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-marching-squares/images/FindContours04Kt.png)
+![FindContours04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-marching-squares/images/FindContours04Kt.webp)
 
 [source code](src/jvmDemo/kotlin/FindContours04.kt)
