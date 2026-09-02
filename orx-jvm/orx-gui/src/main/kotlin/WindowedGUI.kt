@@ -53,7 +53,7 @@ class WindowedGUI(
                     width = appearance.barWidth,
                     height = program.height,
                     resizable = windowResizable,
-                    position = program.window.position.toInt() - IntVector2(200, 0)
+                    position = program.window.position.toInt() - IntVector2(appearance.barWidth, 0)
                 )
             ) {
                 //
