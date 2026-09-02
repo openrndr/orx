@@ -187,7 +187,7 @@ Each circle is also added to the gui, making it possible to adjust its propertie
 
 Click an existing circle to remove it from the collection and from the gui.
 
-![DemoAddRemove01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoAddRemove01Kt.png)
+![DemoAddRemove01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoAddRemove01Kt.webp)
 
 [source code](src/demo/kotlin/DemoAddRemove01.kt)
 
@@ -207,7 +207,7 @@ This will rarely produce interesting visual effects, but it reveals that
 the filter's order of application can be modified after creation.
 Note that the order in the gui will not change.
 
-![DemoAddRemove02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoAddRemove02Kt.png)
+![DemoAddRemove02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoAddRemove02Kt.webp)
 
 [source code](src/demo/kotlin/DemoAddRemove02.kt)
 
@@ -218,7 +218,7 @@ Demonstrates how to customize the appearance of the GUI by using
 
 In this demo, we make the GUI wider (400 pixels) and translucent.
 
-![DemoAppearance01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoAppearance01Kt.png)
+![DemoAppearance01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoAppearance01Kt.webp)
 
 [source code](src/demo/kotlin/DemoAppearance01.kt)
 
@@ -230,7 +230,7 @@ Demonstrates how to customize the appearance of the GUI by using
 This demo not only changes the background color and the panel width,
 but also the widget colors and font size.
 
-![DemoAppearance02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoAppearance02Kt.png)
+![DemoAppearance02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoAppearance02Kt.webp)
 
 [source code](src/demo/kotlin/DemoAppearance02.kt)
 
@@ -239,7 +239,7 @@ but also the widget colors and font size.
 Demonstrates using collapsible compartments in the GUI. Each one has a description
 visible (and clickable) in the panel.
 
-![DemoCompartments01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoCompartments01Kt.png)
+![DemoCompartments01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoCompartments01Kt.webp)
 
 [source code](src/demo/kotlin/DemoCompartments01.kt)
 
@@ -247,7 +247,7 @@ visible (and clickable) in the panel.
 
 
 
-![DemoCustom01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoCustom01Kt.png)
+![DemoCustom01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoCustom01Kt.webp)
 
 [source code](src/demo/kotlin/DemoCustom01.kt)
 
@@ -255,7 +255,7 @@ visible (and clickable) in the panel.
 
 Demonstrates how to hide the GUI when the mouse pointer is outside of it.
 
-![DemoHide01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoHide01Kt.png)
+![DemoHide01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoHide01Kt.webp)
 
 [source code](src/demo/kotlin/DemoHide01.kt)
 
@@ -265,7 +265,7 @@ A simple demonstration of a GUI with a drop-down menu.
 
 The entries in the drop-down menu are taken from an `enum class`.
 
-![DemoOptions01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoOptions01Kt.png)
+![DemoOptions01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoOptions01Kt.webp)
 
 [source code](src/demo/kotlin/DemoOptions01.kt)
 
@@ -277,7 +277,7 @@ The entries in the drop-down menu are taken from an `enum class`.
 The `enum class` entries contain both a name (used in the drop-down)
 and a `ColorRGBa` instance (used for rendering).
 
-![DemoOptions02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoOptions02Kt.png)
+![DemoOptions02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoOptions02Kt.webp)
 
 [source code](src/demo/kotlin/DemoOptions02.kt)
 
@@ -288,7 +288,7 @@ A simple demonstration of a GUI with a drop-down menu.
 The entries in the drop-down menu are taken from the `BlendMode` enum class.
 The selected blend mode is used to render a circle on top of an image.
 
-![DemoOptions03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoOptions03Kt.png)
+![DemoOptions03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoOptions03Kt.webp)
 
 [source code](src/demo/kotlin/DemoOptions03.kt)
 
@@ -305,7 +305,7 @@ This mechanism only updates the `String` containing the path of an image file.
 The `watchingImagePath()` delegate property is used to automatically load an image
 when its `String` argument changes.
 
-![DemoPath01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoPath01Kt.png)
+![DemoPath01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoPath01Kt.webp)
 
 [source code](src/demo/kotlin/DemoPath01.kt)
 
@@ -318,7 +318,7 @@ Keyboard controls:
 [Left Shift] + [0]..[9] => store current GUI values to a preset
 [0]..[9] => recall a preset
 
-![DemoPresets01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoPresets01Kt.png)
+![DemoPresets01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoPresets01Kt.webp)
 
 [source code](src/demo/kotlin/DemoPresets01.kt)
 
@@ -336,7 +336,7 @@ This demo sets the window to resizable, so if you resize the window
 you should see tha the circle stays at the center of the canvas.
 
 
-![DemoSideCanvas01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoSideCanvas01Kt.png)
+![DemoSideCanvas01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoSideCanvas01Kt.webp)
 
 [source code](src/demo/kotlin/DemoSideCanvas01.kt)
 
@@ -352,7 +352,7 @@ The demo also shows how to use the variables controlled by the GUI
 inside the program, so changes to those variables affect
 the rendering in real time.
 
-![DemoSimple01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoSimple01Kt.png)
+![DemoSimple01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoSimple01Kt.webp)
 
 [source code](src/demo/kotlin/DemoSimple01.kt)
 
@@ -364,6 +364,6 @@ This annotation creates an interactive XY control in a GUI that can be used to u
 a `Vector2` variable. In this demo it sets the position of a circle.
 
 
-![DemoXYParameterKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoXYParameterKt.png)
+![DemoXYParameterKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoXYParameterKt.webp)
 
 [source code](src/demo/kotlin/DemoXYParameter.kt)

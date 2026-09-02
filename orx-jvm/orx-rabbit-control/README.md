@@ -52,7 +52,7 @@ to open the web user interface. A clickable URL is also displayed in the console
 
 Once the UI is visible in a web browser we can use it to control the OPENRNDR program.
 
-![DemoRabbitControlKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-rabbit-control/images/DemoRabbitControlKt.png)
+![DemoRabbitControlKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-rabbit-control/images/DemoRabbitControlKt.webp)
 
 [source code](src/demo/kotlin/DemoRabbitControl.kt)
 
@@ -63,7 +63,7 @@ can be displayed and hidden manually.
 
 To display the QR-code overlay in this demo, hold down the HOME key in the keyboard.
 
-![DemoRabbitControlManualOverlayKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-rabbit-control/images/DemoRabbitControlManualOverlayKt.png)
+![DemoRabbitControlManualOverlayKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-rabbit-control/images/DemoRabbitControlManualOverlayKt.webp)
 
 [source code](src/demo/kotlin/DemoRabbitControlManualOverlay.kt)
 
@@ -77,6 +77,6 @@ connected computers that are not in the same network.
 To use it with this example use 'orxtest' as the tunnel-name in https://rabbithole.rabbitcontrol.cc
 
 
-![DemoRabbitHoleKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-rabbit-control/images/DemoRabbitHoleKt.png)
+![DemoRabbitHoleKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-rabbit-control/images/DemoRabbitHoleKt.webp)
 
 [source code](src/demo/kotlin/DemoRabbitHole.kt)

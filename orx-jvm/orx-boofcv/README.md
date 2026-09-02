@@ -37,7 +37,7 @@ The `.toShapeContours()` converts BoofCV contours to OPENRNDR `ShapeContour` ins
 
 The resulting contours are animated zooming in and out while their colors change slowly.
 
-![DemoContours01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-boofcv/images/DemoContours01Kt.png)
+![DemoContours01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-boofcv/images/DemoContours01Kt.webp)
 
 [source code](src/demo/kotlin/DemoContours01.kt)
 
@@ -46,7 +46,7 @@ The resulting contours are animated zooming in and out while their colors change
 Demonstrates how to calculate the movement of pixels using an image flow algorithm.
 Not ideal for real-time purposes.
 
-![DemoOpticalFlowKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-boofcv/images/DemoOpticalFlowKt.png)
+![DemoOpticalFlowKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-boofcv/images/DemoOpticalFlowKt.webp)
 
 [source code](src/demo/kotlin/DemoOpticalFlow.kt)
 
@@ -55,7 +55,7 @@ Not ideal for real-time purposes.
 Demonstrates how to scale down images using the `resizeBy` BoofCV-based
 method.
 
-![DemoResize01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-boofcv/images/DemoResize01Kt.png)
+![DemoResize01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-boofcv/images/DemoResize01Kt.webp)
 
 [source code](src/demo/kotlin/DemoResize01.kt)
 
@@ -67,7 +67,7 @@ method.
 If only the `newWidth` or the `newHeight` arguments are specified,
 the resizing happens maintaining the original aspect ratio.
 
-![DemoResize02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-boofcv/images/DemoResize02Kt.png)
+![DemoResize02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-boofcv/images/DemoResize02Kt.webp)
 
 [source code](src/demo/kotlin/DemoResize02.kt)
 
@@ -84,6 +84,6 @@ Then it uses the simplified vertex lists to create smooth curves
 
 Study the console to learn about the number of segments before and after simplification.
 
-![DemoSimplified01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-boofcv/images/DemoSimplified01Kt.png)
+![DemoSimplified01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-boofcv/images/DemoSimplified01Kt.webp)
 
 [source code](src/demo/kotlin/DemoSimplified01.kt)

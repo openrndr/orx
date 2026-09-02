@@ -13,7 +13,7 @@ the value of the sliders with properties of an object's instance.
 (equivalent to CSS in web pages) and `layout` represents the content of the UI,
 including names, ID and slider ranges (equivalent to HTML in web pages).
 
-![DemoBinding01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoBinding01Kt.png)
+![DemoBinding01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoBinding01Kt.webp)
 
 [source code](src/demo/kotlin/DemoBinding01.kt)
 
@@ -21,7 +21,7 @@ including names, ID and slider ranges (equivalent to HTML in web pages).
 
 A simple demonstration of a ColorPickerButton
 
-![DemoColorPickerButton01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoColorPickerButton01Kt.png)
+![DemoColorPickerButton01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoColorPickerButton01Kt.webp)
 
 [source code](src/demo/kotlin/DemoColorPickerButton01.kt)
 
@@ -30,7 +30,7 @@ A simple demonstration of a ColorPickerButton
 Demonstrates how to create a UI with a drop-down menu. When an option is picked,
 the content of a Div is replaced by a button and some sliders.
 
-![DemoComplex01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoComplex01Kt.png)
+![DemoComplex01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoComplex01Kt.webp)
 
 [source code](src/demo/kotlin/DemoComplex01.kt)
 
@@ -41,7 +41,7 @@ Demonstrates the use of grid layouts.
 The program creates a grid of 2 columns and 4 rows. The first two rows are merged together by using
 `gridPopulation { 2.columns }`.
 
-![DemoGridLayout01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoGridLayout01Kt.png)
+![DemoGridLayout01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoGridLayout01Kt.webp)
 
 [source code](src/demo/kotlin/DemoGridLayout01.kt)
 
@@ -53,7 +53,7 @@ to create a horizontal layout featuring 10 clickable buttons with various colors
 The `controlManager { }` DSL includes `styleSheet { }`, which uses a syntax inspired
 by CSS, and `layout { }`, which is structured similarly to HTML.
 
-![DemoHorizontalLayout01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoHorizontalLayout01Kt.png)
+![DemoHorizontalLayout01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoHorizontalLayout01Kt.webp)
 
 [source code](src/demo/kotlin/DemoHorizontalLayout01.kt)
 
@@ -62,7 +62,7 @@ by CSS, and `layout { }`, which is structured similarly to HTML.
 Demonstrates the use of grid layouts, property-control binding, and JSON serialization/deserialization for
 model persistence.
 
-![DemoSimpleUI01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoSimpleUI01Kt.png)
+![DemoSimpleUI01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoSimpleUI01Kt.webp)
 
 [source code](src/demo/kotlin/DemoSimpleUI01.kt)
 
@@ -74,7 +74,7 @@ A `hitTest` area at the top of the tool window makes it possible to drag it with
 
 The tool window can be closed by clicking its `close` button, or by pressing the ESC key.
 
-![DemoToolWindows01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoToolWindows01Kt.png)
+![DemoToolWindows01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoToolWindows01Kt.webp)
 
 [source code](src/demo/kotlin/DemoToolWindows01.kt)
 
@@ -86,7 +86,7 @@ using `FlexDirection.Column` instead of `FlexDirection.Row`.
 The program also shows common `styleSheet` properties to control `width`, `height`,
 padding and background color.
 
-![DemoVerticalLayout01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoVerticalLayout01Kt.png)
+![DemoVerticalLayout01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoVerticalLayout01Kt.webp)
 
 [source code](src/demo/kotlin/DemoVerticalLayout01.kt)
 
@@ -96,7 +96,7 @@ This demonstration shows how `ViewBox` (from `orx-view-box`) can be embedded as 
 allowing OPENRNDR drawing operations to be integrated alongside other UI components in a grid layout.
 The ViewBox element responds interactively to UI controls (slider) and mouse input.
 
-![DemoViewBoxElement01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoViewBoxElement01Kt.png)
+![DemoViewBoxElement01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoViewBoxElement01Kt.webp)
 
 [source code](src/demo/kotlin/DemoViewBoxElement01.kt)
 
@@ -106,7 +106,7 @@ This demonstration shows how a previously defined `ViewBox` (from `orx-view-box`
 allowing OPENRNDR drawing operations to be integrated alongside other UI components in a grid layout.
 The ViewBox element responds interactively to UI controls (slider) and mouse input.
 
-![DemoViewBoxElement02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoViewBoxElement02Kt.png)
+![DemoViewBoxElement02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoViewBoxElement02Kt.webp)
 
 [source code](src/demo/kotlin/DemoViewBoxElement02.kt)
 
@@ -117,7 +117,7 @@ and a variable number of inputs arranged in a grid. The user can adjust
 the number of columns and rows of the grid, and each cell features a slider
 to control its value between 0.0 and 10.0 (the default range).
 
-![DemoWatchDiv01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoWatchDiv01Kt.png)
+![DemoWatchDiv01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoWatchDiv01Kt.webp)
 
 [source code](src/demo/kotlin/DemoWatchDiv01.kt)
 
@@ -139,6 +139,6 @@ The label for each button is its coordinates. A `clicked` event is attached to t
 those coordinates.
 
 
-![DemoWatchObjectDiv01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoWatchObjectDiv01Kt.png)
+![DemoWatchObjectDiv01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoWatchObjectDiv01Kt.webp)
 
 [source code](src/demo/kotlin/DemoWatchObjectDiv01.kt)

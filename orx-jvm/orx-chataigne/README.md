@@ -54,6 +54,6 @@ a Kinect camera, etc.)
 
 See the related Chataigne project under the `resources` folder.
 
-![ChataigneOSCDemoKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-chataigne/images/ChataigneOSCDemoKt.png)
+![ChataigneOSCDemoKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-chataigne/images/ChataigneOSCDemoKt.webp)
 
 [source code](src/demo/kotlin/ChataigneOSCDemo.kt)

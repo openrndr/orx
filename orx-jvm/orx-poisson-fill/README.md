@@ -18,7 +18,7 @@ result stored into the `wet` `ColorBuffer`, then displayed.
 
 A sharp white rectangle is drawn on top just for contrast against the blurry background. *
 
-![DemoPoissonFill01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-poisson-fill/images/DemoPoissonFill01Kt.png)
+![DemoPoissonFill01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-poisson-fill/images/DemoPoissonFill01Kt.webp)
 
 [source code](src/demo/kotlin/DemoPoissonFill01.kt)
 
@@ -29,7 +29,7 @@ This simplifies the program by not having to manually create and update a `Rende
 
 Clearing the window to transparent is expected when using `PoisonFill`.
 
-![DemoPoissonFill02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-poisson-fill/images/DemoPoissonFill02Kt.png)
+![DemoPoissonFill02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-poisson-fill/images/DemoPoissonFill02Kt.webp)
 
 [source code](src/demo/kotlin/DemoPoissonFill02.kt)
 
@@ -39,6 +39,6 @@ Demonstrates how to draw graphics not affected by a `Post` extension
 by including them in an `extend(stage = ExtensionStage.AFTER_DRAW) { ... }` block
 before** the `Post` effect.
 
-![DemoPoissonFill03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-poisson-fill/images/DemoPoissonFill03Kt.png)
+![DemoPoissonFill03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-poisson-fill/images/DemoPoissonFill03Kt.webp)
 
 [source code](src/demo/kotlin/DemoPoissonFill03.kt)

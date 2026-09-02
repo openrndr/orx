@@ -27,7 +27,7 @@ Demonstrates how to load and play an animated .glb file.
 The `applyToTargets()` method expects an argument with a time in seconds.
 The 0.6 offset is used just to get a more interesting screenshot to include in the README.md file in GitHub.
 
-![DemoAnimations01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoAnimations01Kt.png)
+![DemoAnimations01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoAnimations01Kt.webp)
 
 [source code](src/demo/kotlin/DemoAnimations01.kt)
 
@@ -36,7 +36,7 @@ The 0.6 offset is used just to get a more interesting screenshot to include in t
 Demonstrates how the view and projection matrices used for rendering in OPENRNDR can
 be controlled using an animated camera found in a loaded .glb file.
 
-![DemoCamera01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoCamera01Kt.png)
+![DemoCamera01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoCamera01Kt.webp)
 
 [source code](src/demo/kotlin/DemoCamera01.kt)
 
@@ -44,7 +44,7 @@ be controlled using an animated camera found in a loaded .glb file.
 
 
 
-![DemoDSL01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoDSL01Kt.png)
+![DemoDSL01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoDSL01Kt.webp)
 
 [source code](src/demo/kotlin/DemoDSL01.kt)
 
@@ -52,7 +52,7 @@ be controlled using an animated camera found in a loaded .glb file.
 
 
 
-![DemoDSL02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoDSL02Kt.png)
+![DemoDSL02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoDSL02Kt.webp)
 
 [source code](src/demo/kotlin/DemoDSL02.kt)
 
@@ -61,7 +61,7 @@ be controlled using an animated camera found in a loaded .glb file.
 Advanced lighting demonstration featuring irradiance probes, a dynamic node animated via code,
 and an interactive Orbital camera.
 
-![DemoIrrProbe01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoIrrProbe01Kt.png)
+![DemoIrrProbe01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoIrrProbe01Kt.webp)
 
 [source code](src/demo/kotlin/DemoIrrProbe01.kt)
 
@@ -79,7 +79,7 @@ in time.
 An interactive orbital camera is enabled, letting you use the mouse to control the camera position,
 direction, and zoom.
 
-![DemoLights01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoLights01Kt.png)
+![DemoLights01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoLights01Kt.webp)
 
 [source code](src/demo/kotlin/DemoLights01.kt)
 
@@ -98,7 +98,7 @@ in time.
 An interactive orbital camera is enabled, letting you use the mouse to control the camera position,
 direction, and zoom.
 
-![DemoLights02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoLights02Kt.png)
+![DemoLights02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoLights02Kt.webp)
 
 [source code](src/demo/kotlin/DemoLights02.kt)
 
@@ -110,7 +110,7 @@ The light hits the cube, which casts a shadow onto the sphere and the floor.
 An interactive orbital camera is enabled, letting you use the mouse to control the camera position,
 direction, and zoom.
 
-![DemoLights03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoLights03Kt.png)
+![DemoLights03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoLights03Kt.webp)
 
 [source code](src/demo/kotlin/DemoLights03.kt)
 
@@ -125,7 +125,7 @@ a better view of the models.
 
 Meshes can provide (or not) an `indexBuffer`. The program how to render both types of mesh.
 
-![DemoObject01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoObject01Kt.png)
+![DemoObject01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoObject01Kt.webp)
 
 [source code](src/demo/kotlin/DemoObject01.kt)
 
@@ -135,7 +135,7 @@ Demonstrates how to create a 3D Scene and add children to it:
 one child containing two lights, and another containing a loaded 3D model.
 The model contains two textures: one is the base color and another is its metallic roughness.
 
-![DemoScene01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoScene01Kt.png)
+![DemoScene01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoScene01Kt.webp)
 
 [source code](src/demo/kotlin/DemoScene01.kt)
 
@@ -145,7 +145,7 @@ Demonstrates how to create a 3D Scene and add children to it:
 one child containing two lights, and another containing a loaded 3D model of a rubber duck.
 The model contains two textures: one is the base color and another is its metallic roughness.
 
-![DemoScene02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoScene02Kt.png)
+![DemoScene02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoScene02Kt.webp)
 
 [source code](src/demo/kotlin/DemoScene02.kt)
 
@@ -156,7 +156,7 @@ one child contains lights, another contains a spherical 3D mesh
 generated via code. A PBR (Physically Based Rendering) material
 is created, configured, and applied to the mesh.
 
-![DemoScene03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoScene03Kt.png)
+![DemoScene03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoScene03Kt.webp)
 
 [source code](src/demo/kotlin/DemoScene03.kt)
 
@@ -165,7 +165,7 @@ is created, configured, and applied to the mesh.
 Demonstrate the use of a custom renderer, in this case a `segmentContourRenderer`,
 which renders the outline of a 3D object, an animated 3D fox loaded  from a .glb file.
 
-![DemoSegmentContours01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoSegmentContours01Kt.png)
+![DemoSegmentContours01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoSegmentContours01Kt.webp)
 
 [source code](src/demo/kotlin/DemoSegmentContours01.kt)
 
@@ -178,6 +178,6 @@ from a .glb file.
 Note that the file contains 3 animations.
 Try animations 0, 1, and 2.
 
-![DemoSkinning01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoSkinning01Kt.png)
+![DemoSkinning01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoSkinning01Kt.webp)
 
 [source code](src/demo/kotlin/DemoSkinning01.kt)

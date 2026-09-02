@@ -196,7 +196,7 @@ and applying it to the position of a circle.
 
 The JSON file contains times, coordinates, easing functions and envelopes.
 
-![DemoEvelope01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoEvelope01Kt.png)
+![DemoEvelope01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoEvelope01Kt.webp)
 
 [source code](src/demo/kotlin/DemoEvelope01.kt)
 
@@ -205,7 +205,7 @@ The JSON file contains times, coordinates, easing functions and envelopes.
 Loads and plays the animation described in `demo-full-01.json`.
 The keyframes contained in that file control the position, radius, and color of a circle.
 
-![DemoFull01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoFull01Kt.png)
+![DemoFull01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoFull01Kt.webp)
 
 [source code](src/demo/kotlin/DemoFull01.kt)
 
@@ -216,7 +216,7 @@ also allows controlling time by dragging the play head with the mouse.
 
 The result behaves like a typical video player where we can scrub the current time.
 
-![DemoScrub01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoScrub01Kt.png)
+![DemoScrub01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoScrub01Kt.webp)
 
 [source code](src/demo/kotlin/DemoScrub01.kt)
 
@@ -228,7 +228,7 @@ A minimal orx-keyframe demo. It creates a class extending `Keyframer()` and spec
 In the `extend { }` block, the current time is passed to the `Keyframer` and its properties are used
 to draw on the window.
 
-![DemoSimple01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoSimple01Kt.png)
+![DemoSimple01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoSimple01Kt.webp)
 
 [source code](src/demo/kotlin/DemoSimple01.kt)
 
@@ -241,7 +241,7 @@ then loads a JSON file containing animation information.
 In the `extend { }` block, the current time is passed to the `Keyframer` and its properties are used
 to draw on the window.
 
-![DemoSimple02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoSimple02Kt.png)
+![DemoSimple02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoSimple02Kt.webp)
 
 [source code](src/demo/kotlin/DemoSimple02.kt)
 
@@ -255,6 +255,6 @@ and to specify the time of each keyframe.
 
 Note the multiplication operations in the JSON file.
 
-![DemoSimpleExpressions01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoSimpleExpressions01Kt.png)
+![DemoSimpleExpressions01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-keyframer/images/DemoSimpleExpressions01Kt.webp)
 
 [source code](src/demo/kotlin/DemoSimpleExpressions01.kt)

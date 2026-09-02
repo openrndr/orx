@@ -21,7 +21,7 @@ Demonstrates how to construct a Processing `PShape` out of an OPENRNDR
 The program renders a rectangular `Shape` after converting to PShape and back.
 
 
-![DemoPShape01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-processing/images/DemoPShape01Kt.png)
+![DemoPShape01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-processing/images/DemoPShape01Kt.webp)
 
 [source code](src/demo/kotlin/DemoPShape01.kt)
 
@@ -36,7 +36,7 @@ the resulting `Shape` after being a `PShape`.
 Both elements are rendered with translucency and a slight offset
 so they can be visually compared.
 
-![DemoPShape02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-processing/images/DemoPShape02Kt.png)
+![DemoPShape02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-processing/images/DemoPShape02Kt.webp)
 
 [source code](src/demo/kotlin/DemoPShape02.kt)
 
@@ -50,7 +50,7 @@ The program renders both the original `Shape` and
 the resulting `Shape` with translucency and a slight offset
 so they can be visually compared.
 
-![DemoPShape03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-processing/images/DemoPShape03Kt.png)
+![DemoPShape03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-processing/images/DemoPShape03Kt.webp)
 
 [source code](src/demo/kotlin/DemoPShape03.kt)
 
@@ -64,7 +64,7 @@ The program creates a `ShapeContour` with quadratic, cubic, and straight segment
 Both elements are rendered with translucency and a slight offset
 so they can be visually compared.
 
-![DemoPShape04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-processing/images/DemoPShape04Kt.png)
+![DemoPShape04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-processing/images/DemoPShape04Kt.webp)
 
 [source code](src/demo/kotlin/DemoPShape04.kt)
 
@@ -74,6 +74,6 @@ Demonstrates that a `Shape` can be converted to a
 `PShape` and back to a `Shape` while maintaining
 its looks.
 
-![DemoPShape06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-processing/images/DemoPShape06Kt.png)
+![DemoPShape06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-processing/images/DemoPShape06Kt.webp)
 
 [source code](src/demo/kotlin/DemoPShape06.kt)
