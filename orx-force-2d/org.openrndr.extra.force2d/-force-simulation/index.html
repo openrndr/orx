@@ -1,0 +1,316 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>ForceSimulation</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../../images/logo-icon.svg">
+<link href="../../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.0-dev.80+f5a3aec
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-force-2d/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-force-2d/commonMain" data-filter=":orx-force-2d/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="orx-force-2d::org.openrndr.extra.force2d/ForceSimulation///PointingToDeclaration//1438523959">
+  <div class="breadcrumbs"><a href="../../index.html">orx-force-2d</a><span class="delimiter">/</span><a href="../index.html">org.openrndr.extra.force2d</a><span class="delimiter">/</span><span class="current">ForceSimulation</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Force</span><wbr><span><span>Simulation</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-force-2d/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">ForceSimulation</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>bodies<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><a href="../-body/index.html">Body</a><span class="token operator">&gt;</span><span class="token operator"> = </span>mutableListOf()</span></span><span class="token punctuation">)</span><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/openrndr/orx/blob/master/orx-force-2d/src/commonMain/kotlin/ForceSimulation.kt#L284">source</a>)</span></span></div><p class="paragraph">Represents a physics simulation of interacting bodies.</p><p class="paragraph">The <a href="index.html">ForceSimulation</a> class provides the infrastructure to simulate the dynamics of a system of bodies under the influence of forces and constraints. It supports customizable interbody forces, collision detection, and resolution, allowing for a wide variety of physical interactions.</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="-840341567%2FConstructors%2F1438523959" anchor-label="ForceSimulation" id="-840341567%2FConstructors%2F1438523959" data-filterable-set=":orx-force-2d/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":orx-force-2d/commonMain" data-filterable-set=":orx-force-2d/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-force-simulation.html"><span>Force</span><wbr><span><span>Simulation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-840341567%2FConstructors%2F1438523959"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-force-2d/commonMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">bodies<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><a href="../-body/index.html">Body</a><span class="token operator">&gt;</span><span class="token operator"> = </span>mutableListOf()</span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="224264956%2FProperties%2F1438523959" anchor-label="alpha" id="224264956%2FProperties%2F1438523959" data-filterable-set=":orx-force-2d/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-force-2d/commonMain" data-filterable-set=":orx-force-2d/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="alpha.html"><span><span>alpha</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="224264956%2FProperties%2F1438523959"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-force-2d/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="alpha.html">alpha</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-117251392%2FProperties%2F1438523959" anchor-label="bodies" id="-117251392%2FProperties%2F1438523959" data-filterable-set=":orx-force-2d/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-force-2d/commonMain" data-filterable-set=":orx-force-2d/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="bodies.html"><span><span>bodies</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-117251392%2FProperties%2F1438523959"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-force-2d/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="bodies.html">bodies</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><a href="../-body/index.html">Body</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">The list of <a href="../-body/index.html">Body</a> objects participating in the simulation. Each body has its own properties, forces, and constraints that determine its behavior.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1140186555%2FProperties%2F1438523959" anchor-label="broadPhaseCollisionDetector" id="1140186555%2FProperties%2F1438523959" data-filterable-set=":orx-force-2d/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-force-2d/commonMain" data-filterable-set=":orx-force-2d/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="broad-phase-collision-detector.html"><span>broad</span><wbr><span>Phase</span><wbr><span>Collision</span><wbr><span><span>Detector</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1140186555%2FProperties%2F1438523959"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-force-2d/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="broad-phase-collision-detector.html">broadPhaseCollisionDetector</a><span class="token operator">: </span><a href="../-broad-phase-collision-detector/index.html">BroadPhaseCollisionDetector</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The collision detection algorithm used to identify potential overlapping pairs of bodies during the simulation. It operates in the broad-phase stage of collision resolution.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-40699893%2FProperties%2F1438523959" anchor-label="collisionConstraint" id="-40699893%2FProperties%2F1438523959" data-filterable-set=":orx-force-2d/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-force-2d/commonMain" data-filterable-set=":orx-force-2d/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="collision-constraint.html"><span>collision</span><wbr><span><span>Constraint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-40699893%2FProperties%2F1438523959"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-force-2d/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="collision-constraint.html">collisionConstraint</a><span class="token operator">: </span><a href="../-collision-constraint/index.html">CollisionConstraint</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The collision resolution handler responsible for determining the outcome of detected collisions between bodies.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-92206965%2FProperties%2F1438523959" anchor-label="context" id="-92206965%2FProperties%2F1438523959" data-filterable-set=":orx-force-2d/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-force-2d/commonMain" data-filterable-set=":orx-force-2d/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="context.html"><span><span>context</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-92206965%2FProperties%2F1438523959"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-force-2d/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="context.html">context</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.coroutines/-coroutine-context/index.html">CoroutineContext</a></div><div class="brief "><p class="paragraph">The coroutine context in which the simulation runs, allowing for asynchronous computations. By default, it uses <span data-unresolved-link="kotlinx.coroutines/Dispatchers/Default/#/PointingToDeclaration/">Dispatchers.Default</span>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="256915476%2FProperties%2F1438523959" anchor-label="interbodyForces" id="256915476%2FProperties%2F1438523959" data-filterable-set=":orx-force-2d/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-force-2d/commonMain" data-filterable-set=":orx-force-2d/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="interbody-forces.html"><span>interbody</span><wbr><span><span>Forces</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="256915476%2FProperties%2F1438523959"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-force-2d/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="interbody-forces.html">interbodyForces</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><a href="../-interbody-force/index.html">InterbodyForce</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A list of interbody forces that affect pairs of bodies in the simulation. These forces are computed per pair of bodies and influence their dynamics.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="1342907399%2FFunctions%2F1438523959" anchor-label="naiveBroadPhaseCollisionDetector" id="1342907399%2FFunctions%2F1438523959" data-filterable-set=":orx-force-2d/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-force-2d/commonMain" data-filterable-set=":orx-force-2d/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../naive-broad-phase-collision-detector.html"><span>naive</span><wbr><span>Broad</span><wbr><span>Phase</span><wbr><span>Collision</span><wbr><span><span>Detector</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1342907399%2FFunctions%2F1438523959"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-force-2d/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">ForceSimulation</a><span class="token punctuation">.</span><a href="../naive-broad-phase-collision-detector.html"><span class="token function">naiveBroadPhaseCollisionDetector</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Configures the force simulation to use the naive broad-phase collision detection algorithm.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="440243671%2FFunctions%2F1438523959" anchor-label="nodeRepulseInterbodyForce" id="440243671%2FFunctions%2F1438523959" data-filterable-set=":orx-force-2d/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-force-2d/commonMain" data-filterable-set=":orx-force-2d/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../node-repulse-interbody-force.html"><span>node</span><wbr><span>Repulse</span><wbr><span>Interbody</span><wbr><span><span>Force</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="440243671%2FFunctions%2F1438523959"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-force-2d/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">ForceSimulation</a><span class="token punctuation">.</span><a href="../node-repulse-interbody-force.html"><span class="token function">nodeRepulseInterbodyForce</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">configure<span class="token operator">: </span><a href="../-node-repulse-interbody-force/index.html">NodeRepulseInterbodyForce</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Adds a <code class="lang-kotlin">NodeRepulseInterbodyForce</code> to the list of interbody forces in the simulation.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1342370431%2FFunctions%2F1438523959" anchor-label="nodeRepulseInterbodyForceBVH" id="1342370431%2FFunctions%2F1438523959" data-filterable-set=":orx-force-2d/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-force-2d/commonMain" data-filterable-set=":orx-force-2d/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../node-repulse-interbody-force-b-v-h.html"><span>node</span><wbr><span>Repulse</span><wbr><span>Interbody</span><wbr><span>Force</span><wbr><span><span>BVH</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1342370431%2FFunctions%2F1438523959"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-force-2d/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">ForceSimulation</a><span class="token punctuation">.</span><a href="../node-repulse-interbody-force-b-v-h.html"><span class="token function">nodeRepulseInterbodyForceBVH</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">configure<span class="token operator">: </span><a href="../-node-repulse-interbody-force-b-v-h/index.html">NodeRepulseInterbodyForceBVH</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Adds a repulsive interbody force using a bounding volume hierarchy (BVH) to the simulation.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1995159180%2FFunctions%2F1438523959" anchor-label="sapCollisionConstraint" id="-1995159180%2FFunctions%2F1438523959" data-filterable-set=":orx-force-2d/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-force-2d/commonMain" data-filterable-set=":orx-force-2d/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../sap-collision-constraint.html"><span>sap</span><wbr><span>Collision</span><wbr><span><span>Constraint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1995159180%2FFunctions%2F1438523959"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-force-2d/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">ForceSimulation</a><span class="token punctuation">.</span><a href="../sap-collision-constraint.html"><span class="token function">sapCollisionConstraint</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Sets the collision resolution handler to a sweep-and-prune (SAP) based collision constraint.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1311082571%2FFunctions%2F1438523959" anchor-label="simulate" id="-1311082571%2FFunctions%2F1438523959" data-filterable-set=":orx-force-2d/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-force-2d/commonMain" data-filterable-set=":orx-force-2d/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="simulate.html"><span><span>simulate</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1311082571%2FFunctions%2F1438523959"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-force-2d/commonMain"><div class="symbol monospace"><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="simulate.html"><span class="token function">simulate</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">dt<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">substeps<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">10</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
