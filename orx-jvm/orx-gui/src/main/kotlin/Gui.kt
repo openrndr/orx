@@ -13,14 +13,18 @@ import org.openrndr.events.Event
 import org.openrndr.extra.noise.uniform
 import org.openrndr.extra.parameters.*
 import org.openrndr.internal.Driver
-import org.openrndr.math.*
+import org.openrndr.math.Vector2
+import org.openrndr.math.Vector3
+import org.openrndr.math.Vector4
+import org.openrndr.math.mix
 import org.openrndr.panel.ControlManager
+import org.openrndr.panel.collections.SelectableList
+import org.openrndr.panel.collections.SelectableMutableList
 import org.openrndr.panel.controlManager
 import org.openrndr.panel.elements.*
 import org.openrndr.panel.style.*
 import org.openrndr.panel.style.Display
 import java.io.File
-import kotlin.collections.set
 import kotlin.math.roundToInt
 import kotlin.reflect.KMutableProperty1
 
@@ -77,6 +81,38 @@ private fun <T : Any> setAndPersist(compartmentLabel: String, property: KMutable
     val state = compartmentState()[compartmentLabel]
         ?: error("item '$compartmentLabel' not in state (${compartmentState()}. ContextID ${Driver.instance.contextID} )")
     state.parameterValues[property.name] = value
+}
+
+private fun getPersistedSelectedIndex(compartmentLabel: String, property: KMutableProperty1<*, *>, obj: Any): Int? {
+    val state = compartmentState()[compartmentLabel] ?: return null
+    return state.parameterValues["${property.name}_selectedIndex"] as? Int
+}
+
+private fun setAndPersistSelectedIndex(
+    compartmentLabel: String,
+    property: KMutableProperty1<*, *>,
+    obj: Any,
+    value: Int
+) {
+    val state = compartmentState()[compartmentLabel]
+        ?: error("item '$compartmentLabel' not in state (${compartmentState()}. ContextID ${Driver.instance.contextID} )")
+    state.parameterValues["${property.name}_selectedIndex"] = value
+}
+
+private fun getPersistedListElements(compartmentLabel: String, property: KMutableProperty1<*, *>, obj: Any): List<*>? {
+    val state = compartmentState()[compartmentLabel] ?: return null
+    return state.parameterValues["${property.name}_elements"] as? List<*>
+}
+
+private fun setAndPersistListElements(
+    compartmentLabel: String,
+    property: KMutableProperty1<*, *>,
+    obj: Any,
+    value: List<*>
+) {
+    val state = compartmentState()[compartmentLabel]
+        ?: error("item '$compartmentLabel' not in state (${compartmentState()}. ContextID ${Driver.instance.contextID} )")
+    state.parameterValues["${property.name}_elements"] = value
 }
 
 private val logger = KotlinLogging.logger { }
@@ -787,6 +823,118 @@ open class GUI(
                 }
             }
 
+            ParameterType.List -> {
+                dropdownButton {
+                    label = parameter.label
+
+                    val prop = parameter.property!!
+
+                    @Suppress("UNCHECKED_CAST")
+                    val propTyped = prop as KMutableProperty1<Any, Any>
+                    val selectableList = propTyped.get(obj) as SelectableList<*>
+                    val optionsList = selectableList.toList()
+
+                    getPersistedSelectedIndex(
+                        compartment.label,
+                        prop,
+                        obj
+                    )?.let { persistedIndex ->
+                        selectableList.selectedIndex = persistedIndex.coerceAtMost(optionsList.lastIndex)
+                    }
+
+                    optionsList.forEach { value ->
+                        item {
+                            label = value.toString()
+                            data = value
+                        }
+                    }
+                    events.valueChanged.listen {
+                        val currentSelectableList = propTyped.get(obj) as SelectableList<*>
+                        val newIndex = optionsList.indexOf(it.value.data)
+                        currentSelectableList.selectedIndex = newIndex
+                        setAndPersistSelectedIndex(
+                            compartment.label,
+                            prop,
+                            obj,
+                            newIndex
+                        )
+                        onChangeListener?.invoke(prop.name, currentSelectableList.selected)
+                    }
+                    val selectedItem = selectableList.selected
+                    value = items().find { it.data == selectedItem }
+                }
+            }
+
+            ParameterType.MutableList -> {
+                dropdownButton {
+                    label = parameter.label
+
+                    val prop = parameter.property!!
+
+                    @Suppress("UNCHECKED_CAST")
+                    val propTyped = prop as KMutableProperty1<Any, Any>
+                    val selectableMutableList = propTyped.get(obj) as SelectableMutableList<*>
+
+                    getPersistedListElements(
+                        compartment.label,
+                        prop,
+                        obj
+                    )?.let { persistedElements ->
+                        selectableMutableList.clear()
+                        @Suppress("UNCHECKED_CAST")
+                        (selectableMutableList as SelectableMutableList<Any>).addAll(persistedElements as Collection<Any>)
+                    }
+
+                    getPersistedSelectedIndex(
+                        compartment.label,
+                        prop,
+                        obj
+                    )?.let { persistedIndex ->
+                        selectableMutableList.selectedIndex =
+                            persistedIndex.coerceAtMost(selectableMutableList.lastIndex)
+                    }
+
+                    selectableMutableList.forEach { value ->
+                        item {
+                            label = value.toString()
+                            data = value
+                        }
+                    }
+                    fun rebuildItems() {
+                        children.filterIsInstance<Item>().forEach { remove(it) }
+                        selectableMutableList.forEach { value ->
+                            item {
+                                label = value.toString()
+                                data = value
+                            }
+                        }
+                        val selectedItem = selectableMutableList.selected
+                        value = items().find { it.data == selectedItem }
+                    }
+
+                    selectableMutableList.changed.listen {
+                        rebuildItems()
+                        draw.dirty = true
+                        setAndPersistListElements(
+                            compartment.label, prop, obj, selectableMutableList.toList()
+                        )
+                    }
+
+                    events.valueChanged.listen {
+                        val currentSelectableMutableList = propTyped.get(obj) as SelectableMutableList<*>
+                        val newIndex = selectableMutableList.indexOf(it.value.data)
+                        currentSelectableMutableList.selectedIndex = newIndex
+                        setAndPersistSelectedIndex(
+                            compartment.label, prop, obj, newIndex
+                        )
+                        onChangeListener?.invoke(prop.name, currentSelectableMutableList.selected)
+                    }
+
+                    val selectedItem = selectableMutableList.selected
+                    value = items().find { it.data == selectedItem }
+                }
+            }
+
             ParameterType.Option -> {
                 dropdownButton {
                     val enumProperty = parameter.property as KMutableProperty1<Any, Enum<*>>
@@ -856,10 +1004,14 @@ open class GUI(
         var vector3Value: Vector3? = null,
         var vector4Value: Vector4? = null,
         var doubleListValue: MutableList<Double>? = null,
+        var intListValue: MutableList<Int>? = null,
+        var stringListValue: MutableList<String>? = null,
         var textValue: String? = null,
         var optionValue: String? = null,
         var minValue: Double? = null,
-        var maxValue: Double? = null
+        var maxValue: Double? = null,
+        var selectedIndex: Int? = null,
+        var listElementType: String? = null
     )
 
 
@@ -925,6 +1077,45 @@ open class GUI(
                         ParameterType.Path -> ParameterValue(textValue = k.property.qget(lo.obj) as String)
 
                         ParameterType.Option -> ParameterValue(optionValue = (k.property.qget(lo.obj) as Enum<*>).name)
+
+                        ParameterType.List -> {
+                            val selectableList = k.property.qget(lo.obj) as SelectableList<*>
+                            val elementType = when (val first = selectableList.firstOrNull()) {
+                                is String -> "String"
+                                is Int -> "Int"
+                                is Double -> "Double"
+                                else -> "String"
+                            }
+                            ParameterValue(
+                                selectedIndex = selectableList.selectedIndex,
+                                listElementType = elementType
+                            )
+                        }
+
+                        ParameterType.MutableList -> {
+                            val selectableMutableList = k.property.qget(lo.obj) as SelectableMutableList<*>
+                            val elementType = when (val first = selectableMutableList.firstOrNull()) {
+                                is String -> "String"
+                                is Int -> "Int"
+                                is Double -> "Double"
+                                else -> "String"
+                            }
+                            val elements = selectableMutableList.map {
+                                when (it) {
+                                    is String -> it
+                                    is Int -> it
+                                    is Double -> it
+                                    else -> it.toString()
+                                }
+                            }
+                            ParameterValue(
+                                selectedIndex = selectableMutableList.selectedIndex,
+                                listElementType = elementType,
+                                stringListValue = if (elementType == "String") elements as? MutableList<String> else null,
+                                intListValue = if (elementType == "Int") elements as? MutableList<Int> else null,
+                                doubleListValue = if (elementType == "Double") elements as? MutableList<Double> else null
+                            )
+                        }
                     }
                 )
             })
@@ -1014,6 +1205,39 @@ open class GUI(
                                 parameter.property.qset(lo.obj, it)
                             }
 
+                            ParameterType.List -> {
+                                parameterValue.selectedIndex?.let { selectedIndex ->
+                                    parameterValue.listElementType?.let { elementType ->
+                                        val prop = parameter.property!!
+                                        val state = compartmentState()[lo.label]
+                                        if (state != null) {
+                                            state.parameterValues["${prop.name}_selectedIndex"] = selectedIndex
+                                        }
+                                    }
+                                }
+                            }
+
+                            ParameterType.MutableList -> {
+                                parameterValue.selectedIndex?.let { selectedIndex ->
+                                    parameterValue.listElementType?.let { elementType ->
+                                        val elements = when (elementType) {
+                                            "String" -> parameterValue.stringListValue
+                                            "Int" -> parameterValue.intListValue
+                                            "Double" -> parameterValue.doubleListValue
+                                            else -> null
+                                        }
+                                        elements?.let { elementList ->
+                                            val prop = parameter.property!!
+                                            val state = compartmentState()[lo.label]
+                                            if (state != null) {
+                                                state.parameterValues["${prop.name}_selectedIndex"] = selectedIndex
+                                                state.parameterValues["${prop.name}_elements"] = elementList
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
                             ParameterType.Action -> {
                                 // intentionally do nothing
                             }
@@ -1101,6 +1325,28 @@ open class GUI(
 
             ParameterType.Path -> {
 
+            }
+
+            ParameterType.List -> {
+                val ddb = control as DropdownButton
+                val prop = parameter.property!!
+
+                @Suppress("UNCHECKED_CAST")
+                val propTyped = prop as KMutableProperty1<Any, Any>
+                val selectableList = propTyped.get(labeledObject.obj) as SelectableList<*>?
+                val selectedItem = selectableList?.selected
+                ddb.value = ddb.items().find { item -> item.data == selectedItem }
+            }
+
+            ParameterType.MutableList -> {
+                val ddb = control as DropdownButton
+                val prop = parameter.property!!
+
+                @Suppress("UNCHECKED_CAST")
+                val propTyped = prop as KMutableProperty1<Any, Any>
+                val selectableMutableList = propTyped.get(labeledObject.obj) as SelectableMutableList<*>?
+                val selectedItem = selectableMutableList?.selected
+                ddb.value = ddb.items().find { item -> item.data == selectedItem }
             }
 
             ParameterType.Action -> {
