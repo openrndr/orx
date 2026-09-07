@@ -45,6 +45,7 @@ open class LinearGradientBase<C>(
     var quantize: Int by Parameter()
 
     init {
+        println("registering ColorPhraseBook")
         ColorPhraseBook.register()
         this.color0 = color0
         this.color1 = color1
@@ -107,6 +108,7 @@ fun linearGradient(
     rotation: Double = 0.0,
     exponent: Double = 1.0
 ): LinearGradient {
+    println("linearGradient $color0 $color1 $offset $rotation $exponent")
     return LinearGradient(color0, color1, offset, rotation, exponent)
 }
 
