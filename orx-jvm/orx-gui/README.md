@@ -292,6 +292,31 @@ The selected blend mode is used to render a circle on top of an image.
 
 [source code](src/demo/kotlin/DemoOptions03.kt)
 
+### DemoOptions04
+
+Demonstrates the use of the [ListParameter] and [MutableListParameter] annotations to
+show lists and mutable lists in a drop-down in a GUI.
+
+Shows how to set the selectedIndex of the drop-down, how to add items to a [SelectableMutableList]
+and how to delete specific entries in them.
+
+![DemoOptions04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoOptions04Kt.webp)
+
+[source code](src/demo/kotlin/DemoOptions04.kt)
+
+### DemoOptions05
+
+Demonstrates how to populate a [MutableListParameter] in a GUI
+with the files found in a folder.
+The image is loaded and displayed when the user chooses
+an image from the drop-down menu.
+The program allows dropping a folder onto the program populate
+the drop-down menu.
+
+![DemoOptions05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoOptions05Kt.webp)
+
+[source code](src/demo/kotlin/DemoOptions05.kt)
+
 ### DemoPath01
 
 Demonstrates how to include a button for loading images in a GUI, and how to display
