@@ -69,6 +69,14 @@ A grid of such rectangles is displayed, animating the `u` and `v` parameters bas
 
 [source code](src/jvmDemo/kotlin/linearrange/DemoLinearRange03.kt)
 
+### matrix/DemoFilterContour01
+
+
+
+![matrix-DemoFilterContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/matrix-DemoFilterContour01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/matrix/DemoFilterContour01.kt)
+
 ### matrix/DemoLeastSquares01
 
 Demonstrate least squares method to find a regression line through noisy points.
@@ -99,6 +107,14 @@ to the ground truth depending on the random values used.
 ![matrix-DemoLeastSquares02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/matrix-DemoLeastSquares02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/matrix/DemoLeastSquares02.kt)
+
+### matrix/DemoSeparableImages01
+
+
+
+![matrix-DemoSeparableImages01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/matrix-DemoSeparableImages01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/matrix/DemoSeparableImages01.kt)
 
 ### rbf/RbfColorGrading01
 
