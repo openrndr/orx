@@ -106,6 +106,14 @@ fun Any.listParameters(): List<Parameter> {
                     pathExtensions = it.extensions
                     pathIsDirectory = it.directory
                 }
+                is ListParameter -> {
+                    label = it.label
+                    order = it.order
+                }
+                is MutableListParameter -> {
+                    label = it.label
+                    order = it.order
+                }
             }
         }
         @Suppress("UNCHECKED_CAST")

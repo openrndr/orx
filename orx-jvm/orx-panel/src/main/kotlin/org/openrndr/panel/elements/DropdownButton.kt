@@ -267,6 +267,11 @@ class DropdownButton : Element(ElementType("dropdown-button")) {
 
 }
 
+/**
+ * Two-way data binding between a DropdownButton and an enum property.
+ * Launches a coroutine to monitor the property for external changes
+ * and updates the dropdown selection to match.
+ */
 fun <E : Enum<E>> DropdownButton.bind(property: KMutableProperty0<E>, map: Map<E, String>) {
     val options = mutableMapOf<E, Item>()
     map.forEach { (k, v) ->

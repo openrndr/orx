@@ -29,6 +29,29 @@ annotation class Description(val title: String, val description: String = "")
 annotation class OptionParameter(val label: String, val order: Int = Int.MAX_VALUE)
 
 /**
+ * ListParameter annotation for a `SelectableList`
+ *
+ * @property label a short description of the parameter
+ * @property order hint for where to place the parameter in user interfaces
+ */
+
+@Target(AnnotationTarget.PROPERTY)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ListParameter(val label: String, val order: Int = Int.MAX_VALUE)
+
+
+/**
+ * ListParameter annotation for a `SelectableMutableList`.
+ *
+ * @property label a short description of the parameter
+ * @property order hint for where to place the parameter in user interfaces
+ */
+
+@Target(AnnotationTarget.PROPERTY)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class MutableListParameter(val label: String, val order: Int = Int.MAX_VALUE)
+
+/**
  * DoubleParameter annotation for a double precision parameter
  * @property label a short description of the parameter
  * @property low the lowest value this parameter should be assigned
@@ -197,6 +220,8 @@ enum class ParameterType(val annotationClass: KClass<out Annotation>) {
     Vector3(Vector3Parameter::class),
     Vector4(Vector4Parameter::class),
     Option(OptionParameter::class),
+    List(ListParameter::class),
+    MutableList(MutableListParameter::class),
     Path(PathParameter::class)
     ;
 
