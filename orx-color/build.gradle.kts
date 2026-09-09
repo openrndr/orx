@@ -20,9 +20,6 @@ kotlin {
 
         val commonTest by getting {
             dependencies {
-                implementation(sharedLibs.kotlin.serialization.json)
-                implementation(sharedLibs.kotest.assertions)
-                implementation(sharedLibs.kotest.framework.engine)
             }
         }
 
