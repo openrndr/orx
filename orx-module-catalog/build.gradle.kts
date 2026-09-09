@@ -6,6 +6,7 @@ plugins {
 
 catalog {
     versionCatalog {
+        library("bvh", "org.openrndr.extra:orx-bvh:$version")
         library("camera", "org.openrndr.extra:orx-camera:$version")
         library("color", "org.openrndr.extra:orx-color:$version")
         library("composition", "org.openrndr.extra:orx-composition:$version")
@@ -18,7 +19,9 @@ catalog {
         library("expression-evaluator-typed", "org.openrndr.extra:orx-expression-evaluator-typed:$version")
         library("fcurve", "org.openrndr.extra:orx-fcurve:$version")
         library("fft", "org.openrndr.extra:orx-fft:$version")
+        library("force-2d", "org.openrndr.extra:orx-force-2d:$version")
         library("fx", "org.openrndr.extra:orx-fx:$version")
+        library("g-code", "org.openrndr.extra:orx-g-code:$version")
         library("gradient-descent", "org.openrndr.extra:orx-gradient-descent:$version")
         library("hash-grid", "org.openrndr.extra:orx-hash-grid:$version")
         library("image-fit", "org.openrndr.extra:orx-image-fit:$version")
@@ -73,7 +76,6 @@ catalog {
         library("triangulation", "org.openrndr.extra:orx-triangulation:$version")
         library("turtle", "org.openrndr.extra:orx-turtle:$version")
         library("view-box", "org.openrndr.extra:orx-view-box:$version")
-        library("gcode", "org.openrndr.extra:orx-g-code:$version")
 
         bundle(
             "basic",
