@@ -1,6 +1,7 @@
 # orx-mesh-noise
 
-Generate random samples on the surface of a mesh
+Generate random samples on the surface of a mesh.
+
 <!-- __demos__ -->
 ## Demos
 ### DemoMeshNoise01
