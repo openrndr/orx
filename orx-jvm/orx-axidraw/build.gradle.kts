@@ -11,6 +11,7 @@ dependencies {
     implementation(project(":orx-image-fit"))
     implementation(project(":orx-shapes"))
     implementation(project(":orx-camera"))
+    implementation(project(":orx-jvm:orx-python"))
     demoImplementation(project(":orx-camera"))
     demoImplementation(project(":orx-noise"))
     demoImplementation(project(":orx-parameters"))

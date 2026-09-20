@@ -78,6 +78,7 @@ include(
         "orx-jvm:orx-osc",
         "orx-palette",
         "orx-property-watchers",
+        "orx-jvm:orx-python",
         "orx-jvm:orx-panel",
         "orx-jvm:orx-poisson-fill",
         "orx-jvm:orx-processing",

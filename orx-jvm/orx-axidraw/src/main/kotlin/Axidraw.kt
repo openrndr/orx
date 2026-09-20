@@ -15,6 +15,10 @@ import org.openrndr.extra.imageFit.FitMethod
 import org.openrndr.extra.imageFit.fit
 import org.openrndr.extra.imageFit.fitRectangle
 import org.openrndr.extra.parameters.*
+import org.openrndr.extra.python.ExecutionResult
+import org.openrndr.extra.python.VirtualEnvironment
+import org.openrndr.extra.python.createVirtualEnv
+import org.openrndr.extra.python.systemPython
 import org.openrndr.extra.svg.loadSVG
 import org.openrndr.extra.svg.toSVG
 import org.openrndr.math.Matrix44
@@ -119,10 +123,6 @@ enum class PaperSize(val size: Vector2) {
     A10(Vector2(26.0, 37.0))
 }
 
-/**
- * Data class containing the output text and error code resulting from executing command line programs.
- */
-data class ExecutionResult(val errorCode: Int, val output: String)
 
 /**
  * Class for working with Axidraw pen plotters. It communicates with the `axicli` command line program,
@@ -154,15 +154,14 @@ class Axidraw(
     ).second
     private val scaleFactor = (paperSizeInMm.x * pointsPerInch / mmPerInch) / paperStretchedInPx.width
 
+
+    private val virtualEnv = setupVirtualEnv()
     /**
      * This method is called automatically when instantiating [org.openrndr.extra.axidraw.Axidraw] to set up
      * a Python virtual environment. Call it with `true` as an argument to manually reinstall the virtual environment.
      */
-    fun setupVirtualEnv(reinstall: Boolean = false) {
-        if (!File(virtualEnvName).exists() || reinstall) {
-            logger.info { "setting up $virtualEnvName Python virtual environment" }
-            invokePython(listOf("-m", "venv", virtualEnvName))
-        }
+    fun setupVirtualEnv(reinstall: Boolean = false): VirtualEnvironment {
+        return systemPython().createVirtualEnv(virtualEnvName, reinstall)
     }
 
     /**
@@ -170,19 +169,20 @@ class Axidraw(
      * the `axicli` program. Call it with `true` as an argument to manually reinstall axicli.`
      */
     fun setupAxidrawCli(reinstall: Boolean = false) {
-        val python = venvPython(File(virtualEnvName))
+
+        val python = virtualEnv.interpreter.executable
+
         val axicli = File(python).resolveSibling("axicli")
         if (!axicli.exists() || reinstall) {
             logger.info { "installing axidraw-cli in virtual environment $python" }
-            invokePython(
-                listOf("-m", "pip", "install", "https://cdn.evilmadscientist.com/dl/ad/public/AxiDraw_API.zip"),
-                python
+            virtualEnv.interpreter.invokePython(
+                listOf("-m", "pip", "install", "https://cdn.evilmadscientist.com/dl/ad/public/AxiDraw_API.zip")
             )
         }
     }
 
     init {
-        setupVirtualEnv()
+
         setupAxidrawCli()
     }
 
@@ -361,10 +361,10 @@ class Axidraw(
      * Private function used to run command line programs and return an [ExecutionResult].
      */
     private fun runCMD(args: List<String>): ExecutionResult {
-        val python = venvPython(File(virtualEnvName))
-        val result = invokePython(listOf("-m", "axicli") + args, python)
-        plotPaused = result.output.contains("Plot paused programmatically.") ||
-                result.output.contains("Plot paused by button press.")
+        //val python = venvPython(File(virtualEnvName))
+        val result = virtualEnv.interpreter.invokePython(listOf("-m", "axicli") + args)
+        plotPaused = result.error.contains("Plot paused programmatically.") ||
+                result.error.contains("Plot paused by button press.")
         return result
     }
 
@@ -469,7 +469,7 @@ class Axidraw(
         if (plotPaused) {
             val errorMsg = "The device is paused. Please resume plotting or resume to home"
             println(errorMsg)
-            return ExecutionResult(1, errorMsg)
+            return ExecutionResult(1,  "", errorMsg)
         }
         val svgFile = makeTempSVGFile()
         save(svgFile)
