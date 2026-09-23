@@ -53,6 +53,24 @@ extend(NoClear()) {
 NB! any submitted _lambda expression_ must be valid within the `renderTarget` context.
 <!-- __demos__ -->
 ## Demos
+### DemoNoClear02
+
+Demonstrates the `NoClear` extension with `FLOAT32` color type.
+
+The program draws circles around the center using additive blending.
+The fill colors are dark and accumulate to create a visible effect.
+
+By default, the color type is `UINT8`, which provides 256 brightness levels
+per color channel (red, green, blue).
+
+With `UINT8`, very small color increments (like a HSV value below 1.0/256.0,
+e.g., 0.0035 instead of 0.035) would be too small to register, and the brightness
+would not increase. Using `FLOAT32` solves this by supporting a finer precision.
+
+![DemoNoClear02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-no-clear/images/DemoNoClear02Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoNoClear02.kt)
+
 ### DemoNoClear
 
 By default, OPENRNDR clears the canvas on each animation
