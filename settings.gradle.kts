@@ -73,6 +73,8 @@ include(
         "orx-no-clear",
         "orx-noise",
         "orx-obj-loader",
+        "orx-jvm:orx-onnx-models",
+        "orx-jvm:orx-onnx-runtime",
         "orx-marching-squares",
         "orx-jvm:orx-olive",
         "orx-jvm:orx-osc",

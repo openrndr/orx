@@ -1,4 +1,5 @@
 [versions]
+onnxRuntime = "1.30.0"
 kotlinApi = "2.4"
 kotlinLanguage = "2.4"
 kotlin = "2.4.20"
@@ -27,6 +28,7 @@ nmcp = "1.6.2"
 okhttp = "5.5.0"
 
 [libraries]
+onnx-runtime = { group = "com.microsoft.onnxruntime", name = "onnxruntime", version.ref = "onnxRuntime" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
