@@ -2,51 +2,93 @@
 
 2D and 3D cameras controllable via mouse and keyboard.
 
-## Usage
+## Camera2D
+
+To enable a 2D camera, add `extend(Camera2D())` to your program:
 
 ```kotlin
 import org.openrndr.application
-import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.DrawPrimitive
-import org.openrndr.extra.camera.AxisHelper
-import org.openrndr.extra.camera.GridHelper
-import org.openrndr.extra.camera.OrbitalCamera
-import org.openrndr.extra.camera.OrbitalControls
-import org.openrndr.extra.meshgenerators.boxMesh
-import org.openrndr.extra.meshgenerators.sphereMesh
-import org.openrndr.math.Vector3
+import org.openrndr.extra.camera.Camera2D
 
 fun main() = application {
     program {
-        val camera = OrbitalCamera(
-            Vector3.UNIT_Z * 90.0, Vector3.ZERO, 90.0, 0.1, 5000.0
-        )
-        val controls = OrbitalControls(camera, keySpeed = 10.0)
-
-        val sphere = sphereMesh(radius = 25.0)
-        val cube = boxMesh(20.0, 20.0, 5.0, 5, 5, 2)
-
-        extend(camera)
-        extend(AxisHelper()) // shows XYZ axes as RGB lines
-        extend(GridHelper(100)) // debug ground plane
-        extend(controls) // adds both mouse and keyboard bindings
+        extend(Camera2D())
         extend {
-            drawer.vertexBuffer(sphere, DrawPrimitive.LINE_LOOP)
-            drawer.vertexBuffer(cube, DrawPrimitive.LINE_LOOP)
-            drawer.stroke = ColorRGBa.WHITE
-            drawer.fill = null
-            repeat(10) {
-                drawer.translate(0.0, 0.0, 10.0)
-                // 2D primitives are not optimized for 3D and can
-                // occlude each other
-                drawer.circle(0.0, 0.0, 50.0)
-            }
+            drawer.circle(drawer.bounds.center, 300.0)
         }
     }
 }
 ```
 
-### Keybindings
+### Mouse controls 
+
+* left-click drag - panning
+* right-click drag - rotating
+* middle-click - reset camera
+* mouse-wheel - zoom
+
+## Camera2DManual
+
+A version of Camera2D that allows controlling
+which elements are affected by the camera and which ones are not.
+
+```kotlin
+import org.openrndr.application
+import org.openrndr.extra.camera.Camera2DManual
+
+fun main() = application {
+    program {
+        val camera = Camera2DManual()
+        extend {
+            camera.isolated {
+                // drawing in this block is affected by the camera
+                drawer.rectangle(0.0, 0.0, 200.0, 100.0)
+            }
+
+            // static elements
+            drawer.circle(drawer.bounds.center, 200.0)
+        }
+    }
+}
+```
+
+You can have multiple layers, in any order, some static and others controlled by the camera.
+Note that we don't `extend()` the camera in this case. 
+
+## Orbital 3D camera
+
+A 3D camera is often used to explore scenes with 3D meshes. To enable it, add `extend(Orbital())` to your program.
+
+```kotlin
+import org.openrndr.application
+import org.openrndr.color.ColorRGBa
+import org.openrndr.draw.DrawPrimitive
+import org.openrndr.extra.camera.Orbital
+import org.openrndr.extra.meshgenerators.boxMesh
+import org.openrndr.extra.meshgenerators.sphereMesh
+
+fun main() = application {
+    program {
+        val sphere = sphereMesh(radius = 25.0)
+        val cube = boxMesh(20.0, 20.0, 5.0, 5, 5, 2)
+
+        extend(Orbital())
+
+        extend {
+            drawer.vertexBuffer(sphere, DrawPrimitive.LINE_LOOP)
+            drawer.vertexBuffer(cube, DrawPrimitive.LINE_LOOP)
+        }
+    }
+}
+```
+
+### Mouse controls
+
+* left-click drag - rotate
+* right-click drag - pan
+* mouse-wheel - zoom
+
+### Key bindings
 
 * `w` - move forwards (+z)
 * `s` - move backwards (-z)
@@ -56,6 +98,19 @@ fun main() = application {
 * `Down` or `q` -  move up (-y)
 * `Page Up` -  zoom in
 * `Page Down` -  zoom out
+
+## OrbitalManual 3D camera
+
+This is the equivalent to `Camera2DManual` but for 3D scenes. 
+It lets you control what is affected by the camera and what is not.
+A common use is to display 2D graphics and text around camera-controlled 3D models.
+
+## ParametricOrbital 3D camera
+
+This camera can only be controlled via code or a GUI, not with the mouse or keyboard.
+
+Study the following demos for more examples.
+
 <!-- __demos__ -->
 ## Demos
 ### DemoCamera2D01
