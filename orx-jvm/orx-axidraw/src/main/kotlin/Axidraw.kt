@@ -47,6 +47,12 @@ private const val pointsPerInch = 96.0
 // TODO: Allow choosing pen order. Sortable GUI?
 
 // TODO: simulate line thickness and ink overlap (via opacity or blend mode, but not ink bleed) in preview?
+//
+// TODO: Alternative multi pen: do not insert pauses but start from corner. I
+// had it fail with the pauses
+//
+// TODO: run plotting in a thread, otherwise if I change virtual desktops and
+// come back the OPENRNDR is blank until it's done plotting.
 
 /**
  * Axidraw reordering optimization types.
@@ -447,7 +453,7 @@ class Axidraw(
 
             // If the user wants a frame covering the design...
             if (occlusion) {
-                fill = ColorRGBa.WHITE
+                fill = program.backgroundColor
                 stroke = null
                 shape(makeFrame(margin.toDouble()))?.attributes?.put("type", "margin")
             }
@@ -518,7 +524,7 @@ class Axidraw(
     }
 
     /**
-     * Makes a white frame to cover the borders of the page, to avoid plotting
+     * Makes a frame to cover the borders of the page to avoid plotting
      * on the edge of papers, which may damage the pen or make a mess.
      * The frame is created by shifting `bounds.contour` inwards `width` pixels,
      * and outwards 1000 pixels.
@@ -547,7 +553,7 @@ class Axidraw(
 
             // Draw frame
             if (occlusion) {
-                fill = ColorRGBa.WHITE
+                fill = program.backgroundColor
                 stroke = null
                 shape(makeFrame(margin.toDouble()))
             }
