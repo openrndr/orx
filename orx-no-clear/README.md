@@ -53,6 +53,18 @@ extend(NoClear()) {
 NB! any submitted _lambda expression_ must be valid within the `renderTarget` context.
 <!-- __demos__ -->
 ## Demos
+### DemoNoClear01
+
+By default, OPENRNDR clears the canvas on each animation
+frame. [NoClear] disables that behavior, letting you
+draw on top of what you drew in previous animation frames.
+
+That's the default in some other frameworks.
+
+![DemoNoClear01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-no-clear/images/DemoNoClear01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoNoClear01.kt)
+
 ### DemoNoClear02
 
 Demonstrates the `NoClear` extension with `FLOAT32` color type.
@@ -70,15 +82,3 @@ would not increase. Using `FLOAT32` solves this by supporting a finer precision.
 ![DemoNoClear02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-no-clear/images/DemoNoClear02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoNoClear02.kt)
-
-### DemoNoClear
-
-By default, OPENRNDR clears the canvas on each animation
-frame. [NoClear] disables that behavior, letting you
-draw on top of what you drew in previous animation frames.
-
-That's the default in some other frameworks.
-
-![DemoNoClearKt](https://raw.githubusercontent.com/openrndr/orx/media/orx-no-clear/images/DemoNoClearKt.webp)
-
-[source code](src/jvmDemo/kotlin/DemoNoClear.kt)
