@@ -92,35 +92,68 @@ fun findContours(
                 segments.add(l0)
             }
 
+            // Each branch emits its line(s) so that walking from the first point to the
+            // second keeps the positive (inside) region consistently on the same side.
+            // Complementary cases (index and 15 xor index) need opposite point order,
+            // so they can no longer share a single branch as they did before.
             when (index) {
                 0, 15 -> {}
-                1, 15 xor 1 -> {
+                1 -> {
                     emitLine(p00, p01, v00, v01, p00, p10, v00, v10)
                 }
 
-                2, 15 xor 2 -> {
+                2 -> {
                     emitLine(p00, p10, v00, v10, p10, p11, v10, v11)
                 }
 
-                3, 15 xor 3 -> {
+                3 -> {
                     emitLine(p00, p01, v00, v01, p10, p11, v10, v11)
                 }
 
-                4, 15 xor 4 -> {
-                    emitLine(p00, p01, v00, v01, p01, p11, v01, v11)
+                4 -> {
+                    emitLine(p01, p11, v01, v11, p00, p01, v00, v01)
                 }
 
-                5, 15 xor 5 -> {
+                5 -> {
+                    emitLine(p01, p11, v01, v11, p00, p10, v00, v10)
+                }
+
+                6 -> {
+                    emitLine(p00, p10, v00, v10, p00, p01, v00, v01)
+                    emitLine(p01, p11, v01, v11, p10, p11, v10, v11)
+                }
+
+                7 -> {
+                    emitLine(p01, p11, v01, v11, p10, p11, v10, v11)
+                }
+
+                8 -> {
+                    emitLine(p10, p11, v10, v11, p01, p11, v01, v11)
+                }
+
+                9 -> {
+                    emitLine(p00, p01, v00, v01, p00, p10, v00, v10)
+                    emitLine(p10, p11, v10, v11, p01, p11, v01, v11)
+                }
+
+                10 -> {
                     emitLine(p00, p10, v00, v10, p01, p11, v01, v11)
                 }
 
-                6, 15 xor 6 -> {
-                    emitLine(p00, p01, v00, v01, p00, p10, v00, v10)
-                    emitLine(p01, p11, v01, v11, p10, p11, v10, v11)
+                11 -> {
+                    emitLine(p00, p01, v00, v01, p01, p11, v01, v11)
                 }
 
-                7, 15 xor 7 -> {
-                    emitLine(p01, p11, v01, v11, p10, p11, v10, v11)
+                12 -> {
+                    emitLine(p10, p11, v10, v11, p00, p01, v00, v01)
+                }
+
+                13 -> {
+                    emitLine(p10, p11, v10, v11, p00, p10, v00, v10)
+                }
+
+                14 -> {
+                    emitLine(p00, p10, v00, v10, p00, p01, v00, v01)
                 }
             }
         }
