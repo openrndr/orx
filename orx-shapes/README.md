@@ -702,6 +702,14 @@ to make the light of rendered segments accumulate.
 
 [source code](src/jvmDemo/kotlin/loft/DemoLoftNormals02.kt)
 
+### offset/DemoOffset01
+
+
+
+![offset-DemoOffset01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/offset-DemoOffset01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/offset/DemoOffset01.kt)
+
 ### operators/DemoRoundCorners01
 
 Demonstrates how to use the `roundCorners` method to round the sharp corners
