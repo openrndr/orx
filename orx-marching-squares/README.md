@@ -21,7 +21,23 @@ drawer.contours(contours)
 ```
 <!-- __demos__ -->
 ## Demos
-### FindContours01
+### DemoCollapse01
+
+
+
+![DemoCollapse01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-marching-squares/images/DemoCollapse01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoCollapse01.kt)
+
+### DemoCompareContours01
+
+
+
+![DemoCompareContours01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-marching-squares/images/DemoCompareContours01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoCompareContours01.kt)
+
+### DemoFindContours01
 
 A simple demonstration of using the `findContours` method provided by `orx-marching-squares`.
 
@@ -38,11 +54,11 @@ Try increasing the cell size to see how the precision of the circle reduces.
 The circular contour created in this program has over 90 segments. The number of segments depends on the cell
 size, and the resulting radius.
 
-![FindContours01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-marching-squares/images/FindContours01Kt.webp)
+![DemoFindContours01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-marching-squares/images/DemoFindContours01Kt.webp)
 
-[source code](src/jvmDemo/kotlin/FindContours01.kt)
+[source code](src/jvmDemo/kotlin/DemoFindContours01.kt)
 
-### FindContours02
+### DemoFindContours02
 
 This Marching Square demonstration shows the effect of wrapping a distance function
 within a cosine (or sine). These mathematical functions return values that periodically
@@ -53,11 +69,11 @@ equivalent to 0.06. Increasing or decreasing this value will change how close th
 parallel curves are to each other.
 
 
-![FindContours02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-marching-squares/images/FindContours02Kt.webp)
+![DemoFindContours02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-marching-squares/images/DemoFindContours02Kt.webp)
 
-[source code](src/jvmDemo/kotlin/FindContours02.kt)
+[source code](src/jvmDemo/kotlin/DemoFindContours02.kt)
 
-### FindContours03
+### DemoFindContours03
 
 Demonstrates how Marching Squares can be used to generate animations, by using a time-related
 variable like `seconds`. The evaluated function is somewhat more complex than previous ones,
@@ -65,11 +81,11 @@ but one can arrive to such functions by exploration and experimentation, nesting
 functions and making use of `seconds`, v.x and v.y.
 
 
-![FindContours03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-marching-squares/images/FindContours03Kt.webp)
+![DemoFindContours03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-marching-squares/images/DemoFindContours03Kt.webp)
 
-[source code](src/jvmDemo/kotlin/FindContours03.kt)
+[source code](src/jvmDemo/kotlin/DemoFindContours03.kt)
 
-### FindContours04
+### DemoFindContours04
 
 Demonstrates using Marching Squares while reading the pixel colors of a loaded image.
 
@@ -82,6 +98,6 @@ and only reads from the image when it is.
 The `seconds` built-in variable is used to generate an animated effect, serving as a shifting cut-off point
 that specifies at which brightness level to create curves.
 
-![FindContours04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-marching-squares/images/FindContours04Kt.webp)
+![DemoFindContours04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-marching-squares/images/DemoFindContours04Kt.webp)
 
-[source code](src/jvmDemo/kotlin/FindContours04.kt)
+[source code](src/jvmDemo/kotlin/DemoFindContours04.kt)
