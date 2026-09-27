@@ -89,6 +89,7 @@ To make use of these extensions clone the [OPENRNDR template](https://github.com
 | [`orx-poisson-fill`](orx-jvm/orx-poisson-fill/) | Post processing effect that fills transparent parts of the image interpolating the edge pixel colors. GPU-based. |
 | [`orx-processing`](orx-jvm/orx-processing/) | orx-processing is a module designed to facilitate seamless type conversions between Processing's types and OPENRNDR's types. It provides utilities and methods that allow developers to integrate the two graphics frameworks effectively by bridging the gap between their respective data structures. |
 | [`orx-rabbit-control`](orx-jvm/orx-rabbit-control/) | Creates a web-based remote UI to control your OPENRNDR program from a mobile device or a different computer. Alternative to `orx-gui`. |
+| [`orx-remote-control`](orx-jvm/orx-remote-control/) | Add remote control functionality to Programs |
 | [`orx-syphon`](orx-jvm/orx-syphon/) | Send frames to- and from OPENRNDR to other applications in real time using _Syphon_ for Mac. |
 | [`orx-video-profiles`](orx-jvm/orx-video-profiles/) | GIF, H265, PNG, Prores, TIFF and Webp `VideoWriterProfile`s for `ScreenRecorder` and `VideoWriter`. |
 <!-- __orxListEnd__ -->
