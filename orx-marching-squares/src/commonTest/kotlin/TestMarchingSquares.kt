@@ -32,7 +32,7 @@ class TestMarchingSquares {
 
         val bounds = Rectangle(0.0, 0.0, 720.0, 720.0)
 
-        fun f(v:Vector2) = cos((v.distanceTo(bounds.center)*0.1).coerceAtMost(14* PI) )
+        fun f(v:Vector2) = cos((v.distanceTo(bounds.center)*0.1).coerceAtMost(6* PI) )
 
         val contours = findContours(::f, bounds, 16.0)
         val shape = Shape(contours)
