@@ -93,3 +93,17 @@ was active before `/clock` first overrode it.
 curl -s -X POST "http://127.0.0.1:9000/clock?time=1.5707963"
 curl -s -X POST "http://127.0.0.1:9000/clock/reset"
 ```
+<!-- __demos__ -->
+## Demos
+### DemoRemoteControl01
+
+A small, visibly-reactive program to drive with [RemoteControl]: draws a circle that
+follows the (possibly emulated) mouse position, flips the background color on spacebar,
+and orbits a dot based on [org.openrndr.Program.seconds] -- so freezing it with `/clock`
+visibly stops the dot instead of just leaving a static scene unprovable either way. Useful
+for checking, end to end, that HTTP requests to `/screenshot`, `/mouse/move`,
+`/keyboard/down` and `/clock` actually reach the running program.
+
+![DemoRemoteControl01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-remote-control/images/DemoRemoteControl01Kt.webp)
+
+[source code](src/demo/kotlin/DemoRemoteControl01.kt)
