@@ -139,7 +139,6 @@ fun Segment2D.offset(
 }
 
 
-
 /**
  * Offsets a [ShapeContour]'s [Segment2D]s by given [distance].
  *
@@ -173,8 +172,10 @@ fun ShapeContour.offset(distance: Double, joinType: SegmentJoin = SegmentJoin.RO
         return ShapeContour(emptyList(), false)
     }
 
-
-    val startPoint = if (closed) offsets.last().last().end else offsets.first().first().start
+    val startPoint = if (closed)
+        offsetContours.last().segments.last().end
+    else
+        offsetContours.first().segments.first().start
 
     val candidateContour = contour {
         moveTo(startPoint)
@@ -192,6 +193,7 @@ fun ShapeContour.offset(distance: Double, joinType: SegmentJoin = SegmentJoin.RO
                         sweepFlag = true,
                         end = offsetContour.position(0.0)
                     )
+
                     SegmentJoin.MITER -> {
                         val ls = lastSegment ?: offsetContours.last().segments.last()
                         val fs = offsetContour.segments.first()
