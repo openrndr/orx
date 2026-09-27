@@ -18,14 +18,13 @@ import kotlin.math.min
  * @return a list of [ShapeContour] instances
  */
 fun findContours(
-    f: (Vector2) -> Double,
+    f: ShapeFunction,
     area: Rectangle,
     cellSize: Double,
     useInterpolation: Boolean = true
 ): List<ShapeContour> {
     val segments = mutableListOf<LineSegment>()
     val values = mutableMapOf<IntVector2, Double>()
-    val segmentsMap = mutableMapOf<Vector2, MutableList<LineSegment>>()
 
     for (y in 0 until (area.height / cellSize).toInt()) {
         for (x in 0 until (area.width / cellSize).toInt()) {
@@ -86,10 +85,7 @@ fun findContours(
 
                 val v0 = p00.mix(p01, r0)
                 val v1 = p10.mix(p11, r1)
-                val l0 = LineSegment(v0, v1)
-                segmentsMap.getOrPut(v1) { mutableListOf() }.add(l0)
-                segmentsMap.getOrPut(v0) { mutableListOf() }.add(l0)
-                segments.add(l0)
+                segments.add(LineSegment(v0, v1))
             }
 
             // Each branch emits its line(s) so that walking from the first point to the
@@ -159,35 +155,62 @@ fun findContours(
         }
     }
 
+    return assembleContours(segments)
+}
+
+/**
+ * Chains a soup of [LineSegment]s (connected end-to-end via shared endpoints) into
+ * [ShapeContour]s. Used to turn the raw segments produced by a contouring algorithm
+ * (marching squares, dual contouring, ...) into closed or open polylines.
+ *
+ * This walks by tracking the current *point* and asking each segment which of its two ends
+ * isn't that point, rather than assuming a segment's `start` is always "where we came from"
+ * and its `end` is always "where we're going" -- a segment soup isn't guaranteed to have that
+ * consistent an orientation (dual contouring's segments in particular don't: each one just
+ * runs from one cell's dual vertex to its neighbor's, with no regard for a consistent walking
+ * direction around the eventual loop). Assuming otherwise can walk two segments that happen
+ * to share a `start` (instead of one's `end` matching the other's `start`) as if the shared
+ * point were a dead end, silently dropping a vertex from the middle of an otherwise-valid
+ * cycle.
+ */
+internal fun assembleContours(segments: List<LineSegment>): List<ShapeContour> {
+    val segmentsMap = mutableMapOf<Vector2, MutableList<LineSegment>>()
+    for (segment in segments) {
+        segmentsMap.getOrPut(segment.start) { mutableListOf() }.add(segment)
+        segmentsMap.getOrPut(segment.end) { mutableListOf() }.add(segment)
+    }
+
     val processedSegments = mutableSetOf<LineSegment>()
     val contours = mutableListOf<ShapeContour>()
-    for (segment in segments) {
-        if (segment in processedSegments) {
+    for (startSegment in segments) {
+        if (startSegment in processedSegments) {
             continue
-        } else {
-            val collected = mutableListOf<Vector2>()
-            var current: LineSegment? = segment
-            var closed = true
-            var lastVertex = Vector2.INFINITY
-            do {
-                current!!
-                if (lastVertex.squaredDistanceTo(current.start) > 1E-5) {
-                    collected.add(current.start)
-                }
-                lastVertex = current.start
-                processedSegments.add(current)
-                if (segmentsMap[current.start]!!.size < 2) {
-                    closed = false
-                }
-                val hold = current
-                current = segmentsMap[current.start]?.firstOrNull { it !in processedSegments }
-                if (current == null) {
-                    current = segmentsMap[hold.end]?.firstOrNull { it !in processedSegments }
-                }
-            } while (current != segment && current != null)
-
-            contours.add(ShapeContour.fromPoints(collected, closed = closed))
         }
+
+        val collected = mutableListOf<Vector2>()
+        val startPoint = startSegment.start
+        var point = startPoint
+        var segment = startSegment
+        var closed = false
+
+        while (true) {
+            processedSegments.add(segment)
+            collected.add(point)
+            val nextPoint = if (segment.start == point) segment.end else segment.start
+            if (nextPoint == startPoint) {
+                closed = true
+                break
+            }
+            val next = segmentsMap[nextPoint].orEmpty().firstOrNull { it !in processedSegments }
+            if (next == null) {
+                collected.add(nextPoint)
+                break
+            }
+            point = nextPoint
+            segment = next
+        }
+
+        contours.add(ShapeContour.fromPoints(collected, closed = closed))
     }
     return contours
 }
