@@ -15,7 +15,7 @@ data class QuadtreeQuery<T>(val nearest: T, val neighbours: List<T>, val quads: 
  * @param T
  * @property bounds the tree's bounding box
  * @property maxObjects maximum number of objects per node
- * @property mapper
+ * @property mapper function that maps an element of type [T] to its 2D position ([Vector2]) for spatial indexing and queries
  */
 class Quadtree<T>(val bounds: Rectangle, val maxObjects: Int = 10, val mapper: ((T) -> Vector2)) : IQuadtree<T> {
     /**
