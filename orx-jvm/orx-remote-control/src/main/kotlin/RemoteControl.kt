@@ -20,6 +20,7 @@ import org.openrndr.MouseButton
 import org.openrndr.MouseEvent
 import org.openrndr.MouseEventType
 import org.openrndr.Program
+import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.BufferMultisample
 import org.openrndr.draw.ColorBuffer
 import org.openrndr.draw.Drawer
@@ -145,7 +146,14 @@ class RemoteControl : Extension {
                         // actual position has to be set through Application instead.
                         program.application.cursorPosition = position
                         program.mouse.moved.trigger(
-                            MouseEvent(position, Vector2.ZERO, position - previous, MouseEventType.MOVED, MouseButton.NONE, emptySet())
+                            MouseEvent(
+                                position,
+                                Vector2.ZERO,
+                                position - previous,
+                                MouseEventType.MOVED,
+                                MouseButton.NONE,
+                                emptySet()
+                            )
                         )
                     }
                     program.window.requestDraw()
@@ -174,7 +182,8 @@ class RemoteControl : Extension {
                         if (requestedPosition != null) {
                             program.application.cursorPosition = requestedPosition
                         }
-                        val event = MouseEvent(program.mouse.position, Vector2.ZERO, Vector2.ZERO, type, button, modifiers)
+                        val event =
+                            MouseEvent(program.mouse.position, Vector2.ZERO, Vector2.ZERO, type, button, modifiers)
                         when (type) {
                             MouseEventType.BUTTON_DOWN -> program.mouse.buttonDown.trigger(event)
                             MouseEventType.BUTTON_UP -> program.mouse.buttonUp.trigger(event)
@@ -190,7 +199,14 @@ class RemoteControl : Extension {
                     val dy = call.request.queryParameters["dy"]?.toDoubleOrNull() ?: 0.0
                     actionQueue.add {
                         program.mouse.scrolled.trigger(
-                            MouseEvent(program.mouse.position, Vector2(dx, dy), Vector2.ZERO, MouseEventType.SCROLLED, MouseButton.NONE, emptySet())
+                            MouseEvent(
+                                program.mouse.position,
+                                Vector2(dx, dy),
+                                Vector2.ZERO,
+                                MouseEventType.SCROLLED,
+                                MouseButton.NONE,
+                                emptySet()
+                            )
                         )
                     }
                     program.window.requestDraw()
@@ -261,6 +277,7 @@ class RemoteControl : Extension {
                     BufferMultisample.Disabled -> null
                     is BufferMultisample.SampleCount -> colorBuffer(width, height, contentScale = contentScale)
                 }
+                screenshotTarget?.clearColor(0, program.backgroundColor ?: ColorRGBa.TRANSPARENT)
                 screenshotTarget?.bind()
             }
         }
