@@ -4,25 +4,19 @@ plugins {
 
 kotlin {
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation(openrndr.application.core)
-            }
+        commonMain.dependencies {
+            implementation(openrndr.application.core)
         }
-        val jvmMain by getting {
-            dependencies {
-                implementation(project(":orx-noise"))
-                implementation(libs.gson)
-                implementation(openrndr.math)
-            }
+        jvmMain.dependencies {
+            implementation(project(":orx-noise"))
+            implementation(libs.gson)
+            implementation(openrndr.math)
         }
 
-        val jvmDemo by getting {
-            dependencies {
-                implementation(project(":orx-palette"))
-                implementation(project(":orx-palette"))
-                implementation(project(":orx-shapes"))
-            }
+        jvmDemo.dependencies {
+            implementation(project(":orx-palette"))
+            implementation(project(":orx-palette"))
+            implementation(project(":orx-shapes"))
         }
     }
 }

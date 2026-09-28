@@ -4,19 +4,15 @@ plugins {
 
 kotlin {
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation(openrndr.shape)
-                implementation(openrndr.draw)
-                implementation(openrndr.application.core)
-                implementation(project(":orx-shapes"))
-            }
+        commonMain.dependencies {
+            implementation(openrndr.shape)
+            implementation(openrndr.draw)
+            implementation(openrndr.application.core)
+            implementation(project(":orx-shapes"))
         }
 
-        val jvmDemo by getting {
-            dependencies {
-                implementation(project(":orx-text-on-contour"))
-            }
+        jvmDemo.dependencies {
+            implementation(project(":orx-text-on-contour"))
         }
     }
 }

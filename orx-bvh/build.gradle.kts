@@ -11,24 +11,18 @@ kotlin {
     }
 
     sourceSets {
-        @Suppress("UNUSED_VARIABLE")
-        val commonMain by getting {
-            dependencies {
-                implementation(project(":orx-parameters"))
-                implementation(project(":orx-shader-phrases"))
-                implementation(openrndr.application.core)
-                implementation(openrndr.draw)
-                implementation(openrndr.filter)
-                implementation(sharedLibs.kotlin.reflect)
-                implementation(sharedLibs.kotlin.coroutines)
-            }
+        commonMain.dependencies {
+            implementation(project(":orx-parameters"))
+            implementation(project(":orx-shader-phrases"))
+            implementation(openrndr.application.core)
+            implementation(openrndr.draw)
+            implementation(openrndr.filter)
+            implementation(sharedLibs.kotlin.reflect)
+            implementation(sharedLibs.kotlin.coroutines)
         }
 
-        @Suppress("UNUSED_VARIABLE")
-        val jvmDemo = getByName("jvmDemo") {
-            dependencies {
-                implementation(project(":orx-noise"))
-            }
+        jvmDemo.dependencies {
+            implementation(project(":orx-noise"))
         }
     }
 }

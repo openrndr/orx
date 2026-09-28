@@ -4,33 +4,25 @@ plugins {
 
 kotlin {
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation(project(":orx-composition"))
-                implementation(openrndr.shape)
-            }
+        commonMain.dependencies {
+            implementation(project(":orx-composition"))
+            implementation(openrndr.shape)
         }
 
-        val jvmMain by getting {
-            dependencies {
-                implementation(libs.jsoup)
-                implementation(openrndr.draw)
-            }
+        jvmMain.dependencies {
+            implementation(libs.jsoup)
+            implementation(openrndr.draw)
         }
 
-        val jvmTest by getting {
-            dependencies {
-                implementation(sharedLibs.kotest.assertions)
-                implementation(sharedLibs.kotest.framework.engine)
-                implementation(sharedLibs.kotlin.serialization.json)
-                runtimeOnly(sharedLibs.kotlin.reflect)
-            }
+        jvmTest.dependencies {
+            implementation(sharedLibs.kotest.assertions)
+            implementation(sharedLibs.kotest.framework.engine)
+            implementation(sharedLibs.kotlin.serialization.json)
+            runtimeOnly(sharedLibs.kotlin.reflect)
         }
 
-        val jvmDemo by getting {
-            dependencies {
-                implementation(project(":orx-svg"))
-            }
+        jvmDemo.dependencies {
+            implementation(project(":orx-svg"))
         }
     }
 }

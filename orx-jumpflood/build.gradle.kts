@@ -3,6 +3,7 @@ plugins {
 }
 
 val embedShaders = tasks.register<EmbedShadersTask>("embedShaders") {
+    description = "Embeds .glsl files as strings in .kt files with matching file names"
     inputDir.set(file("$projectDir/src/shaders/glsl"))
     outputDir.set(layout.buildDirectory.dir("generated/shaderKotlin"))
     defaultPackage.set("org.openrndr.extra.jumpflood")
@@ -11,10 +12,9 @@ val embedShaders = tasks.register<EmbedShadersTask>("embedShaders") {
 }.get()
 
 kotlin {
-    kotlin.sourceSets.getByName("commonMain").kotlin.srcDir(embedShaders.outputDir)
     sourceSets {
-        @Suppress("UNUSED_VARIABLE")
-        val commonMain by getting {
+        commonMain {
+            kotlin.srcDir(embedShaders.outputDir)
             dependencies {
                 implementation(project(":orx-parameters"))
                 implementation(project(":orx-fx"))
@@ -25,18 +25,15 @@ kotlin {
             }
         }
 
-        @Suppress("UNUSED_VARIABLE")
-        val jvmDemo by getting {
-            dependencies {
-                implementation(project(":orx-color"))
-                implementation(project(":orx-fx"))
-                implementation(project(":orx-noise"))
-                implementation(project(":orx-jumpflood"))
-                implementation(project(":orx-compositor"))
-                implementation(project(":orx-jvm:orx-gui"))
-                implementation(project(":orx-composition"))
-                implementation(project(":orx-svg"))
-            }
+        jvmDemo.dependencies {
+            implementation(project(":orx-color"))
+            implementation(project(":orx-fx"))
+            implementation(project(":orx-noise"))
+            implementation(project(":orx-jumpflood"))
+            implementation(project(":orx-compositor"))
+            implementation(project(":orx-jvm:orx-gui"))
+            implementation(project(":orx-composition"))
+            implementation(project(":orx-svg"))
         }
     }
 }

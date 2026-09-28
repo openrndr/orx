@@ -29,7 +29,7 @@ val generateKotlinGrammarSource = tasks.register<AntlrKotlinTask>("generateKotli
 
 kotlin {
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 implementation(libs.antlr.kotlin.runtime)
                 implementation(openrndr.application.core)
@@ -42,15 +42,13 @@ kotlin {
                 srcDir(layout.buildDirectory.dir("generatedAntlr"))
             }
         }
-        val jvmDemo by getting {
-            dependencies {
-                implementation(project(":orx-jvm:orx-gui"))
-            }
+        jvmDemo.dependencies {
+            implementation(project(":orx-jvm:orx-gui"))
         }
     }
 }
 
 tasks.withType<KotlinCompilationTask<*>> { dependsOn(generateKotlinGrammarSource) }
 tasks.withType<org.gradle.jvm.tasks.Jar> { dependsOn(generateKotlinGrammarSource) }
-tasks.named("dokkaGeneratePublicationHtml") { dependsOn(generateKotlinGrammarSource) }
-tasks.named("dokkaGenerateModuleHtml") { dependsOn(generateKotlinGrammarSource) }
+tasks.dokkaGeneratePublicationHtml { dependsOn(generateKotlinGrammarSource) }
+tasks.dokkaGenerateModuleHtml { dependsOn(generateKotlinGrammarSource) }

@@ -4,25 +4,19 @@ plugins {
 
 kotlin {
     sourceSets {
-        @Suppress("UNUSED_VARIABLE")
-        val commonMain by getting {
-            dependencies {
-                api(openrndr.application.core)
-                api(openrndr.math)
-                implementation(project(":orx-shapes"))
-                api(project(":orx-mesh"))
-            }
+        commonMain.dependencies {
+            api(openrndr.application.core)
+            api(openrndr.math)
+            implementation(project(":orx-shapes"))
+            api(project(":orx-mesh"))
         }
 
-        @Suppress("UNUSED_VARIABLE")
-        val jvmDemo by getting {
-            dependencies {
-                implementation(project(":orx-shapes"))
-                implementation(project(":orx-mesh-generators"))
-                implementation(project(":orx-camera"))
-                implementation(project(":orx-noise"))
-                implementation(project(":orx-obj-loader"))
-            }
+        jvmDemo.dependencies {
+            implementation(project(":orx-shapes"))
+            implementation(project(":orx-mesh-generators"))
+            implementation(project(":orx-camera"))
+            implementation(project(":orx-noise"))
+            implementation(project(":orx-obj-loader"))
         }
     }
 }

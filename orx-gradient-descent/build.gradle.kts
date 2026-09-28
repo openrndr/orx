@@ -5,36 +5,28 @@ plugins {
 kotlin {
     jvm {
         testRuns["test"].executionTask {
-            useJUnitPlatform {
-
-            }
+            useJUnitPlatform {}
         }
     }
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation(project(":orx-parameters"))
-                implementation(project(":orx-shader-phrases"))
-                implementation(openrndr.application.core)
-                implementation(openrndr.draw)
-                implementation(openrndr.filter)
-                implementation(sharedLibs.kotlin.reflect)
-            }
+        commonMain.dependencies {
+            implementation(project(":orx-parameters"))
+            implementation(project(":orx-shader-phrases"))
+            implementation(openrndr.application.core)
+            implementation(openrndr.draw)
+            implementation(openrndr.filter)
+            implementation(sharedLibs.kotlin.reflect)
         }
 
-        val commonTest by getting {
-            dependencies {
-                implementation(sharedLibs.kotest.assertions)
-                implementation(sharedLibs.kotest.framework.engine)
-            }
+        commonTest.dependencies {
+            implementation(sharedLibs.kotest.assertions)
+            implementation(sharedLibs.kotest.framework.engine)
         }
 
-        val jvmTest by getting {
-            dependencies {
-                implementation(sharedLibs.kotest.assertions)
-                implementation(sharedLibs.kotest.framework.engine)
-                runtimeOnly(sharedLibs.kotlin.reflect)
-            }
+        jvmTest.dependencies {
+            implementation(sharedLibs.kotest.assertions)
+            implementation(sharedLibs.kotest.framework.engine)
+            runtimeOnly(sharedLibs.kotlin.reflect)
         }
     }
 }

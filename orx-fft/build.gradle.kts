@@ -4,20 +4,10 @@ plugins {
 
 kotlin {
     sourceSets {
-        @Suppress("UNUSED_VARIABLE")
-        val commonMain by getting {
-            dependencies {
-
-            }
-        }
-
-        @Suppress("UNUSED_VARIABLE")
-        val jvmDemo by getting {
-            dependencies {
-                implementation(project(":orx-shapes"))
-                implementation(project(":orx-noise"))
-
-            }
+        commonMain.dependencies { }
+        jvmDemo.dependencies {
+            implementation(project(":orx-shapes"))
+            implementation(project(":orx-noise"))
         }
     }
 }

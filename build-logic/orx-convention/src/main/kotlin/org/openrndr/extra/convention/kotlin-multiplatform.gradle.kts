@@ -1,7 +1,6 @@
 package org.openrndr.extra.convention
 
 import CollectScreenshotsTask
-
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
@@ -10,7 +9,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
-val libs =  extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
+val libs = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
 val sharedLibs = extensions.getByType(VersionCatalogsExtension::class.java).named("sharedLibs")
 val openrndr = extensions.getByType(VersionCatalogsExtension::class.java).named("openrndr")
 
@@ -36,8 +35,12 @@ group = "org.openrndr.extra"
 
 tasks.withType<KotlinCompilationTask<*>> {
     compilerOptions {
-        apiVersion.set(KotlinVersion.valueOf("KOTLIN_${libs.findVersion("kotlinApi").get().displayName.replace(".", "_")}"))
-        languageVersion.set(KotlinVersion.valueOf("KOTLIN_${libs.findVersion("kotlinLanguage").get().displayName.replace(".", "_")}"))
+        apiVersion.set(
+            KotlinVersion.valueOf("KOTLIN_${libs.findVersion("kotlinApi").get().displayName.replace(".", "_")}")
+        )
+        languageVersion.set(
+            KotlinVersion.valueOf("KOTLIN_${libs.findVersion("kotlinLanguage").get().displayName.replace(".", "_")}")
+        )
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 }
@@ -53,9 +56,9 @@ kotlin {
     applyDefaultHierarchyTemplate()
     jvm {
         compilations {
-            val main by getting
+            val main = getByName("main")
 
-            val demo by creating {
+            create("demo") {
                 associateWith(main)
                 tasks.register<CollectScreenshotsTask>("collectScreenshots") {
                     // since Kotlin 2.1.20 output.classesDirs no longer contains a single file
@@ -94,40 +97,32 @@ kotlin {
     }
 
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation(libs.findLibrary("kotlin-stdlib").get())
-                implementation(sharedLibs.findLibrary("kotlin-logging").get())
-            }
+        commonMain.dependencies {
+            implementation(libs.findLibrary("kotlin-stdlib").get())
+            implementation(sharedLibs.findLibrary("kotlin-logging").get())
         }
 
-        val commonTest by getting {
-            dependencies {
-                implementation(libs.findLibrary("kotlin-test").get())
-            }
+        commonTest.dependencies {
+            implementation(libs.findLibrary("kotlin-test").get())
         }
 
-        val jvmTest by getting {
-            dependencies {
-                runtimeOnly(sharedLibs.findBundle("jupiter").get())
-                runtimeOnly(sharedLibs.findLibrary("slf4j.simple").get())
-            }
+        jvmTest.dependencies {
+            runtimeOnly(sharedLibs.findBundle("jupiter").get())
+            runtimeOnly(sharedLibs.findLibrary("slf4j.simple").get())
         }
 
-        val jvmDemo by getting {
-            dependencies {
-                implementation(openrndr.findLibrary("application-core").get())
-                implementation(openrndr.findLibrary("orextensions").get())
+        getByName("jvmDemo").dependencies {
+            implementation(openrndr.findLibrary("application-core").get())
+            implementation(openrndr.findLibrary("orextensions").get())
 
-                if (findProperty("openrndr.application.backend") == null) {
-                    runtimeOnly(openrndr.findLibrary("application-sdl").get())
-                } else {
-                    runtimeOnly(openrndr.findLibrary(findProperty("openrndr.application.backend") as String).get())
-                }
-
+            if (findProperty("openrndr.application.backend") == null) {
                 runtimeOnly(openrndr.findLibrary("application-sdl").get())
-                runtimeOnly(sharedLibs.findLibrary("slf4j-simple").get())
+            } else {
+                runtimeOnly(openrndr.findLibrary(findProperty("openrndr.application.backend") as String).get())
             }
+
+            runtimeOnly(openrndr.findLibrary("application-sdl").get())
+            runtimeOnly(sharedLibs.findLibrary("slf4j-simple").get())
         }
     }
 }

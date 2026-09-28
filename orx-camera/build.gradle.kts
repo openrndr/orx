@@ -5,32 +5,25 @@ plugins {
 kotlin {
     jvm {
         testRuns["test"].executionTask {
-            useJUnitPlatform {
-            }
+            useJUnitPlatform {}
         }
     }
 
     sourceSets {
-        @Suppress("UNUSED_VARIABLE")
-        val commonMain by getting {
-            dependencies {
-                implementation(project(":orx-parameters"))
-                implementation(project(":orx-shader-phrases"))
-                implementation(openrndr.application.core)
-                implementation(openrndr.draw)
-                implementation(openrndr.filter)
-                implementation(sharedLibs.kotlin.reflect)
-            }
+        commonMain.dependencies {
+            implementation(project(":orx-parameters"))
+            implementation(project(":orx-shader-phrases"))
+            implementation(openrndr.application.core)
+            implementation(openrndr.draw)
+            implementation(openrndr.filter)
+            implementation(sharedLibs.kotlin.reflect)
         }
 
-        @Suppress("UNUSED_VARIABLE")
-        val jvmDemo by getting {
-            dependencies {
-                implementation(project(":orx-camera"))
-                implementation(project(":orx-mesh-generators"))
-                implementation(project(":orx-jvm:orx-gui"))
-                implementation(project(":orx-jvm:orx-remote-control"))
-            }
+        jvmDemo.dependencies {
+            implementation(project(":orx-camera"))
+            implementation(project(":orx-mesh-generators"))
+            implementation(project(":orx-jvm:orx-gui"))
+            implementation(project(":orx-jvm:orx-remote-control"))
         }
     }
 }

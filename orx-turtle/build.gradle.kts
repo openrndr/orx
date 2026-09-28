@@ -4,20 +4,14 @@ plugins {
 
 kotlin {
     sourceSets {
-        @Suppress("UNUSED_VARIABLE")
-        val commonMain by getting {
-            dependencies {
-                api(openrndr.math)
-                api(openrndr.shape)
-            }
+        commonMain.dependencies {
+            api(openrndr.math)
+            api(openrndr.shape)
         }
 
-        @Suppress("UNUSED_VARIABLE")
-        val jvmDemo by getting {
-            dependencies {
-                implementation(project(":orx-shapes"))
-                implementation(project(":orx-noise"))
-            }
+        jvmDemo.dependencies {
+            implementation(project(":orx-shapes"))
+            implementation(project(":orx-noise"))
         }
     }
 }

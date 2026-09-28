@@ -4,23 +4,17 @@ plugins {
 
 kotlin {
     sourceSets {
-        @Suppress("UNUSED_VARIABLE")
-        val commonMain by getting {
-            dependencies {
-                implementation(project(":orx-parameters"))
-                implementation(openrndr.application.core)
-                implementation(openrndr.draw)
-                implementation(openrndr.filter)
-                implementation(sharedLibs.kotlin.reflect)
-            }
+        commonMain.dependencies {
+            implementation(project(":orx-parameters"))
+            implementation(openrndr.application.core)
+            implementation(openrndr.draw)
+            implementation(openrndr.filter)
+            implementation(sharedLibs.kotlin.reflect)
         }
 
-        @Suppress("UNUSED_VARIABLE")
-        val jvmDemo by getting {
-            dependencies {
-                implementation(project(":orx-delegate-magic"))
-                implementation(project(":orx-jvm:orx-gui"))
-            }
+        jvmDemo.dependencies {
+            implementation(project(":orx-delegate-magic"))
+            implementation(project(":orx-jvm:orx-gui"))
         }
     }
 }

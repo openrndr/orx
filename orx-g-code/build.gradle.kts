@@ -11,24 +11,15 @@ kotlin {
     }
 
     sourceSets {
-        @Suppress("UNUSED_VARIABLE")
-        val commonMain by getting {
-            dependencies {
-                implementation(openrndr.application.core)
-                implementation(openrndr.draw)
-                implementation(openrndr.shape)
-                api(project(":orx-composition"))
-            }
+        commonMain.dependencies {
+            implementation(openrndr.application.core)
+            implementation(openrndr.draw)
+            implementation(openrndr.shape)
+            api(project(":orx-composition"))
         }
 
-        @Suppress("UNUSED_VARIABLE")
-        val jvmTest by getting {
-            dependencies { }
-        }
+        jvmTest.dependencies {}
 
-        @Suppress("UNUSED_VARIABLE")
-        val jvmDemo by getting {
-            dependencies { }
-        }
+        jvmDemo.dependencies {}
     }
 }

@@ -5,23 +5,17 @@ plugins {
 
 kotlin {
     sourceSets {
-        @Suppress("UNUSED_VARIABLE")
-        val commonMain by getting {
-            dependencies {
-                implementation(project(":orx-parameters"))
-                implementation(openrndr.application.core)
-                implementation(openrndr.draw)
-                implementation(openrndr.filter)
-                implementation(sharedLibs.kotlin.reflect)
-                implementation(sharedLibs.kotlin.serialization.core)
-            }
+        commonMain.dependencies {
+            implementation(project(":orx-parameters"))
+            implementation(openrndr.application.core)
+            implementation(openrndr.draw)
+            implementation(openrndr.filter)
+            implementation(sharedLibs.kotlin.reflect)
+            implementation(sharedLibs.kotlin.serialization.core)
         }
 
-        @Suppress("UNUSED_VARIABLE")
-        val jvmDemo by getting {
-            dependencies {
-                implementation(project(":orx-shapes"))
-            }
+        jvmDemo.dependencies {
+            implementation(project(":orx-shapes"))
         }
     }
 }

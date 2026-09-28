@@ -5,22 +5,16 @@ plugins {
 
 kotlin {
     sourceSets {
-        @Suppress("UNUSED_VARIABLE")
-        val commonMain by getting {
-            dependencies {
-                implementation(openrndr.application.core)
-                implementation(openrndr.draw)
-                implementation(openrndr.filter)
-                implementation(sharedLibs.kotlin.reflect)
-                implementation(sharedLibs.kotlin.serialization.core)
-            }
+        commonMain.dependencies {
+            implementation(openrndr.application.core)
+            implementation(openrndr.draw)
+            implementation(openrndr.filter)
+            implementation(sharedLibs.kotlin.reflect)
+            implementation(sharedLibs.kotlin.serialization.core)
         }
 
-        @Suppress("UNUSED_VARIABLE")
-        val jvmDemo by getting {
-            dependencies {
-                implementation(project(":orx-svg"))
-            }
+        jvmDemo.dependencies {
+            implementation(project(":orx-svg"))
         }
     }
 }

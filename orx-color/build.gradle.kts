@@ -6,41 +6,32 @@ plugins {
 
 kotlin {
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation(project(":orx-parameters"))
-                implementation(project(":orx-shader-phrases"))
-                implementation(sharedLibs.kotlin.serialization.core)
-                implementation(openrndr.application.core)
-                implementation(openrndr.draw)
-                implementation(openrndr.filter)
-                implementation(sharedLibs.kotlin.reflect)
-            }
+        commonMain.dependencies {
+            implementation(project(":orx-parameters"))
+            implementation(project(":orx-shader-phrases"))
+            implementation(sharedLibs.kotlin.serialization.core)
+            implementation(openrndr.application.core)
+            implementation(openrndr.draw)
+            implementation(openrndr.filter)
+            implementation(sharedLibs.kotlin.reflect)
         }
 
-        val commonTest by getting {
-            dependencies {
-            }
+        commonTest.dependencies {}
+
+        jvmTest.dependencies {
+            implementation(sharedLibs.kotlin.serialization.json)
+            implementation(sharedLibs.kotest.assertions)
+            implementation(sharedLibs.kotest.framework.engine)
         }
 
-        val jvmTest by getting {
-            dependencies {
-                implementation(sharedLibs.kotlin.serialization.json)
-                implementation(sharedLibs.kotest.assertions)
-                implementation(sharedLibs.kotest.framework.engine)
-            }
-        }
-
-        val jvmDemo by getting {
-            dependencies {
-                implementation(project(":orx-camera"))
-                implementation(project(":orx-mesh-generators"))
-                implementation(project(":orx-color"))
-                implementation(project(":orx-jvm:orx-gui"))
-                implementation(project(":orx-shade-styles"))
-                implementation(project(":orx-image-fit"))
-                implementation(project(":orx-shapes"))
-            }
+        jvmDemo.dependencies {
+            implementation(project(":orx-camera"))
+            implementation(project(":orx-mesh-generators"))
+            implementation(project(":orx-color"))
+            implementation(project(":orx-jvm:orx-gui"))
+            implementation(project(":orx-shade-styles"))
+            implementation(project(":orx-image-fit"))
+            implementation(project(":orx-shapes"))
         }
     }
 }

@@ -32,10 +32,9 @@ repositories {
 
 group = "org.openrndr.extra"
 
-val main: SourceSet by project.sourceSets.getting
+val main = sourceSets.getByName("main")
 
-@Suppress("UNUSED_VARIABLE")
-val demo: SourceSet by project.sourceSets.creating {
+sourceSets.create("demo") {
     // avoid generating screenshots in these projects
     val skipDemos = setOf(
         "openrndr-demos",
@@ -50,7 +49,7 @@ val demo: SourceSet by project.sourceSets.creating {
         "orx-crash-handler"
     )
     if (project.name !in skipDemos) {
-        collectScreenshots(project, this@creating) { }
+        collectScreenshots(project, this) { }
     }
 }
 
@@ -73,8 +72,7 @@ dependencies {
 }
 
 tasks {
-    @Suppress("UNUSED_VARIABLE")
-    val test by getting(Test::class) {
+    named<Test>("test") {
         if (DefaultNativePlatform.getCurrentOperatingSystem().isMacOsX) {
             allJvmArgs = allJvmArgs + "-XstartOnFirstThread"
         }
@@ -82,8 +80,7 @@ tasks {
         testLogging.exceptionFormat = TestExceptionFormat.FULL
     }
 
-    @Suppress("UNUSED_VARIABLE")
-    val javadoc by getting(Javadoc::class) {
+    named<Javadoc>("javadoc") {
         options {
             this as StandardJavadocDocletOptions
             addBooleanOption("Xdoclint:none", true)

@@ -4,24 +4,20 @@ plugins {
 
 kotlin {
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                api(openrndr.application.core)
-                api(openrndr.math)
-                api(openrndr.shape)
-                implementation(project(":orx-shapes"))
-            }
+        commonMain.dependencies {
+            api(openrndr.application.core)
+            api(openrndr.math)
+            api(openrndr.shape)
+            implementation(project(":orx-shapes"))
         }
 
-        val jvmDemo by getting {
-            dependencies {
-                api(openrndr.shape)
-                implementation(project(":orx-shapes"))
-                implementation(project(":orx-mesh-generators"))
-                implementation(project(":orx-obj-loader"))
-                implementation(project(":orx-camera"))
-                implementation(project(":orx-noise"))
-            }
+        jvmDemo.dependencies {
+            api(openrndr.shape)
+            implementation(project(":orx-shapes"))
+            implementation(project(":orx-mesh-generators"))
+            implementation(project(":orx-obj-loader"))
+            implementation(project(":orx-camera"))
+            implementation(project(":orx-noise"))
         }
     }
 }
