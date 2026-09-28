@@ -29,6 +29,7 @@ kotlin {
                 implementation(project(":orx-camera"))
                 implementation(project(":orx-mesh-generators"))
                 implementation(project(":orx-jvm:orx-gui"))
+                implementation(project(":orx-jvm:orx-remote-control"))
             }
         }
     }
