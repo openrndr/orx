@@ -163,6 +163,28 @@ how the active contour is rendered.
 
 [source code](src/jvmDemo/kotlin/DemoCamera2DManual02.kt)
 
+### DemoGeneralizedOrbital01
+
+Demonstrate the use of `GeneralizedOrbital`, an interactive 3D camera -- combining what
+`Orbital` splits across `OrbitalCamera`/`OrbitalControls` into one extension -- whose
+projection comes from `generalizedProjection` rather than `Drawer.perspective`/`.ortho`.
+
+Press `p` to blend the projection from perspective towards parallel (orthographic) and back;
+unlike `Orbital`, this is one continuous knob instead of a `ProjectionType` switch, and --
+like the orbit's rotation/pan/zoom -- it eases smoothly rather than snapping.
+
+Press `z` for a dolly zoom (Vertigo effect): the eye dollies to a new distance while `fov`
+is compensated so the sphere at `lookAt` keeps the same apparent size -- only the receding
+ring of circles, at a fixed depth independent of the eye, visibly stretches or compresses.
+
+Press `o` to shift `offset`, shearing the frustum off-axis (a lens-shift look) without
+moving or rotating the eye -- the scene slides across the frame rather than the camera
+panning through it.
+
+![DemoGeneralizedOrbital01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-camera/images/DemoGeneralizedOrbital01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoGeneralizedOrbital01.kt)
+
 ### DemoOrbital01
 
 Demonstrate the use of `Orbital`, an interactive 3D camera
