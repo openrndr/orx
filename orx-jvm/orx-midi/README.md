@@ -28,4 +28,4 @@ dev.programChange.listen {
 
 ## Further reading
 
-The OPENRNDR guide has a [section on orx-midi](https://guide.openrndr.org/#/10_OPENRNDR_Extras/C04_Midi_controllers) that provides step-by-step documentation for using orx-midi in combination with OPENRNDR.
+The OPENRNDR guide has a [section on orx-midi](https://guide.openrndr.org/ORX/midiControllers.html) that provides step-by-step documentation for using orx-midi in combination with OPENRNDR.

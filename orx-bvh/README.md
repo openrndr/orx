@@ -1,6 +1,8 @@
 # orx-bvh
 
-Bounding volume hierarchies
+Bounding Volume Hierarchy: a tree structure used to speed up ray/geometry intersection tests. 
+
+It wraps groups of geometric objects in progressively larger bounding volumes, so you can test the simpler boxes first and only test the detailed geometry when needed.
 
 
 <!-- __demos__ -->

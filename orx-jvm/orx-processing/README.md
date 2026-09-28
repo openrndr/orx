@@ -1,9 +1,6 @@
 # orx-processing
 
-orx-processing is a module designed to facilitate seamless type conversions
-between Processing's types and OPENRNDR's types. It provides utilities and
-methods that allow developers to integrate the two graphics frameworks
-effectively by bridging the gap between their respective data structures.
+Seamless conversion between [Processing](https://processing.org) and OPENRNDR types to bridge the gap between the two frameworks.
 
 For example, orx-processing enables you to:
  - Convert Processing's PVector to OPENRNDR's Vector2 or Vector3.

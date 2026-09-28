@@ -1,6 +1,6 @@
 # orx-expression-evaluator
 
-Tools to evaluate strings containing mathematical expressions.
+Evaluate strings containing mathematical expressions.
 
 # Expression evaluator
 

@@ -1,6 +1,6 @@
 # orx-text-writer
 
-Writing texts with layouts
+Write texts with layouts.
 
 The `TextWriter` class was previously called `Writer`.
 Find usage examples [in the guide](https://guide.openrndr.org/drawing/text.html#advanced-text-rendering).

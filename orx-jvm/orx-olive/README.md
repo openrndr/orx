@@ -1,6 +1,6 @@
 # orx-olive
 
-Provides live coding functionality: updates a running OPENRNDR program when you save your changes.
+Live coding functionality: updates a running OPENRNDR program when you save your changes.
 
 ## usage
 

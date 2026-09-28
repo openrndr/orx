@@ -1,6 +1,6 @@
 # orx-composition
 
-Shape composition library
+Create, inspect, and modify vector-based designs.
 
 One can think of a Composition as a vector design made out of primitives
 like ShapeContour, Shape, or LineSegment, each having its fill color,

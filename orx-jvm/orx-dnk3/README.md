@@ -1,6 +1,6 @@
 # orx-dnk3
 
-A scene graph based 3d renderer with support for Gltf based assets
+A scene-graph based 3D renderer with support for Gltf based assets
 
 Status: in development
 

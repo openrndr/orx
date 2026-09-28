@@ -1,7 +1,7 @@
 # orx-interval-tree
 
-For querying a data set containing time segments (start time and end time)
-when we need all entries containing a specific time value. Useful when creating a timeline.
+Query a data set containing time segments (with start and end time)
+to get all entries containing a specific time value. Useful when creating a timeline.
 
 For more information on interval trees read the [wikipedia page](https://en.wikipedia.org/wiki/Interval_tree).
 

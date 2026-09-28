@@ -1,6 +1,6 @@
 # orx-shader-phrases
 
-A library that provides a `#pragma import` statement for shaders.
+Provides a `#pragma import` statement for shaders.
 
 ## Usage
 

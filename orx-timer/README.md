@@ -1,6 +1,6 @@
 # orx-timer
 
-Simple timer functionality providing `repeat`, to run code with a given interval
+Timer functionality providing `repeat`, to run code with a given interval
 and `timeOut`, to run code once after a given delay.
 
 ## Prerequisites

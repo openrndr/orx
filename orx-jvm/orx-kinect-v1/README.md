@@ -1,6 +1,6 @@
 # orx-kinect-v1
 
-Support for the Kinect V1 RGB and depth cameras.
+Kinect V1 RGB and depth camera support.
 
 If using Linux, add the [udev rules](https://github.com/OpenKinect/libfreenect/tree/master/platform/linux/udev) to be able to access the camera without being a root user.
 

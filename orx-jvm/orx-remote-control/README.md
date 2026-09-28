@@ -1,6 +1,6 @@
 # orx-remote-control
 
-Add remote control functionality to Programs
+Add remote control functionality to Programs via HTTP API.
 
 ## Usage
 

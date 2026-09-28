@@ -1,7 +1,7 @@
 # orx-fcurve
 
-FCurves are 1-dimensional function curves constructed from 2D bezier functions.
-They are often used to control a property over time. 
+1-dimensional function curves constructed from 2D bezier functions.
+Often used to control a property over time. 
 `x` values don't have any units, but they often represent a duration in seconds.
 
 The language to express FCurves is similar to SVG's path language.

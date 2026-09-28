@@ -1,6 +1,6 @@
 # orx-delegate magic
 
-Collection of magical property delegators. For tracking variable change or
+Magical property delegators for tracking variable change or
 interpolate towards the value of a variable.
 
 ## Delegated properties

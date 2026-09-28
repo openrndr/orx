@@ -1,6 +1,6 @@
 # orx-view-box
 
-To create independent views inside one program window.
+Create independent views inside one program window.
 
 <!-- __demos__ -->
 ## Demos

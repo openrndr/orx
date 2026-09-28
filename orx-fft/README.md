@@ -1,6 +1,6 @@
 # orx-fft
 
-Simple forward and inverse FFT routine
+Simple forward and inverse Fast Fourier transform routine.
 
 The FFT routine found in `orx-fft` is a Kotlin port of Minim's FFT routine.
 <!-- __demos__ -->

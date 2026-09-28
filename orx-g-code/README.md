@@ -1,6 +1,6 @@
 # orx-g-code
 
-Utilities for generating g-code for CNC Machines such as pen plotters, laser engravers, 3D printers, and more.
+G-code generator for CNC Machines such as pen plotters, laser engravers, 3D printers, and more.
 
 **Features:**
 - Generate g-code from compositions.

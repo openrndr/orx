@@ -1,6 +1,6 @@
 # orx-obj-loader
 
-Simple loader and saver for Wavefront .obj 3D mesh files.
+OBJ reader and writer library (Wavefront 3D mesh files).
 
 ##### Usage
 

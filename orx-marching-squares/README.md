@@ -1,6 +1,6 @@
 # orx-marching-squares
 
-Tools for extracting contours from functions
+Extract contours from mathematical functions.
 
 ## How to use it?
 

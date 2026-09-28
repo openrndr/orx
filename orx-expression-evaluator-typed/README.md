@@ -1,6 +1,6 @@
 # orx-expression-evaluator-typed
 
-Tools to evaluate strings containing typed mathematical expressions.
+Evaluate strings containing *typed* mathematical expressions.
 
 # Expression evaluator
 

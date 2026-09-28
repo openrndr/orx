@@ -1,6 +1,6 @@
 # orx-no-clear
 
-Provides the classical "draw-without-clearing-the-screen" functionality.
+Classical "draw-without-clearing-the-screen" functionality.
 
 #### Usage
 

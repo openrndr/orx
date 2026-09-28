@@ -1,6 +1,6 @@
 # orx-time-operators
 
-A collection of time-sensitive functions aimed at controlling raw data over-time, 
+Time-sensitive functions for controlling raw data over-time, 
 such as Envelope and LFO.
 
 For more detailed information, read: [An introduction to orx-time-operators](https://openrndr.discourse.group/t/an-introduction-to-orx-time-operators/108)

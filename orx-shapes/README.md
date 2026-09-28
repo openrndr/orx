@@ -1,6 +1,6 @@
 # orx-shapes
 
-Collection of 2D shape generators and modifiers.
+2D and 3D shape generators and modifiers.
 
 <!-- __demos__ -->
 ## Demos

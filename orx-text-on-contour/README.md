@@ -1,6 +1,6 @@
 # orx-text-on-contour
 
-Writing texts on contours.
+Write texts on contours.
 
 <!-- __demos__ -->
 ## Demos

@@ -1,6 +1,6 @@
 # orx-osc
 
-Open Sound Control makes it possible to send and receive messages
+Use Open Sound Control to send and receive messages
 from other OSC enabled programs in the same or a different computer.
 Used to create multi-application or multi-device software.
 

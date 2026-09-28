@@ -1,7 +1,6 @@
 # orx-minim
 
-Simplifies working with the Minim sound library.
-Provides sound synthesis and analysis.
+Sound synthesis and analysis via the [Minim](https://code.compartmental.net/tools/minim/) sound library.
 
 ## Usage
 
