@@ -27,6 +27,9 @@ import kotlin.contracts.contract
 class Camera2D : Extension, ChangeEvents {
     override var enabled = true
 
+    var near = -1.0
+    var far = 1.0
+
     var userInteraction = true
 
     private lateinit var program: Program
@@ -88,7 +91,8 @@ class Camera2D : Extension, ChangeEvents {
             callsInPlace(function, kotlin.contracts.InvocationKind.EXACTLY_ONCE)
         }
         program.drawer.isolated {
-            program.drawer.ortho(RenderTarget.active)
+            val renderTarget = RenderTarget.active
+            program.drawer.ortho(0.0, renderTarget.width.toDouble(), renderTarget.height.toDouble(), 0.0, near, far)
 
             program.drawer.view = this@Camera2D.view
             program.drawer.function()
@@ -206,7 +210,10 @@ class Camera2D : Extension, ChangeEvents {
 
     override fun beforeDraw(drawer: Drawer, program: Program) {
         drawer.pushTransforms()
-        drawer.ortho(RenderTarget.active)
+
+        val renderTarget = RenderTarget.active
+        program.drawer.ortho(0.0, renderTarget.width.toDouble(), renderTarget.height.toDouble(), 0.0, near, far)
+
         drawer.view = view
     }
 
