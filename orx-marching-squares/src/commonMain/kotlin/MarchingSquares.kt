@@ -5,6 +5,7 @@ import org.openrndr.math.Vector2
 import org.openrndr.shape.LineSegment
 import org.openrndr.shape.Rectangle
 import org.openrndr.shape.ShapeContour
+import org.openrndr.shape.contains
 import kotlin.math.max
 import kotlin.math.min
 
@@ -212,5 +213,35 @@ internal fun assembleContours(segments: List<LineSegment>): List<ShapeContour> {
 
         contours.add(ShapeContour.fromPoints(collected, closed = closed))
     }
-    return contours
+    return normalizeWindingByNesting(contours)
+}
+
+/**
+ * Assigns each closed contour's winding direction by its nesting depth among the others, per
+ * OPENRNDR's own fill convention (see [ShapeContour.winding] / `Shape.compound`'s doc comment):
+ * a contour nested inside an even number of others (0, 2, 4, ...) is a solid region and must be
+ * [ShapeContour.clockwise]; nested inside an odd number is a hole and must be
+ * [ShapeContour.counterClockwise].
+ *
+ * Without this, two contours discovered independently by [assembleContours] (different connected
+ * components of the segment soup) can come out with arbitrary, inconsistent winding relative to
+ * each other -- which segment happened to be walked first, and in which direction, depends only
+ * on incidental ordering in the input segment list, not on which side of either loop is "solid".
+ * Rendering (`drawer.shape`) tolerates this fine since its fill rule doesn't care about absolute
+ * winding direction, but boolean ops (`intersection`, `union`, ...) rely on the documented
+ * clockwise-is-solid contract and silently drop a contour wound the "hole" way when it has
+ * nothing to hole out of.
+ */
+private fun normalizeWindingByNesting(contours: List<ShapeContour>): List<ShapeContour> {
+    if (contours.size <= 1) return contours.map { if (it.closed) it.clockwise else it }
+    val probePoints = contours.map { it.position(0.0) }
+    return contours.mapIndexed { i, c ->
+        if (!c.closed) return@mapIndexed c
+        var depth = 0
+        for (j in contours.indices) {
+            if (i == j || !contours[j].closed) continue
+            if (probePoints[i] in contours[j].shape) depth++
+        }
+        if (depth % 2 == 0) c.clockwise else c.counterClockwise
+    }
 }
