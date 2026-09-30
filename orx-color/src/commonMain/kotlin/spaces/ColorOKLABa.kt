@@ -5,9 +5,10 @@ import org.openrndr.color.*
 import org.openrndr.math.Vector4
 import kotlin.jvm.JvmRecord
 import kotlin.math.abs
+import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.sign
-
+import kotlin.math.sqrt
 
 /**
  * Represents a color in the OKLAB color space with an optional alpha (transparency) value.
@@ -40,13 +41,38 @@ data class ColorOKLABa(val l: Double, val a: Double, val b: Double, override val
             val mnl = abs(m).pow(1.0 / 3.0) * sign(m)
             val snl = abs(s).pow(1.0 / 3.0) * sign(s)
 
-
             val L = 0.2104542553 * lnl + 0.7936177850 * mnl - 0.0040720468 * snl
             val a = 1.9779984951 * lnl - 2.4285922050 * mnl + 0.4505937099 * snl
             val b = 0.0259040371 * lnl + 0.7827717662 * mnl - 0.8086757660 * snl
 
             return ColorOKLABa(L, a, b, c.alpha)
         }
+    }
+    /**
+     * Converts this color to [ColorRGBa], gamut-mapping it first if it falls outside the RGB
+     * gamut. Unlike [toRGBa] -- which converts directly and can produce components outside
+     * `[0, 1]` for an out-of-gamut color -- this holds lightness ([l]) and hue (the `a`/`b`
+     * direction) fixed and reduces chroma to [find_gamut_intersection]'s boundary, the
+     * "reduce saturation until it fits" gamut-mapping strategy. A final [ColorRGBa.clip] guards
+     * against the tiny floating-point overshoot the boundary search can leave right at the edge
+     * of the gamut.
+     */
+    fun toRGBaClipped(): ColorRGBa {
+        if (l <= 0.0) return ColorRGBa(0.0, 0.0, 0.0, alpha, Linearity.LINEAR)
+        if (l >= 1.0) return ColorRGBa(1.0, 1.0, 1.0, alpha, Linearity.LINEAR)
+
+        val chroma = sqrt(a * a + b * b)
+        if (chroma < 1E-8) {
+            // achromatic already -- no hue direction to clip along, and nothing to clip
+            return toRGBa()
+        }
+
+        val hueA = a / chroma
+        val hueB = b / chroma
+        val maxChroma = find_gamut_intersection(hueA, hueB, l, 1.0, l)
+        val clippedChroma = min(chroma, maxChroma)
+
+        return ColorOKLABa(l, clippedChroma * hueA, clippedChroma * hueB, alpha).toRGBa().clip()
     }
 
     override fun toRGBa(): ColorRGBa {
