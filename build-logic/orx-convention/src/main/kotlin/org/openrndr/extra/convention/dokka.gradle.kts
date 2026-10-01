@@ -31,7 +31,7 @@ dokka {
             // URL showing where the source code can be accessed through the web browser
             remoteUrl("https://github.com/openrndr/orx/blob/master/${moduleName.get()}/src/$name/kotlin")
 
-            // Suffix which is used to append the line number to the URL. Use #L for GitHub
+            // Suffix to append the line number to the URL. Use #L for GitHub
             remoteLineSuffix.set("#L")
         }
     }

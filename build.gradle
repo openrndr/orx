@@ -4,6 +4,12 @@ import org.gradle.api.flow.FlowScope
 
 import javax.inject.Inject
 
+buildscript {
+    dependencies {
+        classpath "javax.inject:javax.inject:1"
+    }
+}
+
 plugins {
     alias(libs.plugins.nebula.release)
     alias(libs.plugins.nmcp)
