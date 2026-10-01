@@ -13,6 +13,7 @@ import org.openrndr.MouseEvent
 import org.openrndr.Program
 import org.openrndr.draw.DepthTestPass
 import org.openrndr.draw.Drawer
+import org.openrndr.draw.RenderTarget
 import org.openrndr.events.Event
 import org.openrndr.extra.camera.projection.generalizedProjection
 import org.openrndr.math.Spherical
@@ -20,6 +21,9 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.asDegrees
 import org.openrndr.math.asRadians
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import org.openrndr.math.transforms.lookAt as lookAt_
 import kotlin.math.abs
 import kotlin.math.atan
@@ -259,7 +263,7 @@ class GeneralizedOrbital(
         dirty = true
     }
 
-    private fun update(timeDelta: Double) {
+    fun update(timeDelta: Double) {
         if (!dirty) return
         dirty = false
         updateStep(timeDelta)
@@ -331,6 +335,10 @@ class GeneralizedOrbital(
         lastSeconds = program.seconds
         update(delta)
 
+        applyTo(drawer)
+    }
+
+    private fun applyTo(drawer: Drawer) {
         drawer.view = viewMatrix()
 
         // The viewport rectangle is measured at the orbit radius (the eye-to-lookAt distance),
@@ -444,5 +452,40 @@ class GeneralizedOrbital(
 
     companion object {
         private const val EPSILON = 0.000001
+    }
+    @OptIn(ExperimentalContracts::class)
+    fun isolated(drawFunction: Drawer.() -> Unit) {
+        contract {
+            callsInPlace(drawFunction, InvocationKind.EXACTLY_ONCE)
+        }
+        val drawer = Program.active?.drawer ?: error("No active program")
+        drawer.pushTransforms()
+        drawer.pushStyle()
+        try {
+            applyTo(drawer)
+            drawFunction(drawer)
+        } finally {
+            drawer.popStyle()
+            drawer.popTransforms()
+        }
+    }
+
+    @OptIn(ExperimentalContracts::class)
+    fun isolatedWithTarget(target: RenderTarget, drawFunction: Drawer.() -> Unit) {
+        contract {
+            callsInPlace(drawFunction, InvocationKind.EXACTLY_ONCE)
+        }
+        val drawer = Program.active?.drawer ?: error("No active program")
+        drawer.pushTransforms()
+        drawer.pushStyle()
+        target.bind()
+        try {
+            applyTo(drawer)
+            drawFunction(drawer)
+        } finally {
+            drawer.popStyle()
+            drawer.popTransforms()
+            target.unbind()
+        }
     }
 }
