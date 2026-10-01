@@ -36,9 +36,27 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
     @get:Inject
     abstract val execOperations: ExecOperations
 
+    @get:Internal
+    abstract val rootProjectDir: Property<File>
+
+    @get:Internal
+    abstract val projectDir: Property<File>
+
+    @get:Internal
+    abstract val rootDir: Property<File>
+
+    @get:Internal
+    abstract val hasKotlinMultiplatformPlugin: Property<Boolean>
+    
+    @get:Internal
+    abstract val preloadClassDir: Property<File>
+
+    @get:Internal
+    abstract val classpathBundle: Property<FileCollection>
+
     @TaskAction
     fun execute(inputChanges: InputChanges) {
-        val preloadClass = File(project.rootProject.projectDir, "build-logic/orx-convention/build/classes/kotlin/preload")
+        val preloadClass = preloadClassDir.get()
         require(preloadClass.exists()) {
             "preload class not found: '${preloadClass.absolutePath}'"
         }
@@ -52,8 +70,9 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
                     return@forEach
                 }
                 try {
-                    val cp = (runtimeDependencies.get().map { it.toURI().toURL() } + inputDir.get().asFile.toURI()
-                        .toURL()).toTypedArray()
+                    val cp = classpathBundle.get().map {
+                        it.toURI().toURL()
+                    }.toTypedArray()
                     val ucl = URLClassLoader(cp)
                     val ccl = CustomClassLoader(ucl)
                     val tempClass = ccl.findClass(change.file)
@@ -70,10 +89,9 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
 
                 fun launchDemoProgram() {
                     execOperations.javaexec {
-                        this.classpath += project.files(inputDir.get().asFile, preloadClass)
-                        this.classpath += runtimeDependencies.get()
+                        this.classpath = classpathBundle.get()
                         this.mainClass.set(klassName)
-                        this.workingDir(project.rootProject.projectDir)
+                        this.workingDir(rootProjectDir.get())
                         this.jvmArgs(
                             "-DtakeScreenshot=true",
                             "-DscreenshotPath=$pngFile",
@@ -105,7 +123,7 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
         }!!.sortedBy { it.absolutePath.lowercase() }.map { it.nameWithoutExtension }
 
         // Update readme.md using the found PNG images
-        val readme = File(project.projectDir, "README.md")
+        val readme = File(projectDir.get(), "README.md")
         if (readme.exists()) {
             var readmeLines = readme.readLines().toMutableList()
             val screenshotsLine = readmeLines.indexOfFirst { it == "<!-- __demos__ -->" }
@@ -115,11 +133,11 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
             readmeLines.add("<!-- __demos__ -->")
             readmeLines.add("## Demos")
 
-            val isKotlinMultiplatform = project.plugins.hasPlugin("org.jetbrains.kotlin.multiplatform")
+            val isKotlinMultiplatform = hasKotlinMultiplatformPlugin.get()
             val demoModuleName = if (isKotlinMultiplatform) "jvmDemo" else "demo"
 
             for (demoImageBaseName in demoImageBaseNames) {
-                val projectPath = project.projectDir.relativeTo(project.rootDir)
+                val projectPath = projectDir.get().relativeTo(rootDir.get())
 
                 // val url = "" // for local testing
                 val url = "https://raw.githubusercontent.com/openrndr/orx/media/$projectPath/"
@@ -173,8 +191,16 @@ object ScreenshotsHelper {
     ): CollectScreenshotsTask {
         val task = project.tasks.register<CollectScreenshotsTask>("collectScreenshots").get()
         task.outputDir.set(project.file(project.projectDir.toString() + "/images"))
-        task.inputDir.set(File(project.layout.buildDirectory.get().asFile, "classes/kotlin/${sourceSet.name}"))
+        val inputDirFile = File(project.layout.buildDirectory.get().asFile, "classes/kotlin/${sourceSet.name}")
+        val preloadClassDirFile = File(project.rootProject.projectDir, "build-logic/orx-convention/build/classes/kotlin/preload")
+        task.inputDir.set(inputDirFile)
         task.runtimeDependencies.set(sourceSet.runtimeClasspath)
+        task.rootProjectDir.set(project.rootProject.projectDir)
+        task.projectDir.set(project.projectDir)
+        task.rootDir.set(project.rootDir)
+        task.hasKotlinMultiplatformPlugin.set(project.plugins.hasPlugin("org.jetbrains.kotlin.multiplatform"))
+        task.preloadClassDir.set(preloadClassDirFile)
+        task.classpathBundle.set(project.files(inputDirFile, preloadClassDirFile, sourceSet.runtimeClasspath))
         task.config()
         task.dependsOn(sourceSet.output)
         return task

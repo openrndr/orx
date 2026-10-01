@@ -61,10 +61,17 @@ kotlin {
             create("demo") {
                 associateWith(main)
                 tasks.register<CollectScreenshotsTask>("collectScreenshots") {
+                    description = "Run all ORX demos to generate screenshots"
                     // since Kotlin 2.1.20 output.classesDirs no longer contains a single file
                     inputDir.set(output.classesDirs.filter { it.path.contains("classes/kotlin") }.singleFile)
                     runtimeDependencies.set(runtimeDependencyFiles)
                     outputDir.set(project.file(project.projectDir.toString() + "/images"))
+                    rootProjectDir.set(project.rootProject.projectDir)
+                    projectDir.set(project.projectDir)
+                    rootDir.set(project.rootDir)
+                    hasKotlinMultiplatformPlugin.set(project.plugins.hasPlugin("org.jetbrains.kotlin.multiplatform"))
+                    preloadClassDir.set(File(project.rootProject.projectDir, "build-logic/orx-convention/build/classes/kotlin/preload"))
+                    classpathBundle.set(project.files(inputDir, preloadClassDir, runtimeDependencyFiles))
                     dependsOn(compileTaskProvider)
                 }
 
