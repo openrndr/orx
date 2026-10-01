@@ -39,7 +39,7 @@ jobs:
         run: ./gradlew publishToMavenLocal snapshot
 
       - name: Build apidocs
-        run: ./gradlew :dokkaGenerate -Dorg.gradle.jvmargs=-Xmx4g
+        run: ./gradlew :dokkaGenerate -Dorg.gradle.jvmargs=-Xmx4g --no-build-cache --rerun-tasks
 
       - name: Publish to gh-pages
         run: |
