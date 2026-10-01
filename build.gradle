@@ -20,14 +20,27 @@ repositories {
     mavenCentral()
 }
 
-tasks.register('buildMainReadme') {
-    doFirst {
-        def subProjects = project.subprojects
-        //.findAll { !it.name.contains("kinect-common") && !it.name.contains
-        // ("kinect-v1-") }
+def mainReadmePath = file("README.md").path
+def subProjectData = project.subprojects.collect { sub ->
+    def readmeFile = sub.file("README.md")
+    if (readmeFile.exists()) {
+        return [
+                name: sub.name,
+                path: sub.path.substring(1).replace(":", "/"),
+                readmePath: readmeFile.path
+        ]
+    }
+    return null
+}.findAll()
+//.findAll { !it.name.contains("kinect-common") && !it.name.contains("kinect-v1-") }
 
+tasks.register('buildMainReadme') {
+    inputs.property('subProjectData', subProjectData)
+    inputs.property('mainReadmePath', mainReadmePath)
+
+    doFirst {
         // Load README.md and find [begin, end] section to replace
-        def mainReadme = file("README.md")
+        def mainReadme = new File(mainReadmePath)
         def lines = mainReadme.readLines()
 
         def begin = lines.findIndexOf { it == "<!-- __orxListBegin__ -->" }
@@ -41,9 +54,7 @@ tasks.register('buildMainReadme') {
         def footer = lines.subList(end, lines.size())
 
         def newReadme = []
-        for (line in header) {
-            newReadme.add(line)
-        }
+        newReadme.addAll(header)
 
         // Search for the description at the top of the readme.
         // Skip the hash character from the headline, then start
@@ -56,24 +67,18 @@ tasks.register('buildMainReadme') {
         def orxJVMOnly = []
 
         // Build orx list
-        for (sub in subProjects) {
-            def orxReadmeFile = sub.file("README.md")
+        for (sub in subProjectData) {
+            def orxReadmeFile = new File(sub.readmePath)
             if (orxReadmeFile.exists()) {
                 def orxReadmeText = orxReadmeFile.getText()
-                orxReadmeText.find(descriptionRx) {
-                    description ->
-                        def trimmedDescription = description[1].trim() //.strip() supports unicode, java11 only
-                                .replace("\n", " ").replace("\r", "")
-                        def path = sub.path.substring(1).replace(":", "/")
-                        if (path.startsWith("orx-jvm")) {
-                            orxJVMOnly.add("| [`${sub.name}`]($path/) " +
-                                    "| $trimmedDescription |")
-                        } else {
-                            orxMultiplatform.add("| [`${sub.name}`]($path/) " +
-                                    "| $trimmedDescription |")
-                        }
+                orxReadmeText.find(descriptionRx) {match ->
+                    def trimmedDescription = match[1].strip().replace("\n", " ").replace("\r", "")
+                    if (sub.path.startsWith("orx-jvm")) {
+                        orxJVMOnly.add("| [`${sub.name}`](${sub.path}/) | $trimmedDescription |")
+                    } else {
+                        orxMultiplatform.add("| [`${sub.name}`](${sub.path}/) | $trimmedDescription |")
+                    }
                 }
-
             } else {
                 println("${sub.name}/README.md not found!")
             }
@@ -89,9 +94,7 @@ tasks.register('buildMainReadme') {
         newReadme.add("| --- | --- |")
         newReadme.addAll(orxJVMOnly)
 
-        for (line in footer) {
-            newReadme.add(line)
-        }
+        newReadme.addAll(footer)
 
         // Write result
         if (mainReadme.exists()) {
