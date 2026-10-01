@@ -135,6 +135,14 @@ subprojects {
     }
 }
 
+dependencies {
+    subprojects.findAll {
+        it.name.startsWith("orx-") && !it.name.contains("-catalog")
+    }.each { subproject ->
+        dokka project(path: subproject.path)
+    }
+}
+
 abstract class VersionPrinterFlowAction implements FlowAction<Parameters> {
     interface Parameters extends FlowParameters {
         @Input
