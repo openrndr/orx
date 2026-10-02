@@ -506,7 +506,7 @@ class Voronoi(val delaunay: Delaunay, val bounds: Rectangle) {
         if (p.size > 4) {
             var idx = 0
             var n = p.size
-            while (idx < n) {
+            while (idx < n && p.size > 4) {
                 val j = (idx + 2) % p.size
                 val k = (idx + 4) % p.size
 
