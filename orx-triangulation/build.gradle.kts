@@ -18,6 +18,7 @@ kotlin {
             implementation(project(":orx-shapes"))
             implementation(project(":orx-noise"))
             implementation(openrndr.shape)
+            implementation(project(":orx-jvm:orx-remote-control"))
         }
     }
 }
