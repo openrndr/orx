@@ -22,8 +22,7 @@ fun main() = application {
         height = 720
     }
     program {
-        val face =
-            loadFace("https://github.com/IBM/plex/raw/master/packages/plex-mono/fonts/complete/otf/IBMPlexMono-Bold.otf")
+        val face = loadFace("demo-data/fonts/IBMPlexMono-Regular.ttf")
         val shapes = shapesFromText(face, "SUCH\nVECTOR\nSUCH\nTEXT", 150.0)
 
         val bounds = shapes.bounds
