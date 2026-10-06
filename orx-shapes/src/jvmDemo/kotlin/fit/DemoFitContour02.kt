@@ -12,6 +12,15 @@ import org.openrndr.shape.Rectangle
 import org.openrndr.shape.ShapeContour
 import kotlin.math.floor
 
+/**
+ * A program that lets the user draw animated looping contours. It uses the
+ * [fitCubicBeziers](https://orx.openrndr.org/orx-shapes/org.openrndr.extra.shapes.fit/fit-cubic-beziers.html) method
+ * to create smooth curves out of mouse-drawn gestures.
+ *
+ * The line loops get drawn over and over. If their start and end point differ, they will drift out of the window
+ * and appear at the opposite border, like in the 1998
+ * [Yellowtail](https://www.flong.com/archive/projects/yellowtail/index.html) work by Golan Levin.
+ */
 fun main() {
     application {
         configure {
@@ -34,7 +43,6 @@ fun main() {
                     val tr1 = transform {
                         translate(delta * (n+1))
                     }
-
 
                     val t = dt.mod(1.0)
                     val c =  contour.sub(t, 1.0).transform(tr0) + contour.sub(0.0, t).transform(tr1)
@@ -68,11 +76,11 @@ fun main() {
             var hackSeconds = seconds
 
             mouse.dragged.listen {
-
                 if (points.isEmpty() || points.last().distanceTo(it.position) > 10.0) {
                     points.add(mouse.position)
                 }
             }
+
             mouse.buttonUp.listen {
                 if (points.size >= 2) {
                     val segments = fitCubicBeziers(points, minPointsToSplit = 5)
@@ -82,7 +90,6 @@ fun main() {
                     animContours.add(AnimContour(contours.last().rectified(), hackSeconds))
                 }
             }
-
 
             extend {
                 hackSeconds = seconds

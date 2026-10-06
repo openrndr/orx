@@ -147,9 +147,8 @@ fun Segment2D.offset(
  * @param joinType Specifies how to join together the moved [Segment2D]s.
  */
 fun ShapeContour.offset(distance: Double, joinType: SegmentJoin = SegmentJoin.ROUND): ShapeContour {
-    val offsets =
-        segments.map { it.offset(distance, yPolarity = polarity) }
-            .filter { it.isNotEmpty() }
+    val offsets = segments.map { it.offset(distance, yPolarity = polarity) }
+        .filter { it.isNotEmpty() }
     val tempContours = offsets.map {
         ShapeContour.fromSegments(it, closed = false, distanceTolerance = 0.01)
     }

@@ -8,6 +8,10 @@ import org.openrndr.shape.Rectangle
 import org.openrndr.shape.SegmentJoin
 import kotlin.math.cos
 
+/**
+ * Demonstrates the use of ShapeContour.offset() with different `SegmentJoin` settings.
+ * The offset distance is animated over time using the cosine of time.
+ */
 fun main() = application {
     program {
         val c = Rectangle(100.0, 100.0, width - 200.0, height - 200.0).contour //.reversed

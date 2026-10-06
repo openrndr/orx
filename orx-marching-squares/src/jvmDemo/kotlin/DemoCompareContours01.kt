@@ -11,6 +11,15 @@ import org.openrndr.math.Vector2
 import org.openrndr.shape.Shape
 import kotlin.math.cos
 
+/**
+ * Demonstrates three different marching squares methods:
+ * - [findContours](https://orx.openrndr.org/orx-marching-squares/org.openrndr.extra.marchingsquares/find-contours.html) (dodger-blue, top-left)
+ * - [findContoursAdaptive](https://orx.openrndr.org/orx-marching-squares/org.openrndr.extra.marchingsquares/find-contours-adaptive.html) (pink-red, top-right)
+ * - [findContoursAdaptiveMarchingSquares](https://orx.openrndr.org/orx-marching-squares/org.openrndr.extra.marchingsquares/find-contours-adaptive-marching-squares.html) (acid-green, bottom-left)
+ *
+ * One can appreciate that the animated effect of the adaptive methods is smoother than what the hplain
+ * [findContours] provides.
+ */
 fun main() = application {
     configure {
         width = 720
@@ -20,7 +29,8 @@ fun main() = application {
         extend {
             val grid = drawer.bounds.grid(2, 2, gutterX = 10.0, gutterY = 10.0, marginX = 10.0, marginY = 10.0).flatten()
 
-            fun f(v:Vector2) = cos(seconds + (v.distanceTo(drawer.bounds.center)*0.1))
+            fun f(v: Vector2) = cos(seconds + (v.distanceTo(drawer.bounds.center) * 0.1))
+
             val contours = findContours(::f, grid[0], 16.0)
             val shape = Shape(contours)
 

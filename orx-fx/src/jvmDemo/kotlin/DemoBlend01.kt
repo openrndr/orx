@@ -1,6 +1,10 @@
 import org.openrndr.application
 import org.openrndr.extra.fx.blend.*
 
+/**
+ * Internal demo instantiating all the blend modes
+ * to make sure they are in a working state.
+ */
 fun main() = application {
     program {
         val add = Add()

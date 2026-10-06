@@ -11,6 +11,21 @@ import org.openrndr.extra.shapes.rectify.rectified
 import org.openrndr.extra.shapes.segmentation.segmentByCurvature
 import org.openrndr.shape.ShapeContour
 
+/**
+ * Applies [fitCubicBeziers] to a collection of points generated via [scatter] and [hilbertOrder],
+ * constructs a [ShapeContour] with the resulting segments, and draws it.
+ *
+ * The program also introduces
+ * [segmentByCurvature](https://orx.openrndr.org/orx-shapes/org.openrndr.extra.shapes.segmentation/segment-by-curvature.html)
+ * which returns a list of contours with limited curvature. Those contours are offset inwards and outwards, and displayed.
+ *
+ * One more method introduced is
+ * [findLocalMaxima](https://orx.openrndr.org/orx-shapes/org.openrndr.extra.shapes.extrema/find-local-maxima.html),
+ * used in this case to find the locations of maximum curvature, then rendered as small circles.
+ *
+ * [rectified] is used to produce contours that can be sampled at regular intervals, regardless of how uneven the
+ * lengths of the original contour were.
+ */
 fun main() {
     application {
         configure {
@@ -18,9 +33,7 @@ fun main() {
             height = 720
         }
         program {
-
             val pts = drawer.bounds.scatter(5.0).hilbertOrder()
-
 
             val segments = fitCubicBeziers(pts, minPointsToSplit = 25)
             val contour = ShapeContour.fromSegments(segments, false)
@@ -42,11 +55,7 @@ fun main() {
 
             val maxima = contour.rectified().findLocalMaxima(10000, 0.001) { t -> this.curvature(t) }
 
-
-
-
             extend {
-
                 drawer.fill = null
                 drawer.stroke = ColorRGBa.PINK
                 drawer.contour(contour)
