@@ -23,7 +23,14 @@ drawer.contours(contours)
 ## Demos
 ### DemoCollapse01
 
+Demonstrates how, given a user-defined SDF
+function that takes a [Vector2] as input and outputs a signed Double,
+[QuadTree.buildQuadTree](https://orx.openrndr.org/orx-marching-squares/org.openrndr.extra.marchingsquares/build-quad-tree.html)
+is used to build a quad tree out of that SDF function, and
+[QuadTree.findDualGraph](https://orx.openrndr.org/orx-marching-squares/org.openrndr.extra.marchingsquares/find-dual-graph.html),
+converts the quad tree into a list of vertices and a list of vertex indices defining polygonal faces.
 
+The program uses these tools to render an animated SDF as a segment-based polygonal mesh.
 
 ![DemoCollapse01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-marching-squares/images/DemoCollapse01Kt.webp)
 
@@ -31,7 +38,13 @@ drawer.contours(contours)
 
 ### DemoCompareContours01
 
+Demonstrates three different marching squares methods:
+- [findContours](https://orx.openrndr.org/orx-marching-squares/org.openrndr.extra.marchingsquares/find-contours.html) (dodger-blue, top-left)
+- [findContoursAdaptive](https://orx.openrndr.org/orx-marching-squares/org.openrndr.extra.marchingsquares/find-contours-adaptive.html) (pink-red, top-right)
+- [findContoursAdaptiveMarchingSquares](https://orx.openrndr.org/orx-marching-squares/org.openrndr.extra.marchingsquares/find-contours-adaptive-marching-squares.html) (acid-green, bottom-left)
 
+One can appreciate that the animated effect of the adaptive methods is smoother than what the hplain
+[findContours] provides.
 
 ![DemoCompareContours01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-marching-squares/images/DemoCompareContours01Kt.webp)
 

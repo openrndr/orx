@@ -509,7 +509,20 @@ Demonstrates distortion over the rectified (length proportional) t parameter
 
 ### distort/DemoWarpContour01
 
+Demonstrates how to [warp](https://orx.openrndr.org/orx-shapes/org.openrndr.extra.shapes.distort/warp.html)
+a contour relative to a `base` and `warp` contours.
 
+The warping operation works by finding the nearest position and normal on the `base` contour,
+then applying that displacement relative to the `warp` contour.
+
+This interactive program:
+- Uses mouse position to create a rectified circle
+- Uses a horizontal rectified contour as the warping `base`
+- Uses a centered rectified circle as the `warp` contour
+
+Think of the `base` and `warp` contours as source and destination: the circle follows your mouse
+and transforms relative to both contours. Horizontal mouse movement moves the warped circle
+along the `base` and `warp` contours, while vertical movement changes its distance to both contours.
 
 ![distort-DemoWarpContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoWarpContour01Kt.webp)
 
@@ -525,7 +538,10 @@ Demonstrates distortion over the rectified (length proportional) t parameter
 
 ### fit/DemoFitContour01
 
-
+An interactive demonstration of the
+[fitCubicBeziers](https://orx.openrndr.org/orx-shapes/org.openrndr.extra.shapes.fit/fit-cubic-beziers.html) method.
+Drag the mouse to add points to a growing contour. `fitCubicBeziers` will convert the
+collection of points into a smooth ShapeContour using Bézier curves.
 
 ![fit-DemoFitContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/fit-DemoFitContour01Kt.webp)
 
@@ -533,7 +549,13 @@ Demonstrates distortion over the rectified (length proportional) t parameter
 
 ### fit/DemoFitContour02
 
+A program that lets the user draw animated looping contours. It uses the
+[fitCubicBeziers](https://orx.openrndr.org/orx-shapes/org.openrndr.extra.shapes.fit/fit-cubic-beziers.html) method
+to create smooth curves out of mouse-drawn gestures.
 
+The line loops get drawn over and over. If their start and end point differ, they will drift out of the window
+and appear at the opposite border, like in the 1998
+[Yellowtail](https://www.flong.com/archive/projects/yellowtail/index.html) work by Golan Levin.
 
 ![fit-DemoFitContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/fit-DemoFitContour02Kt.webp)
 
@@ -541,7 +563,19 @@ Demonstrates distortion over the rectified (length proportional) t parameter
 
 ### fit/DemoFitContour03
 
+Applies [fitCubicBeziers] to a collection of points generated via [scatter] and [hilbertOrder],
+constructs a [ShapeContour] with the resulting segments, and draws it.
 
+The program also introduces
+[segmentByCurvature](https://orx.openrndr.org/orx-shapes/org.openrndr.extra.shapes.segmentation/segment-by-curvature.html)
+which returns a list of contours with limited curvature. Those contours are offset inwards and outwards, and displayed.
+
+One more method introduced is
+[findLocalMaxima](https://orx.openrndr.org/orx-shapes/org.openrndr.extra.shapes.extrema/find-local-maxima.html),
+used in this case to find the locations of maximum curvature, then rendered as small circles.
+
+[rectified] is used to produce contours that can be sampled at regular intervals, regardless of how uneven the
+lengths of the original contour were.
 
 ![fit-DemoFitContour03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/fit-DemoFitContour03Kt.webp)
 
@@ -704,7 +738,8 @@ to make the light of rendered segments accumulate.
 
 ### offset/DemoOffset01
 
-
+Demonstrates the use of ShapeContour.offset() with different `SegmentJoin` settings.
+The offset distance is animated over time using the cosine of time.
 
 ![offset-DemoOffset01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/offset-DemoOffset01Kt.webp)
 
