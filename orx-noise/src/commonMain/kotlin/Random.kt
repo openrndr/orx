@@ -297,7 +297,7 @@ object Random {
     }
 
     fun fbm(x: Double, y: Double, noiseFun: (Int, Double, Double) -> Double, type: Fractal = Fractal.FBM,
-            octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5): Double {
+            octaves: Int = 8, lacunarity: Double = 2.0, gain: Double = 0.5): Double {
         val s = stringToInt(seed)
 
         return when (type) {
@@ -309,7 +309,7 @@ object Random {
 
     fun fbm(position: Vector2, noiseFun: (Int, Double, Double) -> Double,
             type: Fractal = Fractal.FBM,
-            octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5): Double {
+            octaves: Int = 8, lacunarity: Double = 2.0, gain: Double = 0.5): Double {
         val s = stringToInt(seed)
 
         return when (type) {
@@ -320,7 +320,7 @@ object Random {
     }
 
     fun fbm(x: Double, y: Double, z: Double, noiseFun: (Int, Double, Double, Double) -> Double, type: Fractal = Fractal.FBM,
-            octaves: Int = 8, lacunarity: Double = 0.5, gain: Double = 0.5): Double {
+            octaves: Int = 8, lacunarity: Double = 2.0, gain: Double = 0.5): Double {
         val s = stringToInt(seed)
 
         return when (type) {
@@ -332,7 +332,7 @@ object Random {
 
     fun fbm(position: Vector3, noiseFun: (Int, Double, Double, Double) -> Double,
             type: Fractal = Fractal.FBM, octaves: Int = 8,
-            lacunarity: Double = 0.5, gain: Double = 0.5): Double {
+            lacunarity: Double = 2.0, gain: Double = 0.5): Double {
         val s = stringToInt(seed)
 
         return when (type) {
