@@ -197,6 +197,17 @@ based on a 3D cubic Hermite noise function.
 
 [source code](src/jvmDemo/kotlin/DemoCubicNoise2D01.kt)
 
+### DemoFbmOctaves01
+
+Demonstrates the impact of `octaves` when using `fbm`.
+The animated graph at the top uses only 1 octave, which makes it the smoothest.
+The bottom one uses 8 octaves. By default, each additional octave has half the strength of the previous one
+and double the frequency.
+
+![DemoFbmOctaves01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-noise/images/DemoFbmOctaves01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoFbmOctaves01.kt)
+
 ### DemoFunctionalComposition01
 
 Demonstrates how to chain methods behind noise functions like `simplex3D` to
