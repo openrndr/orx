@@ -48,7 +48,7 @@ object Random {
     }
 
     private fun stringToInt(str: String): Int = str.toCharArray().fold(0) { i: Int, c: Char ->
-        i + c.toInt()
+        i + c.code
     }
 
     fun resetState() {
