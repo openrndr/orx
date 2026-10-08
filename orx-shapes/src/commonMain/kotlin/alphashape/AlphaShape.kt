@@ -97,13 +97,8 @@ class AlphaShape(val points: List<Vector2>) {
      * @return A [Shape] representing the alpha shape, or [Shape.EMPTY] if the alpha shape
      * cannot be represented by a [Shape] (e.g. because it consists of multiple disconnected components).
      */
-    fun createShape(alpha: Double): Shape = edgesToShape(createBase(alpha))
+    fun createShape(alpha: Double = determineShapeAlpha()): Shape = edgesToShape(createBase(alpha))
 
-    /**
-     * Returns a [Shape] representing an alpha shape; the smallest alpha is chosen such that the corresponding alpha
-     * shape contains all input points and can be represented by a [Shape] (in particular, it consists of one component).
-     */
-    fun createShape(): Shape = edgesToShape(createBase(determineShapeAlpha()))
 
     /**
      * Creates an alpha shape
