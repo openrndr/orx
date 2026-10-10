@@ -536,6 +536,22 @@ along the `base` and `warp` contours, while vertical movement changes its distan
 
 [source code](src/jvmDemo/kotlin/distort/DemoWarpShape01.kt)
 
+### expand/DemoExpand01
+
+
+
+![expand-DemoExpand01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/expand-DemoExpand01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/expand/DemoExpand01.kt)
+
+### expand/DemoExpand02
+
+
+
+![expand-DemoExpand02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/expand-DemoExpand02Kt.webp)
+
+[source code](src/jvmDemo/kotlin/expand/DemoExpand02.kt)
+
 ### fit/DemoFitContour01
 
 An interactive demonstration of the
@@ -1256,6 +1272,14 @@ Try commenting out `.rectified(0.01, 100.0)` to observe the difference it makes.
 ![rectify-DemoRectifiedPath3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/rectify-DemoRectifiedPath3D01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/rectify/DemoRectifiedPath3D01.kt)
+
+### smoothnormal/DemoSmoothNormal01
+
+
+
+![smoothnormal-DemoSmoothNormal01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/smoothnormal-DemoSmoothNormal01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/smoothnormal/DemoSmoothNormal01.kt)
 
 ### text/DemoText01
 

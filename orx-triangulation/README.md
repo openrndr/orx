@@ -64,6 +64,24 @@ Ricardo Matias / [@ricardomatias](https://github.com/ricardomatias)
 Edwin Jakobs / [@edwinRNDR](https://github.com/edwinRNDR)
 <!-- __demos__ -->
 ## Demos
+### DemoConstrainedDelaunay01
+
+Visualizes a constrained Delaunay triangulation (left) and its dual constrained Voronoi
+diagram (right) of a non-convex (star-shaped) outer contour with two rectangular holes,
+to confirm neither triangles nor Voronoi cells leak outside the shape or into the holes.
+
+![DemoConstrainedDelaunay01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoConstrainedDelaunay01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoConstrainedDelaunay01.kt)
+
+### DemoConstrainedDelaunay02
+
+
+
+![DemoConstrainedDelaunay02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoConstrainedDelaunay02Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoConstrainedDelaunay02.kt)
+
 ### DemoDelaunay01
 
 This demo shows how to use Delaunay triangulation to convert a Shape into a list of triangular ShapeContours.

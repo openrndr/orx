@@ -50,6 +50,14 @@ One can appreciate that the animated effect of the adaptive methods is smoother 
 
 [source code](src/jvmDemo/kotlin/DemoCompareContours01.kt)
 
+### DemoEigenModesContours01
+
+
+
+![DemoEigenModesContours01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-marching-squares/images/DemoEigenModesContours01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoEigenModesContours01.kt)
+
 ### DemoFindContours01
 
 A simple demonstration of using the `findContours` method provided by `orx-marching-squares`.
