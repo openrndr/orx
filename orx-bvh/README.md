@@ -9,7 +9,8 @@ It wraps groups of geometric objects in progressively larger bounding volumes, s
 ## Demos
 ### DemoBipartiteIntersections01
 
-
+Demonstrates how to prepare two BVH data structures to be processed via
+`findIntersectionPairs()`.
 
 ![DemoBipartiteIntersections01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-bvh/images/DemoBipartiteIntersections01Kt.webp)
 
