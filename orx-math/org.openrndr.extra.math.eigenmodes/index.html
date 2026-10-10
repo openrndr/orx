@@ -1,0 +1,356 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>org.openrndr.extra.math.eigenmodes</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../images/logo-icon.svg">
+<link href="../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.1-dev.18+aa46e7a
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-math/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-math/commonMain" data-filter=":orx-math/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageids="orx-math::org.openrndr.extra.math.eigenmodes////PointingToDeclaration//-48581845">
+  <div class="breadcrumbs"><a href="../index.html">orx-math</a><span class="delimiter">/</span><span class="current">org.openrndr.extra.math.eigenmodes</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="608814005%2FClasslikes%2F-48581845" anchor-label="CycleEigenMode" id="608814005%2FClasslikes%2F-48581845" data-filterable-set=":orx-math/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-math/commonMain" data-filterable-set=":orx-math/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-cycle-eigen-mode/index.html"><span>Cycle</span><wbr><span>Eigen</span><wbr><span><span>Mode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="608814005%2FClasslikes%2F-48581845"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-math/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-cycle-eigen-mode/index.html">CycleEigenMode</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>eigenvalue<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>frequencyRatio<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>n<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>values<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">One eigenmode of <code class="lang-kotlin">n</code> points arranged around a closed curve, as produced by <a href="extract-cycle-eigen-modes.html">extractCycleEigenModes</a> -- the discrete, boundary-only analogue of <a href="-grid-eigen-mode/index.html">GridEigenMode</a>. These are the eigenvectors of the cycle graph Laplacian, i.e. a generalization of the sine/cosine basis used by classical Fourier shape descriptors to a curve sampled at non-uniform detail.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="883759294%2FClasslikes%2F-48581845" anchor-label="Eigenpair" id="883759294%2FClasslikes%2F-48581845" data-filterable-set=":orx-math/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-math/commonMain" data-filterable-set=":orx-math/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-eigenpair/index.html"><span><span>Eigenpair</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="883759294%2FClasslikes%2F-48581845"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-math/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-eigenpair/index.html">Eigenpair</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>eigenvalue<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>eigenvector<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">An eigenvalue paired with its eigenvector.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1146210907%2FClasslikes%2F-48581845" anchor-label="GridEigenMode" id="1146210907%2FClasslikes%2F-48581845" data-filterable-set=":orx-math/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-math/commonMain" data-filterable-set=":orx-math/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-grid-eigen-mode/index.html"><span>Grid</span><wbr><span>Eigen</span><wbr><span><span>Mode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1146210907%2FClasslikes%2F-48581845"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-math/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-grid-eigen-mode/index.html">GridEigenMode</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>eigenvalue<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>frequencyRatio<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>width<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>height<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>values<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">One vibrational eigenmode of a domain rasterized to a <code class="lang-kotlin">width</code> x <code class="lang-kotlin">height</code> grid, as produced by <a href="extract-eigen-modes.html">extractEigenModes</a>. Values are zero outside the domain that was passed in.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="529013242%2FFunctions%2F-48581845" anchor-label="bilinearSample" id="529013242%2FFunctions%2F-48581845" data-filterable-set=":orx-math/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-math/commonMain" data-filterable-set=":orx-math/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="bilinear-sample.html"><span>bilinear</span><wbr><span><span>Sample</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="529013242%2FFunctions%2F-48581845"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-math/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="bilinear-sample.html"><span class="token function">bilinearSample</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">values<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a><span class="token punctuation">, </span></span><span class="parameter ">width<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">height<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">y<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">Bilinearly samples a row-major <code class="lang-kotlin">width</code> x <code class="lang-kotlin">height</code> grid of <a href="bilinear-sample.html">values</a> at grid coordinates (<a href="bilinear-sample.html">x</a>, <a href="bilinear-sample.html">y</a>), where <code class="lang-kotlin">x</code> ranges over <code class="lang-kotlin">0 until width</code> and <code class="lang-kotlin">y</code> over <code class="lang-kotlin">0 until height</code>. Positions outside that range are clamped.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1483987500%2FFunctions%2F-48581845" anchor-label="buildCycleLaplacian" id="1483987500%2FFunctions%2F-48581845" data-filterable-set=":orx-math/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-math/commonMain" data-filterable-set=":orx-math/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="build-cycle-laplacian.html"><span>build</span><wbr><span>Cycle</span><wbr><span><span>Laplacian</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1483987500%2FFunctions%2F-48581845"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-math/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="build-cycle-laplacian.html"><span class="token function">buildCycleLaplacian</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">n<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../org.openrndr.extra.math.matrix/-sparse-matrix/index.html">SparseMatrix</a></div><div class="brief "><p class="paragraph">Builds the graph Laplacian of an <code class="lang-kotlin">n</code>-node cycle graph (node <code class="lang-kotlin">i</code> connected to <code class="lang-kotlin">i - 1</code> and <code class="lang-kotlin">i + 1</code>, indices modulo <code class="lang-kotlin">n</code>) -- the discrete analogue of the periodic 1D Laplacian, and the natural graph to put on <code class="lang-kotlin">n</code> points sampled around a closed curve. Symmetric positive semi-definite, with the constant vector as its null (zero-eigenvalue) eigenvector -- see <a href="extract-cycle-eigen-modes.html">extractCycleEigenModes</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-494987934%2FFunctions%2F-48581845" anchor-label="buildDirichletLaplacian" id="-494987934%2FFunctions%2F-48581845" data-filterable-set=":orx-math/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-math/commonMain" data-filterable-set=":orx-math/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="build-dirichlet-laplacian.html"><span>build</span><wbr><span>Dirichlet</span><wbr><span><span>Laplacian</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-494987934%2FFunctions%2F-48581845"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-math/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="build-dirichlet-laplacian.html"><span class="token function">buildDirichletLaplacian</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">mask<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean-array/index.html">BooleanArray</a><span class="token punctuation">, </span></span><span class="parameter ">width<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">height<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="../org.openrndr.extra.math.matrix/-sparse-matrix/index.html">SparseMatrix</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int-array/index.html">IntArray</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Builds the discrete Dirichlet Laplacian for the interior grid points marked <code class="lang-kotlin">true</code> in <a href="build-dirichlet-laplacian.html">mask</a>, a <code class="lang-kotlin">width</code> x <code class="lang-kotlin">height</code> grid stored row-major (index = y * width + x).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1800679818%2FFunctions%2F-48581845" anchor-label="buildNeumannLaplacian" id="1800679818%2FFunctions%2F-48581845" data-filterable-set=":orx-math/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-math/commonMain" data-filterable-set=":orx-math/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="build-neumann-laplacian.html"><span>build</span><wbr><span>Neumann</span><wbr><span><span>Laplacian</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1800679818%2FFunctions%2F-48581845"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-math/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="build-neumann-laplacian.html"><span class="token function">buildNeumannLaplacian</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">mask<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean-array/index.html">BooleanArray</a><span class="token punctuation">, </span></span><span class="parameter ">width<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">height<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="../org.openrndr.extra.math.matrix/-sparse-matrix/index.html">SparseMatrix</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int-array/index.html">IntArray</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Builds the discrete Neumann ("free edge") Laplacian for the interior grid points marked <code class="lang-kotlin">true</code> in <a href="build-neumann-laplacian.html">mask</a>, a <code class="lang-kotlin">width</code> x <code class="lang-kotlin">height</code> grid stored row-major (index = y * width + x).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1871296326%2FFunctions%2F-48581845" anchor-label="diagonal" id="1871296326%2FFunctions%2F-48581845" data-filterable-set=":orx-math/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-math/commonMain" data-filterable-set=":orx-math/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="diagonal.html"><span><span>diagonal</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1871296326%2FFunctions%2F-48581845"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-math/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../org.openrndr.extra.math.matrix/-sparse-matrix/index.html">SparseMatrix</a><span class="token punctuation">.</span><a href="diagonal.html"><span class="token function">diagonal</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">Extracts the main diagonal of this sparse matrix.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-137836393%2FFunctions%2F-48581845" anchor-label="extractCycleEigenModes" id="-137836393%2FFunctions%2F-48581845" data-filterable-set=":orx-math/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-math/commonMain" data-filterable-set=":orx-math/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="extract-cycle-eigen-modes.html"><span>extract</span><wbr><span>Cycle</span><wbr><span>Eigen</span><wbr><span><span>Modes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-137836393%2FFunctions%2F-48581845"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-math/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="extract-cycle-eigen-modes.html"><span class="token function">extractCycleEigenModes</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">n<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">count<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">random<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.random/-random/index.html">Random</a><span class="token operator"> = </span>Random(0)</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-cycle-eigen-mode/index.html">CycleEigenMode</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Extracts the <a href="extract-cycle-eigen-modes.html">count</a> lowest-frequency eigenmodes of <code class="lang-kotlin">n</code> points arranged around a closed curve, by solving the eigenproblem of the <a href="build-cycle-laplacian.html">buildCycleLaplacian</a> graph Laplacian -- the boundary-only counterpart to <a href="extract-eigen-modes.html">extractEigenModes</a>/<a href="extract-neumann-eigen-modes.html">extractNeumannEigenModes</a>, which instead act on the curve's interior.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="357539217%2FFunctions%2F-48581845" anchor-label="extractEigenModes" id="357539217%2FFunctions%2F-48581845" data-filterable-set=":orx-math/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-math/commonMain" data-filterable-set=":orx-math/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="extract-eigen-modes.html"><span>extract</span><wbr><span>Eigen</span><wbr><span><span>Modes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="357539217%2FFunctions%2F-48581845"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-math/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="extract-eigen-modes.html"><span class="token function">extractEigenModes</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">mask<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean-array/index.html">BooleanArray</a><span class="token punctuation">, </span></span><span class="parameter ">width<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">height<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">count<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">random<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.random/-random/index.html">Random</a><span class="token operator"> = </span>Random(0)</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-grid-eigen-mode/index.html">GridEigenMode</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Extracts the <a href="extract-eigen-modes.html">count</a> lowest-frequency Dirichlet ("fixed edge") vibrational eigenmodes of the domain marked <code class="lang-kotlin">true</code> in <a href="extract-eigen-modes.html">mask</a>, a <code class="lang-kotlin">width</code> x <code class="lang-kotlin">height</code> grid. This is the discrete analogue of solving <code class="lang-kotlin">-Δu = λu</code> on the domain with <code class="lang-kotlin">u = 0</code> on its boundary -- the same problem that produces Chladni figures on a clamped drum head.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="262104825%2FFunctions%2F-48581845" anchor-label="extractNeumannEigenModes" id="262104825%2FFunctions%2F-48581845" data-filterable-set=":orx-math/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-math/commonMain" data-filterable-set=":orx-math/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="extract-neumann-eigen-modes.html"><span>extract</span><wbr><span>Neumann</span><wbr><span>Eigen</span><wbr><span><span>Modes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="262104825%2FFunctions%2F-48581845"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-math/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="extract-neumann-eigen-modes.html"><span class="token function">extractNeumannEigenModes</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">mask<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean-array/index.html">BooleanArray</a><span class="token punctuation">, </span></span><span class="parameter ">width<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">height<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">count<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">random<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.random/-random/index.html">Random</a><span class="token operator"> = </span>Random(0)</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-grid-eigen-mode/index.html">GridEigenMode</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Extracts the <a href="extract-neumann-eigen-modes.html">count</a> lowest-frequency Neumann ("free edge") vibrational eigenmodes of the domain marked <code class="lang-kotlin">true</code> in <a href="extract-neumann-eigen-modes.html">mask</a>, a <code class="lang-kotlin">width</code> x <code class="lang-kotlin">height</code> grid. This is the discrete analogue of solving <code class="lang-kotlin">-Δu = λu</code> on the domain with a zero-derivative (reflecting) boundary -- the free-plate counterpart to <a href="extract-eigen-modes.html">extractEigenModes</a>'s clamped drum head.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1056404308%2FFunctions%2F-48581845" anchor-label="normalizeSign" id="1056404308%2FFunctions%2F-48581845" data-filterable-set=":orx-math/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-math/commonMain" data-filterable-set=":orx-math/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="normalize-sign.html"><span>normalize</span><wbr><span><span>Sign</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1056404308%2FFunctions%2F-48581845"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-math/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="normalize-sign.html"><span class="token function">normalizeSign</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">v<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Flips the sign of <a href="normalize-sign.html">v</a> in place, if needed, so that its largest-magnitude component is positive. Eigenvectors are only defined up to sign; this picks a canonical one so that repeated extraction (across seeds, resolutions, or re-runs) doesn't flip a mode's polarity arbitrarily.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1057982263%2FFunctions%2F-48581845" anchor-label="smallestEigenpairs" id="1057982263%2FFunctions%2F-48581845" data-filterable-set=":orx-math/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-math/commonMain" data-filterable-set=":orx-math/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="smallest-eigenpairs.html"><span>smallest</span><wbr><span><span>Eigenpairs</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1057982263%2FFunctions%2F-48581845"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-math/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../org.openrndr.extra.math.matrix/-sparse-matrix/index.html">SparseMatrix</a><span class="token punctuation">.</span><a href="smallest-eigenpairs.html"><span class="token function">smallestEigenpairs</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">count<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">knownEigenpairs<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-eigenpair/index.html">Eigenpair</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()<span class="token punctuation">, </span></span><span class="parameter ">random<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.random/-random/index.html">Random</a><span class="token operator"> = </span>Random(0)<span class="token punctuation">, </span></span><span class="parameter ">cgTolerance<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1.0E-10</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-eigenpair/index.html">Eigenpair</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Finds the <a href="smallest-eigenpairs.html">count</a> smallest eigenpairs of this symmetric positive-semidefinite sparse matrix, using shift-invert Lanczos: builds one Krylov subspace for the operator <code class="lang-kotlin">v -&gt; solve(this, v)</code> (via <a href="solve-c-g.html">SparseMatrix.solveCG</a>) -- which maps this matrix's smallest eigenvalues to its largest, the ones Lanczos converges to fastest -- and extracts Ritz pairs from the resulting small, dense tridiagonal eigenproblem.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1730982505%2FFunctions%2F-48581845" anchor-label="solveCG" id="-1730982505%2FFunctions%2F-48581845" data-filterable-set=":orx-math/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-math/commonMain" data-filterable-set=":orx-math/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="solve-c-g.html"><span>solve</span><wbr><span><span>CG</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1730982505%2FFunctions%2F-48581845"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-math/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../org.openrndr.extra.math.matrix/-sparse-matrix/index.html">SparseMatrix</a><span class="token punctuation">.</span><a href="solve-c-g.html"><span class="token function">solveCG</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">b<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a><span class="token punctuation">, </span></span><span class="parameter ">tolerance<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1.0E-10</span><span class="token punctuation">, </span></span><span class="parameter ">maxIterations<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span>max(50, rows * 2)</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">Solves the symmetric positive-definite system <code class="lang-kotlin">this * x = b</code> using the Jacobi-preconditioned conjugate gradient method.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="150843332%2FFunctions%2F-48581845" anchor-label="times" id="150843332%2FFunctions%2F-48581845" data-filterable-set=":orx-math/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-math/commonMain" data-filterable-set=":orx-math/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="times.html"><span><span>times</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="150843332%2FFunctions%2F-48581845"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-math/commonMain"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="../org.openrndr.extra.math.matrix/-sparse-matrix/index.html">SparseMatrix</a><span class="token punctuation">.</span><a href="times.html"><span class="token function">times</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">v<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">Multiplies this sparse matrix with a dense vector.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
