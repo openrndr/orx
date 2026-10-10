@@ -9,20 +9,16 @@ import org.openrndr.shape.contours
 /**
  * Kotlin/OPENRNDR idiomatic interface to `Delaunay`
  */
-class DelaunayTriangulation(val points: List<Vector2>) {
+class DelaunayTriangulation(override val points: List<Vector2>) : AbstractDelaunayTriangulation {
     val delaunay: Delaunay = Delaunay.from(points)
 
-    fun voronoiDiagram(bounds: Rectangle) = VoronoiDiagram(this, bounds)
+    override fun voronoiDiagram(bounds: Rectangle): VoronoiDiagram = VoronoiDiagram(this, bounds)
 
-    fun neighbors(pointIndex: Int): Sequence<Int> {
+    override fun neighbors(pointIndex: Int): Sequence<Int> {
         return delaunay.neighbors(pointIndex)
     }
 
-    fun neighborPoints(pointIndex: Int): List<Vector2> {
-        return neighbors(pointIndex).map { points[it] }.toList()
-    }
-
-    fun triangleIndices(): List<IntArray> {
+    override fun triangleIndices(): List<IntArray> {
         val list = mutableListOf<IntArray>()
         for (i in delaunay.triangles.indices step 3) {
             list.add(
@@ -36,7 +32,7 @@ class DelaunayTriangulation(val points: List<Vector2>) {
         return list
     }
 
-    fun triangles(filterPredicate: (Int, Int, Int) -> Boolean = { _, _, _ -> true }): List<Triangle> {
+    override fun triangles(filterPredicate: (Int, Int, Int) -> Boolean): List<Triangle> {
         val list = mutableListOf<Triangle>()
 
         for (i in delaunay.triangles.indices step 3) {
@@ -76,9 +72,7 @@ class DelaunayTriangulation(val points: List<Vector2>) {
         close()
     }
 
-    fun nearest(query: Vector2): Int = delaunay.find(query.x, query.y)
-
-    fun nearestPoint(query: Vector2): Vector2 = points[nearest(query)]
+    override fun nearest(query: Vector2): Int = delaunay.find(query.x, query.y)
 }
 
 /**

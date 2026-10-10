@@ -23,7 +23,7 @@ fun main() = application {
         val delaunay = points.delaunayTriangulation()
         val halfedges = delaunay.halfedges()
 
-        //val hull = delaunay.hull()
+        val hull = delaunay.hull()
 
         extend {
             drawer.clear(ColorRGBa.BLACK)
@@ -32,8 +32,8 @@ fun main() = application {
             drawer.stroke = ColorRGBa.PINK
             drawer.contours(halfedges)
 
-            //drawer.stroke = ColorRGBa.GREEN
-            //drawer.contour(hull)
+            drawer.stroke = ColorRGBa.GREEN
+            drawer.contour(hull)
         }
     }
 }

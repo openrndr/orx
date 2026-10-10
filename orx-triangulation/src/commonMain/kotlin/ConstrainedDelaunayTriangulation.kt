@@ -1,6 +1,7 @@
 package org.openrndr.extra.triangulation
 
 import org.openrndr.math.Vector2
+import org.openrndr.shape.Rectangle
 import org.openrndr.shape.Shape
 import org.openrndr.shape.Triangle
 import org.openrndr.shape.contains
@@ -28,13 +29,13 @@ import org.openrndr.shape.contains
 class ConstrainedDelaunayTriangulation(
     val shape: Shape,
     interiorPoints: List<Vector2> = emptyList()
-) {
+) : AbstractDelaunayTriangulation {
 
     /**
      * The combined vertex positions used for triangulation: [interiorPoints] followed
      * by the vertices of all contours of [shape], in that order.
      */
-    val points: List<Vector2>
+    override val points: List<Vector2>
 
     private val indices: List<IntArray>
 
@@ -86,13 +87,28 @@ class ConstrainedDelaunayTriangulation(
             }
     }
 
-    /** The resulting triangles as index triples into [points], in counter-clockwise order. */
-    fun triangleIndices(): List<IntArray> = indices
-
-    /** The resulting triangles. */
-    fun triangles(): List<Triangle> = indices.map { (a, b, c) ->
-        Triangle(points[c], points[b], points[a])
+    /** Adjacency derived from [indices] (i.e. from the surviving, inside-the-shape triangles only). */
+    private val neighborSets: List<Set<Int>> by lazy {
+        val sets = Array(points.size) { mutableSetOf<Int>() }
+        for ((a, b, c) in indices) {
+            sets[a].add(b); sets[a].add(c)
+            sets[b].add(a); sets[b].add(c)
+            sets[c].add(a); sets[c].add(b)
+        }
+        sets.asList()
     }
+
+    /** The resulting triangles as index triples into [points], in counter-clockwise order. */
+    override fun triangleIndices(): List<IntArray> = indices
+
+    /** The resulting triangles, optionally restricted by [filterPredicate]. */
+    override fun triangles(filterPredicate: (Int, Int, Int) -> Boolean): List<Triangle> = indices
+        .filter { (a, b, c) -> filterPredicate(a, b, c) }
+        .map { (a, b, c) -> Triangle(points[c], points[b], points[a]) }
+
+    override fun neighbors(pointIndex: Int): Sequence<Int> = neighborSets[pointIndex].asSequence()
+
+    override fun voronoiDiagram(bounds: Rectangle): ConstrainedVoronoiDiagram = ConstrainedVoronoiDiagram(this, bounds)
 }
 
 /**

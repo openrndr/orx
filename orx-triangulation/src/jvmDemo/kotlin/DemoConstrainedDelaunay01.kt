@@ -1,5 +1,7 @@
 import org.openrndr.application
+import org.openrndr.color.ColorHSVa
 import org.openrndr.color.ColorRGBa
+import org.openrndr.draw.isolated
 import org.openrndr.extra.noise.scatter
 import org.openrndr.extra.remotecontrol.RemoteControl
 import org.openrndr.extra.triangulation.constrainedDelaunayTriangulation
@@ -12,13 +14,13 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 /**
- * Visualizes a constrained Delaunay triangulation of a non-convex (star-shaped) outer
- * contour with two rectangular holes, to confirm no triangles leak outside the shape
- * or into the holes.
+ * Visualizes a constrained Delaunay triangulation (left) and its dual constrained Voronoi
+ * diagram (right) of a non-convex (star-shaped) outer contour with two rectangular holes,
+ * to confirm neither triangles nor Voronoi cells leak outside the shape or into the holes.
  */
 fun main() = application {
     configure {
-        width = 720
+        width = 1440
         height = 720
     }
     program {
@@ -36,22 +38,43 @@ fun main() = application {
         val shape = Shape(listOf(outer, hole1, hole2))
 
         val pts = shape.scatter(20.0, distanceToEdge = 10.0)
-        val cdt = shape.constrainedDelaunayTriangulation(pts)
+        val cdt = shape.constrainedDelaunayTriangulation()
+        val voronoi = cdt.voronoiDiagram()
 
-        extend {
-            drawer.clear(ColorRGBa.BLACK)
-
-            drawer.stroke = ColorRGBa.WHITE
-            drawer.strokeWeight = 1.0
-            drawer.fill = ColorRGBa.PINK.opacify(0.3)
-            drawer.contours(cdt.triangles().map { it.contour })
-
+        fun drawOutline() {
             drawer.fill = null
             drawer.stroke = ColorRGBa.YELLOW
             drawer.strokeWeight = 2.0
             drawer.contour(outer)
             drawer.contour(hole1)
             drawer.contour(hole2)
+        }
+
+        extend {
+            drawer.clear(ColorRGBa.BLACK)
+
+            // left: the constrained Delaunay triangulation
+            drawer.stroke = ColorRGBa.WHITE
+            drawer.strokeWeight = 1.0
+            //drawer.fill = ColorRGBa.PINK.opacify(0.3)
+            drawer.fill = null
+            drawer.contours(cdt.triangles().map { it.contour })
+            drawOutline()
+
+            // right: the dual constrained Voronoi diagram, cells clipped to the shape
+            drawer.isolated {
+                drawer.translate(0.0, 0.0)
+
+                drawer.stroke = ColorRGBa.WHITE.opacify(0.5)
+                drawer.strokeWeight = 0.5
+                for ((i, cell) in voronoi.cellPolygons().withIndex()) {
+                    if (cell.segments.isEmpty()) continue
+                    //drawer.fill = ColorHSVa(i * 47.0, 0.55, 0.85).toRGBa().opacify(0.85)
+                    drawer.stroke = ColorRGBa.WHITE.opacify(0.5)
+                    drawer.contour(cell)
+                }
+                drawOutline()
+            }
         }
     }
 }

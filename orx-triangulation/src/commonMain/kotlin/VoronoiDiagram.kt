@@ -5,7 +5,12 @@ import org.openrndr.shape.Rectangle
 import org.openrndr.shape.ShapeContour
 import org.openrndr.shape.bounds
 
-class VoronoiDiagram(val delaunayTriangulation: DelaunayTriangulation, val bounds: Rectangle) {
+class VoronoiDiagram(
+    val delaunayTriangulation: DelaunayTriangulation,
+    override val bounds: Rectangle
+) : AbstractVoronoiDiagram {
+    override val triangulation: AbstractDelaunayTriangulation get() = delaunayTriangulation
+
     private val voronoi = Voronoi(delaunayTriangulation.delaunay, bounds)
 
     val vectors by lazy {
@@ -20,38 +25,7 @@ class VoronoiDiagram(val delaunayTriangulation: DelaunayTriangulation, val bound
         }
     }
 
-    fun cellArea(i: Int, contour: ShapeContour = cellPolygon(i)): Double {
-        val segments = contour.segments
-        var sum = 0.0
-        for (j in segments.indices) {
-            val v0 = segments[j].start
-            val v1 = segments[(j + 1).mod(segments.size)].start
-            sum += v0.x * v1.y - v1.x * v0.y
-        }
-        return sum / 2.0
-    }
-
-    fun cellCentroid(i: Int, contour: ShapeContour = cellPolygon(i)): Vector2 {
-        val segments = cellPolygon(i).segments
-        var cx = 0.0
-        var cy = 0.0
-        for (j in segments.indices) {
-            val v0 = segments[j].start
-            val v1 = segments[(j + 1).mod(segments.size)].start
-            cx += (v0.x + v1.x) * (v0.x * v1.y - v1.x * v0.y)
-            cy += (v0.y + v1.y) * (v0.x * v1.y - v1.x * v0.y)
-        }
-        val a = cellArea(i, contour) * 6.0
-        cx /= a
-        cy /= a
-        return Vector2(cx, cy)
-    }
-
-    fun cellCentroids() = (delaunayTriangulation.points.indices).map {
-        cellCentroid(it)
-    }
-
-    fun cellPolygon(i: Int): ShapeContour {
+    override fun cellPolygon(i: Int): ShapeContour {
         val points = voronoi.clip(i)
 
         if (points == null || points.isEmpty()) return ShapeContour.EMPTY
@@ -69,15 +43,72 @@ class VoronoiDiagram(val delaunayTriangulation: DelaunayTriangulation, val bound
         return ShapeContour.fromPoints(polygon, true)
     }
 
-    fun cellPolygons(): List<ShapeContour> {
-        val points = delaunayTriangulation.points
-        return (points.indices).map {
-            cellPolygon(it)
-        }
+    override fun neighbors(cellIndex: Int): Sequence<Int> {
+        return voronoi.neighbors(cellIndex)
     }
 
-    fun neighbors(cellIndex: Int): Sequence<Int> {
-        return voronoi.neighbors(cellIndex)
+    /**
+     * The edges dual to the interior halfedges of the Delaunay triangulation (connecting the
+     * circumcenters of adjacent triangles), restricted to those with both endpoints strictly
+     * inside [bounds]. Since [bounds] is convex such an edge never touches the boundary.
+     *
+     * Circumcenters that (nearly) coincide, as happens for co-circular sites, are merged into
+     * a single vertex and the resulting zero-length edges are dropped.
+     */
+    override fun internalEdges(): Pair<List<Vector2>, List<IntArray>> {
+        val delaunay = delaunayTriangulation.delaunay
+        val halfedges = delaunay.halfedges
+        val centers = circumcenters
+        val triangleCount = delaunay.triangles.size / 3
+        if (triangleCount == 0) return Pair(emptyList(), emptyList())
+
+        val epsilon = 1E-9 * maxOf(bounds.width, bounds.height, 1.0)
+
+        // merge (nearly) coincident circumcenters of adjacent triangles
+        val parent = IntArray(triangleCount) { it }
+        fun find(i: Int): Int {
+            var r = i
+            while (parent[r] != r) r = parent[r]
+            var c = i
+            while (parent[c] != r) {
+                val next = parent[c]
+                parent[c] = r
+                c = next
+            }
+            return r
+        }
+        for (e in halfedges.indices) {
+            val o = halfedges[e]
+            if (o < e) continue
+            val a = e / 3
+            val b = o / 3
+            if (centers[a].distanceTo(centers[b]) <= epsilon) {
+                parent[find(a)] = find(b)
+            }
+        }
+
+        fun strictlyInside(p: Vector2) =
+            p.x > bounds.x && p.x < bounds.x + bounds.width && p.y > bounds.y && p.y < bounds.y + bounds.height
+
+        val vertices = mutableListOf<Vector2>()
+        val vertexIndex = IntArray(triangleCount) { -1 }
+        val edges = mutableListOf<IntArray>()
+        val seen = mutableSetOf<Long>()
+
+        for (e in halfedges.indices) {
+            val o = halfedges[e]
+            if (o < e) continue
+            val a = find(e / 3)
+            val b = find(o / 3)
+            if (a == b) continue
+            if (!strictlyInside(centers[a]) || !strictlyInside(centers[b])) continue
+            if (!seen.add(minOf(a, b).toLong() * triangleCount + maxOf(a, b))) continue
+
+            if (vertexIndex[a] == -1) { vertexIndex[a] = vertices.size; vertices.add(centers[a]) }
+            if (vertexIndex[b] == -1) { vertexIndex[b] = vertices.size; vertices.add(centers[b]) }
+            edges.add(intArrayOf(vertexIndex[a], vertexIndex[b]))
+        }
+        return Pair(vertices, edges)
     }
 }
 
