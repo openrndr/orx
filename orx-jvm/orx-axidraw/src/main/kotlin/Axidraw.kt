@@ -533,8 +533,8 @@ class Axidraw(
     private val makeFrame = { width: Double ->
         Shape(
             listOf(
-                bounds.contour.offset(1000.0, SegmentJoin.MITER),
-                bounds.contour.offset(-width).reversed
+                bounds.contour.offset(1000.0, SegmentJoin.MITER).contours.first(),
+                bounds.contour.offset(-width).contours.first().reversed
             )
         )
     }.lastArgMemo()
