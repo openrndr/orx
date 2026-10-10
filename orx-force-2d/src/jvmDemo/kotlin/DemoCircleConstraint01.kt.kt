@@ -10,6 +10,24 @@ import org.openrndr.extra.force2d.pointsToBody
 import org.openrndr.extra.noise.scatter
 import org.openrndr.shape.Circle
 
+/**
+ * This demo creates a particle simulation.
+ *
+ * It starts by creating a collection of `Vector2`s using the
+ * `Rectangle.scatter` method, then converts them into
+ * bodies by calling [pointsToBody].
+ *
+ * Those bodies are affected by
+ * [gravity](https://orx.openrndr.org/orx-force-2d/org.openrndr.extra.force2d/-gravity-force/index.html),
+ * a [nodeCollisionConstraint](https://orx.openrndr.org/orx-force-2d/org.openrndr.extra.force2d/-node-collision-constraint/index.html)
+ * that makes bodies bump into each other,
+ * and a [nodeCircleConstraint](https://orx.openrndr.org/orx-force-2d/org.openrndr.extra.force2d/-node-circle-constraint/index.html)
+ * which ensures bodies are within or on the boundary of a circle.
+ *
+ * Try increasing the `compliance` value of the node-circle constraint to relax it,
+ * giving some priority to gravity. If, on the other hand, you lower that value,
+ * bodies are strictly placed on the circle boundary.
+ */
 fun main() {
     application {
         configure {

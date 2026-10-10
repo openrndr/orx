@@ -13,11 +13,23 @@ import org.openrndr.extra.force2d.linkLengthConstraint
 import org.openrndr.extra.force2d.nodeRepulseForce
 import org.openrndr.extra.force2d.nodeRepulseInterbodyForce
 import org.openrndr.extra.force2d.rectangularBoundsConstraint
-import org.openrndr.extra.noise.scatter
+import org.openrndr.extra.noise.uniform
 import org.openrndr.extra.shapes.primitives.grid
 import org.openrndr.extra.shapes.primitives.regularStar
 import org.openrndr.shape.LineSegment
+import org.openrndr.shape.Rectangle
 
+/**
+ * A demo similar to DemoBendyStar03, but adding 4 bodies instead
+ * of 1, and an interbody repulse force.
+ *
+ * Two of the bodies are given a higher repulse force strength.
+ * The low compliance values in the link-length and body-area constraints
+ * indicate that those constraints must be strictly enforced.
+ *
+ * Commented-out code can be enabled to visualize the nodes
+ * and the body bounds.
+ */
 fun main() {
     application {
         configure {
@@ -25,33 +37,14 @@ fun main() {
             height = 720
         }
         program {
-
-//            extend(ScreenRecorder()) {
-//                frameRate = 60.0
-//                contentScale = 1.0
-//                frameClock = false
-//            }
-
             val sim = ForceSimulation()
-
             val gravity = GravityForce()
 
-//            sim.apply {
-//                naiveBroadPhaseCollisionDetector()
-//                sapCollisionConstraint()
-//            }
-
-            val pts = drawer.bounds.scatter(15.0)
-
             drawer.bounds.grid(2, 2).flatten().forEach { cell ->
-
-
-
                 //val contour = Rectangle.fromCenter(drawer.bounds.center, 400.0).contour
                 val contour = regularStar(10, 50.0, 200.0, cell.center)
                 val body = contourToBody(contour, density = 10.0, linkNeighbors = 5) {
                     gravity(gravity)
-
                     linkLengthConstraint {
                         compliance = 1E-4
                         iterations = 2
@@ -62,25 +55,22 @@ fun main() {
                     }
                     nodeRepulseForce {
                         searchRadius = 45.0
-                        strength = .0
+                        strength = 0.0
                     }
                     rectangularBoundsConstraint {
                         bounds = drawer.bounds.offsetEdges(-10.0)
                     }
                 }
                 sim.bodies.add(body)
-
             }
+
+            sim.context = Dispatchers.IO
             sim.nodeRepulseInterbodyForce {
                 searchRadius = 30.0
                 strength = 1000.0
             }
 
-            sim.context = Dispatchers.IO
-
-
             extend {
-
                 gravity.gravity = (mouse.position - drawer.bounds.center) * 1.0
 
                 drawer.clear(ColorRGBa.PINK)
@@ -95,23 +85,22 @@ fun main() {
                     body.updateBounds()
                     val points = body.nodes.map { it.position }
                     val segments = body.boundaryLinks.map {
-                        val it = body.links[it]
-                        LineSegment(points[it.source], points[it.target])
+                        val link = body.links[it]
+                        LineSegment(points[link.source], points[link.target])
                     }
                     drawer.stroke = ColorRGBa.BLACK
                     drawer.fill = ColorRGBa.WHITE
-//                    drawer.circles(points, 4.0)
+                    //drawer.circles(points, 4.0)
                     drawer.lineSegments(segments)
-                    drawer.fill = null
-                    drawer.stroke = ColorRGBa.RED
-//                    drawer.rectangle(body.bounds)
+
+                    // show body bounds
+                    //drawer.fill = null
+                    //drawer.stroke = ColorRGBa.RED
+                    //drawer.rectangle(body.bounds)
                 }
 
                 drawer.defaults()
-
-
             }
         }
-
     }
 }

@@ -17,7 +17,18 @@ import org.openrndr.shape.LineSegment
 import org.openrndr.shape.Rectangle
 
 /**
- * Demonstration soft body blobs
+ * A demonstration with two soft body blobs.
+ *
+ * The horizontal mouse position is used to divide the space in two adjacent
+ * rectangles, each controlling the dimensions of a
+ * [rectangularBoundsConstraint](https://orx.openrndr.org/orx-force-2d/org.openrndr.extra.force2d/-rectangular-bounds-constraint/index.html)
+ *
+ * Each blob lives inside those constraint rectangles.
+ *
+ * A [bodyAreaConstraint](https://orx.openrndr.org/orx-force-2d/org.openrndr.extra.force2d/-body-area-constraint/index.html)
+ * "inflates" / "deflates" the blob to the specified `restArea`. In this example,
+ * the vertical mouse position controls how much of the available constraint rectangle area
+ * is used: 100% at the bottom and 0% at the bottom.
  */
 fun main() {
     application {
@@ -26,7 +37,6 @@ fun main() {
             height = 720
         }
         program {
-
             val sim = ForceSimulation()
             val gravity = GravityForce()
 
@@ -42,7 +52,6 @@ fun main() {
                         compliance = 0.0
                         iterations = 10
                     }
-
                     linkLengthConstraint {
                         compliance = 1E-4
                         iterations = 10
@@ -56,15 +65,14 @@ fun main() {
 
             extend {
                 val leftArea = Rectangle(0.0, 0.0, mouse.position.x, height.toDouble()).offsetEdges(-10.0)
-                val rightArea =
-                    Rectangle(mouse.position.x, 0.0, width - mouse.position.x, height.toDouble()).offsetEdges(-10.0)
+                val rightArea = Rectangle(mouse.position.x, 0.0, width - mouse.position.x, height.toDouble()).offsetEdges(-10.0)
                 (sim.bodies[0].constraints[0] as RectangularBoundsConstraint).bounds = leftArea
                 (sim.bodies[1].constraints[0] as RectangularBoundsConstraint).bounds = rightArea
 
                 val f = mouse.position.y / height.toDouble()
-
                 (sim.bodies[0].constraints[2] as BodyAreaConstraint).restArea = leftArea.area * f
                 (sim.bodies[1].constraints[2] as BodyAreaConstraint).restArea = rightArea.area * f
+
                 drawer.clear(ColorRGBa.PINK)
                 runBlocking {
                     sim.simulate(1.0 / 60.0, 10)
@@ -81,8 +89,6 @@ fun main() {
                     drawer.stroke = ColorRGBa.BLACK
                     drawer.fill = ColorRGBa.WHITE
                     drawer.lineSegments(segments)
-                    drawer.fill = null
-                    drawer.stroke = ColorRGBa.RED
                 }
             }
         }

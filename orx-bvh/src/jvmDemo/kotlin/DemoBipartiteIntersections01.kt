@@ -7,6 +7,10 @@ import org.openrndr.extra.noise.scatter
 import org.openrndr.shape.Circle
 import org.openrndr.shape.Rectangle
 
+/**
+ * Demonstrates how to prepare two BVH data structures to be processed via
+ * `findIntersectionPairs()`.
+ */
 fun main() {
     application {
         configure {
@@ -19,7 +23,6 @@ fun main() {
 
             val bvh = runBlocking {
                 BVHNode2D.fromObjects(circles) { Rectangle.fromCenter(it.center, it.radius * 2.0, it.radius * 2.0) }
-
             }
             val bvh2 = runBlocking {
                 BVHNode2D.fromObjects(circles2) { Rectangle.fromCenter(it.center, it.radius * 2.0, it.radius * 2.0) }
@@ -33,7 +36,9 @@ fun main() {
                 println("intersections took ${end - start} ms")
 
                 val ci = intersections.flatMap {
-                    if (circles[it.first].center.distanceTo(circles2[it.second].center) < circles[it.first].radius + circles2[it.second].radius) listOf(circles[it.first], circles2[it.second]) else listOf()
+                    val a = circles[it.first]
+                    val b = circles2[it.second]
+                    if (a.center.distanceTo(b.center) < a.radius + b.radius) listOf(a, b) else listOf()
                 }
 
                 drawer.stroke = null
