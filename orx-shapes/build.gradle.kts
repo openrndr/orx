@@ -3,6 +3,22 @@ plugins {
 }
 
 kotlin {
+    js(IR) {
+        nodejs {
+            testTask {
+                useMocha { timeout = "30s" }
+            }
+        }
+    }
+
+    wasmJs {
+        nodejs {
+            testTask {
+                useMocha { timeout = "30s" }
+            }
+        }
+    }
+
     sourceSets {
         commonMain.dependencies {
             implementation(project(":orx-parameters"))
