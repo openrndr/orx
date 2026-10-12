@@ -140,7 +140,14 @@ and a
 
 ### DemoBlobAndParticles01
 
+Demonstration of how to include two types of bodies in the same simulation:
+a blob and circular particles. It could be seen as a combination of one of
+DemoBlob02 and DemoParticles01.
 
+Both bodies have the same rectangular-bounds constraint to make them collide
+with the window borders and are affected by the same mouse-controlled gravity.
+
+A helper function to draw the outline of a blob is provided.
 
 ![DemoBlobAndParticles01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoBlobAndParticles01Kt.webp)
 
@@ -156,7 +163,14 @@ and a
 
 ### DemoContourConstraint01
 
+Demonstration of the [NodeContourConstraint](https://orx.openrndr.org/orx-force-2d/org.openrndr.extra.force2d/-node-contour-constraint/index.html).
 
+A random hobby-contour is created and used for this particle simulation.
+The gravity is not interactive but rotates clockwise over time.
+The particles then "fall" onto part of the contour depending on the direction of gravity.
+
+Try lowering the compliance of the `nodeContourConstraint` to make the particles follow the contour more strictly,
+or increase the value for more looseness.
 
 ![DemoContourConstraint01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoContourConstraint01Kt.webp)
 
@@ -164,7 +178,18 @@ and a
 
 ### DemoDifferentialBlob01
 
+Demonstrates the use of repulsive forces optimized via bounding volume hierarchy
+[BVH](https://orx.openrndr.org/orx-force-2d/org.openrndr.extra.force2d/-node-repulse-force-b-v-h/index.html).
+The simulation begins with 4 regular stars placed on a 2x2 grid. The contours of the
+shapes are quickly transformed by the repulsive forces, ensuring the vertices keep
+a distance from each other.
 
+The `searchRadius` for each shape's force is modulated over time using the cosine of time,
+but out of sync, so when one radius increases, the other goes down, producing a mesmerizing
+animation of the four shapes competing for space.
+
+The shapes are rendered with `MULTIPLY` blend mode and unique hues
+that together produce unique colors on the overlapping parts.
 
 ![DemoDifferentialBlob01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoDifferentialBlob01Kt.webp)
 
@@ -172,7 +197,18 @@ and a
 
 ### DemoGraphLayout01
 
-Demonstrates a simple force graph layout
+Demonstrates a custom simulation by manually creating nodes, links between those nodes,
+and then a body containing them. The nodes are initially scattered around the drawer
+bounds, and links are created for each node to the two nearest ones.
+
+The simulation enforces a link-length constraint, a rectangular-bounds constraint for
+the borders of the window, and a node-repulse force.
+
+After a few seconds, the simulation falls into a semi-stable state, but this
+is not a given and very much depends on the simulation values.
+
+Not how instead of adding bodies one by one to the `ForceSimulation` they are passed
+all at one in the constructor.
 
 ![DemoGraphLayout01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoGraphLayout01Kt.webp)
 
@@ -180,7 +216,13 @@ Demonstrates a simple force graph layout
 
 ### DemoGraphLayout02
 
-Demonstrates a simple force graph layout
+A variation of DemoGraphLayout01 that uses [ManyNodeForce] instead of
+[NodeRepulseForce].
+
+The simulation uses a high number of nodes connected to the
+two nearest nodes, then tries to find a simple resting state.
+
+`ManyNodeForce` uses a quadtree to deal with high node counts.
 
 ![DemoGraphLayout02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoGraphLayout02Kt.webp)
 
@@ -188,7 +230,12 @@ Demonstrates a simple force graph layout
 
 ### DemoParticles01
 
+A "hello world" of particle simulation. The particles are scattered on the drawer bounds
+when the simulation starts.
 
+Mouse-controllable gravity is the only active force, and two constraints are present: a
+`rectangularBoundsConstraint` to keep the particles inside the program window and colliding
+with its borders, and a `nodeCollisionConstraint` to make them collide with each other.
 
 ![DemoParticles01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-force-2d/images/DemoParticles01Kt.webp)
 

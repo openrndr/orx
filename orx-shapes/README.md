@@ -230,7 +230,18 @@ This demo shows how we can query and visualize the neighborhoods of those 4 vert
 
 ### arrangement/DemoArrangement03
 
+Demonstrates the creation of an arrangement out of ten
+circles and ten squares. The algorithm creates shapes
+by finding all intersections between the provided shapes.
 
+Then, to give the resulting pieces color, it randomizes
+the order and assigns them a hue based on the new index,
+covering 360 degrees of hues.
+
+Since the order of the pieces is randomized in every animation
+frame, a fixed seed value is used to avoid flickering colors.
+Another option would be to do the randomization outside
+the animation loop.
 
 ![arrangement-DemoArrangement03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/arrangement-DemoArrangement03Kt.webp)
 
