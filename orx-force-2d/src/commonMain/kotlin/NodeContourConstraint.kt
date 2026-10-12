@@ -5,10 +5,10 @@ import org.openrndr.extra.bvh.sap.findNearest
 import org.openrndr.shape.Rectangle
 
 /**
- * Represents a constraint that enforces nodes within a body to remain near the defined contour of a rectangle.
+ * Represents a constraint that enforces nodes within a body to remain near a user-defined contour.
  *
- * The [NodeContourConstraint] ensures that the nodes of a body stay within a certain distance of the contour
- * of a rectangle by iteratively applying corrections based on proximity calculations. It influences the
+ * The [NodeContourConstraint] ensures that the nodes of a body stay within a certain distance of a
+ * user-defnied contour by iteratively applying corrections based on proximity calculations. It influences the
  * position of nodes to enforce defined physical rules in relation to the contour, while respecting mass
  * and other physical properties.
  *
@@ -19,7 +19,7 @@ import org.openrndr.shape.Rectangle
  * @property compliance the compliance factor that allows some flexibility in the constraint.
  * @property searchRadius the radius within which nodes will search for the nearest contour point or edge.
  * @property strength the strength of the constraint's enforcement on the body.
- * @property contour the contour of the rectangle which the nodes are constrained to respect.
+ * @property contour the contour that the nodes are constrained to. Defaults to a 100x100 Rectangle.
  * @property lambdas an array of lambda values used internally for constraint resolution.
  */
 class NodeContourConstraint(val body: Body) : Constraint {
@@ -85,7 +85,7 @@ class NodeContourConstraint(val body: Body) : Constraint {
  * Applies a node contour constraint to the body and configures it using the provided configuration block.
  *
  * The node contour constraint ensures that the nodes of the body are constrained to remain near
- * the defined contour of a rectangle. This function allows you to customize the constraint by
+ * a user-defined contour (by default a rectangle). This function allows you to customize the constraint by
  * providing a configuration block.
  *
  * @param configure a lambda function used to customize the [NodeContourConstraint] instance being added to the body.

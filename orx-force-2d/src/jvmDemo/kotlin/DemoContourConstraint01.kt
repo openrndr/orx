@@ -1,19 +1,22 @@
 import kotlinx.coroutines.runBlocking
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extra.force2d.ForceSimulation
-import org.openrndr.extra.force2d.GravityForce
-import org.openrndr.extra.force2d.gravity
-import org.openrndr.extra.force2d.nodeCollisionConstraint
-import org.openrndr.extra.force2d.nodeContourConstraint
-import org.openrndr.extra.force2d.nodeRepulseForce
-import org.openrndr.extra.force2d.pointsToBody
-import org.openrndr.extra.force2d.rectangularBoundsConstraint
+import org.openrndr.extra.force2d.*
 import org.openrndr.extra.noise.scatter
 import org.openrndr.extra.shapes.hobbycurve.hobbyCurve
 import org.openrndr.extra.shapes.ordering.hilbertOrder
 import org.openrndr.math.Polar
 
+/**
+ * Demonstration of the [NodeContourConstraint](https://orx.openrndr.org/orx-force-2d/org.openrndr.extra.force2d/-node-contour-constraint/index.html).
+ *
+ * A random hobby-contour is created and used for this particle simulation.
+ * The gravity is not interactive but rotates clockwise over time.
+ * The particles then "fall" onto part of the contour depending on the direction of gravity.
+ *
+ * Try lowering the compliance of the `nodeContourConstraint` to make the particles follow the contour more strictly,
+ * or increase the value for more looseness.
+ */
 fun main() {
     application {
         configure {
@@ -21,18 +24,10 @@ fun main() {
             height = 720
         }
         program {
-
-//            extend(ScreenRecorder()) {
-//                contentScale = 1.0
-//                maximumDuration = 10.0
-//                frameRate = 60.0
-//                frameSkip = 60*10
-//            }
-
             val sim = ForceSimulation()
-
             val gravity = GravityForce()
 
+            val wobblyContour = hobbyCurve(drawer.bounds.offsetEdges(-100.0).scatter(50.0).hilbertOrder(), true)
 
             val pts = drawer.bounds.scatter(20.0)
             val body = pointsToBody(pts, radius = 10.0) {
@@ -46,7 +41,7 @@ fun main() {
                 }
                 nodeContourConstraint {
                     compliance = 1.0
-                    contour = hobbyCurve( drawer.bounds.offsetEdges(-100.0).scatter(50.0).hilbertOrder(), true)
+                    contour = wobblyContour
                     strength = 0.2
                 }
                 rectangularBoundsConstraint {
@@ -62,12 +57,10 @@ fun main() {
                 drawer.clear(ColorRGBa.BLACK)
                 runBlocking {
                     sim.simulate(1.0 / 60.0, 10)
-                    6
                 }
                 val circles = sim.bodies[0].nodes.map { it.position }
                 drawer.circles(circles, 10.0)
             }
         }
-
     }
 }

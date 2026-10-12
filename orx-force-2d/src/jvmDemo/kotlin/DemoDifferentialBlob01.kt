@@ -24,6 +24,20 @@ import org.openrndr.shape.ShapeContour
 import kotlin.math.PI
 import kotlin.math.cos
 
+/**
+ * Demonstrates the use of repulsive forces optimized via bounding volume hierarchy
+ * [BVH](https://orx.openrndr.org/orx-force-2d/org.openrndr.extra.force2d/-node-repulse-force-b-v-h/index.html).
+ * The simulation begins with 4 regular stars placed on a 2x2 grid. The contours of the
+ * shapes are quickly transformed by the repulsive forces, ensuring the vertices keep
+ * a distance from each other.
+ *
+ * The `searchRadius` for each shape's force is modulated over time using the cosine of time,
+ * but out of sync, so when one radius increases, the other goes down, producing a mesmerizing
+ * animation of the four shapes competing for space.
+ *
+ * The shapes are rendered with `MULTIPLY` blend mode and unique hues
+ * that together produce unique colors on the overlapping parts.
+ */
 fun main() {
     application {
         configure {
@@ -31,9 +45,7 @@ fun main() {
             height = 720
         }
         program {
-
             val sim = ForceSimulation()
-
             val gravity = GravityForce()
 
             drawer.bounds.grid(2, 2).flatten().forEach { cell ->
@@ -65,6 +77,7 @@ fun main() {
                 strength = 100.0
             }
 
+            // perform some initial simulation before displaying anything
             for (i in 0 until 100) {
                 sim.simulate(1.0 / 60.0, 10)
             }

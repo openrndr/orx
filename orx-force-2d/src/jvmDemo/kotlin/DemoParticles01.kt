@@ -10,6 +10,14 @@ import org.openrndr.extra.force2d.pointsToBody
 import org.openrndr.extra.force2d.rectangularBoundsConstraint
 import org.openrndr.extra.noise.scatter
 
+/**
+ * A "hello world" of particle simulation. The particles are scattered on the drawer bounds
+ * when the simulation starts.
+ *
+ * Mouse-controllable gravity is the only active force, and two constraints are present: a
+ * `rectangularBoundsConstraint` to keep the particles inside the program window and colliding
+ * with its borders, and a `nodeCollisionConstraint` to make them collide with each other.
+ */
 fun main() {
     application {
         configure {

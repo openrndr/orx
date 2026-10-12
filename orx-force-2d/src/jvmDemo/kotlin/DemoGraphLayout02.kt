@@ -1,20 +1,20 @@
 import kotlinx.coroutines.runBlocking
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extra.force2d.Body
-import org.openrndr.extra.force2d.ForceSimulation
-import org.openrndr.extra.force2d.Link
-import org.openrndr.extra.force2d.Node
-import org.openrndr.extra.force2d.linkLengthConstraint
-import org.openrndr.extra.force2d.manyNodeForce
-import org.openrndr.extra.force2d.rectangularBoundsConstraint
+import org.openrndr.extra.force2d.*
 import org.openrndr.extra.kdtree.kdTree
 import org.openrndr.extra.noise.scatter
 import org.openrndr.math.Vector2
 import org.openrndr.shape.LineSegment
 
 /**
- * Demonstrates a simple force graph layout
+ * A variation of DemoGraphLayout01 that uses [ManyNodeForce] instead of
+ * [NodeRepulseForce].
+ *
+ * The simulation uses a high number of nodes connected to the
+ * two nearest nodes, then tries to find a simple resting state.
+ *
+ * `ManyNodeForce` uses a quadtree to deal with high node counts.
  */
 fun main() {
     application {
@@ -42,13 +42,11 @@ fun main() {
                 linkLengthConstraint {
                     compliance = 1.0
                     iterations = 1
-                    for (i in nodes.indices) {
-                     //   restLengths[i] = 30.0
-                    }
-
+//                    for (i in nodes.indices) {
+//                         restLengths[i] = 30.0
+//                    }
                 }
                 manyNodeForce {
-
                     theta = 1.0
                     strength = { -3.0 }
                 }

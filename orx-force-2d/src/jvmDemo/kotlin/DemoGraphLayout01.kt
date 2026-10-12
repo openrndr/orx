@@ -1,20 +1,25 @@
 import kotlinx.coroutines.runBlocking
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extra.force2d.Body
-import org.openrndr.extra.force2d.ForceSimulation
-import org.openrndr.extra.force2d.Link
-import org.openrndr.extra.force2d.Node
-import org.openrndr.extra.force2d.linkLengthConstraint
-import org.openrndr.extra.force2d.nodeRepulseForce
-import org.openrndr.extra.force2d.rectangularBoundsConstraint
+import org.openrndr.extra.force2d.*
 import org.openrndr.extra.kdtree.kdTree
 import org.openrndr.extra.noise.scatter
 import org.openrndr.math.Vector2
 import org.openrndr.shape.LineSegment
 
 /**
- * Demonstrates a simple force graph layout
+ * Demonstrates a custom simulation by manually creating nodes, links between those nodes,
+ * and then a body containing them. The nodes are initially scattered around the drawer
+ * bounds, and links are created for each node to the two nearest ones.
+ *
+ * The simulation enforces a link-length constraint, a rectangular-bounds constraint for
+ * the borders of the window, and a node-repulse force.
+ *
+ * After a few seconds, the simulation falls into a semi-stable state, but this
+ * is not a given and very much depends on the simulation values.
+ *
+ * Not how instead of adding bodies one by one to the `ForceSimulation` they are passed
+ * all at one in the constructor.
  */
 fun main() {
     application {
@@ -41,7 +46,6 @@ fun main() {
             val body = Body(nodes, links = links).apply {
                 linkLengthConstraint {
                     compliance = 1E-1
-
                 }
                 nodeRepulseForce {
                     searchRadius = 100.0
