@@ -64,23 +64,35 @@ class ConstrainedDelaunayTriangulation(
 
         points = allPoints
 
+        // Tripack requires its first three nodes to be non-collinear: swap a suitable point into third place
+        val order = IntArray(points.size) { it }
+        val third = (2 until points.size).firstOrNull { k ->
+            val (a, b, c) = Triple(points[0], points[1], points[k])
+            (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x) != 0.0
+        }
+        require(third != null) { "ConstrainedDelaunayTriangulation: all points are collinear" }
+        order[2] = third
+        order[third] = 2
+        // order is its own inverse: it maps point indices to (0-based) node indices and back
+
         val mesh = Tripack(points.size)
-        for ((i, p) in points.withIndex()) {
-            mesh.setPoint(i + 1, p.x, p.y)
+        for (node in points.indices) {
+            val p = points[order[node]]
+            mesh.setPoint(node + 1, p.x, p.y)
         }
         mesh.build(points.size)
 
         for (range in contourRanges) {
             val count = range.last - range.first + 1
             for (i in 0 until count) {
-                val a = range.first + i + 1
-                val b = range.first + (i + 1) % count + 1
+                val a = order[range.first + i] + 1
+                val b = order[range.first + (i + 1) % count] + 1
                 mesh.forceEdge(a, b)
             }
         }
 
         indices = mesh.enumerateTriangles()
-            .map { intArrayOf(it[0] - 1, it[1] - 1, it[2] - 1) }
+            .map { intArrayOf(order[it[0] - 1], order[it[1] - 1], order[it[2] - 1]) }
             .filter { (a, b, c) ->
                 val centroid = (points[a] + points[b] + points[c]) / 3.0
                 centroid in shape
@@ -120,4 +132,7 @@ class ConstrainedDelaunayTriangulation(
  */
 fun Shape.constrainedDelaunayTriangulation(
     interiorPoints: List<Vector2> = emptyList()
-): ConstrainedDelaunayTriangulation = ConstrainedDelaunayTriangulation(this, interiorPoints)
+): ConstrainedDelaunayTriangulation {
+
+    return ConstrainedDelaunayTriangulation(this, interiorPoints)
+}

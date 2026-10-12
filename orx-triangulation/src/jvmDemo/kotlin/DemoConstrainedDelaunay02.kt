@@ -16,7 +16,8 @@ fun main() {
         program {
 
             val pts = drawer.bounds.scatter(46.0, random = Random(10)).hilbertOrder()
-            val hc = hobbyCurve(pts, true).sampleLinear(4.0)
+            val hcog = hobbyCurve(pts, true)
+            val hc = hcog.sampleLinear(4.0)
 
             val dt = hc.shape.constrainedDelaunayTriangulation()
             val vd = dt.voronoiDiagram()
@@ -30,7 +31,7 @@ fun main() {
             extend {
                 drawer.fill = null
                 drawer.stroke = ColorRGBa.PINK
-                drawer.contour(hc)
+                drawer.contour(hcog)
 
                 for (cell in vd.cellPolygons()) {
                     if (cell.segments.isEmpty()) continue
