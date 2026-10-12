@@ -228,6 +228,14 @@ This demo shows how we can query and visualize the neighborhoods of those 4 vert
 
 [source code](src/jvmDemo/kotlin/arrangement/DemoArrangement02.kt)
 
+### arrangement/DemoArrangement03
+
+
+
+![arrangement-DemoArrangement03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/arrangement-DemoArrangement03Kt.webp)
+
+[source code](src/jvmDemo/kotlin/arrangement/DemoArrangement03.kt)
+
 ### arrangement/DemoArrangement04
 
 Demonstrates using the `boundedFaces` collection available in Arrangements.
@@ -751,6 +759,15 @@ to make the light of rendered segments accumulate.
 ![loft-DemoLoftNormals02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/loft-DemoLoftNormals02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/loft/DemoLoftNormals02.kt)
+
+### medialaxis/DemoMedialAxis01
+
+Medial axes of a few shapes. Gray: the raw approximation given by the internal edges of the constrained
+Voronoi diagram of the sampled boundary. Colored: the fitted medial axis branches, one color per branch.
+
+![medialaxis-DemoMedialAxis01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/medialaxis-DemoMedialAxis01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/medialaxis/DemoMedialAxis01.kt)
 
 ### offset/DemoOffset01
 
