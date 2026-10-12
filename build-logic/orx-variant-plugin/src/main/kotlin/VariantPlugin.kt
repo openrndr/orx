@@ -83,7 +83,7 @@ abstract class VariantExtension(
         val sourceSets = project.extensions.getByType(SourceSetContainer::class.java)
 
         val sourceSetArch = arch.replace("-", "_")
-        val nameMain = "${os}${sourceSetArch.capitalize()}Main"
+        val nameMain = "${os}${sourceSetArch.replaceFirstChar { it.uppercaseChar() }}Main"
         val platformMain = sourceSets.create(nameMain)
         val tasks = project.tasks
         tasks.register(platformMain.jarTaskName, Jar::class.java) {
