@@ -20,6 +20,10 @@ import kotlin.random.Random
  * In this example, `faces` contains 25 items: 24 `bounded` and 1 `unbounded` faces.
  */
 fun main() = application {
+    configure {
+        width = 720
+        height = 720
+    }
     program {
         val circles = listOf(
             Circle(Vector2(-50.0, 0.0), 50.0),
@@ -44,6 +48,7 @@ fun main() = application {
             drawer.stroke = ColorRGBa.WHITE
             drawer.translate(drawer.bounds.center)
             drawer.scale(2.0)
+
 
             for (f in arr.boundedFaces) {
                 drawer.fill = rgb(
