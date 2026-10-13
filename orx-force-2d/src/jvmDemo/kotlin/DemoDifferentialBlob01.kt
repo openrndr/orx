@@ -6,16 +6,7 @@ import org.openrndr.draw.BlendMode
 import org.openrndr.extra.color.presets.PERU
 import org.openrndr.extra.color.spaces.OKHSV
 import org.openrndr.extra.color.tools.shiftHue
-import org.openrndr.extra.force2d.ForceSimulation
-import org.openrndr.extra.force2d.GravityForce
-import org.openrndr.extra.force2d.NodeRepulseForceBVH
-import org.openrndr.extra.force2d.bodyAreaConstraint
-import org.openrndr.extra.force2d.contourToBody
-import org.openrndr.extra.force2d.gravity
-import org.openrndr.extra.force2d.linkLengthConstraint
-import org.openrndr.extra.force2d.nodeRepulseForceBVH
-import org.openrndr.extra.force2d.nodeRepulseInterbodyForceBVH
-import org.openrndr.extra.force2d.rectangularBoundsConstraint
+import org.openrndr.extra.force2d.*
 import org.openrndr.extra.shapes.primitives.grid
 import org.openrndr.extra.shapes.primitives.regularStar
 import org.openrndr.math.map
@@ -77,10 +68,8 @@ fun main() {
                 strength = 100.0
             }
 
-            // perform some initial simulation before displaying anything
-            for (i in 0 until 100) {
-                sim.simulate(1.0 / 60.0, 10)
-            }
+            // For a better README.md screenshot
+            repeat(50) { sim.simulate(1.0 / 60.0, 10) }
 
             sim.context = Dispatchers.IO
             extend {

@@ -4,6 +4,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.force2d.*
 import org.openrndr.extra.noise.scatter
 import org.openrndr.extra.noise.uniform
+import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
 import org.openrndr.shape.LineSegment
 
@@ -72,6 +73,11 @@ fun main() {
                 }
                 drawer.lineSegments(segments)
             }
+
+            // For a better README.md screenshot
+            gravity.gravity = Vector2(-450.0)
+            repeat(35) { sim.simulate(1.0 / 60.0, 10) }
+
             extend {
                 gravity.gravity = (mouse.position - drawer.bounds.center) * 1.0
 

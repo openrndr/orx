@@ -6,6 +6,7 @@ import org.openrndr.extra.noise.scatter
 import org.openrndr.extra.shapes.hobbycurve.hobbyCurve
 import org.openrndr.extra.shapes.ordering.hilbertOrder
 import org.openrndr.math.Polar
+import org.openrndr.math.Vector2
 
 /**
  * Demonstration of the [NodeContourConstraint](https://orx.openrndr.org/orx-force-2d/org.openrndr.extra.force2d/-node-contour-constraint/index.html).
@@ -50,6 +51,10 @@ fun main() {
                 }
             }
             sim.bodies.add(body)
+
+            // For a better README.md screenshot
+            gravity.gravity = Vector2(-300.0)
+            repeat(50) { sim.simulate(1.0 / 60.0, 10) }
 
             extend {
                 gravity.gravity = Polar(seconds * 72.0, 300.0).cartesian

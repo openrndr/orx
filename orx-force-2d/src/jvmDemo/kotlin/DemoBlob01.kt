@@ -1,15 +1,7 @@
 import kotlinx.coroutines.runBlocking
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extra.force2d.BodyAreaConstraint
-import org.openrndr.extra.force2d.ForceSimulation
-import org.openrndr.extra.force2d.GravityForce
-import org.openrndr.extra.force2d.RectangularBoundsConstraint
-import org.openrndr.extra.force2d.bodyAreaConstraint
-import org.openrndr.extra.force2d.contourToBody
-import org.openrndr.extra.force2d.gravity
-import org.openrndr.extra.force2d.linkLengthConstraint
-import org.openrndr.extra.force2d.rectangularBoundsConstraint
+import org.openrndr.extra.force2d.*
 import org.openrndr.extra.shapes.primitives.grid
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle

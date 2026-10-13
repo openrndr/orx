@@ -8,6 +8,7 @@ import org.openrndr.extra.color.tools.shiftHue
 import org.openrndr.extra.force2d.*
 import org.openrndr.extra.shapes.primitives.grid
 import org.openrndr.extra.shapes.primitives.regularStar
+import org.openrndr.math.Vector2
 import org.openrndr.shape.Segment2D
 import org.openrndr.shape.ShapeContour
 
@@ -59,6 +60,10 @@ fun main() {
                 searchRadius = 20.0
                 strength = 100.0
             }
+
+            // For a better README.md screenshot
+            gravity.gravity = Vector2(-250.0)
+            repeat(35) { sim.simulate(1.0 / 60.0, 10) }
 
             extend {
                 gravity.gravity = (mouse.position - drawer.bounds.center) * 1.0

@@ -50,11 +50,8 @@ fun main() {
             }
             sim.bodies.add(body)
 
-            if (System.getProperty("takeScreenshot") == "true") {
-                extensions.filterIsInstance<SingleScreenshot>().forEach {
-                    it.delayFrames = 30
-                }
-            }
+            // For a better README.md screenshot
+            repeat(15) { sim.simulate(1.0 / 60.0, 10) }
 
             extend {
                 gravity.gravity = (mouse.position - drawer.bounds.center) * 1.0

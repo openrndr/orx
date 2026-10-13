@@ -2,10 +2,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extensions.SingleScreenshot
 import org.openrndr.extra.force2d.*
 import org.openrndr.extra.noise.uniform
 import org.openrndr.extra.shapes.primitives.grid
+import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
 import org.openrndr.shape.LineSegment
 
@@ -66,11 +66,9 @@ fun main() {
                 sim.bodies.add(body)
             }
 
-            if (System.getProperty("takeScreenshot") == "true") {
-                extensions.filterIsInstance<SingleScreenshot>().forEach {
-                    it.delayFrames = 200
-                }
-            }
+            // For a better README.md screenshot
+            gravity.gravity = Vector2(200.0)
+            repeat(100) { sim.simulate(1.0 / 60.0, 10) }
 
             extend {
                 drawer.clear(ColorRGBa.PINK)

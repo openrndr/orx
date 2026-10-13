@@ -57,6 +57,9 @@ fun main() {
 
             val sim = ForceSimulation(mutableListOf(body))
 
+            // For a better README.md screenshot
+            repeat(90) { sim.simulate(1.0 / 60.0, 10) }
+
             extend {
                 runBlocking {
                     sim.simulate(1.0 / 60.0, 10)

@@ -1,15 +1,9 @@
 import kotlinx.coroutines.runBlocking
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extensions.SingleScreenshot
-import org.openrndr.extra.force2d.ForceSimulation
-import org.openrndr.extra.force2d.GravityForce
-import org.openrndr.extra.force2d.bodyAreaConstraint
-import org.openrndr.extra.force2d.contourToBody
-import org.openrndr.extra.force2d.gravity
-import org.openrndr.extra.force2d.linkLengthConstraint
-import org.openrndr.extra.force2d.rectangularBoundsConstraint
+import org.openrndr.extra.force2d.*
 import org.openrndr.extra.shapes.primitives.regularStar
+import org.openrndr.math.Vector2
 import org.openrndr.shape.LineSegment
 
 /**
@@ -60,11 +54,9 @@ fun main() {
             }
             sim.bodies.add(body)
 
-            if (System.getProperty("takeScreenshot") == "true") {
-                extensions.filterIsInstance<SingleScreenshot>().forEach {
-                    it.delayFrames = 30
-                }
-            }
+            // For a better README.md screenshot
+            gravity.gravity = Vector2(-750.0)
+            repeat(35) { sim.simulate(1.0 / 60.0, 10) }
 
             extend {
                 gravity.gravity = (mouse.position - drawer.bounds.center) * 1.0

@@ -1,23 +1,11 @@
-
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extra.force2d.ForceSimulation
-import org.openrndr.extra.force2d.GravityForce
-import org.openrndr.extra.force2d.NodeRepulseForce
-import org.openrndr.extra.force2d.bodyAreaConstraint
-import org.openrndr.extra.force2d.contourToBody
-import org.openrndr.extra.force2d.gravity
-import org.openrndr.extra.force2d.linkLengthConstraint
-import org.openrndr.extra.force2d.nodeRepulseForce
-import org.openrndr.extra.force2d.nodeRepulseInterbodyForce
-import org.openrndr.extra.force2d.rectangularBoundsConstraint
-import org.openrndr.extra.noise.uniform
+import org.openrndr.extra.force2d.*
 import org.openrndr.extra.shapes.primitives.grid
 import org.openrndr.extra.shapes.primitives.regularStar
 import org.openrndr.shape.LineSegment
-import org.openrndr.shape.Rectangle
 
 /**
  * A demo similar to DemoBendyStar03, but adding 4 bodies instead
@@ -75,11 +63,13 @@ fun main() {
 
                 drawer.clear(ColorRGBa.PINK)
                 runBlocking {
-                    sim.simulate( 1.0 / 60.0, 10)
+                    sim.simulate(1.0 / 60.0, 10)
                 }
 
-                (sim.bodies[0].forces.getOrNull(1) as? NodeRepulseForce)?.strength = 10.0 //* mouse.position.y / height.toDouble()
-                (sim.bodies[1].forces.getOrNull(1) as? NodeRepulseForce)?.strength = 10.0 //* mouse.position.y / height.toDouble()
+                (sim.bodies[0].forces.getOrNull(1) as? NodeRepulseForce)?.strength =
+                    10.0 //* mouse.position.y / height.toDouble()
+                (sim.bodies[1].forces.getOrNull(1) as? NodeRepulseForce)?.strength =
+                    10.0 //* mouse.position.y / height.toDouble()
 
                 for (body in sim.bodies) {
                     body.updateBounds()
