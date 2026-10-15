@@ -6,9 +6,11 @@ import org.openrndr.extra.noise.scatter
 import org.openrndr.extra.shapes.expand.expand
 import org.openrndr.extra.shapes.hobbycurve.hobbyCurve
 import org.openrndr.extra.shapes.ordering.hilbertOrder
-import org.openrndr.shape.LineSegment
-import org.openrndr.shape.Segment2D
 
+/**
+ * Demonstrates how `ShapeContour.expand()` behaves with a long complex contour
+ * that results in an expanded `Shape` with sharp turns and overlapping sections.
+ */
 fun main() {
     application {
         configure {

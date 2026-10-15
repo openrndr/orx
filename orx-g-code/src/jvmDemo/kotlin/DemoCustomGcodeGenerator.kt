@@ -30,7 +30,6 @@ fun main() = application {
     }
 
     program {
-
         val comp = drawComposition {
             lineSegment(10.0, 10.0, 20.0, 20.0)
         }

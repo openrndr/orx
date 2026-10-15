@@ -80,13 +80,11 @@ fun main() {
                         val it = body.links[it]
                         Segment2D(points[it.source], points[it.target])
                     }
-                    drawer.stroke = null
-                    drawer.fill = ColorRGBa.PERU.shiftHue<OKHSV>(90.0 * -index).opacify(0.8)
 
                     val c = ShapeContour.fromSegments(segments, closed = true)
+                    drawer.stroke = null
+                    drawer.fill = ColorRGBa.PERU.shiftHue<OKHSV>(90.0 * -index).opacify(0.8)
                     drawer.contour(c)
-                    drawer.fill = null
-                    drawer.stroke = ColorRGBa.RED
                 }
             }
         }
