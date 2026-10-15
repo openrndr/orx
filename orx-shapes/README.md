@@ -438,7 +438,12 @@ This demo shows a grid of 9 contours which are part circle and part 5-point star
 
 ### deform/DemoDeformContour01
 
+[ShapeContour.deform](https://orx.openrndr.org/orx-shapes/org.openrndr.extra.shapes.deform/deform.html)
+deforms the current ShapeContour by applying an attraction force toward a given attractor point.
+The deformation is influenced by various parameters including strength, falloff, and reference distance,
+and adaptively refines the contour where necessary to meet an error tolerance.
 
+In this interactive demo, a circular shape is deformed based on the current mouse position.
 
 ![deform-DemoDeformContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/deform-DemoDeformContour01Kt.webp)
 
@@ -446,7 +451,12 @@ This demo shows a grid of 9 contours which are part circle and part 5-point star
 
 ### deform/DemoDeformContour02
 
+An interactive demo of
+[ShapeContour.deform](https://orx.openrndr.org/orx-shapes/org.openrndr.extra.shapes.deform/deform.html)
+that presents a circular contour and deforms it in real time based on the mouse position.
 
+By clicking the mouse, the temporary deformation becomes permanent, letting you sculpt a 2D shape
+by deforming it repeatedly.
 
 ![deform-DemoDeformContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/deform-DemoDeformContour02Kt.webp)
 
@@ -454,7 +464,8 @@ This demo shows a grid of 9 contours which are part circle and part 5-point star
 
 ### deform/DemoDeformSegment01
 
-
+This demo creates sets of horizontal and vertical line segments, then draws them all deformed
+using the current mouse position as the attractor.
 
 ![deform-DemoDeformSegment01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/deform-DemoDeformSegment01Kt.webp)
 
@@ -557,7 +568,10 @@ along the `base` and `warp` contours, while vertical movement changes its distan
 
 ### expand/DemoExpand01
 
+Demonstrates [expand](https://orx.openrndr.org/orx-shapes/org.openrndr.extra.shapes.expand/expand.html),
+a method that takes a `ShapeContour` and returns an expanded version of it as a `Shape`.
 
+It does this by offsetting the original contour to both sides and connecting both offsets to form a closed shape.
 
 ![expand-DemoExpand01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/expand-DemoExpand01Kt.webp)
 
@@ -565,7 +579,8 @@ along the `base` and `warp` contours, while vertical movement changes its distan
 
 ### expand/DemoExpand02
 
-
+Demonstrates how `ShapeContour.expand()` behaves with a long complex contour
+that results in an expanded `Shape` with sharp turns and overlapping sections.
 
 ![expand-DemoExpand02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/expand-DemoExpand02Kt.webp)
 
@@ -1303,7 +1318,21 @@ Try commenting out `.rectified(0.01, 100.0)` to observe the difference it makes.
 
 ### smoothnormal/DemoSmoothNormal01
 
+Interactive demonstration of
+[RectifiedContour.smoothNormalLinear(t, radius)](https://orx.openrndr.org/orx-shapes/org.openrndr.extra.shapes.smoothnormal/smooth-normal-linear.html),
+an alternative to `RectifiedContour.normal(t)`.
 
+The vertical mouse position controls the applied `radius`: 0.0 at the top and 50.0 at the bottom.
+We choose a maximum radius of 50.0 because that's half the side of the base rectangle. To see what the result
+would look like when using just `.normal(t)`, move the mouse pointer all the way to the top to make the `radius` 0.0.
+
+The program creates 64 segments pointing out from the base rectangle and
+10 contours offset outwards.
+
+The position of the segments and the curvature of the contours varies depending on the applied radius.
+
+See [distortUniform](https://orx.openrndr.org/orx-shapes/org.openrndr.extra.shapes.distort/distort-uniform.html).
+See [RectifiedContour.smoothNormalAngular](https://orx.openrndr.org/orx-shapes/org.openrndr.extra.shapes.smoothnormal/smooth-normal-angular.html)
 
 ![smoothnormal-DemoSmoothNormal01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/smoothnormal-DemoSmoothNormal01Kt.webp)
 
