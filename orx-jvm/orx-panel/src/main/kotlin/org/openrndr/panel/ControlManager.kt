@@ -264,6 +264,7 @@ class ControlManager : Extension {
                     dragTarget = null
                     return
                 }
+                event.cancelPropagation()
                 it.mouse.dragged.trigger(event)
             }
 

@@ -8,7 +8,7 @@ import kotlin.math.max
 open class Div : TextElement(ElementType("div")) {
     init {
         mouse.pressed.listen {
-            if (computedStyle.effectiveBackground?.alpha?:0.0 > 0.0) {
+            if ((computedStyle.effectiveBackground?.alpha ?: 0.0) > 0.0) {
                 it.cancelPropagation()
             }
         }
