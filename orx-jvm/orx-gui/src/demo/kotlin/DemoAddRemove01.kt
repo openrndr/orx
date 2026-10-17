@@ -2,7 +2,6 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.gui.GUI
 import org.openrndr.extra.parameters.ColorParameter
-import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.Vector2Parameter
 import org.openrndr.math.Vector2
@@ -48,10 +47,10 @@ fun main() = application {
 
         mouse.buttonDown.listen { ev ->
             // Ignore clicks inside the gui
-            if(!ev.propagationCancelled) {
+            if (!ev.propagationCancelled) {
                 // Check whether we clicked inside a circle
                 val hit = coloredCircles.firstOrNull { ev.position.distanceTo(it.position) < it.radius }
-                if(hit != null) {
+                if (hit != null) {
                     // If we did, remove that circle from the collection and the gui
                     coloredCircles.remove(hit)
                     gui.remove(hit)

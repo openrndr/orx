@@ -11,6 +11,18 @@ import org.openrndr.extra.math.matrix.svd
 import kotlin.math.sin
 import kotlin.math.sqrt
 
+/**
+ * A demo visualizing Singular Value Decomposition (SVD) applied
+ * to image/matrix decomposition and compression.
+ *
+ * It shows:
+ * - The original image: the [sinc](https://en.wikipedia.org/wiki/Sinc_function)
+ *   pattern matrix rendered as grayscale
+ * - Individual rank-1 components (5 images)
+ * - Progressive reconstruction (5 images) - the cumulative sum of
+ *   components showing how the original image emerges as more
+ *   singular values are added.
+ */
 fun main() {
     application {
         configure {

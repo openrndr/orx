@@ -9,6 +9,13 @@ import org.openrndr.extra.shapes.text.shapesFromText
 import org.openrndr.math.transforms.transform
 import org.openrndr.shape.Ellipse
 
+/**
+ * A variation of DemoWarpContour01, where
+ * - The base is the same horizontal, rectified contour.
+ * - The warp contour is an ellipse instead of a circle.
+ * - The warped shapes are the ones found in the word "WARP", translated using the mouse position
+ *   (instead of using a circular contour at the mouse position).
+ */
 fun main() {
     application {
         configure {
@@ -17,13 +24,10 @@ fun main() {
         }
         program {
             val c = Ellipse(drawer.bounds.center, 300.0, 200.0).contour.rectified()
-
             val face = loadFace("demo-data/fonts/IBMPlexMono-Regular.ttf")
-
             val g = shapesFromText(face, "WARP", 64.0)
 
             extend {
-
                 val s = g.map {
                     it.transform(transform {
                         translate(mouse.position)
@@ -32,7 +36,6 @@ fun main() {
 
                 val b = drawer.bounds.horizontal(0.5).contour.rectified()
                 val w = s.map { it.warp(b, c) }
-
 
                 drawer.fill = null
                 drawer.stroke = ColorRGBa.GRAY
