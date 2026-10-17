@@ -71,11 +71,48 @@ A grid of such rectangles is displayed, animating the `u` and `v` parameters bas
 
 ### matrix/DemoFilterContour01
 
+An advanced demonstration of using a Henkel matrix to smooth a rectangular contour.
 
+A Hankel matrix is a square or rectangular matrix where each ascending
+skew-diagonal from left to right is constant. For a sequence [a, b, c, d, ...],
+a Hankel matrix might look like:
+
+a  b  c  d
+b  c  d  e
+c  d  e  f
+d  e  f  g
+
+In signal processing and filtering, Hankel matrices are used to embed a
+1D time series (or point sequence) into a higher-dimensional trajectory space.
+This embedding reveals the underlying structure and correlations in the data.
+
+For filtering point sequences:
+1. The Hankel matrix transforms the sequence into a trajectory matrix where
+each row is a delayed copy of the signal.
+2. Applying SVD (Singular Value Decomposition) decomposes this matrix into
+orthogonal components ranked by their contribution to the signal's variance.
+3. By keeping only the top-k singular values, we filter out noise and
+high-frequency details while preserving the dominant low-frequency shape.
+4. Converting back from Hankel form (dehankelVector2) reconstructs a smoothed
+version of the original point sequence.
+
+This approach is particularly powerful for contour smoothing because it's
+data-driven: the SVD automatically identifies the most significant geometric
+features without requiring explicit frequency cutoffs or kernel functions.
 
 ![matrix-DemoFilterContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/matrix-DemoFilterContour01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/matrix/DemoFilterContour01.kt)
+
+### matrix/DemoFilterContour02
+
+An advanced demonstration of using a Henkel matrix to smooth a star-shaped contour.
+
+The animated shape is drawn multiple times with varying levels of smoothing.
+
+![matrix-DemoFilterContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/matrix-DemoFilterContour02Kt.webp)
+
+[source code](src/jvmDemo/kotlin/matrix/DemoFilterContour02.kt)
 
 ### matrix/DemoLeastSquares01
 
@@ -110,7 +147,16 @@ to the ground truth depending on the random values used.
 
 ### matrix/DemoSeparableImages01
 
+A demo visualizing Singular Value Decomposition (SVD) applied
+to image/matrix decomposition and compression.
 
+It shows:
+- The original image: the [sinc](https://en.wikipedia.org/wiki/Sinc_function)
+pattern matrix rendered as grayscale
+- Individual rank-1 components (5 images)
+- Progressive reconstruction (5 images) - the cumulative sum of
+components showing how the original image emerges as more
+singular values are added.
 
 ![matrix-DemoSeparableImages01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-math/images/matrix-DemoSeparableImages01Kt.webp)
 

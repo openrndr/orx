@@ -499,7 +499,12 @@ for a classic DoG band-pass shape.
 
 ### distort/DemoDistortContour01
 
+Animated demonstration on how
+[`ShapeContour.distort`](https://orx.openrndr.org/orx-shapes/org.openrndr.extra.shapes.distort/distort.html)
+can be used to distort a contour.
 
+The program creates a contour with a 24-point regular star centered on the window.
+On every animation frame, the program distorts that contour with sines and cosines of the time in seconds.
 
 ![distort-DemoDistortContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoDistortContour01Kt.webp)
 
@@ -507,7 +512,12 @@ for a classic DoG band-pass shape.
 
 ### distort/DemoDistortContour02
 
+A demonstration of `ShapeContour.distort` similar to DemoDistortContour01.
 
+Only the distortion function changes: the points of the star are rotated
+around the center of the window. The amount of rotation oscillates
+based on the cosine of the current time in seconds, alternating between
+a clockwise and a counter-clockwise distortion.
 
 ![distort-DemoDistortContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoDistortContour02Kt.webp)
 
@@ -515,7 +525,23 @@ for a classic DoG band-pass shape.
 
 ### distort/DemoDistortContour04
 
-Demonstrates distortion over the rectified (length proportional) t parameter
+Demonstrates `RectifiedContour.distort`. The difference between
+`RectifiedContour` and `ShapeContour` is that
+in rectified contours, the `t` parameter is length-proportional.
+With non-rectified contours, the `t` parameter does not always advance
+at a constant speed along the contour, but depends on the lengths of the segments.
+
+This demo first creates a circular rectified contour, then a distorted one
+based on it by shifting the contour outwards and inwards along the normals
+using the cosine of the `t` value, producing 8 "petals". The formula includes
+the current time in `seconds`, giving the impression that the shape rotates
+in real time, even if what actually happens is that vertices are being pushed
+in and out based on time.
+
+The distorted contour is distorted again in a loop, pushing the contours
+along the normals. Notice that this time the normals no longer point away
+from the center of the window, but away from the "petals", creating
+offset copies.
 
 ![distort-DemoDistortContour04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoDistortContour04Kt.webp)
 
@@ -523,7 +549,15 @@ Demonstrates distortion over the rectified (length proportional) t parameter
 
 ### distort/DemoDistortUniformContour01
 
+Demonstrates how to use
+[`RectifiedContour.distort`](https://orx.openrndr.org/orx-shapes/org.openrndr.extra.shapes.distort/distort.html)
+to distort a contour by writing a function that takes
+the normalized `t` value and the `position`, and returns a `Vector2`.
 
+In this example, a circular rectified contour is transformed by adding to the current
+position the normal (perpendicular vector) multiplied by an oscillating cosine.
+Since the `t` value goes from 0.0 to 1.0, the `cos(t * PI * 14)` expression
+increases and decreases 7 times, creating a 7-point rounded star as a result.
 
 ![distort-DemoDistortUniformContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoDistortUniformContour01Kt.webp)
 
@@ -531,7 +565,14 @@ Demonstrates distortion over the rectified (length proportional) t parameter
 
 ### distort/DemoEnvelopeShape01
 
+Demonstrates how
+[`Shape.envelope`](https://orx.openrndr.org/orx-shapes/org.openrndr.extra.shapes.distort/envelope.html)
+transforms a shape by distorting its contours based on a mapping between
+a reference rectangle and a target Bézier patch.
 
+The program draws four horizontal and vertical lines from the Bézier patch, which inside the patch
+are actually curved. It also draws the shapes contained in the text "WARP", translated to the mouse position,
+and mapped from a source Rectangle to a target Bézier patch.
 
 ![distort-DemoEnvelopeShape01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoEnvelopeShape01Kt.webp)
 
@@ -558,9 +599,30 @@ along the `base` and `warp` contours, while vertical movement changes its distan
 
 [source code](src/jvmDemo/kotlin/distort/DemoWarpContour01.kt)
 
+### distort/DemoWarpContour02
+
+Advanced demonstration of [warp](https://orx.openrndr.org/orx-shapes/org.openrndr.extra.shapes.distort/warp.html).
+
+Here, a grid of irregularly sized rectangles is created and displayed in gray. The rectangles are
+warped using:
+
+- A horizontal rectified contour as the warping `base` (in yellow)
+- A deformed pulley as the `warp` contour (in yellow). `adjustContour` is used to slightly rotate the vertices of the
+pulley.
+
+The resulting wobbly grid is shown in pink.
+
+![distort-DemoWarpContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoWarpContour02Kt.webp)
+
+[source code](src/jvmDemo/kotlin/distort/DemoWarpContour02.kt)
+
 ### distort/DemoWarpShape01
 
-
+A variation of DemoWarpContour01, where
+- The base is the same horizontal, rectified contour.
+- The warp contour is an ellipse instead of a circle.
+- The warped shapes are the ones found in the word "WARP", translated using the mouse position
+(instead of using a circular contour at the mouse position).
 
 ![distort-DemoWarpShape01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoWarpShape01Kt.webp)
 
