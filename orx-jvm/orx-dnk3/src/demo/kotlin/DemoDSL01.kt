@@ -10,6 +10,13 @@ import org.openrndr.math.Vector3
 import org.openrndr.math.transforms.transform
 import java.io.File
 
+/**
+ * Demonstrates how a scene can be created using a DSL (Domain-Specific Language).
+ * The DSL uses keywords like `addSkybox`, `hemisphereLight`, `node`, `pointLight` and `simpleMseh`.
+ * Note how one of the transformations uses `seconds` to animate a rotation value. Even if the
+ * scene is defined only once, its elements can be evaluated on every animation frame to allow
+ * for changing properties over time.
+ */
 fun main() = application {
     configure {
         width = 1280

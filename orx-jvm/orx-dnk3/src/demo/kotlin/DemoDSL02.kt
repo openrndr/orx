@@ -13,6 +13,11 @@ import org.openrndr.math.transforms.transform
 import org.openrndr.shape.path3D
 import java.io.File
 
+/**
+ * Another demonstration showing how the scene DSL is used to add a skybox, two lights,
+ * a green ground plane with a centered sphere, and a wobbling path-mesh that moves
+ * based on simplex noise. The sphere and the path both use a PBR material.
+ */
 fun main() = application {
     configure {
         width = 1280
@@ -72,8 +77,10 @@ fun main() = application {
                             path3D {
                                 val t = seconds * 0.3
 
-                                // simplex returns values between -1.0 and 1.0. Make sure the y component
-                                // (the elevation) is between 0.0 and 4.0
+                                // Generate simplex noise `Vector3` values based on `t`
+                                // making sure the `x` and `z` values are
+                                // between -4.0 and 4.0, and the `y` elevation
+                                // between 0.0 and 4.0.
                                 val control = Vector3.simplex(3032, t).let {
                                     it.copy(y = it.y * 0.5 + 0.5)
                                 } * 4.0
