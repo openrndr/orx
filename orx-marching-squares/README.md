@@ -52,7 +52,12 @@ One can appreciate that the animated effect of the adaptive methods is smoother 
 
 ### DemoEigenModesContours01
 
+Advanced demonstration using
+[Shape.extractEigenModes](https://orx.openrndr.org/orx-shapes/org.openrndr.extra.shapes.eigenmodes/extract-eigen-modes.html)
+to generate 36 Eigen modes for the given contour (by default, a 2D hexagon). The program produces both
+heatmap color buffers and contours for those heatmaps.
 
+Computationally heavy: it takes several seconds to do the calculations and render the color buffers.
 
 ![DemoEigenModesContours01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-marching-squares/images/DemoEigenModesContours01Kt.webp)
 

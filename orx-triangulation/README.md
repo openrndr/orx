@@ -76,7 +76,16 @@ to confirm neither triangles nor Voronoi cells leak outside the shape or into th
 
 ### DemoConstrainedDelaunay02
 
+Demonstrates
+[Shape.constrainedDelaunayTriangulation](https://orx.openrndr.org/orx-triangulation/org.openrndr.extra.triangulation/constrained-delaunay-triangulation.html).
 
+The program first creates a list of scattered points sorted via `hilbertOrder`, then connects those points using
+a Hobby curve. By sorting the points this way, the resulting curve does not cross itself.
+
+Next, it calculates a Delaunay triangulation and a Voronoi diagram for it.
+
+The program then draws the hobby curve, the Voronoi cells, and the internal Voronoi edges in RED, revealing the
+inner contours of the blob.
 
 ![DemoConstrainedDelaunay02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-triangulation/images/DemoConstrainedDelaunay02Kt.webp)
 
