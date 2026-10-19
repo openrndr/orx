@@ -42,7 +42,11 @@ be controlled using an animated camera found in a loaded .glb file.
 
 ### DemoDSL01
 
-
+Demonstrates how a scene can be created using a DSL (Domain-Specific Language).
+The DSL uses keywords like `addSkybox`, `hemisphereLight`, `node`, `pointLight` and `simpleMseh`.
+Note how one of the transformations uses `seconds` to animate a rotation value. Even if the
+scene is defined only once, its elements can be evaluated on every animation frame to allow
+for changing properties over time.
 
 ![DemoDSL01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoDSL01Kt.webp)
 
@@ -50,11 +54,23 @@ be controlled using an animated camera found in a loaded .glb file.
 
 ### DemoDSL02
 
-
+Another demonstration showing how the scene DSL is used to add a skybox, two lights,
+a green ground plane with a centered sphere, and a wobbling path-mesh that moves
+based on simplex noise. The sphere and the path both use a PBR material.
 
 ![DemoDSL02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoDSL02Kt.webp)
 
 [source code](src/demo/kotlin/DemoDSL02.kt)
+
+### DemoDSL03
+
+This demo includes some tips on how to set up spotlights to produce shadows.
+The main idea is to not set a `direction` for them, but use a transformation
+with `tranlate` and `rotate` instead.
+
+![DemoDSL03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-dnk3/images/DemoDSL03Kt.webp)
+
+[source code](src/demo/kotlin/DemoDSL03.kt)
 
 ### DemoIrrProbe01
 
