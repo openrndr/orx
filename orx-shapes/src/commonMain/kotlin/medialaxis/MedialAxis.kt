@@ -452,8 +452,12 @@ private class Boundary(shape: Shape) {
         return best
     }
 
-    /** The pieces (segment, t0, t1) of the shorter way from [a] to [b] along their contour. */
-    private fun shorterArc(a: Foot, b: Foot): List<Triple<Int, Double, Double>>? {
+    /**
+     * The pieces (segment, t0, t1) of the shorter way from [a] to [b] along their contour. [swapped] is set when
+     * this is already the reverse direction, so that a near tie (both ways rounding to more than half the contour
+     * length) doesn't swap back and forth forever.
+     */
+    private fun shorterArc(a: Foot, b: Foot, swapped: Boolean = false): List<Triple<Int, Double, Double>>? {
         if (a.contour != b.contour) return null
         val contour = contours[a.contour]
         val segments = contour.segments
@@ -472,7 +476,7 @@ private class Boundary(shape: Shape) {
             pieces.add(Triple(b.segment, 0.0, b.t))
         }
         val forwardLength = pieces.sumOf { (j, t0, t1) -> segments[j].length * (t1 - t0) }
-        if (contour.closed && forwardLength > contour.length - forwardLength) return shorterArc(b, a)
+        if (contour.closed && !swapped && forwardLength > contour.length - forwardLength) return shorterArc(b, a, true)
         return pieces
     }
 
