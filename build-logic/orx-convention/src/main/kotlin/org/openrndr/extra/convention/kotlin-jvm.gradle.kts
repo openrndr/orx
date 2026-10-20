@@ -16,13 +16,13 @@ val shouldPublish = project.name !in setOf("openrndr-demos", "orx-git-archiver-g
 plugins {
     java
     kotlin("jvm")
-    `maven-publish` apply false
+    `maven-publish`
     id("org.openrndr.extra.convention.component-metadata-rule")
     id("org.openrndr.extra.convention.dokka")
     signing
 }
 if (shouldPublish) {
-    apply(plugin = "maven-publish")
+    apply(plugin = "com.gradleup.nmcp")
 }
 
 repositories {
@@ -74,7 +74,7 @@ dependencies {
 tasks {
     named<Test>("test") {
         if (DefaultNativePlatform.getCurrentOperatingSystem().isMacOsX) {
-            allJvmArgs = allJvmArgs + "-XstartOnFirstThread"
+            jvmArgs("-XstartOnFirstThread")
         }
         useJUnitPlatform()
         testLogging.exceptionFormat = TestExceptionFormat.FULL

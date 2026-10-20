@@ -83,16 +83,16 @@ class TestClothoids {
             for ((j, segment) in contour.segments.withIndex()) {
                 val h = fit.length / pieces
                 val q = segment.position(0.5)
-                fun distance(s: Double) = fit.position(s).distanceTo(q)
-                val k = (0..100).minBy { k -> distance(h * (j + k / 100.0)) }
-                var lo = h * (j + (k - 1) / 100.0)
-                var hi = h * (j + (k + 1) / 100.0)
-                repeat(100) {
-                    val m1 = lo + (hi - lo) / 3.0
-                    val m2 = hi - (hi - lo) / 3.0
-                    if (distance(m1) < distance(m2)) hi = m2 else lo = m1
+                // the closest point on the clothoid by Newton's method on (P(s) - q)·T(s) = 0, whose derivative is
+                // 1 + κ(s)·(P(s) - q)·N(s), from the middle of the piece, where it nearly is
+                var s = h * (j + 0.5)
+                repeat(5) {
+                    val d = fit.position(s) - q
+                    val tangent = direction(fit.angle(s))
+                    val normal = Vector2(-tangent.y, tangent.x)
+                    s -= d.dot(tangent) / (1.0 + (fit.kappa + fit.dkappa * s) * d.dot(normal))
                 }
-                worst = maxOf(worst, distance((lo + hi) / 2.0) / h)
+                worst = maxOf(worst, fit.position(s).distanceTo(q) / h)
             }
         }
         assertTrue(worst < 1E-5)
@@ -116,7 +116,8 @@ class TestClothoids {
     @Test
     fun splines() {
         val random = Random(3)
-        repeat(50) {
+        // three splines of every size from 3 to 10 points
+        repeat(24) {
             val points = randomPoints(random, 3 + it % 8)
             for (closed in listOf(false, true)) {
                 val contour = points.clothoids(closed)

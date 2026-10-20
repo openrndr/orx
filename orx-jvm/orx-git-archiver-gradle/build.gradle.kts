@@ -4,6 +4,7 @@ plugins {
 }
 
 apply(plugin = "maven-publish")
+apply(plugin = "com.gradleup.nmcp")
 
 dependencies {
     implementation(project(":orx-jvm:orx-git-archiver"))

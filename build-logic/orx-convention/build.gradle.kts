@@ -2,7 +2,7 @@ plugins {
     `kotlin-dsl`
 }
 
-val preload: SourceSet by project.sourceSets.creating
+val preload: SourceSet = project.sourceSets.create("preload")
 
 repositories {
     mavenCentral()
@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":orx-variant-plugin"))
     implementation(libs.findLibrary("kotlin-gradle-plugin").get())
     implementation(libs.findLibrary("dokka-gradle-plugin").get())
+    implementation(libs.findLibrary("nmcp-gradle-plugin").get())
     "preloadImplementation"(openrndr.application.core)
     "preloadImplementation"(openrndr.orextensions)
 }
