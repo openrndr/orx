@@ -9,88 +9,13 @@ plugins {
     alias(libs.plugins.nebula.release)
     alias(libs.plugins.nmcp)
     id("org.openrndr.extra.convention.dokka")
+    id("org.openrndr.extra.convention.main-readme")
 }
 
 repositories {
     mavenCentral()
 }
 
-val mainReadmePath: String = file("README.md").path
-val subProjectData: List<Map<String, String>> = subprojects.mapNotNull { sub ->
-    val readmeFile = sub.file("README.md")
-    if (readmeFile.exists()) {
-        mapOf(
-            "name" to sub.name,
-            "path" to sub.path.substring(1).replace(":", "/"),
-            "readmePath" to readmeFile.path
-        )
-    } else null
-}
-
-tasks.register("buildMainReadme") {
-    // local copies, so the task action doesn't capture the script object
-    val subProjectData = subProjectData
-    val mainReadmePath = mainReadmePath
-    inputs.property("subProjectData", subProjectData)
-    inputs.property("mainReadmePath", mainReadmePath)
-
-    doFirst {
-        // Load README.md and find [begin, end] section to replace
-        val mainReadme = File(mainReadmePath)
-        val lines = mainReadme.readLines()
-
-        val begin = lines.indexOfFirst { it == "<!-- __orxListBegin__ -->" }
-        val end = lines.indexOfFirst { it == "<!-- __orxListEnd__ -->" }
-        if (begin == -1 || end == -1) {
-            println("Comments for orx list generation not found in README.md!")
-            return@doFirst
-        }
-
-        val header = lines.subList(0, begin + 1)
-        val footer = lines.subList(end, lines.size)
-
-        val newReadme = mutableListOf<String>()
-        newReadme.addAll(header)
-
-        // Search for the description at the top of the readme.
-        // Skip the hash character from the headline, then start
-        // on the next line and continue until the next empty line.
-        // Don't fall into Windows line breaks.
-        val descriptionRx = Regex("(?s)#.*?\\n(.+?)\\n\\r?\\n")
-        // Note: the readme needs an empty line after the description
-
-        val orxMultiplatform = mutableListOf<String>()
-        val orxJVMOnly = mutableListOf<String>()
-
-        // Build orx list
-        for (sub in subProjectData) {
-            val orxReadmeFile = File(sub.getValue("readmePath"))
-            if (orxReadmeFile.exists()) {
-                val match = descriptionRx.find(orxReadmeFile.readText()) ?: continue
-                val trimmedDescription = match.groupValues[1].trim().replace("\n", " ").replace("\r", "")
-                val row = "| [`${sub.getValue("name")}`](${sub.getValue("path")}/) | $trimmedDescription |"
-                if (sub.getValue("path").startsWith("orx-jvm")) orxJVMOnly.add(row) else orxMultiplatform.add(row)
-            } else {
-                println("${sub.getValue("name")}/README.md not found!")
-            }
-        }
-
-        newReadme.add("\n## Multiplatform\n")
-        newReadme.add("| name" + "&nbsp;".repeat(36) + " | description |")
-        newReadme.add("| --- | --- |")
-        newReadme.addAll(orxMultiplatform)
-
-        newReadme.add("\n## JVM only\n")
-        newReadme.add("| name" + "&nbsp;".repeat(36) + " | description |")
-        newReadme.add("| --- | --- |")
-        newReadme.addAll(orxJVMOnly)
-
-        newReadme.addAll(footer)
-
-        // Write result
-        mainReadme.writeText(newReadme.joinToString("\n"))
-    }
-}
 group = "org.openrndr.extra"
 
 nmcpAggregation {
