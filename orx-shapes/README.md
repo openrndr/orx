@@ -857,6 +857,25 @@ Voronoi diagram of the sampled boundary. Colored: the fitted medial axis branche
 
 [source code](src/jvmDemo/kotlin/medialaxis/DemoMedialAxis01.kt)
 
+### metro/DemoMetro01
+
+Metro map style schematization of shapes and open paths. From left to right the number of allowed directions is
+2 (rectilinear), 3 (hexilinear), 4 (octilinear) and 6. The top row shows a closed shape, the middle row a noisy
+open path, the bottom row the same path simplified further using a segment penalty and the bounds cost.
+Gray: the input, colored: the schematized contours.
+
+![metro-DemoMetro01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/metro-DemoMetro01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/metro/DemoMetro01.kt)
+
+### metro/DemoMetro02
+
+
+
+![metro-DemoMetro02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/metro-DemoMetro02Kt.webp)
+
+[source code](src/jvmDemo/kotlin/metro/DemoMetro02.kt)
+
 ### offset/DemoOffset01
 
 Demonstrates the use of ShapeContour.offset() with different `SegmentJoin` settings.
