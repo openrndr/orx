@@ -192,7 +192,8 @@ fun githubAnchor(heading: String): String =
     heading.lowercase().replace(Regex("[^\\p{L}\\p{N} _-]"), "").replace(' ', '-')
 
 /**
- * A table of contents for the Demos section: a bullet per subdirectory, with a nested bullet linking to each demo.
+ * A table of contents for the Demos section: a bullet per subdirectory, with a nested bullet per demo. Numbered
+ * variants of a demo share a bullet: `DemoAdjustContour01`, `DemoAdjustContour02` becomes `DemoAdjustContour 01, 02`.
  * Empty when all demos are in the top-level directory, since the list of headings is then flat already.
  *
  * @param imagePaths demo paths relative to the demo source root, without extension, e.g. `arcer/DemoArcer01`
@@ -203,8 +204,25 @@ fun demoTableOfContents(imagePaths: List<String>): List<String> {
     val groups = imagePaths.groupBy { it.substringBeforeLast('/', "") }.entries.sortedByDescending { it.key.isEmpty() }
     val toc = groups.flatMap { (directory, paths) ->
         val indent = if (directory.isEmpty()) "" else "  "
-        val links = paths.map { "$indent- [${it.substringAfterLast('/')}](#${githubAnchor(it)})" }
-        if (directory.isEmpty()) links else listOf("- **$directory**") + links
+        val numbered = Regex("(.*?)(\\d+)$")
+        // group on the name without its trailing number; names without one are kept apart from numbered ones
+        val variants = paths.groupBy { path ->
+            val name = path.substringAfterLast('/')
+            numbered.matchEntire(name)?.let { it.groupValues[1] + "#" } ?: name
+        }.values
+        val bullets = variants.map { group ->
+            val name = group.first().substringAfterLast('/')
+            val match = numbered.matchEntire(name)
+            if (group.size == 1 || match == null) {
+                "$indent- [$name](#${githubAnchor(group.first())})"
+            } else {
+                val numbers = group.joinToString(", ") { path ->
+                    "[${numbered.matchEntire(path.substringAfterLast('/'))!!.groupValues[2]}](#${githubAnchor(path)})"
+                }
+                "$indent- ${match.groupValues[1]} $numbers"
+            }
+        }
+        if (directory.isEmpty()) bullets else listOf("- **$directory**") + bullets
     }
     return toc + ""
 }
