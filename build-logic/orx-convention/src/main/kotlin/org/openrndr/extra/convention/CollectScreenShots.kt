@@ -136,6 +136,8 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
             val isKotlinMultiplatform = hasKotlinMultiplatformPlugin.get()
             val demoModuleName = if (isKotlinMultiplatform) "jvmDemo" else "demo"
 
+            readmeLines.addAll(demoTableOfContents(demoImageBaseNames.map { it.dropLast(2).replace("-", "/") }))
+
             for (demoImageBaseName in demoImageBaseNames) {
                 val projectPath = projectDir.get().relativeTo(rootDir.get())
 
@@ -181,6 +183,30 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
             readme.writeText(readmeLines.joinToString("\n"))
         }
     }
+}
+
+/**
+ * GitHub's anchor for a markdown heading: lowercase, punctuation other than `-` and `_` removed, spaces become `-`.
+ */
+fun githubAnchor(heading: String): String =
+    heading.lowercase().replace(Regex("[^\\p{L}\\p{N} _-]"), "").replace(' ', '-')
+
+/**
+ * A table of contents for the Demos section: a bullet per subdirectory, with a nested bullet linking to each demo.
+ * Empty when all demos are in the top-level directory, since the list of headings is then flat already.
+ *
+ * @param imagePaths demo paths relative to the demo source root, without extension, e.g. `arcer/DemoArcer01`
+ */
+fun demoTableOfContents(imagePaths: List<String>): List<String> {
+    if (imagePaths.none { '/' in it }) return emptyList()
+    // top-level demos first, then one line per subdirectory
+    val groups = imagePaths.groupBy { it.substringBeforeLast('/', "") }.entries.sortedByDescending { it.key.isEmpty() }
+    val toc = groups.flatMap { (directory, paths) ->
+        val indent = if (directory.isEmpty()) "" else "  "
+        val links = paths.map { "$indent- [${it.substringAfterLast('/')}](#${githubAnchor(it)})" }
+        if (directory.isEmpty()) links else listOf("- **$directory**") + links
+    }
+    return toc + ""
 }
 
 object ScreenshotsHelper {
