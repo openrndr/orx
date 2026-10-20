@@ -4,6 +4,82 @@
 
 <!-- __demos__ -->
 ## Demos
+- **adjust**
+  - DemoAdjustContour [01](#adjustdemoadjustcontour01), [02](#adjustdemoadjustcontour02), [03](#adjustdemoadjustcontour03), [04](#adjustdemoadjustcontour04), [05](#adjustdemoadjustcontour05), [06](#adjustdemoadjustcontour06), [07](#adjustdemoadjustcontour07), [08](#adjustdemoadjustcontour08), [09](#adjustdemoadjustcontour09)
+  - [DemoAdjustContourContinue01](#adjustdemoadjustcontourcontinue01)
+- **alphashape**
+  - DemoAlphaShape [01](#alphashapedemoalphashape01), [02](#alphashapedemoalphashape02)
+- **arrangement**
+  - DemoArrangement [01](#arrangementdemoarrangement01), [02](#arrangementdemoarrangement02), [03](#arrangementdemoarrangement03), [04](#arrangementdemoarrangement04)
+- **bezierpatch**
+  - DemoBezierPatch [01](#bezierpatchdemobezierpatch01), [02](#bezierpatchdemobezierpatch02), [03](#bezierpatchdemobezierpatch03), [04](#bezierpatchdemobezierpatch04), [05](#bezierpatchdemobezierpatch05), [06](#bezierpatchdemobezierpatch06)
+  - DemoBezierPatchDrawer [01](#bezierpatchdemobezierpatchdrawer01), [02](#bezierpatchdemobezierpatchdrawer02), [03](#bezierpatchdemobezierpatchdrawer03), [04](#bezierpatchdemobezierpatchdrawer04)
+  - [DemoBezierPatches01](#bezierpatchdemobezierpatches01)
+- **blend**
+  - DemoContourBlend [01](#blenddemocontourblend01), [02](#blenddemocontourblend02)
+- **deform**
+  - DemoDeformContour [01](#deformdemodeformcontour01), [02](#deformdemodeformcontour02)
+  - [DemoDeformSegment01](#deformdemodeformsegment01)
+- **distort**
+  - [DemoConvoluteContour](#distortdemoconvolutecontour)
+  - DemoDistortContour [01](#distortdemodistortcontour01), [02](#distortdemodistortcontour02), [04](#distortdemodistortcontour04)
+  - [DemoDistortUniformContour01](#distortdemodistortuniformcontour01)
+  - [DemoEnvelopeShape01](#distortdemoenvelopeshape01)
+  - DemoWarpContour [01](#distortdemowarpcontour01), [02](#distortdemowarpcontour02)
+  - [DemoWarpShape01](#distortdemowarpshape01)
+- **expand**
+  - DemoExpand [01](#expanddemoexpand01), [02](#expanddemoexpand02)
+- **fit**
+  - DemoFitContour [01](#fitdemofitcontour01), [02](#fitdemofitcontour02), [03](#fitdemofitcontour03)
+- **frames**
+  - [DemoFrames01](#framesdemoframes01)
+- **hobbycurve**
+  - DemoHobbyCurve [01](#hobbycurvedemohobbycurve01), [02](#hobbycurvedemohobbycurve02), [03](#hobbycurvedemohobbycurve03), [04](#hobbycurvedemohobbycurve04), [05](#hobbycurvedemohobbycurve05)
+  - [DemoHobbyCurve3D01](#hobbycurvedemohobbycurve3d01)
+- **hull**
+  - DemoConvexHull [01](#hulldemoconvexhull01), [02](#hulldemoconvexhull02), [03](#hulldemoconvexhull03)
+- **loft**
+  - DemoLoftNormals [01](#loftdemoloftnormals01), [02](#loftdemoloftnormals02)
+- **medialaxis**
+  - [DemoMedialAxis01](#medialaxisdemomedialaxis01)
+- **metro**
+  - DemoMetro [01](#metrodemometro01), [02](#metrodemometro02)
+- **offset**
+  - [DemoOffset01](#offsetdemooffset01)
+- **operators**
+  - DemoRoundCorners [01](#operatorsdemoroundcorners01), [02](#operatorsdemoroundcorners02)
+- **ordering**
+  - DemoHilbertOrder [01](#orderingdemohilbertorder01), [02](#orderingdemohilbertorder02)
+- **path3d**
+  - [DemoPath3DProjection](#path3ddemopath3dprojection)
+- **primitives**
+  - [DemoArc01](#primitivesdemoarc01)
+  - DemoCircleInversion [01](#primitivesdemocircleinversion01), [02](#primitivesdemocircleinversion02), [03](#primitivesdemocircleinversion03)
+  - [DemoNet01](#primitivesdemonet01)
+  - [DemoPulley01](#primitivesdemopulley01)
+  - [DemoRectangleDistribute01](#primitivesdemorectangledistribute01)
+  - [DemoRectangleFitHorizontally](#primitivesdemorectanglefithorizontally)
+  - DemoRectangleGrid [01](#primitivesdemorectanglegrid01), [02](#primitivesdemorectanglegrid02), [03](#primitivesdemorectanglegrid03)
+  - [DemoRectangleIntersection01](#primitivesdemorectangleintersection01)
+  - DemoRectangleIrregularGrid [01](#primitivesdemorectangleirregulargrid01), [02](#primitivesdemorectangleirregulargrid02)
+  - [DemoRectanglePlace01](#primitivesdemorectangleplace01)
+  - [DemoRegularPolygon](#primitivesdemoregularpolygon)
+  - DemoRegularStar [01](#primitivesdemoregularstar01), [02](#primitivesdemoregularstar02)
+  - DemoRoundedRectangle [01](#primitivesdemoroundedrectangle01), [02](#primitivesdemoroundedrectangle02)
+  - [DemoSector01](#primitivesdemosector01)
+  - [DemoSplit01](#primitivesdemosplit01)
+  - DemoTear [01](#primitivesdemotear01), [02](#primitivesdemotear02)
+- **rectify**
+  - DemoRectifiedContour [01](#rectifydemorectifiedcontour01), [02](#rectifydemorectifiedcontour02), [03](#rectifydemorectifiedcontour03), [04](#rectifydemorectifiedcontour04)
+  - [DemoRectifiedPath3D01](#rectifydemorectifiedpath3d01)
+- **smoothnormal**
+  - [DemoSmoothNormal01](#smoothnormaldemosmoothnormal01)
+- **text**
+  - [DemoText01](#textdemotext01)
+- **tunni**
+  - [DemoTunniAdjuster01](#tunnidemotunniadjuster01)
+  - [DemoTunniPoint01](#tunnidemotunnipoint01)
+
 ### adjust/DemoAdjustContour01
 
 Demonstrates how to use `adjustContour` to select and modify three vertices

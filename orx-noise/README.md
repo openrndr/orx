@@ -187,6 +187,39 @@ val v8 = billow(seed, x, y, z, ::perlinLinear, octaves, lacunarity, gain)
 
 <!-- __demos__ -->
 ## Demos
+- [DemoCubicNoise2D01](#democubicnoise2d01)
+- [DemoFbmOctaves01](#demofbmoctaves01)
+- [DemoFunctionalComposition01](#demofunctionalcomposition01)
+- [DemoGradientPerturb2D](#demogradientperturb2d)
+- [DemoGradientPerturb3D](#demogradientperturb3d)
+- [DemoScatter01](#demoscatter01)
+- [DemoSimplex01](#demosimplex01)
+- [DemoTriangleNoise01](#demotrianglenoise01)
+- [DemoValueNoise2D01](#demovaluenoise2d01)
+- **glsl**
+  - [DemoNoisesGLSLGui](#glsldemonoisesglslgui)
+  - [DemoNoisesGLSL](#glsldemonoisesglsl)
+  - [DemoSimplexGLSL](#glsldemosimplexglsl)
+- **hammersley**
+  - [DemoHammersley2D01](#hammersleydemohammersley2d01)
+  - [DemoHammersley3D01](#hammersleydemohammersley3d01)
+  - [DemoHammersley4D01](#hammersleydemohammersley4d01)
+- **hash**
+  - [DemoCircleHash01](#hashdemocirclehash01)
+  - [DemoRectangleHash01](#hashdemorectanglehash01)
+  - [DemoUHash01](#hashdemouhash01)
+- **linearrange**
+  - DemoLinearRange [01](#linearrangedemolinearrange01), [02](#linearrangedemolinearrange02)
+- **phrases**
+  - [DemoUHashPhrase01](#phrasesdemouhashphrase01)
+- **rseq**
+  - [DemoRseq2D01](#rseqdemorseq2d01)
+  - [DemoRseq3D01](#rseqdemorseq3d01)
+  - [DemoRseq4D01](#rseqdemorseq4d01)
+- **simplexrange**
+  - DemoSimplexRange2D [01](#simplexrangedemosimplexrange2d01), [02](#simplexrangedemosimplexrange2d02)
+  - DemoSimplexUniform [01](#simplexrangedemosimplexuniform01), [02](#simplexrangedemosimplexuniform02)
+
 ### DemoCubicNoise2D01
 
 Demonstrates how to render dynamic grayscale patterns using 3D cubic Hermite interpolation.

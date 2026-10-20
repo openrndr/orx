@@ -85,6 +85,15 @@ Check out the [source code](src/commonMain/kotlin) to learn about function argum
 
 <!-- __demos__ -->
 ## Demos
+- [DemoAll](#demoall)
+- [DemoBox](#demobox)
+- DemoComplex [01](#democomplex01), [02](#democomplex02), [03](#democomplex03), [04](#democomplex04), [05](#democomplex05), [06](#democomplex06)
+- DemoExtrude [01](#demoextrude01), [02](#demoextrude02), [03](#demoextrude03), [04](#demoextrude04), [05](#demoextrude05), [06](#demoextrude06)
+- **decal**
+  - DemoDecal [01](#decaldemodecal01), [02](#decaldemodecal02)
+- **tangents**
+  - [DemoTangents01](#tangentsdemotangents01)
+
 ### decal/DemoDecal01
 
 Demonstrate decal generator as an object slicer

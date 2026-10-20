@@ -6,6 +6,23 @@ linear ranges, simplex ranges, matrices and radial basis functions (RBF).
 
 <!-- __demos__ -->
 ## Demos
+- **assignment**
+  - [Assignment01](#assignmentassignment01)
+- **linearrange**
+  - DemoLinearRange [02](#linearrangedemolinearrange02), [03](#linearrangedemolinearrange03)
+- **matrix**
+  - DemoFilterContour [01](#matrixdemofiltercontour01), [02](#matrixdemofiltercontour02)
+  - DemoLeastSquares [01](#matrixdemoleastsquares01), [02](#matrixdemoleastsquares02)
+  - [DemoSeparableImages01](#matrixdemoseparableimages01)
+- **rbf**
+  - [RbfColorGrading01](#rbfrbfcolorgrading01)
+  - [RbfGlitch01](#rbfrbfglitch01)
+  - [RbfGrid01](#rbfrbfgrid01)
+  - RbfGridJacobian [01](#rbfrbfgridjacobian01), [02](#rbfrbfgridjacobian02)
+  - RbfInterpolation [01](#rbfrbfinterpolation01), [02](#rbfrbfinterpolation02)
+- **simplexrange**
+  - [DemoSimplexRange3D01](#simplexrangedemosimplexrange3d01)
+
 ### assignment/Assignment01
 
 Demonstrates how to solve an [Assignment Problem](https://en.wikipedia.org/wiki/Assignment_problem)

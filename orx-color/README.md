@@ -49,6 +49,30 @@ for (c in cs blend (width / 40)) {
 Two color spaces are added: `ColorHSLUVa` and `ColorHPLUVa`, they are an implementation of the colorspaces presented at [hsluv.org](http://www.hsluv.org)
 <!-- __demos__ -->
 ## Demos
+- DemoColorPalette [01](#democolorpalette01), [02](#democolorpalette02)
+- DemoColorPlane [01](#democolorplane01), [02](#democolorplane02)
+- [DemoColorSequence01](#democolorsequence01)
+- [DemoDeltaE](#demodeltae)
+- DemoFettePalette [01](#demofettepalette01), [02](#demofettepalette02)
+- DemoHSLUV [01](#demohsluv01), [02](#demohsluv02)
+- [DemoHueTools01](#demohuetools01)
+- [DemoMixSpectral01](#demomixspectral01)
+- [DemoOKHSV01](#demookhsv01)
+- [DemoXSLUV01](#demoxsluv01)
+- **colormap**
+  - [DemoSpectralZucconiColormap](#colormapdemospectralzucconicolormap)
+  - [DemoSpectralZucconiColormapPhrase](#colormapdemospectralzucconicolormapphrase)
+  - [DemoSpectralZucconiColormapPlot](#colormapdemospectralzucconicolormapplot)
+  - [DemoTurboColormap](#colormapdemoturbocolormap)
+  - [DemoTurboColormapPhrase](#colormapdemoturbocolormapphrase)
+  - [DemoTurboColormapPlot](#colormapdemoturbocolormapplot)
+- **colormatrix**
+  - DemoColorMatrix [01](#colormatrixdemocolormatrix01), [02](#colormatrixdemocolormatrix02), [03](#colormatrixdemocolormatrix03), [04](#colormatrixdemocolormatrix04)
+- **colorRange**
+  - DemoColorRange [01](#colorrangedemocolorrange01), [02](#colorrangedemocolorrange02), [03](#colorrangedemocolorrange03), [04](#colorrangedemocolorrange04)
+- **histogram**
+  - DemoHistogram [01](#histogramdemohistogram01), [02](#histogramdemohistogram02), [03](#histogramdemohistogram03)
+
 ### colormap/DemoSpectralZucconiColormap
 
 This program demonstrates the `spectralZucconi6()` function, which

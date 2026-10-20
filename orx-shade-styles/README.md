@@ -8,6 +8,24 @@ Shader based fills and strokes, including various types of gradient fills.
 ![DemoRadialGradient01Kt](https://github.com/openrndr/orx/blob/media/orx-shade-styles/images/DemoRadialGradient01Kt.png
 <!-- __demos__ -->
 ## Demos
+- **clip**
+  - DemoClip [01](#clipdemoclip01), [02](#clipdemoclip02), [03](#clipdemoclip03)
+- **composed**
+  - [DemoComposed01](#composeddemocomposed01)
+- **gradients**
+  - DemoGradient [01](#gradientsdemogradient01), [02](#gradientsdemogradient02), [03](#gradientsdemogradient03), [04](#gradientsdemogradient04), [05](#gradientsdemogradient05), [06](#gradientsdemogradient06), [07](#gradientsdemogradient07), [08](#gradientsdemogradient08), [09](#gradientsdemogradient09), [10](#gradientsdemogradient10)
+- **image**
+  - DemoImageFill [01](#imagedemoimagefill01), [02](#imagedemoimagefill02), [03](#imagedemoimagefill03)
+- **noise**
+  - [DemoBlueNoise01](#noisedemobluenoise01)
+  - [DemoSimplex01](#noisedemosimplex01)
+  - [DemoWhiteNoise01](#noisedemowhitenoise01)
+- **patterns**
+  - DemoPatterns [01](#patternsdemopatterns01), [02](#patternsdemopatterns02), [03](#patternsdemopatterns03)
+- **spatial**
+  - [DemoHemisphere01](#spatialdemohemisphere01)
+  - [DemoVisualizeNormals01](#spatialdemovisualizenormals01)
+
 ### clip/DemoClip01
 
 Animated demonstration on how to use the `clip` shade style to mask-out
