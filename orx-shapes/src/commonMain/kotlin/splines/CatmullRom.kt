@@ -147,26 +147,34 @@ class CatmullRom2(val p0: Vector2, val p1: Vector2, val p2: Vector2, val p3: Vec
  * @param alpha The *tension* of the curve.
  *      Use `0.0` for the uniform spline, `0.5` for the centripetal spline, `1.0` for the chordal spline.
  * @param loop Whether to connect the first and last point, such that it forms a closed shape.
+ *
+ * The ends of an open chain use phantom points that mirror the first and last edge, so that the curve, like the
+ * centripetal and chordal parametrizations themselves, doesn't depend on the scale of the points. Repeated consecutive
+ * points are dropped.
  */
 class CatmullRomChain2(points: List<Vector2>, alpha: Double = 0.5, val loop: Boolean = false) {
-    val segments = if (!loop) {
-        val startPoints = points.take(2)
-        val endPoints = points.takeLast(2)
-        val mirrorStart =
-            startPoints.first() - (startPoints.last() - startPoints.first()).normalized
-        val mirrorEnd = endPoints.last() + (endPoints.last() - endPoints.first()).normalized
+    val segments = run {
+        // repeated consecutive points would give zero knot intervals
+        val distinct = points.filterIndexed { i, p -> i == 0 || p.squaredDistanceTo(points[i - 1]) > 1E-24 }
+        if (!loop) {
+            if (distinct.size < 2) return@run emptyList()
+            // phantom points that mirror the end edges, so the ends don't depend on the scale of the points
+            val mirrorStart = distinct[0] * 2.0 - distinct[1]
+            val mirrorEnd = distinct[distinct.size - 1] * 2.0 - distinct[distinct.size - 2]
 
-        (listOf(mirrorStart) + points + listOf(mirrorEnd)).windowed(4, 1).map {
-            CatmullRom2(it[0], it[1], it[2], it[3], alpha)
-        }
-    } else {
-        val cleanPoints = if (loop && points.first().distanceTo(points.last()) <= 1.0E-6) {
-            points.dropLast(1)
+            (listOf(mirrorStart) + distinct + listOf(mirrorEnd)).windowed(4, 1).map {
+                CatmullRom2(it[0], it[1], it[2], it[3], alpha)
+            }
         } else {
-            points
-        }
-        (cleanPoints + cleanPoints.take(3)).windowed(4, 1).map {
-            CatmullRom2(it[0], it[1], it[2], it[3], alpha)
+            val cleanPoints = if (distinct.size > 1 && distinct.first().distanceTo(distinct.last()) <= 1.0E-6) {
+                distinct.dropLast(1)
+            } else {
+                distinct
+            }
+            if (cleanPoints.size < 2) return@run emptyList()
+            (cleanPoints + cleanPoints.take(3)).windowed(4, 1).map {
+                CatmullRom2(it[0], it[1], it[2], it[3], alpha)
+            }
         }
     }
 
@@ -242,26 +250,34 @@ class CatmullRom3(val p0: Vector3, val p1: Vector3, val p2: Vector3, val p3: Vec
  * @param alpha The *tension* of the curve.
  *      Use `0.0` for the uniform spline, `0.5` for the centripetal spline, `1.0` for the chordal spline.
  * @param loop Whether to connect the first and last point, such that it forms a closed shape.
+ *
+ * The ends of an open chain use phantom points that mirror the first and last edge, so that the curve, like the
+ * centripetal and chordal parametrizations themselves, doesn't depend on the scale of the points. Repeated consecutive
+ * points are dropped.
  */
 class CatmullRomChain3(points: List<Vector3>, alpha: Double = 0.5, val loop: Boolean = false) {
-    val segments = if (!loop) {
-        val startPoints = points.take(2)
-        val endPoints = points.takeLast(2)
-        val mirrorStart =
-            startPoints.first() - (startPoints.last() - startPoints.first()).normalized
-        val mirrorEnd = endPoints.last() + (endPoints.last() - endPoints.first()).normalized
+    val segments = run {
+        // repeated consecutive points would give zero knot intervals
+        val distinct = points.filterIndexed { i, p -> i == 0 || p.squaredDistanceTo(points[i - 1]) > 1E-24 }
+        if (!loop) {
+            if (distinct.size < 2) return@run emptyList()
+            // phantom points that mirror the end edges, so the ends don't depend on the scale of the points
+            val mirrorStart = distinct[0] * 2.0 - distinct[1]
+            val mirrorEnd = distinct[distinct.size - 1] * 2.0 - distinct[distinct.size - 2]
 
-        (listOf(mirrorStart) + points + listOf(mirrorEnd)).windowed(4, 1).map {
-            CatmullRom3(it[0], it[1], it[2], it[3], alpha)
-        }
-    } else {
-        val cleanPoints = if (loop && points.first().distanceTo(points.last()) <= 1.0E-6) {
-            points.dropLast(1)
+            (listOf(mirrorStart) + distinct + listOf(mirrorEnd)).windowed(4, 1).map {
+                CatmullRom3(it[0], it[1], it[2], it[3], alpha)
+            }
         } else {
-            points
-        }
-        (cleanPoints + cleanPoints + cleanPoints.take(3)).windowed(4, 1).map {
-            CatmullRom3(it[0], it[1], it[2], it[3], alpha)
+            val cleanPoints = if (distinct.size > 1 && distinct.first().distanceTo(distinct.last()) <= 1.0E-6) {
+                distinct.dropLast(1)
+            } else {
+                distinct
+            }
+            if (cleanPoints.size < 2) return@run emptyList()
+            (cleanPoints + cleanPoints.take(3)).windowed(4, 1).map {
+                CatmullRom3(it[0], it[1], it[2], it[3], alpha)
+            }
         }
     }
 

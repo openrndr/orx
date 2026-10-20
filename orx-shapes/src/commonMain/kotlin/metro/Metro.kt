@@ -251,21 +251,40 @@ private class MetroFit(
         return (t0 - lo) * (t0 - lo) + (t1 - hi) * (t1 - hi)
     }
 
+    /**
+     * Whether the segment of [b], between the junctions with its current neighbours, runs against the order of its
+     * points. This happens for short blocks whose neighbours' lines cross beyond them, the output then overshoots and
+     * doubles back along the segment of [b], forming a small loop.
+     */
+    fun reversed(b: Block): Boolean {
+        var d = directions[b.direction]
+        if ((point(b.end) - point(b.start)).dot(d) < 0.0) d = -d
+        return segmentEnd(b, b.next).dot(d) < segmentStart(b, b.prev).dot(d) - 1E-9
+    }
+
     fun cost(b: Block, prev: Block?, next: Block?): Double =
         segmentPenalty + b.regression + if (boundsWeight > 0.0) boundsWeight * boundsCost(b, prev, next) else 0.0
 
     /**
-     * Merges adjacent blocks with parallel lines until none remain (Section 3 of the paper).
+     * Merges blocks until no adjacent blocks have parallel lines (Section 3 of the paper) and no block has a reversed
+     * segment, see [reversed]. A reversed block is merged with the neighbour that increases the regression cost the
+     * least.
      */
-    fun mergeParallel() {
+    fun mergeForced() {
         var changed = true
         while (changed) {
             changed = false
             for (a in blocks()) {
                 if (!a.alive || blockCount <= minBlocks) continue
-                val b = a.next ?: continue
-                if (a.direction == b.direction) {
+                val b = a.next
+                if (b != null && a.direction == b.direction) {
                     merge(a, b)
+                    changed = true
+                } else if (reversed(a)) {
+                    val p = a.prev
+                    val withPrev = p?.let { merged(it, a).regression - it.regression } ?: Double.POSITIVE_INFINITY
+                    val withNext = b?.let { merged(a, it).regression - it.regression } ?: Double.POSITIVE_INFINITY
+                    if (withPrev < withNext) merge(p!!, a) else merge(a, b!!)
                     changed = true
                 }
             }
@@ -309,10 +328,10 @@ private class MetroFit(
         head = initial[0]
         blockCount = initial.size
 
-        mergeParallel()
+        mergeForced()
         if (segmentPenalty > 0.0 || boundsWeight > 0.0) {
             while (mergeGreedy()) {
-                mergeParallel()
+                mergeForced()
             }
         }
 

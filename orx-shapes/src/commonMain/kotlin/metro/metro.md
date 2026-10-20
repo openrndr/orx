@@ -8,6 +8,7 @@ val octilinear = shape.metro(directions = 4)                // 0°, 45°, 90°, 
 val rectilinear = contour.metro(directions = 2)             // horizontal and vertical only
 val simpler = contour.metro(segmentPenalty = 100.0, boundsWeight = 1.0)
 val vertices = points.metro(closed = false, directions = 3) // works on plain points too
+val rounded = vertices.filletCorners(15.0, closed = false) // corners become circular arcs
 ```
 
 It implements the heuristic from T. Dwyer, N. Hurst and D. Merrick, *A Fast and Simple Heuristic
@@ -23,7 +24,8 @@ reference.
 | `ShapeContour.metro(...)` | a linear `ShapeContour` with the same `closed` and `polarity` |
 | `List<Vector2>.metro(closed, ...)` | the polyline vertices; for closed input the first vertex is not repeated |
 
-The contour functions linearize the input and then call the list version.
+The contour functions linearize the input and call the list version. The output has sharp corners;
+to round them, pass the vertices to `List<Vector2>.filletCorners` (see [Corner arcs](#6-corner-arcs)).
 
 ## Parameters
 
@@ -108,12 +110,27 @@ blocks' statistics, which counts the shared point twice. It also chooses a block
 a line through the block's first point instead of the barycenter. This implementation follows the
 paper on both points.
 
-### 3. Parallel merging (section 3, `mergeParallel`)
+### 3. Forced merging (section 3, `mergeForced`)
 
 The path starts as one block per input edge. That is n − 1 blocks for open paths and n for closed
-ones. Then adjacent blocks with the same direction are merged until none remain. A merged block is
-re-fitted, and its new direction can match one of its new neighbours, which then merges in turn.
-This is the backtracking described in the paper.
+ones. Then two kinds of invalid configurations are merged away until none remain:
+
+- **Parallel neighbours.** Adjacent blocks with the same direction are merged, as in the paper.
+- **Reversed segments** (`reversed`), an addition to the paper. A block's segment runs from its
+  junction with the previous block to its junction with the next. With 3 or more directions, a
+  short block between two neighbours can have those junctions in the wrong order along its line.
+  For example, a 2-point horizontal block sits between a diagonal and a vertical whose lines cross
+  beyond it. The segment then runs against the order of its points: the output overshoots, doubles
+  back along the short segment and crosses itself in a small X-shaped loop that the input doesn't
+  have. Such a block is merged with whichever neighbour increases the regression cost least.
+
+  The test is: with **d** oriented from the block's first point towards its last, the segment
+  is reversed if `end · d < start · d`. The paper's `bounds` term (step 4) penalizes this only
+  softly, and only when `boundsWeight > 0`.
+
+A merged block is re-fitted, and its new direction can match one of its new neighbours, which then
+merges in turn. This is the backtracking described in the paper. A merge also moves the junctions
+of the neighbouring blocks, so they are checked for reversal again.
 
 The paper does this in O(|C| n) with a single pass and a backtrack step. The code repeats passes
 over the list until nothing changes. That is simpler, and fast enough for contour-sized inputs.
@@ -150,8 +167,8 @@ before = cost(a.prev) + cost(a) + cost(b) + cost(b.next)
 after  = cost(a.prev) + cost(m) + cost(b.next)        // neighbours re-evaluated against m
 ```
 
-The pair with the most negative change is merged. Parallel merging then runs again; the paper gives
-parallel pairs infinite priority. Rounds repeat until no merge lowers the cost.
+The pair with the most negative change is merged. Forced merging then runs again; the paper gives
+parallel pairs infinite priority, and reversed segments are treated the same way. Rounds repeat until no merge lowers the cost.
 
 The paper uses a priority queue for O(n log n). Here each round rescans all pairs, and bounds terms
 scan their block's points. That makes it roughly O(m · n) overall, which is fine at contour scale.
@@ -168,6 +185,84 @@ Like the paper's version, the result is a local minimum, not an optimum.
   minimum stops a merge (see below). Then the shared point is projected onto both lines and both
   projections are emitted. This gives a short jog perpendicular to the lines. If the projections
   coincide, one vertex is emitted.
+
+### 6. Corner arcs
+
+The metro functions don't round corners themselves. Rounding is a separate post-process on the
+output vertices, `List<Vector2>.filletCorners(radius, closed, reverseCurves = true, polarity)` in
+`operators/FilletCorners.kt`. It knows nothing about the fit, so it works on any polyline. Most
+corners get a fillet; opposite corners that are too close for two fillets become an S-bend of two
+opposite arcs, unless `reverseCurves = false`, and arcs that don't fit next to their neighbours
+shrink. It returns
+a `ShapeContour` because arcs need curved segments. It uses two kinds of rounding: single-corner
+fillets and two-corner S-bends.
+
+**Fillets.** For a corner P with incoming direction **u**, outgoing direction **v** and turning
+angle θ:
+
+- The arc starts at `A = P − u·t` and ends at `B = P + v·t`, where the tangent length is
+  `t = r · tan(θ / 2)`.
+- Its center lies at distance r from A, perpendicular to **u**, on the side the path turns to.
+
+**S-bends (reverse curves).** Take two consecutive corners i and i+1 that turn in opposite
+directions, such as a jog between parallel lines or a short diagonal step. When their fillets don't
+fit on the edge between them (`t_i + t_{i+1} > L`), the pair is replaced by two arcs of the full
+radius r. The arcs turn in opposite directions and meet tangentially at an inflection point T. The
+incoming and outgoing edges are kept, and the middle edge is replaced. Fillets would instead have to
+shrink to `r · L / (t_i + t_{i+1})`, which turns a short jog into a near-sharp kink.
+
+`reverseCurve` solves for the S-bend:
+
+- The center C1 lies on the line parallel to the incoming edge at distance r, on the side corner i
+  turns to: `C1 = K + u·a`. Likewise `C2 = L + w·b` for the outgoing edge.
+- T, the midpoint of C1 and C2, must lie on the line of the middle edge. This is linear, so b is a
+  linear function of a.
+- `|C2 − C1| = 2r` makes the arcs touch. This is a quadratic in a.
+
+A root is valid if the entry lies at or before corner i (`a ≤ 0`), the exit lies at or after corner
+i+1 (`b ≥ 0`), and both arcs sweep between 0 and 180°. Of the valid roots, the one whose T is closest
+to where the two fillets would meet is used. When the fillets fit exactly, both fillets touch the
+middle edge at the same point. That configuration satisfies the same equations, so the change from
+fillets to an S-bend is continuous. The tests check that the contours agree within 1e-4 on either
+side of the switch.
+
+Pairs are chosen greedily, most overfull middle edge first, and no corner is used twice. In a
+staircase of short jogs between longer runs, every jog becomes an S-bend. In a zigzag where every
+edge is too short, the pairing alternates: every other edge becomes the middle of an S-bend, and the
+edges in between connect consecutive S-bends. Corners that turn the same way (a U-turn over a short edge)
+always get fillets.
+
+**Arcs.** Each arc is split into ⌈angle / 90°⌉ cubic Béziers. Each piece of angle φ has its handles
+along the tangents at both ends, with length `4/3 · tan(φ / 4) · r`. The radial error is below 0.03%
+of r. Each arc meets the straight edges, and the other arc at the inflection, with exactly the
+shared tangent. That makes the whole contour G1 continuous: the tangent direction never jumps.
+Curvature does jump: from 0 on a straight edge to 1/r on an arc, and from +1/r to −1/r at an
+inflection.
+
+**Sharing edges.** Each rounding claims a length on the edges it touches:
+
+| Rounding | Claim |
+|----------|-------|
+| Fillet | t on both edges |
+| S-bend | −a on the incoming edge, b on the outgoing edge; the middle edge is entirely its own |
+
+When the two claims on an edge add up to more than its length L, the edge is divided in proportion to
+the claims. This rules out overlapping arcs and backwards lines.
+
+- A fillet scales its radius down to fit its share.
+- An S-bend's claims grow nonlinearly with r, so the largest radius that fits is found by
+  bisection. The search runs between the full radius and the radius at which the two fillets just
+  fit on the middle edge. If even that doesn't fit, the pair falls back to two shrunk fillets.
+
+For open paths the first and last edge hold only one rounding, so it may use the full edge length.
+
+Gaps below `1e-6 · max(1, r)` between consecutive roundings are numerical, for example from the
+bisection. No line is emitted there, because a line that short has no meaningful direction. Instead
+the first Bézier piece is moved onto the previous end point, together with its first control point,
+so its tangent is unchanged.
+
+**Degenerate corners.** Duplicate vertices are dropped. Collinear corners (θ ≈ 0) need no arc.
+Reversals (θ ≈ 180°) can't be filleted with a finite tangent length and stay sharp.
 
 ## Closed contours
 
@@ -190,24 +285,58 @@ Tests (`commonTest/kotlin/TestMetro.kt`):
 - **Circle** r = 100, `directions = 4`: an octagon, with all segments at multiples of 45° and the
   vertices within 15 of the circle.
 - **Noisy open path**, `directions` 2 to 6: every segment is in an allowed direction, both with and
-  without greedy merging. Greedy merging never gives more vertices than parallel merging alone.
+  without greedy merging. Greedy merging never gives more vertices than forced merging alone.
 - **Straight diagonal line:** two vertices, at the first and last point.
+- **No reversed-segment loops:** 100 random walks with a wandering heading; those that cross
+  themselves are skipped, and at least 20 must remain. For directions 2 to 6, with and without
+  greedy merging, no output segment i crosses segment i + 2, which is the signature of the
+  overshoot loop. The test fails when the reversal check is disabled.
+
+Tests for the corner arcs (`commonTest/kotlin/TestFilletCorners.kt`):
+
+- **Square** 100 × 100, r = 10: 4 lines and 4 arcs, length 4·80 + 2π·10, and arc points 10 from the
+  expected center within 3e-4 relative.
+- **160° turn:** two Bézier pieces, both on the expected circle.
+- **Zigzag** with r = 1000: every pair becomes an S-bend that must shrink to fit its neighbours. The
+  endpoints are kept, and no line runs backwards.
+- **Jog** of 10 between horizontal lines, r = 20: an S-bend of two arcs of radius 20 that turn
+  opposite ways. The entry is at `100 − 20·sin(acos(0.75))`, the inflection at (100, 5) and the exit
+  mirrored, all within 1e-9. With `reverseCurves = false` the result is two fillets of radius 5.
+- **Switch between fillets and S-bend:** an octilinear step whose diagonal is 1e-6 shorter or
+  longer than two fillets need. The contours agree within 1e-4 everywhere.
+- **Closed staircase** of jogs: tangent continuous, and the result doesn't depend on which vertex
+  comes first.
+- **Degenerate corners:** duplicates, collinear points and a reversal stay linear.
+- **Filleted metro output:** for random walks with directions 2 to 6 and r = 2, 10 and 1000,
+  and for a closed circle, consecutive segments connect and their tangent directions agree within
+  1e-9 at every joint.
 
 `DemoMetro01` draws a Hobby-curve blob with a hole and a noisy open path, with directions 2, 3, 4
 and 6. The bottom row shows the same path with `segmentPenalty = 100.0, boundsWeight = 1.0`.
+`DemoMetro03` draws the same inputs octilinearly, filleted with radius 0, 5, 15 and 40. It also shows
+an octilinear line with jogs, rounded with fillets only and with S-bends.
 
 ## Known limitations
 
 - **Contours are schematized independently.** Contours that share points (lines through the same
   station) are not aligned with each other. Topology is not preserved, so schematized contours, or
   parts of one contour, can cross where the input did not. Section 5 of the paper leaves this open
-  too.
+  too. Only the local overshoot loops of reversed segments are removed (see step 3). Parts of a
+  contour that pass close to each other in the input can still cross after schematization.
 - **Station order along a segment is not enforced.** The paper drops this constraint as well. The
   nearest points on the output can be out of order relative to the input.
 - **The direction of a block is chosen by regression alone,** even during greedy merging. Choosing
   it by the full local cost could sometimes do better.
 - **No splitting.** The paper's suggested refinement of splitting blocks again is not implemented.
-- **The output is always linear;** curved input segments are not kept.
+- **Curved input segments are not kept.** The fit is linear. `filletCorners` adds arcs only at
+  corners, with one radius for all of them, apart from clamping.
+- **Corner arcs are G1, not G2.** Curvature jumps where an arc meets a straight edge and at S-bend
+  inflections. Rounding doesn't move the fit, so with large radii the path cuts inside the fitted
+  corners, and an S-bend moves off its middle edge.
+- **S-bend pairing is greedy.** In a zigzag where every edge is too short, only every other edge is
+  the middle of an S-bend.
+- **On dense, noisy paths** most corners are limited by their neighbours, so increasing the radius
+  beyond the corner spacing changes little.
 - **Scale-dependent parameters.** `segmentPenalty` is in squared distance units and the regression
   cost sums over points. A value tuned for one shape does not transfer to a shape of a different
   size or sampling density.
