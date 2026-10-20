@@ -192,25 +192,38 @@ fun githubAnchor(heading: String): String =
     heading.lowercase().replace(Regex("[^\\p{L}\\p{N} _-]"), "").replace(' ', '-')
 
 /**
+ * Splits [items] into runs of consecutive items with the same [key], keeping their order. Unlike groupBy, items with
+ * the same key that aren't next to each other end up in separate runs.
+ */
+private fun <T, K> runsBy(items: List<T>, key: (T) -> K): List<Pair<K, List<T>>> {
+    val runs = mutableListOf<Pair<K, MutableList<T>>>()
+    for (item in items) {
+        val k = key(item)
+        if (runs.isNotEmpty() && runs.last().first == k) runs.last().second.add(item) else runs.add(k to mutableListOf(item))
+    }
+    return runs
+}
+
+/**
  * A table of contents for the Demos section: a bullet per subdirectory, with a nested bullet per demo. Numbered
  * variants of a demo share a bullet: `DemoAdjustContour01`, `DemoAdjustContour02` becomes `DemoAdjustContour 01, 02`.
- * Empty when all demos are in the top-level directory, since the list of headings is then flat already.
+ * Demos are listed in the order of [imagePaths], which is the order their images appear in, so only consecutive
+ * demos are grouped. Empty when all demos are in the top-level directory, since the list of headings is then flat
+ * already.
  *
  * @param imagePaths demo paths relative to the demo source root, without extension, e.g. `arcer/DemoArcer01`
  */
 fun demoTableOfContents(imagePaths: List<String>): List<String> {
     if (imagePaths.none { '/' in it }) return emptyList()
-    // top-level demos first, then one line per subdirectory
-    val groups = imagePaths.groupBy { it.substringBeforeLast('/', "") }.entries.sortedByDescending { it.key.isEmpty() }
-    val toc = groups.flatMap { (directory, paths) ->
+    val numbered = Regex("(.*?)(\\d+)$")
+    val toc = runsBy(imagePaths) { it.substringBeforeLast('/', "") }.flatMap { (directory, paths) ->
         val indent = if (directory.isEmpty()) "" else "  "
-        val numbered = Regex("(.*?)(\\d+)$")
         // group on the name without its trailing number; names without one are kept apart from numbered ones
-        val variants = paths.groupBy { path ->
+        val variants = runsBy(paths) { path ->
             val name = path.substringAfterLast('/')
             numbered.matchEntire(name)?.let { it.groupValues[1] + "#" } ?: name
-        }.values
-        val bullets = variants.map { group ->
+        }
+        val bullets = variants.map { (_, group) ->
             val name = group.first().substringAfterLast('/')
             val match = numbered.matchEntire(name)
             if (group.size == 1 || match == null) {
