@@ -17,13 +17,13 @@ val shouldPublish = project.name !in setOf("openrndr-demos")
 
 plugins {
     kotlin("multiplatform")
-    `maven-publish` apply false
+    `maven-publish`
     id("org.openrndr.extra.convention.component-metadata-rule")
     id("org.openrndr.extra.convention.dokka")
     signing
 }
 if (shouldPublish) {
-    apply(plugin = "maven-publish")
+    apply(plugin = "com.gradleup.nmcp")
 }
 
 repositories {

@@ -2,6 +2,12 @@ plugins {
     `version-catalog`
     `maven-publish`
     signing
+    id("com.gradleup.nmcp")
+}
+
+// nmcp resolves its tasks from a repository in every project that applies it
+repositories {
+    mavenCentral()
 }
 
 catalog {
