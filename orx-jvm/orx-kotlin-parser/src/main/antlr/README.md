@@ -1,1 +1,1 @@
-Synced from https://github.com/Kotlin/kotlin-spec/ @ 8e3f52e5ee01c03c1884cfd34d5ed7e3e2f016c1
+Synced from https://github.com/Kotlin/kotlin-spec/ @ 0f762a2314a9304e4b3fc386b1aceef1d56c7e4c
