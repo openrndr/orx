@@ -10,7 +10,6 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.jvm.JvmRecord
-import kotlin.math.absoluteValue
 
 /**
  * Represents a 2D coordinate or position in a Cartesian space.
@@ -284,7 +283,7 @@ class TextWriter(val drawerRef: Drawer?) {
     /**
      * Moves the cursor position to the start of the next line within the defined text box.
      * The horizontal position of the cursor is reset to align with the left edge of the text box,
-     * while the vertical position is incremented by the sum of the font's leading value (if available)
+     * while the vertical position is incremented by the font's line height (if available)
      * and the additional line spacing defined in the style settings.
      *
      * This function is commonly used as part of a text rendering process to ensure proper
@@ -294,13 +293,14 @@ class TextWriter(val drawerRef: Drawer?) {
         require(style.verticalAlign == null) { "Not allowed to use newLine() with verticalAlign set" }
 
         cursor.x = box.corner.x
-        cursor.y += ((drawStyle?.fontMap?.height?:0.0) + (drawStyle?.fontMap?.leading ?: 0.0)) + style.leading
+        // fontMap.height is the full line height (ascender + |descender| + line gap)
+        cursor.y += (drawStyle?.fontMap?.height ?: 0.0) + style.leading
     }
 
     /**
      * Moves the cursor to the beginning of the next line without considering additional line spacing
      * or style-specific adjustments like leading. The cursor's x-coordinate is reset to the left edge
-     * of the defined text box, while its y-coordinate is incremented by the height of the current font,
+     * of the defined text box, while its y-coordinate is incremented by the ascender-to-descender distance of the current font,
      * if available, or remains unchanged if no font is set.
      *
      * This method is useful for situations where precise control over cursor positioning is required,
@@ -308,7 +308,7 @@ class TextWriter(val drawerRef: Drawer?) {
      */
     fun gaplessNewLine() {
         cursor.x = box.corner.x
-        cursor.y += drawStyle.fontMap?.height ?: 0.0
+        cursor.y += drawStyle.fontMap?.let { it.ascenderLength - it.descenderLength } ?: 0.0
     }
 
     /**
@@ -399,11 +399,12 @@ class TextWriter(val drawerRef: Drawer?) {
                 val first = renderTokens.firstOrNull { it != TextToken.END_OF_LINE } ?: return emptyList()
                 val last = renderTokens.lastOrNull() ?: return emptyList()
                 renderTokens.split().flatMap {
+                    // descenderLength is negative (below the baseline)
                     val sy = first.y - (fontMap?.ascenderLength ?: 0.0)
-                    val ey = last.y + (fontMap?.descenderLength ?: 0.0)
+                    val ey = last.y - (fontMap?.descenderLength ?: 0.0)
 
                     val th = ey - sy
-                    it.map { it.shift(0.0, (fontMap?.height ?: 0.0) + (box.height - th) * align) }
+                    it.map { it.shift(0.0, (fontMap?.ascenderLength ?: 0.0) + (box.height - th) * align) }
                 }
             }
         }
@@ -457,7 +458,7 @@ class TextWriter(val drawerRef: Drawer?) {
 
             val localCursor = Cursor(cursor)
 
-            val verticalSpace = style.leading + font.ascenderLength.absoluteValue + font.height + font.leading
+            val verticalSpace = font.height + style.leading
 
             val textTokens = mutableListOf<TextToken>()
 

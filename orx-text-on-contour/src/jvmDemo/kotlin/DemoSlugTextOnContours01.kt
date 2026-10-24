@@ -1,8 +1,6 @@
 import org.openrndr.application
 import org.openrndr.draw.ColorFormat
 import org.openrndr.draw.ColorType
-import org.openrndr.draw.MagnifyingFilter
-import org.openrndr.draw.MinifyingFilter
 import org.openrndr.draw.colorBuffer
 import org.openrndr.draw.font.loadFace
 import org.openrndr.draw.slug.SlugDrawer
@@ -26,13 +24,12 @@ fun main() = application {
         height = 720
     }
     program {
-        val face = loadFace("demo-data/fonts/IBMPlexMono-Regular.ttf", 32.0, 1.0)
+        val face = loadFace("demo-data/fonts/IBMPlexMono-Regular.ttf").withSize(32.0)
 
         val slugMap = SlugMap(
             colorBuffer(4096, 64, type = ColorType.FLOAT32, format = ColorFormat.RG),
             colorBuffer(4096, 64, type = ColorType.UINT16_INT, format = ColorFormat.RGBa)
         )
-        slugMap.bands.filter(MinifyingFilter.LINEAR, MagnifyingFilter.LINEAR)
 
         val slugGlyphMap = SlugGlyphMap(slugMap)
         val slugDrawer = SlugDrawer()

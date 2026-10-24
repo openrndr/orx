@@ -71,7 +71,7 @@ class ImageFlowProcessor(val width: Int, val height: Int) {
         }
 
         (bb as Buffer).rewind()
-        result.write(bb)
+        result.writeBuffer(bb)
         result.flipV = true
     }
 }

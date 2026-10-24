@@ -4,8 +4,6 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ColorFormat
 import org.openrndr.draw.ColorType
 import org.openrndr.draw.Drawer
-import org.openrndr.draw.MagnifyingFilter
-import org.openrndr.draw.MinifyingFilter
 import org.openrndr.draw.colorBuffer
 import org.openrndr.draw.font.Face
 import org.openrndr.draw.font.internal.ShapeFeature
@@ -127,9 +125,7 @@ class SlugTextDrawer {
     private val slugMap = SlugMap(
         colorBuffer(4096, 64, type = ColorType.FLOAT32, format = ColorFormat.RG),
         colorBuffer(4096, 64, type = ColorType.UINT16_INT, format = ColorFormat.RGBa)
-    ).apply {
-        bands.filter(MinifyingFilter.NEAREST, MagnifyingFilter.NEAREST)
-    }
+    )
 
     private val slugGlyphMap = SlugGlyphMap(slugMap)
 

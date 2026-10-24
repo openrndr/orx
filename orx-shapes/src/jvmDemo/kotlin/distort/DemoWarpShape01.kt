@@ -25,7 +25,7 @@ fun main() {
         program {
             val c = Ellipse(drawer.bounds.center, 300.0, 200.0).contour.rectified()
             val face = loadFace("demo-data/fonts/IBMPlexMono-Regular.ttf")
-            val g = shapesFromText(face, "WARP", 64.0)
+            val g = shapesFromText(face.withSize(64.0), "WARP")
 
             extend {
                 val s = g.map {

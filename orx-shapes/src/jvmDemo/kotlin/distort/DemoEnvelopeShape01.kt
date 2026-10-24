@@ -34,7 +34,7 @@ fun main() {
             val c = Circle(drawer.bounds.center, 300.0).contour(4, 45.0 + 180.0)
 
             val face = loadFace("demo-data/fonts/IBMPlexMono-Regular.ttf")
-            val letters = shapesFromText(face, "WARP", 64.0)
+            val letters = shapesFromText(face.withSize(64.0), "WARP")
 
             extend {
                 val lettersAtMousePos = letters.map {

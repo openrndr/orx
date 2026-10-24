@@ -22,3 +22,9 @@ kotlin {
         }
     }
 }
+
+tasks.named<Test>("jvmTest") {
+    if (org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentOperatingSystem().isMacOsX) {
+        jvmArgs("-XstartOnFirstThread")
+    }
+}

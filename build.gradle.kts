@@ -134,6 +134,8 @@ gradle.projectsEvaluated {
         }
     }
     for (sub in subprojects) {
+        // projects that don't apply nmcp (shouldPublish == false in the conventions) aren't meant to be uploaded
+        if (!sub.plugins.hasPlugin("com.gradleup.nmcp")) continue
         val publications = sub.extensions.findByType<PublishingExtension>()?.publications
         if (!publications.isNullOrEmpty() && sub.path !in publishedProjects) {
             problems += "${sub.path} has publications but is missing from publishedProjects"
