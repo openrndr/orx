@@ -7,9 +7,13 @@ import org.openrndr.draw.font.internal.TextShapingDriver
 import org.openrndr.draw.slug.SlugCommand
 import org.openrndr.draw.slug.SlugDrawer
 import org.openrndr.draw.slug.SlugGlyphMap
-import org.openrndr.draw.slug.StrokeMode
-import org.openrndr.draw.slug.TextSpan
-import org.openrndr.draw.slug.TextStyle
+import org.openrndr.extra.textwriter.StrokeMode
+import org.openrndr.extra.textwriter.TextSpan
+import org.openrndr.extra.textwriter.TextStyle
+import org.openrndr.extra.textwriter.LineBox
+import org.openrndr.extra.textwriter.LineGlue
+import org.openrndr.extra.textwriter.LinePenalty
+import org.openrndr.extra.textwriter.shapeParagraph
 import org.openrndr.extra.shapes.rectify.RectifiedContour
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector4
@@ -19,6 +23,15 @@ fun RectifiedContour.positionOnlyPose(t: Double): Matrix44 {
     return Matrix44.fromColumnVectors(Vector4.UNIT_X * -1.0, Vector4.UNIT_Y * -1.0, Vector4.UNIT_Z, position(t).xy01)
 }
 
+/**
+ * Draws [spans] on a single line along [contour] using slugs. Text that is longer than the contour wraps around a
+ * closed contour.
+ *
+ * @param baseStyle the style that is cascaded into the style of every span
+ * @param startT the normalized position on the contour at which the text starts
+ * @param baselineOffset the distance between the contour and the baseline of the text, positive distances move the
+ * text towards its ascenders. Glyph spacing is measured on the offset baseline.
+ */
 fun slugTextOnContour(
     drawer: Drawer,
     slugDrawer: SlugDrawer,
@@ -26,7 +39,8 @@ fun slugTextOnContour(
     baseStyle: TextStyle,
     spans: List<TextSpan>,
     contour: RectifiedContour,
-    startT: Double = 0.0
+    startT: Double = 0.0,
+    baselineOffset: Double = 0.0
 ) {
     val fixOrientation = Matrix44.fromColumnVectors(
         Vector4(-1.0, 0.0, 0.0, 0.0),
@@ -37,109 +51,58 @@ fun slugTextOnContour(
 
     val shaper = TextShapingDriver.instance
 
-    var textWidth = 0.0
-
     class WordInfo(val word: String, val width: Double, val shaped: List<ShapeResult>, val style: TextStyle)
 
-    val items = mutableListOf<WordInfo>()
-
-
-    for (span in spans) {
-        val spanStyle = baseStyle.cascade(span.style)
-        val face = spanStyle.face ?: error("face not set in span")
-
-        val words = mutableListOf<String>()
-        val currentWord = StringBuilder()
-
-        for (ch in span.text) {
-            when (ch) {
-                ' ', '\t' -> {
-                    if (currentWord.isNotEmpty()) {
-                        words.add(currentWord.toString())
-                        currentWord.clear()
-                    }
-                    words.add(" ")
-                }
-
-                '\n' -> {
-                    if (currentWord.isNotEmpty()) {
-                        words.add(currentWord.toString())
-                        currentWord.clear()
-                    }
-                    words.add("\n")
-                }
-
-                else -> {
-                    currentWord.append(ch)
-                }
-            }
+    // The whole text is placed on a single line, newlines are treated as spaces
+    val paragraph = shapeParagraph(
+        spans.map { it.copy(text = it.text.replace('\n', ' ')) }, baseStyle, baseStyle.direction,
+        hyphenate = false, shaper = shaper
+    )
+    val orderedItems = paragraph.visualOrder(0, paragraph.items.size).asList().mapNotNull { index ->
+        when (val item = paragraph.items[index]) {
+            is LineBox -> WordInfo(item.content.text, item.width, item.content.shapeResults, item.content.style)
+            is LineGlue -> WordInfo(" ", item.width, emptyList(), baseStyle)
+            is LinePenalty -> null
         }
-        if (currentWord.isNotEmpty()) {
-            words.add(currentWord.toString())
-        }
-
-        val spaceGlyph = face.glyphForCharacter(' ')
-        val spaceWidth = spaceGlyph.advanceWidth() * spanStyle.textWidthFactor!! * spanStyle.sizeInEm!!
-
-        for (word in words) {
-            when (word) {
-                " ", "\t" -> {
-                    items.add(WordInfo(" ", spaceWidth, emptyList(), spanStyle))
-                    textWidth += spaceWidth
-                }
-
-                else -> {
-                    val features = spanStyle.features
-
-                    val shaped = shaper.shape(face, word, features)
-                    var wordWidth = 0.0
-                    for (sr in shaped) {
-                        wordWidth += sr.advance.x * spanStyle.textWidthFactor!! * spanStyle.sizeInEm!!
-                    }
-
-                    items.add(WordInfo(word, wordWidth, shaped, spanStyle))
-                    textWidth += wordWidth
-                }
-            }
-        }
-        var cursorT = startT
-
-        val dt = 1.0 / contour.contour.length
-
-        val commands = mutableListOf<SlugCommand>()
-        for (item in items) {
-            if (item.word == " ") {
-                cursorT += item.width * dt
-            } else {
-
-                val itemTransform = transform {
-                    scale(item.style.sizeInEm!! * item.style.textWidthFactor!!, item.style.sizeInEm!!)
-                }
-
-                val hscale = item.style.sizeInEm!! * item.style.textWidthFactor!!
-                for (shape in item.shaped) {
-                    val slugIndex = slugGlyphMap.getSlugForGlyphIndex(item.style.face!!, shape.glyphIndex)
-
-                    val t =
-                        if (contour.contour.closed) (cursorT + shape.offset.x * hscale * dt).mod(1.0) else cursorT + shape.offset.x * hscale * dt
-
-                    val pose =
-                        contour.pose(t) * itemTransform * fixOrientation
-
-                    val cmd = SlugCommand(
-                        slugIndex,
-                        pose,
-                        item.style.fill ?: ColorRGBa.TRANSPARENT,
-                        item.style.stroke ?: ColorRGBa.TRANSPARENT,
-                        strokeWeight = item.style.strokeWeight ?: 0.0,
-                        (item.style.strokeMode ?: StrokeMode.CENTER).mode
-                    )
-                    commands.add(cmd)
-                    cursorT += shape.advance.x * hscale * dt
-                }
-            }
-        }
-        slugDrawer.prepare(slugGlyphMap.slugMap, commands)
-        slugDrawer.draw(drawer, slugGlyphMap.slugMap)
     }
+
+    var cursorT = startT
+
+    val baseline = BaselinePath(contour, baselineOffset)
+    val dt = 1.0 / baseline.length
+
+    val commands = mutableListOf<SlugCommand>()
+    for (item in orderedItems) {
+        if (item.word == " ") {
+            cursorT += item.width * dt
+        } else {
+
+            // the baseline shift moves the word towards its ascenders, the y axis of the pose
+            val baselineShift = (item.style.baselineShiftInEm ?: 0.0) * item.style.face!!.height * item.style.sizeInEm!!
+            val itemTransform = transform {
+                translate(0.0, baselineShift)
+                scale(item.style.sizeInEm!! * item.style.textWidthFactor!!, item.style.sizeInEm!!)
+            }
+
+            val hscale = item.style.sizeInEm!! * item.style.textWidthFactor!!
+            for (shape in item.shaped) {
+                val slugIndex = slugGlyphMap.getSlugForGlyphIndex(item.style.face!!, shape.glyphIndex)
+
+                val pose = baseline.pose(cursorT + shape.offset.x * hscale * dt) * itemTransform * fixOrientation
+
+                val cmd = SlugCommand(
+                    slugIndex,
+                    pose,
+                    item.style.fill ?: ColorRGBa.TRANSPARENT,
+                    item.style.stroke ?: ColorRGBa.TRANSPARENT,
+                    strokeWeight = item.style.strokeWeight ?: 0.0,
+                    (item.style.strokeMode ?: StrokeMode.CENTER).mode
+                )
+                commands.add(cmd)
+                cursorT += shape.advance.x * hscale * dt
+            }
+        }
+    }
+    slugDrawer.prepare(slugGlyphMap.slugMap, commands)
+    slugDrawer.draw(drawer, slugGlyphMap.slugMap)
 }

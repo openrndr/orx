@@ -6,8 +6,8 @@ import org.openrndr.draw.font.loadFace
 import org.openrndr.draw.slug.SlugDrawer
 import org.openrndr.draw.slug.SlugGlyphMap
 import org.openrndr.draw.slug.SlugMap
-import org.openrndr.draw.slug.TextSpan
-import org.openrndr.draw.slug.TextStyle
+import org.openrndr.extra.textwriter.TextSpan
+import org.openrndr.extra.textwriter.TextStyle
 import org.openrndr.extra.camera.Camera2D
 import org.openrndr.extra.shapes.rectify.rectified
 import org.openrndr.extra.textoncontour.slugTextOnContour

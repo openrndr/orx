@@ -5,10 +5,10 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.font.internal.TextShapingDriver
 import org.openrndr.draw.font.loadFace
 import org.openrndr.draw.isolated
-import org.openrndr.draw.slug.SlugTextDrawer
-import org.openrndr.draw.slug.StrokeMode
-import org.openrndr.draw.slug.TextSpan
-import org.openrndr.draw.slug.TextStyle
+import org.openrndr.extra.textwriter.SlugTextDrawer
+import org.openrndr.extra.textwriter.StrokeMode
+import org.openrndr.extra.textwriter.TextSpan
+import org.openrndr.extra.textwriter.TextStyle
 import org.openrndr.internal.Driver
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
@@ -21,9 +21,9 @@ fun main() {
         }
         program {
 
-            val f0 = loadFace("data/fonts/default.otf").withSize(32.0)
-            val f1 = loadFace("data/fonts/NotoSansKR-VariableFont_wght.ttf").withSize(32.0)
-            val f2 = loadFace("data/fonts/Platypi-Regular.ttf").withSize(32.0)
+            val f0 = loadFace("demo-data/fonts/IBMPlexMono-Regular.ttf").withSize(32.0)
+            val f1 = loadFace("https://raw.githubusercontent.com/google/fonts/main/ofl/notosanskr/NotoSansKR%5Bwght%5D.ttf").withSize(32.0)
+            val f2 = loadFace("https://raw.githubusercontent.com/d-sargent/platypi/main/fonts/ttf/Platypi-Regular.ttf").withSize(32.0)
 
             val scripts = TextShapingDriver.instance.querySupportedScripts(f2)
             for (script in scripts) {
@@ -45,9 +45,7 @@ fun main() {
             spans.add(TextSpan("ロレム イプサム ドロール シット アメット", TextStyle(f1, fill = ColorRGBa.PINK)))
 
             val start = System.currentTimeMillis()
-            slugTextDrawer.startBatch()
             slugTextDrawer.addText(spans, listOf(box, box2))
-            slugTextDrawer.endBatch()
             val end = System.currentTimeMillis()
 
             println("setting and font slugging: ${end - start}ms")

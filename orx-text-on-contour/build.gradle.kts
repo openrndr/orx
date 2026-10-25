@@ -9,6 +9,7 @@ kotlin {
             implementation(openrndr.draw)
             implementation(openrndr.application.core)
             implementation(project(":orx-shapes"))
+            api(project(":orx-text-writer"))
         }
 
         val jvmDemo by getting {

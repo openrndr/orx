@@ -2,11 +2,11 @@ package slug
 
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.font.internal.TextShapingDriver
 import org.openrndr.draw.font.loadFace
 import org.openrndr.draw.isolated
-import org.openrndr.draw.slug.SlugTextDrawer
-import org.openrndr.draw.slug.TextStyle
+import org.openrndr.extra.camera.Camera2D
+import org.openrndr.extra.textwriter.SlugTextDrawer
+import org.openrndr.extra.textwriter.TextStyle
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 
@@ -18,7 +18,7 @@ fun main() {
         }
         program {
 
-            val pface = loadFace("data/fonts/default.otf").withSize(16.0)
+            val pface = loadFace("demo-data/fonts/IBMPlexMono-Regular.ttf").withSize(16.0)
 
 
             val slugTextDrawer = SlugTextDrawer()
@@ -34,6 +34,7 @@ fun main() {
             slugTextDrawer.addText(text,
                 box.movedBy(Vector2(360.0, 0.0)), style = TextStyle(pface, justify = true, lineHeightInEm = 1.2)
             )
+            extend(Camera2D())
             extend {
                 drawer.translate(drawer.bounds.center)
                 drawer.scale(1.0 + 2.0 * mouse.position.y / height)
