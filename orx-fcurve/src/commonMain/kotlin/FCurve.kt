@@ -7,6 +7,7 @@ import org.openrndr.shape.Segment2D
 import org.openrndr.shape.ShapeContour
 import org.openrndr.shape.bounds
 import kotlin.math.abs
+import kotlin.math.sqrt
 
 /**
  * Find the (first) t value for a given [x] value
@@ -39,38 +40,52 @@ private fun Segment2D.yForX(x: Double): Double {
 }
 
 /**
- * Scale tangents such that tangent lines do not overlap
+ * Scales the tangents of a segment such that the segment is function shaped along [axis]: the position along
+ * [axis] does not decrease from start to end, so there is a single point of the segment for every position along
+ * [axis] between start and end.
+ *
+ * Handles that point backwards along [axis] are made perpendicular to [axis]. When the handles of a cubic segment
+ * reach so far along [axis] that the position along [axis] would decrease, both handles are shortened by the same
+ * factor, which keeps the directions of the tangents. The handles of a cubic with handle lengths h0 and h1 along
+ * [axis] on a segment of length w along [axis] do not need shortening when h0 + h1 - w <= sqrt(h0 * h1), segments
+ * that meet this condition are not changed. A quadratic segment is function shaped when its control point lies
+ * between start and end along [axis], a quadratic that is not is converted to a cubic and scaled.
  */
 fun Segment2D.scaleTangents(axis: Vector2 = Vector2.UNIT_X): Segment2D {
     if (linear) {
         return this
-    } else {
-        val c = this.cubic
-        val width = end.distanceTo(start)
-
-        val cd0 = (c.control[0] - c.start).projectedOn(axis)
-        val cd0a = cd0.dot(axis)
-        val cd1 = (c.control[1] - c.end).projectedOn(-axis)
-        val cd1a = cd1.dot(-axis)
-        val handleWidth = cd0.length + cd1.length
-
-        val r = width / handleWidth
-        val c0 = (if (handleWidth > width) (c.control[0] - c.start) * r + c.start else c.control[0]).let {
-            if (cd0a <= 0.0) {
-                (it - c.start).projectedOn((axis).perpendicular()) + c.start
-            } else {
-                it
-            }
-        }
-        val c1 = (if (handleWidth > width) (c.control[1] - c.end) * r + c.end else c.control[1]).let {
-            if (cd1a <= 0.0) {
-                (it - c.end).projectedOn((-axis).perpendicular()) + c.end
-            } else {
-                it
-            }
-        }
-        return copy(control = listOf(c0, c1))
     }
+    val a = axis.normalized
+    val width = (end - start).dot(a)
+
+    if (control.size == 1) {
+        val h = (control[0] - start).dot(a)
+        if (h in 0.0..width) {
+            return this
+        }
+    }
+
+    val c = this.cubic
+    // handles that point backwards along the axis become perpendicular to it
+    val backward0 = (c.control[0] - c.start).dot(a) < 0.0
+    val backward1 = (c.control[1] - c.end).dot(a) > 0.0
+    val d0 = (c.control[0] - c.start).let { d -> if (backward0) d - a * d.dot(a) else d }
+    val d1 = (c.control[1] - c.end).let { d -> if (backward1) d - a * d.dot(a) else d }
+
+    // the derivative along the axis is 3 times the Bernstein quadratic h0 (1-t)^2 + 2 (w - h0 - h1) t (1-t) + h1 t^2,
+    // which is non-negative on [0, 1] if and only if h0 + h1 - w <= sqrt(h0 h1)
+    val h0 = d0.dot(a)
+    val h1 = -d1.dot(a)
+    val reach = h0 + h1 - sqrt(h0 * h1)
+    val r = if (reach > width) (width / reach).coerceAtLeast(0.0) else 1.0
+
+    if (r == 1.0 && !backward0 && !backward1) {
+        return c
+    }
+    // handles that do not change are kept exactly
+    val c0 = if (r == 1.0 && !backward0) c.control[0] else c.start + d0 * r
+    val c1 = if (r == 1.0 && !backward1) c.control[1] else c.end + d1 * r
+    return copy(control = listOf(c0, c1))
 }
 
 
@@ -385,7 +400,7 @@ class FCurveBuilder {
                 cursor,
                 Vector2(cursor.x + x0, cursor.y * r + y0),
                 Vector2(cursor.x + x, cursor.y * r + y)
-            )
+            ).scaleTangents()
         )
         cursor = Vector2(cursor.x + x, cursor.y * r + y)
         path += "${if (relative) "q" else "Q"}$x0,$y0,$x,$y"
