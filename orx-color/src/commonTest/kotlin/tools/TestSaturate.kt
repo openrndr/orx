@@ -34,6 +34,11 @@ class TestSaturate {
             val half = seed.saturate<T>(0.5).convertTo<T>().saturation
             assertEquals(saturation * 0.5, half, 1E-4, "$name $seed")
         }
+        // colors without saturation are not changed
+        for (neutral in listOf(ColorRGBa.BLACK, ColorRGBa.WHITE, ColorRGBa(0.5, 0.5, 0.5, linearity = Linearity.SRGB))) {
+            val saturated = neutral.saturate<T>(2.0)
+            assertTrue(distance(neutral, saturated) < 1E-4, "$name $neutral $saturated")
+        }
     }
 
     @Test
