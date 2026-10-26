@@ -251,6 +251,16 @@ These are real spectra instead of spectra upsampled from RGB, so mixing them wit
 surfaces with these specific spectral shapes combine. Rendered with `reflectanceToRGBa`, they match the published
 sRGB values of the chart. The cyan patch lies slightly outside the sRGB gamut, as it does on the physical chart.
 
+`PigmentReflectances` contains measured spectra of 82 historical and modern pigments, from azurite and lead white
+to phthalo blue and pyrrole red, plus the acrylic binder on its own. They were measured with fiber optics reflectance
+spectroscopy (FORS) by [CHSOS](https://chsopensource.org) on the swatches of their Pigments Checker (A. Cosentino,
+*FORS spectral database of historical pigments in different binders*, e-conservation Journal 2, 2014). The original
+data runs from about 360 to 940 nm at 0.17 nm. `tools/generate_pigment_reflectances.py` reduces it to the 10 nm grid
+by averaging all measurements within 5 nm of each sample. The swatches are samples for pigment identification, not
+opaque paint layers. Some, such as ivory black, iron gall ink and Tyrian purple, render much lighter than the
+pigment, probably because the layer is thin over a light ground. Kubelka–Munk mixing of these spectra is an
+approximation.
+
 `mixReflectance(reflectance1, reflectance2, t, k1, k2)` is the spectral core of `mixSpectral`: the same
 concentration weighting, Kubelka–Munk mixing and Saunderson correction, without the conversion from and to RGB.
 

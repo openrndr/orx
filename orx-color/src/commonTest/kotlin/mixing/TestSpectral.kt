@@ -131,4 +131,29 @@ class TestSpectral {
         val green = reflectanceToRGBa(mixReflectance(blue, yellow, 0.5))
         assertTrue(green.g > green.r && green.g > green.b, "$green")
     }
+
+    @Test
+    fun testPigmentReflectances() {
+        val all = PigmentReflectances.all
+        assertEquals(82, all.size)
+        for ((name, reflectance) in all) {
+            assertEquals(38, reflectance.size, name)
+            assertTrue(reflectance.all { it in 0.0..1.0 }, name)
+        }
+
+        val titaniumWhite = reflectanceToRGBa(PigmentReflectances.titaniumWhite)
+        assertTrue(titaniumWhite.toSRGB().let { minOf(it.r, it.g, it.b) > 0.85 }, "$titaniumWhite")
+
+        val cadmiumYellow = reflectanceToRGBa(PigmentReflectances.cadmiumYellow)
+        assertTrue(cadmiumYellow.r > cadmiumYellow.b && cadmiumYellow.g > cadmiumYellow.b, "$cadmiumYellow")
+
+        val ultramarine = reflectanceToRGBa(PigmentReflectances.ultramarineBlueArtificial)
+        assertTrue(ultramarine.b > ultramarine.r && ultramarine.b > ultramarine.g, "$ultramarine")
+
+        // ultramarine and cadmium yellow paint make green
+        val green = reflectanceToRGBa(
+            mixReflectance(PigmentReflectances.ultramarineBlueArtificial, PigmentReflectances.cadmiumYellow, 0.5)
+        )
+        assertTrue(green.g > green.r && green.g > green.b, "$green")
+    }
 }
