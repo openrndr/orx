@@ -1,8 +1,5 @@
 package org.openrndr.extra.gui
 
-import com.google.gson.Gson
-import com.google.gson.JsonSyntaxException
-import com.google.gson.reflect.TypeToken
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.serialization.Serializable
 import org.openrndr.*
@@ -23,7 +20,6 @@ import org.openrndr.panel.collections.SelectableMutableList
 import org.openrndr.panel.controlManager
 import org.openrndr.panel.elements.*
 import org.openrndr.panel.style.*
-import org.openrndr.panel.style.Display
 import java.io.File
 import kotlin.math.roundToInt
 import kotlin.reflect.KMutableProperty1
@@ -32,20 +28,20 @@ import kotlin.reflect.KMutableProperty1
 There is a 6-step incantation to add a new parameter type
 0) Add your parameter type to orx-parameters, follow the instructions provided there.
 
-1) Set up a control style, very likely analogous to the styles already in place.
+1) Set up a control style in GuiStyles.kt, very likely analogous to the styles already in place.
 2) Add control creation code.
-3) Add value serialization code, may need to update ParameterValue too.
-4) Add value deserialization code.
+3) Add value serialization code in GuiSerialization.kt, may need to update ParameterValue too.
+4) Add value deserialization code in GuiSerialization.kt.
 5) Add value randomization code.
 6) Add control update code.
 
 You can use your editor's search functionality to jump to "1)", "2)".
  */
-private data class LabeledObject(val label: String, val obj: Any)
+internal data class LabeledObject(val label: String, val obj: Any)
 
-private class CompartmentState(var collapsed: Boolean, val parameterValues: MutableMap<String, Any> = mutableMapOf())
+internal class CompartmentState(var collapsed: Boolean, val parameterValues: MutableMap<String, Any> = mutableMapOf())
 private class SidebarState(var hidden: Boolean = false, var collapsed: Boolean = false, var scrollTop: Double = 0.0)
-private class TrackedObjectBinding(
+internal class TrackedObjectBinding(
     val parameters: List<Parameter>,
     val parameterControls: MutableMap<Parameter, Element> = mutableMapOf()
 )
@@ -53,7 +49,7 @@ private class TrackedObjectBinding(
 private val persistentCompartmentStates = mutableMapOf<Long, MutableMap<String, CompartmentState>>()
 private val persistentSidebarStates = mutableMapOf<Long, SidebarState>()
 
-private fun compartmentState(): MutableMap<String, CompartmentState> =
+internal fun compartmentState(): MutableMap<String, CompartmentState> =
     persistentCompartmentStates.getOrPut(Driver.instance.contextID) {
         mutableMapOf()
     }
@@ -162,7 +158,30 @@ open class GUI(
     var enableSideCanvas = false
     var showToolbar = true
 
+    /**
+     * Show a header above every compartment that collapses and expands it when clicked. Must be set before the GUI
+     * is installed with `extend()`.
+     */
+    var showCompartmentHeaders = true
+
+    /**
+     * The canvas created by [GUILayoutScope.sideCanvas], see [enableSideCanvas].
+     */
     var canvas: Canvas? = null
+        private set
+
+    /**
+     * The style sheets for the GUI's elements, applied on top of [defaultStyles]. Must be set before the GUI is
+     * installed with `extend()`.
+     */
+    var styles: List<StyleSheet> = guiStyles(appearance)
+
+    /**
+     * The layout that builds the GUI's element tree, see [GUILayout]. Must be set before the GUI is installed with
+     * `extend()`.
+     */
+    var layout: GUILayout = defaultGUILayout
+
     private var panel: ControlManager? = null
 
     // Randomize button
@@ -176,7 +195,8 @@ open class GUI(
     val collapsed = ElementClass("collapsed")
 
     private var sidebar: Div? = null
-    private val collapsibles = mutableSetOf<Div>()
+    private var compartmentSelector: DropdownButton? = null
+    private val compartments = mutableMapOf<String, Div>()
     private val elementsForObject = mutableMapOf<Any, List<Element>>()
 
     private fun addCollapsible(parent: Element, labeledObject: LabeledObject, binding: TrackedObjectBinding) {
@@ -184,49 +204,59 @@ open class GUI(
 
             val (label, _) = labeledObject
 
-            val h3Header = h3 { label }
+            val h3Header = if (showCompartmentHeaders) h3 { label } else null
             val collapsible = div("compartment") {
                 for (parameter in binding.parameters) {
                     val element = addControl(labeledObject, parameter)
                     binding.parameterControls[parameter] = element
                 }
             }
-            collapsibles.add(collapsible)
-            elementsForObject[labeledObject.obj] = listOf(h3Header, collapsible)
-            val collapseClass = ElementClass("collapsed")
+            compartments[label] = collapsible
+            elementsForObject[labeledObject.obj] = listOfNotNull(h3Header, collapsible)
 
             /* this is guaranteed to be in the dictionary after insertion through add() */
             val collapseState = compartmentState()[label]!!
             if (collapseState.collapsed) {
-                collapsible.classes.add(collapseClass)
+                collapsible.classes.add(collapsed)
             }
 
-            h3Header.mouse.pressed.listen {
+            h3Header?.mouse?.pressed?.listen {
                 it.cancelPropagation()
             }
-            h3Header.mouse.clicked.listen { me ->
+            h3Header?.mouse?.clicked?.listen { me ->
 
                 if (KeyModifier.CTRL in me.modifiers) {
-                    collapsible.classes.remove(collapseClass)
-                    compartmentState().forEach {
-                        it.value.collapsed = true
-                    }
-                    collapseState.collapsed = false
-
-                    (collapsibles - collapsible).forEach {
-                        it.classes.add(collapseClass)
-                    }
+                    selectCompartment(label)
                 } else {
 
-                    if (collapseClass in collapsible.classes) {
-                        collapsible.classes.remove(collapseClass)
+                    if (collapsed in collapsible.classes) {
+                        collapsible.classes.remove(collapsed)
                         collapseState.collapsed = false
                     } else {
-                        collapsible.classes.add(collapseClass)
+                        collapsible.classes.add(collapsed)
                         collapseState.collapsed = true
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Expand the compartment with [label] and collapse all other compartments.
+     */
+    fun selectCompartment(label: String) {
+        compartmentState().forEach { (compartmentLabel, state) ->
+            state.collapsed = compartmentLabel != label
+        }
+        for ((compartmentLabel, compartment) in compartments) {
+            if (compartmentLabel == label) {
+                compartment.classes.remove(collapsed)
+            } else {
+                compartment.classes.add(collapsed)
+            }
+        }
+        compartmentSelector?.let { selector ->
+            selector.value = selector.items().find { it.label == label }
         }
     }
 
@@ -274,236 +304,143 @@ open class GUI(
             }
         }
 
+        sidebar = null
+        compartmentSelector = null
+        compartments.clear()
         panel = program.controlManager(defaultStyles = defaultStyles) {
-            styleSheet(has class_ "fullscreen") {
-                this.width = length { 100.percent }
-                this.height = length { 100.percent }
-                this.flexDirection = FlexDirection.Row
-                this.display = Display.FLEX
-            }
-            styleSheet(has class_ "full-canvas") {
-                this.background = color { ColorRGBa.RED }
-                this.flexShrink = flex { 1 }
-                this.flexGrow = flex { 1 }
-                this.height = length { 100.percent }
-                this.width = length { 100 }
-            }
-
-            styleSheet(has class_ "container") {
-                this.display = Display.FLEX
-                this.flexDirection = FlexDirection.Column
-                this.width = length { appearance.barWidth }
-                this.height = length { 100.percent }
-            }
-
-            styleSheet(has class_ "collapse-border") {
-                this.display = Display.FLEX
-                this.flexDirection = FlexDirection.Column
-                this.height = length { 5 }
-                this.width = length { 100.percent }
-                this.background = color { appearance.baseColor.shade(0.9) }
-
-                and(has state "hover") {
-                    this.background = color { appearance.baseColor.shade(1.1) }
-                }
-            }
-
-            styleSheet(has class_ "toolbar") {
-                this.height = LinearDimension.Auto
-                this.width = length { 100.percent }
-                this.display = Display.FLEX
-                this.flexDirection = FlexDirection.Row
-                this.background = color { appearance.baseColor }
-                this.columnGap = length { 5 }
-
-                child(has type "button") {
-                    marginLeft = length { 0 }
-                    marginRight = length { 0 }
-                    this.flexGrow = flex { 1 }
-                }
-            }
-
-            styleSheet(has class_ "collapsed") {
-                this.display = Display.NONE
-            }
-
-            styleSheet(has class_ "compartment") {
-                this.paddingBottom = length { 20 }
-            }
-
-            styleSheet(has class_ "sidebar") {
-                this.width = length { appearance.barWidth }
-                this.paddingBottom = length { 20 }
-                this.paddingTop = length { 10 }
-                this.paddingLeft = length { 10 }
-                this.paddingRight = length { 10 }
-                this.marginRight = length { 2 }
-                this.height = length { 100.percent }
-                this.background = color { appearance.baseColor }
-                this.overflow = Overflow.Scroll
-
-                //<editor-fold desc="1) setup control style">
-                descendant(has type "colorpicker-button") {
-                    this.width = length { appearance.barWidth - 25 }
-                }
-
-                descendant(has type "slider") {
-                    this.width = length { appearance.barWidth - 25 }
-                }
-
-                descendant(has type "button") {
-                    this.width = length { appearance.barWidth - 25 }
-                }
-
-                descendant(has type "textfield") {
-                    this.width = length { appearance.barWidth - 25 }
-                }
-
-                descendant(has type "toggle") {
-                    this.width = length { appearance.barWidth - 25 }
-                }
-
-                descendant(has type "xy-pad") {
-                    this.width = length { appearance.barWidth - 25 }
-                    this.height = length { appearance.barWidth - 25 }
-                }
-
-                descendant(
-                    has type listOf(
-                        "sequence-editor",
-                        "sliders-vector2",
-                        "sliders-vector3",
-                        "sliders-vector4"
-                    )
-                ) {
-                    this.width = length { appearance.barWidth - 25 }
-                    this.height = length { 100 }
-                }
-                //</editor-fold>
-            }
-
-            styleSheet(has class_ "randomize-strong") {
-                color = color { ColorRGBa.PINK }
-
-                and(has state "hover") {
-                    color = color { ColorRGBa.BLACK }
-                    background = color { ColorRGBa.PINK }
-                }
-            }
-
-            styleSheet(has type "dropdown-button") {
-                this.width = 175.px
-            }
+            styleSheets(styles)
             layout {
-                div("fullscreen") {
-                    div("container") {
-                        id = "container"
-                        if (showToolbar) {
-                            @Suppress("UNUSED_VARIABLE")
-                            val header = div("toolbar") {
-                                randomizeButton = button {
-                                    label = "Randomize"
-                                    clicked {
-                                        randomize(strength = if (shiftDown) .75 else .05)
-                                    }
-                                }
-                                button {
-                                    label = "Load"
-                                    clicked {
-                                        openFileDialog(
-                                            supportedExtensions = listOf("GUI parameters" to listOf("json")),
-                                            contextID = "gui.parameters"
-                                        ) {
-                                            loadParameters(it)
-                                        }
-                                    }
-                                }
-                                button {
-                                    label = "Save"
-                                    clicked {
-                                        val defaultPath = getDefaultPathForContext(contextID = "gui.parameters")
-
-                                        if (defaultPath == null) {
-                                            val local = File(".")
-                                            val parameters = File(local, defaultSaveFolder)
-                                            if (parameters.exists() && parameters.isDirectory) {
-                                                setDefaultPathForContext(
-                                                    contextID = "gui.parameters",
-                                                    file = parameters
-                                                )
-                                            } else {
-                                                if (parameters.mkdirs()) {
-                                                    setDefaultPathForContext(
-                                                        contextID = "gui.parameters",
-                                                        file = parameters
-                                                    )
-                                                } else {
-                                                    logger.warn { "Could not create directory ${parameters.absolutePath}" }
-                                                }
-                                            }
-                                        }
-
-                                        saveFileDialog(
-                                            suggestedFilename = "parameters.json",
-                                            contextID = "gui.parameters",
-                                            supportedExtensions = listOf("GUI parameters" to listOf("json"))
-                                        ) {
-                                            saveParameters(it)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        val collapseBorder = div("collapse-border") {
-
-                        }
-
-
-                        sidebar = div("sidebar") {
-                            id = "sidebar"
-                            scrollTop = sidebarState().scrollTop
-                            for ((labeledObject, binding) in trackedObjects) {
-                                addCollapsible(this, labeledObject, binding)
-                            }
-                        }
-                        val sidebar = sidebar!!
-
-                        collapseBorder.mouse.pressed.listen {
-                            it.cancelPropagation()
-                        }
-
-                        collapseBorder.mouse.clicked.listen {
-                            val collapsed = ElementClass("collapsed")
-                            if (collapsed in sidebar.classes) {
-                                sidebar.classes.remove(collapsed)
-                                sidebarState().collapsed = false
-                            } else {
-                                sidebar.classes.add(collapsed)
-                                sidebarState().collapsed = true
-                            }
-                            it.cancelPropagation()
-                        }
-
-                        sidebar.mouse.scrolled.listen {
-                            sidebarState().scrollTop = sidebar.scrollTop
-                        }
-                        if (sidebarState().collapsed) {
-                            sidebar.classes.add(ElementClass("collapsed"))
-                        }
-                        sidebar.scrollTop = sidebarState().scrollTop
-                    }
-                    if (enableSideCanvas) {
-                        canvas = canvas("full-canvas") {
-                        }
-                    }
-                }
+                GUILayoutScope(this@GUI, this).layout()
             }
         }
+        checkNotNull(sidebar) { "the GUI layout did not create a sidebar, call sidebar() in the layout" }
         // trigger class updates
         visible = visible
 
         program.extend(panel ?: error("no panel"))
     }
+
+    //<editor-fold desc="Layout building blocks">
+    internal fun buildToolbar(parent: Element): Div = parent.div("toolbar") {
+        randomizeButton = button {
+            label = "Randomize"
+            clicked {
+                randomize(strength = if (shiftDown) .75 else .05)
+            }
+        }
+        button {
+            label = "Load"
+            clicked {
+                openFileDialog(
+                    supportedExtensions = listOf("GUI parameters" to listOf("json")),
+                    contextID = "gui.parameters"
+                ) {
+                    loadParameters(it)
+                }
+            }
+        }
+        button {
+            label = "Save"
+            clicked {
+                val defaultPath = getDefaultPathForContext(contextID = "gui.parameters")
+
+                if (defaultPath == null) {
+                    val local = File(".")
+                    val parameters = File(local, defaultSaveFolder)
+                    if (parameters.exists() && parameters.isDirectory) {
+                        setDefaultPathForContext(
+                            contextID = "gui.parameters",
+                            file = parameters
+                        )
+                    } else {
+                        if (parameters.mkdirs()) {
+                            setDefaultPathForContext(
+                                contextID = "gui.parameters",
+                                file = parameters
+                            )
+                        } else {
+                            logger.warn { "Could not create directory ${parameters.absolutePath}" }
+                        }
+                    }
+                }
+
+                saveFileDialog(
+                    suggestedFilename = "parameters.json",
+                    contextID = "gui.parameters",
+                    supportedExtensions = listOf("GUI parameters" to listOf("json"))
+                ) {
+                    saveParameters(it)
+                }
+            }
+        }
+    }
+
+    internal fun buildCollapseBorder(parent: Element): Div {
+        val collapseBorder = parent.div("collapse-border") {}
+        collapseBorder.mouse.pressed.listen {
+            it.cancelPropagation()
+        }
+        collapseBorder.mouse.clicked.listen {
+            sidebar?.let { sidebar ->
+                if (collapsed in sidebar.classes) {
+                    sidebar.classes.remove(collapsed)
+                    sidebarState().collapsed = false
+                } else {
+                    sidebar.classes.add(collapsed)
+                    sidebarState().collapsed = true
+                }
+            }
+            it.cancelPropagation()
+        }
+        return collapseBorder
+    }
+
+    internal fun buildSidebar(parent: Element): Div {
+        check(sidebar == null) { "sidebar() can only be called once in a GUI layout" }
+        val sidebar = parent.div("sidebar") {
+            id = "sidebar"
+            scrollTop = sidebarState().scrollTop
+            for ((labeledObject, binding) in trackedObjects) {
+                addCollapsible(this, labeledObject, binding)
+            }
+        }
+        this.sidebar = sidebar
+        sidebar.mouse.scrolled.listen {
+            sidebarState().scrollTop = sidebar.scrollTop
+        }
+        if (sidebarState().collapsed) {
+            sidebar.classes.add(collapsed)
+        }
+        sidebar.scrollTop = sidebarState().scrollTop
+        return sidebar
+    }
+
+    internal fun buildCompartmentSelector(parent: Element): DropdownButton {
+        check(compartmentSelector == null) { "compartmentSelector() can only be called once in a GUI layout" }
+        val selector = parent.dropdownButton("compartment-selector", label = "") {
+            for (labeledObject in trackedObjects.keys) {
+                item {
+                    label = labeledObject.label
+                }
+            }
+            events.valueChanged.listen {
+                selectCompartment(it.value.label)
+            }
+        }
+        compartmentSelector = selector
+        // keep exactly one compartment expanded, preferably the first one that already is
+        val selected = trackedObjects.keys.firstOrNull { compartmentState()[it.label]?.collapsed == false }
+            ?: trackedObjects.keys.firstOrNull()
+        selected?.let { selectCompartment(it.label) }
+        return selector
+    }
+
+    internal fun buildSideCanvas(parent: Element): Canvas {
+        val canvas = parent.canvas("full-canvas") {}
+        this.canvas = canvas
+        return canvas
+    }
+    //</editor-fold>
 
     /* 2) control creation. create control, set label, set range, setup event-handler, load values */
     //<editor-fold desc="2) Control creation">
@@ -1022,110 +959,10 @@ open class GUI(
      * externally. This allows the user to combine custom data with gui
      * state and save it all to one file. Complements `.fromObject()`.
      */
-    fun toObject(): Map<String, Map<String, ParameterValue>> {
-        fun <T> KMutableProperty1<out Any, Any?>?.qget(obj: Any): T {
-            return (this as KMutableProperty1<Any, T>).get(obj)
-        }
-
-        return trackedObjects.entries.associate { (lo, b) ->
-            Pair(lo.label, b.parameterControls.keys.associate { k ->
-                Pair(
-                    k.property?.name ?: k.function?.name
-                    ?: error("no name"), when (k.parameterType) {
-                        /* 3) setup serializers */
-                        ParameterType.Double -> ParameterValue(
-                            doubleValue = k.property.qget(lo.obj) as Double,
-                            minValue = k.doubleRange?.start,
-                            maxValue = k.doubleRange?.endInclusive
-                        )
-
-                        ParameterType.Int -> ParameterValue(
-                            intValue = k.property.qget(lo.obj) as Int,
-                            minValue = k.intRange?.start?.toDouble(),
-                            maxValue = k.intRange?.endInclusive?.toDouble()
-                        )
-
-                        ParameterType.Action -> ParameterValue()
-                        ParameterType.Color -> ParameterValue(colorValue = k.property.qget(lo.obj) as ColorRGBa)
-                        ParameterType.Text -> ParameterValue(textValue = k.property.qget(lo.obj) as String)
-                        ParameterType.Boolean -> ParameterValue(booleanValue = k.property.qget(lo.obj) as Boolean)
-                        ParameterType.XY -> ParameterValue(vector2Value = k.property.qget(lo.obj) as Vector2)
-                        ParameterType.DoubleList -> ParameterValue(
-                            doubleListValue = k.property.qget(
-                                lo.obj
-                            ) as MutableList<Double>,
-                            minValue = k.doubleRange?.start,
-                            maxValue = k.doubleRange?.endInclusive
-                        )
-
-                        ParameterType.Vector2 -> ParameterValue(
-                            vector2Value = k.property.qget(lo.obj) as Vector2,
-                            minValue = k.doubleRange?.start,
-                            maxValue = k.doubleRange?.endInclusive
-                        )
-
-                        ParameterType.Vector3 -> ParameterValue(
-                            vector3Value = k.property.qget(lo.obj) as Vector3,
-                            minValue = k.doubleRange?.start,
-                            maxValue = k.doubleRange?.endInclusive
-                        )
-
-                        ParameterType.Vector4 -> ParameterValue(
-                            vector4Value = k.property.qget(lo.obj) as Vector4,
-                            minValue = k.doubleRange?.start,
-                            maxValue = k.doubleRange?.endInclusive
-                        )
-
-                        ParameterType.Path -> ParameterValue(textValue = k.property.qget(lo.obj) as String)
-
-                        ParameterType.Option -> ParameterValue(optionValue = (k.property.qget(lo.obj) as Enum<*>).name)
-
-                        ParameterType.List -> {
-                            val selectableList = k.property.qget(lo.obj) as SelectableList<*>
-                            val elementType = when (val first = selectableList.firstOrNull()) {
-                                is String -> "String"
-                                is Int -> "Int"
-                                is Double -> "Double"
-                                else -> "String"
-                            }
-                            ParameterValue(
-                                selectedIndex = selectableList.selectedIndex,
-                                listElementType = elementType
-                            )
-                        }
-
-                        ParameterType.MutableList -> {
-                            val selectableMutableList = k.property.qget(lo.obj) as SelectableMutableList<*>
-                            val elementType = when (val first = selectableMutableList.firstOrNull()) {
-                                is String -> "String"
-                                is Int -> "Int"
-                                is Double -> "Double"
-                                else -> "String"
-                            }
-                            val elements = selectableMutableList.map {
-                                when (it) {
-                                    is String -> it
-                                    is Int -> it
-                                    is Double -> it
-                                    else -> it.toString()
-                                }
-                            }
-                            ParameterValue(
-                                selectedIndex = selectableMutableList.selectedIndex,
-                                listElementType = elementType,
-                                stringListValue = if (elementType == "String") elements as? MutableList<String> else null,
-                                intListValue = if (elementType == "Int") elements as? MutableList<Int> else null,
-                                doubleListValue = if (elementType == "Double") elements as? MutableList<Double> else null
-                            )
-                        }
-                    }
-                )
-            })
-        }
-    }
+    fun toObject(): Map<String, Map<String, ParameterValue>> = trackedObjects.toParameterValues()
 
     fun saveParameters(file: File) {
-        file.writeText(Gson().toJson(toObject()))
+        file.writeText(parameterValuesToJson(toObject()))
     }
 
     /**
@@ -1135,133 +972,12 @@ open class GUI(
      * Complements `.toObject()`.
      */
     fun fromObject(labeledValues: Map<String, Map<String, ParameterValue>>) {
-        fun <T> KMutableProperty1<out Any, Any?>?.qset(obj: Any, value: T) =
-            (this as KMutableProperty1<Any, T>).set(obj, value)
-
-        fun KMutableProperty1<out Any, Any?>?.enumSet(obj: Any, value: String) {
-            val v = (this as KMutableProperty1<Any, Enum<*>>).get(obj)
-
-            try {
-                @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
-                val enumValue =
-                    (v as java.lang.Enum<*>).getDeclaringClass().getEnumConstants().find { it.name == value }
-                        ?: error("cannot map value $value to enum")
-                (this as KMutableProperty1<Any, Enum<*>>).set(obj, enumValue)
-            } catch (e: Throwable) {
-                logger.warn { e.message }
-            }
-        }
-
-        labeledValues.forEach { (label, ps) ->
-            trackedObjects.keys.find { it.label == label }?.let { lo ->
-                val binding = trackedObjects[lo]!!
-                ps.forEach { (parameterName, parameterValue) ->
-                    binding.parameters.find { it.property?.name == parameterName }?.let { parameter ->
-                        when (parameter.parameterType) {
-                            /* 4) Set up deserializers */
-                            ParameterType.Double -> parameterValue.doubleValue?.let {
-                                parameter.property.qset(lo.obj, it)
-                            }
-
-                            ParameterType.Int -> parameterValue.intValue?.let {
-                                parameter.property.qset(lo.obj, it)
-                            }
-
-                            ParameterType.Text -> parameterValue.textValue?.let {
-                                parameter.property.qset(lo.obj, it)
-                            }
-
-                            ParameterType.Color -> parameterValue.colorValue?.let {
-                                parameter.property.qset(lo.obj, it)
-                            }
-
-                            ParameterType.XY -> parameterValue.vector2Value?.let {
-                                parameter.property.qset(lo.obj, it)
-                            }
-
-                            ParameterType.DoubleList -> parameterValue.doubleListValue?.let {
-                                parameter.property.qset(lo.obj, it)
-                            }
-
-                            ParameterType.Boolean -> parameterValue.booleanValue?.let {
-                                parameter.property.qset(lo.obj, it)
-                            }
-
-                            ParameterType.Vector2 -> parameterValue.vector2Value?.let {
-                                parameter.property.qset(lo.obj, it)
-                            }
-
-                            ParameterType.Vector3 -> parameterValue.vector3Value?.let {
-                                parameter.property.qset(lo.obj, it)
-                            }
-
-                            ParameterType.Vector4 -> parameterValue.vector4Value?.let {
-                                parameter.property.qset(lo.obj, it)
-                            }
-
-                            ParameterType.Option -> parameterValue.optionValue?.let {
-                                parameter.property.enumSet(lo.obj, it)
-                            }
-
-                            ParameterType.Path -> parameterValue.textValue?.let {
-                                parameter.property.qset(lo.obj, it)
-                            }
-
-                            ParameterType.List -> {
-                                parameterValue.selectedIndex?.let { selectedIndex ->
-                                    parameterValue.listElementType?.let { elementType ->
-                                        val prop = parameter.property!!
-                                        val state = compartmentState()[lo.label]
-                                        if (state != null) {
-                                            state.parameterValues["${prop.name}_selectedIndex"] = selectedIndex
-                                        }
-                                    }
-                                }
-                            }
-
-                            ParameterType.MutableList -> {
-                                parameterValue.selectedIndex?.let { selectedIndex ->
-                                    parameterValue.listElementType?.let { elementType ->
-                                        val elements = when (elementType) {
-                                            "String" -> parameterValue.stringListValue
-                                            "Int" -> parameterValue.intListValue
-                                            "Double" -> parameterValue.doubleListValue
-                                            else -> null
-                                        }
-                                        elements?.let { elementList ->
-                                            val prop = parameter.property!!
-                                            val state = compartmentState()[lo.label]
-                                            if (state != null) {
-                                                state.parameterValues["${prop.name}_selectedIndex"] = selectedIndex
-                                                state.parameterValues["${prop.name}_elements"] = elementList
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            ParameterType.Action -> {
-                                // intentionally do nothing
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        trackedObjects.applyParameterValues(labeledValues)
         updateControls()
     }
 
     fun loadParameters(file: File) {
-        val json = file.readText()
-        val typeToken = object : TypeToken<Map<String, Map<String, ParameterValue>>>() {}
-        val labeledValues: Map<String, Map<String, ParameterValue>> = try {
-            Gson().fromJson(json, typeToken.type)
-        } catch (e: JsonSyntaxException) {
-            println("could not parse json: $json")
-            throw e
-        }
-
-        fromObject(labeledValues)
+        fromObject(parameterValuesFromJson(file.readText()))
         loaded.trigger(GUIEvent())
     }
 
@@ -1477,9 +1193,19 @@ open class GUI(
             val labeledObject = LabeledObject(uniqueLabel, objectWithParameters)
             val binding = TrackedObjectBinding(parameters)
             trackedObjects[labeledObject] = binding
+            compartmentSelector?.let { selector ->
+                selector.item {
+                    this.label = uniqueLabel
+                }
+                // only the selected compartment is expanded, the new compartment is selected if there is none
+                if (selector.value == null) {
+                    selectCompartment(uniqueLabel)
+                } else {
+                    compartmentState()[uniqueLabel]?.collapsed = true
+                }
+            }
             sidebar?.let {
                 addCollapsible(it, labeledObject, binding)
-
             }
 
         }
@@ -1499,8 +1225,18 @@ open class GUI(
         found.forEach { (labeledObject, binding) ->
             collapseStates.remove(labeledObject.label)
             trackedObjects.remove(labeledObject, binding)
+            compartments.remove(labeledObject.label)
+            compartmentSelector?.let { selector ->
+                selector.items().find { it.label == labeledObject.label }?.let { item ->
+                    selector.remove(item)
+                    if (selector.value == item) {
+                        selector.value = null
+                        trackedObjects.keys.firstOrNull()?.let { selectCompartment(it.label) }
+                    }
+                }
+            }
         }
-        elementsForObject[objectWithParameters]?.forEach {
+        elementsForObject.remove(objectWithParameters)?.forEach {
             it.parent?.remove(it)?.close()
         }
     }
