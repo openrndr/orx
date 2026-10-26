@@ -2,464 +2,178 @@ package org.openrndr.extra.color.mixing
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.color.ColorXYZa
+import org.openrndr.color.Linearity
+import org.openrndr.extra.color.spaces.ColorOKLABa
+import org.openrndr.extra.color.spaces.ColorOKLCHa
 import org.openrndr.extra.color.tools.matchLinearity
 
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.sqrt
+import kotlin.jvm.JvmName
 
 /*
 Direct port of https://github.com/rvanwijnen/spectral.js
  */
 
-/**
- * Represents spectral power distribution (SPD) coefficients for the cyan channel,
- * spanning 38 wavelength samples. This array is used as part of the spectral upsampling
- * process to convert a linear RGB color into a reflectance spectrum.
- *
- * The coefficients are predefined values that define the contribution of the cyan channel
- * at specific wavelengths to the resulting reflectance spectrum.
+/*
+The reflectance basis spectra and the color matching functions are those of spectral.js 3.0.0. They replace the
+spectral.js 2 data, whose magenta and green basis spectra had a discontinuity at 570 to 590 nm.
  */
-private val SPD_C = doubleArrayOf(
-    0.96853629,
-    0.96855103,
-    0.96859338,
-    0.96877345,
-    0.96942204,
-    0.97143709,
-    0.97541862,
-    0.98074186,
-    0.98580992,
-    0.98971194,
-    0.99238027,
-    0.99409844,
-    0.995172,
-    0.99576545,
-    0.99593552,
-    0.99564041,
-    0.99464769,
-    0.99229579,
-    0.98638762,
-    0.96829712,
-    0.89228016,
-    0.53740239,
-    0.15360445,
-    0.05705719,
-    0.03126539,
-    0.02205445,
-    0.01802271,
-    0.0161346,
-    0.01520947,
-    0.01475977,
-    0.01454263,
-    0.01444459,
-    0.01439897,
-    0.0143762,
-    0.01436343,
-    0.01435687,
-    0.0143537,
-    0.01435408
+
+/**
+ * Reflectance basis spectrum for white, 38 samples from 380 to 750 nm in steps of 10 nm. Linear RGB colors are
+ * decomposed into white, one secondary and one primary, see [linearToReflectance].
+ */
+private val BASE_W = doubleArrayOf(
+    1.00116072718764, 1.00116065159728, 1.00116031922747, 1.00115867270789, 1.00115259844552, 1.00113252528998,
+    1.00108500663327, 1.00099687889453, 1.00086525152274, 1.0006962900094, 1.00050496114888, 1.00030808187992,
+    1.00011966602013, 0.999952765968407, 0.999821836899297, 0.999738609557593, 0.999709551639612,
+    0.999731930210627, 0.999799436346195, 0.999900330316671, 1.00002040652611, 1.00014478793658, 1.00025997903412,
+    1.00035579697089, 1.00042753780269, 1.00047623344888, 1.00050720967508, 1.00052519156373, 1.00053509606896,
+    1.00054022097482, 1.00054272816784, 1.00054389569087, 1.00054448212151, 1.00054476959992, 1.00054489887762,
+    1.00054496254689, 1.00054498927058, 1.000544996993
 )
 
 /**
- * Represents the spectral power distribution (SPD) data for the magenta color component.
- * This array contains 38 predefined values corresponding to specific wavelengths.
- * Used in the process of spectral upsampling to compute reflectance spectra from RGB color information.
+ * Reflectance basis spectrum for cyan, 38 samples from 380 to 750 nm in steps of 10 nm. Linear RGB colors are
+ * decomposed into white, one secondary and one primary, see [linearToReflectance].
  */
-private val SPD_M = doubleArrayOf(
-    0.51567122,
-    0.5401552,
-    0.62645502,
-    0.75595012,
-    0.92826996,
-    0.97223624,
-    0.98616174,
-    0.98955255,
-    0.98676237,
-    0.97312575,
-    0.91944277,
-    0.32564851,
-    0.13820628,
-    0.05015143,
-    0.02912336,
-    0.02421691,
-    0.02660696,
-    0.03407586,
-    0.04835936,
-    0.0001172,
-    0.00008554,
-    0.85267882,
-    0.93188793,
-    0.94810268,
-    0.94200977,
-    0.91478045,
-    0.87065445,
-    0.78827548,
-    0.65738359,
-    0.59909403,
-    0.56817268,
-    0.54031997,
-    0.52110241,
-    0.51041094,
-    0.50526577,
-    0.5025508,
-    0.50126452,
-    0.50083021
+private val BASE_C = doubleArrayOf(
+    0.970585001322962, 0.970592498143425, 0.970625348729891, 0.970786806119017, 0.971368673228248,
+    0.973163230621252, 0.976740223158765, 0.981587605491377, 0.986280265652949, 0.989949147689134,
+    0.99249270153842, 0.994145680405256, 0.995183975033212, 0.995756750110818, 0.99591281828671, 0.995606157834528,
+    0.994597600961854, 0.99221571549237, 0.986236452783249, 0.967943337264541, 0.891285004244943,
+    0.536202477862053, 0.154108119001878, 0.0574575093228929, 0.0315349873107007, 0.0222633920086335,
+    0.0182022841492439, 0.016299055973264, 0.0153656239334613, 0.0149111568733976, 0.0146954339898235,
+    0.0145964146717719, 0.0145470156699655, 0.0145228771899495, 0.0145120341118965, 0.0145066940939832,
+    0.0145044507314479, 0.0145038009464639
 )
 
 /**
- * Spectral power distribution (SPD) values for the Yellow primary in the spectral upsampling process.
- * This array contains 38 precomputed reflectance values corresponding to specific wavelength samples.
- * It is used to calculate the reflectance spectrum when converting a linear RGB color to its spectral representation.
+ * Reflectance basis spectrum for magenta, 38 samples from 380 to 750 nm in steps of 10 nm. Linear RGB colors are
+ * decomposed into white, one secondary and one primary, see [linearToReflectance].
  */
-private val SPD_Y = doubleArrayOf(
-    0.02055257,
-    0.02059936,
-    0.02062723,
-    0.02073387,
-    0.02114202,
-    0.02233154,
-    0.02556857,
-    0.03330189,
-    0.05185294,
-    0.10087639,
-    0.24000413,
-    0.53589066,
-    0.79874659,
-    0.91186529,
-    0.95399623,
-    0.97137099,
-    0.97939505,
-    0.98345207,
-    0.98553736,
-    0.98648905,
-    0.98674535,
-    0.98657555,
-    0.98611877,
-    0.98559942,
-    0.98507063,
-    0.98460039,
-    0.98425301,
-    0.98403909,
-    0.98388535,
-    0.98376116,
-    0.98368246,
-    0.98365023,
-    0.98361309,
-    0.98357259,
-    0.98353856,
-    0.98351247,
-    0.98350101,
-    0.98350852
+private val BASE_M = doubleArrayOf(
+    0.990673557319988, 0.990671524961979, 0.990662582353421, 0.990618107644795, 0.99045148087871,
+    0.989871081400204, 0.98828660875964, 0.984290692797504, 0.973934905625306, 0.941817838460145,
+    0.817390326195156, 0.432472805065729, 0.13845397825887, 0.0537347216940033, 0.0292174996673231,
+    0.021313651750859, 0.0201349530181136, 0.0241323096280662, 0.0372236145223627, 0.0760506552706601,
+    0.205375471942399, 0.541268903460439, 0.815841685086486, 0.912817704123976, 0.946339830166962,
+    0.959927696331991, 0.966260595230312, 0.969325970058424, 0.970854536721399, 0.971605066528128,
+    0.971962769757392, 0.972127272274509, 0.972209417745812, 0.972249577678424, 0.972267621998742,
+    0.97227650946215, 0.972280243306874, 0.97228132482656
 )
 
 /**
- * A predefined spectral power distribution (SPD) array for the red channel,
- * used in the spectral upsampling process to convert linear RGB colors into reflectance spectra.
- *
- * This array contains 38 values corresponding to specific wavelengths and represents
- * the relative spectral contribution of the red channel in the conversion process.
- *
- * The SPD_R array is utilized in conjunction with other SPDs (e.g., SPD_C, SPD_M, SPD_Y, SPD_G, SPD_B)
- * and the weights derived from spectral upsampling to calculate the reflectance spectrum
- * for a given color.
+ * Reflectance basis spectrum for yellow, 38 samples from 380 to 750 nm in steps of 10 nm. Linear RGB colors are
+ * decomposed into white, one secondary and one primary, see [linearToReflectance].
  */
-private val SPD_R = doubleArrayOf(
-    0.03147571,
-    0.03146636,
-    0.03140624,
-    0.03119611,
-    0.03053888,
-    0.02856855,
-    0.02459485,
-    0.0192952,
-    0.01423112,
-    0.01033111,
-    0.00765876,
-    0.00593693,
-    0.00485616,
-    0.00426186,
-    0.00409039,
-    0.00438375,
-    0.00537525,
-    0.00772962,
-    0.0136612,
-    0.03181352,
-    0.10791525,
-    0.46249516,
-    0.84604333,
-    0.94275572,
-    0.96860996,
-    0.97783966,
-    0.98187757,
-    0.98377315,
-    0.98470202,
-    0.98515481,
-    0.98537114,
-    0.98546685,
-    0.98550011,
-    0.98551031,
-    0.98550741,
-    0.98551323,
-    0.98551563,
-    0.98551547
+private val BASE_Y = doubleArrayOf(
+    0.0210523371789306, 0.0210564627517414, 0.0210746178695038, 0.0211649058448753, 0.0215027957272504,
+    0.0226738799041561, 0.0258235649693629, 0.0334879385639851, 0.0519069663740307, 0.100749014833473,
+    0.239129899706847, 0.534804312272748, 0.79780757864303, 0.911449894067384, 0.953797963004507,
+    0.971241615465429, 0.979303123807588, 0.983380119507575, 0.985461246567755, 0.986435046976605,
+    0.986738250670141, 0.986617882445032, 0.986277776758643, 0.985860592444056, 0.98547492767621,
+    0.985176934765558, 0.984971574014181, 0.984846303415712, 0.984775351811199, 0.984738066625265,
+    0.984719648311765, 0.984711023391939, 0.984706683300676, 0.984704554393091, 0.98470359630937,
+    0.984703124077552, 0.98470292561509, 0.984702868122795
 )
 
 /**
- * Represents the predefined spectral power distribution (SPD) values for the green component
- * used in spectral upsampling of linear RGB colors.
- *
- * This array contains 38 reflectance values corresponding to specific wavelengths and
- * reflects the spectral characteristics of the green primary in the color model.
- *
- * It is utilized as one of the SPD datasets in the linearToReflectance function, which
- * converts linear RGB colors into reflectance spectra.
+ * Reflectance basis spectrum for red, 38 samples from 380 to 750 nm in steps of 10 nm. Linear RGB colors are
+ * decomposed into white, one secondary and one primary, see [linearToReflectance].
  */
-private val SPD_G = doubleArrayOf(
-    0.49108579,
-    0.46944057,
-    0.4016578,
-    0.2449042,
-    0.0682688,
-    0.02732883,
-    0.013606,
-    0.01000187,
-    0.01284127,
-    0.02636635,
-    0.07058713,
-    0.70421692,
-    0.85473994,
-    0.95081565,
-    0.9717037,
-    0.97651888,
-    0.97429245,
-    0.97012917,
-    0.9425863,
-    0.99989207,
-    0.99989891,
-    0.13823139,
-    0.06968113,
-    0.05628787,
-    0.06111561,
-    0.08987709,
-    0.13656016,
-    0.22169624,
-    0.32176956,
-    0.36157329,
-    0.4836192,
-    0.46488579,
-    0.47440306,
-    0.4857699,
-    0.49267971,
-    0.49625685,
-    0.49807754,
-    0.49889859
+private val BASE_R = doubleArrayOf(
+    0.0315605737777207, 0.0315520718330149, 0.0315148215513658, 0.0313318044982702, 0.0306729857725527,
+    0.0286480476989607, 0.0246450407045709, 0.0192960753663651, 0.0142066612220556, 0.0102942608878609,
+    0.0076191460521811, 0.005898041083542, 0.0048233247781713, 0.0042298748350633, 0.0040599171299341,
+    0.0043533695594676, 0.0053434425970201, 0.0076917201010463, 0.0135969795736536, 0.0316975442661115,
+    0.107861196355249, 0.463812603168704, 0.847055405272011, 0.943185409393918, 0.968862150696558,
+    0.978030667473603, 0.982043643854306, 0.983923623718707, 0.984845484154382, 0.985294275814596,
+    0.985507295219825, 0.985605071539837, 0.985653849933578, 0.985677685033883, 0.985688391806122,
+    0.985693664690031, 0.985695879848205, 0.985696521463762
 )
 
 /**
- * Represents the spectral power distribution (SPD) values corresponding to the blue component
- * of a linear RGB color. The array contains 38 precomputed reflectance values
- * that span a specific range of wavelengths. These values are utilized in the spectral
- * upsampling process to map an RGB color to its equivalent spectral reflectance distribution.
+ * Reflectance basis spectrum for green, 38 samples from 380 to 750 nm in steps of 10 nm. Linear RGB colors are
+ * decomposed into white, one secondary and one primary, see [linearToReflectance].
  */
-private val SPD_B = doubleArrayOf(
-    0.97901834,
-    0.97901649,
-    0.97901118,
-    0.97892146,
-    0.97858555,
-    0.97743705,
-    0.97428075,
-    0.96663223,
-    0.94822893,
-    0.89937713,
-    0.76070164,
-    0.4642044,
-    0.20123039,
-    0.08808402,
-    0.04592894,
-    0.02860373,
-    0.02060067,
-    0.01656701,
-    0.01451549,
-    0.01357964,
-    0.01331243,
-    0.01347661,
-    0.01387181,
-    0.01435472,
-    0.01479836,
-    0.0151525,
-    0.01540513,
-    0.01557233,
-    0.0156571,
-    0.01571025,
-    0.01571916,
-    0.01572133,
-    0.01572502,
-    0.01571717,
-    0.01571905,
-    0.01571059,
-    0.01569728,
-    0.0157002
+private val BASE_G = doubleArrayOf(
+    0.0095560747554212, 0.0095581580120851, 0.0095673245444588, 0.0096129126297349, 0.0097837090401843,
+    0.010378622705871, 0.0120026452378567, 0.0160977721473922, 0.026706190223168, 0.0595555440185881,
+    0.186039826532826, 0.570579820116159, 0.861467768400292, 0.945879089767658, 0.970465486474305,
+    0.97841363028445, 0.979589031411224, 0.975533536908632, 0.962288755397813, 0.92312157451312, 0.793434018943111,
+    0.459270135902429, 0.185574103666303, 0.0881774959955372, 0.05436302287667, 0.0406288447060719,
+    0.034221520431697, 0.0311185790956966, 0.0295708898336134, 0.0288108739348928, 0.0284486271324597,
+    0.0282820301724731, 0.0281988376490237, 0.0281581655342037, 0.0281398910216386, 0.0281308901665811,
+    0.0281271086805816, 0.0281260133612096
 )
 
 /**
- * A pre-defined array representing the CIE 1931 Standard Observer's color matching function values for the X component.
- * This data is used in color science calculations to transform spectral reflectance data into the CIE XYZ color space.
- * The array contains 38 discrete samples corresponding to wavelengths within the visible spectrum.
- *
- * This constant is specifically used during computations involving spectral data to calculate the X component
- * of the CIE XYZ color space via multiplication with a corresponding reflectance spectrum array.
+ * Reflectance basis spectrum for blue, 38 samples from 380 to 750 nm in steps of 10 nm. Linear RGB colors are
+ * decomposed into white, one secondary and one primary, see [linearToReflectance].
+ */
+private val BASE_B = doubleArrayOf(
+    0.979404752502014, 0.97940070684313, 0.979382903470261, 0.979294364945594, 0.97896301460857, 0.977814466694043,
+    0.974724321133836, 0.967198482343973, 0.949079657530575, 0.900850128940977, 0.76315044546224,
+    0.465922171649319, 0.201263280451005, 0.0877524413419623, 0.0457176793291679, 0.0284706050521843,
+    0.020527176756985, 0.0165302792310211, 0.0145135107212858, 0.0136003508637687, 0.0133604258769571,
+    0.013548894314568, 0.0139594356366992, 0.014443425575357, 0.0148854440621406, 0.0152254296999746,
+    0.0154592848180209, 0.0156018026485961, 0.0156824871281936, 0.0157248764360615, 0.0157458108784121,
+    0.0157556123350225, 0.0157605443964911, 0.0157629637515278, 0.0157640525629106, 0.015764589232951,
+    0.0157648147772649, 0.0157648801149616
+)
+
+/**
+ * The CIE 1931 2° color matching function x̄ multiplied by the CIE D65 illuminant and normalized so that a
+ * perfect white reflector has Y = 1, 38 samples from 380 to 750 nm in steps of 10 nm. See spectral.md.
  */
 private val CIE_CMF_X = doubleArrayOf(
-    0.00006469,
-    0.00021941,
-    0.00112057,
-    0.00376661,
-    0.01188055,
-    0.02328644,
-    0.03455942,
-    0.03722379,
-    0.03241838,
-    0.02123321,
-    0.01049099,
-    0.00329584,
-    0.00050704,
-    0.00094867,
-    0.00627372,
-    0.01686462,
-    0.02868965,
-    0.04267481,
-    0.05625475,
-    0.0694704,
-    0.08305315,
-    0.0861261,
-    0.09046614,
-    0.08500387,
-    0.07090667,
-    0.05062889,
-    0.03547396,
-    0.02146821,
-    0.01251646,
-    0.00680458,
-    0.00346457,
-    0.00149761,
-    0.0007697,
-    0.00040737,
-    0.00016901,
-    0.00009522,
-    0.00004903,
-    0.00002
+    6.46919989576e-05, 0.0002194098998132, 0.0011205743509343, 0.0037666134117111, 0.011880553603799,
+    0.0232864424191771, 0.0345594181969747, 0.0372237901162006, 0.0324183761091486, 0.021233205609381,
+    0.0104909907685421, 0.0032958375797931, 0.0005070351633801, 0.0009486742057141, 0.0062737180998318,
+    0.0168646241897775, 0.028689649025981, 0.0426748124691731, 0.0562547481311377, 0.0694703972677158,
+    0.0830531516998291, 0.0861260963002257, 0.0904661376847769, 0.0850038650591277, 0.0709066691074488,
+    0.0506288916373645, 0.035473961885264, 0.0214682102597065, 0.0125164567619117, 0.0068045816390165,
+    0.0034645657946526, 0.0014976097506959, 0.000769700480928, 0.0004073680581315, 0.0001690104031614,
+    9.52245150365e-05, 4.90309872958e-05, 1.99961492222e-05
 )
 
 /**
- * Represents the Y-component of the CIE 1931 color matching functions.
- *
- * The CIE 1931 color matching functions are used to convert spectral power distributions into
- * CIE XYZ tristimulus values, which represent a color in a perceptually-uniform color space.
- * These functions are defined over 38 discrete wavelength samples, typically covering
- * the visible spectrum.
- *
- * The Y-component corresponds to the luminous efficiency function,
- * which describes the sensitivity of human vision to different wavelengths of light.
+ * The CIE 1931 2° color matching function ȳ multiplied by the CIE D65 illuminant and normalized so that a
+ * perfect white reflector has Y = 1, 38 samples from 380 to 750 nm in steps of 10 nm. See spectral.md.
  */
 private val CIE_CMF_Y = doubleArrayOf(
-    0.00000184,
-    0.00000621,
-    0.00003101,
-    0.00010475,
-    0.00035364,
-    0.00095147,
-    0.00228226,
-    0.00420733,
-    0.0066888,
-    0.0098884,
-    0.01524945,
-    0.02141831,
-    0.03342293,
-    0.05131001,
-    0.07040208,
-    0.08783871,
-    0.09424905,
-    0.09795667,
-    0.09415219,
-    0.08678102,
-    0.07885653,
-    0.0635267,
-    0.05374142,
-    0.04264606,
-    0.03161735,
-    0.02088521,
-    0.01386011,
-    0.00810264,
-    0.0046301,
-    0.00249138,
-    0.0012593,
-    0.00054165,
-    0.00027795,
-    0.00014711,
-    0.00006103,
-    0.00003439,
-    0.00001771,
-    0.00000722
+    1.844289444e-06, 6.2053235865e-06, 3.10096046799e-05, 0.0001047483849269, 0.0003536405299538,
+    0.0009514714056444, 0.0022822631748318, 0.004207329043473, 0.0066887983719014, 0.0098883960193565,
+    0.0152494514496311, 0.0214183109449723, 0.0334229301575068, 0.0513100134918512, 0.070402083939949,
+    0.0878387072603517, 0.0942490536184085, 0.0979566702718931, 0.0941521856862608, 0.0867810237486753,
+    0.0788565338632013, 0.0635267026203555, 0.05374141675682, 0.042646064357412, 0.0316173492792708,
+    0.020885205921391, 0.0138601101360152, 0.0081026402038399, 0.004630102258803, 0.0024913800051319,
+    0.0012593033677378, 0.000541646522168, 0.0002779528920067, 0.0001471080673854, 6.10327472927e-05,
+    3.43873229523e-05, 1.77059860053e-05, 7.220974913e-06
 )
 
 /**
- * Represents the Z component of the CIE 1931 2° Standard Observer Color Matching Function (CMF).
- *
- * This array contains precomputed values representing the spectral sensitivity of the human eye's Z cone.
- * It is used in color science to convert spectral reflectance data into the Z component of the CIE XYZ color space.
- *
- * The values in this array correspond to sampling points across the visible light spectrum
- * and are used in conjunction with `CIE_CMF_X` and `CIE_CMF_Y` to perform reflectance spectrum to XYZ color conversions.
+ * The CIE 1931 2° color matching function z̄ multiplied by the CIE D65 illuminant and normalized so that a
+ * perfect white reflector has Y = 1, 38 samples from 380 to 750 nm in steps of 10 nm. See spectral.md.
  */
 private val CIE_CMF_Z = doubleArrayOf(
-    0.00030502,
-    0.00103681,
-    0.00531314,
-    0.01795439,
-    0.05707758,
-    0.11365162,
-    0.17335873,
-    0.19620658,
-    0.18608237,
-    0.13995048,
-    0.08917453,
-    0.04789621,
-    0.02814563,
-    0.01613766,
-    0.0077591,
-    0.00429615,
-    0.00200551,
-    0.00086147,
-    0.00036904,
-    0.00019143,
-    0.00014956,
-    0.00009231,
-    0.00006813,
-    0.00002883,
-    0.00001577,
-    0.00000394,
-    0.00000158,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0
+    0.000305017147638, 0.0010368066663574, 0.0053131363323992, 0.0179543925899536, 0.0570775815345485,
+    0.113651618936287, 0.17335872618355, 0.196206575558657, 0.186082370706296, 0.139950475383207,
+    0.0891745294268649, 0.0478962113517075, 0.0281456253957952, 0.0161376622950514, 0.0077591019215214,
+    0.0042961483736618, 0.0020055092122156, 0.0008614711098802, 0.0003690387177652, 0.0001914287288574,
+    0.0001495555858975, 9.23109285104e-05, 6.81349182337e-05, 2.88263655696e-05, 1.57671820553e-05,
+    3.9406041027e-06, 1.584012587e-06, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
 )
 
 /**
- * Converts RGB color values into a form that represents spectral power distribution weights.
+ * Decomposes a color into weights for the reflectance basis spectra (Smits 1999).
  *
- * @param rgb The RGB color in the form of a `ColorRGBa` object, which is to be converted to spectral weights.
- * @return A `DoubleArray` representing the decomposed weights for white, cyan, magenta, yellow, red, green, and blue.
+ * @param rgb The color to decompose.
+ * @return The weights for white, cyan, magenta, yellow, red, green, and blue.
  */
 private fun spectralUpsampling(rgb: ColorRGBa): DoubleArray {
     var lrgb = rgb.toLinear()
@@ -494,37 +208,16 @@ fun linearToReflectance(rgb: ColorRGBa): DoubleArray {
     for (i in 0 until 38) {
         reflectance[i] = max(
             eps,
-            weights[0] +
-                    weights[1] * SPD_C[i] +
-                    weights[2] * SPD_M[i] +
-                    weights[3] * SPD_Y[i] +
-                    weights[4] * SPD_R[i] +
-                    weights[5] * SPD_G[i] +
-                    weights[6] * SPD_B[i]
+            weights[0] * BASE_W[i] +
+                    weights[1] * BASE_C[i] +
+                    weights[2] * BASE_M[i] +
+                    weights[3] * BASE_Y[i] +
+                    weights[4] * BASE_R[i] +
+                    weights[5] * BASE_G[i] +
+                    weights[6] * BASE_B[i]
         )
     }
     return reflectance
-}
-
-/**
- * Computes the concentration of a component in a linear interpolation based on the specified parameters.
- *
- * The method calculates a concentration factor `c` using two linear values `l1` and `l2`,
- * as well as a blend factor `t`. This can be used in scenarios such as spectral mixing
- * or interpolation tasks where weights are dynamically computed.
- *
- * @param l1 The first linear value, typically derived from reflectance or intensity.
- * @param l2 The second linear value, typically derived from reflectance or intensity.
- * @param t The blending factor in the range [0.0, 1.0], where 0.0 represents full influence of `l1`
- *          and 1.0 represents full influence of `l2`.
- * @return The computed concentration factor as a `Double`, representing the relative contribution
- *         of the components based on the blending factor.
- */
-private fun linearToConcentration(l1: Double, l2: Double, t: Double): Double {
-    val t1 = l1 * (1 - t).pow(2.0)
-    val t2 = l2 * t.pow(2.0)
-
-    return t2 / (t1 + t2)
 }
 
 private fun DoubleArray.dot(other: DoubleArray): Double {
@@ -633,24 +326,47 @@ fun mixReflectance(
     k2: Double = 0.0
 ): DoubleArray {
     require(reflectance1.size == 38 && reflectance2.size == 38) { "reflectances must have 38 samples" }
-    val l1 = reflectance1.dot(CIE_CMF_Y)
-    val l2 = reflectance2.dot(CIE_CMF_Y)
+    return mixKubelkaMunk(listOf(reflectance1, reflectance2), listOf(1.0 - t, t), listOf(1.0, 1.0), k1, k2)
+}
 
-    val c = linearToConcentration(l1, l2, t)
+/**
+ * The smallest luminance used for weighting a color in a mix, so that black colors still count.
+ */
+private const val MIN_LUMINANCE = 2.220446049250313E-16
 
-    val reflectance = DoubleArray(38)
-
-    for (i in 0 until 38) {
-        // Kubelka–Munk works with the internal reflectance of the layer, without the reflections at its surface,
-        // reflectances are kept above 0 so that K/S stays finite
-        val r1 = inverseSaundersonCorrection(max(reflectance1[i], 0.00000001), k1, k2)
-        val r2 = inverseSaundersonCorrection(max(reflectance2[i], 0.00000001), k1, k2)
-        val ks = (1.0 - c) * (pow(1.0 - r1, 2.0) / (2.0 * r1)) + c * (pow(1.0 - r2, 2.0) / (2.0 * r2))
-        val km = (1.0 + ks - sqrt(pow(ks, 2.0) + 2.0 * ks))
-
-        reflectance[i] = saundersonCorrection(km, k1, k2)
+/**
+ * Mixes reflectance spectra with single-constant Kubelka–Munk theory, as in spectral.js 3.0. The K/S values of the
+ * spectra are averaged per wavelength with weights `factor² · tintingStrength² · luminance`, where the luminance is
+ * the Y of the spectrum. With non-zero Saunderson coefficients the spectra are converted to internal reflectance
+ * before mixing and the result back to reflectance seen from outside.
+ */
+private fun mixKubelkaMunk(
+    reflectances: List<DoubleArray>,
+    factors: List<Double>,
+    tintingStrengths: List<Double>,
+    k1: Double,
+    k2: Double
+): DoubleArray {
+    require(reflectances.isNotEmpty()) { "nothing to mix" }
+    val concentrations = reflectances.indices.map { j ->
+        val luminance = max(MIN_LUMINANCE, reflectances[j].dot(CIE_CMF_Y))
+        factors[j] * factors[j] * tintingStrengths[j] * tintingStrengths[j] * luminance
     }
-    return reflectance
+    val total = concentrations.sum()
+    require(total > 0.0) { "at least one factor and tinting strength must be non-zero" }
+
+    return DoubleArray(38) { i ->
+        var ks = 0.0
+        for (j in reflectances.indices) {
+            if (concentrations[j] == 0.0) continue
+            // Kubelka–Munk works with the internal reflectance of the layer, without the reflections at its surface,
+            // reflectances are kept above 0 so that K/S stays finite
+            val r = inverseSaundersonCorrection(max(reflectances[j][i], 0.00000001), k1, k2)
+            ks += (pow(1.0 - r, 2.0) / (2.0 * r)) * concentrations[j]
+        }
+        ks /= total
+        saundersonCorrection(1.0 + ks - sqrt(pow(ks, 2.0) + 2.0 * ks), k1, k2)
+    }
 }
 
 /**
@@ -659,6 +375,233 @@ fun mixReflectance(
  * @param reflectance A reflectance spectrum with 38 samples from 380 to 750 nm in steps of 10 nm.
  */
 fun reflectanceToRGBa(reflectance: DoubleArray): ColorRGBa = reflectanceToXYZ(reflectance).toRGBa()
+
+/**
+ * How [SpectralColor.toRGBa] and the spectral mixing functions bring colors outside the sRGB gamut into it.
+ */
+enum class SpectralGamutMapping {
+    /** Colors are returned as they are, components can be below 0 or above 1. */
+    NONE,
+
+    /** Every linear RGB component is clamped to [0, 1], which can change hue and lightness. */
+    CLIP,
+
+    /**
+     * Chroma is reduced in OKLCh, keeping lightness and hue, until the color is in gamut or the remaining difference
+     * after clamping is below a just noticeable difference. This is the method of spectral.js 3.0 and of CSS Color 4.
+     */
+    MAP
+}
+
+private fun ColorRGBa.isInLinearGamut() = r in 0.0..1.0 && g in 0.0..1.0 && b in 0.0..1.0
+
+private fun ColorRGBa.clampLinear() =
+    ColorRGBa(r.coerceIn(0.0, 1.0), g.coerceIn(0.0, 1.0), b.coerceIn(0.0, 1.0), alpha, Linearity.LINEAR)
+
+private fun deltaEOK(a: ColorOKLABa, b: ColorOKLABa): Double {
+    val dl = a.l - b.l
+    val da = a.a - b.a
+    val db = a.b - b.b
+    return sqrt(dl * dl + da * da + db * db)
+}
+
+/**
+ * Maps a color into the sRGB gamut by reducing its OKLCh chroma, as spectral.js 3.0 and CSS Color 4 do.
+ *
+ * @param color the color, in any linearity
+ * @param jnd the just noticeable difference in OKLab, colors that clamping changes less than this are clamped
+ * @param epsilon the precision of the binary search over chroma
+ * @return the mapped color in linear RGB
+ */
+private fun gamutMapOKLCh(color: ColorRGBa, jnd: Double = 0.03, epsilon: Double = 0.0001): ColorRGBa {
+    val linear = color.toLinear()
+    val lch = ColorOKLABa.fromRGBa(linear).toOKLCHa()
+    if (lch.l >= 1.0) return ColorRGBa(1.0, 1.0, 1.0, linear.alpha, Linearity.LINEAR)
+    if (lch.l <= 0.0) return ColorRGBa(0.0, 0.0, 0.0, linear.alpha, Linearity.LINEAR)
+    if (linear.isInLinearGamut()) return linear
+
+    var clipped = ColorOKLABa.fromRGBa(linear.clampLinear())
+    var e = deltaEOK(clipped, ColorOKLABa.fromRGBa(linear))
+    if (e < jnd) return clipped.toRGBa().clampLinear()
+
+    var min = 0.0
+    var max = lch.c
+    var minInGamut = true
+    while (max - min > epsilon) {
+        val chroma = (min + max) / 2.0
+        val oklab = ColorOKLCHa(lch.l, chroma, lch.h, linear.alpha).toOKLABa()
+        val current = oklab.toRGBa()
+        if (minInGamut && current.isInLinearGamut()) {
+            min = chroma
+        } else {
+            clipped = ColorOKLABa.fromRGBa(current.clampLinear())
+            e = deltaEOK(clipped, oklab)
+            if (e < jnd) {
+                if (jnd - e < epsilon) break
+                minInGamut = false
+                min = chroma
+            } else {
+                max = chroma
+            }
+        }
+    }
+    return clipped.toRGBa().clampLinear()
+}
+
+private fun ColorRGBa.mapToGamut(mapping: SpectralGamutMapping): ColorRGBa = when (mapping) {
+    SpectralGamutMapping.NONE -> this
+    SpectralGamutMapping.CLIP -> toLinear().clampLinear()
+    SpectralGamutMapping.MAP -> gamutMapOKLCh(this)
+}
+
+/**
+ * A color as a reflectance spectrum with a tinting strength, the color type of spectral.js 3.0.
+ *
+ * The tinting strength scales how strongly the color affects a mix: its concentration in a mix is
+ * `factor² · tintingStrength² · luminance`. Strong pigments such as phthalo blue have a high tinting strength, weak
+ * ones such as most earth pigments a low one.
+ *
+ * @param spectrum the reflectance spectrum, 38 samples from 380 to 750 nm in steps of 10 nm, it is copied
+ * @param tintingStrength the tinting strength, 1.0 by default
+ */
+class SpectralColor(spectrum: DoubleArray, val tintingStrength: Double = 1.0) {
+    init {
+        require(spectrum.size == 38) { "spectrum must have 38 samples" }
+    }
+
+    internal val samples: DoubleArray = spectrum.copyOf()
+
+    /**
+     * A spectral color for an RGB color, using the reflectance spectrum from [linearToReflectance].
+     */
+    constructor(color: ColorRGBa, tintingStrength: Double = 1.0) : this(linearToReflectance(color), tintingStrength)
+
+    /** A copy of the reflectance spectrum */
+    val reflectance: DoubleArray get() = samples.copyOf()
+
+    /** The luminance Y of the color under D65 light */
+    val luminance: Double by lazy { reflectanceToXYZ(samples).y }
+
+    /** Returns this color with a different tinting strength */
+    fun withTintingStrength(tintingStrength: Double) = SpectralColor(samples, tintingStrength)
+
+    /** The color in CIE XYZ under D65 light */
+    fun toXYZa(): ColorXYZa = reflectanceToXYZ(samples)
+
+    /**
+     * The color in linear RGB under D65 light.
+     * @param gamutMapping how colors outside the sRGB gamut are mapped into it
+     */
+    fun toRGBa(gamutMapping: SpectralGamutMapping = SpectralGamutMapping.NONE): ColorRGBa =
+        reflectanceToRGBa(samples).mapToGamut(gamutMapping)
+}
+
+/**
+ * Mixes any number of spectral colors with Kubelka–Munk theory, as `spectral.mix` in spectral.js 3.0.
+ *
+ * Every color is given with its mixing factor. Its concentration in the mix is
+ * `factor² · tintingStrength² · luminance`, the factors do not need to add up to 1.
+ *
+ * @param colors the colors with their mixing factors, at least one factor must be non-zero
+ * @param k1 The Saunderson coefficient for reflection at the front surface, see [mixSpectral].
+ * @param k2 The Saunderson coefficient for internal reflection at the surface, see [mixSpectral].
+ * @return the mix, with a tinting strength of 1
+ */
+fun mixSpectral(vararg colors: Pair<SpectralColor, Double>, k1: Double = 0.0, k2: Double = 0.0): SpectralColor {
+    require(colors.isNotEmpty()) { "nothing to mix" }
+    return SpectralColor(
+        mixKubelkaMunk(
+            colors.map { it.first.samples }, colors.map { it.second }, colors.map { it.first.tintingStrength }, k1, k2
+        )
+    )
+}
+
+/**
+ * Mixes any number of RGB colors with Kubelka–Munk theory, see the [SpectralColor] version of [mixSpectral].
+ * Use [SpectralColor] to give colors a tinting strength.
+ *
+ * @param colors the colors with their mixing factors, at least one factor must be non-zero
+ * @param gamutMapping how a mix outside the sRGB gamut is mapped into it
+ * @return the mix, with the linearity of the first color
+ */
+@JvmName("mixSpectralRGBa")
+fun mixSpectral(
+    vararg colors: Pair<ColorRGBa, Double>,
+    k1: Double = 0.0,
+    k2: Double = 0.0,
+    gamutMapping: SpectralGamutMapping = SpectralGamutMapping.MAP
+): ColorRGBa {
+    require(colors.isNotEmpty()) { "nothing to mix" }
+    val mix = mixSpectral(*colors.map { SpectralColor(it.first) to it.second }.toTypedArray(), k1 = k1, k2 = k2)
+    return mix.toRGBa(gamutMapping).matchLinearity(colors.first().first)
+}
+
+/**
+ * Creates a palette of [size] colors from [a] to [b] by mixing them in spectral steps, as `spectral.palette` in
+ * spectral.js 3.0. The first color is [a] and the last [b].
+ */
+fun spectralPalette(a: SpectralColor, b: SpectralColor, size: Int, k1: Double = 0.0, k2: Double = 0.0): List<SpectralColor> {
+    require(size >= 1) { "size must be at least 1" }
+    if (size == 1) return listOf(a)
+    return List(size) { i -> mixSpectral(a to (size - 1 - i).toDouble(), b to i.toDouble(), k1 = k1, k2 = k2) }
+}
+
+/**
+ * Creates a palette of [size] colors from [a] to [b] by mixing them in spectral steps, see the [SpectralColor]
+ * version of [spectralPalette].
+ *
+ * @param gamutMapping how colors outside the sRGB gamut are mapped into it
+ * @return the colors, with the linearity of [a]
+ */
+fun spectralPalette(
+    a: ColorRGBa,
+    b: ColorRGBa,
+    size: Int,
+    k1: Double = 0.0,
+    k2: Double = 0.0,
+    gamutMapping: SpectralGamutMapping = SpectralGamutMapping.MAP
+): List<ColorRGBa> = spectralPalette(SpectralColor(a), SpectralColor(b), size, k1, k2).map {
+    it.toRGBa(gamutMapping).matchLinearity(a)
+}
+
+/**
+ * Samples a spectral gradient at [t], as `spectral.gradient` in spectral.js 3.0. The gradient is defined by [stops],
+ * colors with their positions; between two stops the colors are mixed spectrally. Before the first and after the
+ * last stop the gradient has the color of that stop.
+ */
+fun spectralGradient(t: Double, vararg stops: Pair<SpectralColor, Double>, k1: Double = 0.0, k2: Double = 0.0): SpectralColor {
+    require(stops.isNotEmpty()) { "a gradient needs at least one stop" }
+    var below: Pair<SpectralColor, Double>? = null
+    var above: Pair<SpectralColor, Double>? = null
+    for (stop in stops) {
+        if (stop.second <= t && (below == null || stop.second > below.second)) below = stop
+        if (stop.second >= t && (above == null || stop.second < above.second)) above = stop
+    }
+    if (below == null) return above!!.first
+    if (above == null) return below.first
+    if (below.second == above.second) return below.first
+    val factor = (t - below.second) / (above.second - below.second)
+    return mixSpectral(below.first to 1.0 - factor, above.first to factor, k1 = k1, k2 = k2)
+}
+
+/**
+ * Samples a spectral gradient of RGB colors at [t], see the [SpectralColor] version of [spectralGradient].
+ *
+ * @param gamutMapping how colors outside the sRGB gamut are mapped into it
+ * @return the color, with the linearity of the first stop
+ */
+@JvmName("spectralGradientRGBa")
+fun spectralGradient(
+    t: Double,
+    vararg stops: Pair<ColorRGBa, Double>,
+    k1: Double = 0.0,
+    k2: Double = 0.0,
+    gamutMapping: SpectralGamutMapping = SpectralGamutMapping.MAP
+): ColorRGBa {
+    require(stops.isNotEmpty()) { "a gradient needs at least one stop" }
+    val spectral = stops.map { SpectralColor(it.first) to it.second }.toTypedArray()
+    return spectralGradient(t, *spectral, k1 = k1, k2 = k2).toRGBa(gamutMapping).matchLinearity(stops.first().first)
+}
 
 /**
  * Measured reflectance spectra of the 24 patches of the X-Rite (formerly Macbeth) ColorChecker Classic, for use with

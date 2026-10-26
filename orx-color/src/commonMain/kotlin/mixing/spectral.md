@@ -2,10 +2,23 @@
 
 `Spectral.kt` (package `org.openrndr.extra.color.mixing`) mixes colors the way paints mix instead of the way light
 mixes: blue and yellow make green, not gray. It is a port of [spectral.js](https://github.com/rvanwijnen/spectral.js)
-by Ronald van Wijnen, from before its 3.0 release.
+by Ronald van Wijnen, version 3.0.0, with an added Saunderson correction.
 
 ```kotlin
 val green = mixSpectral(ColorRGBa.BLUE, ColorRGBa.YELLOW, 0.5)
+
+// any number of colors with mixing factors, the result is mapped into the sRGB gamut
+val brown = mixSpectral(ColorRGBa.RED to 1.0, ColorRGBa.YELLOW to 1.0, ColorRGBa.BLUE to 0.5)
+
+// tinting strength makes a color weaker or stronger in a mix
+val red = SpectralColor(ColorRGBa.RED, tintingStrength = 0.35)
+val orange = mixSpectral(red to 0.5, SpectralColor(ColorRGBa.YELLOW) to 0.5).toRGBa(SpectralGamutMapping.MAP)
+
+val palette = spectralPalette(ColorRGBa.fromHex("#BB0657"), ColorRGBa.fromHex("#E0E0B3"), 8)
+val color = spectralGradient(
+    0.75,
+    ColorRGBa.fromHex("#005E72") to 0.0, ColorRGBa.fromHex("#EAD9A7") to 0.5, ColorRGBa.fromHex("#894B54") to 1.0
+)
 
 val r = linearToReflectance(color)     // 38 reflectance samples, 380..750 nm
 val xyz = reflectanceToXYZ(r)          // CIE XYZ of that surface under D65
@@ -15,11 +28,29 @@ val mix = mixReflectance(ColorCheckerReflectances.blue, ColorCheckerReflectances
 val rgb = reflectanceToRGBa(mix)       // linear RGB under D65
 ```
 
+## API
+
+| Function | Does |
+|---|---|
+| `mixSpectral(color1, color2, t, k1, k2)` | mixes two RGB colors, the result is not gamut mapped |
+| `mixSpectral(vararg colors: Pair<ColorRGBa, Double>, k1, k2, gamutMapping)` | mixes any number of RGB colors with factors |
+| `mixSpectral(vararg colors: Pair<SpectralColor, Double>, k1, k2)` | mixes spectral colors, returns a `SpectralColor` |
+| `spectralPalette(a, b, size, ...)` | `size` colors from `a` to `b`, for RGB and spectral colors |
+| `spectralGradient(t, vararg stops, ...)` | the color at `t` of a gradient with color stops, for RGB and spectral colors |
+| `mixReflectance(reflectance1, reflectance2, t, k1, k2)` | mixes two reflectance spectra |
+| `SpectralColor(color or spectrum, tintingStrength)` | a reflectance spectrum with a tinting strength |
+| `linearToReflectance(color)`, `reflectanceToXYZ(r)`, `reflectanceToRGBa(r)` | conversions |
+
+The RGB versions return colors with the linearity of their first color. Except for the two-color `mixSpectral`,
+which keeps its old behavior, they map results into the sRGB gamut by default (`SpectralGamutMapping.MAP`), as
+spectral.js does. The results match the examples in the spectral.js 3.0.0 README to within 1/255 (see
+`TestSpectralJs`).
+
 ## Pipeline
 
-`mixSpectral(color1, color2, t, k1, k2)` works in five steps:
+Mixing works in five steps:
 
-1. Both colors are converted to linear sRGB.
+1. The colors are converted to linear sRGB.
 2. Each color is turned into a reflectance spectrum: the fraction of light the surface reflects at each wavelength
    ([From RGB to a reflectance spectrum](#from-rgb-to-a-reflectance-spectrum)).
 3. Each spectrum is converted to the Kubelka–Munk ratio of absorption to scattering, K/S. The ratios are averaged,
@@ -28,7 +59,8 @@ val rgb = reflectanceToRGBa(mix)       // linear RGB under D65
    added back after it ([Saunderson correction](#saunderson-correction)).
 4. The mixed spectrum is converted to the reflectance seen from outside with the Saunderson correction.
 5. The spectrum is integrated against the color matching functions to give CIE XYZ, which is converted back to RGB
-   with the linearity of `color1` ([The CIE_CMF_X, Y and Z tables](#the-cie_cmf_x-y-and-z-tables)).
+   ([The CIE_CMF_X, Y and Z tables](#the-cie_cmf_x-y-and-z-tables)) and, if requested, mapped into the sRGB gamut
+   ([Gamut mapping](#gamut-mapping)).
 
 All spectra use 38 samples from 380 nm to 750 nm in steps of 10 nm.
 
@@ -99,11 +131,11 @@ pick one. `linearToReflectance` uses the method of Brian Smits, *An RGB-to-Spect
 - one **secondary** (cyan, magenta or yellow) for what the two largest channels share beyond white;
 - one **primary** (red, green or blue) for what is left in the largest channel.
 
-The reflectance is the weighted sum of seven fixed basis spectra. White is a flat spectrum at 1.0; the other six are
-`SPD_C`, `SPD_M`, `SPD_Y`, `SPD_R`, `SPD_G` and `SPD_B`. Despite the `SPD` (spectral power distribution) prefix,
-these are reflectance curves between 0 and 1, not emission spectra. They are smooth curves computed for spectral.js
-such that under D65 each maps back to its sRGB color. Converting linear RGB to a spectrum and back through
-`reflectanceToXYZ` reproduces the input to within 0.001.
+The reflectance is the weighted sum of seven fixed basis spectra, `BASE_W`, `BASE_C`, `BASE_M`, `BASE_Y`, `BASE_R`,
+`BASE_G` and `BASE_B`: reflectance curves between 0 and 1 computed for spectral.js such that under D65 each maps back
+to its sRGB color. White is nearly flat, between 0.9997 and 1.0012. The data is that of spectral.js 3.0.0. The
+spectral.js 2 basis spectra this port started from had a discontinuity in magenta and green: magenta dropped to almost
+0 at 570 and 580 nm and jumped to 0.85 at 590 nm, green did the opposite.
 
 Reflectances are clamped to at least 1·10⁻⁸ so that K/S below stays finite.
 
@@ -124,7 +156,7 @@ S = Σ cᵢSᵢ. spectral.js uses the **single-constant** simplification, which 
 that K/S itself mixes linearly. Per wavelength:
 
 ```
-(K/S)mix = (1 − c) · (K/S)₁ + c · (K/S)₂
+(K/S)mix = Σ cᵢ · (K/S)ᵢ / Σ cᵢ
 ```
 
 Absorption mixes nonlinearly in reflectance: a little dark pigment absorbs a lot, which is why blue and yellow give
@@ -132,16 +164,17 @@ green and not gray. In the code, `ks` is the mixed K/S and `km` is the resulting
 
 ### Concentration
 
-`t` is not used as the concentration directly. `linearToConcentration` weights each color by its luminance l (the Y
-of its reflectance spectrum):
+The mixing factors are not used as concentrations directly. As in spectral.js 3.0, the concentration of a color is
 
 ```
-c = l₂ t² / (l₁ (1 − t)² + l₂ t²)
+c = f² · T² · L
 ```
 
-Dark colors absorb strongly and would otherwise dominate the mix. This weighting makes `t` behave more evenly. It is
-a design choice of spectral.js, not part of Kubelka–Munk theory. spectral.js 3.0 generalizes it to
-`C = f² · T² · L`, with mixing factor f, tinting strength T and luminance L.
+with mixing factor f, tinting strength T and luminance L, the Y of its reflectance spectrum. Dark colors absorb
+strongly and would otherwise dominate the mix; weighting by luminance makes the factors behave more evenly. The
+tinting strength lets a color be weaker or stronger in mixes, like a strong or weak pigment. Both are design choices
+of spectral.js, not part of Kubelka–Munk theory. The factors do not need to add up to 1. For two colors with factors
+1 − t and t this gives the `t` of the two-color `mixSpectral`.
 
 ### Limitations
 
@@ -152,8 +185,17 @@ a design choice of spectral.js, not part of Kubelka–Munk theory. spectral.js 3
 - The spectra come from RGB colors, not from measured pigments. The result is a plausible paint-like mix, not a
   prediction for real paints.
 - The mixed spectrum is a valid reflectance between 0 and 1, but its color can still lie slightly outside the sRGB
-  gamut. Green mixed with blue gives about (−0.05, 0.25, 0.07) in linear RGB, and cyan with magenta a blue of 1.03.
-  `mixSpectral` returns such values unclamped.
+  gamut. Green mixed with blue gives a negative red component, cyan with magenta a blue above 1.
+
+## Gamut mapping
+
+`SpectralGamutMapping` chooses what happens to colors outside the sRGB gamut:
+
+- `NONE` returns them unchanged;
+- `CLIP` clamps every linear RGB component to [0, 1], which can shift hue and lightness;
+- `MAP` reduces the chroma in OKLCh while keeping lightness and hue, until the color is in gamut or clamping it
+  changes it less than a just noticeable difference of 0.03 in OKLab. This is the method of spectral.js 3.0 and the
+  gamut mapping algorithm of CSS Color 4.
 
 ## Saunderson correction
 
@@ -214,16 +256,12 @@ concentration weighting, Kubelka–Munk mixing and Saunderson correction, withou
 
 ## Differences from spectral.js 3.0
 
-spectral.js 3.0 adds features this port does not have:
-
-- mixing any number of colors with individual factors: `mix([c1, f1], [c2, f2], ...)`;
-- a tinting strength per color, which scales its concentration;
-- `palette(a, b, size)` and `gradient(t, ...colors)`;
-- gamut mapping of the mixed result in OKLCh, by reducing chroma until it fits in sRGB;
-- an explicit white basis spectrum instead of a flat 1.0, and basis spectra with more precise values.
-
-spectral.js does not use a Saunderson correction; it was added in this port. `mixSpectral` also ignores alpha: the
-result is always opaque.
+- The Saunderson correction is an addition of this port; spectral.js does not model surface reflections.
+- XYZ is converted to RGB with the openrndr matrices, results can differ from spectral.js by 1/255.
+- Out-of-gamut RGB input is handled by clamping the decomposition weights to 0.
+- Alpha is ignored: mixes are always opaque.
+- spectral.js parses CSS color strings and formats results as hex; use `ColorRGBa.fromHex` and openrndr's formatting
+  instead.
 
 ## References
 
