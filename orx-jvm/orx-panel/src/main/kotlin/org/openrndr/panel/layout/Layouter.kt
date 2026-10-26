@@ -4,11 +4,15 @@ import org.openrndr.panel.elements.Element
 import org.openrndr.panel.elements.TextNode
 import org.openrndr.panel.style.*
 import org.openrndr.shape.Rectangle
+import kotlin.math.ceil
 import kotlin.math.max
 
-/** the length in pixels, or 0 when it is not given in pixels */
-private val LinearDimension.pixels: Double
-    get() = (this as? LinearDimension.PX)?.value ?: 0.0
+/** the length in pixels, with percentages taken of [reference]; 0 for other kinds of lengths */
+private fun LinearDimension.resolve(reference: Double): Double = when (this) {
+    is LinearDimension.PX -> value
+    is LinearDimension.Percent -> reference * (value / 100.0)
+    else -> 0.0
+}
 
 private val StyleSheet.grow: Double
     get() = (flexGrow as FlexGrow.Ratio).value
@@ -24,7 +28,8 @@ private val StyleSheet.shrink: Double
  * sizes and positions of the children of an element, using the measured sizes. Every element in the flow is sized and
  * positioned by its parent, fixed and absolute elements size and position themselves.
  *
- * Sizes are border-box sizes: they include the padding but not the margins of an element.
+ * Sizes are border-box sizes: they include the padding but not the margins of an element. Percentages are taken of
+ * the content size of the containing element, margins are always taken of its width.
  */
 class Layouter {
     val styleSheets = ArrayList<StyleSheet>()
@@ -32,7 +37,12 @@ class Layouter {
     val manualPosition = setOf(Position.FIXED, Position.ABSOLUTE)
 
     private data class WidthKey(val element: Element, val containerWidth: Double)
-    private data class HeightKey(val element: Element, val width: Double, val containerHeight: Double)
+    private data class HeightKey(
+        val element: Element,
+        val width: Double,
+        val containerWidth: Double,
+        val containerHeight: Double
+    )
 
     private val widthCache = HashMap<WidthKey, Double>()
     private val heightCache = HashMap<HeightKey, Double>()
@@ -51,13 +61,22 @@ class Layouter {
     private val Element.contentHeight: Double
         get() = layout.screenHeight - computedStyle.effectivePaddingHeight
 
-    fun marginTop(element: Element) = element.computedStyle.marginTop.pixels
-    fun marginBottom(element: Element) = element.computedStyle.marginBottom.pixels
-    fun marginLeft(element: Element) = element.computedStyle.marginLeft.pixels
-    fun marginRight(element: Element) = element.computedStyle.marginRight.pixels
+    private val Element.containerWidth: Double
+        get() = parent?.contentWidth ?: 0.0
 
-    private fun horizontalMargins(element: Element) = marginLeft(element) + marginRight(element)
-    private fun verticalMargins(element: Element) = marginTop(element) + marginBottom(element)
+    private val Element.containerHeight: Double
+        get() = parent?.contentHeight ?: 0.0
+
+    fun marginTop(element: Element) = element.computedStyle.marginTop.resolve(element.containerWidth)
+    fun marginBottom(element: Element) = element.computedStyle.marginBottom.resolve(element.containerWidth)
+    fun marginLeft(element: Element) = element.computedStyle.marginLeft.resolve(element.containerWidth)
+    fun marginRight(element: Element) = element.computedStyle.marginRight.resolve(element.containerWidth)
+
+    private fun horizontalMargins(element: Element, containerWidth: Double) =
+        element.computedStyle.let { it.marginLeft.resolve(containerWidth) + it.marginRight.resolve(containerWidth) }
+
+    private fun verticalMargins(element: Element, containerWidth: Double) =
+        element.computedStyle.let { it.marginTop.resolve(containerWidth) + it.marginBottom.resolve(containerWidth) }
 
     //<editor-fold desc="Measuring">
     /**
@@ -72,23 +91,34 @@ class Layouter {
                 0.0
             } else when (val width = cs.width) {
                 is LinearDimension.PX -> width.value
-                is LinearDimension.Percent -> containerWidth * (width.value / 100.0) - horizontalMargins(element)
+                is LinearDimension.Percent ->
+                    containerWidth * (width.value / 100.0) - horizontalMargins(element, containerWidth)
+
                 is LinearDimension.Auto -> {
-                    val available = containerWidth - horizontalMargins(element) - cs.effectivePaddingWidth
-                    (element.widthHint ?: naturalContentWidth(element, available)) + cs.effectivePaddingWidth
+                    val available = containerWidth - horizontalMargins(element, containerWidth) - cs.effectivePaddingWidth
+                    val contentWidth = when (element) {
+                        // text takes its natural width, it wraps when that is not available. The text writer
+                        // only keeps words on a line that end before its edge, hence the extra pixel.
+                        is TextNode -> minOf(ceil(element.textWidth()) + 1.0, max(0.0, available))
+                        else -> element.widthHint ?: naturalContentWidth(element, available)
+                    }
+                    contentWidth + cs.effectivePaddingWidth
                 }
 
+                // the height of an element depends on its width, it is not known here
+                is LinearDimension.Calculate -> width.function(CalculateContext(null, null))
                 else -> error("width $width is not supported")
             }
         }
 
     /**
      * The height of [element] when it is [width] wide.
+     * @param containerWidth the content width of the containing element, the reference for margins
      * @param containerHeight the content height of the containing element: the reference for percentages, and the
      * height available to elements with an auto height
      */
-    private fun measureHeight(element: Element, width: Double, containerHeight: Double): Double =
-        heightCache.getOrPut(HeightKey(element, width, containerHeight)) {
+    private fun measureHeight(element: Element, width: Double, containerWidth: Double, containerHeight: Double): Double =
+        heightCache.getOrPut(HeightKey(element, width, containerWidth, containerHeight)) {
             val cs = element.computedStyle
             if (cs.display == Display.NONE) {
                 0.0
@@ -96,9 +126,11 @@ class Layouter {
                 element.sizeHint(width).height
             } else when (val height = cs.height) {
                 is LinearDimension.PX -> height.value
-                is LinearDimension.Percent -> containerHeight * (height.value / 100.0) - verticalMargins(element)
+                is LinearDimension.Percent ->
+                    containerHeight * (height.value / 100.0) - verticalMargins(element, containerWidth)
+
                 is LinearDimension.Auto -> {
-                    val available = containerHeight - verticalMargins(element) - cs.effectivePaddingHeight
+                    val available = containerHeight - verticalMargins(element, containerWidth) - cs.effectivePaddingHeight
                     (element.heightHint ?: naturalContentHeight(element, width - cs.effectivePaddingWidth, available)) +
                             cs.effectivePaddingHeight
                 }
@@ -109,10 +141,10 @@ class Layouter {
         }
 
     private fun outerWidth(element: Element, containerWidth: Double) =
-        measureWidth(element, containerWidth) + horizontalMargins(element)
+        measureWidth(element, containerWidth) + horizontalMargins(element, containerWidth)
 
-    private fun outerHeight(element: Element, width: Double, containerHeight: Double) =
-        measureHeight(element, width, containerHeight) + verticalMargins(element)
+    private fun outerHeight(element: Element, width: Double, containerWidth: Double, containerHeight: Double) =
+        measureHeight(element, width, containerWidth, containerHeight) + verticalMargins(element, containerWidth)
 
     /**
      * The width the in-flow children of [element] need when [contentWidth] is available.
@@ -145,12 +177,15 @@ class Layouter {
 
             cs.display == Display.FLEX && cs.flexDirection == FlexDirection.Row -> {
                 val widths = flexSizes(element, children, true, contentWidth, contentHeight)
-                children.withIndex().maxOfOrNull { (i, child) -> outerHeight(child, widths[i], contentHeight) } ?: 0.0
+                children.withIndex().maxOfOrNull { (i, child) ->
+                    outerHeight(child, widths[i], contentWidth, contentHeight)
+                } ?: 0.0
             }
 
             else -> {
                 val gap = if (cs.display == Display.FLEX) cs.rowGap.inPixels(contentHeight) else 0.0
-                children.sumOf { outerHeight(it, measureWidth(it, contentWidth), contentHeight) } + gaps(children, gap)
+                children.sumOf { outerHeight(it, measureWidth(it, contentWidth), contentWidth, contentHeight) } +
+                        gaps(children, gap)
             }
         }
     }
@@ -176,12 +211,14 @@ class Layouter {
             if (horizontal) {
                 measureWidth(it, contentWidth)
             } else {
-                measureHeight(it, measureWidth(it, contentWidth), contentHeight)
+                measureHeight(it, measureWidth(it, contentWidth), contentWidth, contentHeight)
             }
         }
         val available = if (horizontal) contentWidth else contentHeight
         val gap = if (horizontal) cs.columnGap.inPixels(contentWidth) else cs.rowGap.inPixels(contentHeight)
-        val margins = children.sumOf { if (horizontal) horizontalMargins(it) else verticalMargins(it) }
+        val margins = children.sumOf {
+            if (horizontal) horizontalMargins(it, contentWidth) else verticalMargins(it, contentWidth)
+        }
         val remainder = available - sizes.sum() - margins - gaps(children, gap)
 
         val weights = when {
@@ -236,20 +273,23 @@ class Layouter {
         }
         for ((i, child) in children.withIndex()) {
             val layout = child.layout
+            val ccs = child.computedStyle
+            val marginLeft = ccs.marginLeft.resolve(contentWidth)
+            val marginTop = ccs.marginTop.resolve(contentWidth)
             if (horizontal) {
-                layout.screenX = position + marginLeft(child)
-                layout.screenY = element.layout.screenY + cs.effectivePaddingTop - element.scrollTop + marginTop(child)
+                layout.screenX = position + marginLeft
+                layout.screenY = element.layout.screenY + cs.effectivePaddingTop - element.scrollTop + marginTop
                 layout.screenWidth = sizes[i]
-                layout.screenHeight = measureHeight(child, sizes[i], contentHeight)
+                layout.screenHeight = measureHeight(child, sizes[i], contentWidth, contentHeight)
                 layout.growWidth = sizes[i] - measureWidth(child, contentWidth)
-                position += sizes[i] + horizontalMargins(child) + gap
+                position += sizes[i] + horizontalMargins(child, contentWidth) + gap
             } else {
-                layout.screenX = element.layout.screenX + cs.effectivePaddingLeft + marginLeft(child)
-                layout.screenY = position + marginTop(child)
+                layout.screenX = element.layout.screenX + cs.effectivePaddingLeft + marginLeft
+                layout.screenY = position + marginTop
                 layout.screenWidth = measureWidth(child, contentWidth)
                 layout.screenHeight = sizes[i]
-                layout.growHeight = sizes[i] - measureHeight(child, layout.screenWidth, contentHeight)
-                position += sizes[i] + verticalMargins(child) + gap
+                layout.growHeight = sizes[i] - measureHeight(child, layout.screenWidth, contentWidth, contentHeight)
+                position += sizes[i] + verticalMargins(child, contentWidth) + gap
             }
         }
     }
@@ -265,11 +305,11 @@ class Layouter {
         var y = element.layout.screenY + cs.effectivePaddingTop - element.scrollTop
         for (child in inFlowChildren(element)) {
             val layout = child.layout
-            layout.screenX = x + marginLeft(child)
-            layout.screenY = y + marginTop(child)
+            layout.screenX = x + child.computedStyle.marginLeft.resolve(contentWidth)
+            layout.screenY = y + child.computedStyle.marginTop.resolve(contentWidth)
             layout.screenWidth = measureWidth(child, contentWidth)
-            layout.screenHeight = measureHeight(child, layout.screenWidth, contentHeight)
-            y += layout.screenHeight + verticalMargins(child)
+            layout.screenHeight = measureHeight(child, layout.screenWidth, contentWidth, contentHeight)
+            y += layout.screenHeight + verticalMargins(child, contentWidth)
         }
     }
 
@@ -357,8 +397,8 @@ class Layouter {
     }
 
     /**
-     * Places the in-flow children of [element] in the cells of its grid. Children with an auto width or height fill
-     * their cells.
+     * Places the in-flow children of [element] in the cells of its grid. A cell is the containing area of its child,
+     * children with an auto width or height fill their cells.
      */
     private fun arrangeGrid(element: Element) {
         val cs = element.computedStyle
@@ -394,17 +434,17 @@ class Layouter {
 
             val ccs = child.computedStyle
             val layout = child.layout
-            layout.screenX = cellX + ccs.marginLeft.inPixels(cellWidth)
-            layout.screenY = cellY + ccs.marginTop.inPixels(cellWidth) - element.scrollTop
+            layout.screenX = cellX + ccs.marginLeft.resolve(cellWidth)
+            layout.screenY = cellY + ccs.marginTop.resolve(cellWidth) - element.scrollTop
             layout.screenWidth = if (ccs.width == LinearDimension.Auto) {
-                cellWidth - ccs.marginLeft.inPixels(cellWidth) - ccs.marginRight.inPixels(cellWidth)
+                cellWidth - horizontalMargins(child, cellWidth)
             } else {
-                measureWidth(child, contentBounds.width)
+                measureWidth(child, cellWidth)
             }
             layout.screenHeight = if (ccs.height == LinearDimension.Auto) {
-                cellHeight - ccs.marginTop.inPixels(cellWidth) - ccs.marginBottom.inPixels(cellWidth)
+                cellHeight - verticalMargins(child, cellWidth)
             } else {
-                measureHeight(child, layout.screenWidth, contentBounds.height)
+                measureHeight(child, layout.screenWidth, cellWidth, cellHeight)
             }
             x += columnCells.count()
             if (x >= columns) {
@@ -426,15 +466,13 @@ class Layouter {
         val layout = element.layout
         if (cs.position in manualPosition) {
             val parent = element.parent
-            layout.screenWidth = measureWidth(element, parent?.contentWidth ?: 0.0)
-            layout.screenHeight = measureHeight(element, layout.screenWidth, parent?.contentHeight ?: 0.0)
-            if (cs.position == Position.FIXED || parent == null) {
-                layout.screenX = cs.left.pixels
-                layout.screenY = cs.top.pixels
-            } else {
-                layout.screenX = parent.layout.screenX + cs.left.pixels
-                layout.screenY = parent.layout.screenY + cs.top.pixels
-            }
+            layout.screenWidth = measureWidth(element, element.containerWidth)
+            layout.screenHeight =
+                measureHeight(element, layout.screenWidth, element.containerWidth, element.containerHeight)
+            // fixed elements are placed relative to the root, absolute elements relative to their parent
+            val origin = if (cs.position == Position.FIXED || parent == null) element.root() else parent
+            layout.screenX = origin.layout.screenX + cs.left.resolve(origin.layout.screenWidth)
+            layout.screenY = origin.layout.screenY + cs.top.resolve(origin.layout.screenHeight)
         }
 
         layout.paddingLeft = cs.effectivePaddingLeft
@@ -460,10 +498,9 @@ class Layouter {
     fun layout(element: Element) {
         clearCaches()
         if (element.computedStyle.position !in manualPosition) {
-            val parent = element.parent
-            element.layout.screenWidth = measureWidth(element, parent?.contentWidth ?: 0.0)
+            element.layout.screenWidth = measureWidth(element, element.containerWidth)
             element.layout.screenHeight =
-                measureHeight(element, element.layout.screenWidth, parent?.contentHeight ?: 0.0)
+                measureHeight(element, element.layout.screenWidth, element.containerWidth, element.containerHeight)
         }
         arrange(element)
     }
@@ -478,8 +515,8 @@ class Layouter {
      */
     fun width(element: Element, includeMargins: Boolean = true): Double {
         clearCaches()
-        return measureWidth(element, element.parent?.contentWidth ?: 0.0) +
-                if (includeMargins) horizontalMargins(element) else 0.0
+        return measureWidth(element, element.containerWidth) +
+                if (includeMargins) horizontalMargins(element, element.containerWidth) else 0.0
     }
 
     /**
@@ -488,9 +525,9 @@ class Layouter {
      */
     fun height(element: Element, width: Double? = null, includeMargins: Boolean = true): Double {
         clearCaches()
-        val elementWidth = width ?: measureWidth(element, element.parent?.contentWidth ?: 0.0)
-        return measureHeight(element, elementWidth, element.parent?.contentHeight ?: 0.0) +
-                if (includeMargins) verticalMargins(element) else 0.0
+        val elementWidth = width ?: measureWidth(element, element.containerWidth)
+        return measureHeight(element, elementWidth, element.containerWidth, element.containerHeight) +
+                if (includeMargins) verticalMargins(element, element.containerWidth) else 0.0
     }
 
     fun computeStyles(element: Element) {
