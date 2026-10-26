@@ -47,7 +47,8 @@ class ColorpickerButton : Element(ElementType("colorpicker-button")) {
         }
         mouse.clicked.listen {
             replace {
-                slideOut(0.0, screenArea.height, screenArea.width, 200.0) {
+                // opens below the button, or above it when there is no space below
+                slideOut(0.0, screenArea.height, screenArea.width, 200.0, aboveY = 0.0) {
 
                     val cp = colorpicker {
                         style {

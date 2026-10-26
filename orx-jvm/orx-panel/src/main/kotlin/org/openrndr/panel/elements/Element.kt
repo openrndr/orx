@@ -132,7 +132,7 @@ open class Element(val type: ElementType) : AutoCloseable {
 
         val bounds: Rectangle
             get() {
-                return Rectangle(screenWidth, screenHeight, screenWidth, screenHeight)
+                return Rectangle(screenX, screenY, screenWidth, screenHeight)
             }
 
         val boundsAtOrigin: Rectangle
@@ -279,6 +279,13 @@ open class Element(val type: ElementType) : AutoCloseable {
 
     open fun draw(drawer: Drawer) {
 
+    }
+
+    /**
+     * Called by the layouter once the size of this element is known and before its children are positioned. Can be
+     * used to adjust [layout] to the element's size.
+     */
+    internal open fun sized() {
     }
 
     fun filter(f: (Element) -> Boolean): List<Element> {

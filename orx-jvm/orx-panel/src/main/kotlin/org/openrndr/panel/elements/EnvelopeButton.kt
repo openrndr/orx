@@ -27,8 +27,19 @@ class EnvelopeButton : Element(ElementType("envelope-button")) {
     var envelopeSubscription: ((Envelope.EnvelopeChangedEvent)->Unit)? = null
 
     init {
+        // the control manager only sends clicks to elements that cancel the propagation of the press
+        mouse.pressed.listen {
+            it.cancelPropagation()
+        }
         mouse.clicked.listen {
-            append(SlideOut(0.0, screenArea.height, screenArea.width, 200.0, this))
+            val open = children.filterIsInstance<SlideOut>()
+            if (open.isEmpty()) {
+                // opens below the button, or above it when there is no space below
+                append(SlideOut(0.0, screenArea.height, screenArea.width, 200.0, this, aboveY = 0.0))
+            } else {
+                open.forEach { slideOut -> slideOut.dispose() }
+            }
+            it.cancelPropagation()
         }
         envelopeSubscription = envelope.events.envelopeChanged.listen {
             draw.dirty = true
@@ -97,7 +108,18 @@ class EnvelopeButton : Element(ElementType("envelope-button")) {
     }
 
 
-    class SlideOut(val x: Double, val y: Double, val width: Double, val height: Double, parent: EnvelopeButton) : Element(ElementType("envelope-slide-out")) {
+    /**
+     * @param aboveY when set, the slide-out is placed with its bottom edge at [aboveY] relative to the parent when it
+     * does not fit between [y] and the bottom of the window, but does fit above [aboveY]
+     */
+    class SlideOut(
+        val x: Double,
+        val y: Double,
+        val width: Double,
+        val height: Double,
+        parent: EnvelopeButton,
+        val aboveY: Double? = null
+    ) : Element(ElementType("envelope-slide-out")) {
 
         init {
 
@@ -127,6 +149,10 @@ class EnvelopeButton : Element(ElementType("envelope-button")) {
                     dispose()
                 }
             })
+        }
+
+        override fun sized() {
+            aboveY?.let { placeAboveWhenNoSpaceBelow(it) }
         }
 
         override fun draw(drawer: Drawer) {

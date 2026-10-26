@@ -166,9 +166,14 @@ class XYPad : Element(ElementType("xy-pad")) {
         )
 
     private val grid = mutableListOf<LineSegment>()
+    private var gridSize = Vector2(-1.0, -1.0)
 
     override fun draw(drawer: Drawer) {
-        if (grid.isEmpty()) {
+        // the grid is rebuilt when the size of the pad changes
+        val size = Vector2(layout.screenWidth, layout.screenHeight)
+        if (size != gridSize) {
+            grid.clear()
+            gridSize = size
             repeat(21) { n ->
                 grid.add(
                     LineSegment(
