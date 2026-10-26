@@ -91,8 +91,9 @@ L 5,5
 ### Smooth curves
 
 The `T` and `S` commands (and their lowercase counterparts) allow us to create smooth curves, where
-one control point is automatically calculated to maintain the curve direction. The smooth curve
-commands require the presence of a previous segment, otherwise the program will not run.
+one control point is automatically calculated to maintain the curve direction. When a smooth curve
+command is used for the first segment there is no direction to maintain: `T` draws a straight line
+and `S` places its first control point at the start of the segment.
 
 ```kotlin
 // Hold the value 0.5 during 0.2 seconds, 

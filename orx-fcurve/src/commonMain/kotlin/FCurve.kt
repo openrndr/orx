@@ -424,19 +424,25 @@ class FCurveBuilder {
         path += "${if (relative) "c" else "C"}$x0,$y0,$x,$y"
     }
 
+    /**
+     * The handle that continues the direction of the last segment: the reflection of its last control point in its
+     * end point. For a linear segment the reflection of its midpoint, which continues the line's slope. Without a
+     * last segment there is no direction to continue and the handle is zero.
+     */
+    private fun smoothHandle(): Vector2 {
+        val lastSegment = segments.lastOrNull() ?: return Vector2.ZERO
+        val outTangent = if (lastSegment.linear) lastSegment.position(0.5) else lastSegment.control.last()
+        return lastSegment.end - outTangent
+    }
+
     fun continueTo(x: Double, y: Double, relative: Boolean = false) {
         val r = if (relative) 1.0 else 0.0
 
         if (segments.isNotEmpty()) {
-            val lastSegment = segments.last()
-            val outTangent = if (segments.last().linear) lastSegment.end else segments.last().control.last()
-            val outPos = lastSegment.end
-            val d = outPos - outTangent
-            val ts = 1.0// x / lastDuration
             segments.add(
                 Segment2D(
                     cursor,
-                    cursor + d * ts,
+                    cursor + smoothHandle(),
                     Vector2(cursor.x + x, cursor.y * r + y)
                 ).scaleTangents()
             )
@@ -452,14 +458,10 @@ class FCurveBuilder {
 
     fun continueTo(x1: Double, y1: Double, x: Double, y: Double, relative: Boolean = false) {
         val r = if (relative) 1.0 else 0.0
-        val lastSegment = segments.last()
-        val outTangent = if (lastSegment.linear) lastSegment.position(0.5) else segments.last().control.last()
-        val dx = cursor.x - outTangent.x
-        val dy = cursor.y - outTangent.y
         segments.add(
             Segment2D(
                 cursor,
-                Vector2(cursor.x + dx, cursor.y + dy),
+                cursor + smoothHandle(),
                 Vector2(cursor.x + x1, cursor.y * r + y1),
                 Vector2(cursor.x + x, cursor.y * r + y)
             ).scaleTangents()
