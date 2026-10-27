@@ -60,6 +60,7 @@ Two color spaces are added: `ColorHSLUVa` and `ColorHPLUVa`, they are an impleme
   - DemoColorMatrix [01](#colormatrixdemocolormatrix01), [02](#colormatrixdemocolormatrix02), [03](#colormatrixdemocolormatrix03), [04](#colormatrixdemocolormatrix04)
 - **colorRange**
   - DemoColorRange [01](#colorrangedemocolorrange01), [02](#colorrangedemocolorrange02), [03](#colorrangedemocolorrange03), [04](#colorrangedemocolorrange04)
+- [DemoChromatography01](#demochromatography01)
 - DemoColorPalette [01](#democolorpalette01), [02](#democolorpalette02)
 - DemoColorPlane [01](#democolorplane01), [02](#democolorplane02)
 - [DemoColorSequence01](#democolorsequence01)
@@ -67,7 +68,7 @@ Two color spaces are added: `ColorHSLUVa` and `ColorHPLUVa`, they are an impleme
 - DemoFettePalette [01](#demofettepalette01), [02](#demofettepalette02)
 - DemoHSLUV [01](#demohsluv01), [02](#demohsluv02)
 - [DemoHueTools01](#demohuetools01)
-- [DemoMixSpectral01](#demomixspectral01)
+- DemoMixSpectral [01](#demomixspectral01), [02](#demomixspectral02), [03](#demomixspectral03)
 - [DemoOKHSV01](#demookhsv01)
 - [DemoXSLUV01](#demoxsluv01)
 - **histogram**
@@ -279,6 +280,24 @@ smaller, invisible cube.
 
 [source code](src/jvmDemo/kotlin/colorRange/DemoColorRange04.kt)
 
+### DemoChromatography01
+
+Demonstrates a paper chromatography effect with spectral color mixing.
+
+An ink is a mixture of dyes. When a drop of ink sits on wet paper, the solvent spreads outward and carries the dyes
+with it, but every dye travels at its own speed, given by its retention factor: the fraction of the solvent front's
+distance that it covers. The dyes separate into colored rings, each blurring as it travels and leaving a faint
+trail. A tide line marks the solvent front.
+
+The dyes are measured spectra from [PigmentReflectances]. At every radius, the paper and the local concentrations of
+the dyes are mixed with Kubelka–Munk theory, where bands overlap their dyes mix. The radial color profile of every
+spot is written to a small texture; a shader draws the spot from it and warps the radius with noise along the angle,
+for the irregular, feathered edges that paper fibers cause. Click to drop another ink.
+
+![DemoChromatography01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoChromatography01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoChromatography01.kt)
+
 ### DemoColorPalette01
 
 Demonstrates the creation of color palettes using various available methods
@@ -484,6 +503,32 @@ A plain `mix()` of the same two colors is shown at the bottom for comparison.
 ![DemoMixSpectral01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoMixSpectral01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoMixSpectral01.kt)
+
+### DemoMixSpectral02
+
+Demonstrates spectral color mixing, which mixes colors the way paints mix:
+- blue and yellow mixed in RGB and spectrally;
+- three paints mixed in every proportion, on a triangle;
+- a palette and a gradient with three color stops;
+- the effect of tinting strength: a weaker red changes the mix with yellow less, the strength is animated.
+
+![DemoMixSpectral02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoMixSpectral02Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoMixSpectral02.kt)
+
+### DemoMixSpectral03
+
+Compares measured pigment spectra from [PigmentReflectances] with spectra constructed from their RGB colors by
+[linearToReflectance].
+
+The top shows pigments with their measured (solid) and constructed (dashed) reflectance spectra. Both spectra have
+the same color under D65 light, they are metamers, but their shapes differ. The bottom mixes pairs of pigments in
+steps, once with the measured spectra and once with the constructed ones: because the spectra differ, so do the
+mixes.
+
+![DemoMixSpectral03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-color/images/DemoMixSpectral03Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoMixSpectral03.kt)
 
 ### DemoOKHSV01
 
