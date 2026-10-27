@@ -156,10 +156,22 @@ class ControlManager : Extension {
 
     val keyboardInput = KeyboardInput()
 
+    /**
+     * The distance in pixels the mouse has to move while a button is held before it counts as a drag. Smaller
+     * movements are ignored, so that a press that moves slightly still results in a click.
+     */
+    var dragThreshold = 3.0
+
     inner class MouseInput {
         var dragTarget: Element? = null
         var clickTarget: Element? = null
         var lastClick = System.currentTimeMillis()
+
+        /** the position of the last press, the start of a possible drag */
+        private var pressPosition: Vector2? = null
+
+        /** true once the mouse moved further than [dragThreshold] since the last press */
+        private var dragging = false
 
         fun scroll(event: MouseEvent) {
             fun traverse(element: Element) {
@@ -213,6 +225,8 @@ class ControlManager : Extension {
 
         fun press(event: MouseEvent) {
             logger.debug { "press event: $event" }
+            pressPosition = event.position
+            dragging = false
             val candidates = mutableListOf<Pair<Element, Int>>()
             fun traverse(element: Element, depth: Int = 0) {
                 if (element.computedStyle.display == Display.NONE) {
@@ -259,6 +273,13 @@ class ControlManager : Extension {
 
         fun drag(event: MouseEvent) {
             logger.debug { "drag event $event" }
+            if (!dragging) {
+                val start = pressPosition
+                if (start != null && event.position.distanceTo(start) < dragThreshold) {
+                    return
+                }
+                dragging = true
+            }
             dragTarget?.let {
                 if (it.isHidden()) {
                     dragTarget = null
