@@ -33,8 +33,11 @@ fun main() = application {
         val rt = renderTarget(width, height) { colorBuffer() }
         val distanceField = DistanceField()
 
-        // Needs to be FLOAT32 so we can have negative values
-        val result = colorBuffer(width, height, type = ColorType.FLOAT32)
+        // Needs to be FLOAT32 so we can have negative values. Uses the content scale of the render target, so that
+        // it has the same size in pixels on high density displays.
+        val result = colorBuffer(
+            width, height, contentScale = rt.colorBuffer(0).contentScale, type = ColorType.FLOAT32
+        )
         val shader = shadeStyle {
             fragmentTransform = """
                 float distance = abs(x_fill.r);
