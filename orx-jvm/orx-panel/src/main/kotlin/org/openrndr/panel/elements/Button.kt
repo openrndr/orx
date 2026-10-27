@@ -3,6 +3,7 @@ package org.openrndr.panel.elements
 import org.openrndr.KEY_SPACEBAR
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
+import org.openrndr.draw.StrokeAlignment
 
 import org.openrndr.draw.isolated
 import org.openrndr.events.Event
@@ -83,7 +84,9 @@ class Button : Element(ElementType("button")) {
             drawer.isolated {
                 drawer.stroke = computedStyle.effectiveBorderColor
                 drawer.strokeWeight = layout.borderWidth
-                drawer.rectangle(layout.borderBoundsAtOrigin)
+                // the background covers the box, the border is drawn inside it
+                drawer.strokeAlignment = StrokeAlignment.INSIDE
+                drawer.rectangle(layout.boundsAtOrigin)
             }
 
             (root() as? Body)?.controlManager?.fontManager?.let {

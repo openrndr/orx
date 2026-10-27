@@ -2,6 +2,7 @@ package org.openrndr.panel.elements
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
+import org.openrndr.draw.StrokeAlignment
 import org.openrndr.panel.style.*
 
 open class Div : TextElement(ElementType("div")) {
@@ -28,7 +29,9 @@ open class Div : TextElement(ElementType("div")) {
                 drawer.fill = ((it as? Color.RGBa)?.color ?: ColorRGBa.BLACK)
                 drawer.stroke = computedStyle.effectiveBorderColor
                 drawer.strokeWeight = layout.borderWidth
-                drawer.rectangle(layout.borderBoundsAtOrigin)
+                // the background covers the box, the border is drawn inside it
+                drawer.strokeAlignment = StrokeAlignment.INSIDE
+                drawer.rectangle(layout.boundsAtOrigin)
                 //drawer.smooth(true)
             }
         }

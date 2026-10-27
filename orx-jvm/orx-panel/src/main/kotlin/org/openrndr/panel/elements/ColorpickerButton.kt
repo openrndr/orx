@@ -54,8 +54,9 @@ class ColorpickerButton : Element(ElementType("colorpicker-button")) {
                 return@listen
             }
             replace {
-                // opens below the button, or above it when there is no space below
-                slideOut(0.0, screenArea.height, screenArea.width, 200.0, aboveY = 0.0) {
+                // opens below the button, or above it when there is no space below; it closes half a second after
+                // the cursor moved out of it
+                slideOut(0.0, screenArea.height, screenArea.width, 200.0, aboveY = 0.0, closeDelayMillis = 500L) {
 
                     val cp = colorpicker {
                         style {

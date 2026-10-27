@@ -3,6 +3,7 @@ package org.openrndr.panel.elements
 import org.openrndr.KEY_SPACEBAR
 import org.openrndr.Program
 import org.openrndr.draw.Drawer
+import org.openrndr.draw.StrokeAlignment
 import org.openrndr.draw.LineCap
 import org.openrndr.panel.style.*
 import org.openrndr.shape.Rectangle
@@ -97,6 +98,8 @@ class Toggle : Element(ElementType("toggle")) {
         drawer.strokeWeight = 1.0
         drawer.stroke = computedStyle.effectiveColor
         drawer.fill = null
+        // the frame of the check box is drawn inside it
+        drawer.strokeAlignment = StrokeAlignment.INSIDE
         drawer.rectangle(0.0, 0.0, checkBoxSize, checkBoxSize)
 
         if (value) {

@@ -220,6 +220,8 @@ open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(E
 
             drawer.stroke = computedStyle.effectiveColor?.shade(1.1)
             drawer.fill = ColorRGBa.PINK
+            // the stroke of the knob stays inside its radius
+            drawer.strokeAlignment = StrokeAlignment.INSIDE
             drawer.circle(x, controlArea.height / 2.0 + height, 7.0)
         }
 

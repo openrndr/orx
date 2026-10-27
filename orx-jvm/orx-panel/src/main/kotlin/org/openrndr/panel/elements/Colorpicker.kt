@@ -5,6 +5,7 @@ import org.openrndr.color.ColorHSVa
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ColorBuffer
 import org.openrndr.draw.Drawer
+import org.openrndr.draw.StrokeAlignment
 import org.openrndr.draw.colorBuffer
 import org.openrndr.events.Event
 import org.openrndr.extra.imageFit.imageFit
@@ -155,6 +156,7 @@ class Colorpicker : Element {
 
         val x = color.toHSVa().h/360.0 * colorMap!!.width.toDouble()
         val y =(1.0 -  color.toHSVa().v/1.0) * colorMap!!.height.toDouble()
+        drawer.strokeAlignment = StrokeAlignment.INSIDE
         drawer.circle(x, y, 10.0)
 
         val f = (root() as? Body)?.controlManager?.fontManager?.font(computedStyle)!!

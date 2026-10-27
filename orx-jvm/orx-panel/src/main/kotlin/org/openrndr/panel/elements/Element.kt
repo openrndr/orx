@@ -153,18 +153,6 @@ open class Element(val type: ElementType) : AutoCloseable {
                 return Rectangle(0.0, 0.0, screenWidth, screenHeight)
             }
 
-        /**
-         * The rectangle to stroke the border along: the bounds inset by half the border width, so that the border is
-         * drawn inside the bounds.
-         */
-        val borderBoundsAtOrigin: Rectangle
-            get() = Rectangle(
-                borderWidth / 2.0,
-                borderWidth / 2.0,
-                max(0.0, screenWidth - borderWidth),
-                max(0.0, screenHeight - borderWidth)
-            )
-
         @Deprecated("use contentBoundsAtOrigin", ReplaceWith("contentBoundsAtOrigin"))
         @Suppress("UNUSED_PARAMETER")
         fun boundsAtOriginPadded(computedStyle: StyleSheet): Rectangle = contentBoundsAtOrigin

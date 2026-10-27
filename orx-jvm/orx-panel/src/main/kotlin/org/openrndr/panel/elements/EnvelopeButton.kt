@@ -3,6 +3,7 @@ package org.openrndr.panel.elements
 import org.openrndr.color.ColorRGBa
 
 import org.openrndr.draw.Drawer
+import org.openrndr.draw.StrokeAlignment
 import org.openrndr.extra.textwriter.Cursor
 import org.openrndr.extra.textwriter.TextWriter
 
@@ -58,6 +59,7 @@ class EnvelopeButton : Element(ElementType("envelope-button")) {
 
     override fun draw(drawer: Drawer) {
         drawer.fill = ((computedStyle.background as? Color.RGBa)?.color ?: ColorRGBa.PINK)
+        drawer.strokeAlignment = StrokeAlignment.INSIDE
         drawer.rectangle(0.0, 0.0, screenArea.width, screenArea.height)
 
         (root() as? Body)?.controlManager?.fontManager?.let {
@@ -157,6 +159,7 @@ class EnvelopeButton : Element(ElementType("envelope-button")) {
 
         override fun draw(drawer: Drawer) {
             drawer.fill = ((computedStyle.background as? Color.RGBa)?.color ?: ColorRGBa.PINK)
+            drawer.strokeAlignment = StrokeAlignment.INSIDE
             drawer.rectangle(0.0, 0.0, screenArea.width, screenArea.height)
         }
 

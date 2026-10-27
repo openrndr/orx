@@ -3,6 +3,7 @@ package org.openrndr.panel.elements
 import org.openrndr.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
+import org.openrndr.draw.StrokeAlignment
 import org.openrndr.events.Event
 import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.math.Vector2
@@ -221,6 +222,7 @@ class XYPad : Element(ElementType("xy-pad")) {
             // ball
             drawer.fill = ColorRGBa.PINK
             drawer.stroke = ColorRGBa.WHITE
+            drawer.strokeAlignment = StrokeAlignment.INSIDE
             drawer.circle(ballPosition, 8.0)
 
             val valueLabel =

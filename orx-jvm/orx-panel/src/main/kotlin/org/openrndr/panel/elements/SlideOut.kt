@@ -1,7 +1,11 @@
 package org.openrndr.panel.elements
 
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
+import org.openrndr.draw.StrokeAlignment
+import org.openrndr.launch
 import org.openrndr.panel.style.*
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
@@ -12,16 +16,22 @@ import kotlin.contracts.contract
  *
  * @param aboveY when set, the slide-out is placed with its bottom edge at [aboveY] relative to the parent when it does
  * not fit between [y] and the bottom of the window, but does fit above [aboveY]
+ * @param closeDelayMillis how long the slide-out stays open after the cursor has moved out of it; moving the cursor
+ * back in keeps it open
  */
 class SlideOut(
     val x: Double,
     val y: Double,
     val width: Double,
     val height: Double,
-    val aboveY: Double? = null
+    val aboveY: Double? = null,
+    val closeDelayMillis: Long = 0L
 ) : Element(ElementType("slide-out")) {
 
     var dragging = false
+
+    /** the pending close after the cursor moved out */
+    private var closing: Job? = null
 
     init {
         style {
@@ -48,8 +58,22 @@ class SlideOut(
 
         mouse.exited.listen {
             if (!dragging) {
-                dispose()
+                val program = (root() as? Body)?.controlManager?.program
+                if (closeDelayMillis <= 0L || program == null) {
+                    dispose()
+                } else {
+                    closing?.cancel()
+                    closing = program.launch {
+                        delay(closeDelayMillis)
+                        dispose()
+                    }
+                }
             }
+        }
+
+        mouse.entered.listen {
+            closing?.cancel()
+            closing = null
         }
     }
 
@@ -64,13 +88,22 @@ class SlideOut(
                 drawer.fill = ((it as? Color.RGBa)?.color ?: ColorRGBa.BLACK)
                 drawer.stroke = computedStyle.effectiveBorderColor
                 drawer.strokeWeight = layout.borderWidth
-                drawer.rectangle(layout.borderBoundsAtOrigin)
+                // the background covers the box, the border is drawn inside it
+                drawer.strokeAlignment = StrokeAlignment.INSIDE
+                drawer.rectangle(layout.boundsAtOrigin)
             }
         }
     }
 
     fun dispose() {
-        parent?.remove(this)
+        closing?.cancel()
+        closing = null
+        val parent = parent ?: return
+        val controlManager = (root() as? Body)?.controlManager
+        parent.remove(this)
+        // closing after a delay is not caused by an event that redraws the panel
+        parent.draw.dirty = true
+        controlManager?.checkForManualRedraw()
         close()
     }
 }
@@ -83,12 +116,13 @@ fun Element.slideOut(
     height: Double,
     vararg classes: String,
     aboveY: Double? = null,
+    closeDelayMillis: Long = 0L,
     init: SlideOut.() -> Unit
 ): SlideOut {
     contract {
         callsInPlace(init, InvocationKind.EXACTLY_ONCE)
     }
-    val slideOut = SlideOut(x, y, width, height, aboveY)
+    val slideOut = SlideOut(x, y, width, height, aboveY, closeDelayMillis)
     initElement(classes, slideOut, init)
     return slideOut
 }

@@ -3,6 +3,7 @@ package org.openrndr.panel.elements
 import org.openrndr.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
+import org.openrndr.draw.StrokeAlignment
 import org.openrndr.draw.isolated
 import org.openrndr.events.Event
 import org.openrndr.extra.textwriter.Cursor
@@ -225,6 +226,7 @@ class TextInput : Element(ElementType("text-input")) {
     override fun draw(drawer: Drawer) {
         drawer.fill = computedStyle.effectiveBackground
         drawer.stroke = ((computedStyle.borderColor as? Color.RGBa)?.color ?: ColorRGBa.TRANSPARENT)
+        drawer.strokeAlignment = StrokeAlignment.INSIDE
         drawer.rectangle(layout.boundsAtOrigin)
 
         (root() as? Body)?.controlManager?.fontManager?.let { fm ->
