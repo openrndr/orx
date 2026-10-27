@@ -259,6 +259,29 @@ Demonstrates how to hide the GUI when the mouse pointer is outside of it.
 
 [source code](src/demo/kotlin/DemoHide01.kt)
 
+### DemoLayout01
+
+Demonstrates how to customize the layout and the styles of the GUI.
+
+The layout places the side canvas on the left and the sidebar on the right, with the toolbar below the sidebar.
+The building blocks `toolbar()`, `collapseBorder()`, `sidebar()` and `sideCanvas()` are arranged with the
+regular `div {}` builder. A custom style sheet is appended to the GUI styles to restyle the toolbar.
+
+![DemoLayout01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoLayout01Kt.webp)
+
+[source code](src/demo/kotlin/DemoLayout01.kt)
+
+### DemoMiniGUI01
+
+Demonstrates [MiniGUI], a compact GUI that shows a single horizontal bar at the bottom of the screen.
+
+The dropdown on the left of the bar selects the compartment to show, the controls of the selected compartment are
+laid out horizontally next to it.
+
+![DemoMiniGUI01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoMiniGUI01Kt.webp)
+
+[source code](src/demo/kotlin/DemoMiniGUI01.kt)
+
 ### DemoOptions01
 
 A simple demonstration of a GUI with a drop-down menu.
