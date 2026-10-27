@@ -46,6 +46,13 @@ class ColorpickerButton : Element(ElementType("colorpicker-button")) {
             it.cancelPropagation()
         }
         mouse.clicked.listen {
+            // a click while the color picker is open closes it
+            val open = children.filterIsInstance<SlideOut>()
+            if (open.isNotEmpty()) {
+                open.forEach { slideOut -> slideOut.dispose() }
+                it.cancelPropagation()
+                return@listen
+            }
             replace {
                 // opens below the button, or above it when there is no space below
                 slideOut(0.0, screenArea.height, screenArea.width, 200.0, aboveY = 0.0) {
