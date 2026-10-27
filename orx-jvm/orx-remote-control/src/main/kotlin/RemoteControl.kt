@@ -12,6 +12,8 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
 import kotlinx.coroutines.CompletableDeferred
+import org.openrndr.ApplicationMouse
+import org.openrndr.ApplicationWindowMouse
 import org.openrndr.Extension
 import org.openrndr.KeyEvent
 import org.openrndr.KeyEventType
@@ -142,9 +144,7 @@ class RemoteControl : Extension {
                     }
                     actionQueue.add {
                         val previous = program.mouse.position
-                        // Program.mouse is typed as the read-only MouseEvents interface, so the
-                        // actual position has to be set through Application instead.
-                        program.application.cursorPosition = position
+                        program.setCursorPosition(position)
                         program.mouse.moved.trigger(
                             MouseEvent(
                                 position,
@@ -180,7 +180,7 @@ class RemoteControl : Extension {
                     val modifiers = parseModifiers(call.request.queryParameters["modifiers"])
                     actionQueue.add {
                         if (requestedPosition != null) {
-                            program.application.cursorPosition = requestedPosition
+                            program.setCursorPosition(requestedPosition)
                         }
                         val event =
                             MouseEvent(program.mouse.position, Vector2.ZERO, Vector2.ZERO, type, button, modifiers)
@@ -335,4 +335,17 @@ private fun io.ktor.http.Parameters.vector2(xKey: String, yKey: String): Vector2
     val x = this[xKey]?.toDoubleOrNull()
     val y = this[yKey]?.toDoubleOrNull()
     return if (x != null && y != null) Vector2(x, y) else null
+}
+
+/**
+ * Sets the cursor position of this program's own window. Program.mouse is typed as the read-only MouseEvents
+ * interface; the cursor position of the application is that of the main window, which differs from a child
+ * window's.
+ */
+private fun Program.setCursorPosition(position: Vector2) {
+    when (val m = mouse) {
+        is ApplicationWindowMouse -> m.position = position
+        is ApplicationMouse -> m.position = position
+        else -> application.cursorPosition = position
+    }
 }
