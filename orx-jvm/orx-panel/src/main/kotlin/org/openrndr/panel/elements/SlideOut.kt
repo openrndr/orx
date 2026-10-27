@@ -63,8 +63,8 @@ class SlideOut(
             style.background.let {
                 drawer.fill = ((it as? Color.RGBa)?.color ?: ColorRGBa.BLACK)
                 drawer.stroke = computedStyle.effectiveBorderColor
-                drawer.strokeWeight = computedStyle.effectiveBorderWidth
-                drawer.rectangle(0.0, 0.0, layout.screenWidth, layout.screenHeight)
+                drawer.strokeWeight = layout.borderWidth
+                drawer.rectangle(layout.borderBoundsAtOrigin)
             }
         }
     }

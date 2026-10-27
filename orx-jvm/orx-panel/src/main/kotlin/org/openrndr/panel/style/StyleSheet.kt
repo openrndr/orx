@@ -179,6 +179,47 @@ sealed class FlexDirection(inherit: Boolean = false) : PropertyValue(inherit) {
     object Inherit : FlexDirection(inherit = true)
 }
 
+/**
+ * How the items of a flex container are placed across its main axis, inside their line.
+ */
+sealed class AlignItems(inherit: Boolean = false) : PropertyValue(inherit) {
+    object Start : AlignItems()
+    object Center : AlignItems()
+    object End : AlignItems()
+
+    /** items with an auto cross size fill their line */
+    object Stretch : AlignItems()
+    object Inherit : AlignItems(inherit = true)
+}
+
+/**
+ * How the space left in a line of a flex container is distributed along its main axis.
+ */
+sealed class JustifyContent(inherit: Boolean = false) : PropertyValue(inherit) {
+    object Start : JustifyContent()
+    object Center : JustifyContent()
+    object End : JustifyContent()
+
+    /** the space is put between the items */
+    object SpaceBetween : JustifyContent()
+
+    /** every item gets an equal amount of space on both of its sides */
+    object SpaceAround : JustifyContent()
+
+    /** the space between the items and the edges is equal */
+    object SpaceEvenly : JustifyContent()
+    object Inherit : JustifyContent(inherit = true)
+}
+
+/**
+ * Whether the items of a flex container wrap onto new lines when they do not fit.
+ */
+sealed class FlexWrap(inherit: Boolean = false) : PropertyValue(inherit) {
+    object NoWrap : FlexWrap()
+    object Wrap : FlexWrap()
+    object Inherit : FlexWrap(inherit = true)
+}
+
 sealed class Overflow(inherit: Boolean = false) : PropertyValue(inherit) {
     object Visible : Overflow()
     object Hidden : Overflow()
@@ -315,6 +356,12 @@ class StyleSheet(val selector: CompoundSelector = CompoundSelector.DUMMY) {
 
 var StyleSheet.width by PropertyHandler<LinearDimension>("width", RESET, LinearDimension.Auto)
 var StyleSheet.height by PropertyHandler<LinearDimension>("height", RESET, LinearDimension.Auto)
+
+// a minimum or maximum of auto means no limit
+var StyleSheet.minWidth by PropertyHandler<LinearDimension>("min-width", RESET, LinearDimension.Auto)
+var StyleSheet.maxWidth by PropertyHandler<LinearDimension>("max-width", RESET, LinearDimension.Auto)
+var StyleSheet.minHeight by PropertyHandler<LinearDimension>("min-height", RESET, LinearDimension.Auto)
+var StyleSheet.maxHeight by PropertyHandler<LinearDimension>("max-height", RESET, LinearDimension.Auto)
 var StyleSheet.top by PropertyHandler<LinearDimension>("top", RESET, length { 0 }) // css default is auto
 var StyleSheet.left by PropertyHandler<LinearDimension>("left", RESET, length { 0 }) // css default is auto
 
@@ -348,6 +395,9 @@ var StyleSheet.gridRow by PropertyHandler<GridPopulation>("grid-row", RESET, Gri
 var StyleSheet.flexDirection by PropertyHandler<FlexDirection>("flex-direction", RESET, FlexDirection.Row)
 var StyleSheet.flexGrow by PropertyHandler<FlexGrow>("flex-grow", RESET, FlexGrow.Ratio(0.0))
 var StyleSheet.flexShrink by PropertyHandler<FlexGrow>("flex-shrink", RESET, FlexGrow.Ratio(1.0))
+var StyleSheet.flexWrap by PropertyHandler<FlexWrap>("flex-wrap", RESET, FlexWrap.NoWrap)
+var StyleSheet.alignItems by PropertyHandler<AlignItems>("align-items", RESET, AlignItems.Start) // css default is stretch
+var StyleSheet.justifyContent by PropertyHandler<JustifyContent>("justify-content", RESET, JustifyContent.Start)
 
 var StyleSheet.borderWidth by PropertyHandler<LinearDimension>("border-width", RESET, 0.px)
 var StyleSheet.borderColor by PropertyHandler<Color>("border-color", INHERIT, Color.RGBa(ColorRGBa.TRANSPARENT))

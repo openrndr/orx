@@ -6,7 +6,6 @@ import org.openrndr.KEY_ARROW_UP
 import org.openrndr.KEY_ENTER
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
-import org.openrndr.draw.loadFont
 import org.openrndr.events.Event
 import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.launch
@@ -83,11 +82,8 @@ class DropdownButton : Element(ElementType("dropdown-button")) {
     override val widthHint: Double?
         get() {
             computedStyle.let { style ->
-                val fontUrl = (root() as? Body)?.controlManager?.fontManager?.resolve(style.fontFamily) ?: "broken"
-                val fontSize = (style.fontSize as? LinearDimension.PX)?.value ?: 16.0
-
-                val program = (root() as? Body)?.controlManager?.program ?: error("no program")
-                val fontMap =  program.loadFont(fontUrl, fontSize)
+                // measure with the font the label is drawn with
+                val fontMap = (root() as? Body)?.controlManager?.fontManager?.font(style) ?: error("no font manager")
 
                 val writer = TextWriter(null)
 
@@ -212,8 +208,7 @@ class DropdownButton : Element(ElementType("dropdown-button")) {
             }
 
             mouse.scrolled.listen {
-                scrollTop -= it.rotation.y * 10.0
-                scrollTop = max(0.0, scrollTop)
+                scrollTop = (scrollTop - it.rotation.y * 10.0).coerceIn(0.0, maxScrollTop)
                 draw.dirty = true
                 it.cancelPropagation()
             }

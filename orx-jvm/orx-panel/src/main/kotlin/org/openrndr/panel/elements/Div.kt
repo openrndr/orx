@@ -3,7 +3,6 @@ package org.openrndr.panel.elements
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.panel.style.*
-import kotlin.math.max
 
 open class Div : TextElement(ElementType("div")) {
     init {
@@ -15,8 +14,7 @@ open class Div : TextElement(ElementType("div")) {
         mouse.scrolled.listen {
             computedStyle.let { cs ->
                 if (cs.overflow != Overflow.Visible) {
-                    scrollTop -= it.rotation.y * 10
-                    scrollTop = max(0.0, scrollTop)
+                    scrollTop = (scrollTop - it.rotation.y * 10).coerceIn(0.0, maxScrollTop)
                     draw.dirty = true
                     it.cancelPropagation()
                 }
@@ -29,9 +27,8 @@ open class Div : TextElement(ElementType("div")) {
             style.background.let {
                 drawer.fill = ((it as? Color.RGBa)?.color ?: ColorRGBa.BLACK)
                 drawer.stroke = computedStyle.effectiveBorderColor
-                drawer.strokeWeight = computedStyle.effectiveBorderWidth
-                //drawer.smooth(false)
-                drawer.rectangle(0.0, 0.0, layout.screenWidth, layout.screenHeight)
+                drawer.strokeWeight = layout.borderWidth
+                drawer.rectangle(layout.borderBoundsAtOrigin)
                 //drawer.smooth(true)
             }
         }

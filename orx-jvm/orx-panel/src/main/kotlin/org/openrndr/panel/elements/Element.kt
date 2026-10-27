@@ -10,10 +10,6 @@ import org.openrndr.panel.style.CompoundSelector
 import org.openrndr.panel.style.Display
 import org.openrndr.panel.style.StyleSheet
 import org.openrndr.panel.style.display
-import org.openrndr.panel.style.effectivePaddingBottom
-import org.openrndr.panel.style.effectivePaddingLeft
-import org.openrndr.panel.style.effectivePaddingRight
-import org.openrndr.panel.style.effectivePaddingTop
 import org.openrndr.shape.Rectangle
 
 import java.util.*
@@ -43,6 +39,13 @@ open class Element(val type: ElementType) : AutoCloseable {
         private set
 
     var scrollTop = 0.0
+
+    /**
+     * The largest [scrollTop]: how far the content of the element extends beyond its bottom, as found by the last
+     * layout.
+     */
+    val maxScrollTop: Double
+        get() = max(0.0, layout.scrollHeight - layout.screenHeight)
     open val handlesDoubleClick = false
     open val handlesKeyboardFocus = false
 
@@ -110,22 +113,32 @@ open class Element(val type: ElementType) : AutoCloseable {
 
     val keyboard = KeyboardObservables()
 
+    /**
+     * The result of the layout of an element. Sizes are border-box sizes: they include the padding and the border.
+     */
     class Layout {
-        var widthSetByParent = false
-        var heightSetByParent = false
         var zIndex = 0
         var screenX = 0.0
         var screenY = 0.0
         var screenWidth = 0.0
         var screenHeight = 0.0
 
+        /** the padding in pixels, resolved by the layout */
         var paddingLeft = 0.0
         var paddingTop = 0.0
         var paddingRight = 0.0
         var paddingBottom = 0.0
 
+        /** the width of the border in pixels, resolved by the layout */
+        var borderWidth = 0.0
+
         var growWidth = 0.0
         var growHeight = 0.0
+
+        /**
+         * The height of the content including the padding, for elements that scroll their content
+         */
+        var scrollHeight = 0.0
         override fun toString(): String {
             return "Layout(screenX=$screenX, screenY=$screenY, screenWidth=$screenWidth, screenHeight=$screenHeight, growWidth=$growWidth, growHeight=$growHeight)"
         }
@@ -140,29 +153,32 @@ open class Element(val type: ElementType) : AutoCloseable {
                 return Rectangle(0.0, 0.0, screenWidth, screenHeight)
             }
 
-        fun boundsAtOriginPadded(computedStyle: StyleSheet): Rectangle {
-            return Rectangle(
-                computedStyle.effectivePaddingLeft,
-                computedStyle.effectivePaddingTop,
-                screenWidth - (computedStyle.effectivePaddingLeft + computedStyle.effectivePaddingRight),
-                max(0.0, screenHeight - (computedStyle.effectivePaddingTop + computedStyle.effectivePaddingBottom))
-            )
-        }
-
-        val contentBounds: Rectangle
+        /**
+         * The rectangle to stroke the border along: the bounds inset by half the border width, so that the border is
+         * drawn inside the bounds.
+         */
+        val borderBoundsAtOrigin: Rectangle
             get() = Rectangle(
-                screenX + paddingLeft,
-                screenY + paddingTop,
-                screenWidth - paddingLeft - paddingRight,
-                screenHeight - paddingTop - paddingBottom
+                borderWidth / 2.0,
+                borderWidth / 2.0,
+                max(0.0, screenWidth - borderWidth),
+                max(0.0, screenHeight - borderWidth)
             )
+
+        @Deprecated("use contentBoundsAtOrigin", ReplaceWith("contentBoundsAtOrigin"))
+        @Suppress("UNUSED_PARAMETER")
+        fun boundsAtOriginPadded(computedStyle: StyleSheet): Rectangle = contentBoundsAtOrigin
+
+        /** the area inside the border and the padding */
+        val contentBounds: Rectangle
+            get() = contentBoundsAtOrigin.movedBy(Vector2(screenX, screenY))
 
         val contentBoundsAtOrigin: Rectangle
             get() = Rectangle(
-                paddingLeft,
-                paddingTop,
-                screenWidth - paddingLeft - paddingRight,
-                screenHeight - paddingTop - paddingBottom
+                borderWidth + paddingLeft,
+                borderWidth + paddingTop,
+                max(0.0, screenWidth - paddingLeft - paddingRight - 2.0 * borderWidth),
+                max(0.0, screenHeight - paddingTop - paddingBottom - 2.0 * borderWidth)
             )
 
     }

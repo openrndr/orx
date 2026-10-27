@@ -5,7 +5,6 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 
 import org.openrndr.draw.isolated
-import org.openrndr.draw.loadFont
 import org.openrndr.events.Event
 import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.panel.style.*
@@ -56,11 +55,8 @@ class Button : Element(ElementType("button")) {
     override val widthHint: Double
         get() {
             computedStyle.let { style ->
-                val fontUrl = (root() as? Body)?.controlManager?.fontManager?.resolve(style.fontFamily) ?: "broken"
-                val fontSize = (style.fontSize as? LinearDimension.PX)?.value ?: 14.0
-
-                val program = (root() as? Body)?.controlManager?.program ?: error("no program")
-                val fontMap =  program.loadFont(fontUrl, fontSize)
+                // measure with the font the label is drawn with
+                val fontMap = (root() as? Body)?.controlManager?.fontManager?.font(style) ?: error("no font manager")
 
                 val writer = TextWriter(null)
 
@@ -86,14 +82,14 @@ class Button : Element(ElementType("button")) {
 
             drawer.isolated {
                 drawer.stroke = computedStyle.effectiveBorderColor
-                drawer.strokeWeight = computedStyle.effectiveBorderWidth
-                drawer.rectangle(layout.boundsAtOrigin)
+                drawer.strokeWeight = layout.borderWidth
+                drawer.rectangle(layout.borderBoundsAtOrigin)
             }
 
             (root() as? Body)?.controlManager?.fontManager?.let {
                 val font = it.font(computedStyle)
                 val writer = TextWriter(drawer)
-                writer.box = layout.boundsAtOriginPadded(computedStyle).let { it.copy(width = it.width + 1.0, height = it.height + 1.0) }
+                writer.box = layout.contentBoundsAtOrigin.let { it.copy(width = it.width + 1.0, height = it.height + 1.0) }
                 writer.verticalAlign =  computedStyle.computedTextVerticalAlign
                 writer.horizontalAlign = computedStyle.computedTextHorizontalAlign
 

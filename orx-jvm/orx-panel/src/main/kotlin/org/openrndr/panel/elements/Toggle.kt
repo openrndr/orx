@@ -4,7 +4,6 @@ import org.openrndr.KEY_SPACEBAR
 import org.openrndr.Program
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.LineCap
-import org.openrndr.draw.loadFont
 import org.openrndr.panel.style.*
 import org.openrndr.shape.Rectangle
 
@@ -43,10 +42,8 @@ class Toggle : Element(ElementType("toggle")) {
     override val widthHint: Double?
         get() {
             computedStyle.let { style ->
-                val fontUrl = (root() as? Body)?.controlManager?.fontManager?.resolve(style.fontFamily) ?: "broken"
-                val fontSize = (style.fontSize as? LinearDimension.PX)?.value ?: 14.0
-                val program = (root() as? Body)?.controlManager?.program ?: error("no program")
-                val fontMap = program.loadFont(fontUrl, fontSize)
+                // measure with the font the label is drawn with
+                val fontMap = (root() as? Body)?.controlManager?.fontManager?.font(style) ?: error("no font manager")
 
                 val writer = TextWriter(null)
 

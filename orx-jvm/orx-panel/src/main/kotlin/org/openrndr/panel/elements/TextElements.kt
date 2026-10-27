@@ -28,7 +28,7 @@ class TextNode(var text: String) : Element(ElementType("text")) {
 
             writer.ellipsis = null
             // writer.box = Rectangle(Vector2(layout.screenX * 0.0, layout.screenY * 0.0), layout.screenWidth, layout.screenHeight)
-            writer.box = layout.boundsAtOriginPadded(computedStyle)
+            writer.box = layout.contentBoundsAtOrigin
 
             writer.horizontalAlign = computedStyle.computedTextHorizontalAlign
             writer.verticalAlign = computedStyle.computedTextVerticalAlign

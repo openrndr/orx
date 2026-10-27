@@ -39,11 +39,12 @@ fun main() = application {
 
                 child(has type "button") {
                     margins(length { 0 })
+                    // the border is part of the size of a button, it is there before hovering to keep the size
+                    borderWidth = length { 2 }
 
                     and(has state "hover") {
                         background = color(true) { ColorRGBa.BLACK }
                         borderColor = color { ColorRGBa.WHITE }
-                        borderWidth = length { 2 }
                     }
                 }
             }
