@@ -23,7 +23,7 @@ fun main() = application {
     }
     program {
         val face = loadFace("demo-data/fonts/IBMPlexMono-Regular.ttf")
-        val shapes = shapesFromText(face, "SUCH\nVECTOR\nSUCH\nTEXT", 150.0)
+        val shapes = shapesFromText(face.withSize(150.0), "SUCH\nVECTOR\nSUCH\nTEXT")
 
         val bounds = shapes.bounds
         extend(Camera2D())

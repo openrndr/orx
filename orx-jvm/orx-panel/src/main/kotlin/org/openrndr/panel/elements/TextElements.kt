@@ -4,9 +4,8 @@ import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.FontMap
-import org.openrndr.draw.font.fontEmScaler
-import org.openrndr.draw.loadFont
 import org.openrndr.events.Event
+import org.openrndr.extra.textwriter.TextToken
 import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.panel.binding.Binding0
 import org.openrndr.panel.style.*
@@ -36,12 +35,9 @@ class TextNode(var text: String) : Element(ElementType("text")) {
         }
     }
 
-    private fun fontMap(): FontMap {
-        val fontUrl = (root() as? Body)?.controlManager?.fontManager?.resolve(computedStyle.fontFamily) ?: "broken"
-        val fontSize = (computedStyle.fontSize as? LinearDimension.PX)?.value ?: 14.0
-        val program = (root() as? Body)?.controlManager?.program ?: error("no program")
-        return program.loadFont(fontUrl, fontSize, fontScaler = ::fontEmScaler)
-    }
+    /** the font the text is drawn with */
+    private fun fontMap(): FontMap =
+        (root() as? Body)?.controlManager?.fontManager?.font(computedStyle) ?: error("no font manager")
 
     /**
      * The width of the widest line of the text when it is not wrapped.
@@ -53,22 +49,20 @@ class TextNode(var text: String) : Element(ElementType("text")) {
     }
 
     /**
-     * The size of the text when it is wrapped at [width].
+     * The size of the text when it is wrapped at [width]. Like [draw], the text is laid out by [TextWriter], which
+     * places it from the ascender of the first line to the descender of the last line.
      */
     fun sizeHint(width: Double = layout.screenWidth): Rectangle {
         val fontMap = fontMap()
         val writer = TextWriter(null)
-        writer.box = Rectangle(layout.screenX, layout.screenY, width, 1E9)
+        writer.box = Rectangle(0.0, 0.0, width, 1E9)
         writer.drawStyle.fontMap = fontMap
-        writer.newLine()
-        writer.text(text, visible = false)
-
-        return Rectangle(
-            layout.screenX,
-            layout.screenY,
-            width,
-            (writer.cursor.y - layout.screenY) - fontMap.descenderLength * 2
-        )
+        val tokens = writer.text(text, visible = false).filter { it != TextToken.END_OF_LINE }
+        // the distance between the baselines of the first and the last line
+        val lines = if (tokens.isEmpty()) 0.0 else tokens.last().y - tokens.first().y
+        // descenderLength is negative (below the baseline)
+        val height = lines + fontMap.ascenderLength - fontMap.descenderLength
+        return Rectangle(layout.screenX, layout.screenY, width, height)
     }
 
     override fun toString(): String {

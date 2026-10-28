@@ -30,12 +30,12 @@ class RectifiedContour(contour: ShapeContour, distanceTolerance: Double = 0.5, l
         }
     }
 
-    fun pose(t: Double): Matrix44 {
+    fun pose(t: Double, polarity: YPolarity = (originalPath as ShapeContour).polarity): Matrix44 {
         originalPath as ShapeContour
         return if (originalPath.empty) {
             Matrix44.IDENTITY
         } else {
-            originalPath.pose(rectify(safe(t)))
+            originalPath.pose(rectify(safe(t)), polarity)
         }
     }
 

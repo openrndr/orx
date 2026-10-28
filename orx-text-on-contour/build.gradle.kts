@@ -9,10 +9,15 @@ kotlin {
             implementation(openrndr.draw)
             implementation(openrndr.application.core)
             implementation(project(":orx-shapes"))
+            api(project(":orx-text-writer"))
         }
 
-        jvmDemo.dependencies {
-            implementation(project(":orx-text-on-contour"))
+        val jvmDemo by getting {
+            dependencies {
+                implementation(openrndr.ffmpeg)
+                implementation(project(":orx-text-on-contour"))
+                implementation(project(":orx-camera"))
+            }
         }
     }
 }

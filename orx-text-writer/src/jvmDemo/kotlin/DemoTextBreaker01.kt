@@ -1,7 +1,6 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.TextSettingMode
-import org.openrndr.draw.font.fontEmScaler
 import org.openrndr.draw.isolated
 import org.openrndr.draw.loadFont
 import org.openrndr.extra.textwriter.writer
@@ -36,7 +35,7 @@ fun main() {
                     drawer.stroke = ColorRGBa.WHITE
                     drawer.rectangle(r)
                 }
-                drawer.fontMap = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 24.0, fontScaler = ::fontEmScaler)
+                drawer.fontMap = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 24.0)
                 writer {
                     drawer.drawStyle.textSetting = TextSettingMode.SUBPIXEL
                     style.horizontalAlign = 0.0

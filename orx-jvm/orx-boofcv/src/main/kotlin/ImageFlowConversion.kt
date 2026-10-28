@@ -30,7 +30,7 @@ fun InterleavedF32.toColorBuffer(target: ColorBuffer? = null): ColorBuffer {
     }
 
     (bb as Buffer).rewind()
-    cb.write(bb)
+    cb.writeBuffer(bb)
     cb.flipV = true
     return cb
 }
@@ -71,7 +71,7 @@ class ImageFlowProcessor(val width: Int, val height: Int) {
         }
 
         (bb as Buffer).rewind()
-        result.write(bb)
+        result.writeBuffer(bb)
         result.flipV = true
     }
 }

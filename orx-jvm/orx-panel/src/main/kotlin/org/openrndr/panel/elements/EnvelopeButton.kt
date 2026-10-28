@@ -72,7 +72,7 @@ class EnvelopeButton : Element(ElementType("envelope-button")) {
                 drawer.fontMap = (font)
                 drawer.fill = (ColorRGBa.BLACK)
                 writer.cursor = Cursor(0.0,layout.screenHeight - 4.0)
-                chartHeight = writer.cursor.y - font.height-4
+                chartHeight = writer.cursor.y - (font.ascenderLength + font.descenderLength) - 4
                 writer.text("$label")
             }
 
