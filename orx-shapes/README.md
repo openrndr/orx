@@ -79,6 +79,8 @@
 - **tunni**
   - [DemoTunniAdjuster01](#tunnidemotunniadjuster01)
   - [DemoTunniPoint01](#tunnidemotunnipoint01)
+- **utilities**
+  - [DemoShift01](#utilitiesdemoshift01)
 
 ### adjust/DemoAdjustContour01
 
@@ -1544,3 +1546,11 @@ altered with `withTunniLine()` along the segment's normal.
 ![tunni-DemoTunniPoint01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/tunni-DemoTunniPoint01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/tunni/DemoTunniPoint01.kt)
+
+### utilities/DemoShift01
+
+
+
+![utilities-DemoShift01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/utilities-DemoShift01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/utilities/DemoShift01.kt)

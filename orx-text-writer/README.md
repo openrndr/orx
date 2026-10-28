@@ -8,6 +8,13 @@ Find usage examples [in the guide](https://guide.openrndr.org/drawing/text.html#
 _The code in `orx-text-writer` was previously found under `openrndr-draw` in the `openrndr` repository._
 <!-- __demos__ -->
 ## Demos
+- [DemoGlyphOutput01](#demoglyphoutput01)
+- [DemoTextBreaker01](#demotextbreaker01)
+- DemoTextWriter [01](#demotextwriter01), [02](#demotextwriter02), [03](#demotextwriter03)
+- **slug**
+  - DemoSlugTextDrawer [01](#slugdemoslugtextdrawer01), [02](#slugdemoslugtextdrawer02), [03](#slugdemoslugtextdrawer03), [04](#slugdemoslugtextdrawer04), [05](#slugdemoslugtextdrawer05), [06](#slugdemoslugtextdrawer06), [07](#slugdemoslugtextdrawer07), [08](#slugdemoslugtextdrawer08), [09](#slugdemoslugtextdrawer09)
+  - [DemoVectorTextDrawer01](#slugdemovectortextdrawer01)
+
 ### DemoGlyphOutput01
 
 This demo implements a drawing program utilizing custom text rendering with a wave-like animation effect.
@@ -95,3 +102,90 @@ It creates a grid of 3x3 cells to demonstrate all alignment combinations by sett
 ![DemoTextWriter03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/DemoTextWriter03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoTextWriter03.kt)
+
+### slug/DemoSlugTextDrawer01
+
+
+
+![slug-DemoSlugTextDrawer01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/slug-DemoSlugTextDrawer01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/slug/DemoSlugTextDrawer01.kt)
+
+### slug/DemoSlugTextDrawer02
+
+
+
+![slug-DemoSlugTextDrawer02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/slug-DemoSlugTextDrawer02Kt.webp)
+
+[source code](src/jvmDemo/kotlin/slug/DemoSlugTextDrawer02.kt)
+
+### slug/DemoSlugTextDrawer03
+
+
+
+![slug-DemoSlugTextDrawer03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/slug-DemoSlugTextDrawer03Kt.webp)
+
+[source code](src/jvmDemo/kotlin/slug/DemoSlugTextDrawer03.kt)
+
+### slug/DemoSlugTextDrawer04
+
+
+
+![slug-DemoSlugTextDrawer04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/slug-DemoSlugTextDrawer04Kt.webp)
+
+[source code](src/jvmDemo/kotlin/slug/DemoSlugTextDrawer04.kt)
+
+### slug/DemoSlugTextDrawer05
+
+Demonstrates typesetting Arabic script: contextual letter forms, ligatures and right-to-left lines.
+The text is Article 1 of the Universal Declaration of Human Rights.
+
+![slug-DemoSlugTextDrawer05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/slug-DemoSlugTextDrawer05Kt.webp)
+
+[source code](src/jvmDemo/kotlin/slug/DemoSlugTextDrawer05.kt)
+
+### slug/DemoSlugTextDrawer06
+
+Demonstrates bidirectional text: a left-to-right paragraph with embedded Arabic words and a
+right-to-left paragraph with embedded English words and numbers.
+
+Every embedded run keeps its own reading order, multi-word runs are not reversed word by word.
+
+![slug-DemoSlugTextDrawer06Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/slug-DemoSlugTextDrawer06Kt.webp)
+
+[source code](src/jvmDemo/kotlin/slug/DemoSlugTextDrawer06.kt)
+
+### slug/DemoSlugTextDrawer07
+
+Demonstrates hyphenation: the same text in two justified columns, on the left without hyphenation and on the right
+hyphenated automatically by setting [TextStyle.language].
+
+![slug-DemoSlugTextDrawer07Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/slug-DemoSlugTextDrawer07Kt.webp)
+
+[source code](src/jvmDemo/kotlin/slug/DemoSlugTextDrawer07.kt)
+
+### slug/DemoSlugTextDrawer08
+
+Demonstrates text flowing into shapes: justified and hyphenated text fills a ring, lines next to the hole are split
+in two, and the text continues in a rectangle with a circular cut-out.
+
+![slug-DemoSlugTextDrawer08Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/slug-DemoSlugTextDrawer08Kt.webp)
+
+[source code](src/jvmDemo/kotlin/slug/DemoSlugTextDrawer08.kt)
+
+### slug/DemoSlugTextDrawer09
+
+Demonstrates vertical alignment of text in shapes: the same text in three circles, aligned to the top, the center
+and the bottom.
+
+![slug-DemoSlugTextDrawer09Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/slug-DemoSlugTextDrawer09Kt.webp)
+
+[source code](src/jvmDemo/kotlin/slug/DemoSlugTextDrawer09.kt)
+
+### slug/DemoVectorTextDrawer01
+
+
+
+![slug-DemoVectorTextDrawer01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/slug-DemoVectorTextDrawer01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/slug/DemoVectorTextDrawer01.kt)
