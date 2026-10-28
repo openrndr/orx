@@ -2,6 +2,7 @@ package org.openrndr.extra.videoprofiles
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.openrndr.ffmpeg.HDRTransfer
 import org.openrndr.ffmpeg.ScreenRecorder
+import org.openrndr.ffmpeg.VideoRotation
 import org.openrndr.ffmpeg.VideoWriterProfile
 
 private val logger = KotlinLogging.logger { }
@@ -86,6 +87,11 @@ class H265Profile : VideoWriterProfile() {
 
     val filters = mutableListOf("vflip")
 
+    /**
+     * Rotates the frames, a 90 degree rotation swaps the width and height of the video
+     */
+    var rotation = VideoRotation.NONE
+
     var tagArguments = listOf("-tag:v", "hvc1")
 
     /**
@@ -148,7 +154,7 @@ class H265Profile : VideoWriterProfile() {
         }
         val profileArguments = if (videoToolbox) arrayOf("-profile:v", "main10") else emptyArray()
         // the frames are already Y'CbCr, they are only subsampled
-        val filterArguments = arrayOf("-vf", (filters + "format=$pixelFormat").joinToString(","))
+        val filterArguments = arrayOf("-vf", (filters + rotation.filters + "format=$pixelFormat").joinToString(","))
 
         return hwaccelArguments + arrayOf("-pix_fmt", pixelFormat) + hdrColorArguments() + filterArguments +
                 videoCodecArguments + profileArguments + qualityArguments(videoCodec) + x265Parameters + tagArguments +
@@ -184,7 +190,8 @@ class H265Profile : VideoWriterProfile() {
         }
 
         // the filters are not changed, the arguments can be requested more than once
-        val filters = if (highPrecisionChroma) filters + "colorspace=bt709:iall=bt601-6-625:fast=1" else filters
+        val filters = filters + rotation.filters +
+                (if (highPrecisionChroma) listOf("colorspace=bt709:iall=bt601-6-625:fast=1") else emptyList())
 
         val videoCodec = encoder()
         val pixelFormat = if (fullChroma) "yuv444p" else pixelFormat

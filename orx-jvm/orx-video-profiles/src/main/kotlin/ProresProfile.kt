@@ -1,6 +1,7 @@
 package org.openrndr.extra.videoprofiles
 
 import org.openrndr.ffmpeg.ScreenRecorder
+import org.openrndr.ffmpeg.VideoRotation
 import org.openrndr.ffmpeg.VideoWriterProfile
 
 class ProresProfile : VideoWriterProfile() {
@@ -29,10 +30,15 @@ class ProresProfile : VideoWriterProfile() {
 
     val filters = mutableListOf("vflip")
 
+    /**
+     * Rotates the frames, a 90 degree rotation swaps the width and height of the video
+     */
+    var rotation = VideoRotation.NONE
+
     override fun arguments(): Array<String> {
         val vcodec = arrayOf("-vcodec", codec)
         val profile = arrayOf("-profile:v", profile.argument)
-        val filters = arrayOf("-vf", filters.joinToString(","))
+        val filters = arrayOf("-vf", (filters + rotation.filters).joinToString(","))
         val audio = arrayOf("-an")
         val encoder = if (isVideoToolbox(codec)) videoToolboxArguments else emptyArray()
         return vcodec + profile + encoder + filters + audio
