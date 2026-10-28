@@ -1,7 +1,10 @@
 package org.openrndr.extra.videoprofiles
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.openrndr.ffmpeg.HDRTransfer
 import org.openrndr.ffmpeg.ScreenRecorder
 import org.openrndr.ffmpeg.VideoWriterProfile
+
+private val logger = KotlinLogging.logger { }
 
 @Deprecated("use h265 profile", replaceWith = ReplaceWith("H265Profile"))
 typealias X265Profile = H265Profile
@@ -62,6 +65,23 @@ class H265Profile : VideoWriterProfile() {
      * The pixel format of SDR video, HDR video is encoded with 10 bits per component (yuv420p10le)
      */
     var pixelFormat = "yuv420p" as String?
+
+    /**
+     * Encode colors at full resolution (4:4:4) instead of at half resolution (4:2:0). This keeps the colors of thin
+     * lines and edges, but the video does not play in all players. VideoToolbox does not encode 4:4:4, with full
+     * chroma libx265 is used instead.
+     */
+    var fullChroma = false
+
+    /**
+     * The encoder, libx265 when VideoToolbox would be used for full chroma
+     */
+    private fun encoder(): String? = if (fullChroma && isVideoToolbox(videoCodec)) {
+        logger.warn { "$videoCodec does not encode full chroma, using $CODEC_LIBX265" }
+        CODEC_LIBX265
+    } else {
+        videoCodec
+    }
     var userArguments = emptyArray<String>()
 
     val filters = mutableListOf("vflip")
@@ -75,12 +95,12 @@ class H265Profile : VideoWriterProfile() {
     var hdr = null as HDRTransfer?
 
     /**
-     * The maximum content light level (MaxCLL) in nits, written as metadata of PQ video
+     * The maximum content light level (MaxCLL) in nits, written as metadata of PQ video encoded with libx265
      */
     var maxContentLightLevel = null as Int?
 
     /**
-     * The maximum frame average light level (MaxFALL) in nits, written as metadata of PQ video
+     * The maximum frame average light level (MaxFALL) in nits, written as metadata of PQ video encoded with libx265
      */
     var maxFrameAverageLightLevel = null as Int?
 
@@ -103,6 +123,7 @@ class H265Profile : VideoWriterProfile() {
     override fun inputArguments(): Array<String> = if (hdr != null) hdrColorArguments() else emptyArray()
 
     private fun hdrArguments(): Array<String> {
+        val videoCodec = encoder()
         val x265Parameters = if (videoCodec == CODEC_LIBX265) {
             val parameters = mutableListOf("colorprim=bt2020", "transfer=$hdrTransferName", "colormatrix=bt2020nc", "range=limited")
             if (hdr == HDRTransfer.PQ) {
@@ -120,13 +141,17 @@ class H265Profile : VideoWriterProfile() {
         val videoCodecArguments = videoCodec?.let { arrayOf("-vcodec", it) } ?: emptyArray()
         // VideoToolbox takes 10 bit frames as p010le and encodes them with the Main 10 profile
         val videoToolbox = isVideoToolbox(videoCodec)
-        val pixelFormat = if (videoToolbox) "p010le" else "yuv420p10le"
+        val pixelFormat = when {
+            videoToolbox -> "p010le"
+            fullChroma -> "yuv444p10le"
+            else -> "yuv420p10le"
+        }
         val profileArguments = if (videoToolbox) arrayOf("-profile:v", "main10") else emptyArray()
         // the frames are already Y'CbCr, they are only subsampled
         val filterArguments = arrayOf("-vf", (filters + "format=$pixelFormat").joinToString(","))
 
         return hwaccelArguments + arrayOf("-pix_fmt", pixelFormat) + hdrColorArguments() + filterArguments +
-                videoCodecArguments + profileArguments + qualityArguments() + x265Parameters + tagArguments +
+                videoCodecArguments + profileArguments + qualityArguments(videoCodec) + x265Parameters + tagArguments +
                 userArguments
     }
 
@@ -134,7 +159,7 @@ class H265Profile : VideoWriterProfile() {
      * The quality arguments of the encoder: a constant quality for VideoToolbox, a constant rate factor and preset
      * for libx265
      */
-    private fun qualityArguments(): Array<String> = if (isVideoToolbox(videoCodec)) {
+    private fun qualityArguments(videoCodec: String?): Array<String> = if (isVideoToolbox(videoCodec)) {
         videoToolboxArguments + (quality?.let { arrayOf("-q:v", it.toString()) } ?: emptyArray())
     } else {
         (constantRateFactor?.let { arrayOf("-crf", it.toString()) } ?: emptyArray()) +
@@ -158,17 +183,18 @@ class H265Profile : VideoWriterProfile() {
             emptyArray()
         }
 
-        if (highPrecisionChroma) {
-            filters.add("colorspace=bt709:iall=bt601-6-625:fast=1")
-        }
+        // the filters are not changed, the arguments can be requested more than once
+        val filters = if (highPrecisionChroma) filters + "colorspace=bt709:iall=bt601-6-625:fast=1" else filters
 
+        val videoCodec = encoder()
+        val pixelFormat = if (fullChroma) "yuv444p" else pixelFormat
         val hwaccelArguments = hwaccel?.let { arrayOf("-hwaccel", it) } ?: emptyArray()
         val pixelFormatArguments = pixelFormat?.let { arrayOf("-pix_fmt", it) } ?: emptyArray()
         val videoCodecArguments = videoCodec?.let { arrayOf("-vcodec", it) } ?: emptyArray()
         val filterArguments = arrayOf("-vf", filters.joinToString(","))
 
         val arguments =
-            hwaccelArguments + pixelFormatArguments + chromaArguments + filterArguments + videoCodecArguments + qualityArguments() + tagArguments + userArguments
+            hwaccelArguments + pixelFormatArguments + chromaArguments + filterArguments + videoCodecArguments + qualityArguments(videoCodec) + tagArguments + userArguments
 
         return arguments
     }
