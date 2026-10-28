@@ -52,6 +52,11 @@ tasks.withType<KotlinJvmCompile>().configureEach {
     }
 }
 
+// compact object headers (JEP 519) reduce the heap size of small objects like vectors and colors
+tasks.withType<Test>().configureEach {
+    jvmArgs("-XX:+UseCompactObjectHeaders")
+}
+
 kotlin {
     applyDefaultHierarchyTemplate()
     jvm {
@@ -211,4 +216,7 @@ tasks.withType<JavaExec>().matching { it.name == "jvmRun" }.configureEach {
     if (os?.name == "Mac OS X") {
         setJvmArgs(listOf("-XstartOnFirstThread"))
     }
+    // compact object headers (JEP 519) reduce the heap size of small objects like vectors and colors.
+    // ZGC keeps garbage collection pauses well below a frame, which avoids dropped frames in programs that allocate a lot
+    jvmArgs("-XX:+UseCompactObjectHeaders", "-XX:+UseZGC")
 }

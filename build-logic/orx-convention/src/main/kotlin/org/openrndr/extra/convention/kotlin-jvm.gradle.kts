@@ -72,6 +72,11 @@ dependencies {
 }
 
 tasks {
+    // compact object headers (JEP 519) reduce the heap size of small objects like vectors and colors
+    withType<Test>().configureEach {
+        jvmArgs("-XX:+UseCompactObjectHeaders")
+    }
+
     named<Test>("test") {
         if (DefaultNativePlatform.getCurrentOperatingSystem().isMacOsX) {
             jvmArgs("-XstartOnFirstThread")
