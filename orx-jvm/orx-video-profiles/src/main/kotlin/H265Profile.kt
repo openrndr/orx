@@ -10,7 +10,7 @@ typealias X265Profile = H265Profile
 class H265Profile : VideoWriterProfile() {
 
     /**
-     * constant rate factor (default is 23)
+     * constant rate factor (default is 23), used by libx265
      */
     var constantRateFactor = null as Int?
 
@@ -28,10 +28,34 @@ class H265Profile : VideoWriterProfile() {
 
     val CODEC_LIBX265 = "libx265"
 
+    /**
+     * The hardware HEVC encoder of macOS
+     */
+    val CODEC_HEVC_VIDEOTOOLBOX = "hevc_videotoolbox"
 
     var videoCodec = CODEC_LIBX265 as String?
     var hwaccel = null as String?
+
+    /**
+     * The encoding preset of libx265
+     */
     var preset = null as String?
+
+    /**
+     * Constant quality of VideoToolbox encoding, from 1 to 100 where higher is better, or null for VideoToolbox's
+     * default bit rate. The default of 55 is comparable to the default quality of libx265, at about twice the size.
+     */
+    var quality = 55 as Int?
+
+    /**
+     * Encode with the hardware HEVC encoder where one is supported: VideoToolbox on macOS. Encoding falls back to
+     * software when the hardware does not support HEVC. On other platforms the encoder is not changed.
+     */
+    fun hardwareAcceleration() {
+        if (isMacOS) {
+            videoCodec = CODEC_HEVC_VIDEOTOOLBOX
+        }
+    }
 
 
     /**
@@ -93,15 +117,28 @@ class H265Profile : VideoWriterProfile() {
         }
 
         val hwaccelArguments = hwaccel?.let { arrayOf("-hwaccel", it) } ?: emptyArray()
-        val constantRateArguments = constantRateFactor?.let { arrayOf("-crf", it.toString()) } ?: emptyArray()
-        val presetArguments = preset?.let { arrayOf("-preset", it) } ?: emptyArray()
         val videoCodecArguments = videoCodec?.let { arrayOf("-vcodec", it) } ?: emptyArray()
+        // VideoToolbox takes 10 bit frames as p010le and encodes them with the Main 10 profile
+        val videoToolbox = isVideoToolbox(videoCodec)
+        val pixelFormat = if (videoToolbox) "p010le" else "yuv420p10le"
+        val profileArguments = if (videoToolbox) arrayOf("-profile:v", "main10") else emptyArray()
         // the frames are already Y'CbCr, they are only subsampled
-        val filterArguments = arrayOf("-vf", (filters + "format=yuv420p10le").joinToString(","))
+        val filterArguments = arrayOf("-vf", (filters + "format=$pixelFormat").joinToString(","))
 
-        return hwaccelArguments + arrayOf("-pix_fmt", "yuv420p10le") + hdrColorArguments() + filterArguments +
-                videoCodecArguments + constantRateArguments + presetArguments + x265Parameters + tagArguments +
+        return hwaccelArguments + arrayOf("-pix_fmt", pixelFormat) + hdrColorArguments() + filterArguments +
+                videoCodecArguments + profileArguments + qualityArguments() + x265Parameters + tagArguments +
                 userArguments
+    }
+
+    /**
+     * The quality arguments of the encoder: a constant quality for VideoToolbox, a constant rate factor and preset
+     * for libx265
+     */
+    private fun qualityArguments(): Array<String> = if (isVideoToolbox(videoCodec)) {
+        videoToolboxArguments + (quality?.let { arrayOf("-q:v", it.toString()) } ?: emptyArray())
+    } else {
+        (constantRateFactor?.let { arrayOf("-crf", it.toString()) } ?: emptyArray()) +
+                (preset?.let { arrayOf("-preset", it) } ?: emptyArray())
     }
 
     override fun arguments(): Array<String> {
@@ -127,13 +164,11 @@ class H265Profile : VideoWriterProfile() {
 
         val hwaccelArguments = hwaccel?.let { arrayOf("-hwaccel", it) } ?: emptyArray()
         val pixelFormatArguments = pixelFormat?.let { arrayOf("-pix_fmt", it) } ?: emptyArray()
-        val constantRateArguments = constantRateFactor?.let { arrayOf("-crf", it.toString()) } ?: emptyArray()
-        val presetArguments = preset?.let { arrayOf("-preset", it) } ?: emptyArray()
         val videoCodecArguments = videoCodec?.let { arrayOf("-vcodec", it) } ?: emptyArray()
         val filterArguments = arrayOf("-vf", filters.joinToString(","))
 
         val arguments =
-            hwaccelArguments + pixelFormatArguments + chromaArguments + filterArguments + videoCodecArguments + constantRateArguments + presetArguments + tagArguments + userArguments
+            hwaccelArguments + pixelFormatArguments + chromaArguments + filterArguments + videoCodecArguments + qualityArguments() + tagArguments + userArguments
 
         return arguments
     }

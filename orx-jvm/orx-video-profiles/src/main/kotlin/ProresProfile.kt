@@ -14,7 +14,18 @@ class ProresProfile : VideoWriterProfile() {
 
     override val fileExtension: String = "mov"
     var profile = Profile.SQ
+
     var codec = "prores_ks"
+
+    /**
+     * Encode with the hardware ProRes encoder where one is supported: VideoToolbox on macOS. Encoding falls back to
+     * software when the hardware does not support ProRes. On other platforms the encoder is not changed.
+     */
+    fun hardwareAcceleration() {
+        if (isMacOS) {
+            codec = "prores_videotoolbox"
+        }
+    }
 
     val filters = mutableListOf("vflip")
 
@@ -23,7 +34,8 @@ class ProresProfile : VideoWriterProfile() {
         val profile = arrayOf("-profile:v", profile.argument)
         val filters = arrayOf("-vf", filters.joinToString(","))
         val audio = arrayOf("-an")
-        return vcodec + profile + filters + audio
+        val encoder = if (isVideoToolbox(codec)) videoToolboxArguments else emptyArray()
+        return vcodec + profile + encoder + filters + audio
     }
 }
 
