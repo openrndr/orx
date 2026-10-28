@@ -1,5 +1,6 @@
 package org.openrndr.extra.textwriter
 
+import org.openrndr.math.Matrix44
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ColorFormat
@@ -125,6 +126,14 @@ class SlugTextDrawer : TextDrawer {
     }
 
     override fun addGlyphs(glyphs: List<TypesetGlyph>) {
+        addGlyphs(glyphs) { it.transform() }
+    }
+
+    /**
+     * Adds glyphs that are placed by [transform] instead of by their positions, for example along a path.
+     * @param transform the transform of the outline of a glyph, replacing [TypesetGlyph.transform]
+     */
+    fun addGlyphs(glyphs: List<TypesetGlyph>, transform: (TypesetGlyph) -> Matrix44) {
         // Make sure all glyphs are in the glyph map before slug indices are used, new glyphs are added in a single
         // batch so the slug map textures are written once
         slugMap.startBatch()
@@ -141,7 +150,7 @@ class SlugTextDrawer : TextDrawer {
             commands.add(
                 SlugCommand(
                     slugGlyphMap.getSlugForGlyphIndex(glyph.face, glyph.glyphIndex),
-                    glyph.transform(),
+                    transform(glyph),
                     glyphStyle.fill,
                     glyphStyle.stroke,
                     glyphStyle.strokeWeight ?: 0.0,

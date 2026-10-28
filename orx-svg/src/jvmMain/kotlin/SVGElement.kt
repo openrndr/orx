@@ -27,6 +27,28 @@ internal sealed class SVGElement(element: Element?) {
             Prop.FILL -> style.fill = SVGParse.color(value)
             Prop.FILL_OPACITY -> style.fillOpacity = SVGParse.number(value)
             Prop.OPACITY -> style.opacity = SVGParse.number(value)
+            Prop.FONT_FAMILY -> style.fontFamily = FontFamily(
+                value.split(",").map { it.trim().trim('"', '\'') }.filter { it.isNotEmpty() }
+            )
+            Prop.FONT_SIZE -> style.fontSize = SVGParse.length(value.trim())
+            Prop.FONT_WEIGHT -> style.fontWeight = FontWeight(
+                when (val weight = value.trim()) {
+                    "normal" -> 400
+                    "bold", "bolder" -> 700
+                    "lighter" -> 300
+                    else -> weight.toIntOrNull() ?: 400
+                }
+            )
+            Prop.FONT_STYLE -> style.fontStyle = when (value.trim()) {
+                "italic" -> FontStyle.ITALIC
+                "oblique" -> FontStyle.OBLIQUE
+                else -> FontStyle.NORMAL
+            }
+            Prop.TEXT_ANCHOR -> style.textAnchor = when (value.trim()) {
+                "middle" -> TextAnchor.MIDDLE
+                "end" -> TextAnchor.END
+                else -> TextAnchor.START
+            }
             else -> logger.warn { "Unknown property: $key" }
         }
     }
@@ -75,6 +97,8 @@ internal open class SVGGroup(val element: Element, val elements: MutableList<SVG
         this.element.children().forEach { child ->
             when (child.tagName()) {
                 "image" -> elements.add(SVGImage(child))
+                "text" -> elements.add(SVGText(child, topLevel = true))
+                "defs" -> elements.add(SVGDefs(child))
                 in Tag.graphicsList -> elements.add(SVGPath(child))
                 else -> elements.add(SVGGroup(child))
             }
@@ -156,6 +180,134 @@ internal class SVGImage(val element: Element? = null) : SVGElement(element) {
     }
 }
 
+
+/**
+ * <defs> element, its contents are not rendered but can be referenced, for example by textPath elements
+ */
+internal class SVGDefs(element: Element) : SVGGroup(element)
+
+/**
+ * A run of characters of a text element. A run without a position continues after the previous run.
+ */
+internal class SVGTextRun(var text: String, val x: Double?, val y: Double?, val dx: Double, val dy: Double) :
+    SVGElement(null) {
+    override fun handleAttribute(attribute: Attribute) {}
+}
+
+/**
+ * The position that the first run of a text element starts at
+ */
+internal class SVGTextPosition(val x: Double?, val y: Double?, val dx: Double, val dy: Double)
+
+/**
+ * <text> and <tspan> elements: runs of characters and nested tspan elements
+ * @param topLevel true for a text element, which starts at its position (0, 0 by default) and of which the whitespace
+ * is collapsed
+ * @param inheritedPosition the position of the parent element when it has no characters before this element
+ */
+internal class SVGText(
+    val element: Element,
+    topLevel: Boolean,
+    inheritedPosition: SVGTextPosition? = null
+) : SVGElement(element) {
+    val elements = mutableListOf<SVGElement>()
+
+    /** for a textPath element: the reference to the path that the text is placed along */
+    val pathHref: String? = if (element.tagName() == "textPath") {
+        listOf("href", "xlink:href").firstNotNullOfOrNull { name ->
+            element.attr(name).trim().takeIf { it.isNotEmpty() }
+        } ?: ""
+    } else {
+        null
+    }
+
+    /** for a textPath element: the distance along the path where the text starts, a length or a percentage */
+    val startOffset: String = element.attr("startOffset").trim()
+
+    override fun handleAttribute(attribute: Attribute) {
+        when (attribute.key) {
+            in Prop.list -> styleProperty(attribute.key, attribute.value)
+            Attr.TRANSFORM -> style.transform = SVGParse.transform(this.element)
+        }
+    }
+
+    /** the first value of a list of lengths, x, y, dx and dy can be given for every character */
+    private fun firstLength(name: String): Double? =
+        element.attr(name).trim().split(Regex("[\\s,]+")).firstOrNull()?.takeIf { it.isNotEmpty() }
+            ?.let { SVGParse.length(it).value }
+
+    init {
+        element.attributes().forEach {
+            if (it.key == Attr.STYLE) {
+                inlineStyles(it)
+            } else {
+                handleAttribute(it)
+            }
+        }
+
+        val own = SVGTextPosition(firstLength("x"), firstLength("y"), firstLength("dx") ?: 0.0, firstLength("dy") ?: 0.0)
+        var pending: SVGTextPosition? = when {
+            topLevel -> SVGTextPosition(own.x ?: 0.0, own.y ?: 0.0, own.dx, own.dy)
+            own.x != null || own.y != null || own.dx != 0.0 || own.dy != 0.0 -> SVGTextPosition(
+                own.x ?: inheritedPosition?.x, own.y ?: inheritedPosition?.y, own.dx, own.dy
+            )
+            else -> inheritedPosition
+        }
+
+        for (node in element.childNodes()) {
+            when (node) {
+                is org.jsoup.nodes.TextNode -> {
+                    val text = node.wholeText.replace(Regex("\\s+"), " ")
+                    if (text.isNotEmpty()) {
+                        val position = pending
+                        elements.add(
+                            SVGTextRun(text, position?.x, position?.y, position?.dx ?: 0.0, position?.dy ?: 0.0)
+                        )
+                        pending = null
+                    }
+                }
+
+                is Element -> if (node.tagName() == "tspan" || node.tagName() == "textPath") {
+                    val tspan = SVGText(node, topLevel = false, inheritedPosition = pending)
+                    if (tspan.runs().isNotEmpty()) {
+                        pending = null
+                    }
+                    elements.add(tspan)
+                }
+            }
+        }
+
+        if (topLevel) {
+            collapseWhitespace()
+        }
+    }
+
+    /** the runs of this element and its tspan elements, in order */
+    fun runs(): List<SVGTextRun> = elements.flatMap {
+        when (it) {
+            is SVGTextRun -> listOf(it)
+            is SVGText -> it.runs()
+            else -> emptyList()
+        }
+    }
+
+    /**
+     * Removes whitespace at the start and the end of the text, and spaces that follow a space in the previous run
+     */
+    private fun collapseWhitespace() {
+        val runs = runs()
+        for ((index, run) in runs.withIndex()) {
+            if (index == 0) {
+                run.text = run.text.trimStart()
+            } else if (runs[index - 1].text.endsWith(" ") && run.x == null && run.y == null) {
+                run.text = run.text.trimStart()
+            }
+            if (index == runs.lastIndex) {
+                run.text = run.text.trimEnd()
+            }
+        }
+    }
+}
 
 internal class SVGPath(val element: Element? = null) : SVGElement(element) {
     val commands = mutableListOf<Command>()

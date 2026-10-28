@@ -6,6 +6,7 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
+            implementation(project(":orx-text-writer"))
             implementation(openrndr.application.core)
             implementation(openrndr.draw)
             implementation(openrndr.filter)

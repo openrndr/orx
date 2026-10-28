@@ -648,7 +648,7 @@ class CompositionDrawer(
     ): TextNode {
         val g = GroupNode()
         g.style.transform = Transform.Matrix(transform { translate(position.xy0) })
-        val textNode = TextNode(text, null).apply {
+        val textNode = TextNode(text, null, x = 0.0, y = 0.0).apply {
             this.style.fill = when (val f = this@CompositionDrawer.fill) {
                 is ColorRGBa -> Paint.RGB(f)
                 else -> Paint.None
@@ -756,7 +756,7 @@ class CompositionDrawer(
                 }
 
                 is TextNode -> {
-                    TextNode(node.text, node.contour)
+                    TextNode(node.text, node.contour, node.x, node.y, node.dx, node.dy)
                 }
 
                 is GroupNode -> {

@@ -6,6 +6,7 @@ import org.openrndr.draw.ColorBuffer
 import org.openrndr.draw.loadImage
 import org.openrndr.extra.composition.*
 import org.openrndr.shape.Rectangle
+import org.openrndr.shape.ShapeContour
 import java.io.File
 import java.net.MalformedURLException
 import java.net.URI
@@ -67,7 +68,12 @@ internal class SVGDocument(
     }
 
     private fun convertElement(svgElem: SVGElement): CompositionNode = when (svgElem) {
+        // the contents of defs elements are not rendered
+        is SVGDefs -> GroupNode().apply {
+            this.id = svgElem.id
+        }
         is SVGGroup -> GroupNode().apply {
+            style = svgElem.style
             this.id = svgElem.id
             svgElem.elements.mapTo(children) { convertElement(it).also { x -> x.parent = this@apply } }
         }
@@ -77,6 +83,8 @@ internal class SVGDocument(
                 this.id = svgElem.id
             }
         }
+        is SVGText -> convertText(svgElem, null)
+        is SVGTextRun -> TextNode(svgElem.text, null, svgElem.x, svgElem.y, svgElem.dx, svgElem.dy)
         is SVGImage -> {
             imageNode(svgElem).apply {
                 style = svgElem.style
@@ -85,6 +93,71 @@ internal class SVGDocument(
         }
     }.apply {
         transform = svgElem.style.transform.value
+    }
+
+    /** the paths of the document by their id, including the paths in defs elements */
+    private val pathsById: Map<String, SVGPath> by lazy {
+        val paths = mutableMapOf<String, SVGPath>()
+        fun collect(element: SVGElement) {
+            when (element) {
+                is SVGPath -> if (element.id.isNotEmpty()) paths[element.id] = element
+                is SVGGroup -> element.elements.forEach(::collect)
+                else -> {}
+            }
+        }
+        collect(root)
+        paths
+    }
+
+    /** the contour of the path that [href] refers to, in the coordinates of the path element's parent */
+    private fun pathContour(href: String): ShapeContour? {
+        val path = pathsById[href.removePrefix("#")] ?: return null
+        return path.shape().contours.firstOrNull()?.transform(path.style.transform.value)
+    }
+
+    /** the distance along the path where text starts: a length, or a percentage of the length of the path */
+    private fun startOffset(value: String, length: Double): Double = when {
+        value.isEmpty() -> 0.0
+        value.endsWith("%") -> (value.dropLast(1).toDoubleOrNull() ?: 0.0) * length / 100.0
+        else -> SVGParse.length(value).value
+    }
+
+    /** the contour that the runs of a textPath element are placed along, the first run starts at [startOffset] */
+    private class PathText(val contour: ShapeContour, var startOffset: Double?)
+
+    /**
+     * Converts a text, tspan or textPath element to a group of text runs. Runs of a textPath element, and of the
+     * tspan elements in it, are placed along its path; a textPath element of which the path is not found is not
+     * rendered.
+     */
+    private fun convertText(svgText: SVGText, pathText: PathText?): GroupNode = GroupNode().apply {
+        style = svgText.style
+        this.id = svgText.id
+        val href = svgText.pathHref
+        val path = if (href != null) {
+            val contour = pathContour(href)
+            if (contour == null) {
+                logger.warn { "textPath refers to '$href', which is not a path in the document" }
+                return@apply
+            }
+            PathText(contour, startOffset(svgText.startOffset, contour.length))
+        } else {
+            pathText
+        }
+        for (element in svgText.elements) {
+            val child = when (element) {
+                is SVGText -> convertText(element, path)
+                is SVGTextRun -> if (path != null) {
+                    TextNode(element.text, path.contour, path.startOffset, null, element.dx, element.dy)
+                        .also { path.startOffset = null }
+                } else {
+                    TextNode(element.text, null, element.x, element.y, element.dx, element.dy)
+                }
+                else -> continue
+            }
+            child.parent = this
+            children.add(child)
+        }
     }
 
     /**

@@ -252,6 +252,39 @@ data class AspectRatio(val align: Align, val meetOrSlice: MeetOrSlice) : Attribu
     }
 }
 
+/**
+ * The font families of text in order of preference, like CSS font-family
+ */
+class FontFamily(override val value: List<String>) : AttributeOrPropertyValue {
+    override fun toString(): String = value.joinToString(", ") { if (it.contains(' ')) "'$it'" else it }
+}
+
+/**
+ * The weight of a font, from 100 (thin) to 900 (black), 400 is normal and 700 is bold
+ */
+class FontWeight(override val value: Int) : AttributeOrPropertyValue {
+    override fun toString(): String = value.toString()
+}
+
+enum class FontStyle(override val value: Boolean) : AttributeOrPropertyValue {
+    NORMAL(false),
+    ITALIC(true),
+    OBLIQUE(true);
+
+    override fun toString(): String = name.lowercase()
+}
+
+/**
+ * Where text is placed relative to its position: the fraction of its width that is left of the position
+ */
+enum class TextAnchor(override val value: Double) : AttributeOrPropertyValue {
+    START(0.0),
+    MIDDLE(0.5),
+    END(1.0);
+
+    override fun toString(): String = name.lowercase()
+}
+
 sealed interface ViewBox : AttributeOrPropertyValue {
     override val value: Rectangle?
 
@@ -359,6 +392,12 @@ var Style.width by PropertyDelegate<Length>(WIDTH, RESET, 768.0.pixels)
 var Style.height by PropertyDelegate<Length>(HEIGHT, RESET, 576.0.pixels)
 
 var Style.shadeStyle by PropertyDelegate<Shade>(SHADESTYLE, INHERIT, Shade.Value(ShadeStyle()))
+
+var Style.fontFamily by PropertyDelegate<FontFamily>(FONT_FAMILY, INHERIT, FontFamily(listOf("sans-serif")))
+var Style.fontSize by PropertyDelegate<Length>(FONT_SIZE, INHERIT, 16.0.pixels)
+var Style.fontWeight by PropertyDelegate<FontWeight>(FONT_WEIGHT, INHERIT, FontWeight(400))
+var Style.fontStyle by PropertyDelegate<FontStyle>(FONT_STYLE, INHERIT, FontStyle.NORMAL)
+var Style.textAnchor by PropertyDelegate<TextAnchor>(TEXT_ANCHOR, INHERIT, TextAnchor.START)
 
 enum class AttributeOrPropertyKey {
     // @formatter:off

@@ -1,5 +1,6 @@
 package org.openrndr.extra.composition
 
+import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 import org.openrndr.math.Matrix55
 import org.openrndr.draw.Drawer
@@ -18,6 +19,9 @@ fun Drawer.composition(composition: Composition) {
 
     // viewBox transformation
     model *= composition.calculateViewportTransform()
+
+    // where text without a position continues
+    var pen = Vector2.ZERO
 
     fun node(compositionNode: CompositionNode) {
         pushModel()
@@ -92,7 +96,9 @@ fun Drawer.composition(composition: Composition) {
                 }
                 image(image, source, target)
             }
-            is TextNode -> TODO()
+            is TextNode -> {
+                pen = CompositionText.draw(this, compositionNode, pen)
+            }
             is GroupNode -> compositionNode.children.forEach { node(it) }
         }
         popModel()

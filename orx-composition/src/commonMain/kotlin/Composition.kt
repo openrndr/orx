@@ -248,7 +248,22 @@ class ShapeNode(var shape: Shape) : CompositionNode() {
 /**
  * a [CompositionNode] that holds a single text
  */
-data class TextNode(var text: String, var contour: ShapeContour?) : CompositionNode() {
+/**
+ * a [CompositionNode] that holds a run of text, drawn along [contour] or starting at a position
+ * @param x the horizontal position of the start of the text, or null to continue after the previous text. For text
+ * along a contour it is the distance along the contour where the text starts.
+ * @param y the vertical position of the baseline of the text, or null to continue after the previous text
+ * @param dx a horizontal offset added to the position
+ * @param dy a vertical offset added to the position, for text along a contour an offset across the contour
+ */
+data class TextNode(
+    var text: String,
+    var contour: ShapeContour?,
+    var x: Double? = null,
+    var y: Double? = null,
+    var dx: Double = 0.0,
+    var dy: Double = 0.0
+) : CompositionNode() {
     // TODO: This should not be Rectangle.EMPTY
     override val bounds: Rectangle
         get() = Rectangle.EMPTY

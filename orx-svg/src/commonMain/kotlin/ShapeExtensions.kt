@@ -33,7 +33,7 @@ fun ShapeContour.toSvg(): String {
         }
         sb.append(
             when (segment.control.size) {
-                1 -> "C${segment.control[0].x}, ${segment.control[0].y} ${segment.end.x} ${segment.end.y}"
+                1 -> "Q${segment.control[0].x} ${segment.control[0].y} ${segment.end.x} ${segment.end.y}"
                 2 -> "C${segment.control[0].x}, ${segment.control[0].y} ${segment.control[1].x} ${segment.control[1].y} ${segment.end.x} ${segment.end.y}"
                 else -> "L${segment.end.x} ${segment.end.y}"
             }

@@ -110,17 +110,36 @@ fun writeSVG(
     sb.append("<svg version=\"1.2\" baseProfile=\"tiny\" id=\"$topLevelId\" $namespaces $styleSer $docStyleSer>")
 
     var textPathID = 0
+    // groups written as text elements, their contents are written with them
+    val textGroups = mutableSetOf<CompositionNode>()
     process(composition.root) { stage ->
+        if (generateSequence(this) { it.parent }.any { it in textGroups && it != this }) {
+            return@process
+        }
         if (stage == VisitStage.PRE) {
 
             val styleSerialized = this.style.serialize(this.parent?.style)
 
             when (this) {
                 is GroupNode -> {
-                    val attributes = listOf(svgId, styleSerialized, svgAttributes)
-                        .filter(String::isNotEmpty)
-                        .joinToString(" ")
-                    sb.append("<g${" $attributes"}>\n")
+                    if (isText() && (parent as? GroupNode)?.isText() != true) {
+                        textGroups.add(this)
+                        val contour = textRuns()?.firstOrNull()?.contour
+                        if (contour == null) {
+                            sb.appendText(this, "text")
+                        } else {
+                            // the runs are placed along the contour, the first run starts at the start offset
+                            sb.append("<defs><path id=\"text$textPathID\" d=\"${contour.toSvg()}\"/></defs>")
+                            sb.appendText(this, "text", "text$textPathID")
+                            textPathID++
+                        }
+                        sb.append("\n")
+                    } else {
+                        val attributes = listOf(svgId, styleSerialized, svgAttributes)
+                            .filter(String::isNotEmpty)
+                            .joinToString(" ")
+                        sb.append("<g${" $attributes"}>\n")
+                    }
                 }
                 is ShapeNode -> {
                     val pathAttribute = "d=\"${shape.toSvg()}\""
@@ -141,12 +160,30 @@ fun writeSVG(
                     val contour = this.contour
                     val escapedText = Entities.escape(this.text)
                     if (contour == null) {
-                        sb.append("<text $svgId $svgAttributes>$escapedText</text>")
+                        // text without a position continues the previous text, written as a separate text element
+                        // it starts at the origin
+                        val position = listOfNotNull(
+                            x?.let { "x=\"$it\"" },
+                            y?.let { "y=\"$it\"" },
+                            dx.takeIf { it != 0.0 }?.let { "dx=\"$it\"" },
+                            dy.takeIf { it != 0.0 }?.let { "dy=\"$it\"" }
+                        )
+                        val attributes = (listOf(svgId, styleSerialized, svgAttributes) + position)
+                            .filter(String::isNotEmpty)
+                            .joinToString(" ")
+                        sb.append("<text $attributes>$escapedText</text>\n")
                     } else {
                         sb.append("<defs>")
                         sb.append("<path id=\"text$textPathID\" d=\"${contour.toSvg()}\"/>")
                         sb.append("</defs>")
-                        sb.append("<text $styleSerialized><textPath href=\"#text$textPathID\">$escapedText</textPath></text>")
+                        // dx moves the text along the path, dy moves it across the path
+                        val attributes = listOf(
+                            svgId, styleSerialized, svgAttributes,
+                            dx.takeIf { it != 0.0 }?.let { "dx=\"$it\"" } ?: "",
+                            dy.takeIf { it != 0.0 }?.let { "dy=\"$it\"" } ?: ""
+                        ).filter(String::isNotEmpty).joinToString(" ")
+                        val startOffset = x?.takeIf { it != 0.0 }?.let { " startOffset=\"$it\"" } ?: ""
+                        sb.append("<text $attributes><textPath href=\"#text$textPathID\"$startOffset>$escapedText</textPath></text>\n")
                         textPathID++
                     }
                 }
@@ -168,13 +205,90 @@ fun writeSVG(
                 }
             }
         } else {
-            if (this is GroupNode) {
+            if (this is GroupNode && this !in textGroups) {
                 sb.append("</g>\n")
             }
         }
     }
     sb.append("</svg>")
     return sb.toString()
+}
+
+/**
+ * The text runs in this group and its descendants, null when the group holds anything else
+ */
+private fun GroupNode.textRuns(): List<TextNode>? = children.flatMap {
+    when (it) {
+        is TextNode -> listOf(it)
+        is GroupNode -> it.textRuns() ?: return null
+        else -> return null
+    }
+}
+
+/**
+ * Does this group hold only text, like the text elements that are loaded? Text along a contour is only written as a
+ * group when all runs share the contour and only the first run has a start offset.
+ */
+private fun GroupNode.isText(): Boolean {
+    val runs = textRuns()
+    if (runs.isNullOrEmpty()) return false
+    val contour = runs.first().contour ?: return runs.all { it.contour == null }
+    return runs.all { it.contour === contour } && runs.drop(1).all { it.x == null }
+}
+
+/**
+ * Writes a text group as a text or tspan [element], with a tspan for every nested group and for every run that has
+ * a position or a style of its own, so that runs without a position continue after the previous run.
+ * @param pathId the id of the path that the text is placed along, its contents are written in a textPath element
+ */
+private fun StringBuilder.appendText(node: CompositionNode, element: String, pathId: String? = null) {
+    val styleSerialized = node.style.serialize(node.parent?.style)
+    when (node) {
+        is GroupNode -> {
+            val attributes = listOf(node.svgId, styleSerialized, node.svgAttributes)
+                .filter(String::isNotEmpty)
+                .joinToString(" ")
+            append("<$element${if (attributes.isEmpty()) "" else " $attributes"}>")
+            if (pathId != null) {
+                val startOffset = node.textRuns()?.first()?.x?.takeIf { it != 0.0 }
+                    ?.let { "startOffset=\"$it\"" } ?: ""
+                // a single group in the text is written as the textPath element, like the loaded textPath elements,
+                // properties like text-anchor apply to the textPath element but not to a tspan in it
+                val single = node.children.singleOrNull() as? GroupNode
+                val pathAttributes = listOf(
+                    "href=\"#$pathId\"", startOffset,
+                    single?.svgId ?: "", single?.style?.serialize(node.style) ?: "", single?.svgAttributes ?: ""
+                ).filter(String::isNotEmpty).joinToString(" ")
+                append("<textPath $pathAttributes>")
+                (single?.children ?: node.children).forEach { appendText(it, "tspan") }
+                append("</textPath>")
+            } else {
+                node.children.forEach { appendText(it, "tspan") }
+            }
+            append("</$element>")
+        }
+
+        is TextNode -> {
+            val escapedText = Entities.escape(node.text)
+            // the x of a run along a contour is the start offset, written with the textPath element
+            val position = listOfNotNull(
+                node.x?.takeIf { node.contour == null }?.let { "x=\"$it\"" },
+                node.y?.takeIf { node.contour == null }?.let { "y=\"$it\"" },
+                node.dx.takeIf { it != 0.0 }?.let { "dx=\"$it\"" },
+                node.dy.takeIf { it != 0.0 }?.let { "dy=\"$it\"" }
+            )
+            val attributes = (listOf(node.svgId, styleSerialized, node.svgAttributes) + position)
+                .filter(String::isNotEmpty)
+                .joinToString(" ")
+            if (attributes.isEmpty()) {
+                append(escapedText)
+            } else {
+                append("<tspan $attributes>$escapedText</tspan>")
+            }
+        }
+
+        else -> {}
+    }
 }
 
 
