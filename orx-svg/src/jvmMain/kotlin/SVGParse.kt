@@ -19,7 +19,7 @@ internal sealed interface PropertyRegex {
     companion object {
         val wsp = "(?:\\s|\\A|\\Z)+".toRegex()
         val commaWsp = "(?:\\s*,\\s*|\\s+)".toRegex()
-        const val align = "(?<align>[xy](?:Min|Mid|Max)[XY](?:Min|Mid|Max))?"
+        const val align = "(?<align>none|[xy](?:Min|Mid|Max)[XY](?:Min|Mid|Max))?"
         const val meetOrSlice = "(?<meetOrSlice>meet|slice)?"
         const val unitIdentifier = "in|pc|pt|px|cm|mm|Q"
         val opts = RegexOption.IGNORE_CASE

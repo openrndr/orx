@@ -1,5 +1,7 @@
 package org.openrndr.extra.composition
 
+import org.openrndr.shape.Rectangle
+import org.openrndr.math.Matrix55
 import org.openrndr.draw.Drawer
 
 
@@ -79,7 +81,16 @@ fun Drawer.composition(composition: Composition) {
                 shape(compositionNode.shape)
             }
             is ImageNode -> {
-                image(compositionNode.image)
+                val image = compositionNode.image
+                val source = compositionNode.source ?: Rectangle(0.0, 0.0, image.width.toDouble(), image.height.toDouble())
+                val target = Rectangle(compositionNode.x, compositionNode.y, compositionNode.width, compositionNode.height)
+                (compositionNode.style.opacity as? Numeric.Rational)?.let {
+                    if (it.value < 1.0) {
+                        // scales the alpha of the image
+                        drawStyle.colorMatrix = Matrix55.IDENTITY.copy(c3r3 = it.value)
+                    }
+                }
+                image(image, source, target)
             }
             is TextNode -> TODO()
             is GroupNode -> compositionNode.children.forEach { node(it) }

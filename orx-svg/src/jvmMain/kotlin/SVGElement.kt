@@ -2,8 +2,6 @@ package org.openrndr.extra.svg
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.jsoup.nodes.*
-import org.openrndr.draw.ColorBuffer
-import org.openrndr.draw.loadImage
 import org.openrndr.extra.composition.*
 import org.openrndr.math.*
 import org.openrndr.shape.*
@@ -111,16 +109,27 @@ internal fun Double.toBoolean(): Boolean? = when (this) {
 
 internal class SVGImage(val element: Element? = null) : SVGElement(element) {
 
-    val x = element?.attribute("x")?.value?.toDoubleOrNull() ?: 0.0
-    val y = element?.attribute("y")?.value?.toDoubleOrNull() ?: 0.0
+    /** the value of a length attribute in pixels, or null when it is not given or auto */
+    private fun lengthAttribute(name: String): Double? =
+        element?.attr(name)?.trim()?.takeIf { it.isNotEmpty() && it != "auto" }?.let { SVGParse.length(it).value }
 
-    val width = element?.attribute("width")?.value?.toDoubleOrNull() ?: 0.0
-    val height = element?.attribute("height")?.value?.toDoubleOrNull() ?: 0.0
+    val x = lengthAttribute("x") ?: 0.0
+    val y = lengthAttribute("y") ?: 0.0
 
+    /** the width of the viewport of the image, null when the width of the image is used */
+    val width = lengthAttribute("width")
 
-    fun image(): ColorBuffer {
-        return loadImage(element!!.attr("xlink:href"))
+    /** the height of the viewport of the image, null when the height of the image is used */
+    val height = lengthAttribute("height")
+
+    /** the reference to the image: the href of SVG 2 or the xlink:href of SVG 1.1 */
+    val href: String? = listOf("href", "xlink:href").firstNotNullOfOrNull { name ->
+        element?.attr(name)?.trim()?.takeIf { it.isNotEmpty() }
     }
+
+    /** how the image is fitted into its viewport */
+    val aspectRatio: AspectRatio =
+        element?.let { SVGParse.preserveAspectRatio(it) } ?: AspectRatio(Align.X_MID_Y_MID, MeetOrSlice.MEET)
 
     override fun handleAttribute(attribute: Attribute) {
         if (this.element is Element) {
@@ -134,6 +143,14 @@ internal class SVGImage(val element: Element? = null) : SVGElement(element) {
 
     init {
         if (element != null) {
+            // style properties, like opacity, can be given as attributes or in the style attribute
+            element.attributes().forEach {
+                if (it.key == Attr.STYLE) {
+                    inlineStyles(it)
+                } else {
+                    handleAttribute(it)
+                }
+            }
             style.transform = SVGParse.transform(this.element)
         }
     }

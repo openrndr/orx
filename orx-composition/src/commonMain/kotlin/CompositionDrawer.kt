@@ -748,7 +748,7 @@ class CompositionDrawer(
         fun nodeCopy(node: CompositionNode): CompositionNode {
             val copy = when (node) {
                 is ImageNode -> {
-                    ImageNode(node.image, node.x, node.y, node.width, node.height)
+                    ImageNode(node.image, node.x, node.y, node.width, node.height, node.source)
                 }
 
                 is ShapeNode -> {

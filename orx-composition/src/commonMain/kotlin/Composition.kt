@@ -151,12 +151,21 @@ fun transform(node: CompositionNode): Matrix44 =
     (node.parent?.let { transform(it) } ?: Matrix44.IDENTITY) * node.transform
 
 /**
- * a [CompositionNode] that holds a single image [ColorBuffer]
+ * a [CompositionNode] that holds a single image [ColorBuffer], drawn into the rectangle at ([x], [y]) of [width] by
+ * [height]
+ * @param source the part of the image that is drawn, in the image's coordinates with the origin at its top left
+ * corner, or null to draw the whole image
  */
-class ImageNode(var image: ColorBuffer, var x: Double, var y: Double, var width: Double, var height: Double) :
-    CompositionNode() {
+class ImageNode(
+    var image: ColorBuffer,
+    var x: Double,
+    var y: Double,
+    var width: Double,
+    var height: Double,
+    var source: Rectangle? = null
+) : CompositionNode() {
     override val bounds: Rectangle
-        get() = Rectangle(0.0, 0.0, width, height).contour.transform(transform(this)).bounds
+        get() = Rectangle(x, y, width, height).contour.transform(transform(this)).bounds
 }
 
 /**

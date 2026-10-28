@@ -1,5 +1,6 @@
 package org.openrndr.extra.svg
 
+import org.openrndr.draw.ImageFileFormat
 import org.jsoup.nodes.*
 import org.openrndr.extra.composition.*
 import org.openrndr.extra.composition.TextNode
@@ -150,8 +151,20 @@ fun writeSVG(
                     }
                 }
                 is ImageNode -> {
-                    val dataUrl = this.image.toDataUrl()
-                    sb.append("""<image xlink:href="$dataUrl" height="${this.image.height}" width="${this.image.width}"/>""")
+                    // PNG keeps the colors and the transparency of the image, JPEG does not
+                    val dataUrl = this.image.toDataUrl(ImageFileFormat.PNG)
+                    val attributes = listOf(svgId, styleSerialized, svgAttributes)
+                        .filter(String::isNotEmpty)
+                        .joinToString(" ")
+                    val source = this.source
+                    if (source == null) {
+                        sb.append("""<image $attributes xlink:href="$dataUrl" x="$x" y="$y" width="$width" height="$height" preserveAspectRatio="none"/>""")
+                    } else {
+                        // the viewBox of a nested viewport selects the part of the image that is shown
+                        sb.append("""<svg $attributes x="$x" y="$y" width="$width" height="$height" viewBox="${source.x} ${source.y} ${source.width} ${source.height}" preserveAspectRatio="none">""")
+                        sb.append("""<image xlink:href="$dataUrl" width="${image.width}" height="${image.height}"/></svg>""")
+                    }
+                    sb.append("\n")
                 }
             }
         } else {
