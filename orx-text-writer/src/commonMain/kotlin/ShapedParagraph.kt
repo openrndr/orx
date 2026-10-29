@@ -28,6 +28,12 @@ class ShapedParagraph internal constructor(
         }
     }
 
+    /** the offset of the text of the item at [index] in the text of the paragraph, -1 for items without text */
+    fun textStart(index: Int): Int = itemStarts[index]
+
+    /** the length of the text of the item at [index] */
+    fun textLength(index: Int): Int = itemLength(index)
+
     private fun itemLength(index: Int) = when (val item = items[index]) {
         is LineBox -> item.content.text.length
         is LineGlue -> 1

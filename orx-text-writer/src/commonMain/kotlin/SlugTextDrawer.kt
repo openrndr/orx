@@ -134,23 +134,34 @@ class SlugTextDrawer : TextDrawer {
      * @param transform the transform of the outline of a glyph, replacing [TypesetGlyph.transform]
      */
     fun addGlyphs(glyphs: List<TypesetGlyph>, transform: (TypesetGlyph) -> Matrix44) {
+        addCommands(glyphs.map { it to transform(it) })
+    }
+
+    /**
+     * Adds the glyphs of text that is placed on a contour by [layoutTextOnContour]
+     */
+    fun addGlyphs(layout: ContourTextLayout) {
+        addCommands(layout.glyphs.map { it.glyph to it.transform })
+    }
+
+    private fun addCommands(glyphs: List<Pair<TypesetGlyph, Matrix44>>) {
         // Make sure all glyphs are in the glyph map before slug indices are used, new glyphs are added in a single
         // batch so the slug map textures are written once
         slugMap.startBatch()
         try {
-            for (glyph in glyphs) {
+            for ((glyph, _) in glyphs) {
                 slugGlyphMap.getSlugForGlyphIndex(glyph.face, glyph.glyphIndex)
             }
         } finally {
             slugMap.endBatch()
         }
 
-        for (glyph in glyphs) {
+        for ((glyph, transform) in glyphs) {
             val glyphStyle = glyph.style
             commands.add(
                 SlugCommand(
                     slugGlyphMap.getSlugForGlyphIndex(glyph.face, glyph.glyphIndex),
-                    transform(glyph),
+                    transform,
                     glyphStyle.fill,
                     glyphStyle.stroke,
                     glyphStyle.strokeWeight ?: 0.0,

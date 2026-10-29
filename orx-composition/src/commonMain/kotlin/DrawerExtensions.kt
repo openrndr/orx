@@ -99,7 +99,15 @@ fun Drawer.composition(composition: Composition) {
             is TextNode -> {
                 pen = CompositionText.draw(this, compositionNode, pen)
             }
-            is GroupNode -> compositionNode.children.forEach { node(it) }
+            is GroupNode -> {
+                // text along a contour is shaped and placed as a whole
+                val contourRuns = CompositionText.contourRuns(compositionNode)
+                if (contourRuns != null) {
+                    pen = CompositionText.drawOnContour(this, contourRuns, pen)
+                } else {
+                    compositionNode.children.forEach { node(it) }
+                }
+            }
         }
         popModel()
         popStyle()
