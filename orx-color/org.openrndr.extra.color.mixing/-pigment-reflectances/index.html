@@ -1,0 +1,1373 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>PigmentReflectances</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../../images/logo-icon.svg">
+<link href="../../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.1-dev.15.uncommitted+b7449fe
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-color/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-color/commonMain" data-filter=":orx-color/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="orx-color::org.openrndr.extra.color.mixing/PigmentReflectances///PointingToDeclaration//-454829500">
+  <div class="breadcrumbs"><a href="../../index.html">orx-color</a><span class="delimiter">/</span><a href="../index.html">org.openrndr.extra.color.mixing</a><span class="delimiter">/</span><span class="current">PigmentReflectances</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Pigment</span><wbr><span><span>Reflectances</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">object </span><a href="index.html">PigmentReflectances</a><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/openrndr/orx/blob/master/orx-color/src/commonMain/kotlin/mixing/PigmentReflectances.kt#L19">source</a>)</span></span></div><p class="paragraph">Measured reflectance spectra of historical and modern pigments, for use with <a href="../mix-reflectance.html">mixReflectance</a> and <a href="../reflectance-to-r-g-ba.html">reflectanceToRGBa</a>.</p><p class="paragraph">Every spectrum has 38 samples from 380 to 750 nm in steps of 10 nm, the grid used by <a href="../linear-to-reflectance.html">linearToReflectance</a> and <a href="../reflectance-to-x-y-z.html">reflectanceToXYZ</a>. The spectra were measured with fiber optics reflectance spectroscopy (FORS) by Cultural Heritage Science Open Source (CHSOS, https://chsopensource.org) on the swatches of their Pigments Checker, see A. Cosentino, <i>FORS spectral database of historical pigments in different binders</i>, e-conservation Journal 2, 57-68 (2014). Each sample is the average of all measurements within 5 nm of its wavelength.</p><p class="paragraph">The swatches are pigment samples in a binder for pigment identification, not opaque paint layers, so mixing them with Kubelka-Munk theory is an approximation, in particular for transparent pigments such as lakes. Every property returns a new copy of the spectrum.</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-1607138366%2FProperties%2F-454829500" anchor-label="acrylicBinder" id="-1607138366%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="acrylic-binder.html"><span>acrylic</span><wbr><span><span>Binder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1607138366%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="acrylic-binder.html">acrylicBinder</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "acrylic binder"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-234501985%2FProperties%2F-454829500" anchor-label="alizarin" id="-234501985%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="alizarin.html"><span><span>alizarin</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-234501985%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="alizarin.html">alizarin</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "alizarine"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1933661800%2FProperties%2F-454829500" anchor-label="all" id="1933661800%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="all.html"><span><span>all</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1933661800%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="all.html">all</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">All spectra by their CHSOS name.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1119229726%2FProperties%2F-454829500" anchor-label="anilineBlack" id="-1119229726%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="aniline-black.html"><span>aniline</span><wbr><span><span>Black</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1119229726%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="aniline-black.html">anilineBlack</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "PBk 1 - aniline black" (PBk 1)</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1869216527%2FProperties%2F-454829500" anchor-label="antimonyWhite" id="1869216527%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="antimony-white.html"><span>antimony</span><wbr><span><span>White</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1869216527%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="antimony-white.html">antimonyWhite</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "PW 11 - antimony white" (PW 11)</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-132725265%2FProperties%2F-454829500" anchor-label="arylideYellow" id="-132725265%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="arylide-yellow.html"><span>arylide</span><wbr><span><span>Yellow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-132725265%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="arylide-yellow.html">arylideYellow</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "arylide yellow"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1981296421%2FProperties%2F-454829500" anchor-label="azurite" id="1981296421%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="azurite.html"><span><span>azurite</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1981296421%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="azurite.html">azurite</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "azurite"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-445467207%2FProperties%2F-454829500" anchor-label="bismuthMetalPowder" id="-445467207%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="bismuth-metal-powder.html"><span>bismuth</span><wbr><span>Metal</span><wbr><span><span>Powder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-445467207%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="bismuth-metal-powder.html">bismuthMetalPowder</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "bismuth metal powder"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1908526373%2FProperties%2F-454829500" anchor-label="bitumen" id="-1908526373%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="bitumen.html"><span><span>bitumen</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1908526373%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="bitumen.html">bitumen</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "bitumen"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2081199374%2FProperties%2F-454829500" anchor-label="blueBice" id="2081199374%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="blue-bice.html"><span>blue</span><wbr><span><span>Bice</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2081199374%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="blue-bice.html">blueBice</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "blue bice"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1006079150%2FProperties%2F-454829500" anchor-label="boneBlack" id="1006079150%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="bone-black.html"><span>bone</span><wbr><span><span>Black</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1006079150%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="bone-black.html">boneBlack</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "bone black"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="186718322%2FProperties%2F-454829500" anchor-label="burntSienna" id="186718322%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="burnt-sienna.html"><span>burnt</span><wbr><span><span>Sienna</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="186718322%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="burnt-sienna.html">burntSienna</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "burnt sienna"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2068226015%2FProperties%2F-454829500" anchor-label="burntUmber" id="2068226015%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="burnt-umber.html"><span>burnt</span><wbr><span><span>Umber</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2068226015%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="burnt-umber.html">burntUmber</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "burnt umber"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-812603640%2FProperties%2F-454829500" anchor-label="cadmiumGreen" id="-812603640%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="cadmium-green.html"><span>cadmium</span><wbr><span><span>Green</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-812603640%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="cadmium-green.html">cadmiumGreen</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "cadmium green"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1169597254%2FProperties%2F-454829500" anchor-label="cadmiumRed" id="-1169597254%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="cadmium-red.html"><span>cadmium</span><wbr><span><span>Red</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1169597254%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="cadmium-red.html">cadmiumRed</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "cadmium red"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-418017637%2FProperties%2F-454829500" anchor-label="cadmiumYellow" id="-418017637%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="cadmium-yellow.html"><span>cadmium</span><wbr><span><span>Yellow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-418017637%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="cadmium-yellow.html">cadmiumYellow</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "cadmium yellow"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1751692627%2FProperties%2F-454829500" anchor-label="carmineLake" id="1751692627%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="carmine-lake.html"><span>carmine</span><wbr><span><span>Lake</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1751692627%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="carmine-lake.html">carmineLake</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "carmine lake"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1228498130%2FProperties%2F-454829500" anchor-label="chalk" id="-1228498130%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="chalk.html"><span><span>chalk</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1228498130%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="chalk.html">chalk</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "chalk"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="229323797%2FProperties%2F-454829500" anchor-label="chromeOxideGreen" id="229323797%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="chrome-oxide-green.html"><span>chrome</span><wbr><span>Oxide</span><wbr><span><span>Green</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="229323797%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="chrome-oxide-green.html">chromeOxideGreen</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "chrome oxide green"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-378336189%2FProperties%2F-454829500" anchor-label="chromeYellow" id="-378336189%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="chrome-yellow.html"><span>chrome</span><wbr><span><span>Yellow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-378336189%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="chrome-yellow.html">chromeYellow</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "chrome yellow"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="232458820%2FProperties%2F-454829500" anchor-label="cobaltBlue" id="232458820%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="cobalt-blue.html"><span>cobalt</span><wbr><span><span>Blue</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="232458820%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="cobalt-blue.html">cobaltBlue</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "cobalt blue"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2037417479%2FProperties%2F-454829500" anchor-label="cobaltCeruleanBlue" id="-2037417479%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="cobalt-cerulean-blue.html"><span>cobalt</span><wbr><span>Cerulean</span><wbr><span><span>Blue</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2037417479%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="cobalt-cerulean-blue.html">cobaltCeruleanBlue</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "cobalt cerulean b"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1705240043%2FProperties%2F-454829500" anchor-label="cobaltChromiteBlue" id="-1705240043%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="cobalt-chromite-blue.html"><span>cobalt</span><wbr><span>Chromite</span><wbr><span><span>Blue</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1705240043%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="cobalt-chromite-blue.html">cobaltChromiteBlue</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "cobalt chromite b"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="345768255%2FProperties%2F-454829500" anchor-label="cobaltTitanateGreen" id="345768255%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="cobalt-titanate-green.html"><span>cobalt</span><wbr><span>Titanate</span><wbr><span><span>Green</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="345768255%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="cobalt-titanate-green.html">cobaltTitanateGreen</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "cobalt titanate green"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-871217793%2FProperties%2F-454829500" anchor-label="cobaltViolet" id="-871217793%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="cobalt-violet.html"><span>cobalt</span><wbr><span><span>Violet</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-871217793%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="cobalt-violet.html">cobaltViolet</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "cobalt violet"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-824122582%2FProperties%2F-454829500" anchor-label="cobaltYellow" id="-824122582%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="cobalt-yellow.html"><span>cobalt</span><wbr><span><span>Yellow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-824122582%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="cobalt-yellow.html">cobaltYellow</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "cobalt yellow"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1105724139%2FProperties%2F-454829500" anchor-label="copperResinate" id="1105724139%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="copper-resinate.html"><span>copper</span><wbr><span><span>Resinate</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1105724139%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="copper-resinate.html">copperResinate</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "copper resinate"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1634203107%2FProperties%2F-454829500" anchor-label="curcuma" id="1634203107%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="curcuma.html"><span><span>curcuma</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1634203107%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="curcuma.html">curcuma</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "curcuma"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1477638812%2FProperties%2F-454829500" anchor-label="egyptianBlue" id="1477638812%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="egyptian-blue.html"><span>egyptian</span><wbr><span><span>Blue</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1477638812%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="egyptian-blue.html">egyptianBlue</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "egyptian blue"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1109209749%2FProperties%2F-454829500" anchor-label="gamboge" id="-1109209749%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="gamboge.html"><span><span>gamboge</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1109209749%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="gamboge.html">gamboge</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "gamboge"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1993431018%2FProperties%2F-454829500" anchor-label="greenEarth" id="1993431018%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="green-earth.html"><span>green</span><wbr><span><span>Earth</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1993431018%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="green-earth.html">greenEarth</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "green earth"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="301646820%2FProperties%2F-454829500" anchor-label="gypsum" id="301646820%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="gypsum.html"><span><span>gypsum</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="301646820%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="gypsum.html">gypsum</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "gypsum"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1824455994%2FProperties%2F-454829500" anchor-label="hanBlue" id="1824455994%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="han-blue.html"><span>han</span><wbr><span><span>Blue</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1824455994%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="han-blue.html">hanBlue</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "han blue"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-604383360%2FProperties%2F-454829500" anchor-label="hansaYellow10G" id="-604383360%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hansa-yellow10-g.html"><span>hansa</span><wbr><span><span>Yellow10G</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-604383360%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="hansa-yellow10-g.html">hansaYellow10G</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "PY 3 - hansa yellow 10G" (PY 3)</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1111773057%2FProperties%2F-454829500" anchor-label="indigo" id="-1111773057%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="indigo.html"><span><span>indigo</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1111773057%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="indigo.html">indigo</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "indigo"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-391233115%2FProperties%2F-454829500" anchor-label="ironGallInk" id="-391233115%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="iron-gall-ink.html"><span>iron</span><wbr><span>Gall</span><wbr><span><span>Ink</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-391233115%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="iron-gall-ink.html">ironGallInk</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "iron gall ink"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-241940741%2FProperties%2F-454829500" anchor-label="ivoryBlack" id="-241940741%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="ivory-black.html"><span>ivory</span><wbr><span><span>Black</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-241940741%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="ivory-black.html">ivoryBlack</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "ivory black"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-245281969%2FProperties%2F-454829500" anchor-label="lacDye" id="-245281969%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="lac-dye.html"><span>lac</span><wbr><span><span>Dye</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-245281969%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="lac-dye.html">lacDye</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "lac die"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="456739010%2FProperties%2F-454829500" anchor-label="lampBlack" id="456739010%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="lamp-black.html"><span>lamp</span><wbr><span><span>Black</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="456739010%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="lamp-black.html">lampBlack</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "lamp black"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2130360807%2FProperties%2F-454829500" anchor-label="leadTinYellowI" id="-2130360807%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="lead-tin-yellow-i.html"><span>lead</span><wbr><span>Tin</span><wbr><span>Yellow</span><wbr><span><span>I</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2130360807%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="lead-tin-yellow-i.html">leadTinYellowI</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "lead tin y I"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1353252680%2FProperties%2F-454829500" anchor-label="leadTinYellowII" id="-1353252680%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="lead-tin-yellow-i-i.html"><span>lead</span><wbr><span>Tin</span><wbr><span>Yellow</span><wbr><span><span>II</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1353252680%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="lead-tin-yellow-i-i.html">leadTinYellowII</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "lead tin y II"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1747500636%2FProperties%2F-454829500" anchor-label="leadWhite" id="1747500636%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="lead-white.html"><span>lead</span><wbr><span><span>White</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1747500636%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="lead-white.html">leadWhite</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "lead white"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1986957205%2FProperties%2F-454829500" anchor-label="lithopone" id="1986957205%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="lithopone.html"><span><span>lithopone</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1986957205%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="lithopone.html">lithopone</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "lithopone"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1038603999%2FProperties%2F-454829500" anchor-label="madderLake" id="-1038603999%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="madder-lake.html"><span>madder</span><wbr><span><span>Lake</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1038603999%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="madder-lake.html">madderLake</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "madder lake"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1364853693%2FProperties%2F-454829500" anchor-label="malachite" id="1364853693%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="malachite.html"><span><span>malachite</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1364853693%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="malachite.html">malachite</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "malachite"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="120820621%2FProperties%2F-454829500" anchor-label="manganeseViolet" id="120820621%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="manganese-violet.html"><span>manganese</span><wbr><span><span>Violet</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="120820621%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="manganese-violet.html">manganeseViolet</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "manganese violet"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1538066430%2FProperties%2F-454829500" anchor-label="massicot" id="1538066430%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="massicot.html"><span><span>massicot</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1538066430%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="massicot.html">massicot</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "massicot"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="894804155%2FProperties%2F-454829500" anchor-label="mayaBlue" id="894804155%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="maya-blue.html"><span>maya</span><wbr><span><span>Blue</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="894804155%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="maya-blue.html">mayaBlue</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "maya blue"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1893276302%2FProperties%2F-454829500" anchor-label="methyleneBlue" id="-1893276302%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="methylene-blue.html"><span>methylene</span><wbr><span><span>Blue</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1893276302%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="methylene-blue.html">methyleneBlue</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "BB 9 - methilene blue" (BB 9)</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1619715106%2FProperties%2F-454829500" anchor-label="naphtholGreen" id="1619715106%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="naphthol-green.html"><span>naphthol</span><wbr><span><span>Green</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1619715106%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="naphthol-green.html">naphtholGreen</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "PG 12 - naphthol green" (PG 12)</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1895557036%2FProperties%2F-454829500" anchor-label="naphtholRed" id="-1895557036%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="naphthol-red.html"><span>naphthol</span><wbr><span><span>Red</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1895557036%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="naphthol-red.html">naphtholRed</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "naphthol red"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1832686976%2FProperties%2F-454829500" anchor-label="naplesYellow" id="-1832686976%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="naples-yellow.html"><span>naples</span><wbr><span><span>Yellow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1832686976%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="naples-yellow.html">naplesYellow</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "naples yellow"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-153690199%2FProperties%2F-454829500" anchor-label="nickelAzoYellow" id="-153690199%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="nickel-azo-yellow.html"><span>nickel</span><wbr><span>Azo</span><wbr><span><span>Yellow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-153690199%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="nickel-azo-yellow.html">nickelAzoYellow</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "PY 150 - nickel azo yellow" (PY 150)</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1789411543%2FProperties%2F-454829500" anchor-label="orpiment" id="1789411543%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="orpiment.html"><span><span>orpiment</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1789411543%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="orpiment.html">orpiment</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "orpiment"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1190732553%2FProperties%2F-454829500" anchor-label="phthaloBlue" id="-1190732553%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="phthalo-blue.html"><span>phthalo</span><wbr><span><span>Blue</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1190732553%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="phthalo-blue.html">phthaloBlue</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "phthalo blue"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1440774074%2FProperties%2F-454829500" anchor-label="phthaloGreen" id="-1440774074%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="phthalo-green.html"><span>phthalo</span><wbr><span><span>Green</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1440774074%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="phthalo-green.html">phthaloGreen</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "phthalo green"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-853209452%2FProperties%2F-454829500" anchor-label="prussianBlue" id="-853209452%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="prussian-blue.html"><span>prussian</span><wbr><span><span>Blue</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-853209452%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="prussian-blue.html">prussianBlue</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "prussian blue"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1709607103%2FProperties%2F-454829500" anchor-label="pyrroleRed" id="1709607103%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="pyrrole-red.html"><span>pyrrole</span><wbr><span><span>Red</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1709607103%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="pyrrole-red.html">pyrroleRed</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "PR 264 - pyrrole red" (PR 264)</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="355889007%2FProperties%2F-454829500" anchor-label="rawSienna" id="355889007%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="raw-sienna.html"><span>raw</span><wbr><span><span>Sienna</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="355889007%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="raw-sienna.html">rawSienna</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "raw sienna"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2082736830%2FProperties%2F-454829500" anchor-label="rawUmber" id="-2082736830%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="raw-umber.html"><span>raw</span><wbr><span><span>Umber</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2082736830%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="raw-umber.html">rawUmber</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "raw umber"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1170593873%2FProperties%2F-454829500" anchor-label="realgar" id="-1170593873%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="realgar.html"><span><span>realgar</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1170593873%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="realgar.html">realgar</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "realgar"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1765867524%2FProperties%2F-454829500" anchor-label="redLead" id="-1765867524%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="red-lead.html"><span>red</span><wbr><span><span>Lead</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1765867524%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="red-lead.html">redLead</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "red lead"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-333057381%2FProperties%2F-454829500" anchor-label="redOchre" id="-333057381%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="red-ochre.html"><span>red</span><wbr><span><span>Ochre</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-333057381%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="red-ochre.html">redOchre</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "red ochre"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1157791473%2FProperties%2F-454829500" anchor-label="rhodamine6G" id="-1157791473%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="rhodamine6-g.html"><span><span>rhodamine6G</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1157791473%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="rhodamine6-g.html">rhodamine6G</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "PR 81 - rhodamine 6G" (PR 81)</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="108786454%2FProperties%2F-454829500" anchor-label="safflower" id="108786454%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="safflower.html"><span><span>safflower</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="108786454%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="safflower.html">safflower</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "NY 5 - safflower" (NY 5)</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1850488006%2FProperties%2F-454829500" anchor-label="saffron" id="1850488006%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="saffron.html"><span><span>saffron</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1850488006%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="saffron.html">saffron</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "saffron"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1552898893%2FProperties%2F-454829500" anchor-label="sepia" id="-1552898893%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="sepia.html"><span><span>sepia</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1552898893%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="sepia.html">sepia</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "sepia"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1597720646%2FProperties%2F-454829500" anchor-label="smalt" id="-1597720646%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="smalt.html"><span><span>smalt</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1597720646%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="smalt.html">smalt</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "smalt"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-352966381%2FProperties%2F-454829500" anchor-label="stilDeGrain" id="-352966381%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="stil-de-grain.html"><span>stil</span><wbr><span>De</span><wbr><span><span>Grain</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-352966381%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="stil-de-grain.html">stilDeGrain</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "still de grain"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="402142069%2FProperties%2F-454829500" anchor-label="titaniumWhite" id="402142069%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="titanium-white.html"><span>titanium</span><wbr><span><span>White</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="402142069%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="titanium-white.html">titaniumWhite</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "titanium white"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1591358996%2FProperties%2F-454829500" anchor-label="tyrianPurple" id="-1591358996%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="tyrian-purple.html"><span>tyrian</span><wbr><span><span>Purple</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1591358996%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="tyrian-purple.html">tyrianPurple</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "NV 1 - tyrian purple" (NV 1)</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1222273511%2FProperties%2F-454829500" anchor-label="ultramarineBlueArtificial" id="1222273511%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="ultramarine-blue-artificial.html"><span>ultramarine</span><wbr><span>Blue</span><wbr><span><span>Artificial</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1222273511%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="ultramarine-blue-artificial.html">ultramarineBlueArtificial</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "ultramarine b art"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="307602704%2FProperties%2F-454829500" anchor-label="ultramarineBlueNatural" id="307602704%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="ultramarine-blue-natural.html"><span>ultramarine</span><wbr><span>Blue</span><wbr><span><span>Natural</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="307602704%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="ultramarine-blue-natural.html">ultramarineBlueNatural</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "ultramarine b nat"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-801666387%2FProperties%2F-454829500" anchor-label="vanDykeBrown" id="-801666387%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="van-dyke-brown.html"><span>van</span><wbr><span>Dyke</span><wbr><span><span>Brown</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-801666387%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="van-dyke-brown.html">vanDykeBrown</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "van dyke brown"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-735123508%2FProperties%2F-454829500" anchor-label="verdigris" id="-735123508%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="verdigris.html"><span><span>verdigris</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-735123508%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="verdigris.html">verdigris</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "verdigris"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1091925716%2FProperties%2F-454829500" anchor-label="vermilionArtificial" id="1091925716%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="vermilion-artificial.html"><span>vermilion</span><wbr><span><span>Artificial</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1091925716%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="vermilion-artificial.html">vermilionArtificial</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "vermilion artificial"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="971933507%2FProperties%2F-454829500" anchor-label="vermilionNatural" id="971933507%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="vermilion-natural.html"><span>vermilion</span><wbr><span><span>Natural</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="971933507%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="vermilion-natural.html">vermilionNatural</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "vermilion nat"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="258242324%2FProperties%2F-454829500" anchor-label="vineBlack" id="258242324%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="vine-black.html"><span>vine</span><wbr><span><span>Black</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="258242324%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="vine-black.html">vineBlack</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "vine black"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1762853131%2FProperties%2F-454829500" anchor-label="viridian" id="-1762853131%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="viridian.html"><span><span>viridian</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1762853131%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="viridian.html">viridian</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "viridian"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1441041762%2FProperties%2F-454829500" anchor-label="vivianite" id="1441041762%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="vivianite.html"><span><span>vivianite</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1441041762%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="vivianite.html">vivianite</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "vivianite"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-935410516%2FProperties%2F-454829500" anchor-label="yellowLakeReseda" id="-935410516%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="yellow-lake-reseda.html"><span>yellow</span><wbr><span>Lake</span><wbr><span><span>Reseda</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-935410516%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="yellow-lake-reseda.html">yellowLakeReseda</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "yellow lake reseda"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-801492458%2FProperties%2F-454829500" anchor-label="yellowOchre" id="-801492458%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="yellow-ochre.html"><span>yellow</span><wbr><span><span>Ochre</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-801492458%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="yellow-ochre.html">yellowOchre</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "yellow ochre"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1932599772%2FProperties%2F-454829500" anchor-label="zincWhite" id="-1932599772%2FProperties%2F-454829500" data-filterable-set=":orx-color/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-color/commonMain" data-filterable-set=":orx-color/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="zinc-white.html"><span>zinc</span><wbr><span><span>White</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1932599772%2FProperties%2F-454829500"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-color/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="zinc-white.html">zincWhite</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">CHSOS spectrum "zinc white"</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
