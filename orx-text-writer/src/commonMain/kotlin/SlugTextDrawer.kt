@@ -3,18 +3,14 @@ package org.openrndr.extra.textwriter
 import org.openrndr.math.Matrix44
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.ColorFormat
-import org.openrndr.draw.ColorType
 import org.openrndr.draw.Drawer
-import org.openrndr.draw.colorBuffer
+import org.openrndr.draw.boundary.BoundaryCommand
+import org.openrndr.draw.boundary.BoundaryDrawer
+import org.openrndr.draw.boundary.BoundaryGlyphMap
 import org.openrndr.draw.font.Face
 import org.openrndr.draw.font.internal.Direction
 import org.openrndr.draw.font.internal.ShapeFeature
 import org.openrndr.draw.font.internal.TextShapingDriver
-import org.openrndr.draw.slug.SlugCommand
-import org.openrndr.draw.slug.SlugDrawer
-import org.openrndr.draw.slug.SlugGlyphMap
-import org.openrndr.draw.slug.SlugMap
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 import kotlin.jvm.JvmRecord
@@ -104,19 +100,26 @@ data class TextStyle(
 data class TextSpan(val text: String, val style: TextStyle?)
 
 
-class SlugTextDrawer : TextDrawer {
+/**
+ * Draws text with a [BoundaryDrawer], which draws glyphs from their outlines.
+ *
+ * @param boundaryDrawer the boundary drawer that draws the text, for example a [org.openrndr.draw.slug.SlugDrawer],
+ * or null for the boundary drawer of the drawer of the active program. The boundary drawer is used from the first
+ * time glyphs are added on.
+ */
+class SlugTextDrawer(boundaryDrawer: BoundaryDrawer? = null) : TextDrawer {
 
     val shaper = TextShapingDriver.instance
 
-    private val slugMap = SlugMap(
-        colorBuffer(4096, 64, type = ColorType.FLOAT32, format = ColorFormat.RG),
-        colorBuffer(4096, 64, type = ColorType.UINT16_INT, format = ColorFormat.RGBa)
-    )
+    /** the boundary drawer that draws the text */
+    val boundaryDrawer: BoundaryDrawer by lazy {
+        boundaryDrawer ?: Program.active?.drawer?.boundaryDrawer
+        ?: error("no boundary drawer given and there is no active program")
+    }
 
-    private val slugGlyphMap = SlugGlyphMap(slugMap)
+    private val glyphMap by lazy { BoundaryGlyphMap(this.boundaryDrawer.createMap()) }
 
-
-    val commands = mutableListOf<SlugCommand>()
+    val commands = mutableListOf<BoundaryCommand>()
 
     override var style = TextStyle.Defaults
 
@@ -145,22 +148,22 @@ class SlugTextDrawer : TextDrawer {
     }
 
     private fun addCommands(glyphs: List<Pair<TypesetGlyph, Matrix44>>) {
-        // Make sure all glyphs are in the glyph map before slug indices are used, new glyphs are added in a single
-        // batch so the slug map textures are written once
-        slugMap.startBatch()
+        // Make sure all glyphs are in the glyph map before boundary indices are used, new glyphs are added in a single
+        // batch so the map is written once
+        glyphMap.startBatch()
         try {
             for ((glyph, _) in glyphs) {
-                slugGlyphMap.getSlugForGlyphIndex(glyph.face, glyph.glyphIndex)
+                glyphMap.getBoundaryForGlyphIndex(glyph.face, glyph.glyphIndex)
             }
         } finally {
-            slugMap.endBatch()
+            glyphMap.endBatch()
         }
 
         for ((glyph, transform) in glyphs) {
             val glyphStyle = glyph.style
             commands.add(
-                SlugCommand(
-                    slugGlyphMap.getSlugForGlyphIndex(glyph.face, glyph.glyphIndex),
+                BoundaryCommand(
+                    glyphMap.getBoundaryForGlyphIndex(glyph.face, glyph.glyphIndex),
                     transform,
                     glyphStyle.fill,
                     glyphStyle.stroke,
@@ -180,10 +183,10 @@ class SlugTextDrawer : TextDrawer {
     }
 
     override fun draw(drawer: Drawer) {
-        val slugDrawer = Program.active?.drawer?.slugDrawer?: return
-
-        slugDrawer.prepare(slugMap, commands)
-        slugDrawer.draw(drawer, slugMap)
+        if (commands.isNotEmpty()) {
+            boundaryDrawer.prepare(glyphMap.map, commands)
+            boundaryDrawer.draw(drawer, glyphMap.map)
+        }
     }
 
 }

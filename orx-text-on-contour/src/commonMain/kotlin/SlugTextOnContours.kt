@@ -3,9 +3,9 @@ package org.openrndr.extra.textoncontour
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.font.internal.TextShapingDriver
-import org.openrndr.draw.slug.SlugCommand
-import org.openrndr.draw.slug.SlugDrawer
-import org.openrndr.draw.slug.SlugGlyphMap
+import org.openrndr.draw.boundary.BoundaryCommand
+import org.openrndr.draw.boundary.BoundaryDrawer
+import org.openrndr.draw.boundary.BoundaryGlyphMap
 import org.openrndr.extra.textwriter.StrokeMode
 import org.openrndr.extra.textwriter.TextSpan
 import org.openrndr.extra.textwriter.TextStyle
@@ -23,7 +23,9 @@ import org.openrndr.math.transforms.transform
 import kotlin.math.roundToInt
 
 /**
- * Draws [spans] along [contours] using the Knuth-Plass line breaking algorithm.
+ * Draws [spans] along [contours] using the Knuth-Plass line breaking algorithm, with [boundaryDrawer], for example a
+ * [org.openrndr.draw.slug.SlugDrawer] or the boundary drawer of a [Drawer]. The boundaries of the glyphs are kept in
+ * [glyphMap].
  *
  * Every contour acts as a single line, the length of the contour is used as the line width.
  * Text that does not fit on a contour overflows to the next contour, text that does not fit
@@ -43,8 +45,8 @@ import kotlin.math.roundToInt
  */
 fun slugTextOnContours(
     drawer: Drawer,
-    slugDrawer: SlugDrawer,
-    slugGlyphMap: SlugGlyphMap,
+    boundaryDrawer: BoundaryDrawer,
+    glyphMap: BoundaryGlyphMap,
     baseStyle: TextStyle,
     spans: List<TextSpan>,
     contours: List<RectifiedContour>,
@@ -76,7 +78,7 @@ fun slugTextOnContours(
     val lineWidths = baselines.map { it.length }
     val (firstContour, lines) = contourLines(items, lineWidths, baseStyle.verticalAlign ?: 0.0)
 
-    val commands = mutableListOf<SlugCommand>()
+    val commands = mutableListOf<BoundaryCommand>()
 
     // lines that do not fit on any of the contours are discarded
     for ((lineIdx, line) in lines.withIndex()) {
@@ -123,16 +125,16 @@ fun slugTextOnContours(
                     else item.content.shapeResults + hyphen
 
                     for (sr in shapeResults) {
-                        slugGlyphMap.getSlugForGlyphIndex(wordFace, sr.glyphIndex)
+                        glyphMap.getBoundaryForGlyphIndex(wordFace, sr.glyphIndex)
                     }
                     for (sr in shapeResults) {
-                        val slugIndex = slugGlyphMap.getSlugForGlyphIndex(wordFace, sr.glyphIndex)
+                        val boundaryIndex = glyphMap.getBoundaryForGlyphIndex(wordFace, sr.glyphIndex)
                         val pose = baseline.pose(startT + (cursor + sr.offset.x * hscale) * du) * itemTransform *
                                 fixOrientation
 
                         commands.add(
-                            SlugCommand(
-                                slugIndex,
+                            BoundaryCommand(
+                                boundaryIndex,
                                 pose,
                                 wordStyle.fill ?: ColorRGBa.TRANSPARENT,
                                 wordStyle.stroke ?: ColorRGBa.TRANSPARENT,
@@ -150,8 +152,8 @@ fun slugTextOnContours(
         }
     }
 
-    slugDrawer.prepare(slugGlyphMap.slugMap, commands)
-    slugDrawer.draw(drawer, slugGlyphMap.slugMap)
+    boundaryDrawer.prepare(glyphMap.map, commands)
+    boundaryDrawer.draw(drawer, glyphMap.map)
 }
 
 /**

@@ -2,9 +2,9 @@ package org.openrndr.extra.textoncontour
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
-import org.openrndr.draw.slug.SlugCommand
-import org.openrndr.draw.slug.SlugDrawer
-import org.openrndr.draw.slug.SlugGlyphMap
+import org.openrndr.draw.boundary.BoundaryCommand
+import org.openrndr.draw.boundary.BoundaryDrawer
+import org.openrndr.draw.boundary.BoundaryGlyphMap
 import org.openrndr.extra.textwriter.ContourBaseline
 import org.openrndr.extra.textwriter.StrokeMode
 import org.openrndr.extra.textwriter.layoutTextOnContour
@@ -19,8 +19,9 @@ fun RectifiedContour.positionOnlyPose(t: Double): Matrix44 {
 }
 
 /**
- * Draws [spans] on a single line along [contour] using slugs. Text that is longer than the contour wraps around a
- * closed contour.
+ * Draws [spans] on a single line along [contour] with [boundaryDrawer], for example a
+ * [org.openrndr.draw.slug.SlugDrawer] or the boundary drawer of a [Drawer]. The boundaries of the glyphs are kept in
+ * [glyphMap]. Text that is longer than the contour wraps around a closed contour.
  *
  * @param baseStyle the style that is cascaded into the style of every span
  * @param startT the normalized position on the contour at which the text starts
@@ -29,8 +30,8 @@ fun RectifiedContour.positionOnlyPose(t: Double): Matrix44 {
  */
 fun slugTextOnContour(
     drawer: Drawer,
-    slugDrawer: SlugDrawer,
-    slugGlyphMap: SlugGlyphMap,
+    boundaryDrawer: BoundaryDrawer,
+    glyphMap: BoundaryGlyphMap,
     baseStyle: TextStyle,
     spans: List<TextSpan>,
     contour: RectifiedContour,
@@ -42,8 +43,8 @@ fun slugTextOnContour(
 
     val commands = layout.glyphs.map { placed ->
         val style = placed.glyph.style
-        SlugCommand(
-            slugGlyphMap.getSlugForGlyphIndex(placed.glyph.face, placed.glyph.glyphIndex),
+        BoundaryCommand(
+            glyphMap.getBoundaryForGlyphIndex(placed.glyph.face, placed.glyph.glyphIndex),
             placed.transform,
             style.fill ?: ColorRGBa.TRANSPARENT,
             style.stroke ?: ColorRGBa.TRANSPARENT,
@@ -51,6 +52,6 @@ fun slugTextOnContour(
             (style.strokeMode ?: StrokeMode.CENTER).mode
         )
     }
-    slugDrawer.prepare(slugGlyphMap.slugMap, commands)
-    slugDrawer.draw(drawer, slugGlyphMap.slugMap)
+    boundaryDrawer.prepare(glyphMap.map, commands)
+    boundaryDrawer.draw(drawer, glyphMap.map)
 }
