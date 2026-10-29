@@ -1,12 +1,7 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.ColorFormat
-import org.openrndr.draw.ColorType
-import org.openrndr.draw.colorBuffer
 import org.openrndr.draw.font.loadFace
-import org.openrndr.draw.slug.SlugDrawer
-import org.openrndr.draw.slug.SlugGlyphMap
-import org.openrndr.draw.slug.SlugMap
+import org.openrndr.draw.boundary.BoundaryGlyphMap
 import org.openrndr.extra.shapes.rectify.rectified
 import org.openrndr.extra.textoncontour.slugTextOnContour
 import org.openrndr.extra.textwriter.TextSpan
@@ -28,12 +23,8 @@ fun main() = application {
     program {
         val face = loadFace("demo-data/fonts/IBMPlexMono-Regular.ttf").withSize(24.0)
 
-        val slugMap = SlugMap(
-            colorBuffer(4096, 64, type = ColorType.FLOAT32, format = ColorFormat.RG),
-            colorBuffer(4096, 64, type = ColorType.UINT16_INT, format = ColorFormat.RGBa)
-        )
-        val slugGlyphMap = SlugGlyphMap(slugMap)
-        val slugDrawer = SlugDrawer()
+        val boundaryDrawer = drawer.boundaryDrawer
+        val glyphMap = BoundaryGlyphMap(boundaryDrawer.createMap())
 
         val circle = Circle(drawer.bounds.center, 200.0)
         val contour = circle.contour.rectified()
@@ -51,7 +42,7 @@ fun main() = application {
                     TextSpan("2", TextStyle(fill = color, sizeInEm = 0.6, baselineShiftInEm = 0.4))
                 )
                 slugTextOnContour(
-                    drawer, slugDrawer, slugGlyphMap, TextStyle.Defaults.copy(face = face), spans, contour,
+                    drawer, boundaryDrawer, glyphMap, TextStyle.Defaults.copy(face = face), spans, contour,
                     startT = 0.6, baselineOffset = offset
                 )
             }

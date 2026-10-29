@@ -1,13 +1,8 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.ColorFormat
-import org.openrndr.draw.ColorType
-import org.openrndr.draw.colorBuffer
 import org.openrndr.draw.font.internal.Direction
 import org.openrndr.draw.font.loadFace
-import org.openrndr.draw.slug.SlugDrawer
-import org.openrndr.draw.slug.SlugGlyphMap
-import org.openrndr.draw.slug.SlugMap
+import org.openrndr.draw.boundary.BoundaryGlyphMap
 import org.openrndr.extra.shapes.rectify.rectified
 import org.openrndr.extra.textoncontour.slugTextOnContours
 import org.openrndr.extra.textwriter.TextStyle
@@ -30,13 +25,8 @@ fun main() = application {
     program {
         val face = loadFace("https://raw.githubusercontent.com/google/fonts/main/ofl/amiri/Amiri-Regular.ttf").withSize(36.0)
 
-        val slugMap = SlugMap(
-            colorBuffer(4096, 64, type = ColorType.FLOAT32, format = ColorFormat.RG),
-            colorBuffer(4096, 64, type = ColorType.UINT16_INT, format = ColorFormat.RGBa)
-        )
-
-        val slugGlyphMap = SlugGlyphMap(slugMap)
-        val slugDrawer = SlugDrawer()
+        val boundaryDrawer = drawer.boundaryDrawer
+        val glyphMap = BoundaryGlyphMap(boundaryDrawer.createMap())
 
         fun contours(phase: Double) = (0 until 10).map { line ->
             ShapeContour.fromPoints(List(100) { i ->
@@ -59,7 +49,7 @@ fun main() = application {
 
         extend {
             slugTextOnContours(
-                drawer, slugDrawer, slugGlyphMap,
+                drawer, boundaryDrawer, glyphMap,
                 TextStyle.Defaults.copy(face = face, justify = true, direction = Direction.RIGHT_TO_LEFT),
                 spans, contours(seconds)
             )
