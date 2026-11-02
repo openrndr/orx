@@ -74,6 +74,8 @@ val publishedProjects = listOf(
     ":orx-jvm:orx-midi",
     ":orx-jvm:orx-minim",
     ":orx-jvm:orx-olive",
+    ":orx-jvm:orx-onnx-models",
+    ":orx-jvm:orx-onnx-runtime",
     ":orx-jvm:orx-osc",
     ":orx-jvm:orx-panel",
     ":orx-jvm:orx-poisson-fill",
