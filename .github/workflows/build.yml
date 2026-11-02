@@ -54,6 +54,10 @@ jobs:
         working-directory: ./openrndr
         run: ./gradlew publishToMavenLocal snapshot
 
+      # the bundled FFmpeg (libavdevice) needs the PulseAudio client library
+      - name: Install FFmpeg runtime dependencies
+        run: sudo apt-get update && sudo apt-get install -y libpulse0
+
       - name: Build ORX
         run: xvfb-run ./gradlew build -Popenrndr.application.backend=application-glfw
 
