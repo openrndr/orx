@@ -165,6 +165,23 @@ class TestH265Profile {
     }
 
     @Test
+    fun `Quick Sync encodes HDR video as P010`() {
+        val profile = H265Profile().apply {
+            videoCodec = CODEC_HEVC_QSV
+            hdr = HDRTransfer.PQ
+        }
+        val arguments = profile.arguments()
+        assertEquals("hevc_qsv", arguments.valueOf("-vcodec"))
+        assertEquals("p010le", arguments.valueOf("-pix_fmt"))
+        assertEquals("vflip,format=p010le", arguments.valueOf("-vf"))
+        assertEquals("smpte2084", arguments.valueOf("-color_trc"))
+        assertEquals("25", arguments.valueOf("-global_quality"))
+        assertFalse("-x265-params" in arguments)
+        // Quick Sync selects the Main 10 profile for P010 frames
+        assertFalse("-profile:v" in arguments)
+    }
+
+    @Test
     fun `AMF encodes HEVC without a B-frame quantizer`() {
         val profile = H265Profile().apply { videoCodec = CODEC_HEVC_AMF }
         val arguments = profile.arguments()
