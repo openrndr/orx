@@ -1,5 +1,5 @@
 [versions]
-onnxRuntime = "1.30.0"
+onnxRuntime = "1.31.1"
 kotlinApi = "2.4"
 kotlinLanguage = "2.4"
 kotlin = "2.4.20"
