@@ -17,6 +17,9 @@ sealed interface EffectStage {
     /** maps every color with [color] */
     class Color(val color: ColorPreset) : EffectStage
 
+    /** replaces the image by the colors that [source] generates */
+    class Source(val source: SourcePreset) : EffectStage
+
     /** applies [filter], which can read its input anywhere, such as a blur */
     class Filter(val filter: Filter1to1) : EffectStage
 }
@@ -35,14 +38,19 @@ class EffectChainBuilder {
         stages.add(EffectStage.Color(color))
     }
 
+    fun source(source: SourcePreset) {
+        stages.add(EffectStage.Source(source))
+    }
+
     fun filter(filter: Filter1to1) {
         stages.add(EffectStage.Filter(filter))
     }
 }
 
 /**
- * A filter that applies [stages] in order. Consecutive warp and color stages are fused into a single pass that reads
- * the input once, filter stages run as passes of their own. The result is that of applying the stages one after
+ * A filter that applies [stages] in order. Consecutive warp, color and source stages are fused into a single pass that
+ * reads the input once, filter stages run as passes of their own. A source stage replaces the image, the stages
+ * before it have no effect. The result is that of applying the stages one after
  * another, without resampling between fused stages.
  *
  * Changing the properties of the presets and filters of the stages takes effect on the next apply, assigning [stages]
@@ -126,9 +134,11 @@ class EffectChain(stages: List<EffectStage> = emptyList()) : Filter1to1(null) {
         /**
          * A single pass for warp and color [stages]. Applied one after another, the color of stage k reads the
          * output of stage k - 1 at the coordinate that the later warps map the output coordinate to, so the
-         * coordinates are found from the last stage to the first, the colors from the first to the last.
+         * coordinates are found from the last stage to the first, the colors from the first to the last. The colors
+         * start at the last source stage, or at the input when there is none.
          */
         fun fuse(stages: List<EffectStage>): Filter1to1 {
+            val lastSource = stages.indexOfLast { it is EffectStage.Source }
             val code = buildString {
                 appendLine("vec2 u${stages.size} = c_textureCoordinate;")
                 for (k in stages.indices.reversed()) {
@@ -137,8 +147,12 @@ class EffectChain(stages: List<EffectStage> = emptyList()) : Filter1to1(null) {
                         else -> appendLine("vec2 u$k = u${k + 1};")
                     }
                 }
-                appendLine("vec4 c = texture(p_input0, u0);")
-                for (k in stages.indices) {
+                if (lastSource >= 0) {
+                    appendLine("vec4 c = p_s$lastSource(u${lastSource + 1});")
+                } else {
+                    appendLine("vec4 c = texture(p_input0, u0);")
+                }
+                for (k in lastSource + 1 until stages.size) {
                     if (stages[k] is EffectStage.Color) {
                         appendLine("c = p_s$k(c, u${k + 1});")
                     }
@@ -150,6 +164,7 @@ class EffectChain(stages: List<EffectStage> = emptyList()) : Filter1to1(null) {
                 val preset: Preset = when (stage) {
                     is EffectStage.Warp -> stage.warp
                     is EffectStage.Color -> stage.color
+                    is EffectStage.Source -> stage.source
                     is EffectStage.Filter -> error("filters are not fused")
                 }
                 require(preset.contract.accepts(preset.dynamicParameter)) {

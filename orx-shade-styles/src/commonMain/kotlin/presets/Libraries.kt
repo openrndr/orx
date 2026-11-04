@@ -2,6 +2,7 @@ package org.openrndr.extra.shadestyles.presets
 
 import org.openrndr.draw.GlslLibrary
 import org.openrndr.draw.glslLibrary
+import org.openrndr.extra.color.colormaps.ColormapPhraseBook
 
 /**
  * GLSL library with 3D simplex noise, `float snoise3(vec3 v)`, which returns values in [-1, 1]
@@ -110,6 +111,63 @@ float snoise3(vec3 v)
     m = m * m;
     return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1),
     dot(p2,x2), dot(p3,x3) ) );
+}
+"""
+)
+
+/** GLSL library with `vec3 bump3y(vec3 x, vec3 yoffset)`, used by [spectralZucconi6Library] */
+val bump3yLibrary: GlslLibrary = glslLibrary("bump3y", ColormapPhraseBook.bump3y.phrase)
+
+/** GLSL library with the Turbo colormap, `vec3 turbo_colormap(float x)` */
+val turboColormapLibrary: GlslLibrary = glslLibrary("turbo_colormap", ColormapPhraseBook.turboColormap.phrase)
+
+/** GLSL library with Alan Zucconi's spectral colormap, `vec3 spectral_zucconi6(float x)` */
+val spectralZucconi6Library: GlslLibrary = glslLibrary(
+    "spectral_zucconi6",
+    ColormapPhraseBook.spectralZucconi6.phrase.lines().filterNot { it.trim().startsWith("#pragma") }.joinToString("\n"),
+    bump3yLibrary
+)
+
+/**
+ * GLSL library with conversions between sRGB and OKLab: `oklab_srgb_to_linear`, `oklab_linear_to_srgb`,
+ * `oklab_from_linear` and `oklab_to_linear`, all `vec3 f(vec3 c)`
+ */
+val oklabLibrary: GlslLibrary = glslLibrary(
+    "oklab", """
+vec3 oklab_srgb_to_linear(vec3 c) {
+    c = max(c, vec3(0.0));
+    return mix(c / 12.92, pow((c + 0.055) / 1.055, vec3(2.4)), step(vec3(0.04045), c));
+}
+
+vec3 oklab_linear_to_srgb(vec3 c) {
+    c = max(c, vec3(0.0));
+    return mix(c * 12.92, 1.055 * pow(c, vec3(1.0 / 2.4)) - 0.055, step(vec3(0.0031308), c));
+}
+
+vec3 oklab_from_linear(vec3 c) {
+    float l = 0.4122214708 * c.r + 0.5363325363 * c.g + 0.0514459929 * c.b;
+    float m = 0.2119034982 * c.r + 0.6806995451 * c.g + 0.1073969566 * c.b;
+    float s = 0.0883024619 * c.r + 0.2817188376 * c.g + 0.6299787005 * c.b;
+    vec3 lms = sign(vec3(l, m, s)) * pow(abs(vec3(l, m, s)), vec3(1.0 / 3.0));
+    return vec3(
+        0.2104542553 * lms.x + 0.7936177850 * lms.y - 0.0040720468 * lms.z,
+        1.9779984951 * lms.x - 2.4285922050 * lms.y + 0.4505937099 * lms.z,
+        0.0259040371 * lms.x + 0.7827717662 * lms.y - 0.8086757660 * lms.z
+    );
+}
+
+vec3 oklab_to_linear(vec3 c) {
+    vec3 lms = vec3(
+        c.x + 0.3963377774 * c.y + 0.2158037573 * c.z,
+        c.x - 0.1055613458 * c.y - 0.0638541728 * c.z,
+        c.x - 0.0894841775 * c.y - 1.2914855480 * c.z
+    );
+    lms = lms * lms * lms;
+    return vec3(
+        4.0767416621 * lms.x - 3.3077115913 * lms.y + 0.2309699292 * lms.z,
+        -1.2684380046 * lms.x + 2.6097574011 * lms.y - 0.3413193965 * lms.z,
+        -0.0041960863 * lms.x - 0.7034186147 * lms.y + 1.7076147010 * lms.z
+    );
 }
 """
 )

@@ -9,6 +9,7 @@ import org.openrndr.extra.parameters.ColorParameter
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
 import org.openrndr.extra.parameters.NestedParameter
+import org.openrndr.extra.parameters.OptionParameter
 import org.openrndr.extra.parameters.Vector2Parameter
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector4
@@ -132,4 +133,116 @@ class ChainColor(first: ColorPreset = Grade(), second: ColorPreset = Vignette())
 
     @NestedParameter("second", order = 1)
     var second: ColorPreset by dynamicParameter.presetSlot("second", CONTRACT, second)
+}
+
+/** the colormaps of [Colormap] */
+enum class ColormapType {
+    TURBO,
+    SPECTRAL,
+    GRAYSCALE
+}
+
+/**
+ * Maps the luma of the colors to a [colormap]: the luma between [minValue] and [maxValue], raised to [curve], picks
+ * the color. [amount] mixes the mapped colors with the original ones.
+ */
+class Colormap : ColorPreset() {
+    override val dynamicParameter = glslFunction<Vector4>(
+        "vec4 c, vec2 uv", """
+        float luma = dot(c.rgb, vec3(0.2126, 0.7152, 0.0722));
+        float v = pow(clamp((luma - p_minValue) / (p_maxValue - p_minValue), 0.0, 1.0), p_curve);
+        vec3 rgb = p_colormap == 0 ? turbo_colormap(v) : (p_colormap == 1 ? spectral_zucconi6(v) : vec3(v));
+        return vec4(mix(c.rgb, rgb, p_amount), c.a);
+        """.trimIndent(), listOf(turboColormapLibrary, spectralZucconi6Library)
+    )
+
+    @OptionParameter("colormap", order = 0)
+    var colormap: ColormapType = ColormapType.TURBO
+        set(value) {
+            field = value
+            dynamicParameter.parameter("colormap", value.ordinal)
+        }
+
+    @DoubleParameter("min value", 0.0, 1.0, order = 1)
+    var minValue: Double by dynamicParameter.Parameter("minValue", 0.0)
+
+    @DoubleParameter("max value", 0.0, 1.0, order = 2)
+    var maxValue: Double by dynamicParameter.Parameter("maxValue", 1.0)
+
+    @DoubleParameter("curve", 0.1, 4.0, order = 3)
+    var curve: Double by dynamicParameter.Parameter("curve", 1.0)
+
+    @DoubleParameter("amount", 0.0, 1.0, order = 4)
+    var amount: Double by dynamicParameter.Parameter("amount", 1.0)
+
+    init {
+        dynamicParameter.parameter("colormap", colormap.ordinal)
+    }
+}
+
+/**
+ * Adjusts colors in OKLCh: adds [lightness], scales the chroma by [chroma] and turns the hue by [hue] degrees. The
+ * colors are read and written as sRGB.
+ */
+class OklchAdjust : ColorPreset() {
+    override val dynamicParameter = glslFunction<Vector4>(
+        "vec4 c, vec2 uv", """
+        vec3 lab = oklab_from_linear(oklab_srgb_to_linear(c.rgb));
+        float chroma = length(lab.yz) * p_chroma;
+        float hue = atan(lab.z, lab.y) + radians(p_hue);
+        lab = vec3(lab.x + p_lightness, chroma * cos(hue), chroma * sin(hue));
+        return vec4(oklab_linear_to_srgb(oklab_to_linear(lab)), c.a);
+        """.trimIndent(), listOf(oklabLibrary)
+    )
+
+    @DoubleParameter("lightness", -1.0, 1.0, order = 0)
+    var lightness: Double by dynamicParameter.Parameter("lightness", 0.0)
+
+    @DoubleParameter("chroma", 0.0, 2.0, order = 1)
+    var chroma: Double by dynamicParameter.Parameter("chroma", 1.0)
+
+    @DoubleParameter("hue", -180.0, 180.0, order = 2)
+    var hue: Double by dynamicParameter.Parameter("hue", 0.0)
+}
+
+/**
+ * Levels: maps [inBlack]..[inWhite] to 0..1, applies [gamma], then maps 0..1 to [outBlack]..[outWhite]
+ */
+class Levels : ColorPreset() {
+    override val dynamicParameter = glslFunction<Vector4>(
+        "vec4 c, vec2 uv", """
+        vec3 v = clamp((c.rgb - p_inBlack) / max(p_inWhite - p_inBlack, 1e-5), 0.0, 1.0);
+        v = pow(v, vec3(1.0 / p_gamma));
+        return vec4(mix(vec3(p_outBlack), vec3(p_outWhite), v), c.a);
+        """.trimIndent()
+    )
+
+    @DoubleParameter("in black", 0.0, 1.0, order = 0)
+    var inBlack: Double by dynamicParameter.Parameter("inBlack", 0.0)
+
+    @DoubleParameter("in white", 0.0, 1.0, order = 1)
+    var inWhite: Double by dynamicParameter.Parameter("inWhite", 1.0)
+
+    @DoubleParameter("gamma", 0.1, 4.0, order = 2)
+    var gamma: Double by dynamicParameter.Parameter("gamma", 1.0)
+
+    @DoubleParameter("out black", 0.0, 1.0, order = 3)
+    var outBlack: Double by dynamicParameter.Parameter("outBlack", 0.0)
+
+    @DoubleParameter("out white", 0.0, 1.0, order = 4)
+    var outWhite: Double by dynamicParameter.Parameter("outWhite", 1.0)
+}
+
+/**
+ * Blends the colors of [source] over the colors with [blend]
+ */
+class Layer(source: SourcePreset = NoiseSource(), blend: BlendPreset = LayerBlend()) : ColorPreset() {
+    override val dynamicParameter: GlslFunction =
+        glslFunction<Vector4>("vec4 c, vec2 uv", "p_blend(c, p_source(uv))")
+
+    @NestedParameter("source", order = 0)
+    var source: SourcePreset by dynamicParameter.presetSlot("source", SourcePreset.CONTRACT, source)
+
+    @NestedParameter("blend", order = 1)
+    var blend: BlendPreset by dynamicParameter.presetSlot("blend", BlendPreset.CONTRACT, blend)
 }
