@@ -4,6 +4,44 @@ import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 import org.openrndr.math.Matrix55
 import org.openrndr.draw.Drawer
+import org.openrndr.draw.ShadeStyle
+import org.openrndr.extra.shadestyles.presets.PaintLayer
+import org.openrndr.extra.shadestyles.presets.PaintStyle
+import org.openrndr.extra.shadestyles.presets.PaintUnits
+import org.openrndr.extra.shadestyles.presets.boundsTransform
+import org.openrndr.math.Matrix44
+import org.openrndr.color.ColorRGBa
+
+/** the paint styles of pairs of fill and stroke paints, gradients with the same values share a paint style */
+private val paintStyles = LinkedHashMap<Pair<Paint.Server?, Paint.Server?>, PaintStyle>()
+
+/**
+ * The paint style that draws [fill] and [stroke]. Paints are read in object units, the transforms of a shape are set
+ * by [paintTransform] before it is drawn.
+ */
+internal fun paintStyle(fill: Paint.Server?, stroke: Paint.Server?): PaintStyle {
+    val key = Pair(fill, stroke)
+    paintStyles[key]?.let { return it }
+    if (paintStyles.size >= 256) {
+        paintStyles.remove(paintStyles.keys.first())
+    }
+    fun layer(paint: Paint.Server?) = paint?.let { PaintLayer(it.source(), PaintUnits.OBJECT) }
+    return PaintStyle(layer(fill), layer(stroke)).also { paintStyles[key] = it }
+}
+
+/**
+ * The transform of [paint] in object units for a shape with [bounds]: paints over the bounds of the shape are mapped
+ * to them. Null when the bounds have no width or height, then the paint is not drawn, as in SVG.
+ */
+internal fun paintTransform(paint: Paint.Server, bounds: org.openrndr.shape.Rectangle): Matrix44? = when (paint.units) {
+    PaintUnits.OBJECT -> paint.transform
+    PaintUnits.BOUNDS -> if (bounds.width <= 0.0 || bounds.height <= 0.0) null else boundsTransform(bounds) * paint.transform
+}
+
+/** true when [style] draws anything: it has code */
+private fun hasCode(style: ShadeStyle): Boolean =
+    !style.fragmentTransform.isNullOrBlank() || !style.vertexTransform.isNullOrBlank() ||
+            !style.fragmentPreamble.isNullOrBlank() || !style.vertexPreamble.isNullOrBlank()
 
 
 /**
@@ -36,6 +74,7 @@ fun Drawer.composition(composition: Composition) {
                 compositionNode.style.stroke.let {
                     stroke = when (it) {
                         is Paint.RGB -> it.value.copy(alpha = 1.0)
+                        is Paint.Server -> ColorRGBa.WHITE
                         Paint.None -> null
                         Paint.CurrentColor -> null
                     }
@@ -65,9 +104,27 @@ fun Drawer.composition(composition: Composition) {
                 compositionNode.style.fill.let {
                     fill = when (it) {
                         is Paint.RGB -> it.value.copy(alpha = 1.0)
+                        is Paint.Server -> ColorRGBa.WHITE
                         is Paint.None -> null
                         is Paint.CurrentColor -> null
                     }
+                }
+                // gradients and other paints are drawn by a paint style, which takes the alpha of the fill and stroke
+                val fillServer = compositionNode.style.fill as? Paint.Server
+                val strokeServer = compositionNode.style.stroke as? Paint.Server
+                if (fillServer != null || strokeServer != null) {
+                    val paint = paintStyle(fillServer, strokeServer)
+                    val bounds = compositionNode.shape.bounds
+                    if (fillServer != null) {
+                        val transform = paintTransform(fillServer, bounds)
+                        if (transform == null) fill = null else paint.fillTransform = transform
+                    }
+                    if (strokeServer != null) {
+                        val transform = paintTransform(strokeServer, bounds)
+                        if (transform == null) stroke = null else paint.strokeTransform = transform
+                    }
+                    val own = shadeStyle
+                    shadeStyle = if (own != null && hasCode(own)) own + paint else paint
                 }
                 compositionNode.style.fillOpacity.let {
                     fill = when (it) {

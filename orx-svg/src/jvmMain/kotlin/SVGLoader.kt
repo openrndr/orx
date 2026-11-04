@@ -264,7 +264,9 @@ internal class SVGLoader {
         val namespaces = root.attributes().filter { it.key.startsWith("xmlns") }.associate {
             Pair(it.key, it.value)
         }
-        val rootGroup = SVGSVGElement(root)
+        // gradients are collected first, elements can refer to gradients that are defined after them
+        val gradients = SVGGradients.parse(root)
+        val rootGroup = SVGGradients.using(gradients) { SVGSVGElement(root) }
         return SVGDocument(rootGroup, namespaces, base)
     }
 

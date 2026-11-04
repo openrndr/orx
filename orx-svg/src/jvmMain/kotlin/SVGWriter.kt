@@ -4,6 +4,8 @@ import org.openrndr.draw.ImageFileFormat
 import org.jsoup.nodes.*
 import org.openrndr.extra.composition.*
 import org.openrndr.extra.composition.TextNode
+import org.openrndr.extra.shadestyles.presets.PaintUnits
+import org.openrndr.math.Matrix44
 
 import java.io.*
 
@@ -108,6 +110,7 @@ fun writeSVG(
     val docStyleSer = composition.documentStyle.serialize()
 
     sb.append("<svg version=\"1.2\" baseProfile=\"tiny\" id=\"$topLevelId\" $namespaces $styleSer $docStyleSer>")
+    sb.appendGradients(composition)
 
     var textPathID = 0
     // groups written as text elements, their contents are written with them
@@ -303,4 +306,50 @@ private fun process(compositionNode: CompositionNode, visitor: CompositionNode.(
         compositionNode.children.forEach { process(it, visitor) }
     }
     compositionNode.visitor(VisitStage.POST)
+}
+/** the gradients that the fills and strokes of the nodes of [composition] use, by their id */
+private fun gradients(composition: Composition): Map<String, Paint.Gradient> {
+    val gradients = LinkedHashMap<String, Paint.Gradient>()
+    process(composition.root) { stage ->
+        if (stage == VisitStage.PRE) {
+            for (paint in listOf(style.fill, style.stroke)) {
+                if (paint is Paint.Gradient) gradients.getOrPut(paint.svgId) { paint }
+            }
+        }
+    }
+    return gradients
+}
+
+/** writes a defs element with the gradients that [composition] uses, when it uses any */
+private fun StringBuilder.appendGradients(composition: Composition) {
+    val gradients = gradients(composition)
+    if (gradients.isEmpty()) return
+    append("<defs>")
+    for ((id, gradient) in gradients) {
+        val units = if (gradient.units == PaintUnits.OBJECT) "userSpaceOnUse" else "objectBoundingBox"
+        val spread = gradient.spread.name.lowercase()
+        val t = gradient.transform
+        val transform = if (t == Matrix44.IDENTITY) "" else
+            " gradientTransform=\"matrix(${t.c0r0} ${t.c0r1} ${t.c1r0} ${t.c1r1} ${t.c3r0} ${t.c3r1})\""
+        val tag = when (gradient) {
+            is Paint.LinearGradient -> {
+                append("<linearGradient id=\"$id\" x1=\"${gradient.start.x}\" y1=\"${gradient.start.y}\" ")
+                append("x2=\"${gradient.end.x}\" y2=\"${gradient.end.y}\"")
+                "linearGradient"
+            }
+            is Paint.RadialGradient -> {
+                append("<radialGradient id=\"$id\" cx=\"${gradient.center.x}\" cy=\"${gradient.center.y}\" ")
+                append("r=\"${gradient.radius}\" fx=\"${gradient.focal.x}\" fy=\"${gradient.focal.y}\" ")
+                append("fr=\"${gradient.focalRadius}\"")
+                "radialGradient"
+            }
+        }
+        append(" gradientUnits=\"$units\" spreadMethod=\"$spread\"$transform>")
+        for (stop in gradient.stops) {
+            val color = Paint.RGB(stop.color.copy(alpha = 1.0)).toString()
+            append("<stop offset=\"${stop.offset}\" stop-color=\"$color\" stop-opacity=\"${stop.color.alpha}\"/>")
+        }
+        append("</$tag>")
+    }
+    append("</defs>\n")
 }

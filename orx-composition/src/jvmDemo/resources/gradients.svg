@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600" height="400" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="sunset">
+      <stop offset="0" stop-color="#ffcc00"/>
+      <stop offset="0.5" stop-color="#ff3366"/>
+      <stop offset="1" stop-color="#3322aa"/>
+    </linearGradient>
+    <linearGradient id="diagonal" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="40" y2="40" spreadMethod="reflect">
+      <stop offset="0" stop-color="#003344"/>
+      <stop offset="1" stop-color="#66ffcc"/>
+    </linearGradient>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.6" stop-color="#ff8800"/>
+      <stop offset="1" stop-color="#330000"/>
+    </radialGradient>
+    <radialGradient id="rings" cx="0.5" cy="0.5" r="0.25" fx="0.35" fy="0.4" fr="0.05" spreadMethod="repeat">
+      <stop offset="0" stop-color="#2244ff"/>
+      <stop offset="0.5" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#2244ff"/>
+    </radialGradient>
+    <linearGradient id="rotated" xlink:href="#sunset" gradientTransform="rotate(45 0.5 0.5)"/>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#22aa44" stop-opacity="1"/>
+      <stop offset="1" stop-color="#22aa44" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="strokePaint" gradientUnits="userSpaceOnUse" x1="410" y1="0" x2="590" y2="0">
+      <stop offset="0" stop-color="#ff0055"/>
+      <stop offset="1" stop-color="#0055ff"/>
+    </linearGradient>
+  </defs>
+  <rect x="10" y="10" width="180" height="180" fill="url(#sunset)"/>
+  <g transform="translate(300 100) scale(1.5)">
+    <circle cx="0" cy="0" r="60" fill="url(#diagonal)"/>
+  </g>
+  <ellipse cx="500" cy="100" rx="90" ry="60" fill="url(#glow)"/>
+  <rect x="10" y="210" width="180" height="180" fill="url(#rings)"/>
+  <rect x="210" y="210" width="180" height="180" fill="url(#rotated)"/>
+  <rect x="230" y="230" width="140" height="140" fill="url(#fade)"/>
+  <path d="M 420 230 C 480 200, 520 400, 580 370" fill="none" stroke="url(#strokePaint)" stroke-width="24"/>
+  <circle cx="500" cy="300" r="30" fill="url(#missing) #888888"/>
+</svg>

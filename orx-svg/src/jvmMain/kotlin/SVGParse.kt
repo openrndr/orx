@@ -203,10 +203,10 @@ internal object SVGParse {
     }
 
     // Syntax should map to https://www.w3.org/TR/css-transforms-1/#svg-syntax
-    fun transform(element: Element): Transform {
+    fun transform(element: Element, attribute: String = Attr.TRANSFORM): Transform {
         var transform = Matrix44.IDENTITY
 
-        val transformValue = element.attr(Attr.TRANSFORM).let {
+        val transformValue = element.attr(attribute).let {
             it.ifEmpty {
                 return Transform.None
             }
@@ -434,6 +434,12 @@ internal object SVGParse {
     }
 
     fun color(colorValue: String): Paint {
+        // a reference to a gradient, with an optional color for when the reference can not be resolved
+        Regex("^\\s*url\\(\\s*['\"]?#([^)'\"]+)['\"]?\\s*\\)\\s*(.*)$").matchEntire(colorValue)?.let { match ->
+            return SVGGradients.lookup(match.groupValues[1].trim())
+                ?: match.groupValues[2].trim().takeIf { it.isNotEmpty() }?.let { color(it) }
+                ?: Paint.None
+        }
         val col = colorValue.lowercase()
 
         return when {

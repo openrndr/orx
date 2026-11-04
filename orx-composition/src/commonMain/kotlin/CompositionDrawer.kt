@@ -58,6 +58,8 @@ enum class ClipMode(val grouped: Boolean, val op: ClipOp) {
  */
 private data class CompositionDrawStyle(
     var fill: ColorRGBa? = null,
+    var fillPaint: Paint.Server? = null,
+    var strokePaint: Paint.Server? = null,
     var fillOpacity: Double = 1.0,
     var stroke: ColorRGBa? = ColorRGBa.BLACK,
     var strokeOpacity: Double = 1.0,
@@ -135,6 +137,22 @@ class CompositionDrawer(
             drawStyle.fill = value?.copy(alpha = 1.0)
             drawStyle.fillOpacity = value?.alpha ?: 1.0
         }
+
+    /**
+     * A paint, such as a gradient, for the fills of the shapes that are drawn, instead of [fill]. Its alpha is
+     * multiplied by [fillOpacity].
+     */
+    var fillPaint
+        get() = drawStyle.fillPaint
+        set(value) = run { drawStyle.fillPaint = value }
+
+    /**
+     * A paint, such as a gradient, for the strokes of the shapes that are drawn, instead of [stroke]. Its alpha is
+     * multiplied by [strokeOpacity].
+     */
+    var strokePaint
+        get() = drawStyle.strokePaint
+        set(value) = run { drawStyle.strokePaint = value }
 
     var fillOpacity
         get() = drawStyle.fillOpacity
@@ -442,6 +460,8 @@ class CompositionDrawer(
                 shapeNode.lineJoin = lineJoin
                 shapeNode.fill = fill
                 shapeNode.fillOpacity = fillOpacity
+                drawStyle.fillPaint?.let { shapeNode.style.fill = it }
+                drawStyle.strokePaint?.let { shapeNode.style.stroke = it }
 
                 if (insert) {
                     cursor.children.add(shapeNode)

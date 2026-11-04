@@ -3,6 +3,12 @@
 package org.openrndr.extra.composition
 import org.openrndr.color.*
 import org.openrndr.draw.*
+import org.openrndr.extra.shadestyles.presets.ColorStop
+import org.openrndr.extra.shadestyles.presets.GradientSpread
+import org.openrndr.extra.shadestyles.presets.LinearGradientPaint
+import org.openrndr.extra.shadestyles.presets.PaintUnits
+import org.openrndr.extra.shadestyles.presets.RadialGradientPaint
+import org.openrndr.extra.shadestyles.presets.SourcePreset
 import org.openrndr.extra.composition.AttributeOrPropertyKey.*
 import org.openrndr.extra.composition.Inheritance.*
 import org.openrndr.math.*
@@ -43,6 +49,89 @@ sealed interface Paint : AttributeOrPropertyValue {
     object None : Paint {
         override val value: ColorRGBa? = null
         override fun toString(): String = "none"
+    }
+
+    /**
+     * A paint that is drawn with a shade style: its [source] read at coordinates in [units], transformed by the
+     * inverse of [transform]. [value] is a single color that stands in for it where it can not be drawn.
+     */
+    sealed interface Server : Paint {
+        val units: PaintUnits
+        val transform: Matrix44
+
+        /** the preset that generates the colors of this paint */
+        fun source(): SourcePreset
+    }
+
+    /**
+     * A gradient with color [stops], like the gradients of SVG. [id] is the id of the gradient in SVG documents.
+     */
+    sealed interface Gradient : Server {
+        val stops: List<ColorStop>
+        val spread: GradientSpread
+        val id: String
+
+        /** the id of the gradient in SVG documents: [id], or an id derived from the gradient when it has none */
+        val svgId: String get() = id.ifEmpty { "gradient-" + hashCode().toUInt().toString(16) }
+
+        override val value: ColorRGBa?
+            get() = if (stops.isEmpty()) null else ColorRGBa(
+                stops.sumOf { it.color.r } / stops.size,
+                stops.sumOf { it.color.g } / stops.size,
+                stops.sumOf { it.color.b } / stops.size,
+                1.0,
+                stops.first().color.linearity
+            )
+    }
+
+    /**
+     * A linear gradient from [start] to [end], like SVG's linearGradient
+     */
+    data class LinearGradient(
+        val start: Vector2,
+        val end: Vector2,
+        override val stops: List<ColorStop>,
+        override val units: PaintUnits = PaintUnits.BOUNDS,
+        override val spread: GradientSpread = GradientSpread.PAD,
+        override val transform: Matrix44 = Matrix44.IDENTITY,
+        override val id: String = ""
+    ) : Gradient {
+        override fun source(): SourcePreset = LinearGradientPaint(start, end, stops, spread)
+        override fun toString(): String = "url(#$svgId)"
+    }
+
+    /**
+     * A radial gradient from the circle at [focal] with [focalRadius] to the circle at [center] with [radius], like
+     * SVG's radialGradient
+     */
+    data class RadialGradient(
+        val center: Vector2,
+        val radius: Double,
+        val focal: Vector2 = center,
+        val focalRadius: Double = 0.0,
+        override val stops: List<ColorStop>,
+        override val units: PaintUnits = PaintUnits.BOUNDS,
+        override val spread: GradientSpread = GradientSpread.PAD,
+        override val transform: Matrix44 = Matrix44.IDENTITY,
+        override val id: String = ""
+    ) : Gradient {
+        override fun source(): SourcePreset = RadialGradientPaint(center, radius, focal, focalRadius, stops, spread)
+        override fun toString(): String = "url(#$svgId)"
+    }
+
+    /**
+     * A paint of any [preset] that generates colors, such as noise or checkers. It is not written to SVG documents,
+     * [fallback] is written instead.
+     */
+    class Preset(
+        val preset: SourcePreset,
+        override val units: PaintUnits = PaintUnits.BOUNDS,
+        override val transform: Matrix44 = Matrix44.IDENTITY,
+        val fallback: ColorRGBa? = null
+    ) : Server {
+        override val value: ColorRGBa? get() = fallback
+        override fun source(): SourcePreset = preset
+        override fun toString(): String = fallback?.let { RGB(it).toString() } ?: "none"
     }
 }
 

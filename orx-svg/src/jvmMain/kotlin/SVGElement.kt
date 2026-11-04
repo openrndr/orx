@@ -99,6 +99,8 @@ internal open class SVGGroup(val element: Element, val elements: MutableList<SVG
                 "image" -> elements.add(SVGImage(child))
                 "text" -> elements.add(SVGText(child, topLevel = true))
                 "defs" -> elements.add(SVGDefs(child))
+                // gradients are read before the elements are, see SVGGradients
+                "linearGradient", "radialGradient" -> {}
                 in Tag.graphicsList -> elements.add(SVGPath(child))
                 else -> elements.add(SVGGroup(child))
             }

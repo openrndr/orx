@@ -28,8 +28,10 @@ internal object CompositionText {
 
     private val failedFonts = mutableSetOf<String>()
 
+    // text is drawn in a single color, gradients and other paints are drawn in the color that stands in for them
     private fun Paint.color(opacity: Double): ColorRGBa? = when (this) {
         is Paint.RGB -> value.copy(alpha = 1.0).opacify(opacity)
+        is Paint.Server -> value?.copy(alpha = 1.0)?.opacify(opacity)
         else -> null
     }
 
