@@ -3,6 +3,7 @@ import org.openrndr.draw.WrapMode
 import org.openrndr.draw.createEquivalent
 import org.openrndr.draw.loadImage
 import org.openrndr.extra.fx.distort.Perturb
+import org.openrndr.extra.shadestyles.presets.NoiseWarp
 import org.openrndr.extra.imageFit.imageFit
 import org.openrndr.math.Vector3
 
@@ -24,13 +25,15 @@ fun main() = application {
         image.wrapU = WrapMode.MIRRORED_REPEAT // Try other wrap modes
         image.wrapV = WrapMode.MIRRORED_REPEAT
         val result = image.createEquivalent()
+        val noise = NoiseWarp()
         val effect = Perturb()
+        effect.warp = noise
 
         mouse.buttonDown.listen {
             effect.clampEdges = !effect.clampEdges
         }
         extend {
-            effect.seed = Vector3.UNIT_Z * seconds * 0.1
+            noise.seed = Vector3.UNIT_Z * seconds * 0.1
             effect.apply(image, result)
             drawer.imageFit(result, drawer.bounds)
         }

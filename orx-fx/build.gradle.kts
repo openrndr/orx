@@ -17,6 +17,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":orx-parameters"))
+            api(project(":orx-shade-styles"))
             implementation(project(":orx-shader-phrases"))
             implementation(project(":orx-color"))
             implementation(openrndr.application.core)
@@ -31,6 +32,7 @@ kotlin {
             implementation(project(":orx-noise"))
             implementation(project(":orx-shapes"))
             implementation(project(":orx-image-fit"))
+            implementation(project(":orx-jvm:orx-gui"))
         }
     }
 }

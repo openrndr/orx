@@ -4,6 +4,7 @@ import org.openrndr.draw.ColorFormat
 import org.openrndr.draw.ColorType
 import org.openrndr.draw.colorBuffer
 import org.openrndr.extra.fx.distort.Perturb
+import org.openrndr.extra.shadestyles.presets.NoiseWarp
 import org.openrndr.extra.gui.GUI
 import org.openrndr.extra.jumpfill.ShapeSDF
 import org.openrndr.extra.jumpfill.draw.SDFStrokeFill
@@ -39,7 +40,9 @@ fun main() = application {
         val df0 = colorBuffer(width, height, format = ColorFormat.RGBa, type = ColorType.FLOAT32)
         val df1 = colorBuffer(width, height, format = ColorFormat.RGBa, type = ColorType.FLOAT32)
 
+        val noise = NoiseWarp()
         val perturb = Perturb()
+        perturb.warp = noise
         perturb.outputUV = true
 
         val uvmap = colorBuffer(width, height, type = ColorType.FLOAT16)
@@ -58,7 +61,7 @@ fun main() = application {
         extend {
             drawer.clear(ColorRGBa.PINK)
 
-            perturb.phase = seconds * 0.1
+            noise.phase = seconds * 0.1
             perturb.apply(uvmap, uvmap)
 
             sdf0.useUV = true
