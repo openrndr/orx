@@ -83,7 +83,7 @@ internal class SVGDocument(
                 this.id = svgElem.id
             }
         }
-        is SVGText -> convertText(svgElem, null)
+        is SVGText -> convertText(svgElem, null).apply { textElement = true }
         is SVGTextRun -> TextNode(svgElem.text, null, svgElem.x, svgElem.y, svgElem.dx, svgElem.dy)
         is SVGImage -> {
             imageNode(svgElem).apply {

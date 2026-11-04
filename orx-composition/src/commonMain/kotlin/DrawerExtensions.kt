@@ -61,6 +61,9 @@ fun Drawer.composition(composition: Composition) {
     // where text without a position continues
     var pen = Vector2.ZERO
 
+    // the bounds of the text element that is drawn, when its paints need them
+    var textBounds: Rectangle? = null
+
     fun node(compositionNode: CompositionNode) {
         pushModel()
         pushStyle()
@@ -154,16 +157,25 @@ fun Drawer.composition(composition: Composition) {
                 image(image, source, target)
             }
             is TextNode -> {
-                pen = CompositionText.draw(this, compositionNode, pen)
+                pen = CompositionText.draw(this, compositionNode, pen, textBounds)
             }
             is GroupNode -> {
+                // paints over the bounds of text are mapped to the bounds of the whole text element
+                val outerBounds = textBounds
+                if (compositionNode.textElement) {
+                    val runs = CompositionText.textRuns(compositionNode)
+                    if (runs != null && CompositionText.hasPaints(runs)) {
+                        textBounds = CompositionText.measure(compositionNode, pen)
+                    }
+                }
                 // text along a contour is shaped and placed as a whole
                 val contourRuns = CompositionText.contourRuns(compositionNode)
                 if (contourRuns != null) {
-                    pen = CompositionText.drawOnContour(this, contourRuns, pen)
+                    pen = CompositionText.drawOnContour(this, contourRuns, pen, textBounds)
                 } else {
                     compositionNode.children.forEach { node(it) }
                 }
+                textBounds = outerBounds
             }
         }
         popModel()

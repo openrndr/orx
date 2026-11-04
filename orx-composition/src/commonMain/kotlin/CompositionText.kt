@@ -15,7 +15,11 @@ import org.openrndr.extra.textwriter.SlugTextDrawer
 import org.openrndr.extra.textwriter.TextStyle
 import org.openrndr.extra.textwriter.TypesetGlyph
 import org.openrndr.extra.textwriter.typesetLine
+import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
+import org.openrndr.shape.Rectangle
+import org.openrndr.shape.bounds
+import kotlin.math.abs
 
 private val logger = KotlinLogging.logger {}
 
@@ -62,17 +66,68 @@ internal object CompositionText {
         }
     }
 
-    /** the fill and stroke of the text of [node] */
+    /** the paint servers of the fill and stroke of [style], null when neither is one */
+    private fun servers(style: Style): Pair<Paint.Server?, Paint.Server?>? {
+        val fill = style.fill as? Paint.Server
+        val stroke = style.stroke as? Paint.Server
+        return if (fill == null && stroke == null) null else Pair(fill, stroke)
+    }
+
+    /**
+     * The fill and stroke of the text of [node]. Paints that are drawn with a paint style are white, the paint style
+     * replaces the color and keeps the alpha.
+     */
     private fun textStyle(node: TextNode, style: Style): TextStyle {
         val opacity = opacity(node)
-        val fill = style.fill.color(opacity * ((style.fillOpacity as? Numeric.Rational)?.value ?: 1.0))
-        val stroke = style.stroke.color(opacity * ((style.strokeOpacity as? Numeric.Rational)?.value ?: 1.0))
+        fun color(paint: Paint, paintOpacity: Double): ColorRGBa? = when (paint) {
+            is Paint.Server -> ColorRGBa.WHITE.opacify(paintOpacity)
+            else -> paint.color(paintOpacity)
+        }
+        val fill = color(style.fill, opacity * ((style.fillOpacity as? Numeric.Rational)?.value ?: 1.0))
+        val stroke = color(style.stroke, opacity * ((style.strokeOpacity as? Numeric.Rational)?.value ?: 1.0))
         return TextStyle.Defaults.copy(
             fill = fill,
             stroke = stroke,
             strokeWeight = if (stroke != null) (style.strokeWeight as? Length.Pixels)?.value else null
         )
     }
+
+    /**
+     * Sets the paint style for text with [style] on [drawer], with paints over the bounds of the text mapped to
+     * [bounds]. Paints that can not be drawn, over bounds that are not known or are empty, are left out.
+     * @return false when nothing of the text is drawn
+     */
+    private fun applyPaints(drawer: Drawer, style: Style, bounds: Rectangle?): Boolean {
+        val (fillServer, strokeServer) = servers(style) ?: return true
+        val emptyBounds = Rectangle(0.0, 0.0, 0.0, 0.0)
+        val fillTransform = fillServer?.let { paintTransform(it, bounds ?: emptyBounds) }
+        val strokeTransform = strokeServer?.let { paintTransform(it, bounds ?: emptyBounds) }
+        val fill = if (fillTransform != null) fillServer else null
+        val stroke = if (strokeTransform != null) strokeServer else null
+        if (fill == null && stroke == null) {
+            // the paints of a run with a server have no color to fall back on
+            return style.fill !is Paint.Server && style.stroke !is Paint.Server
+        }
+        val paint = paintStyle(fill, stroke)
+        fillTransform?.let { paint.fillTransform = it }
+        strokeTransform?.let { paint.strokeTransform = it }
+        drawer.shadeStyle = paint
+        return true
+    }
+
+    /**
+     * The runs of [group] when it holds only text, in order, null otherwise
+     */
+    fun textRuns(group: GroupNode): List<TextNode>? = group.children.flatMap {
+        when (it) {
+            is TextNode -> listOf(it)
+            is GroupNode -> textRuns(it) ?: return null
+            else -> return null
+        }
+    }
+
+    /** true when the fill or stroke of a run of [runs] is a paint that is drawn with a paint style */
+    fun hasPaints(runs: List<TextNode>): Boolean = runs.any { servers(it.effectiveStyle) != null }
 
     /**
      * The text runs of [group] when they are all placed along the same contour, like the runs of an SVG textPath
@@ -89,18 +144,15 @@ internal object CompositionText {
         return if (collect(group) && runs.isNotEmpty()) runs else null
     }
 
+    /** the glyphs of a run, placed, and the position after the run */
+    private class RunLayout(val glyphs: List<TypesetGlyph>, val end: Vector2)
+
     /**
-     * Draws the text of [node] starting at [pen], or at the position of the node when it has one. Text with a
-     * contour is drawn along it, the x component of the pen and of the position is then the distance along the
-     * contour.
-     * @return the position after the text, where text that continues it starts
+     * Lays out the text of [node] starting at [pen], or at the position of the node when it has one
      */
-    fun draw(drawer: Drawer, node: TextNode, pen: Vector2): Vector2 {
-        if (node.contour != null) {
-            return drawOnContour(drawer, listOf(node), pen)
-        }
+    private fun layoutRun(node: TextNode, pen: Vector2): RunLayout? {
         val style = node.effectiveStyle
-        val face = face(style) ?: return pen
+        val face = face(style) ?: return null
         val textStyle = textStyle(node, style)
 
         // spaces at the start and the end of a run separate it from the runs around it, the typesetter does not keep
@@ -115,36 +167,59 @@ internal object CompositionText {
 
         val start = Vector2(node.x ?: pen.x, node.y ?: pen.y) + Vector2(node.dx, node.dy)
         val origin = start - Vector2(width * style.textAnchor.value, 0.0)
-        if (textStyle.fill != null || textStyle.stroke != null) {
-            slugTextDrawer.clear()
-            slugTextDrawer.addGlyphs(glyphs.map { TypesetGlyph(it.face, it.glyphIndex, it.position + origin, it.style) })
-            slugTextDrawer.draw(drawer)
-        }
-        return origin + Vector2(width, 0.0)
+        return RunLayout(
+            glyphs.map { TypesetGlyph(it.face, it.glyphIndex, it.position + origin, it.style) },
+            origin + Vector2(width, 0.0)
+        )
     }
 
     /**
-     * Draws [runs] that share a contour along it, like SVG draws the text of a textPath element: the runs are shaped
-     * as a single line, the middle of every glyph is placed on the contour and glyphs beyond its ends are not drawn.
-     * The first run determines where the text starts and its anchor. The dx of every run moves the text from that run
-     * on along the contour, its dy moves it across the contour.
-     * @return the position after the text, its x component is the distance along the contour
+     * Draws the text of [node] starting at [pen], or at the position of the node when it has one. Text with a
+     * contour is drawn along it, the x component of the pen and of the position is then the distance along the
+     * contour. Paints over the bounds of the text are mapped to [textBounds], the bounds of the text element.
+     * @return the position after the text, where text that continues it starts
      */
-    fun drawOnContour(drawer: Drawer, runs: List<TextNode>, pen: Vector2): Vector2 {
+    fun draw(drawer: Drawer, node: TextNode, pen: Vector2, textBounds: Rectangle? = null): Vector2 {
+        if (node.contour != null) {
+            return drawOnContour(drawer, listOf(node), pen, textBounds)
+        }
+        val layout = layoutRun(node, pen) ?: return pen
+        val style = node.effectiveStyle
+        val visible = layout.glyphs.filter { it.style.fill != null || it.style.stroke != null }
+        // a run that is not part of a text element is a text of its own
+        val bounds = textBounds ?: layout.glyphs.flatMap { cell(it) }.takeIf { it.isNotEmpty() }?.bounds
+        if (visible.isNotEmpty() && applyPaints(drawer, style, bounds)) {
+            slugTextDrawer.clear()
+            slugTextDrawer.addGlyphs(visible)
+            slugTextDrawer.draw(drawer)
+        }
+        return layout.end
+    }
+
+    /**
+     * Lays out [runs] that share a contour along it, like SVG places the text of a textPath element. Runs that are
+     * not [shown] are laid out without fill and stroke.
+     */
+    private fun layoutOnContour(
+        runs: List<TextNode>,
+        pen: Vector2,
+        shown: (TextNode) -> Boolean = { true }
+    ): ContourTextLayout? {
         val first = runs.first()
-        val contour = first.contour ?: return pen
+        val contour = first.contour ?: return null
         val spans = mutableListOf<TextSpan>()
         val shifts = mutableListOf<Vector2>()
         for (run in runs) {
             val style = run.effectiveStyle
             val face = face(style) ?: continue
-            spans.add(TextSpan(run.text, textStyle(run, style).copy(face = face)))
+            val textStyle = textStyle(run, style).copy(face = face)
+            spans.add(TextSpan(run.text, if (shown(run)) textStyle else textStyle.copy(fill = null, stroke = null)))
             shifts.add(Vector2(run.dx, run.dy))
         }
         if (spans.isEmpty()) {
-            return pen
+            return null
         }
-        val layout = layoutTextOnContour(
+        return layoutTextOnContour(
             spans,
             ContourBaseline(contour, measureOnBaseline = false),
             // the fill and stroke of every span are complete, a span without a fill is not filled
@@ -155,12 +230,92 @@ internal object CompositionText {
             pivot = GlyphPivot.MIDDLE,
             shifts = shifts
         )
-        val visible = layout.glyphs.filter { it.glyph.style.fill != null || it.glyph.style.stroke != null }
-        if (visible.isNotEmpty()) {
-            slugTextDrawer.clear()
-            slugTextDrawer.addGlyphs(ContourTextLayout(visible, layout.start, layout.advance))
-            slugTextDrawer.draw(drawer)
+    }
+
+    /**
+     * Draws [runs] that share a contour along it, like SVG draws the text of a textPath element: the runs are shaped
+     * as a single line, the middle of every glyph is placed on the contour and glyphs beyond its ends are not drawn.
+     * The first run determines where the text starts and its anchor. The dx of every run moves the text from that run
+     * on along the contour, its dy moves it across the contour. Runs with different paints are drawn separately,
+     * paints over the bounds of the text are mapped to [textBounds].
+     * @return the position after the text, its x component is the distance along the contour
+     */
+    fun drawOnContour(drawer: Drawer, runs: List<TextNode>, pen: Vector2, textBounds: Rectangle? = null): Vector2 {
+        val all = layoutOnContour(runs, pen) ?: return pen
+        // runs that are not part of a text element are a text of their own
+        val bounds = textBounds ?: all.glyphs.flatMap { cell(it.glyph, it.transform) }.takeIf { it.isNotEmpty() }?.bounds
+        // the runs are drawn in groups that share their paints
+        val groups = runs.groupBy { servers(it.effectiveStyle) }
+        for ((paints, groupRuns) in groups) {
+            val layout = if (groups.size == 1) all else layoutOnContour(runs, pen) { it in groupRuns } ?: continue
+            val visible = layout.glyphs.filter { it.glyph.style.fill != null || it.glyph.style.stroke != null }
+            if (visible.isEmpty()) continue
+            drawer.pushStyle()
+            val drawn = paints == null || applyPaints(drawer, groupRuns.first().effectiveStyle, bounds)
+            if (drawn) {
+                slugTextDrawer.clear()
+                slugTextDrawer.addGlyphs(ContourTextLayout(visible, layout.start, layout.advance))
+                slugTextDrawer.draw(drawer)
+            }
+            drawer.popStyle()
         }
-        return Vector2(layout.end, pen.y)
+        return Vector2(all.end, pen.y)
+    }
+
+    /**
+     * The corners of the glyph cell of [glyph], its advance by the ascent and descent of its face, in the coordinates
+     * of the text. [outline] is the transform of the outline of the glyph when it is not placed by its position, as
+     * for text along a contour.
+     */
+    private fun cell(glyph: TypesetGlyph, outline: Matrix44? = null): List<Vector2> {
+        val face = glyph.face
+        val advance = face.glyphForIndex(glyph.glyphIndex).advanceWidth()
+        val p = glyph.position
+        val top = p.y - abs(face.ascent)
+        val bottom = p.y + abs(face.descent)
+        val corners = listOf(Vector2(p.x, top), Vector2(p.x + advance, top), Vector2(p.x + advance, bottom), Vector2(p.x, bottom))
+        if (outline == null) return corners
+        val m = outline * glyph.transform().inversed
+        return corners.map { (m * it.xy01).xy }
+    }
+
+    /**
+     * The bounds of the text of [group], the union of the cells of its glyphs, like SVG's bounding box of a text
+     * element, laid out starting at [pen]. Null when it has no glyphs.
+     */
+    fun measure(group: GroupNode, pen: Vector2): Rectangle? {
+        val points = mutableListOf<Vector2>()
+        var current = pen
+        fun visit(node: CompositionNode) {
+            when (node) {
+                is TextNode -> if (node.contour != null) {
+                    layoutOnContour(listOf(node), current)?.let { layout ->
+                        layout.glyphs.forEach { points.addAll(cell(it.glyph, it.transform)) }
+                        current = Vector2(layout.end, current.y)
+                    }
+                } else {
+                    layoutRun(node, current)?.let { layout ->
+                        layout.glyphs.forEach { points.addAll(cell(it)) }
+                        current = layout.end
+                    }
+                }
+
+                is GroupNode -> {
+                    val contourRuns = contourRuns(node)
+                    if (contourRuns != null) {
+                        layoutOnContour(contourRuns, current)?.let { layout ->
+                            layout.glyphs.forEach { points.addAll(cell(it.glyph, it.transform)) }
+                            current = Vector2(layout.end, current.y)
+                        }
+                    } else {
+                        node.children.forEach(::visit)
+                    }
+                }
+
+                else -> {}
+            }
+        }
+        visit(group)
+        return if (points.isEmpty()) null else points.bounds
     }
 }

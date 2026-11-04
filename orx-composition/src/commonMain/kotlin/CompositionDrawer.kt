@@ -667,6 +667,7 @@ class CompositionDrawer(
         insert: Boolean = true
     ): TextNode {
         val g = GroupNode()
+        g.textElement = true
         g.style.transform = Transform.Matrix(transform { translate(position.xy0) })
         val textNode = TextNode(text, null, x = 0.0, y = 0.0).apply {
             this.style.fill = when (val f = this@CompositionDrawer.fill) {

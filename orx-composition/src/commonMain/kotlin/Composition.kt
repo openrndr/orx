@@ -279,6 +279,12 @@ data class TextNode(
  * @property children A mutable list of child nodes belonging to this group. Defaults to an empty list.
  */
 open class GroupNode(open val children: MutableList<CompositionNode> = mutableListOf()) : CompositionNode() {
+    /**
+     * True when this group is a text element, like an SVG text element: its text runs form one text, paints over the
+     * bounds of the text are mapped to the bounds of all its runs
+     */
+    var textElement: Boolean = false
+
     override val bounds: Rectangle
         get() {
             return children.map { it.bounds }.bounds
@@ -295,6 +301,7 @@ open class GroupNode(open val children: MutableList<CompositionNode> = mutableLi
             it.parent = parent
             it.style = style
             it.attributes = attributes
+            it.textElement = textElement
         }
     }
 
