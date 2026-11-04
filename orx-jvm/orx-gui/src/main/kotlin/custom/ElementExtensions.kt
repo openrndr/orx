@@ -13,6 +13,7 @@ import org.openrndr.panel.elements.bind
 import org.openrndr.panel.elements.button
 import org.openrndr.panel.elements.colorpickerButton
 import org.openrndr.panel.elements.div
+import org.openrndr.panel.elements.h3
 import org.openrndr.panel.elements.slider
 import org.openrndr.panel.elements.slidersVector2
 import org.openrndr.panel.elements.slidersVector3
@@ -20,6 +21,7 @@ import org.openrndr.panel.elements.slidersVector4
 import org.openrndr.panel.elements.textfield
 import org.openrndr.panel.elements.toggle
 import kotlin.reflect.KMutableProperty1
+import kotlin.reflect.KProperty1
 
 fun Element.uiForParameters(obj: Any): Div {
     return div {
@@ -119,6 +121,13 @@ fun Element.uiForParameters(obj: Any): Div {
                         value = (parameter.property as KMutableProperty1<Any, Vector4>).get(obj)
                         @Suppress("UNCHECKED_CAST")
                         bind(obj, parameter.property as KMutableProperty1<Any, Vector4>)
+                    }
+                }
+                ParameterType.Nested -> {
+                    @Suppress("UNCHECKED_CAST")
+                    (parameter.nestedProperty as KProperty1<Any, Any?>).get(obj)?.let { nested ->
+                        h3 { parameter.label }
+                        uiForParameters(nested)
                     }
                 }
                 else -> {}

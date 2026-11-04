@@ -28,7 +28,7 @@ internal fun Map<LabeledObject, TrackedObjectBinding>.toParameterValues(): Map<S
         return (this as KMutableProperty1<Any, T>).get(obj)
     }
 
-    return entries.associate { (lo, b) ->
+    return withNested().associate { (lo, b) ->
         Pair(lo.label, b.parameterControls.keys.associate { k ->
             Pair(
                 k.property?.name ?: k.function?.name
@@ -46,7 +46,7 @@ internal fun Map<LabeledObject, TrackedObjectBinding>.toParameterValues(): Map<S
                         maxValue = k.intRange?.endInclusive?.toDouble()
                     )
 
-                    ParameterType.Action -> GUI.ParameterValue()
+                    ParameterType.Action, ParameterType.Nested -> GUI.ParameterValue()
                     ParameterType.Color -> GUI.ParameterValue(colorValue = k.property.qget(lo.obj) as ColorRGBa)
                     ParameterType.Text -> GUI.ParameterValue(textValue = k.property.qget(lo.obj) as String)
                     ParameterType.Boolean -> GUI.ParameterValue(booleanValue = k.property.qget(lo.obj) as Boolean)
@@ -150,8 +150,7 @@ internal fun Map<LabeledObject, TrackedObjectBinding>.applyParameterValues(
     }
 
     labeledValues.forEach { (label, ps) ->
-        keys.find { it.label == label }?.let { lo ->
-            val binding = this[lo]!!
+        withNested().find { it.first.label == label }?.let { (lo, binding) ->
             ps.forEach { (parameterName, parameterValue) ->
                 binding.parameters.find { it.property?.name == parameterName }?.let { parameter ->
                     when (parameter.parameterType) {
@@ -237,7 +236,7 @@ internal fun Map<LabeledObject, TrackedObjectBinding>.applyParameterValues(
                             }
                         }
 
-                        ParameterType.Action -> {
+                        ParameterType.Action, ParameterType.Nested -> {
                             // intentionally do nothing
                         }
                     }

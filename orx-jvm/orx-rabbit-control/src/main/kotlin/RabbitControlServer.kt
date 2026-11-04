@@ -31,6 +31,7 @@ import java.net.Socket
 import java.net.URI
 import java.net.URISyntaxException
 import kotlin.reflect.KMutableProperty1
+import kotlin.reflect.KProperty1
 
 
 class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true, rcpPort: Int =
@@ -190,6 +191,10 @@ class RabbitControlServer(private val showQRUntilClientConnects: Boolean = true,
         val parameters = objectWithParameters.listParameters()
 
         parameters.forEach {
+            if (it.parameterType == ParameterType.Nested) {
+                (it.nestedProperty as KProperty1<Any, Any?>).get(objectWithParameters)?.let { nested -> add(nested) }
+                return@forEach
+            }
             val rabbitParam = when (it.parameterType) {
                 ParameterType.Int -> {
                     val param = rabbitServer.createInt32Parameter(it.label)

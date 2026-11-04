@@ -4,6 +4,7 @@ import org.openrndr.math.Vector2
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty1
+import kotlin.reflect.KProperty1
 
 /*  In case you are here to add an extra annotation type:
     1. Add an annotation class
@@ -204,6 +205,26 @@ annotation class PathParameter(
     val order: Int = Int.MAX_VALUE
 )
 
+/**
+ * NestedParameter annotation for a property that holds an object with annotated parameters of its own. The
+ * parameters of that object are listed as [Parameter.nestedParameters], user interfaces show them as a group.
+ * The property does not need to be mutable. When it is, it can be assigned an object of another class with other
+ * parameters; [listParameters] lists the object the property holds when it is called, the GUI of orx-gui follows
+ * assignments and replaces the controls of the group.
+ *
+ * ```
+ * class Effect {
+ *     @NestedParameter("noise")
+ *     val noise = NoiseSettings() // a class with annotated parameters
+ * }
+ * ```
+ *
+ * @property name the name of the group of nested parameters
+ * @property order hint for where to place the parameter in user interfaces
+ */
+@Target(AnnotationTarget.PROPERTY)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class NestedParameter(val name: String, val order: Int = Int.MAX_VALUE)
 
 //</editor-fold>
 //<editor-fold desc="2. Add an entry to ParameterType" id="add-parameter-type" defaultstate="collapsed">
@@ -222,7 +243,8 @@ enum class ParameterType(val annotationClass: KClass<out Annotation>) {
     Option(OptionParameter::class),
     List(ListParameter::class),
     MutableList(MutableListParameter::class),
-    Path(PathParameter::class)
+    Path(PathParameter::class),
+    Nested(NestedParameter::class)
     ;
 
     companion object {
@@ -244,6 +266,9 @@ enum class ParameterType(val annotationClass: KClass<out Annotation>) {
  * @property precision a precision hint in case a [DoubleParameter] annotation is used
  * @property invertY should the y-axis of [XYParameter] be inverted?
  * @property order a hint for where in the ui this parameter is placed, lower value means higher priority
+ * @property nestedProperty the property that holds the nested object in case [NestedParameter] is used
+ * @property nestedParameters the parameters of the nested object in case [NestedParameter] is used, empty when the
+ * property holds null
  */
 class Parameter(
         val parameterType: ParameterType,
@@ -263,6 +288,8 @@ class Parameter(
         val pathExtensions: Array<String>?,
         val pathIsDirectory: Boolean?,
         val order: Int,
+        val nestedProperty: KProperty1<out Any, Any?>? = null,
+        val nestedParameters: List<Parameter>? = null,
         )
 //</editor-fold>
 //<editor-fold desc="4. Add handling annotation code to listParameters" defaultstate="collapsed">

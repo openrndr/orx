@@ -3,6 +3,7 @@ package org.openrndr.extra.parameters
 import org.openrndr.math.Vector2
 import kotlin.reflect.KCallable
 import kotlin.reflect.KMutableProperty1
+import kotlin.reflect.KProperty1
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.KVisibility
 import kotlin.reflect.full.declaredMemberFunctions
@@ -13,14 +14,59 @@ fun ParameterType.Companion.forParameterAnnotationClass(annotation: Annotation):
 
 val ParameterType.Companion.parameterAnnotationClasses get() = ParameterType.values().map { it.annotationClass }
 
-fun Any.listParameters(): List<Parameter> {
+/** the annotation classes of parameters that are read and written through a mutable property */
+private val valueAnnotationClasses get() = ParameterType.parameterAnnotationClasses - NestedParameter::class
+
+/**
+ * List all parameters, (public var properties with a parameter annotation, functions with an [ActionParameter]
+ * annotation and public properties with a [NestedParameter] annotation)
+ */
+fun Any.listParameters(): List<Parameter> = listParameters(mutableListOf())
+
+/**
+ * @param path the objects that contain this object through nested parameters, used to detect cycles
+ */
+private fun Any.listParameters(path: MutableList<Any>): List<Parameter> {
+    path.add(this)
+    val nested = this::class.memberProperties.filter { property ->
+        property.visibility == KVisibility.PUBLIC && property.findAnnotation<NestedParameter>() != null
+    }.map { property ->
+        val annotation = property.findAnnotation<NestedParameter>()!!
+        @Suppress("UNCHECKED_CAST")
+        val value = (property as KProperty1<Any, Any?>).get(this)
+        require(path.none { it === value }) {
+            "nested parameter '${property.name}' holds an object that contains it"
+        }
+        Parameter(
+            ParameterType.Nested,
+            property = null,
+            function = null,
+            label = annotation.name,
+            doubleRange = null,
+            intRange = null,
+            sizeRange = null,
+            vectorRange = null,
+            precision = null,
+            showVector = null,
+            invertY = null,
+            absolutePath = null,
+            pathContext = null,
+            pathExtensions = null,
+            pathIsDirectory = null,
+            order = annotation.order,
+            nestedProperty = property,
+            nestedParameters = value?.listParameters(path) ?: emptyList()
+        )
+    }
+    path.removeAt(path.lastIndex)
+
     return (this::class.memberProperties.filter { property ->
         !property.isConst &&
                 property is KMutableProperty1<*, *> &&
                 property.visibility == KVisibility.PUBLIC &&
-                property.annotations.map { it.annotationClass }.intersect(ParameterType.parameterAnnotationClasses.toSet()).isNotEmpty()
+                property.annotations.map { it.annotationClass }.intersect(valueAnnotationClasses.toSet()).isNotEmpty()
     }.map { property ->
-        val annotations = property.annotations.filter { it.annotationClass in ParameterType.parameterAnnotationClasses }
+        val annotations = property.annotations.filter { it.annotationClass in valueAnnotationClasses }
         var intRange: IntRange? = null
         var doubleRange: ClosedRange<Double>? = null
         var sizeRange: ClosedRange<Int>? = null
@@ -162,7 +208,7 @@ fun Any.listParameters(): List<Parameter> {
             pathIsDirectory = null,
             order = order
         )
-    }).sortedBy { it.order }
+    } + nested).sortedBy { it.order }
 }
 
 actual fun Any.title() = this::class.findAnnotation<Description>()?.title

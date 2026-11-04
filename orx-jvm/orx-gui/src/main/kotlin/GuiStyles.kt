@@ -8,7 +8,8 @@ import org.openrndr.panel.style.Display
  * The style sheets for the elements of a [GUI], in addition to the default control styles.
  *
  * The selectors refer to the element classes used by the building blocks of [GUILayoutScope]:
- * `fullscreen`, `container`, `toolbar`, `collapse-border`, `sidebar`, `compartment`, `full-canvas`, and the
+ * `fullscreen`, `container`, `toolbar`, `collapse-border`, `sidebar`, `compartment`, `nested`, `nested-header`,
+ * `nested-content`, `full-canvas`, and the
  * `collapsed` and `randomize-strong` state classes. A custom [GUILayout] can use these classes on its own elements,
  * and custom style sheets can be appended to (or replace) the list returned here, see [GUI.styles].
  *
@@ -73,6 +74,12 @@ fun guiStyles(appearance: GUIAppearance = GUIAppearance()): List<StyleSheet> = l
 
     styleSheet(has class_ "compartment") {
         this.paddingBottom = length { 20 }
+    },
+
+    styleSheet(has class_ "nested-header") {
+        this.fontSize = 13.px
+        this.paddingTop = length { 8 }
+        this.paddingBottom = length { 2 }
     },
 
     styleSheet(has class_ "sidebar") {

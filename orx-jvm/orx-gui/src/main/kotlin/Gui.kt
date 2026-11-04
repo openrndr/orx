@@ -23,6 +23,7 @@ import org.openrndr.panel.style.*
 import java.io.File
 import kotlin.math.roundToInt
 import kotlin.reflect.KMutableProperty1
+import kotlin.reflect.KProperty1
 
 /** Dear contributor, just in case you are here looking to add a new parameter type.
 There is a 6-step incantation to add a new parameter type
@@ -43,8 +44,51 @@ internal class CompartmentState(var collapsed: Boolean, val parameterValues: Mut
 private class SidebarState(var hidden: Boolean = false, var collapsed: Boolean = false, var scrollTop: Double = 0.0)
 internal class TrackedObjectBinding(
     val parameters: List<Parameter>,
-    val parameterControls: MutableMap<Parameter, Element> = mutableMapOf()
+    val parameterControls: MutableMap<Parameter, Element> = mutableMapOf(),
+    /** the bindings of the [ParameterType.Nested] parameters */
+    val nested: Map<Parameter, NestedBinding> = emptyMap()
 )
+
+/**
+ * The binding of the object held by the property of a [ParameterType.Nested] parameter of [parent]. The property is
+ * read every frame, when it holds another object, which can be of another class, the binding and the controls are
+ * rebuilt for it.
+ * @property label the label of the nested object, `<label of the parent>/<name of the nested parameter>`
+ */
+internal class NestedBinding(val label: String, val parent: Any, val property: KProperty1<Any, Any?>) {
+    /** the bound object, null when the property held null */
+    var obj: Any? = null
+
+    /** the binding of [obj] */
+    var binding: TrackedObjectBinding? = null
+
+    /** the element that holds the controls of [obj], null when the controls are not built */
+    var content: Div? = null
+
+    val labeledObject: LabeledObject? get() = obj?.let { LabeledObject(label, it) }
+
+    /** the object the property currently holds */
+    fun current(): Any? = property.get(parent)
+}
+
+/**
+ * The tracked objects and the objects nested in them through [NestedParameter] properties, parents before the
+ * objects nested in them
+ */
+internal fun Map<LabeledObject, TrackedObjectBinding>.withNested(): List<Pair<LabeledObject, TrackedObjectBinding>> {
+    val result = mutableListOf<Pair<LabeledObject, TrackedObjectBinding>>()
+    fun visit(labeledObject: LabeledObject, binding: TrackedObjectBinding) {
+        result.add(labeledObject to binding)
+        for (nested in binding.nested.values) {
+            val nestedObject = nested.labeledObject ?: continue
+            visit(nestedObject, nested.binding ?: continue)
+        }
+    }
+    for ((labeledObject, binding) in this) {
+        visit(labeledObject, binding)
+    }
+    return result
+}
 
 private val persistentCompartmentStates = mutableMapOf<Long, MutableMap<String, CompartmentState>>()
 private val persistentSidebarStates = mutableMapOf<Long, SidebarState>()
@@ -206,10 +250,7 @@ open class GUI(
 
             val h3Header = if (showCompartmentHeaders) h3 { label } else null
             val collapsible = div("compartment") {
-                for (parameter in binding.parameters) {
-                    val element = addControl(labeledObject, parameter)
-                    binding.parameterControls[parameter] = element
-                }
+                addControls(labeledObject, binding)
             }
             compartments[label] = collapsible
             elementsForObject[labeledObject.obj] = listOfNotNull(h3Header, collapsible)
@@ -245,8 +286,9 @@ open class GUI(
      * Expand the compartment with [label] and collapse all other compartments.
      */
     fun selectCompartment(label: String) {
-        compartmentState().forEach { (compartmentLabel, state) ->
-            state.collapsed = compartmentLabel != label
+        // only compartments, the states of nested groups are kept
+        for (labeledObject in trackedObjects.keys) {
+            compartmentState()[labeledObject.label]?.collapsed = labeledObject.label != label
         }
         for ((compartmentLabel, compartment) in compartments) {
             if (compartmentLabel == label) {
@@ -444,10 +486,54 @@ open class GUI(
 
     /* 2) control creation. create control, set label, set range, setup event-handler, load values */
     //<editor-fold desc="2) Control creation">
+    private fun Div.addControls(labeledObject: LabeledObject, binding: TrackedObjectBinding) {
+        for (parameter in binding.parameters) {
+            if (parameter.parameterType == ParameterType.Nested) {
+                binding.nested[parameter]?.let { addNested(parameter, it) }
+            } else {
+                binding.parameterControls[parameter] = addControl(labeledObject, parameter)
+            }
+        }
+    }
+
+    /**
+     * Add a group with the controls of a nested object, collapsed and expanded by clicking its header
+     */
+    private fun Div.addNested(parameter: Parameter, nested: NestedBinding): Div =
+        div("nested") {
+            val header = h3("nested-header") { parameter.label }
+            val content = div("nested-content") {
+                val labeledObject = nested.labeledObject
+                val binding = nested.binding
+                if (labeledObject != null && binding != null) {
+                    addControls(labeledObject, binding)
+                }
+            }
+            nested.content = content
+            /* this is guaranteed to be in the dictionary after binding through add() */
+            val collapseState = compartmentState()[nested.label]!!
+            if (collapseState.collapsed) {
+                content.classes.add(collapsed)
+            }
+            header.mouse.pressed.listen {
+                it.cancelPropagation()
+            }
+            header.mouse.clicked.listen {
+                if (collapsed in content.classes) {
+                    content.classes.remove(collapsed)
+                    collapseState.collapsed = false
+                } else {
+                    content.classes.add(collapsed)
+                    collapseState.collapsed = true
+                }
+            }
+        }
+
     private fun Div.addControl(compartment: LabeledObject, parameter: Parameter): Element {
         val obj = compartment.obj
 
         return when (parameter.parameterType) {
+            ParameterType.Nested -> error("nested parameters are added by addControls")
 
             ParameterType.Int -> {
                 slider {
@@ -926,7 +1012,7 @@ open class GUI(
     private val trackedObjects = mutableMapOf<LabeledObject, TrackedObjectBinding>()
 
     private fun updateControls() {
-        for ((labeledObject, binding) in trackedObjects) {
+        for ((labeledObject, binding) in trackedObjects.withNested()) {
             for ((parameter, control) in binding.parameterControls) {
                 updateControl(labeledObject, parameter, control)
             }
@@ -959,7 +1045,10 @@ open class GUI(
      * externally. This allows the user to combine custom data with gui
      * state and save it all to one file. Complements `.fromObject()`.
      */
-    fun toObject(): Map<String, Map<String, ParameterValue>> = trackedObjects.toParameterValues()
+    fun toObject(): Map<String, Map<String, ParameterValue>> {
+        rebindNested()
+        return trackedObjects.toParameterValues()
+    }
 
     fun saveParameters(file: File) {
         file.writeText(parameterValuesToJson(toObject()))
@@ -972,6 +1061,7 @@ open class GUI(
      * Complements `.toObject()`.
      */
     fun fromObject(labeledValues: Map<String, Map<String, ParameterValue>>) {
+        rebindNested()
         trackedObjects.applyParameterValues(labeledValues)
         updateControls()
     }
@@ -1067,14 +1157,15 @@ open class GUI(
                 ddb.value = ddb.items().find { item -> item.data == selectedItem }
             }
 
-            ParameterType.Action -> {
+            ParameterType.Action, ParameterType.Nested -> {
                 // intentionally do nothing
             }
         }
     }
 
     fun randomize(strength: Double = 0.05) {
-        for ((labeledObject, binding) in trackedObjects) {
+        rebindNested()
+        for ((labeledObject, binding) in trackedObjects.withNested()) {
             // -- only randomize visible parameters
             for (parameter in binding.parameterControls.keys) {
                 when (parameter.parameterType) {
@@ -1191,7 +1282,7 @@ open class GUI(
             }
 
             val labeledObject = LabeledObject(uniqueLabel, objectWithParameters)
-            val binding = TrackedObjectBinding(parameters)
+            val binding = bind(uniqueLabel, objectWithParameters, parameters)
             trackedObjects[labeledObject] = binding
             compartmentSelector?.let { selector ->
                 selector.item {
@@ -1213,6 +1304,62 @@ open class GUI(
     }
 
     /**
+     * Bind [parameters] of [obj], and recursively the parameters of the objects nested in [obj], which are labeled
+     * `<label>/<name of the nested parameter>`.
+     */
+    private fun bind(label: String, obj: Any, parameters: List<Parameter>): TrackedObjectBinding {
+        val nested = parameters.filter { it.parameterType == ParameterType.Nested }.associateWith { parameter ->
+            val nestedLabel = "$label/${parameter.label}"
+            compartmentState().getOrPut(nestedLabel) { CompartmentState(false) }
+            @Suppress("UNCHECKED_CAST")
+            NestedBinding(nestedLabel, obj, parameter.nestedProperty as KProperty1<Any, Any?>).apply {
+                this.obj = current()
+                binding = this.obj?.let { bind(nestedLabel, it, parameter.nestedParameters ?: emptyList()) }
+            }
+        }
+        return TrackedObjectBinding(parameters, nested = nested)
+    }
+
+    /**
+     * Rebind the nested objects whose properties hold other objects than the ones that are bound, and rebuild their
+     * controls. The values persisted for the replaced objects and the objects nested in them are dropped, a new
+     * object keeps its own values.
+     */
+    private fun rebindNested() {
+        fun visit(binding: TrackedObjectBinding) {
+            for (nested in binding.nested.values) {
+                val current = nested.current()
+                if (current !== nested.obj) {
+                    compartmentState().forEach { (label, state) ->
+                        if (label == nested.label || label.startsWith("${nested.label}/")) {
+                            state.parameterValues.clear()
+                        }
+                    }
+                    nested.obj = current
+                    nested.binding = current?.let { bind(nested.label, it, it.listParameters()) }
+                    nested.content?.let { content ->
+                        for (child in content.children.toList()) {
+                            content.remove(child)?.close()
+                        }
+                        val labeledObject = nested.labeledObject
+                        val nestedBinding = nested.binding
+                        if (labeledObject != null && nestedBinding != null) {
+                            content.addControls(labeledObject, nestedBinding)
+                        }
+                        content.requestRedraw()
+                    }
+                    onChangeListener?.invoke(nested.property.name, current)
+                } else {
+                    nested.binding?.let { visit(it) }
+                }
+            }
+        }
+        for (binding in trackedObjects.values) {
+            visit(binding)
+        }
+    }
+
+    /**
      * Remove an object from the GUI.
      *
      * @param objectWithParameters the original object added to the GUI using the `add()` method.
@@ -1223,7 +1370,7 @@ open class GUI(
             mutableMapOf()
         }
         found.forEach { (labeledObject, binding) ->
-            collapseStates.remove(labeledObject.label)
+            collapseStates.keys.removeAll { it == labeledObject.label || it.startsWith("${labeledObject.label}/") }
             trackedObjects.remove(labeledObject, binding)
             compartments.remove(labeledObject.label)
             compartmentSelector?.let { selector ->
@@ -1252,6 +1399,7 @@ open class GUI(
     }
 
     override fun afterDraw(drawer: Drawer, program: Program) {
+        rebindNested()
         if (doubleBind) {
             updateControls()
         }
