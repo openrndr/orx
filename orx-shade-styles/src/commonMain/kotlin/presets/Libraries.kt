@@ -171,3 +171,60 @@ vec3 oklab_to_linear(vec3 c) {
 }
 """
 )
+
+/**
+ * GLSL library with the film grain of orx-fx: `float film_grain_source(vec3 x, float strength, float pitch)`
+ */
+val filmGrainLibrary: GlslLibrary = glslLibrary(
+    "film_grain", """
+float film_grain_hash(vec3 p3) {
+    p3 = fract(p3 * 0.1031);
+    p3 += dot(p3, p3.yzx + 19.19);
+    return fract((p3.x + p3.y) * p3.z);
+}
+
+float film_grain_noise(vec3 x) {
+    vec3 i = floor(x);
+    vec3 f = fract(x);
+    f = f * f * (3.0 - 2.0 * f);
+    return mix(mix(mix(film_grain_hash(i + vec3(0, 0, 0)), film_grain_hash(i + vec3(1, 0, 0)), f.x),
+                   mix(film_grain_hash(i + vec3(0, 1, 0)), film_grain_hash(i + vec3(1, 1, 0)), f.x), f.y),
+               mix(mix(film_grain_hash(i + vec3(0, 0, 1)), film_grain_hash(i + vec3(1, 0, 1)), f.x),
+                   mix(film_grain_hash(i + vec3(0, 1, 1)), film_grain_hash(i + vec3(1, 1, 1)), f.x), f.y), f.z);
+}
+
+float film_grain_source(vec3 x, float strength, float pitch) {
+    float center = film_grain_noise(x);
+    float v1 = center - film_grain_noise(vec3(1, 0, 0) / pitch + x) + 0.5;
+    float v2 = center - film_grain_noise(vec3(0, 1, 0) / pitch + x) + 0.5;
+    float v3 = center - film_grain_noise(vec3(-1, 0, 0) / pitch + x) + 0.5;
+    float v4 = center - film_grain_noise(vec3(0, -1, 0) / pitch + x) + 0.5;
+    float total = (v1 + v2 + v3 + v4) / 4.0;
+    return mix(1.0, 0.5 + total, strength);
+}
+"""
+)
+
+/**
+ * GLSL library with the ordered dither masks of orx-fx: `float a_dither(int pattern, int levels, float l, ivec2 p,
+ * int c)` quantizes `l` to `levels` levels with the mask `pattern` (0 to 3) at pixel `p` for channel `c`
+ */
+val aDitherLibrary: GlslLibrary = glslLibrary(
+    "a_dither", """
+float a_dither(int pattern, int levels, float l, ivec2 p, int c) {
+    int x = p.x;
+    int y = p.y;
+    float mask;
+    if (pattern == 0) {
+        mask = float((x ^ y * 149) * 1234 & 511) / 511.0;
+    } else if (pattern == 1) {
+        mask = float(((x + c * 17) ^ y * 149) * 1234 & 511) / 511.0;
+    } else if (pattern == 2) {
+        mask = float((x + y * 237) * 119 & 255) / 255.0;
+    } else {
+        mask = float(((x + c * 67) + y * 236) * 119 & 255) / 255.0;
+    }
+    return floor(float(levels) * l + mask) / float(levels);
+}
+"""
+)

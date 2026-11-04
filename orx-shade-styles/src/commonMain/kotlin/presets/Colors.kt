@@ -5,6 +5,9 @@ package org.openrndr.extra.shadestyles.presets
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.GlslFunction
 import org.openrndr.draw.glslFunction
+import org.openrndr.extra.color.presets.CORAL
+import org.openrndr.extra.color.presets.NAVY
+import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.ColorParameter
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.extra.parameters.IntParameter
@@ -245,4 +248,249 @@ class Layer(source: SourcePreset = NoiseSource(), blend: BlendPreset = LayerBlen
 
     @NestedParameter("blend", order = 1)
     var blend: BlendPreset by dynamicParameter.presetSlot("blend", BlendPreset.CONTRACT, blend)
+}
+
+/**
+ * Sepia toning, by [amount]
+ */
+class Sepia : ColorPreset() {
+    override val dynamicParameter = glslFunction<Vector4>(
+        "vec4 c, vec2 uv", """
+        float a = p_amount;
+        return vec4(
+            min(1.0, c.r * (1.0 - 0.607 * a) + c.g * (0.769 * a) + c.b * (0.189 * a)),
+            min(1.0, c.r * (0.349 * a) + c.g * (1.0 - 0.314 * a) + c.b * (0.168 * a)),
+            min(1.0, c.r * (0.272 * a) + c.g * (0.534 * a) + c.b * (1.0 - 0.869 * a)),
+            c.a
+        );
+        """.trimIndent()
+    )
+
+    @DoubleParameter("amount", 0.0, 1.0)
+    var amount: Double by dynamicParameter.Parameter("amount", 0.5)
+}
+
+/**
+ * Maps the luma of the colors from [background] to [foreground], interpolated in OKLab when [labInterpolation]
+ */
+class Duotone : ColorPreset() {
+    override val dynamicParameter = glslFunction<Vector4>(
+        "vec4 c, vec2 uv", """
+        float t = dot(c.rgb, vec3(0.2126, 0.7152, 0.0722));
+        vec3 rgb;
+        if (p_labInterpolation) {
+            vec3 bg = oklab_from_linear(oklab_srgb_to_linear(p_background.rgb));
+            vec3 fg = oklab_from_linear(oklab_srgb_to_linear(p_foreground.rgb));
+            rgb = oklab_linear_to_srgb(oklab_to_linear(mix(bg, fg, t)));
+        } else {
+            rgb = mix(p_background.rgb, p_foreground.rgb, t);
+        }
+        return vec4(rgb, c.a);
+        """.trimIndent(), listOf(oklabLibrary)
+    )
+
+    @ColorParameter("background", order = 0)
+    var background: ColorRGBa by dynamicParameter.Parameter("background", ColorRGBa.NAVY)
+
+    @ColorParameter("foreground", order = 1)
+    var foreground: ColorRGBa by dynamicParameter.Parameter("foreground", ColorRGBa.CORAL)
+
+    @BooleanParameter("LAB interpolation", order = 2)
+    var labInterpolation: Boolean by dynamicParameter.Parameter("labInterpolation", true)
+}
+
+/**
+ * [foreground] where the luma is at least [threshold], [background] elsewhere
+ */
+class LumaThreshold : ColorPreset() {
+    override val dynamicParameter = glslFunction<Vector4>(
+        "vec4 c, vec2 uv", """
+        float luma = dot(c.rgb, vec3(1.0 / 3.0));
+        return mix(p_background * p_backgroundOpacity, p_foreground * p_foregroundOpacity, step(p_threshold, luma));
+        """.trimIndent()
+    )
+
+    @DoubleParameter("threshold", 0.0, 1.0, order = 0)
+    var threshold: Double by dynamicParameter.Parameter("threshold", 0.5)
+
+    @ColorParameter("foreground", order = 1)
+    var foreground: ColorRGBa by dynamicParameter.Parameter("foreground", ColorRGBa.WHITE)
+
+    @DoubleParameter("foreground opacity", 0.0, 1.0, order = 2)
+    var foregroundOpacity: Double by dynamicParameter.Parameter("foregroundOpacity", 1.0)
+
+    @ColorParameter("background", order = 3)
+    var background: ColorRGBa by dynamicParameter.Parameter("background", ColorRGBa.BLACK)
+
+    @DoubleParameter("background opacity", 0.0, 1.0, order = 4)
+    var backgroundOpacity: Double by dynamicParameter.Parameter("backgroundOpacity", 1.0)
+}
+
+/** the masks of [Dither] */
+enum class DitherPattern {
+    XOR,
+    XOR_CHANNELS,
+    ADD,
+    ADD_CHANNELS
+}
+
+/**
+ * Ordered dithering to [levels] levels per channel with a [pattern] from "arithmetic dither". The pattern is
+ * aligned to the pixels of the output.
+ */
+class Dither : ColorPreset() {
+    override val dynamicParameter = glslFunction<Vector4>(
+        "vec4 c, vec2 uv", """
+        vec4 u = c;
+        if (u.a > 0.0) {
+            u.rgb /= u.a;
+        }
+        ivec2 p = ivec2(gl_FragCoord.xy);
+        vec4 d = vec4(
+            a_dither(p_pattern, p_levels, u.r, p, 0),
+            a_dither(p_pattern, p_levels, u.g, p, 1),
+            a_dither(p_pattern, p_levels, u.b, p, 2),
+            a_dither(p_pattern, p_levels, u.a, p, 3)
+        );
+        d.rgb *= d.a;
+        return d;
+        """.trimIndent(), listOf(aDitherLibrary)
+    )
+
+    @OptionParameter("pattern", order = 0)
+    var pattern: DitherPattern = DitherPattern.ADD_CHANNELS
+        set(value) {
+            field = value
+            dynamicParameter.parameter("pattern", value.ordinal)
+        }
+
+    @IntParameter("levels", 1, 16, order = 1)
+    var levels: Int by dynamicParameter.Parameter("levels", 4)
+
+    init {
+        dynamicParameter.parameter("pattern", pattern.ordinal)
+    }
+}
+
+/**
+ * Film grain. [time] animates the grain at [rate] changes per second; [strength] and [pitch] set the strength and
+ * size of the grain, [liftRatio] mixes multiplied grain (0) with added grain (1). Colored grain is desaturated by
+ * [colorLevel]. The grain is aligned to the pixels of the output.
+ */
+class FilmGrain : ColorPreset() {
+    override val dynamicParameter = glslFunction<Vector4>(
+        "vec4 c, vec2 uv", """
+        vec2 x = gl_FragCoord.xy;
+        float t = p_time;
+        vec3 grain;
+        if (p_useColor) {
+            float rg = film_grain_source(vec3(x, floor(p_rate * t)), p_strength, p_pitch);
+            float gg = film_grain_source(vec3(x, floor(p_rate * (t + 9.0))), p_strength, p_pitch);
+            float bg = film_grain_source(vec3(x, floor(p_rate * (t - 9.0))), p_strength, p_pitch);
+            vec3 colorGrain = vec3(rg, gg, bg);
+            grain = mix(vec3(dot(colorGrain, vec3(0.2126, 0.7152, 0.0722))), colorGrain, p_colorLevel);
+        } else {
+            grain = vec3(film_grain_source(vec3(x, floor(p_rate * t)), p_strength / sqrt(2.0), p_pitch));
+        }
+        return vec4(max(mix(c.rgb * grain, c.rgb + (grain - 1.0), p_liftRatio), 0.0), c.a);
+        """.trimIndent(), listOf(filmGrainLibrary)
+    )
+
+    /** time in seconds, default is 0.0 */
+    var time: Double by dynamicParameter.Parameter("time", 0.0)
+
+    @BooleanParameter("use color", order = 0)
+    var useColor: Boolean by dynamicParameter.Parameter("useColor", false)
+
+    @DoubleParameter("lift ratio", 0.0, 1.0, order = 1)
+    var liftRatio: Double by dynamicParameter.Parameter("liftRatio", 0.5)
+
+    @DoubleParameter("strength", 0.0, 1.0, order = 2)
+    var strength: Double by dynamicParameter.Parameter("strength", 1.0)
+
+    @DoubleParameter("rate", 0.0, 60.0, order = 3)
+    var rate: Double by dynamicParameter.Parameter("rate", 1.0)
+
+    @DoubleParameter("pitch", 0.0, 1.0, order = 4)
+    var pitch: Double by dynamicParameter.Parameter("pitch", 1.0)
+
+    @DoubleParameter("color level", 0.0, 1.0, order = 5)
+    var colorLevel: Double by dynamicParameter.Parameter("colorLevel", 1.0)
+}
+
+/**
+ * A halftone of the luma: black where the luma times a pattern of cosine lines is below [threshold], white
+ * elsewhere, or the other way around when [invert]. The pattern, lines at [freq0] with a cosine wobble of [freq1] and
+ * [gain1], turned by [rotation] degrees, is antialiased by sampling it 7 by 7 times per pixel.
+ */
+class LumaHalftone : ColorPreset() {
+    override val dynamicParameter = glslFunction<Vector4>(
+        "vec4 c, vec2 uv", """
+        vec2 texel = vec2(abs(dFdx(uv).x) + abs(dFdy(uv).x), abs(dFdx(uv).y) + abs(dFdy(uv).y));
+        float ca = cos(radians(p_rotation));
+        float sa = sin(radians(p_rotation));
+        float aspect = texel.y / texel.x;
+        mat2 rm = mat2(1.0, 0.0, 0.0, aspect) * mat2(vec2(ca, sa), vec2(-sa, ca)) * mat2(1.0, 0.0, 0.0, 1.0 / aspect);
+        vec4 u = c;
+        if (u.a != 0.0) {
+            u.rgb /= u.a;
+        }
+        float l = dot(vec3(1.0 / 3.0), u.rgb);
+        if (p_invert) {
+            l = 1.0 - l;
+        }
+        vec2 delta = texel / 6.0;
+        float sum = 0.0;
+        for (int v = -3; v <= 3; ++v) {
+            for (int w = -3; w <= 3; ++w) {
+                vec2 cuv = rm * (uv + delta * vec2(w, v) - vec2(0.5)) + vec2(0.5);
+                float m = fract(p_phase0 + cuv.x * p_freq0 + cos(cuv.y * p_freq1 + p_phase1 * 3.141592653) * p_gain1);
+                sum += step(p_threshold, l * m);
+            }
+        }
+        float t = sum / 49.0;
+        if (p_invert) {
+            t = 1.0 - t;
+        }
+        return vec4(vec3(t), 1.0) * c.a;
+        """.trimIndent()
+    )
+
+    @DoubleParameter("threshold", 0.0, 1.0, order = 0)
+    var threshold: Double by dynamicParameter.Parameter("threshold", 0.5)
+
+    @DoubleParameter("rotation", -180.0, 180.0, order = 1)
+    var rotation: Double by dynamicParameter.Parameter("rotation", 0.0)
+
+    @DoubleParameter("freq0", 0.0, 200.0, order = 2)
+    var freq0: Double by dynamicParameter.Parameter("freq0", 10.0)
+
+    @DoubleParameter("freq1", 0.0, 200.0, order = 3)
+    var freq1: Double by dynamicParameter.Parameter("freq1", 20.0)
+
+    @DoubleParameter("gain1", 0.0, 1.0, order = 4)
+    var gain1: Double by dynamicParameter.Parameter("gain1", 0.1)
+
+    @DoubleParameter("phase0", -1.0, 1.0, order = 5)
+    var phase0: Double by dynamicParameter.Parameter("phase0", 0.0)
+
+    @DoubleParameter("phase1", -1.0, 1.0, order = 6)
+    var phase1: Double by dynamicParameter.Parameter("phase1", 0.0)
+
+    @BooleanParameter("invert", order = 7)
+    var invert: Boolean by dynamicParameter.Parameter("invert", true)
+}
+
+/**
+ * Applies [color] where [mask] is 1, keeps the colors where it is 0, and mixes in between
+ */
+class Masked(color: ColorPreset = Grade(), mask: MaskPreset = RadialGradientMask()) : ColorPreset() {
+    override val dynamicParameter: GlslFunction =
+        glslFunction<Vector4>("vec4 c, vec2 uv", "mix(c, p_color(c, uv), clamp(p_mask(uv), 0.0, 1.0))")
+
+    @NestedParameter("color", order = 0)
+    var color: ColorPreset by dynamicParameter.presetSlot("color", CONTRACT, color)
+
+    @NestedParameter("mask", order = 1)
+    var mask: MaskPreset by dynamicParameter.presetSlot("mask", MaskPreset.CONTRACT, mask)
 }
