@@ -41,16 +41,8 @@ internal object CompositionText {
         else -> null
     }
 
-    /** the opacity of [node] and its ancestors, the opacity of a group applies to its contents */
-    private fun opacity(node: CompositionNode): Double {
-        var opacity = 1.0
-        var current: CompositionNode? = node
-        while (current != null) {
-            opacity *= (current.style.opacity as? Numeric.Rational)?.value ?: 1.0
-            current = current.parent
-        }
-        return opacity
-    }
+    /** the opacity of [node], the opacity of the groups it is in is applied by their layers */
+    private fun opacity(node: CompositionNode): Double = (node.style.opacity as? Numeric.Rational)?.value ?: 1.0
 
     /** the face of the font of [style], null when there is no font or it cannot be loaded */
     private fun face(style: Style): Face? {

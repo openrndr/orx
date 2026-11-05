@@ -420,6 +420,93 @@ sealed interface MarkerReference : AttributeOrPropertyValue {
     }
 }
 
+/** how the value of a [Mask] is taken from its content, like the mask-type property of SVG */
+enum class MaskType {
+    /** the luminance of the content, multiplied by its alpha */
+    LUMINANCE,
+
+    /** the alpha of the content */
+    ALPHA
+}
+
+/**
+ * A mask, like SVG's mask: the alpha of what it is applied to is multiplied by the value of [content], its luminance
+ * or its alpha by [type]. The content is in the coordinates of the node it is applied to, or in the bounds of that
+ * node when [units] is [PaintUnits.BOUNDS]; it is drawn in [region], in the coordinates of [regionUnits], or
+ * everywhere when the region is null.
+ */
+class Mask(
+    val content: GroupNode,
+    val units: PaintUnits = PaintUnits.OBJECT,
+    val region: Rectangle? = Rectangle(-0.1, -0.1, 1.2, 1.2),
+    val regionUnits: PaintUnits = PaintUnits.BOUNDS,
+    val type: MaskType = MaskType.LUMINANCE,
+    val id: String = ""
+) {
+    /** the id of the mask in SVG documents: [id], or an id derived from the mask when it has none */
+    val svgId: String get() = id.ifEmpty { "mask-" + hashCode().toUInt().toString(16) }
+}
+
+/**
+ * The mask of a node, like the mask property of SVG
+ */
+sealed interface MaskReference : AttributeOrPropertyValue {
+    override val value: Mask?
+
+    object None : MaskReference {
+        override val value: Mask? = null
+        override fun toString() = "none"
+    }
+
+    class Value(override val value: Mask) : MaskReference {
+        override fun toString() = "url(#${value.svgId})"
+    }
+}
+
+/**
+ * How a node is blended with what is drawn under it, like the mix-blend-mode property of CSS. The modes are those of
+ * the W3C compositing and blending specification.
+ */
+enum class MixBlendMode(private val css: String) : AttributeOrPropertyValue {
+    NORMAL("normal"),
+    MULTIPLY("multiply"),
+    SCREEN("screen"),
+    OVERLAY("overlay"),
+    DARKEN("darken"),
+    LIGHTEN("lighten"),
+    COLOR_DODGE("color-dodge"),
+    COLOR_BURN("color-burn"),
+    HARD_LIGHT("hard-light"),
+    SOFT_LIGHT("soft-light"),
+    DIFFERENCE("difference"),
+    EXCLUSION("exclusion"),
+    HUE("hue"),
+    SATURATION("saturation"),
+    COLOR("color"),
+    LUMINOSITY("luminosity"),
+    PLUS_LIGHTER("plus-lighter");
+
+    override val value: MixBlendMode get() = this
+    override fun toString(): String = css
+
+    companion object {
+        /** the mode named [name] in CSS, null for names that are not known */
+        fun of(name: String): MixBlendMode? = entries.firstOrNull { it.css == name.trim() }
+    }
+}
+
+/**
+ * Whether a group is drawn on its own before it is blended with what is under it, like the isolation property of
+ * CSS. Groups with an opacity, a mask or a blend mode are always isolated.
+ */
+enum class Isolation(private val css: String) : AttributeOrPropertyValue {
+    AUTO("auto"),
+    ISOLATE("isolate");
+
+    override val value: Isolation get() = this
+    override fun toString(): String = css
+}
+
 sealed interface Display : AttributeOrPropertyValue {
     override val value: Boolean
 
@@ -800,6 +887,9 @@ var Style.fillRule by PropertyDelegate<FillRule>(FILL_RULE, INHERIT, FillRule.No
 var Style.color by PropertyDelegate<Paint>(COLOR, INHERIT, Paint.RGB(ColorRGBa.BLACK))
 var Style.vectorEffect by PropertyDelegate<VectorEffect>(VECTOR_EFFECT, RESET, VectorEffect.None)
 var Style.clipPath by PropertyDelegate<ClipPath>(CLIP_PATH, RESET, ClipPath.None)
+var Style.mask by PropertyDelegate<MaskReference>(MASK, RESET, MaskReference.None)
+var Style.mixBlendMode by PropertyDelegate<MixBlendMode>(MIX_BLEND_MODE, RESET, MixBlendMode.NORMAL)
+var Style.isolation by PropertyDelegate<Isolation>(ISOLATION, RESET, Isolation.AUTO)
 var Style.clipRule by PropertyDelegate<FillRule>(CLIP_RULE, INHERIT, FillRule.NonZero)
 var Style.markerStart by PropertyDelegate<MarkerReference>(MARKER_START, INHERIT, MarkerReference.None)
 var Style.markerMid by PropertyDelegate<MarkerReference>(MARKER_MID, INHERIT, MarkerReference.None)
@@ -898,6 +988,9 @@ enum class AttributeOrPropertyKey {
     PAINT_ORDER { override fun toString() = "paint-order" },
     CLIP_PATH { override fun toString() = "clip-path" },
     CLIP_RULE { override fun toString() = "clip-rule" },
+    MASK { override fun toString() = "mask" },
+    MIX_BLEND_MODE { override fun toString() = "mix-blend-mode" },
+    ISOLATION { override fun toString() = "isolation" },
     MARKER_START { override fun toString() = "marker-start" },
     MARKER_MID { override fun toString() = "marker-mid" },
     MARKER_END { override fun toString() = "marker-end" },

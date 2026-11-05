@@ -62,8 +62,17 @@ private val CompositionNode.svgAttributes: String
 private fun Styleable.serialize(parentStyleable: Styleable? = null): String {
     val sb = StringBuilder()
 
+    // properties that are not presentation attributes are written in a style attribute
+    val cssOnly = setOf(AttributeOrPropertyKey.MIX_BLEND_MODE, AttributeOrPropertyKey.ISOLATION)
+    val css = this.properties.filter { (key, value) ->
+        key in cssOnly && value.toString().isNotEmpty() &&
+                (parentStyleable == null || !this.isInherited(parentStyleable, key))
+    }
+    if (css.isNotEmpty()) {
+        sb.append("style=\"${css.entries.joinToString(";") { (key, value) -> "$key:$value" }}\" ")
+    }
     val filtered = this.properties.filter {
-        it.key != AttributeOrPropertyKey.SHADESTYLE
+        it.key != AttributeOrPropertyKey.SHADESTYLE && it.key !in cssOnly
     }
     // Inheritance can't be checked without a parentStyleable
     when (parentStyleable) {
@@ -115,6 +124,7 @@ fun writeSVG(
     sb.appendPatterns(composition, ids)
     sb.appendClipPaths(composition, ids)
     sb.appendMarkers(composition, ids)
+    sb.appendMasks(composition, ids)
 
     sb.appendNodes(composition.root, ids)
     sb.append("</svg>")
@@ -220,14 +230,36 @@ private fun process(compositionNode: CompositionNode, visitor: CompositionNode.(
     }
     compositionNode.visitor(VisitStage.POST)
 }
+/**
+ * The nodes of [root] and the nodes of the patterns, clip paths, masks and markers that they refer to, which are
+ * written in defs elements and can refer to gradients, patterns, clip paths, masks and markers themselves
+ */
+private fun allNodes(root: CompositionNode): List<CompositionNode> {
+    val nodes = mutableListOf<CompositionNode>()
+    val visited = mutableSetOf<GroupNode>()
+    fun visit(node: CompositionNode) {
+        process(node) { stage ->
+            if (stage == VisitStage.PRE) {
+                nodes.add(this)
+                val referenced = listOfNotNull(
+                    (style.fill as? Paint.Pattern)?.content, (style.stroke as? Paint.Pattern)?.content,
+                    (style.clipPath as? ClipPath.Shapes)?.content, style.mask.value?.content,
+                    style.markerStart.value?.content, style.markerMid.value?.content, style.markerEnd.value?.content
+                )
+                for (content in referenced) if (visited.add(content)) visit(content)
+            }
+        }
+    }
+    visit(root)
+    return nodes
+}
+
 /** the gradients that the fills and strokes of the nodes of [composition] use, by their id */
 private fun gradients(composition: Composition): Map<String, Paint.Gradient> {
     val gradients = LinkedHashMap<String, Paint.Gradient>()
-    process(composition.root) { stage ->
-        if (stage == VisitStage.PRE) {
-            for (paint in listOf(style.fill, style.stroke)) {
-                if (paint is Paint.Gradient) gradients.getOrPut(paint.svgId) { paint }
-            }
+    for (node in allNodes(composition.root)) {
+        for (paint in listOf(node.style.fill, node.style.stroke)) {
+            if (paint is Paint.Gradient) gradients.getOrPut(paint.svgId) { paint }
         }
     }
     return gradients
@@ -384,23 +416,14 @@ private fun StringBuilder.appendNodes(root: CompositionNode, ids: WriterIds) {
 /** the patterns that the fills and strokes of [root] and the nodes in it use, also in the content of patterns */
 private fun patterns(root: CompositionNode): Map<String, Paint.Pattern> {
     val patterns = LinkedHashMap<String, Paint.Pattern>()
-    fun collect(node: CompositionNode) {
-        process(node) { stage ->
-            if (stage == VisitStage.PRE) {
-                for (paint in listOf(style.fill, style.stroke)) {
-                    if (paint is Paint.Pattern && paint.svgId !in patterns) {
-                        patterns[paint.svgId] = paint
-                        collect(paint.content)
-                    }
-                }
-            }
+    for (node in allNodes(root)) {
+        for (paint in listOf(node.style.fill, node.style.stroke)) {
+            if (paint is Paint.Pattern) patterns.getOrPut(paint.svgId) { paint }
         }
     }
-    collect(root)
     return patterns
 }
 
-/** writes a defs element with the patterns that [composition] uses, when it uses any */
 private fun StringBuilder.appendPatterns(composition: Composition, ids: WriterIds) {
     val patterns = patterns(composition.root)
     if (patterns.isEmpty()) return
@@ -426,10 +449,8 @@ private fun StringBuilder.appendPatterns(composition: Composition, ids: WriterId
 /** writes a defs element with the clip paths that the nodes of [composition] use, when they use any */
 private fun StringBuilder.appendClipPaths(composition: Composition, ids: WriterIds) {
     val clips = LinkedHashMap<String, ClipPath.Shapes>()
-    process(composition.root) { stage ->
-        if (stage == VisitStage.PRE) {
-            (style.clipPath as? ClipPath.Shapes)?.let { clips.getOrPut(it.svgId) { it } }
-        }
+    for (node in allNodes(composition.root)) {
+        (node.style.clipPath as? ClipPath.Shapes)?.let { clips.getOrPut(it.svgId) { it } }
     }
     if (clips.isEmpty()) return
     append("<defs>")
@@ -442,14 +463,35 @@ private fun StringBuilder.appendClipPaths(composition: Composition, ids: WriterI
     append("</defs>\n")
 }
 
+/** writes a defs element with the masks that the nodes of [composition] use, when they use any */
+private fun StringBuilder.appendMasks(composition: Composition, ids: WriterIds) {
+    val masks = LinkedHashMap<String, Mask>()
+    for (node in allNodes(composition.root)) {
+        node.style.mask.value?.let { masks.getOrPut(it.svgId) { it } }
+    }
+    if (masks.isEmpty()) return
+    append("<defs>")
+    for ((id, mask) in masks) {
+        val contentUnits = if (mask.units == PaintUnits.BOUNDS) "objectBoundingBox" else "userSpaceOnUse"
+        val regionUnits = if (mask.regionUnits == PaintUnits.BOUNDS) "objectBoundingBox" else "userSpaceOnUse"
+        // a mask without a region is drawn everywhere, a region far beyond what is drawn stands in for it
+        val r = mask.region ?: if (mask.regionUnits == PaintUnits.BOUNDS) org.openrndr.shape.Rectangle(-1E4, -1E4, 2E4, 2E4)
+            else org.openrndr.shape.Rectangle(-1E7, -1E7, 2E7, 2E7)
+        val type = if (mask.type == MaskType.ALPHA) " mask-type=\"alpha\"" else ""
+        append("<mask id=\"$id\" maskUnits=\"$regionUnits\" maskContentUnits=\"$contentUnits\" ")
+        append("x=\"${r.x}\" y=\"${r.y}\" width=\"${r.width}\" height=\"${r.height}\"$type>")
+        for (child in mask.content.children) appendNodes(child, ids)
+        append("</mask>")
+    }
+    append("</defs>\n")
+}
+
 /** writes a defs element with the markers that the nodes of [composition] use, when they use any */
 private fun StringBuilder.appendMarkers(composition: Composition, ids: WriterIds) {
     val markers = LinkedHashMap<String, Marker>()
-    process(composition.root) { stage ->
-        if (stage == VisitStage.PRE) {
-            for (reference in listOf(style.markerStart, style.markerMid, style.markerEnd)) {
-                reference.value?.let { markers.getOrPut(it.svgId) { it } }
-            }
+    for (node in allNodes(composition.root)) {
+        for (reference in listOf(node.style.markerStart, node.style.markerMid, node.style.markerEnd)) {
+            reference.value?.let { markers.getOrPut(it.svgId) { it } }
         }
     }
     if (markers.isEmpty()) return

@@ -169,6 +169,12 @@ internal sealed class SVGElement(element: Element?) {
             Prop.TEXT_DECORATION -> style.textDecoration = value.trim().split(Regex("\\s+")).let {
                 TextDecoration(underline = "underline" in it, overline = "overline" in it, lineThrough = "line-through" in it)
             }
+            Prop.MASK -> style.mask = SVGParse.mask(value)
+            Prop.MIX_BLEND_MODE -> MixBlendMode.of(value)?.let { style.mixBlendMode = it }
+                ?: logger.warn { "Unknown blend mode: $value" }
+            Prop.ISOLATION -> style.isolation = if (value.trim() == "isolate") Isolation.ISOLATE else Isolation.AUTO
+            // the type of a mask is read with the mask element
+            Prop.MASK_TYPE -> {}
             Prop.SHAPE_RENDERING -> style.shapeRendering = when (value.trim()) {
                 "optimizeSpeed" -> ShapeRendering.OPTIMIZE_SPEED
                 "crispEdges" -> ShapeRendering.CRISP_EDGES
@@ -239,7 +245,8 @@ internal open class SVGGroup(val element: Element, val elements: MutableList<SVG
                 // gradients are read before the elements are, see SVGGradients
                 // patterns are drawn where they are referred to, see SVGGradients
                 // clip paths are applied where they are referred to, see SVGGradients
-                "linearGradient", "radialGradient", "pattern", "clipPath", "marker" -> {}
+                // masks are applied where they are referred to, see SVGGradients
+                "linearGradient", "radialGradient", "pattern", "clipPath", "marker", "mask" -> {}
                 // style elements are applied before the elements are read, see SVGStyleSheet
                 "style", "title", "desc", "metadata" -> {}
                 in Tag.graphicsList -> elements.add(SVGPath(child))

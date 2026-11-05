@@ -5,6 +5,8 @@ import org.jsoup.nodes.Element
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.composition.AspectRatio
 import org.openrndr.extra.composition.ClipPath
+import org.openrndr.extra.composition.Mask
+import org.openrndr.extra.composition.MaskType
 import org.openrndr.extra.composition.clipPath
 import org.openrndr.extra.composition.Marker
 import org.openrndr.extra.composition.MarkerOrient
@@ -32,6 +34,50 @@ internal object SVGGradients {
     private val current = ThreadLocal<Map<String, Paint.Server>>()
     private val currentClips = ThreadLocal<Map<String, ClipPath.Shapes>>()
     private val currentMarkers = ThreadLocal<Map<String, Marker>>()
+    private val currentMasks = ThreadLocal<Map<String, Mask>>()
+
+    /** runs [block] with [masks] available to [lookupMask] */
+    fun <T> usingMasks(masks: Map<String, Mask>, block: () -> T): T {
+        val previous = currentMasks.get()
+        currentMasks.set(masks)
+        try {
+            return block()
+        } finally {
+            currentMasks.set(previous)
+        }
+    }
+
+    /** the mask with [id] of the document that is being parsed */
+    fun lookupMask(id: String): Mask? = currentMasks.get()?.get(id).also {
+        if (it == null) logger.warn { "mask refers to '#$id', which is not a mask in the document" }
+    }
+
+    /**
+     * The masks in the document with [root], by their id, with their elements. Their content is empty, it is added
+     * when the elements are converted.
+     */
+    fun parseMasks(root: Element): Map<String, Pair<Mask, Element>> =
+        root.allElements.filter { it.tagName() == "mask" && it.id().isNotEmpty() }.associate { element ->
+            val regionUnits = if (element.attr("maskUnits").trim() == "userSpaceOnUse") PaintUnits.OBJECT else PaintUnits.BOUNDS
+            val units = if (element.attr("maskContentUnits").trim() == "objectBoundingBox") PaintUnits.BOUNDS else PaintUnits.OBJECT
+            // the region is in fractions of the bounds, or in lengths of the user space
+            fun region(name: String, default: String, axis: SVGParse.LengthAxis): Double {
+                val value = element.attr(name).trim().ifEmpty { default }
+                return if (regionUnits == PaintUnits.BOUNDS) {
+                    if (value.endsWith("%")) (value.dropLast(1).toDoubleOrNull() ?: 0.0) / 100.0 else value.toDoubleOrNull() ?: 0.0
+                } else {
+                    SVGParse.lengthValue(value, element, axis) ?: 0.0
+                }
+            }
+            val region = org.openrndr.shape.Rectangle(
+                region("x", "-10%", SVGParse.LengthAxis.X), region("y", "-10%", SVGParse.LengthAxis.Y),
+                region("width", "120%", SVGParse.LengthAxis.X), region("height", "120%", SVGParse.LengthAxis.Y)
+            )
+            val typeValue = SVGStyleSheet.declarations(element.attr("style")).lastOrNull { it.first == "mask-type" }?.second
+                ?: element.attr("mask-type")
+            val type = if (typeValue.trim() == "alpha") MaskType.ALPHA else MaskType.LUMINANCE
+            element.id() to Pair(Mask(GroupNode(), units, region, regionUnits, type, element.id()), element)
+        }
 
     /** runs [block] with [markers] available to [lookupMarker] */
     fun <T> usingMarkers(markers: Map<String, Marker>, block: () -> T): T {

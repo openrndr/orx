@@ -232,6 +232,9 @@ internal fun Drawer.applyClip() {
     }
 }
 
+/** the depth of the clip that is drawn, nested compositions, like those of masks and markers, continue the depth */
+private var clipDepth = 0
+
 /** the masks of clip paths by nesting depth, reused while their size matches the render target */
 private val clipMasks = mutableListOf<RenderTarget>()
 
@@ -239,6 +242,8 @@ private val clipMasks = mutableListOf<RenderTarget>()
 internal fun localBounds(node: CompositionNode): Rectangle? = when (node) {
     is ShapeNode -> node.shape.bounds.takeIf { !node.shape.empty }
     is ImageNode -> Rectangle(node.x, node.y, node.width, node.height)
+    // the bounds of a text are the cells of its glyphs
+    is GroupNode if node.textElement -> CompositionText.measure(node, Vector2.ZERO)
     is GroupNode -> node.children.mapNotNull { child ->
         localBounds(child)?.let { b ->
             val t = child.transform
@@ -403,8 +408,6 @@ fun Drawer.composition(composition: Composition) {
     // the bounds of the text element that is drawn, when its paints need them
     var textBounds: Rectangle? = null
 
-    var clipDepth = 0
-
     fun node(compositionNode: CompositionNode) {
         // a node with display none is not drawn, nor are the nodes in it
         if (compositionNode.style.display == Display.None) return
@@ -427,7 +430,12 @@ fun Drawer.composition(composition: Composition) {
         shadeStyle = (compositionNode.style.shadeStyle as Shade.Value).value
         paintOrder = compositionNode.effectiveStyle.paintOrder.value
 
-        when (compositionNode) {
+        // the opacity of a node on a layer of its own is applied when the layer is composited
+        val ownOpacity = (compositionNode.style.opacity as? Numeric.Rational)?.value ?: 1.0
+        val layered = needsLayer(compositionNode, ownOpacity)
+        val opacity = if (layered) 1.0 else ownOpacity
+
+        fun content() { when (compositionNode) {
             is ShapeNode -> {
                 // fills and strokes are inherited from the groups the shape is in
                 val style = compositionNode.effectiveStyle
@@ -499,9 +507,7 @@ fun Drawer.composition(composition: Composition) {
                         is Numeric.Rational -> fill?.opacify(it.value)
                     }
                 }
-                // the opacity of the shape and of the groups it is in
-                val opacity = generateSequence(compositionNode as CompositionNode) { it.parent }
-                    .fold(1.0) { acc, node -> acc * ((node.style.opacity as? Numeric.Rational)?.value ?: 1.0) }
+                // the opacity of the groups the shape is in is applied by their layers
                 stroke = stroke?.opacify(opacity)
                 fill = fill?.opacify(opacity)
                 if (style.visibility.value) {
@@ -561,11 +567,9 @@ fun Drawer.composition(composition: Composition) {
                 val image = compositionNode.image
                 val source = compositionNode.source ?: Rectangle(0.0, 0.0, image.width.toDouble(), image.height.toDouble())
                 val target = Rectangle(compositionNode.x, compositionNode.y, compositionNode.width, compositionNode.height)
-                (compositionNode.style.opacity as? Numeric.Rational)?.let {
-                    if (it.value < 1.0) {
-                        // scales the alpha of the image
-                        drawStyle.colorMatrix = Matrix55.IDENTITY.copy(c3r3 = it.value)
-                    }
+                if (opacity < 1.0) {
+                    // scales the alpha of the image
+                    drawStyle.colorMatrix = Matrix55.IDENTITY.copy(c3r3 = opacity)
                 }
                 applyClip()
                 image(image, source, target)
@@ -591,7 +595,8 @@ fun Drawer.composition(composition: Composition) {
                 }
                 textBounds = outerBounds
             }
-        }
+        } }
+        if (layered) drawLayer(compositionNode, ownOpacity) { content() } else content()
         if (clipPath is ClipPath.Shapes) clipDepth--
         activeClip = outerClip
         popModel()
@@ -601,7 +606,12 @@ fun Drawer.composition(composition: Composition) {
     val enclosingClip = activeClip
     activeClip = null
     try {
-        node(composition.root)
+        // nodes are blended with what is drawn under them in the composition, which is drawn on a layer of its own
+        if (usesBlendModes(composition.root)) {
+            drawLayer(GroupNode(), 1.0) { node(composition.root) }
+        } else {
+            node(composition.root)
+        }
     } finally {
         activeClip = enclosingClip
     }

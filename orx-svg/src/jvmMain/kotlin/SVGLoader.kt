@@ -79,7 +79,7 @@ internal class SVGDocument(
 
     fun composition(): Composition = Composition(
         convertElement(root).also {
-            // the content of patterns and clip paths is converted like the elements of the document
+            // the content of patterns, clip paths, markers and masks is converted like the elements of the document
             for ((content, group) in contents) {
                 // the clip of a marker to its viewport is kept, the clip path of a clipPath element applies to its
                 // content, not to the element it clips
@@ -410,16 +410,18 @@ internal class SVGLoader {
         val patterns = SVGGradients.parsePatterns(root)
         val clips = SVGGradients.parseClipPaths(root)
         val markers = SVGGradients.parseMarkers(root)
+        val masks = SVGGradients.parseMasks(root)
         val servers: Map<String, Paint.Server> = gradients + patterns.mapValues { it.value.first }
-        return SVGGradients.usingMarkers(markers.mapValues { it.value.first }) { SVGGradients.using(servers, clips.mapValues { it.value.first }) {
+        return SVGGradients.usingMasks(masks.mapValues { it.value.first }) { SVGGradients.usingMarkers(markers.mapValues { it.value.first }) { SVGGradients.using(servers, clips.mapValues { it.value.first }) {
             val rootGroup = SVGSVGElement(root)
             // the content of patterns and clip paths can refer to gradients, patterns and clip paths too
             val contents = patterns.values.mapNotNull { (pattern, element) ->
                 element?.let { pattern.content to SVGGroup(it) }
             } + clips.values.map { (clip, element) -> clip.content to SVGGroup(element) } +
-                    markers.values.map { (marker, element) -> marker.content to SVGGroup(element) }
+                    markers.values.map { (marker, element) -> marker.content to SVGGroup(element) } +
+                    masks.values.map { (mask, element) -> mask.content to SVGGroup(element) }
             SVGDocument(rootGroup, namespaces, base, contents)
-        } }
+        } } }
     }
 
 //    private fun handleImage(group: SVGGroup, e: Element) {

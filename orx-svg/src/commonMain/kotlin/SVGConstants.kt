@@ -128,6 +128,10 @@ internal object Prop {
     const val BASELINE_SHIFT = "baseline-shift"
     const val TEXT_DECORATION = "text-decoration"
     const val SHAPE_RENDERING = "shape-rendering"
+    const val MASK = "mask"
+    const val MASK_TYPE = "mask-type"
+    const val MIX_BLEND_MODE = "mix-blend-mode"
+    const val ISOLATION = "isolation"
 
     val list = listOf(
         COLOR,
@@ -172,6 +176,10 @@ internal object Prop {
         ALIGNMENT_BASELINE,
         BASELINE_SHIFT,
         TEXT_DECORATION,
-        SHAPE_RENDERING
+        SHAPE_RENDERING,
+        MASK,
+        MASK_TYPE,
+        MIX_BLEND_MODE,
+        ISOLATION
     )
 }

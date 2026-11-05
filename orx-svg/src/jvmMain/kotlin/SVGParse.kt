@@ -597,6 +597,11 @@ internal object SVGParse {
         return SVGGradients.lookupClip(match.groupValues[1].trim()) ?: ClipPath.None
     }
 
+    fun mask(value: String): MaskReference {
+        val match = Regex("^\\s*url\\(\\s*['\"]?#([^)'\"]+)['\"]?\\s*\\)\\s*$").matchEntire(value) ?: return MaskReference.None
+        return SVGGradients.lookupMask(match.groupValues[1].trim())?.let { MaskReference.Value(it) } ?: MaskReference.None
+    }
+
     fun paintOrder(value: String): PaintOrder {
         val names = value.trim().split(Regex("\\s+")).filter { it == "fill" || it == "stroke" }
         return if (names.firstOrNull() == "stroke") PaintOrder.StrokeFirst else PaintOrder.Normal
