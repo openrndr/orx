@@ -132,6 +132,10 @@ internal object Prop {
     const val MASK_TYPE = "mask-type"
     const val MIX_BLEND_MODE = "mix-blend-mode"
     const val ISOLATION = "isolation"
+    const val FILTER = "filter"
+    const val COLOR_INTERPOLATION_FILTERS = "color-interpolation-filters"
+    const val FLOOD_COLOR = "flood-color"
+    const val FLOOD_OPACITY = "flood-opacity"
 
     val list = listOf(
         COLOR,
@@ -180,6 +184,10 @@ internal object Prop {
         MASK,
         MASK_TYPE,
         MIX_BLEND_MODE,
-        ISOLATION
+        ISOLATION,
+        FILTER,
+        COLOR_INTERPOLATION_FILTERS,
+        FLOOD_COLOR,
+        FLOOD_OPACITY
     )
 }

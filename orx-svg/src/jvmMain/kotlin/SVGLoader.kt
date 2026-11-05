@@ -411,8 +411,9 @@ internal class SVGLoader {
         val clips = SVGGradients.parseClipPaths(root)
         val markers = SVGGradients.parseMarkers(root)
         val masks = SVGGradients.parseMasks(root)
+        val filters = SVGFilters.parse(root)
         val servers: Map<String, Paint.Server> = gradients + patterns.mapValues { it.value.first }
-        return SVGGradients.usingMasks(masks.mapValues { it.value.first }) { SVGGradients.usingMarkers(markers.mapValues { it.value.first }) { SVGGradients.using(servers, clips.mapValues { it.value.first }) {
+        return SVGFilters.using(filters) { SVGGradients.usingMasks(masks.mapValues { it.value.first }) { SVGGradients.usingMarkers(markers.mapValues { it.value.first }) { SVGGradients.using(servers, clips.mapValues { it.value.first }) {
             val rootGroup = SVGSVGElement(root)
             // the content of patterns and clip paths can refer to gradients, patterns and clip paths too
             val contents = patterns.values.mapNotNull { (pattern, element) ->
@@ -421,7 +422,7 @@ internal class SVGLoader {
                     markers.values.map { (marker, element) -> marker.content to SVGGroup(element) } +
                     masks.values.map { (mask, element) -> mask.content to SVGGroup(element) }
             SVGDocument(rootGroup, namespaces, base, contents)
-        } } }
+        } } } }
     }
 
 //    private fun handleImage(group: SVGGroup, e: Element) {

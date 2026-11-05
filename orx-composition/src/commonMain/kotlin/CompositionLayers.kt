@@ -66,60 +66,67 @@ private var backdropBuffer: ColorBuffer? = null
 private val unusedTexture by lazy { colorBuffer(1, 1) }
 
 /**
+ * The blend modes of the W3C compositing and blending specification: layer_blend(mode, backdrop, source) blends
+ * straight colors, the mode is the ordinal of a [MixBlendMode]
+ */
+internal val blendFunctions = """
+vec3 layer_soft(vec3 b, vec3 s) {
+    vec3 d = mix(sqrt(b), ((16.0 * b - 12.0) * b + 4.0) * b, step(b, vec3(0.25)));
+    return mix(b + (2.0 * s - 1.0) * (d - b), b - (1.0 - 2.0 * s) * b * (1.0 - b), step(s, vec3(0.5)));
+}
+vec3 layer_hard(vec3 b, vec3 s) {
+    return mix(1.0 - 2.0 * (1.0 - s) * (1.0 - b), 2.0 * s * b, step(s, vec3(0.5)));
+}
+float layer_lum(vec3 c) { return dot(c, vec3(0.3, 0.59, 0.11)); }
+vec3 layer_clip(vec3 c) {
+    float l = layer_lum(c);
+    float n = min(c.r, min(c.g, c.b));
+    float x = max(c.r, max(c.g, c.b));
+    if (n < 0.0) c = l + (c - l) * l / max(l - n, 1e-6);
+    if (x > 1.0) c = l + (c - l) * (1.0 - l) / max(x - l, 1e-6);
+    return c;
+}
+vec3 layer_setLum(vec3 c, float l) { return layer_clip(c + (l - layer_lum(c))); }
+float layer_sat(vec3 c) { return max(c.r, max(c.g, c.b)) - min(c.r, min(c.g, c.b)); }
+vec3 layer_setSat(vec3 c, float s) {
+    float n = min(c.r, min(c.g, c.b));
+    float x = max(c.r, max(c.g, c.b));
+    return x > n ? (c - n) * s / (x - n) : vec3(0.0);
+}
+vec3 layer_blend(int mode, vec3 b, vec3 s) {
+    if (mode == 1) return b * s;
+    if (mode == 2) return b + s - b * s;
+    if (mode == 3) return layer_hard(s, b);
+    if (mode == 4) return min(b, s);
+    if (mode == 5) return max(b, s);
+    if (mode == 6) return mix(min(vec3(1.0), b / max(1.0 - s, 1e-6)), vec3(1.0), step(1.0, s)) * step(1e-6, b);
+    if (mode == 7) return mix(1.0 - min(vec3(1.0), (1.0 - b) / max(s, 1e-6)), vec3(0.0), step(s, vec3(0.0))) * (1.0 - step(1.0 - 1e-6, b)) + step(1.0 - 1e-6, b);
+    if (mode == 8) return layer_hard(b, s);
+    if (mode == 9) return layer_soft(b, s);
+    if (mode == 10) return abs(b - s);
+    if (mode == 11) return b + s - 2.0 * b * s;
+    if (mode == 12) return layer_setLum(layer_setSat(s, layer_sat(b)), layer_lum(b));
+    if (mode == 13) return layer_setLum(layer_setSat(b, layer_sat(s)), layer_lum(b));
+    if (mode == 14) return layer_setLum(s, layer_lum(b));
+    if (mode == 15) return layer_setLum(b, layer_lum(s));
+    return s;
+}
+""".trimIndent()
+
+/**
  * Composites a layer: multiplies its alpha by [opacity] and by the value of the mask, and blends it with the backdrop
  * by the mode, using the formulas of the W3C compositing and blending specification. The layer, the mask and the
  * backdrop have the size of the target, they are read at the fragment position.
  */
 private class LayerStyle : ShadeStyle() {
     init {
-        fragmentPreamble = """
-            vec3 layer_soft(vec3 b, vec3 s) {
-                vec3 d = mix(sqrt(b), ((16.0 * b - 12.0) * b + 4.0) * b, step(b, vec3(0.25)));
-                return mix(b + (2.0 * s - 1.0) * (d - b), b - (1.0 - 2.0 * s) * b * (1.0 - b), step(s, vec3(0.5)));
-            }
-            vec3 layer_hard(vec3 b, vec3 s) {
-                return mix(1.0 - 2.0 * (1.0 - s) * (1.0 - b), 2.0 * s * b, step(s, vec3(0.5)));
-            }
-            float layer_lum(vec3 c) { return dot(c, vec3(0.3, 0.59, 0.11)); }
-            vec3 layer_clip(vec3 c) {
-                float l = layer_lum(c);
-                float n = min(c.r, min(c.g, c.b));
-                float x = max(c.r, max(c.g, c.b));
-                if (n < 0.0) c = l + (c - l) * l / max(l - n, 1e-6);
-                if (x > 1.0) c = l + (c - l) * (1.0 - l) / max(x - l, 1e-6);
-                return c;
-            }
-            vec3 layer_setLum(vec3 c, float l) { return layer_clip(c + (l - layer_lum(c))); }
-            float layer_sat(vec3 c) { return max(c.r, max(c.g, c.b)) - min(c.r, min(c.g, c.b)); }
-            vec3 layer_setSat(vec3 c, float s) {
-                float n = min(c.r, min(c.g, c.b));
-                float x = max(c.r, max(c.g, c.b));
-                return x > n ? (c - n) * s / (x - n) : vec3(0.0);
-            }
+        fragmentPreamble = blendFunctions + "\n" + """
             vec3 layer_toSrgb(vec3 c) {
                 c = clamp(c, 0.0, 1.0);
                 return mix(1.055 * pow(c, vec3(1.0 / 2.4)) - 0.055, c * 12.92, step(c, vec3(0.0031308)));
             }
             vec3 layer_toLinear(vec3 c) {
                 return mix(pow((c + 0.055) / 1.055, vec3(2.4)), c / 12.92, step(c, vec3(0.04045)));
-            }
-            vec3 layer_blend(int mode, vec3 b, vec3 s) {
-                if (mode == 1) return b * s;
-                if (mode == 2) return b + s - b * s;
-                if (mode == 3) return layer_hard(s, b);
-                if (mode == 4) return min(b, s);
-                if (mode == 5) return max(b, s);
-                if (mode == 6) return mix(min(vec3(1.0), b / max(1.0 - s, 1e-6)), vec3(1.0), step(1.0, s)) * step(1e-6, b);
-                if (mode == 7) return mix(1.0 - min(vec3(1.0), (1.0 - b) / max(s, 1e-6)), vec3(0.0), step(s, vec3(0.0))) * (1.0 - step(1.0 - 1e-6, b)) + step(1.0 - 1e-6, b);
-                if (mode == 8) return layer_hard(b, s);
-                if (mode == 9) return layer_soft(b, s);
-                if (mode == 10) return abs(b - s);
-                if (mode == 11) return b + s - 2.0 * b * s;
-                if (mode == 12) return layer_setLum(layer_setSat(s, layer_sat(b)), layer_lum(b));
-                if (mode == 13) return layer_setLum(layer_setSat(b, layer_sat(s)), layer_lum(b));
-                if (mode == 14) return layer_setLum(s, layer_lum(b));
-                if (mode == 15) return layer_setLum(b, layer_lum(s));
-                return s;
             }
         """.trimIndent()
         fragmentTransform = """
@@ -133,6 +140,8 @@ private class LayerStyle : ShadeStyle() {
             } else if (p_maskType == 2) {
                 layer_mask = texture(p_mask, gl_FragCoord.xy / vec2(textureSize(p_mask, 0))).a;
             }
+            // the clip of a node with a filter applies to the result of the filter
+            if (p_clipped == 1) layer_mask *= texture(p_clip, gl_FragCoord.xy / vec2(textureSize(p_clip, 0))).r;
             float as = x_fill.a * p_opacity * layer_mask;
             if (p_mode == 0) {
                 x_fill.a = as;
@@ -156,7 +165,12 @@ private class LayerStyle : ShadeStyle() {
         """.trimIndent()
     }
 
-    fun set(opacity: Double, mask: ColorBuffer?, maskType: MaskType, mode: MixBlendMode, backdrop: ColorBuffer?) {
+    fun set(
+        opacity: Double, mask: ColorBuffer?, maskType: MaskType, mode: MixBlendMode, backdrop: ColorBuffer?,
+        clip: ColorBuffer?
+    ) {
+        parameter("clipped", if (clip == null) 0 else 1)
+        parameter("clip", clip ?: unusedTexture)
         parameter("opacity", opacity)
         parameter("maskType", if (mask == null) 0 else if (maskType == MaskType.LUMINANCE) 1 else 2)
         parameter("mask", mask ?: unusedTexture)
@@ -171,6 +185,7 @@ private val layerStyle by lazy { LayerStyle() }
 internal fun needsLayer(node: CompositionNode, opacity: Double): Boolean {
     val style = node.style
     if (style.mask !is MaskReference.None || style.mixBlendMode != MixBlendMode.NORMAL) return true
+    if (style.filter.value.isNotEmpty()) return true
     return when (node) {
         is GroupNode -> opacity < 1.0 || style.isolation == Isolation.ISOLATE
         // the stroke and the markers of a translucent shape do not show the fill under them
@@ -189,7 +204,7 @@ internal fun usesBlendModes(node: CompositionNode): Boolean =
 /**
  * Draws [content] on a layer and composites it with [opacity], the mask and the blend mode of [node]
  */
-internal fun Drawer.drawLayer(node: CompositionNode, opacity: Double, content: () -> Unit) {
+internal fun Drawer.drawLayer(node: CompositionNode, opacity: Double, clip: ColorBuffer? = null, content: () -> Unit) {
     val active = RenderTarget.active
     val layer = layerTargets.get(layerDepth, active)
     layerDepth++
@@ -197,6 +212,14 @@ internal fun Drawer.drawLayer(node: CompositionNode, opacity: Double, content: (
         isolatedWithTarget(layer) {
             clear(ColorRGBa.TRANSPARENT)
             content()
+        }
+        // the filters of the node are applied to what it draws
+        val filters = node.style.filter.value
+        val image = if (filters.isEmpty()) layer.colorBuffer(0) else {
+            val drawn = layer.colorBuffer(0)
+            val space = FilterSpace(projection * view * model, localBounds(node),
+                org.openrndr.math.Vector2(drawn.effectiveWidth.toDouble(), drawn.effectiveHeight.toDouble()))
+            applyFilters(filters, drawn, space, layerDepth - 1)
         }
         val mask = node.style.mask.value
         val maskBuffer = mask?.let { renderMask(it, node, active) ?: return }
@@ -214,8 +237,8 @@ internal fun Drawer.drawLayer(node: CompositionNode, opacity: Double, content: (
                 buffer
             }
         }
-        composite(layer.colorBuffer(0), opacity, maskBuffer, mask?.type ?: MaskType.LUMINANCE,
-            if (backdrop == null) MixBlendMode.NORMAL else mode, backdrop)
+        composite(image, opacity, maskBuffer, mask?.type ?: MaskType.LUMINANCE,
+            if (backdrop == null) MixBlendMode.NORMAL else mode, backdrop, clip)
     } finally {
         layerDepth--
     }
@@ -224,14 +247,14 @@ internal fun Drawer.drawLayer(node: CompositionNode, opacity: Double, content: (
 /** draws [layer] over the whole active target with the layer style */
 private fun Drawer.composite(
     layer: ColorBuffer, opacity: Double, mask: ColorBuffer?, maskType: MaskType, mode: MixBlendMode,
-    backdrop: ColorBuffer?
+    backdrop: ColorBuffer?, clip: ColorBuffer?
 ) {
     isolated {
         val active = RenderTarget.active
         ortho(active)
         view = Matrix44.IDENTITY
         model = Matrix44.IDENTITY
-        layerStyle.set(opacity, mask, maskType, mode, backdrop)
+        layerStyle.set(opacity, mask, maskType, mode, backdrop, clip)
         shadeStyle = layerStyle
         // a blended layer replaces the backdrop that it is blended with
         drawStyle.blendMode = if (backdrop != null) BlendMode.REPLACE else BlendMode.OVER

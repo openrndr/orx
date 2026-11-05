@@ -596,7 +596,15 @@ fun Drawer.composition(composition: Composition) {
                 textBounds = outerBounds
             }
         } }
-        if (layered) drawLayer(compositionNode, ownOpacity) { content() } else content()
+        if (layered) {
+            // a node with a filter is drawn without its clip, which applies to the result of the filter
+            val filtered = compositionNode.style.filter.value.isNotEmpty()
+            val clip = if (filtered) activeClip?.mask else null
+            if (filtered) activeClip = null
+            drawLayer(compositionNode, ownOpacity, clip) { content() }
+        } else {
+            content()
+        }
         if (clipPath is ClipPath.Shapes) clipDepth--
         activeClip = outerClip
         popModel()

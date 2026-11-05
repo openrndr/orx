@@ -170,6 +170,9 @@ internal sealed class SVGElement(element: Element?) {
                 TextDecoration(underline = "underline" in it, overline = "overline" in it, lineThrough = "line-through" in it)
             }
             Prop.MASK -> style.mask = SVGParse.mask(value)
+            Prop.FILTER -> style.filter = SVGFilters.filter(value, source)
+            // the color space of filters is read with the filter elements
+            Prop.COLOR_INTERPOLATION_FILTERS, Prop.FLOOD_COLOR, Prop.FLOOD_OPACITY -> {}
             Prop.MIX_BLEND_MODE -> MixBlendMode.of(value)?.let { style.mixBlendMode = it }
                 ?: logger.warn { "Unknown blend mode: $value" }
             Prop.ISOLATION -> style.isolation = if (value.trim() == "isolate") Isolation.ISOLATE else Isolation.AUTO
@@ -246,7 +249,8 @@ internal open class SVGGroup(val element: Element, val elements: MutableList<SVG
                 // patterns are drawn where they are referred to, see SVGGradients
                 // clip paths are applied where they are referred to, see SVGGradients
                 // masks are applied where they are referred to, see SVGGradients
-                "linearGradient", "radialGradient", "pattern", "clipPath", "marker", "mask" -> {}
+                // filters are applied where they are referred to, see SVGFilters
+                "linearGradient", "radialGradient", "pattern", "clipPath", "marker", "mask", "filter" -> {}
                 // style elements are applied before the elements are read, see SVGStyleSheet
                 "style", "title", "desc", "metadata" -> {}
                 in Tag.graphicsList -> elements.add(SVGPath(child))

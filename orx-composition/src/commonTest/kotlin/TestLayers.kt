@@ -41,4 +41,11 @@ class TestLayers {
         assertTrue(usesBlendModes(root))
         assertFalse(usesBlendModes(GroupNode().also { it.children.add(shape(fill = true, stroke = true)) }))
     }
+
+    @Test
+    fun layersFilters() {
+        val filtered = shape(fill = true, stroke = false)
+        filtered.style.filter = FilterReference.Value(listOf(FilterEffect(listOf(FilterPrimitive.Flood(ColorRGBa.RED)))))
+        assertTrue(needsLayer(filtered, 1.0))
+    }
 }

@@ -888,6 +888,7 @@ var Style.color by PropertyDelegate<Paint>(COLOR, INHERIT, Paint.RGB(ColorRGBa.B
 var Style.vectorEffect by PropertyDelegate<VectorEffect>(VECTOR_EFFECT, RESET, VectorEffect.None)
 var Style.clipPath by PropertyDelegate<ClipPath>(CLIP_PATH, RESET, ClipPath.None)
 var Style.mask by PropertyDelegate<MaskReference>(MASK, RESET, MaskReference.None)
+var Style.filter by PropertyDelegate<FilterReference>(FILTER, RESET, FilterReference.None)
 var Style.mixBlendMode by PropertyDelegate<MixBlendMode>(MIX_BLEND_MODE, RESET, MixBlendMode.NORMAL)
 var Style.isolation by PropertyDelegate<Isolation>(ISOLATION, RESET, Isolation.AUTO)
 var Style.clipRule by PropertyDelegate<FillRule>(CLIP_RULE, INHERIT, FillRule.NonZero)
@@ -989,6 +990,7 @@ enum class AttributeOrPropertyKey {
     CLIP_PATH { override fun toString() = "clip-path" },
     CLIP_RULE { override fun toString() = "clip-rule" },
     MASK { override fun toString() = "mask" },
+    FILTER { override fun toString() = "filter" },
     MIX_BLEND_MODE { override fun toString() = "mix-blend-mode" },
     ISOLATION { override fun toString() = "isolation" },
     MARKER_START { override fun toString() = "marker-start" },

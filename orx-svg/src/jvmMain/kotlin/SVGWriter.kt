@@ -1,5 +1,6 @@
 package org.openrndr.extra.svg
 
+import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ImageFileFormat
 import org.jsoup.nodes.*
 import org.openrndr.extra.composition.*
@@ -63,7 +64,7 @@ private fun Styleable.serialize(parentStyleable: Styleable? = null): String {
     val sb = StringBuilder()
 
     // properties that are not presentation attributes are written in a style attribute
-    val cssOnly = setOf(AttributeOrPropertyKey.MIX_BLEND_MODE, AttributeOrPropertyKey.ISOLATION)
+    val cssOnly = setOf(AttributeOrPropertyKey.MIX_BLEND_MODE, AttributeOrPropertyKey.ISOLATION, AttributeOrPropertyKey.FILTER)
     val css = this.properties.filter { (key, value) ->
         key in cssOnly && value.toString().isNotEmpty() &&
                 (parentStyleable == null || !this.isInherited(parentStyleable, key))
@@ -125,6 +126,7 @@ fun writeSVG(
     sb.appendClipPaths(composition, ids)
     sb.appendMarkers(composition, ids)
     sb.appendMasks(composition, ids)
+    sb.appendFilters(composition)
 
     sb.appendNodes(composition.root, ids)
     sb.append("</svg>")
@@ -457,8 +459,81 @@ private fun StringBuilder.appendClipPaths(composition: Composition, ids: WriterI
     for ((id, clip) in clips) {
         val units = if (clip.units == PaintUnits.BOUNDS) "objectBoundingBox" else "userSpaceOnUse"
         append("<clipPath id=\"$id\" clipPathUnits=\"$units\">")
-        appendNodes(clip.content, ids)
+        // a clip path holds shapes and text, not groups
+        for (child in clip.content.children) appendNodes(child, ids)
         append("</clipPath>")
+    }
+    append("</defs>\n")
+}
+
+/** the value of an input of a filter primitive */
+private fun FilterInput.svg(): String? = when (this) {
+    FilterInput.Previous -> null
+    FilterInput.SourceGraphic -> "SourceGraphic"
+    FilterInput.SourceAlpha -> "SourceAlpha"
+    is FilterInput.Result -> name
+    is FilterInput.Unsupported -> name
+}
+
+/** writes a defs element with the filters that the nodes of [composition] use, when they use any */
+private fun StringBuilder.appendFilters(composition: Composition) {
+    val filters = LinkedHashMap<String, FilterEffect>()
+    for (node in allNodes(composition.root)) {
+        for (effect in node.style.filter.value) filters.getOrPut(effect.svgId) { effect }
+    }
+    if (filters.isEmpty()) return
+    fun n(v: Double) = v.toString()
+    fun color(c: ColorRGBa) = "flood-color=\"${Paint.RGB(c.copy(alpha = 1.0))}\" flood-opacity=\"${c.alpha}\""
+    append("<defs>")
+    for ((id, effect) in filters) {
+        val regionUnits = if (effect.regionUnits == PaintUnits.BOUNDS) "objectBoundingBox" else "userSpaceOnUse"
+        val primitiveUnits = if (effect.primitiveUnits == PaintUnits.BOUNDS) "objectBoundingBox" else "userSpaceOnUse"
+        // a filter without a region is applied everywhere, a region far beyond what is drawn stands in for it
+        val r = effect.region ?: if (effect.regionUnits == PaintUnits.BOUNDS) org.openrndr.shape.Rectangle(-1E4, -1E4, 2E4, 2E4)
+            else org.openrndr.shape.Rectangle(-1E7, -1E7, 2E7, 2E7)
+        append("<filter id=\"$id\" filterUnits=\"$regionUnits\" primitiveUnits=\"$primitiveUnits\" ")
+        append("x=\"${r.x}\" y=\"${r.y}\" width=\"${r.width}\" height=\"${r.height}\">")
+        for (p in effect.primitives) {
+            val common = listOfNotNull(
+                p.inputs.getOrNull(0)?.svg()?.let { "in=\"$it\"" }.takeIf { p !is FilterPrimitive.Merge },
+                p.inputs.getOrNull(1)?.svg()?.let { "in2=\"$it\"" }.takeIf { p !is FilterPrimitive.Merge },
+                p.result?.let { "result=\"$it\"" },
+                if (p.colorSpace == FilterColorSpace.SRGB) "color-interpolation-filters=\"sRGB\"" else null
+            ).joinToString(" ")
+            fun element(tag: String, attributes: String, children: String = "") =
+                if (children.isEmpty()) append("<$tag $common $attributes/>") else append("<$tag $common $attributes>$children</$tag>")
+            when (p) {
+                is FilterPrimitive.GaussianBlur -> element("feGaussianBlur", "stdDeviation=\"${n(p.stdDeviation.x)} ${n(p.stdDeviation.y)}\"")
+                is FilterPrimitive.Offset -> element("feOffset", "dx=\"${n(p.dx)}\" dy=\"${n(p.dy)}\"")
+                is FilterPrimitive.Flood -> element("feFlood", color(p.color))
+                is FilterPrimitive.Merge -> element("feMerge", "", p.inputs.joinToString("") { i ->
+                    i.svg()?.let { "<feMergeNode in=\"$it\"/>" } ?: "<feMergeNode/>"
+                })
+                is FilterPrimitive.Composite -> element("feComposite", "operator=\"${p.operator.name.lowercase()}\" " +
+                        "k1=\"${n(p.k1)}\" k2=\"${n(p.k2)}\" k3=\"${n(p.k3)}\" k4=\"${n(p.k4)}\"")
+                is FilterPrimitive.Blend -> element("feBlend", "mode=\"${p.mode}\"")
+                is FilterPrimitive.ColorMatrix -> element("feColorMatrix", "type=\"matrix\" values=\"${p.values.joinToString(" ")}\"")
+                is FilterPrimitive.ComponentTransfer -> {
+                    fun function(tag: String, f: FilterPrimitive.TransferFunction) = when (f) {
+                        FilterPrimitive.TransferFunction.Identity -> ""
+                        is FilterPrimitive.TransferFunction.Table -> "<$tag type=\"table\" tableValues=\"${f.values.joinToString(" ")}\"/>"
+                        is FilterPrimitive.TransferFunction.Discrete -> "<$tag type=\"discrete\" tableValues=\"${f.values.joinToString(" ")}\"/>"
+                        is FilterPrimitive.TransferFunction.Linear -> "<$tag type=\"linear\" slope=\"${f.slope}\" intercept=\"${f.intercept}\"/>"
+                        is FilterPrimitive.TransferFunction.Gamma -> "<$tag type=\"gamma\" amplitude=\"${f.amplitude}\" exponent=\"${f.exponent}\" offset=\"${f.offset}\"/>"
+                    }
+                    val children = function("feFuncR", p.red) + function("feFuncG", p.green) + function("feFuncB", p.blue) + function("feFuncA", p.alpha)
+                    if (children.isEmpty()) element("feComponentTransfer", "") else element("feComponentTransfer", "", children)
+                }
+                is FilterPrimitive.Morphology -> element("feMorphology", "operator=\"${if (p.dilate) "dilate" else "erode"}\" radius=\"${n(p.radius.x)} ${n(p.radius.y)}\"")
+                is FilterPrimitive.DropShadow -> element("feDropShadow", "dx=\"${n(p.dx)}\" dy=\"${n(p.dy)}\" " +
+                        "stdDeviation=\"${n(p.stdDeviation.x)} ${n(p.stdDeviation.y)}\" ${color(p.color)}")
+                is FilterPrimitive.Turbulence -> element("feTurbulence", "type=\"${if (p.fractalNoise) "fractalNoise" else "turbulence"}\" " +
+                        "baseFrequency=\"${n(p.baseFrequency.x)} ${n(p.baseFrequency.y)}\" numOctaves=\"${p.octaves}\" seed=\"${n(p.seed)}\"")
+                is FilterPrimitive.DisplacementMap -> element("feDisplacementMap", "scale=\"${n(p.scale)}\" " +
+                        "xChannelSelector=\"${p.xChannel}\" yChannelSelector=\"${p.yChannel}\"")
+            }
+        }
+        append("</filter>")
     }
     append("</defs>\n")
 }
