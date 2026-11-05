@@ -341,12 +341,13 @@ internal object SVGParse {
         // y-end
         val ye = dy + height
 
+        // like SVG, the outline starts at the right and runs to the bottom first, dash patterns start there
         return listOf(
-            Command("M", dx, y),
-            Command("C", dx, y - oy, x - ox, dy, x, dy),
-            Command("C", x + ox, dy, xe, y - oy, xe, y),
+            Command("M", xe, y),
             Command("C", xe, y + oy, x + ox, ye, x, ye),
             Command("C", x - ox, ye, dx, y + oy, dx, y),
+            Command("C", dx, y - oy, x - ox, dy, x, dy),
+            Command("C", x + ox, dy, xe, y - oy, xe, y),
             Command("z")
         )
     }
