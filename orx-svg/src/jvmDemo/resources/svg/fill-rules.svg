@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+  <rect x="0" y="0" width="720" height="480" fill="#f4efe6"/>
+  <g font-family="Plex" font-size="18" fill="#202020">
+    <text x="20" y="40">nonzero</text>
+    <text x="20" y="270">evenodd</text>
+    <text x="118" y="460">self-intersecting</text>
+    <text x="345" y="460">same winding</text>
+    <text x="515" y="460">opposite winding</text>
+  </g>
+  <!-- the same geometry in two rows: nonzero (the SVG default) on top, evenodd at the bottom -->
+  <g id="nonzero" fill-rule="nonzero" stroke="#202020" stroke-width="2" stroke-linejoin="round">
+    <!-- a pentagram: its center is surrounded twice -->
+    <path d="M 210 60 L 257 205 L 134 115 L 286 115 L 163 205 Z" fill="#e8574a"/>
+    <!-- a square with a hole that turns the same way as the outline -->
+    <path d="M 340 60 h 140 v 140 h -140 z M 375 95 h 70 v 70 h -70 z" fill="#3d5a99"/>
+    <!-- a square with a hole that turns the other way -->
+    <path d="M 520 60 h 140 v 140 h -140 z M 555 95 v 70 h 70 v -70 z" fill="#4c9e8a"/>
+  </g>
+  <g id="evenodd" fill-rule="evenodd" stroke="#202020" stroke-width="2" stroke-linejoin="round">
+    <path d="M 210 290 L 257 435 L 134 345 L 286 345 L 163 435 Z" fill="#e8574a"/>
+    <path d="M 340 290 h 140 v 140 h -140 z M 375 325 h 70 v 70 h -70 z" fill="#3d5a99"/>
+    <path d="M 520 290 h 140 v 140 h -140 z M 555 325 v 70 h 70 v -70 z" fill="#4c9e8a"/>
+  </g>
+</svg>
