@@ -33,9 +33,10 @@ internal object CompositionText {
     private val failedFonts = mutableSetOf<String>()
 
     // text is drawn in a single color, gradients and other paints are drawn in the color that stands in for them
-    private fun Paint.color(opacity: Double): ColorRGBa? = when (this) {
-        is Paint.RGB -> value.copy(alpha = 1.0).opacify(opacity)
+    private fun Paint.color(opacity: Double, style: Style): ColorRGBa? = when (this) {
+        is Paint.RGB -> value.opacify(opacity)
         is Paint.Server -> value?.copy(alpha = 1.0)?.opacify(opacity)
+        is Paint.CurrentColor -> currentColor(style)?.opacify(opacity)
         else -> null
     }
 
@@ -81,7 +82,7 @@ internal object CompositionText {
         val opacity = opacity(node)
         fun color(paint: Paint, paintOpacity: Double): ColorRGBa? = when (paint) {
             is Paint.Server -> ColorRGBa.WHITE.opacify(paintOpacity)
-            else -> paint.color(paintOpacity)
+            else -> paint.color(paintOpacity, style)
         }
         val fill = color(style.fill, opacity * ((style.fillOpacity as? Numeric.Rational)?.value ?: 1.0))
         val stroke = color(style.stroke, opacity * ((style.strokeOpacity as? Numeric.Rational)?.value ?: 1.0))
@@ -188,7 +189,8 @@ internal object CompositionText {
         val visible = layout.glyphs.filter { it.style.fill != null || it.style.stroke != null }
         // a run that is not part of a text element is a text of its own
         val bounds = textBounds ?: layout.glyphs.flatMap { cell(it) }.takeIf { it.isNotEmpty() }?.bounds
-        if (visible.isNotEmpty() && applyPaints(drawer, style, bounds)) {
+        // hidden text is laid out, text after it continues after it, but it is not drawn
+        if (visible.isNotEmpty() && style.visibility.value && applyPaints(drawer, style, bounds)) {
             slugTextDrawer.clear()
             slugTextDrawer.addGlyphs(visible)
             slugTextDrawer.draw(drawer)
@@ -246,8 +248,11 @@ internal object CompositionText {
         val bounds = textBounds ?: all.glyphs.flatMap { cell(it.glyph, it.transform) }.takeIf { it.isNotEmpty() }?.bounds
         // the runs are drawn in groups that share their paints
         val groups = runs.groupBy { servers(it.effectiveStyle) }
+        fun shown(run: TextNode) = run.effectiveStyle.visibility.value
+        val anyHidden = runs.any { !shown(it) }
         for ((paints, groupRuns) in groups) {
-            val layout = if (groups.size == 1) all else layoutOnContour(runs, pen) { it in groupRuns } ?: continue
+            val layout = if (groups.size == 1 && !anyHidden) all else
+                layoutOnContour(runs, pen) { it in groupRuns && shown(it) } ?: continue
             val visible = layout.glyphs.filter { it.glyph.style.fill != null || it.glyph.style.stroke != null }
             if (visible.isEmpty()) continue
             drawer.pushStyle()

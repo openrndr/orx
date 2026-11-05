@@ -142,6 +142,9 @@ private fun Drawer.patternTile(pattern: Paint.Pattern, tile: Rectangle, bounds: 
     return texture
 }
 
+/** the color of [style] that [Paint.CurrentColor] refers to */
+internal fun currentColor(style: Style): ColorRGBa? = (style.color as? Paint.RGB)?.value
+
 /** true when [style] draws anything: it has code */
 private fun hasCode(style: ShadeStyle): Boolean =
     !style.fragmentTransform.isNullOrBlank() || !style.vertexTransform.isNullOrBlank() ||
@@ -159,6 +162,9 @@ fun Drawer.composition(composition: Composition) {
     pushModel()
     pushStyle()
 
+    // the model the composition is drawn with, strokes that do not scale keep their weight in its coordinates
+    val baseModel = model
+
     // viewBox transformation
     model *= composition.calculateViewportTransform()
 
@@ -169,6 +175,8 @@ fun Drawer.composition(composition: Composition) {
     var textBounds: Rectangle? = null
 
     fun node(compositionNode: CompositionNode) {
+        // a node with display none is not drawn, nor are the nodes in it
+        if (compositionNode.style.display == Display.None) return
         pushModel()
         pushStyle()
         model *= compositionNode.style.transform.value
@@ -182,10 +190,10 @@ fun Drawer.composition(composition: Composition) {
 
                 style.stroke.let {
                     stroke = when (it) {
-                        is Paint.RGB -> it.value.copy(alpha = 1.0)
+                        is Paint.RGB -> it.value
                         is Paint.Server -> ColorRGBa.WHITE
                         Paint.None -> null
-                        Paint.CurrentColor -> null
+                        Paint.CurrentColor -> currentColor(style)
                     }
                 }
                 style.strokeOpacity.let {
@@ -197,6 +205,12 @@ fun Drawer.composition(composition: Composition) {
                     strokeWeight = when (it) {
                         is Length.Pixels -> it.value
                         is Length.Percent -> composition.normalizedDiagonalLength() * it.value / 100.0
+                    }
+                    // a stroke that does not scale keeps its weight in the coordinates the composition is drawn in
+                    if (style.vectorEffect == VectorEffect.NonScalingStroke) {
+                        val m = baseModel.inversed * model
+                        val scale = sqrt(abs(m.c0r0 * m.c1r1 - m.c0r1 * m.c1r0))
+                        if (scale > 0.0) strokeWeight /= scale
                     }
                 }
                 style.miterLimit.let {
@@ -213,10 +227,10 @@ fun Drawer.composition(composition: Composition) {
                 fillRule = style.fillRule.value
                 style.fill.let {
                     fill = when (it) {
-                        is Paint.RGB -> it.value.copy(alpha = 1.0)
+                        is Paint.RGB -> it.value
                         is Paint.Server -> ColorRGBa.WHITE
                         is Paint.None -> null
-                        is Paint.CurrentColor -> null
+                        is Paint.CurrentColor -> currentColor(style)
                     }
                 }
                 // gradients and other paints are drawn by a paint style, which takes the alpha of the fill and stroke
@@ -245,9 +259,11 @@ fun Drawer.composition(composition: Composition) {
                     .fold(1.0) { acc, node -> acc * ((node.style.opacity as? Numeric.Rational)?.value ?: 1.0) }
                 stroke = stroke?.opacify(opacity)
                 fill = fill?.opacify(opacity)
-                shape(compositionNode.shape)
+                if (style.visibility.value) {
+                    shape(compositionNode.shape)
+                }
             }
-            is ImageNode -> {
+            is ImageNode -> if (compositionNode.effectiveStyle.visibility.value) {
                 val image = compositionNode.image
                 val source = compositionNode.source ?: Rectangle(0.0, 0.0, image.width.toDouble(), image.height.toDouble())
                 val target = Rectangle(compositionNode.x, compositionNode.y, compositionNode.width, compositionNode.height)

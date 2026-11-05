@@ -458,14 +458,16 @@ class CompositionDrawer(
 
                     else -> error("unreachable")
                 }
-                shapeNode.stroke = stroke
+                // colors without their opacities, which are set as opacities
+                shapeNode.stroke = drawStyle.stroke
                 shapeNode.strokeOpacity = strokeOpacity
                 shapeNode.strokeWeight = strokeWeight
                 shapeNode.miterLimit = miterlimit
                 shapeNode.lineCap = lineCap
                 shapeNode.lineJoin = lineJoin
-                shapeNode.fill = fill
+                shapeNode.fill = drawStyle.fill
                 shapeNode.fillOpacity = fillOpacity
+                if (drawStyle.opacity != 1.0) shapeNode.opacity = drawStyle.opacity
                 shapeNode.style.fillRule = when (drawStyle.fillRule) {
                     org.openrndr.shape.FillRule.NON_ZERO -> FillRule.NonZero
                     org.openrndr.shape.FillRule.EVEN_ODD -> FillRule.EvenOdd

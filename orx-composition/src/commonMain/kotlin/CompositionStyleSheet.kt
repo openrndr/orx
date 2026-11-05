@@ -39,10 +39,9 @@ sealed interface Paint : AttributeOrPropertyValue {
         }
     }
 
-    // This one is kept just in case, it's not handled in any way yet
+    /** the value of the color property, like SVG's currentColor; it has no color of its own */
     object CurrentColor : Paint {
-        override val value: ColorRGBa
-            get() = TODO("Not yet implemented")
+        override val value: ColorRGBa? = null
 
         override fun toString(): String = "currentcolor"
     }
@@ -269,6 +268,24 @@ sealed interface Visibility : AttributeOrPropertyValue {
     object Collapse : Visibility {
         override val value = false
         override fun toString() = "collapse"
+    }
+}
+
+/**
+ * Effects on the rendering of shapes, like the vector-effect property of SVG
+ */
+sealed interface VectorEffect : AttributeOrPropertyValue {
+    override val value: Boolean
+
+    object None : VectorEffect {
+        override val value = false
+        override fun toString() = "none"
+    }
+
+    /** the stroke weight is not scaled by the transforms of the shape and its groups */
+    object NonScalingStroke : VectorEffect {
+        override val value = true
+        override fun toString() = "non-scaling-stroke"
     }
 }
 
@@ -528,6 +545,10 @@ var Style.lineJoin by PropertyDelegate<LineJoin>(STROKE_LINEJOIN, INHERIT, LineJ
 var Style.fill by PropertyDelegate<Paint>(FILL, INHERIT, Paint.RGB(ColorRGBa.BLACK))
 var Style.fillOpacity by PropertyDelegate<Numeric>(FILL_OPACITY, INHERIT, Numeric.Rational(1.0))
 var Style.fillRule by PropertyDelegate<FillRule>(FILL_RULE, INHERIT, FillRule.NonZero)
+
+/** the color that [Paint.CurrentColor] refers to, like the color property of SVG */
+var Style.color by PropertyDelegate<Paint>(COLOR, INHERIT, Paint.RGB(ColorRGBa.BLACK))
+var Style.vectorEffect by PropertyDelegate<VectorEffect>(VECTOR_EFFECT, RESET, VectorEffect.None)
 
 var Style.transform by PropertyDelegate<Transform>(TRANSFORM, RESET, Transform.None)
 
