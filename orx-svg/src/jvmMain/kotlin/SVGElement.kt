@@ -31,6 +31,15 @@ internal sealed class SVGElement(element: Element?) {
                 else -> org.openrndr.extra.composition.FillRule.NonZero
             }
             Prop.OPACITY -> style.opacity = SVGParse.number(value)
+            Prop.COLOR -> style.color = SVGParse.color(value)
+            Prop.DISPLAY -> style.display = if (value.trim() == "none") Display.None else Display.Inline
+            Prop.VISIBILITY -> style.visibility = when (value.trim()) {
+                "hidden" -> Visibility.Hidden
+                "collapse" -> Visibility.Collapse
+                else -> Visibility.Visible
+            }
+            Prop.VECTOR_EFFECT -> style.vectorEffect =
+                if (value.trim() == "non-scaling-stroke") VectorEffect.NonScalingStroke else VectorEffect.None
             Prop.FONT_FAMILY -> style.fontFamily = FontFamily(
                 value.split(",").map { it.trim().trim('"', '\'') }.filter { it.isNotEmpty() }
             )
@@ -84,6 +93,9 @@ internal class SVGSVGElement(element: Element) : SVGGroup(element) {
 /** <g> element but practically works with anything that has child elements */
 internal open class SVGGroup(val element: Element, val elements: MutableList<SVGElement> = mutableListOf()) :
     SVGElement(element) {
+    /** the child elements that are read, all of them */
+    protected open fun children(): List<Element> = element.children()
+
 
     init {
         this.element.attributes().forEach {
@@ -98,14 +110,20 @@ internal open class SVGGroup(val element: Element, val elements: MutableList<SVG
     }
 
     private fun handleChildren() {
-        this.element.children().forEach { child ->
+        children().forEach { child ->
             when (child.tagName()) {
                 "image" -> elements.add(SVGImage(child))
                 "text" -> elements.add(SVGText(child, topLevel = true))
                 "defs" -> elements.add(SVGDefs(child))
+                // symbols are drawn where use elements refer to them
+                "symbol" -> elements.add(SVGSymbol(child))
+                "use" -> elements.add(SVGUse(child))
+                "switch" -> elements.add(SVGSwitch(child))
                 // gradients are read before the elements are, see SVGGradients
                 // patterns are drawn where they are referred to, see SVGGradients
                 "linearGradient", "radialGradient", "pattern" -> {}
+                // style elements are applied before the elements are read, see SVGStyleSheet
+                "style", "title", "desc", "metadata" -> {}
                 in Tag.graphicsList -> elements.add(SVGPath(child))
                 else -> elements.add(SVGGroup(child))
             }
@@ -192,6 +210,54 @@ internal class SVGImage(val element: Element? = null) : SVGElement(element) {
  * <defs> element, its contents are not rendered but can be referenced, for example by textPath elements
  */
 internal class SVGDefs(element: Element) : SVGGroup(element)
+
+/**
+ * <symbol> element, its contents are rendered where a use element refers to it, fitted into the viewport of the use
+ * element by its view box
+ */
+internal class SVGSymbol(element: Element) : SVGGroup(element) {
+    val viewBox: org.openrndr.shape.Rectangle? = (SVGParse.viewBox(element) as? ViewBox.Value)?.value
+    val aspectRatio: AspectRatio = SVGParse.preserveAspectRatio(element)
+}
+
+/**
+ * <switch> element: only its first child element is rendered. Conditional attributes are not evaluated, the first
+ * child is taken to apply.
+ */
+internal class SVGSwitch(element: Element) : SVGGroup(element) {
+    override fun children(): List<Element> = element.children().take(1)
+}
+
+/**
+ * <use> element: renders the element that [href] refers to, moved by [x] and [y]; a symbol is fitted into [width]
+ * and [height]
+ */
+internal class SVGUse(val element: Element) : SVGElement(element) {
+    val href: String? = listOf("href", "xlink:href").firstNotNullOfOrNull { name ->
+        element.attr(name).trim().takeIf { it.startsWith("#") }?.removePrefix("#")
+    }
+
+    private fun length(name: String): Double? =
+        element.attr(name).trim().takeIf { it.isNotEmpty() && !it.endsWith("%") }?.let { SVGParse.length(it).value }
+
+    val x = length("x") ?: 0.0
+    val y = length("y") ?: 0.0
+    val width = length("width")
+    val height = length("height")
+
+    override fun handleAttribute(attribute: Attribute) {
+        when (attribute.key) {
+            in Prop.list -> styleProperty(attribute.key, attribute.value)
+        }
+    }
+
+    init {
+        element.attributes().forEach {
+            if (it.key == Attr.STYLE) inlineStyles(it) else handleAttribute(it)
+        }
+        style.transform = SVGParse.transform(element)
+    }
+}
 
 /**
  * A run of characters of a text element. A run without a position continues after the previous run.

@@ -53,6 +53,12 @@ fun parseSVG(svgString: String, base: URI? = null): Composition {
     return document.composition()
 }
 
+/**
+ * A copy of this style: the nodes of the elements of a document get their own styles, an element that is used more
+ * than once, by use elements, becomes nodes with independent styles
+ */
+private fun Style.copy(): Style = Style().also { it.properties.putAll(properties) }
+
 internal class SVGDocument(
     private val root: SVGSVGElement,
     val namespaces: Map<String, String>,
@@ -63,7 +69,7 @@ internal class SVGDocument(
         convertElement(root).also {
             // the content of patterns is converted like the elements of the document
             for ((pattern, group) in patternContents) {
-                pattern.content.style = group.style
+                pattern.content.style = group.style.copy()
                 group.elements.mapTo(pattern.content.children) { element ->
                     convertElement(element).also { node -> node.parent = pattern.content }
                 }
@@ -77,18 +83,19 @@ internal class SVGDocument(
     }
 
     private fun convertElement(svgElem: SVGElement): CompositionNode = when (svgElem) {
-        // the contents of defs elements are not rendered
-        is SVGDefs -> GroupNode().apply {
+        // the contents of defs and symbol elements are not rendered where they are defined
+        is SVGDefs, is SVGSymbol -> GroupNode().apply {
             this.id = svgElem.id
         }
+        is SVGUse -> convertUse(svgElem)
         is SVGGroup -> GroupNode().apply {
-            style = svgElem.style
+            style = svgElem.style.copy()
             this.id = svgElem.id
             svgElem.elements.mapTo(children) { convertElement(it).also { x -> x.parent = this@apply } }
         }
         is SVGPath -> {
             ShapeNode(svgElem.shape()).apply {
-                style = svgElem.style
+                style = svgElem.style.copy()
                 this.id = svgElem.id
             }
         }
@@ -96,12 +103,75 @@ internal class SVGDocument(
         is SVGTextRun -> TextNode(svgElem.text, null, svgElem.x, svgElem.y, svgElem.dx, svgElem.dy)
         is SVGImage -> {
             imageNode(svgElem).apply {
-                style = svgElem.style
+                style = svgElem.style.copy()
                 this.id = svgElem.id
             }
         }
     }.apply {
         transform = svgElem.style.transform.value
+    }
+
+    /** the elements of the document by their id, including the elements in defs and symbol elements */
+    private val elementsById: Map<String, SVGElement> by lazy {
+        val elements = mutableMapOf<String, SVGElement>()
+        fun collect(element: SVGElement) {
+            if (element.id.isNotEmpty()) elements.putIfAbsent(element.id, element)
+            when (element) {
+                is SVGGroup -> element.elements.forEach(::collect)
+                is SVGText -> element.elements.forEach(::collect)
+                else -> {}
+            }
+        }
+        collect(root)
+        elements
+    }
+
+    /** the use elements that are being converted, a use element that refers to an element it is in is not drawn */
+    private val usesInProgress = mutableSetOf<SVGUse>()
+
+    /**
+     * Converts a use element to a group with a copy of the element it refers to, moved by its x and y. A symbol is
+     * fitted into the width and height of the use element, by default the size of the document.
+     */
+    private fun convertUse(use: SVGUse): GroupNode = GroupNode().apply {
+        style = use.style.copy()
+        this.id = use.id
+        val target = use.href?.let { elementsById[it] }
+        if (target == null) {
+            logger.warn { "use refers to '#${use.href}', which is not an element in the document" }
+            return@apply
+        }
+        if (use in usesInProgress) {
+            logger.warn { "use refers to '#${use.href}', which contains it" }
+            return@apply
+        }
+        usesInProgress.add(use)
+        try {
+            val content = if (target is SVGSymbol) {
+                val width = use.width ?: root.bounds.dimensions.x
+                val height = use.height ?: root.bounds.dimensions.y
+                GroupNode().also { symbol ->
+                    symbol.style = target.style.copy()
+                    symbol.transform = target.viewBox?.let {
+                        viewportTransform(it, org.openrndr.shape.Rectangle(0.0, 0.0, width, height), target.aspectRatio)
+                    } ?: org.openrndr.math.Matrix44.IDENTITY
+                    target.elements.mapTo(symbol.children) { convertElement(it).also { node -> node.parent = symbol } }
+                }
+            } else {
+                convertElement(target)
+            }
+            content.parent = this
+            // the position moves the copy, after the transform of the use element
+            val translated = GroupNode().also {
+                it.transform = org.openrndr.math.transforms.buildTransform { translate(use.x, use.y, 0.0) }
+                it.parent = this
+                content.parent = it
+                it.children.add(content)
+            }
+            children.add(translated)
+        } finally {
+            usesInProgress.remove(use)
+        }
     }
 
     /** the paths of the document by their id, including the paths in defs elements */
@@ -140,7 +210,7 @@ internal class SVGDocument(
      * rendered.
      */
     private fun convertText(svgText: SVGText, pathText: PathText?): GroupNode = GroupNode().apply {
-        style = svgText.style
+        style = svgText.style.copy()
         this.id = svgText.id
         val href = svgText.pathHref
         val path = if (href != null) {
@@ -273,6 +343,8 @@ internal class SVGLoader {
         val namespaces = root.attributes().filter { it.key.startsWith("xmlns") }.associate {
             Pair(it.key, it.value)
         }
+        // the rules of style elements are applied to the elements they select before the elements are read
+        SVGStyleSheet.apply(root)
         // gradients and patterns are collected first, elements can refer to them before they are defined
         val gradients = SVGGradients.parse(root)
         val patterns = SVGGradients.parsePatterns(root)

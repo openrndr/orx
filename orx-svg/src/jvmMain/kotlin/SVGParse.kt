@@ -461,61 +461,61 @@ internal object SVGParse {
                 ?: match.groupValues[2].trim().takeIf { it.isNotEmpty() }?.let { color(it) }
                 ?: Paint.None
         }
-        val col = colorValue.lowercase()
+        val col = colorValue.trim().lowercase()
 
         return when {
-            col.isEmpty() -> Paint.None
-            col.startsWith("#") -> {
-                val normalizedColor = normalizeColorHex(col) ?: return Paint.None
-                val v = normalizedColor.toLong(radix = 16)
-                val vi = v.toInt()
-                val r = vi shr 16 and 0xff
-                val g = vi shr 8 and 0xff
-                val b = vi and 0xff
-                Paint.RGB(ColorRGBa(r / 255.0, g / 255.0, b / 255.0, linearity = Linearity.SRGB))
-            }
-            col.startsWith("rgb(") -> rgbFunction(col)
+            col.isEmpty() || col == "none" -> Paint.None
+            col == "currentcolor" -> Paint.CurrentColor
+            col == "transparent" -> Paint.RGB(ColorRGBa(0.0, 0.0, 0.0, 0.0, linearity = Linearity.SRGB))
+            col.startsWith("#") -> hexColor(col.drop(1))?.let { Paint.RGB(it) } ?: Paint.None
+            Regex("^(rgba?|hsla?)\\((.*)\\)$").matchEntire(col) != null -> functionalColor(col)?.let { Paint.RGB(it) } ?: Paint.None
             col in cssColorNames -> Paint.RGB(ColorRGBa.fromHex(cssColorNames[col]!!))
             else -> Paint.None
         }
     }
 
-    private fun normalizeColorHex(colorHex: String): String? {
-        val matchResult = PropertyRegex.RGBHex.regex.matchEntire(colorHex) ?: return null
-
-        val hexValue = matchResult.groups[1]!!.value.lowercase()
-        val normalizedArgb = when (hexValue.length) {
-            3 -> expandToTwoDigitsPerComponent("f$hexValue")
-            6 -> hexValue
+    /** a hexadecimal color of 3, 4, 6 or 8 digits: rgb, rgba, rrggbb or rrggbbaa */
+    private fun hexColor(hex: String): ColorRGBa? {
+        if (!hex.all { it in "0123456789abcdef" }) return null
+        val digits = when (hex.length) {
+            3, 4 -> hex.map { "$it$it" }
+            6, 8 -> hex.chunked(2)
             else -> return null
-        }
-
-        return normalizedArgb
+        }.map { it.toInt(16) / 255.0 }
+        return ColorRGBa(digits[0], digits[1], digits[2], digits.getOrElse(3) { 1.0 }, linearity = Linearity.SRGB)
     }
 
     /**
-     * Parses rgb functional notation as described in CSS2 spec
+     * A color in functional notation: rgb(), rgba(), hsl() or hsla(), with arguments separated by commas or spaces and
+     * an optional alpha, after a slash in the space separated syntax
      */
-    private fun rgbFunction(rgbValue: String): Paint {
+    private fun functionalColor(value: String): ColorRGBa? {
+        val name = value.substringBefore("(")
+        val arguments = value.substringAfter("(").substringBeforeLast(")")
+            .split(Regex("[\\s,/]+")).filter { it.isNotEmpty() }
+        if (arguments.size !in 3..4) return null
 
-        val result =
-            PropertyRegex.RGBFunctional.regex.matchEntire(rgbValue) ?: return Paint.None
+        /** a number, or a percentage of [full] */
+        fun component(argument: String, full: Double): Double? =
+            if (argument.endsWith("%")) argument.dropLast(1).toDoubleOrNull()?.let { it / 100.0 * full }
+            else argument.toDoubleOrNull()
 
-        // The first three capture groups contain values if the match was without percentages
-        // Otherwise the values are in capture groups #4 to #6.
-        // Based on this information, we can deduce the divisor.
-        val divisor = if (result.groups[1] == null) {
-            100.0
+        val alpha = arguments.getOrNull(3)?.let { component(it, 1.0) ?: return null }?.coerceIn(0.0, 1.0) ?: 1.0
+        return if (name.startsWith("rgb")) {
+            val (r, g, b) = arguments.take(3).map { (component(it, 255.0) ?: return null).coerceIn(0.0, 255.0) / 255.0 }
+            ColorRGBa(r, g, b, alpha, linearity = Linearity.SRGB)
         } else {
-            255.0
+            val hue = arguments[0].removeSuffix("deg").toDoubleOrNull() ?: return null
+            val saturation = (component(arguments[1], 1.0) ?: return null).coerceIn(0.0, 1.0)
+            val lightness = (component(arguments[2], 1.0) ?: return null).coerceIn(0.0, 1.0)
+            // hsl to rgb, as in CSS Color 4
+            fun f(n: Double): Double {
+                val k = (n + hue / 30.0).mod(12.0)
+                val a = saturation * min(lightness, 1.0 - lightness)
+                return lightness - a * max(-1.0, min(k - 3.0, min(9.0 - k, 1.0)))
+            }
+            ColorRGBa(f(0.0), f(8.0), f(4.0), alpha, linearity = Linearity.SRGB)
         }
-
-        // Drop full match, filter out empty matches, map it, deconstruct it
-        val (r, g, b) = result.groupValues
-            .drop(1)
-            .filter(String::isNotBlank)
-            .map { it.toDouble().coerceIn(0.0..divisor) / divisor }
-        return Paint.RGB(ColorRGBa(r, g, b, linearity = Linearity.SRGB))
     }
 
     private fun expandToTwoDigitsPerComponent(hexValue: String) =

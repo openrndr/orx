@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="720" height="480" viewBox="0 0 720 480">
+  <style>
+    /* classes, types, ids and descendants, like design tools export */
+    .card { fill: #f4efe6; stroke: #202020; stroke-width: 2; }
+    .accent { fill: #e8574a; }
+    rect.accent { stroke: none; }
+    #special { fill: #3d5a99; }
+    .row circle { fill: #4c9e8a; }
+    @media print { .card { fill: black; } }
+  </style>
+  <defs>
+    <symbol id="star" viewBox="0 0 100 100">
+      <path d="M 50 5 L 79 95 L 2 39 L 98 39 L 21 95 Z"/>
+    </symbol>
+    <circle id="dot" cx="0" cy="0" r="14"/>
+  </defs>
+  <rect width="720" height="480" fill="#ffffff"/>
+
+  <!-- CSS: a class, a type and class, an id that beats a class, a descendant rule, an inline style that beats CSS -->
+  <rect class="card" x="20" y="20" width="220" height="140"/>
+  <rect class="accent" x="40" y="40" width="50" height="50" stroke="#000000" stroke-width="6"/>
+  <rect id="special" class="accent" x="110" y="40" width="50" height="50"/>
+  <g class="row"><circle cx="205" cy="65" r="22"/></g>
+  <circle class="accent" cx="130" cy="125" r="22" style="fill: #f2b134"/>
+
+  <!-- display and visibility: the hidden rectangle is not drawn, the visible child of a hidden group is -->
+  <rect x="260" y="20" width="60" height="60" fill="#e8574a" display="none"/>
+  <g visibility="hidden">
+    <rect x="260" y="20" width="60" height="60" fill="#e8574a"/>
+    <rect x="340" y="20" width="60" height="60" fill="#3d5a99" visibility="visible"/>
+  </g>
+  <g style="display: none"><rect x="420" y="20" width="60" height="60" fill="#e8574a"/></g>
+
+  <!-- colors: #rgba, #rrggbbaa, rgba(), hsl(), hsla(), transparent and currentColor -->
+  <rect x="260" y="100" width="300" height="60" fill="#202020"/>
+  <rect x="270" y="110" width="40" height="40" fill="#f008"/>
+  <rect x="320" y="110" width="40" height="40" fill="#00ff0080"/>
+  <rect x="370" y="110" width="40" height="40" fill="rgba(255, 200, 0, 0.6)"/>
+  <rect x="420" y="110" width="40" height="40" fill="rgb(100% 50% 0% / 50%)"/>
+  <rect x="470" y="110" width="40" height="40" fill="hsl(200, 80%, 60%)"/>
+  <rect x="520" y="110" width="30" height="40" fill="hsla(320deg 70% 50% / 0.7)" stroke="transparent"/>
+  <g color="#4c9e8a"><circle cx="620" cy="130" r="30" fill="currentColor" stroke="#202020" stroke-width="2"/></g>
+
+  <!-- use: a shape and a symbol fitted into the size of the use element -->
+  <use xlink:href="#dot" x="60" y="230" fill="#3d5a99"/>
+  <use href="#dot" x="110" y="230" fill="#e8574a" transform="scale(1.2)"/>
+  <use href="#star" x="180" y="190" width="80" height="80" fill="#f2b134"/>
+  <use href="#star" x="280" y="200" width="120" height="60" fill="#4c9e8a"/>
+
+  <!-- switch: only the first child is drawn -->
+  <switch>
+    <rect x="430" y="200" width="60" height="60" fill="#3d5a99"/>
+    <rect x="430" y="200" width="60" height="60" fill="#e8574a"/>
+  </switch>
+
+  <!-- non-scaling strokes keep their weight in scaled groups -->
+  <g transform="translate(40 320) scale(4 2)">
+    <rect x="0" y="0" width="30" height="30" fill="none" stroke="#202020" stroke-width="2"/>
+    <rect x="40" y="0" width="30" height="30" fill="none" stroke="#e8574a" stroke-width="2" vector-effect="non-scaling-stroke"/>
+  </g>
+</svg>
