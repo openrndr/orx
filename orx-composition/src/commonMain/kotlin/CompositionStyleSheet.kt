@@ -583,6 +583,119 @@ enum class TextAnchor(override val value: Double) : AttributeOrPropertyValue {
     override fun toString(): String = name.lowercase()
 }
 
+/**
+ * The baseline of text that its position is on, like the dominant-baseline property of SVG. [AUTO] is the alphabetic
+ * baseline.
+ */
+enum class DominantBaseline(private val css: String) : AttributeOrPropertyValue {
+    AUTO("auto"),
+    ALPHABETIC("alphabetic"),
+    IDEOGRAPHIC("ideographic"),
+    MIDDLE("middle"),
+    CENTRAL("central"),
+    MATHEMATICAL("mathematical"),
+    HANGING("hanging"),
+    TEXT_BEFORE_EDGE("text-before-edge"),
+    TEXT_AFTER_EDGE("text-after-edge");
+
+    override val value: DominantBaseline get() = this
+    override fun toString(): String = css
+
+    /**
+     * The distance from this baseline down to the alphabetic baseline, for a face with [ascent], [descent] and
+     * [xHeight], all positive
+     */
+    fun offset(ascent: Double, descent: Double, xHeight: Double): Double = when (this) {
+        AUTO, ALPHABETIC -> 0.0
+        IDEOGRAPHIC, TEXT_AFTER_EDGE -> -descent
+        MIDDLE -> xHeight / 2.0
+        CENTRAL -> (ascent - descent) / 2.0
+        MATHEMATICAL -> ascent / 2.0
+        HANGING -> ascent * 0.8
+        TEXT_BEFORE_EDGE -> ascent
+    }
+
+    companion object {
+        /** the baseline named [name] in SVG or CSS, null for names that are not known */
+        fun of(name: String): DominantBaseline? = when (val n = name.trim()) {
+            "text-top" -> TEXT_BEFORE_EDGE
+            "text-bottom" -> TEXT_AFTER_EDGE
+            "use-script", "no-change", "reset-size" -> AUTO
+            else -> entries.firstOrNull { it.css == n }
+        }
+    }
+}
+
+/**
+ * How far text is moved up from the baseline of its parent, like the baseline-shift property of SVG
+ */
+sealed interface BaselineShift : AttributeOrPropertyValue {
+    /** moved down by half the height of the font of the text, like Chrome and Firefox do */
+    object Sub : BaselineShift {
+        override val value: BaselineShift get() = this
+        override fun toString() = "sub"
+    }
+
+    /** moved up by half the height of the font of the text */
+    object Super : BaselineShift {
+        override val value: BaselineShift get() = this
+        override fun toString() = "super"
+    }
+
+    /** moved up by a length, a percentage is one of the font size */
+    class Value(override val value: Length) : BaselineShift {
+        override fun toString() = value.toString()
+    }
+
+    companion object {
+        val NONE = Value(0.0.pixels)
+    }
+}
+
+/**
+ * The lines drawn along text, like the text-decoration property of CSS
+ */
+class TextDecoration(
+    val underline: Boolean = false,
+    val overline: Boolean = false,
+    val lineThrough: Boolean = false
+) : AttributeOrPropertyValue {
+    override val value: TextDecoration get() = this
+
+    override fun toString(): String = listOfNotNull(
+        "underline".takeIf { underline }, "overline".takeIf { overline }, "line-through".takeIf { lineThrough }
+    ).joinToString(" ").ifEmpty { "none" }
+
+    companion object {
+        val NONE = TextDecoration()
+    }
+}
+
+/**
+ * How shapes are rendered, like the shape-rendering property of SVG: shapes are not anti-aliased with [CRISP_EDGES]
+ * and [OPTIMIZE_SPEED]
+ */
+enum class ShapeRendering(private val css: String, override val value: Boolean) : AttributeOrPropertyValue {
+    AUTO("auto", true),
+    OPTIMIZE_SPEED("optimizeSpeed", false),
+    CRISP_EDGES("crispEdges", false),
+    GEOMETRIC_PRECISION("geometricPrecision", true);
+
+    override fun toString(): String = css
+}
+
+/**
+ * The length that the author gives a path, like the pathLength attribute of SVG: lengths along the path, like
+ * those of dashes, are scaled by the actual length of the path divided by [value]. Null for the actual length.
+ */
+class PathLength(override val value: Double?) : AttributeOrPropertyValue {
+    override fun toString(): String = value?.toString() ?: ""
+
+    companion object {
+        val NONE = PathLength(null)
+    }
+}
+
 sealed interface ViewBox : AttributeOrPropertyValue {
     override val value: Rectangle?
 
@@ -657,6 +770,12 @@ sealed class Styleable {
         }
 }
 
+/** the initial value of the property [name], the value it has when it is not set and not inherited */
+fun initialValue(name: AttributeOrPropertyKey): AttributeOrPropertyValue? = PropertyBehaviors.behaviors[name]?.initial
+
+/** true when the property [name] is inherited by the contents of groups */
+fun isInheritedProperty(name: AttributeOrPropertyKey): Boolean = PropertyBehaviors.behaviors[name]?.inherit == INHERIT
+
 class DocumentStyle : Styleable()
 class Style : Styleable()
 
@@ -709,6 +828,24 @@ var Style.fontSize by PropertyDelegate<Length>(FONT_SIZE, INHERIT, 16.0.pixels)
 var Style.fontWeight by PropertyDelegate<FontWeight>(FONT_WEIGHT, INHERIT, FontWeight(400))
 var Style.fontStyle by PropertyDelegate<FontStyle>(FONT_STYLE, INHERIT, FontStyle.NORMAL)
 var Style.textAnchor by PropertyDelegate<TextAnchor>(TEXT_ANCHOR, INHERIT, TextAnchor.START)
+
+/** space added after every character of text, like letter-spacing */
+var Style.letterSpacing by PropertyDelegate<Length>(LETTER_SPACING, INHERIT, 0.0.pixels)
+
+/** space added to every space between words, like word-spacing */
+var Style.wordSpacing by PropertyDelegate<Length>(WORD_SPACING, INHERIT, 0.0.pixels)
+var Style.dominantBaseline by PropertyDelegate<DominantBaseline>(DOMINANT_BASELINE, INHERIT, DominantBaseline.AUTO)
+
+/** how far text is moved up from the baseline of its parent, like baseline-shift; the shifts of groups add up */
+var Style.baselineShift by PropertyDelegate<BaselineShift>(BASELINE_SHIFT, RESET, BaselineShift.NONE)
+
+/**
+ * The lines drawn along text. Unlike CSS, where decorations are drawn in the color of the element that declares
+ * them, the lines are drawn in the fill and stroke of the text they are drawn along.
+ */
+var Style.textDecoration by PropertyDelegate<TextDecoration>(TEXT_DECORATION, INHERIT, TextDecoration.NONE)
+var Style.shapeRendering by PropertyDelegate<ShapeRendering>(SHAPE_RENDERING, INHERIT, ShapeRendering.AUTO)
+var Style.pathLength by PropertyDelegate<PathLength>(PATH_LENGTH, RESET, PathLength.NONE)
 
 enum class AttributeOrPropertyKey {
     // @formatter:off
@@ -764,6 +901,12 @@ enum class AttributeOrPropertyKey {
     MARKER_START { override fun toString() = "marker-start" },
     MARKER_MID { override fun toString() = "marker-mid" },
     MARKER_END { override fun toString() = "marker-end" },
+    LETTER_SPACING { override fun toString() = "letter-spacing" },
+    WORD_SPACING { override fun toString() = "word-spacing" },
+    DOMINANT_BASELINE { override fun toString() = "dominant-baseline" },
+    BASELINE_SHIFT { override fun toString() = "baseline-shift" },
+    TEXT_DECORATION { override fun toString() = "text-decoration" },
+    SHAPE_RENDERING { override fun toString() = "shape-rendering" },
     STOP_COLOR { override fun toString() = "stop-color" },
     STOP_OPACITY { override fun toString() = "stop-opacity" },
     STROKE { override fun toString() = "stroke" },

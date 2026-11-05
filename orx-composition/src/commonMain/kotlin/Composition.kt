@@ -256,6 +256,8 @@ class ShapeNode(var shape: Shape) : CompositionNode() {
  * @param y the vertical position of the baseline of the text, or null to continue after the previous text
  * @param dx a horizontal offset added to the position
  * @param dy a vertical offset added to the position, for text along a contour an offset across the contour
+ * @param rotate the angle in degrees that every glyph is turned by around its origin, like the rotate attribute of
+ * SVG text. It is not applied to text along a contour.
  */
 data class TextNode(
     var text: String,
@@ -263,7 +265,8 @@ data class TextNode(
     var x: Double? = null,
     var y: Double? = null,
     var dx: Double = 0.0,
-    var dy: Double = 0.0
+    var dy: Double = 0.0,
+    var rotate: Double = 0.0
 ) : CompositionNode() {
     // TODO: This should not be Rectangle.EMPTY
     override val bounds: Rectangle

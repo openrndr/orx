@@ -17,6 +17,7 @@ import org.openrndr.extra.textwriter.TypesetGlyph
 import org.openrndr.extra.textwriter.typesetLine
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
+import org.openrndr.math.transforms.buildTransform
 import org.openrndr.shape.Rectangle
 import org.openrndr.shape.bounds
 import kotlin.math.abs
@@ -86,11 +87,48 @@ internal object CompositionText {
         }
         val fill = color(style.fill, opacity * ((style.fillOpacity as? Numeric.Rational)?.value ?: 1.0))
         val stroke = color(style.stroke, opacity * ((style.strokeOpacity as? Numeric.Rational)?.value ?: 1.0))
+        val fontSize = fontSize(style)
         return TextStyle.Defaults.copy(
             fill = fill,
             stroke = stroke,
-            strokeWeight = if (stroke != null) (style.strokeWeight as? Length.Pixels)?.value else null
+            strokeWeight = if (stroke != null) (style.strokeWeight as? Length.Pixels)?.value else null,
+            characterSpacingInEm = pixels(style.letterSpacing, fontSize) / fontSize,
+            wordSpacingInEm = pixels(style.wordSpacing, fontSize) / fontSize
         )
+    }
+
+    private fun fontSize(style: Style) = (style.fontSize as? Length.Pixels)?.value ?: 16.0
+
+    /** [length] in pixels, a percentage is one of [fontSize] */
+    private fun pixels(length: Length, fontSize: Double) = when (length) {
+        is Length.Pixels -> length.value
+        is Length.Percent -> fontSize * length.value / 100.0
+    }
+
+    /**
+     * How far the alphabetic baseline of [node] is below its position: the offset of its dominant baseline minus the
+     * baseline shifts of the node and of the groups it is in
+     */
+    private fun baselineOffset(node: TextNode, style: Style, face: Face): Double {
+        val dominant = style.dominantBaseline.offset(abs(face.ascent), abs(face.descent), face.xHeight)
+        var shift = 0.0
+        var current: CompositionNode? = node
+        while (current != null) {
+            val own = current.style
+            if (own.properties[AttributeOrPropertyKey.BASELINE_SHIFT] != null) {
+                val currentStyle = current.effectiveStyle
+                shift += when (val baselineShift = own.baselineShift) {
+                    is BaselineShift.Value -> pixels(baselineShift.value, fontSize(currentStyle))
+                    else -> {
+                        val currentFace = face(currentStyle) ?: face
+                        val half = (abs(currentFace.ascent) + abs(currentFace.descent)) / 2.0
+                        if (baselineShift is BaselineShift.Sub) -half else half
+                    }
+                }
+            }
+            current = current.parent
+        }
+        return dominant - shift
     }
 
     /**
@@ -145,8 +183,15 @@ internal object CompositionText {
         return if (collect(group) && runs.isNotEmpty()) runs else null
     }
 
-    /** the glyphs of a run, placed, and the position after the run */
-    private class RunLayout(val glyphs: List<TypesetGlyph>, val end: Vector2)
+    /**
+     * The glyphs of a run, placed, and the position after the run. [origin] is the start of the baseline of the run,
+     * [rotate] the angle every glyph is turned by.
+     */
+    private class RunLayout(val glyphs: List<TypesetGlyph>, val end: Vector2, val origin: Vector2, val rotate: Double) {
+        /** the transform of the outline of [glyph], turned around its origin */
+        fun outline(glyph: TypesetGlyph): Matrix44 = if (rotate == 0.0) glyph.transform() else
+            buildTransform { translate(glyph.position); rotate(rotate); translate(-glyph.position) } * glyph.transform()
+    }
 
     /**
      * Lays out the text of [node] starting at [pen], or at the position of the node when it has one
@@ -158,19 +203,25 @@ internal object CompositionText {
 
         // spaces at the start and the end of a run separate it from the runs around it, the typesetter does not keep
         // them, their advances are added here
-        val space = face.glyphForCharacter(' ').advanceWidth()
+        val fontSize = fontSize(style)
+        val letterSpacing = pixels(style.letterSpacing, fontSize)
+        val space = face.glyphForCharacter(' ').advanceWidth() + letterSpacing + pixels(style.wordSpacing, fontSize)
         val leading = node.text.takeWhile { it == ' ' }.length * space
         val trailing = if (node.text.isBlank()) 0.0 else node.text.takeLastWhile { it == ' ' }.length * space
         val glyphs = typesetLine(face, node.text.trim(' '), Vector2(leading, 0.0), textStyle)
-        fun advance(glyph: TypesetGlyph) = face.glyphForIndex(glyph.glyphIndex).advanceWidth()
+        fun advance(glyph: TypesetGlyph) = face.glyphForIndex(glyph.glyphIndex).advanceWidth() + letterSpacing
         // the advance of the text, used for its anchor and to continue the text after it
         val width = (glyphs.maxOfOrNull { it.position.x + advance(it) } ?: leading) + trailing
 
         val start = Vector2(node.x ?: pen.x, node.y ?: pen.y) + Vector2(node.dx, node.dy)
         val origin = start - Vector2(width * style.textAnchor.value, 0.0)
+        // the glyphs are on the alphabetic baseline, text continues on the baseline of the position
+        val baseline = Vector2(0.0, baselineOffset(node, style, face))
         return RunLayout(
-            glyphs.map { TypesetGlyph(it.face, it.glyphIndex, it.position + origin, it.style) },
-            origin + Vector2(width, 0.0)
+            glyphs.map { TypesetGlyph(it.face, it.glyphIndex, it.position + origin + baseline, it.style) },
+            origin + Vector2(width, 0.0),
+            origin + baseline,
+            node.rotate
         )
     }
 
@@ -188,15 +239,49 @@ internal object CompositionText {
         val style = node.effectiveStyle
         val visible = layout.glyphs.filter { it.style.fill != null || it.style.stroke != null }
         // a run that is not part of a text element is a text of its own
-        val bounds = textBounds ?: layout.glyphs.flatMap { cell(it) }.takeIf { it.isNotEmpty() }?.bounds
+        val bounds = textBounds ?: layout.glyphs.flatMap { cell(it, layout.outline(it)) }.takeIf { it.isNotEmpty() }?.bounds
         // hidden text is laid out, text after it continues after it, but it is not drawn
         if (visible.isNotEmpty() && style.visibility.value && applyPaints(drawer, style, bounds)) {
             slugTextDrawer.clear()
-            slugTextDrawer.addGlyphs(visible)
+            if (layout.rotate == 0.0) slugTextDrawer.addGlyphs(visible)
+            else slugTextDrawer.addGlyphs(visible) { layout.outline(it) }
             drawer.applyClip()
             slugTextDrawer.draw(drawer)
+            drawDecorations(drawer, node, style, layout)
         }
         return layout.end
+    }
+
+    /**
+     * Draws the lines of the text decoration of [style] along the run of [node] laid out as [layout], in the fill
+     * and stroke of the text
+     */
+    private fun drawDecorations(drawer: Drawer, node: TextNode, style: Style, layout: RunLayout) {
+        val decoration = style.textDecoration
+        if (!decoration.underline && !decoration.overline && !decoration.lineThrough) return
+        val face = face(style) ?: return
+        val textStyle = textStyle(node, style)
+        // the underline and the line through are where the face puts them, the overline is on top of the ascent
+        val metrics = face.decorationMetrics
+        val ascent = abs(face.ascent)
+        val lines = listOfNotNull(
+            Pair(-metrics.underlinePosition, metrics.underlineThickness).takeIf { decoration.underline },
+            Pair(-ascent - metrics.underlineThickness / 2.0, metrics.underlineThickness).takeIf { decoration.overline },
+            Pair(-metrics.strikeoutPosition, metrics.strikeoutThickness).takeIf { decoration.lineThrough }
+        )
+        val start = layout.origin.x
+        val end = layout.end.x
+        if (end <= start) return
+        drawer.pushStyle()
+        drawer.fill = textStyle.fill
+        drawer.stroke = textStyle.stroke
+        drawer.strokeWeight = textStyle.strokeWeight ?: 1.0
+        val rectangles = lines.map { (y, thickness) ->
+            Rectangle(start, layout.origin.y + y - thickness / 2.0, end - start, thickness)
+        }
+        drawer.applyClip()
+        drawer.rectangles(rectangles)
+        drawer.popStyle()
     }
 
     /**
@@ -212,12 +297,16 @@ internal object CompositionText {
         val contour = first.contour ?: return null
         val spans = mutableListOf<TextSpan>()
         val shifts = mutableListOf<Vector2>()
+        // shifts accumulate, the baseline of every run is shifted by the difference with the previous run
+        var previousBaseline = 0.0
         for (run in runs) {
             val style = run.effectiveStyle
             val face = face(style) ?: continue
             val textStyle = textStyle(run, style).copy(face = face)
             spans.add(TextSpan(run.text, if (shown(run)) textStyle else textStyle.copy(fill = null, stroke = null)))
-            shifts.add(Vector2(run.dx, run.dy))
+            val baseline = baselineOffset(run, style, face)
+            shifts.add(Vector2(run.dx, run.dy + baseline - previousBaseline))
+            previousBaseline = baseline
         }
         if (spans.isEmpty()) {
             return null
@@ -302,7 +391,7 @@ internal object CompositionText {
                     }
                 } else {
                     layoutRun(node, current)?.let { layout ->
-                        layout.glyphs.forEach { points.addAll(cell(it)) }
+                        layout.glyphs.forEach { points.addAll(if (layout.rotate == 0.0) cell(it) else cell(it, layout.outline(it))) }
                         current = layout.end
                     }
                 }

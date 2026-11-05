@@ -469,6 +469,7 @@ fun Drawer.composition(composition: Composition) {
                     lineJoin = it.value
                 }
                 fillRule = style.fillRule.value
+                drawStyle.smooth = style.shapeRendering.value
                 style.fill.let {
                     fill = when (it) {
                         is Paint.RGB -> it.value
@@ -505,7 +506,11 @@ fun Drawer.composition(composition: Composition) {
                 fill = fill?.opacify(opacity)
                 if (style.visibility.value) {
                     // a dash pattern with a positive length draws the stroke as dashes, after the fill
-                    val pattern = style.strokeDashArray.value
+                    // lengths along a path with a path length are in units of that length
+                    val lengthScale = style.pathLength.value?.takeIf { it > 0.0 }?.let { pathLength ->
+                        compositionNode.shape.contours.sumOf { it.length } / pathLength
+                    } ?: 1.0
+                    val pattern = style.strokeDashArray.value.map { it * lengthScale }
                     if (stroke != null && pattern.isNotEmpty() && pattern.all { it >= 0.0 } && pattern.sum() > 0.0) {
                         val strokeColor = stroke
                         val fillColor = fill
@@ -513,7 +518,7 @@ fun Drawer.composition(composition: Composition) {
                         stroke = null
                         if (!strokeFirst) shape(compositionNode.shape)
                         val offset = when (val o = style.strokeDashOffset) {
-                            is Length.Pixels -> o.value
+                            is Length.Pixels -> o.value * lengthScale
                             is Length.Percent -> composition.normalizedDiagonalLength() * o.value / 100.0
                         }
                         val dashes = dashes(compositionNode.shape, pattern, offset)

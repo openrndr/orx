@@ -65,6 +65,18 @@ internal class SVGDocument(
     private val base: URI? = null,
     private val contents: List<Pair<GroupNode, SVGGroup>> = emptyList()
 ) {
+    /** the nodes with properties that are not inherited but have the value inherit, see [resolveInherit] */
+    private val inherits = java.util.IdentityHashMap<CompositionNode, Set<AttributeOrPropertyKey>>()
+
+    /** gives the properties of nodes that have the value inherit the value of their parent, from the root down */
+    private fun resolveInherit(node: CompositionNode) {
+        inherits[node]?.let { keys ->
+            val parentStyle = node.parent?.effectiveStyle
+            for (key in keys) node.style[key] = parentStyle?.get(key) ?: initialValue(key)
+        }
+        if (node is GroupNode) node.children.forEach(::resolveInherit)
+    }
+
     fun composition(): Composition = Composition(
         convertElement(root).also {
             // the content of patterns and clip paths is converted like the elements of the document
@@ -78,6 +90,7 @@ internal class SVGDocument(
                     convertElement(element).also { node -> node.parent = content }
                 }
             }
+            if (inherits.isNotEmpty()) resolveInherit(it)
         },
         root.bounds
 
@@ -105,7 +118,7 @@ internal class SVGDocument(
             }
         }
         is SVGText -> convertText(svgElem, null).apply { textElement = true }
-        is SVGTextRun -> TextNode(svgElem.text, null, svgElem.x, svgElem.y, svgElem.dx, svgElem.dy)
+        is SVGTextRun -> svgElem.pieces.firstOrNull().let { TextNode(svgElem.text, null, it?.x, it?.y, it?.dx ?: 0.0, it?.dy ?: 0.0, it?.rotate ?: 0.0) }
         is SVGImage -> {
             imageNode(svgElem).apply {
                 style = svgElem.style.copy()
@@ -114,6 +127,9 @@ internal class SVGDocument(
         }
     }.apply {
         transform = svgElem.effectiveTransform()
+        if (svgElem.inheritedProperties.isNotEmpty()) inherits[this] = svgElem.inheritedProperties
+        svgElem.title?.let { userData["title"] = it }
+        svgElem.description?.let { userData["desc"] = it }
     }
 
     /** the elements of the document by their id, including the elements in defs and symbol elements */
@@ -225,10 +241,10 @@ internal class SVGDocument(
     }
 
     /** the distance along the path where text starts: a length, or a percentage of the length of the path */
-    private fun startOffset(value: String, length: Double): Double = when {
+    private fun startOffset(value: String, length: Double, scale: Double): Double = when {
         value.isEmpty() -> 0.0
         value.endsWith("%") -> (value.dropLast(1).toDoubleOrNull() ?: 0.0) * length / 100.0
-        else -> SVGParse.length(value).value
+        else -> SVGParse.length(value).value * scale
     }
 
     /** the contour that the runs of a textPath element are placed along, the first run starts at [startOffset] */
@@ -249,23 +265,31 @@ internal class SVGDocument(
                 logger.warn { "textPath refers to '$href', which is not a path in the document" }
                 return@apply
             }
-            PathText(contour, startOffset(svgText.startOffset, contour.length))
+            // a length along a path with a path length is in units of that length
+            val scale = pathsById[href.removePrefix("#")]?.style?.pathLength?.value?.takeIf { it > 0.0 }
+                ?.let { contour.length / it } ?: 1.0
+            PathText(contour, startOffset(svgText.startOffset, contour.length, scale))
         } else {
             pathText
         }
         for (element in svgText.elements) {
-            val child = when (element) {
-                is SVGText -> convertText(element, path)
-                is SVGTextRun -> if (path != null) {
-                    TextNode(element.text, path.contour, path.startOffset, null, element.dx, element.dy)
-                        .also { path.startOffset = null }
-                } else {
-                    TextNode(element.text, null, element.x, element.y, element.dx, element.dy)
+            val nodes = when (element) {
+                is SVGText -> listOf(convertText(element, path))
+                is SVGTextRun -> element.pieces.map { piece ->
+                    if (path != null) {
+                        // along a path the text starts at the start offset, x is a distance along the path
+                        TextNode(piece.text, path.contour, path.startOffset ?: piece.x, null, piece.dx, piece.dy, piece.rotate)
+                            .also { path.startOffset = null }
+                    } else {
+                        TextNode(piece.text, null, piece.x, piece.y, piece.dx, piece.dy, piece.rotate)
+                    }
                 }
                 else -> continue
             }
-            child.parent = this
-            children.add(child)
+            for (child in nodes) {
+                child.parent = this
+                children.add(child)
+            }
         }
     }
 

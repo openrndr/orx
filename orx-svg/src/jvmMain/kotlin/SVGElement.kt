@@ -39,11 +39,50 @@ internal sealed class SVGElement(element: Element?) {
     var tag: String = element?.tagName() ?: ""
     var id: String = element?.id() ?: ""
 
+    /** the text of the title element in the element */
+    val title: String? = element?.children()?.firstOrNull { it.tagName() == "title" }?.text()
+
+    /** the text of the desc element in the element */
+    val description: String? = element?.children()?.firstOrNull { it.tagName() == "desc" }?.text()
+
+    /** the properties that are not inherited but have the value inherit, they take the value of the parent */
+    val inheritedProperties = mutableSetOf<AttributeOrPropertyKey>()
+
+    /**
+     * Applies the CSS-wide keywords inherit, initial and unset to property [key]
+     * @return false when [value] is not one of them
+     */
+    private fun cssWideKeyword(key: String, value: String): Boolean {
+        val keyword = value.trim()
+        if (keyword != "inherit" && keyword != "initial" && keyword != "unset") return false
+        if (key == Prop.TRANSFORM_ORIGIN) {
+            transformOrigin = null
+            return true
+        }
+        val names = if (key == Prop.MARKER) listOf(Prop.MARKER_START, Prop.MARKER_MID, Prop.MARKER_END) else listOf(key)
+        for (name in names) {
+            val property = AttributeOrPropertyKey.entries.firstOrNull { it.toString() == name } ?: continue
+            inheritedProperties.remove(property)
+            when {
+                // an unset property is inherited or has its initial value, as if it was not given
+                keyword == "unset" || (keyword == "inherit" && isInheritedProperty(property)) ->
+                    style.properties.remove(property)
+                keyword == "initial" -> style[property] = initialValue(property)
+                else -> {
+                    style.properties.remove(property)
+                    inheritedProperties.add(property)
+                }
+            }
+        }
+        return true
+    }
+
     open var style = Style()
     abstract fun handleAttribute(attribute: Attribute)
 
     // Any element can have a style attribute to pass down properties
     fun styleProperty(key: String, value: String) {
+        if (cssWideKeyword(key, value)) return
         when (key) {
             Prop.STROKE -> style.stroke = SVGParse.color(value)
             Prop.STROKE_OPACITY -> style.strokeOpacity = SVGParse.number(value)
@@ -113,18 +152,44 @@ internal sealed class SVGElement(element: Element?) {
                 "end" -> TextAnchor.END
                 else -> TextAnchor.START
             }
+            Prop.LETTER_SPACING -> style.letterSpacing = spacing(value)
+            Prop.WORD_SPACING -> style.wordSpacing = spacing(value)
+            // the alignment baseline of an element is taken as the baseline of its text
+            Prop.DOMINANT_BASELINE, Prop.ALIGNMENT_BASELINE -> DominantBaseline.of(value)?.let { style.dominantBaseline = it }
+                ?: logger.warn { "Unknown baseline: $value" }
+            Prop.BASELINE_SHIFT -> style.baselineShift = when (val v = value.trim()) {
+                "baseline" -> BaselineShift.NONE
+                "sub" -> BaselineShift.Sub
+                "super" -> BaselineShift.Super
+                else -> BaselineShift.Value(
+                    if (v.endsWith("%")) Length.Percent(v.dropLast(1).toDoubleOrNull() ?: 0.0)
+                    else Length.Pixels(SVGParse.lengthValue(v, source) ?: 0.0)
+                )
+            }
+            Prop.TEXT_DECORATION -> style.textDecoration = value.trim().split(Regex("\\s+")).let {
+                TextDecoration(underline = "underline" in it, overline = "overline" in it, lineThrough = "line-through" in it)
+            }
+            Prop.SHAPE_RENDERING -> style.shapeRendering = when (value.trim()) {
+                "optimizeSpeed" -> ShapeRendering.OPTIMIZE_SPEED
+                "crispEdges" -> ShapeRendering.CRISP_EDGES
+                "geometricPrecision" -> ShapeRendering.GEOMETRIC_PRECISION
+                else -> ShapeRendering.AUTO
+            }
             else -> logger.warn { "Unknown property: $key" }
         }
     }
 
+    /** a letter or word spacing: normal, a length or a percentage of the font size */
+    private fun spacing(value: String): Length = when (val v = value.trim()) {
+        "normal" -> Length.Pixels(0.0)
+        else -> if (v.endsWith("%")) Length.Percent(v.dropLast(1).toDoubleOrNull() ?: 0.0)
+            else Length.Pixels(SVGParse.lengthValue(v, source) ?: 0.0)
+    }
+
     /** Special case of parsing an inline style attribute. */
     fun inlineStyles(attribute: Attribute) {
-        attribute.value.split(";").forEach {
-            val result = it.split(":").map { s -> s.trim() }
-
-            if (result.size >= 2) {
-                styleProperty(result[0], result[1])
-            }
+        for ((name, value) in SVGStyleSheet.declarations(attribute.value)) {
+            styleProperty(name, value)
         }
     }
 }
@@ -327,28 +392,80 @@ internal class SVGUse(val element: Element) : SVGElement(element) {
 }
 
 /**
- * A run of characters of a text element. A run without a position continues after the previous run.
+ * A part of a run of characters that is placed as a whole: at [x] and [y] when they are given, otherwise after the
+ * text before it, moved by [dx] and [dy], its glyphs turned by [rotate] degrees
  */
-internal class SVGTextRun(var text: String, val x: Double?, val y: Double?, val dx: Double, val dy: Double) :
+internal class SVGTextPiece(
+    val text: String,
+    val x: Double?,
+    val y: Double?,
+    val dx: Double,
+    val dy: Double,
+    val rotate: Double
+)
+
+/**
+ * The x, y, dx, dy and rotate values of the characters of a text, tspan or textPath element, and of the elements it
+ * is in. A value of an element applies to its characters in order, the values of the innermost element that has one
+ * apply; the last rotation applies to all characters after it.
+ */
+internal class SVGTextPositions(
+    private val x: List<Double>,
+    private val y: List<Double>,
+    private val dx: List<Double>,
+    private val dy: List<Double>,
+    private val rotate: List<Double>,
+    private val parent: SVGTextPositions?
+) {
+    /** the number of characters of the element that have been given their values */
+    private var index = 0
+
+    val hasPosition: Boolean get() = x.isNotEmpty() || y.isNotEmpty()
+
+    /** the values of the next character, every character takes values once */
+    fun next(): SVGTextPiece {
+        var x: Double? = null
+        var y: Double? = null
+        var dx: Double? = null
+        var dy: Double? = null
+        var rotate: Double? = null
+        var level: SVGTextPositions? = this
+        while (level != null) {
+            val i = level.index
+            if (x == null) x = level.x.getOrNull(i)
+            if (y == null) y = level.y.getOrNull(i)
+            if (dx == null) dx = level.dx.getOrNull(i)
+            if (dy == null) dy = level.dy.getOrNull(i)
+            if (rotate == null) rotate = level.rotate.getOrNull(i) ?: level.rotate.lastOrNull()
+            level.index++
+            level = level.parent
+        }
+        return SVGTextPiece("", x, y, dx ?: 0.0, dy ?: 0.0, rotate ?: 0.0)
+    }
+}
+
+/**
+ * A run of characters of a text element. Its [pieces] are known once the whitespace of the text element is
+ * collapsed.
+ * @param startsPositioned true when the run is the first of an element with an x or y position
+ */
+internal class SVGTextRun(var text: String, val positions: SVGTextPositions, val startsPositioned: Boolean) :
     SVGElement(null) {
+    var pieces: List<SVGTextPiece> = emptyList()
+
     override fun handleAttribute(attribute: Attribute) {}
 }
 
 /**
- * The position that the first run of a text element starts at
- */
-internal class SVGTextPosition(val x: Double?, val y: Double?, val dx: Double, val dy: Double)
-
-/**
- * <text> and <tspan> elements: runs of characters and nested tspan elements
+ * <text>, <tspan> and <textPath> elements: runs of characters and nested tspan elements
  * @param topLevel true for a text element, which starts at its position (0, 0 by default) and of which the whitespace
  * is collapsed
- * @param inheritedPosition the position of the parent element when it has no characters before this element
+ * @param parentPositions the positions of the characters of the parent element
  */
 internal class SVGText(
     val element: Element,
     topLevel: Boolean,
-    inheritedPosition: SVGTextPosition? = null
+    parentPositions: SVGTextPositions? = null
 ) : SVGElement(element) {
     val elements = mutableListOf<SVGElement>()
 
@@ -371,10 +488,18 @@ internal class SVGText(
         }
     }
 
-    /** the first value of a list of lengths, x, y, dx and dy can be given for every character */
-    private fun firstLength(name: String): Double? =
-        element.attr(name).trim().split(Regex("[\\s,]+")).firstOrNull()?.takeIf { it.isNotEmpty() }
-            ?.let { SVGParse.length(it).value }
+    /** the values of a list attribute, x, y, dx, dy and rotate can be given for every character */
+    private fun values(name: String, axis: SVGParse.LengthAxis?): List<Double> =
+        // a textPath element has no positions of its own
+        if (element.tagName() == "textPath") emptyList() else element.attr(name).trim().split(Regex("[\\s,]+")).filter { it.isNotEmpty() }.mapNotNull {
+            if (axis == null) it.toDoubleOrNull() else SVGParse.lengthValue(it, element, axis)
+        }
+
+    private val positions = SVGTextPositions(
+        values("x", SVGParse.LengthAxis.X), values("y", SVGParse.LengthAxis.Y),
+        values("dx", SVGParse.LengthAxis.X), values("dy", SVGParse.LengthAxis.Y), values("rotate", null),
+        parentPositions
+    )
 
     init {
         element.attributes().forEach {
@@ -385,32 +510,21 @@ internal class SVGText(
             }
         }
 
-        val own = SVGTextPosition(firstLength("x"), firstLength("y"), firstLength("dx") ?: 0.0, firstLength("dy") ?: 0.0)
-        var pending: SVGTextPosition? = when {
-            topLevel -> SVGTextPosition(own.x ?: 0.0, own.y ?: 0.0, own.dx, own.dy)
-            own.x != null || own.y != null || own.dx != 0.0 || own.dy != 0.0 -> SVGTextPosition(
-                own.x ?: inheritedPosition?.x, own.y ?: inheritedPosition?.y, own.dx, own.dy
-            )
-            else -> inheritedPosition
-        }
-
+        var first = true
         for (node in element.childNodes()) {
             when (node) {
                 is org.jsoup.nodes.TextNode -> {
                     val text = node.wholeText.replace(Regex("\\s+"), " ")
                     if (text.isNotEmpty()) {
-                        val position = pending
-                        elements.add(
-                            SVGTextRun(text, position?.x, position?.y, position?.dx ?: 0.0, position?.dy ?: 0.0)
-                        )
-                        pending = null
+                        elements.add(SVGTextRun(text, positions, first && positions.hasPosition))
+                        first = false
                     }
                 }
 
                 is Element -> if (node.tagName() == "tspan" || node.tagName() == "textPath") {
-                    val tspan = SVGText(node, topLevel = false, inheritedPosition = pending)
+                    val tspan = SVGText(node, topLevel = false, parentPositions = positions)
                     if (tspan.runs().isNotEmpty()) {
-                        pending = null
+                        first = false
                     }
                     elements.add(tspan)
                 }
@@ -419,6 +533,7 @@ internal class SVGText(
 
         if (topLevel) {
             collapseWhitespace()
+            placeCharacters()
         }
     }
 
@@ -439,12 +554,49 @@ internal class SVGText(
         for ((index, run) in runs.withIndex()) {
             if (index == 0) {
                 run.text = run.text.trimStart()
-            } else if (runs[index - 1].text.endsWith(" ") && run.x == null && run.y == null) {
+            } else if (runs[index - 1].text.endsWith(" ") && !run.startsPositioned) {
                 run.text = run.text.trimStart()
             }
             if (index == runs.lastIndex) {
                 run.text = run.text.trimEnd()
             }
+        }
+    }
+
+    /**
+     * Gives the characters of the runs their values, in order, and splits the runs into pieces where a character is
+     * positioned or turned differently. The text starts at (0, 0) when it has no position.
+     */
+    private fun placeCharacters() {
+        var firstPiece = true
+        for (run in runs()) {
+            val pieces = mutableListOf<SVGTextPiece>()
+            var current: SVGTextPiece? = null
+            val text = StringBuilder()
+            fun flush() {
+                current?.let { pieces.add(SVGTextPiece(text.toString(), it.x, it.y, it.dx, it.dy, it.rotate)) }
+                text.clear()
+            }
+            var offset = 0
+            while (offset < run.text.length) {
+                val length = Character.charCount(run.text.codePointAt(offset))
+                var values = run.positions.next()
+                if (firstPiece) {
+                    values = SVGTextPiece("", values.x ?: 0.0, values.y ?: 0.0, values.dx, values.dy, values.rotate)
+                    firstPiece = false
+                }
+                val c = current
+                if (c == null || values.x != null || values.y != null || values.dx != 0.0 || values.dy != 0.0 ||
+                    values.rotate != c.rotate
+                ) {
+                    flush()
+                    current = values
+                }
+                text.append(run.text, offset, offset + length)
+                offset += length
+            }
+            flush()
+            run.pieces = pieces
         }
     }
 }
@@ -765,6 +917,7 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                 // Attributes can also be style properties, in which case they're passed on
                 in Prop.list -> styleProperty(attribute.key, attribute.value)
                 Attr.TRANSFORM -> style.transform = SVGParse.transform(this.element)
+                Attr.PATH_LENGTH -> style.pathLength = PathLength(attribute.value.trim().toDoubleOrNull())
             }
         }
     }

@@ -121,6 +121,13 @@ internal object Prop {
     const val UNICODE_BIDI = "unicode-bidi"
     const val VECTOR_EFFECT = "vector-effect"
     const val VISIBILITY = "visibility"
+    const val LETTER_SPACING = "letter-spacing"
+    const val WORD_SPACING = "word-spacing"
+    const val DOMINANT_BASELINE = "dominant-baseline"
+    const val ALIGNMENT_BASELINE = "alignment-baseline"
+    const val BASELINE_SHIFT = "baseline-shift"
+    const val TEXT_DECORATION = "text-decoration"
+    const val SHAPE_RENDERING = "shape-rendering"
 
     val list = listOf(
         COLOR,
@@ -158,6 +165,13 @@ internal object Prop {
         TEXT_ANCHOR,
         UNICODE_BIDI,
         VECTOR_EFFECT,
-        VISIBILITY
+        VISIBILITY,
+        LETTER_SPACING,
+        WORD_SPACING,
+        DOMINANT_BASELINE,
+        ALIGNMENT_BASELINE,
+        BASELINE_SHIFT,
+        TEXT_DECORATION,
+        SHAPE_RENDERING
     )
 }

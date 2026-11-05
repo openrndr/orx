@@ -121,6 +121,13 @@ fun writeSVG(
     return sb.toString()
 }
 
+/** the title and desc elements of the title and description of this node, see [loadSVG] */
+private val CompositionNode.metadata: String
+    get() = listOfNotNull(
+        (userData["title"] as? String)?.let { "<title>${Entities.escape(it)}</title>" },
+        (userData["desc"] as? String)?.let { "<desc>${Entities.escape(it)}</desc>" }
+    ).joinToString("")
+
 /**
  * The text runs in this group and its descendants, null when the group holds anything else
  */
@@ -156,6 +163,7 @@ private fun StringBuilder.appendText(node: CompositionNode, element: String, pat
                 .filter(String::isNotEmpty)
                 .joinToString(" ")
             append("<$element${if (attributes.isEmpty()) "" else " $attributes"}>")
+            append(node.metadata)
             if (pathId != null) {
                 val startOffset = node.textRuns()?.first()?.x?.takeIf { it != 0.0 }
                     ?.let { "startOffset=\"$it\"" } ?: ""
@@ -182,7 +190,8 @@ private fun StringBuilder.appendText(node: CompositionNode, element: String, pat
                 node.x?.takeIf { node.contour == null }?.let { "x=\"$it\"" },
                 node.y?.takeIf { node.contour == null }?.let { "y=\"$it\"" },
                 node.dx.takeIf { it != 0.0 }?.let { "dx=\"$it\"" },
-                node.dy.takeIf { it != 0.0 }?.let { "dy=\"$it\"" }
+                node.dy.takeIf { it != 0.0 }?.let { "dy=\"$it\"" },
+                node.rotate.takeIf { it != 0.0 }?.let { "rotate=\"$it\"" }
             )
             val attributes = (listOf(node.svgId, styleSerialized, node.svgAttributes) + position)
                 .filter(String::isNotEmpty)
@@ -296,7 +305,7 @@ private fun StringBuilder.appendNodes(root: CompositionNode, ids: WriterIds) {
                         val attributes = listOf(svgId, styleSerialized, svgAttributes)
                             .filter(String::isNotEmpty)
                             .joinToString(" ")
-                        sb.append("<g${" $attributes"}>\n")
+                        sb.append("<g${" $attributes"}>$metadata\n")
                     }
                 }
                 is ShapeNode -> {
@@ -311,7 +320,8 @@ private fun StringBuilder.appendNodes(root: CompositionNode, ids: WriterIds) {
                         .filter(String::isNotEmpty)
                         .joinToString(" ")
 
-                    sb.append("<path $attributes/>\n")
+                    val metadata = metadata
+                    sb.append(if (metadata.isEmpty()) "<path $attributes/>\n" else "<path $attributes>$metadata</path>\n")
                 }
 
                 is TextNode -> {
@@ -324,7 +334,8 @@ private fun StringBuilder.appendNodes(root: CompositionNode, ids: WriterIds) {
                             x?.let { "x=\"$it\"" },
                             y?.let { "y=\"$it\"" },
                             dx.takeIf { it != 0.0 }?.let { "dx=\"$it\"" },
-                            dy.takeIf { it != 0.0 }?.let { "dy=\"$it\"" }
+                            dy.takeIf { it != 0.0 }?.let { "dy=\"$it\"" },
+                            rotate.takeIf { it != 0.0 }?.let { "rotate=\"$it\"" }
                         )
                         val attributes = (listOf(svgId, styleSerialized, svgAttributes) + position)
                             .filter(String::isNotEmpty)
