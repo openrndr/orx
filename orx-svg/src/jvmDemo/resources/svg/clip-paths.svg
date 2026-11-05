@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+  <defs>
+    <clipPath id="circle"><circle cx="130" cy="120" r="90"/></clipPath>
+    <clipPath id="box" clipPathUnits="objectBoundingBox"><rect x="0.1" y="0.1" width="0.8" height="0.4"/></clipPath>
+    <clipPath id="star" clip-rule="evenodd"><path d="M 480 20 L 539 200 L 384 88 L 576 88 L 421 200 Z"/></clipPath>
+    <clipPath id="band"><rect x="0" y="300" width="720" height="60" transform="rotate(-8 360 330)"/></clipPath>
+    <clipPath id="wide"><rect x="40" y="250" width="640" height="200"/></clipPath>
+  </defs>
+  <rect width="720" height="480" fill="#f4efe6"/>
+  <!-- a group clipped by a circle: fills and strokes are clipped -->
+  <g clip-path="url(#circle)">
+    <rect x="20" y="20" width="220" height="200" fill="#3d5a99"/>
+    <g stroke="#f2b134" stroke-width="10">
+      <line x1="20" y1="40" x2="240" y2="200"/>
+      <line x1="20" y1="120" x2="240" y2="120"/>
+      <line x1="20" y1="200" x2="240" y2="40"/>
+    </g>
+  </g>
+  <!-- a clip over the bounds of the shape -->
+  <rect x="260" y="30" width="120" height="180" fill="#e8574a" clip-path="url(#box)"/>
+  <!-- clip-rule evenodd leaves the center of the star out -->
+  <rect x="380" y="20" width="200" height="190" fill="#4c9e8a" clip-path="url(#star)"/>
+  <!-- nested clips: a band within a wide rectangle; text with paint order stroke -->
+  <g clip-path="url(#wide)">
+    <g clip-path="url(#band)">
+      <rect x="0" y="240" width="720" height="240" fill="#202040"/>
+      <circle cx="600" cy="330" r="50" fill="#f2b134" stroke="#e8574a" stroke-width="20" paint-order="stroke"/>
+      <text x="60" y="350" font-family="Plex" font-size="48" fill="#f4efe6" stroke="#e8574a" stroke-width="10" stroke-linejoin="round" paint-order="stroke">paint order</text>
+    </g>
+  </g>
+  <circle cx="660" cy="80" r="40" fill="#f2b134" stroke="#e8574a" stroke-width="20"/>
+</svg>

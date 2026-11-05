@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+  <defs>
+    <linearGradient id="sunset" gradientUnits="userSpaceOnUse" x1="40" x2="680">
+      <stop offset="0" stop-color="#ffcc00"/>
+      <stop offset="0.5" stop-color="#ff3366"/>
+      <stop offset="1" stop-color="#3322aa"/>
+    </linearGradient>
+  </defs>
+  <rect width="720" height="480" fill="#f4efe6"/>
+  <g stroke="#202020" stroke-width="6" fill="none">
+    <!-- dash and gap -->
+    <line x1="40" y1="40" x2="680" y2="40" stroke-dasharray="30 15"/>
+    <!-- an odd number of lengths is repeated: 30 10 5 30 10 5 -->
+    <line x1="40" y1="80" x2="680" y2="80" stroke-dasharray="30 10 5"/>
+    <!-- the offset moves the pattern along the line -->
+    <line x1="40" y1="120" x2="680" y2="120" stroke-dasharray="30 15" stroke-dashoffset="20"/>
+    <!-- zero length dashes with round caps make dots -->
+    <line x1="40" y1="160" x2="680" y2="160" stroke-dasharray="0 16" stroke-linecap="round" stroke-width="10"/>
+    <!-- closed shapes: the pattern runs around them -->
+    <rect x="40" y="200" width="180" height="120" stroke-dasharray="20 10" fill="#e8d5b5"/>
+    <circle cx="340" cy="260" r="60" stroke-dasharray="15 8" stroke="#3d5a99" stroke-width="8" fill="#ffffff"/>
+    <path d="M 440 320 C 480 180, 600 180, 660 320" stroke-dasharray="40 12 4 12" stroke="#4c9e8a" stroke-width="10"/>
+  </g>
+  <!-- a dashed stroke with a gradient -->
+  <path d="M 40 380 L 680 380" stroke="url(#sunset)" stroke-width="18" stroke-dasharray="50 20" stroke-linecap="round"/>
+  <polyline points="40,440 160,420 280,450 400,420 520,450 680,430" fill="none" stroke="#e8574a" stroke-width="4" stroke-dasharray="8 6" stroke-linecap="square"/>
+</svg>
