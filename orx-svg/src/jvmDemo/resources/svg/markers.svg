@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+  <style>.dotted { marker: url(#dot); }</style>
+  <defs>
+    <!-- an arrowhead, sized in stroke widths, turned along the path -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#e8574a"/>
+    </marker>
+    <!-- a dot in user space units -->
+    <marker id="dot" markerWidth="12" markerHeight="12" refX="6" refY="6" markerUnits="userSpaceOnUse">
+      <circle cx="6" cy="6" r="5" fill="#3d5a99"/>
+    </marker>
+    <!-- a tick that is turned along the path -->
+    <marker id="tick" viewBox="0 0 2 10" refX="1" refY="5" markerWidth="2" markerHeight="6" orient="auto">
+      <rect width="2" height="10" fill="#202020"/>
+    </marker>
+    <!-- a fixed angle -->
+    <marker id="diamond" viewBox="-5 -5 10 10" markerWidth="4" markerHeight="4" orient="45deg">
+      <rect x="-3" y="-3" width="6" height="6" fill="#f2b134"/>
+    </marker>
+    <!-- content that overflows the viewport is clipped -->
+    <marker id="clipped" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6">
+      <circle cx="5" cy="5" r="8" fill="#4c9e8a"/>
+    </marker>
+  </defs>
+  <rect width="720" height="480" fill="#f4efe6"/>
+  <line x1="40" y1="60" x2="300" y2="60" stroke="#202020" stroke-width="4" marker-end="url(#arrow)"/>
+  <path id="curve" d="M 40 160 C 120 80, 220 240, 300 140" fill="none" stroke="#202020" stroke-width="3" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+  <polyline id="zigzag" class="dotted" points="360,60 440,140 520,60 600,140 680,60" fill="none" stroke="#3d5a99" stroke-width="2"/>
+  <polygon points="380,220 520,200 560,320 420,340" fill="#e8d5b5" stroke="#202020" stroke-width="2" marker-start="url(#tick)" marker-mid="url(#tick)" marker-end="url(#tick)"/>
+  <path d="M 40 260 L 120 300 L 200 240 L 300 300" fill="none" stroke="#202020" stroke-width="2" marker-mid="url(#diamond)" marker-end="url(#diamond)"/>
+  <path d="M 40 400 Q 200 320 340 420 T 680 400" fill="none" stroke="#4c9e8a" stroke-width="3" marker-start="url(#clipped)" marker-mid="url(#clipped)" marker-end="url(#clipped)"/>
+</svg>

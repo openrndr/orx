@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+  <style>.turned { transform: rotate(-15deg); transform-origin: 600px 120px; }</style>
+  <defs>
+    <linearGradient id="srgb"><stop offset="0" stop-color="#ff0000"/><stop offset="1" stop-color="#00ff00"/></linearGradient>
+    <linearGradient id="linear" color-interpolation="linearRGB"><stop offset="0" stop-color="#ff0000"/><stop offset="1" stop-color="#00ff00"/></linearGradient>
+  </defs>
+  <rect width="720" height="480" fill="#f4efe6"/>
+  <!-- nested svg: content in a view box, fitted and clipped to the viewport -->
+  <svg x="20" y="20" width="200" height="120" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+    <rect width="100" height="100" fill="#3d5a99"/>
+    <circle cx="50" cy="50" r="45" fill="#f2b134"/>
+  </svg>
+  <svg x="240" y="20" width="120" height="120" overflow="visible">
+    <circle cx="60" cy="60" r="80" fill="#4c9e8a" opacity="0.6"/>
+  </svg>
+  <!-- units: percentages of the viewport, em of the font size, mm -->
+  <g font-size="20">
+    <rect x="2.8%" y="35%" width="25%" height="10%" fill="#e8574a"/>
+    <circle cx="300" cy="210" r="2em" fill="#3d5a99"/>
+    <line x1="400" y1="190" x2="400" y2="60mm" stroke="#202020" stroke-width="0.5em"/>
+    <rect x="440" y="170" width="1in" height="20pt" fill="#4c9e8a"/>
+  </g>
+  <!-- color-interpolation: sRGB and linearRGB -->
+  <rect x="20" y="300" width="320" height="60" fill="url(#srgb)"/>
+  <rect x="20" y="380" width="320" height="60" fill="url(#linear)"/>
+  <!-- CSS transforms -->
+  <rect x="400" y="300" width="100" height="60" fill="#3d5a99" style="transform: rotate(0.2rad) translateX(20px)"/>
+  <rect x="540" y="300" width="100" height="60" fill="#e8574a" style="transform: rotate(30deg); transform-origin: 590px 330px"/>
+  <rect x="540" y="80" width="120" height="80" fill="#f2b134" class="turned"/>
+  <rect x="400" y="390" width="80" height="60" fill="#202040" transform="rotate(20)" transform-origin="center"/>
+  <rect x="540" y="390" width="80" height="60" fill="#4c9e8a" style="transform: scaleX(1.5) rotate(-0.02turn); transform-origin: 580px 420px"/>
+</svg>
