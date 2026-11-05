@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="720" height="480" viewBox="0 0 720 480">
+  <defs>
+    <linearGradient id="sunset">
+      <stop offset="0" stop-color="#ffcc00"/>
+      <stop offset="0.5" stop-color="#ff3366"/>
+      <stop offset="1" stop-color="#3322aa"/>
+    </linearGradient>
+    <!-- the spread methods, on a gradient that covers the middle of the shape -->
+    <linearGradient id="pad" x1="0.35" x2="0.65" xlink:href="#sunset"/>
+    <linearGradient id="reflect" x1="0.35" x2="0.65" spreadMethod="reflect" xlink:href="#sunset"/>
+    <linearGradient id="repeat" x1="0.35" x2="0.65" spreadMethod="repeat" xlink:href="#sunset"/>
+    <!-- radial gradients: centered, with a focal point, and with a focal radius -->
+    <radialGradient id="sphere" cx="0.5" cy="0.5" r="0.5" fx="0.3" fy="0.3">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.4" stop-color="#4c9eff"/>
+      <stop offset="1" stop-color="#0b1a40"/>
+    </radialGradient>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#ffd27a"/>
+      <stop offset="0.7" stop-color="#ff6a00" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="#ff6a00" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="rings" r="0.2" fr="0.05" spreadMethod="reflect">
+      <stop offset="0" stop-color="#202020"/>
+      <stop offset="1" stop-color="#f2b134"/>
+    </radialGradient>
+    <!-- a gradient in user space, shared by shapes in different places, and a rotated gradient -->
+    <linearGradient id="sky" gradientUnits="userSpaceOnUse" x1="0" y1="300" x2="0" y2="460">
+      <stop offset="0" stop-color="#1e2a78"/>
+      <stop offset="1" stop-color="#f28b66"/>
+    </linearGradient>
+    <linearGradient id="diagonal" gradientTransform="rotate(45 0.5 0.5)" xlink:href="#sunset"/>
+  </defs>
+  <rect x="0" y="0" width="720" height="480" fill="#f4efe6"/>
+  <rect x="30" y="30" width="200" height="110" rx="10" fill="url(#pad)"/>
+  <rect x="260" y="30" width="200" height="110" rx="10" fill="url(#reflect)"/>
+  <rect x="490" y="30" width="200" height="110" rx="10" fill="url(#repeat)"/>
+  <circle cx="130" cy="230" r="70" fill="url(#sphere)"/>
+  <circle cx="360" cy="230" r="80" fill="url(#glow)"/>
+  <rect x="510" y="160" width="160" height="140" fill="url(#rings)" stroke="#202020" stroke-width="2"/>
+  <rect x="30" y="320" width="220" height="130" fill="url(#sky)"/>
+  <circle cx="330" cy="385" r="60" fill="url(#sky)"/>
+  <rect x="420" y="330" width="120" height="120" fill="url(#diagonal)"/>
+  <path d="M 570 440 C 600 330, 650 330, 690 440" fill="none" stroke="url(#sunset)" stroke-width="16" stroke-linecap="round"/>
+</svg>

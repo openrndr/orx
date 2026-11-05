@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="720" height="480" viewBox="0 0 720 480">
+  <defs>
+    <linearGradient id="sunset">
+      <stop offset="0" stop-color="#ffcc00"/>
+      <stop offset="0.5" stop-color="#ff3366"/>
+      <stop offset="1" stop-color="#3322aa"/>
+    </linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4c9e8a"/>
+      <stop offset="1" stop-color="#0b1a40"/>
+    </linearGradient>
+    <path id="wave" d="M 40 400 C 200 300, 300 480, 420 400 S 640 320, 690 400"/>
+  </defs>
+  <rect x="0" y="0" width="720" height="480" fill="#f4efe6"/>
+  <text x="40" y="90" font-family="Plex" font-size="64" fill="url(#sunset)">SVG text</text>
+  <text x="40" y="150" font-family="Plex" font-size="28" fill="#202020">plain, <tspan fill="#e8574a">colored</tspan> and <tspan fill="url(#sea)" font-size="40">gradient</tspan> runs</text>
+  <text x="40" y="200" font-family="Plex" font-size="24" fill="#3d5a99">runs continue <tspan dy="-10">up</tspan><tspan dy="20">down</tspan><tspan dy="-10" dx="12">and on</tspan></text>
+  <g font-family="Plex" font-size="24" fill="#202020">
+    <line x1="360" y1="230" x2="360" y2="330" stroke="#bbbbbb"/>
+    <text x="360" y="255" text-anchor="start">start</text>
+    <text x="360" y="290" text-anchor="middle">middle</text>
+    <text x="360" y="325" text-anchor="end">end</text>
+  </g>
+  <path d="M 40 400 C 200 300, 300 480, 420 400 S 640 320, 690 400" fill="none" stroke="#d8d0c0" stroke-width="2"/>
+  <text font-family="Plex" font-size="30" fill="url(#sea)" stroke="url(#sunset)" stroke-width="1"><textPath xlink:href="#wave" startOffset="5%">text along a path, with gradients</textPath></text>
+</svg>

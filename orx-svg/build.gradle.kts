@@ -23,6 +23,7 @@ kotlin {
 
         jvmDemo.dependencies {
             implementation(project(":orx-svg"))
+            implementation(project(":orx-composition"))
         }
     }
 }
