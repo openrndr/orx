@@ -73,8 +73,10 @@ fun Drawer.composition(composition: Composition) {
 
         when (compositionNode) {
             is ShapeNode -> {
+                // fills and strokes are inherited from the groups the shape is in
+                val style = compositionNode.effectiveStyle
 
-                compositionNode.style.stroke.let {
+                style.stroke.let {
                     stroke = when (it) {
                         is Paint.RGB -> it.value.copy(alpha = 1.0)
                         is Paint.Server -> ColorRGBa.WHITE
@@ -82,29 +84,29 @@ fun Drawer.composition(composition: Composition) {
                         Paint.CurrentColor -> null
                     }
                 }
-                compositionNode.style.strokeOpacity.let {
+                style.strokeOpacity.let {
                     stroke = when (it) {
                         is Numeric.Rational -> stroke?.opacify(it.value)
                     }
                 }
-                compositionNode.style.strokeWeight.let {
+                style.strokeWeight.let {
                     strokeWeight = when (it) {
                         is Length.Pixels -> it.value
                         is Length.Percent -> composition.normalizedDiagonalLength() * it.value / 100.0
                     }
                 }
-                compositionNode.style.miterLimit.let {
+                style.miterLimit.let {
                     miterLimit = when (it) {
                         is Numeric.Rational -> it.value
                     }
                 }
-                compositionNode.style.lineCap.let {
+                style.lineCap.let {
                     lineCap = it.value
                 }
-                compositionNode.style.lineJoin.let {
+                style.lineJoin.let {
                     lineJoin = it.value
                 }
-                compositionNode.style.fill.let {
+                style.fill.let {
                     fill = when (it) {
                         is Paint.RGB -> it.value.copy(alpha = 1.0)
                         is Paint.Server -> ColorRGBa.WHITE
@@ -113,8 +115,8 @@ fun Drawer.composition(composition: Composition) {
                     }
                 }
                 // gradients and other paints are drawn by a paint style, which takes the alpha of the fill and stroke
-                val fillServer = compositionNode.style.fill as? Paint.Server
-                val strokeServer = compositionNode.style.stroke as? Paint.Server
+                val fillServer = style.fill as? Paint.Server
+                val strokeServer = style.stroke as? Paint.Server
                 if (fillServer != null || strokeServer != null) {
                     val paint = paintStyle(fillServer, strokeServer)
                     val bounds = compositionNode.shape.bounds
@@ -129,19 +131,16 @@ fun Drawer.composition(composition: Composition) {
                     val own = shadeStyle
                     shadeStyle = if (own != null && hasCode(own)) own + paint else paint
                 }
-                compositionNode.style.fillOpacity.let {
+                style.fillOpacity.let {
                     fill = when (it) {
                         is Numeric.Rational -> fill?.opacify(it.value)
                     }
                 }
-                compositionNode.style.opacity.let {
-                    when (it) {
-                        is Numeric.Rational -> {
-                            stroke = stroke?.opacify(it.value)
-                            fill = fill?.opacify(it.value)
-                        }
-                    }
-                }
+                // the opacity of the shape and of the groups it is in
+                val opacity = generateSequence(compositionNode as CompositionNode) { it.parent }
+                    .fold(1.0) { acc, node -> acc * ((node.style.opacity as? Numeric.Rational)?.value ?: 1.0) }
+                stroke = stroke?.opacify(opacity)
+                fill = fill?.opacify(opacity)
                 shape(compositionNode.shape)
             }
             is ImageNode -> {
