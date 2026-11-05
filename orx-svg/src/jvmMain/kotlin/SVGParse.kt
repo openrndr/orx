@@ -241,7 +241,8 @@ internal object SVGParse {
             }
             if (token.startsWith("scale")) {
                 val operands = getTransformOperands(token.substring(5))
-                val mat = Matrix44.scale(operands[0], operands.elementAtOrElse(1) { operands[0] }, 0.0)
+                // the z scale is 1, so the transform can be inverted, as the transforms of paints are
+                val mat = Matrix44.scale(operands[0], operands.elementAtOrElse(1) { operands[0] }, 1.0)
                 transform *= mat
             }
             if (token.startsWith("translate")) {
@@ -386,6 +387,26 @@ internal object SVGParse {
         val y = element.attr(Attr.Y).let { if (it.isEmpty()) 0.0 else it.toDoubleOrNull() } ?: return emptyList()
         val width = element.attr(Attr.WIDTH).toDoubleOrNull() ?: return emptyList()
         val height = element.attr(Attr.HEIGHT).toDoubleOrNull() ?: return emptyList()
+
+        // rounded corners: a missing radius is the other radius, radii are at most half the width and height
+        val rxAttribute = element.attr("rx").toDoubleOrNull()?.takeIf { it > 0.0 }
+        val ryAttribute = element.attr("ry").toDoubleOrNull()?.takeIf { it > 0.0 }
+        val rx = (rxAttribute ?: ryAttribute ?: 0.0).coerceAtMost(width / 2.0)
+        val ry = (ryAttribute ?: rxAttribute ?: 0.0).coerceAtMost(height / 2.0)
+        if (rx > 0.0 && ry > 0.0) {
+            return listOf(
+                Command("M", x + rx, y),
+                Command("h", width - 2.0 * rx),
+                Command("a", rx, ry, 0.0, 0.0, 1.0, rx, ry),
+                Command("v", height - 2.0 * ry),
+                Command("a", rx, ry, 0.0, 0.0, 1.0, -rx, ry),
+                Command("h", -(width - 2.0 * rx)),
+                Command("a", rx, ry, 0.0, 0.0, 1.0, -rx, -ry),
+                Command("v", -(height - 2.0 * ry)),
+                Command("a", rx, ry, 0.0, 0.0, 1.0, rx, -ry),
+                Command("z")
+            )
+        }
 
         return listOf(
             Command("M", x, y),
