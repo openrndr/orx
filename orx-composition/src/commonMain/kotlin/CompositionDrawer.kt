@@ -70,6 +70,7 @@ private data class CompositionDrawStyle(
     var transformMode: TransformMode = TransformMode.APPLY,
     var lineCap: LineCap = LineCap.BUTT,
     var lineJoin: LineJoin = LineJoin.MITER,
+    var fillRule: org.openrndr.shape.FillRule = org.openrndr.shape.FillRule.NON_ZERO,
     var miterlimit: Double = 4.0,
     var visibility: Visibility = Visibility.Visible
 )
@@ -184,6 +185,11 @@ class CompositionDrawer(
     var lineJoin
         get() = drawStyle.lineJoin
         set(value) = run { drawStyle.lineJoin = value }
+
+    /** the fill rule of the shapes that are drawn, like the fill-rule of SVG */
+    var fillRule
+        get() = drawStyle.fillRule
+        set(value) = run { drawStyle.fillRule = value }
 
     var opacity
         get() = drawStyle.opacity
@@ -460,6 +466,10 @@ class CompositionDrawer(
                 shapeNode.lineJoin = lineJoin
                 shapeNode.fill = fill
                 shapeNode.fillOpacity = fillOpacity
+                shapeNode.style.fillRule = when (drawStyle.fillRule) {
+                    org.openrndr.shape.FillRule.NON_ZERO -> FillRule.NonZero
+                    org.openrndr.shape.FillRule.EVEN_ODD -> FillRule.EvenOdd
+                }
                 drawStyle.fillPaint?.let { shapeNode.style.fill = it }
                 drawStyle.strokePaint?.let { shapeNode.style.stroke = it }
 

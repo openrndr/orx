@@ -26,6 +26,10 @@ internal sealed class SVGElement(element: Element?) {
             Prop.STROKE_LINEJOIN -> style.lineJoin = SVGParse.lineJoin(value)
             Prop.FILL -> style.fill = SVGParse.color(value)
             Prop.FILL_OPACITY -> style.fillOpacity = SVGParse.number(value)
+            Prop.FILL_RULE -> style.fillRule = when (value.trim()) {
+                "evenodd" -> org.openrndr.extra.composition.FillRule.EvenOdd
+                else -> org.openrndr.extra.composition.FillRule.NonZero
+            }
             Prop.OPACITY -> style.opacity = SVGParse.number(value)
             Prop.FONT_FAMILY -> style.fontFamily = FontFamily(
                 value.split(",").map { it.trim().trim('"', '\'') }.filter { it.isNotEmpty() }

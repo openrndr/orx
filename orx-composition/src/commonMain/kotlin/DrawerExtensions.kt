@@ -106,6 +106,7 @@ fun Drawer.composition(composition: Composition) {
                 style.lineJoin.let {
                     lineJoin = it.value
                 }
+                fillRule = style.fillRule.value
                 style.fill.let {
                     fill = when (it) {
                         is Paint.RGB -> it.value.copy(alpha = 1.0)

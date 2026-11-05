@@ -269,6 +269,26 @@ sealed interface LineCap : AttributeOrPropertyValue {
     }
 }
 
+/**
+ * The rule that decides which parts of a shape with overlapping or self-intersecting contours are filled, like the
+ * fill-rule of SVG
+ */
+sealed interface FillRule : AttributeOrPropertyValue {
+    override val value: org.openrndr.shape.FillRule
+
+    /** filled where the contours wind around a point a number of times other than zero */
+    object NonZero : FillRule {
+        override val value = org.openrndr.shape.FillRule.NON_ZERO
+        override fun toString() = "nonzero"
+    }
+
+    /** filled where an odd number of contours are around a point */
+    object EvenOdd : FillRule {
+        override val value = org.openrndr.shape.FillRule.EVEN_ODD
+        override fun toString() = "evenodd"
+    }
+}
+
 sealed interface LineJoin : AttributeOrPropertyValue {
     override val value: org.openrndr.draw.LineJoin
 
@@ -466,6 +486,7 @@ var Style.lineJoin by PropertyDelegate<LineJoin>(STROKE_LINEJOIN, INHERIT, LineJ
 
 var Style.fill by PropertyDelegate<Paint>(FILL, INHERIT, Paint.RGB(ColorRGBa.BLACK))
 var Style.fillOpacity by PropertyDelegate<Numeric>(FILL_OPACITY, INHERIT, Numeric.Rational(1.0))
+var Style.fillRule by PropertyDelegate<FillRule>(FILL_RULE, INHERIT, FillRule.NonZero)
 
 var Style.transform by PropertyDelegate<Transform>(TRANSFORM, RESET, Transform.None)
 
