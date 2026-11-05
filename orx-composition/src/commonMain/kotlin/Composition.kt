@@ -67,7 +67,8 @@ sealed class CompositionNode {
     /** Calculates the absolute transformation of the current node. */
     val effectiveTransform: Matrix44
         get() = when (val p = parent) {
-            is CompositionNode -> transform * p.effectiveTransform
+            // the transform of the node applies within the transform of its parent
+            is CompositionNode -> p.effectiveTransform * transform
             else -> transform
         }
 
