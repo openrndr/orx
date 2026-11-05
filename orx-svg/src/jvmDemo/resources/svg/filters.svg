@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+  <style>
+    text { font-family: Plex; }
+    .label { font-size: 10px; fill: #8a8378; }
+  </style>
+  <defs>
+    <linearGradient id="spectrum"><stop offset="0" stop-color="#e8574a"/><stop offset="0.5" stop-color="#f2b134"/><stop offset="1" stop-color="#3d5a99"/></linearGradient>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4"/></filter>
+    <filter id="lifted" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="4" dy="6" stdDeviation="4" flood-color="#202040" flood-opacity="0.5"/>
+    </filter>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="3" result="thick"/>
+      <feGaussianBlur in="thick" stdDeviation="3" result="blurred"/>
+      <feFlood flood-color="#f2b134"/>
+      <feComposite in2="blurred" operator="in" result="halo"/>
+      <feMerge><feMergeNode in="halo"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="hue"><feColorMatrix type="hueRotate" values="0"/></filter>
+    <filter id="poster">
+      <feComponentTransfer>
+        <feFuncR type="discrete" tableValues="0 0.5 1"/><feFuncG type="discrete" tableValues="0 0.5 1"/><feFuncB type="discrete" tableValues="0 0.5 1"/>
+      </feComponentTransfer>
+    </filter>
+    <filter id="clouds" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="4" seed="2"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.24  0 0 0 0 0.35  0 0 0 0 0.6  0 0 0 1.4 -0.3"/>
+    </filter>
+    <filter id="wobble" x="-10%" y="-40%" width="120%" height="180%">
+      <feTurbulence type="turbulence" baseFrequency="0.04" numOctaves="2" seed="5" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="10" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="duotone" x="0" y="0" width="100%" height="100%">
+      <feColorMatrix type="saturate" values="0" result="gray"/>
+      <feFlood flood-color="#4c9e8a" result="ink"/>
+      <feBlend in="ink" in2="gray" mode="multiply"/>
+    </filter>
+  </defs>
+  <rect width="720" height="480" fill="#f4efe6"/>
+
+  <text class="label" x="20" y="30">FEGAUSSIANBLUR</text>
+  <circle id="blurred" cx="80" cy="95" r="45" fill="#e8574a" filter="url(#soft)"/>
+
+  <text class="label" x="190" y="30">FEDROPSHADOW</text>
+  <rect x="190" y="50" width="110" height="90" rx="10" fill="#f2b134" filter="url(#lifted)"/>
+
+  <text class="label" x="350" y="30">FEMORPHOLOGY, FEMERGE</text>
+  <text x="350" y="110" font-size="52" fill="#202040" filter="url(#glow)">glow</text>
+
+  <text class="label" x="530" y="30">FECOLORMATRIX: HUEROTATE</text>
+  <rect x="530" y="50" width="170" height="90" fill="url(#spectrum)" filter="url(#hue)"/>
+
+  <text class="label" x="20" y="185">FETURBULENCE</text>
+  <rect x="20" y="195" width="300" height="110" fill="black" filter="url(#clouds)"/>
+
+  <text class="label" x="350" y="185">FEDISPLACEMENTMAP</text>
+  <text x="350" y="270" font-size="64" fill="#3d5a99" filter="url(#wobble)">wobble</text>
+
+  <text class="label" x="20" y="345">FECOMPONENTTRANSFER</text>
+  <rect x="20" y="355" width="140" height="100" fill="url(#spectrum)" filter="url(#poster)"/>
+
+  <text class="label" x="190" y="345">FEBLEND</text>
+  <rect x="190" y="355" width="140" height="100" fill="url(#spectrum)" filter="url(#duotone)"/>
+
+  <text class="label" x="360" y="345">CSS FILTER FUNCTIONS</text>
+  <rect x="360" y="355" width="100" height="100" fill="url(#spectrum)" style="filter: sepia(1) contrast(120%)"/>
+  <rect x="480" y="355" width="100" height="100" fill="url(#spectrum)" style="filter: invert(1)"/>
+  <text x="600" y="420" font-size="40" fill="#e8574a" style="filter: blur(1px) drop-shadow(3px 4px 3px #202040)">css</text>
+</svg>
