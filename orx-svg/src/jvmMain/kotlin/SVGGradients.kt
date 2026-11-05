@@ -3,6 +3,8 @@ package org.openrndr.extra.svg
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.jsoup.nodes.Element
 import org.openrndr.color.ColorRGBa
+import org.openrndr.extra.composition.AspectRatio
+import org.openrndr.extra.composition.GroupNode
 import org.openrndr.extra.composition.Length
 import org.openrndr.extra.composition.Paint
 import org.openrndr.extra.composition.ViewBox
@@ -11,6 +13,7 @@ import org.openrndr.extra.shadestyles.presets.GradientSpread
 import org.openrndr.extra.shadestyles.presets.PaintUnits
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
+import org.openrndr.shape.Rectangle
 import kotlin.math.sqrt
 
 private val logger = KotlinLogging.logger {}
@@ -19,10 +22,10 @@ private val logger = KotlinLogging.logger {}
  * The linearGradient and radialGradient elements of SVG documents, as [Paint.Gradient]s
  */
 internal object SVGGradients {
-    private val current = ThreadLocal<Map<String, Paint.Gradient>>()
+    private val current = ThreadLocal<Map<String, Paint.Server>>()
 
-    /** runs [block] with [gradients] available to [lookup] */
-    fun <T> using(gradients: Map<String, Paint.Gradient>, block: () -> T): T {
+    /** runs [block] with [gradients], gradients and patterns, available to [lookup] */
+    fun <T> using(gradients: Map<String, Paint.Server>, block: () -> T): T {
         val previous = current.get()
         current.set(gradients)
         try {
@@ -32,10 +35,52 @@ internal object SVGGradients {
         }
     }
 
-    /** the gradient with [id] of the document that is being parsed */
-    fun lookup(id: String): Paint.Gradient? = current.get()?.get(id).also {
-        if (it == null) logger.warn { "paint refers to '#$id', which is not a gradient in the document" }
+    /** the gradient or pattern with [id] of the document that is being parsed */
+    fun lookup(id: String): Paint.Server? = current.get()?.get(id).also {
+        if (it == null) logger.warn { "paint refers to '#$id', which is not a gradient or pattern in the document" }
     }
+
+    /**
+     * The patterns in the document with [root], by their id, with the element that holds their content: their own
+     * element, or the first pattern they refer to with content. The content of the patterns is empty, it is added
+     * when the elements are converted.
+     */
+    fun parsePatterns(root: Element): Map<String, Pair<Paint.Pattern, Element?>> {
+        val elements = root.allElements.filter { it.tagName() == "pattern" && it.id().isNotEmpty() }
+            .associateBy { it.id() }
+        val viewport = viewport(root)
+        return elements.mapValues { (_, element) -> pattern(element, elements, viewport) }
+    }
+
+    private fun pattern(element: Element, elements: Map<String, Element>, viewport: Vector2): Pair<Paint.Pattern, Element?> {
+        val chain = chain(element, elements)
+        fun attr(name: String): String? = chain.firstNotNullOfOrNull { e -> e.attr(name).trim().takeIf { it.isNotEmpty() } }
+        fun units(name: String, default: PaintUnits) = when (attr(name)) {
+            "userSpaceOnUse" -> PaintUnits.OBJECT
+            "objectBoundingBox" -> PaintUnits.BOUNDS
+            else -> default
+        }
+        val units = units("patternUnits", PaintUnits.BOUNDS)
+        val contentUnits = units("patternContentUnits", PaintUnits.OBJECT)
+        fun coordinate(name: String, size: Double) = coordinate(attr(name) ?: "0", units, size)
+        val tile = Rectangle(
+            coordinate("x", viewport.x), coordinate("y", viewport.y),
+            coordinate("width", viewport.x), coordinate("height", viewport.y)
+        )
+        val transform = chain.firstOrNull { it.attr("patternTransform").isNotBlank() }
+            ?.let { SVGParse.transform(it, "patternTransform").value } ?: Matrix44.IDENTITY
+        val viewBox = chain.firstOrNull { it.attr("viewBox").isNotBlank() }
+            ?.let { (SVGParse.viewBox(it) as? ViewBox.Value)?.value }
+        val aspectRatio = chain.firstOrNull { it.attr("preserveAspectRatio").isNotBlank() }
+            ?.let { SVGParse.preserveAspectRatio(it) } ?: AspectRatio.DEFAULT
+        val content = chain.firstOrNull { e -> e.children().any { it.tagName() !in NON_CONTENT_TAGS } }
+        val pattern = Paint.Pattern(
+            GroupNode(), tile, units, contentUnits, viewBox, aspectRatio, transform, element.id()
+        )
+        return pattern to content
+    }
+
+    private val NON_CONTENT_TAGS = setOf("desc", "title", "metadata")
 
     /** the gradients in the document with [root], by their id */
     fun parse(root: Element): Map<String, Paint.Gradient> {

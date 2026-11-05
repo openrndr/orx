@@ -56,10 +56,19 @@ fun parseSVG(svgString: String, base: URI? = null): Composition {
 internal class SVGDocument(
     private val root: SVGSVGElement,
     val namespaces: Map<String, String>,
-    private val base: URI? = null
+    private val base: URI? = null,
+    private val patternContents: List<Pair<Paint.Pattern, SVGGroup>> = emptyList()
 ) {
     fun composition(): Composition = Composition(
-        convertElement(root),
+        convertElement(root).also {
+            // the content of patterns is converted like the elements of the document
+            for ((pattern, group) in patternContents) {
+                pattern.content.style = group.style
+                group.elements.mapTo(pattern.content.children) { element ->
+                    convertElement(element).also { node -> node.parent = pattern.content }
+                }
+            }
+        },
         root.bounds
 
     ).apply {
@@ -264,10 +273,18 @@ internal class SVGLoader {
         val namespaces = root.attributes().filter { it.key.startsWith("xmlns") }.associate {
             Pair(it.key, it.value)
         }
-        // gradients are collected first, elements can refer to gradients that are defined after them
+        // gradients and patterns are collected first, elements can refer to them before they are defined
         val gradients = SVGGradients.parse(root)
-        val rootGroup = SVGGradients.using(gradients) { SVGSVGElement(root) }
-        return SVGDocument(rootGroup, namespaces, base)
+        val patterns = SVGGradients.parsePatterns(root)
+        val servers: Map<String, Paint.Server> = gradients + patterns.mapValues { it.value.first }
+        return SVGGradients.using(servers) {
+            val rootGroup = SVGSVGElement(root)
+            // the content of patterns can refer to gradients and patterns too
+            val patternContents = patterns.values.mapNotNull { (pattern, element) ->
+                element?.let { pattern to SVGGroup(it) }
+            }
+            SVGDocument(rootGroup, namespaces, base, patternContents)
+        }
     }
 
 //    private fun handleImage(group: SVGGroup, e: Element) {

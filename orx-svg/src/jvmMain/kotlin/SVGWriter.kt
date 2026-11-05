@@ -110,109 +110,11 @@ fun writeSVG(
     val docStyleSer = composition.documentStyle.serialize()
 
     sb.append("<svg version=\"1.2\" baseProfile=\"tiny\" id=\"$topLevelId\" $namespaces $styleSer $docStyleSer>")
+    val ids = WriterIds()
     sb.appendGradients(composition)
+    sb.appendPatterns(composition, ids)
 
-    var textPathID = 0
-    // groups written as text elements, their contents are written with them
-    val textGroups = mutableSetOf<CompositionNode>()
-    process(composition.root) { stage ->
-        if (generateSequence(this) { it.parent }.any { it in textGroups && it != this }) {
-            return@process
-        }
-        if (stage == VisitStage.PRE) {
-
-            val styleSerialized = this.style.serialize(this.parent?.style)
-
-            when (this) {
-                is GroupNode -> {
-                    if (isText() && (parent as? GroupNode)?.isText() != true) {
-                        textGroups.add(this)
-                        val contour = textRuns()?.firstOrNull()?.contour
-                        if (contour == null) {
-                            sb.appendText(this, "text")
-                        } else {
-                            // the runs are placed along the contour, the first run starts at the start offset
-                            sb.append("<defs><path id=\"text$textPathID\" d=\"${contour.toSvg()}\"/></defs>")
-                            sb.appendText(this, "text", "text$textPathID")
-                            textPathID++
-                        }
-                        sb.append("\n")
-                    } else {
-                        val attributes = listOf(svgId, styleSerialized, svgAttributes)
-                            .filter(String::isNotEmpty)
-                            .joinToString(" ")
-                        sb.append("<g${" $attributes"}>\n")
-                    }
-                }
-                is ShapeNode -> {
-                    val pathAttribute = "d=\"${shape.toSvg()}\""
-
-                    val attributes = listOf(
-                        svgId,
-                        styleSerialized,
-                        svgAttributes,
-                        pathAttribute
-                    )
-                        .filter(String::isNotEmpty)
-                        .joinToString(" ")
-
-                    sb.append("<path $attributes/>\n")
-                }
-
-                is TextNode -> {
-                    val contour = this.contour
-                    val escapedText = Entities.escape(this.text)
-                    if (contour == null) {
-                        // text without a position continues the previous text, written as a separate text element
-                        // it starts at the origin
-                        val position = listOfNotNull(
-                            x?.let { "x=\"$it\"" },
-                            y?.let { "y=\"$it\"" },
-                            dx.takeIf { it != 0.0 }?.let { "dx=\"$it\"" },
-                            dy.takeIf { it != 0.0 }?.let { "dy=\"$it\"" }
-                        )
-                        val attributes = (listOf(svgId, styleSerialized, svgAttributes) + position)
-                            .filter(String::isNotEmpty)
-                            .joinToString(" ")
-                        sb.append("<text $attributes>$escapedText</text>\n")
-                    } else {
-                        sb.append("<defs>")
-                        sb.append("<path id=\"text$textPathID\" d=\"${contour.toSvg()}\"/>")
-                        sb.append("</defs>")
-                        // dx moves the text along the path, dy moves it across the path
-                        val attributes = listOf(
-                            svgId, styleSerialized, svgAttributes,
-                            dx.takeIf { it != 0.0 }?.let { "dx=\"$it\"" } ?: "",
-                            dy.takeIf { it != 0.0 }?.let { "dy=\"$it\"" } ?: ""
-                        ).filter(String::isNotEmpty).joinToString(" ")
-                        val startOffset = x?.takeIf { it != 0.0 }?.let { " startOffset=\"$it\"" } ?: ""
-                        sb.append("<text $attributes><textPath href=\"#text$textPathID\"$startOffset>$escapedText</textPath></text>\n")
-                        textPathID++
-                    }
-                }
-                is ImageNode -> {
-                    // PNG keeps the colors and the transparency of the image, JPEG does not
-                    val dataUrl = this.image.toDataUrl(ImageFileFormat.PNG)
-                    val attributes = listOf(svgId, styleSerialized, svgAttributes)
-                        .filter(String::isNotEmpty)
-                        .joinToString(" ")
-                    val source = this.source
-                    if (source == null) {
-                        sb.append("""<image $attributes xlink:href="$dataUrl" x="$x" y="$y" width="$width" height="$height" preserveAspectRatio="none"/>""")
-                    } else {
-                        // the viewBox of a nested viewport selects the part of the image that is shown
-                        sb.append("""<svg $attributes x="$x" y="$y" width="$width" height="$height" viewBox="${source.x} ${source.y} ${source.width} ${source.height}" preserveAspectRatio="none">""")
-                        sb.append("""<image xlink:href="$dataUrl" width="${image.width}" height="${image.height}"/></svg>""")
-                    }
-                    sb.append("\n")
-                }
-            }
-        } else {
-            if (this is GroupNode && this !in textGroups) {
-                sb.append("</g>\n")
-            }
-        }
-    }
+    sb.appendNodes(composition.root, ids)
     sb.append("</svg>")
     return sb.toString()
 }
@@ -350,6 +252,158 @@ private fun StringBuilder.appendGradients(composition: Composition) {
             append("<stop offset=\"${stop.offset}\" stop-color=\"$color\" stop-opacity=\"${stop.color.alpha}\"/>")
         }
         append("</$tag>")
+    }
+    append("</defs>\n")
+}
+
+/** counters for the ids that the writer generates */
+private class WriterIds {
+    var textPath = 0
+}
+
+/** writes [root] and the nodes in it */
+private fun StringBuilder.appendNodes(root: CompositionNode, ids: WriterIds) {
+    val sb = this
+    // groups written as text elements, their contents are written with them
+    val textGroups = mutableSetOf<CompositionNode>()
+    process(root) { stage ->
+        if (generateSequence(this) { it.parent }.any { it in textGroups && it != this }) {
+            return@process
+        }
+        if (stage == VisitStage.PRE) {
+
+            val styleSerialized = this.style.serialize(this.parent?.style)
+
+            when (this) {
+                is GroupNode -> {
+                    if (isText() && (parent as? GroupNode)?.isText() != true) {
+                        textGroups.add(this)
+                        val contour = textRuns()?.firstOrNull()?.contour
+                        if (contour == null) {
+                            sb.appendText(this, "text")
+                        } else {
+                            // the runs are placed along the contour, the first run starts at the start offset
+                            sb.append("<defs><path id=\"text${ids.textPath}\" d=\"${contour.toSvg()}\"/></defs>")
+                            sb.appendText(this, "text", "text${ids.textPath}")
+                            ids.textPath++
+                        }
+                        sb.append("\n")
+                    } else {
+                        val attributes = listOf(svgId, styleSerialized, svgAttributes)
+                            .filter(String::isNotEmpty)
+                            .joinToString(" ")
+                        sb.append("<g${" $attributes"}>\n")
+                    }
+                }
+                is ShapeNode -> {
+                    val pathAttribute = "d=\"${shape.toSvg()}\""
+
+                    val attributes = listOf(
+                        svgId,
+                        styleSerialized,
+                        svgAttributes,
+                        pathAttribute
+                    )
+                        .filter(String::isNotEmpty)
+                        .joinToString(" ")
+
+                    sb.append("<path $attributes/>\n")
+                }
+
+                is TextNode -> {
+                    val contour = this.contour
+                    val escapedText = Entities.escape(this.text)
+                    if (contour == null) {
+                        // text without a position continues the previous text, written as a separate text element
+                        // it starts at the origin
+                        val position = listOfNotNull(
+                            x?.let { "x=\"$it\"" },
+                            y?.let { "y=\"$it\"" },
+                            dx.takeIf { it != 0.0 }?.let { "dx=\"$it\"" },
+                            dy.takeIf { it != 0.0 }?.let { "dy=\"$it\"" }
+                        )
+                        val attributes = (listOf(svgId, styleSerialized, svgAttributes) + position)
+                            .filter(String::isNotEmpty)
+                            .joinToString(" ")
+                        sb.append("<text $attributes>$escapedText</text>\n")
+                    } else {
+                        sb.append("<defs>")
+                        sb.append("<path id=\"text${ids.textPath}\" d=\"${contour.toSvg()}\"/>")
+                        sb.append("</defs>")
+                        // dx moves the text along the path, dy moves it across the path
+                        val attributes = listOf(
+                            svgId, styleSerialized, svgAttributes,
+                            dx.takeIf { it != 0.0 }?.let { "dx=\"$it\"" } ?: "",
+                            dy.takeIf { it != 0.0 }?.let { "dy=\"$it\"" } ?: ""
+                        ).filter(String::isNotEmpty).joinToString(" ")
+                        val startOffset = x?.takeIf { it != 0.0 }?.let { " startOffset=\"$it\"" } ?: ""
+                        sb.append("<text $attributes><textPath href=\"#text${ids.textPath}\"$startOffset>$escapedText</textPath></text>\n")
+                        ids.textPath++
+                    }
+                }
+                is ImageNode -> {
+                    // PNG keeps the colors and the transparency of the image, JPEG does not
+                    val dataUrl = this.image.toDataUrl(ImageFileFormat.PNG)
+                    val attributes = listOf(svgId, styleSerialized, svgAttributes)
+                        .filter(String::isNotEmpty)
+                        .joinToString(" ")
+                    val source = this.source
+                    if (source == null) {
+                        sb.append("""<image $attributes xlink:href="$dataUrl" x="$x" y="$y" width="$width" height="$height" preserveAspectRatio="none"/>""")
+                    } else {
+                        // the viewBox of a nested viewport selects the part of the image that is shown
+                        sb.append("""<svg $attributes x="$x" y="$y" width="$width" height="$height" viewBox="${source.x} ${source.y} ${source.width} ${source.height}" preserveAspectRatio="none">""")
+                        sb.append("""<image xlink:href="$dataUrl" width="${image.width}" height="${image.height}"/></svg>""")
+                    }
+                    sb.append("\n")
+                }
+            }
+        } else {
+            if (this is GroupNode && this !in textGroups) {
+                sb.append("</g>\n")
+            }
+        }
+    }
+}
+
+/** the patterns that the fills and strokes of [root] and the nodes in it use, also in the content of patterns */
+private fun patterns(root: CompositionNode): Map<String, Paint.Pattern> {
+    val patterns = LinkedHashMap<String, Paint.Pattern>()
+    fun collect(node: CompositionNode) {
+        process(node) { stage ->
+            if (stage == VisitStage.PRE) {
+                for (paint in listOf(style.fill, style.stroke)) {
+                    if (paint is Paint.Pattern && paint.svgId !in patterns) {
+                        patterns[paint.svgId] = paint
+                        collect(paint.content)
+                    }
+                }
+            }
+        }
+    }
+    collect(root)
+    return patterns
+}
+
+/** writes a defs element with the patterns that [composition] uses, when it uses any */
+private fun StringBuilder.appendPatterns(composition: Composition, ids: WriterIds) {
+    val patterns = patterns(composition.root)
+    if (patterns.isEmpty()) return
+    append("<defs>")
+    for ((id, pattern) in patterns) {
+        fun units(units: PaintUnits) = if (units == PaintUnits.OBJECT) "userSpaceOnUse" else "objectBoundingBox"
+        val t = pattern.transform
+        val transform = if (t == Matrix44.IDENTITY) "" else
+            " patternTransform=\"matrix(${t.c0r0} ${t.c0r1} ${t.c1r0} ${t.c1r1} ${t.c3r0} ${t.c3r1})\""
+        val viewBox = pattern.viewBox?.let {
+            " viewBox=\"${it.x} ${it.y} ${it.width} ${it.height}\" preserveAspectRatio=\"${pattern.aspectRatio}\""
+        } ?: ""
+        append("<pattern id=\"$id\" x=\"${pattern.tile.x}\" y=\"${pattern.tile.y}\" ")
+        append("width=\"${pattern.tile.width}\" height=\"${pattern.tile.height}\" ")
+        append("patternUnits=\"${units(pattern.units)}\" patternContentUnits=\"${units(pattern.contentUnits)}\"")
+        append("$transform$viewBox>")
+        appendNodes(pattern.content, ids)
+        append("</pattern>")
     }
     append("</defs>\n")
 }

@@ -10,6 +10,21 @@ import org.openrndr.extra.shadestyles.presets.PaintStyle
 import org.openrndr.extra.shadestyles.presets.PaintUnits
 import org.openrndr.extra.shadestyles.presets.boundsTransform
 import org.openrndr.math.Matrix44
+import org.openrndr.math.IntVector2
+import org.openrndr.math.transforms.scale
+import org.openrndr.math.transforms.translate
+import org.openrndr.draw.ColorBuffer
+import org.openrndr.draw.RenderTarget
+import org.openrndr.draw.WrapMode
+import org.openrndr.draw.isolatedWithTarget
+import org.openrndr.draw.renderTarget
+import kotlin.math.abs
+import kotlin.math.ceil
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.log2
+import kotlin.math.pow
+import kotlin.math.sqrt
 import org.openrndr.color.ColorRGBa
 
 /** the paint styles of pairs of fill and stroke paints, gradients with the same values share a paint style */
@@ -30,12 +45,101 @@ internal fun paintStyle(fill: Paint.Server?, stroke: Paint.Server?): PaintStyle 
 }
 
 /**
- * The transform of [paint] in object units for a shape with [bounds]: paints over the bounds of the shape are mapped
- * to them. Null when the bounds have no width or height, then the paint is not drawn, as in SVG.
+ * Prepares [paint] for a shape with [bounds] and returns its transform in object units: paints over the bounds of the
+ * shape are mapped to them, the tile of a pattern is drawn to a texture. Null when the paint is not drawn: when it is
+ * over bounds without width or height, or a pattern with an empty tile, as in SVG.
  */
-internal fun paintTransform(paint: Paint.Server, bounds: org.openrndr.shape.Rectangle): Matrix44? = when (paint.units) {
-    PaintUnits.OBJECT -> paint.transform
-    PaintUnits.BOUNDS -> if (bounds.width <= 0.0 || bounds.height <= 0.0) null else boundsTransform(bounds) * paint.transform
+internal fun Drawer.preparePaint(paint: Paint.Server, bounds: Rectangle): Matrix44? {
+    val emptyBounds = bounds.width <= 0.0 || bounds.height <= 0.0
+    return when (paint) {
+        is Paint.Pattern -> {
+            if (paint.units == PaintUnits.BOUNDS && emptyBounds) return null
+            // the tile in the coordinates of the shape
+            val tile = when (paint.units) {
+                PaintUnits.BOUNDS -> Rectangle(
+                    bounds.x + paint.tile.x * bounds.width, bounds.y + paint.tile.y * bounds.height,
+                    paint.tile.width * bounds.width, paint.tile.height * bounds.height
+                )
+                PaintUnits.OBJECT -> paint.tile
+            }
+            if (tile.width <= 0.0 || tile.height <= 0.0) return null
+            val texture = patternTile(paint, tile, bounds) ?: return null
+            paint.texturePaint(texture)
+            // the tile texture is stored bottom up, the top of the tile is at texture coordinate 1
+            paint.transform * boundsTransform(tile) * Matrix44.translate(0.0, 1.0, 0.0) * Matrix44.scale(1.0, -1.0, 1.0)
+        }
+        else -> when (paint.units) {
+            PaintUnits.OBJECT -> paint.transform
+            PaintUnits.BOUNDS -> if (emptyBounds) null else boundsTransform(bounds) * paint.transform
+        }
+    }
+}
+
+/** the textures of the tiles of patterns, by pattern, size in pixels and placement of the content */
+private val patternTiles = LinkedHashMap<Triple<Paint.Pattern, IntVector2, Matrix44>, ColorBuffer>()
+
+/**
+ * The texture of the tile of [pattern] with the size of [tile], at the scale it is drawn at, which wraps around to
+ * repeat the tile. [bounds] are the bounds of the shape, which content in bounds units is relative to.
+ */
+private fun Drawer.patternTile(pattern: Paint.Pattern, tile: Rectangle, bounds: Rectangle): ColorBuffer? {
+    // the size in pixels: the size of the tile scaled like the pattern is drawn
+    val m = model * pattern.transform
+    // the scale is rounded up to steps of a quarter octave, so tiles are not drawn again for every small change of
+    // scale, such as while zooming
+    val exactScale = sqrt(abs(m.c0r0 * m.c1r1 - m.c0r1 * m.c1r0)).coerceAtLeast(1E-6)
+    val scale = 2.0.pow(ceil(log2(exactScale) * 4.0) / 4.0)
+    val contentScale = RenderTarget.active.contentScale
+    val size = IntVector2(
+        ceil(tile.width * scale * contentScale).toInt().coerceIn(1, 2048),
+        ceil(tile.height * scale * contentScale).toInt().coerceIn(1, 2048)
+    )
+    // places the content in the tile, in the units of the tile
+    val content = when {
+        pattern.viewBox != null -> viewportTransform(pattern.viewBox, Rectangle(0.0, 0.0, tile.width, tile.height), pattern.aspectRatio)
+        pattern.contentUnits == PaintUnits.BOUNDS -> Matrix44.scale(bounds.width, bounds.height, 1.0)
+        else -> Matrix44.IDENTITY
+    }
+    val key = Triple(pattern, size, content)
+    patternTiles[key]?.let { return it }
+    if (patternTiles.size >= 64) {
+        patternTiles.remove(patternTiles.keys.first())?.destroy()
+    }
+
+    val target = renderTarget(size.x, size.y, contentScale = 1.0) {
+        colorBuffer()
+        depthBuffer()
+    }
+    val bounds = Rectangle(0.0, 0.0, size.x.toDouble(), size.y.toDouble())
+    isolatedWithTarget(target) {
+        ortho(target)
+        clear(ColorRGBa.TRANSPARENT)
+        // the tile is drawn with its neighbours, every copy clipped to its tile and a pixel around it: shapes that end at
+        // the edge of the tile are anti-aliased by the shapes of the neighbouring tiles, so the tiles repeat without
+        // seams, while content beyond the edge of a tile is clipped, as in SVG
+        val composition = Composition(pattern.content)
+        for (j in -1..1) {
+            for (i in -1..1) {
+                val x0 = max(i * size.x - 1.0, 0.0)
+                val y0 = max(j * size.y - 1.0, 0.0)
+                val x1 = min((i + 1) * size.x + 1.0, bounds.width)
+                val y1 = min((j + 1) * size.y + 1.0, bounds.height)
+                if (x1 <= x0 || y1 <= y0) continue
+                drawStyle.clip = Rectangle(x0, y0, x1 - x0, y1 - y0)
+                model = Matrix44.translate(i * size.x.toDouble(), j * size.y.toDouble(), 0.0) *
+                        Matrix44.scale(size.x / tile.width, size.y / tile.height, 1.0) * content
+                composition(composition)
+            }
+        }
+        drawStyle.clip = null
+    }
+    val texture = target.colorBuffer(0)
+    target.detachColorAttachments()
+    target.destroy()
+    texture.wrapU = WrapMode.REPEAT
+    texture.wrapV = WrapMode.REPEAT
+    patternTiles[key] = texture
+    return texture
 }
 
 /** true when [style] draws anything: it has code */
@@ -119,16 +223,15 @@ fun Drawer.composition(composition: Composition) {
                 val fillServer = style.fill as? Paint.Server
                 val strokeServer = style.stroke as? Paint.Server
                 if (fillServer != null || strokeServer != null) {
-                    val paint = paintStyle(fillServer, strokeServer)
                     val bounds = compositionNode.shape.bounds
-                    if (fillServer != null) {
-                        val transform = paintTransform(fillServer, bounds)
-                        if (transform == null) fill = null else paint.fillTransform = transform
-                    }
-                    if (strokeServer != null) {
-                        val transform = paintTransform(strokeServer, bounds)
-                        if (transform == null) stroke = null else paint.strokeTransform = transform
-                    }
+                    // paints are prepared first, the tiles of patterns are drawn before they are read
+                    val fillTransform = fillServer?.let { preparePaint(it, bounds) }
+                    val strokeTransform = strokeServer?.let { preparePaint(it, bounds) }
+                    if (fillServer != null && fillTransform == null) fill = null
+                    if (strokeServer != null && strokeTransform == null) stroke = null
+                    val paint = paintStyle(fillServer, strokeServer)
+                    fillTransform?.let { paint.fillTransform = it }
+                    strokeTransform?.let { paint.strokeTransform = it }
                     val own = shadeStyle
                     shadeStyle = if (own != null && hasCode(own)) own + paint else paint
                 }

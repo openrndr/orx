@@ -416,60 +416,61 @@ class Composition(val root: CompositionNode, var bounds: CompositionDimensions =
      * As per [the SVG 2.0 spec](https://svgwg.org/svg2-draft/single-page.html#coords-ComputingAViewportsTransform).
      */
     fun calculateViewportTransform(): Matrix44 {
-        return when (documentStyle.viewBox) {
+        return when (val viewBox = documentStyle.viewBox) {
             ViewBox.None -> Matrix44.IDENTITY
-            is ViewBox.Value -> {
-                when (val vb = (documentStyle.viewBox as ViewBox.Value).value) {
-                    Rectangle.EMPTY -> {
-                        // The intent is to not display the element
-                        Matrix44.ZERO
-                    }
-
-                    else -> {
-                        val vbCorner = vb.corner
-                        val vbDims = vb.dimensions
-                        val eCorner = bounds.position
-                        val eDims = bounds.dimensions
-                        val (align, meetOrSlice) = documentStyle.preserveAspectRatio
-
-                        val scale = (eDims / vbDims).let {
-                            if (align != Align.NONE) {
-                                if (meetOrSlice == MeetOrSlice.MEET) {
-                                    Vector2(min(it.x, it.y))
-                                } else {
-                                    Vector2(max(it.x, it.y))
-                                }
-                            } else {
-                                it
-                            }
-                        }
-
-                        val translate = (eCorner - (vbCorner * scale)).let {
-                            val cx = eDims.x - vbDims.x * scale.x
-                            val cy = eDims.y - vbDims.y * scale.y
-                            it + when (align) {
-                                // TODO: This first one probably doesn't comply with the spec
-                                Align.NONE -> Vector2.ZERO
-                                Align.X_MIN_Y_MIN -> Vector2.ZERO
-                                Align.X_MID_Y_MIN -> Vector2(cx / 2, 0.0)
-                                Align.X_MAX_Y_MIN -> Vector2(cx, 0.0)
-                                Align.X_MIN_Y_MID -> Vector2(0.0, cy / 2)
-                                Align.X_MID_Y_MID -> Vector2(cx / 2, cy / 2)
-                                Align.X_MAX_Y_MID -> Vector2(cx, cy / 2)
-                                Align.X_MIN_Y_MAX -> Vector2(0.0, cy)
-                                Align.X_MID_Y_MAX -> Vector2(cx / 2, cy)
-                                Align.X_MAX_Y_MAX -> Vector2(cx, cy)
-                            }
-                        }
-
-                        buildTransform {
-                            translate(translate)
-                            scale(scale.x, scale.y, 1.0)
-                        }
-                    }
-                }
-            }
+            is ViewBox.Value -> viewportTransform(viewBox.value, Rectangle(bounds.position, bounds.dimensions.x, bounds.dimensions.y), documentStyle.preserveAspectRatio)
         }
+    }
+}
+
+/**
+ * The transform that fits [viewBox] into [viewport] following [aspectRatio], like the viewBox and
+ * preserveAspectRatio attributes of SVG. An empty view box hides the contents.
+ */
+fun viewportTransform(viewBox: Rectangle, viewport: Rectangle, aspectRatio: AspectRatio): Matrix44 {
+    if (viewBox == Rectangle.EMPTY || viewBox.width == 0.0 || viewBox.height == 0.0) {
+        // The intent is to not display the element
+        return Matrix44.ZERO
+    }
+    val vbCorner = viewBox.corner
+    val vbDims = viewBox.dimensions
+    val eCorner = viewport.corner
+    val eDims = viewport.dimensions
+    val (align, meetOrSlice) = aspectRatio
+
+    val scale = (eDims / vbDims).let {
+        if (align != Align.NONE) {
+            if (meetOrSlice == MeetOrSlice.MEET) {
+                Vector2(min(it.x, it.y))
+            } else {
+                Vector2(max(it.x, it.y))
+            }
+        } else {
+            it
+        }
+    }
+
+    val translate = (eCorner - (vbCorner * scale)).let {
+        val cx = eDims.x - vbDims.x * scale.x
+        val cy = eDims.y - vbDims.y * scale.y
+        it + when (align) {
+            // TODO: This first one probably doesn't comply with the spec
+            Align.NONE -> Vector2.ZERO
+            Align.X_MIN_Y_MIN -> Vector2.ZERO
+            Align.X_MID_Y_MIN -> Vector2(cx / 2, 0.0)
+            Align.X_MAX_Y_MIN -> Vector2(cx, 0.0)
+            Align.X_MIN_Y_MID -> Vector2(0.0, cy / 2)
+            Align.X_MID_Y_MID -> Vector2(cx / 2, cy / 2)
+            Align.X_MAX_Y_MID -> Vector2(cx, cy / 2)
+            Align.X_MIN_Y_MAX -> Vector2(0.0, cy)
+            Align.X_MID_Y_MAX -> Vector2(cx / 2, cy)
+            Align.X_MAX_Y_MAX -> Vector2(cx, cy)
+        }
+    }
+
+    return buildTransform {
+        translate(translate)
+        scale(scale.x, scale.y, 1.0)
     }
 }
 

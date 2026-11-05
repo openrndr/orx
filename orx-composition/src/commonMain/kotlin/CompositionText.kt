@@ -100,8 +100,8 @@ internal object CompositionText {
     private fun applyPaints(drawer: Drawer, style: Style, bounds: Rectangle?): Boolean {
         val (fillServer, strokeServer) = servers(style) ?: return true
         val emptyBounds = Rectangle(0.0, 0.0, 0.0, 0.0)
-        val fillTransform = fillServer?.let { paintTransform(it, bounds ?: emptyBounds) }
-        val strokeTransform = strokeServer?.let { paintTransform(it, bounds ?: emptyBounds) }
+        val fillTransform = fillServer?.let { drawer.preparePaint(it, bounds ?: emptyBounds) }
+        val strokeTransform = strokeServer?.let { drawer.preparePaint(it, bounds ?: emptyBounds) }
         val fill = if (fillTransform != null) fillServer else null
         val stroke = if (strokeTransform != null) strokeServer else null
         if (fill == null && stroke == null) {

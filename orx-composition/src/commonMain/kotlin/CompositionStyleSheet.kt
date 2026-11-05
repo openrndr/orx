@@ -9,6 +9,7 @@ import org.openrndr.extra.shadestyles.presets.LinearGradientPaint
 import org.openrndr.extra.shadestyles.presets.PaintUnits
 import org.openrndr.extra.shadestyles.presets.RadialGradientPaint
 import org.openrndr.extra.shadestyles.presets.SourcePreset
+import org.openrndr.extra.shadestyles.presets.TexturePaint
 import org.openrndr.extra.composition.AttributeOrPropertyKey.*
 import org.openrndr.extra.composition.Inheritance.*
 import org.openrndr.math.*
@@ -116,6 +117,46 @@ sealed interface Paint : AttributeOrPropertyValue {
         override val id: String = ""
     ) : Gradient {
         override fun source(): SourcePreset = RadialGradientPaint(center, radius, focal, focalRadius, stops, spread)
+        override fun toString(): String = "url(#$svgId)"
+    }
+
+    /**
+     * A pattern, like SVG's pattern: [content] drawn in a tile that is repeated in both directions.
+     *
+     * The tile is [tile] in [units]: the bounds of the painted shape for [PaintUnits.BOUNDS], so 0..1 covers the
+     * shape, or its coordinates for [PaintUnits.OBJECT]. [transform] transforms the tiles, like patternTransform.
+     * The content is drawn with its origin at the corner of the tile; [viewBox] and [aspectRatio] fit the content
+     * into the tile when a view box is given, otherwise [contentUnits] decide whether its coordinates are in the
+     * coordinates of the shape or relative to its bounds.
+     *
+     * The tile is drawn to a texture once for every size it is drawn at, changes to [content] after it is drawn are
+     * not seen. [fallback] is the color that stands in for the pattern where it can not be drawn.
+     */
+    class Pattern(
+        val content: GroupNode,
+        val tile: Rectangle,
+        override val units: PaintUnits = PaintUnits.BOUNDS,
+        val contentUnits: PaintUnits = PaintUnits.OBJECT,
+        val viewBox: Rectangle? = null,
+        val aspectRatio: AspectRatio = AspectRatio.DEFAULT,
+        override val transform: Matrix44 = Matrix44.IDENTITY,
+        val id: String = "",
+        val fallback: ColorRGBa? = null
+    ) : Server {
+        override val value: ColorRGBa? get() = fallback
+
+        /** the id of the pattern in SVG documents: [id], or an id derived from the pattern when it has none */
+        val svgId: String get() = id.ifEmpty { "pattern-" + hashCode().toUInt().toString(16) }
+
+        // the tile textures are set on this paint before a shape is drawn
+        private var texturePaint: TexturePaint? = null
+
+        override fun source(): SourcePreset = texturePaint ?: error("the texture of the pattern is not prepared")
+
+        /** the paint that reads the tile textures, created with [texture] */
+        internal fun texturePaint(texture: ColorBuffer): TexturePaint =
+            texturePaint?.also { it.texture = texture } ?: TexturePaint(texture).also { texturePaint = it }
+
         override fun toString(): String = "url(#$svgId)"
     }
 
