@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+  <style>
+    :root { --ink: #202020; --accent: #e8574a; --cool: #3d5a99; --gap: 40px; }
+    text { font-family: Plex; fill: var(--ink); }
+    .label { font-size: 11px; fill: #8a8378; letter-spacing: 1px; }
+    .swatch { width: calc(var(--gap) * 1.5); height: var(--gap); }
+    .accent { fill: var(--accent) !important; }
+  </style>
+  <rect width="720" height="480" fill="#f4efe6"/>
+
+  <!-- letter and word spacing -->
+  <text class="label" x="20" y="30">LETTER-SPACING, WORD-SPACING</text>
+  <text id="spaced" x="20" y="70" font-size="26">spacing</text>
+  <text x="20" y="110" font-size="20" word-spacing="1em">words apart</text>
+
+  <!-- baselines: every word is positioned on the red line -->
+  <text class="label" x="360" y="30">DOMINANT-BASELINE, BASELINE-SHIFT</text>
+  <line x1="360" y1="70" x2="700" y2="70" stroke="#e8574a"/>
+  <g font-size="18">
+    <text x="360" y="70">Ag</text>
+    <text x="410" y="70" dominant-baseline="middle">Ag</text>
+    <text x="460" y="70" dominant-baseline="central">Ag</text>
+    <text x="510" y="70" dominant-baseline="hanging">Ag</text>
+    <text x="560" y="70" dominant-baseline="text-before-edge">Ag</text>
+    <text x="610" y="70" dominant-baseline="text-after-edge">Ag</text>
+  </g>
+  <text x="360" y="115" font-size="24">E = mc<tspan baseline-shift="super" font-size="14">2</tspan>, H<tspan baseline-shift="sub" font-size="14">2</tspan>O</text>
+
+  <!-- characters positioned one by one -->
+  <text class="label" x="20" y="160">X, Y, DX, DY AND ROTATE PER CHARACTER</text>
+  <text id="turning" x="20 54 88 122 156 190" y="205" font-size="30">TURNING</text>
+  <text x="300" y="205" dy="0 -8 -8 8 8 -8 -8 8 8" font-size="28" fill="#3d5a99">wavering</text>
+
+  <!-- decorations -->
+  <text class="label" x="20" y="250">TEXT-DECORATION</text>
+  <text x="20" y="290" font-size="22" text-decoration="underline">underline</text>
+  <text x="190" y="290" font-size="22" text-decoration="overline">overline</text>
+  <text x="340" y="290" font-size="22" text-decoration="line-through">line-through</text>
+
+  <!-- custom properties, calc and !important -->
+  <text class="label" x="20" y="335">VAR(), CALC(), !IMPORTANT</text>
+  <g style="--accent: #4c9e8a">
+    <rect class="swatch" x="20" y="350" fill="var(--cool)"/>
+    <rect class="swatch accent" x="90" y="350" fill="var(--cool)"/>
+  </g>
+  <rect class="swatch accent" x="160" y="350" style="fill: var(--cool)"/>
+  <rect x="230" y="350" width="calc(100% - 650px)" height="var(--gap)" fill="var(--undefined, #f2b134)"/>
+
+  <!-- path lengths: ten dashes along the curve, the text starts halfway -->
+  <text class="label" x="360" y="335">PATHLENGTH, SHAPE-RENDERING</text>
+  <path id="track" d="M 360 420 C 440 340 560 470 700 380" fill="none" stroke="#202020" stroke-width="3"
+        pathLength="10" stroke-dasharray="0.5"/>
+  <text font-size="16"><textPath href="#track" startOffset="5">halfway</textPath></text>
+  <circle cx="60" cy="440" r="24" fill="#3d5a99"/>
+  <circle cx="130" cy="440" r="24" fill="#3d5a99" shape-rendering="crispEdges"/>
+</svg>
