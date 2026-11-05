@@ -27,6 +27,9 @@ enum class StrokeMode(val mode: Int) {
  *
  * @property justify Determines whether the text should be justified.
  * @property lineHeightInEm Specifies the line height multiplier for the text.
+ * @property characterSpacingInEm Space added after every character, in em, like CSS letter-spacing. Ligatures are
+ * not formed when it is not zero.
+ * @property wordSpacingInEm Space added to every space between words, in em, like CSS word-spacing.
  * @property horizontalAlign Defines the horizontal alignment of the text, typically in the range [0.0, 1.0].
  * @property verticalAlign Defines the vertical alignment of the text, typically in the range [0.0, 1.0].
  * @property direction The paragraph direction, either [Direction.LEFT_TO_RIGHT] or [Direction.RIGHT_TO_LEFT], or
@@ -46,6 +49,7 @@ data class TextStyle(
     val lineHeightInEm: Double? = null,
     val textWidthFactor: Double? = null,
     val characterSpacingInEm: Double? = null,
+    val wordSpacingInEm: Double? = null,
     val baselineShiftInEm: Double? = null,
     val horizontalAlign: Double? = null,
     val verticalAlign: Double? = null,
@@ -66,6 +70,7 @@ data class TextStyle(
             lineHeightInEm = other.lineHeightInEm ?: lineHeightInEm,
             textWidthFactor = other.textWidthFactor ?: textWidthFactor,
             characterSpacingInEm = other.characterSpacingInEm ?: characterSpacingInEm,
+            wordSpacingInEm = other.wordSpacingInEm ?: wordSpacingInEm,
             baselineShiftInEm = other.baselineShiftInEm ?: baselineShiftInEm,
             horizontalAlign = other.horizontalAlign ?: horizontalAlign,
             verticalAlign = other.verticalAlign ?: verticalAlign,
@@ -86,6 +91,7 @@ data class TextStyle(
             lineHeightInEm = 1.0,
             textWidthFactor = 1.0,
             characterSpacingInEm = 0.0,
+            wordSpacingInEm = 0.0,
             baselineShiftInEm = 0.0,
             horizontalAlign = 0.0,
             verticalAlign = 0.0,

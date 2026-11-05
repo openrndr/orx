@@ -4,7 +4,9 @@ import org.openrndr.draw.font.internal.BidiText
 import org.openrndr.draw.font.internal.BidiTextDriver
 import org.openrndr.draw.font.internal.Direction
 import org.openrndr.draw.font.internal.Script
+import org.openrndr.draw.font.internal.ShapeFeature
 import org.openrndr.draw.font.internal.TextShapingDriver
+import org.openrndr.math.Vector2
 
 private const val SOFT_HYPHEN = '\u00AD'
 
@@ -107,11 +109,18 @@ fun shapeParagraph(
         val face = spanStyle.face ?: error("face not set in span")
         val sizeInEm = spanStyle.sizeInEm ?: error("sizeInEm not set in span")
         val scale = sizeInEm * (spanStyle.textWidthFactor ?: error("textWidthFactor not set in span"))
-        val spaceWidth = face.glyphForCharacter(' ').advanceWidth() * scale
+        // letter spacing follows every character, spaces included; word spacing widens spaces
+        val letterSpacing = (spanStyle.characterSpacingInEm ?: 0.0) * face.sizeInPoints
+        val wordSpacing = (spanStyle.wordSpacingInEm ?: 0.0) * face.sizeInPoints
+        val spaceWidth = (face.glyphForCharacter(' ').advanceWidth() + letterSpacing + wordSpacing) * scale
+        // ligatures are not formed in spaced text, as in CSS
+        val features = if (letterSpacing != 0.0) {
+            spanStyle.features + ShapeFeature("liga", 0) + ShapeFeature.DISABLE_COMMON_LIGATURES
+        } else spanStyle.features
         val language = spanStyle.language
         // the shaper only guesses direction and script when none of direction, script and language are given
         val hyphen by lazy {
-            shaper.shape(face, "-", spanStyle.features, Direction.LEFT_TO_RIGHT, Script.COMMON, language)
+            shaper.shape(face, "-", features, Direction.LEFT_TO_RIGHT, Script.COMMON, language)
         }
         val autoHyphenate = hyphenate && language != null && spanStyle.hyphenate != false
 
@@ -119,7 +128,10 @@ fun shapeParagraph(
             val runs = bidi.runs(start, end)
             for ((index, run) in runs.withIndex()) {
                 val runText = text.substring(run.start, run.end)
-                val shaped = shaper.shape(face, runText, spanStyle.features, run.direction, run.script, language)
+                val shaped = shaper.shape(face, runText, features, run.direction, run.script, language).let { results ->
+                    if (letterSpacing == 0.0) results
+                    else results.map { it.copy(advance = it.advance + Vector2(letterSpacing, 0.0)) }
+                }
                 val width = shaped.sumOf { it.advance.x } * scale
                 val rightToLeft = run.direction == Direction.RIGHT_TO_LEFT
                 val runHyphen = if (hyphenated && index == runs.lastIndex) hyphen else emptyList()

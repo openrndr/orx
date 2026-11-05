@@ -192,4 +192,18 @@ class TestTypesetText {
             TextStyle.Defaults.copy(face = face, language = "en"))
         assertEquals(listOf(8, 4), lines.map { it.glyphs.size })
     }
+
+    @Test
+    fun spacingWidensText() {
+        val face = face()
+        val plain = typesetLine(face, "ab cd", Vector2.ZERO)
+        val spaced = typesetLine(face, "ab cd", Vector2.ZERO, TextStyle.Defaults.copy(characterSpacingInEm = 0.5))
+        val words = typesetLine(face, "ab cd", Vector2.ZERO, TextStyle.Defaults.copy(wordSpacingInEm = 1.0))
+        // every character moves by half an em for every character before it, the space included
+        assertEquals(plain.map { it.position.x }.zip(listOf(0, 1, 3, 4)).map { (x, n) -> x + n * 12.0 },
+            spaced.map { it.position.x })
+        // the space between the words is an em wider
+        assertEquals(plain.map { it.position.x }.zip(listOf(0, 0, 1, 1)).map { (x, n) -> x + n * 24.0 },
+            words.map { it.position.x })
+    }
 }

@@ -84,6 +84,12 @@ class TextComposer(initialStyle: TextStyle = TextStyle()) {
             style = style.copy(characterSpacingInEm = value)
         }
 
+    var wordSpacingInEm: Double?
+        get() = style.wordSpacingInEm
+        set(value) {
+            style = style.copy(wordSpacingInEm = value)
+        }
+
     var baselineShiftInEm: Double?
         get() = style.baselineShiftInEm
         set(value) {
