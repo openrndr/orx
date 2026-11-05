@@ -9,6 +9,33 @@ import org.openrndr.shape.*
 private val logger = KotlinLogging.logger {}
 
 internal sealed class SVGElement(element: Element?) {
+    /** the element this is read from, for lengths relative to its font size */
+    protected val source: Element? = element
+
+    /** the origin of the transform, like transform-origin, null for the origin of the coordinates */
+    var transformOrigin: String? = null
+
+    /** the transform of the element around its [transformOrigin] */
+    fun effectiveTransform(): org.openrndr.math.Matrix44 {
+        val transform = style.transform.value
+        val origin = transformOrigin ?: return transform
+        val size = SVGParse.viewport.get() ?: Vector2(100.0, 100.0)
+        val parts = origin.trim().split(Regex("\\s+")).filter { it.isNotEmpty() }
+        fun component(value: String?, axis: SVGParse.LengthAxis, extent: Double): Double = when (value) {
+            null, "center" -> extent / 2.0
+            "left", "top" -> 0.0
+            "right", "bottom" -> extent
+            else -> SVGParse.lengthValue(value, source, axis) ?: 0.0
+        }
+        // a vertical keyword first is the y component
+        val (xValue, yValue) = if (parts.firstOrNull() in setOf("top", "bottom")) parts.getOrNull(1) to parts[0]
+            else parts.getOrNull(0) to parts.getOrNull(1)
+        val o = Vector2(component(xValue, SVGParse.LengthAxis.X, size.x), component(yValue, SVGParse.LengthAxis.Y, size.y))
+        if (o == Vector2.ZERO) return transform
+        return org.openrndr.math.transforms.buildTransform { translate(o.x, o.y, 0.0) } * transform *
+                org.openrndr.math.transforms.buildTransform { translate(-o.x, -o.y, 0.0) }
+    }
+
     var tag: String = element?.tagName() ?: ""
     var id: String = element?.id() ?: ""
 
@@ -20,7 +47,12 @@ internal sealed class SVGElement(element: Element?) {
         when (key) {
             Prop.STROKE -> style.stroke = SVGParse.color(value)
             Prop.STROKE_OPACITY -> style.strokeOpacity = SVGParse.number(value)
-            Prop.STROKE_WIDTH -> style.strokeWeight = SVGParse.length(value)
+            Prop.STROKE_WIDTH -> style.strokeWeight = value.trim().let { v ->
+                when {
+                    v.endsWith("%") -> Length.Percent(v.dropLast(1).toDoubleOrNull() ?: 0.0)
+                    else -> Length.Pixels(SVGParse.lengthValue(v, source) ?: 1.0)
+                }
+            }
             Prop.STROKE_DASHARRAY -> style.strokeDashArray = SVGParse.dashArray(value)
             Prop.STROKE_DASHOFFSET -> style.strokeDashOffset = SVGParse.length(value.trim())
             Prop.STROKE_MITERLIMIT -> style.miterLimit = SVGParse.number(value)
@@ -35,6 +67,17 @@ internal sealed class SVGElement(element: Element?) {
             Prop.OPACITY -> style.opacity = SVGParse.number(value)
             Prop.COLOR -> style.color = SVGParse.color(value)
             Prop.PAINT_ORDER -> style.paintOrder = SVGParse.paintOrder(value)
+            Prop.TRANSFORM_ORIGIN -> transformOrigin = value
+            Prop.MARKER -> SVGParse.marker(value).let {
+                style.markerStart = it
+                style.markerMid = it
+                style.markerEnd = it
+            }
+            Prop.MARKER_START -> style.markerStart = SVGParse.marker(value)
+            Prop.MARKER_MID -> style.markerMid = SVGParse.marker(value)
+            Prop.MARKER_END -> style.markerEnd = SVGParse.marker(value)
+            // a transform in CSS or in the style attribute
+            "transform" -> style.transform = SVGParse.transform(value)
             Prop.CLIP_PATH -> style.clipPath = SVGParse.clipPath(value)
             Prop.CLIP_RULE -> style.clipRule = when (value.trim()) {
                 "evenodd" -> org.openrndr.extra.composition.FillRule.EvenOdd
@@ -127,10 +170,11 @@ internal open class SVGGroup(val element: Element, val elements: MutableList<SVG
                 "symbol" -> elements.add(SVGSymbol(child))
                 "use" -> elements.add(SVGUse(child))
                 "switch" -> elements.add(SVGSwitch(child))
+                "svg" -> elements.add(SVGNestedSVG(child))
                 // gradients are read before the elements are, see SVGGradients
                 // patterns are drawn where they are referred to, see SVGGradients
                 // clip paths are applied where they are referred to, see SVGGradients
-                "linearGradient", "radialGradient", "pattern", "clipPath" -> {}
+                "linearGradient", "radialGradient", "pattern", "clipPath", "marker" -> {}
                 // style elements are applied before the elements are read, see SVGStyleSheet
                 "style", "title", "desc", "metadata" -> {}
                 in Tag.graphicsList -> elements.add(SVGPath(child))
@@ -227,6 +271,20 @@ internal class SVGDefs(element: Element) : SVGGroup(element)
 internal class SVGSymbol(element: Element) : SVGGroup(element) {
     val viewBox: org.openrndr.shape.Rectangle? = (SVGParse.viewBox(element) as? ViewBox.Value)?.value
     val aspectRatio: AspectRatio = SVGParse.preserveAspectRatio(element)
+}
+
+/**
+ * A nested <svg> element: its content is placed in a viewport at [x], [y] of [width] by [height], fitted by its view
+ * box, and clipped to the viewport unless its overflow is visible
+ */
+internal class SVGNestedSVG(element: Element) : SVGGroup(element) {
+    val x = SVGParse.lengthValue(element.attr("x"), element, SVGParse.LengthAxis.X) ?: 0.0
+    val y = SVGParse.lengthValue(element.attr("y"), element, SVGParse.LengthAxis.Y) ?: 0.0
+    val width = SVGParse.lengthValue(element.attr("width").ifBlank { "100%" }, element, SVGParse.LengthAxis.X) ?: 0.0
+    val height = SVGParse.lengthValue(element.attr("height").ifBlank { "100%" }, element, SVGParse.LengthAxis.Y) ?: 0.0
+    val viewBox: org.openrndr.shape.Rectangle? = (SVGParse.viewBox(element) as? ViewBox.Value)?.value
+    val aspectRatio: AspectRatio = SVGParse.preserveAspectRatio(element)
+    val clipped = element.attr("overflow").trim().let { it != "visible" && it != "auto" }
 }
 
 /**
@@ -445,6 +503,10 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                     return@forEach
                 }
 
+                // smooth curves only reflect the control point of a preceding curve of the same kind
+                if (command.op.lowercase() !in listOf("c", "s")) prevCubicCtrlPoint = null
+                if (command.op.lowercase() !in listOf("q", "t")) prevQuadCtrlPoint = null
+
                 when (command.op) {
                     "A", "a" -> {
                         // If size == step, only the last window can be partial
@@ -659,20 +721,19 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
                     "T" -> {
                         points!!.forEach {
                             val cp = 2.0 * cursor - (prevQuadCtrlPoint ?: cursor)
-                            Segment2D(cursor, cp, it).also { _ ->
-                                cursor = it
-                                prevQuadCtrlPoint = cp
-                            }
+                            segments += Segment2D(cursor, cp, it)
+                            cursor = it
+                            prevQuadCtrlPoint = cp
                         }
                     }
 
                     "t" -> {
                         points!!.forEach {
                             val cp = 2.0 * cursor - (prevQuadCtrlPoint ?: cursor)
-                            Segment2D(cursor, cp, cursor + it).also { _ ->
-                                cursor = it
-                                prevQuadCtrlPoint = cp
-                            }
+                            val target = cursor + it
+                            segments += Segment2D(cursor, cp, target)
+                            cursor = target
+                            prevQuadCtrlPoint = cp
                         }
                     }
 

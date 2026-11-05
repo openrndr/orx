@@ -114,6 +114,7 @@ fun writeSVG(
     sb.appendGradients(composition)
     sb.appendPatterns(composition, ids)
     sb.appendClipPaths(composition, ids)
+    sb.appendMarkers(composition, ids)
 
     sb.appendNodes(composition.root, ids)
     sb.append("</svg>")
@@ -247,7 +248,9 @@ private fun StringBuilder.appendGradients(composition: Composition) {
                 "radialGradient"
             }
         }
-        append(" gradientUnits=\"$units\" spreadMethod=\"$spread\"$transform>")
+        val interpolation = if (gradient.interpolation == org.openrndr.extra.shadestyles.presets.GradientInterpolation.LINEAR_RGB)
+            " color-interpolation=\"linearRGB\"" else ""
+        append(" gradientUnits=\"$units\" spreadMethod=\"$spread\"$transform$interpolation>")
         for (stop in gradient.stops) {
             val color = Paint.RGB(stop.color.copy(alpha = 1.0)).toString()
             append("<stop offset=\"${stop.offset}\" stop-color=\"$color\" stop-opacity=\"${stop.color.alpha}\"/>")
@@ -424,6 +427,38 @@ private fun StringBuilder.appendClipPaths(composition: Composition, ids: WriterI
         append("<clipPath id=\"$id\" clipPathUnits=\"$units\">")
         appendNodes(clip.content, ids)
         append("</clipPath>")
+    }
+    append("</defs>\n")
+}
+
+/** writes a defs element with the markers that the nodes of [composition] use, when they use any */
+private fun StringBuilder.appendMarkers(composition: Composition, ids: WriterIds) {
+    val markers = LinkedHashMap<String, Marker>()
+    process(composition.root) { stage ->
+        if (stage == VisitStage.PRE) {
+            for (reference in listOf(style.markerStart, style.markerMid, style.markerEnd)) {
+                reference.value?.let { markers.getOrPut(it.svgId) { it } }
+            }
+        }
+    }
+    if (markers.isEmpty()) return
+    append("<defs>")
+    for ((id, marker) in markers) {
+        val orient = when (val o = marker.orient) {
+            MarkerOrient.Auto -> "auto"
+            MarkerOrient.AutoStartReverse -> "auto-start-reverse"
+            is MarkerOrient.Angle -> "${o.degrees}"
+        }
+        val units = if (marker.strokeWidthUnits) "strokeWidth" else "userSpaceOnUse"
+        val viewBox = marker.viewBox?.let {
+            " viewBox=\"${it.x} ${it.y} ${it.width} ${it.height}\" preserveAspectRatio=\"${marker.aspectRatio}\""
+        } ?: ""
+        // the content is clipped to the viewport of the marker, the default of SVG
+        val overflow = if (marker.content.style.clipPath is ClipPath.None) " overflow=\"visible\"" else ""
+        append("<marker id=\"$id\" refX=\"${marker.reference.x}\" refY=\"${marker.reference.y}\" ")
+        append("markerWidth=\"${marker.size.x}\" markerHeight=\"${marker.size.y}\" markerUnits=\"$units\" orient=\"$orient\"$viewBox$overflow>")
+        for (child in marker.content.children) appendNodes(child, ids)
+        append("</marker>")
     }
     append("</defs>\n")
 }

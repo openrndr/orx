@@ -10,6 +10,10 @@ import org.openrndr.extra.shadestyles.presets.PaintStyle
 import org.openrndr.extra.shadestyles.presets.PaintUnits
 import org.openrndr.extra.shadestyles.presets.boundsTransform
 import org.openrndr.math.Matrix44
+import org.openrndr.draw.isolated
+import kotlin.math.atan2
+import org.openrndr.math.transforms.buildTransform
+import org.openrndr.math.Vector3
 import org.openrndr.shape.ShapeContour
 import org.openrndr.shape.Shape
 import org.openrndr.shape.bounds
@@ -301,6 +305,75 @@ private fun Drawer.pushClip(clip: ClipPath.Shapes, node: CompositionNode, depth:
     return true
 }
 
+/**
+ * The vertices of [shape] where markers are drawn, with their angle along the path in degrees: [start] at the first
+ * vertex, [end] at the last and [mid] at the others, like the vertices of SVG paths
+ */
+internal class MarkerVertices(val start: Pair<Vector2, Double>?, val mid: List<Pair<Vector2, Double>>, val end: Pair<Vector2, Double>?)
+
+internal fun markerVertices(shape: Shape): MarkerVertices {
+    val all = mutableListOf<Pair<Vector2, Double>>()
+    fun angle(incoming: Vector2?, outgoing: Vector2?): Double {
+        val i = incoming?.takeIf { it.length.isFinite() && it.length > 0.0 }?.normalized
+        val o = outgoing?.takeIf { it.length.isFinite() && it.length > 0.0 }?.normalized
+        val direction = when {
+            i != null && o != null -> (i + o).let { if (it.length < 1E-9) i else it }
+            else -> i ?: o ?: Vector2.UNIT_X
+        }
+        return atan2(direction.y, direction.x) * 180.0 / kotlin.math.PI
+    }
+    for (contour in shape.contours) {
+        val segments = contour.segments
+        if (segments.isEmpty()) continue
+        val n = segments.size
+        for (k in 0..n) {
+            val position = if (k < n) segments[k].start else segments[n - 1].end
+            val incoming = when {
+                k > 0 -> segments[k - 1].direction(1.0)
+                contour.closed -> segments[n - 1].direction(1.0)
+                else -> null
+            }
+            val outgoing = when {
+                k < n -> segments[k].direction(0.0)
+                contour.closed -> segments[0].direction(0.0)
+                else -> null
+            }
+            all.add(Pair(position, angle(incoming, outgoing)))
+        }
+    }
+    if (all.isEmpty()) return MarkerVertices(null, emptyList(), null)
+    return MarkerVertices(all.first(), all.subList(1, (all.size - 1).coerceAtLeast(1)), all.last().takeIf { all.size > 1 })
+}
+
+/** draws the markers of [style] at the vertices of [shape], drawn with [strokeWeight] */
+private fun Drawer.drawMarkers(shape: Shape, style: Style, strokeWeight: Double) {
+    val start = style.markerStart.value
+    val mid = style.markerMid.value
+    val end = style.markerEnd.value
+    if (start == null && mid == null && end == null) return
+    val vertices = markerVertices(shape)
+    fun draw(marker: Marker, vertex: Pair<Vector2, Double>, isStart: Boolean) {
+        val (position, angle) = vertex
+        val rotation = when (val orient = marker.orient) {
+            MarkerOrient.Auto -> angle
+            MarkerOrient.AutoStartReverse -> if (isStart) angle + 180.0 else angle
+            is MarkerOrient.Angle -> orient.degrees
+        }
+        val scale = if (marker.strokeWidthUnits) strokeWeight else 1.0
+        isolated {
+            model = model * buildTransform {
+                translate(position.x, position.y, 0.0)
+                rotate(Vector3.UNIT_Z, rotation)
+                scale(scale, scale, 1.0)
+            } * marker.contentTransform
+            composition(Composition(marker.content))
+        }
+    }
+    start?.let { m -> vertices.start?.let { draw(m, it, true) } }
+    mid?.let { m -> vertices.mid.forEach { draw(m, it, false) } }
+    end?.let { m -> vertices.end?.let { draw(m, it, false) } }
+}
+
 /** true when [style] draws anything: it has code */
 private fun hasCode(style: ShadeStyle): Boolean =
     !style.fragmentTransform.isNullOrBlank() || !style.vertexTransform.isNullOrBlank() ||
@@ -475,6 +548,8 @@ fun Drawer.composition(composition: Composition) {
                         applyClip()
                         shape(compositionNode.shape)
                     }
+                    // markers are drawn after the fill and the stroke
+                    drawMarkers(compositionNode.shape, style, strokeWeight)
                 }
             }
             is ImageNode -> if (compositionNode.effectiveStyle.visibility.value) {

@@ -99,6 +99,11 @@ internal object Prop {
     const val FONT_WEIGHT = "font-weight"
     const val OPACITY = "opacity"
     const val PAINT_ORDER = "paint-order"
+    const val TRANSFORM_ORIGIN = "transform-origin"
+    const val MARKER = "marker"
+    const val MARKER_START = "marker-start"
+    const val MARKER_MID = "marker-mid"
+    const val MARKER_END = "marker-end"
     const val CLIP_PATH = "clip-path"
     const val CLIP_RULE = "clip-rule"
     const val STOP_COLOR = "stop-color"
@@ -132,6 +137,11 @@ internal object Prop {
         FONT_WEIGHT,
         OPACITY,
         PAINT_ORDER,
+        TRANSFORM_ORIGIN,
+        MARKER,
+        MARKER_START,
+        MARKER_MID,
+        MARKER_END,
         CLIP_PATH,
         CLIP_RULE,
         STOP_COLOR,

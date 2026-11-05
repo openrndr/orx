@@ -69,9 +69,11 @@ internal class SVGDocument(
         convertElement(root).also {
             // the content of patterns and clip paths is converted like the elements of the document
             for ((content, group) in contents) {
+                // the clip of a marker to its viewport is kept, the clip path of a clipPath element applies to its
+                // content, not to the element it clips
+                val clip = content.style.clipPath.takeIf { group.element.tagName() == "marker" } ?: ClipPath.None
                 content.style = group.style.copy()
-                // the clip path of a clipPath element applies to its content, not to the element it clips
-                content.style.clipPath = ClipPath.None
+                content.style.clipPath = clip
                 group.elements.mapTo(content.children) { element ->
                     convertElement(element).also { node -> node.parent = content }
                 }
@@ -90,6 +92,7 @@ internal class SVGDocument(
             this.id = svgElem.id
         }
         is SVGUse -> convertUse(svgElem)
+        is SVGNestedSVG -> convertNestedSVG(svgElem)
         is SVGGroup -> GroupNode().apply {
             style = svgElem.style.copy()
             this.id = svgElem.id
@@ -110,7 +113,7 @@ internal class SVGDocument(
             }
         }
     }.apply {
-        transform = svgElem.style.transform.value
+        transform = svgElem.effectiveTransform()
     }
 
     /** the elements of the document by their id, including the elements in defs and symbol elements */
@@ -126,6 +129,31 @@ internal class SVGDocument(
         }
         collect(root)
         elements
+    }
+
+    /**
+     * Converts a nested svg element: a group, clipped to the viewport unless its overflow is visible, with a group
+     * that places and fits the content
+     */
+    private fun convertNestedSVG(svg: SVGNestedSVG): GroupNode = GroupNode().apply {
+        style = svg.style.copy()
+        this.id = svg.id
+        if (svg.width <= 0.0 || svg.height <= 0.0) return@apply
+        if (svg.clipped) {
+            val clipContent = GroupNode()
+            val rectangle = org.openrndr.shape.Rectangle(svg.x, svg.y, svg.width, svg.height)
+            clipContent.children.add(ShapeNode(rectangle.shape).also { it.parent = clipContent })
+            style.clipPath = ClipPath.Shapes(clipContent)
+        }
+        val content = GroupNode().also { group ->
+            group.transform = org.openrndr.math.transforms.buildTransform { translate(svg.x, svg.y, 0.0) } *
+                    (svg.viewBox?.let {
+                        viewportTransform(it, org.openrndr.shape.Rectangle(0.0, 0.0, svg.width, svg.height), svg.aspectRatio)
+                    } ?: org.openrndr.math.Matrix44.IDENTITY)
+            group.parent = this
+            svg.elements.mapTo(group.children) { convertElement(it).also { node -> node.parent = group } }
+        }
+        children.add(content)
     }
 
     /** the use elements that are being converted, a use element that refers to an element it is in is not drawn */
@@ -347,19 +375,27 @@ internal class SVGLoader {
         }
         // the rules of style elements are applied to the elements they select before the elements are read
         SVGStyleSheet.apply(root)
+        // percentages of lengths refer to the size of the viewport of the document
+        SVGParse.viewport.set(
+            (SVGParse.viewBox(root) as? ViewBox.Value)?.value?.dimensions
+                ?: SVGParse.bounds(root).dimensions.takeIf { it.x > 0.0 && it.y > 0.0 }
+                ?: org.openrndr.math.Vector2(100.0, 100.0)
+        )
         // gradients and patterns are collected first, elements can refer to them before they are defined
         val gradients = SVGGradients.parse(root)
         val patterns = SVGGradients.parsePatterns(root)
         val clips = SVGGradients.parseClipPaths(root)
+        val markers = SVGGradients.parseMarkers(root)
         val servers: Map<String, Paint.Server> = gradients + patterns.mapValues { it.value.first }
-        return SVGGradients.using(servers, clips.mapValues { it.value.first }) {
+        return SVGGradients.usingMarkers(markers.mapValues { it.value.first }) { SVGGradients.using(servers, clips.mapValues { it.value.first }) {
             val rootGroup = SVGSVGElement(root)
             // the content of patterns and clip paths can refer to gradients, patterns and clip paths too
             val contents = patterns.values.mapNotNull { (pattern, element) ->
                 element?.let { pattern.content to SVGGroup(it) }
-            } + clips.values.map { (clip, element) -> clip.content to SVGGroup(element) }
+            } + clips.values.map { (clip, element) -> clip.content to SVGGroup(element) } +
+                    markers.values.map { (marker, element) -> marker.content to SVGGroup(element) }
             SVGDocument(rootGroup, namespaces, base, contents)
-        }
+        } }
     }
 
 //    private fun handleImage(group: SVGGroup, e: Element) {

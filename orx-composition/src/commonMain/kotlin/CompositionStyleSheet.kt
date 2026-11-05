@@ -5,6 +5,7 @@ import org.openrndr.color.*
 import org.openrndr.draw.*
 import org.openrndr.extra.shadestyles.presets.ColorStop
 import org.openrndr.extra.shadestyles.presets.GradientSpread
+import org.openrndr.extra.shadestyles.presets.GradientInterpolation
 import org.openrndr.extra.shadestyles.presets.LinearGradientPaint
 import org.openrndr.extra.shadestyles.presets.PaintUnits
 import org.openrndr.extra.shadestyles.presets.RadialGradientPaint
@@ -13,6 +14,7 @@ import org.openrndr.extra.shadestyles.presets.TexturePaint
 import org.openrndr.extra.composition.AttributeOrPropertyKey.*
 import org.openrndr.extra.composition.Inheritance.*
 import org.openrndr.math.*
+import org.openrndr.math.transforms.buildTransform
 import org.openrndr.shape.Rectangle
 import kotlin.jvm.JvmRecord
 import kotlin.reflect.*
@@ -71,6 +73,9 @@ sealed interface Paint : AttributeOrPropertyValue {
         val spread: GradientSpread
         val id: String
 
+        /** the color space the colors are interpolated in, sRGB like SVG by default */
+        val interpolation: GradientInterpolation
+
         /** the id of the gradient in SVG documents: [id], or an id derived from the gradient when it has none */
         val svgId: String get() = id.ifEmpty { "gradient-" + hashCode().toUInt().toString(16) }
 
@@ -94,9 +99,11 @@ sealed interface Paint : AttributeOrPropertyValue {
         override val units: PaintUnits = PaintUnits.BOUNDS,
         override val spread: GradientSpread = GradientSpread.PAD,
         override val transform: Matrix44 = Matrix44.IDENTITY,
-        override val id: String = ""
+        override val id: String = "",
+        override val interpolation: GradientInterpolation = GradientInterpolation.SRGB
     ) : Gradient {
-        override fun source(): SourcePreset = LinearGradientPaint(start, end, stops, spread)
+        override fun source(): SourcePreset =
+            LinearGradientPaint(start, end, stops, spread).also { it.interpolation = interpolation }
         override fun toString(): String = "url(#$svgId)"
     }
 
@@ -113,9 +120,11 @@ sealed interface Paint : AttributeOrPropertyValue {
         override val units: PaintUnits = PaintUnits.BOUNDS,
         override val spread: GradientSpread = GradientSpread.PAD,
         override val transform: Matrix44 = Matrix44.IDENTITY,
-        override val id: String = ""
+        override val id: String = "",
+        override val interpolation: GradientInterpolation = GradientInterpolation.SRGB
     ) : Gradient {
-        override fun source(): SourcePreset = RadialGradientPaint(center, radius, focal, focalRadius, stops, spread)
+        override fun source(): SourcePreset =
+            RadialGradientPaint(center, radius, focal, focalRadius, stops, spread).also { it.interpolation = interpolation }
         override fun toString(): String = "url(#$svgId)"
     }
 
@@ -349,6 +358,65 @@ sealed interface ClipPath : AttributeOrPropertyValue {
         val svgId: String get() = id.ifEmpty { "clip-" + hashCode().toUInt().toString(16) }
 
         override fun toString() = "url(#$svgId)"
+    }
+}
+
+/**
+ * How a [Marker] is turned at a vertex
+ */
+sealed interface MarkerOrient {
+    /** along the direction of the path, the bisector of the directions in and out of the vertex */
+    object Auto : MarkerOrient
+
+    /** like [Auto], the marker at the start of the path is turned around */
+    object AutoStartReverse : MarkerOrient
+
+    /** by a fixed angle in [degrees] */
+    class Angle(val degrees: Double) : MarkerOrient
+}
+
+/**
+ * A marker, like SVG's marker: [content] drawn at the vertices of paths. The content is in the coordinates of
+ * [viewBox], fitted into [size] by [aspectRatio], or in the coordinates of [size] when there is no view box; the
+ * point [reference] of the content is placed on the vertex. The size is multiplied by the stroke weight when
+ * [strokeWidthUnits] is true. Clipping the content to the viewport, as SVG does by default, is part of the content.
+ */
+class Marker(
+    val content: GroupNode,
+    val viewBox: Rectangle? = null,
+    val aspectRatio: AspectRatio = AspectRatio.DEFAULT,
+    val reference: Vector2 = Vector2.ZERO,
+    val size: Vector2 = Vector2(3.0, 3.0),
+    val strokeWidthUnits: Boolean = true,
+    val orient: MarkerOrient = MarkerOrient.Angle(0.0),
+    val id: String = ""
+) {
+    /** the id of the marker in SVG documents: [id], or an id derived from the marker when it has none */
+    val svgId: String get() = id.ifEmpty { "marker-" + hashCode().toUInt().toString(16) }
+
+    /** the transform from the coordinates of the content to the viewport, with the reference point at the origin */
+    val contentTransform: Matrix44
+        get() {
+            val fit = viewBox?.let { viewportTransform(it, Rectangle(0.0, 0.0, size.x, size.y), aspectRatio) }
+                ?: Matrix44.IDENTITY
+            val reference = (fit * this.reference.xy01).xy
+            return buildTransform { translate(-reference.x, -reference.y, 0.0) } * fit
+        }
+}
+
+/**
+ * The marker at vertices of paths, like the marker-start, marker-mid and marker-end properties of SVG
+ */
+sealed interface MarkerReference : AttributeOrPropertyValue {
+    override val value: Marker?
+
+    object None : MarkerReference {
+        override val value: Marker? = null
+        override fun toString() = "none"
+    }
+
+    class Value(override val value: Marker) : MarkerReference {
+        override fun toString() = "url(#${value.svgId})"
     }
 }
 
@@ -614,6 +682,9 @@ var Style.color by PropertyDelegate<Paint>(COLOR, INHERIT, Paint.RGB(ColorRGBa.B
 var Style.vectorEffect by PropertyDelegate<VectorEffect>(VECTOR_EFFECT, RESET, VectorEffect.None)
 var Style.clipPath by PropertyDelegate<ClipPath>(CLIP_PATH, RESET, ClipPath.None)
 var Style.clipRule by PropertyDelegate<FillRule>(CLIP_RULE, INHERIT, FillRule.NonZero)
+var Style.markerStart by PropertyDelegate<MarkerReference>(MARKER_START, INHERIT, MarkerReference.None)
+var Style.markerMid by PropertyDelegate<MarkerReference>(MARKER_MID, INHERIT, MarkerReference.None)
+var Style.markerEnd by PropertyDelegate<MarkerReference>(MARKER_END, INHERIT, MarkerReference.None)
 var Style.paintOrder by PropertyDelegate<PaintOrder>(PAINT_ORDER, INHERIT, PaintOrder.Normal)
 var Style.strokeDashArray by PropertyDelegate<DashArray>(STROKE_DASHARRAY, INHERIT, DashArray.None)
 var Style.strokeDashOffset by PropertyDelegate<Length>(STROKE_DASHOFFSET, INHERIT, 0.0.pixels)
@@ -690,6 +761,9 @@ enum class AttributeOrPropertyKey {
     PAINT_ORDER { override fun toString() = "paint-order" },
     CLIP_PATH { override fun toString() = "clip-path" },
     CLIP_RULE { override fun toString() = "clip-rule" },
+    MARKER_START { override fun toString() = "marker-start" },
+    MARKER_MID { override fun toString() = "marker-mid" },
+    MARKER_END { override fun toString() = "marker-end" },
     STOP_COLOR { override fun toString() = "stop-color" },
     STOP_OPACITY { override fun toString() = "stop-opacity" },
     STROKE { override fun toString() = "stroke" },

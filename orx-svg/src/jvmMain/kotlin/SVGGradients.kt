@@ -5,12 +5,18 @@ import org.jsoup.nodes.Element
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.composition.AspectRatio
 import org.openrndr.extra.composition.ClipPath
+import org.openrndr.extra.composition.clipPath
+import org.openrndr.extra.composition.Marker
+import org.openrndr.extra.composition.MarkerOrient
+import org.openrndr.extra.composition.ShapeNode
+import org.openrndr.extra.composition.viewportTransform
 import org.openrndr.extra.composition.GroupNode
 import org.openrndr.extra.composition.Length
 import org.openrndr.extra.composition.Paint
 import org.openrndr.extra.composition.ViewBox
 import org.openrndr.extra.shadestyles.presets.ColorStop
 import org.openrndr.extra.shadestyles.presets.GradientSpread
+import org.openrndr.extra.shadestyles.presets.GradientInterpolation
 import org.openrndr.extra.shadestyles.presets.PaintUnits
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
@@ -25,6 +31,74 @@ private val logger = KotlinLogging.logger {}
 internal object SVGGradients {
     private val current = ThreadLocal<Map<String, Paint.Server>>()
     private val currentClips = ThreadLocal<Map<String, ClipPath.Shapes>>()
+    private val currentMarkers = ThreadLocal<Map<String, Marker>>()
+
+    /** runs [block] with [markers] available to [lookupMarker] */
+    fun <T> usingMarkers(markers: Map<String, Marker>, block: () -> T): T {
+        val previous = currentMarkers.get()
+        currentMarkers.set(markers)
+        try {
+            return block()
+        } finally {
+            currentMarkers.set(previous)
+        }
+    }
+
+    /** the marker with [id] of the document that is being parsed */
+    fun lookupMarker(id: String): Marker? = currentMarkers.get()?.get(id).also {
+        if (it == null) logger.warn { "marker refers to '#$id', which is not a marker in the document" }
+    }
+
+    /**
+     * The markers in the document with [root], by their id, with their elements. Their content is empty, it is added
+     * when the elements are converted; content that is clipped to the viewport of the marker gets a clip path.
+     */
+    fun parseMarkers(root: Element): Map<String, Pair<Marker, Element>> =
+        root.allElements.filter { it.tagName() == "marker" && it.id().isNotEmpty() }.associate { element ->
+            fun number(name: String, default: Double) = element.attr(name).trim().let { value ->
+                if (value.isEmpty()) default else SVGParse.lengthValue(value, element) ?: default
+            }
+            val viewBox = (SVGParse.viewBox(element) as? ViewBox.Value)?.value
+            val aspectRatio = SVGParse.preserveAspectRatio(element)
+            val size = Vector2(number("markerWidth", 3.0), number("markerHeight", 3.0))
+            // keywords of the reference point refer to the view box, or to the viewport without one
+            val extent = viewBox ?: Rectangle(0.0, 0.0, size.x, size.y)
+            fun reference(name: String, low: String, high: String, start: Double, length: Double) =
+                when (val value = element.attr(name).trim()) {
+                    low -> start
+                    "center" -> start + length / 2.0
+                    high -> start + length
+                    else -> SVGParse.lengthValue(value, element) ?: 0.0
+                }
+            val orient = when (val value = element.attr("orient").trim()) {
+                "auto" -> MarkerOrient.Auto
+                "auto-start-reverse" -> MarkerOrient.AutoStartReverse
+                else -> MarkerOrient.Angle(SVGParse.angle(value) ?: 0.0)
+            }
+            val content = GroupNode()
+            if (element.attr("overflow").trim().let { it != "visible" && it != "auto" }) {
+                // the viewport in the coordinates of the content
+                val fit = viewBox?.let { viewportTransform(it, Rectangle(0.0, 0.0, size.x, size.y), aspectRatio) }
+                    ?: Matrix44.IDENTITY
+                val corners = listOf(Vector2.ZERO, Vector2(size.x, 0.0), size, Vector2(0.0, size.y))
+                    .map { (fit.inversed * it.xy01).xy }
+                val clip = GroupNode()
+                clip.children.add(ShapeNode(org.openrndr.shape.ShapeContour.fromPoints(corners, closed = true).shape).also { it.parent = clip })
+                content.style.clipPath = ClipPath.Shapes(clip)
+            }
+            val marker = Marker(
+                content, viewBox, aspectRatio,
+                Vector2(
+                    reference("refX", "left", "right", extent.x, extent.width),
+                    reference("refY", "top", "bottom", extent.y, extent.height)
+                ),
+                size,
+                element.attr("markerUnits").trim() != "userSpaceOnUse",
+                orient,
+                element.id()
+            )
+            element.id() to Pair(marker, element)
+        }
 
     /**
      * runs [block] with [gradients], gradients and patterns, available to [lookup], and [clips] to [lookupClip]
@@ -165,6 +239,12 @@ internal object SVGGradients {
             "repeat" -> GradientSpread.REPEAT
             else -> GradientSpread.PAD
         }
+        // color-interpolation, given as an attribute or in the style attribute
+        val interpolation = chain.firstNotNullOfOrNull { e ->
+            (e.attr("style").split(";").map { it.split(":").map(String::trim) }
+                .firstOrNull { it.size >= 2 && it[0] == "color-interpolation" }?.get(1)
+                ?: e.attr("color-interpolation").trim().takeIf { it.isNotEmpty() })
+        }.let { if (it == "linearRGB" || it == "linearrgb") GradientInterpolation.LINEAR_RGB else GradientInterpolation.SRGB }
         val transform = chain.firstOrNull { it.attr("gradientTransform").isNotBlank() }
             ?.let { SVGParse.transform(it, "gradientTransform").value } ?: Matrix44.IDENTITY
         val stops = chain.firstNotNullOfOrNull { e -> e.children().filter { it.tagName() == "stop" }.takeIf { it.isNotEmpty() } }
@@ -178,7 +258,8 @@ internal object SVGGradients {
             "linearGradient" -> Paint.LinearGradient(
                 start = Vector2(coordinate("x1", "0%", viewport.x), coordinate("y1", "0%", viewport.y)),
                 end = Vector2(coordinate("x2", "100%", viewport.x), coordinate("y2", "0%", viewport.y)),
-                stops = stops, units = units, spread = spread, transform = transform, id = element.id()
+                stops = stops, units = units, spread = spread, transform = transform, id = element.id(),
+                interpolation = interpolation
             )
 
             "radialGradient" -> {
@@ -191,7 +272,8 @@ internal object SVGGradients {
                         attr("fy")?.let { coordinate(it, units, viewport.y) } ?: center.y
                     ),
                     focalRadius = coordinate("fr", "0%", diagonal),
-                    stops = stops, units = units, spread = spread, transform = transform, id = element.id()
+                    stops = stops, units = units, spread = spread, transform = transform, id = element.id(),
+                    interpolation = interpolation
                 )
             }
 

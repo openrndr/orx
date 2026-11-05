@@ -203,17 +203,34 @@ internal object SVGParse {
     }
 
     // Syntax should map to https://www.w3.org/TR/css-transforms-1/#svg-syntax
-    fun transform(element: Element, attribute: String = Attr.TRANSFORM): Transform {
+    fun transform(element: Element, attribute: String = Attr.TRANSFORM): Transform =
+        transform(element.attr(attribute))
+
+    /**
+     * A transform list, of SVG or CSS: matrix, translate, scale, rotate, skewX and skewY, and the CSS functions
+     * translateX, translateY, scaleX and scaleY. CSS units px and deg are ignored, turn and rad are converted.
+     */
+    fun transform(value: String): Transform {
         var transform = Matrix44.IDENTITY
 
-        val transformValue = element.attr(attribute).let {
+        val transformValue = value.trim().let {
             it.ifEmpty {
                 return Transform.None
             }
+        }.let { css ->
+            // CSS angles and lengths: degrees and pixels are the units of SVG
+            css.replace(Regex("([0-9.])turn")) { "${it.groupValues[1]}*360" }
+                .replace(Regex("(-?[0-9.]+(?:[eE][-+]?[0-9]+)?)rad")) { (it.groupValues[1].toDouble() * 180.0 / PI).toString() }
+                .replace(Regex("(-?[0-9.]+(?:[eE][-+]?[0-9]+)?)\\*360")) { (it.groupValues[1].toDouble() * 360.0).toString() }
+                .replace(Regex("(?<=[0-9.])(deg|px)"), "")
+                .replace("translateX(", "translate(").replace("scaleX(", "scale1x(")
+                .replace(Regex("translateY\\(\\s*([^)]*)\\)")) { "translate(0 ${it.groupValues[1]})" }
+                .replace(Regex("scaleY\\(\\s*([^)]*)\\)")) { "scale(1 ${it.groupValues[1]})" }
+                .replace(Regex("scale1x\\(\\s*([^)]*)\\)")) { "scale(${it.groupValues[1]} 1)" }
         }
 
         // TODO: Number regex accepts `-` as a number lol
-        val p = Pattern.compile("(matrix|translate|scale|rotate|skewX|skewY)\\([\\d\\.,\\-\\s]+\\)")
+        val p = Pattern.compile("(matrix|translate|scale|rotate|skewX|skewY)\\([\\d\\.,\\-\\seE+]+\\)")
         val m = p.matcher(transformValue)
 
         // TODO: This looks to be making far too many assumptions about the well-formedness of its input
@@ -352,46 +369,92 @@ internal object SVGParse {
         )
     }
 
+    /** which size of the viewport a percentage is relative to */
+    enum class LengthAxis { X, Y, OTHER }
+
+    /** the size of the viewport of the document that is being parsed, which percentages refer to */
+    val viewport = ThreadLocal<Vector2>()
+
+    /** the font size of [element]: its own or that of the nearest ancestor that has one, in pixels; 16 by default */
+    fun fontSize(element: Element?): Double {
+        var current: Element? = element
+        val sizes = mutableListOf<String>()
+        while (current != null) {
+            val inline = current.attr("style").split(";").map { it.split(":").map(String::trim) }
+                .firstOrNull { it.size >= 2 && it[0] == "font-size" }?.get(1)
+            (inline ?: current.attr("font-size").trim().takeIf { it.isNotEmpty() })?.let { sizes.add(it) }
+            current = current.parent()
+        }
+        // relative sizes are resolved from the outermost size inwards
+        var size = 16.0
+        for (value in sizes.asReversed()) {
+            size = when {
+                value.endsWith("em") && !value.endsWith("rem") -> (value.dropLast(2).toDoubleOrNull() ?: 1.0) * size
+                value.endsWith("%") -> (value.dropLast(1).toDoubleOrNull() ?: 100.0) / 100.0 * size
+                else -> value.toDoubleOrNull() ?: length(value).value
+            }
+        }
+        return size
+    }
+
+    /**
+     * A length in pixels: a number, a number with an absolute unit, em or ex, relative to the font size of [element],
+     * or a percentage of the size of the viewport along [axis]. Null when it is not a length.
+     */
+    fun lengthValue(value: String, element: Element?, axis: LengthAxis = LengthAxis.OTHER): Double? {
+        val v = value.trim()
+        if (v.isEmpty()) return null
+        v.toDoubleOrNull()?.let { return it }
+        return when {
+            v.endsWith("%") -> {
+                val fraction = (v.dropLast(1).toDoubleOrNull() ?: return null) / 100.0
+                val size = viewport.get() ?: Vector2(100.0, 100.0)
+                fraction * when (axis) {
+                    LengthAxis.X -> size.x
+                    LengthAxis.Y -> size.y
+                    LengthAxis.OTHER -> sqrt((size.x * size.x + size.y * size.y) / 2.0)
+                }
+            }
+            v.endsWith("em") && !v.endsWith("rem") -> (v.dropLast(2).toDoubleOrNull() ?: return null) * fontSize(element)
+            v.endsWith("ex") -> (v.dropLast(2).toDoubleOrNull() ?: return null) * fontSize(element) * 0.5
+            PropertyRegex.Length.regex.matchEntire(v) != null -> length(v).value
+            else -> null
+        }
+    }
+
+    /** the length of attribute [name] of [element] in pixels, [default] when it is not given, null when it is invalid */
+    private fun attributeLength(element: Element, name: String, axis: LengthAxis, default: Double?): Double? {
+        val value = element.attr(name).trim()
+        if (value.isEmpty()) return default
+        return lengthValue(value, element, axis)
+    }
+
     fun circle(element: Element): List<Command> {
-        val cx = element.attr(Attr.CX).let {
-            if (it.isEmpty()) 0.0 else it.toDoubleOrNull()
-        } ?: return emptyList()
-        val cy = element.attr(Attr.CY).let {
-            if (it.isEmpty()) 0.0 else it.toDoubleOrNull()
-        } ?: return emptyList()
-        val r = element.attr(Attr.R).let {
-            if (it.isEmpty()) 0.0 else it.toDoubleOrNull()?.times(2.0)
-        } ?: return emptyList()
+        val cx = attributeLength(element, Attr.CX, LengthAxis.X, 0.0) ?: return emptyList()
+        val cy = attributeLength(element, Attr.CY, LengthAxis.Y, 0.0) ?: return emptyList()
+        val r = attributeLength(element, Attr.R, LengthAxis.OTHER, 0.0)?.times(2.0) ?: return emptyList()
 
         return ellipsePath(cx, cy, r, r)
     }
 
     fun ellipse(element: Element): List<Command> {
-        val cx = element.attr(Attr.CX).let {
-            if (it.isEmpty()) 0.0 else it.toDoubleOrNull()
-        } ?: return emptyList()
-        val cy = element.attr(Attr.CY).let {
-            if (it.isEmpty()) 0.0 else it.toDoubleOrNull()
-        } ?: return emptyList()
-        val rx = element.attr(Attr.RX).let {
-            if (it.isEmpty()) 0.0 else it.toDoubleOrNull()?.times(2.0)
-        } ?: return emptyList()
-        val ry = element.attr(Attr.RY).let {
-            if (it.isEmpty()) 0.0 else it.toDoubleOrNull()?.times(2.0)
-        } ?: return emptyList()
+        val cx = attributeLength(element, Attr.CX, LengthAxis.X, 0.0) ?: return emptyList()
+        val cy = attributeLength(element, Attr.CY, LengthAxis.Y, 0.0) ?: return emptyList()
+        val rx = attributeLength(element, Attr.RX, LengthAxis.X, 0.0)?.times(2.0) ?: return emptyList()
+        val ry = attributeLength(element, Attr.RY, LengthAxis.Y, 0.0)?.times(2.0) ?: return emptyList()
 
         return ellipsePath(cx, cy, rx, ry)
     }
 
     fun rectangle(element: Element): List<Command> {
-        val x = element.attr(Attr.X).let { if (it.isEmpty()) 0.0 else it.toDoubleOrNull() } ?: return emptyList()
-        val y = element.attr(Attr.Y).let { if (it.isEmpty()) 0.0 else it.toDoubleOrNull() } ?: return emptyList()
-        val width = element.attr(Attr.WIDTH).toDoubleOrNull() ?: return emptyList()
-        val height = element.attr(Attr.HEIGHT).toDoubleOrNull() ?: return emptyList()
+        val x = attributeLength(element, Attr.X, LengthAxis.X, 0.0) ?: return emptyList()
+        val y = attributeLength(element, Attr.Y, LengthAxis.Y, 0.0) ?: return emptyList()
+        val width = attributeLength(element, Attr.WIDTH, LengthAxis.X, null) ?: return emptyList()
+        val height = attributeLength(element, Attr.HEIGHT, LengthAxis.Y, null) ?: return emptyList()
 
         // rounded corners: a missing radius is the other radius, radii are at most half the width and height
-        val rxAttribute = element.attr("rx").toDoubleOrNull()?.takeIf { it > 0.0 }
-        val ryAttribute = element.attr("ry").toDoubleOrNull()?.takeIf { it > 0.0 }
+        val rxAttribute = attributeLength(element, "rx", LengthAxis.X, null)?.takeIf { it > 0.0 }
+        val ryAttribute = attributeLength(element, "ry", LengthAxis.Y, null)?.takeIf { it > 0.0 }
         val rx = (rxAttribute ?: ryAttribute ?: 0.0).coerceAtMost(width / 2.0)
         val ry = (ryAttribute ?: rxAttribute ?: 0.0).coerceAtMost(height / 2.0)
         if (rx > 0.0 && ry > 0.0) {
@@ -419,10 +482,10 @@ internal object SVGParse {
     }
 
     fun line(element: Element): List<Command> {
-        val x1 = element.attr(Attr.X1).toDoubleOrNull() ?: return emptyList()
-        val x2 = element.attr(Attr.X2).toDoubleOrNull() ?: return emptyList()
-        val y1 = element.attr(Attr.Y1).toDoubleOrNull() ?: return emptyList()
-        val y2 = element.attr(Attr.Y2).toDoubleOrNull() ?: return emptyList()
+        val x1 = attributeLength(element, Attr.X1, LengthAxis.X, 0.0) ?: return emptyList()
+        val x2 = attributeLength(element, Attr.X2, LengthAxis.X, 0.0) ?: return emptyList()
+        val y1 = attributeLength(element, Attr.Y1, LengthAxis.Y, 0.0) ?: return emptyList()
+        val y2 = attributeLength(element, Attr.Y2, LengthAxis.Y, 0.0) ?: return emptyList()
 
         return listOf(
             Command("M", x1, y1),
@@ -472,6 +535,24 @@ internal object SVGParse {
     /**
      * A paint order: the stroke is painted first when it is named before the fill, or the fill is not named
      */
+    /** an angle in degrees: a number, or a number with the unit deg, rad, grad or turn */
+    fun angle(value: String): Double? {
+        val v = value.trim()
+        return when {
+            v.endsWith("deg") -> v.dropLast(3).toDoubleOrNull()
+            v.endsWith("grad") -> v.dropLast(4).toDoubleOrNull()?.times(0.9)
+            v.endsWith("rad") -> v.dropLast(3).toDoubleOrNull()?.times(180.0 / PI)
+            v.endsWith("turn") -> v.dropLast(4).toDoubleOrNull()?.times(360.0)
+            else -> v.toDoubleOrNull()
+        }
+    }
+
+    /** a marker: none, or a reference to a marker element */
+    fun marker(value: String): MarkerReference {
+        val match = Regex("^\\s*url\\(\\s*['\"]?#([^)'\"]+)['\"]?\\s*\\)\\s*$").matchEntire(value) ?: return MarkerReference.None
+        return SVGGradients.lookupMarker(match.groupValues[1].trim())?.let { MarkerReference.Value(it) } ?: MarkerReference.None
+    }
+
     /** a clip path: none, or a reference to a clipPath element */
     fun clipPath(value: String): ClipPath {
         val match = Regex("^\\s*url\\(\\s*['\"]?#([^)'\"]+)['\"]?\\s*\\)\\s*$").matchEntire(value) ?: return ClipPath.None
