@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="720" height="480" viewBox="0 0 720 480">
+  <defs>
+    <!-- a checkerboard in user space -->
+    <pattern id="checkers" patternUnits="userSpaceOnUse" width="16" height="16">
+      <rect width="16" height="16" fill="#f2b134"/>
+      <rect width="8" height="8" fill="#3d5a99"/>
+      <rect x="8" y="8" width="8" height="8" fill="#3d5a99"/>
+    </pattern>
+    <!-- stripes, turned by the pattern transform -->
+    <pattern id="stripes" patternUnits="userSpaceOnUse" width="12" height="12" patternTransform="rotate(45)">
+      <rect width="12" height="12" fill="#e8574a"/>
+      <rect width="6" height="12" fill="#202040"/>
+    </pattern>
+    <!-- dots over the bounds of a text: twenty by four tiles, whatever its size -->
+    <pattern id="dots" width="0.05" height="0.25" patternContentUnits="objectBoundingBox">
+      <rect width="0.05" height="0.25" fill="#4c9e8a"/>
+      <ellipse cx="0.025" cy="0.125" rx="0.015" ry="0.07" fill="#f4efe6"/>
+    </pattern>
+    <path id="arc" d="M 60 440 Q 360 300 660 440"/>
+  </defs>
+  <rect width="720" height="480" fill="#f4efe6"/>
+  <text x="30" y="110" font-family="Plex" font-size="110" fill="url(#checkers)">PATTERN</text>
+  <text x="30" y="210" font-family="Plex" font-size="80" fill="url(#stripes)">stripes</text>
+  <text x="30" y="310" font-family="Plex" font-size="80" fill="url(#dots)">dots in bounds</text>
+  <text x="440" y="210" font-family="Plex" font-size="64" fill="#f4efe6" stroke="url(#stripes)" stroke-width="6">rim</text>
+  <text font-family="Plex" font-size="40" fill="url(#checkers)"><textPath xlink:href="#arc" startOffset="6%">along a path with a pattern</textPath></text>
+</svg>
