@@ -63,15 +63,17 @@ internal class SVGDocument(
     private val root: SVGSVGElement,
     val namespaces: Map<String, String>,
     private val base: URI? = null,
-    private val patternContents: List<Pair<Paint.Pattern, SVGGroup>> = emptyList()
+    private val contents: List<Pair<GroupNode, SVGGroup>> = emptyList()
 ) {
     fun composition(): Composition = Composition(
         convertElement(root).also {
-            // the content of patterns is converted like the elements of the document
-            for ((pattern, group) in patternContents) {
-                pattern.content.style = group.style.copy()
-                group.elements.mapTo(pattern.content.children) { element ->
-                    convertElement(element).also { node -> node.parent = pattern.content }
+            // the content of patterns and clip paths is converted like the elements of the document
+            for ((content, group) in contents) {
+                content.style = group.style.copy()
+                // the clip path of a clipPath element applies to its content, not to the element it clips
+                content.style.clipPath = ClipPath.None
+                group.elements.mapTo(content.children) { element ->
+                    convertElement(element).also { node -> node.parent = content }
                 }
             }
         },
@@ -348,14 +350,15 @@ internal class SVGLoader {
         // gradients and patterns are collected first, elements can refer to them before they are defined
         val gradients = SVGGradients.parse(root)
         val patterns = SVGGradients.parsePatterns(root)
+        val clips = SVGGradients.parseClipPaths(root)
         val servers: Map<String, Paint.Server> = gradients + patterns.mapValues { it.value.first }
-        return SVGGradients.using(servers) {
+        return SVGGradients.using(servers, clips.mapValues { it.value.first }) {
             val rootGroup = SVGSVGElement(root)
-            // the content of patterns can refer to gradients and patterns too
-            val patternContents = patterns.values.mapNotNull { (pattern, element) ->
-                element?.let { pattern to SVGGroup(it) }
-            }
-            SVGDocument(rootGroup, namespaces, base, patternContents)
+            // the content of patterns and clip paths can refer to gradients, patterns and clip paths too
+            val contents = patterns.values.mapNotNull { (pattern, element) ->
+                element?.let { pattern.content to SVGGroup(it) }
+            } + clips.values.map { (clip, element) -> clip.content to SVGGroup(element) }
+            SVGDocument(rootGroup, namespaces, base, contents)
         }
     }
 

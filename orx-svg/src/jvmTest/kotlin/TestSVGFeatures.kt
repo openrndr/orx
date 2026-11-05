@@ -119,3 +119,75 @@ class TestSVGFeatures {
         assertTrue(c.findShapes().none { it.id == "second" })
     }
 }
+
+class TestSVGDashes {
+    private val c = parseSVG(
+        """<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+            <g stroke-dasharray="4, 2" stroke-dashoffset="3">
+                <line id="inherited" x1="0" y1="0" x2="10" y2="0"/>
+                <line id="none" x1="0" y1="0" x2="10" y2="0" stroke-dasharray="none"/>
+                <line id="negative" x1="0" y1="0" x2="10" y2="0" stroke-dasharray="4 -2"/>
+                <line id="zeros" x1="0" y1="0" x2="10" y2="0" stroke-dasharray="0 0"/>
+                <line id="odd" x1="0" y1="0" x2="10" y2="0" style="stroke-dasharray: 5 1 2"/>
+            </g>
+        </svg>"""
+    )
+
+    private fun style(id: String) = c.findShapes().first { it.id == id }.effectiveStyle
+
+    @Test
+    fun parsesDashArrays() {
+        assertEquals(listOf(4.0, 2.0), style("inherited").strokeDashArray.value)
+        assertEquals(3.0, style("inherited").strokeDashOffset.value)
+        assertIs<DashArray.None>(style("none").strokeDashArray)
+        // invalid patterns give solid strokes, as in SVG
+        assertIs<DashArray.None>(style("negative").strokeDashArray)
+        assertIs<DashArray.None>(style("zeros").strokeDashArray)
+        assertEquals(listOf(5.0, 1.0, 2.0), style("odd").strokeDashArray.value)
+    }
+}
+
+class TestSVGClipPaths {
+    private val c = parseSVG(
+        """<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+            <defs>
+                <clipPath id="user"><circle cx="5" cy="5" r="5"/><rect id="ruled" width="2" height="2" clip-rule="evenodd"/></clipPath>
+                <clipPath id="bounds" clipPathUnits="objectBoundingBox"><rect width="0.5" height="0.5"/></clipPath>
+            </defs>
+            <g id="g" clip-path="url(#user)"><rect id="a" width="10" height="10"/></g>
+            <rect id="b" width="10" height="10" style="clip-path: url(#bounds)" paint-order="stroke"/>
+            <rect id="c" width="10" height="10" clip-path="url(#missing)" paint-order="fill markers"/>
+        </svg>"""
+    )
+
+    @Test
+    fun parsesClipPaths() {
+        val group = c.root.findGroups().first { it.id == "g" }
+        val clip = group.style.clipPath
+        assertIs<ClipPath.Shapes>(clip)
+        assertEquals(org.openrndr.extra.shadestyles.presets.PaintUnits.OBJECT, clip.units)
+        assertEquals(2, clip.content.findShapes().size)
+        assertEquals(FillRule.EvenOdd, clip.content.findShapes().first { it.id == "ruled" }.effectiveStyle.clipRule)
+        // the content of clip paths is not drawn where it is defined
+        assertEquals(listOf("a", "b", "c"), c.findShapes().map { it.id })
+        val bounds = c.findShapes().first { it.id == "b" }.style.clipPath
+        assertIs<ClipPath.Shapes>(bounds)
+        assertEquals(org.openrndr.extra.shadestyles.presets.PaintUnits.BOUNDS, bounds.units)
+        assertIs<ClipPath.None>(c.findShapes().first { it.id == "c" }.style.clipPath)
+    }
+
+    @Test
+    fun parsesPaintOrder() {
+        assertEquals(PaintOrder.StrokeFirst, c.findShapes().first { it.id == "b" }.effectiveStyle.paintOrder)
+        assertEquals(PaintOrder.Normal, c.findShapes().first { it.id == "c" }.effectiveStyle.paintOrder)
+    }
+
+    @Test
+    fun writesClipPaths() {
+        val written = org.openrndr.extra.svg.writeSVG(c)
+        assertTrue("<clipPath id=\"user\"" in written)
+        assertTrue("clip-path=\"url(#user)\"" in written)
+        val reread = parseSVG(written)
+        assertIs<ClipPath.Shapes>(reread.root.findGroups().first { it.id == "g" }.style.clipPath)
+    }
+}

@@ -98,6 +98,9 @@ internal object Prop {
     const val FONT_VARIANT = "font-variant"
     const val FONT_WEIGHT = "font-weight"
     const val OPACITY = "opacity"
+    const val PAINT_ORDER = "paint-order"
+    const val CLIP_PATH = "clip-path"
+    const val CLIP_RULE = "clip-rule"
     const val STOP_COLOR = "stop-color"
     const val STOP_OPACITY = "stop-opacity"
     const val STROKE = "stroke"
@@ -128,6 +131,9 @@ internal object Prop {
         FONT_VARIANT,
         FONT_WEIGHT,
         OPACITY,
+        PAINT_ORDER,
+        CLIP_PATH,
+        CLIP_RULE,
         STOP_COLOR,
         STOP_OPACITY,
         STROKE,

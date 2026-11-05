@@ -21,6 +21,8 @@ internal sealed class SVGElement(element: Element?) {
             Prop.STROKE -> style.stroke = SVGParse.color(value)
             Prop.STROKE_OPACITY -> style.strokeOpacity = SVGParse.number(value)
             Prop.STROKE_WIDTH -> style.strokeWeight = SVGParse.length(value)
+            Prop.STROKE_DASHARRAY -> style.strokeDashArray = SVGParse.dashArray(value)
+            Prop.STROKE_DASHOFFSET -> style.strokeDashOffset = SVGParse.length(value.trim())
             Prop.STROKE_MITERLIMIT -> style.miterLimit = SVGParse.number(value)
             Prop.STROKE_LINECAP -> style.lineCap = SVGParse.lineCap(value)
             Prop.STROKE_LINEJOIN -> style.lineJoin = SVGParse.lineJoin(value)
@@ -32,6 +34,12 @@ internal sealed class SVGElement(element: Element?) {
             }
             Prop.OPACITY -> style.opacity = SVGParse.number(value)
             Prop.COLOR -> style.color = SVGParse.color(value)
+            Prop.PAINT_ORDER -> style.paintOrder = SVGParse.paintOrder(value)
+            Prop.CLIP_PATH -> style.clipPath = SVGParse.clipPath(value)
+            Prop.CLIP_RULE -> style.clipRule = when (value.trim()) {
+                "evenodd" -> org.openrndr.extra.composition.FillRule.EvenOdd
+                else -> org.openrndr.extra.composition.FillRule.NonZero
+            }
             Prop.DISPLAY -> style.display = if (value.trim() == "none") Display.None else Display.Inline
             Prop.VISIBILITY -> style.visibility = when (value.trim()) {
                 "hidden" -> Visibility.Hidden
@@ -121,7 +129,8 @@ internal open class SVGGroup(val element: Element, val elements: MutableList<SVG
                 "switch" -> elements.add(SVGSwitch(child))
                 // gradients are read before the elements are, see SVGGradients
                 // patterns are drawn where they are referred to, see SVGGradients
-                "linearGradient", "radialGradient", "pattern" -> {}
+                // clip paths are applied where they are referred to, see SVGGradients
+                "linearGradient", "radialGradient", "pattern", "clipPath" -> {}
                 // style elements are applied before the elements are read, see SVGStyleSheet
                 "style", "title", "desc", "metadata" -> {}
                 in Tag.graphicsList -> elements.add(SVGPath(child))

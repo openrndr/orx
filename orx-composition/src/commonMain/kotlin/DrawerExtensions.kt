@@ -10,6 +10,9 @@ import org.openrndr.extra.shadestyles.presets.PaintStyle
 import org.openrndr.extra.shadestyles.presets.PaintUnits
 import org.openrndr.extra.shadestyles.presets.boundsTransform
 import org.openrndr.math.Matrix44
+import org.openrndr.shape.ShapeContour
+import org.openrndr.shape.Shape
+import org.openrndr.shape.bounds
 import org.openrndr.math.IntVector2
 import org.openrndr.math.transforms.scale
 import org.openrndr.math.transforms.translate
@@ -142,8 +145,161 @@ private fun Drawer.patternTile(pattern: Paint.Pattern, tile: Rectangle, bounds: 
     return texture
 }
 
+/**
+ * The dashes of a shape: [contours] of the dashes, and the positions and directions of [points], dashes of length
+ * zero, which only have caps
+ */
+internal class Dashes(val contours: List<ShapeContour>, val points: List<Pair<Vector2, Vector2>>)
+
+/** the dashes of shapes by shape, pattern and offset */
+private val dashCache = LinkedHashMap<Triple<Shape, List<Double>, Double>, Dashes>()
+
+/**
+ * The dashes of the contours of [shape] with the dash [pattern], alternating dash and gap lengths, shifted by
+ * [offset], like SVG's stroke-dasharray and stroke-dashoffset. A pattern with an odd number of lengths is repeated.
+ */
+internal fun dashes(shape: Shape, pattern: List<Double>, offset: Double): Dashes {
+    val key = Triple(shape, pattern, offset)
+    dashCache[key]?.let { return it }
+    val lengths = if (pattern.size % 2 == 1) pattern + pattern else pattern
+    val total = lengths.sum()
+    val result = mutableListOf<ShapeContour>()
+    val points = mutableListOf<Pair<Vector2, Vector2>>()
+    for (contour in shape.contours) {
+        val length = contour.length
+        if (length <= 0.0) continue
+        var position = -(offset.mod(total))
+        var index = 0
+        while (position < length) {
+            val dash = lengths[index % lengths.size]
+            if (index % 2 == 0) {
+                val start = max(position, 0.0)
+                val end = min(position + dash, length)
+                if (end > start) {
+                    val t0 = contour.tForLength(start)
+                    val t1 = contour.tForLength(end)
+                    if (t1 > t0) result.add(contour.sub(t0, t1))
+                } else if (dash == 0.0 && position >= 0.0) {
+                    val t = contour.tForLength(position)
+                    points.add(Pair(contour.position(t), contour.normal(t).perpendicular()))
+                }
+            }
+            position += dash
+            index++
+        }
+    }
+    if (dashCache.size >= 256) dashCache.remove(dashCache.keys.first())
+    return Dashes(result, points).also { dashCache[key] = it }
+}
+
 /** the color of [style] that [Paint.CurrentColor] refers to */
 internal fun currentColor(style: Style): ColorRGBa? = (style.color as? Paint.RGB)?.value
+
+/** the clip style of the node that is drawn, its mask is multiplied with the coverage of what is drawn */
+private var activeClip: ClipStyle? = null
+
+/**
+ * A shade style that multiplies the alpha of fills and strokes by the red channel of [mask], a texture of the size of
+ * the render target, read at the fragment position
+ */
+internal class ClipStyle(val mask: ColorBuffer) : ShadeStyle() {
+    init {
+        fragmentTransform = """
+            float clip_coverage = texture(p_clipMask, gl_FragCoord.xy / vec2(textureSize(p_clipMask, 0))).r;
+            x_fill.a *= clip_coverage;
+            x_stroke.a *= clip_coverage;
+        """.trimIndent()
+        parameter("clipMask", mask)
+    }
+}
+
+/** the shade styles combined with clip styles */
+private val clippedStyles = LinkedHashMap<Pair<ShadeStyle, ClipStyle>, ShadeStyle>()
+
+/** sets the shade style of the drawer to its shade style combined with the active clip style, if there is one */
+internal fun Drawer.applyClip() {
+    val clip = activeClip ?: return
+    val style = shadeStyle
+    shadeStyle = if (style == null || !hasCode(style)) clip else {
+        clippedStyles.getOrPut(Pair(style, clip)) {
+            if (clippedStyles.size >= 256) clippedStyles.remove(clippedStyles.keys.first())
+            style + clip
+        }
+    }
+}
+
+/** the masks of clip paths by nesting depth, reused while their size matches the render target */
+private val clipMasks = mutableListOf<RenderTarget>()
+
+/** the bounds of the content of [node] in its own coordinates, null when it has none */
+internal fun localBounds(node: CompositionNode): Rectangle? = when (node) {
+    is ShapeNode -> node.shape.bounds.takeIf { !node.shape.empty }
+    is ImageNode -> Rectangle(node.x, node.y, node.width, node.height)
+    is GroupNode -> node.children.mapNotNull { child ->
+        localBounds(child)?.let { b ->
+            val t = child.transform
+            listOf(b.corner, b.corner + Vector2(b.width, 0.0), b.corner + Vector2(0.0, b.height), b.corner + b.dimensions)
+                .map { (t * it.xy01).xy }
+        }
+    }.flatten().takeIf { it.isNotEmpty() }?.bounds
+    else -> null
+}
+
+/**
+ * Renders the mask of [clip] for [node] with the current transforms and makes it the active clip; the mask of a clip
+ * in a clip is drawn clipped by the outer clip, so it is their intersection. Returns false when nothing of the node
+ * is drawn: when the clip is over the bounds of a node without bounds.
+ */
+private fun Drawer.pushClip(clip: ClipPath.Shapes, node: CompositionNode, depth: Int): Boolean {
+    val units = when (clip.units) {
+        PaintUnits.OBJECT -> Matrix44.IDENTITY
+        PaintUnits.BOUNDS -> {
+            val bounds = localBounds(node) ?: return false
+            if (bounds.width <= 0.0 || bounds.height <= 0.0) return false
+            boundsTransform(bounds)
+        }
+    }
+    val active = RenderTarget.active
+    val width = (active.width * active.contentScale).toInt()
+    val height = (active.height * active.contentScale).toInt()
+    while (clipMasks.size <= depth) clipMasks.add(renderTarget(width, height, contentScale = 1.0) { colorBuffer(); depthBuffer() })
+    var target = clipMasks[depth]
+    if (target.width != width || target.height != height) {
+        target.colorBuffer(0).destroy()
+        target.detachColorAttachments()
+        target.depthBuffer?.destroy()
+        target.detachDepthBuffer()
+        target.destroy()
+        target = renderTarget(width, height, contentScale = 1.0) { colorBuffer(); depthBuffer() }
+        clipMasks[depth] = target
+    }
+    val outer = activeClip
+    // the projection maps the view to the render target, the mask has the same size in pixels
+    isolatedWithTarget(target) {
+        clear(ColorRGBa.TRANSPARENT)
+        fill = ColorRGBa.WHITE
+        stroke = null
+        shadeStyle = outer
+        model = model * units
+        fun visit(clipNode: CompositionNode) {
+            if (clipNode.style.display == Display.None) return
+            pushModel()
+            model *= clipNode.transform
+            when (clipNode) {
+                is ShapeNode -> if (clipNode.effectiveStyle.visibility.value) {
+                    fillRule = clipNode.effectiveStyle.clipRule.value
+                    shape(clipNode.shape)
+                }
+                is GroupNode -> clipNode.children.forEach(::visit)
+                else -> {}
+            }
+            popModel()
+        }
+        clip.content.children.forEach(::visit)
+    }
+    activeClip = ClipStyle(target.colorBuffer(0))
+    return true
+}
 
 /** true when [style] draws anything: it has code */
 private fun hasCode(style: ShadeStyle): Boolean =
@@ -174,6 +330,8 @@ fun Drawer.composition(composition: Composition) {
     // the bounds of the text element that is drawn, when its paints need them
     var textBounds: Rectangle? = null
 
+    var clipDepth = 0
+
     fun node(compositionNode: CompositionNode) {
         // a node with display none is not drawn, nor are the nodes in it
         if (compositionNode.style.display == Display.None) return
@@ -181,7 +339,20 @@ fun Drawer.composition(composition: Composition) {
         pushStyle()
         model *= compositionNode.style.transform.value
 
+        // a clip path is in the coordinates of the node, the content of the node is drawn through its mask
+        val outerClip = activeClip
+        val clipPath = compositionNode.style.clipPath
+        if (clipPath is ClipPath.Shapes) {
+            if (!pushClip(clipPath, compositionNode, clipDepth)) {
+                popModel()
+                popStyle()
+                return
+            }
+            clipDepth++
+        }
+
         shadeStyle = (compositionNode.style.shadeStyle as Shade.Value).value
+        paintOrder = compositionNode.effectiveStyle.paintOrder.value
 
         when (compositionNode) {
             is ShapeNode -> {
@@ -260,7 +431,50 @@ fun Drawer.composition(composition: Composition) {
                 stroke = stroke?.opacify(opacity)
                 fill = fill?.opacify(opacity)
                 if (style.visibility.value) {
-                    shape(compositionNode.shape)
+                    // a dash pattern with a positive length draws the stroke as dashes, after the fill
+                    val pattern = style.strokeDashArray.value
+                    if (stroke != null && pattern.isNotEmpty() && pattern.all { it >= 0.0 } && pattern.sum() > 0.0) {
+                        val strokeColor = stroke
+                        val fillColor = fill
+                        val strokeFirst = paintOrder == org.openrndr.draw.PaintOrder.STROKE_FILL
+                        stroke = null
+                        if (!strokeFirst) shape(compositionNode.shape)
+                        val offset = when (val o = style.strokeDashOffset) {
+                            is Length.Pixels -> o.value
+                            is Length.Percent -> composition.normalizedDiagonalLength() * o.value / 100.0
+                        }
+                        val dashes = dashes(compositionNode.shape, pattern, offset)
+                        fill = null
+                        stroke = strokeColor
+                        applyClip()
+                        contours(dashes.contours)
+                        // dashes of length zero are their caps: dots for round caps, squares for square caps
+                        if (dashes.points.isNotEmpty() && lineCap != org.openrndr.draw.LineCap.BUTT) {
+                            val half = strokeWeight / 2.0
+                            fill = strokeColor
+                            stroke = null
+                            if (lineCap == org.openrndr.draw.LineCap.ROUND) {
+                                applyClip()
+                                circles(dashes.points.map { it.first }, half)
+                            } else {
+                                applyClip()
+                                contours(dashes.points.map { (p, d) ->
+                                    val n = d.perpendicular() * half
+                                    val t = d * half
+                                    ShapeContour.fromPoints(listOf(p - t - n, p + t - n, p + t + n, p - t + n), closed = true)
+                                })
+                            }
+                        }
+                        if (strokeFirst) {
+                            fill = fillColor
+                            stroke = null
+                            applyClip()
+                            shape(compositionNode.shape)
+                        }
+                    } else {
+                        applyClip()
+                        shape(compositionNode.shape)
+                    }
                 }
             }
             is ImageNode -> if (compositionNode.effectiveStyle.visibility.value) {
@@ -273,6 +487,7 @@ fun Drawer.composition(composition: Composition) {
                         drawStyle.colorMatrix = Matrix55.IDENTITY.copy(c3r3 = it.value)
                     }
                 }
+                applyClip()
                 image(image, source, target)
             }
             is TextNode -> {
@@ -297,10 +512,19 @@ fun Drawer.composition(composition: Composition) {
                 textBounds = outerBounds
             }
         }
+        if (clipPath is ClipPath.Shapes) clipDepth--
+        activeClip = outerClip
         popModel()
         popStyle()
     }
-    node(composition.root)
+    // clips of a composition that is drawn in another, such as the tiles of patterns, do not apply to it
+    val enclosingClip = activeClip
+    activeClip = null
+    try {
+        node(composition.root)
+    } finally {
+        activeClip = enclosingClip
+    }
     popModel()
     popStyle()
 }

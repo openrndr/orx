@@ -455,6 +455,34 @@ internal object SVGParse {
         return commands
     }
 
+    /**
+     * A dash array: none, or lengths separated by commas or spaces. Negative or invalid lengths, or lengths that are
+     * all zero, give no dashes, as in SVG.
+     */
+    fun dashArray(value: String): DashArray {
+        val trimmed = value.trim()
+        if (trimmed.isEmpty() || trimmed == "none") return DashArray.None
+        val lengths = trimmed.split(Regex("[\\s,]+")).filter { it.isNotEmpty() }.map {
+            if (it.endsWith("%")) return DashArray.None else length(it).value
+        }
+        return if (lengths.isEmpty() || lengths.any { it < 0.0 } || lengths.sum() <= 0.0) DashArray.None
+        else DashArray.Lengths(lengths)
+    }
+
+    /**
+     * A paint order: the stroke is painted first when it is named before the fill, or the fill is not named
+     */
+    /** a clip path: none, or a reference to a clipPath element */
+    fun clipPath(value: String): ClipPath {
+        val match = Regex("^\\s*url\\(\\s*['\"]?#([^)'\"]+)['\"]?\\s*\\)\\s*$").matchEntire(value) ?: return ClipPath.None
+        return SVGGradients.lookupClip(match.groupValues[1].trim()) ?: ClipPath.None
+    }
+
+    fun paintOrder(value: String): PaintOrder {
+        val names = value.trim().split(Regex("\\s+")).filter { it == "fill" || it == "stroke" }
+        return if (names.firstOrNull() == "stroke") PaintOrder.StrokeFirst else PaintOrder.Normal
+    }
+
     fun color(colorValue: String): Paint {
         // a reference to a gradient, with an optional color for when the reference can not be resolved
         Regex("^\\s*url\\(\\s*['\"]?#([^)'\"]+)['\"]?\\s*\\)\\s*(.*)$").matchEntire(colorValue)?.let { match ->

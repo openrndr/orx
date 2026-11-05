@@ -193,6 +193,7 @@ internal object CompositionText {
         if (visible.isNotEmpty() && style.visibility.value && applyPaints(drawer, style, bounds)) {
             slugTextDrawer.clear()
             slugTextDrawer.addGlyphs(visible)
+            drawer.applyClip()
             slugTextDrawer.draw(drawer)
         }
         return layout.end
@@ -260,6 +261,7 @@ internal object CompositionText {
             if (drawn) {
                 slugTextDrawer.clear()
                 slugTextDrawer.addGlyphs(ContourTextLayout(visible, layout.start, layout.advance))
+                drawer.applyClip()
                 slugTextDrawer.draw(drawer)
             }
             drawer.popStyle()

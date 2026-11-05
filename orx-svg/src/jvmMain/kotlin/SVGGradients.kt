@@ -4,6 +4,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import org.jsoup.nodes.Element
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.composition.AspectRatio
+import org.openrndr.extra.composition.ClipPath
 import org.openrndr.extra.composition.GroupNode
 import org.openrndr.extra.composition.Length
 import org.openrndr.extra.composition.Paint
@@ -23,17 +24,42 @@ private val logger = KotlinLogging.logger {}
  */
 internal object SVGGradients {
     private val current = ThreadLocal<Map<String, Paint.Server>>()
+    private val currentClips = ThreadLocal<Map<String, ClipPath.Shapes>>()
 
-    /** runs [block] with [gradients], gradients and patterns, available to [lookup] */
-    fun <T> using(gradients: Map<String, Paint.Server>, block: () -> T): T {
+    /**
+     * runs [block] with [gradients], gradients and patterns, available to [lookup], and [clips] to [lookupClip]
+     */
+    fun <T> using(
+        gradients: Map<String, Paint.Server>,
+        clips: Map<String, ClipPath.Shapes> = emptyMap(),
+        block: () -> T
+    ): T {
         val previous = current.get()
+        val previousClips = currentClips.get()
         current.set(gradients)
+        currentClips.set(clips)
         try {
             return block()
         } finally {
             current.set(previous)
+            currentClips.set(previousClips)
         }
     }
+
+    /** the clip path with [id] of the document that is being parsed */
+    fun lookupClip(id: String): ClipPath.Shapes? = currentClips.get()?.get(id).also {
+        if (it == null) logger.warn { "clip-path refers to '#$id', which is not a clip path in the document" }
+    }
+
+    /**
+     * The clip paths in the document with [root], by their id, with their elements. Their content is empty, it is
+     * added when the elements are converted.
+     */
+    fun parseClipPaths(root: Element): Map<String, Pair<ClipPath.Shapes, Element>> =
+        root.allElements.filter { it.tagName() == "clipPath" && it.id().isNotEmpty() }.associate { element ->
+            val units = if (element.attr("clipPathUnits").trim() == "objectBoundingBox") PaintUnits.BOUNDS else PaintUnits.OBJECT
+            element.id() to Pair(ClipPath.Shapes(GroupNode(), units, element.id()), element)
+        }
 
     /** the gradient or pattern with [id] of the document that is being parsed */
     fun lookup(id: String): Paint.Server? = current.get()?.get(id).also {

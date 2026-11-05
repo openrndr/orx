@@ -113,6 +113,7 @@ fun writeSVG(
     val ids = WriterIds()
     sb.appendGradients(composition)
     sb.appendPatterns(composition, ids)
+    sb.appendClipPaths(composition, ids)
 
     sb.appendNodes(composition.root, ids)
     sb.append("</svg>")
@@ -404,6 +405,25 @@ private fun StringBuilder.appendPatterns(composition: Composition, ids: WriterId
         append("$transform$viewBox>")
         appendNodes(pattern.content, ids)
         append("</pattern>")
+    }
+    append("</defs>\n")
+}
+
+/** writes a defs element with the clip paths that the nodes of [composition] use, when they use any */
+private fun StringBuilder.appendClipPaths(composition: Composition, ids: WriterIds) {
+    val clips = LinkedHashMap<String, ClipPath.Shapes>()
+    process(composition.root) { stage ->
+        if (stage == VisitStage.PRE) {
+            (style.clipPath as? ClipPath.Shapes)?.let { clips.getOrPut(it.svgId) { it } }
+        }
+    }
+    if (clips.isEmpty()) return
+    append("<defs>")
+    for ((id, clip) in clips) {
+        val units = if (clip.units == PaintUnits.BOUNDS) "objectBoundingBox" else "userSpaceOnUse"
+        append("<clipPath id=\"$id\" clipPathUnits=\"$units\">")
+        appendNodes(clip.content, ids)
+        append("</clipPath>")
     }
     append("</defs>\n")
 }

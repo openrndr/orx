@@ -289,6 +289,69 @@ sealed interface VectorEffect : AttributeOrPropertyValue {
     }
 }
 
+/**
+ * The dash pattern of strokes, like the stroke-dasharray property of SVG
+ */
+sealed interface DashArray : AttributeOrPropertyValue {
+    override val value: List<Double>
+
+    /** solid strokes */
+    object None : DashArray {
+        override val value = emptyList<Double>()
+        override fun toString() = "none"
+    }
+
+    /** strokes with alternating dashes and gaps of [value] */
+    class Lengths(override val value: List<Double>) : DashArray {
+        override fun toString() = value.joinToString(" ")
+        override fun equals(other: Any?) = other is Lengths && other.value == value
+        override fun hashCode() = value.hashCode()
+    }
+}
+
+/**
+ * The order in which the fill and the stroke of shapes and text are painted, like the paint-order property of SVG
+ */
+sealed interface PaintOrder : AttributeOrPropertyValue {
+    override val value: org.openrndr.draw.PaintOrder
+
+    /** the fill, then the stroke */
+    object Normal : PaintOrder {
+        override val value = org.openrndr.draw.PaintOrder.FILL_STROKE
+        override fun toString() = "normal"
+    }
+
+    /** the stroke, then the fill, which covers the inner half of the stroke */
+    object StrokeFirst : PaintOrder {
+        override val value = org.openrndr.draw.PaintOrder.STROKE_FILL
+        override fun toString() = "stroke"
+    }
+}
+
+/**
+ * The clip path of a node, like the clip-path property of SVG: the node is drawn where the shapes of the clip path
+ * are, with anti-aliased edges
+ */
+sealed interface ClipPath : AttributeOrPropertyValue {
+    object None : ClipPath {
+        override val value: Any? = null
+        override fun toString() = "none"
+    }
+
+    /**
+     * The shapes in [content] clip, in [units]: the coordinates of the node, or 0..1 over its bounds. The shapes are
+     * filled with the clip rule ([clipRule]) of their styles, their fills and strokes are ignored.
+     */
+    class Shapes(val content: GroupNode, val units: PaintUnits = PaintUnits.OBJECT, val id: String = "") : ClipPath {
+        override val value: GroupNode get() = content
+
+        /** the id of the clip path in SVG documents: [id], or an id derived from the clip path when it has none */
+        val svgId: String get() = id.ifEmpty { "clip-" + hashCode().toUInt().toString(16) }
+
+        override fun toString() = "url(#$svgId)"
+    }
+}
+
 sealed interface Display : AttributeOrPropertyValue {
     override val value: Boolean
 
@@ -549,6 +612,11 @@ var Style.fillRule by PropertyDelegate<FillRule>(FILL_RULE, INHERIT, FillRule.No
 /** the color that [Paint.CurrentColor] refers to, like the color property of SVG */
 var Style.color by PropertyDelegate<Paint>(COLOR, INHERIT, Paint.RGB(ColorRGBa.BLACK))
 var Style.vectorEffect by PropertyDelegate<VectorEffect>(VECTOR_EFFECT, RESET, VectorEffect.None)
+var Style.clipPath by PropertyDelegate<ClipPath>(CLIP_PATH, RESET, ClipPath.None)
+var Style.clipRule by PropertyDelegate<FillRule>(CLIP_RULE, INHERIT, FillRule.NonZero)
+var Style.paintOrder by PropertyDelegate<PaintOrder>(PAINT_ORDER, INHERIT, PaintOrder.Normal)
+var Style.strokeDashArray by PropertyDelegate<DashArray>(STROKE_DASHARRAY, INHERIT, DashArray.None)
+var Style.strokeDashOffset by PropertyDelegate<Length>(STROKE_DASHOFFSET, INHERIT, 0.0.pixels)
 
 var Style.transform by PropertyDelegate<Transform>(TRANSFORM, RESET, Transform.None)
 
@@ -619,6 +687,9 @@ enum class AttributeOrPropertyKey {
     FONT_VARIANT { override fun toString() = "font-variant" },
     FONT_WEIGHT { override fun toString() = "font-weight" },
     OPACITY { override fun toString() = "opacity" },
+    PAINT_ORDER { override fun toString() = "paint-order" },
+    CLIP_PATH { override fun toString() = "clip-path" },
+    CLIP_RULE { override fun toString() = "clip-rule" },
     STOP_COLOR { override fun toString() = "stop-color" },
     STOP_OPACITY { override fun toString() = "stop-opacity" },
     STROKE { override fun toString() = "stroke" },
