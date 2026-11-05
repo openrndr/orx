@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+  <style>
+    text { font-family: Plex; }
+    .label { font-size: 10px; fill: #8a8378; }
+  </style>
+  <defs>
+    <linearGradient id="backdrop"><stop offset="0" stop-color="#f2b134"/><stop offset="0.5" stop-color="#4c9e8a"/><stop offset="1" stop-color="#202040"/></linearGradient>
+    <radialGradient id="glow"><stop offset="0" stop-color="white"/><stop offset="1" stop-color="black"/></radialGradient>
+    <linearGradient id="fade" x1="0" x2="1"><stop offset="0" stop-color="white"/><stop offset="1" stop-color="black" stop-opacity="0"/></linearGradient>
+    <!-- a luminance mask: a soft spot that the demo moves -->
+    <mask id="spotlight" maskUnits="userSpaceOnUse" x="240" y="20" width="220" height="220">
+      <circle id="spot" cx="350" cy="130" r="70" fill="url(#glow)"/>
+    </mask>
+    <!-- an alpha mask in the bounds of what it masks -->
+    <mask id="fading" maskContentUnits="objectBoundingBox" style="mask-type: alpha">
+      <rect width="1" height="1" fill="url(#fade)"/>
+    </mask>
+  </defs>
+  <rect width="720" height="480" fill="#f4efe6"/>
+
+  <!-- group opacity: the group is drawn first, its overlap does not show -->
+  <text class="label" x="20" y="30">GROUP OPACITY</text>
+  <g opacity="0.6">
+    <circle cx="70" cy="100" r="45" fill="#3d5a99"/>
+    <circle cx="140" cy="100" r="45" fill="#3d5a99"/>
+  </g>
+  <circle cx="70" cy="200" r="45" fill="#e8574a" opacity="0.6"/>
+  <circle cx="140" cy="200" r="45" fill="#e8574a" opacity="0.6"/>
+
+  <!-- masks -->
+  <text class="label" x="240" y="30">MASK</text>
+  <g mask="url(#spotlight)">
+    <rect x="240" y="40" width="220" height="200" fill="#202040"/>
+    <text x="252" y="120" font-size="44" fill="#f2b134">light</text>
+    <text x="252" y="180" font-size="44" fill="#4c9e8a">spot</text>
+  </g>
+  <text class="label" x="490" y="30">MASK-TYPE: ALPHA</text>
+  <rect x="490" y="45" width="210" height="80" fill="#3d5a99" mask="url(#fading)"/>
+  <text x="490" y="190" font-size="36" fill="#e8574a" mask="url(#fading)">fading</text>
+
+  <!-- blend modes -->
+    <g transform="translate(20 290)">
+      <rect width="76" height="66" fill="url(#backdrop)"/>
+      <circle cx="38" cy="33" r="24" fill="#e8574a" style="mix-blend-mode: normal"/>
+      <text class="label" x="0" y="80">normal</text>
+    </g>
+    <g transform="translate(106 290)">
+      <rect width="76" height="66" fill="url(#backdrop)"/>
+      <circle cx="38" cy="33" r="24" fill="#e8574a" style="mix-blend-mode: multiply"/>
+      <text class="label" x="0" y="80">multiply</text>
+    </g>
+    <g transform="translate(192 290)">
+      <rect width="76" height="66" fill="url(#backdrop)"/>
+      <circle cx="38" cy="33" r="24" fill="#e8574a" style="mix-blend-mode: screen"/>
+      <text class="label" x="0" y="80">screen</text>
+    </g>
+    <g transform="translate(278 290)">
+      <rect width="76" height="66" fill="url(#backdrop)"/>
+      <circle cx="38" cy="33" r="24" fill="#e8574a" style="mix-blend-mode: overlay"/>
+      <text class="label" x="0" y="80">overlay</text>
+    </g>
+    <g transform="translate(364 290)">
+      <rect width="76" height="66" fill="url(#backdrop)"/>
+      <circle cx="38" cy="33" r="24" fill="#e8574a" style="mix-blend-mode: darken"/>
+      <text class="label" x="0" y="80">darken</text>
+    </g>
+    <g transform="translate(450 290)">
+      <rect width="76" height="66" fill="url(#backdrop)"/>
+      <circle cx="38" cy="33" r="24" fill="#e8574a" style="mix-blend-mode: lighten"/>
+      <text class="label" x="0" y="80">lighten</text>
+    </g>
+    <g transform="translate(536 290)">
+      <rect width="76" height="66" fill="url(#backdrop)"/>
+      <circle cx="38" cy="33" r="24" fill="#e8574a" style="mix-blend-mode: color-dodge"/>
+      <text class="label" x="0" y="80">color-dodge</text>
+    </g>
+    <g transform="translate(622 290)">
+      <rect width="76" height="66" fill="url(#backdrop)"/>
+      <circle cx="38" cy="33" r="24" fill="#e8574a" style="mix-blend-mode: color-burn"/>
+      <text class="label" x="0" y="80">color-burn</text>
+    </g>
+    <g transform="translate(20 380)">
+      <rect width="76" height="66" fill="url(#backdrop)"/>
+      <circle cx="38" cy="33" r="24" fill="#e8574a" style="mix-blend-mode: hard-light"/>
+      <text class="label" x="0" y="80">hard-light</text>
+    </g>
+    <g transform="translate(106 380)">
+      <rect width="76" height="66" fill="url(#backdrop)"/>
+      <circle cx="38" cy="33" r="24" fill="#e8574a" style="mix-blend-mode: soft-light"/>
+      <text class="label" x="0" y="80">soft-light</text>
+    </g>
+    <g transform="translate(192 380)">
+      <rect width="76" height="66" fill="url(#backdrop)"/>
+      <circle cx="38" cy="33" r="24" fill="#e8574a" style="mix-blend-mode: difference"/>
+      <text class="label" x="0" y="80">difference</text>
+    </g>
+    <g transform="translate(278 380)">
+      <rect width="76" height="66" fill="url(#backdrop)"/>
+      <circle cx="38" cy="33" r="24" fill="#e8574a" style="mix-blend-mode: exclusion"/>
+      <text class="label" x="0" y="80">exclusion</text>
+    </g>
+    <g transform="translate(364 380)">
+      <rect width="76" height="66" fill="url(#backdrop)"/>
+      <circle cx="38" cy="33" r="24" fill="#e8574a" style="mix-blend-mode: hue"/>
+      <text class="label" x="0" y="80">hue</text>
+    </g>
+    <g transform="translate(450 380)">
+      <rect width="76" height="66" fill="url(#backdrop)"/>
+      <circle cx="38" cy="33" r="24" fill="#e8574a" style="mix-blend-mode: saturation"/>
+      <text class="label" x="0" y="80">saturation</text>
+    </g>
+    <g transform="translate(536 380)">
+      <rect width="76" height="66" fill="url(#backdrop)"/>
+      <circle cx="38" cy="33" r="24" fill="#e8574a" style="mix-blend-mode: color"/>
+      <text class="label" x="0" y="80">color</text>
+    </g>
+    <g transform="translate(622 380)">
+      <rect width="76" height="66" fill="url(#backdrop)"/>
+      <circle cx="38" cy="33" r="24" fill="#e8574a" style="mix-blend-mode: luminosity"/>
+      <text class="label" x="0" y="80">luminosity</text>
+    </g>
+
+  <!-- a disc that the demo moves over the blend modes -->
+  <circle id="lens" cx="360" cy="330" r="34" fill="#f4efe6" style="mix-blend-mode: difference"/>
+</svg>
