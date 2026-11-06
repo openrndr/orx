@@ -63,6 +63,17 @@ private val CompositionNode.svgAttributes: String
 private fun Styleable.serialize(parentStyleable: Styleable? = null): String {
     val sb = StringBuilder()
 
+    /**
+     * true when the value of [key] does not need to be written: an inherited property with the value of the parent,
+     * the effective style of the parent node, or a property that is not inherited with its initial value
+     */
+    fun redundant(key: AttributeOrPropertyKey): Boolean {
+        if (parentStyleable == null) return false
+        val value = this.properties[key].toString()
+        return if (isInheritedProperty(key)) value == (parentStyleable[key] ?: initialValue(key)).toString()
+        else value == initialValue(key).toString()
+    }
+
     // properties that are not presentation attributes are written in a style attribute
     val cssOnly = setOf(
         AttributeOrPropertyKey.MIX_BLEND_MODE, AttributeOrPropertyKey.ISOLATION, AttributeOrPropertyKey.FILTER,
@@ -71,7 +82,7 @@ private fun Styleable.serialize(parentStyleable: Styleable? = null): String {
     )
     val css = this.properties.filter { (key, value) ->
         key in cssOnly && value.toString().isNotEmpty() &&
-                (parentStyleable == null || !this.isInherited(parentStyleable, key))
+                !redundant(key)
     }
     if (css.isNotEmpty()) {
         sb.append("style=\"${css.entries.joinToString(";") { (key, value) -> "$key:$value" }}\" ")
@@ -87,7 +98,7 @@ private fun Styleable.serialize(parentStyleable: Styleable? = null): String {
             }
         }
         else -> filtered.forEach { (t, u) ->
-            if (u.toString().isNotEmpty() && !this.isInherited(parentStyleable, t)) {
+            if (u.toString().isNotEmpty() && !redundant(t)) {
                 sb.append("$t=\"${u.toString()}\" ")
             }
         }
@@ -173,7 +184,7 @@ private fun GroupNode.isText(): Boolean {
  * @param pathId the id of the path that the text is placed along, its contents are written in a textPath element
  */
 private fun StringBuilder.appendText(node: CompositionNode, element: String, pathId: String? = null) {
-    val styleSerialized = node.style.serialize(node.parent?.style)
+    val styleSerialized = node.style.serialize(node.parent?.effectiveStyle)
     when (node) {
         is GroupNode -> {
             val attributes = listOf(node.svgId, styleSerialized, node.svgAttributes)
@@ -189,7 +200,7 @@ private fun StringBuilder.appendText(node: CompositionNode, element: String, pat
                 val single = node.children.singleOrNull() as? GroupNode
                 val pathAttributes = listOf(
                     "href=\"#$pathId\"", startOffset,
-                    single?.svgId ?: "", single?.style?.serialize(node.style) ?: "", single?.svgAttributes ?: ""
+                    single?.svgId ?: "", single?.style?.serialize(node.effectiveStyle) ?: "", single?.svgAttributes ?: ""
                 ).filter(String::isNotEmpty).joinToString(" ")
                 append("<textPath $pathAttributes>")
                 (single?.children ?: node.children).forEach { appendText(it, "tspan") }
@@ -324,7 +335,7 @@ private fun StringBuilder.appendNodes(root: CompositionNode, ids: WriterIds) {
         }
         if (stage == VisitStage.PRE) {
 
-            val styleSerialized = this.style.serialize(this.parent?.style)
+            val styleSerialized = this.style.serialize(this.parent?.effectiveStyle)
 
             when (this) {
                 is GroupNode -> {

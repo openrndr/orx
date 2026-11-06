@@ -77,7 +77,21 @@ internal class SVGDocument(
         if (node is GroupNode) node.children.forEach(::resolveInherit)
     }
 
-    fun composition(): Composition = Composition(
+    /** the location of this document as images refer to it, null when it has no location */
+    private val location: String? = base?.let { if (it.scheme == "file") File(it).path else it.toString() }
+
+    fun composition(): Composition {
+        // images in this document that refer to it, directly or through other documents, are not drawn
+        val inProgress = documentsInProgress.get()
+        val added = location != null && inProgress.add(location)
+        try {
+            return buildComposition()
+        } finally {
+            if (added) inProgress.remove(location)
+        }
+    }
+
+    private fun buildComposition(): Composition = Composition(
         convertElement(root).also {
             // the content of patterns, clip paths, markers and masks is converted like the elements of the document
             for ((content, group) in contents) {
@@ -327,6 +341,9 @@ internal class SVGDocument(
             logger.warn { "image without href" }
             return GroupNode()
         }
+        if (isSvgReference(href)) {
+            return svgImageNode(svgImage, href)
+        }
         val image = try {
             loadImage(resolve(href))
         } catch (e: Throwable) {
@@ -344,7 +361,114 @@ internal class SVGDocument(
         }
         return fitImage(image, Rectangle(svgImage.x, svgImage.y, width, height), svgImage.aspectRatio)
     }
+
+    /**
+     * Converts an image element that refers to an SVG document: the document is loaded as a composition of its own,
+     * fitted into the viewport of the image by its view box, or by its size when it has none, and clipped to the
+     * viewport. As in browsers, the document does not inherit the styles of the document that refers to it.
+     */
+    private fun svgImageNode(svgImage: SVGImage, href: String): CompositionNode {
+        val location = if (href.startsWith("data:", ignoreCase = true)) href else resolve(href.substringBefore('#'))
+        val inProgress = documentsInProgress.get()
+        val key = if (location.startsWith("data:", ignoreCase = true)) location.hashCode().toString() else location
+        if (!inProgress.add(key)) {
+            logger.warn { "image refers to '${href.take(80)}', which is being loaded, it refers to itself" }
+            return GroupNode()
+        }
+        val document = try {
+            val (text, documentBase) = readSvgDocument(location, base)
+            // the viewport of this document is used again when its elements are converted
+            val viewport = SVGParse.viewport.get()
+            try {
+                parseSVG(text, documentBase)
+            } finally {
+                SVGParse.viewport.set(viewport)
+            }
+        } catch (e: Throwable) {
+            logger.warn { "could not load image '${href.take(80)}': ${e.message}" }
+            return GroupNode()
+        } finally {
+            inProgress.remove(key)
+        }
+
+        // the intrinsic size of the document is its width and height, or the size of its view box
+        val viewBox = document.documentStyle.viewBox.value
+        val dimensions = document.bounds.dimensions
+        val intrinsic = when {
+            dimensions.x > 0.0 && dimensions.y > 0.0 -> dimensions
+            viewBox != null && viewBox.width > 0.0 && viewBox.height > 0.0 -> viewBox.dimensions
+            else -> org.openrndr.math.Vector2(300.0, 150.0)
+        }
+        val width = svgImage.width ?: svgImage.height?.let { it * intrinsic.x / intrinsic.y } ?: intrinsic.x
+        val height = svgImage.height ?: svgImage.width?.let { it * intrinsic.y / intrinsic.x } ?: intrinsic.y
+        if (width <= 0.0 || height <= 0.0) return GroupNode()
+        val viewport = Rectangle(svgImage.x, svgImage.y, width, height)
+
+        val root = document.root
+        // the document does not inherit the properties of this document
+        for (key in AttributeOrPropertyKey.entries) {
+            if (isInheritedProperty(key) && root.style.properties[key] == null) {
+                initialValue(key)?.let { root.style[key] = it }
+            }
+        }
+        val fitted = GroupNode().also { group ->
+            group.transform = viewportTransform(viewBox ?: Rectangle(0.0, 0.0, intrinsic.x, intrinsic.y), viewport, svgImage.aspectRatio)
+            root.parent = group
+            group.children.add(root)
+        }
+        // the content of the image is clipped to its viewport
+        val clipped = GroupNode().also { group ->
+            val clip = GroupNode()
+            clip.children.add(ShapeNode(viewport.shape).also { it.parent = clip })
+            group.style.clipPath = ClipPath.Shapes(clip)
+            fitted.parent = group
+            group.children.add(fitted)
+        }
+        return GroupNode().also { outer ->
+            clipped.parent = outer
+            outer.children.add(clipped)
+        }
+    }
 }
+
+/** the locations of the documents that are being loaded as images, a document that refers to itself is not loaded again */
+private val documentsInProgress = ThreadLocal.withInitial { mutableSetOf<String>() }
+
+/** true when [href] refers to an SVG document: an .svg or .svgz file or URL, or an SVG data URL */
+private fun isSvgReference(href: String): Boolean {
+    val h = href.trim()
+    if (h.startsWith("data:", ignoreCase = true)) return h.substringAfter(':').startsWith("image/svg+xml", ignoreCase = true)
+    val path = h.substringBefore('#').substringBefore('?').lowercase()
+    return path.endsWith(".svg") || path.endsWith(".svgz")
+}
+
+/** the text of the SVG document at [location], a file, a URL or a data URL, and the location relative references in it are resolved against */
+private fun readSvgDocument(location: String, base: URI?): Pair<String, URI?> {
+    if (location.startsWith("data:", ignoreCase = true)) {
+        val header = location.substringBefore(',')
+        val data = location.substringAfter(',')
+        val bytes = if (header.endsWith(";base64", ignoreCase = true)) {
+            java.util.Base64.getMimeDecoder().decode(data)
+        } else {
+            java.net.URLDecoder.decode(data.replace("+", "%2B"), Charsets.UTF_8).toByteArray()
+        }
+        return Pair(gunzipIfNeeded(bytes).toString(Charsets.UTF_8), base)
+    }
+    val hasScheme = Regex("^[a-zA-Z][a-zA-Z0-9+.-]*:").containsMatchIn(location) && !File(location).isAbsolute
+    return if (hasScheme) {
+        val uri = URI(location)
+        Pair(gunzipIfNeeded(uri.toURL().readBytes()).toString(Charsets.UTF_8), uri)
+    } else {
+        val file = File(location)
+        Pair(gunzipIfNeeded(file.readBytes()).toString(Charsets.UTF_8), file.absoluteFile.toURI())
+    }
+}
+
+/** [bytes], decompressed when they are gzipped, as svgz documents are */
+private fun gunzipIfNeeded(bytes: ByteArray): ByteArray =
+    if (bytes.size > 2 && bytes[0] == 0x1f.toByte() && bytes[1] == 0x8b.toByte()) {
+        java.util.zip.GZIPInputStream(bytes.inputStream()).readBytes()
+    } else bytes
 
 /**
  * Places [image] in [viewport] following [aspectRatio], like SVG's preserveAspectRatio: stretched to the viewport
