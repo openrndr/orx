@@ -57,6 +57,12 @@ open class Element(val type: ElementType) : AutoCloseable {
     /** how far the content of an element that scrolls is scrolled to the left, in pixels */
     var scrollLeft = 0.0
 
+    /** the text shown next to the pointer when it rests on the element, null for none */
+    var tooltip: String? = null
+
+    /** builds the menu that opens when the element is clicked with the right button, null for none */
+    var contextMenu: (ContextMenuBuilder.() -> Unit)? = null
+
     /**
      * Scrolls the content to [left] and [top], within the content: smoothly when the [StyleSheet.scrollBehavior] of
      * the element is smooth and [smooth] is not false, and the element is in a control manager

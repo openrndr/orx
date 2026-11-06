@@ -1,5 +1,7 @@
 package org.openrndr.panel.elements
 
+import org.openrndr.panel.intersection
+
 import org.openrndr.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
@@ -45,6 +47,37 @@ class TextInput : Element(ElementType("text-input")) {
 
     private var selectionStart = value.lastIndex
     private var selectionEnd = value.lastIndex
+
+    /** the text that is selected, empty when nothing is */
+    val selectedText: String
+        get() {
+            val a = (min(selectionStart, selectionEnd) + 1).coerceIn(0, value.length)
+            val b = (max(selectionStart, selectionEnd) + 1).coerceIn(0, value.length)
+            return value.substring(a, b)
+        }
+
+    /** replaces the selection with [text], or inserts it at the caret when nothing is selected; the caret moves after it */
+    fun insert(text: String) {
+        val oldValue = value
+        val a = (min(selectionStart, selectionEnd) + 1).coerceIn(0, value.length)
+        val b = (max(selectionStart, selectionEnd) + 1).coerceIn(0, value.length)
+        ivalue = value.substring(0, a) + text + value.substring(b)
+        selectionEnd = a + text.length - 1
+        selectionStart = selectionEnd
+        if (value != oldValue) events.valueChanged.trigger(ValueChangedEvent(this, oldValue, value))
+        requestRedraw()
+    }
+
+    /** the clipboard of the program */
+    private val clipboard get() = (root() as? Body)?.controlManager?.program?.clipboard
+
+    /** the caret position nearest to [x] on the screen: the index of the character before it, -1 before the first */
+    private fun caretAt(x: Double): Int? {
+        if (glyphRectangles.isEmpty()) return null
+        val boundaries = glyphRectangles.map { it.second.x } + glyphRectangles.last().second.let { it.x + it.width }
+        // the glyphs are drawn moved by the horizontal scroll of the text
+        return (boundaries.withIndex().minBy { abs(x - layout.screenX - scroll - it.value) }.index - 1).coerceAtLeast(-1)
+    }
 
     class ValueChangedEvent(val source: TextInput, val oldValue: String, val newValue: String)
     class Events : AutoCloseable {
@@ -133,12 +166,23 @@ class TextInput : Element(ElementType("text-input")) {
             if (KeyModifier.CTRL in it.modifiers || KeyModifier.SUPER in it.modifiers) {
                 when (it.name) {
                     "v" -> {
-                        // Paste
-                        val oldValue = value
-                        (root() as Body).controlManager?.program?.clipboard?.contents?.let {
-                            ivalue += it
+                        // paste over the selection, or at the caret
+                        clipboard?.contents?.let { text -> insert(text) }
+                        it.cancelPropagation()
+                    }
+
+                    "c" -> {
+                        // copy the selection
+                        if (selectedText.isNotEmpty()) clipboard?.contents = selectedText
+                        it.cancelPropagation()
+                    }
+
+                    "x" -> {
+                        // cut the selection
+                        if (selectedText.isNotEmpty()) {
+                            clipboard?.contents = selectedText
+                            insert("")
                         }
-                        events.valueChanged.trigger(ValueChangedEvent(this, oldValue, value))
                         it.cancelPropagation()
                     }
 
@@ -184,30 +228,29 @@ class TextInput : Element(ElementType("text-input")) {
 
         keyboard.character.listen {
             it.cancelPropagation()
-            val oldValue = value
-            if (selectionStart != selectionEnd) deleteChars(0)
-            ivalue = value.take(selectionEnd + 1) + it.character.toString() + value.drop(selectionEnd + 1)
-            selectionEnd++
-            selectionStart = selectionEnd
-            events.valueChanged.trigger(ValueChangedEvent(this, oldValue, value))
-            requestRedraw()
+            // typing replaces the selection
+            insert(it.character.toString())
         }
 
+        // pressing places the caret, or extends the selection with shift; dragging selects
         mouse.pressed.listen { ev ->
+            caretAt(ev.position.x)?.let { position ->
+                selectionEnd = position
+                if (KeyModifier.SHIFT !in ev.modifiers) selectionStart = position
+                requestRedraw()
+            }
+            ev.cancelPropagation()
+        }
+
+        mouse.dragged.listen { ev ->
+            caretAt(ev.position.x)?.let { position ->
+                selectionEnd = position
+                requestRedraw()
+            }
             ev.cancelPropagation()
         }
 
         mouse.clicked.listen { ev ->
-            if (glyphRectangles.isNotEmpty()) {
-                val boundaries = glyphRectangles.map { it.second.x } +
-                        glyphRectangles.last().second.let { it.x + it.width }
-
-                selectionStart = (boundaries.withIndex().minBy {
-                    abs(ev.position.x - layout.screenX - it.value)
-                }.index - 1).coerceAtLeast(-1)
-                selectionEnd = selectionStart
-                requestRedraw()
-            }
             ev.cancelPropagation()
         }
 
@@ -239,7 +282,9 @@ class TextInput : Element(ElementType("text-input")) {
             val isInputActive = ElementPseudoClass("active") in pseudoClasses
 
             //drawer.rectangle(layout.contentBoundsAtOrigin)
-            drawer.drawStyle.clip = layout.contentBounds
+            // within the clipping of the elements around it
+            drawer.drawStyle.clip = drawer.drawStyle.clip?.let { intersection(it, layout.contentBounds) ?: Rectangle(0.0, 0.0, 0.0, 0.0) }
+                ?: layout.contentBounds
             drawer.fontMap = font
             drawer.fill = ((computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE)
 
@@ -247,7 +292,8 @@ class TextInput : Element(ElementType("text-input")) {
                 if (isInputActive || firstDraw) {
                     cursor = Cursor(xOffset, yOffset)
                     text(value, visible = false)
-                    glyphRectangles = glyphOutput.rectangles
+                    // a copy, the writer refills its list when the text is drawn moved by the scroll
+                    glyphRectangles = glyphOutput.rectangles.toMutableList()
 
                     if (glyphRectangles.isEmpty()) {
                         caretX = xOffset

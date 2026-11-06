@@ -4,7 +4,6 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import org.openrndr.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
-import org.openrndr.internal.Driver
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.panel.document.Document
@@ -40,7 +39,6 @@ class ControlManager : Extension {
 
     val fontManager = FontManager()
     lateinit var window: Window
-    private val renderTargetCache = HashMap<Element, RenderTarget>()
 
     lateinit var program: Program
     override var enabled: Boolean = true
@@ -89,6 +87,14 @@ class ControlManager : Extension {
             }
 
         fun press(event: KeyEvent) {
+            // escape closes the open context menu
+            if (event.key == KEY_ESCAPE && openMenu?.parent != null) {
+                openMenu?.dismiss()
+                openMenu = null
+                event.cancelPropagation()
+                checkForManualRedraw()
+                return
+            }
             target?.let {
                 if (it.isHidden()) {
                     return
@@ -205,6 +211,7 @@ class ControlManager : Extension {
         }
 
         fun scroll(event: MouseEvent) {
+            tooltips.hide()
             fun traverse(element: Element) {
                 if (element.computedStyle.display == Display.NONE) {
                     return
@@ -269,6 +276,29 @@ class ControlManager : Extension {
             logger.debug { "press event: $event" }
             pressPosition = event.position
             dragging = false
+            tooltips.hide()
+
+            // a press outside the open context menu closes it
+            openMenu?.let { menu ->
+                if (menu.parent == null) openMenu = null
+                else if (event.position !in menu.screenArea) {
+                    menu.dismiss()
+                    openMenu = null
+                }
+            }
+            // the right button opens the context menu of the innermost element that has one
+            if (event.button == MouseButton.RIGHT) {
+                body?.let { root -> elementAt(root, event.position) { it.contextMenu != null } }?.let { element ->
+                    val menu = ContextMenu(event.position, element.contextMenu!!)
+                    body?.append(menu)
+                    openMenu = menu
+                    event.cancelPropagation()
+                    dragTarget = null
+                    clickTarget = null
+                    checkForManualRedraw()
+                    return
+                }
+            }
 
             // scrollbars are on top of the content: the thumb is dragged, the track scrolls by a page
             body?.let { scrollbarAt(it, event.position) }?.let { bar ->
@@ -374,6 +404,9 @@ class ControlManager : Extension {
         fun move(event: MouseEvent) {
             mousePosition = event.position
             hoverScrollbar(event.position)
+            tooltips.moved(body?.let { root -> elementAt(root, event.position) { it.tooltip != null } }, event.position)
+            // a tooltip that shows follows the pointer
+            if (tooltips.showing || tooltipShown) body?.draw?.dirty = true
             val hover = ElementPseudoClass("hover")
             val toRemove = insideElements.filter { (event.position !in it.screenArea) }
 
@@ -436,6 +469,16 @@ class ControlManager : Extension {
     /** the transitions of the styles of elements */
     internal val styleTransitions = StyleTransitions()
 
+    /** the tooltips of the elements under the pointer */
+    internal val tooltips = Tooltips()
+    private var tooltipShown = false
+
+    /** the context menu that is open */
+    private var openMenu: ContextMenu? = null
+
+    /** the rounded boxes that clip what is drawn */
+    private val roundedClips = RoundedClips()
+
     /** the render targets that elements that are not opaque are drawn into */
     private val opacityTargets = HashMap<Element, RenderTarget>()
 
@@ -487,8 +530,12 @@ class ControlManager : Extension {
                 drawElement(element, drawer, zIndex, zComp)
             }
             drawingFaded.remove(element)
+            val outerClip = drawer.drawStyle.clip
             drawer.isolated {
                 drawer.defaults()
+                // within the clipping of the elements around it
+                drawer.drawStyle.clip = outerClip
+                drawer.shadeStyle = roundedClips.style()
                 drawer.ortho(RenderTarget.active)
                 // the colors are premultiplied by their alpha
                 drawer.drawStyle.colorMatrix = org.openrndr.extra.color.colormatrix.tint(ColorRGBa(opacity, opacity, opacity, opacity))
@@ -528,21 +575,11 @@ class ControlManager : Extension {
                     drawElement(it, drawer, zIndex, newZComp)
                 }
             } else {
+                // the content is clipped to the area of the element, within the clipping of the elements around it,
+                // by scissoring, which needs no render target
                 val area = element.screenArea
-                val rt = renderTargetCache.computeIfAbsent(element) {
-                    renderTarget(program.width, program.height, contentScale) {
-                        colorBuffer()
-                        depthBuffer()
-                    }
-                }
-
-                drawer.isolatedWithTarget(rt) {
-                    drawer.clear(ColorRGBa.BLACK.opacify(0.0))
-                    drawer.ortho(rt)
-                    element.childrenInDrawingOrder().forEach {
-                        drawElement(it, drawer, zIndex, newZComp)
-                    }
-                }
+                val outer = drawer.drawStyle.clip
+                val clip = if (outer == null) area else intersection(outer, area)
 
                 drawer.isolated {
                     drawer.translate(element.screenPosition)
@@ -552,11 +589,26 @@ class ControlManager : Extension {
                         drawOutline(drawer, element)
                     }
                 }
-                drawer.drawStyle.blendMode = BlendMode.OVER
-                drawer.image(
-                    rt.colorBuffer(0), Rectangle(Vector2(area.x, area.y), area.width, area.height),
-                    Rectangle(Vector2(area.x, area.y), area.width, area.height)
-                )
+                if (clip != null) {
+                    // an element with rounded corners clips to its rounded padding box
+                    val radius = element.cornerRadius
+                    val border = element.layout.borderWidth
+                    if (radius > 0.0) {
+                        roundedClips.push(
+                            Rectangle(area.x + border, area.y + border, area.width - 2.0 * border, area.height - 2.0 * border),
+                            maxOf(0.0, radius - border)
+                        )
+                    }
+                    drawer.isolated {
+                        drawer.drawStyle.clip = snapToPixels(clip, contentScale)
+                        for (child in element.childrenInDrawingOrder()) {
+                            // the children of deeper elements change the clipping, it is set for every child
+                            drawer.shadeStyle = roundedClips.style()
+                            drawElement(child, drawer, zIndex, newZComp)
+                        }
+                    }
+                    if (radius > 0.0) roundedClips.pop()
+                }
                 if (newZComp == zIndex) {
                     val active = mouseInput.scrollbarDrag?.element === element || mouseInput.scrollbarHover?.element === element
                     drawScrollbars(drawer, element, mouseInput.scrollbarDrag, mouseInput.scrollbarHover,
@@ -575,8 +627,6 @@ class ControlManager : Extension {
 
                 renderTarget?.close()
                 renderTarget = null
-                renderTargetCache.forEach { (_, u) -> u.close() }
-                renderTargetCache.clear()
                 opacityTargets.forEach { (_, u) -> u.close() }
                 opacityTargets.clear()
             }
@@ -589,6 +639,13 @@ class ControlManager : Extension {
                 program.drawer.isolatedWithTarget(renderTarget!!) {
                     program.drawer.clear(ColorRGBa.BLACK.opacify(0.0))
                 }
+            }
+
+            // a tooltip shows or hides
+            val tooltipShows = tooltips.showing
+            if (tooltipShows != tooltipShown) {
+                body?.draw?.dirty = true
+                tooltipShown = tooltipShows
             }
 
             // elements whose styles transition are drawn again
@@ -631,13 +688,14 @@ class ControlManager : Extension {
                         drawElement(it, program.drawer, 0, 0)
                         drawElement(it, program.drawer, 1, 0)
                         drawElement(it, program.drawer, 1000, 0)
+                        // over everything
+                        tooltips.draw(program.drawer, fontManager, Rectangle(0.0, 0.0, program.width.toDouble(), program.height.toDouble()))
                     }
                     // over a scrollbar, and while dragging one, the cursor is that of the scrollbar
                     (mouseInput.scrollbarDrag ?: mouseInput.scrollbarHover)?.let { bar ->
                         program.application.cursorType = bar.element.computedStyle.scrollbarCursor.cursorType
                     }
                 }
-                Driver.instance.finish()
             }
 
             body?.visit {
@@ -651,7 +709,7 @@ class ControlManager : Extension {
             drawCount++
 
             // the next frame continues the fading also when frames are only drawn on request
-            if ((fadingBefore.isNotEmpty() || smooth || styleTransitions.animating.isNotEmpty()) &&
+            if ((fadingBefore.isNotEmpty() || smooth || styleTransitions.animating.isNotEmpty() || tooltips.waiting) &&
                 window.presentationMode == PresentationMode.MANUAL
             ) {
                 window.requestDraw()
@@ -669,6 +727,29 @@ private val Cursor.cursorType: CursorType
         Cursor.Crosshair -> CursorType.CROSSHAIR_CURSOR
         else -> CursorType.ARROW_CURSOR
     }
+
+/**
+ * The innermost element at [position] of [root] and its descendants that matches [predicate], skipping elements that
+ * are not displayed and the parts of elements outside the elements that clip them; elements on higher layers first
+ */
+internal fun elementAt(root: Element, position: Vector2, predicate: (Element) -> Boolean): Element? {
+    var found: Element? = null
+    var foundZ = Int.MIN_VALUE
+    fun visit(element: Element, clippedBelow: Int?) {
+        val cs = element.computedStyle
+        if (cs.display == Display.NONE) return
+        var clipped = clippedBelow
+        if (cs.clipsContent && position !in element.screenArea) clipped = maxOf(clipped ?: Int.MIN_VALUE, element.layout.zIndex)
+        val visible = clipped == null || element.layout.zIndex > clipped
+        if (visible && position in element.screenArea && predicate(element) && element.layout.zIndex >= foundZ) {
+            found = element
+            foundZ = element.layout.zIndex
+        }
+        element.children.forEach { visit(it, clipped) }
+    }
+    visit(root, null)
+    return found
+}
 
 /** the children of [this] in the order they are drawn: sticky children over the others */
 private fun Element.childrenInDrawingOrder(): List<Element> =

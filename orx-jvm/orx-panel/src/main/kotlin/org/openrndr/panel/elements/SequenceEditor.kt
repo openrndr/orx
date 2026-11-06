@@ -69,7 +69,7 @@ open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(E
     var range: ClosedRange<Double> = -1.0..1.0
 
     private var selectedIndex: Int? = null
-    private var tooltip: Tooltip? = null
+    private var valueTooltip: Tooltip? = null
 
     private val footerHeight = 20.0
 
@@ -137,8 +137,8 @@ open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(E
 
         mouse.exited.listen {
             hoverJob?.cancel()
-            if (tooltip != null) {
-                tooltip = null
+            if (valueTooltip != null) {
+                valueTooltip = null
                 requestRedraw()
             }
         }
@@ -147,8 +147,8 @@ open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(E
             hoverJob?.let { job ->
                 job.cancel()
             }
-            if (tooltip != null) {
-                tooltip = null
+            if (valueTooltip != null) {
+                valueTooltip = null
                 requestRedraw()
             }
 
@@ -164,7 +164,7 @@ open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(E
                         val readIndex = index.roundToInt() - 1
                         if (readIndex >= 0 && readIndex < baseValue.size) {
                             val value = String.format("%.0${precision}f", baseValue[readIndex])
-                            tooltip = Tooltip(
+                            valueTooltip = Tooltip(
                                 this@SequenceEditorBase,
                                 it.position - Vector2(layout.screenX, layout.screenY),
                                 "$value"
@@ -240,7 +240,7 @@ open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(E
             }
         }
 
-        tooltip?.draw(drawer)
+        valueTooltip?.draw(drawer)
     }
 
     override fun close() {

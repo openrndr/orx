@@ -20,6 +20,76 @@ fun defaultStyles(
         transitionDuration = 0.12
     },
 
+    styleSheet(has type "number-field") {
+        width = 100.percent
+        height = (controlFontSize * 32.0 / defaultFontSize).px
+        marginLeft = 5.px
+        marginRight = 5.px
+        marginTop = (controlFontSize * 5.0 / defaultFontSize).px
+        marginBottom = (controlFontSize * 5.0 / defaultFontSize).px
+        paddingLeft = 8.px
+        paddingRight = 8.px
+        fontSize = controlFontSize.px
+        background = Color.RGBa(controlBackground.shade(0.6))
+        color = controlTextColor
+        borderRadius = 4.px
+        transitionDuration = 0.12
+        and(has state "hover") {
+            background = Color.RGBa(controlBackground.shade(0.8))
+        }
+    },
+
+    styleSheet(has type "tab-bar") {
+        display = Display.FLEX
+        flexDirection = FlexDirection.Row
+        columnGap = 2.px
+    },
+
+    styleSheet(has type "tab") {
+        paddingLeft = 12.px
+        paddingRight = 12.px
+        paddingTop = 6.px
+        paddingBottom = 6.px
+        fontSize = controlFontSize.px
+        color = controlTextColor
+        background = Color.RGBa(controlBackground.shade(0.6))
+        transitionDuration = 0.12
+        and(has state "hover") {
+            background = Color.RGBa(controlBackground.shade(0.8))
+        }
+        and(has state "selected") {
+            background = Color.RGBa(controlBackground)
+            color = Color.RGBa(ColorRGBa.WHITE)
+        }
+    },
+
+    styleSheet(has type "tab-page") {
+        padding(5.px)
+    },
+
+    styleSheet(has type "context-menu") {
+        width = 180.px
+        padding(4.px)
+        background = Color.RGBa(ColorRGBa.fromHex("#262626").opacify(0.97))
+        borderWidth = 1.px
+        borderColor = Color.RGBa(ColorRGBa.WHITE.opacify(0.2))
+        borderRadius = 6.px
+    },
+
+    styleSheet(has type "menu-item") {
+        paddingLeft = 8.px
+        paddingRight = 8.px
+        paddingTop = 4.px
+        paddingBottom = 4.px
+        fontSize = controlFontSize.px
+        color = controlTextColor
+        borderRadius = 4.px
+        and(has state "hover") {
+            background = Color.RGBa(controlBackground)
+            color = Color.RGBa(ColorRGBa.WHITE)
+        }
+    },
+
     // a ring around the control that the keyboard moved the focus to
     styleSheet(has state "focus-visible") {
         outlineWidth = length { 2 }

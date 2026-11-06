@@ -6,7 +6,8 @@ import org.openrndr.draw.Drawer
 import org.openrndr.draw.StrokeAlignment
 import org.openrndr.panel.style.*
 
-open class Div : TextElement(ElementType("div")) {
+/** a box that holds other elements, of [type] `div` unless elements built on it give another */
+open class Div(type: ElementType = ElementType("div")) : TextElement(type) {
     init {
         mouse.pressed.listen {
             if ((computedStyle.effectiveBackground?.alpha ?: 0.0) > 0.0) {
