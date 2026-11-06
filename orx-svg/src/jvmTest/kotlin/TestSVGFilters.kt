@@ -88,8 +88,7 @@ class TestSVGFilters {
         assertEquals(20, assertIs<FilterPrimitive.ColorMatrix>(p[3]).values.size)
         assertEquals(Vector2(2.0, 2.0), assertIs<FilterPrimitive.Morphology>(p[4]).radius)
         assertIs<FilterInput.Unsupported>(assertIs<FilterPrimitive.Blend>(p[5]).input2)
-        // primitives that are not supported pass their input on
-        assertIs<FilterPrimitive.ColorMatrix>(p[6])
+        assertIs<FilterPrimitive.Image>(p[6])
     }
 
     @Test

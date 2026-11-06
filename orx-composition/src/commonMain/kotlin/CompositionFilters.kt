@@ -36,6 +36,13 @@ enum class FilterColorSpace {
 }
 
 /**
+ * The subregion of a primitive, like the x, y, width and height attributes of SVG filter primitives: in the units of
+ * [FilterEffect.primitiveUnits], fractions of the bounds of the node for [PaintUnits.BOUNDS]. A component that is
+ * null is that of the default subregion: the union of the subregions of the inputs, or the region of the filter.
+ */
+class FilterSubregion(val x: Double? = null, val y: Double? = null, val width: Double? = null, val height: Double? = null)
+
+/**
  * A primitive of a [FilterEffect]: it computes an image from its inputs, which is the input of the next primitive
  * and, when it has a [result] name, of later primitives that refer to it. Lengths are in the units of the
  * [FilterEffect.primitiveUnits].
@@ -45,6 +52,9 @@ sealed class FilterPrimitive {
     var result: String? = null
 
     var colorSpace: FilterColorSpace = FilterColorSpace.LINEAR_RGB
+
+    /** the subregion that the result of the primitive is clipped to, null for the default subregion */
+    var subregion: FilterSubregion? = null
 
     /** the inputs, in the order of in and in2 */
     abstract val inputs: List<FilterInput>
@@ -200,6 +210,25 @@ sealed class FilterPrimitive {
         var octaves: Int = 1,
         var seed: Double = 0.0,
         var fractalNoise: Boolean = false
+    ) : FilterPrimitive() {
+        override val inputs get() = emptyList<FilterInput>()
+    }
+
+    /** the subregion of the input repeated over the subregion of the primitive, like feTile */
+    class Tile(var input: FilterInput = FilterInput.Previous) : FilterPrimitive() {
+        override val inputs get() = listOf(input)
+    }
+
+    /**
+     * An image, like feImage: [content] is drawn in user space when [size] is null, like an element that feImage
+     * refers to, otherwise the content, of [size], is fitted into the subregion by [aspectRatio], like an image file
+     */
+    class Image(
+        val content: GroupNode,
+        var size: Vector2? = null,
+        var aspectRatio: AspectRatio = AspectRatio.DEFAULT,
+        /** the reference that the content is loaded from, like the href of feImage, it is written to SVG documents */
+        var href: String? = null
     ) : FilterPrimitive() {
         override val inputs get() = emptyList<FilterInput>()
     }

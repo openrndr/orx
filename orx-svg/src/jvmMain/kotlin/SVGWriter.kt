@@ -524,7 +524,10 @@ private fun StringBuilder.appendFilters(composition: Composition) {
         append("<filter id=\"$id\" filterUnits=\"$regionUnits\" primitiveUnits=\"$primitiveUnits\" ")
         append("x=\"${r.x}\" y=\"${r.y}\" width=\"${r.width}\" height=\"${r.height}\">")
         for (p in effect.primitives) {
+            val sub = p.subregion
             val common = listOfNotNull(
+                sub?.x?.let { "x=\"$it\"" }, sub?.y?.let { "y=\"$it\"" },
+                sub?.width?.let { "width=\"$it\"" }, sub?.height?.let { "height=\"$it\"" },
                 p.inputs.getOrNull(0)?.svg()?.let { "in=\"$it\"" }.takeIf { p !is FilterPrimitive.Merge },
                 p.inputs.getOrNull(1)?.svg()?.let { "in2=\"$it\"" }.takeIf { p !is FilterPrimitive.Merge },
                 p.result?.let { "result=\"$it\"" },
@@ -561,6 +564,11 @@ private fun StringBuilder.appendFilters(composition: Composition) {
                         "baseFrequency=\"${n(p.baseFrequency.x)} ${n(p.baseFrequency.y)}\" numOctaves=\"${p.octaves}\" seed=\"${n(p.seed)}\"")
                 is FilterPrimitive.DisplacementMap -> element("feDisplacementMap", "scale=\"${n(p.scale)}\" " +
                         "xChannelSelector=\"${p.xChannel}\" yChannelSelector=\"${p.yChannel}\"")
+                is FilterPrimitive.Tile -> element("feTile", "")
+                is FilterPrimitive.Image -> p.href?.let { href ->
+                    val aspect = p.aspectRatio.toString().takeIf { it.isNotEmpty() }?.let { " preserveAspectRatio=\"$it\"" } ?: ""
+                    element("feImage", "href=\"${Entities.escape(href)}\"$aspect")
+                } ?: element("feFlood", "flood-opacity=\"0\"")
             }
         }
         append("</filter>")

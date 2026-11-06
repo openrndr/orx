@@ -13,6 +13,7 @@ import org.openrndr.extra.shadestyles.presets.PaintUnits
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector4
+import org.openrndr.shape.bounds
 import org.openrndr.shape.Rectangle
 import org.openrndr.utils.buffer.MPPBuffer
 import kotlin.math.ceil
@@ -52,8 +53,9 @@ private val passPreamble = """
         return mix(pow((c + 0.055) / 1.055, vec3(2.4)), c / 12.92, step(c, vec3(0.04045)));
     }
     // a premultiplied color of a texture in the color space of the primitive, transparent outside the texture
+    // outside the region of the filter, p_valid in texture coordinates, images are transparent
     vec4 f_get(sampler2D t, vec2 uv) {
-        if (uv.x < 0.0 || uv.y < 0.0 || uv.x > 1.0 || uv.y > 1.0) return vec4(0.0);
+        if (uv.x < p_valid.x || uv.y < p_valid.y || uv.x > p_valid.z || uv.y > p_valid.w) return vec4(0.0);
         vec4 c = texture(t, uv);
         if (p_srgb == 1 && c.a > 0.0) c.rgb = f_toSrgb(c.rgb / c.a) * c.a;
         return c;
@@ -236,6 +238,16 @@ private val displacementPass by lazy {
     """.trimIndent())
 }
 
+private val tilePass by lazy {
+    pass("""
+        // the point in user space wraps around in the subregion of the input
+        vec2 point = (p_toUser * vec4(uv * 2.0 - 1.0, 0.0, 1.0)).xy;
+        vec2 wrapped = p_tile.xy + mod(point - p_tile.xy, p_tile.zw);
+        vec4 c = p_toClip * vec4(wrapped, 0.0, 1.0);
+        x_fill = f_out(f_get(p_input0, c.xy / c.w * 0.5 + 0.5));
+    """.trimIndent())
+}
+
 private val regionPass by lazy {
     pass("""
         vec4 c = texture(p_input0, uv);
@@ -324,9 +336,15 @@ private fun transferTable(functions: List<FilterPrimitive.TransferFunction>): Co
 
 /**
  * The transforms of a node that a filter is applied to: [toClip] maps its user space to clip space, [bounds] are the
- * bounds of what it draws in user space
+ * bounds of what it draws in user space. [render] draws a group with an extra transform into a texture, for the
+ * images of filters.
  */
-internal class FilterSpace(private val toClip: Matrix44, val bounds: Rectangle?, private val size: Vector2) {
+internal class FilterSpace(
+    val toClip: Matrix44,
+    val bounds: Rectangle?,
+    private val size: Vector2,
+    val render: (GroupNode, Matrix44, ColorBuffer) -> Unit
+) {
     /** maps texture coordinates to user space */
     val toUser: Matrix44 = toClip.inversed
 
@@ -357,25 +375,56 @@ internal fun applyFilters(effects: List<FilterEffect>, source: ColorBuffer, spac
     return input
 }
 
-private fun ShadeStyleFilter.run(inputs: List<ColorBuffer>, target: ColorBuffer, srgb: Boolean) {
+/**
+ * Runs a pass on [inputs] into [target]; with a [box] only its pixels are written, and only its pixels of the inputs
+ * are read
+ */
+private fun ShadeStyleFilter.run(inputs: List<ColorBuffer>, target: ColorBuffer, srgb: Boolean, box: PixelBox?) {
     parameter("srgb", if (srgb) 1 else 0)
-    apply(inputs.toTypedArray(), target)
+    parameter("valid", box?.uvBounds ?: Vector4(0.0, 0.0, 1.0, 1.0))
+    apply(inputs.toTypedArray(), target, box?.clip)
 }
 
 private fun applyEffect(effect: FilterEffect, source: ColorBuffer, space: FilterSpace, next: () -> ColorBuffer): ColorBuffer {
     val bounds = space.bounds
     if ((effect.regionUnits == PaintUnits.BOUNDS && effect.region != null) || effect.primitiveUnits == PaintUnits.BOUNDS) {
-        if (bounds == null || bounds.width <= 0.0 || bounds.height <= 0.0) return next().also { clear(it) }
+        if (bounds == null || bounds.width <= 0.0 || bounds.height <= 0.0) return next().also { clear(it, null) }
     }
     // lengths of primitives along x and y in user space
     fun lengths(v: Vector2) = if (effect.primitiveUnits == PaintUnits.BOUNDS) Vector2(v.x * bounds!!.width, v.y * bounds.height) else v
 
+    // the region of the filter in user space, and the pixels it covers; passes only write and read those
+    val userRegion = effect.region?.let { region ->
+        if (effect.regionUnits == PaintUnits.BOUNDS) Rectangle(
+            bounds!!.x + region.x * bounds.width, bounds.y + region.y * bounds.height,
+            region.width * bounds.width, region.height * bounds.height
+        ) else region
+    }
+    val box = userRegion?.let {
+        pixelBox(it, space.toClip, source.width.toDouble(), source.height.toDouble(), source.contentScale)
+            ?: return next().also { b -> clear(b, null) }
+    }
+
+    /** a subregion in user space: the given components in primitive units, the others those of [default] */
+    fun resolve(sub: FilterSubregion?, default: Rectangle?): Rectangle? {
+        if (sub == null) return default
+        val base = default ?: userRegion ?: bounds ?: return null
+        fun x(v: Double) = if (effect.primitiveUnits == PaintUnits.BOUNDS) bounds!!.x + v * bounds.width else v
+        fun y(v: Double) = if (effect.primitiveUnits == PaintUnits.BOUNDS) bounds!!.y + v * bounds.height else v
+        fun w(v: Double) = if (effect.primitiveUnits == PaintUnits.BOUNDS) v * bounds!!.width else v
+        fun h(v: Double) = if (effect.primitiveUnits == PaintUnits.BOUNDS) v * bounds!!.height else v
+        return Rectangle(sub.x?.let(::x) ?: base.x, sub.y?.let(::y) ?: base.y,
+            sub.width?.let(::w) ?: base.width, sub.height?.let(::h) ?: base.height)
+    }
+
     val results = mutableMapOf<String, ColorBuffer>()
+    // the subregions of the results, null for the region of the filter
+    val subregions = mutableMapOf<ColorBuffer, Rectangle?>()
     var previous = source
     val sourceAlpha by lazy {
-        next().also { copyPass.parameter("alphaOnly", 1); copyPass.run(listOf(source), it, false) }
+        next().also { copyPass.parameter("alphaOnly", 1); copyPass.run(listOf(source), it, false, box) }
     }
-    val transparent by lazy { next().also { clear(it) } }
+    val transparent by lazy { next().also { clear(it, box) } }
 
     for (primitive in effect.primitives) {
         val srgb = primitive.colorSpace == FilterColorSpace.SRGB
@@ -386,6 +435,14 @@ private fun applyEffect(effect: FilterEffect, source: ColorBuffer, space: Filter
             is FilterInput.Result -> results[i.name] ?: previous
             is FilterInput.Unsupported -> transparent
         }
+        // the default subregion is the union of the subregions of the inputs, or the region of the filter
+        val inputRegions = primitive.inputs.map { subregions[input(it)] }
+        // a tile is repeated over the region of the filter, as browsers do
+        val defaultRegion = if (primitive is FilterPrimitive.Tile || inputRegions.isEmpty() || inputRegions.any { it == null }) userRegion
+            else inputRegions.filterNotNull().reduce { a, b ->
+                listOf(a.corner, a.corner + a.dimensions, b.corner, b.corner + b.dimensions).bounds
+            }
+        val subregion = resolve(primitive.subregion, defaultRegion)
 
         fun blur(input: ColorBuffer, stdDeviation: Vector2): ColorBuffer {
             var current = input
@@ -397,13 +454,13 @@ private fun applyEffect(effect: FilterEffect, source: ColorBuffer, space: Filter
                 blurPass.parameter("step", space.uv(axis) / pixels)
                 blurPass.parameter("sigma", sigmaPixels)
                 blurPass.parameter("radius", min(ceil(sigmaPixels * 3.0).toInt(), 512))
-                blurPass.run(listOf(current), out, srgb)
+                blurPass.run(listOf(current), out, srgb, box)
                 current = out
             }
             return current
         }
 
-        val output: ColorBuffer = when (primitive) {
+        var output: ColorBuffer = when (primitive) {
             is FilterPrimitive.GaussianBlur -> {
                 val s = lengths(primitive.stdDeviation)
                 if (s.x < 0.0 || s.y < 0.0) transparent else blur(input(primitive.input), s)
@@ -412,12 +469,12 @@ private fun applyEffect(effect: FilterEffect, source: ColorBuffer, space: Filter
             is FilterPrimitive.Offset -> next().also {
                 val d = lengths(Vector2(primitive.dx, primitive.dy))
                 offsetPass.parameter("shift", space.uv(d))
-                offsetPass.run(listOf(input(primitive.input)), it, srgb)
+                offsetPass.run(listOf(input(primitive.input)), it, srgb, box)
             }
 
             is FilterPrimitive.Flood -> next().also {
                 floodPass.parameter("color", workingColor(primitive.color, srgb))
-                floodPass.run(listOf(noInput), it, srgb)
+                floodPass.run(listOf(noInput), it, srgb, box)
             }
 
             is FilterPrimitive.Merge -> {
@@ -426,7 +483,7 @@ private fun applyEffect(effect: FilterEffect, source: ColorBuffer, space: Filter
                     val out = next()
                     compositePass.parameter("operator", 0)
                     compositePass.parameter("k", Vector4.ZERO)
-                    compositePass.run(listOf(input(i), merged), out, srgb)
+                    compositePass.run(listOf(input(i), merged), out, srgb, box)
                     merged = out
                 }
                 merged
@@ -435,12 +492,12 @@ private fun applyEffect(effect: FilterEffect, source: ColorBuffer, space: Filter
             is FilterPrimitive.Composite -> next().also {
                 compositePass.parameter("operator", primitive.operator.ordinal)
                 compositePass.parameter("k", Vector4(primitive.k1, primitive.k2, primitive.k3, primitive.k4))
-                compositePass.run(listOf(input(primitive.input), input(primitive.input2)), it, srgb)
+                compositePass.run(listOf(input(primitive.input), input(primitive.input2)), it, srgb, box)
             }
 
             is FilterPrimitive.Blend -> next().also {
                 blendPass.parameter("mode", primitive.mode.ordinal)
-                blendPass.run(listOf(input(primitive.input), input(primitive.input2)), it, srgb)
+                blendPass.run(listOf(input(primitive.input), input(primitive.input2)), it, srgb, box)
             }
 
             is FilterPrimitive.ColorMatrix -> next().also {
@@ -452,12 +509,12 @@ private fun applyEffect(effect: FilterEffect, source: ColorBuffer, space: Filter
                     v[15], v[16], v[17], v[18]
                 ))
                 matrixPass.parameter("offset", Vector4(v[4], v[9], v[14], v[19]))
-                matrixPass.run(listOf(input(primitive.input)), it, srgb)
+                matrixPass.run(listOf(input(primitive.input)), it, srgb, box)
             }
 
             is FilterPrimitive.ComponentTransfer -> next().also {
                 transferPass.parameter("table", transferTable(listOf(primitive.red, primitive.green, primitive.blue, primitive.alpha)))
-                transferPass.run(listOf(input(primitive.input)), it, srgb)
+                transferPass.run(listOf(input(primitive.input)), it, srgb, box)
             }
 
             is FilterPrimitive.Morphology -> {
@@ -474,7 +531,7 @@ private fun applyEffect(effect: FilterEffect, source: ColorBuffer, space: Filter
                         morphologyPass.parameter("step", space.uv(axis) / pixels)
                         morphologyPass.parameter("radius", min(radiusPixels, 512))
                         morphologyPass.parameter("dilate", if (primitive.dilate) 1 else 0)
-                        morphologyPass.run(listOf(current), out, srgb)
+                        morphologyPass.run(listOf(current), out, srgb, box)
                         current = out
                     }
                     current
@@ -486,11 +543,11 @@ private fun applyEffect(effect: FilterEffect, source: ColorBuffer, space: Filter
                 val blurred = blur(inputBuffer, lengths(primitive.stdDeviation))
                 val moved = next().also {
                     offsetPass.parameter("shift", space.uv(lengths(Vector2(primitive.dx, primitive.dy))))
-                    offsetPass.run(listOf(blurred), it, srgb)
+                    offsetPass.run(listOf(blurred), it, srgb, box)
                 }
                 next().also {
                     shadowPass.parameter("color", workingColor(primitive.color, srgb))
-                    shadowPass.run(listOf(inputBuffer, moved), it, srgb)
+                    shadowPass.run(listOf(inputBuffer, moved), it, srgb, box)
                 }
             }
 
@@ -500,7 +557,7 @@ private fun applyEffect(effect: FilterEffect, source: ColorBuffer, space: Filter
                 turbulencePass.parameter("frequency", primitive.baseFrequency)
                 turbulencePass.parameter("octaves", max(primitive.octaves, 0))
                 turbulencePass.parameter("fractal", if (primitive.fractalNoise) 1 else 0)
-                turbulencePass.run(listOf(noInput), it, srgb)
+                turbulencePass.run(listOf(noInput), it, srgb, box)
             }
 
             is FilterPrimitive.DisplacementMap -> next().also {
@@ -509,23 +566,54 @@ private fun applyEffect(effect: FilterEffect, source: ColorBuffer, space: Filter
                 displacementPass.parameter("toUv", space.toUv)
                 displacementPass.parameter("xChannel", primitive.xChannel.ordinal)
                 displacementPass.parameter("yChannel", primitive.yChannel.ordinal)
-                displacementPass.run(listOf(input(primitive.input), input(primitive.input2)), it, srgb)
+                displacementPass.run(listOf(input(primitive.input), input(primitive.input2)), it, srgb, box)
+            }
+
+            is FilterPrimitive.Tile -> {
+                val tileInput = input(primitive.input)
+                // the tile is the subregion of the input, the region of the filter when it has none
+                val tile = subregions[tileInput] ?: userRegion
+                if (tile == null || tile.width <= 0.0 || tile.height <= 0.0) tileInput else next().also {
+                    tilePass.parameter("toUser", space.toUser)
+                    tilePass.parameter("toClip", space.toClip)
+                    tilePass.parameter("tile", Vector4(tile.x, tile.y, tile.width, tile.height))
+                    tilePass.run(listOf(tileInput), it, srgb, box)
+                }
+            }
+
+            is FilterPrimitive.Image -> next().also {
+                val size = primitive.size
+                val viewport = subregion ?: userRegion ?: bounds
+                // an image file is fitted into the subregion, an element is moved to the corner of the subregion, as
+                // browsers do
+                val transform = when {
+                    viewport == null -> Matrix44.IDENTITY
+                    size == null -> org.openrndr.math.transforms.buildTransform { translate(viewport.x, viewport.y, 0.0) }
+                    size.x <= 0.0 || size.y <= 0.0 -> Matrix44.IDENTITY
+                    else -> viewportTransform(Rectangle(0.0, 0.0, size.x, size.y), viewport, primitive.aspectRatio)
+                }
+                space.render(primitive.content, transform, it)
             }
         }
+        // the result is clipped to the subregion of the primitive
+        if (subregion != null && subregion != userRegion) {
+            output = next().also {
+                regionPass.parameter("toUser", space.toUser)
+                regionPass.parameter("region", Vector4(subregion.x, subregion.y, subregion.width, subregion.height))
+                regionPass.run(listOf(output), it, false, box)
+            }
+        }
+        subregions[output] = subregion?.takeIf { it != userRegion }
         previous = output
         primitive.result?.let { results[it] = output }
     }
 
     // the result is clipped to the region of the filter
-    val region = effect.region ?: return previous
-    val userRegion = if (effect.regionUnits == PaintUnits.BOUNDS) Rectangle(
-        bounds!!.x + region.x * bounds.width, bounds.y + region.y * bounds.height,
-        region.width * bounds.width, region.height * bounds.height
-    ) else region
+    if (userRegion == null) return previous
     return next().also {
         regionPass.parameter("toUser", space.toUser)
         regionPass.parameter("region", Vector4(userRegion.x, userRegion.y, userRegion.width, userRegion.height))
-        regionPass.run(listOf(previous), it, false)
+        regionPass.run(listOf(previous), it, false, box)
     }
 }
 
@@ -538,7 +626,7 @@ private fun workingColor(color: ColorRGBa, srgb: Boolean): Vector4 {
 /** a texture that passes without inputs are given, they do not read it */
 private val noInput by lazy { colorBuffer(1, 1) }
 
-private fun clear(buffer: ColorBuffer) {
+private fun clear(buffer: ColorBuffer, box: PixelBox?) {
     floodPass.parameter("color", Vector4.ZERO)
-    floodPass.run(listOf(noInput), buffer, false)
+    floodPass.run(listOf(noInput), buffer, false, box)
 }

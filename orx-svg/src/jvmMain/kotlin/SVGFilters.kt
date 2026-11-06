@@ -9,6 +9,8 @@ import org.openrndr.extra.composition.FilterInput
 import org.openrndr.extra.composition.FilterPrimitive
 import org.openrndr.extra.composition.FilterPrimitive.TransferFunction
 import org.openrndr.extra.composition.FilterReference
+import org.openrndr.extra.composition.FilterSubregion
+import org.openrndr.extra.composition.GroupNode
 import org.openrndr.extra.composition.MixBlendMode
 import org.openrndr.extra.composition.Paint
 import org.openrndr.extra.shadestyles.presets.PaintUnits
@@ -24,6 +26,12 @@ private val logger = KotlinLogging.logger {}
 internal object SVGFilters {
     private val current = ThreadLocal<Map<String, FilterEffect>>()
 
+    /** the feImage primitives of the document that is being parsed, with their references, see [images] */
+    private val currentImages = ThreadLocal<MutableList<Pair<FilterPrimitive.Image, String>>>()
+
+    /** the feImage primitives of the filters of the last document that was parsed, their content is added later */
+    val images: List<Pair<FilterPrimitive.Image, String>> get() = currentImages.get() ?: emptyList()
+
     /** runs [block] with [filters] available to [filter] */
     fun <T> using(filters: Map<String, FilterEffect>, block: () -> T): T {
         val previous = current.get()
@@ -36,8 +44,10 @@ internal object SVGFilters {
     }
 
     /** the filter elements in the document with [root], by their id */
-    fun parse(root: Element): Map<String, FilterEffect> =
-        root.allElements.filter { it.tagName() == "filter" && it.id().isNotEmpty() }.associate { it.id() to effect(it) }
+    fun parse(root: Element): Map<String, FilterEffect> {
+        currentImages.set(mutableListOf())
+        return root.allElements.filter { it.tagName() == "filter" && it.id().isNotEmpty() }.associate { it.id() to effect(it) }
+    }
 
     /** a property or attribute of [element], the style attribute first */
     private fun property(element: Element, name: String): String? =
@@ -83,11 +93,11 @@ internal object SVGFilters {
             region("x", "-10%", SVGParse.LengthAxis.X), region("y", "-10%", SVGParse.LengthAxis.Y),
             region("width", "120%", SVGParse.LengthAxis.X), region("height", "120%", SVGParse.LengthAxis.Y)
         )
-        val primitives = element.children().mapNotNull { child -> primitive(child, element) }
+        val primitives = element.children().mapNotNull { child -> primitive(child, element, primitiveUnits) }
         return FilterEffect(primitives, region, regionUnits, primitiveUnits, element.id())
     }
 
-    private fun primitive(element: Element, filter: Element): FilterPrimitive? {
+    private fun primitive(element: Element, filter: Element, units: PaintUnits): FilterPrimitive? {
         val input = input(element.attr("in"))
         val input2 = input(element.attr("in2"))
         val primitive = when (element.tagName()) {
@@ -141,12 +151,32 @@ internal object SVGFilters {
                 FilterPrimitive.DisplacementMap(input, input2, element.attr("scale").toDoubleOrNull() ?: 0.0,
                     channel("xChannelSelector"), channel("yChannelSelector"))
             }
+            "feTile" -> FilterPrimitive.Tile(input)
+            "feImage" -> {
+                val href = listOf("href", "xlink:href").firstNotNullOfOrNull { name -> element.attr(name).trim().takeIf { it.isNotEmpty() } }
+                FilterPrimitive.Image(GroupNode(), aspectRatio = SVGParse.preserveAspectRatio(element), href = href).also { image ->
+                    // the content is added when the document is converted
+                    if (href != null) currentImages.get()?.add(image to href)
+                }
+            }
             else -> {
                 logger.warn { "filter primitive ${element.tagName()} is not supported, its input is passed on" }
                 FilterPrimitive.ColorMatrix(input, FilterPrimitive.ColorMatrix.saturate(1.0))
             }
         }
         primitive.result = element.attr("result").trim().takeIf { it.isNotEmpty() }
+        // the subregion, in the units of the primitives: fractions of the bounds, or lengths in user space
+        fun component(name: String, axis: SVGParse.LengthAxis): Double? {
+            val value = element.attr(name).trim().takeIf { it.isNotEmpty() } ?: return null
+            return if (units == PaintUnits.BOUNDS) {
+                if (value.endsWith("%")) value.dropLast(1).toDoubleOrNull()?.div(100.0) else value.toDoubleOrNull()
+            } else SVGParse.lengthValue(value, element, axis)
+        }
+        val x = component("x", SVGParse.LengthAxis.X)
+        val y = component("y", SVGParse.LengthAxis.Y)
+        val width = component("width", SVGParse.LengthAxis.X)
+        val height = component("height", SVGParse.LengthAxis.Y)
+        if (x != null || y != null || width != null || height != null) primitive.subregion = FilterSubregion(x, y, width, height)
         // color-interpolation-filters is inherited from the filter element and the elements it is in
         val space = property(element, "color-interpolation-filters")?.takeIf { it != "auto" && it != "inherit" }
             ?: generateSequence(filter) { it.parent() }.firstNotNullOfOrNull { e ->

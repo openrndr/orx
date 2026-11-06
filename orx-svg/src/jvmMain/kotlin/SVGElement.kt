@@ -395,9 +395,15 @@ internal class SVGSwitch(element: Element) : SVGGroup(element) {
  * and [height]
  */
 internal class SVGUse(val element: Element) : SVGElement(element) {
-    val href: String? = listOf("href", "xlink:href").firstNotNullOfOrNull { name ->
-        element.attr(name).trim().takeIf { it.startsWith("#") }?.removePrefix("#")
+    private val reference: String? = listOf("href", "xlink:href").firstNotNullOfOrNull { name ->
+        element.attr(name).trim().takeIf { it.isNotEmpty() }
     }
+
+    /** the id of the element that is used */
+    val href: String? = reference?.substringAfter('#', "")?.takeIf { it.isNotEmpty() }
+
+    /** the document the element is in when it is not this document: a file, a URL or a data URL */
+    val document: String? = reference?.substringBefore('#')?.takeIf { it.isNotEmpty() }
 
     private fun length(name: String): Double? =
         element.attr(name).trim().takeIf { it.isNotEmpty() && !it.endsWith("%") }?.let { SVGParse.length(it).value }

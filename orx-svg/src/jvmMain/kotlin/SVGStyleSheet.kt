@@ -91,16 +91,52 @@ internal object SVGStyleSheet {
         if (name.isEmpty()) null else Declaration(name, value, important != null)
     }
 
-    /** the text of the style elements of the document with [root], CDATA sections included */
-    private fun css(root: Element): String =
-        root.getElementsByTag("style").joinToString("\n") { it.data().ifBlank { it.wholeText() } }
+    /**
+     * The text of the style elements of the document with [root], CDATA sections included, with the style sheets that
+     * they import, relative to [base]. Statements like @charset and @namespace are left out.
+     */
+    private fun css(root: Element, base: java.net.URI?): String =
+        root.getElementsByTag("style").joinToString("\n") { imports(it.data().ifBlank { it.wholeText() }, base, mutableSetOf()) }
+
+    /** [css] with its @import rules replaced by the style sheets they refer to, references in them made absolute */
+    private fun imports(css: String, base: java.net.URI?, seen: MutableSet<String>): String {
+        val text = css.replace(Regex("/\\*.*?\\*/", RegexOption.DOT_MATCHES_ALL), "")
+        val result = StringBuilder()
+        var position = 0
+        for (match in Regex("@import\\s+(?:url\\(\\s*['\"]?([^'\")]+)['\"]?\\s*\\)|['\"]([^'\"]+)['\"])[^;]*;").findAll(text)) {
+            result.append(text, position, match.range.first)
+            position = match.range.last + 1
+            val href = match.groupValues[1].ifEmpty { match.groupValues[2] }.trim()
+            val location = try {
+                base?.resolve(java.net.URI(null, null, href, null)) ?: java.io.File(href).absoluteFile.toURI()
+            } catch (e: Exception) {
+                continue
+            }
+            if (!seen.add(location.toString())) continue
+            val imported = try {
+                location.toURL().readText()
+            } catch (e: Exception) {
+                logger.warn { "could not import style sheet '$href': ${e.message}" }
+                continue
+            }
+            // references in the imported style sheet are relative to it
+            val absolute = imported.replace(Regex("url\\(\\s*(['\"]?)([^'\")]+)\\1\\s*\\)")) { url ->
+                val reference = url.groupValues[2].trim()
+                if (reference.startsWith("#") || Regex("^[a-zA-Z][a-zA-Z0-9+.-]*:").containsMatchIn(reference)) url.value
+                else "url(\"${location.resolve(java.net.URI(null, null, reference, null))}\")"
+            }
+            result.append(imports(absolute, location, seen))
+        }
+        result.append(text, position, text.length)
+        return result.toString().replace(Regex("@(charset|namespace)[^;{]*;"), "")
+    }
 
     /**
      * The @font-face rules of the style elements of the document with [root]: [resolve] maps the URL of a source to
      * the file or URL that it is loaded from. Sources in formats that cannot be loaded, SVG and EOT fonts, are left out.
      */
-    fun fontFaces(root: Element, resolve: (String) -> String): List<org.openrndr.extra.composition.FontFace> {
-        val text = css(root).replace(Regex("/\\*.*?\\*/", RegexOption.DOT_MATCHES_ALL), "")
+    fun fontFaces(root: Element, base: java.net.URI?, resolve: (String) -> String): List<org.openrndr.extra.composition.FontFace> {
+        val text = css(root, base).replace(Regex("/\\*.*?\\*/", RegexOption.DOT_MATCHES_ALL), "")
         return Regex("@font-face\\s*\\{([^}]*)}").findAll(text).mapNotNull { match ->
             val declarations = parse(match.groupValues[1]).associate { it.name.lowercase() to it.value }
             val family = declarations["font-family"]?.trim()?.trim('"', '\'')?.takeIf { it.isNotEmpty() }
@@ -177,9 +213,9 @@ internal object SVGStyleSheet {
      * are ordered by importance and specificity: rules, the style attribute, important rules and important declarations
      * of the style attribute.
      */
-    fun apply(root: Element) {
+    fun apply(root: Element, base: java.net.URI? = null) {
         // the XML parser reads the contents of style elements as text, CDATA sections included
-        val css = css(root)
+        val css = css(root, base)
         val matches = java.util.IdentityHashMap<Element, MutableList<Pair<Pair<Int, Int>, String>>>()
         if (css.isNotBlank()) {
             for (rule in rules(css)) {

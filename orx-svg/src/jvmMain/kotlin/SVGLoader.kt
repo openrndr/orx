@@ -18,16 +18,25 @@ private val logger = KotlinLogging.logger {}
 
 /**
  * Load a [Composition] from a filename, url or svg string
- * @param fileOrUrlOrSvg a filename, a url or an svg document
+ * @param fileOrUrlOrSvg a filename, a url or an svg document. A fragment after a filename or url selects a view of
+ * the document: the id of a view element, or svgView(viewBox(...);preserveAspectRatio(...)).
  */
 fun loadSVG(fileOrUrlOrSvg: String): Composition {
-    return if (fileOrUrlOrSvg.endsWith(".svg")) {
-        try {
-            val url = URL(fileOrUrlOrSvg)
-            parseSVG(url.readText(), url.toURI())
+    val path = fileOrUrlOrSvg.substringBefore('#')
+    val fragment = fileOrUrlOrSvg.substringAfter('#', "").takeIf { it.isNotEmpty() }
+    return if (path.endsWith(".svg")) {
+        val (text, base) = try {
+            val url = URL(path)
+            url.readText() to url.toURI()
         } catch (e: MalformedURLException) {
-            val file = File(fileOrUrlOrSvg)
-            parseSVG(file.readText(), file.absoluteFile.toURI())
+            val file = File(path)
+            file.readText() to file.absoluteFile.toURI()
+        }
+        val document = SVGLoader().loadSVG(text, base)
+        val (viewBox, aspectRatio) = document.view(fragment)
+        document.composition().also { composition ->
+            viewBox?.let { composition.documentStyle.viewBox = ViewBox.Value(it) }
+            aspectRatio?.let { composition.documentStyle.preserveAspectRatio = it }
         }
     } else {
         parseSVG(fileOrUrlOrSvg)
@@ -63,8 +72,73 @@ internal class SVGDocument(
     private val root: SVGSVGElement,
     val namespaces: Map<String, String>,
     private val base: URI? = null,
-    private val contents: List<Pair<GroupNode, SVGGroup>> = emptyList()
+    private val contents: List<Pair<GroupNode, SVGGroup>> = emptyList(),
+    private val filterImages: List<Pair<FilterPrimitive.Image, String>> = emptyList()
 ) {
+    /** the font faces of the document, known once it is converted */
+    var fontFaces: List<FontFace> = emptyList()
+        private set
+
+    /** the documents that use elements refer to, converted once, by their location */
+    private val externalDocuments = mutableMapOf<String, SVGDocument?>()
+
+    /**
+     * The document at [href], a file or URL relative to this document or a data URL, converted once so that the
+     * content of its patterns, clip paths, markers and masks is known. Null when it can not be loaded, or when it is
+     * being converted, when documents refer to each other.
+     */
+    private fun externalDocument(href: String): SVGDocument? {
+        val location = if (href.startsWith("data:", ignoreCase = true)) href else resolve(href)
+        return externalDocuments.getOrPut(location) {
+            if (location in documentsInProgress.get()) {
+                logger.warn { "use refers to '${href.take(80)}', which is being loaded, it refers to itself" }
+                return null
+            }
+            loadDocument(location)?.also { it.composition() }
+        }
+    }
+
+    /** the document at [location] parsed, null when it can not be loaded */
+    private fun loadDocument(location: String): SVGDocument? = try {
+        val (text, documentBase) = readSvgDocument(location, base)
+        // the viewport of this document is used again when its elements are converted
+        val viewport = SVGParse.viewport.get()
+        try {
+            SVGLoader().loadSVG(text, documentBase)
+        } finally {
+            SVGParse.viewport.set(viewport)
+        }
+    } catch (e: Throwable) {
+        logger.warn { "could not load '${location.take(80)}': ${e.message}" }
+        null
+    }
+
+    /**
+     * The view of this document that [fragment] selects: the id of a view element, or svgView(viewBox(...);
+     * preserveAspectRatio(...)). Null components are those of the document.
+     */
+    fun view(fragment: String?): Pair<Rectangle?, AspectRatio?> {
+        if (fragment.isNullOrBlank()) return Pair(null, null)
+        val svgView = Regex("^svgView\\((.*)\\)$").matchEntire(fragment.trim())
+        val (viewBox, aspectRatio) = if (svgView != null) {
+            val arguments = svgView.groupValues[1]
+            Pair(
+                Regex("viewBox\\(([^)]*)\\)").find(arguments)?.groupValues?.get(1),
+                Regex("preserveAspectRatio\\(([^)]*)\\)").find(arguments)?.groupValues?.get(1)
+            )
+        } else {
+            val view = root.element.getElementsByTag("view").firstOrNull { it.id() == fragment }
+                ?: return Pair(null, null).also { logger.warn { "'#$fragment' is not a view of the document" } }
+            Pair(view.attr("viewBox").takeIf { it.isNotBlank() }, view.attr("preserveAspectRatio").takeIf { it.isNotBlank() })
+        }
+        val rectangle = viewBox?.split(Regex("[\\s,]+"))?.mapNotNull { it.toDoubleOrNull() }?.takeIf { it.size == 4 }
+            ?.let { Rectangle(it[0], it[1], it[2], it[3]) }
+        val ratio = aspectRatio?.let { value ->
+            SVGParse.preserveAspectRatio(org.jsoup.nodes.Element("view").attr("preserveAspectRatio", value))
+        }
+        return Pair(rectangle, ratio)
+    }
+
     /** the nodes with properties that are not inherited but have the value inherit, see [resolveInherit] */
     private val inherits = java.util.IdentityHashMap<CompositionNode, Set<AttributeOrPropertyKey>>()
 
@@ -105,8 +179,23 @@ internal class SVGDocument(
                 }
             }
             if (inherits.isNotEmpty()) resolveInherit(it)
+            // the content of the images of filters: elements of the document, or images and documents
+            for ((primitive, href) in filterImages) {
+                primitive.content.children.clear()
+                val node = if (href.startsWith("#")) {
+                    elementsById[href.removePrefix("#")]?.let { convertElement(it) }
+                        ?.also { primitive.size = null }
+                } else {
+                    filterImageContent(href)?.let { (node, size) -> primitive.size = size; node }
+                }
+                node?.let {
+                    it.parent = primitive.content
+                    primitive.content.children.add(it)
+                } ?: logger.warn { "feImage refers to '${href.take(80)}', which can not be loaded" }
+            }
             // the fonts of the document are available to its text, and to the text in patterns, markers and masks
-            val faces = SVGStyleSheet.fontFaces(root.element, ::resolve)
+            val faces = SVGStyleSheet.fontFaces(root.element, base, ::resolve)
+            fontFaces = faces
             if (faces.isNotEmpty()) {
                 (it as? GroupNode)?.fontFaces = faces
                 for ((content, _) in contents) content.fontFaces = faces
@@ -199,12 +288,31 @@ internal class SVGDocument(
      * Converts a use element to a group with a copy of the element it refers to, moved by its x and y. A symbol is
      * fitted into the width and height of the use element, by default the size of the document.
      */
+    /**
+     * A copy of [target], an element of this document, for [use]: a symbol is fitted into [width] by [height] by its
+     * view box, other elements are converted as they are
+     */
+    private fun useContent(target: SVGElement, width: Double, height: Double): CompositionNode =
+        if (target is SVGSymbol) {
+            GroupNode().also { symbol ->
+                symbol.style = target.style.copy()
+                symbol.transform = target.viewBox?.let {
+                    viewportTransform(it, org.openrndr.shape.Rectangle(0.0, 0.0, width, height), target.aspectRatio)
+                } ?: org.openrndr.math.Matrix44.IDENTITY
+                target.elements.mapTo(symbol.children) { convertElement(it).also { node -> node.parent = symbol } }
+            }
+        } else {
+            convertElement(target)
+        }
+
     private fun convertUse(use: SVGUse): GroupNode = GroupNode().apply {
         style = use.style.copy()
         this.id = use.id
-        val target = use.href?.let { elementsById[it] }
+        // the element is in this document, or in the document the use element refers to
+        val document = use.document?.let { externalDocument(it) ?: return@apply } ?: this@SVGDocument
+        val target = use.href?.let { document.elementsById[it] }
         if (target == null) {
-            logger.warn { "use refers to '#${use.href}', which is not an element in the document" }
+            logger.warn { "use refers to '${use.document ?: ""}#${use.href}', which is not an element in the document" }
             return@apply
         }
         if (use in usesInProgress) {
@@ -213,19 +321,9 @@ internal class SVGDocument(
         }
         usesInProgress.add(use)
         try {
-            val content = if (target is SVGSymbol) {
-                val width = use.width ?: root.bounds.dimensions.x
-                val height = use.height ?: root.bounds.dimensions.y
-                GroupNode().also { symbol ->
-                    symbol.style = target.style.copy()
-                    symbol.transform = target.viewBox?.let {
-                        viewportTransform(it, org.openrndr.shape.Rectangle(0.0, 0.0, width, height), target.aspectRatio)
-                    } ?: org.openrndr.math.Matrix44.IDENTITY
-                    target.elements.mapTo(symbol.children) { convertElement(it).also { node -> node.parent = symbol } }
-                }
-            } else {
-                convertElement(target)
-            }
+            val content = document.useContent(target, use.width ?: root.bounds.dimensions.x, use.height ?: root.bounds.dimensions.y)
+            // the text of an element of another document uses the fonts of that document
+            if (document !== this@SVGDocument) this.fontFaces = document.fontFaces
             content.parent = this
             // the position moves the copy, after the transform of the use element
             val translated = GroupNode().also {
@@ -363,71 +461,99 @@ internal class SVGDocument(
     }
 
     /**
-     * Converts an image element that refers to an SVG document: the document is loaded as a composition of its own,
-     * fitted into the viewport of the image by its view box, or by its size when it has none, and clipped to the
-     * viewport. As in browsers, the document does not inherit the styles of the document that refers to it.
+     * The document at [href] for an image: its root, isolated from the styles of this document, and its intrinsic
+     * size, with the view box and aspect ratio of the view its fragment selects. Null when it can not be loaded, or
+     * when it is being converted, when documents refer to each other.
      */
-    private fun svgImageNode(svgImage: SVGImage, href: String): CompositionNode {
-        val location = if (href.startsWith("data:", ignoreCase = true)) href else resolve(href.substringBefore('#'))
-        val inProgress = documentsInProgress.get()
-        val key = if (location.startsWith("data:", ignoreCase = true)) location.hashCode().toString() else location
-        if (!inProgress.add(key)) {
+    private class ImageDocument(val root: CompositionNode, val size: org.openrndr.math.Vector2, val viewBox: Rectangle, val aspectRatio: AspectRatio?)
+
+    private fun imageDocument(href: String): ImageDocument? {
+        val isData = href.startsWith("data:", ignoreCase = true)
+        val location = if (isData) href else resolve(href.substringBefore('#'))
+        val fragment = if (isData) null else href.substringAfter('#', "").takeIf { it.isNotEmpty() }
+        if (!isData && location in documentsInProgress.get()) {
             logger.warn { "image refers to '${href.take(80)}', which is being loaded, it refers to itself" }
-            return GroupNode()
+            return null
         }
-        val document = try {
-            val (text, documentBase) = readSvgDocument(location, base)
-            // the viewport of this document is used again when its elements are converted
-            val viewport = SVGParse.viewport.get()
-            try {
-                parseSVG(text, documentBase)
-            } finally {
-                SVGParse.viewport.set(viewport)
-            }
-        } catch (e: Throwable) {
-            logger.warn { "could not load image '${href.take(80)}': ${e.message}" }
-            return GroupNode()
-        } finally {
-            inProgress.remove(key)
-        }
+        val document = loadDocument(location) ?: return null
+        val (viewBox, aspectRatio) = document.view(fragment)
+        val composition = document.composition()
 
         // the intrinsic size of the document is its width and height, or the size of its view box
-        val viewBox = document.documentStyle.viewBox.value
-        val dimensions = document.bounds.dimensions
-        val intrinsic = when {
+        val documentViewBox = composition.documentStyle.viewBox.value
+        val dimensions = composition.bounds.dimensions
+        val size = when {
             dimensions.x > 0.0 && dimensions.y > 0.0 -> dimensions
-            viewBox != null && viewBox.width > 0.0 && viewBox.height > 0.0 -> viewBox.dimensions
+            documentViewBox != null && documentViewBox.width > 0.0 && documentViewBox.height > 0.0 -> documentViewBox.dimensions
             else -> org.openrndr.math.Vector2(300.0, 150.0)
         }
-        val width = svgImage.width ?: svgImage.height?.let { it * intrinsic.x / intrinsic.y } ?: intrinsic.x
-        val height = svgImage.height ?: svgImage.width?.let { it * intrinsic.y / intrinsic.x } ?: intrinsic.y
-        if (width <= 0.0 || height <= 0.0) return GroupNode()
-        val viewport = Rectangle(svgImage.x, svgImage.y, width, height)
-
-        val root = document.root
+        val root = composition.root
         // the document does not inherit the properties of this document
         for (key in AttributeOrPropertyKey.entries) {
             if (isInheritedProperty(key) && root.style.properties[key] == null) {
                 initialValue(key)?.let { root.style[key] = it }
             }
         }
-        val fitted = GroupNode().also { group ->
-            group.transform = viewportTransform(viewBox ?: Rectangle(0.0, 0.0, intrinsic.x, intrinsic.y), viewport, svgImage.aspectRatio)
-            root.parent = group
-            group.children.add(root)
+        return ImageDocument(root, size, viewBox ?: documentViewBox ?: Rectangle(0.0, 0.0, size.x, size.y), aspectRatio)
+    }
+
+    /** [content] fitted into [viewport] from [viewBox] by [aspectRatio], clipped to the viewport */
+    private fun fitted(content: CompositionNode, viewBox: Rectangle, viewport: Rectangle, aspectRatio: AspectRatio): GroupNode {
+        val fit = GroupNode().also { group ->
+            group.transform = viewportTransform(viewBox, viewport, aspectRatio)
+            content.parent = group
+            group.children.add(content)
         }
-        // the content of the image is clipped to its viewport
-        val clipped = GroupNode().also { group ->
+        return GroupNode().also { group ->
             val clip = GroupNode()
             clip.children.add(ShapeNode(viewport.shape).also { it.parent = clip })
             group.style.clipPath = ClipPath.Shapes(clip)
-            fitted.parent = group
-            group.children.add(fitted)
+            fit.parent = group
+            group.children.add(fit)
         }
+    }
+
+    /**
+     * Converts an image element that refers to an SVG document: the document is loaded as a composition of its own,
+     * fitted into the viewport of the image by its view box, or by its size when it has none, and clipped to the
+     * viewport. As in browsers, the document does not inherit the styles of the document that refers to it. A
+     * fragment selects a view of the document: the id of a view element or svgView(...).
+     */
+    private fun svgImageNode(svgImage: SVGImage, href: String): CompositionNode {
+        val document = imageDocument(href) ?: return GroupNode()
+        val size = document.size
+        val width = svgImage.width ?: svgImage.height?.let { it * size.x / size.y } ?: size.x
+        val height = svgImage.height ?: svgImage.width?.let { it * size.y / size.x } ?: size.y
+        if (width <= 0.0 || height <= 0.0) return GroupNode()
+        val viewport = Rectangle(svgImage.x, svgImage.y, width, height)
+        // the aspect ratio of a view applies when the image element does not give one
+        val aspectRatio = if (svgImage.element?.hasAttr("preserveAspectRatio") == true) svgImage.aspectRatio
+            else document.aspectRatio ?: svgImage.aspectRatio
+        val clipped = fitted(document.root, document.viewBox, viewport, aspectRatio)
         return GroupNode().also { outer ->
             clipped.parent = outer
             outer.children.add(clipped)
         }
+    }
+
+    /**
+     * The content of an feImage that refers to an image or a document, in the coordinates of its size, and its size;
+     * null when it can not be loaded
+     */
+    private fun filterImageContent(href: String): Pair<CompositionNode, org.openrndr.math.Vector2>? {
+        if (isSvgReference(href)) {
+            val document = imageDocument(href) ?: return null
+            val size = document.size
+            return Pair(fitted(document.root, document.viewBox, Rectangle(0.0, 0.0, size.x, size.y),
+                document.aspectRatio ?: AspectRatio.DEFAULT), size)
+        }
+        val image = try {
+            loadImage(resolve(href))
+        } catch (e: Throwable) {
+            return null
+        }
+        val size = org.openrndr.math.Vector2(image.width.toDouble(), image.height.toDouble())
+        return Pair(ImageNode(image, 0.0, 0.0, size.x, size.y), size)
     }
 }
 
@@ -528,7 +654,7 @@ internal class SVGLoader {
             Pair(it.key, it.value)
         }
         // the rules of style elements are applied to the elements they select before the elements are read
-        SVGStyleSheet.apply(root)
+        SVGStyleSheet.apply(root, base)
         // percentages of lengths refer to the size of the viewport of the document
         SVGParse.viewport.set(
             (SVGParse.viewBox(root) as? ViewBox.Value)?.value?.dimensions
@@ -551,7 +677,7 @@ internal class SVGLoader {
             } + clips.values.map { (clip, element) -> clip.content to SVGGroup(element) } +
                     markers.values.map { (marker, element) -> marker.content to SVGGroup(element) } +
                     masks.values.map { (mask, element) -> mask.content to SVGGroup(element) }
-            SVGDocument(rootGroup, namespaces, base, contents)
+            SVGDocument(rootGroup, namespaces, base, contents, SVGFilters.images.toList())
         } } } }
     }
 
