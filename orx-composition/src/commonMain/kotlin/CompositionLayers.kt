@@ -17,6 +17,10 @@ import org.openrndr.draw.renderTarget
 import org.openrndr.extra.shadestyles.presets.PaintUnits
 import org.openrndr.extra.shadestyles.presets.boundsTransform
 import org.openrndr.math.Matrix44
+import org.openrndr.shape.IntRectangle
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.roundToInt
 import org.openrndr.shape.Rectangle
 
 /*
@@ -202,10 +206,18 @@ internal fun usesBlendModes(node: CompositionNode): Boolean =
     node.style.mixBlendMode != MixBlendMode.NORMAL || (node is GroupNode && node.children.any(::usesBlendModes))
 
 /**
- * Draws [content] on a layer and composites it with [opacity], the mask and the blend mode of [node]
+ * Draws [content] on a layer and composites it with [opacity], the mask and the blend mode of [node]. A [bounded]
+ * layer is composited only where the node draws.
  */
-internal fun Drawer.drawLayer(node: CompositionNode, opacity: Double, clip: ColorBuffer? = null, content: () -> Unit) {
+internal fun Drawer.drawLayer(
+    node: CompositionNode, opacity: Double, clip: ColorBuffer? = null, bounded: Boolean = true, content: () -> Unit
+) {
     val active = RenderTarget.active
+    val toClip = projection * view * model
+    // the pixels that the node covers, the layer is composited and its backdrop copied only there
+    val box = (if (bounded) visualBounds(node) else null)?.let { bounds ->
+        pixelBox(bounds, toClip, active.width.toDouble(), active.height.toDouble(), active.contentScale) ?: return
+    }
     val layer = layerTargets.get(layerDepth, active)
     layerDepth++
     try {
@@ -217,8 +229,9 @@ internal fun Drawer.drawLayer(node: CompositionNode, opacity: Double, clip: Colo
         val filters = node.style.filter.value
         val image = if (filters.isEmpty()) layer.colorBuffer(0) else {
             val drawn = layer.colorBuffer(0)
-            val space = FilterSpace(projection * view * model, localBounds(node),
-                org.openrndr.math.Vector2(drawn.effectiveWidth.toDouble(), drawn.effectiveHeight.toDouble()))
+            val space = FilterSpace(toClip, localBounds(node),
+                org.openrndr.math.Vector2(drawn.effectiveWidth.toDouble(), drawn.effectiveHeight.toDouble())
+            ) { group, transform, target -> renderInto(group, transform, target) }
             applyFilters(filters, drawn, space, layerDepth - 1)
         }
         val mask = node.style.mask.value
@@ -233,12 +246,23 @@ internal fun Drawer.drawLayer(node: CompositionNode, opacity: Double, clip: Colo
                             it.type == target.type && it.format == target.format
                 } ?: colorBuffer(target.width, target.height, target.contentScale, target.format, target.type)
                     .also { backdropBuffer?.destroy(); backdropBuffer = it }
-                target.copyTo(buffer)
+                if (box == null) target.copyTo(buffer) else {
+                    // the pixels of the box, copy rectangles are measured from the top left
+                    val w = target.effectiveWidth
+                    val h = target.effectiveHeight
+                    // a pixel more on every side, the box is rounded to whole pixels
+                    val x0 = max(0, (box.uv.x * w).roundToInt() - 1)
+                    val x1 = min(w, ((box.uv.x + box.uv.width) * w).roundToInt() + 1)
+                    val top = max(0, h - ((box.uv.y + box.uv.height) * h).roundToInt() - 1)
+                    val bottom = min(h, h - (box.uv.y * h).roundToInt() + 1)
+                    val rectangle = IntRectangle(x0, top, x1 - x0, bottom - top)
+                    target.copyTo(buffer, 0, 0, rectangle, rectangle, MagnifyingFilter.NEAREST)
+                }
                 buffer
             }
         }
         composite(image, opacity, maskBuffer, mask?.type ?: MaskType.LUMINANCE,
-            if (backdrop == null) MixBlendMode.NORMAL else mode, backdrop, clip)
+            if (backdrop == null) MixBlendMode.NORMAL else mode, backdrop, clip, box)
     } finally {
         layerDepth--
     }
@@ -247,9 +271,10 @@ internal fun Drawer.drawLayer(node: CompositionNode, opacity: Double, clip: Colo
 /** draws [layer] over the whole active target with the layer style */
 private fun Drawer.composite(
     layer: ColorBuffer, opacity: Double, mask: ColorBuffer?, maskType: MaskType, mode: MixBlendMode,
-    backdrop: ColorBuffer?, clip: ColorBuffer?
+    backdrop: ColorBuffer?, clip: ColorBuffer?, box: PixelBox?
 ) {
     isolated {
+        drawStyle.clip = box?.clip
         val active = RenderTarget.active
         ortho(active)
         view = Matrix44.IDENTITY
@@ -260,6 +285,24 @@ private fun Drawer.composite(
         drawStyle.blendMode = if (backdrop != null) BlendMode.REPLACE else BlendMode.OVER
         drawStyle.colorMatrix = org.openrndr.math.Matrix55.IDENTITY
         image(layer, 0.0, 0.0, active.width.toDouble(), active.height.toDouble())
+    }
+}
+
+/** draws [group] with [transform] after the current transforms into [target], for the images of filters */
+private fun Drawer.renderInto(group: GroupNode, transform: Matrix44, target: ColorBuffer) {
+    val renderTarget = renderTarget(target.width, target.height, target.contentScale) { depthBuffer() }
+    renderTarget.attach(target)
+    try {
+        isolatedWithTarget(renderTarget) {
+            clear(ColorRGBa.TRANSPARENT)
+            model *= transform
+            composition(Composition(group))
+        }
+    } finally {
+        renderTarget.detachColorAttachments()
+        renderTarget.depthBuffer?.destroy()
+        renderTarget.detachDepthBuffer()
+        renderTarget.destroy()
     }
 }
 

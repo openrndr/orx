@@ -619,7 +619,7 @@ fun Drawer.composition(composition: Composition) {
     try {
         // nodes are blended with what is drawn under them in the composition, which is drawn on a layer of its own
         if (usesBlendModes(composition.root)) {
-            drawLayer(GroupNode(), 1.0) { node(composition.root) }
+            drawLayer(GroupNode(), 1.0, bounded = false) { node(composition.root) }
         } else {
             node(composition.root)
         }
