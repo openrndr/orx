@@ -80,3 +80,39 @@ Demonstrates how to
 ![DemoCompositionDrawer05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoCompositionDrawer05Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoCompositionDrawer05.kt)
+
+### DemoCompositionGradients01
+
+Demonstrates drawing an SVG document with gradients: linear and radial gradients in object bounding box and user
+space units, with spread methods, a focal point, a gradient that inherits its stops from another one and is
+rotated, stop opacity and a gradient stroke.
+
+Gradients are parsed into gradient paints of the composition, which are drawn with paint shade styles.
+
+![DemoCompositionGradients01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoCompositionGradients01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoCompositionGradients01.kt)
+
+### DemoCompositionPaints01
+
+Demonstrates paints in a composition: shapes are filled and stroked with gradients, which are written to SVG, and
+with presets, such as noise and checkers, which are animated by changing their properties.
+
+The composition is written to SVG and printed: gradients become linearGradient and radialGradient elements, presets
+are written as their fallback color.
+
+![DemoCompositionPaints01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoCompositionPaints01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoCompositionPaints01.kt)
+
+### DemoCompositionTextGradients01
+
+Demonstrates gradients on text: a gradient over the bounds of a text element, a tspan with a gradient in user
+space, a centered text and text along a path with gradient fills and strokes.
+
+Gradients over the bounds of text span the whole text element, like in browsers: the bounds are the union of the
+cells of all its glyphs, also when the text is placed along a path.
+
+![DemoCompositionTextGradients01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoCompositionTextGradients01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoCompositionTextGradients01.kt)

@@ -247,9 +247,9 @@ The `aside` is not displayed by default.
 
 Next, a white, centered circle is drawn.
 
-Finally, a `HashBlurDynamic` post-processing effect is applied. The dynamic
-version of the HashBlur effect multiplies its `radius` argument by the red component
-of the provided texture (containing the animated checkers in this case).
+Finally, a `HashBlur` post-processing effect is applied. Its `radiusScale` preset
+reads the red component of the aside (containing the animated checkers in this case),
+which multiplies the blur radius per pixel.
 
 ![DemoAside01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-compositor/images/DemoAside01Kt.webp)
 

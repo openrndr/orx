@@ -405,6 +405,42 @@ the pattern wobble slowly.
 
 [source code](src/jvmDemo/kotlin/DemoDitherLumaHalftone01.kt)
 
+### DemoEffectChain01
+
+Demonstrates an [EffectChain]: warp, color and filter stages applied in order. The ripple and the
+grade are fused into one pass, the hash blur is a pass of its own, the tint and the vignette are
+fused into a third pass.
+
+Every stage is added to the GUI; press space to toggle between the chain and the image.
+
+![DemoEffectChain01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoEffectChain01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoEffectChain01.kt)
+
+### DemoEffectChain02
+
+Demonstrates an [EffectChain] that generates its image: a noise source, read through a
+kaleidoscope warp, mapped to a colormap, with a checkerboard multiplied over it and a vignette.
+All stages are fused into a single pass; the input of the chain is not read.
+
+Stages apply in order, so the kaleidoscope after the noise source warps the coordinates the
+noise is read at, and the checkerboard layer, which comes after the warp, is not warped.
+
+![DemoEffectChain02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoEffectChain02Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoEffectChain02.kt)
+
+### DemoEffectChain03
+
+Demonstrates sample stages, masks and film grain in an [EffectChain]. The chromatic aberration is a
+sampler: it reads the image around every pixel, so it starts a pass and reads the input there. The
+grade is applied through a mask, a desaturated and darker grade outside a soft circle, and the film
+grain is aligned to the output pixels. Everything runs in a single pass.
+
+![DemoEffectChain03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoEffectChain03Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoEffectChain03.kt)
+
 ### DemoFluidDistort01
 
 Demonstrates [FluidDistort], a fluid simulation real time effect.
@@ -435,6 +471,20 @@ with the same size and properties as a source `colorBuffer`.
 ![DemoPerturb01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoPerturb01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoPerturb01.kt)
+
+### DemoPerturb02
+
+Demonstrates replacing the warp preset of [Perturb]. A warp preset provides a GLSL function
+`vec2 warp(vec2 uv)` that maps a coordinate to the coordinate to read from, and has annotated
+properties that the GUI shows as a group inside the Perturb compartment.
+
+Press space to cycle between a noise warp, a ripple warp, a swirl warp and a chain of a ripple and a
+swirl; the GUI replaces the controls of the warp group. Every class of warp compiles a shader the
+first time it is used; changing the properties of a warp only updates uniforms.
+
+![DemoPerturb02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-fx/images/DemoPerturb02Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoPerturb02.kt)
 
 ### DemoPost01
 
