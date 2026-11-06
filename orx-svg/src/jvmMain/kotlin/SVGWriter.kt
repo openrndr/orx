@@ -121,6 +121,7 @@ fun writeSVG(
 
     sb.append("<svg version=\"1.2\" baseProfile=\"tiny\" id=\"$topLevelId\" $namespaces $styleSer $docStyleSer>")
     val ids = WriterIds()
+    sb.appendFontFaces(composition)
     sb.appendGradients(composition)
     sb.appendPatterns(composition, ids)
     sb.appendClipPaths(composition, ids)
@@ -464,6 +465,20 @@ private fun StringBuilder.appendClipPaths(composition: Composition, ids: WriterI
         append("</clipPath>")
     }
     append("</defs>\n")
+}
+
+/** writes a style element with the @font-face rules of the font faces of the root of [composition] */
+private fun StringBuilder.appendFontFaces(composition: Composition) {
+    val faces = (composition.root as? GroupNode)?.fontFaces ?: return
+    if (faces.isEmpty()) return
+    append("<style>")
+    for (face in faces) {
+        val sources = face.sources.joinToString(", ") { if (it.startsWith("local(")) it else "url(\"$it\")" }
+        val weight = if (face.weight.first == face.weight.last) "${face.weight.first}" else "${face.weight.first} ${face.weight.last}"
+        append("@font-face { font-family: \"${face.family}\"; src: $sources; font-weight: $weight; ")
+        append("font-style: ${if (face.italic) "italic" else "normal"}; }")
+    }
+    append("</style>\n")
 }
 
 /** the value of an input of a filter primitive */

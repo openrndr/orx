@@ -91,6 +91,12 @@ internal class SVGDocument(
                 }
             }
             if (inherits.isNotEmpty()) resolveInherit(it)
+            // the fonts of the document are available to its text, and to the text in patterns, markers and masks
+            val faces = SVGStyleSheet.fontFaces(root.element, ::resolve)
+            if (faces.isNotEmpty()) {
+                (it as? GroupNode)?.fontFaces = faces
+                for ((content, _) in contents) content.fontFaces = faces
+            }
         },
         root.bounds
 

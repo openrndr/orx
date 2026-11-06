@@ -44,20 +44,24 @@ internal object CompositionText {
     /** the opacity of [node], the opacity of the groups it is in is applied by their layers */
     private fun opacity(node: CompositionNode): Double = (node.style.opacity as? Numeric.Rational)?.value ?: 1.0
 
-    /** the face of the font of [style], null when there is no font or it cannot be loaded */
-    private fun face(style: Style): Face? {
+    /**
+     * The face of the font of [style] for [node], null when there is no font or it cannot be loaded. The font faces of
+     * the groups the node is in are used before the registered fonts, the first source that loads is used.
+     */
+    private fun face(style: Style, node: CompositionNode): Face? {
         val fontSize = (style.fontSize as? Length.Pixels)?.value ?: 16.0
-        val file = CompositionFonts.resolve(style.fontFamily.value, style.fontWeight.value, style.fontStyle.value)
-        if (file == null || file in failedFonts) {
-            return null
+        val faces = generateSequence(node) { it.parent }.filterIsInstance<GroupNode>().flatMap { it.fontFaces }.toList()
+        val candidates = CompositionFonts.candidates(style.fontFamily.value, style.fontWeight.value, style.fontStyle.value, faces)
+        for (file in candidates) {
+            if (file in failedFonts) continue
+            try {
+                return loadFace(file).withSize(fontSize)
+            } catch (e: Throwable) {
+                failedFonts.add(file)
+                logger.warn { "could not load font '${file.take(80)}': ${e.message}" }
+            }
         }
-        return try {
-            loadFace(file).withSize(fontSize)
-        } catch (e: Throwable) {
-            failedFonts.add(file)
-            logger.warn { "could not load font '$file': ${e.message}" }
-            null
-        }
+        return null
     }
 
     /** the paint servers of the fill and stroke of [style], null when neither is one */
@@ -112,7 +116,7 @@ internal object CompositionText {
                 shift += when (val baselineShift = own.baselineShift) {
                     is BaselineShift.Value -> pixels(baselineShift.value, fontSize(currentStyle))
                     else -> {
-                        val currentFace = face(currentStyle) ?: face
+                        val currentFace = face(currentStyle, current) ?: face
                         val half = (abs(currentFace.ascent) + abs(currentFace.descent)) / 2.0
                         if (baselineShift is BaselineShift.Sub) -half else half
                     }
@@ -190,7 +194,7 @@ internal object CompositionText {
      */
     private fun layoutRun(node: TextNode, pen: Vector2): RunLayout? {
         val style = node.effectiveStyle
-        val face = face(style) ?: return null
+        val face = face(style, node) ?: return null
         val textStyle = textStyle(node, style)
 
         // spaces at the start and the end of a run separate it from the runs around it, the typesetter does not keep
@@ -251,7 +255,7 @@ internal object CompositionText {
     private fun drawDecorations(drawer: Drawer, node: TextNode, style: Style, layout: RunLayout) {
         val decoration = style.textDecoration
         if (!decoration.underline && !decoration.overline && !decoration.lineThrough) return
-        val face = face(style) ?: return
+        val face = face(style, node) ?: return
         val textStyle = textStyle(node, style)
         // the underline and the line through are where the face puts them, the overline is on top of the ascent
         val metrics = face.decorationMetrics
@@ -293,7 +297,7 @@ internal object CompositionText {
         var previousBaseline = 0.0
         for (run in runs) {
             val style = run.effectiveStyle
-            val face = face(style) ?: continue
+            val face = face(style, run) ?: continue
             val textStyle = textStyle(run, style).copy(face = face)
             spans.add(TextSpan(run.text, if (shown(run)) textStyle else textStyle.copy(fill = null, stroke = null)))
             val baseline = baselineOffset(run, style, face)

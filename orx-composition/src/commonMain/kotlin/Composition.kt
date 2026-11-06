@@ -289,6 +289,9 @@ open class GroupNode(open val children: MutableList<CompositionNode> = mutableLi
      */
     var textElement: Boolean = false
 
+    /** the font faces that the text in this group can use, like the @font-face rules of a document */
+    var fontFaces: List<FontFace> = emptyList()
+
     override val bounds: Rectangle
         get() {
             return children.map { it.bounds }.bounds
@@ -306,6 +309,7 @@ open class GroupNode(open val children: MutableList<CompositionNode> = mutableLi
             it.style = style
             it.attributes = attributes
             it.textElement = textElement
+            it.fontFaces = fontFaces
         }
     }
 

@@ -8,8 +8,8 @@ private val logger = KotlinLogging.logger {}
 /**
  * The style elements and style attributes of SVG documents: CSS rules with selectors that jsoup supports, such as
  * type, class, id, attribute and descendant selectors, !important declarations, and custom properties that are used
- * with var(). Geometry properties, like the width of a rect element, are applied to the elements. At-rules, such as
- * @media and @font-face, are skipped.
+ * with var(). Geometry properties, like the width of a rect element, are applied to the elements. The @font-face
+ * rules are read by [fontFaces], other at-rules, such as @media, are skipped.
  */
 internal object SVGStyleSheet {
     private class Rule(val selectors: List<String>, val declarations: String, val order: Int)
@@ -91,6 +91,41 @@ internal object SVGStyleSheet {
         if (name.isEmpty()) null else Declaration(name, value, important != null)
     }
 
+    /** the text of the style elements of the document with [root], CDATA sections included */
+    private fun css(root: Element): String =
+        root.getElementsByTag("style").joinToString("\n") { it.data().ifBlank { it.wholeText() } }
+
+    /**
+     * The @font-face rules of the style elements of the document with [root]: [resolve] maps the URL of a source to
+     * the file or URL that it is loaded from. Sources in formats that cannot be loaded, SVG and EOT fonts, are left out.
+     */
+    fun fontFaces(root: Element, resolve: (String) -> String): List<org.openrndr.extra.composition.FontFace> {
+        val text = css(root).replace(Regex("/\\*.*?\\*/", RegexOption.DOT_MATCHES_ALL), "")
+        return Regex("@font-face\\s*\\{([^}]*)}").findAll(text).mapNotNull { match ->
+            val declarations = parse(match.groupValues[1]).associate { it.name.lowercase() to it.value }
+            val family = declarations["font-family"]?.trim()?.trim('"', '\'')?.takeIf { it.isNotEmpty() }
+                ?: return@mapNotNull null
+            val sources = split(declarations["src"] ?: "", ',').mapNotNull { source ->
+                val format = Regex("format\\(\\s*['\"]?([^'\")]+)").find(source)?.groupValues?.get(1)?.trim()
+                if (format == "svg" || format == "embedded-opentype") return@mapNotNull null
+                Regex("url\\(\\s*(['\"]?)(.*?)\\1\\s*\\)", RegexOption.DOT_MATCHES_ALL).find(source)?.let {
+                    resolve(it.groupValues[2].trim())
+                } ?: Regex("local\\((.*?)\\)").find(source)?.value
+            }
+            if (sources.isEmpty()) return@mapNotNull null
+            // a weight, or a range of weights of a variable font
+            val weights = (declarations["font-weight"] ?: "normal").trim().split(Regex("\\s+")).map {
+                when (it) {
+                    "normal" -> 400
+                    "bold" -> 700
+                    else -> it.toIntOrNull() ?: 400
+                }
+            }
+            val italic = declarations["font-style"]?.trim()?.let { it.startsWith("italic") || it.startsWith("oblique") } ?: false
+            org.openrndr.extra.composition.FontFace(family, sources, weights.first()..weights.last(), italic)
+        }.toList()
+    }
+
     /** the names and values of the declarations of a style attribute */
     fun declarations(style: String): List<Pair<String, String>> = parse(style).map { it.name to it.value }
 
@@ -144,7 +179,7 @@ internal object SVGStyleSheet {
      */
     fun apply(root: Element) {
         // the XML parser reads the contents of style elements as text, CDATA sections included
-        val css = root.getElementsByTag("style").joinToString("\n") { it.data().ifBlank { it.wholeText() } }
+        val css = css(root)
         val matches = java.util.IdentityHashMap<Element, MutableList<Pair<Pair<Int, Int>, String>>>()
         if (css.isNotBlank()) {
             for (rule in rules(css)) {
