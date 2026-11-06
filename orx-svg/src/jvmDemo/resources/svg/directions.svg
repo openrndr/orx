@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+  <style>
+    text { font-family: Plex; fill: #202040; }
+    .label { font-size: 10px; fill: #8a8378; }
+    .guide { stroke: #e8574a; pointer-events: none; }
+  </style>
+  <rect width="720" height="480" fill="#f4efe6"/>
+
+  <text class="label" x="20" y="30">DIRECTION: RTL, UNICODE-BIDI</text>
+  <line class="guide" x1="340" x2="340" y1="40" y2="230"/>
+  <text x="340" y="70" font-size="20" direction="rtl">start is on the right</text>
+  <text x="340" y="110" font-size="20" direction="rtl" text-anchor="end">end is on the left</text>
+  <text x="340" y="150" font-size="20" direction="rtl"><tspan>first</tspan> <tspan fill="#e8574a">second</tspan> <tspan fill="#3d5a99">third</tspan></text>
+  <text x="340" y="190" font-size="20" direction="rtl" unicode-bidi="bidi-override">bidi-override</text>
+
+  <text class="label" x="380" y="30">VERTICAL TEXT-DECORATION</text>
+  <text x="420" y="50" font-size="20" style="writing-mode: vertical-rl; text-decoration: underline">underlined</text>
+  <text x="480" y="50" font-size="20" style="writing-mode: vertical-rl; text-decoration: overline line-through">crossed out</text>
+
+  <text class="label" x="540" y="30">VERTICAL TEXTPATH</text>
+  <path id="slope" d="M 560 50 C 640 70 680 130 700 220" fill="none" stroke="#4c9e8a"/>
+  <text font-size="18" style="writing-mode: vertical-rl"><textPath href="#slope">on the path</textPath></text>
+
+  <text class="label" x="20" y="270">VERTICAL INLINE-SIZE</text>
+  <rect id="column" x="380" y="280" width="320" height="180" fill="none" stroke="#e8574a" stroke-dasharray="4 4"/>
+  <text id="columns" x="680" y="300" font-size="16" style="writing-mode: vertical-rl; inline-size: 160px; line-height: 1.5">Vertical text wraps into columns at its inline size, the columns follow each other from right to left.</text>
+</svg>
