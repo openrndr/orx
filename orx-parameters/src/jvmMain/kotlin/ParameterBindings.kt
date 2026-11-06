@@ -1,8 +1,9 @@
 package org.openrndr.extra.parameters
 
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.json.Json
 import org.openrndr.color.ColorRGBa
 import org.openrndr.events.Event
 import org.openrndr.math.Vector2
@@ -16,6 +17,25 @@ import kotlin.reflect.KMutableProperty1
 import kotlin.reflect.KProperty1
 
 private val logger = KotlinLogging.logger { }
+
+/**
+ * The JSON of saved parameter values, as Gson wrote it, which was used before: values that are null are left out,
+ * other default values are written, NaN and infinities are not written
+ */
+private val parameterJson = Json {
+    encodeDefaults = true
+    explicitNulls = false
+}
+
+/** reads the JSON of saved parameter values leniently, as Gson did: keys that are not known are ignored */
+private val lenientParameterJson = Json {
+    ignoreUnknownKeys = true
+    isLenient = true
+    allowSpecialFloatingPointValues = true
+}
+
+private val parameterValuesSerializer =
+    MapSerializer(String.serializer(), MapSerializer(String.serializer(), ParameterValue.serializer()))
 
 /** the name of [this], the name of its property or its function, see [ParameterBindings.Binding.parameter] */
 val Parameter.name: String get() = property?.name ?: function?.name ?: label
@@ -423,12 +443,11 @@ class ParameterBindings {
     }
 
     /** the values of all parameters as JSON, see [toObject] */
-    fun toJson(): String = Gson().toJson(toObject())
+    fun toJson(): String = parameterJson.encodeToString(parameterValuesSerializer, toObject())
 
     /** sets the values of the parameters to the values in [json], see [fromObject] */
     fun fromJson(json: String) {
-        val type = object : TypeToken<Map<String, Map<String, ParameterValue>>>() {}.type
-        fromObject(Gson().fromJson(json, type))
+        fromObject(lenientParameterJson.decodeFromString(parameterValuesSerializer, json))
     }
 
     /** saves the values of all parameters to [file] as JSON */

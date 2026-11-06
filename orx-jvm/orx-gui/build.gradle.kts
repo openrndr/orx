@@ -16,7 +16,6 @@ dependencies {
     implementation(openrndr.math)
     implementation(openrndr.filter)
     implementation(openrndr.dialogs)
-    implementation(libs.gson)
     implementation(sharedLibs.kotlin.reflect)
     implementation(sharedLibs.kotlin.serialization.core)
     demoRuntimeOnly(sharedLibs.slf4j.simple)

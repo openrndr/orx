@@ -13,7 +13,7 @@ kotlin {
         }
 
         jvmMain.dependencies {
-            implementation(libs.gson)
+            implementation(sharedLibs.kotlin.serialization.json)
         }
 
         jvmTest.dependencies {

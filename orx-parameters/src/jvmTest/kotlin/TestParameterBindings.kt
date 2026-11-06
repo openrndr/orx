@@ -140,6 +140,29 @@ class TestParameterBindings {
     }
 
     @Test
+    fun writesAndReadsTheJsonOfGson() {
+        // as Gson wrote it, with HTML characters escaped
+        val json = """{"s \u003c1\u003e":{"color":{"colorValue":{"r":0.1,"g":0.2,"b":0.3,"alpha":1.0,"linearity":"LINEAR"}},""" +
+                """"choices":{"stringListValue":["a \u0026 b","c"],"selectedIndex":1,"listElementType":"String"},""" +
+                """"position":{"vector2Value":{"x":1.0,"y":2.0}},"radius":{"doubleValue":1.0E-7,"minValue":0.0,"maxValue":100.0}}}"""
+        val bindings = ParameterBindings()
+        val settings = Settings()
+        bindings.add(settings, "s <1>")
+        bindings.fromJson(json)
+        assertEquals(ColorRGBa(0.1, 0.2, 0.3), settings.color)
+        assertEquals(listOf("a & b", "c"), settings.choices)
+        assertEquals(1, settings.choices.selectedIndex)
+        assertEquals(Vector2(1.0, 2.0), settings.position)
+        assertEquals(1E-7, settings.radius)
+        // default values are written, null values are not
+        val written = bindings.toJson()
+        assertTrue(""""colorValue":{"r":0.1,"g":0.2,"b":0.3,"alpha":1.0,"linearity":"LINEAR"}""" in written)
+        assertTrue(""""radius":{"doubleValue":1.0E-7,"minValue":0.0,"maxValue":100.0}""" in written)
+        assertTrue(""""press":{}""" in written)
+        assertTrue("null" !in written)
+    }
+
+    @Test
     fun randomizesWithinRanges() {
         val bindings = ParameterBindings()
         val settings = Settings()
