@@ -482,9 +482,9 @@ class Layouter {
         val gap = mainGap(element, horizontal, contentWidth, contentHeight)
         val lineGap = crossGap(element, horizontal, contentWidth, contentHeight)
 
-        // the start of the content along both axes, scrolled vertically
-        val mainStart = if (horizontal) content.x else content.y - element.scrollTop
-        var crossPosition = if (horizontal) content.y - element.scrollTop else content.x
+        // the start of the content along both axes, scrolled
+        val mainStart = if (horizontal) content.x - element.scrollLeft else content.y - element.scrollTop
+        var crossPosition = if (horizontal) content.y - element.scrollTop else content.x - element.scrollLeft
 
         for (line in lines) {
             val free = mainSize - lineExtent(element, line, horizontal, contentWidth, contentHeight)
@@ -726,7 +726,7 @@ class Layouter {
         for (placement in geometry.placements) {
             val child = placement.element
             val ccs = child.computedStyle
-            val cellX = content.x + geometry.columnStart(placement.columns.first)
+            val cellX = content.x + geometry.columnStart(placement.columns.first) - element.scrollLeft
             val cellY = content.y + geometry.rowStart(placement.rows.first) - element.scrollTop
             val cellWidth = geometry.width(placement.columns)
             val cellHeight = geometry.height(placement.rows)
@@ -766,6 +766,18 @@ class Layouter {
     }
 
     /**
+     * How far the arranged in-flow children of [element] reach to the right of the start of its content, with their
+     * margins, as if it is not scrolled
+     */
+    private fun contentExtentRight(element: Element): Double {
+        val content = element.layout.contentBounds
+        val contentWidth = content.width
+        return inFlowChildren(element).maxOfOrNull { child ->
+            child.layout.screenX + child.layout.screenWidth + child.computedStyle.marginRight.resolve(contentWidth)
+        }?.let { it + element.scrollLeft - content.x } ?: 0.0
+    }
+
+    /**
      * Places the in-flow children of [element] below each other.
      */
     private fun arrangeBlock(element: Element) {
@@ -774,7 +786,7 @@ class Layouter {
         for (child in inFlowChildren(element)) {
             val layout = child.layout
             applyFrame(child, content.width)
-            layout.screenX = content.x + child.computedStyle.marginLeft.resolve(content.width)
+            layout.screenX = content.x - element.scrollLeft + child.computedStyle.marginLeft.resolve(content.width)
             layout.screenY = y + child.computedStyle.marginTop.resolve(content.width)
             layout.screenWidth = measureWidth(child, content.width)
             layout.screenHeight = measureHeight(child, layout.screenWidth, content.width, content.height)
@@ -818,6 +830,18 @@ class Layouter {
         }
 
         arrangeChildren(element)
+
+        // the width of the content is that of the children as they are arranged, which flexing changes; when the
+        // scroll position is limited the children are arranged again
+        if (cs.overflow != Overflow.Visible) {
+            val frameWidth = layout.screenWidth - element.contentWidth
+            layout.scrollWidth = contentExtentRight(element) + frameWidth
+            val scrollLeft = element.scrollLeft.coerceIn(0.0, element.maxScrollLeft)
+            if (scrollLeft != element.scrollLeft) {
+                element.scrollLeft = scrollLeft
+                arrangeChildren(element)
+            }
+        }
         element.children.forEach { arrange(it) }
     }
     //</editor-fold>

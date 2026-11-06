@@ -227,6 +227,13 @@ sealed class Overflow(inherit: Boolean = false) : PropertyValue(inherit) {
     object Inherit : Overflow(inherit = true)
 }
 
+/** when scrollbars are shown: [Auto] while scrolling, and fading out after it, or [Always] */
+sealed class ScrollbarVisibility(inherit: Boolean = false) : PropertyValue(inherit) {
+    object Auto : ScrollbarVisibility()
+    object Always : ScrollbarVisibility()
+    object Inherit : ScrollbarVisibility(inherit = true)
+}
+
 sealed class ZIndex(inherit: Boolean = false) : PropertyValue(inherit) {
     object Auto : ZIndex()
     class Value(val value: Int) : ZIndex()
@@ -405,6 +412,24 @@ var StyleSheet.borderColor by PropertyHandler<Color>("border-color", INHERIT, Co
 var StyleSheet.background by PropertyHandler<Color>("background-color", RESET, Color.RGBa(ColorRGBa.BLACK.opacify(0.0)))
 val StyleSheet.effectiveBackground: ColorRGBa?
     get() = (background as? Color.RGBa)?.color
+
+/** the thickness of the scrollbars of elements that scroll, in pixels; 0 hides them */
+var StyleSheet.scrollbarWidth by PropertyHandler<LinearDimension>("scrollbar-width", INHERIT, 6.px)
+
+/** the color of the thumbs of scrollbars */
+var StyleSheet.scrollbarColor by PropertyHandler<Color>("scrollbar-color", INHERIT, Color.RGBa(ColorRGBa.WHITE.opacify(0.35)))
+
+/**
+ * When scrollbars are shown: [ScrollbarVisibility.Auto] shows them while the element scrolls, while they are hovered
+ * and dragged, and fades them out after that; [ScrollbarVisibility.Always] always shows them
+ */
+var StyleSheet.scrollbarVisibility by PropertyHandler<ScrollbarVisibility>("scrollbar-visibility", INHERIT, ScrollbarVisibility.Auto)
+
+/** the cursor over scrollbars, and while a scrollbar is dragged */
+var StyleSheet.scrollbarCursor by PropertyHandler<Cursor>("scrollbar-cursor", INHERIT, Cursor.Pointer)
+
+/** the color of the tracks of scrollbars */
+var StyleSheet.scrollbarTrackColor by PropertyHandler<Color>("scrollbar-track-color", INHERIT, Color.RGBa(ColorRGBa.TRANSPARENT))
 
 var StyleSheet.color by PropertyHandler<Color>("color", INHERIT, Color.RGBa(ColorRGBa.WHITE))
 val StyleSheet.effectiveColor: ColorRGBa?

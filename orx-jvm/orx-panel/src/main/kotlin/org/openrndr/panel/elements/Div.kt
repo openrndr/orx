@@ -1,5 +1,6 @@
 package org.openrndr.panel.elements
 
+import org.openrndr.KeyModifier
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.StrokeAlignment
@@ -15,7 +16,14 @@ open class Div : TextElement(ElementType("div")) {
         mouse.scrolled.listen {
             computedStyle.let { cs ->
                 if (cs.overflow != Overflow.Visible) {
-                    scrollTop = (scrollTop - it.rotation.y * 10).coerceIn(0.0, maxScrollTop)
+                    // with shift held a vertical wheel scrolls horizontally, for mice without a horizontal wheel
+                    // so does it for an element that only scrolls horizontally
+                    val onlyHorizontal = maxScrollTop <= 0.0 && maxScrollLeft > 0.0
+                    val shifted = (KeyModifier.SHIFT in it.modifiers || onlyHorizontal) && it.rotation.x == 0.0
+                    val dx = if (shifted) it.rotation.y else it.rotation.x
+                    val dy = if (shifted) 0.0 else it.rotation.y
+                    scrollTop = (scrollTop - dy * 10).coerceIn(0.0, maxScrollTop)
+                    scrollLeft = (scrollLeft - dx * 10).coerceIn(0.0, maxScrollLeft)
                     draw.dirty = true
                     it.cancelPropagation()
                 }

@@ -311,6 +311,68 @@ class LayouterTest {
         assertEquals(60.0, scroller.scrollTop, epsilon)
     }
 
+    @Test
+    fun `horizontal scrolling is limited to the content`() {
+        lateinit var scroller: Div
+        lateinit var wide: Div
+        val root = body {
+            scroller = div({ width = 100.px; height = 100.px; paddingRight = 10.px; overflow = Overflow.Scroll }) {
+                wide = div({ width = 250.px; height = 20.px })
+            }
+        }
+        layout(root)
+        assertEquals(260.0, scroller.layout.scrollWidth, epsilon)
+        assertEquals(160.0, scroller.maxScrollLeft, epsilon)
+
+        scroller.scrollLeft = 1000.0
+        layout(root)
+        assertEquals(160.0, scroller.scrollLeft, epsilon)
+        assertEquals(-160.0, wide.layout.screenX, epsilon)
+
+        // the scroll position follows content that shrinks, the children are placed at the limited position
+        wide.style { width = 150.px }
+        layout(root)
+        assertEquals(60.0, scroller.scrollLeft, epsilon)
+        assertEquals(-60.0, wide.layout.screenX, epsilon)
+    }
+
+    @Test
+    fun `flex rows scroll horizontally when their items do not shrink`() {
+        lateinit var fixed: Div
+        lateinit var first: Div
+        lateinit var shrinking: Div
+        layout(body {
+            fixed = row({ width = 150.px; height = 50.px; overflow = Overflow.Scroll }) {
+                first = div({ width = 100.px; flexShrink = FlexGrow.Ratio(0.0) })
+                div({ width = 100.px; flexShrink = FlexGrow.Ratio(0.0) })
+            }
+            shrinking = row({ width = 150.px; height = 50.px; overflow = Overflow.Scroll }) {
+                div({ width = 100.px })
+                div({ width = 100.px })
+            }
+        }.also { it.children.first().scrollLeft = 30.0 })
+        assertEquals(50.0, fixed.maxScrollLeft, epsilon)
+        assertEquals(-30.0, first.layout.screenX, epsilon)
+        // items that shrink to fit leave nothing to scroll
+        assertEquals(0.0, shrinking.maxScrollLeft, epsilon)
+    }
+
+    @Test
+    fun `flex columns scroll horizontally across their main axis`() {
+        lateinit var column: Div
+        lateinit var item: Div
+        layout(body {
+            column = div({
+                display = Display.FLEX; flexDirection = FlexDirection.Column
+                width = 100.px; height = 100.px; overflow = Overflow.Scroll
+            }) {
+                item = div({ width = 300.px; height = 20.px })
+            }.apply { scrollLeft = 50.0 }
+        })
+        assertEquals(200.0, column.maxScrollLeft, epsilon)
+        assertEquals(-50.0, item.layout.screenX, epsilon)
+    }
+
     private fun Element.row(style: StyleSheet.() -> Unit, init: Element.() -> Unit) = div({
         display = Display.FLEX; flexDirection = FlexDirection.Row
         style()

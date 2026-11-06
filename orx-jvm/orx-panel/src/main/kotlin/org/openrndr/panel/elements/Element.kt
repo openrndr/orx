@@ -46,6 +46,16 @@ open class Element(val type: ElementType) : AutoCloseable {
      */
     val maxScrollTop: Double
         get() = max(0.0, layout.scrollHeight - layout.screenHeight)
+
+    /** how far the content of an element that scrolls is scrolled to the left, in pixels */
+    var scrollLeft = 0.0
+
+    /**
+     * The largest [scrollLeft]: how far the content of the element extends beyond its right side, as found by the
+     * last layout.
+     */
+    val maxScrollLeft: Double
+        get() = max(0.0, layout.scrollWidth - layout.screenWidth)
     open val handlesDoubleClick = false
     open val handlesKeyboardFocus = false
 
@@ -139,6 +149,11 @@ open class Element(val type: ElementType) : AutoCloseable {
          * The height of the content including the padding, for elements that scroll their content
          */
         var scrollHeight = 0.0
+
+        /**
+         * The width of the content including the padding, for elements that scroll their content
+         */
+        var scrollWidth = 0.0
         override fun toString(): String {
             return "Layout(screenX=$screenX, screenY=$screenY, screenWidth=$screenWidth, screenHeight=$screenHeight, growWidth=$growWidth, growHeight=$growHeight)"
         }

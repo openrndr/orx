@@ -173,6 +173,27 @@ class ControlManager : Extension {
         /** true once the mouse moved further than [dragThreshold] since the last press */
         private var dragging = false
 
+        /** the scrollbar whose thumb is dragged, where the drag started and the scroll position then */
+        internal var scrollbarDrag: Scrollbar? = null
+        private var scrollbarDragStart = 0.0
+        private var scrollbarDragPosition = 0.0
+
+        /** true while the button that was pressed on a scrollbar is down */
+        private var scrollbarPressed = false
+
+        /** the scrollbar the mouse is over */
+        internal var scrollbarHover: Scrollbar? = null
+
+        /** sets the scrollbar the mouse is over to the one at [position], the elements of the bars are drawn again */
+        private fun hoverScrollbar(position: Vector2) {
+            val bar = scrollbarDrag ?: body?.let { scrollbarAt(it, position) }
+            if (!bar.sameAs(scrollbarHover)) {
+                scrollbarHover?.element?.draw?.dirty = true
+                bar?.element?.draw?.dirty = true
+                scrollbarHover = bar
+            }
+        }
+
         fun scroll(event: MouseEvent) {
             fun traverse(element: Element) {
                 if (element.computedStyle.display == Display.NONE) {
@@ -196,6 +217,17 @@ class ControlManager : Extension {
 
         fun click(event: MouseEvent) {
             logger.debug { "click event: $event" }
+            // a press on a scrollbar is not a click
+            if (scrollbarPressed) {
+                scrollbarPressed = false
+                scrollbarDrag?.element?.draw?.dirty = true
+                scrollbarDrag = null
+                hoverScrollbar(event.position)
+                dragTarget = null
+                clickTarget = null
+                checkForManualRedraw()
+                return
+            }
             dragTarget = null
             val ct = System.currentTimeMillis()
             logger.debug { "click target: $clickTarget" }
@@ -227,22 +259,44 @@ class ControlManager : Extension {
             logger.debug { "press event: $event" }
             pressPosition = event.position
             dragging = false
+
+            // scrollbars are on top of the content: the thumb is dragged, the track scrolls by a page
+            body?.let { scrollbarAt(it, event.position) }?.let { bar ->
+                if (event.position in bar.thumb) {
+                    scrollbarDrag = bar
+                    scrollbarDragStart = bar.along(event.position)
+                    scrollbarDragPosition = bar.position
+                } else {
+                    val page = bar.page * 0.9
+                    bar.position += if (bar.beforeThumb(event.position)) -page else page
+                }
+                scrollbarPressed = true
+                event.cancelPropagation()
+                dragTarget = null
+                clickTarget = null
+                bar.element.draw.dirty = true
+                checkForManualRedraw()
+                return
+            }
             val candidates = mutableListOf<Pair<Element, Int>>()
-            fun traverse(element: Element, depth: Int = 0) {
+            /**
+             * @param clippedBelow outside an element that scrolls, only its descendants on a layer above it, like
+             * popups, can be pressed: the layer of that element
+             */
+            fun traverse(element: Element, depth: Int = 0, clippedBelow: Int? = null) {
                 if (element.computedStyle.display == Display.NONE) {
                     return
                 }
-                if (element.computedStyle.overflow == Overflow.Scroll) {
-                    if (event.position !in element.screenArea) {
-                        return
-                    }
+                var clipped = clippedBelow
+                if (element.computedStyle.overflow == Overflow.Scroll && event.position !in element.screenArea) {
+                    clipped = maxOf(clipped ?: Int.MIN_VALUE, element.layout.zIndex)
                 }
 
-                if (element.computedStyle.display != Display.NONE) {
-                    element.children.forEach { traverse(it, depth + 1) }
-                }
+                element.children.forEach { traverse(it, depth + 1, clipped) }
 
-                if (!event.propagationCancelled && event.position in element.screenArea && element.computedStyle.display != Display.NONE) {
+                if (!event.propagationCancelled && event.position in element.screenArea &&
+                    (clipped == null || element.layout.zIndex > clipped)
+                ) {
                     candidates.add(Pair(element, depth))
                 }
             }
@@ -273,6 +327,15 @@ class ControlManager : Extension {
 
         fun drag(event: MouseEvent) {
             logger.debug { "drag event $event" }
+            scrollbarDrag?.let { dragged ->
+                // the geometry of the bar as it is now, the thumb follows the pointer
+                val bar = dragged.element.scrollbars().firstOrNull { it.vertical == dragged.vertical } ?: dragged
+                bar.position = scrollbarDragPosition + (bar.along(event.position) - scrollbarDragStart) * bar.scrollPerPixel
+                event.cancelPropagation()
+                checkForManualRedraw()
+                return
+            }
+            if (scrollbarPressed) return
             if (!dragging) {
                 val start = pressPosition
                 if (start != null && event.position.distanceTo(start) < dragThreshold) {
@@ -300,6 +363,7 @@ class ControlManager : Extension {
         val insideElements = mutableSetOf<Element>()
         fun move(event: MouseEvent) {
             mousePosition = event.position
+            hoverScrollbar(event.position)
             val hover = ElementPseudoClass("hover")
             val toRemove = insideElements.filter { (event.position !in it.screenArea) }
 
@@ -352,6 +416,12 @@ class ControlManager : Extension {
     }
 
     val mouseInput = MouseInput()
+
+    /** the fading of the scrollbars */
+    internal val scrollbarFades = ScrollbarFades()
+
+    /** the elements whose scrollbars were shown or fading in the last frame */
+    private var fadingBefore = emptyList<Element>()
     override fun setup(program: Program) {
 
         fontManager.program = program
@@ -393,17 +463,16 @@ class ControlManager : Extension {
                     drawer.translate(element.screenPosition)
                     if (newZComp == zIndex) {
                         if (mousePosition in element.screenArea) {
-                            program.application.cursorType = when (element.computedStyle.cursor) {
-                                Cursor.Default -> CursorType.ARROW_CURSOR
-                                Cursor.Pointer -> CursorType.HAND_CURSOR
-                                Cursor.Text -> CursorType.IBEAM_CURSOR
-                                Cursor.Crosshair -> CursorType.CROSSHAIR_CURSOR
-                                else -> CursorType.ARROW_CURSOR
-                            }
+                            program.application.cursorType = element.computedStyle.cursor.cursorType
                         }
                         element.draw(drawer)
                     }
                 }
+                element.children.forEach {
+                    drawElement(it, drawer, zIndex, newZComp)
+                }
+            } else if (newZComp != zIndex) {
+                // the layers above the element, like popups, are not clipped by it
                 element.children.forEach {
                     drawElement(it, drawer, zIndex, newZComp)
                 }
@@ -435,6 +504,11 @@ class ControlManager : Extension {
                     rt.colorBuffer(0), Rectangle(Vector2(area.x, area.y), area.width, area.height),
                     Rectangle(Vector2(area.x, area.y), area.width, area.height)
                 )
+                if (newZComp == zIndex) {
+                    val active = mouseInput.scrollbarDrag?.element === element || mouseInput.scrollbarHover?.element === element
+                    drawScrollbars(drawer, element, mouseInput.scrollbarDrag, mouseInput.scrollbarHover,
+                        scrollbarFades.opacity(element, active))
+                }
             }
         }
         element.draw.dirty = false
@@ -461,6 +535,12 @@ class ControlManager : Extension {
                     program.drawer.clear(ColorRGBa.BLACK.opacify(0.0))
                 }
             }
+
+            // scrollbars that are shown or fading are drawn again, and once more when they have faded out
+            val fading = scrollbarFades.animating()
+            fading.forEach { it.draw.dirty = true }
+            fadingBefore.forEach { it.draw.dirty = true }
+            fadingBefore = fading
 
             val redraw = body?.any {
                 it.draw.dirty
@@ -489,6 +569,10 @@ class ControlManager : Extension {
                         drawElement(it, program.drawer, 1, 0)
                         drawElement(it, program.drawer, 1000, 0)
                     }
+                    // over a scrollbar, and while dragging one, the cursor is that of the scrollbar
+                    (mouseInput.scrollbarDrag ?: mouseInput.scrollbarHover)?.let { bar ->
+                        program.application.cursorType = bar.element.computedStyle.scrollbarCursor.cursorType
+                    }
                 }
                 Driver.instance.finish()
             }
@@ -502,9 +586,24 @@ class ControlManager : Extension {
             program.drawer.image(renderTarget!!.colorBuffer(0), 0.0, 0.0)
 
             drawCount++
+
+            // the next frame continues the fading also when frames are only drawn on request
+            if (fadingBefore.isNotEmpty() && window.presentationMode == PresentationMode.MANUAL) {
+                window.requestDraw()
+            }
         }
     }
 }
+
+/** the cursor of the application for [this] */
+private val Cursor.cursorType: CursorType
+    get() = when (this) {
+        Cursor.Default -> CursorType.ARROW_CURSOR
+        Cursor.Pointer -> CursorType.HAND_CURSOR
+        Cursor.Text -> CursorType.IBEAM_CURSOR
+        Cursor.Crosshair -> CursorType.CROSSHAIR_CURSOR
+        else -> CursorType.ARROW_CURSOR
+    }
 
 private fun ControlManager.existingOrNewDocumentWithDefaultStyleSheets(): Document {
     return if (document == null) {
