@@ -8,7 +8,8 @@ import org.openrndr.panel.style.Display
 /**
  * A compact version of [GUI] that shows a single horizontal bar at the bottom of the screen. A dropdown on the left
  * selects the compartment to show, the controls of that compartment are laid out horizontally next to it, followed by
- * the toolbar when [showToolbar] is set.
+ * the toolbar when [showToolbar] is set. When the controls do not fit, they scroll horizontally, with the wheel, a
+ * trackpad or the scrollbar, which shows while scrolling and fades out after it.
  *
  * Objects are added and removed like with [GUI], parameter values are persisted and saved in the same way.
  *
@@ -84,11 +85,16 @@ fun miniGUIStyles(appearance: GUIAppearance = GUIAppearance(), controlWidth: Int
         this.flexShrink = flex { 0 }
     },
 
-    // holds the compartments, takes up the space between the compartment selector and the toolbar
+    // holds the compartments, takes up the space between the compartment selector and the toolbar; it scrolls
+    // horizontally when the controls do not fit, with scrollbars that show while scrolling
     styleSheet(has class_ "sidebar") {
         this.width = length { 0 }
         this.height = LinearDimension.Auto
         this.flexGrow = flex { 1 }
+        this.overflow = Overflow.Scroll
+        this.scrollbarVisibility = ScrollbarVisibility.Auto
+        // room for the scrollbar below the controls
+        this.paddingBottom = length { 5 }
     },
 
     styleSheet(has class_ "compartment") {

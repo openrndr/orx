@@ -39,7 +39,12 @@ There is a 6-step incantation to add a new parameter type
 You can use your editor's search functionality to jump to "1)", "2)".
  */
 internal class CompartmentState(var collapsed: Boolean, val parameterValues: MutableMap<String, Any> = mutableMapOf())
-private class SidebarState(var hidden: Boolean = false, var collapsed: Boolean = false, var scrollTop: Double = 0.0)
+private class SidebarState(
+    var hidden: Boolean = false,
+    var collapsed: Boolean = false,
+    var scrollTop: Double = 0.0,
+    var scrollLeft: Double = 0.0
+)
 
 private val persistentCompartmentStates = mutableMapOf<Long, MutableMap<String, CompartmentState>>()
 private val persistentSidebarStates = mutableMapOf<Long, SidebarState>()
@@ -209,12 +214,16 @@ open class GUI(
 
             val label = binding.label
 
-            val h3Header = if (showCompartmentHeaders) h3 { label } else null
-            val collapsible = div("compartment") {
+            // with a header, the header and the compartment are in a section, the header sticks to the top of the
+            // sidebar while its compartment scrolls by
+            val section = if (showCompartmentHeaders) div("compartment-section") {} else null
+            val container: Element = section ?: this
+            val h3Header = if (showCompartmentHeaders) container.h3("compartment-header") { label } else null
+            val collapsible = container.div("compartment") {
                 addControls(binding)
             }
             compartments[label] = collapsible
-            elementsForObject[binding.obj] = listOfNotNull(h3Header, collapsible)
+            elementsForObject[binding.obj] = listOfNotNull(section ?: h3Header, if (section == null) collapsible else null)
 
             val collapseState = compartmentState().getOrPut(label) { CompartmentState(compartmentsCollapsedByDefault) }
             if (collapseState.collapsed) {
@@ -402,18 +411,17 @@ open class GUI(
         val sidebar = parent.div("sidebar") {
             id = "sidebar"
             scrollTop = sidebarState().scrollTop
+            scrollLeft = sidebarState().scrollLeft
             for (binding in bindings.bindings) {
                 addCollapsible(this, binding)
             }
         }
         this.sidebar = sidebar
-        sidebar.mouse.scrolled.listen {
-            sidebarState().scrollTop = sidebar.scrollTop
-        }
         if (sidebarState().collapsed) {
             sidebar.classes.add(collapsed)
         }
         sidebar.scrollTop = sidebarState().scrollTop
+        sidebar.scrollLeft = sidebarState().scrollLeft
         return sidebar
     }
 
@@ -1222,6 +1230,11 @@ open class GUI(
     }
 
     override fun afterDraw(drawer: Drawer, program: Program) {
+        // the scroll position is kept for when the GUI is made again, it is scrolled by the wheel and the scrollbar
+        sidebar?.let {
+            sidebarState().scrollTop = it.scrollTop
+            sidebarState().scrollLeft = it.scrollLeft
+        }
         bindings.rebindNested()
         if (doubleBind) {
             updateControls()

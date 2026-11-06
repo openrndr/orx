@@ -8,8 +8,8 @@ import org.openrndr.panel.style.Display
  * The style sheets for the elements of a [GUI], in addition to the default control styles.
  *
  * The selectors refer to the element classes used by the building blocks of [GUILayoutScope]:
- * `fullscreen`, `container`, `toolbar`, `collapse-border`, `sidebar`, `compartment`, `nested`, `nested-header`,
- * `nested-content`, `full-canvas`, and the
+ * `fullscreen`, `container`, `toolbar`, `collapse-border`, `sidebar`, `compartment-section`, `compartment-header`,
+ * `compartment`, `nested`, `nested-header`, `nested-content`, `full-canvas`, and the
  * `collapsed` and `randomize-strong` state classes. A custom [GUILayout] can use these classes on its own elements,
  * and custom style sheets can be appended to (or replace) the list returned here, see [GUI.styles].
  *
@@ -76,6 +76,13 @@ fun guiStyles(appearance: GUIAppearance = GUIAppearance()): List<StyleSheet> = l
         this.paddingBottom = length { 20 }
     },
 
+    // the header of a compartment stays at the top of the sidebar while the compartment scrolls by, over the
+    // controls that scroll under it
+    styleSheet(has class_ "compartment-header") {
+        this.position = Position.STICKY
+        this.background = color { appearance.baseColor.opacify(1.0 / appearance.baseColor.alpha) }
+    },
+
     styleSheet(has class_ "nested-header") {
         this.fontSize = 13.px
         this.paddingTop = length { 8 }
@@ -87,11 +94,17 @@ fun guiStyles(appearance: GUIAppearance = GUIAppearance()): List<StyleSheet> = l
         this.paddingBottom = length { 20 }
         this.paddingTop = length { 10 }
         this.paddingLeft = length { 10 }
-        this.paddingRight = length { 10 }
+        // the controls are 25 pixels narrower than the bar and have margins of 5 pixels, they fit the content
+        // exactly
+        this.paddingRight = length { 5 }
         this.marginRight = length { 2 }
         this.height = length { 100.percent }
         this.background = color { appearance.baseColor }
+        // the sidebar only scrolls vertically
         this.overflow = Overflow.Scroll
+        this.overflowX = Overflow.Hidden
+        // scrollbars that show while scrolling and fade out after it, in the space at the right of the controls
+        this.scrollbarVisibility = ScrollbarVisibility.Auto
 
         //<editor-fold desc="1) setup control style">
         descendant(has type "colorpicker-button") {
