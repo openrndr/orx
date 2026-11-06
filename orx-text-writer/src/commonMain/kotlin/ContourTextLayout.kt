@@ -185,7 +185,8 @@ fun layoutTextOnContour(
                 val scale = sizeInEm * (wordStyle.textWidthFactor ?: error("textWidthFactor not set"))
                 val baselineShift = Vector2(0.0, -(wordStyle.baselineShiftInEm ?: 0.0) * wordFace.height * sizeInEm)
                 for (sr: ShapeResult in item.content.shapeResults) {
-                    val glyph = TypesetGlyph(wordFace, sr.glyphIndex, cursor + sr.offset * scale + baselineShift, wordStyle)
+                    val glyph = TypesetGlyph(wordFace, sr.glyphIndex, cursor + sr.offset * scale + baselineShift, wordStyle,
+                        sr.advance * scale, sr.offset * scale + baselineShift)
                     glyphs.add(glyph to sr.advance.x * scale)
                     cursor += sr.advance * scale
                 }

@@ -16,7 +16,19 @@ import kotlin.jvm.JvmName
  * @param position the position of the glyph's origin on the baseline, includes the baseline shift
  * @param style the fully cascaded style of the glyph
  */
-class TypesetGlyph(val face: Face, val glyphIndex: Int, val position: Vector2, val style: TextStyle) {
+class TypesetGlyph(
+    val face: Face,
+    val glyphIndex: Int,
+    val position: Vector2,
+    val style: TextStyle,
+    /** the advance of the pen for the glyph as it is shaped, null when it is not known */
+    val advance: Vector2? = null,
+    /** the offset of [position] from the pen as the glyph is shaped */
+    val offset: Vector2 = Vector2.ZERO
+) {
+    /** the position of the pen after the glyph, null when its advance is not known */
+    val penEnd: Vector2? get() = advance?.let { position - offset + it }
+
     /**
      * The transform that places the outline of the glyph, as returned by [org.openrndr.draw.font.Glyph.shape].
      */
@@ -406,7 +418,8 @@ private fun placeItems(
                 val baselineShift = Vector2(0.0, -(wordStyle.baselineShiftInEm ?: 0.0) * wordFace.height * sizeInEm)
                 fun place(shapeResults: List<ShapeResult>) {
                     for (sr in shapeResults) {
-                        glyphs.add(TypesetGlyph(wordFace, sr.glyphIndex, cursor + sr.offset * scale + baselineShift, wordStyle))
+                        glyphs.add(TypesetGlyph(wordFace, sr.glyphIndex, cursor + sr.offset * scale + baselineShift, wordStyle,
+                            sr.advance * scale, sr.offset * scale + baselineShift))
                         cursor += sr.advance * scale
                     }
                 }
