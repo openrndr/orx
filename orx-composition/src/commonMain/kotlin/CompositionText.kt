@@ -5,7 +5,10 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.font.Face
 import org.openrndr.draw.font.loadFace
+import org.openrndr.draw.font.internal.Direction
+import org.openrndr.draw.font.internal.Script
 import org.openrndr.draw.font.internal.ShapeFeature
+import org.openrndr.draw.font.internal.TextShapingDriver
 import org.openrndr.extra.textwriter.ContourBaseline
 import org.openrndr.extra.textwriter.ContourOverflow
 import org.openrndr.extra.textwriter.ContourTextLayout
@@ -328,16 +331,123 @@ internal object CompositionText {
      * The glyphs of a run, placed, and the position after the run. [origin] is the start of the baseline of the run,
      * [rotate] the angle every glyph is turned by.
      */
-    private class RunLayout(val glyphs: List<TypesetGlyph>, val end: Vector2, val origin: Vector2, val rotate: Double) {
+    private class RunLayout(
+        val glyphs: List<TypesetGlyph>,
+        val end: Vector2,
+        val origin: Vector2,
+        val rotate: Double,
+        /** the transforms of the outlines of glyphs that are not placed by their position, like those of vertical text */
+        val outlines: Map<TypesetGlyph, Matrix44>? = null
+    ) {
+        /** true when glyphs are not placed by their positions alone */
+        val transformed: Boolean get() = rotate != 0.0 || outlines != null
+
         /** the transform of the outline of [glyph], turned around its origin */
-        fun outline(glyph: TypesetGlyph): Matrix44 = if (rotate == 0.0) glyph.transform() else
+        fun outline(glyph: TypesetGlyph): Matrix44 = outlines?.get(glyph) ?: if (rotate == 0.0) glyph.transform() else
             buildTransform { translate(glyph.position); rotate(rotate); translate(-glyph.position) } * glyph.transform()
+    }
+
+    /** the script of upright vertical [text], for the vertical forms of fonts: kana, hangul or Han */
+    private fun script(text: String): Script = when {
+        text.any { it.code in 0x3040..0x309F } -> Script.HIRAGANA
+        text.any { it.code in 0x30A0..0x30FF || it.code in 0xFF66..0xFF9F } -> Script.KATAKANA
+        text.any { it.code in 0x1100..0x11FF || it.code in 0x3130..0x318F || it.code in 0xAC00..0xD7AF } -> Script.HANGUL
+        else -> Script.HAN
+    }
+
+    /**
+     * True when the character [c] is set upright in vertical text with text-orientation mixed: the characters of
+     * scripts that are written vertically, like CJK ideographs, kana, hangul, their punctuation and full width forms,
+     * following the Vertical_Orientation property of Unicode
+     */
+    private fun isUpright(c: Int): Boolean = c in 0x1100..0x11FF || c in 0x2E80..0x2FDF || c in 0x2FF0..0x31FF ||
+            c in 0x3200..0x9FFF || c in 0xA000..0xA4CF || c in 0xA960..0xA97F || c in 0xAC00..0xD7FF ||
+            c in 0xF900..0xFAFF || c in 0xFE10..0xFE1F || c in 0xFE30..0xFE4F || c in 0xFF00..0xFF60 ||
+            c in 0xFFE0..0xFFE6 || c in 0x1F000..0x1FAFF || c in 0x20000..0x3FFFD
+
+    /**
+     * Lays out the text of [node] vertically, from top to bottom: upright characters one below the other, centered
+     * on the line, and runs of other characters turned 90 degrees clockwise, centered on the line by the middle of
+     * their ascent and descent, like the central baseline of vertical text. The anchor is along the line.
+     */
+    private fun layoutVerticalRun(node: TextNode, pen: Vector2, adjust: Boolean): RunLayout? {
+        val style = node.effectiveStyle
+        val face = face(style, node) ?: return null
+        val textStyle = textStyle(node, style, adjust)
+        val fontSize = fontSize(style)
+        val letterSpacing = pixels(style.letterSpacing, fontSize)
+        val ascent = abs(face.ascent)
+        val descent = abs(face.descent)
+        val orientation = style.textOrientation
+
+        // the text in segments of upright and sideways characters
+        val segments = mutableListOf<Pair<Boolean, String>>()
+        var offset = 0
+        while (offset < node.text.length) {
+            val codePoint = if (node.text[offset].isHighSurrogate() && offset + 1 < node.text.length)
+                (node.text[offset].code - 0xD800) * 0x400 + (node.text[offset + 1].code - 0xDC00) + 0x10000 else node.text[offset].code
+            val length = if (codePoint > 0xFFFF) 2 else 1
+            val upright = when (orientation) {
+                TextOrientation.UPRIGHT -> true
+                TextOrientation.SIDEWAYS -> false
+                TextOrientation.MIXED -> isUpright(codePoint)
+            }
+            val character = node.text.substring(offset, offset + length)
+            if (segments.isNotEmpty() && segments.last().first == upright && !upright) {
+                segments[segments.size - 1] = Pair(false, segments.last().second + character)
+            } else {
+                segments.add(Pair(upright, character))
+            }
+            offset += length
+        }
+
+        // the glyphs relative to the start of the line, and the transforms of their outlines
+        val placed = mutableListOf<Pair<TypesetGlyph, Matrix44>>()
+        var cursor = 0.0
+        val space = face.glyphForCharacter(' ').advanceWidth() + letterSpacing + pixels(style.wordSpacing, fontSize)
+        for ((upright, text) in segments) {
+            if (upright) {
+                // shaped vertically: the vertical forms of the font, its vertical advances, the glyphs centered on
+                // the line by their offsets
+                val glyphStyle = textStyle.copy(face = face)
+                val shaped = TextShapingDriver.instance.shape(face, text, textStyle.features, Direction.TOP_TO_BOTTOM, script(text))
+                for (result in shaped) {
+                    val position = Vector2(0.0, cursor) + result.offset
+                    val g = TypesetGlyph(face, result.glyphIndex, position, glyphStyle)
+                    placed.add(g to g.transform())
+                    cursor += result.advance.y + letterSpacing
+                }
+            } else {
+                val leading = text.takeWhile { it == ' ' }.length * space
+                val trailing = if (text.isBlank()) 0.0 else text.takeLastWhile { it == ' ' }.length * space
+                val glyphs = typesetLine(face, text.trim(' '), Vector2(leading, 0.0), textStyle)
+                val width = (glyphs.maxOfOrNull { it.position.x + face.glyphForIndex(it.glyphIndex).advanceWidth() + letterSpacing } ?: leading) + trailing
+                // turned clockwise around the start of the segment, the middle of the ascent and descent on the line
+                val turn = buildTransform {
+                    translate(-(ascent - descent) / 2.0, cursor)
+                    rotate(90.0)
+                }
+                for (glyph in glyphs) placed.add(glyph to turn * glyph.transform())
+                cursor += width
+            }
+        }
+
+        val start = Vector2(node.x ?: pen.x, node.y ?: pen.y) + Vector2(node.dx, node.dy)
+        val origin = start - Vector2(0.0, cursor * style.textAnchor.value)
+        val toOrigin = buildTransform { translate(origin) }
+        val outlines = HashMap<TypesetGlyph, Matrix44>()
+        val glyphs = placed.map { (glyph, transform) ->
+            outlines[glyph] = toOrigin * transform
+            glyph
+        }
+        return RunLayout(glyphs, origin + Vector2(0.0, cursor), origin, 0.0, outlines)
     }
 
     /**
      * Lays out the text of [node] starting at [pen], or at the position of the node when it has one
      */
     private fun layoutRun(node: TextNode, pen: Vector2, adjust: Boolean = true): RunLayout? {
+        if (node.effectiveStyle.writingMode.vertical) return layoutVerticalRun(node, pen, adjust)
         val style = node.effectiveStyle
         val face = face(style, node) ?: return null
         val adjustment = if (adjust) adjustment(node) else noAdjustment
@@ -388,7 +498,7 @@ internal object CompositionText {
         // hidden text is laid out, text after it continues after it, but it is not drawn
         if (visible.isNotEmpty() && style.visibility.value && applyPaints(drawer, style, bounds)) {
             slugTextDrawer.clear()
-            if (layout.rotate == 0.0) slugTextDrawer.addGlyphs(visible)
+            if (!layout.transformed) slugTextDrawer.addGlyphs(visible)
             else slugTextDrawer.addGlyphs(visible) { layout.outline(it) }
             drawer.applyClip()
             slugTextDrawer.draw(drawer)
@@ -404,6 +514,8 @@ internal object CompositionText {
     private fun drawDecorations(drawer: Drawer, node: TextNode, style: Style, layout: RunLayout) {
         val decoration = style.textDecoration
         if (!decoration.underline && !decoration.overline && !decoration.lineThrough) return
+        // the lines of vertical text are not drawn
+        if (style.writingMode.vertical) return
         val face = face(style, node) ?: return
         val textStyle = textStyle(node, style)
         // the underline and the line through are where the face puts them, the overline is on top of the ascent
@@ -536,7 +648,7 @@ internal object CompositionText {
                     }
                 } else {
                     layoutRun(node, current)?.let { layout ->
-                        layout.glyphs.forEach { points.addAll(if (layout.rotate == 0.0) cell(it) else cell(it, layout.outline(it))) }
+                        layout.glyphs.forEach { points.addAll(if (!layout.transformed) cell(it) else cell(it, layout.outline(it))) }
                         current = layout.end
                     }
                 }

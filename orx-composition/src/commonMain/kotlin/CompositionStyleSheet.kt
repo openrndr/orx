@@ -714,6 +714,75 @@ enum class DominantBaseline(private val css: String) : AttributeOrPropertyValue 
 }
 
 /**
+ * The direction that lines of text run in, like the writing-mode property: horizontally, or vertically from top to
+ * bottom; vertical lines follow each other to the left ([VERTICAL_RL]) or to the right ([VERTICAL_LR])
+ */
+enum class WritingMode(private val css: String, val vertical: Boolean) : AttributeOrPropertyValue {
+    HORIZONTAL_TB("horizontal-tb", false),
+    VERTICAL_RL("vertical-rl", true),
+    VERTICAL_LR("vertical-lr", true);
+
+    override val value: WritingMode get() = this
+    override fun toString(): String = css
+
+    companion object {
+        /** the mode named [name] in CSS, or in SVG 1.1 */
+        fun of(name: String): WritingMode? = when (name.trim()) {
+            "horizontal-tb", "lr", "lr-tb", "rl", "rl-tb" -> HORIZONTAL_TB
+            "vertical-rl", "tb", "tb-rl", "sideways-rl" -> VERTICAL_RL
+            "vertical-lr", "sideways-lr" -> VERTICAL_LR
+            else -> null
+        }
+    }
+}
+
+/**
+ * How the characters of vertical text are oriented, like the text-orientation property: [MIXED] sets the characters
+ * of scripts that are written vertically, like CJK, upright and turns others sideways, [UPRIGHT] sets all upright,
+ * [SIDEWAYS] turns all 90 degrees clockwise
+ */
+enum class TextOrientation(private val css: String) : AttributeOrPropertyValue {
+    MIXED("mixed"),
+    UPRIGHT("upright"),
+    SIDEWAYS("sideways");
+
+    override val value: TextOrientation get() = this
+    override fun toString(): String = css
+
+    companion object {
+        fun of(name: String): TextOrientation? = when (name.trim()) {
+            "sideways-right" -> SIDEWAYS
+            else -> entries.firstOrNull { it.css == name.trim() }
+        }
+    }
+}
+
+/**
+ * Which parts of a node are hit by the pointer, like the pointer-events property of SVG: the fill and the stroke,
+ * when they are painted or always, and only when the node is visible or always. [NONE] is never hit.
+ */
+enum class PointerEvents(private val css: String, val fill: Boolean, val stroke: Boolean, val painted: Boolean, val visible: Boolean) :
+    AttributeOrPropertyValue {
+    VISIBLE_PAINTED("visiblePainted", true, true, true, true),
+    VISIBLE_FILL("visibleFill", true, false, false, true),
+    VISIBLE_STROKE("visibleStroke", false, true, false, true),
+    VISIBLE("visible", true, true, false, true),
+    PAINTED("painted", true, true, true, false),
+    FILL("fill", true, false, false, false),
+    STROKE("stroke", false, true, false, false),
+    ALL("all", true, true, false, false),
+    NONE("none", false, false, false, false);
+
+    override val value: PointerEvents get() = this
+    override fun toString(): String = css
+
+    companion object {
+        /** the value named [name] in SVG or CSS, auto is visiblePainted */
+        fun of(name: String): PointerEvents? = if (name.trim() == "auto") VISIBLE_PAINTED else entries.firstOrNull { it.css == name.trim() }
+    }
+}
+
+/**
  * How the white space of text is handled, like the white-space property of CSS. Text in compositions is already
  * collapsed or not, the value is kept so that it is written with the text; line feeds are line breaks of text that
  * wraps, see [inlineSize].
@@ -1012,6 +1081,9 @@ var Style.baselineShift by PropertyDelegate<BaselineShift>(BASELINE_SHIFT, RESET
 var Style.textDecoration by PropertyDelegate<TextDecoration>(TEXT_DECORATION, INHERIT, TextDecoration.NONE)
 var Style.shapeRendering by PropertyDelegate<ShapeRendering>(SHAPE_RENDERING, INHERIT, ShapeRendering.AUTO)
 var Style.whiteSpace by PropertyDelegate<WhiteSpace>(WHITE_SPACE, INHERIT, WhiteSpace.NORMAL)
+var Style.pointerEvents by PropertyDelegate<PointerEvents>(POINTER_EVENTS, INHERIT, PointerEvents.VISIBLE_PAINTED)
+var Style.writingMode by PropertyDelegate<WritingMode>(WRITING_MODE, INHERIT, WritingMode.HORIZONTAL_TB)
+var Style.textOrientation by PropertyDelegate<TextOrientation>(TEXT_ORIENTATION, INHERIT, TextOrientation.MIXED)
 
 /** the length that the text of a text element or a tspan is adjusted to, see [lengthAdjust] */
 var Style.textLength by PropertyDelegate<OptionalLength>(TEXT_LENGTH, RESET, OptionalLength.NONE)
@@ -1093,6 +1165,9 @@ enum class AttributeOrPropertyKey {
     TEXT_DECORATION { override fun toString() = "text-decoration" },
     SHAPE_RENDERING { override fun toString() = "shape-rendering" },
     WHITE_SPACE { override fun toString() = "white-space" },
+    POINTER_EVENTS { override fun toString() = "pointer-events" },
+    WRITING_MODE { override fun toString() = "writing-mode" },
+    TEXT_ORIENTATION { override fun toString() = "text-orientation" },
     TEXT_LENGTH { override fun toString() = "textLength" },
     LENGTH_ADJUST { override fun toString() = "lengthAdjust" },
     INLINE_SIZE { override fun toString() = "inline-size" },

@@ -78,7 +78,8 @@ private fun Styleable.serialize(parentStyleable: Styleable? = null): String {
     val cssOnly = setOf(
         AttributeOrPropertyKey.MIX_BLEND_MODE, AttributeOrPropertyKey.ISOLATION, AttributeOrPropertyKey.FILTER,
         AttributeOrPropertyKey.WHITE_SPACE, AttributeOrPropertyKey.LINE_HEIGHT,
-        AttributeOrPropertyKey.FONT_FEATURE_SETTINGS, AttributeOrPropertyKey.FONT_VARIATION_SETTINGS
+        AttributeOrPropertyKey.FONT_FEATURE_SETTINGS, AttributeOrPropertyKey.FONT_VARIATION_SETTINGS,
+        AttributeOrPropertyKey.TEXT_ORIENTATION
     )
     val css = this.properties.filter { (key, value) ->
         key in cssOnly && value.toString().isNotEmpty() &&
@@ -355,7 +356,10 @@ private fun StringBuilder.appendNodes(root: CompositionNode, ids: WriterIds) {
                         val attributes = listOf(svgId, styleSerialized, svgAttributes)
                             .filter(String::isNotEmpty)
                             .joinToString(" ")
-                        sb.append("<g${" $attributes"}>$metadata\n")
+                        // a group that is a link is an a element
+                        val link = link
+                        if (link != null) sb.append("<a href=\"${Entities.escape(link)}\" $attributes>$metadata\n")
+                        else sb.append("<g${" $attributes"}>$metadata\n")
                     }
                 }
                 is ShapeNode -> {
@@ -425,7 +429,7 @@ private fun StringBuilder.appendNodes(root: CompositionNode, ids: WriterIds) {
             }
         } else {
             if (this is GroupNode && this !in textGroups) {
-                sb.append("</g>\n")
+                sb.append(if (link != null) "</a>\n" else "</g>\n")
             }
         }
     }

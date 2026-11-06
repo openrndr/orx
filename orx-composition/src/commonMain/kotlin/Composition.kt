@@ -292,6 +292,9 @@ open class GroupNode(open val children: MutableList<CompositionNode> = mutableLi
     /** the font faces that the text in this group can use, like the @font-face rules of a document */
     var fontFaces: List<FontFace> = emptyList()
 
+    /** the target of the link the group is, like the href of an SVG a element, null when it is not a link */
+    var link: String? = null
+
     override val bounds: Rectangle
         get() {
             return children.map { it.bounds }.bounds
@@ -310,6 +313,7 @@ open class GroupNode(open val children: MutableList<CompositionNode> = mutableLi
             it.attributes = attributes
             it.textElement = textElement
             it.fontFaces = fontFaces
+            it.link = link
         }
     }
 

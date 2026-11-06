@@ -541,47 +541,8 @@ internal object SVGParse {
         return pathCommands(pathValue)
     }
 
-    /**
-     * The commands of the path data [pathValue]. The flags of arcs can be written without separators, as minified
-     * paths do: "a5 5 0 105 5" has the flags 1 and 0.
-     */
-    fun pathCommands(pathValue: String): List<Command> {
-        val rawCommands = pathValue.split("(?=[MmZzLlHhVvCcSsQqTtAa])".toRegex()).map(String::trim)
-        val numbers = Pattern.compile("[-+]?[0-9]*[.]?[0-9]+(?:[eE][-+]?[0-9]+)?")
-        val commands = mutableListOf<Command>()
-
-        for (rawCommand in rawCommands) {
-            if (rawCommand.isNotEmpty()) {
-                val operands = mutableListOf<Double>()
-                val isArc = rawCommand[0] == 'a' || rawCommand[0] == 'A'
-                var position = 1
-                while (position < rawCommand.length) {
-                    // the fourth and fifth argument of every arc are flags of a single digit
-                    if (isArc && operands.size % 7 in 3..4) {
-                        val c = rawCommand[position]
-                        if (c == '0' || c == '1') {
-                            operands.add(if (c == '1') 1.0 else 0.0)
-                            position++
-                            continue
-                        }
-                        if (c == ' ' || c == ',' || c == '\t' || c == '\n' || c == '\r') {
-                            position++
-                            continue
-                        }
-                    }
-                    val numberMatcher = numbers.matcher(rawCommand)
-                    if (!numberMatcher.find(position)) break
-                    // a number of an arc flag position is read as a flag in the next round
-                    if (isArc && operands.size % 7 in 3..4) break
-                    operands.add(numberMatcher.group().toDouble())
-                    position = numberMatcher.end()
-                }
-                commands += Command(rawCommand[0].toString(), *(operands.toDoubleArray()))
-            }
-        }
-
-        return commands
-    }
+    /** the commands of the path data [pathValue] */
+    fun pathCommands(pathValue: String): List<Command> = SVGPathParser.commands(pathValue)
 
     /**
      * A dash array: none, or lengths separated by commas or spaces. Negative or invalid lengths, or lengths that are

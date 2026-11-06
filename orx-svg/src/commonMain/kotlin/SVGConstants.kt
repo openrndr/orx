@@ -134,6 +134,10 @@ internal object Prop {
     const val ISOLATION = "isolation"
     const val FILTER = "filter"
     const val WHITE_SPACE = "white-space"
+    const val POINTER_EVENTS = "pointer-events"
+    const val WRITING_MODE = "writing-mode"
+    const val TEXT_ORIENTATION = "text-orientation"
+    const val GLYPH_ORIENTATION_VERTICAL = "glyph-orientation-vertical"
     const val TEXT_LENGTH = "textLength"
     const val LENGTH_ADJUST = "lengthAdjust"
     const val INLINE_SIZE = "inline-size"
@@ -194,6 +198,10 @@ internal object Prop {
         ISOLATION,
         FILTER,
         WHITE_SPACE,
+        POINTER_EVENTS,
+        WRITING_MODE,
+        TEXT_ORIENTATION,
+        GLYPH_ORIENTATION_VERTICAL,
         INLINE_SIZE,
         LINE_HEIGHT,
         FONT_FEATURE_SETTINGS,

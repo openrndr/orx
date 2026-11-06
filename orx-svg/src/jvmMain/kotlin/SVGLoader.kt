@@ -218,6 +218,12 @@ internal class SVGDocument(
         is SVGGroup -> GroupNode().apply {
             style = svgElem.style.copy()
             this.id = svgElem.id
+            // an a element is a group that is a link
+            if (svgElem.element.tagName() == "a") {
+                link = listOf("href", "xlink:href").firstNotNullOfOrNull { name ->
+                    svgElem.element.attr(name).trim().takeIf { it.isNotEmpty() }
+                }
+            }
             svgElem.elements.mapTo(children) { convertElement(it).also { x -> x.parent = this@apply } }
         }
         is SVGPath -> {
@@ -378,13 +384,16 @@ internal class SVGDocument(
         this.id = svgText.id
         val href = svgText.pathHref
         val path = if (href != null) {
-            val contour = pathContour(href)
+            // the path of the path attribute, or the path the textPath element refers to; on the right side the text
+            // is along the path reversed
+            val contour = (svgText.pathData?.let { svgShape(it).contours.firstOrNull() } ?: pathContour(href))
+                ?.let { if (svgText.rightSide) it.reversed else it }
             if (contour == null) {
                 logger.warn { "textPath refers to '$href', which is not a path in the document" }
                 return@apply
             }
             // a length along a path with a path length is in units of that length
-            val scale = pathsById[href.removePrefix("#")]?.style?.pathLength?.value?.takeIf { it > 0.0 }
+            val scale = pathsById[href.removePrefix("#")]?.takeIf { svgText.pathData == null }?.style?.pathLength?.value?.takeIf { it > 0.0 }
                 ?.let { contour.length / it } ?: 1.0
             PathText(contour, startOffset(svgText.startOffset, contour.length, scale))
         } else {
