@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+  <style>
+    text { font-family: Plex; fill: #202020; }
+    .label { font-size: 10px; fill: #8a8378; }
+  </style>
+  <rect width="720" height="480" fill="#f4efe6"/>
+
+  <text class="label" x="20" y="30">INLINE-SIZE, LINE-HEIGHT</text>
+  <rect id="column" x="20" y="40" width="300" height="200" fill="none" stroke="#e8574a" stroke-dasharray="4 4"/>
+  <text id="paragraph" x="20" y="62" font-size="16" style="inline-size: 300px; line-height: 1.4">SVG 2 text wraps at its <tspan fill="#3d5a99">inline size</tspan>: lines break at spaces, every line starts at the position of the text and the next lines follow at the line height.</text>
+
+  <text class="label" x="380" y="30">TEXTLENGTH, LENGTHADJUST</text>
+  <line x1="380" x2="380" y1="40" y2="150" stroke="#e8574a"/><line id="end" x1="700" x2="700" y1="40" y2="150" stroke="#e8574a"/>
+  <text id="spaced" x="380" y="80" font-size="28" textLength="320">spacing</text>
+  <text id="stretched" x="380" y="130" font-size="28" textLength="320" lengthAdjust="spacingAndGlyphs">glyphs</text>
+
+  <text class="label" x="380" y="185">WHITE-SPACE: PRE</text>
+  <text x="380" y="215" font-size="16" style="white-space: pre">a    b    c      d</text>
+
+
+  <text class="label" x="20" y="290">OKLCH() HUES</text>
+  <rect x="20" y="300" width="26" height="40" fill="oklch(0.72 0.14 0)"/><rect x="48" y="300" width="26" height="40" fill="oklch(0.72 0.14 30)"/><rect x="76" y="300" width="26" height="40" fill="oklch(0.72 0.14 60)"/><rect x="104" y="300" width="26" height="40" fill="oklch(0.72 0.14 90)"/><rect x="132" y="300" width="26" height="40" fill="oklch(0.72 0.14 120)"/><rect x="160" y="300" width="26" height="40" fill="oklch(0.72 0.14 150)"/><rect x="188" y="300" width="26" height="40" fill="oklch(0.72 0.14 180)"/><rect x="216" y="300" width="26" height="40" fill="oklch(0.72 0.14 210)"/><rect x="244" y="300" width="26" height="40" fill="oklch(0.72 0.14 240)"/><rect x="272" y="300" width="26" height="40" fill="oklch(0.72 0.14 270)"/><rect x="300" y="300" width="26" height="40" fill="oklch(0.72 0.14 300)"/><rect x="328" y="300" width="26" height="40" fill="oklch(0.72 0.14 330)"/>
+  <text class="label" x="20" y="370">COLOR-MIX(IN OKLCH), (IN SRGB)</text>
+  <rect x="20" y="380" width="26" height="40" fill="color-mix(in oklch, #e8574a 100%, #3d5a99)"/><rect x="48" y="380" width="26" height="40" fill="color-mix(in oklch, #e8574a 91%, #3d5a99)"/><rect x="76" y="380" width="26" height="40" fill="color-mix(in oklch, #e8574a 82%, #3d5a99)"/><rect x="104" y="380" width="26" height="40" fill="color-mix(in oklch, #e8574a 73%, #3d5a99)"/><rect x="132" y="380" width="26" height="40" fill="color-mix(in oklch, #e8574a 64%, #3d5a99)"/><rect x="160" y="380" width="26" height="40" fill="color-mix(in oklch, #e8574a 55%, #3d5a99)"/><rect x="188" y="380" width="26" height="40" fill="color-mix(in oklch, #e8574a 46%, #3d5a99)"/><rect x="216" y="380" width="26" height="40" fill="color-mix(in oklch, #e8574a 37%, #3d5a99)"/><rect x="244" y="380" width="26" height="40" fill="color-mix(in oklch, #e8574a 28%, #3d5a99)"/><rect x="272" y="380" width="26" height="40" fill="color-mix(in oklch, #e8574a 19%, #3d5a99)"/><rect x="300" y="380" width="26" height="40" fill="color-mix(in oklch, #e8574a 10%, #3d5a99)"/><rect x="328" y="380" width="26" height="40" fill="color-mix(in oklch, #e8574a 0%, #3d5a99)"/><rect x="20" y="440" width="26" height="20" fill="color-mix(in srgb, #e8574a 100%, #3d5a99)"/><rect x="48" y="440" width="26" height="20" fill="color-mix(in srgb, #e8574a 91%, #3d5a99)"/><rect x="76" y="440" width="26" height="20" fill="color-mix(in srgb, #e8574a 82%, #3d5a99)"/><rect x="104" y="440" width="26" height="20" fill="color-mix(in srgb, #e8574a 73%, #3d5a99)"/><rect x="132" y="440" width="26" height="20" fill="color-mix(in srgb, #e8574a 64%, #3d5a99)"/><rect x="160" y="440" width="26" height="20" fill="color-mix(in srgb, #e8574a 55%, #3d5a99)"/><rect x="188" y="440" width="26" height="20" fill="color-mix(in srgb, #e8574a 46%, #3d5a99)"/><rect x="216" y="440" width="26" height="20" fill="color-mix(in srgb, #e8574a 37%, #3d5a99)"/><rect x="244" y="440" width="26" height="20" fill="color-mix(in srgb, #e8574a 28%, #3d5a99)"/><rect x="272" y="440" width="26" height="20" fill="color-mix(in srgb, #e8574a 19%, #3d5a99)"/><rect x="300" y="440" width="26" height="20" fill="color-mix(in srgb, #e8574a 10%, #3d5a99)"/><rect x="328" y="440" width="26" height="20" fill="color-mix(in srgb, #e8574a 0%, #3d5a99)"/>
+
+  <text class="label" x="380" y="320">LAB(), HWB(), COLOR()</text>
+  <rect x="380" y="330" width="60" height="60" fill="lab(62 50 60)"/>
+  <rect x="450" y="330" width="60" height="60" fill="hwb(200 10% 30%)"/>
+  <rect x="520" y="330" width="60" height="60" fill="color(display-p3 0.3 0.7 0.5)"/>
+  <rect x="590" y="330" width="60" height="60" fill="lch(55 60 300 / 70%)"/>
+</svg>
