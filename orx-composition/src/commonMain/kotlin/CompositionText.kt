@@ -5,6 +5,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.font.Face
 import org.openrndr.draw.font.loadFace
+import org.openrndr.draw.font.internal.BidiTextDriver
 import org.openrndr.draw.font.internal.Direction
 import org.openrndr.draw.font.internal.Script
 import org.openrndr.draw.font.internal.ShapeFeature
@@ -166,7 +167,10 @@ internal object CompositionText {
      * baseline shifts of the node and of the groups it is in
      */
     private fun baselineOffset(node: TextNode, style: Style, face: Face): Double {
-        val dominant = style.dominantBaseline.offset(abs(face.ascent), abs(face.descent), face.xHeight)
+        // vertical text is centered on its line, also along paths
+        val baseline = if (style.writingMode.vertical && style.dominantBaseline == DominantBaseline.AUTO) DominantBaseline.CENTRAL
+            else style.dominantBaseline
+        val dominant = baseline.offset(abs(face.ascent), abs(face.descent), face.xHeight)
         var shift = 0.0
         var current: CompositionNode? = node
         while (current != null) {
@@ -218,84 +222,152 @@ internal object CompositionText {
         else -> abs(face.ascent) + abs(face.descent) + abs(face.lineGap)
     }
 
+    /** true when [c] is a character of a script that is written from right to left */
+    private fun isRightToLeft(c: Char): Boolean = c.code in 0x0590..0x08FF || c.code in 0xFB1D..0xFDFF || c.code in 0xFE70..0xFEFF
+
     /**
-     * The runs of a text element with an inline size, broken into lines like SVG 2 text with inline-size: lines break
-     * at spaces and at the line feeds of preserved white space, the first line starts at the position of the text and
-     * the next lines follow at the line height, every line is anchored at that position. Null when the text does not
-     * wrap. The runs that are returned are drawn in place of those of the text element.
+     * True when the runs of [group] are ordered by the bidirectional algorithm across runs: when its direction is
+     * right to left, when it holds characters of scripts that are written right to left, or uses unicode-bidi
      */
-    fun wrap(group: GroupNode): List<TextNode>? {
-        val inlineSize = (group.style.inlineSize.value as? Length.Pixels)?.value ?: return null
+    private fun needsBidi(group: GroupNode, runs: List<TextNode>): Boolean =
+        group.effectiveStyle.direction == TextDirection.RTL ||
+                runs.any { run -> run.text.any(::isRightToLeft) || run.parent?.style?.unicodeBidi != UnicodeBidi.NORMAL ||
+                        run.effectiveStyle.direction == TextDirection.RTL }
+
+    /**
+     * The runs of a text element arranged in lines, when the text wraps or is bidirectional, null otherwise; they are
+     * drawn in place of the runs of the text element.
+     *
+     * Text with an inline size wraps like SVG 2 text: lines break at spaces and at the line feeds of preserved white
+     * space, the first line starts at the position of the text and the next lines follow at the line height, every
+     * line is anchored at that position; vertical text wraps into columns. The runs of a line of bidirectional text
+     * are ordered by the bidirectional algorithm over the whole line, as browsers do: consecutive runs of left to
+     * right text read left to right in right to left text, and the other way around.
+     */
+    fun arrange(group: GroupNode): List<TextNode>? {
         val runs = textRuns(group)?.takeIf { it.isNotEmpty() && it.all { r -> r.contour == null } } ?: return null
-        val first = runs.first()
         val groupStyle = group.effectiveStyle
+        val vertical = groupStyle.writingMode.vertical
+        val inlineSize = (group.style.inlineSize.value as? Length.Pixels)?.value
+        val bidi = !vertical && needsBidi(group, runs)
+        if (inlineSize == null && !bidi) return null
+        val first = runs.first()
         val face = face(groupStyle, first) ?: return null
         val anchor = groupStyle.textAnchor.value
+        val rtl = !vertical && groupStyle.direction == TextDirection.RTL
 
-        // runs split into words, spaces and line feeds, with their widths
-        class Token(val run: TextNode, val text: String) {
-            val isSpace = text.isNotEmpty() && text.all { it == ' ' }
-            val isBreak = text == "\n"
+        /** a part of a run that is placed as a whole, with its advance */
+        class Segment(val run: TextNode, val text: String) {
             val width: Double by lazy {
-                if (isBreak) 0.0 else {
+                if (text == "\n") 0.0 else {
                     val probe = TextNode(text, null).also { it.parent = run.parent; it.style = run.style }
-                    layoutRun(probe, Vector2.ZERO)?.let { it.end.x - it.origin.x } ?: 0.0
-                }
-            }
-        }
-        val tokens = runs.flatMap { run -> Regex("\n| +|[^ \n]+").findAll(run.text).map { Token(run, it.value) } }
-
-        val lines = mutableListOf(mutableListOf<Token>())
-        var width = 0.0
-        var pending = mutableListOf<Token>()
-        for (token in tokens) {
-            when {
-                token.isBreak -> { lines.add(mutableListOf()); width = 0.0; pending = mutableListOf() }
-                token.isSpace -> if (lines.last().isNotEmpty()) pending.add(token)
-                else -> {
-                    val spaces = pending.sumOf { it.width }
-                    if (lines.last().isNotEmpty() && width + spaces + token.width > inlineSize) {
-                        lines.add(mutableListOf(token))
-                        width = token.width
-                    } else {
-                        lines.last().addAll(pending)
-                        lines.last().add(token)
-                        width += spaces + token.width
-                    }
-                    pending = mutableListOf()
+                    layoutRun(probe, Vector2.ZERO)?.advance ?: 0.0
                 }
             }
         }
 
+        // the lines, with their positions: the position of the text and the index of the line, or the positions of the
+        // parts of the text that start at a position of their own
+        class Line(val position: Vector2, val index: Int, val segments: List<Segment>)
+        val lines = mutableListOf<Line>()
         val x = (first.x ?: 0.0) + first.dx
         val y = (first.y ?: 0.0) + first.dy
+        if (inlineSize != null) {
+            val tokens = runs.flatMap { run -> Regex("\n| +|[^ \n]+").findAll(run.text).map { Segment(run, it.value) } }
+            val tokenLines = mutableListOf(mutableListOf<Segment>())
+            var width = 0.0
+            var pending = mutableListOf<Segment>()
+            for (token in tokens) {
+                val isSpace = token.text.all { it == ' ' }
+                when {
+                    token.text == "\n" -> { tokenLines.add(mutableListOf()); width = 0.0; pending = mutableListOf() }
+                    isSpace -> if (tokenLines.last().isNotEmpty()) pending.add(token)
+                    else -> {
+                        val spaces = pending.sumOf { it.width }
+                        if (tokenLines.last().isNotEmpty() && width + spaces + token.width > inlineSize) {
+                            tokenLines.add(mutableListOf(token))
+                            width = token.width
+                        } else {
+                            tokenLines.last().addAll(pending)
+                            tokenLines.last().add(token)
+                            width += spaces + token.width
+                        }
+                        pending = mutableListOf()
+                    }
+                }
+            }
+            for ((index, tokenLine) in tokenLines.withIndex()) {
+                // consecutive tokens of the same run are placed as one segment
+                val segments = mutableListOf<Segment>()
+                var i = 0
+                while (i < tokenLine.size) {
+                    val run = tokenLine[i].run
+                    val text = StringBuilder()
+                    while (i < tokenLine.size && tokenLine[i].run === run) text.append(tokenLine[i++].text)
+                    segments.add(Segment(run, text.toString()))
+                }
+                lines.add(Line(Vector2(x, y), index, segments))
+            }
+        } else {
+            // parts of the text start at runs with a position of their own
+            var position = Vector2(x, y)
+            var segments = mutableListOf<Segment>()
+            for (run in runs) {
+                if (run !== first && (run.x != null || run.y != null)) {
+                    lines.add(Line(position, 0, segments))
+                    position = Vector2((run.x ?: position.x) + run.dx, (run.y ?: position.y) + run.dy)
+                    segments = mutableListOf()
+                }
+                segments.add(Segment(run, run.text))
+            }
+            lines.add(Line(position, 0, segments))
+        }
+
         val height = lineHeight(groupStyle, face)
-        val wrapped = mutableListOf<TextNode>()
-        for ((index, line) in lines.withIndex()) {
-            if (line.isEmpty()) continue
-            val lineWidth = line.sumOf { it.width }
-            var lineStart = true
-            // consecutive tokens of the same run are drawn as one run, anchored at the start
-            var i = 0
-            while (i < line.size) {
-                val run = line[i].run
-                var j = i
-                val text = StringBuilder()
-                while (j < line.size && line[j].run === run) text.append(line[j++].text)
-                wrapped.add(TextNode(
-                    text.toString(), null,
-                    if (lineStart) x - lineWidth * anchor else null,
-                    if (lineStart) y + index * height else null,
-                    rotate = run.rotate
-                ).also {
-                    it.parent = run.parent
-                    it.style = Style().also { s -> s.properties.putAll(run.style.properties); s.textAnchor = TextAnchor.START }
-                })
-                lineStart = false
-                i = j
+        val arranged = mutableListOf<TextNode>()
+        fun place(segment: Segment, px: Double?, py: Double?, rtlRun: Boolean) {
+            arranged.add(TextNode(segment.text, null, px, py, rotate = segment.run.rotate).also {
+                it.parent = segment.run.parent
+                // a run placed at the left of its segment: anchored at its start, or at its end for right to left
+                it.style = Style().also { s ->
+                    s.properties.putAll(segment.run.style.properties)
+                    s.textAnchor = if (rtlRun) TextAnchor.END else TextAnchor.START
+                }
+            })
+        }
+        for (line in lines) {
+            if (line.segments.isEmpty()) continue
+            val lineWidth = line.segments.sumOf { it.width }
+            if (vertical) {
+                // columns follow each other to the left, or to the right
+                val columnX = line.position.x + line.index * height * (if (groupStyle.writingMode == WritingMode.VERTICAL_LR) 1.0 else -1.0)
+                val top = line.position.y - lineWidth * anchor
+                line.segments.forEachIndexed { i, segment ->
+                    place(segment, if (i == 0) columnX else null, if (i == 0) top else null, false)
+                }
+                continue
+            }
+            val lineY = line.position.y + line.index * height
+            // the left end of the line: right to left, the start of the line is on the right
+            var left = if (rtl) line.position.x - lineWidth * (1.0 - anchor) else line.position.x - lineWidth * anchor
+            val ordered = if (!bidi) line.segments else {
+                // the segments ordered by where their characters are displayed
+                val texts = line.segments.map { bidiText(it.run, it.text) }
+                val starts = texts.runningFold(0) { acc, t -> acc + t.length }
+                val analysis = BidiTextDriver.instance.analyze(texts.joinToString(""), if (rtl) Direction.RIGHT_TO_LEFT else Direction.LEFT_TO_RIGHT)
+                val visual = analysis.visualOrder(0, starts.last())
+                val positionOf = IntArray(visual.size).also { p -> visual.forEachIndexed { v, logical -> p[logical] = v } }
+                line.segments.indices.sortedBy { i ->
+                    (starts[i] until starts[i + 1]).minOfOrNull { positionOf[it] } ?: Int.MAX_VALUE
+                }.map { line.segments[it] }
+            }
+            for (segment in ordered) {
+                val segmentRtl = segment.run.effectiveStyle.direction == TextDirection.RTL
+                place(segment, left, lineY, segmentRtl)
+                left += segment.width
             }
         }
-        return wrapped
+        return arranged
     }
 
     /**
@@ -337,7 +409,9 @@ internal object CompositionText {
         val origin: Vector2,
         val rotate: Double,
         /** the transforms of the outlines of glyphs that are not placed by their position, like those of vertical text */
-        val outlines: Map<TypesetGlyph, Matrix44>? = null
+        val outlines: Map<TypesetGlyph, Matrix44>? = null,
+        /** the advance of the run along its line, from [origin] to the right or down */
+        val advance: Double = (end - origin).length
     ) {
         /** true when glyphs are not placed by their positions alone */
         val transformed: Boolean get() = rotate != 0.0 || outlines != null
@@ -345,6 +419,23 @@ internal object CompositionText {
         /** the transform of the outline of [glyph], turned around its origin */
         fun outline(glyph: TypesetGlyph): Matrix44 = outlines?.get(glyph) ?: if (rotate == 0.0) glyph.transform() else
             buildTransform { translate(glyph.position); rotate(rotate); translate(-glyph.position) } * glyph.transform()
+    }
+
+    /**
+     * [text] of [node] with the control characters of the unicode-bidi of the element it is in, a tspan or a text
+     * element, in the direction of that element
+     */
+    private fun bidiText(node: TextNode, text: String): String {
+        val element = node.parent ?: return text
+        val rtl = element.effectiveStyle.direction == TextDirection.RTL
+        return when (element.style.unicodeBidi) {
+            UnicodeBidi.NORMAL -> text
+            UnicodeBidi.EMBED -> (if (rtl) "\u202B" else "\u202A") + text + "\u202C"
+            UnicodeBidi.ISOLATE -> (if (rtl) "\u2067" else "\u2066") + text + "\u2069"
+            UnicodeBidi.BIDI_OVERRIDE -> (if (rtl) "\u202E" else "\u202D") + text + "\u202C"
+            UnicodeBidi.ISOLATE_OVERRIDE -> (if (rtl) "\u2067\u202E" else "\u2066\u202D") + text + "\u202C\u2069"
+            UnicodeBidi.PLAINTEXT -> "\u2068" + text + "\u2069"
+        }
     }
 
     /** the script of upright vertical [text], for the vertical forms of fonts: kana, hangul or Han */
@@ -421,7 +512,7 @@ internal object CompositionText {
                 val leading = text.takeWhile { it == ' ' }.length * space
                 val trailing = if (text.isBlank()) 0.0 else text.takeLastWhile { it == ' ' }.length * space
                 val glyphs = typesetLine(face, text.trim(' '), Vector2(leading, 0.0), textStyle)
-                val width = (glyphs.maxOfOrNull { it.position.x + face.glyphForIndex(it.glyphIndex).advanceWidth() + letterSpacing } ?: leading) + trailing
+                val width = (glyphs.maxOfOrNull { it.penEnd?.x ?: (it.position.x + face.glyphForIndex(it.glyphIndex).advanceWidth() + letterSpacing) } ?: leading) + trailing
                 // turned clockwise around the start of the segment, the middle of the ascent and descent on the line
                 val turn = buildTransform {
                     translate(-(ascent - descent) / 2.0, cursor)
@@ -440,7 +531,7 @@ internal object CompositionText {
             outlines[glyph] = toOrigin * transform
             glyph
         }
-        return RunLayout(glyphs, origin + Vector2(0.0, cursor), origin, 0.0, outlines)
+        return RunLayout(glyphs, origin + Vector2(0.0, cursor), origin, 0.0, outlines, cursor)
     }
 
     /**
@@ -451,32 +542,46 @@ internal object CompositionText {
         val style = node.effectiveStyle
         val face = face(style, node) ?: return null
         val adjustment = if (adjust) adjustment(node) else noAdjustment
-        val textStyle = textStyle(node, style, adjust)
+        val rtl = style.direction == TextDirection.RTL
+        // right to left text is shaped as a paragraph in that direction, embedded or overridden by unicode-bidi
+        val textStyle = textStyle(node, style, adjust).copy(direction = if (rtl) Direction.RIGHT_TO_LEFT else Direction.LEFT_TO_RIGHT)
+        val text = bidiText(node, node.text.trim(' '))
 
         // spaces at the start and the end of a run separate it from the runs around it, the typesetter does not keep
-        // them, their advances are added here
+        // them, their advances are added here; in right to left text the start is on the right
         val fontSize = fontSize(style)
         val letterSpacing = pixels(style.letterSpacing, fontSize) + adjustment.spacing
         val factor = adjustment.factor
         val space = (face.glyphForCharacter(' ').advanceWidth() + letterSpacing + pixels(style.wordSpacing, fontSize)) * factor
-        val leading = node.text.takeWhile { it == ' ' }.length * space
-        val trailing = if (node.text.isBlank()) 0.0 else node.text.takeLastWhile { it == ' ' }.length * space
-        val glyphs = typesetLine(face, node.text.trim(' '), Vector2(leading, 0.0), textStyle)
-        fun advance(glyph: TypesetGlyph) = (face.glyphForIndex(glyph.glyphIndex).advanceWidth() + letterSpacing) * factor
+        val logicalLeading = node.text.takeWhile { it == ' ' }.length * space
+        val logicalTrailing = if (node.text.isBlank()) 0.0 else node.text.takeLastWhile { it == ' ' }.length * space
+        val leading = if (rtl) logicalTrailing else logicalLeading
+        val trailing = if (rtl) logicalLeading else logicalTrailing
+        val glyphs = typesetLine(face, text, Vector2(leading, 0.0), textStyle)
+        // where the pen is after a glyph: its shaped advance includes the spacing, invisible glyphs, like the controls
+        // of bidirectional text, do not advance
+        fun glyphEnd(glyph: TypesetGlyph) = glyph.penEnd?.x
+            ?: (glyph.position.x + (face.glyphForIndex(glyph.glyphIndex).advanceWidth() + letterSpacing) * factor)
         // the advance of the text, used for its anchor and to continue the text after it; the spacing that adjusts
         // text to its length is not added after its last character
-        val width = (glyphs.maxOfOrNull { it.position.x + advance(it) } ?: leading) + trailing -
+        val width = (glyphs.maxOfOrNull { glyphEnd(it) } ?: leading) + trailing -
                 (if (adjustment.last === node) adjustment.spacing else 0.0)
 
         val start = Vector2(node.x ?: pen.x, node.y ?: pen.y) + Vector2(node.dx, node.dy)
-        val origin = start - Vector2(width * style.textAnchor.value, 0.0)
+        // right to left, the start of text is on the right: text that continues ends where the text before it starts
+        val origin = when {
+            !rtl -> start - Vector2(width * style.textAnchor.value, 0.0)
+            node.x != null -> start - Vector2(width * (1.0 - style.textAnchor.value), 0.0)
+            else -> start - Vector2(width, 0.0)
+        }
         // the glyphs are on the alphabetic baseline, text continues on the baseline of the position
         val baseline = Vector2(0.0, baselineOffset(node, style, face))
         return RunLayout(
-            glyphs.map { TypesetGlyph(it.face, it.glyphIndex, it.position + origin + baseline, it.style) },
-            origin + Vector2(width, 0.0),
+            glyphs.map { TypesetGlyph(it.face, it.glyphIndex, it.position + origin + baseline, it.style, it.advance, it.offset) },
+            if (rtl) origin else origin + Vector2(width, 0.0),
             origin + baseline,
-            node.rotate
+            node.rotate,
+            advance = width
         )
     }
 
@@ -514,8 +619,6 @@ internal object CompositionText {
     private fun drawDecorations(drawer: Drawer, node: TextNode, style: Style, layout: RunLayout) {
         val decoration = style.textDecoration
         if (!decoration.underline && !decoration.overline && !decoration.lineThrough) return
-        // the lines of vertical text are not drawn
-        if (style.writingMode.vertical) return
         val face = face(style, node) ?: return
         val textStyle = textStyle(node, style)
         // the underline and the line through are where the face puts them, the overline is on top of the ascent
@@ -526,15 +629,22 @@ internal object CompositionText {
             Pair(-ascent - metrics.underlineThickness / 2.0, metrics.underlineThickness).takeIf { decoration.overline },
             Pair(-metrics.strikeoutPosition, metrics.strikeoutThickness).takeIf { decoration.lineThrough }
         )
-        val start = layout.origin.x
-        val end = layout.end.x
-        if (end <= start) return
+        if (layout.advance <= 0.0) return
         drawer.pushStyle()
         drawer.fill = textStyle.fill
         drawer.stroke = textStyle.stroke
         drawer.strokeWeight = textStyle.strokeWeight ?: 1.0
-        val rectangles = lines.map { (y, thickness) ->
-            Rectangle(start, layout.origin.y + y - thickness / 2.0, end - start, thickness)
+        val rectangles = if (style.writingMode.vertical) {
+            // the lines of vertical text turn with its glyphs: the underline is on the left of the line, the overline
+            // on the right; the line is the central baseline, the middle of the ascent and the descent
+            val central = (ascent - abs(face.descent)) / 2.0
+            lines.map { (y, thickness) ->
+                Rectangle(layout.origin.x - central - y - thickness / 2.0, layout.origin.y, thickness, layout.advance)
+            }
+        } else {
+            lines.map { (y, thickness) ->
+                Rectangle(layout.origin.x, layout.origin.y + y - thickness / 2.0, layout.advance, thickness)
+            }
         }
         drawer.applyClip()
         drawer.rectangles(rectangles)
@@ -654,7 +764,7 @@ internal object CompositionText {
                 }
 
                 is GroupNode -> {
-                    val wrapped = if (node.textElement) wrap(node) else null
+                    val wrapped = if (node.textElement) arrange(node) else null
                     if (wrapped != null) {
                         for (run in wrapped) layoutRun(run, current)?.let { layout ->
                             layout.glyphs.forEach { points.addAll(cell(it)) }

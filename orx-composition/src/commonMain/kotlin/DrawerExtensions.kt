@@ -587,7 +587,7 @@ fun Drawer.composition(composition: Composition) {
                     }
                 }
                 // text that wraps is drawn as lines, text along a contour is shaped and placed as a whole
-                val wrapped = if (compositionNode.textElement) CompositionText.wrap(compositionNode) else null
+                val wrapped = if (compositionNode.textElement) CompositionText.arrange(compositionNode) else null
                 val contourRuns = if (wrapped == null) CompositionText.contourRuns(compositionNode) else null
                 if (wrapped != null) {
                     for (run in wrapped) pen = CompositionText.draw(this, run, pen, textBounds)

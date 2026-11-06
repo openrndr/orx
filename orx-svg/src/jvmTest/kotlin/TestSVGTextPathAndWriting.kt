@@ -13,6 +13,7 @@ class TestSVGTextPathAndWriting {
             <text><textPath path="M 0 80 L 200 80" href="#line">inline</textPath></text>
             <text id="v" style="writing-mode: vertical-rl; text-orientation: upright">v</text>
             <text id="tb" writing-mode="tb" glyph-orientation-vertical="90">tb</text>
+            <text id="rtl" direction="rtl" style="unicode-bidi: bidi-override">rtl<tspan id="inner" unicode-bidi="isolate">a</tspan></text>
         </svg>"""
     )
 
@@ -39,5 +40,17 @@ class TestSVGTextPathAndWriting {
         val tb = c.root.findGroups().first { it.id == "tb" }.style
         assertEquals(WritingMode.VERTICAL_RL, tb.writingMode)
         assertEquals(TextOrientation.SIDEWAYS, tb.textOrientation)
+    }
+
+    @Test
+    fun readsDirections() {
+        val rtl = c.root.findGroups().first { it.id == "rtl" }
+        assertEquals(TextDirection.RTL, rtl.style.direction)
+        assertEquals(UnicodeBidi.BIDI_OVERRIDE, rtl.style.unicodeBidi)
+        val inner = c.root.findGroups().first { it.id == "inner" }
+        // the direction is inherited, unicode-bidi is not
+        assertEquals(TextDirection.RTL, inner.effectiveStyle.direction)
+        assertEquals(UnicodeBidi.ISOLATE, inner.style.unicodeBidi)
+        assertEquals(UnicodeBidi.NORMAL, c.root.findGroups().first { it.id == "v" }.effectiveStyle.unicodeBidi)
     }
 }

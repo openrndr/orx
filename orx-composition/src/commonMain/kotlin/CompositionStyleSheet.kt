@@ -713,6 +713,40 @@ enum class DominantBaseline(private val css: String) : AttributeOrPropertyValue 
     }
 }
 
+/** the direction of text, like the direction property: left to right or right to left */
+enum class TextDirection(private val css: String) : AttributeOrPropertyValue {
+    LTR("ltr"),
+    RTL("rtl");
+
+    override val value: TextDirection get() = this
+    override fun toString(): String = css
+
+    companion object {
+        fun of(name: String): TextDirection? = entries.firstOrNull { it.css == name.trim() }
+    }
+}
+
+/**
+ * How the direction of text is applied in bidirectional text, like the unicode-bidi property: [NORMAL] follows the
+ * bidirectional algorithm, [EMBED] and [ISOLATE] embed the text in the direction of its element, the overrides set
+ * every character in that direction, [PLAINTEXT] takes the direction from the text
+ */
+enum class UnicodeBidi(private val css: String) : AttributeOrPropertyValue {
+    NORMAL("normal"),
+    EMBED("embed"),
+    ISOLATE("isolate"),
+    BIDI_OVERRIDE("bidi-override"),
+    ISOLATE_OVERRIDE("isolate-override"),
+    PLAINTEXT("plaintext");
+
+    override val value: UnicodeBidi get() = this
+    override fun toString(): String = css
+
+    companion object {
+        fun of(name: String): UnicodeBidi? = entries.firstOrNull { it.css == name.trim() }
+    }
+}
+
 /**
  * The direction that lines of text run in, like the writing-mode property: horizontally, or vertically from top to
  * bottom; vertical lines follow each other to the left ([VERTICAL_RL]) or to the right ([VERTICAL_LR])
@@ -1083,6 +1117,8 @@ var Style.shapeRendering by PropertyDelegate<ShapeRendering>(SHAPE_RENDERING, IN
 var Style.whiteSpace by PropertyDelegate<WhiteSpace>(WHITE_SPACE, INHERIT, WhiteSpace.NORMAL)
 var Style.pointerEvents by PropertyDelegate<PointerEvents>(POINTER_EVENTS, INHERIT, PointerEvents.VISIBLE_PAINTED)
 var Style.writingMode by PropertyDelegate<WritingMode>(WRITING_MODE, INHERIT, WritingMode.HORIZONTAL_TB)
+var Style.direction by PropertyDelegate<TextDirection>(DIRECTION, INHERIT, TextDirection.LTR)
+var Style.unicodeBidi by PropertyDelegate<UnicodeBidi>(UNICODE_BIDI, RESET, UnicodeBidi.NORMAL)
 var Style.textOrientation by PropertyDelegate<TextOrientation>(TEXT_ORIENTATION, INHERIT, TextOrientation.MIXED)
 
 /** the length that the text of a text element or a tspan is adjusted to, see [lengthAdjust] */

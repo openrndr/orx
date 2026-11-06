@@ -181,6 +181,8 @@ internal sealed class SVGElement(element: Element?) {
             Prop.WHITE_SPACE -> WhiteSpace.of(value)?.let { style.whiteSpace = it }
             Prop.POINTER_EVENTS -> PointerEvents.of(value)?.let { style.pointerEvents = it }
             Prop.WRITING_MODE -> WritingMode.of(value)?.let { style.writingMode = it }
+            Prop.DIRECTION -> TextDirection.of(value)?.let { style.direction = it }
+            Prop.UNICODE_BIDI -> UnicodeBidi.of(value)?.let { style.unicodeBidi = it }
             Prop.TEXT_ORIENTATION -> TextOrientation.of(value)?.let { style.textOrientation = it }
             // the orientation of SVG 1.1: upright at 0 degrees, sideways at 90 degrees
             Prop.GLYPH_ORIENTATION_VERTICAL -> when (value.trim().removeSuffix("deg")) {
