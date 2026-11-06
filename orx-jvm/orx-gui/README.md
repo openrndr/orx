@@ -282,6 +282,23 @@ laid out horizontally next to it.
 
 [source code](src/demo/kotlin/DemoMiniGUI01.kt)
 
+### DemoNested01
+
+Demonstrates nested parameters. A property annotated with `@NestedParameter` holds an object with
+annotated parameters of its own; the GUI shows them as a group inside the compartment of the
+outer object. Click the header of a group to collapse or expand it.
+
+The nested groups `fill` and `stroke` both have a `color` parameter, nested parameters are
+stored and saved per group so they do not clash.
+
+`stroke` nests a `style` group of its own. Its property is a `var` of an interface type: press
+"next style" (or the space bar) to assign a style of another class, and the GUI replaces the
+controls of the group with those of the new style.
+
+![DemoNested01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoNested01Kt.webp)
+
+[source code](src/demo/kotlin/DemoNested01.kt)
+
 ### DemoOptions01
 
 A simple demonstration of a GUI with a drop-down menu.
