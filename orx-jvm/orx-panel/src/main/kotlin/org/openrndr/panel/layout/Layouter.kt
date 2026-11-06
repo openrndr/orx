@@ -766,6 +766,39 @@ class Layouter {
     }
 
     /**
+     * Moves the sticky children of [element] into the view of the nearest element that scrolls them, along the axes it
+     * scrolls, keeping them inside the content of [element]
+     */
+    private fun stick(element: Element) {
+        val sticky = inFlowChildren(element).filter { it.computedStyle.position == Position.STICKY }
+        if (sticky.isEmpty()) return
+        val scroller = generateSequence(element) { it.parent }.firstOrNull { it.computedStyle.clipsContent } ?: return
+        val border = scroller.layout.borderWidth
+        val viewX = scroller.layout.screenX + border
+        val viewY = scroller.layout.screenY + border
+        val content = element.layout.contentBounds
+        // the content of the parent, where it is scrolled to
+        val contentX = content.x - if (element === scroller) element.scrollLeft else 0.0
+        val contentY = content.y - if (element === scroller) element.scrollTop else 0.0
+        val contentWidth = if (element === scroller) max(content.width, element.layout.scrollWidth) else content.width
+        val contentHeight = if (element === scroller) max(content.height, element.layout.scrollHeight) else content.height
+        for (child in sticky) {
+            val cs = child.computedStyle
+            val layout = child.layout
+            if (scroller.computedStyle.scrollableY) {
+                val limit = contentY + contentHeight - layout.screenHeight - cs.marginBottom.resolve(content.width)
+                val stuck = viewY + cs.top.resolve(scroller.layout.screenHeight)
+                if (layout.screenY < stuck) layout.screenY = min(stuck, max(layout.screenY, limit))
+            }
+            if (scroller.computedStyle.scrollableX) {
+                val limit = contentX + contentWidth - layout.screenWidth - cs.marginRight.resolve(content.width)
+                val stuck = viewX + cs.left.resolve(scroller.layout.screenWidth)
+                if (layout.screenX < stuck) layout.screenX = min(stuck, max(layout.screenX, limit))
+            }
+        }
+    }
+
+    /**
      * How far the arranged in-flow children of [element] reach to the right of the start of its content, with their
      * margins, as if it is not scrolled
      */
@@ -817,23 +850,28 @@ class Layouter {
         }
         element.sized()
 
-        // an element that scrolls its content can not scroll beyond it, also when the content has shrunk
-        if (cs.overflow != Overflow.Visible) {
+        // an element that scrolls its content can not scroll beyond it, also when the content has shrunk; along an
+        // axis that does not scroll it is not scrolled
+        if (cs.scrollableY) {
             val frameHeight = layout.screenHeight - element.contentHeight
             layout.scrollHeight = naturalContentHeight(element, element.contentWidth, element.contentHeight) + frameHeight
             element.scrollTop = element.scrollTop.coerceIn(0.0, element.maxScrollTop)
+        } else {
+            layout.scrollHeight = 0.0
+            element.scrollTop = 0.0
         }
 
         layout.zIndex = when (val zIndex = cs.zIndex) {
             is ZIndex.Value -> zIndex.value
-            is ZIndex.Auto, is ZIndex.Inherit -> element.parent?.layout?.zIndex ?: 0
+            // a sticky element is over the elements next to it
+            is ZIndex.Auto, is ZIndex.Inherit -> (element.parent?.layout?.zIndex ?: 0) + if (cs.position == Position.STICKY) 1 else 0
         }
 
         arrangeChildren(element)
 
         // the width of the content is that of the children as they are arranged, which flexing changes; when the
         // scroll position is limited the children are arranged again
-        if (cs.overflow != Overflow.Visible) {
+        if (cs.scrollableX) {
             val frameWidth = layout.screenWidth - element.contentWidth
             layout.scrollWidth = contentExtentRight(element) + frameWidth
             val scrollLeft = element.scrollLeft.coerceIn(0.0, element.maxScrollLeft)
@@ -841,7 +879,14 @@ class Layouter {
                 element.scrollLeft = scrollLeft
                 arrangeChildren(element)
             }
+        } else {
+            layout.scrollWidth = 0.0
+            if (element.scrollLeft != 0.0) {
+                element.scrollLeft = 0.0
+                arrangeChildren(element)
+            }
         }
+        stick(element)
         element.children.forEach { arrange(it) }
     }
     //</editor-fold>

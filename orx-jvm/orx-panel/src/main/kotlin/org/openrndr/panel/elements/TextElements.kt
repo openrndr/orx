@@ -4,6 +4,8 @@ import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.FontMap
+import org.openrndr.draw.StrokeAlignment
+import org.openrndr.draw.isolated
 import org.openrndr.events.Event
 import org.openrndr.extra.textwriter.TextToken
 import org.openrndr.extra.textwriter.TextWriter
@@ -80,6 +82,20 @@ class P : TextElement(ElementType("p"))
 class Label : TextElement(ElementType("label"))
 
 abstract class TextElement(et: ElementType) : Element(et) {
+    /** draws the background and the border of the box when they are set, the text is drawn by its text nodes */
+    override fun draw(drawer: Drawer) {
+        val background = computedStyle.effectiveBackground ?: ColorRGBa.TRANSPARENT
+        val border = computedStyle.effectiveBorderColor ?: ColorRGBa.TRANSPARENT
+        if (background.alpha <= 0.0 && (border.alpha <= 0.0 || layout.borderWidth <= 0.0)) return
+        drawer.isolated {
+            drawer.fill = background
+            drawer.stroke = border
+            drawer.strokeWeight = layout.borderWidth
+            drawer.strokeAlignment = StrokeAlignment.INSIDE
+            drawer.box(layout.boundsAtOrigin, cornerRadius)
+        }
+    }
+
     fun text(text: String) {
         append(TextNode(text))
         requestRedraw()

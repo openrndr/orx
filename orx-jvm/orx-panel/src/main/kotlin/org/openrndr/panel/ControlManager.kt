@@ -65,14 +65,23 @@ class ControlManager : Extension {
 
     inner class KeyboardInput {
         private var lastTarget: Element? = null
+        /** true while the focus moves by the keyboard, the focused element is then `focus-visible` */
+        private var focusByKeyboard = false
+
         var target: Element? = null
             set(value) {
                 if (value !== field) {
-                    field?.pseudoClasses?.remove(ElementPseudoClass("active"))
+                    for (pseudoClass in listOf(active, focus, focusVisible)) field?.pseudoClasses?.remove(pseudoClass)
                     field?.keyboard?.focusLost?.trigger(FocusEvent())
                     value?.keyboard?.focusGained?.trigger(FocusEvent())
                     field = value
-                    field?.pseudoClasses?.add(ElementPseudoClass("active"))
+                    field?.pseudoClasses?.add(active)
+                    field?.pseudoClasses?.add(focus)
+                    if (focusByKeyboard) {
+                        field?.pseudoClasses?.add(focusVisible)
+                        // a control that the keyboard moves to is scrolled into view
+                        field?.scrollIntoView(margin = 4.0)
+                    }
                     value?.let {
                         lastTarget = it
                     }
@@ -101,7 +110,7 @@ class ControlManager : Extension {
                     val index = target?.let { focusableControls.indexOf(it) }
                         ?: lastTarget?.let { focusableControls.indexOf(it) } ?: -1
                     if (focusableControls.isNotEmpty()) {
-
+                        focusByKeyboard = true
                         target = if (target != null) {
                             if (KeyModifier.SHIFT in event.modifiers) {
                                 focusableControls[(index - 1).mod(focusableControls.size)]
@@ -111,6 +120,7 @@ class ControlManager : Extension {
                         } else {
                             lastTarget ?: focusableControls[0]
                         }
+                        focusByKeyboard = false
                     }
                 }
             }
@@ -268,7 +278,7 @@ class ControlManager : Extension {
                     scrollbarDragPosition = bar.position
                 } else {
                     val page = bar.page * 0.9
-                    bar.position += if (bar.beforeThumb(event.position)) -page else page
+                    bar.scrollBy(if (bar.beforeThumb(event.position)) -page else page)
                 }
                 scrollbarPressed = true
                 event.cancelPropagation()
@@ -288,7 +298,7 @@ class ControlManager : Extension {
                     return
                 }
                 var clipped = clippedBelow
-                if (element.computedStyle.overflow == Overflow.Scroll && event.position !in element.screenArea) {
+                if (element.computedStyle.clipsContent && event.position !in element.screenArea) {
                     clipped = maxOf(clipped ?: Int.MIN_VALUE, element.layout.zIndex)
                 }
 
@@ -420,6 +430,18 @@ class ControlManager : Extension {
     /** the fading of the scrollbars */
     internal val scrollbarFades = ScrollbarFades()
 
+    /** the smooth scrolling of elements */
+    internal val smoothScrolling = SmoothScrolling()
+
+    /** the transitions of the styles of elements */
+    internal val styleTransitions = StyleTransitions()
+
+    /** the render targets that elements that are not opaque are drawn into */
+    private val opacityTargets = HashMap<Element, RenderTarget>()
+
+    /** the elements that are drawn into their render targets */
+    private val drawingFaded = HashSet<Element>()
+
     /** the elements whose scrollbars were shown or fading in the last frame */
     private var fadingBefore = emptyList<Element>()
     override fun setup(program: Program) {
@@ -448,6 +470,33 @@ class ControlManager : Extension {
     }
 
     private fun drawElement(element: Element, drawer: Drawer, zIndex: Int, zComp: Int) {
+        // an element that is not opaque is drawn with its descendants into a render target, which is drawn faded
+        val opacity = element.computedStyle.opacity.coerceIn(0.0, 1.0)
+        if (opacity < 1.0 && element.computedStyle.display != Display.NONE && element !in drawingFaded) {
+            if (opacity <= 0.0) return
+            val rt = opacityTargets.getOrPut(element) {
+                renderTarget(program.width, program.height, contentScale) {
+                    colorBuffer()
+                    depthBuffer()
+                }
+            }
+            drawingFaded.add(element)
+            drawer.isolatedWithTarget(rt) {
+                drawer.clear(ColorRGBa.TRANSPARENT)
+                drawer.ortho(rt)
+                drawElement(element, drawer, zIndex, zComp)
+            }
+            drawingFaded.remove(element)
+            drawer.isolated {
+                drawer.defaults()
+                drawer.ortho(RenderTarget.active)
+                // the colors are premultiplied by their alpha
+                drawer.drawStyle.colorMatrix = org.openrndr.extra.color.colormatrix.tint(ColorRGBa(opacity, opacity, opacity, opacity))
+                drawer.image(rt.colorBuffer(0))
+            }
+            return
+        }
+
         val newZComp =
             element.computedStyle.zIndex.let {
                 when (it) {
@@ -457,7 +506,7 @@ class ControlManager : Extension {
             }
 
         if (element.computedStyle.display != Display.NONE) {
-            if (element.computedStyle.overflow == Overflow.Visible) {
+            if (!element.computedStyle.clipsContent) {
                 drawer.isolated {
                     drawer.drawStyle.textSetting = TextSettingMode.PIXEL
                     drawer.translate(element.screenPosition)
@@ -465,15 +514,17 @@ class ControlManager : Extension {
                         if (mousePosition in element.screenArea) {
                             program.application.cursorType = element.computedStyle.cursor.cursorType
                         }
-                        element.draw(drawer)
+                        // controls can leave the drawer moved, the outline is drawn where the element is
+                        drawer.isolated { element.draw(drawer) }
+                        drawOutline(drawer, element)
                     }
                 }
-                element.children.forEach {
+                element.childrenInDrawingOrder().forEach {
                     drawElement(it, drawer, zIndex, newZComp)
                 }
             } else if (newZComp != zIndex) {
                 // the layers above the element, like popups, are not clipped by it
-                element.children.forEach {
+                element.childrenInDrawingOrder().forEach {
                     drawElement(it, drawer, zIndex, newZComp)
                 }
             } else {
@@ -488,7 +539,7 @@ class ControlManager : Extension {
                 drawer.isolatedWithTarget(rt) {
                     drawer.clear(ColorRGBa.BLACK.opacify(0.0))
                     drawer.ortho(rt)
-                    element.children.forEach {
+                    element.childrenInDrawingOrder().forEach {
                         drawElement(it, drawer, zIndex, newZComp)
                     }
                 }
@@ -496,7 +547,9 @@ class ControlManager : Extension {
                 drawer.isolated {
                     drawer.translate(element.screenPosition)
                     if (newZComp == zIndex) {
-                        element.draw(drawer)
+                        // controls can leave the drawer moved, the outline is drawn where the element is
+                        drawer.isolated { element.draw(drawer) }
+                        drawOutline(drawer, element)
                     }
                 }
                 drawer.drawStyle.blendMode = BlendMode.OVER
@@ -524,6 +577,8 @@ class ControlManager : Extension {
                 renderTarget = null
                 renderTargetCache.forEach { (_, u) -> u.close() }
                 renderTargetCache.clear()
+                opacityTargets.forEach { (_, u) -> u.close() }
+                opacityTargets.clear()
             }
 
             if (renderTarget == null) {
@@ -535,6 +590,13 @@ class ControlManager : Extension {
                     program.drawer.clear(ColorRGBa.BLACK.opacify(0.0))
                 }
             }
+
+            // elements whose styles transition are drawn again
+            styleTransitions.animating.forEach { it.draw.dirty = true }
+
+            // elements that scroll smoothly move on
+            val smooth = smoothScrolling.scrolling
+            smoothScrolling.advance()
 
             // scrollbars that are shown or fading are drawn again, and once more when they have faded out
             val fading = scrollbarFades.animating()
@@ -565,6 +627,7 @@ class ControlManager : Extension {
                     body?.let {
                         program.drawer.clear(ColorRGBa.BLACK.opacify(0.0))
                         document?.layout()
+                        styleTransitions.apply(it)
                         drawElement(it, program.drawer, 0, 0)
                         drawElement(it, program.drawer, 1, 0)
                         drawElement(it, program.drawer, 1000, 0)
@@ -588,7 +651,9 @@ class ControlManager : Extension {
             drawCount++
 
             // the next frame continues the fading also when frames are only drawn on request
-            if (fadingBefore.isNotEmpty() && window.presentationMode == PresentationMode.MANUAL) {
+            if ((fadingBefore.isNotEmpty() || smooth || styleTransitions.animating.isNotEmpty()) &&
+                window.presentationMode == PresentationMode.MANUAL
+            ) {
                 window.requestDraw()
             }
         }
@@ -604,6 +669,32 @@ private val Cursor.cursorType: CursorType
         Cursor.Crosshair -> CursorType.CROSSHAIR_CURSOR
         else -> CursorType.ARROW_CURSOR
     }
+
+/** the children of [this] in the order they are drawn: sticky children over the others */
+private fun Element.childrenInDrawingOrder(): List<Element> =
+    children.sortedBy { if (it.computedStyle.position == Position.STICKY) 1 else 0 }
+
+/** draws the outline of [element] around its box, with the drawer at the position of the element */
+private fun drawOutline(drawer: Drawer, element: Element) {
+    val cs = element.computedStyle
+    val width = (cs.outlineWidth as? LinearDimension.PX)?.value ?: 0.0
+    val color = (cs.outlineColor as? Color.RGBa)?.color ?: return
+    if (width <= 0.0 || color.alpha <= 0.0) return
+    val offset = (cs.outlineOffset as? LinearDimension.PX)?.value ?: 0.0
+    val grow = offset + width / 2.0
+    val box = element.layout.boundsAtOrigin.let { Rectangle(it.x - grow, it.y - grow, it.width + 2.0 * grow, it.height + 2.0 * grow) }
+    drawer.isolated {
+        drawer.fill = null
+        drawer.stroke = color
+        drawer.strokeWeight = width
+        drawer.box(box, if (element.cornerRadius > 0.0) element.cornerRadius + grow else 0.0)
+    }
+}
+
+/** the pseudo-classes of the element with the keyboard focus, `focus-visible` when the keyboard moved the focus to it */
+private val active = ElementPseudoClass("active")
+private val focus = ElementPseudoClass("focus")
+private val focusVisible = ElementPseudoClass("focus-visible")
 
 private fun ControlManager.existingOrNewDocumentWithDefaultStyleSheets(): Document {
     return if (document == null) {

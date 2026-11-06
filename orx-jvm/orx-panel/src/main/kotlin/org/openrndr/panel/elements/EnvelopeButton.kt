@@ -1,5 +1,7 @@
 package org.openrndr.panel.elements
 
+import org.openrndr.shape.Rectangle
+
 import org.openrndr.color.ColorRGBa
 
 import org.openrndr.draw.Drawer
@@ -60,7 +62,7 @@ class EnvelopeButton : Element(ElementType("envelope-button")) {
     override fun draw(drawer: Drawer) {
         drawer.fill = ((computedStyle.background as? Color.RGBa)?.color ?: ColorRGBa.PINK)
         drawer.strokeAlignment = StrokeAlignment.INSIDE
-        drawer.rectangle(0.0, 0.0, screenArea.width, screenArea.height)
+        drawer.box(Rectangle(0.0, 0.0, screenArea.width, screenArea.height), cornerRadius)
 
         (root() as? Body)?.controlManager?.fontManager?.let {
             var chartHeight = 0.0

@@ -227,7 +227,7 @@ class TextInput : Element(ElementType("text-input")) {
         drawer.fill = computedStyle.effectiveBackground
         drawer.stroke = ((computedStyle.borderColor as? Color.RGBa)?.color ?: ColorRGBa.TRANSPARENT)
         drawer.strokeAlignment = StrokeAlignment.INSIDE
-        drawer.rectangle(layout.boundsAtOrigin)
+        drawer.box(layout.boundsAtOrigin, cornerRadius)
 
         (root() as? Body)?.controlManager?.fontManager?.let { fm ->
             val font = fm.font(computedStyle)

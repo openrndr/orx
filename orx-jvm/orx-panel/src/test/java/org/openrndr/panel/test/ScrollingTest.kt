@@ -12,6 +12,8 @@ import org.openrndr.panel.elements.style
 import org.openrndr.panel.layout.Layouter
 import org.openrndr.color.ColorRGBa
 import org.openrndr.panel.ScrollbarFades
+import org.openrndr.panel.SmoothScrolling
+import org.openrndr.panel.StyleTransitions
 import org.openrndr.panel.highlighted
 import org.openrndr.panel.sameAs
 import org.openrndr.panel.scrollbarAt
@@ -177,5 +179,139 @@ class ScrollingTest {
         val div = scroller().apply { style { scrollbarVisibility = ScrollbarVisibility.Always } }
         relayout(div)
         assertEquals(1.0, fades.opacity(div, false))
+    }
+
+    @Test
+    fun `overflow can differ per axis`() {
+        val div = scroller().apply { style { width = 100.px; height = 100.px; overflow = Overflow.Scroll; overflowX = Overflow.Hidden } }
+        relayout(div)
+        assertEquals(200.0, div.maxScrollTop)
+        // the wheel scrolls vertically only, the scrollbar is vertical only; the hidden axis is scrolled by the program
+        scroll(div, -3.0, -3.0)
+        assertEquals(0.0, div.scrollLeft)
+        assertEquals(30.0, div.scrollTop)
+        assertEquals(listOf(true), div.scrollbars().map { it.vertical })
+        div.scrollLeft = 50.0
+        relayout(div)
+        assertEquals(50.0, div.scrollLeft)
+
+        // along a visible axis the content does not scroll at all
+        div.style { overflowX = Overflow.Visible }
+        relayout(div)
+        assertEquals(0.0, div.scrollLeft)
+        assertEquals(0.0, div.maxScrollLeft)
+    }
+
+    @Test
+    fun `elements are scrolled into view`() {
+        val body = Body(null).apply { style { width = 400.px; height = 300.px } }
+        val outer = Div().apply { style { width = 200.px; height = 200.px; overflow = Overflow.Scroll } }
+        val inner = Div().apply { style { width = 200.px; height = 100.px; marginTop = 250.px; overflow = Overflow.Scroll } }
+        body.append(outer)
+        outer.append(inner)
+        val items = List(6) { Div().apply { style { width = 100.px; height = 50.px } }.also { inner.append(it) } }
+        relayout(body)
+
+        // the inner element scrolls the item to its bottom, the outer one scrolls the inner element to its bottom
+        items[3].scrollIntoView()
+        assertEquals(100.0, inner.scrollTop)
+        assertEquals(150.0, outer.scrollTop)
+        relayout(body)
+        assertEquals(200.0 - 50.0, items[3].layout.screenY, 1E-9)
+
+        // back to the top of the inner element, which the outer element already shows
+        items[0].scrollIntoView(margin = 4.0)
+        assertEquals(0.0, inner.scrollTop)
+        assertEquals(150.0, outer.scrollTop)
+        relayout(body)
+        // the inner element ends at the bottom of the outer one, the margin below it is beyond the content
+        inner.scrollIntoView(margin = 4.0)
+        assertEquals(150.0, outer.scrollTop)
+    }
+
+    @Test
+    fun `smooth scrolling slows down towards its target`() {
+        var now = 0.0
+        val scrolling = SmoothScrolling { now }
+        val div = scroller(contentWidth = 100.0)
+        scrolling.scrollTo(div, 0.0, 150.0)
+        val positions = (1..30).map { now += 1.0 / 60.0; scrolling.advance(); div.scrollTop }
+        // moving towards the target, in steps that get smaller
+        assertTrue(positions.zipWithNext().all { (a, b) -> b >= a })
+        assertTrue(positions[1] - positions[0] > positions[6] - positions[5])
+        assertEquals(150.0, positions.last())
+        assertTrue(!scrolling.scrolling)
+        // targets beyond the content stop at its end
+        scrolling.scrollTo(div, 0.0, 1E6)
+        repeat(60) { now += 1.0 / 60.0; scrolling.advance() }
+        assertEquals(200.0, div.scrollTop)
+    }
+
+    @Test
+    fun `sticky elements stay in view within their parent`() {
+        val body = Body(null).apply { style { width = 400.px; height = 300.px } }
+        val scroller = Div().apply { style { width = 100.px; height = 100.px; overflow = Overflow.Scroll } }
+        body.append(scroller)
+        val sections = List(2) {
+            Div().also { section ->
+                scroller.append(section)
+                section.append(Div().apply { style { height = 20.px; position = Position.STICKY } })
+                section.append(Div().apply { style { height = 180.px } })
+            }
+        }
+        relayout(body)
+        val (first, second) = sections.map { it.children.first() }
+        assertEquals(0.0, first.layout.screenY)
+
+        // the header stays at the top while its section scrolls by
+        scroller.scrollTop = 50.0
+        relayout(body)
+        assertEquals(0.0, first.layout.screenY)
+        assertEquals(150.0, second.layout.screenY)
+        // and leaves with the end of its section, the next header takes its place
+        scroller.scrollTop = 190.0
+        relayout(body)
+        assertEquals(-10.0, first.layout.screenY)
+        assertEquals(10.0, second.layout.screenY)
+        scroller.scrollTop = 250.0
+        relayout(body)
+        assertEquals(0.0, second.layout.screenY)
+    }
+
+    @Test
+    fun `colors and opacity transition`() {
+        var now = 0.0
+        val transitions = StyleTransitions { now }
+        val body = Body(null).apply { style { width = 400.px; height = 300.px } }
+        val button = Div().apply {
+            style {
+                background = Color.RGBa(ColorRGBa.BLACK)
+                transitionDuration = 1.0
+            }
+        }
+        body.append(button)
+        fun update() {
+            Layouter().apply { computeStyles(body); layout(body) }
+            transitions.apply(body)
+        }
+        update()
+        button.style { background = Color.RGBa(ColorRGBa.WHITE); opacity = 0.0 }
+        update()
+        assertEquals(0.0, (button.computedStyle.background as Color.RGBa).color.r, 1E-9)
+        now = 0.5
+        update()
+        assertEquals(0.5, (button.computedStyle.background as Color.RGBa).color.r, 1E-9)
+        assertEquals(0.5, button.computedStyle.opacity, 1E-9)
+        assertEquals(listOf<Element>(button), transitions.animating)
+        // reversing starts from the value that is shown
+        button.style { background = Color.RGBa(ColorRGBa.BLACK); opacity = 1.0 }
+        update()
+        now = 1.0
+        update()
+        assertEquals(0.25, (button.computedStyle.background as Color.RGBa).color.r, 1E-9)
+        now = 2.0
+        update()
+        assertEquals(0.0, (button.computedStyle.background as Color.RGBa).color.r, 1E-9)
+        assertTrue(transitions.animating.isEmpty())
     }
 }

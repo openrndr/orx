@@ -15,6 +15,17 @@ fun defaultStyles(
         display = Display.NONE
     },
 
+    // controls change their colors smoothly when they are hovered and pressed
+    styleSheet(has type listOf("button", "dropdown-button", "colorpicker-button", "envelope-button", "xy-pad", "item")) {
+        transitionDuration = 0.12
+    },
+
+    // a ring around the control that the keyboard moved the focus to
+    styleSheet(has state "focus-visible") {
+        outlineWidth = length { 2 }
+        outlineColor = color { ColorRGBa.fromHex("#5ab0ff") }
+    },
+
     styleSheet(has type "textfield") {
         width = 100.percent
         height = length { auto }

@@ -116,7 +116,7 @@ class DropdownButton : Element(ElementType("dropdown-button")) {
 
         drawer.fill = ((computedStyle.background as? Color.RGBa)?.color ?: ColorRGBa.PINK)
         drawer.stroke = null
-        drawer.rectangle(0.0, 0.0, screenArea.width, screenArea.height)
+        drawer.box(Rectangle(0.0, 0.0, screenArea.width, screenArea.height), cornerRadius)
 
         (root() as? Body)?.controlManager?.fontManager?.let {
             val font = it.font(computedStyle)
@@ -251,7 +251,7 @@ class DropdownButton : Element(ElementType("dropdown-button")) {
             drawer.fill = ((computedStyle.background as? Color.RGBa)?.color ?: ColorRGBa.PINK)
             drawer.stroke = null
             drawer.strokeWeight = 0.0
-            drawer.rectangle(0.0, 0.0, screenArea.width, screenArea.height)
+            drawer.box(Rectangle(0.0, 0.0, screenArea.width, screenArea.height), cornerRadius)
             drawer.strokeWeight = 1.0
         }
 

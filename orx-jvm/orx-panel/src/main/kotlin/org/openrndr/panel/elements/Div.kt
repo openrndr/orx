@@ -15,16 +15,22 @@ open class Div : TextElement(ElementType("div")) {
         }
         mouse.scrolled.listen {
             computedStyle.let { cs ->
-                if (cs.overflow != Overflow.Visible) {
+                if (cs.clipsContent) {
                     // with shift held a vertical wheel scrolls horizontally, for mice without a horizontal wheel
-                    // so does it for an element that only scrolls horizontally
-                    val onlyHorizontal = maxScrollTop <= 0.0 && maxScrollLeft > 0.0
+                    // so does it for an element that only scrolls horizontally; the wheel scrolls the axes with
+                    // Overflow.Scroll, the others only scroll by the program
+                    val userX = cs.effectiveOverflowX == Overflow.Scroll && maxScrollLeft > 0.0
+                    val userY = cs.effectiveOverflowY == Overflow.Scroll && maxScrollTop > 0.0
+                    val onlyHorizontal = userX && !userY
                     val shifted = (KeyModifier.SHIFT in it.modifiers || onlyHorizontal) && it.rotation.x == 0.0
-                    val dx = if (shifted) it.rotation.y else it.rotation.x
-                    val dy = if (shifted) 0.0 else it.rotation.y
-                    scrollTop = (scrollTop - dy * 10).coerceIn(0.0, maxScrollTop)
-                    scrollLeft = (scrollLeft - dx * 10).coerceIn(0.0, maxScrollLeft)
-                    draw.dirty = true
+                    val dx = if (!userX) 0.0 else if (shifted) it.rotation.y else it.rotation.x
+                    val dy = if (!userY || shifted) 0.0 else it.rotation.y
+                    // from where the content scrolls to, so that steps of the wheel add up
+                    val target = scrollTarget
+                    scrollTo(
+                        (target.x - dx * 10).coerceIn(0.0, maxScrollLeft),
+                        (target.y - dy * 10).coerceIn(0.0, maxScrollTop)
+                    )
                     it.cancelPropagation()
                 }
             }
@@ -39,7 +45,7 @@ open class Div : TextElement(ElementType("div")) {
                 drawer.strokeWeight = layout.borderWidth
                 // the background covers the box, the border is drawn inside it
                 drawer.strokeAlignment = StrokeAlignment.INSIDE
-                drawer.rectangle(layout.boundsAtOrigin)
+                drawer.box(layout.boundsAtOrigin, cornerRadius)
                 //drawer.smooth(true)
             }
         }

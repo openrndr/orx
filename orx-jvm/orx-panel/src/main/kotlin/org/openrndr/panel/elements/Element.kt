@@ -8,8 +8,15 @@ import org.openrndr.panel.collections.ObservableCopyOnWriteArrayList
 import org.openrndr.panel.collections.ObservableHashSet
 import org.openrndr.panel.style.CompoundSelector
 import org.openrndr.panel.style.Display
+import org.openrndr.panel.style.ScrollBehavior
 import org.openrndr.panel.style.StyleSheet
+import org.openrndr.panel.style.clipsContent
 import org.openrndr.panel.style.display
+import org.openrndr.panel.style.scrollBehavior
+import org.openrndr.panel.style.scrollableX
+import org.openrndr.panel.style.scrollableY
+import org.openrndr.panel.style.position
+import org.openrndr.panel.style.top
 import org.openrndr.shape.Rectangle
 
 import java.util.*
@@ -49,6 +56,91 @@ open class Element(val type: ElementType) : AutoCloseable {
 
     /** how far the content of an element that scrolls is scrolled to the left, in pixels */
     var scrollLeft = 0.0
+
+    /**
+     * Scrolls the content to [left] and [top], within the content: smoothly when the [StyleSheet.scrollBehavior] of
+     * the element is smooth and [smooth] is not false, and the element is in a control manager
+     */
+    fun scrollTo(left: Double = scrollTarget.x, top: Double = scrollTarget.y, smooth: Boolean? = null) {
+        val animate = smooth ?: (computedStyle.scrollBehavior == ScrollBehavior.Smooth)
+        val scrolling = (root() as? Body)?.controlManager?.smoothScrolling
+        if (animate && scrolling != null) {
+            scrolling.scrollTo(this, left, top)
+        } else {
+            scrolling?.cancel(this)
+            scrollLeft = left.coerceIn(0.0, maxScrollLeft)
+            scrollTop = top.coerceIn(0.0, maxScrollTop)
+        }
+        draw.dirty = true
+        (root() as? Body)?.controlManager?.checkForManualRedraw()
+    }
+
+    /** the sticky descendants of this element, which scrolls them, that are stuck at [viewTop], its top */
+    private fun stuckAtTop(viewTop: Double): List<Element> {
+        val result = mutableListOf<Element>()
+        fun visit(element: Element) {
+            for (child in element.children) {
+                val cs = child.computedStyle
+                if (cs.display == Display.NONE) continue
+                if (cs.position == org.openrndr.panel.style.Position.STICKY &&
+                    kotlin.math.abs(child.layout.screenY - viewTop - cs.top.let { (it as? org.openrndr.panel.style.LinearDimension.PX)?.value ?: 0.0 }) < 0.5
+                ) {
+                    result.add(child)
+                }
+                // the elements that scroll their own content have their own sticky elements
+                if (!cs.clipsContent) visit(child)
+            }
+        }
+        visit(this)
+        return result
+    }
+
+    /** where the content is scrolled to: the end of smooth scrolling, or the scroll position */
+    val scrollTarget: Vector2
+        get() = (root() as? Body)?.controlManager?.smoothScrolling?.target(this) ?: Vector2(scrollLeft, scrollTop)
+
+    /**
+     * Scrolls the elements that scroll this element so that it is in view, with [margin] pixels around it, each by
+     * its [StyleSheet.scrollBehavior]
+     */
+    fun scrollIntoView(margin: Double = 0.0) {
+        // the area of the element when its ancestors are scrolled to where they scroll to
+        var area = screenArea
+        var ancestor = parent
+        while (ancestor != null) {
+            val cs = ancestor.computedStyle
+            if (cs.clipsContent) {
+                val border = ancestor.layout.borderWidth
+                val padded = Rectangle(ancestor.layout.screenX + border, ancestor.layout.screenY + border,
+                    ancestor.layout.screenWidth - 2.0 * border, ancestor.layout.screenHeight - 2.0 * border)
+                // sticky elements that are stuck at the top of the view cover it, other than this element and the
+                // elements around it
+                val around = generateSequence(this) { it.parent }.toSet()
+                val covered = ancestor.stuckAtTop(padded.y).filter { it !in around }
+                    .maxOfOrNull { it.layout.screenY + it.layout.screenHeight - padded.y } ?: 0.0
+                val view = Rectangle(padded.x, padded.y + covered, padded.width, max(0.0, padded.height - covered))
+                val target = ancestor.scrollTarget
+                // the area of the element when the ancestor is at its target
+                val at = area.movedBy(Vector2(ancestor.scrollLeft - target.x, ancestor.scrollTop - target.y))
+                fun along(start: Double, length: Double, viewStart: Double, viewLength: Double): Double = when {
+                    // an element larger than the view shows its start
+                    length + 2.0 * margin > viewLength || start - margin < viewStart -> start - margin - viewStart
+                    start + length + margin > viewStart + viewLength -> start + length + margin - (viewStart + viewLength)
+                    else -> 0.0
+                }
+                val dx = if (cs.scrollableX) along(at.x, at.width, view.x, view.width) else 0.0
+                val dy = if (cs.scrollableY) along(at.y, at.height, view.y, view.height) else 0.0
+                val left = (target.x + dx).coerceIn(0.0, ancestor.maxScrollLeft)
+                val top = (target.y + dy).coerceIn(0.0, ancestor.maxScrollTop)
+                if (left != target.x || top != target.y) {
+                    ancestor.scrollTo(left, top)
+                }
+                // for the ancestors around it the element is where the ancestor scrolls it to
+                area = at.movedBy(Vector2(target.x - left, target.y - top))
+            }
+            ancestor = ancestor.parent
+        }
+    }
 
     /**
      * The largest [scrollLeft]: how far the content of the element extends beyond its right side, as found by the

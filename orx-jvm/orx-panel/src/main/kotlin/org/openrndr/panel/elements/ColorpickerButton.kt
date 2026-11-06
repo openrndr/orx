@@ -1,5 +1,7 @@
 package org.openrndr.panel.elements
 
+import org.openrndr.shape.Rectangle
+
 import org.openrndr.KEY_ENTER
 import org.openrndr.KEY_ESCAPE
 import org.openrndr.Program
@@ -124,7 +126,7 @@ class ColorpickerButton : Element(ElementType("colorpicker-button")) {
         drawer.fill = ((computedStyle.background as? Color.RGBa)?.color ?: ColorRGBa.PINK)
         drawer.stroke = null
         drawer.strokeWeight = 0.0
-        drawer.rectangle(0.0, 0.0, screenArea.width, screenArea.height)
+        drawer.box(Rectangle(0.0, 0.0, screenArea.width, screenArea.height), cornerRadius)
 
         (root() as? Body)?.controlManager?.fontManager?.let {
             val font = it.font(computedStyle)

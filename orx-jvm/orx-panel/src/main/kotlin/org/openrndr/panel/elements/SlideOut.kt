@@ -90,7 +90,7 @@ class SlideOut(
                 drawer.strokeWeight = layout.borderWidth
                 // the background covers the box, the border is drawn inside it
                 drawer.strokeAlignment = StrokeAlignment.INSIDE
-                drawer.rectangle(layout.boundsAtOrigin)
+                drawer.box(layout.boundsAtOrigin, cornerRadius)
             }
         }
     }

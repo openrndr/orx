@@ -168,7 +168,13 @@ enum class Position {
     ABSOLUTE,
     RELATIVE,
     FIXED,
-    INHERIT
+    INHERIT,
+
+    /**
+     * In the flow, but kept in view while the element that scrolls it scrolls: at [top] from its top and [left] from its
+     * left, along the axes it scrolls, within its parent; it is drawn over the elements next to it
+     */
+    STICKY
 }
 
 sealed class FlexDirection(inherit: Boolean = false) : PropertyValue(inherit) {
@@ -225,6 +231,13 @@ sealed class Overflow(inherit: Boolean = false) : PropertyValue(inherit) {
     object Hidden : Overflow()
     object Scroll : Overflow()
     object Inherit : Overflow(inherit = true)
+}
+
+/** how an element scrolls: [Smooth] animates scrolling by the wheel, by pages and into view, [Auto] jumps */
+sealed class ScrollBehavior(inherit: Boolean = false) : PropertyValue(inherit) {
+    object Auto : ScrollBehavior()
+    object Smooth : ScrollBehavior()
+    object Inherit : ScrollBehavior(inherit = true)
 }
 
 /** when scrollbars are shown: [Auto] while scrolling, and fading out after it, or [Always] */
@@ -409,6 +422,27 @@ var StyleSheet.justifyContent by PropertyHandler<JustifyContent>("justify-conten
 var StyleSheet.borderWidth by PropertyHandler<LinearDimension>("border-width", RESET, 0.px)
 var StyleSheet.borderColor by PropertyHandler<Color>("border-color", INHERIT, Color.RGBa(ColorRGBa.TRANSPARENT))
 
+/** the opacity of the element and its descendants, from 0 for invisible to 1 for opaque */
+var StyleSheet.opacity by PropertyHandler<Double>("opacity", RESET, 1.0)
+
+/**
+ * The time in seconds it takes the colors and the opacity of the element to change to new values, for example when
+ * it is hovered; 0 changes them at once
+ */
+var StyleSheet.transitionDuration by PropertyHandler<Double>("transition-duration", RESET, 0.0)
+
+/** the radius of the corners of the box, in pixels or as a percentage of its shorter side */
+var StyleSheet.borderRadius by PropertyHandler<LinearDimension>("border-radius", RESET, 0.px)
+
+/** the width of the outline drawn around the box, outside its border, for example to show the keyboard focus */
+var StyleSheet.outlineWidth by PropertyHandler<LinearDimension>("outline-width", RESET, 0.px)
+
+/** the color of the outline */
+var StyleSheet.outlineColor by PropertyHandler<Color>("outline-color", RESET, Color.RGBa(ColorRGBa.fromHex("#5ab0ff")))
+
+/** the space between the box and its outline */
+var StyleSheet.outlineOffset by PropertyHandler<LinearDimension>("outline-offset", RESET, 1.px)
+
 var StyleSheet.background by PropertyHandler<Color>("background-color", RESET, Color.RGBa(ColorRGBa.BLACK.opacify(0.0)))
 val StyleSheet.effectiveBackground: ColorRGBa?
     get() = (background as? Color.RGBa)?.color
@@ -424,6 +458,9 @@ var StyleSheet.scrollbarColor by PropertyHandler<Color>("scrollbar-color", INHER
  * and dragged, and fades them out after that; [ScrollbarVisibility.Always] always shows them
  */
 var StyleSheet.scrollbarVisibility by PropertyHandler<ScrollbarVisibility>("scrollbar-visibility", INHERIT, ScrollbarVisibility.Auto)
+
+/** how the element scrolls its content, smoothly by default */
+var StyleSheet.scrollBehavior by PropertyHandler<ScrollBehavior>("scroll-behavior", RESET, ScrollBehavior.Smooth)
 
 /** the cursor over scrollbars, and while a scrollbar is dragged */
 var StyleSheet.scrollbarCursor by PropertyHandler<Cursor>("scrollbar-cursor", INHERIT, Cursor.Pointer)
@@ -473,6 +510,32 @@ val StyleSheet.computedTextHorizontalAlign: Double
 var StyleSheet.fontSize by PropertyHandler<LinearDimension>("font-size", INHERIT, 14.px)
 var StyleSheet.fontFamily by PropertyHandler("font-family", INHERIT, "default")
 var StyleSheet.overflow by PropertyHandler<Overflow>("overflow", RESET, Overflow.Visible)
+
+/** how the content overflows horizontally, as [overflow] when it is not set */
+var StyleSheet.overflowX by PropertyHandler<Overflow>("overflow-x", RESET, Overflow.Visible)
+
+/** how the content overflows vertically, as [overflow] when it is not set */
+var StyleSheet.overflowY by PropertyHandler<Overflow>("overflow-y", RESET, Overflow.Visible)
+
+/** the horizontal overflow: [overflowX], or [overflow] when it is not set */
+val StyleSheet.effectiveOverflowX: Overflow
+    get() = getProperty("overflow-x")?.value as? Overflow ?: overflow
+
+/** the vertical overflow: [overflowY], or [overflow] when it is not set */
+val StyleSheet.effectiveOverflowY: Overflow
+    get() = getProperty("overflow-y")?.value as? Overflow ?: overflow
+
+/** true when the content scrolls horizontally: by the program for [Overflow.Hidden], also by the user for [Overflow.Scroll] */
+val StyleSheet.scrollableX: Boolean get() = effectiveOverflowX != Overflow.Visible
+
+/** true when the content scrolls vertically, see [scrollableX] */
+val StyleSheet.scrollableY: Boolean get() = effectiveOverflowY != Overflow.Visible
+
+/**
+ * True when the element clips its content, when it scrolls along one of its axes; along an axis that is visible the
+ * content is clipped too, but does not scroll
+ */
+val StyleSheet.clipsContent: Boolean get() = scrollableX || scrollableY
 var StyleSheet.zIndex by PropertyHandler<ZIndex>("z-index", RESET, ZIndex.Auto)
 
 var StyleSheet.textVerticalAlign by PropertyHandler<TextAlign>(
