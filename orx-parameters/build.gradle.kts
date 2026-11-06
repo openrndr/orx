@@ -1,5 +1,6 @@
 plugins {
     id("org.openrndr.extra.convention.kotlin-multiplatform")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -8,6 +9,11 @@ kotlin {
             implementation(openrndr.application.core)
             implementation(openrndr.math)
             implementation(sharedLibs.kotlin.reflect)
+            implementation(sharedLibs.kotlin.serialization.core)
+        }
+
+        jvmMain.dependencies {
+            implementation(libs.gson)
         }
 
         jvmTest.dependencies {

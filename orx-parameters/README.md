@@ -77,3 +77,31 @@ Given an instance of an annotated class we can list the parameters using the ext
     val parameters = foo.listParameters()
 ```
 
+
+## Binding parameters
+
+`ParameterBindings` (JVM) binds the parameters of objects by labels, without a GUI. Values are read, set,
+randomized, saved and loaded by the label of an object and the name of a parameter. Objects held by properties with
+a `@NestedParameter` annotation are bound too, labeled `<label>/<label of the nested parameter>`.
+
+```kotlin
+val bindings = ParameterBindings()
+bindings.add(foo, "foo")
+
+bindings["foo", "d"] = 0.5          // set a value by the name of its property
+val d = bindings["foo", "d"]        // read it
+bindings.invoke("foo", "someAction") // call an action
+bindings.randomize(0.1)             // move values towards random values in their ranges
+
+bindings.changed.listen { println("${it.binding.label}.${it.parameter.name} = ${it.value}") }
+
+bindings.save(File("parameters.json"))
+bindings.load(File("parameters.json"))
+```
+
+The files are those that the GUI of orx-gui saves and loads. The GUI uses `ParameterBindings` too: pass one to
+`GUI(bindings = ...)` to share it with other code, like a remote control or a MIDI controller; the GUI shows the
+objects that are added to it and reports the changes of its controls through `changed`.
+
+The values of `@ListParameter` and `@MutableListParameter` properties implement `Selectable`, like the
+`SelectableList` and `SelectableMutableList` of orx-panel.

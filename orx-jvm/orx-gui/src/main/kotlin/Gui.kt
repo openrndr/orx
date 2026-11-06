@@ -31,64 +31,15 @@ There is a 6-step incantation to add a new parameter type
 
 1) Set up a control style in GuiStyles.kt, very likely analogous to the styles already in place.
 2) Add control creation code.
-3) Add value serialization code in GuiSerialization.kt, may need to update ParameterValue too.
-4) Add value deserialization code in GuiSerialization.kt.
-5) Add value randomization code.
+3) Add value serialization code to ParameterBindings in orx-parameters, may need to update ParameterValue too.
+4) Add value deserialization code to ParameterBindings.
+5) Add value randomization code to ParameterBindings.
 6) Add control update code.
 
 You can use your editor's search functionality to jump to "1)", "2)".
  */
-internal data class LabeledObject(val label: String, val obj: Any)
-
 internal class CompartmentState(var collapsed: Boolean, val parameterValues: MutableMap<String, Any> = mutableMapOf())
 private class SidebarState(var hidden: Boolean = false, var collapsed: Boolean = false, var scrollTop: Double = 0.0)
-internal class TrackedObjectBinding(
-    val parameters: List<Parameter>,
-    val parameterControls: MutableMap<Parameter, Element> = mutableMapOf(),
-    /** the bindings of the [ParameterType.Nested] parameters */
-    val nested: Map<Parameter, NestedBinding> = emptyMap()
-)
-
-/**
- * The binding of the object held by the property of a [ParameterType.Nested] parameter of [parent]. The property is
- * read every frame, when it holds another object, which can be of another class, the binding and the controls are
- * rebuilt for it.
- * @property label the label of the nested object, `<label of the parent>/<name of the nested parameter>`
- */
-internal class NestedBinding(val label: String, val parent: Any, val property: KProperty1<Any, Any?>) {
-    /** the bound object, null when the property held null */
-    var obj: Any? = null
-
-    /** the binding of [obj] */
-    var binding: TrackedObjectBinding? = null
-
-    /** the element that holds the controls of [obj], null when the controls are not built */
-    var content: Div? = null
-
-    val labeledObject: LabeledObject? get() = obj?.let { LabeledObject(label, it) }
-
-    /** the object the property currently holds */
-    fun current(): Any? = property.get(parent)
-}
-
-/**
- * The tracked objects and the objects nested in them through [NestedParameter] properties, parents before the
- * objects nested in them
- */
-internal fun Map<LabeledObject, TrackedObjectBinding>.withNested(): List<Pair<LabeledObject, TrackedObjectBinding>> {
-    val result = mutableListOf<Pair<LabeledObject, TrackedObjectBinding>>()
-    fun visit(labeledObject: LabeledObject, binding: TrackedObjectBinding) {
-        result.add(labeledObject to binding)
-        for (nested in binding.nested.values) {
-            val nestedObject = nested.labeledObject ?: continue
-            visit(nestedObject, nested.binding ?: continue)
-        }
-    }
-    for ((labeledObject, binding) in this) {
-        visit(labeledObject, binding)
-    }
-    return result
-}
 
 private val persistentCompartmentStates = mutableMapOf<Long, MutableMap<String, CompartmentState>>()
 private val persistentSidebarStates = mutableMapOf<Long, SidebarState>()
@@ -118,9 +69,7 @@ private fun <T : Any> getPersistedOrDefault(
 
 private fun <T : Any> setAndPersist(compartmentLabel: String, property: KMutableProperty1<Any, T>, obj: Any, value: T) {
     property.set(obj, value)
-    val state = compartmentState()[compartmentLabel]
-        ?: error("item '$compartmentLabel' not in state (${compartmentState()}. ContextID ${Driver.instance.contextID} )")
-    state.parameterValues[property.name] = value
+    compartmentState().getOrPut(compartmentLabel) { CompartmentState(false) }.parameterValues[property.name] = value
 }
 
 private fun getPersistedSelectedIndex(compartmentLabel: String, property: KMutableProperty1<*, *>, obj: Any): Int? {
@@ -134,9 +83,7 @@ private fun setAndPersistSelectedIndex(
     obj: Any,
     value: Int
 ) {
-    val state = compartmentState()[compartmentLabel]
-        ?: error("item '$compartmentLabel' not in state (${compartmentState()}. ContextID ${Driver.instance.contextID} )")
-    state.parameterValues["${property.name}_selectedIndex"] = value
+    compartmentState().getOrPut(compartmentLabel) { CompartmentState(false) }.parameterValues["${property.name}_selectedIndex"] = value
 }
 
 private fun getPersistedListElements(compartmentLabel: String, property: KMutableProperty1<*, *>, obj: Any): List<*>? {
@@ -150,9 +97,7 @@ private fun setAndPersistListElements(
     obj: Any,
     value: List<*>
 ) {
-    val state = compartmentState()[compartmentLabel]
-        ?: error("item '$compartmentLabel' not in state (${compartmentState()}. ContextID ${Driver.instance.contextID} )")
-    state.parameterValues["${property.name}_elements"] = value
+    compartmentState().getOrPut(compartmentLabel) { CompartmentState(false) }.parameterValues["${property.name}_elements"] = value
 }
 
 private val logger = KotlinLogging.logger { }
@@ -165,10 +110,16 @@ class GUIAppearance(
 
 class GUIEvent()
 
+/**
+ * A GUI with controls for the parameters of objects, see orx-parameters. The parameters are bound by [bindings],
+ * which can be shared with other code, like remote controls; objects added to it directly are shown too.
+ */
 @Suppress("unused", "UNCHECKED_CAST")
 open class GUI(
     val appearance: GUIAppearance = GUIAppearance(),
     val defaultStyles: List<StyleSheet> = defaultStyles(),
+    /** the bindings of the parameters of the objects that the GUI shows */
+    val bindings: ParameterBindings = ParameterBindings(),
 ) : Extension {
 
     /**
@@ -243,20 +194,29 @@ open class GUI(
     private val compartments = mutableMapOf<String, Div>()
     private val elementsForObject = mutableMapOf<Any, List<Element>>()
 
-    private fun addCollapsible(parent: Element, labeledObject: LabeledObject, binding: TrackedObjectBinding) {
+    /** the controls of the parameters of the bound objects, and the elements that hold the controls of nested objects */
+    private val parameterControls = java.util.IdentityHashMap<ParameterBindings.Binding, MutableMap<Parameter, Element>>()
+    private val nestedContents = java.util.IdentityHashMap<ParameterBindings.NestedBinding, Div>()
+
+    init {
+        bindings.added.listen { added(it) }
+        bindings.removed.listen { removed(it) }
+        bindings.rebound.listen { rebound(it) }
+    }
+
+    private fun addCollapsible(parent: Element, binding: ParameterBindings.Binding) {
         parent.append {
 
-            val (label, _) = labeledObject
+            val label = binding.label
 
             val h3Header = if (showCompartmentHeaders) h3 { label } else null
             val collapsible = div("compartment") {
-                addControls(labeledObject, binding)
+                addControls(binding)
             }
             compartments[label] = collapsible
-            elementsForObject[labeledObject.obj] = listOfNotNull(h3Header, collapsible)
+            elementsForObject[binding.obj] = listOfNotNull(h3Header, collapsible)
 
-            /* this is guaranteed to be in the dictionary after insertion through add() */
-            val collapseState = compartmentState()[label]!!
+            val collapseState = compartmentState().getOrPut(label) { CompartmentState(compartmentsCollapsedByDefault) }
             if (collapseState.collapsed) {
                 collapsible.classes.add(collapsed)
             }
@@ -287,8 +247,8 @@ open class GUI(
      */
     fun selectCompartment(label: String) {
         // only compartments, the states of nested groups are kept
-        for (labeledObject in trackedObjects.keys) {
-            compartmentState()[labeledObject.label]?.collapsed = labeledObject.label != label
+        for (binding in bindings.bindings) {
+            compartmentState()[binding.label]?.collapsed = binding.label != label
         }
         for ((compartmentLabel, compartment) in compartments) {
             if (compartmentLabel == label) {
@@ -442,8 +402,8 @@ open class GUI(
         val sidebar = parent.div("sidebar") {
             id = "sidebar"
             scrollTop = sidebarState().scrollTop
-            for ((labeledObject, binding) in trackedObjects) {
-                addCollapsible(this, labeledObject, binding)
+            for (binding in bindings.bindings) {
+                addCollapsible(this, binding)
             }
         }
         this.sidebar = sidebar
@@ -460,9 +420,9 @@ open class GUI(
     internal fun buildCompartmentSelector(parent: Element): DropdownButton {
         check(compartmentSelector == null) { "compartmentSelector() can only be called once in a GUI layout" }
         val selector = parent.dropdownButton("compartment-selector", label = "") {
-            for (labeledObject in trackedObjects.keys) {
+            for (binding in bindings.bindings) {
                 item {
-                    label = labeledObject.label
+                    label = binding.label
                 }
             }
             events.valueChanged.listen {
@@ -471,8 +431,8 @@ open class GUI(
         }
         compartmentSelector = selector
         // keep exactly one compartment expanded, preferably the first one that already is
-        val selected = trackedObjects.keys.firstOrNull { compartmentState()[it.label]?.collapsed == false }
-            ?: trackedObjects.keys.firstOrNull()
+        val selected = bindings.bindings.firstOrNull { compartmentState()[it.label]?.collapsed == false }
+            ?: bindings.bindings.firstOrNull()
         selected?.let { selectCompartment(it.label) }
         return selector
     }
@@ -486,12 +446,13 @@ open class GUI(
 
     /* 2) control creation. create control, set label, set range, setup event-handler, load values */
     //<editor-fold desc="2) Control creation">
-    private fun Div.addControls(labeledObject: LabeledObject, binding: TrackedObjectBinding) {
+    private fun Div.addControls(binding: ParameterBindings.Binding) {
+        val controls = parameterControls.getOrPut(binding) { mutableMapOf() }
         for (parameter in binding.parameters) {
             if (parameter.parameterType == ParameterType.Nested) {
                 binding.nested[parameter]?.let { addNested(parameter, it) }
             } else {
-                binding.parameterControls[parameter] = addControl(labeledObject, parameter)
+                controls[parameter] = addControl(binding, parameter)
             }
         }
     }
@@ -499,19 +460,14 @@ open class GUI(
     /**
      * Add a group with the controls of a nested object, collapsed and expanded by clicking its header
      */
-    private fun Div.addNested(parameter: Parameter, nested: NestedBinding): Div =
+    private fun Div.addNested(parameter: Parameter, nested: ParameterBindings.NestedBinding): Div =
         div("nested") {
             val header = h3("nested-header") { parameter.label }
             val content = div("nested-content") {
-                val labeledObject = nested.labeledObject
-                val binding = nested.binding
-                if (labeledObject != null && binding != null) {
-                    addControls(labeledObject, binding)
-                }
+                nested.binding?.let { addControls(it) }
             }
-            nested.content = content
-            /* this is guaranteed to be in the dictionary after binding through add() */
-            val collapseState = compartmentState()[nested.label]!!
+            nestedContents[nested] = content
+            val collapseState = compartmentState().getOrPut(nested.label) { CompartmentState(false) }
             if (collapseState.collapsed) {
                 content.classes.add(collapsed)
             }
@@ -529,7 +485,13 @@ open class GUI(
             }
         }
 
-    private fun Div.addControl(compartment: LabeledObject, parameter: Parameter): Element {
+    /** a control changed [parameter] of [binding] to [value], the listeners of the GUI and of [bindings] hear it */
+    private fun changedByControl(binding: ParameterBindings.Binding, parameter: Parameter, value: Any?) {
+        onChangeListener?.invoke(parameter.name, value)
+        bindings.changed.trigger(ParameterBindings.Change(binding, parameter, binding.get(parameter)))
+    }
+
+    private fun Div.addControl(compartment: ParameterBindings.Binding, parameter: Parameter): Element {
         val obj = compartment.obj
 
         return when (parameter.parameterType) {
@@ -548,7 +510,7 @@ open class GUI(
                             it.newValue.toInt()
                         )
                         (parameter.property as KMutableProperty1<Any, Int>).set(obj, value.toInt())
-                        onChangeListener?.invoke(parameter.property!!.name, it.newValue)
+                        changedByControl(compartment, parameter, it.newValue)
                     }
                     getPersistedOrDefault(
                         compartment.label,
@@ -573,7 +535,7 @@ open class GUI(
                             obj,
                             it.newValue
                         )
-                        onChangeListener?.invoke(parameter.property!!.name, it.newValue)
+                        changedByControl(compartment, parameter, it.newValue)
                     }
                     getPersistedOrDefault(
                         compartment.label,
@@ -594,7 +556,7 @@ open class GUI(
                     events.clicked.listen {
                         /* the `obj` we pass in here is the receiver */
                         parameter.function!!.call(obj)
-                        onChangeListener?.invoke(parameter.function!!.name, null)
+                        changedByControl(compartment, parameter, null)
                     }
                 }
             }
@@ -610,7 +572,7 @@ open class GUI(
                             obj,
                             it.newValue
                         )
-                        onChangeListener?.invoke(parameter.property!!.name, it.newValue)
+                        changedByControl(compartment, parameter, it.newValue)
                     }
                     getPersistedOrDefault(
                         compartment.label,
@@ -633,7 +595,7 @@ open class GUI(
                             obj,
                             it.newValue
                         )
-                        onChangeListener?.invoke(parameter.property!!.name, it.newValue)
+                        changedByControl(compartment, parameter, it.newValue)
                     }
                     getPersistedOrDefault(
                         compartment.label,
@@ -655,7 +617,7 @@ open class GUI(
                             obj,
                             it.color
                         )
-                        onChangeListener?.invoke(parameter.property!!.name, it.color)
+                        changedByControl(compartment, parameter, it.color)
                     }
                     getPersistedOrDefault(
                         compartment.label,
@@ -685,7 +647,7 @@ open class GUI(
                             obj,
                             it.newValue
                         )
-                        onChangeListener?.invoke(parameter.property!!.name, it.newValue)
+                        changedByControl(compartment, parameter, it.newValue)
                     }
                 }
             }
@@ -712,7 +674,7 @@ open class GUI(
                                     obj,
                                     resolvedPath
                                 )
-                                onChangeListener?.invoke(parameter.property!!.name, resolvedPath)
+                                changedByControl(compartment, parameter, resolvedPath)
                             }
                         } else {
                             openFolderDialog(contextID = parameter.pathContext ?: "null") {
@@ -727,7 +689,7 @@ open class GUI(
                                     obj,
                                     resolvedPath
                                 )
-                                onChangeListener?.invoke(parameter.property!!.name, resolvedPath)
+                                changedByControl(compartment, parameter, resolvedPath)
                             }
                         }
                     }
@@ -749,7 +711,7 @@ open class GUI(
                             obj,
                             it.newValue.toMutableList()
                         )
-                        onChangeListener?.invoke(parameter.property!!.name, it.newValue)
+                        changedByControl(compartment, parameter, it.newValue)
                     }
                     getPersistedOrDefault(
                         compartment.label,
@@ -781,7 +743,7 @@ open class GUI(
                             it.newValue
                         )
 
-                        onChangeListener?.invoke(parameter.property!!.name, it.newValue)
+                        changedByControl(compartment, parameter, it.newValue)
                     }
                     getPersistedOrDefault(
                         compartment.label,
@@ -808,7 +770,7 @@ open class GUI(
                             it.newValue
                         )
 
-                        onChangeListener?.invoke(parameter.property!!.name, it.newValue)
+                        changedByControl(compartment, parameter, it.newValue)
                     }
                     getPersistedOrDefault(
                         compartment.label,
@@ -835,7 +797,7 @@ open class GUI(
                             it.newValue
                         )
 
-                        onChangeListener?.invoke(parameter.property!!.name, it.newValue)
+                        changedByControl(compartment, parameter, it.newValue)
                     }
                     getPersistedOrDefault(
                         compartment.label,
@@ -883,7 +845,7 @@ open class GUI(
                             obj,
                             newIndex
                         )
-                        onChangeListener?.invoke(prop.name, currentSelectableList.selected)
+                        changedByControl(compartment, parameter, currentSelectableList.selected)
                     }
                     val selectedItem = selectableList.selected
                     value = items().find { it.data == selectedItem }
@@ -952,7 +914,7 @@ open class GUI(
                         setAndPersistSelectedIndex(
                             compartment.label, prop, obj, newIndex
                         )
-                        onChangeListener?.invoke(prop.name, currentSelectableMutableList.selected)
+                        changedByControl(compartment, parameter, currentSelectableMutableList.selected)
                     }
 
                     val selectedItem = selectableMutableList.selected
@@ -984,9 +946,7 @@ open class GUI(
                             it.value.data as? Enum<*> ?: error("no data")
                         )
 
-                        onChangeListener?.invoke(
-                            parameter.property!!.name,
-                            it.value.data as? Enum<*> ?: error("no data")
+                        changedByControl(compartment, parameter, it.value.data as? Enum<*> ?: error("no data")
                         )
                     }
                     getPersistedOrDefault(
@@ -1009,49 +969,26 @@ open class GUI(
     }
     //</editor-fold>
 
-    private val trackedObjects = mutableMapOf<LabeledObject, TrackedObjectBinding>()
-
     private fun updateControls() {
-        for ((labeledObject, binding) in trackedObjects.withNested()) {
-            for ((parameter, control) in binding.parameterControls) {
-                updateControl(labeledObject, parameter, control)
+        for (binding in bindings.all()) {
+            for ((parameter, control) in parameterControls[binding] ?: continue) {
+                updateControl(binding, parameter, control)
             }
         }
     }
 
-    @Serializable
-    class ParameterValue(
-        var doubleValue: Double? = null,
-        var intValue: Int? = null,
-        var booleanValue: Boolean? = null,
-        var colorValue: ColorRGBa? = null,
-        var vector2Value: Vector2? = null,
-        var vector3Value: Vector3? = null,
-        var vector4Value: Vector4? = null,
-        var doubleListValue: MutableList<Double>? = null,
-        var intListValue: MutableList<Int>? = null,
-        var stringListValue: MutableList<String>? = null,
-        var textValue: String? = null,
-        var optionValue: String? = null,
-        var minValue: Double? = null,
-        var maxValue: Double? = null,
-        var selectedIndex: Int? = null,
-        var listElementType: String? = null
-    )
-
+    /** the values of parameters as they are saved, see [ParameterBindings.toObject] */
+    typealias ParameterValue = org.openrndr.extra.parameters.ParameterValue
 
     /**
      * Can be called by the user to obtain an object to be serialized
      * externally. This allows the user to combine custom data with gui
      * state and save it all to one file. Complements `.fromObject()`.
      */
-    fun toObject(): Map<String, Map<String, ParameterValue>> {
-        rebindNested()
-        return trackedObjects.toParameterValues()
-    }
+    fun toObject(): Map<String, Map<String, ParameterValue>> = bindings.toObject()
 
     fun saveParameters(file: File) {
-        file.writeText(parameterValuesToJson(toObject()))
+        bindings.save(file)
     }
 
     /**
@@ -1061,17 +998,42 @@ open class GUI(
      * Complements `.toObject()`.
      */
     fun fromObject(labeledValues: Map<String, Map<String, ParameterValue>>) {
-        rebindNested()
-        trackedObjects.applyParameterValues(labeledValues)
+        bindings.fromObject(labeledValues)
         updateControls()
+        persistValues()
     }
 
     fun loadParameters(file: File) {
-        fromObject(parameterValuesFromJson(file.readText()))
+        bindings.load(file)
+        updateControls()
+        persistValues()
         loaded.trigger(GUIEvent())
     }
 
-    private fun updateControl(labeledObject: LabeledObject, parameter: Parameter, control: Element) {
+    /**
+     * Keeps the values of the parameters for when the GUI is created again in the same context, after values were
+     * set by other means than the controls
+     */
+    private fun persistValues() {
+        if (!persistState) return
+        for (binding in bindings.all()) {
+            val values = compartmentState().getOrPut(binding.label) { CompartmentState(false) }.parameterValues
+            for (parameter in binding.valueParameters) {
+                val property = parameter.property ?: continue
+                val value = binding.get(parameter) ?: continue
+                when (parameter.parameterType) {
+                    ParameterType.List -> values["${property.name}_selectedIndex"] = (value as Selectable).selectedIndex
+                    ParameterType.MutableList -> {
+                        values["${property.name}_selectedIndex"] = (value as Selectable).selectedIndex
+                        values["${property.name}_elements"] = (value as List<*>).toList()
+                    }
+                    else -> values[property.name] = value
+                }
+            }
+        }
+    }
+
+    private fun updateControl(labeledObject: ParameterBindings.Binding, parameter: Parameter, control: Element) {
         when (parameter.parameterType) {
             /* 5) Update control from property value */
             ParameterType.Double -> {
@@ -1163,104 +1125,13 @@ open class GUI(
         }
     }
 
-    fun randomize(strength: Double = 0.05) {
-        rebindNested()
-        for ((labeledObject, binding) in trackedObjects.withNested()) {
-            // -- only randomize visible parameters
-            for (parameter in binding.parameterControls.keys) {
-                when (parameter.parameterType) {
-                    /* 6) Set up value randomizers */
-                    ParameterType.Double -> {
-                        val min = parameter.doubleRange!!.start
-                        val max = parameter.doubleRange!!.endInclusive
-                        val currentValue = (parameter.property as KMutableProperty1<Any, Double>).get(labeledObject.obj)
-                        val randomValue = Double.uniform(min, max)
-                        val newValue = mix(currentValue, randomValue, strength)
-                        (parameter.property as KMutableProperty1<Any, Double>).set(labeledObject.obj, newValue)
-                    }
-
-                    ParameterType.Int -> {
-                        val min = parameter.intRange!!.first
-                        val max = parameter.intRange!!.last
-                        val currentValue = (parameter.property as KMutableProperty1<Any, Int>).get(labeledObject.obj)
-                        val randomValue = Double.uniform(min.toDouble(), max.toDouble())
-                        val newValue = mix(currentValue.toDouble(), randomValue, strength).roundToInt()
-                        (parameter.property as KMutableProperty1<Any, Int>).set(labeledObject.obj, newValue)
-                    }
-
-                    ParameterType.Boolean -> {
-                        //I am not sure about randomizing boolean values here
-                        //(parameter.property as KMutableProperty1<Any, Boolean>).set(labeledObject.obj, (Math.random() < 0.5))
-                    }
-
-                    ParameterType.Color -> {
-                        val currentValue =
-                            (parameter.property as KMutableProperty1<Any, ColorRGBa>).get(labeledObject.obj)
-                        val randomValue =
-                            ColorRGBa.fromVector(Vector3.uniform(0.0, 1.0), currentValue.alpha, currentValue.linearity)
-                        val newValue = currentValue.mix(randomValue, strength)
-                        (parameter.property as KMutableProperty1<Any, ColorRGBa>).set(labeledObject.obj, newValue)
-                    }
-
-                    ParameterType.Vector2 -> {
-                        val min = parameter.doubleRange!!.start
-                        val max = parameter.doubleRange!!.endInclusive
-                        val currentValue =
-                            (parameter.property as KMutableProperty1<Any, Vector2>).get(labeledObject.obj)
-                        val randomValue = Vector2.uniform(min, max)
-                        val newValue = currentValue.mix(randomValue, strength)
-                        (parameter.property as KMutableProperty1<Any, Vector2>).set(labeledObject.obj, newValue)
-                    }
-
-                    ParameterType.XY -> {
-                        val min = parameter.vectorRange!!.first
-                        val max = parameter.vectorRange!!.second
-                        val currentValue =
-                            (parameter.property as KMutableProperty1<Any, Vector2>).get(labeledObject.obj)
-                        val randomValue = Vector2.uniform(min, max)
-                        val newValue = currentValue.mix(randomValue, strength)
-                        (parameter.property as KMutableProperty1<Any, Vector2>).set(labeledObject.obj, newValue)
-                    }
-
-                    ParameterType.Vector3 -> {
-                        val min = parameter.doubleRange!!.start
-                        val max = parameter.doubleRange!!.endInclusive
-                        val currentValue =
-                            (parameter.property as KMutableProperty1<Any, Vector3>).get(labeledObject.obj)
-                        val randomValue = Vector3.uniform(min, max)
-                        val newValue = currentValue.mix(randomValue, strength)
-                        (parameter.property as KMutableProperty1<Any, Vector3>).set(labeledObject.obj, newValue)
-                    }
-
-                    ParameterType.Vector4 -> {
-                        val min = parameter.doubleRange!!.start
-                        val max = parameter.doubleRange!!.endInclusive
-                        val currentValue =
-                            (parameter.property as KMutableProperty1<Any, Vector4>).get(labeledObject.obj)
-                        val randomValue = Vector4.uniform(min, max)
-                        val newValue = currentValue.mix(randomValue, strength)
-                        (parameter.property as KMutableProperty1<Any, Vector4>).set(labeledObject.obj, newValue)
-                    }
-
-                    else -> {
-                        // intentionally do nothing
-                    }
-                }
-            }
-        }
-        updateControls()
-    }
-
     /**
-     * Recursively find a unique label
-     * @param label to find an alternate for in case it already exist
+     * Moves the values of the parameters towards random values by [strength], see [ParameterBindings.randomize]
      */
-    private fun resolveUniqueLabel(label: String): String {
-        return trackedObjects.keys.find { it.label == label }?.let { lo ->
-            resolveUniqueLabel(Regex("(.*) / ([0-9]+)").matchEntire(lo.label)?.let {
-                "${it.groupValues[1]} / ${1 + it.groupValues[2].toInt()}"
-            } ?: "$label / 2")
-        } ?: label
+    fun randomize(strength: Double = 0.05) {
+        bindings.randomize(strength)
+        updateControls()
+        persistValues()
     }
 
     /**
@@ -1270,93 +1141,47 @@ open class GUI(
      * @return pass-through of [objectWithParameters]
      */
     fun <T : Any> add(objectWithParameters: T, label: String? = objectWithParameters.title()): T {
-        val parameters = objectWithParameters.listParameters()
-        val uniqueLabel = resolveUniqueLabel(label ?: "No name")
-
-        if (parameters.isNotEmpty()) {
-            val collapseStates = persistentCompartmentStates.getOrPut(Driver.instance.contextID) {
-                mutableMapOf()
-            }
-            collapseStates.getOrPut(uniqueLabel) {
-                CompartmentState(compartmentsCollapsedByDefault)
-            }
-
-            val labeledObject = LabeledObject(uniqueLabel, objectWithParameters)
-            val binding = bind(uniqueLabel, objectWithParameters, parameters)
-            trackedObjects[labeledObject] = binding
-            compartmentSelector?.let { selector ->
-                selector.item {
-                    this.label = uniqueLabel
-                }
-                // only the selected compartment is expanded, the new compartment is selected if there is none
-                if (selector.value == null) {
-                    selectCompartment(uniqueLabel)
-                } else {
-                    compartmentState()[uniqueLabel]?.collapsed = true
-                }
-            }
-            sidebar?.let {
-                addCollapsible(it, labeledObject, binding)
-            }
-
-        }
+        bindings.add(objectWithParameters, label)
         return objectWithParameters
     }
 
-    /**
-     * Bind [parameters] of [obj], and recursively the parameters of the objects nested in [obj], which are labeled
-     * `<label>/<name of the nested parameter>`.
-     */
-    private fun bind(label: String, obj: Any, parameters: List<Parameter>): TrackedObjectBinding {
-        val nested = parameters.filter { it.parameterType == ParameterType.Nested }.associateWith { parameter ->
-            val nestedLabel = "$label/${parameter.label}"
-            compartmentState().getOrPut(nestedLabel) { CompartmentState(false) }
-            @Suppress("UNCHECKED_CAST")
-            NestedBinding(nestedLabel, obj, parameter.nestedProperty as KProperty1<Any, Any?>).apply {
-                this.obj = current()
-                binding = this.obj?.let { bind(nestedLabel, it, parameter.nestedParameters ?: emptyList()) }
+    /** builds the compartment of an object that was added to [bindings] */
+    private fun added(binding: ParameterBindings.Binding) {
+        compartmentState().getOrPut(binding.label) { CompartmentState(compartmentsCollapsedByDefault) }
+        compartmentSelector?.let { selector ->
+            selector.item {
+                this.label = binding.label
+            }
+            // only the selected compartment is expanded, the new compartment is selected if there is none
+            if (selector.value == null) {
+                selectCompartment(binding.label)
+            } else {
+                compartmentState()[binding.label]?.collapsed = true
             }
         }
-        return TrackedObjectBinding(parameters, nested = nested)
+        sidebar?.let {
+            addCollapsible(it, binding)
+        }
     }
 
     /**
-     * Rebind the nested objects whose properties hold other objects than the ones that are bound, and rebuild their
-     * controls. The values persisted for the replaced objects and the objects nested in them are dropped, a new
-     * object keeps its own values.
+     * Rebuilds the controls of a nested object that is bound again. The values persisted for the replaced object and
+     * the objects nested in it are dropped, a new object keeps its own values.
      */
-    private fun rebindNested() {
-        fun visit(binding: TrackedObjectBinding) {
-            for (nested in binding.nested.values) {
-                val current = nested.current()
-                if (current !== nested.obj) {
-                    compartmentState().forEach { (label, state) ->
-                        if (label == nested.label || label.startsWith("${nested.label}/")) {
-                            state.parameterValues.clear()
-                        }
-                    }
-                    nested.obj = current
-                    nested.binding = current?.let { bind(nested.label, it, it.listParameters()) }
-                    nested.content?.let { content ->
-                        for (child in content.children.toList()) {
-                            content.remove(child)?.close()
-                        }
-                        val labeledObject = nested.labeledObject
-                        val nestedBinding = nested.binding
-                        if (labeledObject != null && nestedBinding != null) {
-                            content.addControls(labeledObject, nestedBinding)
-                        }
-                        content.requestRedraw()
-                    }
-                    onChangeListener?.invoke(nested.property.name, current)
-                } else {
-                    nested.binding?.let { visit(it) }
-                }
+    private fun rebound(nested: ParameterBindings.NestedBinding) {
+        compartmentState().forEach { (label, state) ->
+            if (label == nested.label || label.startsWith("${nested.label}/")) {
+                state.parameterValues.clear()
             }
         }
-        for (binding in trackedObjects.values) {
-            visit(binding)
+        nestedContents[nested]?.let { content ->
+            for (child in content.children.toList()) {
+                content.remove(child)?.close()
+            }
+            nested.binding?.let { content.addControls(it) }
+            content.requestRedraw()
         }
+        onChangeListener?.invoke(nested.property.name, nested.obj)
     }
 
     /**
@@ -1365,25 +1190,23 @@ open class GUI(
      * @param objectWithParameters the original object added to the GUI using the `add()` method.
      */
     fun <T : Any> remove(objectWithParameters: T) {
-        val found = trackedObjects.filter { it.key.obj == objectWithParameters }
-        val collapseStates = persistentCompartmentStates.getOrPut(Driver.instance.contextID) {
-            mutableMapOf()
-        }
-        found.forEach { (labeledObject, binding) ->
-            collapseStates.keys.removeAll { it == labeledObject.label || it.startsWith("${labeledObject.label}/") }
-            trackedObjects.remove(labeledObject, binding)
-            compartments.remove(labeledObject.label)
-            compartmentSelector?.let { selector ->
-                selector.items().find { it.label == labeledObject.label }?.let { item ->
-                    selector.remove(item)
-                    if (selector.value == item) {
-                        selector.value = null
-                        trackedObjects.keys.firstOrNull()?.let { selectCompartment(it.label) }
-                    }
+        bindings.remove(objectWithParameters)
+    }
+
+    /** removes the compartment of an object that was removed from [bindings] */
+    private fun removed(binding: ParameterBindings.Binding) {
+        compartmentState().keys.removeAll { it == binding.label || it.startsWith("${binding.label}/") }
+        compartments.remove(binding.label)
+        compartmentSelector?.let { selector ->
+            selector.items().find { it.label == binding.label }?.let { item ->
+                selector.remove(item)
+                if (selector.value == item) {
+                    selector.value = null
+                    bindings.bindings.firstOrNull()?.let { selectCompartment(it.label) }
                 }
             }
         }
-        elementsForObject.remove(objectWithParameters)?.forEach {
+        elementsForObject.remove(binding.obj)?.forEach {
             it.parent?.remove(it)?.close()
         }
     }
@@ -1399,7 +1222,7 @@ open class GUI(
     }
 
     override fun afterDraw(drawer: Drawer, program: Program) {
-        rebindNested()
+        bindings.rebindNested()
         if (doubleBind) {
             updateControls()
         }

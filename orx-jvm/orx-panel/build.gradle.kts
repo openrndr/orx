@@ -9,6 +9,8 @@ tasks.test {
 }
 
 dependencies {
+    // SelectableList and SelectableMutableList implement Selectable
+    api(project(":orx-parameters"))
     implementation(project(":orx-expression-evaluator"))
     implementation(project(":orx-color"))
     implementation(project(":orx-text-writer"))

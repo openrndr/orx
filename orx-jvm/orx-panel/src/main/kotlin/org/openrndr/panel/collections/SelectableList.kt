@@ -1,6 +1,7 @@
 package org.openrndr.panel.collections
 
 import org.openrndr.events.Event
+import org.openrndr.extra.parameters.Selectable
 
 /**
  * A wrapper around a List that adds selection capability.
@@ -14,7 +15,7 @@ import org.openrndr.events.Event
 class SelectableList<E>(
     private val list: List<E>,
     selectedIndex: Int = -1
-) : List<E> by list, AutoCloseable {
+) : List<E> by list, Selectable, AutoCloseable {
 
     val changed = Event<SelectableList<E>>()
 
@@ -24,7 +25,7 @@ class SelectableList<E>(
      * The index of the currently selected element.
      * Setting this property will trigger the changed event.
      */
-    var selectedIndex: Int
+    override var selectedIndex: Int
         get() = _selectedIndex
         set(value) {
             if (value != _selectedIndex) {

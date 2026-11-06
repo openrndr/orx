@@ -1,6 +1,7 @@
 package org.openrndr.panel.collections
 
 import org.openrndr.events.Event
+import org.openrndr.extra.parameters.Selectable
 import java.util.function.Predicate
 import java.util.function.UnaryOperator
 
@@ -16,7 +17,7 @@ import java.util.function.UnaryOperator
 open class SelectableMutableList<E>(
     elements: Collection<E> = emptyList(),
     selectedIndex: Int = -1
-) : ArrayList<E>(elements), AutoCloseable {
+) : ArrayList<E>(elements), Selectable, AutoCloseable {
 
     val changed = Event<SelectableMutableList<E>>()
 
@@ -35,7 +36,7 @@ open class SelectableMutableList<E>(
      * The index of the currently selected element.
      * Setting this property will trigger the changed event.
      */
-    var selectedIndex: Int
+    override var selectedIndex: Int
         get() = _selectedIndex
         set(value) {
             if (value != _selectedIndex) {
