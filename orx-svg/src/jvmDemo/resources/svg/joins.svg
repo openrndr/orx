@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+  <style>
+    .join { fill: none; stroke: #202020; stroke-width: 14; stroke-miterlimit: 2.5; }
+    .guide { fill: none; stroke: #e8574a; stroke-width: 1; }
+    text { font-family: Plex; font-size: 14px; fill: #202020; text-anchor: middle; }
+  </style>
+  <defs>
+    <!-- markers painted with the fill and stroke of the path that uses them -->
+    <marker id="head" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="context-stroke"/>
+    </marker>
+    <marker id="outlined" viewBox="-1 -1 12 12" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="context-fill" stroke="context-stroke" stroke-width="1.5" stroke-linejoin="round"/>
+    </marker>
+    <marker id="ring" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7">
+      <circle cx="5" cy="5" r="3.5" fill="context-fill" stroke="context-stroke" stroke-width="1.5"/>
+    </marker>
+  </defs>
+  <rect width="720" height="480" fill="#f4efe6"/>
+
+  <g transform="translate(80 0)">
+    <path id="j0" class="join" style="stroke-linejoin: miter" d="M -40 220 L 0 80 L 40 220"/>
+    <path class="guide" d="M -40 220 L 0 80 L 40 220"/>
+    <text y="250">miter</text>
+  </g>
+  <g transform="translate(220 0)">
+    <path id="j1" class="join" style="stroke-linejoin: miter-clip" d="M -40 220 L 0 80 L 40 220"/>
+    <path class="guide" d="M -40 220 L 0 80 L 40 220"/>
+    <text y="250">miter-clip</text>
+  </g>
+  <g transform="translate(360 0)">
+    <path id="j2" class="join" style="stroke-linejoin: arcs" d="M -40 220 L 0 80 L 40 220"/>
+    <path class="guide" d="M -40 220 L 0 80 L 40 220"/>
+    <text y="250">arcs</text>
+  </g>
+  <g transform="translate(500 0)">
+    <path id="j3" class="join" style="stroke-linejoin: bevel" d="M -40 220 L 0 80 L 40 220"/>
+    <path class="guide" d="M -40 220 L 0 80 L 40 220"/>
+    <text y="250">bevel</text>
+  </g>
+  <g transform="translate(640 0)">
+    <path id="j4" class="join" style="stroke-linejoin: round" d="M -40 220 L 0 80 L 40 220"/>
+    <path class="guide" d="M -40 220 L 0 80 L 40 220"/>
+    <text y="250">round</text>
+  </g>
+
+  <path d="M 60 320 L 300 320" fill="#3d5a99" stroke="#3d5a99" stroke-width="3" marker-start="url(#head)" marker-end="url(#head)"/>
+  <path d="M 60 380 L 300 380" fill="#f2b134" stroke="#e8574a" stroke-width="3" marker-start="url(#outlined)" marker-end="url(#outlined)"/>
+  <polyline points="380,420 450,320 520,420 590,320 660,420" fill="none" stroke="#202020" stroke-width="2" marker-start="url(#ring)" marker-mid="url(#ring)" marker-end="url(#ring)"/>
+  <polyline points="380,360 450,290 520,360" fill="#4c9e8a" stroke="#202020" stroke-width="2" marker-mid="url(#ring)"/>
+</svg>

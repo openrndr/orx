@@ -110,6 +110,7 @@ sealed class CompositionNode {
             style.lineJoin = when (value) {
                 org.openrndr.draw.LineJoin.BEVEL -> LineJoin.Bevel
                 org.openrndr.draw.LineJoin.MITER -> LineJoin.Miter
+                org.openrndr.draw.LineJoin.MITER_CLIP -> LineJoin.MiterClip
                 org.openrndr.draw.LineJoin.ROUND -> LineJoin.Round
             }
         }

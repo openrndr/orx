@@ -599,21 +599,18 @@ sealed interface LineJoin : AttributeOrPropertyValue {
         override fun toString() = "round"
     }
 
-    /**
-     * A miter that is clipped at the miter limit instead of beveled, like SVG 2's miter-clip. Drawn as a miter until
-     * OPENRNDR draws clipped miters.
-     */
+    /** A miter that is clipped at the miter limit instead of beveled, like SVG 2's miter-clip */
     object MiterClip : LineJoin {
-        override val value = org.openrndr.draw.LineJoin.MITER
+        override val value = org.openrndr.draw.LineJoin.MITER_CLIP
         override fun toString() = "miter-clip"
     }
 
     /**
-     * Outer edges extended as arcs until they meet, like SVG 2's arcs. Drawn as a miter until OPENRNDR draws arcs
-     * joins.
+     * Outer edges extended as arcs until they meet, like SVG 2's arcs. Drawn as a clipped miter, which is what arcs
+     * joins fall back to, and what they are between straight segments when within the miter limit.
      */
     object Arcs : LineJoin {
-        override val value = org.openrndr.draw.LineJoin.MITER
+        override val value = org.openrndr.draw.LineJoin.MITER_CLIP
         override fun toString() = "arcs"
     }
 }
