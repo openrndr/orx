@@ -53,7 +53,8 @@ import java.util.concurrent.ConcurrentLinkedQueue
  *   key name as used by [org.openrndr.KeyEvent.name] (e.g. `a`, `spacebar`, `arrow-left`).
  *   An optional `modifiers` query parameter takes a comma-separated list of `SHIFT`, `CTRL`,
  *   `ALT`, `SUPER`.
- * - `POST /mouse/move?x=<x>&y=<y>` -- move the mouse to an absolute window position.
+ * - `POST /mouse/move?x=<x>&y=<y>` -- move the mouse to an absolute window position; while a button is down
+ *   (pressed with `/mouse/button/down`) the move is a drag.
  * - `POST /mouse/button/down?x=<x>&y=<y>&button=<LEFT|RIGHT|CENTER>`,
  *   `POST /mouse/button/up?...` -- press/release a mouse button, optionally moving to `x`/`y`
  *   first (omit `x`/`y` to use the current position).
@@ -68,6 +69,9 @@ import java.util.concurrent.ConcurrentLinkedQueue
  */
 class RemoteControl : Extension {
     override var enabled: Boolean = true
+
+    /** the button that is down, pressed with the button routes, moves drag while it is */
+    private var buttonDown: MouseButton? = null
 
     /** the network interface to bind to; the default only accepts connections from localhost */
     var network: String = "127.0.0.1"
@@ -145,16 +149,16 @@ class RemoteControl : Extension {
                     actionQueue.add {
                         val previous = program.mouse.position
                         program.setCursorPosition(position)
-                        program.mouse.moved.trigger(
-                            MouseEvent(
-                                position,
-                                Vector2.ZERO,
-                                position - previous,
-                                MouseEventType.MOVED,
-                                MouseButton.NONE,
-                                emptySet()
+                        val button = buttonDown
+                        if (button == null) {
+                            program.mouse.moved.trigger(
+                                MouseEvent(position, Vector2.ZERO, position - previous, MouseEventType.MOVED, MouseButton.NONE, emptySet())
                             )
-                        )
+                        } else {
+                            program.mouse.dragged.trigger(
+                                MouseEvent(position, Vector2.ZERO, position - previous, MouseEventType.DRAGGED, button, emptySet())
+                            )
+                        }
                     }
                     program.window.requestDraw()
                     call.respond(HttpStatusCode.OK)
@@ -185,8 +189,8 @@ class RemoteControl : Extension {
                         val event =
                             MouseEvent(program.mouse.position, Vector2.ZERO, Vector2.ZERO, type, button, modifiers)
                         when (type) {
-                            MouseEventType.BUTTON_DOWN -> program.mouse.buttonDown.trigger(event)
-                            MouseEventType.BUTTON_UP -> program.mouse.buttonUp.trigger(event)
+                            MouseEventType.BUTTON_DOWN -> { buttonDown = button; program.mouse.buttonDown.trigger(event) }
+                            MouseEventType.BUTTON_UP -> { buttonDown = null; program.mouse.buttonUp.trigger(event) }
                             else -> Unit
                         }
                     }
