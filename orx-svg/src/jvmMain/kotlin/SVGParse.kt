@@ -602,6 +602,60 @@ internal object SVGParse {
         return SVGGradients.lookupMask(match.groupValues[1].trim())?.let { MaskReference.Value(it) } ?: MaskReference.None
     }
 
+    /**
+     * The tags and values of font-feature-settings ([features] true, values default to 1 and can be on or off) or of
+     * font-variation-settings
+     */
+    fun fontSettings(value: String, features: Boolean): Map<String, Double> {
+        if (value.trim() == "normal") return emptyMap()
+        return value.split(",").mapNotNull { entry ->
+            val match = Regex("^\\s*['\"]([^'\"]{4})['\"]\\s*(\\S*)\\s*$").matchEntire(entry) ?: return@mapNotNull null
+            val v = match.groupValues[2]
+            val number = when {
+                v.isEmpty() -> if (features) 1.0 else return@mapNotNull null
+                v == "on" -> 1.0
+                v == "off" -> 0.0
+                else -> v.toDoubleOrNull() ?: return@mapNotNull null
+            }
+            match.groupValues[1] to number
+        }.toMap()
+    }
+
+    /** the OpenType features of the keywords of font-variant */
+    fun fontVariant(value: String): Map<String, Double> {
+        val features = mutableMapOf<String, Double>()
+        for (keyword in value.trim().split(Regex("\\s+"))) {
+            when (keyword) {
+                "none" -> listOf("liga", "clig", "dlig", "hlig", "calt").forEach { features[it] = 0.0 }
+                "small-caps" -> features["smcp"] = 1.0
+                "all-small-caps" -> { features["smcp"] = 1.0; features["c2sc"] = 1.0 }
+                "petite-caps" -> features["pcap"] = 1.0
+                "all-petite-caps" -> { features["pcap"] = 1.0; features["c2pc"] = 1.0 }
+                "unicase" -> features["unic"] = 1.0
+                "titling-caps" -> features["titl"] = 1.0
+                "lining-nums" -> features["lnum"] = 1.0
+                "oldstyle-nums" -> features["onum"] = 1.0
+                "proportional-nums" -> features["pnum"] = 1.0
+                "tabular-nums" -> features["tnum"] = 1.0
+                "diagonal-fractions" -> features["frac"] = 1.0
+                "stacked-fractions" -> features["afrc"] = 1.0
+                "ordinal" -> features["ordn"] = 1.0
+                "slashed-zero" -> features["zero"] = 1.0
+                "common-ligatures" -> { features["liga"] = 1.0; features["clig"] = 1.0 }
+                "no-common-ligatures" -> { features["liga"] = 0.0; features["clig"] = 0.0 }
+                "discretionary-ligatures" -> features["dlig"] = 1.0
+                "no-discretionary-ligatures" -> features["dlig"] = 0.0
+                "historical-ligatures" -> features["hlig"] = 1.0
+                "no-historical-ligatures" -> features["hlig"] = 0.0
+                "contextual" -> features["calt"] = 1.0
+                "no-contextual" -> features["calt"] = 0.0
+                "super" -> features["sups"] = 1.0
+                "sub" -> features["subs"] = 1.0
+            }
+        }
+        return features
+    }
+
     fun paintOrder(value: String): PaintOrder {
         val names = value.trim().split(Regex("\\s+")).filter { it == "fill" || it == "stroke" }
         return if (names.firstOrNull() == "stroke") PaintOrder.StrokeFirst else PaintOrder.Normal
@@ -622,6 +676,12 @@ internal object SVGParse {
             col == "transparent" -> Paint.RGB(ColorRGBa(0.0, 0.0, 0.0, 0.0, linearity = Linearity.SRGB))
             col.startsWith("#") -> hexColor(col.drop(1))?.let { Paint.RGB(it) } ?: Paint.None
             Regex("^(rgba?|hsla?)\\((.*)\\)$").matchEntire(col) != null -> functionalColor(col)?.let { Paint.RGB(it) } ?: Paint.None
+            // the color functions of CSS Color 4 and 5
+            Regex("^([a-z-]+)\\((.*)\\)$", RegexOption.DOT_MATCHES_ALL).matchEntire(col) != null -> {
+                val name = col.substringBefore("(")
+                CSSColors.function(name, col.substringAfter("(").substringBeforeLast(")")) { (color(it) as? Paint.RGB)?.value }
+                    ?.let { Paint.RGB(it) } ?: Paint.None
+            }
             col in cssColorNames -> Paint.RGB(ColorRGBa.fromHex(cssColorNames[col]!!))
             else -> Paint.None
         }
