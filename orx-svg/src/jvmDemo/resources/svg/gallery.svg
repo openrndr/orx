@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+  <style>
+    text { font-family: Plex; font-size: 10px; fill: #8a8378; }
+    .frame { fill: none; stroke: #8a8378; stroke-dasharray: 3 3; }
+  </style>
+  <rect width="720" height="480" fill="#f4efe6"/>
+
+  <!-- other documents placed as images: fitted into their viewport by their view box, clipped to it -->
+  <text x="20" y="25">MARKERS.SVG, XMIDYMID MEET</text>
+  <rect class="frame" x="20" y="32" width="320" height="200"/>
+  <image href="markers.svg" x="20" y="32" width="320" height="200"/>
+
+  <text x="380" y="25">FILTERS.SVG, XMINYMIN SLICE</text>
+  <rect class="frame" x="380" y="32" width="320" height="200"/>
+  <image href="filters.svg" x="380" y="32" width="320" height="200" preserveAspectRatio="xMinYMin slice"/>
+
+  <text x="20" y="265">LAYERS.SVG, NONE</text>
+  <rect class="frame" x="20" y="272" width="200" height="190"/>
+  <image href="layers.svg" x="20" y="272" width="200" height="190" preserveAspectRatio="none"/>
+
+  <text x="250" y="265">STRUCTURE.SVG, OPACITY 0.5</text>
+  <rect class="frame" x="250" y="272" width="210" height="140"/>
+  <image href="structure.svg" x="250" y="272" width="210" opacity="0.5"/>
+
+  <!-- a document in a data url -->
+  <text x="490" y="265">DATA URL</text>
+  <image x="490" y="272" width="210" height="190" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Ccircle cx='5' cy='5' r='4' fill='%23e8574a'/%3E%3Ccircle cx='5' cy='5' r='2' fill='%23f4efe6'/%3E%3C/svg%3E"/>
+</svg>
