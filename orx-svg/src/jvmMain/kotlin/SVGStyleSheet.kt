@@ -24,7 +24,8 @@ internal object SVGStyleSheet {
         "cy" to setOf("circle", "ellipse"),
         "r" to setOf("circle"),
         "rx" to setOf("rect", "ellipse"),
-        "ry" to setOf("rect", "ellipse")
+        "ry" to setOf("rect", "ellipse"),
+        "d" to setOf("path")
     )
 
     /** a declaration of [name] with [value] */
@@ -259,6 +260,9 @@ internal object SVGStyleSheet {
         }
     }
 
+    /** the geometry attributes of elements before geometry properties were applied to them */
+    private val writtenGeometry = java.util.WeakHashMap<Element, Map<String, String?>>()
+
     /**
      * The style attribute of [element] for the declarations of the rules that select it, [matched], and its
      * [inline] style, with the custom properties it inherits, [inherited]: the style and the custom properties in scope
@@ -283,12 +287,19 @@ internal object SVGStyleSheet {
                         ?: variables.remove(declaration.name)
                 }
             }
+        // the geometry attributes of the element as it was written, the properties override them while they apply
+        val written = writtenGeometry.getOrPut(element) {
+            geometry.keys.associateWith { name -> element.attr(name).takeIf { element.hasAttr(name) } }
+        }
+        for ((name, value) in written) if (value == null) element.removeAttr(name) else element.attr(name, value)
         val properties = ordered.filter { !it.name.startsWith("--") }.mapNotNull { declaration ->
             val value = if ("var(" in declaration.value) substitute(declaration.value, variables) else declaration.value
             // geometry properties override the attributes of the element, like in SVG 2
             if (declaration.name in geometry) {
                 if (value != null && value != "auto" && element.tagName() in geometry.getValue(declaration.name)) {
-                    element.attr(declaration.name, value)
+                    // path data is given as path("...") in CSS, none is no path
+                    element.attr(declaration.name, if (declaration.name != "d") value else
+                        ValueInterpolation.pathData(value).takeIf { it != "none" } ?: "")
                 }
                 null
             } else {

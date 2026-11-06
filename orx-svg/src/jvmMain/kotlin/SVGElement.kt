@@ -4,6 +4,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import org.jsoup.nodes.*
 import org.openrndr.extra.composition.*
 import org.openrndr.math.*
+import org.openrndr.math.transforms.buildTransform
 import org.openrndr.shape.*
 
 private val logger = KotlinLogging.logger {}
@@ -18,14 +19,32 @@ internal sealed class SVGElement(element: Element?) {
     /** the origin of the transform, like transform-origin, null for the origin of the coordinates */
     var transformOrigin: String? = null
 
-    /** the transform of the element around its [transformOrigin] */
+    /**
+     * The individual transform properties translate, rotate and scale of CSS, and the motion path properties
+     * offset-path, offset-distance, offset-rotate and offset-anchor, by name
+     */
+    val transformProperties = mutableMapOf<String, String>()
+
+    /**
+     * The transform of the element around its [transformOrigin], like CSS composes it: the individual transform
+     * properties, then the position on the motion path, then the transform
+     */
     fun effectiveTransform(): org.openrndr.math.Matrix44 {
         val transform = style.transform.value
-        val origin = transformOrigin ?: return transform
+        if (transformOrigin == null && transformProperties.isEmpty()) return transform
         // the reference box of the origin: the viewport, or the bounds of the geometry of the element for the boxes
         // of CSS, which are all the same box for elements of SVG
         val box = referenceBox()
-        val parts = origin.trim().split(Regex("\\s+")).filter { it.isNotEmpty() }
+        val o = transformOrigin?.let { position(it, box) } ?: Vector2.ZERO
+        val individual = individualTransform(o, box)
+        if (o == Vector2.ZERO && individual == null) return transform
+        return buildTransform { translate(o.x, o.y, 0.0) } * (individual ?: Matrix44.IDENTITY) * transform *
+                buildTransform { translate(-o.x, -o.y, 0.0) }
+    }
+
+    /** a position like transform-origin and offset-anchor take it, in [box] */
+    private fun position(value: String, box: Rectangle): Vector2 {
+        val parts = value.trim().split(Regex("\\s+")).filter { it.isNotEmpty() }
         fun component(value: String?, axis: SVGParse.LengthAxis, extent: Double): Double = when {
             value == null || value == "center" -> extent / 2.0
             value == "left" || value == "top" -> 0.0
@@ -36,10 +55,81 @@ internal sealed class SVGElement(element: Element?) {
         // a vertical keyword first is the y component
         val (xValue, yValue) = if (parts.firstOrNull() in setOf("top", "bottom")) parts.getOrNull(1) to parts[0]
             else parts.getOrNull(0) to parts.getOrNull(1)
-        val o = box.corner + Vector2(component(xValue, SVGParse.LengthAxis.X, box.width), component(yValue, SVGParse.LengthAxis.Y, box.height))
-        if (o == Vector2.ZERO) return transform
-        return org.openrndr.math.transforms.buildTransform { translate(o.x, o.y, 0.0) } * transform *
-                org.openrndr.math.transforms.buildTransform { translate(-o.x, -o.y, 0.0) }
+        return box.corner + Vector2(component(xValue, SVGParse.LengthAxis.X, box.width), component(yValue, SVGParse.LengthAxis.Y, box.height))
+    }
+
+    /**
+     * The individual transforms and the motion path, within the translation to the origin [o]: translate, rotate,
+     * scale, then the translation to the point on the path and the rotation around the anchor. Null when there are
+     * none.
+     */
+    private fun individualTransform(o: Vector2, box: Rectangle): Matrix44? {
+        if (transformProperties.isEmpty()) return null
+        var m = Matrix44.IDENTITY
+        fun parts(name: String) = transformProperties[name]?.trim()?.takeIf { it.isNotEmpty() && it != "none" }
+            ?.split(Regex("[\\s,]+"))?.filter { it.isNotEmpty() }
+        parts("translate")?.let { p ->
+            fun length(v: String?, axis: SVGParse.LengthAxis, extent: Double) = when {
+                v == null -> 0.0
+                v.endsWith("%") -> (v.dropLast(1).toDoubleOrNull() ?: 0.0) / 100.0 * extent
+                else -> SVGParse.lengthValue(v, source, axis) ?: 0.0
+            }
+            m *= buildTransform { translate(length(p[0], SVGParse.LengthAxis.X, box.width), length(p.getOrNull(1), SVGParse.LengthAxis.Y, box.height), 0.0) }
+        }
+        parts("rotate")?.let { p ->
+            // an angle, or an axis and an angle; only rotations around z turn the plane
+            val angle = SVGParse.angle(p.last()) ?: 0.0
+            val axisZ = when (p.size) {
+                1 -> true
+                2 -> p[0] == "z"
+                else -> p[0].toDoubleOrNull() == 0.0 && p[1].toDoubleOrNull() == 0.0
+            }
+            if (axisZ) m *= buildTransform { rotate(Vector3.UNIT_Z, angle) }
+        }
+        parts("scale")?.let { p ->
+            fun factor(v: String) = if (v.endsWith("%")) (v.dropLast(1).toDoubleOrNull() ?: 100.0) / 100.0 else v.toDoubleOrNull() ?: 1.0
+            val sx = factor(p[0])
+            val sy = p.getOrNull(1)?.let(::factor) ?: sx
+            m *= buildTransform { scale(sx, sy, 1.0) }
+        }
+        motionPath()?.let { path ->
+            val length = path.length
+            val distance = transformProperties["offset-distance"]?.trim()?.let { d ->
+                if (d.endsWith("%")) (d.dropLast(1).toDoubleOrNull() ?: 0.0) / 100.0 * length else SVGParse.lengthValue(d, source) ?: 0.0
+            } ?: 0.0
+            // closed paths repeat, open paths end
+            val along = if (path.closed && length > 0.0) ((distance % length) + length) % length else distance.coerceIn(0.0, length)
+            val t = if (length > 0.0) path.tForLength(along) else 0.0
+            val point = path.position(t)
+            val e = 1E-4
+            val tangent = path.position((t + e).coerceAtMost(1.0)) - path.position((t - e).coerceAtLeast(0.0))
+            val direction = Math.toDegrees(kotlin.math.atan2(tangent.y, tangent.x))
+            // auto turns with the path, reverse against it, an angle is added to both or replaces them
+            val rotate = (transformProperties["offset-rotate"] ?: "auto").trim().split(Regex("\\s+"))
+            var angle = 0.0
+            for (r in rotate) angle += when (r) {
+                "auto" -> direction
+                "reverse" -> direction + 180.0
+                else -> SVGParse.angle(r) ?: 0.0
+            }
+            val anchor = transformProperties["offset-anchor"]?.trim()?.takeIf { it != "auto" }?.let { position(it, box) } ?: o
+            m *= buildTransform {
+                translate(point.x - o.x, point.y - o.y, 0.0)
+                rotate(Vector3.UNIT_Z, angle)
+                translate(o.x - anchor.x, o.y - anchor.y, 0.0)
+            }
+        }
+        return m
+    }
+
+    /** the path of offset-path: path data, or a reference to a shape element; null for none */
+    private fun motionPath(): ShapeContour? {
+        val value = transformProperties["offset-path"]?.trim()?.takeIf { it.isNotEmpty() && it != "none" } ?: return null
+        val data = Regex("^path\\(\\s*['\"]([^'\"]*)['\"]\\s*\\)$").matchEntire(value)
+        if (data != null) return motionPaths.getOrPut(data.groupValues[1]) { svgShape(data.groupValues[1]).contours.firstOrNull() }
+        val id = Regex("^url\\(\\s*['\"]?#([^)'\"]+)['\"]?\\s*\\)$").matchEntire(value)?.groupValues?.get(1) ?: return null
+        val element = source?.ownerDocument()?.getElementById(id) ?: return null
+        return SVGPath(element).shape().contours.firstOrNull()
     }
 
     /** the reference box of [transformOrigin], following the transform-box of the element */
@@ -77,6 +167,10 @@ internal sealed class SVGElement(element: Element?) {
         if (keyword != "inherit" && keyword != "initial" && keyword != "unset") return false
         if (key == Prop.TRANSFORM_ORIGIN) {
             transformOrigin = null
+            return true
+        }
+        if (key in individualTransformNames) {
+            transformProperties.remove(key)
             return true
         }
         val names = if (key == Prop.MARKER) listOf(Prop.MARKER_START, Prop.MARKER_MID, Prop.MARKER_END) else listOf(key)
@@ -129,6 +223,8 @@ internal sealed class SVGElement(element: Element?) {
             Prop.COLOR -> style.color = SVGParse.color(value)
             Prop.PAINT_ORDER -> style.paintOrder = SVGParse.paintOrder(value)
             Prop.TRANSFORM_ORIGIN -> transformOrigin = value
+            // the reference box of the origin is read from the declarations of the element, see referenceBox
+            "transform-box" -> {}
             Prop.MARKER -> SVGParse.marker(value).let {
                 style.markerStart = it
                 style.markerMid = it
@@ -139,6 +235,7 @@ internal sealed class SVGElement(element: Element?) {
             Prop.MARKER_END -> style.markerEnd = SVGParse.marker(value)
             // a transform in CSS or in the style attribute
             "transform" -> style.transform = SVGParse.transform(value)
+            in individualTransformNames -> transformProperties[key] = value
             Prop.CLIP_PATH -> style.clipPath = SVGParse.clipPath(value)
             Prop.CLIP_RULE -> style.clipRule = when (value.trim()) {
                 "evenodd" -> org.openrndr.extra.composition.FillRule.EvenOdd
@@ -728,4 +825,12 @@ internal class SVGPath(val element: Element? = null) : SVGElement(element) {
             }
         }
     }
+}
+
+/** the CSS properties of individual transforms and motion paths, see [SVGElement.transformProperties] */
+internal val individualTransformNames = setOf("translate", "rotate", "scale", "offset-path", "offset-distance", "offset-rotate", "offset-anchor")
+
+/** the contours of the path data of motion paths, which are parsed again in every frame of animations otherwise */
+private val motionPaths = object : LinkedHashMap<String, ShapeContour?>(16, 0.75f, true) {
+    override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, ShapeContour?>?) = size > 64
 }

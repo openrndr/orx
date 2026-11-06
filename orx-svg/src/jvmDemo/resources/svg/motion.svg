@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+  <style>
+    @keyframes drive { to { offset-distance: 100%; } }
+    @keyframes spin { to { rotate: 1turn; } }
+    @keyframes pulse { from { scale: 0.6; } to { scale: 1.2; } }
+    @keyframes hop { 50% { translate: 0 -50px; } }
+    @keyframes morph { to { d: path("M 0.0 -52.0 L 30.6 -42.1 L 49.5 -16.1 L 49.5 16.1 L 30.6 42.1 L 0.0 52.0 L -30.6 42.1 L -49.5 16.1 L -49.5 -16.1 L -30.6 -42.1 Z"); } }
+    .track { fill: none; stroke: #c9bfae; stroke-width: 18; stroke-linejoin: round; }
+    .car { fill: #e8574a; offset-path: url(#track); animation: drive 8s linear infinite; }
+    .follower { fill: #3d5a99; offset-path: url(#track); offset-rotate: 0deg; animation: drive 8s linear -1s infinite; }
+    .ring { fill: none; stroke: #e8574a; stroke-width: 3; offset-path: url(#track); animation: drive 8s linear infinite; }
+    .box { fill: #4c9e8a; transform-box: fill-box; transform-origin: center; }
+    .spin { animation: spin 3s linear infinite; }
+    .pulse { animation: pulse 1s ease-in-out infinite alternate; }
+    .hop { animation: hop 1.2s ease-in-out infinite; }
+    .star { fill: #f2b134; stroke: #202020; stroke-width: 3; stroke-linejoin: round; animation: morph 2s ease-in-out infinite alternate; }
+    .star.calm { animation: none; d: path("M 0.0 -52.0 L 30.6 -42.1 L 49.5 -16.1 L 49.5 16.1 L 30.6 42.1 L 0.0 52.0 L -30.6 42.1 L -49.5 16.1 L -49.5 -16.1 L -30.6 -42.1 Z"); transition: d 0.6s ease-out; }
+  </style>
+  <rect width="720" height="480" fill="#f4efe6"/>
+  <path id="track" class="track" d="M 100 130 C 100 50 300 50 300 130 C 300 210 460 210 460 130 C 460 50 640 50 640 130 C 640 230 100 230 100 130 Z"/>
+  <circle id="ring" class="ring" r="12" opacity="0">
+    <animate id="honk" attributeName="r" from="12" to="40" dur="0.6s" begin="indefinite"/>
+    <animate attributeName="opacity" from="1" to="0" dur="0.6s" begin="honk.begin"/>
+  </circle>
+  <circle class="follower" r="9"/>
+  <path id="car" class="car" d="M -16 -10 L 16 0 L -16 10 Z"/>
+  <rect class="box spin" x="70" y="290" width="60" height="60"/>
+  <rect class="box pulse" x="190" y="290" width="60" height="60" transform="rotate(15)"/>
+  <rect class="box hop" x="310" y="290" width="60" height="60" style="rotate: 45deg"/>
+  <g transform="translate(560 320)">
+    <path id="star" class="star" d="M 0.0 -70.0 L 16.5 -22.7 L 66.6 -21.6 L 26.6 8.7 L 41.1 56.6 L 0.0 28.0 L -41.1 56.6 L -26.6 8.7 L -66.6 -21.6 L -16.5 -22.7 Z"/>
+  </g>
+</svg>
