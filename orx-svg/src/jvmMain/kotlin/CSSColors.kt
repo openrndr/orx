@@ -282,7 +282,7 @@ internal object CSSColors {
     }
 
     /** [text] split at commas that are not in parentheses */
-    private fun splitTopLevel(text: String): List<String> {
+    internal fun splitTopLevel(text: String): List<String> {
         val parts = mutableListOf<String>()
         var depth = 0
         var start = 0

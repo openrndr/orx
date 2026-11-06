@@ -22,21 +22,38 @@ internal sealed class SVGElement(element: Element?) {
     fun effectiveTransform(): org.openrndr.math.Matrix44 {
         val transform = style.transform.value
         val origin = transformOrigin ?: return transform
-        val size = SVGParse.viewport.get() ?: Vector2(100.0, 100.0)
+        // the reference box of the origin: the viewport, or the bounds of the geometry of the element for the boxes
+        // of CSS, which are all the same box for elements of SVG
+        val box = referenceBox()
         val parts = origin.trim().split(Regex("\\s+")).filter { it.isNotEmpty() }
-        fun component(value: String?, axis: SVGParse.LengthAxis, extent: Double): Double = when (value) {
-            null, "center" -> extent / 2.0
-            "left", "top" -> 0.0
-            "right", "bottom" -> extent
+        fun component(value: String?, axis: SVGParse.LengthAxis, extent: Double): Double = when {
+            value == null || value == "center" -> extent / 2.0
+            value == "left" || value == "top" -> 0.0
+            value == "right" || value == "bottom" -> extent
+            value.endsWith("%") -> (value.dropLast(1).toDoubleOrNull() ?: 0.0) / 100.0 * extent
             else -> SVGParse.lengthValue(value, source, axis) ?: 0.0
         }
         // a vertical keyword first is the y component
         val (xValue, yValue) = if (parts.firstOrNull() in setOf("top", "bottom")) parts.getOrNull(1) to parts[0]
             else parts.getOrNull(0) to parts.getOrNull(1)
-        val o = Vector2(component(xValue, SVGParse.LengthAxis.X, size.x), component(yValue, SVGParse.LengthAxis.Y, size.y))
+        val o = box.corner + Vector2(component(xValue, SVGParse.LengthAxis.X, box.width), component(yValue, SVGParse.LengthAxis.Y, box.height))
         if (o == Vector2.ZERO) return transform
         return org.openrndr.math.transforms.buildTransform { translate(o.x, o.y, 0.0) } * transform *
                 org.openrndr.math.transforms.buildTransform { translate(-o.x, -o.y, 0.0) }
+    }
+
+    /** the reference box of [transformOrigin], following the transform-box of the element */
+    private fun referenceBox(): Rectangle {
+        val viewport = (SVGParse.viewport.get() ?: Vector2(100.0, 100.0)).let { Rectangle(0.0, 0.0, it.x, it.y) }
+        val element = source ?: return viewport
+        val box = SVGStyleSheet.declarations(element.attr("style")).lastOrNull { it.first == "transform-box" }?.second?.trim()
+            ?: element.attr("transform-box").trim()
+        if (box !in setOf("fill-box", "stroke-box", "content-box", "border-box")) return viewport
+        val shape = when (element.tagName()) {
+            "rect", "circle", "ellipse", "line", "polyline", "polygon", "path" -> SVGPath(element).shape()
+            else -> return viewport
+        }
+        return if (shape.empty) viewport else shape.bounds
     }
 
     var tag: String = element?.tagName() ?: ""

@@ -232,8 +232,71 @@ internal object SVGStyleSheet {
     /** a keyframe of @keyframes: its [offset] from 0 to 1 and its declarations */
     class Keyframe(val offset: Double, val declarations: List<Pair<String, String>>)
 
-    /** the rules and keyframes that apply over time, see [apply] */
-    class Dynamic(val stateRules: List<StateRule>, val keyframes: Map<String, List<Keyframe>>)
+    /** a rule of a style sheet: a selector, the [specificity] and [order] of the rule, and its declarations */
+    class SelectorRule(val selector: String, val specificity: Int, val order: Int, val declarations: String)
+
+    /**
+     * The rules and keyframes that apply over time, see [apply], and what is needed to compute the style of elements
+     * again when their classes or inline styles change: the [rules] without pointer states, the original [inline]
+     * styles and the custom properties that elements inherit, [variables]
+     */
+    class Dynamic(
+        val stateRules: List<StateRule>,
+        val keyframes: Map<String, List<Keyframe>>,
+        val rules: List<SelectorRule> = emptyList(),
+        val inline: java.util.IdentityHashMap<Element, String> = java.util.IdentityHashMap(),
+        val variables: java.util.IdentityHashMap<Element, Map<String, String>> = java.util.IdentityHashMap()
+    ) {
+        /**
+         * The style of [element] as the rules that select it now and its inline style [inlineStyle] give it, the
+         * value of its style attribute
+         */
+        fun style(element: Element, inlineStyle: String = inline[element] ?: ""): String {
+            val matched = rules.filter { rule ->
+                try { element.`is`(rule.selector) } catch (e: Exception) { false }
+            }.map { Pair(Pair(it.specificity, it.order), it.declarations) }
+            return merge(element, matched, inlineStyle, variables[element] ?: emptyMap()).first
+        }
+    }
+
+    /**
+     * The style attribute of [element] for the declarations of the rules that select it, [matched], and its
+     * [inline] style, with the custom properties it inherits, [inherited]: the style and the custom properties in scope
+     * at the element. Geometry properties are set on the element.
+     */
+    private fun merge(
+        element: Element,
+        matched: List<Pair<Pair<Int, Int>, String>>,
+        inline: String,
+        inherited: Map<String, String>
+    ): Pair<String, Map<String, String>> {
+        val rules = matched.sortedWith(compareBy({ it.first.first }, { it.first.second })).flatMap { parse(it.second) }
+        val own = parse(inline)
+        val ordered = rules.filter { !it.important } + own.filter { !it.important } +
+                rules.filter { it.important } + own.filter { it.important }
+
+        // custom properties are inherited, their values can use the custom properties before them
+        val variables = if (ordered.none { it.name.startsWith("--") }) inherited else
+            inherited.toMutableMap().also { variables ->
+                for (declaration in ordered.filter { it.name.startsWith("--") }) {
+                    substitute(declaration.value, variables)?.let { variables[declaration.name] = it }
+                        ?: variables.remove(declaration.name)
+                }
+            }
+        val properties = ordered.filter { !it.name.startsWith("--") }.mapNotNull { declaration ->
+            val value = if ("var(" in declaration.value) substitute(declaration.value, variables) else declaration.value
+            // geometry properties override the attributes of the element, like in SVG 2
+            if (declaration.name in geometry) {
+                if (value != null && value != "auto" && element.tagName() in geometry.getValue(declaration.name)) {
+                    element.attr(declaration.name, value)
+                }
+                null
+            } else {
+                "${declaration.name}:${value ?: "unset"}"
+            }
+        }
+        return Pair(properties.joinToString(";"), variables)
+    }
 
     private val statePseudo = Regex(":(hover|active)\\b")
 
@@ -297,6 +360,9 @@ internal object SVGStyleSheet {
         val css = css(root, base)
         val matches = java.util.IdentityHashMap<Element, MutableList<Pair<Pair<Int, Int>, String>>>()
         val stateRules = mutableListOf<StateRule>()
+        val selectorRules = mutableListOf<SelectorRule>()
+        val inlineStyles = java.util.IdentityHashMap<Element, String>()
+        val inheritedVariables = java.util.IdentityHashMap<Element, Map<String, String>>()
         if (css.isNotBlank()) {
             for (rule in rules(css)) {
                 for (selector in rule.selectors) {
@@ -311,6 +377,7 @@ internal object SVGStyleSheet {
                         logger.warn { "unsupported CSS selector '$selector'" }
                         continue
                     }
+                    selectorRules.add(SelectorRule(selector, specificity(selector), rule.order, rule.declarations))
                     for (element in elements) {
                         matches.getOrPut(element) { mutableListOf() }
                             .add(Pair(Pair(specificity(selector), rule.order), rule.declarations))
@@ -320,40 +387,16 @@ internal object SVGStyleSheet {
         }
 
         fun visit(element: Element, inherited: Map<String, String>) {
-            val rules = matches[element]
-                ?.sortedWith(compareBy({ it.first.first }, { it.first.second }))
-                ?.flatMap { parse(it.second) } ?: emptyList()
-            val inline = parse(element.attr("style"))
-            val ordered = rules.filter { !it.important } + inline.filter { !it.important } +
-                    rules.filter { it.important } + inline.filter { it.important }
-
-            // custom properties are inherited, their values can use the custom properties before them
-            val variables = if (ordered.none { it.name.startsWith("--") }) inherited else
-                inherited.toMutableMap().also { variables ->
-                    for (declaration in ordered.filter { it.name.startsWith("--") }) {
-                        substitute(declaration.value, variables)?.let { variables[declaration.name] = it }
-                            ?: variables.remove(declaration.name)
-                    }
-                }
+            val inline = element.attr("style")
+            inlineStyles[element] = inline
+            inheritedVariables[element] = inherited
+            val (style, variables) = merge(element, matches[element] ?: emptyList(), inline, inherited)
             // presentation attributes can use custom properties too
             for (attribute in element.attributes().asList()) {
                 if ((attribute.key in Prop.list || attribute.key in geometry) && "var(" in attribute.value) {
                     attribute.setValue(substitute(attribute.value, variables) ?: "unset")
                 }
             }
-            val properties = ordered.filter { !it.name.startsWith("--") }.mapNotNull { declaration ->
-                val value = if ("var(" in declaration.value) substitute(declaration.value, variables) else declaration.value
-                // geometry properties override the attributes of the element, like in SVG 2
-                if (declaration.name in geometry) {
-                    if (value != null && value != "auto" && element.tagName() in geometry.getValue(declaration.name)) {
-                        element.attr(declaration.name, value)
-                    }
-                    null
-                } else {
-                    "${declaration.name}:${value ?: "unset"}"
-                }
-            }
-            val style = properties.joinToString(";")
             if (element.hasAttr("style") || style.isNotEmpty()) {
                 element.removeAttr("style")
                 if (style.isNotEmpty()) element.attr("style", style)
@@ -361,6 +404,6 @@ internal object SVGStyleSheet {
             element.children().forEach { visit(it, variables) }
         }
         visit(root, emptyMap())
-        return Dynamic(stateRules, if (css.isNotBlank()) keyframes(css) else emptyMap())
+        return Dynamic(stateRules, if (css.isNotBlank()) keyframes(css) else emptyMap(), selectorRules, inlineStyles, inheritedVariables)
     }
 }

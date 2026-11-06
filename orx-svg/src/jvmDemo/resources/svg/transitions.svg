@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+    <style>
+        .tile {
+            fill: #e8e4dc; stroke: #2b2b2b; stroke-width: 2;
+            transform-origin: center; transform-box: fill-box;
+            transition: fill 0.6s ease-in-out, transform 0.8s cubic-bezier(0.3, 1.6, 0.6, 1), stroke-width 0.4s ease-out;
+        }
+        .tile.on { fill: #e2533b; transform: rotate(45deg) scale(0.7); stroke-width: 6; }
+        .row.alt .tile { fill: #3b7be2; }
+        text { font-family: Plex; font-size: 16px; fill: #2b2b2b; }
+    </style>
+    <g class="row" transform="translate(60 80)">
+        <rect class="tile" x="0" y="0" width="80" height="80"/>
+        <rect class="tile" x="120" y="0" width="80" height="80"/>
+        <rect class="tile" x="240" y="0" width="80" height="80"/>
+        <rect class="tile" x="360" y="0" width="80" height="80"/>
+        <rect class="tile" x="480" y="0" width="80" height="80"/>
+    </g>
+    <g class="row" transform="translate(60 240)">
+        <rect class="tile" x="0" y="0" width="80" height="80"/>
+        <rect class="tile" x="120" y="0" width="80" height="80"/>
+        <rect class="tile" x="240" y="0" width="80" height="80"/>
+        <rect class="tile" x="360" y="0" width="80" height="80"/>
+        <rect class="tile" x="480" y="0" width="80" height="80"/>
+    </g>
+    <text x="60" y="400">click: toggle .on</text>
+    <text x="60" y="424">space: thick strokes, other keys: toggle .alt</text>
+</svg>

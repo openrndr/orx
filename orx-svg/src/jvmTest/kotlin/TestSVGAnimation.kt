@@ -152,6 +152,78 @@ class TestSVGAnimation {
     }
 
     @Test
+    fun transitionsChangesOfStylesByPrograms() {
+        val c = parse(
+            """
+            <style>
+                .b { fill: #000000; opacity: 1; transition: fill 1s linear, opacity 2s linear; }
+                .b.on { fill: #ff0000; }
+            </style>
+            <rect id="b" class="b" width="10" height="10"/>
+            """
+        )
+        val animation = c.animation!!
+        c.evaluate(0.0)
+        // a change of the style of a node
+        c.shape("b").style.opacity = Numeric.Rational(0.0)
+        c.evaluate(1.0)
+        assertEquals(1.0, c.opacity("b"), 1E-9)
+        c.evaluate(2.0)
+        assertEquals(0.5, c.opacity("b"), 1E-9)
+        c.evaluate(3.0)
+        assertEquals(0.0, c.opacity("b"), 1E-9)
+
+        // a change of a property of the style that has no transition
+        c.shape("b").style.strokeWeight = Length.Pixels(4.0)
+        c.evaluate(3.1)
+        assertEquals(4.0, (c.shape("b").style.strokeWeight as Length.Pixels).value, 1E-9)
+
+        // a class that a rule matches
+        animation.addClass(c.shape("b"), "on")
+        c.evaluate(3.6)
+        assertEquals(0.5, c.fill("b").r, 0.01)
+        // reversing midway starts from the value that is shown
+        animation.removeClass(c.shape("b"), "on")
+        c.evaluate(4.1)
+        assertEquals(0.25, c.fill("b").r, 0.01)
+        c.evaluate(5.0)
+        assertEquals(0.0, c.fill("b").r, 1E-9)
+
+        // an inline property
+        animation.setProperty(c.shape("b"), "fill", "#ffffff")
+        c.evaluate(5.75)
+        assertEquals(0.75, c.fill("b").g, 0.01)
+        c.evaluate(7.0)
+        assertEquals(1.0, c.fill("b").g, 1E-9)
+        animation.setProperty(c.shape("b"), "fill", null)
+        c.evaluate(9.0)
+        assertEquals(0.0, c.fill("b").g, 1E-9)
+    }
+
+    @Test
+    fun transitionsTransformsAroundTheirBoxes() {
+        val c = parse(
+            """
+            <style>
+                .t { transform-box: fill-box; transform-origin: center; transition: transform 1s cubic-bezier(0, 0, 1, 1); }
+                .t.on { transform: rotate(90deg); }
+            </style>
+            <rect id="t" class="t" x="100" y="20" width="40" height="20"/>
+            """
+        )
+        c.evaluate(0.0)
+        c.animation!!.addClass(c.shape("t"), "on")
+        // halfway, from none in the units of the transform, around the center of the rectangle
+        c.evaluate(0.5)
+        val center = Vector2(120.0, 30.0)
+        assertEquals(center, (c.shape("t").transform * center.xy01).xy)
+        assertEquals(kotlin.math.sqrt(0.5), c.shape("t").transform.c0r0, 1E-6)
+        c.evaluate(1.0)
+        assertEquals(0.0, c.shape("t").transform.c0r0, 1E-6)
+        assertEquals(center, (c.shape("t").transform * center.xy01).xy)
+    }
+
+    @Test
     fun documentsWithoutAnimationHaveNone() {
         assertNull(parse("""<rect width="10" height="10"/>""").animation)
         assertTrue(parse("""<rect width="10" height="10"><animate attributeName="x" to="5" dur="1s"/></rect>""").animation != null)

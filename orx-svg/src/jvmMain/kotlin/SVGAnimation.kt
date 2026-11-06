@@ -144,16 +144,15 @@ internal object ValueInterpolation {
      */
     private fun identity(list: String): String = Regex("([a-zA-Z0-9]+)\\(([^)]*)\\)").findAll(list).joinToString(" ") { m ->
         val name = m.groupValues[1]
-        val count = m.groupValues[2].split(Regex("[\\s,]+")).count { it.isNotBlank() }
+        val arguments = m.groupValues[2].split(Regex("[\\s,]+")).filter { it.isNotBlank() }
+        val count = arguments.size
+        // the units and separators of the arguments are kept, so that the text around the numbers matches
         when {
-            name.startsWith("scale") -> "$name(${List(count) { "1" }.joinToString(" ")})"
+            name.startsWith("scale") -> "$name(${m.groupValues[2].replace(number, "1")})"
             name == "matrix" -> "matrix(1 0 0 1 0 0)"
             // the center of a rotation is kept
-            name == "rotate" && count == 3 -> {
-                val n = m.groupValues[2].split(Regex("[\\s,]+")).filter { it.isNotBlank() }
-                "rotate(0 ${n[1]} ${n[2]})"
-            }
-            else -> "$name(${List(count) { "0" }.joinToString(" ")})"
+            name == "rotate" && count == 3 -> "rotate(0 ${arguments[1]} ${arguments[2]})"
+            else -> "$name(${m.groupValues[2].replace(number, "0")})"
         }
     }
 
@@ -226,7 +225,69 @@ internal object ValueInterpolation {
  */
 internal class AnimationTarget(val element: Element, val nodes: List<CompositionNode>) {
     private val baseStyles = nodes.map { HashMap(it.style.properties) }
-    private val baseShapes = nodes.map { (it as? ShapeNode)?.shape }
+    private val baseShapes = nodes.map { (it as? ShapeNode)?.shape }.toMutableList()
+
+    /** the values of the nodes after the last update, changes to them are made by the code of programs */
+    private val applied = nodes.map { HashMap(it.style.properties) }
+    private val appliedShapes = nodes.map { (it as? ShapeNode)?.shape }.toMutableList()
+
+    /** remembers the values of the nodes after an update */
+    fun snapshot() {
+        for ((i, node) in nodes.withIndex()) {
+            applied[i].clear()
+            applied[i].putAll(node.style.properties)
+            appliedShapes[i] = (node as? ShapeNode)?.shape
+        }
+    }
+
+    /**
+     * The properties that the code of the program changed since the last update, with their values before and after:
+     * the changed values become the base values of the nodes
+     */
+    fun detectChanges(): List<Triple<String, String?, String?>> {
+        val changes = mutableListOf<Triple<String, String?, String?>>()
+        for ((i, node) in nodes.withIndex()) {
+            val current = node.style.properties
+            for (key in (current.keys + applied[i].keys).toSet()) {
+                val before = applied[i][key]
+                val after = current[key]
+                if (before?.toString() == after?.toString()) continue
+                if (after == null) baseStyles[i].remove(key) else baseStyles[i][key] = after
+                if (i == 0) changes.add(Triple(key.toString(), before?.toString(), after?.toString()))
+            }
+            val shape = (node as? ShapeNode)?.shape
+            if (shape !== appliedShapes[i]) baseShapes[i] = shape
+        }
+        return changes
+    }
+
+    /** sets the base value of [name] to [value], or removes it when it is null, as if the element was loaded with it */
+    fun setBase(name: String, value: String?) {
+        // the transform is that of the nodes, computed from the declarations of the element
+        if (name == "transform") {
+            values.remove("transform")
+            applyTransform()
+            for ((i, node) in nodes.withIndex()) {
+                node.style.properties[AttributeOrPropertyKey.TRANSFORM]?.let { baseStyles[i][AttributeOrPropertyKey.TRANSFORM] = it }
+                applied[i].clear()
+                applied[i].putAll(node.style.properties)
+            }
+            return
+        }
+        for ((i, node) in nodes.withIndex()) {
+            val setter = PropertySetter(element, null)
+            if (value != null) setter.styleProperty(name, value)
+            val keys = if (value != null) setter.style.properties.keys.toList()
+                else listOfNotNull(AttributeOrPropertyKey.entries.firstOrNull { it.toString() == name })
+            for (key in keys) {
+                val v = setter.style.properties[key]
+                if (v == null) { baseStyles[i].remove(key); node.style.properties.remove(key) }
+                else { baseStyles[i][key] = v; node.style.properties[key] = v }
+            }
+            applied[i].clear()
+            applied[i].putAll(node.style.properties)
+        }
+    }
 
     /** the geometry attributes of shapes, they change the shape */
     private val geometry = setOf("x", "y", "width", "height", "rx", "ry", "cx", "cy", "r", "x1", "y1", "x2", "y2", "points", "d")
@@ -427,12 +488,14 @@ internal class CssAnimation(
     val iterations: Double,
     val direction: String,
     val fillMode: String,
-    val paused: Boolean
+    val paused: Boolean,
+    /** the time the animation was applied to the element */
+    val start: Double = 0.0
 ) {
     /** the values of the properties of the keyframes at [time], null when the animation has no effect */
     fun values(time: Double): Map<String, String>? {
         if (duration <= 0.0 && iterations > 0.0) return null
-        val elapsed = time - delay
+        val elapsed = time - start - delay
         val total = duration * iterations
         val progress: Double
         val iteration: Int
@@ -507,6 +570,10 @@ class SVGAnimation internal constructor(document: SVGDocument) {
     private val smil = mutableListOf<SmilAnimation>()
     private val css = mutableListOf<CssAnimation>()
     private val stateRules = document.dynamic.stateRules
+    private val dynamic = document.dynamic
+
+    /** the transitions that changes by the code of the program started, by element and property */
+    private val codeTransitions = java.util.IdentityHashMap<Element, MutableMap<String, RunningTransition>>()
 
     /** the elements in each pointer state */
     private val hovered = java.util.Collections.newSetFromMap(java.util.IdentityHashMap<Element, Boolean>())
@@ -542,6 +609,10 @@ class SVGAnimation internal constructor(document: SVGDocument) {
             cssAnimations(element, declarations, document.dynamic.keyframes)
         }
         for (rule in stateRules) target(rule.element)
+        // elements with transitions follow the changes that programs make to their styles
+        for (element in root.allElements) {
+            if (SVGStyleSheet.declarations(element.attr("style")).any { it.first.startsWith("transition") }) target(element)
+        }
         // the animations begin at their offsets
         for (a in smil) for (c in a.begins) if (c is TimeCondition.Offset) a.beginInstances.add(c.time)
         for (a in smil) for (c in a.ends) if (c is TimeCondition.Offset) a.endInstances.add(c.time)
@@ -550,7 +621,7 @@ class SVGAnimation internal constructor(document: SVGDocument) {
     }
 
     /** true when the document has animations, transitions or rules for pointer states */
-    val animated: Boolean get() = smil.isNotEmpty() || css.isNotEmpty() || stateRules.isNotEmpty()
+    val animated: Boolean get() = smil.isNotEmpty() || css.isNotEmpty() || stateRules.isNotEmpty() || targets.isNotEmpty()
 
     private fun smilAnimation(element: Element, ids: Map<String, Element>, document: SVGDocument): SmilAnimation? {
         val href = listOf("href", "xlink:href").firstNotNullOfOrNull { element.attr(it).trim().takeIf { h -> h.isNotEmpty() } }
@@ -625,11 +696,11 @@ class SVGAnimation internal constructor(document: SVGDocument) {
     private fun numbersOf(v: String) = Regex("[-+]?(?:[0-9]*\\.[0-9]+|[0-9]+)(?:[eE][-+]?[0-9]+)?").findAll(v).map { it.value.toDouble() }.toList()
 
     /** the CSS animations of [element], from its animation properties */
-    private fun cssAnimations(element: Element, declarations: List<Pair<String, String>>, keyframes: Map<String, List<SVGStyleSheet.Keyframe>>) {
+    private fun cssAnimations(element: Element, declarations: List<Pair<String, String>>, keyframes: Map<String, List<SVGStyleSheet.Keyframe>>, start: Double = 0.0) {
         if (declarations.none { it.first.startsWith("animation") }) return
-        fun longhand(name: String) = declarations.lastOrNull { it.first == name }?.second?.split(',')?.map { it.trim() }
+        fun longhand(name: String) = declarations.lastOrNull { it.first == name }?.second?.let(CSSColors::splitTopLevel)?.map { it.trim() }
         // the shorthand: a name, durations then delays, a timing function, an iteration count, a direction, a fill mode
-        val shorthand = declarations.lastOrNull { it.first == "animation" }?.second?.split(',')?.map { it.trim() } ?: emptyList()
+        val shorthand = declarations.lastOrNull { it.first == "animation" }?.second?.let(CSSColors::splitTopLevel)?.map { it.trim() } ?: emptyList()
         data class Settings(var name: String? = null, var duration: Double = 0.0, var delay: Double = 0.0, var easing: String = "ease",
                             var iterations: Double = 1.0, var direction: String = "normal", var fill: String = "none", var paused: Boolean = false)
         val settings = shorthand.map { part ->
@@ -667,14 +738,14 @@ class SVGAnimation internal constructor(document: SVGDocument) {
         val target = target(element) ?: return
         for (s in settings) {
             val frames = keyframes[s.name ?: continue] ?: continue.also { logger.warn { "@keyframes ${s.name} is not defined" } }
-            css.add(CssAnimation(target, frames, s.duration, Easing.css(s.easing), s.delay, s.iterations, s.direction, s.fill, s.paused))
+            css.add(CssAnimation(target, frames, s.duration, Easing.css(s.easing), s.delay, s.iterations, s.direction, s.fill, s.paused, start))
         }
     }
 
     /** the transition settings of [declarations] for [property], null when it does not transition */
     private fun transitionSettings(declarations: List<Pair<String, String>>, property: String): TransitionSettings? {
         val parts = mutableListOf<Triple<String, TransitionSettings, Int>>()
-        declarations.lastOrNull { it.first == "transition" }?.second?.split(',')?.forEachIndexed { i, part ->
+        declarations.lastOrNull { it.first == "transition" }?.second?.let(CSSColors::splitTopLevel)?.forEachIndexed { i, part ->
             var name = "all"
             var duration = 0.0
             var delay = 0.0
@@ -691,9 +762,9 @@ class SVGAnimation internal constructor(document: SVGDocument) {
             parts.add(Triple(name, TransitionSettings(duration, delay, Easing.css(easing)), i))
         }
         // longhands override the shorthand
-        val names = declarations.lastOrNull { it.first == "transition-property" }?.second?.split(',')?.map { it.trim() }
+        val names = declarations.lastOrNull { it.first == "transition-property" }?.second?.let(CSSColors::splitTopLevel)?.map { it.trim() }
         if (names != null) {
-            fun list(name: String) = declarations.lastOrNull { it.first == name }?.second?.split(',')?.map { it.trim() }
+            fun list(name: String) = declarations.lastOrNull { it.first == name }?.second?.let(CSSColors::splitTopLevel)?.map { it.trim() }
             val durations = list("transition-duration") ?: listOf("0s")
             val delays = list("transition-delay") ?: listOf("0s")
             val easings = list("transition-timing-function") ?: listOf("ease")
@@ -756,6 +827,95 @@ class SVGAnimation internal constructor(document: SVGDocument) {
         interaction.clicked.listen { e -> for (element in elementPath(e.node)) dispatch(element, "click") }
     }
 
+    /** the value of a running transition of [property] of [element] at the time of the last update, null when none runs */
+    private fun transitioning(element: Element, property: String): String? {
+        val transition = codeTransitions[element]?.get(property) ?: transitions[element]?.get(property) ?: return null
+        val t = (time - transition.start - transition.settings.delay) / transition.settings.duration
+        return when {
+            t >= 1.0 -> null
+            t <= 0.0 -> transition.from
+            else -> ValueInterpolation.interpolate(transition.from, transition.to, transition.settings.easing.ease(t))
+        }
+    }
+
+    /** starts a transition of [property] of [element] from [from] to [to] when the element has one for the property */
+    private fun startTransition(element: Element, property: String, from: String?, to: String?) {
+        if (from == null || to == null || from == to) return
+        val settings = transitionSettings(SVGStyleSheet.declarations(element.attr("style")), property)
+        val running = codeTransitions.getOrPut(element) { mutableMapOf() }
+        if (settings == null) { running.remove(property); return }
+        running[property] = RunningTransition(transitioning(element, property) ?: from, to, time, settings)
+    }
+
+    /**
+     * Computes the style of [element] and its descendants again, after their classes or inline styles changed: the
+     * properties that change start transitions, a change of the animations starts them
+     */
+    private fun restyle(element: Element) {
+        val before = SVGStyleSheet.declarations(element.attr("style"))
+        val style = dynamic.style(element)
+        if (style != element.attr("style")) {
+            val after = SVGStyleSheet.declarations(style)
+            fun last(list: List<Pair<String, String>>, name: String) = list.lastOrNull { it.first == name }?.second
+            val names = (before.map { it.first } + after.map { it.first }).distinct()
+            val target = target(element)
+            val changed = names.filter { last(before, it) != last(after, it) }
+            // the values that are shown, before the style changes
+            val shown = changed.associateWith { name -> target?.let { transitioning(element, name) ?: it.baseValue(name) } }
+            if (style.isEmpty()) element.removeAttr("style") else element.attr("style", style)
+            for (name in changed) {
+                if (name.startsWith("animation")) continue
+                if (name.startsWith("transition")) continue
+                // a property that is no longer declared takes the value of its attribute, or is not set
+                val value = last(after, name) ?: element.attr(name).takeIf { element.hasAttr(name) }
+                target?.setBase(name, value)
+                startTransition(element, name, shown[name], value ?: target?.baseValue(name))
+            }
+            // the animations of the element begin when they are applied
+            if (names.any { it.startsWith("animation") && last(before, it) != last(after, it) } && target != null) {
+                css.removeAll { it.target === target }
+                cssAnimations(element, after, dynamic.keyframes, time)
+            }
+        }
+        element.children().forEach(::restyle)
+    }
+
+    private fun elementOf(node: CompositionNode): Element? =
+        elementsByNode[node] ?: generateSequence(node.parent) { it.parent }.firstNotNullOfOrNull { elementsByNode[it] }
+
+    /** adds the class [name] to the element of [node], its style is computed again and changes are transitioned */
+    fun addClass(node: CompositionNode, name: String) {
+        val element = elementOf(node) ?: return
+        element.addClass(name)
+        restyle(element)
+    }
+
+    /** removes the class [name] from the element of [node], see [addClass] */
+    fun removeClass(node: CompositionNode, name: String) {
+        val element = elementOf(node) ?: return
+        element.removeClass(name)
+        restyle(element)
+    }
+
+    /** adds the class [name] to the element of [node] when it does not have it, removes it otherwise; or sets it to [on] */
+    fun toggleClass(node: CompositionNode, name: String, on: Boolean? = null) {
+        val element = elementOf(node) ?: return
+        if (on ?: !element.hasClass(name)) element.addClass(name) else element.removeClass(name)
+        restyle(element)
+    }
+
+    /**
+     * Sets the property [name] of the inline style of the element of [node] to [value], or removes it when it is
+     * null, like setting a property of the style of an element in a browser; changes are transitioned
+     */
+    fun setProperty(node: CompositionNode, name: String, value: String?) {
+        val element = elementOf(node) ?: return
+        val inline = SVGStyleSheet.declarations(dynamic.inline[element] ?: "").filter { it.first != name } +
+                listOfNotNull(value?.let { name to it })
+        dynamic.inline[element] = inline.joinToString(";") { "${it.first}:${it.second}" }
+        restyle(element)
+    }
+
     /** sets the hover state of [element], for programs that do not use [listenTo] */
     fun setHovered(element: Element, hovered: Boolean) { if (hovered) this.hovered.add(element) else this.hovered.remove(element) }
 
@@ -768,6 +928,10 @@ class SVGAnimation internal constructor(document: SVGDocument) {
      */
     fun update(seconds: Double) {
         time = seconds
+        // changes that the program made to the styles of nodes become their values, they are transitioned
+        for (target in targets.values.toList()) {
+            for ((name, before, after) in target.detectChanges()) startTransition(target.element, name, before, after)
+        }
         for (target in targets.values) target.restore()
 
         // rules for pointer states, and transitions to their values
@@ -802,6 +966,19 @@ class SVGAnimation internal constructor(document: SVGDocument) {
             }
         }
 
+        // transitions of changes that the program made
+        for ((element, running) in codeTransitions) {
+            val target = target(element) ?: continue
+            for ((property, transition) in running.entries.toList()) {
+                val t = (seconds - transition.start - transition.settings.delay) / transition.settings.duration
+                when {
+                    t >= 1.0 -> running.remove(property)
+                    t <= 0.0 -> target.set(property, transition.from)
+                    else -> target.set(property, ValueInterpolation.interpolate(transition.from, transition.to, transition.settings.easing.ease(t)))
+                }
+            }
+        }
+
         // CSS animations
         for (animation in css) {
             val values = animation.values(seconds) ?: continue
@@ -811,6 +988,7 @@ class SVGAnimation internal constructor(document: SVGDocument) {
         // SMIL animations: syncbases are resolved in order, every animation applies its value
         resolveSyncbases()
         for (a in smil) applySmil(a, seconds)
+        for (target in targets.values) target.snapshot()
     }
 
     private fun resolveSyncbases() {
