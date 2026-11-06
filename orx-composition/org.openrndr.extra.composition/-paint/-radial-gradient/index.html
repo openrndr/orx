@@ -1,0 +1,361 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>RadialGradient</title>
+<link href="../../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../../styles/style.css" rel="Stylesheet">
+<link href="../../../../styles/main.css" rel="Stylesheet">
+<link href="../../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../../../images/logo-icon.svg">
+<link href="../../../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.1-dev.53.uncommitted+ca6ace5
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-composition/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-composition/commonMain" data-filter=":orx-composition/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="orx-composition::org.openrndr.extra.composition/Paint.RadialGradient///PointingToDeclaration//-354277685">
+  <div class="breadcrumbs"><a href="../../../index.html">orx-composition</a><span class="delimiter">/</span><a href="../../index.html">org.openrndr.extra.composition</a><span class="delimiter">/</span><a href="../index.html">Paint</a><span class="delimiter">/</span><span class="current">RadialGradient</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Radial</span><wbr><span><span>Gradient</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="index.html">RadialGradient</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>center<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>radius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>focal<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>center<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>focalRadius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>stops<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-color-stop/index.html">ColorStop</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>units<span class="token operator">: </span><a href="../../../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-paint-units/index.html">PaintUnits</a><span class="token operator"> = </span>PaintUnits.BOUNDS<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>spread<span class="token operator">: </span><a href="../../../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-gradient-spread/index.html">GradientSpread</a><span class="token operator"> = </span>GradientSpread.PAD<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>transform<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Matrix44///PointingToDeclaration/">Matrix44</span><span class="token operator"> = </span>Matrix44.IDENTITY<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>id<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">""</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>interpolation<span class="token operator">: </span><a href="../../../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-gradient-interpolation/index.html">GradientInterpolation</a><span class="token operator"> = </span>GradientInterpolation.SRGB</span></span><span class="token punctuation">)</span> : <a href="../-gradient/index.html">Paint.Gradient</a><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/openrndr/orx/blob/master/orx-composition/src/commonMain/kotlin/CompositionStyleSheet.kt#L130">source</a>)</span></span></div><p class="paragraph">A radial gradient from the circle at <a href="../../../../orx-composition/org.openrndr.extra.composition/-paint/-radial-gradient/--root--.html">focal</a> with <a href="../../../../orx-composition/org.openrndr.extra.composition/-paint/-radial-gradient/--root--.html">focalRadius</a> to the circle at <a href="../../../../orx-composition/org.openrndr.extra.composition/-paint/-radial-gradient/--root--.html">center</a> with <a href="../../../../orx-composition/org.openrndr.extra.composition/-paint/-radial-gradient/--root--.html">radius</a>, like SVG's radialGradient</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="-1086413936%2FConstructors%2F-354277685" anchor-label="RadialGradient" id="-1086413936%2FConstructors%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-radial-gradient.html"><span>Radial</span><wbr><span><span>Gradient</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1086413936%2FConstructors%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">center<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token punctuation">, </span></span><span class="parameter ">radius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">focal<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>center<span class="token punctuation">, </span></span><span class="parameter ">focalRadius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span><span class="token punctuation">, </span></span><span class="parameter ">stops<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-color-stop/index.html">ColorStop</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">units<span class="token operator">: </span><a href="../../../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-paint-units/index.html">PaintUnits</a><span class="token operator"> = </span>PaintUnits.BOUNDS<span class="token punctuation">, </span></span><span class="parameter ">spread<span class="token operator">: </span><a href="../../../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-gradient-spread/index.html">GradientSpread</a><span class="token operator"> = </span>GradientSpread.PAD<span class="token punctuation">, </span></span><span class="parameter ">transform<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Matrix44///PointingToDeclaration/">Matrix44</span><span class="token operator"> = </span>Matrix44.IDENTITY<span class="token punctuation">, </span></span><span class="parameter ">id<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">""</span><span class="token punctuation">, </span></span><span class="parameter ">interpolation<span class="token operator">: </span><a href="../../../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-gradient-interpolation/index.html">GradientInterpolation</a><span class="token operator"> = </span>GradientInterpolation.SRGB</span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-970138197%2FProperties%2F-354277685" anchor-label="center" id="-970138197%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="center.html"><span><span>center</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-970138197%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="center.html">center</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1162817547%2FProperties%2F-354277685" anchor-label="focal" id="-1162817547%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="focal.html"><span><span>focal</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1162817547%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="focal.html">focal</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-65521277%2FProperties%2F-354277685" anchor-label="focalRadius" id="-65521277%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="focal-radius.html"><span>focal</span><wbr><span><span>Radius</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-65521277%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="focal-radius.html">focalRadius</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1992576731%2FProperties%2F-354277685" anchor-label="id" id="-1992576731%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="id.html"><span><span>id</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1992576731%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="id.html">id</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="684224662%2FProperties%2F-354277685" anchor-label="interpolation" id="684224662%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="interpolation.html"><span><span>interpolation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="684224662%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="interpolation.html">interpolation</a><span class="token operator">: </span><a href="../../../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-gradient-interpolation/index.html">GradientInterpolation</a></div><div class="brief "><p class="paragraph">the color space the colors are interpolated in, sRGB like SVG by default</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1645343730%2FProperties%2F-354277685" anchor-label="radius" id="-1645343730%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="radius.html"><span><span>radius</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1645343730%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="radius.html">radius</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1510074803%2FProperties%2F-354277685" anchor-label="spread" id="-1510074803%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="spread.html"><span><span>spread</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1510074803%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="spread.html">spread</a><span class="token operator">: </span><a href="../../../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-gradient-spread/index.html">GradientSpread</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1149409065%2FProperties%2F-354277685" anchor-label="stops" id="1149409065%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="stops.html"><span><span>stops</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1149409065%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="stops.html">stops</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-color-stop/index.html">ColorStop</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="900868570%2FProperties%2F-354277685" anchor-label="svgId" id="900868570%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-gradient/svg-id.html"><span>svg</span><wbr><span><span>Id</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="900868570%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="../-gradient/svg-id.html">svgId</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">the id of the gradient in SVG documents: <a href="../-gradient/id.html">id</a>, or an id derived from the gradient when it has none</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="450319950%2FProperties%2F-354277685" anchor-label="transform" id="450319950%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="transform.html"><span><span>transform</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="450319950%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="transform.html">transform</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Matrix44///PointingToDeclaration/">Matrix44</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1906660821%2FProperties%2F-354277685" anchor-label="units" id="-1906660821%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="units.html"><span><span>units</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1906660821%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="units.html">units</a><span class="token operator">: </span><a href="../../../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-paint-units/index.html">PaintUnits</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1678231368%2FProperties%2F-354277685" anchor-label="value" id="1678231368%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-gradient/value.html"><span><span>value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1678231368%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="../-gradient/value.html">value</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-799413083%2FFunctions%2F-354277685" anchor-label="source" id="-799413083%2FFunctions%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="source.html"><span><span>source</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-799413083%2FFunctions%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="source.html"><span class="token function">source</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-source-preset/index.html">SourcePreset</a></div><div class="brief "><p class="paragraph">the preset that generates the colors of this paint</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2137649844%2FFunctions%2F-354277685" anchor-label="toString" id="2137649844%2FFunctions%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="to-string.html"><span>to</span><wbr><span><span>String</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2137649844%2FFunctions%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="to-string.html"><span class="token function">toString</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

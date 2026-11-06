@@ -1,0 +1,1066 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>Style</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../../images/logo-icon.svg">
+<link href="../../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.1-dev.53.uncommitted+ca6ace5
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-composition/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-composition/commonMain" data-filter=":orx-composition/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="orx-composition::org.openrndr.extra.composition/Style///PointingToDeclaration//-354277685">
+  <div class="breadcrumbs"><a href="../../index.html">orx-composition</a><span class="delimiter">/</span><a href="../index.html">org.openrndr.extra.composition</a><span class="delimiter">/</span><span class="current">Style</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Style</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">Style</a> : <a href="../-styleable/index.html">Styleable</a><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/openrndr/orx/blob/master/orx-composition/src/commonMain/kotlin/CompositionStyleSheet.kt#L1076">source</a>)</span></span></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="90813949%2FConstructors%2F-354277685" anchor-label="Style" id="90813949%2FConstructors%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-style.html"><span><span>Style</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="90813949%2FConstructors%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="537076635%2FProperties%2F-354277685" anchor-label="baselineShift" id="537076635%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../baseline-shift.html"><span>baseline</span><wbr><span><span>Shift</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="537076635%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../baseline-shift.html">baselineShift</a><span class="token operator">: </span><a href="../-baseline-shift/index.html">BaselineShift</a></div><div class="brief "><p class="paragraph">how far text is moved up from the baseline of its parent, like baseline-shift; the shifts of groups add up</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1408501643%2FProperties%2F-354277685" anchor-label="clipPath" id="1408501643%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../clip-path.html"><span>clip</span><wbr><span><span>Path</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1408501643%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../clip-path.html">clipPath</a><span class="token operator">: </span><a href="../-clip-path/index.html">ClipPath</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1976554516%2FProperties%2F-354277685" anchor-label="clipRule" id="1976554516%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../clip-rule.html"><span>clip</span><wbr><span><span>Rule</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1976554516%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../clip-rule.html">clipRule</a><span class="token operator">: </span><a href="../-fill-rule/index.html">FillRule</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-538617035%2FProperties%2F-354277685" anchor-label="color" id="-538617035%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../color.html"><span><span>color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-538617035%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../color.html">color</a><span class="token operator">: </span><a href="../-paint/index.html">Paint</a></div><div class="brief "><p class="paragraph">the color that <a href="../-paint/-current-color/index.html">Paint.CurrentColor</a> refers to, like the color property of SVG</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2043901287%2FProperties%2F-354277685" anchor-label="direction" id="-2043901287%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../direction.html"><span><span>direction</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2043901287%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../direction.html">direction</a><span class="token operator">: </span><a href="../-text-direction/index.html">TextDirection</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="101254966%2FProperties%2F-354277685" anchor-label="display" id="101254966%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../display.html"><span><span>display</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="101254966%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../display.html">display</a><span class="token operator">: </span><a href="../-display/index.html">Display</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2080673765%2FProperties%2F-354277685" anchor-label="dominantBaseline" id="-2080673765%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../dominant-baseline.html"><span>dominant</span><wbr><span><span>Baseline</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2080673765%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../dominant-baseline.html">dominantBaseline</a><span class="token operator">: </span><a href="../-dominant-baseline/index.html">DominantBaseline</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2064327075%2FProperties%2F-354277685" anchor-label="fill" id="-2064327075%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../fill.html"><span><span>fill</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2064327075%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../fill.html">fill</a><span class="token operator">: </span><a href="../-paint/index.html">Paint</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-925694288%2FProperties%2F-354277685" anchor-label="fillOpacity" id="-925694288%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../fill-opacity.html"><span>fill</span><wbr><span><span>Opacity</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-925694288%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../fill-opacity.html">fillOpacity</a><span class="token operator">: </span><a href="../-numeric/index.html">Numeric</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1593892929%2FProperties%2F-354277685" anchor-label="fillRule" id="1593892929%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../fill-rule.html"><span>fill</span><wbr><span><span>Rule</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1593892929%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../fill-rule.html">fillRule</a><span class="token operator">: </span><a href="../-fill-rule/index.html">FillRule</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1540729976%2FProperties%2F-354277685" anchor-label="filter" id="-1540729976%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../filter.html"><span><span>filter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1540729976%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../filter.html">filter</a><span class="token operator">: </span><a href="../-filter-reference/index.html">FilterReference</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1196992947%2FProperties%2F-354277685" anchor-label="fontFamily" id="-1196992947%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../font-family.html"><span>font</span><wbr><span><span>Family</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1196992947%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../font-family.html">fontFamily</a><span class="token operator">: </span><a href="../-font-family/index.html">FontFamily</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-854417906%2FProperties%2F-354277685" anchor-label="fontFeatureSettings" id="-854417906%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../font-feature-settings.html"><span>font</span><wbr><span>Feature</span><wbr><span><span>Settings</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-854417906%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../font-feature-settings.html">fontFeatureSettings</a><span class="token operator">: </span><a href="../-font-settings/index.html">FontSettings</a></div><div class="brief "><p class="paragraph">OpenType features of text, like font-feature-settings; font-variant is read into it</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-979335152%2FProperties%2F-354277685" anchor-label="fontSize" id="-979335152%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../font-size.html"><span>font</span><wbr><span><span>Size</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-979335152%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../font-size.html">fontSize</a><span class="token operator">: </span><a href="../-length/index.html">Length</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1085028950%2FProperties%2F-354277685" anchor-label="fontStyle" id="1085028950%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../font-style.html"><span>font</span><wbr><span><span>Style</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1085028950%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../font-style.html">fontStyle</a><span class="token operator">: </span><a href="../-font-style/index.html">FontStyle</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-951987631%2FProperties%2F-354277685" anchor-label="fontVariationSettings" id="-951987631%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../font-variation-settings.html"><span>font</span><wbr><span>Variation</span><wbr><span><span>Settings</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-951987631%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../font-variation-settings.html">fontVariationSettings</a><span class="token operator">: </span><a href="../-font-settings/index.html">FontSettings</a></div><div class="brief "><p class="paragraph">values of the axes of variable fonts, like font-variation-settings</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="302548921%2FProperties%2F-354277685" anchor-label="fontWeight" id="302548921%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../font-weight.html"><span>font</span><wbr><span><span>Weight</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="302548921%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../font-weight.html">fontWeight</a><span class="token operator">: </span><a href="../-font-weight/index.html">FontWeight</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1643052089%2FProperties%2F-354277685" anchor-label="height" id="1643052089%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../height.html"><span><span>height</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1643052089%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../height.html">height</a><span class="token operator">: </span><a href="../-length/index.html">Length</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1684857350%2FProperties%2F-354277685" anchor-label="inlineSize" id="1684857350%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../inline-size.html"><span>inline</span><wbr><span><span>Size</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1684857350%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../inline-size.html">inlineSize</a><span class="token operator">: </span><a href="../-optional-length/index.html">OptionalLength</a></div><div class="brief "><p class="paragraph">the width that the text of a text element wraps to, like the inline-size property of SVG 2</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1751082410%2FProperties%2F-354277685" anchor-label="isolation" id="1751082410%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../isolation.html"><span><span>isolation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1751082410%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../isolation.html">isolation</a><span class="token operator">: </span><a href="../-isolation/index.html">Isolation</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="584826635%2FProperties%2F-354277685" anchor-label="lengthAdjust" id="584826635%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../length-adjust.html"><span>length</span><wbr><span><span>Adjust</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="584826635%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../length-adjust.html">lengthAdjust</a><span class="token operator">: </span><a href="../-length-adjust/index.html">LengthAdjust</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1427463067%2FProperties%2F-354277685" anchor-label="letterSpacing" id="1427463067%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../letter-spacing.html"><span>letter</span><wbr><span><span>Spacing</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1427463067%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../letter-spacing.html">letterSpacing</a><span class="token operator">: </span><a href="../-length/index.html">Length</a></div><div class="brief "><p class="paragraph">space added after every character of text, like letter-spacing</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="194350650%2FProperties%2F-354277685" anchor-label="lineCap" id="194350650%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../line-cap.html"><span>line</span><wbr><span><span>Cap</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="194350650%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../line-cap.html">lineCap</a><span class="token operator">: </span><a href="../-line-cap/index.html">LineCap</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="84176293%2FProperties%2F-354277685" anchor-label="lineHeight" id="84176293%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../line-height.html"><span>line</span><wbr><span><span>Height</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="84176293%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../line-height.html">lineHeight</a><span class="token operator">: </span><a href="../-line-height/index.html">LineHeight</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-832437118%2FProperties%2F-354277685" anchor-label="lineJoin" id="-832437118%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../line-join.html"><span>line</span><wbr><span><span>Join</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-832437118%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../line-join.html">lineJoin</a><span class="token operator">: </span><a href="../-line-join/index.html">LineJoin</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-683143401%2FProperties%2F-354277685" anchor-label="markerEnd" id="-683143401%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../marker-end.html"><span>marker</span><wbr><span><span>End</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-683143401%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../marker-end.html">markerEnd</a><span class="token operator">: </span><a href="../-marker-reference/index.html">MarkerReference</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="142776522%2FProperties%2F-354277685" anchor-label="markerMid" id="142776522%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../marker-mid.html"><span>marker</span><wbr><span><span>Mid</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="142776522%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../marker-mid.html">markerMid</a><span class="token operator">: </span><a href="../-marker-reference/index.html">MarkerReference</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1747315568%2FProperties%2F-354277685" anchor-label="markerStart" id="1747315568%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../marker-start.html"><span>marker</span><wbr><span><span>Start</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1747315568%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../marker-start.html">markerStart</a><span class="token operator">: </span><a href="../-marker-reference/index.html">MarkerReference</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-958974572%2FProperties%2F-354277685" anchor-label="mask" id="-958974572%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../mask.html"><span><span>mask</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-958974572%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../mask.html">mask</a><span class="token operator">: </span><a href="../-mask-reference/index.html">MaskReference</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="688462858%2FProperties%2F-354277685" anchor-label="miterLimit" id="688462858%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../miter-limit.html"><span>miter</span><wbr><span><span>Limit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="688462858%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../miter-limit.html">miterLimit</a><span class="token operator">: </span><a href="../-numeric/index.html">Numeric</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="561895784%2FProperties%2F-354277685" anchor-label="mixBlendMode" id="561895784%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../mix-blend-mode.html"><span>mix</span><wbr><span>Blend</span><wbr><span><span>Mode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="561895784%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../mix-blend-mode.html">mixBlendMode</a><span class="token operator">: </span><a href="../-mix-blend-mode/index.html">MixBlendMode</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-276800371%2FProperties%2F-354277685" anchor-label="opacity" id="-276800371%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../opacity.html"><span><span>opacity</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-276800371%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../opacity.html">opacity</a><span class="token operator">: </span><a href="../-numeric/index.html">Numeric</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1989057136%2FProperties%2F-354277685" anchor-label="paintOrder" id="1989057136%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../paint-order.html"><span>paint</span><wbr><span><span>Order</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1989057136%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../paint-order.html">paintOrder</a><span class="token operator">: </span><a href="../-paint-order/index.html">PaintOrder</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1284258187%2FProperties%2F-354277685" anchor-label="pathLength" id="-1284258187%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../path-length.html"><span>path</span><wbr><span><span>Length</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1284258187%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../path-length.html">pathLength</a><span class="token operator">: </span><a href="../-path-length/index.html">PathLength</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="645658050%2FProperties%2F-354277685" anchor-label="pointerEvents" id="645658050%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../pointer-events.html"><span>pointer</span><wbr><span><span>Events</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="645658050%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../pointer-events.html">pointerEvents</a><span class="token operator">: </span><a href="../-pointer-events/index.html">PointerEvents</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1470184653%2FProperties%2F-354277685" anchor-label="properties" id="-1470184653%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-styleable/properties.html"><span><span>properties</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1470184653%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="../-styleable/properties.html">properties</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-hash-map/index.html">HashMap</a><span class="token operator">&lt;</span><a href="../-attribute-or-property-key/index.html">AttributeOrPropertyKey</a><span class="token punctuation">, </span><a href="../-attribute-or-property-value/index.html">AttributeOrPropertyValue</a><span class="token operator">?</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-352774916%2FProperties%2F-354277685" anchor-label="shadeStyle" id="-352774916%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../shade-style.html"><span>shade</span><wbr><span><span>Style</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-352774916%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../shade-style.html">shadeStyle</a><span class="token operator">: </span><a href="../-shade/index.html">Shade</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="667706357%2FProperties%2F-354277685" anchor-label="shapeRendering" id="667706357%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../shape-rendering.html"><span>shape</span><wbr><span><span>Rendering</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="667706357%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../shape-rendering.html">shapeRendering</a><span class="token operator">: </span><a href="../-shape-rendering/index.html">ShapeRendering</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-439246648%2FProperties%2F-354277685" anchor-label="stroke" id="-439246648%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../stroke.html"><span><span>stroke</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-439246648%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../stroke.html">stroke</a><span class="token operator">: </span><a href="../-paint/index.html">Paint</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1545773193%2FProperties%2F-354277685" anchor-label="strokeDashArray" id="1545773193%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../stroke-dash-array.html"><span>stroke</span><wbr><span>Dash</span><wbr><span><span>Array</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1545773193%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../stroke-dash-array.html">strokeDashArray</a><span class="token operator">: </span><a href="../-dash-array/index.html">DashArray</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-380850941%2FProperties%2F-354277685" anchor-label="strokeDashOffset" id="-380850941%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../stroke-dash-offset.html"><span>stroke</span><wbr><span>Dash</span><wbr><span><span>Offset</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-380850941%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../stroke-dash-offset.html">strokeDashOffset</a><span class="token operator">: </span><a href="../-length/index.html">Length</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="127256037%2FProperties%2F-354277685" anchor-label="strokeOpacity" id="127256037%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../stroke-opacity.html"><span>stroke</span><wbr><span><span>Opacity</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="127256037%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../stroke-opacity.html">strokeOpacity</a><span class="token operator">: </span><a href="../-numeric/index.html">Numeric</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-676247504%2FProperties%2F-354277685" anchor-label="strokeWeight" id="-676247504%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../stroke-weight.html"><span>stroke</span><wbr><span><span>Weight</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-676247504%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../stroke-weight.html">strokeWeight</a><span class="token operator">: </span><a href="../-length/index.html">Length</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1204337922%2FProperties%2F-354277685" anchor-label="textAnchor" id="-1204337922%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../text-anchor.html"><span>text</span><wbr><span><span>Anchor</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1204337922%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../text-anchor.html">textAnchor</a><span class="token operator">: </span><a href="../-text-anchor/index.html">TextAnchor</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1714533533%2FProperties%2F-354277685" anchor-label="textDecoration" id="-1714533533%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../text-decoration.html"><span>text</span><wbr><span><span>Decoration</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1714533533%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../text-decoration.html">textDecoration</a><span class="token operator">: </span><a href="../-text-decoration/index.html">TextDecoration</a></div><div class="brief "><p class="paragraph">The lines drawn along text. Unlike CSS, where decorations are drawn in the color of the element that declares them, the lines are drawn in the fill and stroke of the text they are drawn along.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1041377389%2FProperties%2F-354277685" anchor-label="textLength" id="1041377389%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../text-length.html"><span>text</span><wbr><span><span>Length</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1041377389%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../text-length.html">textLength</a><span class="token operator">: </span><a href="../-optional-length/index.html">OptionalLength</a></div><div class="brief "><p class="paragraph">the length that the text of a text element or a tspan is adjusted to, see <a href="../length-adjust.html">lengthAdjust</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="29642037%2FProperties%2F-354277685" anchor-label="textOrientation" id="29642037%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../text-orientation.html"><span>text</span><wbr><span><span>Orientation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="29642037%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../text-orientation.html">textOrientation</a><span class="token operator">: </span><a href="../-text-orientation/index.html">TextOrientation</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2050597428%2FProperties%2F-354277685" anchor-label="transform" id="-2050597428%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../transform.html"><span><span>transform</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2050597428%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../transform.html">transform</a><span class="token operator">: </span><a href="../-transform/index.html">Transform</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="460135375%2FProperties%2F-354277685" anchor-label="unicodeBidi" id="460135375%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../unicode-bidi.html"><span>unicode</span><wbr><span><span>Bidi</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="460135375%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../unicode-bidi.html">unicodeBidi</a><span class="token operator">: </span><a href="../-unicode-bidi/index.html">UnicodeBidi</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1558815948%2FProperties%2F-354277685" anchor-label="vectorEffect" id="1558815948%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../vector-effect.html"><span>vector</span><wbr><span><span>Effect</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1558815948%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../vector-effect.html">vectorEffect</a><span class="token operator">: </span><a href="../-vector-effect/index.html">VectorEffect</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1029746734%2FProperties%2F-354277685" anchor-label="visibility" id="1029746734%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../visibility.html"><span><span>visibility</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1029746734%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../visibility.html">visibility</a><span class="token operator">: </span><a href="../-visibility/index.html">Visibility</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="686964931%2FProperties%2F-354277685" anchor-label="whiteSpace" id="686964931%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../white-space.html"><span>white</span><wbr><span><span>Space</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="686964931%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../white-space.html">whiteSpace</a><span class="token operator">: </span><a href="../-white-space/index.html">WhiteSpace</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1567901618%2FProperties%2F-354277685" anchor-label="width" id="1567901618%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../width.html"><span><span>width</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1567901618%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../width.html">width</a><span class="token operator">: </span><a href="../-length/index.html">Length</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-579075201%2FProperties%2F-354277685" anchor-label="wordSpacing" id="-579075201%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../word-spacing.html"><span>word</span><wbr><span><span>Spacing</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-579075201%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../word-spacing.html">wordSpacing</a><span class="token operator">: </span><a href="../-length/index.html">Length</a></div><div class="brief "><p class="paragraph">space added to every space between words, like word-spacing</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1862030969%2FProperties%2F-354277685" anchor-label="writingMode" id="1862030969%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../writing-mode.html"><span>writing</span><wbr><span><span>Mode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1862030969%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../writing-mode.html">writingMode</a><span class="token operator">: </span><a href="../-writing-mode/index.html">WritingMode</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1806204864%2FProperties%2F-354277685" anchor-label="x" id="-1806204864%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../x.html"><span><span>x</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1806204864%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../x.html">x</a><span class="token operator">: </span><a href="../-length/index.html">Length</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="680914911%2FProperties%2F-354277685" anchor-label="y" id="680914911%2FProperties%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../y.html"><span><span>y</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="680914911%2FProperties%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="index.html">Style</a><span class="token punctuation">.</span><a href="../y.html">y</a><span class="token operator">: </span><a href="../-length/index.html">Length</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-1772608025%2FFunctions%2F-354277685" anchor-label="get" id="-1772608025%2FFunctions%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-styleable/get.html"><span><span>get</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1772608025%2FFunctions%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="../-styleable/get.html"><span class="token function">get</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="../-attribute-or-property-key/index.html">AttributeOrPropertyKey</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-attribute-or-property-value/index.html">AttributeOrPropertyValue</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1416360634%2FFunctions%2F-354277685" anchor-label="inherit" id="1416360634%2FFunctions%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-styleable/inherit.html"><span><span>inherit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1416360634%2FFunctions%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">infix </span><span class="token keyword">fun </span><a href="../-styleable/inherit.html"><span class="token function">inherit</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">from<span class="token operator">: </span><a href="index.html">Style</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Style</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="747336369%2FFunctions%2F-354277685" anchor-label="isInherited" id="747336369%2FFunctions%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-styleable/is-inherited.html"><span>is</span><wbr><span><span>Inherited</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="747336369%2FFunctions%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-styleable/is-inherited.html"><span class="token function">isInherited</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">from<span class="token operator">: </span><a href="../-styleable/index.html">Styleable</a><span class="token punctuation">, </span></span><span class="parameter ">attributeKey<span class="token operator">: </span><a href="../-attribute-or-property-key/index.html">AttributeOrPropertyKey</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="16966940%2FFunctions%2F-354277685" anchor-label="set" id="16966940%2FFunctions%2F-354277685" data-filterable-set=":orx-composition/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-composition/commonMain" data-filterable-set=":orx-composition/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-styleable/set.html"><span><span>set</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="16966940%2FFunctions%2F-354277685"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-composition/commonMain"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="../-styleable/set.html"><span class="token function">set</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="../-attribute-or-property-key/index.html">AttributeOrPropertyKey</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="../-attribute-or-property-value/index.html">AttributeOrPropertyValue</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

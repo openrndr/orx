@@ -1,0 +1,567 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>ParameterBindings</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../../images/logo-icon.svg">
+<link href="../../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.1-dev.53.uncommitted+ca6ace5
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":orx-parameters/jvmMain">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-parameters/jvmMain" data-filter=":orx-parameters/jvmMain">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="orx-parameters::org.openrndr.extra.parameters/ParameterBindings///PointingToDeclaration//-1466395127">
+  <div class="breadcrumbs"><a href="../../index.html">orx-parameters</a><span class="delimiter">/</span><a href="../index.html">org.openrndr.extra.parameters</a><span class="delimiter">/</span><span class="current">ParameterBindings</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Parameter</span><wbr><span><span>Bindings</span></span></h1>
+    <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+      <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">ParameterBindings</a><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/openrndr/orx/blob/master/orx-parameters/src/jvmMain/kotlin/ParameterBindings.kt#L59">source</a>)</span></span></div><p class="paragraph">The parameters of objects, bound by labels: their values are read, set, randomized, saved and loaded by the label of an object and the name of a parameter. This is what a GUI shows, without a GUI: programs that run without one, and other front ends, like remote controls or MIDI controllers, use it in the same way.</p><p class="paragraph">Objects are added with <a href="add.html">add</a>, under a label that is unique. The objects held by properties with a <a href="../-nested-parameter/index.html">NestedParameter</a> annotation are bound too, labeled <code class="lang-kotlin">&lt;label of the parent&gt;/&lt;label of the nested parameter&gt;</code>; when such a property holds another object, <a href="rebind-nested.html">rebindNested</a> binds that object.</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">val bindings = ParameterBindings()<br>val settings = bindings.add(Settings(), "settings")<br>bindings.load(File("parameters.json"))<br>bindings["settings", "radius"] = 20.0</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div></div>    </div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="230123349%2FConstructors%2F-1466395127" anchor-label="ParameterBindings" id="230123349%2FConstructors%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-parameter-bindings.html"><span>Parameter</span><wbr><span><span>Bindings</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="230123349%2FConstructors%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="825554714%2FClasslikes%2F-1466395127" anchor-label="Binding" id="825554714%2FClasslikes%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-binding/index.html"><span><span>Binding</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="825554714%2FClasslikes%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-binding/index.html">Binding</a></div><div class="brief "><p class="paragraph">The binding of <a href="../../../orx-parameters/org.openrndr.extra.parameters/-parameter-bindings/-binding/--root--.html">obj</a>, an object with <a href="../../../orx-parameters/org.openrndr.extra.parameters/-parameter-bindings/-binding/--root--.html">parameters</a>, under <a href="../../../orx-parameters/org.openrndr.extra.parameters/-parameter-bindings/-binding/--root--.html">label</a></p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1583757043%2FClasslikes%2F-1466395127" anchor-label="Change" id="1583757043%2FClasslikes%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-change/index.html"><span><span>Change</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1583757043%2FClasslikes%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-change/index.html">Change</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>binding<span class="token operator">: </span><a href="-binding/index.html">ParameterBindings.Binding</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>parameter<span class="token operator">: </span><a href="../-parameter/index.html">Parameter</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">a change of the value of <a href="../../../orx-parameters/org.openrndr.extra.parameters/-parameter-bindings/-change/--root--.html">parameter</a> of <a href="../../../orx-parameters/org.openrndr.extra.parameters/-parameter-bindings/-change/--root--.html">binding</a>, or of the object of a nested parameter</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1471271503%2FClasslikes%2F-1466395127" anchor-label="NestedBinding" id="-1471271503%2FClasslikes%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-nested-binding/index.html"><span>Nested</span><wbr><span><span>Binding</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1471271503%2FClasslikes%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-nested-binding/index.html">NestedBinding</a></div><div class="brief "><p class="paragraph">The binding of the object held by the property of a <a href="../-parameter-type/-nested/index.html">ParameterType.Nested</a> parameter of <a href="../../../orx-parameters/org.openrndr.extra.parameters/-parameter-bindings/-nested-binding/--root--.html">parent</a></p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-608167380%2FProperties%2F-1466395127" anchor-label="added" id="-608167380%2FProperties%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="added.html"><span><span>added</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-608167380%2FProperties%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="added.html">added</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.events/Event///PointingToDeclaration/">Event</span><span class="token operator">&lt;</span><a href="-binding/index.html">ParameterBindings.Binding</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">an object was added</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="412662560%2FProperties%2F-1466395127" anchor-label="bindings" id="412662560%2FProperties%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="bindings.html"><span><span>bindings</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="412662560%2FProperties%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="bindings.html">bindings</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-binding/index.html">ParameterBindings.Binding</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">the bindings of the objects that are added, in the order they are added</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="27003704%2FProperties%2F-1466395127" anchor-label="changed" id="27003704%2FProperties%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="changed.html"><span><span>changed</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="27003704%2FProperties%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="changed.html">changed</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.events/Event///PointingToDeclaration/">Event</span><span class="token operator">&lt;</span><a href="-change/index.html">ParameterBindings.Change</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Values were changed through the bindings: by <a href="set.html">set</a>, <a href="invoke.html">invoke</a>, <a href="randomize.html">randomize</a>, <a href="from-object.html">fromObject</a> or <a href="load.html">load</a>; for nested parameters by <a href="rebind-nested.html">rebindNested</a>. Front ends trigger it for the changes they make, like the GUI of orx-gui for its controls. Changes made to the objects directly are not noticed.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1747007031%2FProperties%2F-1466395127" anchor-label="loaded" id="-1747007031%2FProperties%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="loaded.html"><span><span>loaded</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1747007031%2FProperties%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="loaded.html">loaded</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.events/Event///PointingToDeclaration/">Event</span><span class="token operator">&lt;</span><a href="index.html">ParameterBindings</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">the values were loaded, by <a href="from-object.html">fromObject</a> or <a href="load.html">load</a></p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="385482401%2FProperties%2F-1466395127" anchor-label="rebound" id="385482401%2FProperties%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="rebound.html"><span><span>rebound</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="385482401%2FProperties%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="rebound.html">rebound</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.events/Event///PointingToDeclaration/">Event</span><span class="token operator">&lt;</span><a href="-nested-binding/index.html">ParameterBindings.NestedBinding</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">the property of a nested parameter holds another object, which is bound, see <a href="rebind-nested.html">rebindNested</a></p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="190631692%2FProperties%2F-1466395127" anchor-label="removed" id="190631692%2FProperties%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="removed.html"><span><span>removed</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="190631692%2FProperties%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="removed.html">removed</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.events/Event///PointingToDeclaration/">Event</span><span class="token operator">&lt;</span><a href="-binding/index.html">ParameterBindings.Binding</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">an object was removed</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-640923022%2FFunctions%2F-1466395127" anchor-label="add" id="-640923022%2FFunctions%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add.html"><span><span>add</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-640923022%2FFunctions%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="add.html"><span class="token function">add</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">obj<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token punctuation">, </span></span><span class="parameter ">label<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>obj.title()</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-binding/index.html">ParameterBindings.Binding</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Adds <a href="add.html">obj</a> under <a href="add.html">label</a>, or the title of its <a href="../-description/index.html">Description</a> annotation; the label is made unique. Objects without parameters are not bound.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-526264213%2FFunctions%2F-1466395127" anchor-label="all" id="-526264213%2FFunctions%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="all.html"><span><span>all</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-526264213%2FFunctions%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="all.html"><span class="token function">all</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-binding/index.html">ParameterBindings.Binding</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">the bindings of the objects and of the objects nested in them, parents before the objects nested in them</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="20243233%2FFunctions%2F-1466395127" anchor-label="binding" id="20243233%2FFunctions%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="binding.html"><span><span>binding</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="20243233%2FFunctions%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="binding.html"><span class="token function">binding</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">obj<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-binding/index.html">ParameterBindings.Binding</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">the binding of <a href="binding.html">obj</a></p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="binding.html"><span class="token function">binding</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">label<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-binding/index.html">ParameterBindings.Binding</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">the binding with <a href="binding.html">label</a>, of an object or a nested object</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1091362824%2FFunctions%2F-1466395127" anchor-label="fromJson" id="1091362824%2FFunctions%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="from-json.html"><span>from</span><wbr><span><span>Json</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1091362824%2FFunctions%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="from-json.html"><span class="token function">fromJson</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">json<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">sets the values of the parameters to the values in <a href="from-json.html">json</a>, see <a href="from-object.html">fromObject</a></p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1786199559%2FFunctions%2F-1466395127" anchor-label="fromObject" id="1786199559%2FFunctions%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="from-object.html"><span>from</span><wbr><span><span>Object</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1786199559%2FFunctions%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="from-object.html"><span class="token function">fromObject</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">labeledValues<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="../-parameter-value/index.html">ParameterValue</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Sets the values of the parameters of the objects to <a href="from-object.html">labeledValues</a>, by the label of the object and the name of the parameter; values of objects or parameters that are not bound are ignored. Complements <a href="to-object.html">toObject</a>.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-204362541%2FFunctions%2F-1466395127" anchor-label="get" id="-204362541%2FFunctions%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get.html"><span><span>get</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-204362541%2FFunctions%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="get.html"><span class="token function">get</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">label<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">the value of the parameter with <a href="get.html">name</a> of the object with <a href="get.html">label</a></p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1582337139%2FFunctions%2F-1466395127" anchor-label="invoke" id="1582337139%2FFunctions%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="invoke.html"><span><span>invoke</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1582337139%2FFunctions%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="invoke.html"><span class="token function">invoke</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">label<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">calls the action with <a href="invoke.html">name</a> of the object with <a href="invoke.html">label</a></p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1216483024%2FFunctions%2F-1466395127" anchor-label="load" id="-1216483024%2FFunctions%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="load.html"><span><span>load</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1216483024%2FFunctions%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="load.html"><span class="token function">load</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">file<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/File.html">File</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">loads the values of the parameters from the JSON in <a href="load.html">file</a></p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="123738083%2FFunctions%2F-1466395127" anchor-label="randomize" id="123738083%2FFunctions%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="randomize.html"><span><span>randomize</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="123738083%2FFunctions%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="randomize.html"><span class="token function">randomize</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">strength<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.05</span><span class="token punctuation">, </span></span><span class="parameter ">random<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.random/-random/index.html">Random</a><span class="token operator"> = </span>Random.Default<span class="token punctuation">, </span></span><span class="parameter ">filter<span class="token operator">: </span><span class="token punctuation">(</span><a href="-binding/index.html">ParameterBindings.Binding</a><span class="token punctuation">, </span><a href="../-parameter/index.html">Parameter</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span>{ _, _ -&gt; true }</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Moves the values of the numeric, vector and color parameters towards random values in their ranges by <a href="randomize.html">strength</a>, 0 keeps the values, 1 sets random values</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-180302521%2FFunctions%2F-1466395127" anchor-label="rebindNested" id="-180302521%2FFunctions%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="rebind-nested.html"><span>rebind</span><wbr><span><span>Nested</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-180302521%2FFunctions%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="rebind-nested.html"><span class="token function">rebindNested</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-nested-binding/index.html">ParameterBindings.NestedBinding</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Binds the objects that the properties of nested parameters hold when they hold other objects than the ones that are bound, with the objects nested in them</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="809319595%2FFunctions%2F-1466395127" anchor-label="remove" id="809319595%2FFunctions%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="remove.html"><span><span>remove</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="809319595%2FFunctions%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="remove.html"><span class="token function">remove</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">obj<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">removes <a href="remove.html">obj</a>, an object that was added</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1432168711%2FFunctions%2F-1466395127" anchor-label="save" id="-1432168711%2FFunctions%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="save.html"><span><span>save</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1432168711%2FFunctions%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="save.html"><span class="token function">save</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">file<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/File.html">File</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">saves the values of all parameters to <a href="save.html">file</a> as JSON</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1432228637%2FFunctions%2F-1466395127" anchor-label="set" id="1432228637%2FFunctions%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set.html"><span><span>set</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1432228637%2FFunctions%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="set.html"><span class="token function">set</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">label<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">sets the parameter with <a href="set.html">name</a> of the object with <a href="set.html">label</a> to <a href="set.html">value</a></p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="set.html"><span class="token function">set</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">binding<span class="token operator">: </span><a href="-binding/index.html">ParameterBindings.Binding</a><span class="token punctuation">, </span></span><span class="parameter ">parameter<span class="token operator">: </span><a href="../-parameter/index.html">Parameter</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Sets <a href="set.html">parameter</a> of <a href="set.html">binding</a> to <a href="set.html">value</a>. For list parameters <a href="set.html">value</a> selects an element: an <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a> is the index of the element, any other value is the element. For mutable list parameters a <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a> replaces the elements.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-186721909%2FFunctions%2F-1466395127" anchor-label="toJson" id="-186721909%2FFunctions%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="to-json.html"><span>to</span><wbr><span><span>Json</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-186721909%2FFunctions%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="to-json.html"><span class="token function">toJson</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">the values of all parameters as JSON, see <a href="to-object.html">toObject</a></p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1743228308%2FFunctions%2F-1466395127" anchor-label="toObject" id="1743228308%2FFunctions%2F-1466395127" data-filterable-set=":orx-parameters/jvmMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="to-object.html"><span>to</span><wbr><span><span>Object</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1743228308%2FFunctions%2F-1466395127"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":orx-parameters/jvmMain" data-filterable-set=":orx-parameters/jvmMain" data-active="" data-toggle=":orx-parameters/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-parameters/jvmMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="to-object.html"><span class="token function">toObject</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="../-parameter-value/index.html">ParameterValue</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">The values of the parameters of all objects, by the label of the object and the name of the parameter, to be saved; complements <a href="from-object.html">fromObject</a>. This allows the values to be saved together with other data.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

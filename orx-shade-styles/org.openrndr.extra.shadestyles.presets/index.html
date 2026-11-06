@@ -1,0 +1,1410 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>org.openrndr.extra.shadestyles.presets</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../images/logo-icon.svg">
+<link href="../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.1-dev.53.uncommitted+ca6ace5
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-shade-styles/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-shade-styles/commonMain" data-filter=":orx-shade-styles/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageids="orx-shade-styles::org.openrndr.extra.shadestyles.presets////PointingToDeclaration//-1246251867">
+  <div class="breadcrumbs"><a href="../index.html">orx-shade-styles</a><span class="delimiter">/</span><span class="current">org.openrndr.extra.shadestyles.presets</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button><button class="section-tab" data-togglable="PROPERTY,EXTENSION_PROPERTY">Properties</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="-2024427158%2FClasslikes%2F-1246251867" anchor-label="Affine" id="-2024427158%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-affine/index.html"><span><span>Affine</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2024427158%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-affine/index.html">Affine</a> : <a href="-warp-preset/index.html">WarpPreset</a></div><div class="brief "><p class="paragraph">Moves, rotates and scales the image around <a href="-affine/pivot.html">pivot</a>: the image is scaled by <a href="-affine/scale.html">scale</a>, rotated by <a href="-affine/rotation.html">rotation</a> degrees and moved by <a href="-affine/translation.html">translation</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2027483881%2FClasslikes%2F-1246251867" anchor-label="BlendPreset" id="2027483881%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-blend-preset/index.html"><span>Blend</span><wbr><span><span>Preset</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2027483881%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-blend-preset/index.html">BlendPreset</a> : <a href="-preset/index.html">Preset</a></div><div class="brief "><p class="paragraph">A blend: a function <code class="lang-kotlin">vec4 blend(vec4 base, vec4 layer)</code> that combines a layer color with a base color</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-908102393%2FClasslikes%2F-1246251867" anchor-label="ChainColor" id="-908102393%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-chain-color/index.html"><span>Chain</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-908102393%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-chain-color/index.html">ChainColor</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">first<span class="token operator">: </span><a href="-color-preset/index.html">ColorPreset</a><span class="token operator"> = </span>Grade()<span class="token punctuation">, </span></span><span class="parameter ">second<span class="token operator">: </span><a href="-color-preset/index.html">ColorPreset</a><span class="token operator"> = </span>Vignette()</span></span><span class="token punctuation">)</span> : <a href="-color-preset/index.html">ColorPreset</a></div><div class="brief "><p class="paragraph">Applies <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-chain-color/--root--.html">first</a>, then <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-chain-color/--root--.html">second</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1458051920%2FClasslikes%2F-1246251867" anchor-label="ChainWarp" id="-1458051920%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-chain-warp/index.html"><span>Chain</span><wbr><span><span>Warp</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1458051920%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-chain-warp/index.html">ChainWarp</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">first<span class="token operator">: </span><a href="-warp-preset/index.html">WarpPreset</a><span class="token operator"> = </span>Ripple()<span class="token punctuation">, </span></span><span class="parameter ">second<span class="token operator">: </span><a href="-warp-preset/index.html">WarpPreset</a><span class="token operator"> = </span>Swirl()</span></span><span class="token punctuation">)</span> : <a href="-warp-preset/index.html">WarpPreset</a></div><div class="brief "><p class="paragraph">Warps with <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-chain-warp/--root--.html">first</a>, then with <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-chain-warp/--root--.html">second</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-473503504%2FClasslikes%2F-1246251867" anchor-label="CheckersSource" id="-473503504%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-checkers-source/index.html"><span>Checkers</span><wbr><span><span>Source</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-473503504%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-checkers-source/index.html">CheckersSource</a> : <a href="-source-preset/index.html">SourcePreset</a></div><div class="brief "><p class="paragraph">A checkerboard of <a href="-checkers-source/x-cells.html">xCells</a> by <a href="-checkers-source/y-cells.html">yCells</a> cells in colors <a href="-checkers-source/even.html">even</a> and <a href="-checkers-source/odd.html">odd</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2117519184%2FClasslikes%2F-1246251867" anchor-label="ChromaticAberration" id="2117519184%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-chromatic-aberration/index.html"><span>Chromatic</span><wbr><span><span>Aberration</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2117519184%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-chromatic-aberration/index.html">ChromaticAberration</a> : <a href="-sampler-preset/index.html">SamplerPreset</a></div><div class="brief "><p class="paragraph">Chromatic aberration: reads red <a href="-chromatic-aberration/amount.html">amount</a> pixels to the left and blue <a href="-chromatic-aberration/amount.html">amount</a> pixels to the right</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-748570384%2FClasslikes%2F-1246251867" anchor-label="Colormap" id="-748570384%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-colormap/index.html"><span><span>Colormap</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-748570384%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-colormap/index.html">Colormap</a> : <a href="-color-preset/index.html">ColorPreset</a></div><div class="brief "><p class="paragraph">Maps the luma of the colors to a <a href="-colormap/colormap.html">colormap</a>: the luma between <a href="-colormap/min-value.html">minValue</a> and <a href="-colormap/max-value.html">maxValue</a>, raised to <a href="-colormap/curve.html">curve</a>, picks the color. <a href="-colormap/amount.html">amount</a> mixes the mapped colors with the original ones.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-560146602%2FClasslikes%2F-1246251867" anchor-label="ColormapType" id="-560146602%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-colormap-type/index.html"><span>Colormap</span><wbr><span><span>Type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-560146602%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-colormap-type/index.html">ColormapType</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-colormap-type/index.html">ColormapType</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">the colormaps of <a href="-colormap/index.html">Colormap</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1107557993%2FClasslikes%2F-1246251867" anchor-label="ColorPreset" id="-1107557993%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-color-preset/index.html"><span>Color</span><wbr><span><span>Preset</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1107557993%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-color-preset/index.html">ColorPreset</a> : <a href="-preset/index.html">Preset</a></div><div class="brief "><p class="paragraph">A color operation: a function <code class="lang-kotlin">vec4 color(vec4 c, vec2 uv)</code> that maps the color <code class="lang-kotlin">c</code> at texture coordinate <code class="lang-kotlin">uv</code> to a new color. The operations below change the rgb channels as they are stored and keep alpha.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="42528532%2FClasslikes%2F-1246251867" anchor-label="ColorStop" id="42528532%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-color-stop/index.html"><span>Color</span><wbr><span><span>Stop</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="42528532%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-color-stop/index.html">ColorStop</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>offset<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>color<span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A color stop of a gradient: <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-color-stop/--root--.html">color</a> at <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-color-stop/--root--.html">offset</a>, from 0 to 1 along the gradient</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2046765369%2FClasslikes%2F-1246251867" anchor-label="ConstantScalar" id="2046765369%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-constant-scalar/index.html"><span>Constant</span><wbr><span><span>Scalar</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2046765369%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-constant-scalar/index.html">ConstantScalar</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span></span></span><span class="token punctuation">)</span> : <a href="-scalar-preset/index.html">ScalarPreset</a></div><div class="brief "><p class="paragraph">The same <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-constant-scalar/--root--.html">value</a> for every pixel</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2104798514%2FClasslikes%2F-1246251867" anchor-label="ConstantVector2" id="-2104798514%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-constant-vector2/index.html"><span>Constant</span><wbr><span><span>Vector2</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2104798514%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-constant-vector2/index.html">ConstantVector2</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>Vector2.ZERO</span></span><span class="token punctuation">)</span> : <a href="-vector2-preset/index.html">Vector2Preset</a></div><div class="brief "><p class="paragraph">The same <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-constant-vector2/--root--.html">value</a> for every pixel</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="768812675%2FClasslikes%2F-1246251867" anchor-label="Dither" id="768812675%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-dither/index.html"><span><span>Dither</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="768812675%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-dither/index.html">Dither</a> : <a href="-color-preset/index.html">ColorPreset</a></div><div class="brief "><p class="paragraph">Ordered dithering to <a href="-dither/levels.html">levels</a> levels per channel with a <a href="-dither/pattern.html">pattern</a> from "arithmetic dither". The pattern is aligned to the pixels of the output.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1857806289%2FClasslikes%2F-1246251867" anchor-label="DitherPattern" id="-1857806289%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-dither-pattern/index.html"><span>Dither</span><wbr><span><span>Pattern</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1857806289%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-dither-pattern/index.html">DitherPattern</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-dither-pattern/index.html">DitherPattern</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">the masks of <a href="-dither/index.html">Dither</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-670555895%2FClasslikes%2F-1246251867" anchor-label="Duotone" id="-670555895%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-duotone/index.html"><span><span>Duotone</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-670555895%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-duotone/index.html">Duotone</a> : <a href="-color-preset/index.html">ColorPreset</a></div><div class="brief "><p class="paragraph">Maps the luma of the colors from <a href="-duotone/background.html">background</a> to <a href="-duotone/foreground.html">foreground</a>, interpolated in OKLab when <a href="-duotone/lab-interpolation.html">labInterpolation</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-313645623%2FClasslikes%2F-1246251867" anchor-label="EffectChain" id="-313645623%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-effect-chain/index.html"><span>Effect</span><wbr><span><span>Chain</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-313645623%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-effect-chain/index.html">EffectChain</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">stages<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-effect-stage/index.html">EffectStage</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.openrndr.draw/Filter1to1///PointingToDeclaration/">Filter1to1</span></div><div class="brief "><p class="paragraph">A filter that applies <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-effect-chain/--root--.html">stages</a> in order. Consecutive warp, color and source stages are fused into a single pass that reads the input once, filter stages run as passes of their own. A source stage replaces the image, the stages before it have no effect. A sample stage reads the image as it is after the stages before it, it starts a pass that reads the input with the sampler. The result is that of applying the stages one after another, without resampling between fused stages.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="317101182%2FClasslikes%2F-1246251867" anchor-label="EffectChainBuilder" id="317101182%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-effect-chain-builder/index.html"><span>Effect</span><wbr><span>Chain</span><wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="317101182%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-effect-chain-builder/index.html">EffectChainBuilder</a></div><div class="brief "><p class="paragraph">Builds the stages of an <a href="-effect-chain/index.html">EffectChain</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1687259180%2FClasslikes%2F-1246251867" anchor-label="EffectStage" id="1687259180%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-effect-stage/index.html"><span>Effect</span><wbr><span><span>Stage</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1687259180%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">interface </span><a href="-effect-stage/index.html">EffectStage</a></div><div class="brief "><p class="paragraph">A stage of an <a href="-effect-chain/index.html">EffectChain</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1167557634%2FClasslikes%2F-1246251867" anchor-label="FilmGrain" id="1167557634%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-film-grain/index.html"><span>Film</span><wbr><span><span>Grain</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1167557634%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-film-grain/index.html">FilmGrain</a> : <a href="-color-preset/index.html">ColorPreset</a></div><div class="brief "><p class="paragraph">Film grain. <a href="-film-grain/time.html">time</a> animates the grain at <a href="-film-grain/rate.html">rate</a> changes per second; <a href="-film-grain/strength.html">strength</a> and <a href="-film-grain/pitch.html">pitch</a> set the strength and size of the grain, <a href="-film-grain/lift-ratio.html">liftRatio</a> mixes multiplied grain (0) with added grain (1). Colored grain is desaturated by <a href="-film-grain/color-level.html">colorLevel</a>. The grain is aligned to the pixels of the output.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="247768256%2FClasslikes%2F-1246251867" anchor-label="Fisheye" id="247768256%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-fisheye/index.html"><span><span>Fisheye</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="247768256%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-fisheye/index.html">Fisheye</a> : <a href="-warp-preset/index.html">WarpPreset</a></div><div class="brief "><p class="paragraph">Bulges the image (positive <a href="-fisheye/strength.html">strength</a>) or pinches it (negative <a href="-fisheye/strength.html">strength</a>) along axes turned by <a href="-fisheye/rotation.html">rotation</a> degrees, then scales it by <a href="-fisheye/scale.html">scale</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1740136121%2FClasslikes%2F-1246251867" anchor-label="GlslContract" id="1740136121%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-glsl-contract/index.html"><span>Glsl</span><wbr><span><span>Contract</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1740136121%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-glsl-contract/index.html">GlslContract</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>returnType<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>argumentTypes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">The GLSL signature a preset slot accepts: a function returning <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-glsl-contract/--root--.html">returnType</a> that takes <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-glsl-contract/--root--.html">argumentTypes</a>, or, without argument types, a value of <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-glsl-contract/--root--.html">returnType</a> such as a GLSL parameter or a texture parameter.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1474831746%2FClasslikes%2F-1246251867" anchor-label="Grade" id="1474831746%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-grade/index.html"><span><span>Grade</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1474831746%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-grade/index.html">Grade</a> : <a href="-color-preset/index.html">ColorPreset</a></div><div class="brief "><p class="paragraph">Color grading: <a href="-grade/exposure.html">exposure</a> in stops, <a href="-grade/contrast.html">contrast</a> around mid gray, <a href="-grade/saturation.html">saturation</a> around the luma and <a href="-grade/gamma.html">gamma</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1214395483%2FClasslikes%2F-1246251867" anchor-label="GradientInterpolation" id="-1214395483%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-gradient-interpolation/index.html"><span>Gradient</span><wbr><span><span>Interpolation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1214395483%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-gradient-interpolation/index.html">GradientInterpolation</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-gradient-interpolation/index.html">GradientInterpolation</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">the color space that the colors of a gradient are interpolated in</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1821849466%2FClasslikes%2F-1246251867" anchor-label="GradientSpread" id="-1821849466%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-gradient-spread/index.html"><span>Gradient</span><wbr><span><span>Spread</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1821849466%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-gradient-spread/index.html">GradientSpread</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-gradient-spread/index.html">GradientSpread</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">what a gradient does beyond its first and last stop</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="112958675%2FClasslikes%2F-1246251867" anchor-label="Invert" id="112958675%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-invert/index.html"><span><span>Invert</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="112958675%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-invert/index.html">Invert</a> : <a href="-color-preset/index.html">ColorPreset</a></div><div class="brief "><p class="paragraph">Inverts the colors, by <a href="-invert/amount.html">amount</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1259292231%2FClasslikes%2F-1246251867" anchor-label="InvertMask" id="1259292231%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-invert-mask/index.html"><span>Invert</span><wbr><span><span>Mask</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1259292231%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-invert-mask/index.html">InvertMask</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">mask<span class="token operator">: </span><a href="-mask-preset/index.html">MaskPreset</a><span class="token operator"> = </span>RadialGradientMask()</span></span><span class="token punctuation">)</span> : <a href="-mask-preset/index.html">MaskPreset</a></div><div class="brief "><p class="paragraph">1 minus <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-invert-mask/--root--.html">mask</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1322915238%2FClasslikes%2F-1246251867" anchor-label="Kaleidoscope" id="-1322915238%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-kaleidoscope/index.html"><span><span>Kaleidoscope</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1322915238%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-kaleidoscope/index.html">Kaleidoscope</a> : <a href="-warp-preset/index.html">WarpPreset</a></div><div class="brief "><p class="paragraph">Mirrors the image into <a href="-kaleidoscope/segments.html">segments</a> wedges around <a href="-kaleidoscope/center.html">center</a>, turned by <a href="-kaleidoscope/rotation.html">rotation</a> degrees</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2115220152%2FClasslikes%2F-1246251867" anchor-label="Layer" id="-2115220152%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-layer/index.html"><span><span>Layer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2115220152%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-layer/index.html">Layer</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">source<span class="token operator">: </span><a href="-source-preset/index.html">SourcePreset</a><span class="token operator"> = </span>NoiseSource()<span class="token punctuation">, </span></span><span class="parameter ">blend<span class="token operator">: </span><a href="-blend-preset/index.html">BlendPreset</a><span class="token operator"> = </span>LayerBlend()</span></span><span class="token punctuation">)</span> : <a href="-color-preset/index.html">ColorPreset</a></div><div class="brief "><p class="paragraph">Blends the colors of <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-layer/--root--.html">source</a> over the colors with <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-layer/--root--.html">blend</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1429499497%2FClasslikes%2F-1246251867" anchor-label="LayerBlend" id="1429499497%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-layer-blend/index.html"><span>Layer</span><wbr><span><span>Blend</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1429499497%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-layer-blend/index.html">LayerBlend</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">mode<span class="token operator">: </span><a href="-layer-blend-mode/index.html">LayerBlendMode</a><span class="token operator"> = </span>LayerBlendMode.NORMAL</span></span><span class="token punctuation">)</span> : <a href="-blend-preset/index.html">BlendPreset</a></div><div class="brief "><p class="paragraph">Blends the rgb channels of the layer with those of the base by <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-layer-blend/--root--.html">mode</a>, weighted by the alpha of the layer and <a href="-layer-blend/opacity.html">opacity</a>. The alpha of the base is kept. Changing the mode does not compile another shader.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-342895098%2FClasslikes%2F-1246251867" anchor-label="LayerBlendMode" id="-342895098%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-layer-blend-mode/index.html"><span>Layer</span><wbr><span>Blend</span><wbr><span><span>Mode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-342895098%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-layer-blend-mode/index.html">LayerBlendMode</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-layer-blend-mode/index.html">LayerBlendMode</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">the blend modes of <a href="-layer-blend/index.html">LayerBlend</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-442223270%2FClasslikes%2F-1246251867" anchor-label="Levels" id="-442223270%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-levels/index.html"><span><span>Levels</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-442223270%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-levels/index.html">Levels</a> : <a href="-color-preset/index.html">ColorPreset</a></div><div class="brief "><p class="paragraph">Levels: maps <a href="-levels/in-black.html">inBlack</a>..<a href="-levels/in-white.html">inWhite</a> to 0..1, applies <a href="-levels/gamma.html">gamma</a>, then maps 0..1 to <a href="-levels/out-black.html">outBlack</a>..<a href="-levels/out-white.html">outWhite</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="109113608%2FClasslikes%2F-1246251867" anchor-label="LinearGradientMask" id="109113608%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-linear-gradient-mask/index.html"><span>Linear</span><wbr><span>Gradient</span><wbr><span><span>Mask</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="109113608%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-linear-gradient-mask/index.html">LinearGradientMask</a> : <a href="-mask-preset/index.html">MaskPreset</a></div><div class="brief "><p class="paragraph">0 at <a href="-linear-gradient-mask/start.html">start</a> to 1 at <a href="-linear-gradient-mask/end.html">end</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="208645040%2FClasslikes%2F-1246251867" anchor-label="LinearGradientPaint" id="208645040%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-linear-gradient-paint/index.html"><span>Linear</span><wbr><span>Gradient</span><wbr><span><span>Paint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="208645040%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-linear-gradient-paint/index.html">LinearGradientPaint</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">start<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>Vector2(0.0, 0.0)<span class="token punctuation">, </span></span><span class="parameter ">end<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>Vector2(1.0, 0.0)<span class="token punctuation">, </span></span><span class="parameter ">stops<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-color-stop/index.html">ColorStop</a><span class="token operator">&gt;</span><span class="token operator"> = </span>listOf(ColorStop(0.0, ColorRGBa.BLACK), ColorStop(1.0, ColorRGBa.WHITE))<span class="token punctuation">, </span></span><span class="parameter ">spread<span class="token operator">: </span><a href="-gradient-spread/index.html">GradientSpread</a><span class="token operator"> = </span>GradientSpread.PAD</span></span><span class="token punctuation">)</span> : <a href="-stops-gradient-paint/index.html">StopsGradientPaint</a></div><div class="brief "><p class="paragraph">A linear gradient from <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-linear-gradient-paint/--root--.html">start</a> (offset 0) to <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-linear-gradient-paint/--root--.html">end</a> (offset 1), like SVG's linearGradient</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1304752968%2FClasslikes%2F-1246251867" anchor-label="LinearGradientScalar" id="1304752968%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-linear-gradient-scalar/index.html"><span>Linear</span><wbr><span>Gradient</span><wbr><span><span>Scalar</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1304752968%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-linear-gradient-scalar/index.html">LinearGradientScalar</a> : <a href="-scalar-preset/index.html">ScalarPreset</a></div><div class="brief "><p class="paragraph">0 at <a href="-linear-gradient-scalar/start.html">start</a> to 1 at <a href="-linear-gradient-scalar/end.html">end</a>, in texture coordinates</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1885737479%2FClasslikes%2F-1246251867" anchor-label="LinearGradientSource" id="-1885737479%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-linear-gradient-source/index.html"><span>Linear</span><wbr><span>Gradient</span><wbr><span><span>Source</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1885737479%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-linear-gradient-source/index.html">LinearGradientSource</a> : <a href="-source-preset/index.html">SourcePreset</a></div><div class="brief "><p class="paragraph"><a href="-linear-gradient-source/from.html">from</a> at <a href="-linear-gradient-source/start.html">start</a> to <a href="-linear-gradient-source/to.html">to</a> at <a href="-linear-gradient-source/end.html">end</a>, in texture coordinates</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2128925703%2FClasslikes%2F-1246251867" anchor-label="LumaHalftone" id="2128925703%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-luma-halftone/index.html"><span>Luma</span><wbr><span><span>Halftone</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2128925703%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-luma-halftone/index.html">LumaHalftone</a> : <a href="-color-preset/index.html">ColorPreset</a></div><div class="brief "><p class="paragraph">A halftone of the luma: black where the luma times a pattern of cosine lines is below <a href="-luma-halftone/threshold.html">threshold</a>, white elsewhere, or the other way around when <a href="-luma-halftone/invert.html">invert</a>. The pattern, lines at <a href="-luma-halftone/freq0.html">freq0</a> with a cosine wobble of <a href="-luma-halftone/freq1.html">freq1</a> and <a href="-luma-halftone/gain1.html">gain1</a>, turned by <a href="-luma-halftone/rotation.html">rotation</a> degrees, is antialiased by sampling it 7 by 7 times per pixel.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="132950315%2FClasslikes%2F-1246251867" anchor-label="LumaThreshold" id="132950315%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-luma-threshold/index.html"><span>Luma</span><wbr><span><span>Threshold</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="132950315%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-luma-threshold/index.html">LumaThreshold</a> : <a href="-color-preset/index.html">ColorPreset</a></div><div class="brief "><p class="paragraph"><a href="-luma-threshold/foreground.html">foreground</a> where the luma is at least <a href="-luma-threshold/threshold.html">threshold</a>, <a href="-luma-threshold/background.html">background</a> elsewhere</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1943894462%2FClasslikes%2F-1246251867" anchor-label="Masked" id="1943894462%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-masked/index.html"><span><span>Masked</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1943894462%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-masked/index.html">Masked</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">color<span class="token operator">: </span><a href="-color-preset/index.html">ColorPreset</a><span class="token operator"> = </span>Grade()<span class="token punctuation">, </span></span><span class="parameter ">mask<span class="token operator">: </span><a href="-mask-preset/index.html">MaskPreset</a><span class="token operator"> = </span>RadialGradientMask()</span></span><span class="token punctuation">)</span> : <a href="-color-preset/index.html">ColorPreset</a></div><div class="brief "><p class="paragraph">Applies <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-masked/--root--.html">color</a> where <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-masked/--root--.html">mask</a> is 1, keeps the colors where it is 0, and mixes in between</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2005966174%2FClasslikes%2F-1246251867" anchor-label="MaskPreset" id="2005966174%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-mask-preset/index.html"><span>Mask</span><wbr><span><span>Preset</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2005966174%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-mask-preset/index.html">MaskPreset</a> : <a href="-preset/index.html">Preset</a></div><div class="brief "><p class="paragraph">A mask: a function <code class="lang-kotlin">float mask(vec2 uv)</code> from 0 to 1 of a texture coordinate. Unlike a <a href="-scalar-preset/index.html">ScalarPreset</a>, which is read at the pixel itself, a mask is read at the coordinate it is given, so warps before it move it.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1507246867%2FClasslikes%2F-1246251867" anchor-label="NoiseMask" id="1507246867%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-noise-mask/index.html"><span>Noise</span><wbr><span><span>Mask</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1507246867%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-noise-mask/index.html">NoiseMask</a> : <a href="-mask-preset/index.html">MaskPreset</a></div><div class="brief "><p class="paragraph">Fractal simplex noise, from 0 where the noise is below <a href="-noise-mask/threshold.html">threshold</a> to 1 over <a href="-noise-mask/softness.html">softness</a>, of coordinates scaled by <a href="-noise-mask/scale.html">scale</a> and moved by <a href="-noise-mask/offset.html">offset</a>, with <a href="-noise-mask/octaves.html">octaves</a> octaves</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="586051219%2FClasslikes%2F-1246251867" anchor-label="NoiseScalar" id="586051219%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-noise-scalar/index.html"><span>Noise</span><wbr><span><span>Scalar</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="586051219%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-noise-scalar/index.html">NoiseScalar</a> : <a href="-scalar-preset/index.html">ScalarPreset</a></div><div class="brief "><p class="paragraph">Fractal simplex noise in 0..1, of texture coordinates scaled by <a href="-noise-scalar/scale.html">scale</a> and moved by <a href="-noise-scalar/offset.html">offset</a>, with <a href="-noise-scalar/octaves.html">octaves</a> octaves</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1690528068%2FClasslikes%2F-1246251867" anchor-label="NoiseSource" id="1690528068%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-noise-source/index.html"><span>Noise</span><wbr><span><span>Source</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1690528068%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-noise-source/index.html">NoiseSource</a> : <a href="-source-preset/index.html">SourcePreset</a></div><div class="brief "><p class="paragraph">Fractal simplex noise from <a href="-noise-source/from.html">from</a> to <a href="-noise-source/to.html">to</a>, of texture coordinates scaled by <a href="-noise-source/scale.html">scale</a> and moved by <a href="-noise-source/offset.html">offset</a>, with <a href="-noise-source/octaves.html">octaves</a> octaves</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-958185737%2FClasslikes%2F-1246251867" anchor-label="NoiseWarp" id="-958185737%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-noise-warp/index.html"><span>Noise</span><wbr><span><span>Warp</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-958185737%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-noise-warp/index.html">NoiseWarp</a> : <a href="-warp-preset/index.html">WarpPreset</a></div><div class="brief "><p class="paragraph">Displaces coordinates by fractal simplex noise, with <a href="-noise-warp/octaves.html">octaves</a> octaves that each scale by <a href="-noise-warp/lacunarity.html">lacunarity</a> and are weighted by <a href="-noise-warp/decay.html">decay</a>. The noise is sampled on a circle of <a href="-noise-warp/radius.html">radius</a> in the third dimension, <a href="-noise-warp/phase.html">phase</a> moves along it, which loops for phases that differ by 2.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-316954219%2FClasslikes%2F-1246251867" anchor-label="OklchAdjust" id="-316954219%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-oklch-adjust/index.html"><span>Oklch</span><wbr><span><span>Adjust</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-316954219%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-oklch-adjust/index.html">OklchAdjust</a> : <a href="-color-preset/index.html">ColorPreset</a></div><div class="brief "><p class="paragraph">Adjusts colors in OKLCh: adds <a href="-oklch-adjust/lightness.html">lightness</a>, scales the chroma by <a href="-oklch-adjust/chroma.html">chroma</a> and turns the hue by <a href="-oklch-adjust/hue.html">hue</a> degrees. The colors are read and written as sRGB.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="760014774%2FClasslikes%2F-1246251867" anchor-label="PaintLayer" id="760014774%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-paint-layer/index.html"><span>Paint</span><wbr><span><span>Layer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="760014774%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-paint-layer/index.html">PaintLayer</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>source<span class="token operator">: </span><a href="-source-preset/index.html">SourcePreset</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>units<span class="token operator">: </span><a href="-paint-units/index.html">PaintUnits</a><span class="token operator"> = </span>PaintUnits.BOUNDS<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>transform<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Matrix44///PointingToDeclaration/">Matrix44</span><span class="token operator"> = </span>Matrix44.IDENTITY</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A paint of a <a href="-paint-style/index.html">PaintStyle</a>: <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-paint-layer/--root--.html">source</a> read at coordinates in <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-paint-layer/--root--.html">units</a>, transformed by the inverse of <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-paint-layer/--root--.html">transform</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1138635946%2FClasslikes%2F-1246251867" anchor-label="PaintStyle" id="-1138635946%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-paint-style/index.html"><span>Paint</span><wbr><span><span>Style</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1138635946%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-paint-style/index.html">PaintStyle</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>fill<span class="token operator">: </span><a href="-paint-layer/index.html">PaintLayer</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>stroke<span class="token operator">: </span><a href="-paint-layer/index.html">PaintLayer</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.openrndr.draw/ShadeStyle///PointingToDeclaration/">ShadeStyle</span></div><div class="brief "><p class="paragraph">A shade style that paints the fills and strokes of shapes with sources, such as gradients: the color of the source replaces the color of the fill or stroke, their alpha multiplies. A fill or stroke without a paint keeps its color. <a href="-paint-units/-o-b-j-e-c-t/index.html">PaintUnits.OBJECT</a> reads the position of the shape and works for shapes and contours.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-643496367%2FClasslikes%2F-1246251867" anchor-label="PaintStyleBuilder" id="-643496367%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-paint-style-builder/index.html"><span>Paint</span><wbr><span>Style</span><wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-643496367%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-paint-style-builder/index.html">PaintStyleBuilder</a></div><div class="brief "><p class="paragraph">Builds a <a href="-paint-style/index.html">PaintStyle</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1661574312%2FClasslikes%2F-1246251867" anchor-label="PaintUnits" id="-1661574312%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-paint-units/index.html"><span>Paint</span><wbr><span><span>Units</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1661574312%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-paint-units/index.html">PaintUnits</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-paint-units/index.html">PaintUnits</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">the coordinates that a paint is read at</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-446599907%2FClasslikes%2F-1246251867" anchor-label="Pixelate" id="-446599907%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pixelate/index.html"><span><span>Pixelate</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-446599907%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-pixelate/index.html">Pixelate</a> : <a href="-warp-preset/index.html">WarpPreset</a></div><div class="brief "><p class="paragraph">Reads every pixel at the center of its cell in a grid of <a href="-pixelate/x-cells.html">xCells</a> by <a href="-pixelate/y-cells.html">yCells</a> cells</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1075140210%2FClasslikes%2F-1246251867" anchor-label="Posterize" id="1075140210%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-posterize/index.html"><span><span>Posterize</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1075140210%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-posterize/index.html">Posterize</a> : <a href="-color-preset/index.html">ColorPreset</a></div><div class="brief "><p class="paragraph">Reduces every channel to <a href="-posterize/levels.html">levels</a> levels</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="533603818%2FClasslikes%2F-1246251867" anchor-label="Preset" id="533603818%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-preset/index.html"><span><span>Preset</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="533603818%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-preset/index.html">Preset</a> : <span data-unresolved-link="org.openrndr.draw/DynamicParameterSource///PointingToDeclaration/">DynamicParameterSource</span></div><div class="brief "><p class="paragraph">A preset: an object with annotated properties that provides a <span data-unresolved-link="org.openrndr.draw/DynamicParameter///PointingToDeclaration/">DynamicParameter</span> for a slot with <a href="-preset/contract.html">contract</a>. Presets are assigned to the slots of filters, shade styles and other presets, see <a href="preset-slot.html">presetSlot</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1825324788%2FClasslikes%2F-1246251867" anchor-label="PresetSlot" id="-1825324788%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-preset-slot/index.html"><span>Preset</span><wbr><span><span>Slot</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1825324788%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-preset-slot/index.html">PresetSlot</a><span class="token operator">&lt;</span><a href="-preset-slot/index.html">P</a><span class="token operator"> : </span><a href="-preset/index.html">Preset</a><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">parameters<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/StyleParameters///PointingToDeclaration/">StyleParameters</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>contract<span class="token operator">: </span><a href="-glsl-contract/index.html">GlslContract</a><span class="token punctuation">, </span></span><span class="parameter ">initial<span class="token operator">: </span><a href="-preset-slot/index.html">P</a></span></span><span class="token punctuation">)</span> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.properties/-read-write-property/index.html">ReadWriteProperty</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token punctuation">, </span><a href="-preset-slot/index.html">P</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">A property that holds a preset and sets it as the parameter <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-preset-slot/--root--.html">name</a> of <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-preset-slot/--root--.html">parameters</a>, a shade style, a filter or the function of another preset. Assigned presets must have <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-preset-slot/--root--.html">contract</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1054455218%2FClasslikes%2F-1246251867" anchor-label="RadialGradientMask" id="-1054455218%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-radial-gradient-mask/index.html"><span>Radial</span><wbr><span>Gradient</span><wbr><span><span>Mask</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1054455218%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-radial-gradient-mask/index.html">RadialGradientMask</a> : <a href="-mask-preset/index.html">MaskPreset</a></div><div class="brief "><p class="paragraph">1 within <a href="-radial-gradient-mask/radius.html">radius</a> from <a href="-radial-gradient-mask/center.html">center</a>, to 0 over <a href="-radial-gradient-mask/softness.html">softness</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1502250198%2FClasslikes%2F-1246251867" anchor-label="RadialGradientPaint" id="-1502250198%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-radial-gradient-paint/index.html"><span>Radial</span><wbr><span>Gradient</span><wbr><span><span>Paint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1502250198%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-radial-gradient-paint/index.html">RadialGradientPaint</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">center<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>Vector2(0.5, 0.5)<span class="token punctuation">, </span></span><span class="parameter ">radius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.5</span><span class="token punctuation">, </span></span><span class="parameter ">focal<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator"> = </span>center<span class="token punctuation">, </span></span><span class="parameter ">focalRadius<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span><span class="token punctuation">, </span></span><span class="parameter ">stops<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-color-stop/index.html">ColorStop</a><span class="token operator">&gt;</span><span class="token operator"> = </span>listOf(ColorStop(0.0, ColorRGBa.WHITE), ColorStop(1.0, ColorRGBa.BLACK))<span class="token punctuation">, </span></span><span class="parameter ">spread<span class="token operator">: </span><a href="-gradient-spread/index.html">GradientSpread</a><span class="token operator"> = </span>GradientSpread.PAD</span></span><span class="token punctuation">)</span> : <a href="-stops-gradient-paint/index.html">StopsGradientPaint</a></div><div class="brief "><p class="paragraph">A radial gradient, like SVG's radialGradient: offset 0 is the circle at <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-radial-gradient-paint/--root--.html">focal</a> with radius <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-radial-gradient-paint/--root--.html">focalRadius</a>, offset 1 the circle at <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-radial-gradient-paint/--root--.html">center</a> with <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-radial-gradient-paint/--root--.html">radius</a>, the circles in between are interpolated</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-193391858%2FClasslikes%2F-1246251867" anchor-label="RadialGradientScalar" id="-193391858%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-radial-gradient-scalar/index.html"><span>Radial</span><wbr><span>Gradient</span><wbr><span><span>Scalar</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-193391858%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-radial-gradient-scalar/index.html">RadialGradientScalar</a> : <a href="-scalar-preset/index.html">ScalarPreset</a></div><div class="brief "><p class="paragraph">1 at <a href="-radial-gradient-scalar/center.html">center</a> to 0 at <a href="-radial-gradient-scalar/radius.html">radius</a> from it, in texture coordinates</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="911084991%2FClasslikes%2F-1246251867" anchor-label="RadialGradientSource" id="911084991%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-radial-gradient-source/index.html"><span>Radial</span><wbr><span>Gradient</span><wbr><span><span>Source</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="911084991%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-radial-gradient-source/index.html">RadialGradientSource</a> : <a href="-source-preset/index.html">SourcePreset</a></div><div class="brief "><p class="paragraph"><a href="-radial-gradient-source/from.html">from</a> at <a href="-radial-gradient-source/center.html">center</a> to <a href="-radial-gradient-source/to.html">to</a> at <a href="-radial-gradient-source/radius.html">radius</a> from it, in texture coordinates</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1392181319%2FClasslikes%2F-1246251867" anchor-label="Ripple" id="-1392181319%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-ripple/index.html"><span><span>Ripple</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1392181319%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-ripple/index.html">Ripple</a> : <a href="-warp-preset/index.html">WarpPreset</a></div><div class="brief "><p class="paragraph">Displaces coordinates along sines: x by the sine of y and y by the sine of x</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1943672238%2FClasslikes%2F-1246251867" anchor-label="SamplerPreset" id="-1943672238%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-sampler-preset/index.html"><span>Sampler</span><wbr><span><span>Preset</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1943672238%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-sampler-preset/index.html">SamplerPreset</a> : <a href="-preset/index.html">Preset</a></div><div class="brief "><p class="paragraph">A sampler: a function <code class="lang-kotlin">vec4 sample(sampler2D image, vec2 uv)</code> that reads an image at and around a texture coordinate. In an <a href="-effect-chain/index.html">EffectChain</a> a sampler reads the image as it is after the stages before it, which takes a pass of its own.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="765318750%2FClasslikes%2F-1246251867" anchor-label="ScalarPreset" id="765318750%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-scalar-preset/index.html"><span>Scalar</span><wbr><span><span>Preset</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="765318750%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-scalar-preset/index.html">ScalarPreset</a> : <a href="-preset/index.html">Preset</a></div><div class="brief "><p class="paragraph">A float that can vary per pixel, for slots that read it as <code class="lang-kotlin">p_&lt;name&gt;</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2053180483%2FClasslikes%2F-1246251867" anchor-label="Sepia" id="2053180483%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-sepia/index.html"><span><span>Sepia</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2053180483%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-sepia/index.html">Sepia</a> : <a href="-color-preset/index.html">ColorPreset</a></div><div class="brief "><p class="paragraph">Sepia toning, by <a href="-sepia/amount.html">amount</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-289327213%2FClasslikes%2F-1246251867" anchor-label="SolidSource" id="-289327213%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-solid-source/index.html"><span>Solid</span><wbr><span><span>Source</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-289327213%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-solid-source/index.html">SolidSource</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">color<span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator"> = </span>ColorRGBa.WHITE</span></span><span class="token punctuation">)</span> : <a href="-source-preset/index.html">SourcePreset</a></div><div class="brief "><p class="paragraph">The same <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-solid-source/--root--.html">color</a> everywhere</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="696141903%2FClasslikes%2F-1246251867" anchor-label="SourcePreset" id="696141903%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-source-preset/index.html"><span>Source</span><wbr><span><span>Preset</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="696141903%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-source-preset/index.html">SourcePreset</a> : <a href="-preset/index.html">Preset</a></div><div class="brief "><p class="paragraph">A source: a function <code class="lang-kotlin">vec4 source(vec2 uv)</code> that generates the color at texture coordinate <code class="lang-kotlin">uv</code>. In an <a href="-effect-chain/index.html">EffectChain</a> a source replaces the image, in a <a href="-layer/index.html">Layer</a> it is blended over the image.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1774567252%2FClasslikes%2F-1246251867" anchor-label="StopsGradientPaint" id="-1774567252%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-stops-gradient-paint/index.html"><span>Stops</span><wbr><span>Gradient</span><wbr><span><span>Paint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1774567252%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-stops-gradient-paint/index.html">StopsGradientPaint</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">stops<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-color-stop/index.html">ColorStop</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span> : <a href="-source-preset/index.html">SourcePreset</a></div><div class="brief "><p class="paragraph">The base of gradients with color stops: the gradient function <code class="lang-kotlin">t</code> of a coordinate picks a color from the stops. The code of the gradient depends on the number of stops, a gradient with another number of stops compiles another shader.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-461892902%2FClasslikes%2F-1246251867" anchor-label="Swirl" id="-461892902%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-swirl/index.html"><span><span>Swirl</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-461892902%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-swirl/index.html">Swirl</a> : <a href="-warp-preset/index.html">WarpPreset</a></div><div class="brief "><p class="paragraph">Rotates coordinates around <a href="-swirl/center.html">center</a> by <a href="-swirl/angle.html">angle</a> radians, less further from the center, as set by <a href="-swirl/falloff.html">falloff</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1589431986%2FClasslikes%2F-1246251867" anchor-label="TextureMask" id="1589431986%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-texture-mask/index.html"><span>Texture</span><wbr><span><span>Mask</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1589431986%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-texture-mask/index.html">TextureMask</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">texture<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ColorBuffer///PointingToDeclaration/">ColorBuffer</span></span></span><span class="token punctuation">)</span> : <a href="-mask-preset/index.html">MaskPreset</a></div><div class="brief "><p class="paragraph">The red channel of <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-texture-mask/--root--.html">texture</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1146125498%2FClasslikes%2F-1246251867" anchor-label="TexturePaint" id="-1146125498%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-texture-paint/index.html"><span>Texture</span><wbr><span><span>Paint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1146125498%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-texture-paint/index.html">TexturePaint</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">texture<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ColorBuffer///PointingToDeclaration/">ColorBuffer</span></span></span><span class="token punctuation">)</span> : <a href="-source-preset/index.html">SourcePreset</a></div><div class="brief "><p class="paragraph">The colors of <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-texture-paint/--root--.html">texture</a>, read at texture coordinates: 0..1 covers the texture once, the wrap mode of the texture decides what lies beyond, set it to repeat to tile the texture. The texture holds premultiplied colors, as render targets that are drawn to do, the colors are read without the premultiplication. Replacing the texture does not compile another shader.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2038428046%2FClasslikes%2F-1246251867" anchor-label="TextureScalar" id="-2038428046%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-texture-scalar/index.html"><span>Texture</span><wbr><span><span>Scalar</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2038428046%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-texture-scalar/index.html">TextureScalar</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">var </span>texture<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ColorBuffer///PointingToDeclaration/">ColorBuffer</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>coordinate<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span>TextureParameter.DEFAULT_COORDINATE</span></span><span class="token punctuation">)</span> : <a href="-scalar-preset/index.html">ScalarPreset</a></div><div class="brief "><p class="paragraph">The red channel of <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-texture-scalar/--root--.html">texture</a> at <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-texture-scalar/--root--.html">coordinate</a>, which by default covers what is drawn, or the input of a filter</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="103224501%2FClasslikes%2F-1246251867" anchor-label="TextureVector2" id="103224501%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-texture-vector2/index.html"><span>Texture</span><wbr><span><span>Vector2</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="103224501%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-texture-vector2/index.html">TextureVector2</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">var </span>texture<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ColorBuffer///PointingToDeclaration/">ColorBuffer</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>coordinate<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span>TextureParameter.DEFAULT_COORDINATE</span></span><span class="token punctuation">)</span> : <a href="-vector2-preset/index.html">Vector2Preset</a></div><div class="brief "><p class="paragraph">The red and green channels of <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-texture-vector2/--root--.html">texture</a> at <a href="../../orx-shade-styles/org.openrndr.extra.shadestyles.presets/-texture-vector2/--root--.html">coordinate</a>, which by default covers what is drawn, or the input of a filter</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="395762510%2FClasslikes%2F-1246251867" anchor-label="Tint" id="395762510%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-tint/index.html"><span><span>Tint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="395762510%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-tint/index.html">Tint</a> : <a href="-color-preset/index.html">ColorPreset</a></div><div class="brief "><p class="paragraph">Multiplies the colors by <a href="-tint/color.html">color</a>, by <a href="-tint/amount.html">amount</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="518765099%2FClasslikes%2F-1246251867" anchor-label="Vector2Preset" id="518765099%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-vector2-preset/index.html"><span><span>Vector2Preset</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="518765099%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-vector2-preset/index.html">Vector2Preset</a> : <a href="-preset/index.html">Preset</a></div><div class="brief "><p class="paragraph">A vec2 that can vary per pixel, for slots that read it as <code class="lang-kotlin">p_&lt;name&gt;</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="962649583%2FClasslikes%2F-1246251867" anchor-label="Vignette" id="962649583%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-vignette/index.html"><span><span>Vignette</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="962649583%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-vignette/index.html">Vignette</a> : <a href="-color-preset/index.html">ColorPreset</a></div><div class="brief "><p class="paragraph">Darkens toward the edges: by <a href="-vignette/amount.html">amount</a> outside <a href="-vignette/radius.html">radius</a> from <a href="-vignette/center.html">center</a>, over a band of <a href="-vignette/softness.html">softness</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1490969022%2FClasslikes%2F-1246251867" anchor-label="WarpPreset" id="-1490969022%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-warp-preset/index.html"><span>Warp</span><wbr><span><span>Preset</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1490969022%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-warp-preset/index.html">WarpPreset</a> : <a href="-preset/index.html">Preset</a></div><div class="brief "><p class="paragraph">A warp: a function <code class="lang-kotlin">vec2 warp(vec2 uv)</code> that maps a coordinate to the coordinate to read from</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1144326896%2FClasslikes%2F-1246251867" anchor-label="Wave" id="-1144326896%2FClasslikes%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-wave/index.html"><span><span>Wave</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1144326896%2FClasslikes%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-wave/index.html">Wave</a> : <a href="-warp-preset/index.html">WarpPreset</a></div><div class="brief "><p class="paragraph">Displaces x by a cosine of y, or y by a cosine of x when <a href="-wave/vertical.html">vertical</a>. <a href="-wave/phase.html">phase</a> is in half periods, <a href="-wave/segments.html">segments</a> quantizes the wave into steps when it is larger than 0.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-563869310%2FProperties%2F-1246251867" anchor-label="aDitherLibrary" id="-563869310%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="a-dither-library.html"><span>a</span><wbr><span>Dither</span><wbr><span><span>Library</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-563869310%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="a-dither-library.html">aDitherLibrary</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/GlslLibrary///PointingToDeclaration/">GlslLibrary</span></div><div class="brief "><p class="paragraph">GLSL library with the ordered dither masks of orx-fx: <code class="lang-kotlin">float a_dither(int pattern, int levels, float l, ivec2 p, int c)</code> quantizes <code class="lang-kotlin">l</code> to <code class="lang-kotlin">levels</code> levels with the mask <code class="lang-kotlin">pattern</code> (0 to 3) at pixel <code class="lang-kotlin">p</code> for channel <code class="lang-kotlin">c</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1784695973%2FProperties%2F-1246251867" anchor-label="bump3yLibrary" id="1784695973%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="bump3y-library.html"><span>bump3y</span><wbr><span><span>Library</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1784695973%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="bump3y-library.html">bump3yLibrary</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/GlslLibrary///PointingToDeclaration/">GlslLibrary</span></div><div class="brief "><p class="paragraph">GLSL library with <code class="lang-kotlin">vec3 bump3y(vec3 x, vec3 yoffset)</code>, used by <a href="spectral-zucconi6-library.html">spectralZucconi6Library</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1135010994%2FProperties%2F-1246251867" anchor-label="filmGrainLibrary" id="1135010994%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="film-grain-library.html"><span>film</span><wbr><span>Grain</span><wbr><span><span>Library</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1135010994%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="film-grain-library.html">filmGrainLibrary</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/GlslLibrary///PointingToDeclaration/">GlslLibrary</span></div><div class="brief "><p class="paragraph">GLSL library with the film grain of orx-fx: <code class="lang-kotlin">float film_grain_source(vec3 x, float strength, float pitch)</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1938235706%2FProperties%2F-1246251867" anchor-label="gradientSpacesLibrary" id="-1938235706%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="gradient-spaces-library.html"><span>gradient</span><wbr><span>Spaces</span><wbr><span><span>Library</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1938235706%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="gradient-spaces-library.html">gradientSpacesLibrary</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/GlslLibrary///PointingToDeclaration/">GlslLibrary</span></div><div class="brief "><p class="paragraph">GLSL library that converts linear RGB colors to and from the interpolation spaces of <a href="-gradient-interpolation/index.html">GradientInterpolation</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1734121996%2FProperties%2F-1246251867" anchor-label="oklabLibrary" id="1734121996%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="oklab-library.html"><span>oklab</span><wbr><span><span>Library</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1734121996%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="oklab-library.html">oklabLibrary</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/GlslLibrary///PointingToDeclaration/">GlslLibrary</span></div><div class="brief "><p class="paragraph">GLSL library with conversions between sRGB and OKLab: <code class="lang-kotlin">oklab_srgb_to_linear</code>, <code class="lang-kotlin">oklab_linear_to_srgb</code>, <code class="lang-kotlin">oklab_from_linear</code> and <code class="lang-kotlin">oklab_to_linear</code>, all <code class="lang-kotlin">vec3 f(vec3 c)</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-495738841%2FProperties%2F-1246251867" anchor-label="snoise3Library" id="-495738841%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="snoise3-library.html"><span><span>snoise3Library</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-495738841%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="snoise3-library.html">snoise3Library</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/GlslLibrary///PointingToDeclaration/">GlslLibrary</span></div><div class="brief "><p class="paragraph">GLSL library with 3D simplex noise, <code class="lang-kotlin">float snoise3(vec3 v)</code>, which returns values in -1, 1</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1793250956%2FProperties%2F-1246251867" anchor-label="spectralZucconi6Library" id="-1793250956%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="spectral-zucconi6-library.html"><span>spectral</span><wbr><span><span>Zucconi6Library</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1793250956%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="spectral-zucconi6-library.html">spectralZucconi6Library</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/GlslLibrary///PointingToDeclaration/">GlslLibrary</span></div><div class="brief "><p class="paragraph">GLSL library with Alan Zucconi's spectral colormap, <code class="lang-kotlin">vec3 spectral_zucconi6(float x)</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-458314190%2FProperties%2F-1246251867" anchor-label="turboColormapLibrary" id="-458314190%2FProperties%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="turbo-colormap-library.html"><span>turbo</span><wbr><span>Colormap</span><wbr><span><span>Library</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-458314190%2FProperties%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="turbo-colormap-library.html">turboColormapLibrary</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/GlslLibrary///PointingToDeclaration/">GlslLibrary</span></div><div class="brief "><p class="paragraph">GLSL library with the Turbo colormap, <code class="lang-kotlin">vec3 turbo_colormap(float x)</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-1115009029%2FFunctions%2F-1246251867" anchor-label="boundsTransform" id="-1115009029%2FFunctions%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="bounds-transform.html"><span>bounds</span><wbr><span><span>Transform</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1115009029%2FFunctions%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="bounds-transform.html"><span class="token function">boundsTransform</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">bounds<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Matrix44///PointingToDeclaration/">Matrix44</span></div><div class="brief "><p class="paragraph">The transform that maps 0..1 to <a href="bounds-transform.html">bounds</a>, which turns a paint in <a href="-paint-units/-b-o-u-n-d-s/index.html">PaintUnits.BOUNDS</a> units into one in <a href="-paint-units/-o-b-j-e-c-t/index.html">PaintUnits.OBJECT</a> units: <code class="lang-kotlin">boundsTransform(shape.bounds) * paintTransform</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="300580441%2FFunctions%2F-1246251867" anchor-label="effectChain" id="300580441%2FFunctions%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="effect-chain.html"><span>effect</span><wbr><span><span>Chain</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="300580441%2FFunctions%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="effect-chain.html"><span class="token function">effectChain</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">builder<span class="token operator">: </span><a href="-effect-chain-builder/index.html">EffectChainBuilder</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-effect-chain/index.html">EffectChain</a></div><div class="brief "><p class="paragraph">An <a href="-effect-chain/index.html">EffectChain</a> with the stages that <a href="effect-chain.html">builder</a> adds</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="334784283%2FFunctions%2F-1246251867" anchor-label="paintStyle" id="334784283%2FFunctions%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="paint-style.html"><span>paint</span><wbr><span><span>Style</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="334784283%2FFunctions%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="paint-style.html"><span class="token function">paintStyle</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">builder<span class="token operator">: </span><a href="-paint-style-builder/index.html">PaintStyleBuilder</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-paint-style/index.html">PaintStyle</a></div><div class="brief "><p class="paragraph">A shade style that paints fills and strokes with sources, such as gradients:</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-692550011%2FFunctions%2F-1246251867" anchor-label="presetSlot" id="-692550011%2FFunctions%2F-1246251867" data-filterable-set=":orx-shade-styles/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shade-styles/commonMain" data-filterable-set=":orx-shade-styles/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="preset-slot.html"><span>preset</span><wbr><span><span>Slot</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-692550011%2FFunctions%2F-1246251867"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shade-styles/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="preset-slot.html">P</a><span class="token operator"> : </span><a href="-preset/index.html">Preset</a><span class="token operator">&gt; </span><span data-unresolved-link="org.openrndr.draw/StyleParameters///PointingToDeclaration/">StyleParameters</span><span class="token punctuation">.</span><a href="preset-slot.html"><span class="token function">presetSlot</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">contract<span class="token operator">: </span><a href="-glsl-contract/index.html">GlslContract</a><span class="token punctuation">, </span></span><span class="parameter ">initial<span class="token operator">: </span><a href="preset-slot.html">P</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-preset-slot/index.html">PresetSlot</a><span class="token operator">&lt;</span><a href="preset-slot.html">P</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A slot for presets with <a href="preset-slot.html">contract</a>, set as parameter <a href="preset-slot.html">name</a>. Annotate the property with <code class="lang-kotlin">@NestedParameter</code> to show the parameters of the preset in user interfaces:</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
