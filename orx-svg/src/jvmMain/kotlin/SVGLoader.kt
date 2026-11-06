@@ -73,8 +73,19 @@ internal class SVGDocument(
     val namespaces: Map<String, String>,
     private val base: URI? = null,
     private val contents: List<Pair<GroupNode, SVGGroup>> = emptyList(),
-    private val filterImages: List<Pair<FilterPrimitive.Image, String>> = emptyList()
+    private val filterImages: List<Pair<FilterPrimitive.Image, String>> = emptyList(),
+    /** the rules for pointer states and the keyframes of the style sheets of the document */
+    val dynamic: SVGStyleSheet.Dynamic = SVGStyleSheet.Dynamic(emptyList(), emptyMap())
 ) {
+    /** the nodes of the elements of the document, an element that is used more than once has more nodes */
+    val nodesByElement = java.util.IdentityHashMap<org.jsoup.nodes.Element, MutableList<CompositionNode>>()
+
+    /** the root element of the document */
+    val rootElement: org.jsoup.nodes.Element get() = root.element
+
+    /** the location of the document, relative references are resolved against it */
+    val documentBase: URI? get() = base
+
     /** the font faces of the document, known once it is converted */
     var fontFaces: List<FontFace> = emptyList()
         private set
@@ -159,7 +170,11 @@ internal class SVGDocument(
         val inProgress = documentsInProgress.get()
         val added = location != null && inProgress.add(location)
         try {
-            return buildComposition()
+            return buildComposition().also { composition ->
+                // the animations of the document change the nodes it is converted to
+                val animation = SVGAnimation(this)
+                if (animation.animated) (composition.root as? GroupNode)?.userData?.set("svg-animation", animation)
+            }
         } finally {
             if (added) inProgress.remove(location)
         }
@@ -240,7 +255,10 @@ internal class SVGDocument(
                 this.id = svgElem.id
             }
         }
+        // the elements that animations set properties with are not in documents
+        else -> GroupNode()
     }.apply {
+        svgElem.sourceElement?.let { nodesByElement.getOrPut(it) { mutableListOf() }.add(this) }
         transform = svgElem.effectiveTransform()
         if (svgElem.inheritedProperties.isNotEmpty()) inherits[this] = svgElem.inheritedProperties
         svgElem.title?.let { userData["title"] = it }
@@ -663,7 +681,7 @@ internal class SVGLoader {
             Pair(it.key, it.value)
         }
         // the rules of style elements are applied to the elements they select before the elements are read
-        SVGStyleSheet.apply(root, base)
+        val dynamic = SVGStyleSheet.apply(root, base)
         // percentages of lengths refer to the size of the viewport of the document
         SVGParse.viewport.set(
             (SVGParse.viewBox(root) as? ViewBox.Value)?.value?.dimensions
@@ -686,7 +704,7 @@ internal class SVGLoader {
             } + clips.values.map { (clip, element) -> clip.content to SVGGroup(element) } +
                     markers.values.map { (marker, element) -> marker.content to SVGGroup(element) } +
                     masks.values.map { (mask, element) -> mask.content to SVGGroup(element) }
-            SVGDocument(rootGroup, namespaces, base, contents, SVGFilters.images.toList())
+            SVGDocument(rootGroup, namespaces, base, contents, SVGFilters.images.toList(), dynamic)
         } } } }
     }
 

@@ -213,13 +213,98 @@ internal object SVGStyleSheet {
      * are ordered by importance and specificity: rules, the style attribute, important rules and important declarations
      * of the style attribute.
      */
-    fun apply(root: Element, base: java.net.URI? = null) {
+    /** a pointer state of an element that rules can depend on, like the :hover and :active pseudo-classes */
+    enum class State { HOVER, ACTIVE }
+
+    /**
+     * A rule that applies to [element] while [condition] is in [state]: its [declarations], with the [specificity]
+     * and [order] of the rule
+     */
+    class StateRule(
+        val element: Element,
+        val condition: Element,
+        val state: State,
+        val declarations: List<Pair<String, String>>,
+        val specificity: Int,
+        val order: Int
+    )
+
+    /** a keyframe of @keyframes: its [offset] from 0 to 1 and its declarations */
+    class Keyframe(val offset: Double, val declarations: List<Pair<String, String>>)
+
+    /** the rules and keyframes that apply over time, see [apply] */
+    class Dynamic(val stateRules: List<StateRule>, val keyframes: Map<String, List<Keyframe>>)
+
+    private val statePseudo = Regex(":(hover|active)\\b")
+
+    /** the @keyframes rules of [css], by name */
+    private fun keyframes(css: String): Map<String, List<Keyframe>> {
+        val result = mutableMapOf<String, List<Keyframe>>()
+        for (match in Regex("@(?:-webkit-)?keyframes\\s+([^\\s{]+)\\s*\\{").findAll(css)) {
+            var depth = 1
+            var i = match.range.last + 1
+            val start = i
+            while (i < css.length && depth > 0) {
+                if (css[i] == '{') depth++ else if (css[i] == '}') depth--
+                i++
+            }
+            val body = css.substring(start, (i - 1).coerceAtLeast(start))
+            val frames = mutableListOf<Keyframe>()
+            for (block in Regex("([^{}]+)\\{([^}]*)}").findAll(body)) {
+                val declarations = parse(block.groupValues[2]).map { it.name to it.value }
+                for (selector in block.groupValues[1].split(",").map { it.trim() }) {
+                    val offset = when {
+                        selector == "from" -> 0.0
+                        selector == "to" -> 1.0
+                        selector.endsWith("%") -> selector.dropLast(1).toDoubleOrNull()?.div(100.0)
+                        else -> null
+                    } ?: continue
+                    frames.add(Keyframe(offset, declarations))
+                }
+            }
+            result[match.groupValues[1].trim('"', '\'')] = frames.sortedBy { it.offset }
+        }
+        return result
+    }
+
+    /**
+     * The rules of [selector] with :hover or :active: the elements that the selector without them selects, each with
+     * the element whose state the rule depends on, the subject or the ancestor of the compound with the pseudo-class
+     */
+    private fun stateRules(root: Element, selector: String, declarations: String, order: Int): List<StateRule> {
+        val compounds = selector.trim().split(Regex("\\s*[>+~]\\s*|\\s+")).filter { it.isNotEmpty() }
+        val index = compounds.indexOfLast { statePseudo.containsMatchIn(it) }
+        if (index < 0) return emptyList()
+        val state = if (statePseudo.find(compounds[index])!!.groupValues[1] == "hover") State.HOVER else State.ACTIVE
+        val stripped = statePseudo.replace(selector, "")
+        val conditionSelector = statePseudo.replace(compounds[index], "").ifEmpty { "*" }
+        val elements = try {
+            root.select(stripped)
+        } catch (e: Exception) {
+            logger.warn { "unsupported CSS selector '$selector'" }
+            return emptyList()
+        }
+        val parsed = parse(declarations).map { it.name to it.value }
+        return elements.mapNotNull { element ->
+            val condition = if (index == compounds.lastIndex) element
+                else element.parents().firstOrNull { it.`is`(conditionSelector) } ?: return@mapNotNull null
+            StateRule(element, condition, state, parsed, specificity(selector), order)
+        }
+    }
+
+    fun apply(root: Element, base: java.net.URI? = null): Dynamic {
         // the XML parser reads the contents of style elements as text, CDATA sections included
         val css = css(root, base)
         val matches = java.util.IdentityHashMap<Element, MutableList<Pair<Pair<Int, Int>, String>>>()
+        val stateRules = mutableListOf<StateRule>()
         if (css.isNotBlank()) {
             for (rule in rules(css)) {
                 for (selector in rule.selectors) {
+                    // rules for pointer states apply over time
+                    if (statePseudo.containsMatchIn(selector)) {
+                        stateRules.addAll(stateRules(root, selector, rule.declarations, rule.order))
+                        continue
+                    }
                     val elements = try {
                         root.select(selector)
                     } catch (e: Exception) {
@@ -276,5 +361,6 @@ internal object SVGStyleSheet {
             element.children().forEach { visit(it, variables) }
         }
         visit(root, emptyMap())
+        return Dynamic(stateRules, if (css.isNotBlank()) keyframes(css) else emptyMap())
     }
 }

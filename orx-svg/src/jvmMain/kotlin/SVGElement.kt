@@ -12,6 +12,9 @@ internal sealed class SVGElement(element: Element?) {
     /** the element this is read from, for lengths relative to its font size */
     protected val source: Element? = element
 
+    /** the element this is read from, null for parts of elements like runs of text */
+    val sourceElement: Element? get() = source
+
     /** the origin of the transform, like transform-origin, null for the origin of the coordinates */
     var transformOrigin: String? = null
 
@@ -82,6 +85,8 @@ internal sealed class SVGElement(element: Element?) {
 
     // Any element can have a style attribute to pass down properties
     fun styleProperty(key: String, value: String) {
+        // transitions and animations are read by SVGAnimation
+        if (key.startsWith("transition") || key.startsWith("animation")) return
         if (cssWideKeyword(key, value)) return
         when (key) {
             Prop.STROKE -> style.stroke = SVGParse.color(value)
@@ -278,6 +283,8 @@ internal open class SVGGroup(val element: Element, val elements: MutableList<SVG
                 // gradients are read before the elements are, see SVGGradients
                 // patterns are drawn where they are referred to, see SVGGradients
                 // clip paths are applied where they are referred to, see SVGGradients
+                // animations are read by SVGAnimation, they are not drawn
+                "animate", "set", "animateTransform", "animateMotion", "animateColor", "discard" -> {}
                 // masks are applied where they are referred to, see SVGGradients
                 // filters are applied where they are referred to, see SVGFilters
                 "linearGradient", "radialGradient", "pattern", "clipPath", "marker", "mask", "filter" -> {}
