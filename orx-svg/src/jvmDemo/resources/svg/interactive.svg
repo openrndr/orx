@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+  <style>
+    text { font-family: Plex; fill: #202040; }
+    .label { font-size: 10px; fill: #8a8378; }
+    .shape { stroke: #202040; stroke-width: 2px; }
+  </style>
+  <rect width="720" height="480" fill="#f4efe6" pointer-events="none"/>
+
+  <text class="label" x="20" y="30">HOVER AND CLICK</text>
+  <circle id="circle" class="shape" cx="80" cy="100" r="50" fill="#e8574a"/>
+  <path id="ring" class="shape" d="M 160 50 h 100 v 100 h -100 z M 185 75 v 50 h 50 v -50 z" fill="#3d5a99" fill-rule="evenodd"/>
+  <line id="line" x1="290" y1="60" x2="370" y2="140" stroke="#4c9e8a" stroke-width="12"/>
+  <a href="https://openrndr.org">
+    <rect id="link" class="shape" x="400" y="60" width="140" height="80" rx="10" fill="#f2b134"/>
+    <text x="470" y="106" font-size="14" text-anchor="middle" pointer-events="none">openrndr.org</text>
+  </a>
+  <text id="status" x="20" y="190" font-size="14">click a shape</text>
+
+  <text class="label" x="20" y="240">TEXTPATH SIDE="RIGHT", PATH="..."</text>
+  <path id="arc" d="M 40 400 A 120 120 0 0 1 280 400" fill="none" stroke="#e8574a" pointer-events="none"/>
+  <text font-size="16"><textPath href="#arc" startOffset="20">along the left side of the arc</textPath></text>
+  <text font-size="16"><textPath href="#arc" side="right" startOffset="40">on the right side</textPath></text>
+  <text font-size="16"><textPath path="M 320 420 C 400 300 480 480 560 360">an inline path</textPath></text>
+
+  <text class="label" x="600" y="240">WRITING-MODE</text>
+  <line x1="620" x2="620" y1="255" y2="470" stroke="#e8574a" pointer-events="none"/>
+  <line x1="680" x2="680" y1="255" y2="470" stroke="#e8574a" pointer-events="none"/>
+  <text x="620" y="260" font-size="18" style="writing-mode: vertical-rl">vertical text</text>
+  <text x="680" y="260" font-size="18" style="writing-mode: vertical-rl; text-orientation: upright">UPRIGHT</text>
+</svg>
