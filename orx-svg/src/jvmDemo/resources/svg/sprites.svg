@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="100" viewBox="0 0 300 100">
+  <defs>
+    <linearGradient id="dusk"><stop offset="0" stop-color="#e8574a"/><stop offset="1" stop-color="#3d5a99"/></linearGradient>
+    <symbol id="star" viewBox="0 0 100 100">
+      <path d="M50 5 L61 39 L97 39 L68 61 L79 95 L50 74 L21 95 L32 61 L3 39 L39 39 Z" fill="#f2b134" stroke="#202020" stroke-width="4"/>
+    </symbol>
+    <symbol id="drop" viewBox="0 0 100 100">
+      <path d="M50 5 C 75 40 85 55 85 68 A 35 35 0 0 1 15 68 C 15 55 25 40 50 5 Z" fill="url(#dusk)"/>
+    </symbol>
+    <symbol id="ring" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="38" fill="none" stroke="#4c9e8a" stroke-width="14"/>
+    </symbol>
+  </defs>
+  <!-- a sheet of the symbols, its views show one of them -->
+  <use href="#star" width="100" height="100"/>
+  <use href="#drop" x="100" width="100" height="100"/>
+  <use href="#ring" x="200" width="100" height="100"/>
+  <view id="first" viewBox="0 0 100 100"/>
+  <view id="second" viewBox="100 0 100 100"/>
+  <view id="third" viewBox="200 0 100 100"/>
+</svg>

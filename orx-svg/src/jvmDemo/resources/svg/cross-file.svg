@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+  <style>@import url("css/cross-file.css");</style>
+  <defs>
+    <g id="mark"><rect x="-6" y="-2" width="12" height="4" fill="#3d5a99"/><rect x="-2" y="-6" width="4" height="12" fill="#3d5a99"/></g>
+    <!-- an element repeated: drawn by feImage at the corner of its subregion, the subregion repeated by feTile -->
+    <filter id="repeat" x="0" y="0" width="100%" height="100%" filterUnits="objectBoundingBox">
+      <feImage href="#mark" x="370" y="230" width="24" height="24" result="cell"/>
+      <feTile in="cell"/>
+    </filter>
+    <!-- a checkerboard of flooded subregions, repeated -->
+    <filter id="checker" x="0" y="0" width="100%" height="100%">
+      <feFlood flood-color="#202040" x="560" y="230" width="16" height="16" result="a"/>
+      <feOffset dx="16" dy="16" result="b"/>
+      <feFlood flood-color="#f2b134" x="560" y="230" width="32" height="32"/>
+      <feComposite in="a"/>
+      <feComposite in="b" x="560" y="230" width="32" height="32"/>
+      <feTile/>
+    </filter>
+    <!-- a document drawn into a filter, fitted into its subregion -->
+    <filter id="sheet" x="0" y="0" width="100%" height="100%">
+      <feImage href="sprites.svg" preserveAspectRatio="xMidYMid meet"/>
+    </filter>
+  </defs>
+  <rect width="720" height="480" fill="#f4efe6"/>
+
+  <text class="label" x="20" y="30">USE HREF="SPRITES.SVG#..."</text>
+  <use id="star" href="sprites.svg#star" x="20" y="40" width="100" height="100"/>
+  <use href="sprites.svg#drop" x="130" y="40" width="100" height="100"/>
+  <use href="sprites.svg#ring" x="240" y="40" width="100" height="100"/>
+
+  <text class="label" x="380" y="30">IMAGE HREF="SPRITES.SVG#VIEW"</text>
+  <image href="sprites.svg#first" x="380" y="40" width="100" height="100"/>
+  <image href="sprites.svg#third" x="490" y="40" width="100" height="100"/>
+  <image id="zoom" href="sprites.svg#svgView(viewBox(130,10,60,60))" x="600" y="40" width="100" height="100"/>
+
+  <text class="label" x="20" y="220">FEIMAGE OF A DOCUMENT</text>
+  <rect class="card" x="20" y="230" width="320" height="110" filter="url(#sheet)"/>
+
+  <text class="label" x="370" y="220">FEIMAGE AND FETILE</text>
+  <rect x="370" y="230" width="170" height="110" filter="url(#repeat)"/>
+  <rect x="560" y="230" width="140" height="110" filter="url(#checker)"/>
+
+  <text class="label" x="20" y="380">@IMPORT</text>
+  <rect class="card" x="20" y="390" width="320" height="70"/>
+</svg>
