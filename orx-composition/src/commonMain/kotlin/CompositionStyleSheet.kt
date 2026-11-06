@@ -54,6 +54,22 @@ sealed interface Paint : AttributeOrPropertyValue {
     }
 
     /**
+     * The fill of the element that a marker is drawn for, like SVG's context-fill; elsewhere it is none
+     */
+    object ContextFill : Paint {
+        override val value: ColorRGBa? = null
+        override fun toString(): String = "context-fill"
+    }
+
+    /**
+     * The stroke of the element that a marker is drawn for, like SVG's context-stroke; elsewhere it is none
+     */
+    object ContextStroke : Paint {
+        override val value: ColorRGBa? = null
+        override fun toString(): String = "context-stroke"
+    }
+
+    /**
      * A paint that is drawn with a shade style: its [source] read at coordinates in [units], transformed by the
      * inverse of [transform]. [value] is a single color that stands in for it where it can not be drawn.
      */
@@ -581,6 +597,24 @@ sealed interface LineJoin : AttributeOrPropertyValue {
     object Round : LineJoin {
         override val value = org.openrndr.draw.LineJoin.ROUND
         override fun toString() = "round"
+    }
+
+    /**
+     * A miter that is clipped at the miter limit instead of beveled, like SVG 2's miter-clip. Drawn as a miter until
+     * OPENRNDR draws clipped miters.
+     */
+    object MiterClip : LineJoin {
+        override val value = org.openrndr.draw.LineJoin.MITER
+        override fun toString() = "miter-clip"
+    }
+
+    /**
+     * Outer edges extended as arcs until they meet, like SVG 2's arcs. Drawn as a miter until OPENRNDR draws arcs
+     * joins.
+     */
+    object Arcs : LineJoin {
+        override val value = org.openrndr.draw.LineJoin.MITER
+        override fun toString() = "arcs"
     }
 }
 

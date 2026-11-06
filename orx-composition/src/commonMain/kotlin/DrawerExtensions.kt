@@ -15,6 +15,7 @@ import kotlin.math.atan2
 import org.openrndr.math.transforms.buildTransform
 import org.openrndr.math.Vector3
 import org.openrndr.shape.ShapeContour
+import org.openrndr.shape.Segment2D
 import org.openrndr.shape.Shape
 import org.openrndr.shape.bounds
 import org.openrndr.math.IntVector2
@@ -297,7 +298,7 @@ private fun Drawer.pushClip(clip: ClipPath.Shapes, node: CompositionNode, depth:
             when (clipNode) {
                 is ShapeNode -> if (clipNode.effectiveStyle.visibility.value) {
                     fillRule = clipNode.effectiveStyle.clipRule.value
-                    shape(clipNode.shape)
+                    shape(Shape(clipNode.shape.contours.map(::closed)))
                 }
                 is GroupNode -> clipNode.children.forEach(::visit)
                 else -> {}
@@ -352,6 +353,7 @@ internal fun markerVertices(shape: Shape): MarkerVertices {
 
 /** draws the markers of [style] at the vertices of [shape], drawn with [strokeWeight] */
 private fun Drawer.drawMarkers(shape: Shape, style: Style, strokeWeight: Double) {
+    val elementModel = model
     val start = style.markerStart.value
     val mid = style.markerMid.value
     val end = style.markerEnd.value
@@ -371,12 +373,84 @@ private fun Drawer.drawMarkers(shape: Shape, style: Style, strokeWeight: Double)
                 rotate(Vector3.UNIT_Z, rotation)
                 scale(scale, scale, 1.0)
             } * marker.contentTransform
-            composition(Composition(marker.content))
+            // the content of the marker can paint with the fill and the stroke of the element
+            val outerContext = markerContext
+            markerContext = MarkerContext(style.fill, style.stroke, elementModel, shape.bounds)
+            try {
+                composition(Composition(marker.content))
+            } finally {
+                markerContext = outerContext
+            }
         }
     }
     start?.let { m -> vertices.start?.let { draw(m, it, true) } }
     mid?.let { m -> vertices.mid.forEach { draw(m, it, false) } }
     end?.let { m -> vertices.end?.let { draw(m, it, false) } }
+}
+
+/**
+ * The element that markers are drawn for: its [fill] and [stroke], the paints of context-fill and context-stroke,
+ * and the [model] and [bounds] that its paints are mapped with
+ */
+private class MarkerContext(val fill: Paint, val stroke: Paint, val model: Matrix44, val bounds: Rectangle)
+
+private var markerContext: MarkerContext? = null
+
+/**
+ * Prepares [paint] for a shape with [bounds], see [preparePaint]: a paint of the context of a marker, [original] is
+ * context-fill or context-stroke, is mapped like it is for the element the marker is drawn for
+ */
+private fun Drawer.preparePaint(paint: Paint.Server, original: Paint, bounds: Rectangle): Matrix44? {
+    val context = markerContext
+    if (context == null || (original !is Paint.ContextFill && original !is Paint.ContextStroke)) return preparePaint(paint, bounds)
+    val transform = preparePaint(paint, context.bounds) ?: return null
+    // from the coordinates of the shape to those of the element
+    return (context.model.inversed * model).inversed * transform
+}
+
+/** [contour], closed when it is open, with a segment from its end to its start when they differ */
+private fun closed(contour: ShapeContour): ShapeContour {
+    if (contour.closed || contour.segments.isEmpty()) return contour
+    val start = contour.segments.first().start
+    val end = contour.segments.last().end
+    val segments = if ((end - start).length > 1E-9) contour.segments + Segment2D(end, start) else contour.segments
+    return ShapeContour(segments, true, contour.polarity)
+}
+
+/**
+ * Draws [shape] with the current fill and stroke; its open contours are filled as if they are closed, and stroked
+ * as they are, as in SVG
+ */
+internal fun Drawer.svgShape(shape: Shape) {
+    val currentFill = fill
+    val currentStroke = stroke
+    if (currentFill == null || shape.contours.all { it.closed || it.segments.isEmpty() }) {
+        shape(shape)
+        return
+    }
+    val filled = Shape(shape.contours.map(::closed))
+    fun fillPass() { fill = currentFill; stroke = null; shape(filled) }
+    fun strokePass() { if (currentStroke != null) { fill = null; stroke = currentStroke; shape(shape) } }
+    if (paintOrder == org.openrndr.draw.PaintOrder.STROKE_FILL) { strokePass(); fillPass() } else { fillPass(); strokePass() }
+    fill = currentFill
+    stroke = currentStroke
+}
+
+/** [style] with its context-fill and context-stroke replaced by the paints of the marker context, or by none */
+internal fun resolveContextPaints(style: Style): Style {
+    fun resolve(paint: Paint) = when (paint) {
+        Paint.ContextFill -> markerContext?.fill ?: Paint.None
+        Paint.ContextStroke -> markerContext?.stroke ?: Paint.None
+        else -> paint
+    }
+    if (style.fill !is Paint.ContextFill && style.fill !is Paint.ContextStroke &&
+        style.stroke !is Paint.ContextFill && style.stroke !is Paint.ContextStroke) return style
+    // a copy, the effective style of a node without a parent is its own style
+    return Style().also {
+        it.properties.putAll(style.properties)
+        it.fill = resolve(style.fill)
+        it.stroke = resolve(style.stroke)
+    }
 }
 
 /** true when [style] draws anything: it has code */
@@ -437,14 +511,16 @@ fun Drawer.composition(composition: Composition) {
 
         fun content() { when (compositionNode) {
             is ShapeNode -> {
-                // fills and strokes are inherited from the groups the shape is in
-                val style = compositionNode.effectiveStyle
+                // fills and strokes are inherited from the groups the shape is in, the paints of the context of a
+                // marker are those of the element it is drawn for
+                val unresolved = compositionNode.effectiveStyle
+                val style = resolveContextPaints(unresolved)
 
                 style.stroke.let {
                     stroke = when (it) {
                         is Paint.RGB -> it.value
                         is Paint.Server -> ColorRGBa.WHITE
-                        Paint.None -> null
+                        Paint.None, Paint.ContextFill, Paint.ContextStroke -> null
                         Paint.CurrentColor -> currentColor(style)
                     }
                 }
@@ -482,7 +558,7 @@ fun Drawer.composition(composition: Composition) {
                     fill = when (it) {
                         is Paint.RGB -> it.value
                         is Paint.Server -> ColorRGBa.WHITE
-                        is Paint.None -> null
+                        is Paint.None, Paint.ContextFill, Paint.ContextStroke -> null
                         is Paint.CurrentColor -> currentColor(style)
                     }
                 }
@@ -492,8 +568,8 @@ fun Drawer.composition(composition: Composition) {
                 if (fillServer != null || strokeServer != null) {
                     val bounds = compositionNode.shape.bounds
                     // paints are prepared first, the tiles of patterns are drawn before they are read
-                    val fillTransform = fillServer?.let { preparePaint(it, bounds) }
-                    val strokeTransform = strokeServer?.let { preparePaint(it, bounds) }
+                    val fillTransform = fillServer?.let { preparePaint(it, unresolved.fill, bounds) }
+                    val strokeTransform = strokeServer?.let { preparePaint(it, unresolved.stroke, bounds) }
                     if (fillServer != null && fillTransform == null) fill = null
                     if (strokeServer != null && strokeTransform == null) stroke = null
                     val paint = paintStyle(fillServer, strokeServer)
@@ -522,7 +598,7 @@ fun Drawer.composition(composition: Composition) {
                         val fillColor = fill
                         val strokeFirst = paintOrder == org.openrndr.draw.PaintOrder.STROKE_FILL
                         stroke = null
-                        if (!strokeFirst) shape(compositionNode.shape)
+                        if (!strokeFirst) svgShape(compositionNode.shape)
                         val offset = when (val o = style.strokeDashOffset) {
                             is Length.Pixels -> o.value * lengthScale
                             is Length.Percent -> composition.normalizedDiagonalLength() * o.value / 100.0
@@ -553,11 +629,11 @@ fun Drawer.composition(composition: Composition) {
                             fill = fillColor
                             stroke = null
                             applyClip()
-                            shape(compositionNode.shape)
+                            svgShape(compositionNode.shape)
                         }
                     } else {
                         applyClip()
-                        shape(compositionNode.shape)
+                        svgShape(compositionNode.shape)
                     }
                     // markers are drawn after the fill and the stroke
                     drawMarkers(compositionNode.shape, style, strokeWeight)

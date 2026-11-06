@@ -47,7 +47,9 @@ internal fun visualBounds(node: CompositionNode): Rectangle? {
                     else -> return null
                 }
                 // miter joins reach up to the miter limit, square caps reach out diagonally
-                val miter = if (style.lineJoin == LineJoin.Miter) max(1.0, (style.miterLimit as? Numeric.Rational)?.value ?: 4.0) else 1.0
+                val join = style.lineJoin
+                val miter = if (join == LineJoin.Miter || join == LineJoin.MiterClip || join == LineJoin.Arcs)
+                    max(1.0, (style.miterLimit as? Numeric.Rational)?.value ?: 4.0) else 1.0
                 val cap = if (style.lineCap == LineCap.Square) sqrt(2.0) else 1.0
                 bounds.offsetEdges(weight / 2.0 * max(miter, cap))
             }

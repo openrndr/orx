@@ -157,10 +157,12 @@ internal object SVGParse {
     }
 
     fun lineJoin(value: String): LineJoin {
-        return when (value) {
+        return when (value.trim()) {
             "miter" -> LineJoin.Miter
             "bevel" -> LineJoin.Bevel
             "round" -> LineJoin.Round
+            "miter-clip" -> LineJoin.MiterClip
+            "arcs" -> LineJoin.Arcs
             else -> LineJoin.Miter
         }
     }
@@ -661,6 +663,8 @@ internal object SVGParse {
         return when {
             col.isEmpty() || col == "none" -> Paint.None
             col == "currentcolor" -> Paint.CurrentColor
+            col == "context-fill" -> Paint.ContextFill
+            col == "context-stroke" -> Paint.ContextStroke
             col == "transparent" -> Paint.RGB(ColorRGBa(0.0, 0.0, 0.0, 0.0, linearity = Linearity.SRGB))
             col.startsWith("#") -> hexColor(col.drop(1))?.let { Paint.RGB(it) } ?: Paint.None
             Regex("^(rgba?|hsla?)\\((.*)\\)$").matchEntire(col) != null -> functionalColor(col)?.let { Paint.RGB(it) } ?: Paint.None

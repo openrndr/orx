@@ -96,4 +96,16 @@ class TestSVGMarkers {
         val lt = s.findShapes().first { it.id == "lt" }.shape.contours.single().segments
         assertEquals(Vector2(10.0, 0.0), lt[1].control.single())
     }
+
+    @Test
+    fun readsContextPaints() {
+        val c = parseSVG("""<svg xmlns="http://www.w3.org/2000/svg">
+            <marker id="m"><path id="head" d="M 0 0 L 1 1" fill="context-stroke" stroke="context-fill"/></marker>
+            <path id="p" d="M 0 0 L 10 0" stroke="red" marker-end="url(#m)"/>
+        </svg>""")
+        val head = c.findShapes().first { it.id == "p" }.effectiveStyle.markerEnd.value!!.content.findShapes().single()
+        assertIs<Paint.ContextStroke>(head.style.fill)
+        assertIs<Paint.ContextFill>(head.style.stroke)
+        assertTrue("context-stroke" in writeSVG(c))
+    }
 }

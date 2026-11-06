@@ -123,7 +123,8 @@ internal object CompositionText {
     }
 
     /** the paint servers of the fill and stroke of [style], null when neither is one */
-    private fun servers(style: Style): Pair<Paint.Server?, Paint.Server?>? {
+    private fun servers(unresolved: Style): Pair<Paint.Server?, Paint.Server?>? {
+        val style = resolveContextPaints(unresolved)
         val fill = style.fill as? Paint.Server
         val stroke = style.stroke as? Paint.Server
         return if (fill == null && stroke == null) null else Pair(fill, stroke)
@@ -133,7 +134,8 @@ internal object CompositionText {
      * The fill and stroke of the text of [node]. Paints that are drawn with a paint style are white, the paint style
      * replaces the color and keeps the alpha.
      */
-    private fun textStyle(node: TextNode, style: Style, adjust: Boolean = true): TextStyle {
+    private fun textStyle(node: TextNode, unresolved: Style, adjust: Boolean = true): TextStyle {
+        val style = resolveContextPaints(unresolved)
         val adjustment = if (adjust) adjustment(node) else noAdjustment
         val opacity = opacity(node)
         fun color(paint: Paint, paintOpacity: Double): ColorRGBa? = when (paint) {
