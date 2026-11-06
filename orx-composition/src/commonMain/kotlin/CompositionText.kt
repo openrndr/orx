@@ -5,6 +5,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.font.Face
 import org.openrndr.draw.font.loadFace
+import org.openrndr.draw.font.internal.ShapeFeature
 import org.openrndr.extra.textwriter.ContourBaseline
 import org.openrndr.extra.textwriter.ContourOverflow
 import org.openrndr.extra.textwriter.ContourTextLayout
@@ -55,13 +56,66 @@ internal object CompositionText {
         for (file in candidates) {
             if (file in failedFonts) continue
             try {
-                return loadFace(file).withSize(fontSize)
+                return variations(loadFace(file).withSize(fontSize), style)
             } catch (e: Throwable) {
                 failedFonts.add(file)
                 logger.warn { "could not load font '${file.take(80)}': ${e.message}" }
             }
         }
         return null
+    }
+
+    /**
+     * [face] with the axes of [style] when it is a variable font: its font-variation-settings, and its weight on the
+     * weight axis when the settings do not give it, as browsers do
+     */
+    private fun variations(face: Face, style: Style): Face {
+        if (!face.isVariable) return face
+        val master = face.master.copy()
+        // the axes of faces are named by their names, registered axes are given by their tags in CSS
+        fun axis(tag: String) = registeredAxes[tag]?.takeIf { it in master } ?: tag.takeIf { it in master }
+        val settings = style.fontVariationSettings.value.mapNotNull { (tag, value) -> axis(tag)?.let { it to value } }.toMap()
+        for ((name, value) in settings) master[name] = value
+        // the weight follows font-weight and the optical size follows the font size, as in browsers
+        axis("wght")?.takeIf { it !in settings }?.let { master[it] = style.fontWeight.value.toDouble() }
+        axis("opsz")?.takeIf { it !in settings }?.let { master[it] = fontSize(style) }
+        return if (master == face.master) face else face.withMaster(master)
+    }
+
+    /** the names of the registered axes of variable fonts by their tags */
+    private val registeredAxes = mapOf(
+        "wght" to "Weight", "wdth" to "Width", "opsz" to "OpticalSize", "ital" to "Italic", "slnt" to "Slant"
+    )
+
+    /**
+     * How the text of [node] is adjusted to the textLength of the text element or tspan it is in: [spacing] is added
+     * after every character, the advances are scaled by [factor]. [last] is the last run of the adjusted text, the
+     * spacing is not added after its last character.
+     */
+    private class Adjustment(val spacing: Double, val factor: Double, val last: TextNode?)
+
+    private val noAdjustment = Adjustment(0.0, 1.0, null)
+
+    private fun adjustment(node: TextNode): Adjustment {
+        var current: CompositionNode? = node.parent
+        while (current is GroupNode) {
+            val length = (current.style.textLength.value as? Length.Pixels)?.value
+            if (length != null) {
+                val runs = textRuns(current)?.filter { it.contour == null } ?: return noAdjustment
+                // the natural width of the text and its number of characters
+                val natural = runs.sumOf { run -> layoutRun(run, Vector2.ZERO, adjust = false)?.let { it.end.x - it.origin.x } ?: 0.0 }
+                val characters = runs.sumOf { run -> run.text.count { !it.isLowSurrogate() } }
+                if (natural <= 0.0 || characters == 0) return noAdjustment
+                return when (current.style.lengthAdjust) {
+                    LengthAdjust.SPACING -> if (characters < 2) noAdjustment else
+                        Adjustment((length - natural) / (characters - 1), 1.0, runs.last())
+                    LengthAdjust.SPACING_AND_GLYPHS -> Adjustment(0.0, length / natural, null)
+                }
+            }
+            if (current.textElement) break
+            current = current.parent
+        }
+        return noAdjustment
     }
 
     /** the paint servers of the fill and stroke of [style], null when neither is one */
@@ -75,7 +129,8 @@ internal object CompositionText {
      * The fill and stroke of the text of [node]. Paints that are drawn with a paint style are white, the paint style
      * replaces the color and keeps the alpha.
      */
-    private fun textStyle(node: TextNode, style: Style): TextStyle {
+    private fun textStyle(node: TextNode, style: Style, adjust: Boolean = true): TextStyle {
+        val adjustment = if (adjust) adjustment(node) else noAdjustment
         val opacity = opacity(node)
         fun color(paint: Paint, paintOpacity: Double): ColorRGBa? = when (paint) {
             is Paint.Server -> ColorRGBa.WHITE.opacify(paintOpacity)
@@ -88,8 +143,10 @@ internal object CompositionText {
             fill = fill,
             stroke = stroke,
             strokeWeight = if (stroke != null) (style.strokeWeight as? Length.Pixels)?.value else null,
-            characterSpacingInEm = pixels(style.letterSpacing, fontSize) / fontSize,
-            wordSpacingInEm = pixels(style.wordSpacing, fontSize) / fontSize
+            characterSpacingInEm = (pixels(style.letterSpacing, fontSize) + adjustment.spacing) / fontSize,
+            wordSpacingInEm = pixels(style.wordSpacing, fontSize) / fontSize,
+            textWidthFactor = adjustment.factor,
+            features = style.fontFeatureSettings.value.map { (tag, value) -> ShapeFeature(tag, value.toInt()) }
         )
     }
 
@@ -150,6 +207,94 @@ internal object CompositionText {
         return true
     }
 
+    /** the height of the lines of text with [style] and [face], like line-height */
+    private fun lineHeight(style: Style, face: Face): Double = when (val h = style.lineHeight) {
+        is LineHeight.Multiple -> h.value * fontSize(style)
+        is LineHeight.Absolute -> h.value
+        // the line height of the face, its ascent, descent and line gap
+        else -> abs(face.ascent) + abs(face.descent) + abs(face.lineGap)
+    }
+
+    /**
+     * The runs of a text element with an inline size, broken into lines like SVG 2 text with inline-size: lines break
+     * at spaces and at the line feeds of preserved white space, the first line starts at the position of the text and
+     * the next lines follow at the line height, every line is anchored at that position. Null when the text does not
+     * wrap. The runs that are returned are drawn in place of those of the text element.
+     */
+    fun wrap(group: GroupNode): List<TextNode>? {
+        val inlineSize = (group.style.inlineSize.value as? Length.Pixels)?.value ?: return null
+        val runs = textRuns(group)?.takeIf { it.isNotEmpty() && it.all { r -> r.contour == null } } ?: return null
+        val first = runs.first()
+        val groupStyle = group.effectiveStyle
+        val face = face(groupStyle, first) ?: return null
+        val anchor = groupStyle.textAnchor.value
+
+        // runs split into words, spaces and line feeds, with their widths
+        class Token(val run: TextNode, val text: String) {
+            val isSpace = text.isNotEmpty() && text.all { it == ' ' }
+            val isBreak = text == "\n"
+            val width: Double by lazy {
+                if (isBreak) 0.0 else {
+                    val probe = TextNode(text, null).also { it.parent = run.parent; it.style = run.style }
+                    layoutRun(probe, Vector2.ZERO)?.let { it.end.x - it.origin.x } ?: 0.0
+                }
+            }
+        }
+        val tokens = runs.flatMap { run -> Regex("\n| +|[^ \n]+").findAll(run.text).map { Token(run, it.value) } }
+
+        val lines = mutableListOf(mutableListOf<Token>())
+        var width = 0.0
+        var pending = mutableListOf<Token>()
+        for (token in tokens) {
+            when {
+                token.isBreak -> { lines.add(mutableListOf()); width = 0.0; pending = mutableListOf() }
+                token.isSpace -> if (lines.last().isNotEmpty()) pending.add(token)
+                else -> {
+                    val spaces = pending.sumOf { it.width }
+                    if (lines.last().isNotEmpty() && width + spaces + token.width > inlineSize) {
+                        lines.add(mutableListOf(token))
+                        width = token.width
+                    } else {
+                        lines.last().addAll(pending)
+                        lines.last().add(token)
+                        width += spaces + token.width
+                    }
+                    pending = mutableListOf()
+                }
+            }
+        }
+
+        val x = (first.x ?: 0.0) + first.dx
+        val y = (first.y ?: 0.0) + first.dy
+        val height = lineHeight(groupStyle, face)
+        val wrapped = mutableListOf<TextNode>()
+        for ((index, line) in lines.withIndex()) {
+            if (line.isEmpty()) continue
+            val lineWidth = line.sumOf { it.width }
+            var lineStart = true
+            // consecutive tokens of the same run are drawn as one run, anchored at the start
+            var i = 0
+            while (i < line.size) {
+                val run = line[i].run
+                var j = i
+                val text = StringBuilder()
+                while (j < line.size && line[j].run === run) text.append(line[j++].text)
+                wrapped.add(TextNode(
+                    text.toString(), null,
+                    if (lineStart) x - lineWidth * anchor else null,
+                    if (lineStart) y + index * height else null,
+                    rotate = run.rotate
+                ).also {
+                    it.parent = run.parent
+                    it.style = Style().also { s -> s.properties.putAll(run.style.properties); s.textAnchor = TextAnchor.START }
+                })
+                lineStart = false
+                i = j
+            }
+        }
+        return wrapped
+    }
+
     /**
      * The runs of [group] when it holds only text, in order, null otherwise
      */
@@ -192,22 +337,26 @@ internal object CompositionText {
     /**
      * Lays out the text of [node] starting at [pen], or at the position of the node when it has one
      */
-    private fun layoutRun(node: TextNode, pen: Vector2): RunLayout? {
+    private fun layoutRun(node: TextNode, pen: Vector2, adjust: Boolean = true): RunLayout? {
         val style = node.effectiveStyle
         val face = face(style, node) ?: return null
-        val textStyle = textStyle(node, style)
+        val adjustment = if (adjust) adjustment(node) else noAdjustment
+        val textStyle = textStyle(node, style, adjust)
 
         // spaces at the start and the end of a run separate it from the runs around it, the typesetter does not keep
         // them, their advances are added here
         val fontSize = fontSize(style)
-        val letterSpacing = pixels(style.letterSpacing, fontSize)
-        val space = face.glyphForCharacter(' ').advanceWidth() + letterSpacing + pixels(style.wordSpacing, fontSize)
+        val letterSpacing = pixels(style.letterSpacing, fontSize) + adjustment.spacing
+        val factor = adjustment.factor
+        val space = (face.glyphForCharacter(' ').advanceWidth() + letterSpacing + pixels(style.wordSpacing, fontSize)) * factor
         val leading = node.text.takeWhile { it == ' ' }.length * space
         val trailing = if (node.text.isBlank()) 0.0 else node.text.takeLastWhile { it == ' ' }.length * space
         val glyphs = typesetLine(face, node.text.trim(' '), Vector2(leading, 0.0), textStyle)
-        fun advance(glyph: TypesetGlyph) = face.glyphForIndex(glyph.glyphIndex).advanceWidth() + letterSpacing
-        // the advance of the text, used for its anchor and to continue the text after it
-        val width = (glyphs.maxOfOrNull { it.position.x + advance(it) } ?: leading) + trailing
+        fun advance(glyph: TypesetGlyph) = (face.glyphForIndex(glyph.glyphIndex).advanceWidth() + letterSpacing) * factor
+        // the advance of the text, used for its anchor and to continue the text after it; the spacing that adjusts
+        // text to its length is not added after its last character
+        val width = (glyphs.maxOfOrNull { it.position.x + advance(it) } ?: leading) + trailing -
+                (if (adjustment.last === node) adjustment.spacing else 0.0)
 
         val start = Vector2(node.x ?: pen.x, node.y ?: pen.y) + Vector2(node.dx, node.dy)
         val origin = start - Vector2(width * style.textAnchor.value, 0.0)
@@ -393,6 +542,14 @@ internal object CompositionText {
                 }
 
                 is GroupNode -> {
+                    val wrapped = if (node.textElement) wrap(node) else null
+                    if (wrapped != null) {
+                        for (run in wrapped) layoutRun(run, current)?.let { layout ->
+                            layout.glyphs.forEach { points.addAll(cell(it)) }
+                            current = layout.end
+                        }
+                        return
+                    }
                     val contourRuns = contourRuns(node)
                     if (contourRuns != null) {
                         layoutOnContour(contourRuns, current)?.let { layout ->

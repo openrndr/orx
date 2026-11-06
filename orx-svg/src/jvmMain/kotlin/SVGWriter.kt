@@ -64,7 +64,11 @@ private fun Styleable.serialize(parentStyleable: Styleable? = null): String {
     val sb = StringBuilder()
 
     // properties that are not presentation attributes are written in a style attribute
-    val cssOnly = setOf(AttributeOrPropertyKey.MIX_BLEND_MODE, AttributeOrPropertyKey.ISOLATION, AttributeOrPropertyKey.FILTER)
+    val cssOnly = setOf(
+        AttributeOrPropertyKey.MIX_BLEND_MODE, AttributeOrPropertyKey.ISOLATION, AttributeOrPropertyKey.FILTER,
+        AttributeOrPropertyKey.WHITE_SPACE, AttributeOrPropertyKey.LINE_HEIGHT,
+        AttributeOrPropertyKey.FONT_FEATURE_SETTINGS, AttributeOrPropertyKey.FONT_VARIATION_SETTINGS
+    )
     val css = this.properties.filter { (key, value) ->
         key in cssOnly && value.toString().isNotEmpty() &&
                 (parentStyleable == null || !this.isInherited(parentStyleable, key))

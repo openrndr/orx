@@ -178,6 +178,25 @@ internal sealed class SVGElement(element: Element?) {
             Prop.ISOLATION -> style.isolation = if (value.trim() == "isolate") Isolation.ISOLATE else Isolation.AUTO
             // the type of a mask is read with the mask element
             Prop.MASK_TYPE -> {}
+            Prop.WHITE_SPACE -> WhiteSpace.of(value)?.let { style.whiteSpace = it }
+            Prop.INLINE_SIZE -> style.inlineSize = value.trim().let { v ->
+                if (v == "auto" || v.isEmpty()) OptionalLength.NONE
+                else SVGParse.lengthValue(v, source, SVGParse.LengthAxis.X)?.takeIf { it > 0.0 }
+                    ?.let { OptionalLength(Length.Pixels(it)) } ?: OptionalLength.NONE
+            }
+            Prop.LINE_HEIGHT -> style.lineHeight = value.trim().let { v ->
+                when {
+                    v == "normal" -> LineHeight.Normal
+                    v.toDoubleOrNull() != null -> LineHeight.Multiple(v.toDouble())
+                    v.endsWith("%") -> LineHeight.Absolute((v.dropLast(1).toDoubleOrNull() ?: 100.0) / 100.0 * SVGParse.fontSize(source))
+                    else -> SVGParse.lengthValue(v, source)?.let { LineHeight.Absolute(it) } ?: LineHeight.Normal
+                }
+            }
+            Prop.FONT_FEATURE_SETTINGS -> style.fontFeatureSettings =
+                FontSettings(style.fontFeatureSettings.value + SVGParse.fontSettings(value, features = true))
+            Prop.FONT_VARIATION_SETTINGS -> style.fontVariationSettings = FontSettings(SVGParse.fontSettings(value, features = false))
+            Prop.FONT_VARIANT -> style.fontFeatureSettings =
+                FontSettings(SVGParse.fontVariant(value) + style.fontFeatureSettings.value)
             Prop.SHAPE_RENDERING -> style.shapeRendering = when (value.trim()) {
                 "optimizeSpeed" -> ShapeRendering.OPTIMIZE_SPEED
                 "crispEdges" -> ShapeRendering.CRISP_EDGES
@@ -460,8 +479,12 @@ internal class SVGTextPositions(
  * collapsed.
  * @param startsPositioned true when the run is the first of an element with an x or y position
  */
-internal class SVGTextRun(var text: String, val positions: SVGTextPositions, val startsPositioned: Boolean) :
-    SVGElement(null) {
+internal class SVGTextRun(
+    var text: String,
+    val positions: SVGTextPositions,
+    val startsPositioned: Boolean,
+    val preserved: Boolean = false
+) : SVGElement(null) {
     var pieces: List<SVGTextPiece> = emptyList()
 
     override fun handleAttribute(attribute: Attribute) {}
@@ -496,6 +519,10 @@ internal class SVGText(
         when (attribute.key) {
             in Prop.list -> styleProperty(attribute.key, attribute.value)
             Attr.TRANSFORM -> style.transform = SVGParse.transform(this.element)
+            Prop.TEXT_LENGTH -> style.textLength = SVGParse.lengthValue(attribute.value, element, SVGParse.LengthAxis.X)
+                ?.takeIf { it >= 0.0 }?.let { OptionalLength(Length.Pixels(it)) } ?: OptionalLength.NONE
+            Prop.LENGTH_ADJUST -> style.lengthAdjust =
+                if (attribute.value.trim() == "spacingAndGlyphs") LengthAdjust.SPACING_AND_GLYPHS else LengthAdjust.SPACING
         }
     }
 
@@ -505,6 +532,17 @@ internal class SVGText(
         if (element.tagName() == "textPath") emptyList() else element.attr(name).trim().split(Regex("[\\s,]+")).filter { it.isNotEmpty() }.mapNotNull {
             if (axis == null) it.toDoubleOrNull() else SVGParse.lengthValue(it, element, axis)
         }
+
+    /** how the white space of the text of this element is handled, inherited from the elements it is in */
+    private val whiteSpace: WhiteSpace = generateSequence(element) { it.parent() }.firstNotNullOfOrNull { e ->
+        (SVGStyleSheet.declarations(e.attr("style")).lastOrNull { it.first == Prop.WHITE_SPACE }?.second
+            ?: e.attr(Prop.WHITE_SPACE).takeIf { it.isNotBlank() })?.let { WhiteSpace.of(it) }
+            ?: when (e.attr("xml:space").trim()) {
+                "preserve" -> WhiteSpace.PRE
+                "default" -> WhiteSpace.NORMAL
+                else -> null
+            }
+    } ?: WhiteSpace.NORMAL
 
     private val positions = SVGTextPositions(
         values("x", SVGParse.LengthAxis.X), values("y", SVGParse.LengthAxis.Y),
@@ -525,9 +563,17 @@ internal class SVGText(
         for (node in element.childNodes()) {
             when (node) {
                 is org.jsoup.nodes.TextNode -> {
-                    val text = node.wholeText.replace(Regex("\\s+"), " ")
+                    val text = when (whiteSpace) {
+                        // spaces are kept, tabs become spaces and line feeds are kept for text that wraps
+                        WhiteSpace.PRE, WhiteSpace.PRE_WRAP, WhiteSpace.BREAK_SPACES ->
+                            node.wholeText.replace("\r\n", "\n").replace(Regex("[\\t\\r]"), " ")
+                        WhiteSpace.PRE_LINE ->
+                            node.wholeText.replace("\r\n", "\n").replace(Regex("[ \\t\\r]*\\n[ \\t\\r]*"), "\n")
+                                .replace(Regex("[ \\t\\r]+"), " ")
+                        else -> node.wholeText.replace(Regex("\\s+"), " ")
+                    }
                     if (text.isNotEmpty()) {
-                        elements.add(SVGTextRun(text, positions, first && positions.hasPosition))
+                        elements.add(SVGTextRun(text, positions, first && positions.hasPosition, whiteSpace.preservesSpaces))
                         first = false
                     }
                 }
@@ -563,6 +609,8 @@ internal class SVGText(
     private fun collapseWhitespace() {
         val runs = runs()
         for ((index, run) in runs.withIndex()) {
+            // spaces that are preserved are not collapsed
+            if (run.preserved) continue
             if (index == 0) {
                 run.text = run.text.trimStart()
             } else if (runs[index - 1].text.endsWith(" ") && !run.startsPositioned) {

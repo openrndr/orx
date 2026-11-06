@@ -714,6 +714,81 @@ enum class DominantBaseline(private val css: String) : AttributeOrPropertyValue 
 }
 
 /**
+ * How the white space of text is handled, like the white-space property of CSS. Text in compositions is already
+ * collapsed or not, the value is kept so that it is written with the text; line feeds are line breaks of text that
+ * wraps, see [inlineSize].
+ */
+enum class WhiteSpace(private val css: String, val preservesSpaces: Boolean) : AttributeOrPropertyValue {
+    NORMAL("normal", false),
+    NOWRAP("nowrap", false),
+    PRE("pre", true),
+    PRE_WRAP("pre-wrap", true),
+    PRE_LINE("pre-line", false),
+    BREAK_SPACES("break-spaces", true);
+
+    override val value: WhiteSpace get() = this
+    override fun toString(): String = css
+
+    companion object {
+        fun of(name: String): WhiteSpace? = entries.firstOrNull { it.css == name.trim() }
+    }
+}
+
+/** how text is adjusted to its [textLength], like the lengthAdjust attribute of SVG */
+enum class LengthAdjust(private val svg: String) : AttributeOrPropertyValue {
+    /** the space between the characters is adjusted */
+    SPACING("spacing"),
+
+    /** the characters are stretched or squeezed along with the space between them */
+    SPACING_AND_GLYPHS("spacingAndGlyphs");
+
+    override val value: LengthAdjust get() = this
+    override fun toString(): String = svg
+}
+
+/** an optional length: a [Length], or none, like the textLength attribute and the inline-size property */
+class OptionalLength(override val value: Length?) : AttributeOrPropertyValue {
+    override fun toString(): String = when (val v = value) {
+        null -> ""
+        is Length.Pixels -> v.value.toString()
+        is Length.Percent -> "${v.value}%"
+    }
+
+    companion object {
+        val NONE = OptionalLength(null)
+    }
+}
+
+/** the height of lines of text: normal, a multiple of the font size, or a length, like line-height */
+sealed interface LineHeight : AttributeOrPropertyValue {
+    object Normal : LineHeight {
+        override val value: Double? = null
+        override fun toString() = "normal"
+    }
+
+    class Multiple(override val value: Double) : LineHeight {
+        override fun toString() = value.toString()
+    }
+
+    class Absolute(override val value: Double) : LineHeight {
+        override fun toString() = "${value}px"
+    }
+}
+
+/**
+ * Settings of the font, like font-feature-settings (OpenType features and their values) and font-variation-settings
+ * (axes of variable fonts and their values)
+ */
+class FontSettings(override val value: Map<String, Double>) : AttributeOrPropertyValue {
+    override fun toString(): String = if (value.isEmpty()) "normal" else
+        value.entries.joinToString(", ") { (tag, v) -> "'$tag' ${if (v == v.toLong().toDouble()) v.toLong().toString() else v.toString()}" }
+
+    companion object {
+        val NORMAL = FontSettings(emptyMap())
+    }
+}
+
+/**
  * How far text is moved up from the baseline of its parent, like the baseline-shift property of SVG
  */
 sealed interface BaselineShift : AttributeOrPropertyValue {
@@ -936,6 +1011,21 @@ var Style.baselineShift by PropertyDelegate<BaselineShift>(BASELINE_SHIFT, RESET
  */
 var Style.textDecoration by PropertyDelegate<TextDecoration>(TEXT_DECORATION, INHERIT, TextDecoration.NONE)
 var Style.shapeRendering by PropertyDelegate<ShapeRendering>(SHAPE_RENDERING, INHERIT, ShapeRendering.AUTO)
+var Style.whiteSpace by PropertyDelegate<WhiteSpace>(WHITE_SPACE, INHERIT, WhiteSpace.NORMAL)
+
+/** the length that the text of a text element or a tspan is adjusted to, see [lengthAdjust] */
+var Style.textLength by PropertyDelegate<OptionalLength>(TEXT_LENGTH, RESET, OptionalLength.NONE)
+var Style.lengthAdjust by PropertyDelegate<LengthAdjust>(LENGTH_ADJUST, RESET, LengthAdjust.SPACING)
+
+/** the width that the text of a text element wraps to, like the inline-size property of SVG 2 */
+var Style.inlineSize by PropertyDelegate<OptionalLength>(INLINE_SIZE, RESET, OptionalLength.NONE)
+var Style.lineHeight by PropertyDelegate<LineHeight>(LINE_HEIGHT, INHERIT, LineHeight.Normal)
+
+/** OpenType features of text, like font-feature-settings; font-variant is read into it */
+var Style.fontFeatureSettings by PropertyDelegate<FontSettings>(FONT_FEATURE_SETTINGS, INHERIT, FontSettings.NORMAL)
+
+/** values of the axes of variable fonts, like font-variation-settings */
+var Style.fontVariationSettings by PropertyDelegate<FontSettings>(FONT_VARIATION_SETTINGS, INHERIT, FontSettings.NORMAL)
 var Style.pathLength by PropertyDelegate<PathLength>(PATH_LENGTH, RESET, PathLength.NONE)
 
 enum class AttributeOrPropertyKey {
@@ -1002,6 +1092,13 @@ enum class AttributeOrPropertyKey {
     BASELINE_SHIFT { override fun toString() = "baseline-shift" },
     TEXT_DECORATION { override fun toString() = "text-decoration" },
     SHAPE_RENDERING { override fun toString() = "shape-rendering" },
+    WHITE_SPACE { override fun toString() = "white-space" },
+    TEXT_LENGTH { override fun toString() = "textLength" },
+    LENGTH_ADJUST { override fun toString() = "lengthAdjust" },
+    INLINE_SIZE { override fun toString() = "inline-size" },
+    LINE_HEIGHT { override fun toString() = "line-height" },
+    FONT_FEATURE_SETTINGS { override fun toString() = "font-feature-settings" },
+    FONT_VARIATION_SETTINGS { override fun toString() = "font-variation-settings" },
     STOP_COLOR { override fun toString() = "stop-color" },
     STOP_OPACITY { override fun toString() = "stop-opacity" },
     STROKE { override fun toString() = "stroke" },

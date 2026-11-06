@@ -133,6 +133,13 @@ internal object Prop {
     const val MIX_BLEND_MODE = "mix-blend-mode"
     const val ISOLATION = "isolation"
     const val FILTER = "filter"
+    const val WHITE_SPACE = "white-space"
+    const val TEXT_LENGTH = "textLength"
+    const val LENGTH_ADJUST = "lengthAdjust"
+    const val INLINE_SIZE = "inline-size"
+    const val LINE_HEIGHT = "line-height"
+    const val FONT_FEATURE_SETTINGS = "font-feature-settings"
+    const val FONT_VARIATION_SETTINGS = "font-variation-settings"
     const val COLOR_INTERPOLATION_FILTERS = "color-interpolation-filters"
     const val FLOOD_COLOR = "flood-color"
     const val FLOOD_OPACITY = "flood-opacity"
@@ -186,6 +193,11 @@ internal object Prop {
         MIX_BLEND_MODE,
         ISOLATION,
         FILTER,
+        WHITE_SPACE,
+        INLINE_SIZE,
+        LINE_HEIGHT,
+        FONT_FEATURE_SETTINGS,
+        FONT_VARIATION_SETTINGS,
         COLOR_INTERPOLATION_FILTERS,
         FLOOD_COLOR,
         FLOOD_OPACITY
