@@ -104,6 +104,7 @@ include(
         "orx-view-box",
         "orx-text-on-contour",
         "orx-text-writer",
+        "orx-style",
         "orx-turtle",
         "orx-g-code",
 

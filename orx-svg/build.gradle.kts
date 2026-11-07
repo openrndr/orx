@@ -6,6 +6,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":orx-composition"))
+            implementation(project(":orx-style"))
             implementation(openrndr.shape)
         }
 

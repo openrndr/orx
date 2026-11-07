@@ -105,6 +105,7 @@ val publishedProjects = listOf(
     ":orx-temporal-blur",
     ":orx-text-on-contour",
     ":orx-text-writer",
+    ":orx-style",
     ":orx-time-operators",
     ":orx-timer",
     ":orx-triangulation",

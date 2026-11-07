@@ -2,6 +2,7 @@ package org.openrndr.panel.style
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.color.ConvertibleToColorRGBa
+import org.openrndr.extra.style.TimingFunction
 import org.openrndr.panel.style.PropertyInheritance.INHERIT
 import org.openrndr.panel.style.PropertyInheritance.RESET
 import java.util.*
@@ -436,6 +437,18 @@ var StyleSheet.opacity by PropertyHandler<Double>("opacity", RESET, 1.0)
  */
 var StyleSheet.transitionDuration by PropertyHandler<Double>("transition-duration", RESET, 0.0)
 
+/** the time in seconds before the colors and the opacity of the element start to change, see [transitionDuration] */
+var StyleSheet.transitionDelay by PropertyHandler<Double>("transition-delay", RESET, 0.0)
+
+/** how the colors and the opacity of the element change over time, see [transitionDuration] */
+var StyleSheet.transitionTimingFunction by PropertyHandler<TimingFunction>("transition-timing-function", RESET, TimingFunction.EASE)
+
+/**
+ * The properties that transition, see [transitionDuration]: of background-color, color, border-color, outline-color
+ * and opacity, `all` for all of them
+ */
+var StyleSheet.transitionProperty by PropertyHandler<List<String>>("transition-property", RESET, listOf("all"))
+
 /** the radius of the corners of the box, in pixels or as a percentage of its shorter side */
 var StyleSheet.borderRadius by PropertyHandler<LinearDimension>("border-radius", RESET, 0.px)
 
@@ -641,7 +654,8 @@ internal fun sameValue(a: Any?, b: Any?): Boolean {
 /** the properties that only change how an element is painted, not its size or position */
 internal val paintProperties = setOf(
     "background-color", "color", "border-color", "border-radius", "outline-width", "outline-color", "outline-offset",
-    "opacity", "cursor", "transition-duration", "scrollbar-color", "scrollbar-track-color", "scrollbar-cursor",
+    "opacity", "cursor", "transition-duration", "transition-delay", "transition-timing-function", "transition-property",
+    "scrollbar-color", "scrollbar-track-color", "scrollbar-cursor",
     "scrollbar-visibility", "scroll-behavior"
 )
 

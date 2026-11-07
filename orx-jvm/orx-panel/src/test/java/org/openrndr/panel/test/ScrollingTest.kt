@@ -11,6 +11,7 @@ import org.openrndr.panel.elements.Div
 import org.openrndr.panel.elements.style
 import org.openrndr.panel.layout.Layouter
 import org.openrndr.color.ColorRGBa
+import org.openrndr.extra.style.TimingFunction
 import org.openrndr.panel.ScrollbarFades
 import org.openrndr.panel.SmoothScrolling
 import org.openrndr.panel.StyleTransitions
@@ -287,6 +288,7 @@ class ScrollingTest {
             style {
                 background = Color.RGBa(ColorRGBa.BLACK)
                 transitionDuration = 1.0
+                transitionTimingFunction = TimingFunction.LINEAR
             }
         }
         body.append(button)
@@ -312,6 +314,46 @@ class ScrollingTest {
         now = 2.0
         update()
         assertEquals(0.0, (button.computedStyle.background as Color.RGBa).color.r, 1E-9)
+        assertTrue(transitions.animating.isEmpty())
+    }
+
+    @Test
+    fun `transitions have delays, timing functions and properties`() {
+        var now = 0.0
+        val transitions = StyleTransitions { now }
+        val body = Body(null).apply { style { width = 400.px; height = 300.px } }
+        val button = Div().apply {
+            style {
+                background = Color.RGBa(ColorRGBa.BLACK)
+                transitionDuration = 1.0
+                transitionDelay = 0.5
+                // the opacity changes at once
+                transitionProperty = listOf("background-color")
+            }
+        }
+        body.append(button)
+        fun update() {
+            Layouter().apply { computeStyles(body); layout(body) }
+            transitions.apply(body)
+        }
+        fun red() = (button.computedStyle.background as Color.RGBa).color.r
+        update()
+        button.style { background = Color.RGBa(ColorRGBa.WHITE); opacity = 0.0 }
+        update()
+        assertEquals(0.0, button.computedStyle.opacity)
+        // during the delay
+        now = 0.25
+        update()
+        assertEquals(0.0, red(), 1E-9)
+        assertEquals(listOf<Element>(button), transitions.animating)
+        // half way, the default timing function is ease, ahead of linear
+        now = 1.0
+        update()
+        assertEquals(TimingFunction.EASE.ease(0.5), red(), 1E-9)
+        assertTrue(red() > 0.5)
+        now = 1.6
+        update()
+        assertEquals(1.0, red(), 1E-9)
         assertTrue(transitions.animating.isEmpty())
     }
 }

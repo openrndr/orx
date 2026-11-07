@@ -1,4 +1,6 @@
 package org.openrndr.extra.svg
+import org.openrndr.extra.style.parseCssAngle
+import org.openrndr.extra.style.parseCssColor
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.jsoup.nodes.*
 import org.openrndr.color.*
@@ -564,16 +566,7 @@ internal object SVGParse {
      * A paint order: the stroke is painted first when it is named before the fill, or the fill is not named
      */
     /** an angle in degrees: a number, or a number with the unit deg, rad, grad or turn */
-    fun angle(value: String): Double? {
-        val v = value.trim()
-        return when {
-            v.endsWith("deg") -> v.dropLast(3).toDoubleOrNull()
-            v.endsWith("grad") -> v.dropLast(4).toDoubleOrNull()?.times(0.9)
-            v.endsWith("rad") -> v.dropLast(3).toDoubleOrNull()?.times(180.0 / PI)
-            v.endsWith("turn") -> v.dropLast(4).toDoubleOrNull()?.times(360.0)
-            else -> v.toDoubleOrNull()
-        }
-    }
+    fun angle(value: String): Double? = parseCssAngle(value)
 
     /** a marker: none, or a reference to a marker element */
     fun marker(value: String): MarkerReference {
@@ -665,61 +658,8 @@ internal object SVGParse {
             col == "currentcolor" -> Paint.CurrentColor
             col == "context-fill" -> Paint.ContextFill
             col == "context-stroke" -> Paint.ContextStroke
-            col == "transparent" -> Paint.RGB(ColorRGBa(0.0, 0.0, 0.0, 0.0, linearity = Linearity.SRGB))
-            col.startsWith("#") -> hexColor(col.drop(1))?.let { Paint.RGB(it) } ?: Paint.None
-            Regex("^(rgba?|hsla?)\\((.*)\\)$").matchEntire(col) != null -> functionalColor(col)?.let { Paint.RGB(it) } ?: Paint.None
-            // the color functions of CSS Color 4 and 5
-            Regex("^([a-z-]+)\\((.*)\\)$", RegexOption.DOT_MATCHES_ALL).matchEntire(col) != null -> {
-                val name = col.substringBefore("(")
-                CSSColors.function(name, col.substringAfter("(").substringBeforeLast(")")) { (color(it) as? Paint.RGB)?.value }
-                    ?.let { Paint.RGB(it) } ?: Paint.None
-            }
-            col in cssColorNames -> Paint.RGB(ColorRGBa.fromHex(cssColorNames[col]!!))
-            else -> Paint.None
-        }
-    }
-
-    /** a hexadecimal color of 3, 4, 6 or 8 digits: rgb, rgba, rrggbb or rrggbbaa */
-    private fun hexColor(hex: String): ColorRGBa? {
-        if (!hex.all { it in "0123456789abcdef" }) return null
-        val digits = when (hex.length) {
-            3, 4 -> hex.map { "$it$it" }
-            6, 8 -> hex.chunked(2)
-            else -> return null
-        }.map { it.toInt(16) / 255.0 }
-        return ColorRGBa(digits[0], digits[1], digits[2], digits.getOrElse(3) { 1.0 }, linearity = Linearity.SRGB)
-    }
-
-    /**
-     * A color in functional notation: rgb(), rgba(), hsl() or hsla(), with arguments separated by commas or spaces and
-     * an optional alpha, after a slash in the space separated syntax
-     */
-    private fun functionalColor(value: String): ColorRGBa? {
-        val name = value.substringBefore("(")
-        val arguments = value.substringAfter("(").substringBeforeLast(")")
-            .split(Regex("[\\s,/]+")).filter { it.isNotEmpty() }
-        if (arguments.size !in 3..4) return null
-
-        /** a number, or a percentage of [full] */
-        fun component(argument: String, full: Double): Double? =
-            if (argument.endsWith("%")) argument.dropLast(1).toDoubleOrNull()?.let { it / 100.0 * full }
-            else argument.toDoubleOrNull()
-
-        val alpha = arguments.getOrNull(3)?.let { component(it, 1.0) ?: return null }?.coerceIn(0.0, 1.0) ?: 1.0
-        return if (name.startsWith("rgb")) {
-            val (r, g, b) = arguments.take(3).map { (component(it, 255.0) ?: return null).coerceIn(0.0, 255.0) / 255.0 }
-            ColorRGBa(r, g, b, alpha, linearity = Linearity.SRGB)
-        } else {
-            val hue = arguments[0].removeSuffix("deg").toDoubleOrNull() ?: return null
-            val saturation = (component(arguments[1], 1.0) ?: return null).coerceIn(0.0, 1.0)
-            val lightness = (component(arguments[2], 1.0) ?: return null).coerceIn(0.0, 1.0)
-            // hsl to rgb, as in CSS Color 4
-            fun f(n: Double): Double {
-                val k = (n + hue / 30.0).mod(12.0)
-                val a = saturation * min(lightness, 1.0 - lightness)
-                return lightness - a * max(-1.0, min(k - 3.0, min(9.0 - k, 1.0)))
-            }
-            ColorRGBa(f(0.0), f(8.0), f(4.0), alpha, linearity = Linearity.SRGB)
+            // named colors, hexadecimal colors and the color functions of CSS Color 4 and 5
+            else -> parseCssColor(col)?.let { Paint.RGB(it) } ?: Paint.None
         }
     }
 

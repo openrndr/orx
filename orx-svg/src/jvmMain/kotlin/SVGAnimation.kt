@@ -3,6 +3,7 @@ package org.openrndr.extra.svg
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.jsoup.nodes.Attribute
 import org.jsoup.nodes.Element
+import org.openrndr.extra.style.*
 import org.openrndr.events.Event
 import org.openrndr.extra.composition.*
 import org.openrndr.math.Vector2
@@ -22,84 +23,6 @@ private val logger = KotlinLogging.logger {}
  * and CSS transitions. Values are text, as they are written in documents: they are interpolated as colors, as lists
  * of numbers, or switched discretely, and applied to the nodes of elements with the parsers that load documents.
  */
-
-/** a clock value of SMIL or a CSS time: 2s, 500ms, 1.5, 01:30, 00:01:30.5, 2min, 1h; null when it is not valid */
-internal fun clockValue(value: String): Double? {
-    val v = value.trim()
-    if (v.contains(':')) {
-        val parts = v.split(':').map { it.toDoubleOrNull() ?: return null }
-        return parts.fold(0.0) { acc, p -> acc * 60.0 + p }
-    }
-    return when {
-        v.endsWith("ms") -> v.dropLast(2).toDoubleOrNull()?.div(1000.0)
-        v.endsWith("min") -> v.dropLast(3).toDoubleOrNull()?.times(60.0)
-        v.endsWith("h") -> v.dropLast(1).toDoubleOrNull()?.times(3600.0)
-        v.endsWith("s") -> v.dropLast(1).toDoubleOrNull()
-        else -> v.toDoubleOrNull()
-    }
-}
-
-/** a timing function, like the easing functions of CSS and the key splines of SMIL */
-internal fun interface Easing {
-    fun ease(t: Double): Double
-
-    companion object {
-        val LINEAR = Easing { it }
-
-        /** a cubic Bézier curve from (0, 0) to (1, 1) with the control points ([x1], [y1]) and ([x2], [y2]) */
-        fun cubicBezier(x1: Double, y1: Double, x2: Double, y2: Double) = Easing { t ->
-            if (t <= 0.0 || t >= 1.0) return@Easing t
-            fun x(u: Double) = 3.0 * (1 - u) * (1 - u) * u * x1 + 3.0 * (1 - u) * u * u * x2 + u * u * u
-            fun y(u: Double) = 3.0 * (1 - u) * (1 - u) * u * y1 + 3.0 * (1 - u) * u * u * y2 + u * u * u
-            // the parameter of the curve at t, by bisection
-            var lo = 0.0
-            var hi = 1.0
-            repeat(40) {
-                val mid = (lo + hi) / 2.0
-                if (x(mid) < t) lo = mid else hi = mid
-            }
-            y((lo + hi) / 2.0)
-        }
-
-        /** steps of CSS: [count] steps, jumping at their start, their end, both or neither */
-        fun steps(count: Int, position: String) = Easing { t ->
-            val n = max(count, 1)
-            val jumps = when (position) {
-                "jump-start", "start" -> 0
-                "jump-none" -> -1
-                "jump-both" -> 1
-                else -> 0
-            }
-            var step = floor(t * n)
-            if (position == "jump-start" || position == "start" || position == "jump-both") step += 1.0
-            if (t >= 0.0 && step < 0.0) step = 0.0
-            val total = n + jumps
-            (step / total).coerceIn(0.0, 1.0)
-        }
-
-        /** the timing function of CSS named [value], linear when it is not known */
-        fun css(value: String): Easing {
-            val v = value.trim()
-            return when {
-                v == "linear" -> LINEAR
-                v == "ease" -> cubicBezier(0.25, 0.1, 0.25, 1.0)
-                v == "ease-in" -> cubicBezier(0.42, 0.0, 1.0, 1.0)
-                v == "ease-out" -> cubicBezier(0.0, 0.0, 0.58, 1.0)
-                v == "ease-in-out" -> cubicBezier(0.42, 0.0, 0.58, 1.0)
-                v == "step-start" -> steps(1, "jump-start")
-                v == "step-end" -> steps(1, "jump-end")
-                v.startsWith("cubic-bezier(") -> numbers(v).takeIf { it.size == 4 }?.let { cubicBezier(it[0], it[1], it[2], it[3]) } ?: LINEAR
-                v.startsWith("steps(") -> {
-                    val arguments = v.substringAfter('(').substringBefore(')').split(',').map { it.trim() }
-                    steps(arguments[0].toIntOrNull() ?: 1, arguments.getOrElse(1) { "jump-end" })
-                }
-                else -> LINEAR
-            }
-        }
-
-        private fun numbers(v: String) = Regex("-?[0-9.]+(?:e-?[0-9]+)?").findAll(v).mapNotNull { it.value.toDoubleOrNull() }.toList()
-    }
-}
 
 /**
  * The interpolation of values given as text: colors in sRGB, lists of numbers with the same text around them, like
@@ -451,11 +374,11 @@ internal sealed interface TimeCondition {
                 val v = part.trim()
                 if (v.isEmpty()) return@mapNotNull null
                 if (v == "indefinite") return@mapNotNull Indefinite
-                clockValue(v)?.let { return@mapNotNull Offset(it) }
+                parseCssTime(v)?.let { return@mapNotNull Offset(it) }
                 // an id, a dot and an event or begin or end, with an offset
                 val match = Regex("^(?:([A-Za-z_][\\w-]*)\\.)?([A-Za-z]+)(?:\\s*([+-])\\s*(.+))?$").matchEntire(v)
                     ?: return@mapNotNull null.also { logger.warn { "unsupported timing '$v'" } }
-                val offset = match.groupValues[4].takeIf { it.isNotEmpty() }?.let { clockValue(it) }?.let {
+                val offset = match.groupValues[4].takeIf { it.isNotEmpty() }?.let { parseCssTime(it) }?.let {
                     if (match.groupValues[3] == "-") -it else it
                 } ?: 0.0
                 val id = match.groupValues[1].takeIf { it.isNotEmpty() }
@@ -477,7 +400,7 @@ internal class SmilAnimation(
     val attribute: String,
     val values: List<String>,
     val keyTimes: List<Double>?,
-    val keySplines: List<Easing>?,
+    val keySplines: List<TimingFunction>?,
     val calcMode: String,
     val duration: Double?,
     val repeatCount: Double?,
@@ -561,7 +484,7 @@ internal class CssAnimation(
     val target: AnimationTarget,
     val keyframes: List<SVGStyleSheet.Keyframe>,
     val duration: Double,
-    val easing: Easing,
+    val easing: TimingFunction,
     val delay: Double,
     val iterations: Double,
     val direction: String,
@@ -622,7 +545,7 @@ internal class CssAnimation(
             // the keyframes with the property, the base value where the first or the last is missing
             val frames = keyframes.filter { frame -> frame.declarations.any { it.first == property } }
                 .map { frame -> Triple(frame.offset, frame.declarations.last { it.first == property }.second,
-                    frame.declarations.lastOrNull { it.first == "animation-timing-function" }?.second?.let { Easing.css(it) }) }
+                    frame.declarations.lastOrNull { it.first == "animation-timing-function" }?.second?.let { TimingFunction.css(it) }) }
                 .toMutableList()
             val base = target.baseValue(property)
             if (frames.first().first > 0.0) frames.add(0, Triple(0.0, base, null))
@@ -634,15 +557,6 @@ internal class CssAnimation(
             ValueInterpolation.interpolate(v1, v2, (e1 ?: easing).ease(local), property = property)
         }
     }
-}
-
-/** the transition settings of an element for a property: its duration, delay and timing function */
-internal class TransitionSettings(val duration: Double, val delay: Double, val easing: Easing)
-
-/** a transition of a property of an element that is running */
-private class RunningTransition(val property: String, val from: String, val to: String, val start: Double, val settings: TransitionSettings) {
-    /** true once the delay is over, when the transition has started */
-    var started = false
 }
 
 /**
@@ -688,7 +602,7 @@ class SVGAnimation internal constructor(document: SVGDocument) {
     private val dynamic = document.dynamic
 
     /** the transitions that changes by the code of the program started, by element and property */
-    private val codeTransitions = java.util.IdentityHashMap<Element, MutableMap<String, RunningTransition>>()
+    private val codeTransitions = java.util.IdentityHashMap<Element, Transitions<String>>()
 
     /** the elements in each pointer state */
     private val hovered = java.util.Collections.newSetFromMap(java.util.IdentityHashMap<Element, Boolean>())
@@ -697,7 +611,17 @@ class SVGAnimation internal constructor(document: SVGDocument) {
     /** the values that the rules for pointer states and transitions last set, by element and property */
     private val targetValues = java.util.IdentityHashMap<Element, MutableMap<String, String>>()
     private val displayed = java.util.IdentityHashMap<Element, MutableMap<String, String>>()
-    private val transitions = java.util.IdentityHashMap<Element, MutableMap<String, RunningTransition>>()
+    private val transitions = java.util.IdentityHashMap<Element, Transitions<String>>()
+
+    /** the transitions of [element] in [map], of values as text, which send the events of transitions */
+    private fun transitionsOf(map: java.util.IdentityHashMap<Element, Transitions<String>>, element: Element): Transitions<String> =
+        map.getOrPut(element) {
+            Transitions<String> { property, a, b, t -> ValueInterpolation.interpolate(a, b, t, property = property) }.apply {
+                started = { emit(transitionStarted, element, nodesOf(element), it.property) }
+                ended = { emit(transitionEnded, element, nodesOf(element), it.property) }
+                canceled = { emit(transitionCanceled, element, nodesOf(element), it.property) }
+            }
+        }
 
     /** the time of the last update */
     var time = 0.0
@@ -864,12 +788,12 @@ class SVGAnimation internal constructor(document: SVGDocument) {
             else -> "linear"
         }
         val keySplines = attr("keySplines")?.split(';')?.map { it.trim() }?.filter { it.isNotEmpty() }?.map { s ->
-            numbersOf(s).takeIf { it.size == 4 }?.let { Easing.cubicBezier(it[0], it[1], it[2], it[3]) } ?: Easing.LINEAR
+            numbersOf(s).takeIf { it.size == 4 }?.let { TimingFunction.cubicBezier(it[0], it[1], it[2], it[3]) } ?: TimingFunction.LINEAR
         }
-        val duration = attr("dur")?.let { if (it == "indefinite" || it == "media") null else clockValue(it) }
+        val duration = attr("dur")?.let { if (it == "indefinite" || it == "media") null else parseCssTime(it) }
             ?: if (tag == "set") null else null
         val repeatCount = attr("repeatCount")?.let { if (it == "indefinite") Double.POSITIVE_INFINITY else it.toDoubleOrNull() }
-        val repeatDuration = attr("repeatDur")?.let { if (it == "indefinite") Double.POSITIVE_INFINITY else clockValue(it) }
+        val repeatDuration = attr("repeatDur")?.let { if (it == "indefinite") Double.POSITIVE_INFINITY else parseCssTime(it) }
         return SmilAnimation(
             element, target, attribute, values,
             attr("keyTimes")?.split(';')?.mapNotNull { it.trim().toDoubleOrNull() },
@@ -886,16 +810,16 @@ class SVGAnimation internal constructor(document: SVGDocument) {
     /** the CSS animations of [element], from its animation properties */
     private fun cssAnimations(element: Element, declarations: List<Pair<String, String>>, keyframes: Map<String, List<SVGStyleSheet.Keyframe>>, start: Double = 0.0) {
         if (declarations.none { it.first.startsWith("animation") }) return
-        fun longhand(name: String) = declarations.lastOrNull { it.first == name }?.second?.let(CSSColors::splitTopLevel)?.map { it.trim() }
+        fun longhand(name: String) = declarations.lastOrNull { it.first == name }?.second?.let(::splitCssList)?.map { it.trim() }
         // the shorthand: a name, durations then delays, a timing function, an iteration count, a direction, a fill mode
-        val shorthand = declarations.lastOrNull { it.first == "animation" }?.second?.let(CSSColors::splitTopLevel)?.map { it.trim() } ?: emptyList()
+        val shorthand = declarations.lastOrNull { it.first == "animation" }?.second?.let(::splitCssList)?.map { it.trim() } ?: emptyList()
         data class Settings(var name: String? = null, var duration: Double = 0.0, var delay: Double = 0.0, var easing: String = "ease",
                             var iterations: Double = 1.0, var direction: String = "normal", var fill: String = "none", var paused: Boolean = false)
         val settings = shorthand.map { part ->
             val s = Settings()
             var times = 0
             for (token in Regex("cubic-bezier\\([^)]*\\)|steps\\([^)]*\\)|\\S+").findAll(part).map { it.value }) {
-                val time = if (token.endsWith("s")) clockValue(token) else null
+                val time = if (token.endsWith("s")) parseCssTime(token) else null
                 when {
                     time != null -> { if (times == 0) s.duration = time else s.delay = time; times++ }
                     token == "infinite" -> s.iterations = Double.POSITIVE_INFINITY
@@ -903,7 +827,7 @@ class SVGAnimation internal constructor(document: SVGDocument) {
                     token in setOf("normal", "reverse", "alternate", "alternate-reverse") -> s.direction = token
                     token in setOf("none", "forwards", "backwards", "both") -> s.fill = token
                     token in setOf("running", "paused") -> s.paused = token == "paused"
-                    token.startsWith("cubic-bezier") || token.startsWith("steps") || token in setOf("linear", "ease", "ease-in", "ease-out", "ease-in-out", "step-start", "step-end") -> s.easing = token
+                    TimingFunction.isCss(token) -> s.easing = token
                     else -> s.name = token
                 }
             }
@@ -916,8 +840,8 @@ class SVGAnimation internal constructor(document: SVGDocument) {
             settings.forEachIndexed { i, s -> apply(s, list[i % list.size]) }
         }
         each("animation-name") { s, v -> s.name = v }
-        each("animation-duration") { s, v -> s.duration = clockValue(v) ?: 0.0 }
-        each("animation-delay") { s, v -> s.delay = clockValue(v) ?: 0.0 }
+        each("animation-duration") { s, v -> s.duration = parseCssTime(v) ?: 0.0 }
+        each("animation-delay") { s, v -> s.delay = parseCssTime(v) ?: 0.0 }
         each("animation-timing-function") { s, v -> s.easing = v }
         each("animation-iteration-count") { s, v -> s.iterations = if (v == "infinite") Double.POSITIVE_INFINITY else v.toDoubleOrNull() ?: 1.0 }
         each("animation-direction") { s, v -> s.direction = v }
@@ -926,44 +850,13 @@ class SVGAnimation internal constructor(document: SVGDocument) {
         val target = target(element) ?: return
         for (s in settings) {
             val frames = keyframes[s.name ?: continue] ?: continue.also { logger.warn { "@keyframes ${s.name} is not defined" } }
-            css.add(CssAnimation(s.name!!, target, frames, s.duration, Easing.css(s.easing), s.delay, s.iterations, s.direction, s.fill, s.paused, start))
+            css.add(CssAnimation(s.name!!, target, frames, s.duration, TimingFunction.css(s.easing), s.delay, s.iterations, s.direction, s.fill, s.paused, start))
         }
     }
 
-    /** the transition settings of [declarations] for [property], null when it does not transition */
-    private fun transitionSettings(declarations: List<Pair<String, String>>, property: String): TransitionSettings? {
-        val parts = mutableListOf<Triple<String, TransitionSettings, Int>>()
-        declarations.lastOrNull { it.first == "transition" }?.second?.let(CSSColors::splitTopLevel)?.forEachIndexed { i, part ->
-            var name = "all"
-            var duration = 0.0
-            var delay = 0.0
-            var easing = "ease"
-            var times = 0
-            for (token in Regex("cubic-bezier\\([^)]*\\)|steps\\([^)]*\\)|\\S+").findAll(part.trim()).map { it.value }) {
-                val time = if (token.endsWith("s")) clockValue(token) else null
-                when {
-                    time != null -> { if (times == 0) duration = time else delay = time; times++ }
-                    token.startsWith("cubic-bezier") || token.startsWith("steps") || token in setOf("linear", "ease", "ease-in", "ease-out", "ease-in-out", "step-start", "step-end") -> easing = token
-                    else -> name = token
-                }
-            }
-            parts.add(Triple(name, TransitionSettings(duration, delay, Easing.css(easing)), i))
-        }
-        // longhands override the shorthand
-        val names = declarations.lastOrNull { it.first == "transition-property" }?.second?.let(CSSColors::splitTopLevel)?.map { it.trim() }
-        if (names != null) {
-            fun list(name: String) = declarations.lastOrNull { it.first == name }?.second?.let(CSSColors::splitTopLevel)?.map { it.trim() }
-            val durations = list("transition-duration") ?: listOf("0s")
-            val delays = list("transition-delay") ?: listOf("0s")
-            val easings = list("transition-timing-function") ?: listOf("ease")
-            parts.clear()
-            names.forEachIndexed { i, n ->
-                parts.add(Triple(n, TransitionSettings(clockValue(durations[i % durations.size]) ?: 0.0,
-                    clockValue(delays[i % delays.size]) ?: 0.0, Easing.css(easings[i % easings.size])), i))
-            }
-        }
-        return parts.lastOrNull { it.first == property || it.first == "all" }?.second?.takeIf { it.duration > 0.0 }
-    }
+    /** the timing of the transitions of [property] by [declarations], null when it does not transition */
+    private fun transitionTiming(declarations: List<Pair<String, String>>, property: String): TransitionTiming? =
+        TransitionTiming.css(property) { name -> declarations.lastOrNull { it.first == name }?.second }
 
     /** the declarations of [element] with the rules for pointer states that apply now */
     private fun stateDeclarations(element: Element): List<Pair<String, String>> {
@@ -1016,46 +909,19 @@ class SVGAnimation internal constructor(document: SVGDocument) {
     }
 
     /** the value of a running transition of [property] of [element] at the time of the last update, null when none runs */
-    private fun transitioning(element: Element, property: String): String? {
-        val transition = codeTransitions[element]?.get(property) ?: transitions[element]?.get(property) ?: return null
-        val t = (time - transition.start - transition.settings.delay) / transition.settings.duration
-        return when {
-            t >= 1.0 -> null
-            t <= 0.0 -> transition.from
-            else -> ValueInterpolation.interpolate(transition.from, transition.to, transition.settings.easing.ease(t), property = transition.property)
-        }
-    }
+    private fun transitioning(element: Element, property: String): String? =
+        codeTransitions[element]?.shown(property, time) ?: transitions[element]?.shown(property, time)
 
     /** starts a transition of [property] of [element] from [from] to [to] when the element has one for the property */
     private fun startTransition(element: Element, property: String, from: String?, to: String?) {
         if (from == null || to == null || from == to) return
-        val settings = transitionSettings(SVGStyleSheet.declarations(element.attr("style")), property)
-        val running = codeTransitions.getOrPut(element) { mutableMapOf() }
+        val timing = transitionTiming(SVGStyleSheet.declarations(element.attr("style")), property)
+        // from the value that is shown, of a transition of a pointer state too
         val shown = transitioning(element, property)
-        running[property]?.let { cancel(element, it) }
-        if (settings == null) { running.remove(property); return }
-        running[property] = RunningTransition(property, shown ?: from, to, time, settings)
+        transitionsOf(codeTransitions, element).change(property, shown ?: from, to, time, timing)
     }
 
     private fun nodesOf(element: Element): List<CompositionNode> = nodesByElement[element] ?: emptyList()
-
-    /** a transition that is replaced, it is canceled when it did not end */
-    private fun cancel(element: Element, transition: RunningTransition) {
-        if ((time - transition.start - transition.settings.delay) / transition.settings.duration < 1.0) {
-            emit(transitionCanceled, element, nodesOf(element), transition.property)
-        }
-    }
-
-    /** the progress of [transition] of [element] at [seconds], it starts and ends with events */
-    private fun progress(element: Element, transition: RunningTransition, seconds: Double): Double {
-        val t = (seconds - transition.start - transition.settings.delay) / transition.settings.duration
-        if (t > 0.0 && !transition.started) {
-            transition.started = true
-            emit(transitionStarted, element, nodesOf(element), transition.property)
-        }
-        if (t >= 1.0) emit(transitionEnded, element, nodesOf(element), transition.property)
-        return t
-    }
 
     /**
      * Computes the style of [element] and its descendants again, after their classes or inline styles changed: the
@@ -1164,27 +1030,16 @@ class SVGAnimation internal constructor(document: SVGDocument) {
             val properties = stateRules.filter { it.element === element }.flatMap { r -> r.declarations.map { it.first } }.distinct()
             val last = targetValues.getOrPut(element) { mutableMapOf() }
             val shown = displayed.getOrPut(element) { mutableMapOf() }
-            val running = transitions.getOrPut(element) { mutableMapOf() }
+            val running = transitionsOf(transitions, element)
             for (property in properties) {
                 val value = declarations.lastOrNull { it.first == property }?.second ?: target.baseValue(property)
                 val previous = last[property]
                 if (previous != null && previous != value) {
                     // the transition of the new state, from the value that is shown
-                    val settings = transitionSettings(declarations, property)
-                    running[property]?.let { cancel(element, it) }
-                    if (settings != null) running[property] = RunningTransition(property, shown[property] ?: previous, value, seconds, settings)
-                    else running.remove(property)
+                    running.change(property, shown[property] ?: previous, value, seconds, transitionTiming(declarations, property))
                 }
                 last[property] = value
-                val transition = running[property]
-                val current = if (transition == null) value else {
-                    val t = progress(element, transition, seconds)
-                    when {
-                        t >= 1.0 -> { running.remove(property); value }
-                        t <= 0.0 -> transition.from
-                        else -> ValueInterpolation.interpolate(transition.from, transition.to, transition.settings.easing.ease(t), property = transition.property)
-                    }
-                }
+                val current = running.value(property, seconds) ?: value
                 shown[property] = current
                 target.set(property, current)
             }
@@ -1193,13 +1048,8 @@ class SVGAnimation internal constructor(document: SVGDocument) {
         // transitions of changes that the program made
         for ((element, running) in codeTransitions) {
             val target = target(element) ?: continue
-            for ((property, transition) in running.entries.toList()) {
-                val t = progress(element, transition, seconds)
-                when {
-                    t >= 1.0 -> running.remove(property)
-                    t <= 0.0 -> target.set(property, transition.from)
-                    else -> target.set(property, ValueInterpolation.interpolate(transition.from, transition.to, transition.settings.easing.ease(t), property = transition.property))
-                }
+            for (transition in running.transitions.toList()) {
+                running.value(transition.property, seconds)?.let { target.set(transition.property, it) }
             }
         }
 

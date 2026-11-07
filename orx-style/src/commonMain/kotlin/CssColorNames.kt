@@ -1,4 +1,4 @@
-package org.openrndr.extra.svg
+package org.openrndr.extra.style
 
 /** Color name map as per the CSS Color Module Level 4 */
 internal val cssColorNames = mapOf(

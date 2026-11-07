@@ -20,6 +20,7 @@ dependencies {
     implementation(project(":orx-expression-evaluator"))
     implementation(project(":orx-color"))
     implementation(project(":orx-text-writer"))
+    api(project(":orx-style"))
     implementation(project(":orx-view-box"))
     implementation(project(":orx-image-fit"))
     implementation(openrndr.application.core)

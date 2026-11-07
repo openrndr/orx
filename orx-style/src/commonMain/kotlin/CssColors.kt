@@ -1,4 +1,4 @@
-package org.openrndr.extra.svg
+package org.openrndr.extra.style
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.color.Linearity
@@ -10,14 +10,112 @@ import kotlin.math.cos
 import kotlin.math.pow
 import kotlin.math.sign
 import kotlin.math.sin
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.sqrt
+
+
+/**
+ * The color of the CSS color [text], in sRGB; null when it is not a color. Reads named colors, `transparent`,
+ * hexadecimal colors of 3, 4, 6 or 8 digits, rgb(), rgba(), hsl(), hsla() and the color functions of CSS Color 4 and 5:
+ * hwb(), lab(), lch(), oklab(), oklch(), color() with the predefined color spaces, color-mix() and light-dark().
+ * Keywords that depend on where the color is used, like `currentcolor`, are not colors here.
+ */
+fun parseCssColor(text: String): ColorRGBa? {
+    val col = text.trim().lowercase()
+    return when {
+        col == "transparent" -> ColorRGBa(0.0, 0.0, 0.0, 0.0, linearity = Linearity.SRGB)
+        col.startsWith("#") -> hexColor(col.drop(1))
+        Regex("^(rgba?|hsla?)\\((.*)\\)$").matchEntire(col) != null -> functionalColor(col)
+        Regex("^([a-z-]+)\\((.*)\\)$", RegexOption.DOT_MATCHES_ALL).matchEntire(col) != null ->
+            CssColorFunctions.function(col.substringBefore("("), col.substringAfter("(").substringBeforeLast(")"), ::parseCssColor)
+        else -> cssColorNames[col]?.let { ColorRGBa.fromHex(it) }
+    }
+}
+
+/** true when [name] is a named color of CSS */
+fun isCssColorName(name: String): Boolean = name.trim().lowercase() in cssColorNames
+
+/** a CSS angle in degrees: deg, grad, rad, turn or a number of degrees; null when it is not an angle */
+fun parseCssAngle(value: String): Double? {
+    val v = value.trim()
+    return when {
+        v.endsWith("deg") -> v.dropLast(3).toDoubleOrNull()
+        v.endsWith("grad") -> v.dropLast(4).toDoubleOrNull()?.times(0.9)
+        v.endsWith("rad") -> v.dropLast(3).toDoubleOrNull()?.times(180.0 / PI)
+        v.endsWith("turn") -> v.dropLast(4).toDoubleOrNull()?.times(360.0)
+        else -> v.toDoubleOrNull()
+    }
+}
+
+/** [text] split at the commas that are not in parentheses, like the lists of CSS */
+fun splitCssList(text: String): List<String> {
+    val parts = mutableListOf<String>()
+    var depth = 0
+    var start = 0
+    for ((i, c) in text.withIndex()) {
+        when (c) {
+            '(' -> depth++
+            ')' -> depth--
+            ',' -> if (depth == 0) {
+                parts.add(text.substring(start, i)); start = i + 1
+            }
+        }
+    }
+    parts.add(text.substring(start))
+    return parts
+}
+
+/** a hexadecimal color of 3, 4, 6 or 8 digits: rgb, rgba, rrggbb or rrggbbaa */
+private fun hexColor(hex: String): ColorRGBa? {
+    if (!hex.all { it in "0123456789abcdef" }) return null
+    val digits = when (hex.length) {
+        3, 4 -> hex.map { "$it$it" }
+        6, 8 -> hex.chunked(2)
+        else -> return null
+    }.map { it.toInt(16) / 255.0 }
+    return ColorRGBa(digits[0], digits[1], digits[2], digits.getOrElse(3) { 1.0 }, linearity = Linearity.SRGB)
+}
+
+/**
+ * A color in functional notation: rgb(), rgba(), hsl() or hsla(), with arguments separated by commas or spaces and
+ * an optional alpha, after a slash in the space separated syntax
+ */
+private fun functionalColor(value: String): ColorRGBa? {
+    val name = value.substringBefore("(")
+    val arguments = value.substringAfter("(").substringBeforeLast(")")
+        .split(Regex("[\\s,/]+")).filter { it.isNotEmpty() }
+    if (arguments.size !in 3..4) return null
+
+    /** a number, or a percentage of [full] */
+    fun component(argument: String, full: Double): Double? =
+        if (argument.endsWith("%")) argument.dropLast(1).toDoubleOrNull()?.let { it / 100.0 * full }
+        else argument.toDoubleOrNull()
+
+    val alpha = arguments.getOrNull(3)?.let { component(it, 1.0) ?: return null }?.coerceIn(0.0, 1.0) ?: 1.0
+    return if (name.startsWith("rgb")) {
+        val (r, g, b) = arguments.take(3).map { (component(it, 255.0) ?: return null).coerceIn(0.0, 255.0) / 255.0 }
+        ColorRGBa(r, g, b, alpha, linearity = Linearity.SRGB)
+    } else {
+        val hue = parseCssAngle(arguments[0]) ?: return null
+        val saturation = (component(arguments[1], 1.0) ?: return null).coerceIn(0.0, 1.0)
+        val lightness = (component(arguments[2], 1.0) ?: return null).coerceIn(0.0, 1.0)
+        // hsl to rgb, as in CSS Color 4
+        fun f(n: Double): Double {
+            val k = (n + hue / 30.0).mod(12.0)
+            val a = saturation * min(lightness, 1.0 - lightness)
+            return lightness - a * max(-1.0, min(k - 3.0, min(9.0 - k, 1.0)))
+        }
+        ColorRGBa(f(0.0), f(8.0), f(4.0), alpha, linearity = Linearity.SRGB)
+    }
+}
 
 /**
  * The color functions of CSS Color 4 and 5 that are not rgb() and hsl(): hwb(), lab(), lch(), oklab(), oklch(),
  * color() with the predefined color spaces, color-mix() and light-dark(). Colors are converted through CIE XYZ, as in
  * the specification, and clipped to sRGB.
  */
-internal object CSSColors {
+internal object CssColorFunctions {
     /** a 3×3 matrix, row by row */
     private class M3(val m: DoubleArray) {
         operator fun times(v: DoubleArray) = DoubleArray(3) { i -> m[i * 3] * v[0] + m[i * 3 + 1] * v[1] + m[i * 3 + 2] * v[2] }
@@ -234,7 +332,7 @@ internal object CSSColors {
         else -> value.toDoubleOrNull()
     }
 
-    private fun hue(value: String?): Double? = if (value == null) 0.0 else SVGParse.angle(value)
+    private fun hue(value: String?): Double? = if (value == null) 0.0 else parseCssAngle(value)
 
     private fun alpha(value: String?): Double = number(value ?: "1", 1.0)?.coerceIn(0.0, 1.0) ?: 1.0
 
@@ -243,7 +341,7 @@ internal object CSSColors {
         when (name) {
             "color-mix" -> return mix(text, parse)
             // light-dark() takes the light color, compositions do not have a dark color scheme
-            "light-dark" -> return splitTopLevel(text).firstOrNull()?.let { parse(it.trim()) }
+            "light-dark" -> return splitCssList(text).firstOrNull()?.let { parse(it.trim()) }
         }
         val a = arguments(text)
         val xyz = when (name) {
@@ -281,24 +379,6 @@ internal object CSSColors {
         return toRgba(Xyz(xyz, alpha(a.alpha)))
     }
 
-    /** [text] split at commas that are not in parentheses */
-    internal fun splitTopLevel(text: String): List<String> {
-        val parts = mutableListOf<String>()
-        var depth = 0
-        var start = 0
-        for ((i, c) in text.withIndex()) {
-            when (c) {
-                '(' -> depth++
-                ')' -> depth--
-                ',' -> if (depth == 0) {
-                    parts.add(text.substring(start, i)); start = i + 1
-                }
-            }
-        }
-        parts.add(text.substring(start))
-        return parts
-    }
-
     /** a color in the coordinates of an interpolation space, with the index of its hue component, or -1 */
     private class Coordinates(val values: DoubleArray, val hueIndex: Int)
 
@@ -327,7 +407,7 @@ internal object CSSColors {
      * with premultiplied alpha, as in CSS Color 5
      */
     private fun mix(text: String, parse: (String) -> ColorRGBa?): ColorRGBa? {
-        val parts = splitTopLevel(text).map { it.trim() }
+        val parts = splitCssList(text).map { it.trim() }
         if (parts.size != 3) return null
         val method = Regex("^in\\s+([a-z0-9-]+)(?:\\s+(shorter|longer|increasing|decreasing)\\s+hue)?$").matchEntire(parts[0]) ?: return null
         val space = method.groupValues[1]
