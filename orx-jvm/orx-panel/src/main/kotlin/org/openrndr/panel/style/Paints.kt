@@ -29,8 +29,11 @@ sealed class BackgroundImage : PropertyValue() {
     data class Radial(val circle: Boolean, val center: Vector2, val stops: List<GradientStop>, val repeating: Boolean = false) : BackgroundImage()
 }
 
-/** a shadow of a box: offset by [offset], blurred by [blur], grown by [spread], in [color], or currentcolor when null */
-data class Shadow(val offset: Vector2, val blur: Double, val spread: Double, val color: ColorRGBa?)
+/**
+ * A shadow of a box: offset by [offset], blurred by [blur], grown by [spread], in [color], or currentcolor when null;
+ * outside the box, or inside it when [inset] is set
+ */
+data class Shadow(val offset: Vector2, val blur: Double, val spread: Double, val color: ColorRGBa?, val inset: Boolean = false)
 
 /** the shadows of the box of an element, the first on top */
 data class BoxShadow(val shadows: List<Shadow>) : PropertyValue() {
@@ -146,17 +149,19 @@ internal fun parseBackgroundImage(text: String): BackgroundImage? {
     }
 }
 
-/** none, or shadows: an x and a y offset, an optional blur and spread, and an optional color; inset is not supported */
+/** none, or shadows: inset or not, an x and a y offset, an optional blur and spread, and an optional color */
 internal fun parseBoxShadow(text: String): BoxShadow? {
     val v = text.trim().lowercase()
     if (v == "none") return BoxShadow.NONE
     val shadows = splitCss(v, ',').map { part ->
-        val words = splitCssWords(part.trim())
-        if ("inset" in words) return null
+        val all = splitCssWords(part.trim())
+        val inset = "inset" in all
+        val words = all.filter { it != "inset" }
+        if (all.count { it == "inset" } > 1) return null
         val color = words.firstNotNullOfOrNull { parseCssColor(it) }
         val lengths = words.filter { parseCssColor(it) == null }.map { (parseLength(it) as? LinearDimension.PX)?.value ?: return null }
         if (lengths.size !in 2..4 || words.size - lengths.size > 1) return null
-        Shadow(Vector2(lengths[0], lengths[1]), lengths.getOrElse(2) { 0.0 }.coerceAtLeast(0.0), lengths.getOrElse(3) { 0.0 }, color)
+        Shadow(Vector2(lengths[0], lengths[1]), lengths.getOrElse(2) { 0.0 }.coerceAtLeast(0.0), lengths.getOrElse(3) { 0.0 }, color, inset)
     }
     return BoxShadow(shadows)
 }

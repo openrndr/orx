@@ -75,7 +75,8 @@ class EffectsTest {
         val corner = StyleSheet().apply { css("background-image: repeating-linear-gradient(to bottom left, red 0, blue 10px)") }.backgroundImage
         assertEquals(Vector2(-1.0, 1.0), (corner as BackgroundImage.Linear).corner)
         assertTrue(corner.repeating)
-        assertNull(StyleSheet().apply { css("box-shadow: inset 0 0 4px red") }["box-shadow"])
+        assertTrue(StyleSheet().apply { css("box-shadow: inset 0 0 4px red") }.boxShadow.shadows.single().inset)
+        assertNull(StyleSheet().apply { css("box-shadow: inset inset 0 0 red") }["box-shadow"])
     }
 
     @Test

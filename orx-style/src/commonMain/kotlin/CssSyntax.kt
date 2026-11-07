@@ -20,8 +20,11 @@ enum class CssKeyword(val css: String) {
 /** a declaration of CSS: the property [name] with [value] as text, [important] when it is marked !important */
 data class CssDeclaration(val name: String, val value: String, val important: Boolean = false)
 
-/** a rule of CSS: its [selectors] and the text of its [block], [order] is its place in the style sheet */
-data class CssRule(val selectors: List<String>, val block: String, val order: Int) {
+/**
+ * A rule of CSS: its [selectors] and the text of its [block], [order] is its place in the style sheet; [media] is the
+ * media query of the @media rules it is in, null when it is in none
+ */
+data class CssRule(val selectors: List<String>, val block: String, val order: Int, val media: String? = null) {
     /** the declarations of the block */
     val declarations: List<CssDeclaration> by lazy { parseCssDeclarations(block) }
 }
@@ -80,10 +83,17 @@ fun parseCssDeclarations(block: String): List<CssDeclaration> =
         if (name.isEmpty()) null else CssDeclaration(name, value, important != null)
     }
 
-/** the rules of the style sheet [css], in the order they are given; at-rules are left out */
+/**
+ * The rules of the style sheet [css], in the order they are given, with the rules in @media rules, which have their
+ * media queries; other at-rules are left out
+ */
 fun parseCssRules(css: String): List<CssRule> {
-    val text = css.replace(Regex("/\\*.*?\\*/", RegexOption.DOT_MATCHES_ALL), "")
     val rules = mutableListOf<CssRule>()
+    collectRules(css.replace(Regex("/\\*.*?\\*/", RegexOption.DOT_MATCHES_ALL), ""), null, rules)
+    return rules
+}
+
+private fun collectRules(text: String, media: String?, rules: MutableList<CssRule>) {
     var position = 0
     while (position < text.length) {
         val open = text.indexOf('{', position)
@@ -100,12 +110,20 @@ fun parseCssRules(css: String): List<CssRule> {
             close++
         }
         val block = text.substring(open + 1, (close - 1).coerceAtLeast(open + 1))
-        if (prelude.isNotEmpty() && !prelude.startsWith("@")) {
-            rules.add(CssRule(splitCss(prelude, ',').map { it.trim() }.filter { it.isNotEmpty() }, block, rules.size))
+        if (prelude.startsWith("@media", ignoreCase = true)) {
+            // nested media queries all apply
+            val query = prelude.substring(6).trim()
+            val combined = when {
+                media == null -> query
+                "," in media || "," in query || query.startsWith("not") -> query
+                else -> "$media and $query"
+            }
+            collectRules(block, combined, rules)
+        } else if (prelude.isNotEmpty() && !prelude.startsWith("@")) {
+            rules.add(CssRule(splitCss(prelude, ',').map { it.trim() }.filter { it.isNotEmpty() }, block, rules.size, media))
         }
         position = close
     }
-    return rules
 }
 
 /**
@@ -322,4 +340,93 @@ fun parseCssKeyframes(css: String): Map<String, List<CssKeyframe>> {
         result[match.groupValues[1].trim('"', '\'')] = frames.sortedBy { it.offset }
     }
     return result
+}
+
+/**
+ * What media queries are evaluated against: the size of the viewport in pixels, its preferred [colorScheme], dark or
+ * light, and the media [type]
+ */
+data class CssMediaEnvironment(val width: Double, val height: Double, val colorScheme: String = "dark", val type: String = "screen")
+
+/**
+ * True when the media query list [query] matches [environment]: queries separated by commas, any of which matches,
+ * with `not`, `only`, a media type, and features joined by `and`: width, height, aspect-ratio with min- and max-,
+ * comparisons like `(width >= 600px)`, orientation and prefers-color-scheme. Features that are not known do not match.
+ */
+fun cssMediaMatches(query: String, environment: CssMediaEnvironment): Boolean =
+    splitCss(query, ',').any { single -> mediaQueryMatches(single.trim().lowercase(), environment) }
+
+private fun mediaQueryMatches(query: String, e: CssMediaEnvironment): Boolean {
+    var q = query
+    var negate = false
+    if (q.startsWith("not ")) { negate = true; q = q.removePrefix("not ").trim() }
+    if (q.startsWith("only ")) q = q.removePrefix("only ").trim()
+    val parts = mutableListOf<String>()
+    // the media type and the features, joined by and
+    var rest = q
+    while (rest.isNotEmpty()) {
+        rest = rest.trim().removePrefix("and ").trim()
+        if (rest.startsWith("(")) {
+            var depth = 0
+            var end = 0
+            for ((i, c) in rest.withIndex()) {
+                if (c == '(') depth++ else if (c == ')') { depth--; if (depth == 0) { end = i; break } }
+            }
+            parts.add(rest.substring(0, end + 1))
+            rest = rest.substring(end + 1)
+        } else {
+            val word = rest.substringBefore(' ')
+            parts.add(word)
+            rest = rest.substring(word.length)
+        }
+    }
+    val result = parts.all { part ->
+        when {
+            part == "all" -> true
+            !part.startsWith("(") -> part == e.type
+            else -> featureMatches(part.removePrefix("(").removeSuffix(")").trim(), e)
+        }
+    }
+    return result != negate
+}
+
+private fun featureMatches(feature: String, e: CssMediaEnvironment): Boolean {
+    fun length(text: String): Double? = parseCssPixels(text)
+    fun ratio(text: String): Double? = text.split('/').map { it.trim().toDoubleOrNull() ?: return null }
+        .let { if (it.size == 2 && it[1] != 0.0) it[0] / it[1] else it.singleOrNull() }
+    fun value(name: String): Double? = when (name) {
+        "width" -> e.width
+        "height" -> e.height
+        "aspect-ratio" -> e.width / e.height
+        else -> null
+    }
+    // a comparison, like width >= 600px
+    Regex("^([a-z-]+)\\s*(>=|<=|>|<|=)\\s*(.+)$").matchEntire(feature)?.let { m ->
+        val actual = value(m.groupValues[1]) ?: return false
+        val given = (if (m.groupValues[1] == "aspect-ratio") ratio(m.groupValues[3]) else length(m.groupValues[3])) ?: return false
+        return when (m.groupValues[2]) {
+            ">=" -> actual >= given; "<=" -> actual <= given; ">" -> actual > given; "<" -> actual < given; else -> actual == given
+        }
+    }
+    val name = feature.substringBefore(':').trim()
+    val text = feature.substringAfter(':', "").trim()
+    if (text.isEmpty()) return when (name) {
+        "width", "height" -> true
+        "prefers-color-scheme" -> true
+        else -> false
+    }
+    return when (name) {
+        "orientation" -> text == if (e.height >= e.width) "portrait" else "landscape"
+        "prefers-color-scheme" -> text == e.colorScheme
+        else -> {
+            val bare = name.removePrefix("min-").removePrefix("max-")
+            val actual = value(bare) ?: return false
+            val given = (if (bare == "aspect-ratio") ratio(text) else length(text)) ?: return false
+            when {
+                name.startsWith("min-") -> actual >= given
+                name.startsWith("max-") -> actual <= given
+                else -> actual == given
+            }
+        }
+    }
 }

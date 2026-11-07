@@ -12,6 +12,10 @@ import org.openrndr.extra.textwriter.Fonts
 import org.openrndr.panel.style.fontFamily
 import org.openrndr.panel.style.fontSize
 import org.openrndr.panel.style.fontWeight
+import org.openrndr.panel.style.LinearDimension
+import org.openrndr.panel.style.TextDecoration
+import org.openrndr.panel.style.textDecoration
+import org.openrndr.panel.elements.TextNode
 import org.openrndr.panel.style.px
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -19,6 +23,43 @@ import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
 class PanelTextTest : PanelTestFixture() {
+    @Test
+    fun `letter spacing, line height, ellipsis, white space and decorations`() {
+        lateinit var paragraph: TextNode
+        lateinit var line: TextNode
+        val cm = panel {
+            css("""
+                .wrapped { width: 120px; line-height: 2 }
+                .single { width: 60px; white-space: nowrap; text-decoration: underline line-through }
+            """)
+            layout {
+                div("wrapped") { paragraph = TextNode("a paragraph of words that wraps"); append(paragraph) }
+                div("single") { line = TextNode("a line that does not wrap"); append(line) }
+            }
+        }
+        relayout(cm)
+        val text = cm.text
+        val plain = StyleSheet().apply { fontSize = 16.px }
+        val spaced = StyleSheet().apply { fontSize = 16.px; css("letter-spacing: 2px") }
+        // two pixels after each of the 6 characters
+        assertEquals(text.width(plain, "radius") + 12.0, text.width(spaced, "radius"), 1E-6)
+        assertEquals(12.0, text.carets(spaced, "radius").last() - text.carets(plain, "radius").last(), 1E-6)
+        // an ellipsis that fits
+        val cut = text.ellipsized(plain, "a long label that is cut", 80.0)
+        assertTrue(cut.endsWith("…") && text.width(plain, cut) <= 80.0, cut)
+        assertEquals("short", text.ellipsized(plain, "short", 80.0))
+        // a line height of 2 spaces the lines by twice the font size
+        val style = paragraph.computedStyle
+        val size = (style.fontSize as LinearDimension.PX).value
+        val lines = text.paragraph(style, paragraph.text, 120.0)
+        val baselines = lines.glyphs.map { it.position.y }.distinct()
+        assertTrue(baselines.size > 1)
+        assertEquals(2.0 * size, baselines[1] - baselines[0], 1E-6)
+        // text that does not wrap is as wide as its line, wider than its parent
+        assertTrue(line.layout.screenWidth > 60.0)
+        assertEquals(TextDecoration(underline = true, lineThrough = true), line.computedStyle.textDecoration)
+    }
+
     @Test
     fun `glyphs are shared with other text drawers`() {
         val cm = panel { layout { div { } } }

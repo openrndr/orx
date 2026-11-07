@@ -27,53 +27,74 @@ object PanelKeyframes {
     }
 }
 
-/** the name of the animation, `none` for no animation */
-var StyleSheet.animationName by PropertyHandler("animation-name", PropertyInheritance.RESET, "none",
-    { it.trim().takeIf { v -> v.isNotEmpty() && ' ' !in v && ',' !in v } })
+/** whether an animation runs or is paused, a paused animation keeps its time */
+enum class AnimationPlayState { RUNNING, PAUSED }
 
-/** the time in seconds an iteration of the animation takes */
-var StyleSheet.animationDuration by PropertyHandler("animation-duration", PropertyInheritance.RESET, 0.0, ::parseTime)
+/** a list of CSS values of [parse], separated by commas */
+private fun <T> list(parse: (String) -> T?): (String) -> List<T>? = { text -> splitCssList(text).map { parse(it.trim()) ?: return@map null }.let { if (null in it) null else it.filterNotNull() } }
 
-/** the time in seconds before the animation starts */
-var StyleSheet.animationDelay by PropertyHandler("animation-delay", PropertyInheritance.RESET, 0.0, ::parseTime)
+/**
+ * The names of the animations of the element, `none` for none. The other animation properties are lists too, their
+ * values repeat for the animations that they do not give, as in CSS.
+ */
+var StyleSheet.animationName by PropertyHandler("animation-name", PropertyInheritance.RESET, listOf("none"),
+    list { it.takeIf { v -> v.isNotEmpty() && ' ' !in v } })
 
-/** how the animation moves from keyframe to keyframe */
-var StyleSheet.animationTimingFunction by PropertyHandler("animation-timing-function", PropertyInheritance.RESET, TimingFunction.EASE, ::parseTimingFunction)
+/** the time in seconds an iteration of an animation takes */
+var StyleSheet.animationDuration by PropertyHandler("animation-duration", PropertyInheritance.RESET, listOf(0.0), list(::parseTime))
 
-/** the number of iterations of the animation, infinite for [Double.POSITIVE_INFINITY] */
-var StyleSheet.animationIterationCount by PropertyHandler("animation-iteration-count", PropertyInheritance.RESET, 1.0,
-    { if (it.trim().lowercase() == "infinite") Double.POSITIVE_INFINITY else parseNumber(it)?.takeIf { n -> n >= 0.0 } })
+/** the time in seconds before an animation starts */
+var StyleSheet.animationDelay by PropertyHandler("animation-delay", PropertyInheritance.RESET, listOf(0.0), list(::parseTime))
 
-var StyleSheet.animationDirection by PropertyHandler("animation-direction", PropertyInheritance.RESET, AnimationDirection.NORMAL,
-    keywords("normal" to AnimationDirection.NORMAL, "reverse" to AnimationDirection.REVERSE,
-        "alternate" to AnimationDirection.ALTERNATE, "alternate-reverse" to AnimationDirection.ALTERNATE_REVERSE))
+/** how an animation moves from keyframe to keyframe */
+var StyleSheet.animationTimingFunction by PropertyHandler("animation-timing-function", PropertyInheritance.RESET, listOf(TimingFunction.EASE), list(::parseTimingFunction))
 
-var StyleSheet.animationFillMode by PropertyHandler("animation-fill-mode", PropertyInheritance.RESET, AnimationFillMode.NONE,
-    keywords("none" to AnimationFillMode.NONE, "forwards" to AnimationFillMode.FORWARDS,
-        "backwards" to AnimationFillMode.BACKWARDS, "both" to AnimationFillMode.BOTH))
+/** the number of iterations of an animation, infinite for [Double.POSITIVE_INFINITY] */
+var StyleSheet.animationIterationCount by PropertyHandler("animation-iteration-count", PropertyInheritance.RESET, listOf(1.0),
+    list { if (it.lowercase() == "infinite") Double.POSITIVE_INFINITY else parseNumber(it)?.takeIf { n -> n >= 0.0 } })
+
+var StyleSheet.animationDirection by PropertyHandler("animation-direction", PropertyInheritance.RESET, listOf(AnimationDirection.NORMAL),
+    list(keywords("normal" to AnimationDirection.NORMAL, "reverse" to AnimationDirection.REVERSE,
+        "alternate" to AnimationDirection.ALTERNATE, "alternate-reverse" to AnimationDirection.ALTERNATE_REVERSE)))
+
+var StyleSheet.animationFillMode by PropertyHandler("animation-fill-mode", PropertyInheritance.RESET, listOf(AnimationFillMode.NONE),
+    list(keywords("none" to AnimationFillMode.NONE, "forwards" to AnimationFillMode.FORWARDS,
+        "backwards" to AnimationFillMode.BACKWARDS, "both" to AnimationFillMode.BOTH)))
+
+var StyleSheet.animationPlayState by PropertyHandler("animation-play-state", PropertyInheritance.RESET, listOf(AnimationPlayState.RUNNING),
+    list(keywords("running" to AnimationPlayState.RUNNING, "paused" to AnimationPlayState.PAUSED)))
 
 private val directions = setOf("normal", "reverse", "alternate", "alternate-reverse")
 private val fillModes = setOf("none", "forwards", "backwards", "both")
+private val playStates = setOf("running", "paused")
 
-// the animation shorthand: the first animation of a list, panels run one animation per element
+// the animation shorthand: every animation of the list sets the values of the longhands at its place
 private val animationShorthand = PanelProperties.apply {
-    shorthand("animation", listOf("animation-name", "animation-duration", "animation-delay", "animation-timing-function",
-        "animation-iteration-count", "animation-direction", "animation-fill-mode")) { value ->
-        val words = splitCssWords(splitCssList(value).first().trim())
-        val result = mutableListOf<Pair<String, String>>()
-        var times = 0
-        for (word in words) {
-            val w = word.lowercase()
-            when {
-                parseTime(w) != null -> { result.add((if (times == 0) "animation-duration" else "animation-delay") to w); times++ }
-                parseTimingFunction(w) != null -> result.add("animation-timing-function" to w)
-                w == "infinite" || parseNumber(w) != null -> result.add("animation-iteration-count" to w)
-                w in directions -> result.add("animation-direction" to w)
-                w in fillModes && w != "none" -> result.add("animation-fill-mode" to w)
-                else -> result.add("animation-name" to word)
+    val longhands = listOf("animation-name", "animation-duration", "animation-delay", "animation-timing-function",
+        "animation-iteration-count", "animation-direction", "animation-fill-mode", "animation-play-state")
+    shorthand("animation", longhands) { value ->
+        val values = longhands.associateWith { mutableListOf<String>() }
+        for (part in splitCssList(value)) {
+            val given = mutableMapOf<String, String>()
+            var times = 0
+            for (word in splitCssWords(part.trim())) {
+                val w = word.lowercase()
+                when {
+                    parseTime(w) != null -> { given[if (times == 0) "animation-duration" else "animation-delay"] = w; times++ }
+                    parseTimingFunction(w) != null -> given["animation-timing-function"] = w
+                    w == "infinite" || parseNumber(w) != null -> given["animation-iteration-count"] = w
+                    w in directions -> given["animation-direction"] = w
+                    w in fillModes && w != "none" -> given["animation-fill-mode"] = w
+                    w in playStates -> given["animation-play-state"] = w
+                    else -> given["animation-name"] = word
+                }
             }
+            val defaults = mapOf("animation-name" to "none", "animation-duration" to "0s", "animation-delay" to "0s",
+                "animation-timing-function" to "ease", "animation-iteration-count" to "1", "animation-direction" to "normal",
+                "animation-fill-mode" to "none", "animation-play-state" to "running")
+            for (longhand in longhands) values[longhand]!!.add(given[longhand] ?: defaults[longhand]!!)
         }
-        result
+        longhands.map { it to values[it]!!.joinToString(", ") }
     }
 }
 

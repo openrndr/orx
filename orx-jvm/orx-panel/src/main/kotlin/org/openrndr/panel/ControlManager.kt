@@ -226,7 +226,7 @@ class ControlManager : Extension {
                     traverse(child)
                 }
                 if (!event.propagationCancelled) {
-                    if (event.position in element.screenArea && element.computedStyle.display != Display.NONE) {
+                    if (element.containsScreenPoint(event.position) && element.computedStyle.display != Display.NONE) {
                         element.mouse.scrolled.trigger(event)
                         if (event.propagationCancelled) {
                             keyboardInput.target = element
@@ -287,7 +287,7 @@ class ControlManager : Extension {
             // a press outside the open context menu closes it
             openMenu?.let { menu ->
                 if (menu.parent == null) openMenu = null
-                else if (event.position !in menu.screenArea) {
+                else if (!menu.containsScreenPoint(event.position)) {
                     menu.dismiss()
                     openMenu = null
                 }
@@ -334,13 +334,13 @@ class ControlManager : Extension {
                     return
                 }
                 var clipped = clippedBelow
-                if (element.computedStyle.clipsContent && event.position !in element.screenArea) {
+                if (element.computedStyle.clipsContent && !element.containsScreenPoint(event.position)) {
                     clipped = maxOf(clipped ?: Int.MIN_VALUE, element.layout.zIndex)
                 }
 
                 element.children.forEach { traverse(it, depth + 1, clipped) }
 
-                if (!event.propagationCancelled && event.position in element.screenArea &&
+                if (!event.propagationCancelled && element.containsScreenPoint(event.position) &&
                     (clipped == null || element.layout.zIndex > clipped)
                 ) {
                     candidates.add(Pair(element, depth))
@@ -415,7 +415,7 @@ class ControlManager : Extension {
             if (tooltips.showing || tooltipArea != null || inspector.enabled) tooltipPending = true
             cursorPending = true
             val hover = ElementPseudoClass("hover")
-            val toRemove = insideElements.filter { (event.position !in it.screenArea) }
+            val toRemove = insideElements.filter { (!it.containsScreenPoint(event.position)) }
 
             toRemove.forEach {
                 it.mouse.exited.trigger(
@@ -433,7 +433,7 @@ class ControlManager : Extension {
             insideElements.removeAll(toRemove)
 
             fun traverse(element: Element) {
-                if (event.position in element.screenArea) {
+                if (element.containsScreenPoint(event.position)) {
                     if (element !in insideElements) {
                         element.mouse.entered.trigger(event)
                     }
@@ -487,6 +487,12 @@ class ControlManager : Extension {
 
     /** true when the tooltip can have moved, shown or hidden since the last frame */
     private var tooltipPending = false
+
+    /**
+     * The color scheme that media queries like `(prefers-color-scheme: dark)` see, dark or light; the window size is
+     * what `(min-width: 600px)` sees
+     */
+    var colorScheme = "dark"
 
     /** the inspector, F12 shows it, see [Inspector] */
     val inspector = Inspector(this)
@@ -661,6 +667,7 @@ class ControlManager : Extension {
                         // controls can leave the drawer moved, the outline is drawn where the element is
                         boxPaints.draw(drawer, element)
                         drawer.isolated { element.draw(drawer) }
+                        boxPaints.drawOver(drawer, element)
                         drawOutline(drawer, element)
                     }
                 }
@@ -676,8 +683,11 @@ class ControlManager : Extension {
                 // the content is clipped to the area of the element, within the clipping of the elements around it,
                 // by scissoring, which needs no render target
                 val area = element.screenArea
+                // a transformed element scissors by its bounds and clips by its shape in the shade style
+                val transform = element.screenTransform
                 val outer = drawer.drawStyle.clip
-                val clip = if (outer == null) area else intersection(outer, area)
+                val bounds = transform?.let { transformedBounds(area, it) } ?: area
+                val clip = if (outer == null) bounds else intersection(outer, bounds)
 
                 drawer.isolated {
                     drawer.translate(element.screenPosition)
@@ -685,6 +695,7 @@ class ControlManager : Extension {
                         // controls can leave the drawer moved, the outline is drawn where the element is
                         boxPaints.draw(drawer, element)
                         drawer.isolated { element.draw(drawer) }
+                        boxPaints.drawOver(drawer, element)
                         drawOutline(drawer, element)
                     }
                 }
@@ -692,10 +703,11 @@ class ControlManager : Extension {
                     // an element with rounded corners clips to its rounded padding box
                     val radius = element.cornerRadius
                     val border = element.layout.borderWidth
-                    if (radius > 0.0) {
+                    val shaped = radius > 0.0 || transform != null
+                    if (shaped) {
                         roundedClips.push(
                             Rectangle(area.x + border, area.y + border, area.width - 2.0 * border, area.height - 2.0 * border),
-                            maxOf(0.0, radius - border)
+                            maxOf(0.0, radius - border), transform
                         )
                     }
                     drawer.isolated {
@@ -706,7 +718,7 @@ class ControlManager : Extension {
                             drawElement(child, drawer, zIndex, newZComp)
                         }
                     }
-                    if (radius > 0.0) roundedClips.pop()
+                    if (shaped) roundedClips.pop()
                 }
                 if (newZComp == zIndex && paints(element)) {
                     val active = mouseInput.scrollbarDrag?.element === element || mouseInput.scrollbarHover?.element === element
@@ -767,6 +779,12 @@ class ControlManager : Extension {
             fading.forEach { it.draw.dirty = true }
             fadingBefore.forEach { it.draw.dirty = true }
             fadingBefore = fading
+
+            // the media queries see the size of the window and the color scheme
+            document?.media = org.openrndr.extra.style.CssMediaEnvironment(program.width.toDouble(), program.height.toDouble(), colorScheme)
+
+            // elements change their children for what is in view
+            body.visit { prepare() }
 
             // CSS files that changed are read again
             if (cssFiles.isNotEmpty()) {

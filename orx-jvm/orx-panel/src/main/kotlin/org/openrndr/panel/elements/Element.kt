@@ -500,6 +500,13 @@ open class Element(val type: ElementType) : AutoCloseable {
     internal open fun sized() {
     }
 
+    /**
+     * Called in every frame before the styles are computed, by the control manager, so that the element can change its
+     * children for what is in view, like a [VirtualList]
+     */
+    open fun prepare() {
+    }
+
     fun filter(f: (Element) -> Boolean): List<Element> {
         val result = ArrayList<Element>()
         val stack = Stack<Element>()
@@ -783,4 +790,10 @@ internal fun transformedBounds(rectangle: Rectangle, transform: org.openrndr.mat
     val x0 = corners.minOf { it.x }
     val y0 = corners.minOf { it.y }
     return Rectangle(x0, y0, corners.maxOf { it.x } - x0, corners.maxOf { it.y } - y0)
+}
+
+/** true when the point [position] of the window is in the box of the element as it is drawn, transformed */
+fun Element.containsScreenPoint(position: org.openrndr.math.Vector2): Boolean {
+    val t = screenTransform ?: return position in screenArea
+    return (t.inversed * position.xy01).xy in screenArea
 }

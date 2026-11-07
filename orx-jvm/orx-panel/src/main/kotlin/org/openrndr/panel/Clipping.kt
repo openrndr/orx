@@ -2,6 +2,7 @@ package org.openrndr.panel
 
 import org.openrndr.draw.ShadeStyle
 import org.openrndr.draw.shadeStyle
+import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector4
 import org.openrndr.shape.Rectangle
@@ -20,8 +21,10 @@ internal val clipCoverageGlsl = """
         for (int i = 0; i < p_clipCount; i++) {
             vec4 box = p_clipBoxes[i];
             float r = p_clipRadii[i].x;
+            // the point in the coordinates of the box before its transform
+            vec2 l = (p_clipInverses[i] * vec4(p, 0.0, 1.0)).xy;
             vec2 halfSize = box.zw * 0.5;
-            vec2 q = abs(p - (box.xy + halfSize)) - halfSize + vec2(r);
+            vec2 q = abs(l - (box.xy + halfSize)) - halfSize + vec2(r);
             float d = length(max(q, vec2(0.0))) + min(max(q.x, q.y), 0.0) - r;
             coverage *= clamp(0.5 - d / max(fwidth(d), 1E-4), 0.0, 1.0);
         }
@@ -30,32 +33,27 @@ internal val clipCoverageGlsl = """
 """.trimIndent()
 
 /**
- * The rounded boxes that clip what is drawn, of the elements with a border radius that clip their content: a shade
- * style covers the pixels outside their corners, smoothly at the edges. The rectangles are clipped by scissoring.
+ * The rounded boxes that clip what is drawn, of the elements with a border radius that clip their content, and the
+ * boxes of transformed elements that clip their content: a shade style covers the pixels outside them, smoothly at the
+ * edges. The rectangles of the window are clipped by scissoring.
  */
 internal class RoundedClips {
     private val boxes = ArrayList<Rectangle>()
     private val radii = ArrayList<Double>()
+    private val inverses = ArrayList<Matrix44>()
 
     private val style = shadeStyle {
+        fragmentPreamble = clipCoverageGlsl
         fragmentTransform = """
             // the position in points, y down from the top
-            vec2 p = vec2(c_screenPosition.x, c_screenSize.y - c_screenPosition.y);
-            float coverage = 1.0;
-            for (int i = 0; i < p_count; i++) {
-                vec4 box = p_boxes[i];
-                float r = p_radii[i].x;
-                vec2 halfSize = box.zw * 0.5;
-                vec2 q = abs(p - (box.xy + halfSize)) - halfSize + vec2(r);
-                float d = length(max(q, vec2(0.0))) + min(max(q.x, q.y), 0.0) - r;
-                coverage *= clamp(0.5 - d / max(fwidth(d), 1E-4), 0.0, 1.0);
-            }
+            float coverage = clipCoverage(vec2(c_screenPosition.x, c_screenSize.y - c_screenPosition.y));
             x_fill.a *= coverage;
             x_stroke.a *= coverage;
         """.trimIndent()
-        parameter("boxes", Array(maxRoundedClips) { Vector4.ZERO })
-        parameter("radii", Array(maxRoundedClips) { Vector2.ZERO })
-        parameter("count", 0)
+        parameter("clipBoxes", Array(maxRoundedClips) { Vector4.ZERO })
+        parameter("clipRadii", Array(maxRoundedClips) { Vector2.ZERO })
+        parameter("clipInverses", Array(maxRoundedClips) { Matrix44.IDENTITY })
+        parameter("clipCount", 0)
     }
 
     /** sets the rounded boxes as the parameters clipBoxes, clipRadii and clipCount of [style], see [clipCoverageGlsl] */
@@ -65,28 +63,27 @@ internal class RoundedClips {
             boxes.getOrNull(i)?.takeIf { i < count }?.let { Vector4(it.x, it.y, it.width, it.height) } ?: Vector4.ZERO
         })
         style.parameter("clipRadii", Array(maxRoundedClips) { i -> Vector2(if (i < count) radii[i] else 0.0, 0.0) })
+        style.parameter("clipInverses", Array(maxRoundedClips) { i -> if (i < count) inverses[i] else Matrix44.IDENTITY })
         style.parameter("clipCount", count)
     }
 
-    fun push(box: Rectangle, radius: Double) {
+    /** clips by [box] with corners of [radius]; [transform] is the transform of the box, from its coordinates to the window */
+    fun push(box: Rectangle, radius: Double, transform: Matrix44? = null) {
         boxes.add(box)
         radii.add(radius)
+        inverses.add(transform?.inversed ?: Matrix44.IDENTITY)
     }
 
     fun pop() {
         boxes.removeAt(boxes.lastIndex)
         radii.removeAt(radii.lastIndex)
+        inverses.removeAt(inverses.lastIndex)
     }
 
     /** the shade style that clips to the rounded boxes, null when there are none */
     fun style(): ShadeStyle? {
         if (boxes.isEmpty()) return null
-        val count = minOf(boxes.size, maxRoundedClips)
-        style.parameter("boxes", Array(maxRoundedClips) { i ->
-            boxes.getOrNull(i)?.takeIf { i < count }?.let { Vector4(it.x, it.y, it.width, it.height) } ?: Vector4.ZERO
-        })
-        style.parameter("radii", Array(maxRoundedClips) { i -> Vector2(if (i < count) radii[i] else 0.0, 0.0) })
-        style.parameter("count", count)
+        applyTo(style)
         return style
     }
 }

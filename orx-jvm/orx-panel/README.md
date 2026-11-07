@@ -35,10 +35,19 @@ those that are set with `setAttribute`, like `data-kind`. States are pseudo-clas
 Backgrounds take gradients, `background: linear-gradient(135deg, #ff7e5f, #feb47b)`, `radial-gradient()` and their
 repeating variants, and boxes take shadows, `box-shadow: 0 8px 24px rgb(0 0 0 / 0.4)`. `transform`, like
 `translateY(-4px) scale(1.05)`, transforms an element and its descendants around `transform-origin`, without changing
-the layout; it transitions, and finding the element under the pointer follows it. `@keyframes` rules animate elements
-with `animation: pulse 1.2s ease-in-out infinite` and the `animation-*` properties, one animation per element. Elements
-that clip their content clip by the rectangles of the window, also when they are transformed, and an element's own
-background color is drawn over its gradient: `background: <gradient>` makes the color transparent.
+the layout. `@keyframes` rules animate elements with `animation: pulse 1.2s ease-in-out infinite` and the
+`animation-*` properties. An element's own background color is drawn over its gradient: `background: <gradient>` makes
+the color transparent. Text drawn from glyph outlines is clipped by the rectangles of the window, also in transformed
+elements that clip their content.
+
+`@media` rules apply by the size of the window and the color scheme of the control manager, `colorScheme`:
+`@media (max-width: 700px)`, `(orientation: portrait)`, `(prefers-color-scheme: light)`. Lengths take `em`, `rem`,
+`vw` and `vh`, and `calc()` mixes them with percentages. Flex items take `flex-basis`, `order` and `align-self`, boxes
+`aspect-ratio`, and positioned elements `right`, `bottom` and `inset`. Text takes `letter-spacing`, `line-height`,
+`white-space: nowrap`, `text-overflow: ellipsis` and `text-decoration`. Elements can have several animations, which
+can be paused with `animation-play-state`; transitions move colors, numbers, lengths, transforms and shadows, and
+`box-shadow` can be `inset`. Transformed elements are hovered and clicked where they are drawn, and clip their content
+by their shape. `virtualList(items, rowHeight) { item, index -> … }` scrolls long lists, it builds only the rows in view.
 
 The default styles take their colors and sizes from custom properties, a theme: override them in a later style sheet,
 like `:root { --control-background: #3a4150; --control-font-size: 16px }`, see `panelThemeCss`. Style sheets can be read

@@ -40,7 +40,9 @@ internal object SVGStyleSheet {
     )
 
     /** the rules of [css], in the order they are given */
-    private fun rules(css: String): List<Rule> = parseCssRules(css).map { Rule(it.selectors, it.block, it.order) }
+    private fun rules(css: String): List<Rule> =
+        // the rules of @media rules are left out
+        parseCssRules(css).filter { it.media == null }.map { Rule(it.selectors, it.block, it.order) }
 
     /** [text] split at [separator], except where the separator is in parentheses or quotes */
     private fun split(text: String, separator: Char, limit: Int = Int.MAX_VALUE): List<String> = splitCss(text, separator, limit)

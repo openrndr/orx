@@ -15,7 +15,13 @@ import org.openrndr.extra.style.splitCssWords
  * of its property.
  */
 
-/** a length: auto, a length in absolute units, a percentage, a fraction (fr), minmax() or calc() of absolute lengths */
+/** the units of lengths relative to font sizes and the window, see [LinearDimension.Relative] */
+internal val relativeUnits = setOf("em", "rem", "vw", "vh", "vmin", "vmax")
+
+/**
+ * A length: auto, a length in absolute units, a percentage, a fraction (fr), a length relative to the font size or
+ * the window (em, rem, vw, vh, vmin, vmax), minmax() or calc()
+ */
 internal fun parseLength(text: String): LinearDimension? {
     val v = text.trim().lowercase()
     if (v == "auto") return LinearDimension.Auto
@@ -24,11 +30,19 @@ internal fun parseLength(text: String): LinearDimension? {
         if (arguments.size != 2) return null
         return LinearDimension.MinMax(parseLength(arguments[0]) ?: return null, parseLength(arguments[1]) ?: return null)
     }
-    if (v.startsWith("calc(")) return parseCssPixels(v)?.let { LinearDimension.PX(it) }
+    if (v.startsWith("calc(")) {
+        // absolute lengths are added up now, relative units when styles are computed, percentages in the layout
+        parseCssPixels(v)?.let { return LinearDimension.PX(it) }
+        val valid = org.openrndr.extra.style.evaluateCssCalc(v) { leaf ->
+            parseCssDimension(leaf)?.let { if (it.unit in relativeUnits || it.unit == "%") 1.0 else it.pixels }
+        }
+        return if (valid != null) LinearDimension.Calc(v) else null
+    }
     val dimension = parseCssDimension(v) ?: return null
     return when (dimension.unit) {
         "%" -> LinearDimension.Percent(dimension.value)
         "fr" -> LinearDimension.Fraction(dimension.value)
+        in relativeUnits -> LinearDimension.Relative(dimension.value, dimension.unit)
         // a number is a length only when it is 0
         "" -> if (dimension.value == 0.0) LinearDimension.PX(0.0) else null
         else -> dimension.pixels?.let { LinearDimension.PX(it) }

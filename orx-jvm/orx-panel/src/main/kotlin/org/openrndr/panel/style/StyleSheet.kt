@@ -107,6 +107,24 @@ sealed class LinearDimension : PropertyValue() {
 
     class MinMax(val min: LinearDimension, val max: LinearDimension) : LinearDimension()
 
+    /**
+     * A length relative to the font size, [unit] em, to the font size of the root, rem, or to the width or height of
+     * the window, vw and vh; computed styles have it in pixels
+     */
+    data class Relative(val value: Double, val unit: String) : LinearDimension()
+
+    /**
+     * A calc() expression with percentages, which are taken of the same length as a percentage of the property; computed
+     * styles have the other relative units in pixels
+     */
+    data class Calc(val expression: String) : LinearDimension() {
+        /** the length in pixels, with percentages of [reference] */
+        fun resolve(reference: Double): Double = org.openrndr.extra.style.evaluateCssCalc(expression) { leaf ->
+            val d = org.openrndr.extra.style.parseCssDimension(leaf) ?: return@evaluateCssCalc null
+            if (d.unit == "%") reference * d.value / 100.0 else d.pixels
+        } ?: 0.0
+    }
+
     object Auto : LinearDimension()
 
     fun inPixels(parentLengthInPx: Double): Double {
@@ -157,8 +175,9 @@ object PanelProperties : CssProperties()
  * initialized when a function of the file is first called
  */
 internal fun panelProperties(): CssProperties {
-    // the animation properties are registered by the delegates of their own file
+    // the animation and text properties are registered by the delegates of their own files
     ensureAnimationProperties()
+    ensureTextProperties()
     return PanelProperties
 }
 
@@ -212,6 +231,9 @@ sealed class FlexDirection : PropertyValue() {
     object RowReverse : FlexDirection()
     object ColumnReverse : FlexDirection()
 }
+
+/** how a flex item is placed across its line, [Auto] for the [alignItems] of its container */
+enum class AlignSelf { Auto, Start, Center, End, Stretch }
 
 /**
  * How the items of a flex container are placed across its main axis, inside their line.
@@ -371,6 +393,9 @@ class StyleSheet(val selector: CompoundSelector = CompoundSelector.DUMMY) {
 
     fun getProperty(name: String) = properties.get(name)
 
+    /** the media query of the @media rule the sheet is in, null when it applies everywhere */
+    var media: String? = null
+
     /** counts the changes to the properties, so that changes made in place are noticed */
     var version = 0
         private set
@@ -462,8 +487,29 @@ var StyleSheet.minWidth by PropertyHandler<LinearDimension>("min-width", RESET, 
 var StyleSheet.maxWidth by PropertyHandler<LinearDimension>("max-width", RESET, LinearDimension.Auto, ::parseLength)
 var StyleSheet.minHeight by PropertyHandler<LinearDimension>("min-height", RESET, LinearDimension.Auto, ::parseLength)
 var StyleSheet.maxHeight by PropertyHandler<LinearDimension>("max-height", RESET, LinearDimension.Auto, ::parseLength)
-var StyleSheet.top by PropertyHandler<LinearDimension>("top", RESET, length { 0 }, ::parseLength) // css default is auto
-var StyleSheet.left by PropertyHandler<LinearDimension>("left", RESET, length { 0 }, ::parseLength) // css default is auto
+/** the offsets of a positioned element from the sides of what it is positioned in; auto is 0 for top and left */
+var StyleSheet.top by PropertyHandler<LinearDimension>("top", RESET, LinearDimension.Auto, ::parseLength)
+var StyleSheet.left by PropertyHandler<LinearDimension>("left", RESET, LinearDimension.Auto, ::parseLength)
+var StyleSheet.right by PropertyHandler<LinearDimension>("right", RESET, LinearDimension.Auto, ::parseLength)
+var StyleSheet.bottom by PropertyHandler<LinearDimension>("bottom", RESET, LinearDimension.Auto, ::parseLength)
+
+/** the size of a flex item along the main axis before it grows or shrinks, auto for its width or height */
+var StyleSheet.flexBasis by PropertyHandler<LinearDimension>("flex-basis", RESET, LinearDimension.Auto, ::parseLength)
+
+/** how a flex item is placed across the line, auto for the align-items of its container */
+var StyleSheet.alignSelf by PropertyHandler("align-self", RESET, AlignSelf.Auto, keywords(
+    "auto" to AlignSelf.Auto, "start" to AlignSelf.Start, "flex-start" to AlignSelf.Start, "center" to AlignSelf.Center,
+    "end" to AlignSelf.End, "flex-end" to AlignSelf.End, "stretch" to AlignSelf.Stretch))
+
+/** the order of a flex item in its container, items with the same order keep the order of the document */
+var StyleSheet.order by PropertyHandler("order", RESET, 0, { it.trim().toIntOrNull() })
+
+/** the proportion of the width to the height, an auto height follows the width; null for auto */
+var StyleSheet.aspectRatio by PropertyHandler<Double?>("aspect-ratio", RESET, null, { text ->
+    val v = text.trim().lowercase().removePrefix("auto").trim()
+    if (v.isEmpty()) null else v.split('/').map { it.trim().toDoubleOrNull() ?: return@PropertyHandler null }
+        .let { if (it.size == 2 && it[1] > 0.0) it[0] / it[1] else it.singleOrNull()?.takeIf { r -> r > 0.0 } }
+})
 
 var StyleSheet.marginTop by PropertyHandler<LinearDimension>("margin-top", RESET, length { 0 }, ::parseLength)
 var StyleSheet.marginBottom by PropertyHandler<LinearDimension>("margin-bottom", RESET, length { 0 }, ::parseLength)
@@ -662,6 +708,7 @@ var StyleSheet.textHorizontalAlign by PropertyHandler<TextAlign>("text-horizonta
 private val shorthands = PanelProperties.apply {
     val sides = listOf("top", "right", "bottom", "left")
     shorthand("margin", sides.map { "margin-$it" }, boxShorthand("margin"))
+    shorthand("inset", sides, { value -> org.openrndr.extra.style.cssBoxSides(value)?.let { sides.zip(it) } })
     shorthand("padding", sides.map { "padding-$it" }, boxShorthand("padding"))
     shorthand("gap", listOf("row-gap", "column-gap")) { value ->
         val words = splitCssWords(value)
@@ -772,7 +819,7 @@ fun styleSheets(css: String): List<StyleSheet> = run {
     if (selectors == null) {
         logger.warn { "ignored the rule for '${rule.selectors.joinToString(", ")}', its selector is not valid or not supported" }
         emptyList()
-    } else selectors.map { selector -> StyleSheet(CompoundSelector.of(selector)).apply { css(rule.block) } }
+    } else selectors.map { selector -> StyleSheet(CompoundSelector.of(selector)).apply { media = rule.media; css(rule.block) } }
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -811,7 +858,7 @@ internal fun sameValue(a: Any?, b: Any?): Boolean {
 /** the properties that only change how an element is painted, not its size or position */
 internal val paintProperties = setOf(
     "background-color", "color", "border-color", "border-radius", "outline-width", "outline-color", "outline-offset",
-    "opacity", "cursor", "background-image", "box-shadow", "transform", "transform-origin", "transition-duration", "transition-delay", "transition-timing-function", "transition-property",
+    "opacity", "cursor", "text-decoration", "text-overflow", "background-image", "box-shadow", "transform", "transform-origin", "transition-duration", "transition-delay", "transition-timing-function", "transition-property",
     "scrollbar-color", "scrollbar-track-color", "scrollbar-cursor",
     "scrollbar-visibility", "scroll-behavior"
 )

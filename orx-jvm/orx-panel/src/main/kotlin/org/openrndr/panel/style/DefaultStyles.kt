@@ -51,6 +51,9 @@ fun panelTheme(css: String = panelThemeCss()): StyleSheet = styleSheet(":root") 
 val defaultStylesCss = """
     item { display: none }
 
+    /* a long list that builds the rows in view, see VirtualList */
+    virtual-list { display: block; overflow: scroll; overflow-x: hidden }
+
     /* controls change their colors smoothly when they are hovered and pressed */
     :is(button, dropdown-button, colorpicker-button, envelope-button, xy-pad, item) { transition-duration: var(--transition) }
 

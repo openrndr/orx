@@ -43,7 +43,12 @@ class TextNode(text: String) : Element(ElementType("text")) {
      * last line, as it is drawn.
      */
     fun sizeHint(width: Double = layout.screenWidth): Rectangle {
-        val height = text0.paragraph(computedStyle, text, width, computedStyle.computedTextHorizontalAlign).height
+        // text that does not wrap is as wide as its widest line, it is a single line when it is cut with an ellipsis
+        val wraps = computedStyle.whiteSpace == WhiteSpace.NORMAL
+        if (!wraps && computedStyle.textOverflow == TextOverflow.ELLIPSIS && '\n' !in text) {
+            return Rectangle(layout.screenX, layout.screenY, width, text0.line(computedStyle, text).height)
+        }
+        val height = text0.paragraph(computedStyle, text, if (wraps) width else textWidth() + 1.0, computedStyle.computedTextHorizontalAlign).height
         return Rectangle(layout.screenX, layout.screenY, width, height)
     }
 

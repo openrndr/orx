@@ -2,6 +2,7 @@ package org.openrndr.panel
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
+import org.openrndr.draw.isolated
 import org.openrndr.draw.VertexBuffer
 import org.openrndr.draw.boundary.BoundaryCommand
 import org.openrndr.draw.boundary.BoundaryDrawCommand
@@ -17,6 +18,7 @@ import org.openrndr.extra.textwriter.typesetLine
 import org.openrndr.extra.textwriter.typesetText
 import org.openrndr.math.Vector2
 import org.openrndr.math.transforms.transform
+import org.openrndr.panel.style.*
 import org.openrndr.panel.style.LinearDimension
 import org.openrndr.panel.style.StyleSheet
 import org.openrndr.panel.style.fontWeight
@@ -74,8 +76,11 @@ class PanelText internal constructor(private val fontManager: FontManager) {
         return reference to face.sizeInPoints / referenceSize
     }
 
-    private val shaped = object : LinkedHashMap<Triple<Face, String, Double?>, ShapedText>(256, 0.75f, true) {
-        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<Triple<Face, String, Double?>, ShapedText>?) =
+    /** the key of shaped text: a single line when [width] is null, a paragraph otherwise */
+    private data class Key(val face: Face, val text: String, val width: Double?, val spacing: Double, val lineHeight: Double?)
+
+    private val shaped = object : LinkedHashMap<Key, ShapedText>(256, 0.75f, true) {
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<Key, ShapedText>?) =
             size > maxShapedTexts
     }
 
@@ -95,15 +100,40 @@ class PanelText internal constructor(private val fontManager: FontManager) {
         return FontFaces.face(url, size, style.fontWeight, opticalSize = null).also { fonts[it] = url to style.fontWeight }
     }
 
-    /** [text] shaped as a single line in the face of [style] */
-    fun line(style: StyleSheet, text: String): ShapedText = line(face(style), text)
+    /** the letter spacing of [style] in pixels */
+    private fun spacing(style: StyleSheet): Double = (style.letterSpacing as? LinearDimension.PX)?.value ?: 0.0
 
-    /** [text] shaped as a single line in [face] */
-    fun line(face: Face, text: String): ShapedText = shaped.getOrPut(Triple(face, text, null)) {
+    /** the line height of [style] in pixels, null for the line height of its font */
+    private fun lineHeight(style: StyleSheet): Double? {
+        val size = (style.fontSize as? LinearDimension.PX)?.value ?: 16.0
+        return when (val h = style.lineHeight) {
+            is LinearDimension.PX -> h.value
+            is LinearDimension.Percent -> h.value / 100.0 * size
+            else -> null
+        }
+    }
+
+    /** [glyphs] moved by [spacing] after every glyph, in lines by their y */
+    private fun spaced(glyphs: List<TypesetGlyph>, spacing: Double): List<TypesetGlyph> {
+        if (spacing == 0.0) return glyphs
+        var line = Double.NaN
+        var index = 0
+        return glyphs.map {
+            if (it.position.y != line) { line = it.position.y; index = 0 }
+            val shift = Vector2(spacing * index++, 0.0)
+            TypesetGlyph(it.face, it.glyphIndex, it.position + shift, it.style, it.advance, it.offset)
+        }
+    }
+
+    /** [text] shaped as a single line in the face of [style], with its letter spacing */
+    fun line(style: StyleSheet, text: String): ShapedText = line(face(style), text, spacing(style))
+
+    /** [text] shaped as a single line in [face], with [spacing] after every character */
+    fun line(face: Face, text: String, spacing: Double = 0.0): ShapedText = shaped.getOrPut(Key(face, text, null, spacing, null)) {
         val (reference, sizeInEm) = reference(face)
         val glyphs = if (text.isEmpty()) emptyList() else
-            typesetLine(reference, text, Vector2.ZERO, TextStyle.Defaults.copy(sizeInEm = sizeInEm))
-        val width = glyphs.lastOrNull()?.penEnd?.x ?: 0.0
+            spaced(typesetLine(reference, text, Vector2.ZERO, TextStyle.Defaults.copy(sizeInEm = sizeInEm)), spacing)
+        val width = (glyphs.lastOrNull()?.penEnd?.x ?: 0.0) + if (glyphs.isEmpty()) 0.0 else spacing
         ShapedText(text, face, glyphs, width, face.ascent - face.descent, 1)
     }
 
@@ -114,16 +144,17 @@ class PanelText internal constructor(private val fontManager: FontManager) {
      */
     fun carets(style: StyleSheet, text: String): DoubleArray {
         val shaped = line(style, text)
+        val spacing = spacing(style)
         val result = DoubleArray(text.length + 1)
         if (shaped.glyphs.size == text.length && shaped.glyphs.all { it.advance != null }) {
             var x = 0.0
             for (i in text.indices) {
                 result[i] = x
-                x += shaped.glyphs[i].advance!!.x
+                x += shaped.glyphs[i].advance!!.x + spacing
             }
             result[text.length] = x
         } else {
-            for (i in 0..text.length) result[i] = line(shaped.face, text.substring(0, i)).width
+            for (i in 0..text.length) result[i] = line(shaped.face, text.substring(0, i), spacing).width
         }
         return result
     }
@@ -138,24 +169,29 @@ class PanelText internal constructor(private val fontManager: FontManager) {
         val face = face(style)
         // widths are rounded up, so that relayouts at nearly the same width share the shaping
         val w = ceil(width)
-        return shaped.getOrPut(Triple(face, text, w + horizontalAlign * 1E-6)) {
+        val spacing = spacing(style)
+        val lineHeight = lineHeight(style)
+        return shaped.getOrPut(Key(face, text, w + horizontalAlign * 1E-6, spacing, lineHeight)) {
             val (reference, sizeInEm) = reference(face)
+            // the line height of the font, or that of the style
+            val faceLineHeight = face.ascent - face.descent + face.lineGap
+            val lineHeightInEm = if (lineHeight == null) sizeInEm else sizeInEm * lineHeight / faceLineHeight
             val lines = if (text.isEmpty()) emptyList() else typesetText(
                 listOf(TextSpan(text, null)),
                 // tall enough for a line per character, typesetting prepares for every line that fits
                 listOf(Rectangle(0.0, 0.0, w.coerceAtLeast(1.0), (text.length + 2) * (face.ascent - face.descent + face.lineGap))),
                 // the line height of the reference face is scaled to the size like the glyphs
                 TextStyle.Defaults.copy(
-                    face = reference, sizeInEm = sizeInEm, lineHeightInEm = sizeInEm,
+                    face = reference, sizeInEm = sizeInEm, lineHeightInEm = lineHeightInEm,
                     hyphenate = false, horizontalAlign = horizontalAlign
                 )
             )
             val glyphs = lines.flatMap { it.glyphs }
             // the first baseline at 0
             val first = glyphs.firstOrNull()?.position?.y ?: 0.0
-            val moved = glyphs.map {
+            val moved = spaced(glyphs.map {
                 TypesetGlyph(it.face, it.glyphIndex, it.position - Vector2(0.0, first), it.style, it.advance, it.offset)
-            }
+            }, spacing)
             val lineCount = moved.map { it.position.y }.distinct().size.coerceAtLeast(1)
             val last = moved.maxOfOrNull { it.position.y } ?: 0.0
             val textWidth = moved.maxOfOrNull { it.penEnd?.x ?: it.position.x } ?: 0.0
@@ -174,8 +210,12 @@ class PanelText internal constructor(private val fontManager: FontManager) {
      * Draws [shaped] at [position], the origin of its first baseline, in [color]. The draw commands are kept for
      * [owner] under [slot] and drawn again as long as the text, its position and its color stay the same.
      */
-    fun draw(drawer: Drawer, owner: Any, slot: String, shaped: ShapedText, position: Vector2, color: ColorRGBa) {
+    fun draw(
+        drawer: Drawer, owner: Any, slot: String, shaped: ShapedText, position: Vector2, color: ColorRGBa,
+        decoration: TextDecoration = TextDecoration.NONE
+    ) {
         if (shaped.glyphs.isEmpty() || color.alpha <= 0.0) return
+        if (!decoration.isNone) drawDecoration(drawer, shaped, Vector2(position.x, round(position.y)), color, decoration)
         val (boundaryDrawer, glyphMap) = map(drawer)
         // the baseline on a whole pixel, for even edges
         val origin = Vector2(position.x, round(position.y))
@@ -205,23 +245,63 @@ class PanelText internal constructor(private val fontManager: FontManager) {
         boundaryDrawer.draw(drawer, glyphMap.map, entry.command)
     }
 
+    /** draws the lines of [decoration] of the lines of [shaped] at [origin], the origin of its first baseline */
+    private fun drawDecoration(drawer: Drawer, shaped: ShapedText, origin: Vector2, color: ColorRGBa, decoration: TextDecoration) {
+        val size = shaped.face.sizeInPoints
+        val thickness = maxOf(1.0, round(size / 14.0))
+        drawer.isolated {
+            drawer.fill = color
+            drawer.stroke = null
+            for ((y, glyphs) in shaped.glyphs.groupBy { it.position.y }) {
+                val x0 = glyphs.minOf { it.position.x }
+                val x1 = glyphs.maxOf { it.penEnd?.x ?: it.position.x }
+                fun line(offset: Double) = drawer.rectangle(origin.x + x0, origin.y + y + offset - thickness / 2.0, x1 - x0, thickness)
+                if (decoration.underline) line(size * 0.12)
+                if (decoration.overline) line(-shaped.ascent)
+                if (decoration.lineThrough) line(-shaped.ascent * 0.32)
+            }
+        }
+    }
+
+    /** [text] cut at its end, with an ellipsis, so that it fits in [width], as a single line in the face of [style] */
+    fun ellipsized(style: StyleSheet, text: String, width: Double): String {
+        if (width(style, text) <= width) return text
+        var lo = 0
+        var hi = text.length
+        // the longest beginning that fits with the ellipsis
+        while (lo < hi) {
+            val mid = (lo + hi + 1) / 2
+            if (width(style, text.substring(0, mid).trimEnd() + "…") <= width) lo = mid else hi = mid - 1
+        }
+        return text.substring(0, lo).trimEnd() + "…"
+    }
+
     /**
      * Draws [text] in the face of [style] in [box], at [horizontalAlign] and [verticalAlign] in it, from 0 at the left
-     * and the top to 1 at the right and the bottom; broken into lines at the width of the box when [wrap] is set
+     * and the top to 1 at the right and the bottom; broken into lines at the width of the box when [wrap] is set and
+     * the white space of the style wraps, cut with an ellipsis when it is a single line that does not fit and the text
+     * overflow of the style is ellipsis, with the decoration of the style
      */
     fun drawInBox(
         drawer: Drawer, owner: Any, slot: String, style: StyleSheet, text: String, box: Rectangle,
         horizontalAlign: Double, verticalAlign: Double, color: ColorRGBa, wrap: Boolean = false
     ) {
-        val shaped = if (wrap) paragraph(style, text, box.width, horizontalAlign) else line(style, text)
-        val x = if (wrap) box.x else box.x + (box.width - shaped.width) * horizontalAlign
+        val wraps = wrap && style.whiteSpace == WhiteSpace.NORMAL
+        val shaped = when {
+            wraps -> paragraph(style, text, box.width, horizontalAlign)
+            // lines that are not wrapped, broken at their line breaks
+            '\n' in text -> paragraph(style, text, text.lines().maxOf { width(style, it) } + 1.0, horizontalAlign)
+            style.textOverflow == TextOverflow.ELLIPSIS -> line(style, ellipsized(style, text, box.width))
+            else -> line(style, text)
+        }
+        val x = if (wraps) box.x else box.x + (box.width - shaped.width) * horizontalAlign
         val y = box.y + (box.height - shaped.height) * verticalAlign + shaped.ascent
-        draw(drawer, owner, slot, shaped, Vector2(x, y), color)
+        draw(drawer, owner, slot, shaped, Vector2(x, y), color, style.textDecoration)
     }
 
-    /** draws a single line of [text] in the face of [style], see [draw] */
+    /** draws a single line of [text] in the face of [style], with its decoration, see [draw] */
     fun drawLine(drawer: Drawer, owner: Any, slot: String, style: StyleSheet, text: String, x: Double, y: Double, color: ColorRGBa) =
-        draw(drawer, owner, slot, line(style, text), Vector2(x, y), color)
+        draw(drawer, owner, slot, line(style, text), Vector2(x, y), color, style.textDecoration)
 
     /** releases the buffers of the texts that were not drawn since the last call, after a redraw */
     fun releaseUnused() {

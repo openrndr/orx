@@ -50,11 +50,13 @@ internal class BoxPaints(private val roundedClips: RoundedClips) {
             float boxDistance = roundedBoxDistance(p, p_box, p_radius);
             float boxCoverage = clamp(0.5 - boxDistance / max(fwidth(boxDistance), 1E-4), 0.0, 1.0);
             vec4 color = vec4(0.0);
-            if (p_mode == 2) {
-                // a shadow: a rounded box blurred with a gaussian, outside the box of the element
+            if (p_mode == 2 || p_mode == 3) {
+                // a shadow: a rounded box blurred with a gaussian, outside the box of the element, or inside it for an
+                // inset shadow, where it is the part of the box outside the blurred box
                 float d = roundedBoxDistance(p, p_shadowBox, p_shadowRadius);
                 float alpha = p_sigma > 0.0 ? 0.5 * (1.0 - erfApprox(d / (1.41421356 * p_sigma))) : clamp(0.5 - d / max(fwidth(d), 1E-4), 0.0, 1.0);
-                color = vec4(p_shadowColor.rgb, p_shadowColor.a * alpha * (1.0 - boxCoverage));
+                float coverage = p_mode == 2 ? alpha * (1.0 - boxCoverage) : (1.0 - alpha) * boxCoverage;
+                color = vec4(p_shadowColor.rgb, p_shadowColor.a * coverage);
             } else {
                 float t;
                 if (p_mode == 0) {
@@ -103,6 +105,7 @@ internal class BoxPaints(private val roundedClips: RoundedClips) {
         parameter("shadowColor", Vector4.ZERO)
         parameter("clipBoxes", Array(maxRoundedClips) { Vector4.ZERO })
         parameter("clipRadii", Array(maxRoundedClips) { Vector2.ZERO })
+        parameter("clipInverses", Array(maxRoundedClips) { org.openrndr.math.Matrix44.IDENTITY })
         parameter("clipCount", 0)
     }
 
@@ -133,8 +136,8 @@ internal class BoxPaints(private val roundedClips: RoundedClips) {
         style.parameter("box", box.vector())
         style.parameter("radius", radius)
 
-        // the shadows, the first on top
-        for (shadow in shadows.reversed()) {
+        // the outer shadows, the first on top
+        for (shadow in shadows.reversed().filter { !it.inset }) {
             val shadowBox = Rectangle(box.x + shadow.offset.x - shadow.spread, box.y + shadow.offset.y - shadow.spread,
                 box.width + 2.0 * shadow.spread, box.height + 2.0 * shadow.spread)
             if (shadowBox.width <= 0.0 || shadowBox.height <= 0.0) continue
@@ -149,6 +152,36 @@ internal class BoxPaints(private val roundedClips: RoundedClips) {
         }
 
         // the gradient, in the box
+        if (image is BackgroundImage.Linear || image is BackgroundImage.Radial) drawGradient(drawer, image, box)
+    }
+
+    /**
+     * Draws the inset shadows of [element] over its background, after the element drew itself, with the drawer at the
+     * position of the element
+     */
+    fun drawOver(drawer: Drawer, element: Element) {
+        val cs = element.computedStyle
+        val shadows = (cs.boxShadow as? BoxShadow)?.shadows?.filter { it.inset } ?: return
+        if (shadows.isEmpty()) return
+        val box = Rectangle(0.0, 0.0, element.layout.screenWidth, element.layout.screenHeight)
+        val radius = element.cornerRadius
+        style.parameter("box", box.vector())
+        style.parameter("radius", radius)
+        for (shadow in shadows.reversed()) {
+            // the box that casts the shadow inside: offset, and shrunk by the spread
+            val shadowBox = Rectangle(box.x + shadow.offset.x + shadow.spread, box.y + shadow.offset.y + shadow.spread,
+                box.width - 2.0 * shadow.spread, box.height - 2.0 * shadow.spread)
+            style.parameter("mode", 3)
+            style.parameter("shadowBox", shadowBox.vector())
+            style.parameter("shadowRadius", if (radius > 0.0) max(0.0, radius - shadow.spread) else 0.0)
+            style.parameter("sigma", shadow.blur / 2.0)
+            style.parameter("shadowColor", (shadow.color ?: (cs.color as? Color.RGBa)?.color ?: ColorRGBa.BLACK).vector())
+            drawer.paint(box)
+        }
+    }
+
+    /** draws the gradient [image] in [box], the box of the element */
+    private fun drawGradient(drawer: Drawer, image: BackgroundImage, box: Rectangle) {
         val stops = when (image) {
             is BackgroundImage.Linear -> image.stops
             is BackgroundImage.Radial -> image.stops

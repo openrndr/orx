@@ -3,6 +3,8 @@ package org.openrndr.panel.layout
 import org.openrndr.panel.elements.Element
 import org.openrndr.panel.elements.TextNode
 import org.openrndr.extra.style.CssDeclaration
+import org.openrndr.extra.style.CssMediaEnvironment
+import org.openrndr.extra.style.cssMediaMatches
 import org.openrndr.extra.style.CssKeyword
 import org.openrndr.extra.style.substituteCssVariables
 import org.openrndr.panel.style.*
@@ -15,6 +17,7 @@ import kotlin.math.min
 private fun LinearDimension.resolve(reference: Double): Double = when (this) {
     is LinearDimension.PX -> value
     is LinearDimension.Percent -> reference * (value / 100.0)
+    is LinearDimension.Calc -> resolve(reference)
     else -> 0.0
 }
 
@@ -196,12 +199,20 @@ class Layouter {
                     is LinearDimension.Percent ->
                         containerWidth * (width.value / 100.0) - horizontalMargins(element, containerWidth)
 
+                    is LinearDimension.Calc -> width.resolve(containerWidth)
+
+                    // an auto width follows a height in pixels by the aspect ratio
+                    is LinearDimension.Auto if cs.aspectRatio != null && cs.height is LinearDimension.PX ->
+                        (cs.height as LinearDimension.PX).value * cs.aspectRatio!!
+
                     is LinearDimension.Auto -> {
                         val available = containerWidth - horizontalMargins(element, containerWidth) - frame.width
                         val contentWidth = when (element) {
                             // text takes its natural width, it wraps when that is not available. The text writer
                             // only keeps words on a line that end before its edge, hence the extra pixel.
-                            is TextNode -> min(ceil(element.textWidth()) + 1.0, max(0.0, available))
+                            // text that does not wrap is as wide as its widest line, it overflows
+                            is TextNode -> if (element.computedStyle.whiteSpace != WhiteSpace.NORMAL) ceil(element.textWidth()) + 1.0
+                                else min(ceil(element.textWidth()) + 1.0, max(0.0, available))
                             else -> element.widthHint ?: naturalContentWidth(element, available)
                         }
                         contentWidth + frame.width
@@ -234,6 +245,11 @@ class Layouter {
                     is LinearDimension.PX -> height.value
                     is LinearDimension.Percent ->
                         containerHeight * (height.value / 100.0) - verticalMargins(element, containerWidth)
+
+                    is LinearDimension.Calc -> height.resolve(containerHeight)
+
+                    // an auto height follows the width by the aspect ratio
+                    is LinearDimension.Auto if cs.aspectRatio != null -> width / cs.aspectRatio!!
 
                     is LinearDimension.Auto -> {
                         val available = containerHeight - verticalMargins(element, containerWidth) - frame.height
@@ -348,10 +364,14 @@ class Layouter {
         val stretch = cs.alignItems == AlignItems.Stretch
         val gap = mainGap(element, horizontal, contentWidth, contentHeight)
 
-        val items = inFlowChildren(element).map { child ->
+        // the items in their order, the order of the document for the same order
+        val items = inFlowChildren(element).sortedBy { it.computedStyle.order }.map { child ->
             val ccs = child.computedStyle
+            val basis = ccs.flexBasis.takeIf { it != LinearDimension.Auto }
+            val stretchItem = ccs.alignSelf == AlignSelf.Stretch || (ccs.alignSelf == AlignSelf.Auto && stretch)
             if (horizontal) {
-                val width = measureWidth(child, contentWidth)
+                // the flex basis replaces the width as the size the item starts from
+                val width = basis?.let { clampWidth(child, it.resolve(contentWidth), contentWidth) } ?: measureWidth(child, contentWidth)
                 FlexItem(
                     child, width, width, 0.0,
                     ccs.marginLeft.resolve(contentWidth), ccs.marginRight.resolve(contentWidth),
@@ -360,12 +380,13 @@ class Layouter {
                 )
             } else {
                 // a stretched item in a single line takes the width of the line before its height is measured
-                val width = if (stretch && !wrap && crossSize != null && ccs.width == LinearDimension.Auto) {
+                val width = if (stretchItem && !wrap && crossSize != null && ccs.width == LinearDimension.Auto) {
                     clampWidth(child, crossSize - horizontalMargins(child, contentWidth), contentWidth)
                 } else {
                     measureWidth(child, contentWidth)
                 }
-                val height = measureHeight(child, width, contentWidth, contentHeight)
+                val height = basis?.let { clampHeight(child, it.resolve(contentHeight), contentHeight) }
+                    ?: measureHeight(child, width, contentWidth, contentHeight)
                 FlexItem(
                     child, height, height, width,
                     ccs.marginTop.resolve(contentWidth), ccs.marginBottom.resolve(contentWidth),
@@ -409,9 +430,10 @@ class Layouter {
             if (!wrap && crossSize != null) {
                 line.cross = crossSize
             }
-            if (stretch) {
+            run {
                 for (item in lineItems) {
                     val ccs = item.element.computedStyle
+                    if (!(ccs.alignSelf == AlignSelf.Stretch || (ccs.alignSelf == AlignSelf.Auto && stretch))) continue
                     val autoCross = if (horizontal) ccs.height == LinearDimension.Auto else ccs.width == LinearDimension.Auto
                     if (autoCross) {
                         val stretched = line.cross - item.crossMarginStart - item.crossMarginEnd
@@ -510,7 +532,15 @@ class Layouter {
                 val mainPosition = if (reverse) mainStart + mainSize - distance - item.main else mainStart + distance
                 position += item.outerMain + gap + between
 
-                val crossOffset = when (cs.alignItems) {
+                // the alignment of the item itself, or that of its container
+                val align = when (item.element.computedStyle.alignSelf) {
+                    AlignSelf.Start -> AlignItems.Start
+                    AlignSelf.Center -> AlignItems.Center
+                    AlignSelf.End -> AlignItems.End
+                    AlignSelf.Stretch -> AlignItems.Stretch
+                    AlignSelf.Auto -> cs.alignItems
+                }
+                val crossOffset = when (align) {
                     AlignItems.Center -> (line.cross - item.outerCross) / 2.0
                     AlignItems.End -> line.cross - item.outerCross
                     else -> 0.0
@@ -843,13 +873,23 @@ class Layouter {
         if (cs.position in manualPosition) {
             val parent = element.parent
             applyFrame(element, element.containerWidth)
-            layout.screenWidth = measureWidth(element, element.containerWidth)
-            layout.screenHeight =
-                measureHeight(element, layout.screenWidth, element.containerWidth, element.containerHeight)
             // fixed elements are placed relative to the root, absolute elements relative to their parent
             val origin = if (cs.position == Position.FIXED || parent == null) element.root() else parent
-            layout.screenX = origin.layout.screenX + cs.left.resolve(origin.layout.screenWidth)
-            layout.screenY = origin.layout.screenY + cs.top.resolve(origin.layout.screenHeight)
+            val ow = origin.layout.screenWidth
+            val oh = origin.layout.screenHeight
+            val auto = LinearDimension.Auto
+            // an auto size between two sides that are given stretches between them
+            layout.screenWidth = if (cs.width == auto && cs.left != auto && cs.right != auto)
+                clampWidth(element, ow - cs.left.resolve(ow) - cs.right.resolve(ow) - horizontalMargins(element, element.containerWidth), element.containerWidth)
+            else measureWidth(element, element.containerWidth)
+            layout.screenHeight = if (cs.height == auto && cs.top != auto && cs.bottom != auto)
+                clampHeight(element, oh - cs.top.resolve(oh) - cs.bottom.resolve(oh) - verticalMargins(element, element.containerWidth), element.containerHeight)
+            else measureHeight(element, layout.screenWidth, element.containerWidth, element.containerHeight)
+            // from the left and the top, or from the right and the bottom when only they are given
+            layout.screenX = if (cs.left == auto && cs.right != auto) origin.layout.screenX + ow - cs.right.resolve(ow) - layout.screenWidth
+                else origin.layout.screenX + cs.left.resolve(ow)
+            layout.screenY = if (cs.top == auto && cs.bottom != auto) origin.layout.screenY + oh - cs.bottom.resolve(oh) - layout.screenHeight
+                else origin.layout.screenY + cs.top.resolve(oh)
         }
         element.sized()
 
@@ -942,7 +982,9 @@ class Layouter {
     private fun textNodeStyle(parentStyle: StyleSheet?): StyleSheet {
         val style = parentStyle?.cascadeOnto(StyleSheet(CompoundSelector.DUMMY)) ?: StyleSheet(CompoundSelector.DUMMY)
         if (parentStyle != null) {
-            style.width = if (parentStyle.width == LinearDimension.Auto) LinearDimension.Auto else 100.percent
+            // text that does not wrap is as wide as its widest line, unless it is cut with an ellipsis at its parent
+            val ownWidth = parentStyle.whiteSpace != WhiteSpace.NORMAL && parentStyle.textOverflow != TextOverflow.ELLIPSIS
+            style.width = if (parentStyle.width == LinearDimension.Auto || ownWidth) LinearDimension.Auto else 100.percent
             style.height = if (parentStyle.height == LinearDimension.Auto) LinearDimension.Auto else 100.percent
         }
         style.minWidth = LinearDimension.Auto
@@ -974,11 +1016,43 @@ class Layouter {
         if (forced || siblingSelectors == null) {
             siblingSelectors = styleSheets.any { it.cssSelector.usesSiblings }
         }
+        if (forced || index == null || index?.size != styleSheets.size) index = RuleIndex(styleSheets)
         return updateStyles(element, forced, false)
     }
 
     /** true when the style sheets select elements by their earlier siblings, null when not known yet */
     private var siblingSelectors: Boolean? = null
+
+    /** the style sheets by the keys of their selectors, made again when the styles are computed with force */
+    private var index: RuleIndex? = null
+
+    /**
+     * What the media queries of style sheets in @media rules are evaluated against, null when they do not apply; set it
+     * before the styles are computed
+     */
+    var media: CssMediaEnvironment? = null
+        set(value) {
+            if (value != field) {
+                field = value
+                mediaMatches.clear()
+            }
+        }
+
+    private val mediaMatches = HashMap<String, Boolean>()
+
+    /** true when the media query of [sheet] matches [media], or it has none */
+    private fun applies(sheet: StyleSheet): Boolean {
+        val query = sheet.media ?: return true
+        val environment = media ?: return false
+        return mediaMatches.getOrPut(query) { cssMediaMatches(query, environment) }
+    }
+
+    /** true when style sheets have media queries */
+    val hasMediaQueries: Boolean get() = styleSheets.any { it.media != null }
+
+    /** the style sheets that can select [element], in their order; all of them when they are not indexed */
+    private fun candidates(element: Element): List<StyleSheet> =
+        (index?.takeIf { it.size == styleSheets.size }?.candidates(element) ?: styleSheets).filter(::applies)
 
     private fun updateStyles(element: Element, forced: Boolean, parentChanged: Boolean): Int {
         val inline = element.style
@@ -1011,7 +1085,51 @@ class Layouter {
 
     /** the style sheets that select [element], in the order of the cascade: the last wins, important declarations aside */
     fun matchingStyleSheets(element: Element): List<StyleSheet> =
-        styleSheets.filter { it.cssSelector.matches(element) }.sortedBy { it.specificity }
+        candidates(element).filter { it.cssSelector.matches(element) }.sortedBy { it.specificity }
+
+    /**
+     * The lengths of [cs], the computed style of [element], that are relative to font sizes or the window in pixels:
+     * em of the font size, of the parent for the font size itself, rem of the font size of the root, vw and vh of
+     * the size of the window, see [media]; in calc() expressions too, which keep their percentages
+     */
+    private fun resolveRelativeLengths(element: Element, cs: StyleSheet, parent: StyleSheet?) {
+        fun px(d: LinearDimension?) = (d as? LinearDimension.PX)?.value
+        val rootStyle = generateSequence(element) { it.parent }.last().takeIf { it !== element }?.computedStyle
+        val viewWidth = media?.width ?: 0.0
+        val viewHeight = media?.height ?: 0.0
+        fun pixels(value: Double, unit: String, fontSize: Double): Double? = when (unit) {
+            "em" -> value * fontSize
+            "rem" -> value * (px(rootStyle?.fontSize) ?: if (rootStyle == null) fontSize else 16.0)
+            "vw" -> value * viewWidth / 100.0
+            "vh" -> value * viewHeight / 100.0
+            "vmin" -> value * minOf(viewWidth, viewHeight) / 100.0
+            "vmax" -> value * maxOf(viewWidth, viewHeight) / 100.0
+            else -> null
+        }
+        fun resolve(name: String, fontSize: Double) {
+            val property = cs.properties[name] ?: return
+            val resolved = when (val v = property.value) {
+                is LinearDimension.Relative -> pixels(v.value, v.unit, fontSize)?.let { LinearDimension.PX(it) }
+                is LinearDimension.Calc -> {
+                    // the relative units in pixels, a calc() without percentages is a length in pixels
+                    val text = Regex("([+-]?(?:\\d+\\.?\\d*|\\.\\d+)(?:e[+-]?\\d+)?)(em|rem|vw|vh|vmin|vmax)\\b").replace(v.expression) { m ->
+                        "${pixels(m.groupValues[1].toDouble(), m.groupValues[2], fontSize)}px"
+                    }
+                    org.openrndr.extra.style.parseCssPixels(text)?.let { LinearDimension.PX(it) } ?: LinearDimension.Calc(text)
+                }
+                else -> null
+            } ?: return
+            cs.properties[name] = property.copy(value = resolved)
+        }
+        // the font size first, em of the parent's, then the other lengths in em of it
+        val parentFontSize = px(parent?.fontSize) ?: 16.0
+        resolve("font-size", parentFontSize)
+        (cs.properties["font-size"]?.value as? LinearDimension.Calc)?.let {
+            cs.properties["font-size"] = cs.properties["font-size"]!!.copy(value = LinearDimension.PX(it.resolve(parentFontSize)))
+        }
+        val fontSize = px(cs.fontSize) ?: parentFontSize
+        for (name in cs.properties.keys.toList()) if (name != "font-size") resolve(name, fontSize)
+    }
 
     /** computes the style of [element] from the style sheets, its inline style and the style of its parent */
     private fun computeStyle(element: Element) {
@@ -1019,7 +1137,7 @@ class Layouter {
             element.computedStyle = textNodeStyle(element.parent?.computedStyle)
         } else {
             element.computedStyle =
-                styleSheets
+                candidates(element)
                     .filter { it.cssSelector.matches(element) }
                     // by specificity, and by order for the same specificity, the most specific and the last first
                     .sortedBy { it.specificity }
@@ -1078,7 +1196,49 @@ class Layouter {
                     }
                 }
             }
+            resolveRelativeLengths(element, cs, parent)
         }
     }
 
+}
+
+/**
+ * The style sheets of [sheets] by the key of their selectors, as browsers index their rules: the id, the class or the
+ * type of their last compound, which the elements they select have. An element is matched against the sheets of its
+ * keys and the sheets without a key only, in the order of [sheets].
+ */
+internal class RuleIndex(private val sheets: List<StyleSheet>) {
+    val size = sheets.size
+    private val byId = HashMap<String, MutableList<Int>>()
+    private val byClass = HashMap<String, MutableList<Int>>()
+    private val byType = HashMap<String, MutableList<Int>>()
+    private val universal = mutableListOf<Int>()
+
+    init {
+        for ((i, sheet) in sheets.withIndex()) {
+            val simples = sheet.cssSelector.compounds.last().simples
+            val id = simples.firstNotNullOfOrNull { it as? org.openrndr.extra.style.SimpleSelector.Id }
+            val c = simples.firstNotNullOfOrNull { it as? org.openrndr.extra.style.SimpleSelector.Class }
+            val type = simples.firstNotNullOfOrNull { it as? org.openrndr.extra.style.SimpleSelector.Type }
+            when {
+                id != null -> byId.getOrPut(id.name) { mutableListOf() }.add(i)
+                c != null -> byClass.getOrPut(c.name) { mutableListOf() }.add(i)
+                type != null -> byType.getOrPut(type.name.lowercase()) { mutableListOf() }.add(i)
+                else -> universal.add(i)
+            }
+        }
+    }
+
+    /** the sheets that can select [element], in their order */
+    fun candidates(element: Element): List<StyleSheet> {
+        val indices = ArrayList<Int>(universal)
+        element.id?.let { byId[it]?.let(indices::addAll) }
+        for (c in element.classes) byClass[c.name]?.let(indices::addAll)
+        byType[element.type.name.lowercase()]?.let(indices::addAll)
+        indices.sort()
+        val result = ArrayList<StyleSheet>(indices.size)
+        var last = -1
+        for (i in indices) if (i != last) { result.add(sheets[i]); last = i }
+        return result
+    }
 }

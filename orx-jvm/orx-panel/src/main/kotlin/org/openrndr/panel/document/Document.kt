@@ -35,6 +35,36 @@ class Document : AutoCloseable {
     }
     private var dirtySheets = true
 
+    /**
+     * What the media queries of the style sheets are evaluated against; when it changes in a way that changes which
+     * style sheets apply, the styles are computed again
+     */
+    var media: org.openrndr.extra.style.CssMediaEnvironment?
+        get() = layouter.media
+        set(value) {
+            if (value != layouter.media) {
+                val before = layouter.styleSheets.map { it.media }.distinct().filterNotNull()
+                    .associateWith { value != null && org.openrndr.extra.style.cssMediaMatches(it, value) }
+                val previous = layouter.media
+                layouter.media = value
+                val changed = before.any { (query, now) -> previous == null || org.openrndr.extra.style.cssMediaMatches(query, previous) != now }
+                // lengths relative to the window change with its size
+                val resized = previous == null || previous.width != value?.width || previous.height != value.height
+                if (changed || (resized && usesViewportUnits())) dirtySheets = true
+            }
+        }
+
+    /** true when the style sheets or the inline styles have lengths relative to the window, like 50vw */
+    private fun usesViewportUnits(): Boolean {
+        fun relative(value: Any?) = when (value) {
+            is org.openrndr.panel.style.LinearDimension.Relative -> value.unit.startsWith("v")
+            is org.openrndr.panel.style.LinearDimension.Calc -> Regex("v(w|h|min|max)\\b").containsMatchIn(value.expression)
+            else -> false
+        }
+        return layouter.styleSheets.any { s -> s.properties.values.any { relative(it.value) } } ||
+                body.filterAll { e -> e.style?.properties?.values?.any { relative(it.value) } == true }
+    }
+
     /** true when the layout has to be computed again, because elements changed in ways that move or size them */
     var layoutDirty = true
 
@@ -70,3 +100,7 @@ class Document : AutoCloseable {
         body.close()
     }
 }
+
+/** true when [predicate] holds for [this] or one of its descendants */
+private fun org.openrndr.panel.elements.Element.filterAll(predicate: (org.openrndr.panel.elements.Element) -> Boolean): Boolean =
+    predicate(this) || children.any { it.filterAll(predicate) }
