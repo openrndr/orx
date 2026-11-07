@@ -109,10 +109,10 @@ class Toggle : Element(ElementType("toggle")) {
         drawer.popModel()
         val text = panelText ?: return
         val face = text.face(computedStyle)
-        val lineHeight = face.ascent - face.descent + face.lineGap
+        // the label is centered vertically, from its ascent to its descent, as the labels of buttons are
         text.drawLine(
             drawer, this, "label", computedStyle, label, 5.0 + checkBoxSize,
-            layout.screenHeight / 2.0 + lineHeight / 2.0, computedStyle.effectiveColor ?: ColorRGBa.WHITE
+            layout.screenHeight / 2.0 + (face.ascent + face.descent) / 2.0, computedStyle.effectiveColor ?: ColorRGBa.WHITE
         )
     }
 
