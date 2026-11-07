@@ -39,10 +39,12 @@ class Document : AutoCloseable {
     var layoutDirty = true
 
     /**
-     * Computes the styles that can have changed, and the layout when it can have changed
+     * Computes the styles that can have changed, and the layout when it can have changed. [adjustStyles] changes the
+     * computed styles before the layout, like transitions and animations do, and gives true when it changed properties
+     * that lay out.
      * @return true when the layout was computed
      */
-    fun layout(): Boolean {
+    fun layout(adjustStyles: () -> Boolean = { false }): Boolean {
         val sheetsChanged = dirtySheets
         if (dirtySheets) {
             layouter.styleSheets.clear()
@@ -51,7 +53,8 @@ class Document : AutoCloseable {
         }
 
         val difference = layouter.updateStyles(body, forced = sheetsChanged)
-        if (sheetsChanged || difference > 1 || layoutDirty) {
+        val adjusted = adjustStyles()
+        if (sheetsChanged || difference > 1 || layoutDirty || adjusted) {
             // layout can mark the layout dirty again, scrolling is limited to the content
             layoutDirty = false
             layouter.layout(body)

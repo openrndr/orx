@@ -28,6 +28,18 @@ CSS values and shorthands, `!important`, the keywords `inherit`, `initial` and `
 `var()`. Inline styles take CSS too: `style = StyleSheet().apply { css("width: 50%; margin: 4px") }`. In CSS, grid
 lines are counted from 1; the Kotlin builder counts grid tracks from 0.
 
+Attribute selectors select the attributes of elements, like the labels of controls, `button[label="Delete"]`, and
+those that are set with `setAttribute`, like `data-kind`. States are pseudo-classes: `:hover`, `:active`, `:focus`,
+`:focus-visible`, `:focus-within`, `:disabled`, `:selected` and `:checked` for toggles that are on.
+
+Backgrounds take gradients, `background: linear-gradient(135deg, #ff7e5f, #feb47b)`, `radial-gradient()` and their
+repeating variants, and boxes take shadows, `box-shadow: 0 8px 24px rgb(0 0 0 / 0.4)`. `transform`, like
+`translateY(-4px) scale(1.05)`, transforms an element and its descendants around `transform-origin`, without changing
+the layout; it transitions, and finding the element under the pointer follows it. `@keyframes` rules animate elements
+with `animation: pulse 1.2s ease-in-out infinite` and the `animation-*` properties, one animation per element. Elements
+that clip their content clip by the rectangles of the window, also when they are transformed, and an element's own
+background color is drawn over its gradient: `background: <gradient>` makes the color transparent.
+
 The default styles take their colors and sizes from custom properties, a theme: override them in a later style sheet,
 like `:root { --control-background: #3a4150; --control-font-size: 16px }`, see `panelThemeCss`. Style sheets can be read
 from CSS files with `cssFile("ui.css")`, which are read again when they change while the program runs.

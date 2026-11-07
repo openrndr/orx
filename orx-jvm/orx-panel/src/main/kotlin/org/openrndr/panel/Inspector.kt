@@ -148,7 +148,17 @@ class Inspector internal constructor(private val controlManager: ControlManager)
             TimingFunction.LINEAR -> "linear"; TimingFunction.EASE -> "ease"; TimingFunction.EASE_IN -> "ease-in"
             TimingFunction.EASE_OUT -> "ease-out"; TimingFunction.EASE_IN_OUT -> "ease-in-out"; else -> "cubic-bezier(…)"
         }
-        is Enum<*> -> value.name.lowercase()
+        is Transform -> if (value.functions.isEmpty()) "none" else value.functions.joinToString(" ") { f ->
+            "${f.name}(${f.arguments.joinToString(", ") { a -> if (f.name == "rotate" || f.name == "skew") "${cssText(a).removeSuffix("px")}deg" else if (f.name == "scale") cssText(a).removeSuffix("px") else cssText(a) }})"
+        }
+        is BoxShadow -> if (value.shadows.isEmpty()) "none" else value.shadows.joinToString(", ") {
+            "${format(it.offset.x)}px ${format(it.offset.y)}px ${format(it.blur)}px ${format(it.spread)}px ${it.color?.toHexOrCss() ?: "currentcolor"}"
+        }
+        is BackgroundImage.None -> "none"
+        is BackgroundImage.Linear -> "${if (value.repeating) "repeating-" else ""}linear-gradient(${format(value.angle)}deg, ${value.stops.joinToString(", ") { s -> s.color.toHexOrCss() + (s.position?.let { " " + cssText(it) } ?: "") }})"
+        is BackgroundImage.Radial -> "${if (value.repeating) "repeating-" else ""}radial-gradient(${value.stops.joinToString(", ") { s -> s.color.toHexOrCss() + (s.position?.let { " " + cssText(it) } ?: "") }})"
+        is org.openrndr.math.Vector2 -> "${format(value.x * 100.0)}% ${format(value.y * 100.0)}%"
+        is Enum<*> -> value.name.lowercase().replace('_', '-')
         is PropertyValue -> value::class.simpleName?.lowercase() ?: value.toString()
         else -> value.toString()
     }

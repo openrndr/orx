@@ -23,7 +23,8 @@ import kotlin.reflect.KMutableProperty1
 
 class ColorpickerButton : Element(ElementType("colorpicker-button")) {
 
-    var label: String = "OK"
+    /** the label, the attribute `label` */
+    var label: String by attribute("label", "OK")
     var color: ColorRGBa = ColorRGBa(0.5, 0.5, 0.5, linearity = Linearity.SRGB)
         set(value) {
             if (value != field) {

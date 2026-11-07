@@ -16,7 +16,8 @@ import kotlin.math.round
 class Button : Element(ElementType("button")) {
 
     override val handlesKeyboardFocus = true
-    var label: String = "OK"
+    /** the label, the attribute `label` */
+    var label: String by attribute("label", "OK")
 
     class ButtonEvent(val source: Button)
     class Events: AutoCloseable {

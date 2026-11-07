@@ -8,7 +8,26 @@ import org.openrndr.shape.Rectangle
 import kotlin.math.round
 
 /** the most rounded boxes that clip at the same time, deeper ones only clip by their rectangles */
-private const val maxRoundedClips = 4
+internal const val maxRoundedClips = 4
+
+/**
+ * GLSL: `clipCoverage(p)`, the coverage of the point [p] of the screen, in points with y down, by the rounded boxes of
+ * the parameters of [RoundedClips.applyTo]
+ */
+internal val clipCoverageGlsl = """
+    float clipCoverage(vec2 p) {
+        float coverage = 1.0;
+        for (int i = 0; i < p_clipCount; i++) {
+            vec4 box = p_clipBoxes[i];
+            float r = p_clipRadii[i].x;
+            vec2 halfSize = box.zw * 0.5;
+            vec2 q = abs(p - (box.xy + halfSize)) - halfSize + vec2(r);
+            float d = length(max(q, vec2(0.0))) + min(max(q.x, q.y), 0.0) - r;
+            coverage *= clamp(0.5 - d / max(fwidth(d), 1E-4), 0.0, 1.0);
+        }
+        return coverage;
+    }
+""".trimIndent()
 
 /**
  * The rounded boxes that clip what is drawn, of the elements with a border radius that clip their content: a shade
@@ -37,6 +56,16 @@ internal class RoundedClips {
         parameter("boxes", Array(maxRoundedClips) { Vector4.ZERO })
         parameter("radii", Array(maxRoundedClips) { Vector2.ZERO })
         parameter("count", 0)
+    }
+
+    /** sets the rounded boxes as the parameters clipBoxes, clipRadii and clipCount of [style], see [clipCoverageGlsl] */
+    fun applyTo(style: ShadeStyle) {
+        val count = minOf(boxes.size, maxRoundedClips)
+        style.parameter("clipBoxes", Array(maxRoundedClips) { i ->
+            boxes.getOrNull(i)?.takeIf { i < count }?.let { Vector4(it.x, it.y, it.width, it.height) } ?: Vector4.ZERO
+        })
+        style.parameter("clipRadii", Array(maxRoundedClips) { i -> Vector2(if (i < count) radii[i] else 0.0, 0.0) })
+        style.parameter("clipCount", count)
     }
 
     fun push(box: Rectangle, radius: Double) {

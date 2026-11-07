@@ -7,6 +7,7 @@ import org.openrndr.extra.style.CompoundSelector
 import org.openrndr.extra.style.CssDeclaration
 import org.openrndr.extra.style.SelectorTree
 import org.openrndr.extra.style.SimpleSelector
+import org.openrndr.extra.style.parseCssKeyframes
 import org.openrndr.extra.style.parseCssSelector
 import org.openrndr.extra.style.substituteCssVariables
 import org.openrndr.extra.style.parseCssDeclarations
@@ -257,33 +258,8 @@ internal object SVGStyleSheet {
     private val pointerStates = setOf("hover", "active")
 
     /** the @keyframes rules of [css], by name */
-    private fun keyframes(css: String): Map<String, List<Keyframe>> {
-        val result = mutableMapOf<String, List<Keyframe>>()
-        for (match in Regex("@(?:-webkit-)?keyframes\\s+([^\\s{]+)\\s*\\{").findAll(css)) {
-            var depth = 1
-            var i = match.range.last + 1
-            val start = i
-            while (i < css.length && depth > 0) {
-                if (css[i] == '{') depth++ else if (css[i] == '}') depth--
-                i++
-            }
-            val body = css.substring(start, (i - 1).coerceAtLeast(start))
-            val frames = mutableListOf<Keyframe>()
-            for (block in Regex("([^{}]+)\\{([^}]*)}").findAll(body)) {
-                val declarations = parse(block.groupValues[2]).map { it.name to it.value }
-                for (selector in block.groupValues[1].split(",").map { it.trim() }) {
-                    val offset = when {
-                        selector == "from" -> 0.0
-                        selector == "to" -> 1.0
-                        selector.endsWith("%") -> selector.dropLast(1).toDoubleOrNull()?.div(100.0)
-                        else -> null
-                    } ?: continue
-                    frames.add(Keyframe(offset, declarations))
-                }
-            }
-            result[match.groupValues[1].trim('"', '\'')] = frames.sortedBy { it.offset }
-        }
-        return result
+    private fun keyframes(css: String): Map<String, List<Keyframe>> = parseCssKeyframes(css).mapValues { (_, frames) ->
+        frames.map { Keyframe(it.offset, it.declarations.map { d -> d.name to d.value }) }
     }
 
     /**

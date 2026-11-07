@@ -61,6 +61,7 @@ object PanelSelectorTree : SelectorTree<Element> {
     override fun type(node: Element): String = node.type.name
     override fun id(node: Element): String? = node.id
     override fun hasClass(node: Element, name: String): Boolean = ElementClass(name) in node.classes
+    override fun attribute(node: Element, name: String): String? = node.attribute(name)
     override fun hasState(node: Element, name: String): Boolean = ElementPseudoClass(name) in node.pseudoClasses
 }
 

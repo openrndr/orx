@@ -25,7 +25,8 @@ class NumberField : Element(ElementType("number-field")) {
 
     val events = Events()
 
-    var label = "value"
+    /** the label, the attribute `label` */
+    var label: String by attribute("label", "value")
 
     /** the change of the value for every pixel the pointer is dragged */
     var step = 0.01

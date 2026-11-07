@@ -22,10 +22,12 @@ class Textfield : Element(ElementType("textfield")) {
             }
         }
 
+    /** the label, also the attribute `label` */
     var label: String = ""
         set(value) {
             if (field != value) {
                 field = value
+                setAttribute("label", value)
                 requestRedraw()
             }
         }

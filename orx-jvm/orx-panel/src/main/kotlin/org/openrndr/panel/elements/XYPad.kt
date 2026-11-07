@@ -29,7 +29,8 @@ class XYPad : Element(ElementType("xy-pad")) {
     /**
      * The label
      */
-    var label = ""
+    /** the label, the attribute `label` */
+    var label: String by attribute("label", "")
 
     /**
      * The precision of the control, default is 2

@@ -11,6 +11,9 @@ import org.openrndr.panel.style.Display
 import org.openrndr.panel.style.LinearDimension
 import org.openrndr.panel.style.outlineOffset
 import org.openrndr.panel.style.outlineWidth
+import org.openrndr.panel.style.boxShadow
+import org.openrndr.panel.style.transform
+import org.openrndr.panel.style.transformOrigin
 import org.openrndr.panel.style.ScrollBehavior
 import org.openrndr.panel.style.StyleSheet
 import org.openrndr.panel.style.clipsContent
@@ -99,6 +102,20 @@ open class Element(val type: ElementType) : AutoCloseable {
     /** the text of the control manager of the element, null when it is not in one */
     val panelText: org.openrndr.panel.PanelText?
         get() = (root() as? Body)?.controlManager?.text
+
+    private val attributeValues = LinkedHashMap<String, String>()
+
+    /** the attributes of the element, which attribute selectors like `[label="OK"]` select, see [setAttribute] */
+    val attributes: Map<String, String> get() = attributeValues
+
+    /** the value of the attribute [name], null when the element does not have it */
+    fun attribute(name: String): String? = attributeValues[name]
+
+    /** sets the attribute [name] to [value], or removes it when [value] is null; the styles are computed again */
+    fun setAttribute(name: String, value: String?) {
+        val old = if (value == null) attributeValues.remove(name) else attributeValues.put(name, value)
+        if (old != value) invalidateStyle()
+    }
 
     /** the text shown next to the pointer when it rests on the element, null for none */
     var tooltip: String? = null
@@ -224,9 +241,11 @@ open class Element(val type: ElementType) : AutoCloseable {
             val cs = computedStyle
             val outline = ((cs.outlineWidth as? LinearDimension.PX)?.value ?: 0.0) +
                     ((cs.outlineOffset as? LinearDimension.PX)?.value ?: 0.0).coerceAtLeast(0.0)
-            val grow = 12.0 + outline
+            val grow = 12.0 + outline + cs.boxShadow.extent
             val area = screenArea
-            return Rectangle(area.x - grow, area.y - grow, area.width + 2.0 * grow, area.height + 2.0 * grow)
+            val grown = Rectangle(area.x - grow, area.y - grow, area.width + 2.0 * grow, area.height + 2.0 * grow)
+            // transformed, by its own transform and those of its ancestors
+            return screenTransform?.let { transformedBounds(grown, it) } ?: grown
         }
 
     /** the paint area of the element when it was last drawn, null when it was not */
@@ -712,4 +731,56 @@ fun Element.style(function: StyleSheet.() -> Unit): StyleSheet {
     }
     style!!.function()
     return style!!
+}
+
+/**
+ * A property of an element that is the attribute [name], with [initial] as its value until it is set, so that
+ * selectors can select it, like the labels of controls: `button[label="Save"]`
+ */
+fun attribute(name: String, initial: String) = AttributeProperty(name, initial)
+
+class AttributeProperty(val name: String, val initial: String) {
+    operator fun getValue(element: Element, property: kotlin.reflect.KProperty<*>): String = element.attribute(name) ?: initial
+
+    operator fun setValue(element: Element, property: kotlin.reflect.KProperty<*>, value: String) {
+        element.setAttribute(name, value)
+    }
+}
+
+/**
+ * The transform of the element itself, in the coordinates of the window, around its transform origin; null when it
+ * has none
+ */
+val Element.ownTransform: org.openrndr.math.Matrix44?
+    get() {
+        val t = computedStyle.transform
+        if (t.functions.isEmpty()) return null
+        val size = org.openrndr.math.Vector2(layout.screenWidth, layout.screenHeight)
+        val o = org.openrndr.math.Vector2(layout.screenX, layout.screenY) + computedStyle.transformOrigin * size
+        return org.openrndr.math.transforms.transform {
+            translate(o.x, o.y)
+            multiply(t.matrix(size))
+            translate(-o.x, -o.y)
+        }
+    }
+
+/** the transform of the element by its own transform and those of its ancestors, null when there are none */
+val Element.screenTransform: org.openrndr.math.Matrix44?
+    get() {
+        var result: org.openrndr.math.Matrix44? = null
+        for (e in generateSequence(this) { it.parent }) {
+            val t = e.ownTransform ?: continue
+            result = if (result == null) t else t * result
+        }
+        return result
+    }
+
+/** the bounds of [rectangle] transformed by [transform] */
+internal fun transformedBounds(rectangle: Rectangle, transform: org.openrndr.math.Matrix44): Rectangle {
+    val corners = listOf(rectangle.corner, rectangle.corner + org.openrndr.math.Vector2(rectangle.width, 0.0),
+        rectangle.corner + org.openrndr.math.Vector2(0.0, rectangle.height), rectangle.corner + rectangle.dimensions)
+        .map { (transform * it.xy01).xy }
+    val x0 = corners.minOf { it.x }
+    val y0 = corners.minOf { it.y }
+    return Rectangle(x0, y0, corners.maxOf { it.x } - x0, corners.maxOf { it.y } - y0)
 }

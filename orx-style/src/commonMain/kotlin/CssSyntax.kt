@@ -289,3 +289,37 @@ private fun substitute(value: String, variables: (String) -> String?, depth: Int
     result.append(value, position, value.length)
     return result.toString()
 }
+
+/** a keyframe of an @keyframes rule: its [offset] from 0 to 1 and its [declarations] */
+data class CssKeyframe(val offset: Double, val declarations: List<CssDeclaration>)
+
+/** the @keyframes rules of [css], by name, with their keyframes in the order of their offsets */
+fun parseCssKeyframes(css: String): Map<String, List<CssKeyframe>> {
+    val text = css.replace(Regex("/\\*.*?\\*/", RegexOption.DOT_MATCHES_ALL), "")
+    val result = mutableMapOf<String, List<CssKeyframe>>()
+    for (match in Regex("@(?:-webkit-)?keyframes\\s+([^\\s{]+)\\s*\\{").findAll(text)) {
+        var depth = 1
+        var i = match.range.last + 1
+        val start = i
+        while (i < text.length && depth > 0) {
+            if (text[i] == '{') depth++ else if (text[i] == '}') depth--
+            i++
+        }
+        val body = text.substring(start, (i - 1).coerceAtLeast(start))
+        val frames = mutableListOf<CssKeyframe>()
+        for (block in Regex("([^{}]+)\\{([^}]*)}").findAll(body)) {
+            val declarations = parseCssDeclarations(block.groupValues[2])
+            for (selector in block.groupValues[1].split(",").map { it.trim().lowercase() }) {
+                val offset = when {
+                    selector == "from" -> 0.0
+                    selector == "to" -> 1.0
+                    selector.endsWith("%") -> selector.dropLast(1).toDoubleOrNull()?.div(100.0)
+                    else -> null
+                } ?: continue
+                frames.add(CssKeyframe(offset, declarations))
+            }
+        }
+        result[match.groupValues[1].trim('"', '\'')] = frames.sortedBy { it.offset }
+    }
+    return result
+}

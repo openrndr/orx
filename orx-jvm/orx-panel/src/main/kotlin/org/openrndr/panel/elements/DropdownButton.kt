@@ -20,7 +20,8 @@ import kotlin.math.roundToInt
 import kotlin.reflect.KMutableProperty0
 
 class Item : Element(ElementType("item")) {
-    var label: String = ""
+    /** the label, the attribute `label` */
+    var label: String by attribute("label", "")
     var data: Any? = null
 
     class PickedEvent(val source: Item)
@@ -38,7 +39,8 @@ class Item : Element(ElementType("item")) {
 
 class DropdownButton : Element(ElementType("dropdown-button")) {
 
-    var label: String = "OK"
+    /** the label, the attribute `label` */
+    var label: String by attribute("label", "OK")
     var value: Item? = null
 
     class ValueChangedEvent(val source: DropdownButton, val value: Item)

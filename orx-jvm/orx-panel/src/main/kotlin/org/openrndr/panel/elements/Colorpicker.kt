@@ -21,7 +21,8 @@ class Colorpicker : Element {
 
     internal var colorMap: ColorBuffer? = null
 
-    var label: String = "Color"
+    /** the label, the attribute `label` */
+    var label: String by attribute("label", "Color")
     private var dirtyColorMap = true
 
     var saturation = 0.5

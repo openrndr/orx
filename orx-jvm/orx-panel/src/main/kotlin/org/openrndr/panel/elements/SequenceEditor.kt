@@ -64,7 +64,8 @@ class SequenceEditor : SequenceEditorBase("sequence-editor") {
 open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(ElementType(type)) {
 
     internal var baseValue = mutableListOf(0.0)
-    var label = "sequence"
+    /** the label, the attribute `label` */
+    var label: String by attribute("label", "sequence")
     var precision = 2
     internal open var maximumSequenceLength = 16
     internal open var minimumSequenceLength = 1

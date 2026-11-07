@@ -36,7 +36,8 @@ class Slider : Element(ElementType("slider")) {
 
     override val handlesKeyboardFocus = true
 
-    var label = ""
+    /** the label, the attribute `label` */
+    var label: String by attribute("label", "")
     var precision = 3
     var mode = SliderMode.RANGE
 

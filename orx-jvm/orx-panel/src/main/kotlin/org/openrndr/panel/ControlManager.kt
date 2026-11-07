@@ -62,6 +62,8 @@ class ControlManager : Extension {
     val dropInput = DropInput()
 
 
+    private val focusWithin = ElementPseudoClass("focus-within")
+
     inner class KeyboardInput {
         private var lastTarget: Element? = null
         /** true while the focus moves by the keyboard, the focused element is then `focus-visible` */
@@ -71,6 +73,9 @@ class ControlManager : Extension {
             set(value) {
                 if (value !== field) {
                     for (pseudoClass in listOf(active, focus, focusVisible)) field?.pseudoClasses?.remove(pseudoClass)
+                    // the element with the focus and its ancestors are :focus-within
+                    field?.let { old -> generateSequence(old) { it.parent }.forEach { it.pseudoClasses.remove(focusWithin) } }
+                    value?.let { new -> generateSequence(new) { it.parent }.forEach { it.pseudoClasses.add(focusWithin) } }
                     field?.keyboard?.focusLost?.trigger(FocusEvent())
                     value?.keyboard?.focusGained?.trigger(FocusEvent())
                     field = value
@@ -532,8 +537,14 @@ class ControlManager : Extension {
     /** the rounded boxes that clip what is drawn */
     private val roundedClips = RoundedClips()
 
+    /** the shadows and background gradients of elements */
+    private val boxPaints = BoxPaints(roundedClips)
+
     /** the render targets that elements that are not opaque are drawn into */
     private val opacityTargets = HashMap<Element, RenderTarget>()
+
+    /** the elements that are drawn with their transforms */
+    private val drawingTransformed = HashSet<Element>()
 
     /** the elements that are drawn into their render targets */
     private val drawingFaded = HashSet<Element>()
@@ -621,6 +632,18 @@ class ControlManager : Extension {
             return
         }
 
+        // a transform applies to the element and its descendants
+        val own = element.ownTransform
+        if (own != null && element !in drawingTransformed) {
+            drawingTransformed.add(element)
+            drawer.isolated {
+                drawer.model = drawer.model * own
+                drawElement(element, drawer, zIndex, zComp)
+            }
+            drawingTransformed.remove(element)
+            return
+        }
+
         val newZComp =
             element.computedStyle.zIndex.let {
                 when (it) {
@@ -636,6 +659,7 @@ class ControlManager : Extension {
                     drawer.translate(element.screenPosition)
                     if (newZComp == zIndex && paints(element)) {
                         // controls can leave the drawer moved, the outline is drawn where the element is
+                        boxPaints.draw(drawer, element)
                         drawer.isolated { element.draw(drawer) }
                         drawOutline(drawer, element)
                     }
@@ -659,6 +683,7 @@ class ControlManager : Extension {
                     drawer.translate(element.screenPosition)
                     if (newZComp == zIndex && paints(element)) {
                         // controls can leave the drawer moved, the outline is drawn where the element is
+                        boxPaints.draw(drawer, element)
                         drawer.isolated { element.draw(drawer) }
                         drawOutline(drawer, element)
                     }
@@ -759,11 +784,11 @@ class ControlManager : Extension {
                 }
             }
             if (fullRedrawPending) document?.layoutDirty = true
-            val laidOut = document?.layout() ?: false
+            // transitions and animations change the computed styles before the layout
+            val laidOut = document?.layout { styleTransitions.apply(body) } ?: false
             if (laidOut) {
                 body.visit { laidOutHints = widthHint to heightHint }
             }
-            styleTransitions.apply(body)
 
             // the tooltip that shows, hides or moves
             val screen = Rectangle(0.0, 0.0, program.width.toDouble(), program.height.toDouble())
@@ -879,9 +904,11 @@ private val Cursor.cursorType: CursorType
 internal fun elementAt(root: Element, position: Vector2, predicate: (Element) -> Boolean): Element? {
     var found: Element? = null
     var foundZ = Int.MIN_VALUE
-    fun visit(element: Element, clippedBelow: Int?) {
+    fun visit(element: Element, clippedBelow: Int?, outerPosition: Vector2) {
         val cs = element.computedStyle
         if (cs.display == Display.NONE) return
+        // the position in the coordinates of the element before its transform
+        val position = element.ownTransform?.let { (it.inversed * outerPosition.xy01).xy } ?: outerPosition
         var clipped = clippedBelow
         if (cs.clipsContent && position !in element.screenArea) clipped = maxOf(clipped ?: Int.MIN_VALUE, element.layout.zIndex)
         val visible = clipped == null || element.layout.zIndex > clipped
@@ -889,9 +916,9 @@ internal fun elementAt(root: Element, position: Vector2, predicate: (Element) ->
             found = element
             foundZ = element.layout.zIndex
         }
-        element.children.forEach { visit(it, clipped) }
+        element.children.forEach { visit(it, clipped, position) }
     }
-    visit(root, null)
+    visit(root, null, position)
     return found
 }
 

@@ -12,7 +12,8 @@ import org.openrndr.panel.style.*
 
 class EnvelopeButton : Element(ElementType("envelope-button")) {
 
-    var label = "OK"
+    /** the label, the attribute `label` */
+    var label: String by attribute("label", "OK")
     var envelope = Envelope()
     set(value) {
         field = value

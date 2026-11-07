@@ -7,6 +7,7 @@ import org.openrndr.extra.style.ComplexSelector
 import org.openrndr.extra.style.CssDeclaration
 import org.openrndr.extra.style.CssKeyword
 import org.openrndr.extra.style.Specificity
+import org.openrndr.extra.style.parseCssKeyframes
 import org.openrndr.extra.style.parseCssRules
 import org.openrndr.extra.style.parseCssSelectorList
 import org.openrndr.extra.style.CssProperties
@@ -155,7 +156,11 @@ object PanelProperties : CssProperties()
  * The properties of panels, all registered: the properties are registered by the delegates of this file, which are
  * initialized when a function of the file is first called
  */
-internal fun panelProperties(): CssProperties = PanelProperties
+internal fun panelProperties(): CssProperties {
+    // the animation properties are registered by the delegates of their own file
+    ensureAnimationProperties()
+    return PanelProperties
+}
 
 /**
  * A property of panels: [name] is its CSS name, its value is inherited by default when [inheritance] is
@@ -526,6 +531,21 @@ var StyleSheet.outlineColor by PropertyHandler<Color>("outline-color", RESET, Co
 /** the space between the box and its outline */
 var StyleSheet.outlineOffset by PropertyHandler<LinearDimension>("outline-offset", RESET, 1.px, ::parseLength)
 
+/** the image of the background, a gradient, drawn under the element; `background: linear-gradient(…)` sets it */
+var StyleSheet.backgroundImage by PropertyHandler<BackgroundImage>("background-image", RESET, BackgroundImage.None, ::parseBackgroundImage)
+
+/**
+ * The transform of the element and its descendants, like `scale(1.05) rotate(2deg)`, around [transformOrigin]; it does
+ * not change the layout
+ */
+var StyleSheet.transform by PropertyHandler<Transform>("transform", RESET, Transform.NONE, ::parseTransform)
+
+/** the point that the element is transformed around, in fractions of its size, the center by default */
+var StyleSheet.transformOrigin by PropertyHandler<org.openrndr.math.Vector2>("transform-origin", RESET, org.openrndr.math.Vector2(0.5, 0.5), ::parseTransformOrigin)
+
+/** the shadows of the box, drawn under the element, outside its box */
+var StyleSheet.boxShadow by PropertyHandler<BoxShadow>("box-shadow", RESET, BoxShadow.NONE, ::parseBoxShadow)
+
 var StyleSheet.background by PropertyHandler<Color>("background-color", RESET, Color.RGBa(ColorRGBa.BLACK.opacify(0.0)), ::parseColor)
 val StyleSheet.effectiveBackground: ColorRGBa?
     get() = (background as? Color.RGBa)?.color
@@ -653,7 +673,15 @@ private val shorthands = PanelProperties.apply {
     }
     shorthand("border", listOf("border-width", "border-color"), lineShorthand("border"))
     shorthand("outline", listOf("outline-width", "outline-color"), lineShorthand("outline"))
-    shorthand("background", listOf("background-color")) { value -> parseColor(value)?.let { listOf("background-color" to value) } }
+    // a color, a gradient, or both; the color that is not given is transparent
+    shorthand("background", listOf("background-color", "background-image")) { value ->
+        val parts = splitCssWords(value)
+        val image = parts.filter { it.contains("gradient(") }
+        val color = parts.filter { !it.contains("gradient(") }
+        if (image.size > 1 || color.size > 1 || (color.isNotEmpty() && parseColor(color[0]) == null)) null
+        else listOfNotNull(color.firstOrNull()?.let { "background-color" to it } ?: ("background-color" to "transparent"),
+            image.firstOrNull()?.let { "background-image" to it })
+    }
     shorthand("text-align", listOf("text-horizontal-align")) { listOf("text-horizontal-align" to it) }
     shorthand("vertical-align", listOf("text-vertical-align")) { listOf("text-vertical-align" to it) }
     // flex: none, auto, or a grow factor and a shrink factor; a basis is not supported
@@ -732,10 +760,14 @@ fun styleSheet(selector: String, init: StyleSheet.() -> Unit): StyleSheet =
 
 /**
  * The style sheets of the CSS [css]: a sheet for every selector of every rule, with the declarations of the rule, see
- * [StyleSheet.css]. Rules with selectors that are not valid or not supported are left out, as in CSS; at-rules are
- * left out.
+ * [StyleSheet.css]. Rules with selectors that are not valid or not supported are left out, as in CSS; @keyframes rules
+ * are added to [PanelKeyframes], other at-rules are left out.
  */
-fun styleSheets(css: String): List<StyleSheet> = parseCssRules(css).flatMap { rule ->
+fun styleSheets(css: String): List<StyleSheet> = run {
+    // the @keyframes rules of the CSS are added to those of panels
+    for ((name, frames) in parseCssKeyframes(css)) PanelKeyframes[name] = frames
+    parseCssRules(css)
+}.flatMap { rule ->
     val selectors = parseCssSelectorList(rule.selectors.joinToString(", "))
     if (selectors == null) {
         logger.warn { "ignored the rule for '${rule.selectors.joinToString(", ")}', its selector is not valid or not supported" }
@@ -779,7 +811,7 @@ internal fun sameValue(a: Any?, b: Any?): Boolean {
 /** the properties that only change how an element is painted, not its size or position */
 internal val paintProperties = setOf(
     "background-color", "color", "border-color", "border-radius", "outline-width", "outline-color", "outline-offset",
-    "opacity", "cursor", "transition-duration", "transition-delay", "transition-timing-function", "transition-property",
+    "opacity", "cursor", "background-image", "box-shadow", "transform", "transform-origin", "transition-duration", "transition-delay", "transition-timing-function", "transition-property",
     "scrollbar-color", "scrollbar-track-color", "scrollbar-cursor",
     "scrollbar-visibility", "scroll-behavior"
 )

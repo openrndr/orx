@@ -21,8 +21,14 @@ class Toggle : Element(ElementType("toggle")) {
 
     override val handlesKeyboardFocus = true
 
-    var label = ""
+    /** the label, the attribute `label` */
+    var label: String by attribute("label", "")
+    /** the value, a toggle that is on is `:checked` */
     var value = false
+        set(value) {
+            field = value
+            if (value) pseudoClasses.add(ElementPseudoClass("checked")) else pseudoClasses.remove(ElementPseudoClass("checked"))
+        }
 
     class ValueChangedEvent(
         val source: Toggle,
