@@ -1,6 +1,9 @@
 package org.openrndr.panel.elements
 
 import org.openrndr.panel.style.height
+import org.openrndr.panel.style.left
+import org.openrndr.panel.style.position
+import org.openrndr.panel.style.top
 import org.openrndr.panel.style.px
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -28,6 +31,59 @@ class VirtualList<T>(
 
     /** the rows that are built around the rows in view, above and below */
     var overscan = 4
+
+    /**
+     * True when the rows can be dragged to other places in the list, [reordered] tells where to; the list does not
+     * change its items itself
+     */
+    var reorderable = false
+        set(value) {
+            field = value
+            items = items
+        }
+
+    /** the text of the ghost of a dragged row, its item as text by default */
+    var rowLabel: (T) -> String = { it.toString() }
+
+    /** a row is dragged from the first index to the second, the index it has after it is moved */
+    val reordered = org.openrndr.events.Event<Pair<Int, Int>>("virtual-list-reordered")
+
+    /** a dragged row of [list] at [index] */
+    data class RowDrag(val list: VirtualList<*>, val index: Int)
+
+    /** the line that shows where a dragged row goes, null while no row is dragged over the list */
+    private var marker: Div? = null
+
+    /** the index a row dropped at [y], in the coordinates of the window, goes to */
+    private fun insertion(y: Double) = ((y - layout.screenY + scrollTop) / rowHeight + 0.5).toInt().coerceIn(0, items.size)
+
+    init {
+        dnd.accepts = { reorderable && it is RowDrag && it.list === this }
+        dnd.over.listen { event ->
+            val at = insertion(event.position.y)
+            val m = marker ?: Div().apply { classes.add(ElementClass("virtual-marker")) }.also { marker = it }
+            m.style {
+                this.position = org.openrndr.panel.style.Position.ABSOLUTE
+                this.top = (at * rowHeight - scrollTop - 1.0).px
+                this.left = 0.px
+            }
+            range = IntRange.EMPTY
+        }
+        dnd.left.listen { removeMarker() }
+        dnd.dropped.listen { event ->
+            removeMarker()
+            val from = (event.data as RowDrag).index
+            val at = insertion(event.position.y)
+            val to = if (at > from) at - 1 else at
+            if (to != from) reordered.trigger(from to to)
+        }
+    }
+
+    private fun removeMarker() {
+        marker?.let { remove(it); it.close() }
+        marker = null
+        range = IntRange.EMPTY
+    }
 
     private val top = Div().apply { classes.add(ElementClass("virtual-spacer")) }
     private val bottom = Div().apply { classes.add(ElementClass("virtual-spacer")) }
@@ -58,12 +114,16 @@ class VirtualList<T>(
                 classes.add(ElementClass("virtual-row"))
                 style { height = rowHeight.px }
                 row(items[i], i)
+                if (reorderable) {
+                    dnd.data = { RowDrag(this@VirtualList, i) }
+                    dnd.label = { rowLabel(items[i]) }
+                }
             }
         }
         range = wanted
         top.style { height = (if (wanted.isEmpty()) 0.0 else wanted.first * rowHeight).px }
         bottom.style { height = (if (wanted.isEmpty()) items.size * rowHeight else (items.size - 1 - wanted.last) * rowHeight).px }
-        val wantedChildren = listOf(top) + wanted.map { rows[it]!! } + bottom
+        val wantedChildren = listOf(top) + wanted.map { rows[it]!! } + bottom + listOfNotNull(marker)
         if (children != wantedChildren) {
             children.clear()
             for (child in wantedChildren) {

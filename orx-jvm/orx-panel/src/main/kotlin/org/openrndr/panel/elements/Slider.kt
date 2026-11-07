@@ -65,10 +65,30 @@ class Slider : Element(ElementType("slider")) {
 
 
     var range = Range(0.0, 10.0)
+
         set(value) {
             field = value
             this.value = this.value
         }
+
+    /** true for a logarithmic scale, which spreads the decades of a range above 0 evenly, like 0.01 to 100 */
+    var logarithmic = false
+
+    /** the number of intervals between ticks, 0 for none; the value snaps to the ticks when [snapToTicks] is set */
+    var ticks = 0
+
+    var snapToTicks = false
+
+    /** where [v] is along the slider, from 0 to 1 */
+    fun fraction(v: Double): Double = if (logarithmic && range.min > 0.0)
+        Math.log(v.coerceAtLeast(range.min) / range.min) / Math.log(range.max / range.min)
+    else (v - range.min) / range.span
+
+    /** the value at [t] along the slider, from 0 to 1, snapped to the ticks when [snapToTicks] is set */
+    fun valueAt(t: Double): Double {
+        val f = if (snapToTicks && ticks > 0) Math.round(t.coerceIn(0.0, 1.0) * ticks).toDouble() / ticks else t
+        return if (logarithmic && range.min > 0.0) range.min * Math.pow(range.max / range.min, f) else f * range.span + range.min
+    }
     private var realValue = 0.0
 
     fun clean(value: Double): Double {
@@ -100,17 +120,17 @@ class Slider : Element(ElementType("slider")) {
     init {
         mouse.pressed.listen {
             val t = (it.position.x - layout.screenX - margin) / (layout.screenWidth - 2.0 * margin)
-            interactiveValue = t * range.span + range.min
+            interactiveValue = valueAt(t)
             it.cancelPropagation()
         }
         mouse.clicked.listen {
             val t = (it.position.x - layout.screenX - margin) / (layout.screenWidth - 2.0 * margin)
-            interactiveValue = t * range.span + range.min
+            interactiveValue = valueAt(t)
             it.cancelPropagation()
         }
         mouse.dragged.listen {
             val t = (it.position.x - layout.screenX - margin) / (layout.screenWidth - 2.0 * margin)
-            interactiveValue = t * range.span + range.min
+            interactiveValue = valueAt(t)
             it.cancelPropagation()
         }
 
@@ -198,12 +218,8 @@ class Slider : Element(ElementType("slider")) {
             }
 
             if (it.key == KEY_ENTER) {
-                try {
-                    val number = evaluateExpression(keyboardInput, constants = mapOf("_" to value)) ?: value
-                    interactiveValue = number.coerceIn(range.min, range.max)
-                } catch (_: ExpressionException) {
-                    // -- silently (but safely) ignore the exception
-                }
+                // a number or arithmetic, a percentage of the range, see evaluateInput
+                evaluateInput(keyboardInput, value, range.min..range.max)?.let { interactiveValue = it.coerceIn(range.min, range.max) }
                 keyboardInput = ""
                 inputIndex = -1
                 draw.dirty = true
@@ -233,7 +249,17 @@ class Slider : Element(ElementType("slider")) {
         drawer.stroke = ((computedStyle.color as Color.RGBa).color)
         drawer.strokeWeight = (8.0)
         drawer.lineCap = (LineCap.ROUND)
-        val x = ((value - range.min) / range.span) * (layout.screenWidth - 2 * margin)
+        val x = fraction(value) * (layout.screenWidth - 2 * margin)
+        // the ticks, under the track
+        if (ticks > 0 && mode == SliderMode.RANGE) {
+            drawer.stroke = ((computedStyle.color as Color.RGBa).color.opacify(0.5))
+            drawer.strokeWeight = 1.0
+            drawer.lineSegments((0..ticks).flatMap { i ->
+                val tx = margin + i.toDouble() / ticks * (layout.screenWidth - 2 * margin)
+                listOf(Vector2(tx, 8.0), Vector2(tx, 11.0))
+            })
+            drawer.strokeWeight = 8.0
+        }
 
         drawer.stroke = ((computedStyle.color as Color.RGBa).color.opacify(0.25))
         drawer.lineSegment(margin + 0.0, 2.0, margin + layout.screenWidth - 2 * margin, 2.0)

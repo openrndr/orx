@@ -41,7 +41,11 @@ class TreeView<T>(
         /** an item is expanded or collapsed, with its new state */
         val toggled = Event<Pair<T, Boolean>>("tree-toggled")
 
+        /** an item is dragged onto another item, the second, when the tree is [TreeView.draggable] */
+        val dropped = Event<Pair<T, T>>("tree-dropped")
+
         override fun close() {
+            dropped.close()
             selected.close()
             activated.close()
             toggled.close()
@@ -58,6 +62,15 @@ class TreeView<T>(
             field = value
             rebuild()
         }
+
+    /** true when items can be dragged onto other items, see [Events.dropped]; the tree does not change itself */
+    var draggable = false
+
+    /** a dragged item of [tree] */
+    data class ItemDrag(val tree: TreeView<*>, val item: Any?)
+
+    /** true when [item] is [ancestor] or in it */
+    internal fun isIn(item: T, ancestor: T): Boolean = item == ancestor || childrenOf(ancestor).any { isIn(item, it) }
 
     /** the items that are expanded, a change shows the tree again */
     val expanded = org.openrndr.panel.collections.ObservableHashSet<T>()
@@ -143,12 +156,21 @@ class TreeView<T>(
 
 /** a row of a [TreeView]: the arrow of an item with children, and its label, indented by its depth */
 class TreeRow<T> internal constructor(private val tree: TreeView<T>, val item: T, val depth: Int) : Div(ElementType("tree-row")) {
+    override val handlesDoubleClick = true
+
     private val indent get() = 8.0 + depth * 16.0
     private val leaf get() = tree.childrenOf(item).isEmpty()
 
     init {
         setAttribute("data-depth", depth.toString())
         updateSelected()
+        // items are dragged onto other items, not onto themselves or what is in them
+        dnd.data = { if (tree.draggable) TreeView.ItemDrag(tree, item) else null }
+        dnd.label = { tree.label(item) }
+        @Suppress("UNCHECKED_CAST")
+        dnd.accepts = { data -> tree.draggable && data is TreeView.ItemDrag && data.tree === tree && !tree.isIn(item, data.item as T) }
+        @Suppress("UNCHECKED_CAST")
+        dnd.dropped.listen { tree.events.dropped.trigger((it.data as TreeView.ItemDrag).item as T to item) }
         mouse.clicked.listen {
             val local = it.position.x - layout.screenX
             if (!leaf && local in indent - 4.0..indent + 14.0) tree.toggle(item) else tree.selection = item

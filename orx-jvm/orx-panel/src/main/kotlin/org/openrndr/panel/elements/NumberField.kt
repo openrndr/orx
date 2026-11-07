@@ -61,9 +61,9 @@ class NumberField : Element(ElementType("number-field")) {
         requestRedraw()
     }
 
-    /** accepts the typed value when it is a number */
+    /** accepts the typed value when it is a value, a number or arithmetic, see [evaluateInput] */
     fun accept() {
-        editing?.toDoubleOrNull()?.let { value = it }
+        editing?.let { evaluateInput(it, value, range) }?.let { value = it }
         editing = null
         requestRedraw()
     }

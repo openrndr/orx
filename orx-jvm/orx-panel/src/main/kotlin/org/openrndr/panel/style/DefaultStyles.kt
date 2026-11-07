@@ -70,6 +70,24 @@ val defaultStylesCss = """
     data-row:hover { background-color: rgb(255 255 255 / 0.06) }
     data-row:selected { background-color: var(--control-background); color: var(--control-selected-text) }
 
+    /* drag and drop */
+    :dragging { opacity: 0.5 }
+    tree-row:drag-over { background-color: rgb(90 176 255 / 0.25) }
+    .virtual-marker { width: 100%; height: 2px; background-color: var(--focus-color) }
+
+    /* menus, the menu bar and the command palette */
+    menu-separator { width: 100%; height: 9px }
+    context-menu menu-item { width: 100% }
+    menu-bar { display: flex; flex-direction: row; width: 100%; height: auto; background-color: var(--control-sunken-background) }
+    menu-title { padding: 6px 12px; font-size: var(--control-font-size); color: var(--control-text); width: auto }
+    menu-title:hover, menu-title:active { background-color: var(--control-sunken-hover-background); color: var(--control-selected-text) }
+    .command-palette { width: 480px }
+    .command-palette text-input { width: 100%; height: 32px; padding-left: 8px; font-size: var(--control-font-size); background-color: rgb(0 0 0 / 0.25); color: var(--control-selected-text); margin-bottom: 8px }
+    .command-palette virtual-list { height: 300px }
+    command-row { width: 100%; height: 100%; color: var(--control-text); font-size: var(--control-font-size); border-radius: 4px }
+    command-row:hover { background-color: rgb(255 255 255 / 0.06) }
+    command-row:selected { background-color: var(--control-background); color: var(--control-selected-text) }
+
     /* split panes, dialogs and toasts */
     split-pane { display: flex; flex-direction: row; align-items: stretch; width: 100%; height: 100% }
     split-pane[data-vertical] { flex-direction: column }
@@ -179,6 +197,40 @@ val defaultStylesCss = """
         margin: var(--control-margin) 5px; font-size: var(--control-font-size); color: var(--control-text);
     }
     slider:active { color: var(--control-active) }
+
+    range-slider {
+        height: var(--control-height); width: 100%;
+        margin: var(--control-margin) 5px; font-size: var(--control-font-size); color: var(--control-text);
+    }
+    range-slider:active { color: var(--control-active) }
+    knob {
+        width: 64px; height: 92px; margin: var(--control-margin) 5px;
+        font-size: var(--control-font-size); color: var(--control-text);
+    }
+    knob:active { color: var(--control-active) }
+    curve-editor {
+        width: 100%; height: 160px; margin: var(--control-margin) 5px var(--control-margin-wide) 5px;
+        background-color: var(--pad-background); font-size: var(--control-font-size); color: var(--control-text);
+    }
+    gradient-editor { width: 100%; margin: var(--control-margin) 5px var(--control-margin-wide) 5px }
+    gradient-bar { width: 100%; height: 40px; margin-bottom: 6px; color: var(--control-text) }
+    timeline {
+        width: 100%; margin: var(--control-margin) 5px; background-color: var(--control-sunken-background);
+        font-size: var(--control-font-size); color: var(--control-text);
+    }
+
+    /* docks */
+    dock { width: 100%; height: 100% }
+    dock-group { display: flex; flex-direction: column; align-items: stretch; width: 100%; height: 100%; position: relative }
+    dock-tab-bar { display: flex; flex-direction: row; flex-shrink: 0; column-gap: 1px; background-color: var(--control-sunken-background) }
+    dock-tab {
+        padding: 6px 12px; font-size: var(--control-font-size); color: var(--control-text); width: auto;
+        transition-duration: var(--transition);
+    }
+    dock-tab:hover { background-color: var(--control-sunken-hover-background) }
+    dock-tab:selected { background-color: var(--control-background); color: var(--control-selected-text) }
+    dock-content { flex: 1; flex-basis: 0; overflow: scroll; overflow-x: hidden; padding: 5px }
+    dock-zone { z-index: 2; background-color: rgb(90 176 255 / 0.2); border-width: 1px; border-color: var(--focus-color); border-radius: 4px }
 
     envelope-editor {
         height: 60px; width: 100%;

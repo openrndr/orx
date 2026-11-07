@@ -77,10 +77,29 @@ class DataTable<T>(rows: List<T>, val columns: List<Column<T>>, val rowHeight: D
     private val header = Div(ElementType("data-header"))
     private val body: VirtualList<T> = VirtualList(rows, rowHeight) { row, _ -> append(DataRow(this@DataTable, row)) }
 
+    /**
+     * True when the rows can be dragged to other places while they are not sorted; the rows are moved and [moved]
+     * tells it
+     */
+    var reorderable: Boolean
+        get() = body.reorderable
+        set(value) {
+            body.reorderable = value
+        }
+
+    /** a row was dragged from the first index to the second */
+    val moved = Event<Pair<Int, Int>>("table-moved")
+
     init {
         for (column in columns) header.append(DataHeaderCell(this, column))
         append(header)
         append(body)
+        body.rowLabel = { row -> columns.firstOrNull()?.let { it.format(it.value(row)) } ?: row.toString() }
+        body.reordered.listen { (from, to) ->
+            if (sort != null) return@listen
+            this@DataTable.rows = this@DataTable.rows.toMutableList().apply { add(to, removeAt(from)) }
+            moved.trigger(from to to)
+        }
     }
 
     private fun refresh() {

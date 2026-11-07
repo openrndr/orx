@@ -14,7 +14,9 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
 import org.openrndr.math.mix
+import org.openrndr.panel.Command
 import org.openrndr.panel.ControlManager
+import org.openrndr.panel.commandPalette
 import org.openrndr.panel.collections.SelectableList
 import org.openrndr.panel.collections.SelectableMutableList
 import org.openrndr.panel.controlManager
@@ -350,9 +352,38 @@ open class GUI(
         visible = visible
 
         program.extend(panel ?: error("no panel"))
+        registerCommands()
         // loading the persisted values and building the controls are not changes that can be undone
         history.clear()
     }
+
+    //<editor-fold desc="Commands">
+    /** the commands to go to the compartments, by their labels */
+    private val compartmentCommands = mutableMapOf<String, Command>()
+
+    /** the actions of the GUI as commands of the command palette of its panel, see [ControlManager.commandPalette] */
+    private fun registerCommands() {
+        val commands = panel?.commands ?: return
+        compartmentCommands.clear()
+        commands.add("Randomize", group = "GUI") { randomize(0.05) }
+        commands.add("Randomize strongly", group = "GUI") { randomize(0.75) }
+        commands.add("Load parameters…", group = "GUI") { loadParametersDialog() }
+        commands.add("Save parameters…", group = "GUI") { saveParametersDialog() }
+        commands.add("Undo", group = "GUI") { undo() }
+        commands.add("Redo", group = "GUI") { redo() }
+        commands.add("Show or hide", group = "GUI") { visible = !visible }
+        for (binding in bindings.bindings) addCompartmentCommand(binding.label)
+    }
+
+    private fun addCompartmentCommand(label: String) {
+        val commands = panel?.commands ?: return
+        if (label in compartmentCommands) return
+        compartmentCommands[label] = commands.add("Go to $label", group = "GUI") {
+            visible = true
+            selectCompartment(label)
+        }
+    }
+    //</editor-fold>
 
     //<editor-fold desc="Layout building blocks">
     internal fun buildToolbar(parent: Element): Div = parent.div("toolbar") {
@@ -364,48 +395,54 @@ open class GUI(
         }
         button {
             label = "Load"
-            clicked {
-                openFileDialog(
-                    supportedExtensions = listOf("GUI parameters" to listOf("json")),
-                    contextID = "gui.parameters"
-                ) {
-                    loadParameters(it)
-                }
-            }
+            clicked { loadParametersDialog() }
         }
         button {
             label = "Save"
-            clicked {
-                val defaultPath = getDefaultPathForContext(contextID = "gui.parameters")
+            clicked { saveParametersDialog() }
+        }
+    }
 
-                if (defaultPath == null) {
-                    val local = File(".")
-                    val parameters = File(local, defaultSaveFolder)
-                    if (parameters.exists() && parameters.isDirectory) {
-                        setDefaultPathForContext(
-                            contextID = "gui.parameters",
-                            file = parameters
-                        )
-                    } else {
-                        if (parameters.mkdirs()) {
-                            setDefaultPathForContext(
-                                contextID = "gui.parameters",
-                                file = parameters
-                            )
-                        } else {
-                            logger.warn { "Could not create directory ${parameters.absolutePath}" }
-                        }
-                    }
-                }
+    /** asks for a file of parameters and loads it */
+    fun loadParametersDialog() {
+        openFileDialog(
+            supportedExtensions = listOf("GUI parameters" to listOf("json")),
+            contextID = "gui.parameters"
+        ) {
+            loadParameters(it)
+        }
+    }
 
-                saveFileDialog(
-                    suggestedFilename = "parameters.json",
+    /** asks for a file to save the parameters to, in the folder of the parameters at first */
+    fun saveParametersDialog() {
+        val defaultPath = getDefaultPathForContext(contextID = "gui.parameters")
+
+        if (defaultPath == null) {
+            val local = File(".")
+            val parameters = File(local, defaultSaveFolder)
+            if (parameters.exists() && parameters.isDirectory) {
+                setDefaultPathForContext(
                     contextID = "gui.parameters",
-                    supportedExtensions = listOf("GUI parameters" to listOf("json"))
-                ) {
-                    saveParameters(it)
+                    file = parameters
+                )
+            } else {
+                if (parameters.mkdirs()) {
+                    setDefaultPathForContext(
+                        contextID = "gui.parameters",
+                        file = parameters
+                    )
+                } else {
+                    logger.warn { "Could not create directory ${parameters.absolutePath}" }
                 }
             }
+        }
+
+        saveFileDialog(
+            suggestedFilename = "parameters.json",
+            contextID = "gui.parameters",
+            supportedExtensions = listOf("GUI parameters" to listOf("json"))
+        ) {
+            saveParameters(it)
         }
     }
 
@@ -1245,6 +1282,7 @@ open class GUI(
         sidebar?.let {
             addCollapsible(it, binding)
         }
+        addCompartmentCommand(binding.label)
     }
 
     /**
@@ -1278,6 +1316,7 @@ open class GUI(
 
     /** removes the compartment of an object that was removed from [bindings] */
     private fun removed(binding: ParameterBindings.Binding) {
+        compartmentCommands.remove(binding.label)?.let { panel?.commands?.remove(it) }
         compartmentState().keys.removeAll { it == binding.label || it.startsWith("${binding.label}/") }
         compartments.remove(binding.label)
         compartmentSelector?.let { selector ->

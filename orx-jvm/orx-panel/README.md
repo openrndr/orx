@@ -59,6 +59,24 @@ by their shape. `virtualList(items, rowHeight) { item, index -> … }` scrolls l
   other.
 - `controlManager.dialog { … }`: a modal dialog that keeps the keyboard focus, closed by escape, a click outside it, or
   `close()`; `controlManager.toast("Saved")`: a notification that goes away by itself.
+- `dock { panel("Scene") { … }; panel("Layers", DockZone.RIGHT) { … } }`: panels in groups of tabs and in splits.
+  Dragging a tab onto another group docks the panel there, in the middle as a tab or at a side next to the group; a
+  double click on a tab, or a drag out of the window, takes the panel into a window of its own, and closing that window
+  docks it again.
+- `menuBar { menu("File") { item("Save", "mod+s") { … }; separator(); submenu("Export") { … } } }`: menus with
+  submenus and shortcuts. Their items are also commands: `controlManager.commands.add("Name", "mod+shift+n") { … }`
+  adds more, and cmd/ctrl+K opens the command palette, which finds commands by fuzzy search. The GUI of orx-gui adds
+  its actions and a command to go to each of its compartments.
+- `timeline { track("x", ::x, 0.0..1.0) }`: tracks of keyframes that set the properties they are bound to as the
+  playhead moves; the ruler scrubs, keyframes drag, a double click adds one, delete removes it, space plays.
+- `knob { }`, `rangeSlider { }`, and sliders with `logarithmic = true` and `ticks`/`snapToTicks`. Number fields and
+  sliders take arithmetic when a value is typed: `2*pi`, `_ + 1` for the value plus one, `50%` of the range.
+- `curveEditor { }`: the cubic Bézier curve of a CSS timing function; `gradientEditor { }`: the stops of a gradient,
+  dragged, added by a double click and removed by dragging them off, interpolated in sRGB, linear RGB or OKLab.
+
+Rows of a `virtualList` and a `dataTable` with `reorderable = true`, and items of a `treeView` with `draggable = true`
+are moved by dragging them; any element takes part in drag and drop with `dnd.data`, `dnd.accepts` and the events of
+`dnd`, the source is `:dragging` and the target under the pointer `:drag-over`.
 
 Trees and tables build only the rows in view, like `virtualList`. Controls in transformed elements get the positions
 under the pointer in their own coordinates, and changes inside elements of fixed sizes lay out only those elements.

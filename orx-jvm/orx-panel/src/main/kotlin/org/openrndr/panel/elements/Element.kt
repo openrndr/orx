@@ -120,6 +120,9 @@ open class Element(val type: ElementType) : AutoCloseable {
         if (old != value) invalidateStyle()
     }
 
+    /** what the element does in drag and drop, see [DragAndDrop] */
+    val dnd = DragAndDrop()
+
     /** the text shown next to the pointer when it rests on the element, null for none */
     var tooltip: String? = null
 
@@ -806,3 +809,7 @@ fun Element.containsScreenPoint(position: org.openrndr.math.Vector2): Boolean {
     val t = screenTransform ?: return position in screenArea
     return (t.inversed * position.xy01).xy in screenArea
 }
+
+/** [position], a point of the window, in the coordinates of the element before its transforms */
+fun Element.localPosition(position: org.openrndr.math.Vector2): org.openrndr.math.Vector2 =
+    screenTransform?.let { (it.inversed * position.xy01).xy } ?: position

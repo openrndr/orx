@@ -249,6 +249,22 @@ class ControlManager : Extension {
 
         fun click(event: MouseEvent) {
             logger.debug { "click event: $event" }
+            dndCandidate = null
+            // a drag and drop ends with a drop on the target under the pointer
+            dnd?.let { state ->
+                dnd = null
+                state.source.pseudoClasses.remove(ElementPseudoClass("dragging"))
+                state.target?.let {
+                    it.pseudoClasses.remove(ElementPseudoClass("drag-over"))
+                    it.dnd.dropped.trigger(DragEvent(state.data, state.source, it.localPosition(event.position)))
+                }
+                state.source.dnd.ended.trigger(DragEvent(state.data, state.source, state.source.localPosition(event.position)))
+                dragTarget = null
+                clickTarget = null
+                checkForManualRedraw()
+                window.requestDraw()
+                return
+            }
             // a press on a scrollbar is not a click
             if (scrollbarPressed) {
                 scrollbarPressed = false
@@ -296,7 +312,7 @@ class ControlManager : Extension {
             // a press outside the open context menu closes it
             openMenu?.let { menu ->
                 if (menu.parent == null) openMenu = null
-                else if (!menu.containsScreenPoint(event.position)) {
+                else if (!menu.containsMenuPoint(event.position) && !(menuOpener?.containsScreenPoint(event.position) ?: false)) {
                     menu.dismiss()
                     openMenu = null
                 }
@@ -376,6 +392,9 @@ class ControlManager : Extension {
                 dragTarget = null
                 keyboardInput.target = null
             }
+            // the element that is dragged in drag and drop when the pointer moves on
+            dndCandidate = generateSequence(clickTarget) { it.parent }.firstOrNull { it.dnd.data != null }
+                ?: body?.let { root -> elementAt(root, event.position) { it.dnd.data != null } }
 
             checkForManualRedraw()
         }
@@ -397,6 +416,35 @@ class ControlManager : Extension {
                     return
                 }
                 dragging = true
+            }
+            mousePosition = event.position
+            // drag and drop starts from the element that has data, and follows the pointer to the drop targets
+            if (dnd == null) dndCandidate?.let { source ->
+                val data = source.dnd.data?.invoke()
+                if (data != null) {
+                    dnd = DndState(source, data)
+                    source.pseudoClasses.add(ElementPseudoClass("dragging"))
+                }
+                dndCandidate = null
+            }
+            dnd?.let { state ->
+                val target = body?.let { root -> elementAt(root, event.position) { it.dnd.accepts?.invoke(state.data) == true } }
+                if (target !== state.target) {
+                    state.target?.let {
+                        it.pseudoClasses.remove(ElementPseudoClass("drag-over"))
+                        it.dnd.left.trigger(DragEvent(state.data, state.source, it.localPosition(event.position)))
+                    }
+                    target?.let {
+                        it.pseudoClasses.add(ElementPseudoClass("drag-over"))
+                        it.dnd.entered.trigger(DragEvent(state.data, state.source, it.localPosition(event.position)))
+                    }
+                    state.target = target
+                }
+                target?.dnd?.over?.trigger(DragEvent(state.data, state.source, target.localPosition(event.position)))
+                event.cancelPropagation()
+                checkForManualRedraw()
+                window.requestDraw()
+                return
             }
             dragTarget?.let {
                 if (it.isHidden()) {
@@ -503,6 +551,12 @@ class ControlManager : Extension {
      */
     var colorScheme = "dark"
 
+    /**
+     * The commands, with their shortcuts, see [Commands]; mod+k opens the command palette, which searches them, see
+     * [commandPalette]
+     */
+    val commands = Commands().apply { add("Command palette", "mod+k") { commandPalette() } }
+
     /** the dialogs that are open, the last on top, see [dialog] */
     private val dialogs = mutableListOf<Dialog>()
 
@@ -544,6 +598,37 @@ class ControlManager : Extension {
             }
         }
         if (toasts.isNotEmpty() && window.presentationMode == PresentationMode.MANUAL) window.requestDraw()
+    }
+
+    /** a drag and drop: what is dragged, from where, and the drop target under the pointer */
+    private class DndState(val source: Element, val data: Any) {
+        var target: Element? = null
+    }
+
+    private var dnd: DndState? = null
+    private var dndCandidate: Element? = null
+
+    /** true while something is dragged in drag and drop */
+    val draggingAndDropping: Boolean get() = dnd != null
+
+    /** draws the ghost of what is dragged next to the pointer */
+    private fun drawDragGhost(drawer: Drawer) {
+        val state = dnd ?: return
+        val label = state.source.dnd.label?.invoke() ?: state.source.attribute("label")
+            ?: (state.source.children.firstOrNull() as? TextNode)?.text ?: state.source.type.name
+        val style = org.openrndr.panel.style.StyleSheet().apply { fontSize = 13.px }
+        val width = text.width(style, label) + 20.0
+        val p = mousePosition + Vector2(12.0, 8.0)
+        drawer.isolated {
+            drawer.defaults()
+            drawer.ortho(RenderTarget.active)
+            drawer.fill = ColorRGBa.fromHex("#26292f").opacify(0.92)
+            drawer.stroke = ColorRGBa.fromHex("#5ab0ff")
+            drawer.strokeWeight = 1.0
+            drawer.box(Rectangle(p.x, p.y, width, 26.0), 5.0)
+            val face = text.face(style)
+            text.drawLine(drawer, this@ControlManager, "drag ghost", style, label, p.x + 10.0, p.y + 13.0 + (face.ascent + face.descent) / 2.0, ColorRGBa.WHITE.shade(0.9))
+        }
     }
 
     /** the inspector, F12 shows it, see [Inspector] */
@@ -592,6 +677,21 @@ class ControlManager : Extension {
     /** the context menu that is open */
     private var openMenu: ContextMenu? = null
 
+    /** the element that opened the open menu, like the title in a menu bar, a press on it does not close the menu */
+    private var menuOpener: Element? = null
+
+    /** the menu that is open, null when none is */
+    internal val currentMenu: ContextMenu? get() = openMenu?.takeIf { it.parent != null }
+
+    /** shows [menu], opened by [opener], instead of the menu that is open */
+    internal fun showMenu(menu: ContextMenu, opener: Element? = null) {
+        openMenu?.takeIf { it.parent != null }?.dismiss()
+        body?.append(menu)
+        openMenu = menu
+        menuOpener = opener
+        checkForManualRedraw()
+    }
+
     /** the rounded boxes that clip what is drawn */
     private val roundedClips = RoundedClips()
 
@@ -625,6 +725,12 @@ class ControlManager : Extension {
         program.mouse.buttonDown.listen { mouseInput.press(it) }
 
         program.keyboard.keyDown.listen {
+            // the shortcuts of commands, before the keys reach the controls
+            if (commands.handle(it)) {
+                it.cancelPropagation()
+                window.requestDraw()
+                return@listen
+            }
             // F12 shows the inspector, shift-F12 pins the inspected element
             if (it.name == KEYNAME_F12) {
                 if (KeyModifier.SHIFT in it.modifiers) {
@@ -954,8 +1060,9 @@ class ControlManager : Extension {
             drawer.ortho(RenderTarget.active)
             program.drawer.image(renderTarget!!.colorBuffer(0), 0.0, 0.0)
 
-            // the inspector over everything
+            // the inspector and what is dragged over everything
             inspector.draw(drawer, text, document?.layouter, screen)
+            drawDragGhost(drawer)
 
             drawCount++
 
