@@ -10,6 +10,13 @@ Compositions can be loaded from SVG files and then queried or altered via code.
 
 Composition can also be generated from scratch, typically using `drawComposition { ... }`, then saved as an SVG file.
 
+`drawer.composition3d(composition)` draws a composition in 3D: its fills and strokes are tessellated into triangles
+in the xy-plane of the model, which can be placed, turned and seen in perspective with depth testing. Strokes keep
+their joins, caps, miter limits and dashes, translucent strokes cover their area once, text, also text along a
+contour, is drawn as the shapes of its glyphs with its gradients, and strokes that do not scale keep their width on
+the screen. Clip paths and masks clip in perspective too, nodes with filters or blend modes are drawn flat on layers
+that are drawn in the plane, and markers are drawn at the vertices of their shapes.
+
 Read about Composition [in the guide](https://guide.openrndr.org/drawing/drawingSVG.html).
 
 _The code in `orx-composition` was previously found under `openrndr-draw` in the `openrndr` repository._

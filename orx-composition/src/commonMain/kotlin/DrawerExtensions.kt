@@ -352,14 +352,22 @@ internal fun markerVertices(shape: Shape): MarkerVertices {
 }
 
 /** draws the markers of [style] at the vertices of [shape], drawn with [strokeWeight] */
-private fun Drawer.drawMarkers(shape: Shape, style: Style, strokeWeight: Double) {
+private fun Drawer.drawMarkers(shape: Shape, style: Style, strokeWeight: Double) =
+    forEachMarker(shape, style, strokeWeight) { marker -> composition(Composition(marker.content)) }
+
+/**
+ * Calls [draw] for the markers of [shape] with [style], at their vertices, with the model of the drawer set to the
+ * coordinates of their content, and the context of the marker set, so that its content can paint with the fill and
+ * the stroke of the element, see [Paint.ContextFill]
+ */
+internal fun Drawer.forEachMarker(shape: Shape, style: Style, strokeWeight: Double, draw: Drawer.(Marker) -> Unit) {
     val elementModel = model
     val start = style.markerStart.value
     val mid = style.markerMid.value
     val end = style.markerEnd.value
     if (start == null && mid == null && end == null) return
     val vertices = markerVertices(shape)
-    fun draw(marker: Marker, vertex: Pair<Vector2, Double>, isStart: Boolean) {
+    fun place(marker: Marker, vertex: Pair<Vector2, Double>, isStart: Boolean) {
         val (position, angle) = vertex
         val rotation = when (val orient = marker.orient) {
             MarkerOrient.Auto -> angle
@@ -377,15 +385,15 @@ private fun Drawer.drawMarkers(shape: Shape, style: Style, strokeWeight: Double)
             val outerContext = markerContext
             markerContext = MarkerContext(style.fill, style.stroke, elementModel, shape.bounds)
             try {
-                composition(Composition(marker.content))
+                draw(marker)
             } finally {
                 markerContext = outerContext
             }
         }
     }
-    start?.let { m -> vertices.start?.let { draw(m, it, true) } }
-    mid?.let { m -> vertices.mid.forEach { draw(m, it, false) } }
-    end?.let { m -> vertices.end?.let { draw(m, it, false) } }
+    start?.let { m -> vertices.start?.let { place(m, it, true) } }
+    mid?.let { m -> vertices.mid.forEach { place(m, it, false) } }
+    end?.let { m -> vertices.end?.let { place(m, it, false) } }
 }
 
 /**
@@ -400,7 +408,7 @@ private var markerContext: MarkerContext? = null
  * Prepares [paint] for a shape with [bounds], see [preparePaint]: a paint of the context of a marker, [original] is
  * context-fill or context-stroke, is mapped like it is for the element the marker is drawn for
  */
-private fun Drawer.preparePaint(paint: Paint.Server, original: Paint, bounds: Rectangle): Matrix44? {
+internal fun Drawer.preparePaint(paint: Paint.Server, original: Paint, bounds: Rectangle): Matrix44? {
     val context = markerContext
     if (context == null || (original !is Paint.ContextFill && original !is Paint.ContextStroke)) return preparePaint(paint, bounds)
     val transform = preparePaint(paint, context.bounds) ?: return null
@@ -466,7 +474,14 @@ private fun hasCode(style: ShadeStyle): Boolean =
  * @param composition The vector composition containing the root node and associated dimensions.
  *                    It includes the styling and viewport transformation details necessary for rendering.
  */
-fun Drawer.composition(composition: Composition) {
+fun Drawer.composition(composition: Composition) = compositionFrom(composition, composition.root, flat = false)
+
+/**
+ * Draws [start], a node of [composition], see [composition]. A [flat] start is drawn in its own coordinates: without
+ * the viewport of the composition and its own transform, clip path, mask and blend mode, which are applied by the
+ * caller, like [Drawer.composition3d] does for the nodes it draws on layers.
+ */
+internal fun Drawer.compositionFrom(composition: Composition, start: CompositionNode, flat: Boolean) {
     pushModel()
     pushStyle()
 
@@ -474,7 +489,7 @@ fun Drawer.composition(composition: Composition) {
     val baseModel = model
 
     // viewBox transformation
-    model *= composition.calculateViewportTransform()
+    if (!flat) model *= composition.calculateViewportTransform()
 
     // where text without a position continues
     var pen = Vector2.ZERO
@@ -487,11 +502,13 @@ fun Drawer.composition(composition: Composition) {
         if (compositionNode.style.display == Display.None) return
         pushModel()
         pushStyle()
-        model *= compositionNode.style.transform.value
+        // the flat start is drawn in its own coordinates, its own clip, mask and blend mode are applied elsewhere
+        val ownEffects = !(flat && compositionNode === start)
+        if (ownEffects) model *= compositionNode.style.transform.value
 
         // a clip path is in the coordinates of the node, the content of the node is drawn through its mask
         val outerClip = activeClip
-        val clipPath = compositionNode.style.clipPath
+        val clipPath = if (ownEffects) compositionNode.style.clipPath else ClipPath.None
         if (clipPath is ClipPath.Shapes) {
             if (!pushClip(clipPath, compositionNode, clipDepth)) {
                 popModel()
@@ -506,7 +523,8 @@ fun Drawer.composition(composition: Composition) {
 
         // the opacity of a node on a layer of its own is applied when the layer is composited
         val ownOpacity = (compositionNode.style.opacity as? Numeric.Rational)?.value ?: 1.0
-        val layered = needsLayer(compositionNode, ownOpacity)
+        val layered = if (ownEffects) needsLayer(compositionNode, ownOpacity) else
+            compositionNode.style.filter.value.isNotEmpty() || needsLayerForOpacity(compositionNode, ownOpacity)
         val opacity = if (layered) 1.0 else ownOpacity
 
         fun content() { when (compositionNode) {
@@ -680,7 +698,7 @@ fun Drawer.composition(composition: Composition) {
             val filtered = compositionNode.style.filter.value.isNotEmpty()
             val clip = if (filtered) activeClip?.mask else null
             if (filtered) activeClip = null
-            drawLayer(compositionNode, ownOpacity, clip) { content() }
+            drawLayer(compositionNode, ownOpacity, clip, ownEffects = ownEffects) { content() }
         } else {
             content()
         }
@@ -694,10 +712,10 @@ fun Drawer.composition(composition: Composition) {
     activeClip = null
     try {
         // nodes are blended with what is drawn under them in the composition, which is drawn on a layer of its own
-        if (usesBlendModes(composition.root)) {
-            drawLayer(GroupNode(), 1.0, bounded = false) { node(composition.root) }
+        if (!flat && usesBlendModes(composition.root)) {
+            drawLayer(GroupNode(), 1.0, bounded = false) { node(start) }
         } else {
-            node(composition.root)
+            node(start)
         }
     } finally {
         activeClip = enclosingClip

@@ -91,7 +91,7 @@ internal object CompositionText {
     }
 
     /** the paint servers of the fill and stroke of [style], null when neither is one */
-    private fun servers(unresolved: Style): Pair<Paint.Server?, Paint.Server?>? {
+    internal fun servers(unresolved: Style): Pair<Paint.Server?, Paint.Server?>? {
         val style = resolveContextPaints(unresolved)
         val fill = style.fill as? Paint.Server
         val stroke = style.stroke as? Paint.Server
@@ -583,6 +583,47 @@ internal object CompositionText {
     }
 
     /**
+     * The glyphs of [node] from [pen] as they are placed, null for text along a contour, see [GlyphGroup]: one group
+     * with the style of the node, the bounds of the glyphs, and the position after the text. For drawing text as
+     * shapes, like [org.openrndr.draw.Drawer.composition3d].
+     */
+    internal fun glyphGroups(node: TextNode, pen: Vector2): Triple<List<GlyphGroup>, Rectangle?, Vector2>? {
+        if (node.contour != null) return null
+        val layout = layoutRun(node, pen) ?: return null
+        val bounds = layout.glyphs.flatMap { cell(it, layout.outline(it)) }.takeIf { it.isNotEmpty() }?.bounds
+        val outlines = layout.glyphs.filter { it.style.fill != null || it.style.stroke != null }.map { glyph ->
+            glyphOutline(glyph, layout.outline(glyph))
+        }
+        return Triple(listOf(GlyphGroup(node.effectiveStyle, outlines)), bounds, layout.end)
+    }
+
+    /**
+     * The glyphs of [runs] along their contour from [pen], see [GlyphGroup]: a group for every set of runs that share
+     * paints, the bounds of all glyphs, and the position after the text, see [drawOnContour]
+     */
+    internal fun contourGlyphGroups(runs: List<TextNode>, pen: Vector2): Triple<List<GlyphGroup>, Rectangle?, Vector2>? {
+        val all = layoutOnContour(runs, pen) ?: return null
+        val bounds = all.glyphs.flatMap { cell(it.glyph, it.transform) }.takeIf { it.isNotEmpty() }?.bounds
+        val groups = runs.groupBy { servers(it.effectiveStyle) }
+        fun shown(run: TextNode) = run.effectiveStyle.visibility.value
+        val anyHidden = runs.any { !shown(it) }
+        val result = groups.values.mapNotNull { groupRuns ->
+            val layout = if (groups.size == 1 && !anyHidden) all else
+                layoutOnContour(runs, pen) { it in groupRuns && shown(it) } ?: return@mapNotNull null
+            val outlines = layout.glyphs.filter { it.glyph.style.fill != null || it.glyph.style.stroke != null }.map {
+                glyphOutline(it.glyph, it.transform)
+            }
+            GlyphGroup(groupRuns.first().effectiveStyle, outlines)
+        }
+        return Triple(result, bounds, Vector2(all.end, pen.y))
+    }
+
+    private fun glyphOutline(glyph: TypesetGlyph, transform: Matrix44) =
+        GlyphOutline(Triple(glyph.face, glyph.glyphIndex, transform), transform, glyph.style.fill, glyph.style.stroke, glyph.style.strokeWeight) {
+            glyph.face.glyphForIndex(glyph.glyphIndex).shape().transform(transform)
+        }
+
+    /**
      * Draws the lines of the text decoration of [style] along the run of [node] laid out as [layout], in the fill
      * and stroke of the text
      */
@@ -760,3 +801,12 @@ internal object CompositionText {
         return if (points.isEmpty()) null else points.bounds
     }
 }
+
+/** glyphs of text that share the paints of [style], see [CompositionText.glyphGroups] */
+internal class GlyphGroup(val style: Style, val outlines: List<GlyphOutline>)
+
+/** a glyph of text: [key] identifies it and its place, [shape] makes its outline, see [CompositionText.glyphGroups] */
+internal class GlyphOutline(
+    val key: Any, val transform: Matrix44, val fill: ColorRGBa?, val stroke: ColorRGBa?, val strokeWeight: Double?,
+    val shape: () -> org.openrndr.shape.Shape
+)

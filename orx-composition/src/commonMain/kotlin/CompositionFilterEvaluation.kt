@@ -96,6 +96,42 @@ private val blurPass by lazy {
     """.trimIndent())
 }
 
+/**
+ * Averages [p_factor] texels of the input along [p_axis], 0 for x and 1 for y, into every texel of a target that is
+ * smaller along that axis, for wide blurs; two of them, along x and along y, average boxes of [p_factor] by [p_factor]
+ */
+private val downsamplePass by lazy {
+    pass("""
+        vec2 size = vec2(textureSize(p_input0, 0));
+        vec2 texel = 1.0 / size;
+        vec2 along = p_axis == 0 ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+        // the first of the texels that this texel averages, along the axis; across it, the texel itself
+        vec2 p = uv * size;
+        vec2 first = mix(floor(p) + 0.5, floor(p / float(p_factor)) * float(p_factor) + 0.5, along);
+        vec4 acc = vec4(0.0);
+        for (int i = 0; i < p_factor; i++) {
+            acc += f_get(p_input0, (first + along * float(i)) * texel);
+        }
+        x_fill = f_out(acc / float(p_factor));
+    """.trimIndent())
+}
+
+/** reads the input with its filter, which is linear for the smaller targets of wide blurs */
+private val upsamplePass by lazy { pass("x_fill = f_out(f_get(p_input0, uv));") }
+
+/** the smaller targets of wide blurs, by size, filtered linearly so that they are scaled up smoothly */
+private val smallBlurBuffers = mutableMapOf<Triple<Int, Int, Int>, ColorBuffer>()
+
+private fun smallBlurBuffer(width: Int, height: Int, index: Int): ColorBuffer =
+    smallBlurBuffers.getOrPut(Triple(width, height, index)) {
+        if (smallBlurBuffers.size >= 24) smallBlurBuffers.remove(smallBlurBuffers.keys.first())?.destroy()
+        colorBuffer(width, height, 1.0, ColorFormat.RGBa, ColorType.FLOAT16).also {
+            it.filter(MinifyingFilter.LINEAR, MagnifyingFilter.LINEAR)
+            it.wrapU = org.openrndr.draw.WrapMode.CLAMP_TO_EDGE
+            it.wrapV = org.openrndr.draw.WrapMode.CLAMP_TO_EDGE
+        }
+    }
+
 private val offsetPass by lazy { pass("x_fill = f_out(f_get(p_input0, uv - p_shift));") }
 
 private val floodPass by lazy { pass("x_fill = f_out(vec4(p_color.rgb * p_color.a, p_color.a));") }
@@ -379,10 +415,11 @@ internal fun applyFilters(effects: List<FilterEffect>, source: ColorBuffer, spac
  * Runs a pass on [inputs] into [target]; with a [box] only its pixels are written, and only its pixels of the inputs
  * are read
  */
-private fun ShadeStyleFilter.run(inputs: List<ColorBuffer>, target: ColorBuffer, srgb: Boolean, box: PixelBox?) {
+private fun ShadeStyleFilter.run(inputs: List<ColorBuffer>, target: ColorBuffer, srgb: Boolean, box: PixelBox?, scissor: Boolean = true) {
     parameter("srgb", if (srgb) 1 else 0)
     parameter("valid", box?.uvBounds ?: Vector4(0.0, 0.0, 1.0, 1.0))
-    apply(inputs.toTypedArray(), target, box?.clip)
+    // the scissor is in the points of a target of the size of the layer, smaller targets are written everywhere
+    apply(inputs.toTypedArray(), target, if (scissor) box?.clip else null)
 }
 
 private fun applyEffect(effect: FilterEffect, source: ColorBuffer, space: FilterSpace, next: () -> ColorBuffer): ColorBuffer {
@@ -445,6 +482,39 @@ private fun applyEffect(effect: FilterEffect, source: ColorBuffer, space: Filter
         val subregion = resolve(primitive.subregion, defaultRegion)
 
         fun blur(input: ColorBuffer, stdDeviation: Vector2): ColorBuffer {
+            // a blur that is wide in pixels is blurred at a lower resolution, where its deviation is about 8 pixels,
+            // and scaled up: wide blurs have no detail that the lower resolution loses, and their cost does not grow
+            // with the zoom
+            val widest = maxOf(stdDeviation.x * space.pixels(Vector2.UNIT_X), stdDeviation.y * space.pixels(Vector2.UNIT_Y))
+            if (widest > 16.0) {
+                val factor = ceil(widest / 8.0).toInt().coerceAtMost(64)
+                val w = (input.effectiveWidth + factor - 1) / factor
+                val h = (input.effectiveHeight + factor - 1) / factor
+                // the input is made smaller along x, then along y
+                val narrow = smallBlurBuffer(w, input.effectiveHeight, 3)
+                val small = smallBlurBuffer(w, h, 0)
+                downsamplePass.parameter("factor", factor)
+                downsamplePass.parameter("axis", 0)
+                downsamplePass.run(listOf(input), narrow, srgb, box, scissor = false)
+                downsamplePass.parameter("axis", 1)
+                downsamplePass.run(listOf(narrow), small, srgb, box, scissor = false)
+                var current = small
+                for ((axis, sigma) in listOf(Vector2.UNIT_X to stdDeviation.x, Vector2.UNIT_Y to stdDeviation.y)) {
+                    val pixels = space.pixels(axis)
+                    val sigmaPixels = sigma * pixels / factor
+                    if (sigmaPixels <= 0.0 || pixels <= 0.0) continue
+                    val out = smallBlurBuffer(w, h, if (current === small) 1 else 0).let { if (it === current) smallBlurBuffer(w, h, 2) else it }
+                    blurPass.parameter("step", space.uv(axis) / pixels * factor.toDouble())
+                    blurPass.parameter("sigma", sigmaPixels)
+                    blurPass.parameter("radius", min(ceil(sigmaPixels * 3.0).toInt(), 512))
+                    blurPass.run(listOf(current), out, srgb, box, scissor = false)
+                    current = out
+                }
+                // the blurred texels are scaled up as they are stored, without converting their color space
+                val out = next()
+                upsamplePass.run(listOf(current), out, false, box)
+                return out
+            }
             var current = input
             for ((axis, sigma) in listOf(Vector2.UNIT_X to stdDeviation.x, Vector2.UNIT_Y to stdDeviation.y)) {
                 val pixels = space.pixels(axis)

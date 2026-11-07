@@ -185,11 +185,39 @@ private class LayerStyle : ShadeStyle() {
 
 private val layerStyle by lazy { LayerStyle() }
 
+/**
+ * The style that composites a layer, see [composite], for [Drawer.composition3d], which draws the layer itself: the
+ * color of the layer is x_fill when the style runs; its alpha is multiplied by [opacity] and the coverage of [clip],
+ * and it is blended with [backdrop] by [mode]
+ */
+internal fun layerCompositeStyle(opacity: Double, mode: MixBlendMode, backdrop: ColorBuffer?, clip: ColorBuffer?): ShadeStyle {
+    layerStyle.set(opacity, null, MaskType.LUMINANCE, mode, backdrop, clip)
+    return layerStyle
+}
+
+/** a copy of the color of the active target, to blend with, null when it has no color buffer */
+internal fun copyBackdrop(): ColorBuffer? {
+    val target = (RenderTarget.active.colorAttachments.firstOrNull() as? ColorBufferAttachment)?.colorBuffer ?: return null
+    val buffer = backdropBuffer?.takeIf {
+        it.width == target.width && it.height == target.height && it.contentScale == target.contentScale &&
+                it.type == target.type && it.format == target.format
+    } ?: colorBuffer(target.width, target.height, target.contentScale, target.format, target.type)
+        .also { backdropBuffer?.destroy(); backdropBuffer = it }
+    target.copyTo(buffer)
+    return buffer
+}
+
 /** true when [node], drawn with [opacity], is drawn on a layer of its own */
 internal fun needsLayer(node: CompositionNode, opacity: Double): Boolean {
     val style = node.style
     if (style.mask !is MaskReference.None || style.mixBlendMode != MixBlendMode.NORMAL) return true
     if (style.filter.value.isNotEmpty()) return true
+    return needsLayerForOpacity(node, opacity)
+}
+
+/** true when [node] needs a layer for its [opacity] or its isolation, see [needsLayer] */
+internal fun needsLayerForOpacity(node: CompositionNode, opacity: Double): Boolean {
+    val style = node.style
     return when (node) {
         is GroupNode -> opacity < 1.0 || style.isolation == Isolation.ISOLATE
         // the stroke and the markers of a translucent shape do not show the fill under them
@@ -210,7 +238,10 @@ internal fun usesBlendModes(node: CompositionNode): Boolean =
  * layer is composited only where the node draws.
  */
 internal fun Drawer.drawLayer(
-    node: CompositionNode, opacity: Double, clip: ColorBuffer? = null, bounded: Boolean = true, content: () -> Unit
+    node: CompositionNode, opacity: Double, clip: ColorBuffer? = null, bounded: Boolean = true,
+    /** false when the mask and the blend mode of the node are applied elsewhere, like by [Drawer.composition3d] */
+    ownEffects: Boolean = true,
+    content: () -> Unit
 ) {
     val active = RenderTarget.active
     val toClip = projection * view * model
@@ -234,9 +265,9 @@ internal fun Drawer.drawLayer(
             ) { group, transform, target -> renderInto(group, transform, target) }
             applyFilters(filters, drawn, space, layerDepth - 1)
         }
-        val mask = node.style.mask.value
+        val mask = if (ownEffects) node.style.mask.value else null
         val maskBuffer = mask?.let { renderMask(it, node, active) ?: return }
-        val mode = node.style.mixBlendMode
+        val mode = if (ownEffects) node.style.mixBlendMode else MixBlendMode.NORMAL
         val backdrop = if (mode == MixBlendMode.NORMAL) null else {
             // the backdrop is a copy of the target, a texture can not be read while it is drawn to
             val target = (active.colorAttachments.firstOrNull() as? ColorBufferAttachment)?.colorBuffer

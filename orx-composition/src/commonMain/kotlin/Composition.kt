@@ -174,6 +174,10 @@ class ImageNode(
  * a [CompositionNode] that holds a single [Shape]
  */
 class ShapeNode(var shape: Shape) : CompositionNode() {
+    /** the triangles of the fill and the stroke, see [org.openrndr.draw.Drawer.composition3d] */
+    internal var fillTessellation: NodeTessellation? = null
+    internal var strokeTessellation: NodeTessellation? = null
+
     override val bounds: Rectangle
         get() {
             val t = effectiveTransform
@@ -269,6 +273,9 @@ data class TextNode(
     var dy: Double = 0.0,
     var rotate: Double = 0.0
 ) : CompositionNode() {
+    /** the triangles of the glyphs, see [org.openrndr.draw.Drawer.composition3d] */
+    internal var tessellation: TextTessellation? = null
+
     // TODO: This should not be Rectangle.EMPTY
     override val bounds: Rectangle
         get() = Rectangle.EMPTY
