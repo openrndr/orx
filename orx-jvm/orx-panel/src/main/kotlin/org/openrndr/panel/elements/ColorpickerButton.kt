@@ -13,7 +13,6 @@ import org.openrndr.draw.Drawer
 import org.openrndr.draw.LineCap
 
 import org.openrndr.events.Event
-import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.panel.binding.Binding0
 import org.openrndr.panel.binding.Binding1
 import org.openrndr.panel.style.*
@@ -234,23 +233,12 @@ class ColorpickerButton : Element(ElementType("colorpicker-button")) {
         drawer.strokeWeight = 0.0
         drawer.box(Rectangle(0.0, 0.0, screenArea.width, screenArea.height), cornerRadius)
 
-        (root() as? Body)?.controlManager?.fontManager?.let {
-            val font = it.font(computedStyle)
-
-            val writer = TextWriter(drawer)
-            drawer.fontMap = (font)
-
-            val text = "$label"
-
-            val textWidth = writer.textWidth(text)
-            val textHeight = font.ascenderLength
-
-            val offset = Math.round((layout.screenWidth - textWidth) / 2.0)
-            val yOffset = Math.round((layout.screenHeight / 2) + textHeight / 2.0) - 2.0
-
-            drawer.fill = (computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE
-            drawer.fontMap = font
-            drawer.text(text, 0.0 + offset, 0.0 + yOffset)
+        panelText?.let { text ->
+            val face = text.face(computedStyle)
+            val offset = Math.round((layout.screenWidth - text.width(computedStyle, label)) / 2.0).toDouble()
+            val baseline = Math.round((layout.screenHeight / 2) + face.ascent / 2.0) - 2.0
+            text.drawLine(drawer, this, "label", computedStyle, label, offset, baseline,
+                (computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE)
             drawer.stroke = color
             drawer.pushStyle()
             drawer.strokeWeight = 4.0

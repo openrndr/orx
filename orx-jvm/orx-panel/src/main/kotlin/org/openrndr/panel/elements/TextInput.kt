@@ -8,8 +8,6 @@ import org.openrndr.draw.Drawer
 import org.openrndr.draw.StrokeAlignment
 import org.openrndr.draw.isolated
 import org.openrndr.events.Event
-import org.openrndr.extra.textwriter.Cursor
-import org.openrndr.extra.textwriter.writer
 import org.openrndr.panel.binding.Binding0
 import org.openrndr.panel.binding.Binding1
 import org.openrndr.panel.style.Color
@@ -26,10 +24,10 @@ import kotlin.reflect.KMutableProperty1
 
 class TextInput : Element(ElementType("text-input")) {
 
-    private var glyphRectangles: MutableList<Pair<Rectangle, Rectangle>> = mutableListOf()
+    /** the x of the caret positions as the text was last drawn, before it is scrolled */
+    private var caretPositions = DoubleArray(0)
     private var ivalue: String = ""
     private var scroll = 0.0
-    private var firstDraw = true
 
     override val handlesDoubleClick = true
 
@@ -73,8 +71,8 @@ class TextInput : Element(ElementType("text-input")) {
 
     /** the caret position nearest to [x] on the screen: the index of the character before it, -1 before the first */
     private fun caretAt(x: Double): Int? {
-        if (glyphRectangles.isEmpty()) return null
-        val boundaries = glyphRectangles.map { it.second.x } + glyphRectangles.last().second.let { it.x + it.width }
+        if (caretPositions.isEmpty()) return null
+        val boundaries = caretPositions.toList()
         // the glyphs are drawn moved by the horizontal scroll of the text
         return (boundaries.withIndex().minBy { abs(x - layout.screenX - scroll - it.value) }.index - 1).coerceAtLeast(-1)
     }
@@ -272,85 +270,52 @@ class TextInput : Element(ElementType("text-input")) {
         drawer.strokeAlignment = StrokeAlignment.INSIDE
         drawer.box(layout.boundsAtOrigin, cornerRadius)
 
-        (root() as? Body)?.controlManager?.fontManager?.let { fm ->
-            val font = fm.font(computedStyle)
-            val textHeight = font.ascenderLength
-            val yOffset = ((layout.screenHeight / 2) + textHeight / 2.0 - 2.0).round(0)
-            val xOffset = layout.contentBoundsAtOrigin.x
-            val baseY = yOffset - font.descenderLength
-            var caretX: Double? = null
-            val isInputActive = ElementPseudoClass("active") in pseudoClasses
+        val panel = panelText ?: return
+        val face = panel.face(computedStyle)
+        val baseline = ((layout.screenHeight / 2) + face.ascent / 2.0 - 2.0).round(0)
+        val xOffset = layout.contentBoundsAtOrigin.x
+        val isInputActive = ElementPseudoClass("active") in pseudoClasses
 
-            //drawer.rectangle(layout.contentBoundsAtOrigin)
-            // within the clipping of the elements around it
-            drawer.drawStyle.clip = drawer.drawStyle.clip?.let { intersection(it, layout.contentBounds) ?: Rectangle(0.0, 0.0, 0.0, 0.0) }
-                ?: layout.contentBounds
-            drawer.fontMap = font
-            drawer.fill = ((computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE)
+        // within the clipping of the elements around it
+        drawer.drawStyle.clip = drawer.drawStyle.clip?.let { intersection(it, layout.contentBounds) ?: Rectangle(0.0, 0.0, 0.0, 0.0) }
+            ?: layout.contentBounds
 
-            writer(drawer) {
-                if (isInputActive || firstDraw) {
-                    cursor = Cursor(xOffset, yOffset)
-                    text(value, visible = false)
-                    // a copy, the writer refills its list when the text is drawn moved by the scroll
-                    glyphRectangles = glyphOutput.rectangles.toMutableList()
+        // the carets of the shaped text, they place the caret, the selection and clicks
+        caretPositions = panel.carets(computedStyle, value).let { carets -> DoubleArray(carets.size) { xOffset + carets[it] } }
+        val caretX = caretPositions[(selectionEnd + 1).coerceIn(0, value.length)]
 
-                    if (glyphRectangles.isEmpty()) {
-                        caretX = xOffset
-                        scroll = 2.0
-                    } else {
-                        caretX = if (selectionEnd == glyphRectangles.lastIndex)
-                            glyphRectangles.last().second.let { it.x + it.width }
-                        else
-                            glyphRectangles[selectionEnd + 1].second.x
-
-                        val padding = textWidth("m") * 1.0
-
-                        // Update scroll only when necessary
-                        if (caretX + scroll > layout.boundsAtOrigin.width - padding) {
-                            scroll = layout.boundsAtOrigin.width - padding - caretX
-                        }
-                        if (caretX + scroll < layout.boundsAtOrigin.x + padding) {
-                            scroll = (layout.boundsAtOrigin.x + padding + caretX).coerceAtMost(2.0)
-                        }
-                    }
-
-                    if (selectionStart != selectionEnd) {
-                        val a = min(selectionStart, selectionEnd) + 1
-                        val b = max(selectionStart, selectionEnd) + 1
-                        val selectionBounds = glyphRectangles.subList(a, b).map { it.second }.bounds
-                        val selectionRect = Rectangle(
-                            selectionBounds.x + scroll, baseY,
-                            selectionBounds.width, font.descenderLength - font.ascenderLength
-                        )
-                        drawer.isolated {
-                            stroke = null
-                            fill = computedStyle.effectiveBackground?.let {
-                                if (it.alpha > 0.0) {
-                                    ColorRGBa(1.0 - it.r, 1.0 - it.g, 1.0 - it.b, it.alpha)
-                                } else ColorRGBa.BLACK
-                            } ?: ColorRGBa.BLACK
-                            rectangle(selectionRect)
-                        }
-                    }
+        if (isInputActive) {
+            if (value.isEmpty()) {
+                scroll = 2.0
+            } else {
+                // the text scrolls to keep the caret in view
+                val padding = panel.width(computedStyle, "m")
+                if (caretX + scroll > layout.boundsAtOrigin.width - padding) {
+                    scroll = layout.boundsAtOrigin.width - padding - caretX
                 }
-
-                cursor = Cursor(xOffset + scroll, yOffset)
-                text(value)
-            }
-
-            if (isInputActive) {
-                caretX?.let { x ->
-                    drawer.stroke = ColorRGBa.WHITE
-                    drawer.lineSegment(x + scroll, baseY, x + scroll, baseY - textHeight)
+                if (caretX + scroll < layout.boundsAtOrigin.x + padding) {
+                    scroll = (layout.boundsAtOrigin.x + padding + caretX).coerceAtMost(2.0)
                 }
             }
-
-            drawer.drawStyle.clip = null
+            if (selectionStart != selectionEnd) {
+                val a = (min(selectionStart, selectionEnd) + 1).coerceIn(0, value.length)
+                val b = (max(selectionStart, selectionEnd) + 1).coerceIn(0, value.length)
+                drawer.isolated {
+                    stroke = null
+                    fill = computedStyle.effectiveBackground?.let {
+                        if (it.alpha > 0.0) ColorRGBa(1.0 - it.r, 1.0 - it.g, 1.0 - it.b, it.alpha) else ColorRGBa.BLACK
+                    } ?: ColorRGBa.BLACK
+                    rectangle(caretPositions[a] + scroll, baseline - face.ascent, caretPositions[b] - caretPositions[a], face.ascent - face.descent)
+                }
+            }
         }
-        if (firstDraw) {
-            firstDraw = false
-            requestRedraw()
+
+        panel.drawLine(drawer, this, "value", computedStyle, value, xOffset + scroll, baseline,
+            (computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE)
+
+        if (isInputActive) {
+            drawer.stroke = ColorRGBa.WHITE
+            drawer.lineSegment(caretX + scroll, baseline - face.descent, caretX + scroll, baseline - face.descent - face.ascent)
         }
     }
 

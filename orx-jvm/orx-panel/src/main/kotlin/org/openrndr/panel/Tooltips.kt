@@ -3,7 +3,6 @@ package org.openrndr.panel
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.isolated
-import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.math.Vector2
 import org.openrndr.panel.elements.Element
 import org.openrndr.panel.elements.box
@@ -49,15 +48,16 @@ internal class Tooltips(private val clock: () -> Double = { System.nanoTime() / 
     val waiting: Boolean get() = element?.tooltip != null && clock() - since < tooltipDelay
 
     /** draws the tooltip below and right of the pointer, inside [bounds] */
-    fun draw(drawer: Drawer, fontManager: FontManager, bounds: Rectangle) {
+    private val style = StyleSheet().apply { fontSize = 13.px }
+
+    fun draw(drawer: Drawer, text: PanelText, bounds: Rectangle) {
         if (!showing) return
-        val text = element?.tooltip ?: return
-        val font = fontManager.font(StyleSheet().apply { fontSize = 13.px })
-        val writer = TextWriter(null)
-        writer.drawStyle.fontMap = font
-        val lines = text.lines()
-        val width = lines.maxOf { writer.textWidth(it) } + 16.0
-        val lineHeight = font.height * 1.3
+        val tip = element?.tooltip ?: return
+        val panel = text
+        val face = panel.face(style)
+        val lines = tip.lines()
+        val width = lines.maxOf { panel.width(style, it) } + 16.0
+        val lineHeight = (face.ascent - face.descent) * 1.3
         val height = lines.size * lineHeight + 10.0
         // below and right of the pointer, moved into the bounds where it does not fit
         val x = (position.x + 12.0).coerceAtMost(bounds.x + bounds.width - width - 4.0).coerceAtLeast(bounds.x + 4.0)
@@ -67,11 +67,9 @@ internal class Tooltips(private val clock: () -> Double = { System.nanoTime() / 
             drawer.stroke = ColorRGBa.WHITE.opacify(0.25)
             drawer.strokeWeight = 1.0
             drawer.box(Rectangle(x, y, width, height), 4.0)
-            drawer.fontMap = font
-            drawer.fill = ColorRGBa.WHITE.shade(0.9)
-            drawer.stroke = null
             for ((i, line) in lines.withIndex()) {
-                drawer.text(line, x + 8.0, y + 5.0 + font.ascenderLength + i * lineHeight)
+                panel.drawLine(drawer, this@Tooltips, "line $i", style, line, x + 8.0,
+                    y + 5.0 + face.ascent + i * lineHeight, ColorRGBa.WHITE.shade(0.9))
             }
         }
     }

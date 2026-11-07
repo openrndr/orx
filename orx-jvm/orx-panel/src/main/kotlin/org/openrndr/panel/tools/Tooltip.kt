@@ -3,53 +3,32 @@ package org.openrndr.panel.tools
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.isolated
-import org.openrndr.draw.loadFont
-import org.openrndr.extra.textwriter.writer
-
 import org.openrndr.math.Vector2
-import org.openrndr.panel.elements.Body
 import org.openrndr.panel.elements.Element
-import kotlin.math.max
+import org.openrndr.panel.style.StyleSheet
+import org.openrndr.panel.style.fontSize
+import org.openrndr.panel.style.px
 
 class Tooltip(val parent: Element, val position: Vector2, val message: String) {
+    private val style = StyleSheet().apply { fontSize = 14.px }
+
     fun draw(drawer: Drawer) {
-
-        val fontUrl = (parent.root() as Body).controlManager?.fontManager?.resolve("default") ?: error("no font")
-        val fontSize = 14.0
-        val program = (parent.root() as? Body)?.controlManager?.program ?: error("no program")
-        val fontMap =  program.loadFont(fontUrl, fontSize)
-
+        val text = parent.panelText ?: return
+        val face = text.face(style)
+        val lineHeight = face.ascent - face.descent + face.lineGap
         val lines = message.split("\n")
+        val width = lines.maxOf { text.width(style, it) }
+        val height = (lines.size + 1) * lineHeight
 
         drawer.isolated {
-            drawer.fontMap = fontMap
-
-            var maxX = 0.0
-            var maxY = 0.0
-            writer(drawer) {
-                for (line in lines) {
-                    newLine()
-                    text(line, false)
-                    maxX = max(maxX, cursor.x)
-                    maxY = cursor.y
-                }
-                gaplessNewLine()
-                maxY = cursor.y
-            }
-
             drawer.translate(position)
             drawer.translate(10.0, 0.0)
             drawer.strokeWeight = 0.5
             drawer.stroke = ColorRGBa.WHITE.opacify(0.25)
             drawer.fill = ColorRGBa.GRAY
-            drawer.rectangle(0.0, 0.0, maxX + 20.0, maxY)
-            drawer.fill = ColorRGBa.BLACK
-            drawer.translate(10.0, 0.0)
-            writer(drawer) {
-                for (line in lines) {
-                    newLine()
-                    text(line)
-                }
+            drawer.rectangle(0.0, 0.0, width + 20.0, height)
+            for ((i, line) in lines.withIndex()) {
+                text.drawLine(drawer, this@Tooltip, "line $i", style, line, 10.0, (i + 1) * lineHeight, ColorRGBa.BLACK)
             }
         }
     }

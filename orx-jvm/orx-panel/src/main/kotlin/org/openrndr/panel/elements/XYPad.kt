@@ -5,7 +5,6 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.StrokeAlignment
 import org.openrndr.events.Event
-import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.math.Vector2
 import org.openrndr.math.clamp
 import org.openrndr.math.map
@@ -231,17 +230,13 @@ class XYPad : Element(ElementType("xy-pad")) {
             val valueLabel =
                 "${String.format("%.0${precision}f", value.x)}, ${String.format("%.0${precision}f", value.y)}"
 
-            (root() as? Body)?.controlManager?.fontManager?.let {
-                val writer = TextWriter(drawer)
-                drawer.fontMap = it.font(computedStyle)
-                val textWidth = writer.textWidth(valueLabel)
-
-                drawer.fill = ((computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE).opacify(
+            panelText?.let { text ->
+                val color = ((computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE).opacify(
                     if (disabled in pseudoClasses) 0.25 else 1.0
                 )
-
-                drawer.text(valueLabel, layout.screenWidth - textWidth - 4.0, layout.screenHeight - 4.0)
-                drawer.text(label, 0.0, layout.screenHeight + 18.0)
+                text.drawLine(drawer, this, "value", computedStyle, valueLabel,
+                    layout.screenWidth - text.width(computedStyle, valueLabel) - 4.0, layout.screenHeight - 4.0, color)
+                text.drawLine(drawer, this, "label", computedStyle, label, 0.0, layout.screenHeight + 18.0, color)
             }
 
             drawer.popStyle()

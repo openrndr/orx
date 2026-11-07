@@ -7,8 +7,6 @@ import org.openrndr.draw.FontMap
 import org.openrndr.draw.StrokeAlignment
 import org.openrndr.draw.isolated
 import org.openrndr.events.Event
-import org.openrndr.extra.textwriter.TextToken
-import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.panel.binding.Binding0
 import org.openrndr.panel.style.*
 import org.openrndr.shape.Rectangle
@@ -17,53 +15,26 @@ import kotlin.reflect.KMutableProperty0
 class TextNode(var text: String) : Element(ElementType("text")) {
 
     override fun draw(drawer: Drawer) {
-        computedStyle.let { style ->
-            style.color.let {
-                val fill = (it as? Color.RGBa)?.color ?: ColorRGBa.WHITE
-                drawer.fill = (fill)
-            }
-            val fontMap = (root() as Body).controlManager?.fontManager?.font(computedStyle)
-            drawer.fontMap = (fontMap)
-
-            val writer = TextWriter(drawer)
-
-            writer.ellipsis = null
-            // writer.box = Rectangle(Vector2(layout.screenX * 0.0, layout.screenY * 0.0), layout.screenWidth, layout.screenHeight)
-            writer.box = layout.contentBoundsAtOrigin
-
-            writer.horizontalAlign = computedStyle.computedTextHorizontalAlign
-            writer.verticalAlign = computedStyle.computedTextVerticalAlign
-            writer.text(text)
-        }
+        val color = (computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE
+        panelText?.drawInBox(
+            drawer, this, "text", computedStyle, text, layout.contentBoundsAtOrigin,
+            computedStyle.computedTextHorizontalAlign, computedStyle.computedTextVerticalAlign, color, wrap = true
+        )
     }
 
-    /** the font the text is drawn with */
-    private fun fontMap(): FontMap =
-        (root() as? Body)?.controlManager?.fontManager?.font(computedStyle) ?: error("no font manager")
+    private val text0: org.openrndr.panel.PanelText get() = panelText ?: error("no control manager")
 
     /**
      * The width of the widest line of the text when it is not wrapped.
      */
-    fun textWidth(): Double {
-        val writer = TextWriter(null)
-        writer.drawStyle.fontMap = fontMap()
-        return text.lines().maxOf { writer.textWidth(it) }
-    }
+    fun textWidth(): Double = text.lines().maxOf { text0.width(computedStyle, it) }
 
     /**
-     * The size of the text when it is wrapped at [width]. Like [draw], the text is laid out by [TextWriter], which
-     * places it from the ascender of the first line to the descender of the last line.
+     * The size of the text when it is wrapped at [width], from the ascent of the first line to the descent of the
+     * last line, as it is drawn.
      */
     fun sizeHint(width: Double = layout.screenWidth): Rectangle {
-        val fontMap = fontMap()
-        val writer = TextWriter(null)
-        writer.box = Rectangle(0.0, 0.0, width, 1E9)
-        writer.drawStyle.fontMap = fontMap
-        val tokens = writer.text(text, visible = false).filter { it != TextToken.END_OF_LINE }
-        // the distance between the baselines of the first and the last line
-        val lines = if (tokens.isEmpty()) 0.0 else tokens.last().y - tokens.first().y
-        // descenderLength is negative (below the baseline)
-        val height = lines + fontMap.ascenderLength - fontMap.descenderLength
+        val height = text0.paragraph(computedStyle, text, width, computedStyle.computedTextHorizontalAlign).height
         return Rectangle(layout.screenX, layout.screenY, width, height)
     }
 

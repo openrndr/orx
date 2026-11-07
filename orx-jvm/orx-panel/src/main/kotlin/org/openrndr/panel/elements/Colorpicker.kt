@@ -159,9 +159,6 @@ class Colorpicker : Element {
         drawer.strokeAlignment = StrokeAlignment.INSIDE
         drawer.circle(x, y, 10.0)
 
-        val f = (root() as? Body)?.controlManager?.fontManager?.font(computedStyle)!!
-        drawer.fontMap = f
-        drawer.fill = ((computedStyle.color as Color.RGBa).color)
 
     }
 

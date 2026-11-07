@@ -6,8 +6,6 @@ import org.openrndr.color.ColorRGBa
 
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.StrokeAlignment
-import org.openrndr.extra.textwriter.Cursor
-import org.openrndr.extra.textwriter.TextWriter
 
 import org.openrndr.math.Vector2
 import org.openrndr.panel.style.*
@@ -67,15 +65,11 @@ class EnvelopeButton : Element(ElementType("envelope-button")) {
         (root() as? Body)?.controlManager?.fontManager?.let {
             var chartHeight = 0.0
 
-            (root() as? Body)?.controlManager?.fontManager?.let {
-                val font = it.font(computedStyle)
-
-                val writer = TextWriter(drawer)
-                drawer.fontMap = (font)
-                drawer.fill = (ColorRGBa.BLACK)
-                writer.cursor = Cursor(0.0,layout.screenHeight - 4.0)
-                chartHeight = writer.cursor.y - (font.ascenderLength + font.descenderLength) - 4
-                writer.text("$label")
+            panelText?.let { text ->
+                val face = text.face(computedStyle)
+                val baseline = layout.screenHeight - 4.0
+                chartHeight = baseline - (face.ascent + face.descent) - 4
+                text.drawLine(drawer, this, "label", computedStyle, label, 0.0, baseline, ColorRGBa.BLACK)
             }
 
 

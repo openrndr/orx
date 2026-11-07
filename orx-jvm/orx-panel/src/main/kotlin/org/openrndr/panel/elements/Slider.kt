@@ -1,5 +1,7 @@
 package org.openrndr.panel.elements
 
+import org.openrndr.color.ColorRGBa
+
 import kotlinx.coroutines.DelicateCoroutinesApi
 import org.openrndr.*
 import org.openrndr.draw.Drawer
@@ -7,8 +9,6 @@ import org.openrndr.draw.LineCap
 import org.openrndr.events.Event
 import org.openrndr.extra.expressions.ExpressionException
 import org.openrndr.extra.expressions.evaluateExpression
-import org.openrndr.extra.textwriter.Cursor
-import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.math.Vector2
 import org.openrndr.panel.binding.Binding0
 import org.openrndr.panel.binding.Binding1
@@ -224,8 +224,9 @@ class Slider : Element(ElementType("slider")) {
     }
 
     override fun draw(drawer: Drawer) {
-        val f = (root() as? Body)?.controlManager?.fontManager?.font(computedStyle)!!
-        drawer.translate(0.0, (layout.screenHeight - (10.0 + f.ascenderLength + f.descenderLength)) / 2)
+        val text = panelText ?: return
+        val face = text.face(computedStyle)
+        drawer.translate(0.0, (layout.screenHeight - (10.0 + face.ascent + face.descent)) / 2)
 
         drawer.fill = ((computedStyle.color as Color.RGBa).color)
         drawer.stroke = ((computedStyle.color as Color.RGBa).color)
@@ -289,44 +290,20 @@ class Slider : Element(ElementType("slider")) {
         }
 
 
-        (root() as? Body)?.controlManager?.fontManager?.let {
-            val font = it.font(computedStyle)
-            val writer = TextWriter(drawer)
-            drawer.fontMap = (font)
-            drawer.fill = computedStyle.effectiveColor
-            writer.cursor = Cursor(0.0, 8.0)
-            writer.box = Rectangle(0.0, 8.0, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY)
-            writer.newLine()
-            writer.text(label)
-
-            val th = font.ascenderLength + font.descenderLength
-            if (keyboardInput.isEmpty()) {
-                val valueFormatted = String.format("%.0${precision}f", value)
-                val tw = writer.textWidth(valueFormatted)
-                writer.cursor.x = (layout.screenWidth - tw)
-                writer.text(valueFormatted)
-            } else {
-                val tw = writer.textWidth(keyboardInput)
-                writer.cursor.x = (layout.screenWidth - tw)
-                writer.text(keyboardInput)
-                drawer.stroke = drawer.fill?.opacify(0.5)
-                drawer.strokeWeight = 1.0
-
-                if (writer.glyphOutput.rectangles.isNotEmpty()) {
-                    if (inputIndex >= 0) {
-                        val last =
-                            writer.glyphOutput.rectangles.getOrNull(inputIndex) ?: writer.glyphOutput.rectangles.last()
-                        val x = last.second.x + last.second.width
-                        drawer.lineSegment(x, writer.cursor.y, x, writer.cursor.y - th)
-                    } else {
-                        if (writer.glyphOutput.rectangles.isNotEmpty()) {
-                            val last = writer.glyphOutput.rectangles.first()
-                            val x = last.second.x
-                            drawer.lineSegment(x, writer.cursor.y, x, writer.cursor.y - th)
-                        }
-                    }
-                }
-            }
+        // the label at the left and the value at the right, a line below the track
+        val color = computedStyle.effectiveColor ?: ColorRGBa.WHITE
+        val baseline = 8.0 + face.ascent - face.descent + face.lineGap
+        text.drawLine(drawer, this, "label", computedStyle, label, 0.0, baseline, color)
+        val shown = keyboardInput.ifEmpty { String.format("%.0${precision}f", value) }
+        val x0 = layout.screenWidth - text.width(computedStyle, shown)
+        text.drawLine(drawer, this, "value", computedStyle, shown, x0, baseline, color)
+        if (keyboardInput.isNotEmpty()) {
+            // the caret after the character at the input index, before the first when it is -1
+            val carets = text.carets(computedStyle, keyboardInput)
+            val x = x0 + carets[(inputIndex + 1).coerceIn(0, keyboardInput.length)]
+            drawer.stroke = color.opacify(0.5)
+            drawer.strokeWeight = 1.0
+            drawer.lineSegment(x, baseline, x, baseline - (face.ascent + face.descent))
         }
     }
 

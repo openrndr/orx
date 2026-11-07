@@ -1,5 +1,7 @@
 package org.openrndr.panel.elements
 
+import org.openrndr.color.ColorRGBa
+
 import org.openrndr.KEY_SPACEBAR
 import org.openrndr.Program
 import org.openrndr.draw.Drawer
@@ -10,7 +12,6 @@ import org.openrndr.shape.Rectangle
 
 
 import org.openrndr.events.Event
-import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.panel.binding.Binding0
 import org.openrndr.panel.binding.Binding1
 import kotlin.reflect.KMutableProperty0
@@ -41,27 +42,8 @@ class Toggle : Element(ElementType("toggle")) {
     val events = Events()
 
     override val widthHint: Double?
-        get() {
-            computedStyle.let { style ->
-                // measure with the font the label is drawn with
-                val fontMap = (root() as? Body)?.controlManager?.fontManager?.font(style) ?: error("no font manager")
-
-                val writer = TextWriter(null)
-
-                writer.box = Rectangle(
-                    0.0,
-                    0.0,
-                    Double.POSITIVE_INFINITY,
-                    Double.POSITIVE_INFINITY
-                )
-
-                writer.drawStyle.fontMap = fontMap
-                writer.newLine()
-                writer.text(label, visible = false)
-
-                return writer.cursor.x + (computedStyle.height as LinearDimension.PX).value - 8.0 + 5.0
-            }
-        }
+        get() = (panelText?.width(computedStyle, label) ?: error("no control manager")) +
+                (computedStyle.height as LinearDimension.PX).value - 8.0 + 5.0
 
     init {
         mouse.pressed.listen {
@@ -119,11 +101,13 @@ class Toggle : Element(ElementType("toggle")) {
         }
 
         drawer.popModel()
-        drawer.fontMap = (root() as? Body)?.controlManager?.fontManager?.font(computedStyle)!!
-        drawer.translate(5.0 + checkBoxSize, (layout.screenHeight / 2.0) + drawer.fontMap!!.height / 2.0)
-        drawer.stroke = null
-        drawer.fill = computedStyle.effectiveColor
-        drawer.text(label, 0.0, 0.0)
+        val text = panelText ?: return
+        val face = text.face(computedStyle)
+        val lineHeight = face.ascent - face.descent + face.lineGap
+        text.drawLine(
+            drawer, this, "label", computedStyle, label, 5.0 + checkBoxSize,
+            layout.screenHeight / 2.0 + lineHeight / 2.0, computedStyle.effectiveColor ?: ColorRGBa.WHITE
+        )
     }
 
     override fun close() {

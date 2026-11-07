@@ -469,6 +469,9 @@ class ControlManager : Extension {
     /** the transitions of the styles of elements */
     internal val styleTransitions = StyleTransitions()
 
+    /** the text of the elements, drawn from the outlines of glyphs, with its caches */
+    val text: PanelText by lazy { PanelText(fontManager) }
+
     /** the tooltips of the elements under the pointer */
     internal val tooltips = Tooltips()
     private var tooltipShown = false
@@ -689,13 +692,18 @@ class ControlManager : Extension {
                         drawElement(it, program.drawer, 1, 0)
                         drawElement(it, program.drawer, 1000, 0)
                         // over everything
-                        tooltips.draw(program.drawer, fontManager, Rectangle(0.0, 0.0, program.width.toDouble(), program.height.toDouble()))
+                        tooltips.draw(program.drawer, text, Rectangle(0.0, 0.0, program.width.toDouble(), program.height.toDouble()))
                     }
                     // over a scrollbar, and while dragging one, the cursor is that of the scrollbar
                     (mouseInput.scrollbarDrag ?: mouseInput.scrollbarHover)?.let { bar ->
                         program.application.cursorType = bar.element.computedStyle.scrollbarCursor.cursorType
                     }
                 }
+            }
+
+            if (redraw) {
+                // the draw commands of texts that were not drawn are released
+                text.releaseUnused()
             }
 
             body?.visit {

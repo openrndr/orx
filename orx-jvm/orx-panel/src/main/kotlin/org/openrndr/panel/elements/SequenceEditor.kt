@@ -10,8 +10,6 @@ import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.*
 import org.openrndr.events.Event
-import org.openrndr.extra.textwriter.Cursor
-import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.math.Vector2
 import org.openrndr.math.map
 import org.openrndr.panel.binding.Binding0
@@ -265,15 +263,11 @@ open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(E
         drawer.isolated {
             drawer.translate(0.0, controlArea.height)
             drawer.fill = computedStyle.effectiveColor
-            (root() as? Body)?.controlManager?.fontManager?.let {
-                val font = it.font(computedStyle)
-                val writer = TextWriter(drawer)
-                drawer.fontMap = (font)
-                drawer.fill = computedStyle.effectiveColor
-                writer.cursor = Cursor(0.0, 4.0)
-                writer.box = Rectangle(0.0, 4.0, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY)
-                writer.newLine()
-                writer.text(label)
+            panelText?.let { text ->
+                val face = text.face(computedStyle)
+                // a line below the top of the footer
+                text.drawLine(drawer, this, "label", computedStyle, label, 0.0,
+                    4.0 + face.ascent - face.descent + face.lineGap, computedStyle.effectiveColor ?: ColorRGBa.WHITE)
             }
         }
 

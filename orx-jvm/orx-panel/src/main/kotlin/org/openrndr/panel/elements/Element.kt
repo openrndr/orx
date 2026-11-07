@@ -57,6 +57,10 @@ open class Element(val type: ElementType) : AutoCloseable {
     /** how far the content of an element that scrolls is scrolled to the left, in pixels */
     var scrollLeft = 0.0
 
+    /** the text of the control manager of the element, null when it is not in one */
+    val panelText: org.openrndr.panel.PanelText?
+        get() = (root() as? Body)?.controlManager?.text
+
     /** the text shown next to the pointer when it rests on the element, null for none */
     var tooltip: String? = null
 

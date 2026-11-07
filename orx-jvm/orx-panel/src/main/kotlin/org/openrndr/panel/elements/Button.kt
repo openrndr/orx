@@ -7,7 +7,6 @@ import org.openrndr.draw.StrokeAlignment
 
 import org.openrndr.draw.isolated
 import org.openrndr.events.Event
-import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.panel.style.*
 import org.openrndr.shape.Rectangle
 
@@ -54,25 +53,7 @@ class Button : Element(ElementType("button")) {
     }
 
     override val widthHint: Double
-        get() {
-            computedStyle.let { style ->
-                // measure with the font the label is drawn with
-                val fontMap = (root() as? Body)?.controlManager?.fontManager?.font(style) ?: error("no font manager")
-
-                val writer = TextWriter(null)
-
-                writer.box = Rectangle(0.0,
-                        0.0,
-                        Double.POSITIVE_INFINITY,
-                        Double.POSITIVE_INFINITY)
-
-                writer.drawStyle.fontMap = fontMap
-                writer.newLine()
-                writer.text(label, visible = false)
-
-                return writer.cursor.x //+ style.paddingLeft.inPixels(0.0) + style.paddingRight.inPixels(0.0)
-            }
-        }
+        get() = panelText?.width(computedStyle, label) ?: error("no control manager")
 
     override fun draw(drawer: Drawer) {
 
@@ -89,26 +70,14 @@ class Button : Element(ElementType("button")) {
                 drawer.box(layout.boundsAtOrigin, cornerRadius)
             }
 
-            (root() as? Body)?.controlManager?.fontManager?.let {
-                val font = it.font(computedStyle)
-                val writer = TextWriter(drawer)
-                writer.box = layout.contentBoundsAtOrigin.let { it.copy(width = it.width + 1.0, height = it.height + 1.0) }
-                writer.verticalAlign =  computedStyle.computedTextVerticalAlign
-                writer.horizontalAlign = computedStyle.computedTextHorizontalAlign
-
-                drawer.fontMap = (font)
-                val textWidth = writer.textWidth(label)
-                val textHeight = font.ascenderLength
-
-                val offset = round((layout.screenWidth - textWidth) / 2.0)
-                val yOffset = round((layout.screenHeight / 2) + textHeight / 2.0 - 2.0) * 1.0
-
-                drawer.fill = ((computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE).opacify(
-                        if (disabled in pseudoClasses) 0.25 else 1.0
-                )
-                //drawer.text(label, 0.0 + offset, 0.0 + yOffset)
-                writer.text(label)
-            }
+            val color = ((computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE).opacify(
+                if (disabled in pseudoClasses) 0.25 else 1.0
+            )
+            panelText?.drawInBox(
+                drawer, this, "label", computedStyle, label,
+                layout.contentBoundsAtOrigin.let { it.copy(width = it.width + 1.0, height = it.height + 1.0) },
+                computedStyle.computedTextHorizontalAlign, computedStyle.computedTextVerticalAlign, color
+            )
 
             drawer.popStyle()
             drawer.popTransforms()

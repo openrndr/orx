@@ -141,16 +141,14 @@ class NumberField : Element(ElementType("number-field")) {
                 drawer.box(Rectangle(0.0, 0.0, layout.screenWidth * t, layout.screenHeight), cornerRadius)
             }
         }
-        val font = (root() as? Body)?.controlManager?.fontManager?.font(cs) ?: return
-        drawer.fontMap = font
-        drawer.stroke = null
-        drawer.fill = cs.effectiveColor ?: ColorRGBa.WHITE
+        val panel = panelText ?: return
+        val face = panel.face(cs)
+        val color = cs.effectiveColor ?: ColorRGBa.WHITE
         val content = layout.contentBoundsAtOrigin
-        val baseline = round(content.y + content.height / 2.0 + font.ascenderLength / 2.0 - 1.0)
-        drawer.text(label, content.x, baseline)
+        val baseline = round(content.y + content.height / 2.0 + face.ascent / 2.0 - 1.0)
+        panel.drawLine(drawer, this, "label", cs, label, content.x, baseline, color)
         val text = editing?.let { "$it|" } ?: format(value)
-        val writer = org.openrndr.extra.textwriter.TextWriter(null).apply { drawStyle.fontMap = font }
-        drawer.text(text, content.x + content.width - writer.textWidth(text), baseline)
+        panel.drawLine(drawer, this, "value", cs, text, content.x + content.width - panel.width(cs, text), baseline, color)
     }
 }
 

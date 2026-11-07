@@ -11,7 +11,6 @@ import org.openrndr.KEY_SPACEBAR
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.events.Event
-import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.launch
 import org.openrndr.panel.style.*
 import org.openrndr.shape.Rectangle
@@ -115,26 +114,7 @@ class DropdownButton : Element(ElementType("dropdown-button")) {
     }
 
     override val widthHint: Double?
-        get() {
-            computedStyle.let { style ->
-                // measure with the font the label is drawn with
-                val fontMap = (root() as? Body)?.controlManager?.fontManager?.font(style) ?: error("no font manager")
-
-                val writer = TextWriter(null)
-
-                writer.box = Rectangle(0.0,
-                        0.0,
-                        Double.POSITIVE_INFINITY,
-                        Double.POSITIVE_INFINITY)
-
-                val text = "$label  ${(value?.label) ?: "<choose>"}"
-                writer.drawStyle.fontMap = fontMap
-                writer.newLine()
-                writer.text(text, visible = false)
-
-                return writer.cursor.x + 10.0
-            }
-        }
+        get() = (panelText?.width(computedStyle, "$label  ${(value?.label) ?: "<choose>"}") ?: error("no control manager")) + 10.0
 
 
     override fun append(element: Element) {
@@ -153,25 +133,15 @@ class DropdownButton : Element(ElementType("dropdown-button")) {
         drawer.stroke = null
         drawer.box(Rectangle(0.0, 0.0, screenArea.width, screenArea.height), cornerRadius)
 
-        (root() as? Body)?.controlManager?.fontManager?.let {
-            val font = it.font(computedStyle)
-
-            val writer = TextWriter(drawer)
-            drawer.fontMap = (font)
-
-            val text = (value?.label) ?: "<choose>"
-
-            val textWidth = writer.textWidth(text)
-            val textHeight = font.ascenderLength
-
-            val offset = Math.round((layout.screenWidth - textWidth))
-            val yOffset = ((layout.screenHeight / 2) + textHeight / 2.0).roundToInt() - 2.0
-
-            drawer.fill = ((computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE)
-
-            drawer.text(label, 5.0, 0.0 + yOffset)
-            drawer.text(text, -5.0 + offset, 0.0 + yOffset)
-        }
+        // the label at the left and the value at the right
+        val panel = panelText ?: return
+        val face = panel.face(computedStyle)
+        val text = (value?.label) ?: "<choose>"
+        val baseline = ((layout.screenHeight / 2) + face.ascent / 2.0).roundToInt() - 2.0
+        val color = (computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE
+        panel.drawLine(drawer, this, "label", computedStyle, label, 5.0, baseline, color)
+        panel.drawLine(drawer, this, "value", computedStyle, text,
+            -5.0 + Math.round(layout.screenWidth - panel.width(computedStyle, text)), baseline, color)
     }
 
     class SlideOut(val x: Double, val y: Double, val width: Double, val height: Double, parent: Element, active: Item?) : Element(ElementType("slide-out")) {
