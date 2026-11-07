@@ -14,6 +14,10 @@ import kotlin.math.max
  * The nested groups `fill` and `stroke` both have a `color` parameter, nested parameters are
  * stored and saved per group so they do not clash.
  *
+ * Resting the pointer on a control shows the description of its parameter. Clicking a control with the right button
+ * resets it to its default, copies its value or pastes a value copied from a control of the same type. Command or
+ * control and z undoes changes, with shift redoes them.
+ *
  * `stroke` nests a `style` group of its own. Its property is a `var` of an interface type: press
  * "next style" (or the space bar) to assign a style of another class, and the GUI replaces the
  * controls of the group with those of the new style.
@@ -86,7 +90,7 @@ class Stroke {
 
 @Description("Circle")
 class CircleSettings {
-    @DoubleParameter("radius", 10.0, 200.0, order = 0)
+    @DoubleParameter("radius", 10.0, 200.0, order = 0, description = "the radius of the circle, in pixels")
     var radius = 120.0
 
     @NestedParameter("fill", order = 1)

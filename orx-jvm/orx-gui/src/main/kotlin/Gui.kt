@@ -297,9 +297,18 @@ open class GUI(
             }
         }
 
+        this.program = program
         program.keyboard.keyDown.listen {
             if (it.key == KEY_F11) {
                 visible = !visible
+            }
+            val command = KeyModifier.SUPER in it.modifiers || KeyModifier.CTRL in it.modifiers
+            if (undoShortcuts && command) {
+                when {
+                    it.name == "z" && KeyModifier.SHIFT in it.modifiers -> redo()
+                    it.name == "z" -> undo()
+                    it.name == "y" -> redo()
+                }
             }
 
             if (it.key == KEY_LEFT_SHIFT) {
@@ -329,6 +338,8 @@ open class GUI(
         visible = visible
 
         program.extend(panel ?: error("no panel"))
+        // loading the persisted values and building the controls are not changes that can be undone
+        history.clear()
     }
 
     //<editor-fold desc="Layout building blocks">
@@ -460,10 +471,62 @@ open class GUI(
             if (parameter.parameterType == ParameterType.Nested) {
                 binding.nested[parameter]?.let { addNested(parameter, it) }
             } else {
-                controls[parameter] = addControl(binding, parameter)
+                controls[parameter] = addControl(binding, parameter).also { control ->
+                    // the description of the parameter shows when the pointer rests on its control
+                    control.tooltip = parameter.description
+                    if (parameter.property != null) control.contextMenu = { parameterMenu(binding, parameter) }
+                }
             }
         }
     }
+
+    /** the value that was copied from a control, with the type of its parameter */
+    private var copiedValue: Pair<ParameterType, ParameterValue>? = null
+
+    /** the program the GUI is installed in */
+    private var program: Program? = null
+
+    /** the items of the context menu of the control of [parameter] of [binding] */
+    private fun ContextMenuBuilder.parameterMenu(binding: ParameterBindings.Binding, parameter: Parameter) {
+        item("reset to default") {
+            bindings.reset(binding, parameter)
+            valuesChanged()
+            onChangeListener?.invoke(parameter.name, binding.get(parameter))
+        }
+        item("copy value") {
+            copiedValue = parameter.parameterType to bindings.parameterValue(binding, parameter)
+            // the value as text, for other programs
+            program?.clipboard?.contents = binding.get(parameter).toString()
+        }
+        copiedValue?.takeIf { it.first == parameter.parameterType }?.let { (_, value) ->
+            item("paste value") {
+                bindings.setParameterValue(binding, parameter, value)
+                valuesChanged()
+                onChangeListener?.invoke(parameter.name, binding.get(parameter))
+            }
+        }
+    }
+
+    /** the controls show the values of the parameters, which are kept for when the GUI is made again */
+    private fun valuesChanged() {
+        updateControls()
+        persistValues()
+    }
+
+    /**
+     * The history of the changes to the parameters, for undo and redo: command or control and z undoes, with shift or
+     * control and y redoes, unless [undoShortcuts] is false
+     */
+    val history = ParameterHistory(bindings)
+
+    /** true when the keys for undo and redo are used by the GUI */
+    var undoShortcuts = true
+
+    /** undoes the last change to the parameters, true when there was one */
+    fun undo(): Boolean = history.undo().also { if (it) valuesChanged() }
+
+    /** redoes the last change to the parameters that was undone, true when there was one */
+    fun redo(): Boolean = history.redo().also { if (it) valuesChanged() }
 
     /**
      * Add a group with the controls of a nested object, collapsed and expanded by clicking its header
