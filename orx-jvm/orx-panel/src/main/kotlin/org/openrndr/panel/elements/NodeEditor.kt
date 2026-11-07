@@ -8,6 +8,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.LineCap
 import org.openrndr.draw.isolated
+import org.openrndr.draw.shadeStyle
 import org.openrndr.events.Event
 import org.openrndr.math.Vector2
 import org.openrndr.panel.Edit
@@ -58,6 +59,25 @@ class NodeEditor : Element(ElementType("node-editor")) {
     companion object {
         const val TITLE_HEIGHT = 26.0
         const val PORT_SPACING = 22.0
+
+        /** the distance between the dots of the grid, in the coordinates of the graph */
+        const val GRID_SPACING = 24.0
+    }
+
+    private val gridStyle = shadeStyle {
+        fragmentTransform = """
+            // the point of the graph under the fragment
+            vec2 local = c_boundsPosition.xy * p_size;
+            vec2 g = (local - p_pan) / p_zoom;
+            // the distance to the nearest dot, in pixels
+            vec2 nearest = floor(g / p_spacing + 0.5) * p_spacing;
+            float d = length(g - nearest) * p_zoom;
+            // dots are a world size, but at least a pixel, and fade out where they get too close together
+            float radius = max(1.1 * p_zoom, 0.8);
+            float coverage = 1.0 - smoothstep(radius - 0.6, radius + 0.6, d);
+            float density = smoothstep(5.0, 10.0, p_spacing * p_zoom);
+            x_fill.a *= coverage * density;
+        """
     }
 
     class Events : AutoCloseable {
@@ -307,19 +327,17 @@ class NodeEditor : Element(ElementType("node-editor")) {
         val color = computedStyle.effectiveColor ?: ColorRGBa.WHITE
         val text = panelText ?: return
         drawer.isolated {
-            // a grid that moves and scales with the graph
-            val step = 24.0 * zoom
-            if (step > 6.0) {
+            // the dots of the grid, at points of the graph, so that they stay where they are while the graph zooms
+            // and pans; drawn by a shade style over the whole editor
+            drawer.isolated {
                 drawer.stroke = null
-                drawer.fill = color.opacify(0.12)
-                val w = layout.screenWidth
-                val h = layout.screenHeight
-                val ox = Math.floorMod(pan.x.toInt(), step.toInt().coerceAtLeast(1)).toDouble()
-                val oy = Math.floorMod(pan.y.toInt(), step.toInt().coerceAtLeast(1)).toDouble()
-                val points = mutableListOf<Vector2>()
-                var y = oy
-                while (y < h) { var x = ox; while (x < w) { points.add(Vector2(x, y)); x += step }; y += step }
-                drawer.circles(points, 1.0)
+                drawer.fill = color.opacify(0.16)
+                drawer.shadeStyle = gridStyle
+                gridStyle.parameter("size", Vector2(layout.screenWidth, layout.screenHeight))
+                gridStyle.parameter("pan", pan)
+                gridStyle.parameter("zoom", zoom)
+                gridStyle.parameter("spacing", GRID_SPACING)
+                drawer.rectangle(0.0, 0.0, layout.screenWidth, layout.screenHeight)
             }
             drawer.translate(pan)
             drawer.scale(zoom)

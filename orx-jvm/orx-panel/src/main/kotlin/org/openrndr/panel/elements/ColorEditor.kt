@@ -233,11 +233,11 @@ class ColorWheel internal constructor(private val editor: ColorEditor) : Element
                         -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
                         -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s);
                     bool outside = any(lessThan(lin, vec3(-0.002))) || any(greaterThan(lin, vec3(1.002)));
+                    // the fill is linear
                     vec3 c = clamp(lin, 0.0, 1.0);
-                    vec3 srgb = mix(12.92 * c, 1.055 * pow(c, vec3(1.0 / 2.4)) - 0.055, step(0.0031308, c));
                     // the colors outside sRGB are dimmed
-                    if (outside) srgb = mix(srgb, vec3(dot(srgb, vec3(0.3333))), 0.8) * 0.55;
-                    x_fill = vec4(srgb, x_fill.a);
+                    if (outside) c = mix(c, vec3(dot(c, vec3(0.2126, 0.7152, 0.0722))), 0.8) * 0.25;
+                    x_fill = vec4(c, x_fill.a);
                 """
                 parameter("maxChroma", MAX_CHROMA)
                 parameter("l", lch.l)
