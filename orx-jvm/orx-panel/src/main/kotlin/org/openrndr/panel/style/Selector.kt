@@ -1,151 +1,90 @@
 package org.openrndr.panel.style
 
+import org.openrndr.extra.style.ComplexSelector
+import org.openrndr.extra.style.SelectorTree
+import org.openrndr.extra.style.SimpleSelector
+import org.openrndr.extra.style.Specificity
+import org.openrndr.extra.style.parseCssSelector
 import org.openrndr.panel.elements.Element
 import org.openrndr.panel.elements.ElementClass
 import org.openrndr.panel.elements.ElementPseudoClass
-import org.openrndr.panel.elements.ElementType
+import org.openrndr.extra.style.CompoundSelector as CssCompoundSelector
 
-data class SelectorPrecedence(var inlineStyle: Int = 0, var id: Int = 0, var classOrAttribute: Int = 0, var type: Int = 0)
+/** how a compound selector relates to the one before it: descendant, child, next sibling or later sibling */
+typealias Combinator = org.openrndr.extra.style.Combinator
 
-abstract class Selector {
-    abstract fun accept(element: Element): Boolean
-}
+/**
+ * A selector of elements, the last compound of a selector of CSS: the [selectors] that the element matches, and the
+ * [previous] compound with the combinator that relates them, as `.sidebar > button:hover`. Build them with [has] and
+ * [and], or from CSS with [CompoundSelector.parse]; they match with the selectors of CSS, see [ComplexSelector].
+ */
+class CompoundSelector(
+    var previous: Pair<Combinator, CompoundSelector>? = null,
+    selectors: List<SimpleSelector> = emptyList()
+) {
+    val selectors: MutableList<SimpleSelector> = selectors.toMutableList()
 
-class CompoundSelector {
     companion object {
+        /** the selector that selects every element */
         val DUMMY = CompoundSelector()
-    }
 
-    var previous: Pair<Combinator, CompoundSelector>?
-    var selectors: MutableList<Selector>
+        /** the selector of the CSS selector [css], like `.toolbar > button:hover`; null when it is not valid */
+        fun parse(css: String): CompoundSelector? = parseCssSelector(css)?.let(::of)
 
-    constructor() {
-        previous = null
-        selectors = mutableListOf()
-    }
-
-    constructor(previous: Pair<Combinator, CompoundSelector>?, selectors: List<Selector>) {
-        this.previous = previous
-        this.selectors = ArrayList()
-        selectors.forEach { this.selectors.add(it) }
-    }
-
-    fun precedence(p: SelectorPrecedence = SelectorPrecedence()): SelectorPrecedence {
-
-        selectors.forEach {
-            when (it) {
-                is IdentitySelector -> p.id++
-                is ClassSelector, is PseudoClassSelector -> p.classOrAttribute++
-                is TypeSelector -> p.type++
-                else -> {
-                }
+        /** the selector of the CSS selector [selector] */
+        fun of(selector: ComplexSelector): CompoundSelector {
+            var result: CompoundSelector? = null
+            for ((i, compound) in selector.compounds.withIndex()) {
+                result = CompoundSelector(result?.let { selector.combinators[i - 1] to it }, compound.simples)
             }
+            return result!!
         }
-        var r = p
-        previous?.let {
-            r = it.second.precedence(p)
-        }
-        return r
     }
 
-    override fun toString(): String {
-        return "CompoundSelector(previous=$previous, selectors=$selectors)"
+    /** the selector of CSS, from the first compound to this */
+    fun toCss(): ComplexSelector {
+        val chain = generateSequence(this) { it.previous?.second }.toList().reversed()
+        val combinators = generateSequence(this) { it.previous?.second }.mapNotNull { it.previous?.first }.toList().reversed()
+        return ComplexSelector(chain.map { CssCompoundSelector(it.selectors.toList()) }, combinators)
     }
 
+    /** the specificity of the selector */
+    val specificity: Specificity get() = toCss().specificity
+
+    override fun toString(): String = toCss().toString()
 }
 
-enum class Combinator {
-    CHILD, DESCENDANT, NEXT_SIBLING, LATER_SIBLING
+/** how the selectors of CSS see the elements of panels: states are their pseudo-classes, like hover and focus */
+object PanelSelectorTree : SelectorTree<Element> {
+    override fun parent(node: Element): Element? = node.parent
+    override fun children(node: Element): List<Element> = node.children
+    override fun type(node: Element): String = node.type.name
+    override fun id(node: Element): String? = node.id
+    override fun hasClass(node: Element, name: String): Boolean = ElementClass(name) in node.classes
+    override fun hasState(node: Element, name: String): Boolean = ElementPseudoClass(name) in node.pseudoClasses
 }
 
-class IdentitySelector(val id: String) : Selector() {
-    override fun accept(element: Element): Boolean = if (element.id != null) {
-        element.id == id
-    } else {
-        false
-    }
-
-    override fun toString(): String {
-        return "IdentitySelector(id='$id')"
-    }
-
-}
-
-class ClassSelector(val c: ElementClass) : Selector() {
-    override fun accept(element: Element): Boolean = c in element.classes
-    override fun toString(): String {
-        return "ClassSelector(c=$c)"
-    }
-}
-
-class TypeSelector(val type: ElementType) : Selector() {
-    override fun accept(element: Element): Boolean = element.type == type
-    override fun toString(): String {
-        return "TypeSelector(type=$type)"
-    }
-}
-
-class TypesSelector(vararg types: ElementType) : Selector() {
-    private val typeSet = types.toSet()
-    override fun accept(element: Element): Boolean = element.type in typeSet
-    override fun toString(): String {
-        return "TypesSelector(types=$typeSet)"
-    }
-}
-
-class PseudoClassSelector(val c: ElementPseudoClass) : Selector() {
-    override fun accept(element: Element): Boolean = c in element.pseudoClasses
-    override fun toString(): String {
-        return "PseudoClassSelector(c=$c)"
-    }
-
-}
+/** true when [selector] selects [element] */
+fun ComplexSelector.matches(element: Element): Boolean = matches(element, PanelSelectorTree)
 
 object has {
-    operator fun invoke(vararg selectors: CompoundSelector): CompoundSelector {
-        val active = CompoundSelector()
-        selectors.forEach {
-            active.selectors.addAll(it.selectors)
-        }
-        return active
-    }
+    operator fun invoke(vararg selectors: CompoundSelector): CompoundSelector =
+        CompoundSelector(selectors = selectors.flatMap { it.selectors })
 
-    infix fun state(q: String): CompoundSelector {
-        val active = CompoundSelector()
-        active.selectors.add(PseudoClassSelector(ElementPseudoClass((q))))
-        return active
-    }
+    /** elements in the state [q], like hover, a pseudo-class */
+    infix fun state(q: String) = CompoundSelector(selectors = listOf(SimpleSelector.PseudoClass(q)))
 
-    infix fun class_(q: String): CompoundSelector {
-        val active = CompoundSelector()
-        active.selectors.add(ClassSelector(ElementClass(q)))
-        return active
-    }
+    infix fun class_(q: String) = CompoundSelector(selectors = listOf(SimpleSelector.Class(q)))
 
-    infix fun type(q: String): CompoundSelector {
-        val active = CompoundSelector()
-        active.selectors.add(TypeSelector(ElementType(q)))
-        return active
-    }
+    infix fun type(q: String) = CompoundSelector(selectors = listOf(SimpleSelector.Type(q)))
 
-    infix fun id(q: String): CompoundSelector {
-        val active = CompoundSelector()
-        active.selectors.add(IdentitySelector(q))
-        return active
-    }
+    infix fun id(q: String) = CompoundSelector(selectors = listOf(SimpleSelector.Id(q)))
 
-    infix fun type(qs: Iterable<String>): CompoundSelector {
-        val active = CompoundSelector()
-        val aqs = qs.map { ElementType(it) }.toList().toTypedArray()
-        active.selectors.add(TypesSelector(*aqs))
-        return active
-    }
+    /** elements of any of the types [qs], like :is() of the types */
+    infix fun type(qs: Iterable<String>) = CompoundSelector(
+        selectors = listOf(SimpleSelector.Logical("is", qs.map { ComplexSelector(listOf(CssCompoundSelector(listOf(SimpleSelector.Type(it)))), emptyList()) }))
+    )
 }
 
-infix fun CompoundSelector.and(other: CompoundSelector): CompoundSelector {
-    val c = CompoundSelector()
-    c.previous = previous
-    c.selectors.addAll(selectors)
-    c.selectors.addAll(other.selectors)
-    return c
-}
+infix fun CompoundSelector.and(other: CompoundSelector): CompoundSelector =
+    CompoundSelector(previous, selectors + other.selectors)

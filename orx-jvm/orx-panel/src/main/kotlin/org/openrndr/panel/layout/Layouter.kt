@@ -2,7 +2,9 @@ package org.openrndr.panel.layout
 
 import org.openrndr.panel.elements.Element
 import org.openrndr.panel.elements.TextNode
+import org.openrndr.extra.style.CssDeclaration
 import org.openrndr.extra.style.CssKeyword
+import org.openrndr.extra.style.substituteCssVariables
 import org.openrndr.panel.style.*
 import kotlin.math.abs
 import kotlin.math.ceil
@@ -970,10 +972,7 @@ class Layouter {
      */
     fun updateStyles(element: Element, forced: Boolean = false): Int {
         if (forced || siblingSelectors == null) {
-            siblingSelectors = styleSheets.any { sheet ->
-                generateSequence(sheet.selector.previous) { it.second.previous }
-                    .any { it.first == Combinator.NEXT_SIBLING || it.first == Combinator.LATER_SIBLING }
-            }
+            siblingSelectors = styleSheets.any { it.cssSelector.usesSiblings }
         }
         return updateStyles(element, forced, false)
     }
@@ -1012,25 +1011,14 @@ class Layouter {
 
     /** computes the style of [element] from the style sheets, its inline style and the style of its parent */
     private fun computeStyle(element: Element) {
-        val matcher = Matcher()
-
         if (element is TextNode) {
             element.computedStyle = textNodeStyle(element.parent?.computedStyle)
         } else {
             element.computedStyle =
                 styleSheets
-                    .filter {
-                        it.selector.let {
-                            matcher.matches(it, element)
-                        }
-                    }
-                    .sortedWith(
-                        compareBy(
-                            { it.precedence.component1() },
-                            { it.precedence.component2() },
-                            { it.precedence.component3() },
-                            { it.precedence.component4() })
-                    )
+                    .filter { it.cssSelector.matches(element) }
+                    // by specificity, and by order for the same specificity, the most specific and the last first
+                    .sortedBy { it.specificity }
                     .reversed()
                     .fold(StyleSheet(CompoundSelector.DUMMY), { a, b -> a.cascadeOnto(b) })
 
@@ -1043,6 +1031,32 @@ class Layouter {
 
             val parent = element.parent?.computedStyle
             val properties = panelProperties()
+            // custom properties are inherited, their values can use the custom properties before them
+            if (parent != null) {
+                for ((name, property) in parent.properties) {
+                    if (name.startsWith("--") && name !in cs.properties) cs.properties[name] = property
+                }
+            }
+            fun variable(name: String) = cs.properties[name]?.value as? String
+            for ((name, declared) in cs.properties.toList()) {
+                val text = declared.value as? String ?: continue
+                if (!name.startsWith("--") || "var(" !in text) continue
+                val value = substituteCssVariables(text) { if (it == name) null else variable(it) }
+                if (value == null) cs.properties.remove(name) else cs.properties[name] = declared.copy(value = value)
+            }
+            // values with var(): substituted and parsed, unset when that fails, as values that are invalid at
+            // computed-value time are in CSS
+            for ((name, declared) in cs.properties.toList()) {
+                val unresolved = declared.value as? VariableValue ?: continue
+                cs.properties.remove(name)
+                val values = substituteCssVariables(unresolved.declaration.value, ::variable)
+                    ?.let { properties.values(CssDeclaration(name, it)) }
+                if (values != null) {
+                    for ((longhand, value) in values) cs.properties[longhand] = Property(longhand, value, declared.important)
+                } else if (properties[name] != null) {
+                    cs.properties[name] = Property(name, CssKeyword.UNSET, declared.important)
+                }
+            }
             // the keywords: inherit takes the value of the parent, initial the initial value, unset the value of the
             // parent for properties that are inherited and the initial value for others
             for ((name, declared) in cs.properties.toList()) {

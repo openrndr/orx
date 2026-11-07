@@ -909,6 +909,9 @@ class ControlManagerBuilder(val controlManager: ControlManager) {
         document.styleSheets.addAll(styleSheets)
     }
 
+    /** adds the style sheets of the CSS [css], see [org.openrndr.panel.style.styleSheets] */
+    fun css(css: String) = styleSheets(org.openrndr.panel.style.styleSheets(css))
+
     @OptIn(ExperimentalContracts::class)
     fun layout(init: Body.() -> Unit) {
         contract {

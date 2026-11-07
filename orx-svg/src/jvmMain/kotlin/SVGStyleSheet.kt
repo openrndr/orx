@@ -2,7 +2,13 @@ package org.openrndr.extra.svg
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.jsoup.nodes.Element
+import org.openrndr.extra.style.ComplexSelector
+import org.openrndr.extra.style.CompoundSelector
 import org.openrndr.extra.style.CssDeclaration
+import org.openrndr.extra.style.SelectorTree
+import org.openrndr.extra.style.SimpleSelector
+import org.openrndr.extra.style.parseCssSelector
+import org.openrndr.extra.style.substituteCssVariables
 import org.openrndr.extra.style.parseCssDeclarations
 import org.openrndr.extra.style.parseCssRules
 import org.openrndr.extra.style.splitCss
@@ -10,9 +16,9 @@ import org.openrndr.extra.style.splitCss
 private val logger = KotlinLogging.logger {}
 
 /**
- * The style elements and style attributes of SVG documents: CSS rules with selectors that jsoup supports, such as
- * type, class, id, attribute and descendant selectors, !important declarations, and custom properties that are used
- * with var(). Geometry properties, like the width of a rect element, are applied to the elements. The @font-face
+ * The style elements and style attributes of SVG documents: CSS rules with the selectors of orx-style, see
+ * [org.openrndr.extra.style.parseCssSelector], such as type, class, id, attribute, structural and logical selectors with
+ * all combinators, !important declarations, and custom properties that are used with var(). Geometry properties, like the width of a rect element, are applied to the elements. The @font-face
  * rules are read by [fontFaces], other at-rules, such as @media, are skipped.
  */
 internal object SVGStyleSheet {
@@ -116,45 +122,36 @@ internal object SVGStyleSheet {
     fun declarations(style: String): List<Pair<String, String>> = parse(style).map { it.name to it.value }
 
     /** the specificity of [selector]: ids, classes, attributes and pseudo-classes, types */
-    private fun specificity(selector: String): Int {
-        val ids = Regex("#[\\w-]+").findAll(selector).count()
-        val classes = Regex("\\.[\\w-]+|\\[[^]]*]|:[\\w-]+").findAll(selector).count()
-        val types = Regex("(^|[\\s>+~])[a-zA-Z][\\w-]*").findAll(selector).count()
-        return ids * 10000 + classes * 100 + types
+    private fun specificity(selector: String): Int =
+        selectorOf(selector)?.specificity?.let { it.ids * 10000 + it.classes * 100 + it.types } ?: 0
+
+    /** how selectors see the elements of documents; pointer states are handled by the rules for them */
+    private object Tree : SelectorTree<Element> {
+        override fun parent(node: Element): Element? { val parent: Element? = node.parent(); return if (parent is org.jsoup.nodes.Document) null else parent }
+        override fun children(node: Element): List<Element> = node.children()
+        override fun type(node: Element): String = node.tagName()
+        override fun id(node: Element): String? = node.id().ifEmpty { null }
+        override fun hasClass(node: Element, name: String): Boolean = node.hasClass(name)
+        override fun attribute(node: Element, name: String): String? = if (node.hasAttr(name)) node.attr(name) else null
     }
+
+    private val selectors = mutableMapOf<String, ComplexSelector?>()
+
+    /** the selector [text], null when it is not valid or not supported */
+    private fun selectorOf(text: String): ComplexSelector? = selectors.getOrPut(text) { parseCssSelector(text) }
+
+    /** true when [selector] selects [element] */
+    private fun matches(element: Element, selector: ComplexSelector) = selector.matches(element, Tree)
+
+    /** the elements of the document with [root] that [selector] selects, in document order */
+    private fun select(root: Element, selector: ComplexSelector): List<Element> = root.allElements.filter { matches(it, selector) }
 
     /**
      * [value] with its var() functions replaced by the values of the custom properties in [variables], or by their
      * fallbacks. Null when a custom property is not defined and has no fallback, which makes the declaration unset.
      */
-    private fun substitute(value: String, variables: Map<String, String>, depth: Int = 0): String? {
-        if (depth > 16) return null
-        val result = StringBuilder()
-        var position = 0
-        while (true) {
-            val start = value.indexOf("var(", position)
-            if (start < 0) break
-            // the function ends at the matching parenthesis
-            var level = 1
-            var end = start + 4
-            while (end < value.length && level > 0) {
-                when (value[end]) {
-                    '(' -> level++
-                    ')' -> level--
-                }
-                end++
-            }
-            val arguments = split(value.substring(start + 4, end - 1), ',', 2)
-            val name = arguments[0].trim()
-            val replacement = variables[name]
-                ?: arguments.getOrNull(1)?.let { substitute(it.trim(), variables, depth + 1) }
-                ?: return null
-            result.append(value, position, start).append(replacement)
-            position = end
-        }
-        result.append(value, position, value.length)
-        return result.toString()
-    }
+    private fun substitute(value: String, variables: Map<String, String>): String? =
+        substituteCssVariables(value) { variables[it] }
 
     /**
      * Applies the rules of the style elements in the document with [root] to the elements they select, and resolves
@@ -202,9 +199,7 @@ internal object SVGStyleSheet {
          * value of its style attribute
          */
         fun style(element: Element, inlineStyle: String = inline[element] ?: ""): String {
-            val matched = rules.filter { rule ->
-                try { element.`is`(rule.selector) } catch (e: Exception) { false }
-            }.map { Pair(Pair(it.specificity, it.order), it.declarations) }
+            val matched = rules.filter { rule -> selectorOf(rule.selector)?.let { matches(element, it) } ?: false }.map { Pair(Pair(it.specificity, it.order), it.declarations) }
             return merge(element, matched, inlineStyle, variables[element] ?: emptyMap()).first
         }
     }
@@ -258,7 +253,8 @@ internal object SVGStyleSheet {
         return Pair(properties.joinToString(";"), variables)
     }
 
-    private val statePseudo = Regex(":(hover|active)\\b")
+    /** the pseudo-classes of pointer states, rules with them apply over time */
+    private val pointerStates = setOf("hover", "active")
 
     /** the @keyframes rules of [css], by name */
     private fun keyframes(css: String): Map<String, List<Keyframe>> {
@@ -294,24 +290,23 @@ internal object SVGStyleSheet {
      * The rules of [selector] with :hover or :active: the elements that the selector without them selects, each with
      * the element whose state the rule depends on, the subject or the ancestor of the compound with the pseudo-class
      */
-    private fun stateRules(root: Element, selector: String, declarations: String, order: Int): List<StateRule> {
-        val compounds = selector.trim().split(Regex("\\s*[>+~]\\s*|\\s+")).filter { it.isNotEmpty() }
-        val index = compounds.indexOfLast { statePseudo.containsMatchIn(it) }
+    private fun stateRules(root: Element, selector: ComplexSelector, declarations: String, order: Int): List<StateRule> {
+        fun state(simple: SimpleSelector) = (simple as? SimpleSelector.PseudoClass)?.name?.takeIf { it in pointerStates }
+        val index = selector.compounds.indexOfLast { compound -> compound.simples.any { state(it) != null } }
         if (index < 0) return emptyList()
-        val state = if (statePseudo.find(compounds[index])!!.groupValues[1] == "hover") State.HOVER else State.ACTIVE
-        val stripped = statePseudo.replace(selector, "")
-        val conditionSelector = statePseudo.replace(compounds[index], "").ifEmpty { "*" }
-        val elements = try {
-            root.select(stripped)
-        } catch (e: Exception) {
-            logger.warn { "unsupported CSS selector '$selector'" }
-            return emptyList()
+        val state = if (selector.compounds[index].simples.firstNotNullOf { state(it) } == "hover") State.HOVER else State.ACTIVE
+        // the selector without the pointer states, and the compound of the element whose state the rule depends on
+        val compounds = selector.compounds.map { compound ->
+            CompoundSelector(compound.simples.filter { state(it) == null }.ifEmpty { listOf(SimpleSelector.Universal) })
         }
+        val stripped = ComplexSelector(compounds, selector.combinators)
+        val condition = ComplexSelector(listOf(compounds[index]), emptyList())
         val parsed = parse(declarations).map { it.name to it.value }
-        return elements.mapNotNull { element ->
-            val condition = if (index == compounds.lastIndex) element
-                else element.parents().firstOrNull { it.`is`(conditionSelector) } ?: return@mapNotNull null
-            StateRule(element, condition, state, parsed, specificity(selector), order)
+        val specificity = selector.specificity.let { it.ids * 10000 + it.classes * 100 + it.types }
+        return select(root, stripped).mapNotNull { element ->
+            val conditionElement = if (index == compounds.lastIndex) element
+                else element.parents().firstOrNull { matches(it, condition) } ?: return@mapNotNull null
+            StateRule(element, conditionElement, state, parsed, specificity, order)
         }
     }
 
@@ -326,17 +321,17 @@ internal object SVGStyleSheet {
         if (css.isNotBlank()) {
             for (rule in rules(css)) {
                 for (selector in rule.selectors) {
-                    // rules for pointer states apply over time
-                    if (statePseudo.containsMatchIn(selector)) {
-                        stateRules.addAll(stateRules(root, selector, rule.declarations, rule.order))
-                        continue
-                    }
-                    val elements = try {
-                        root.select(selector)
-                    } catch (e: Exception) {
+                    val parsed = selectorOf(selector)
+                    if (parsed == null) {
                         logger.warn { "unsupported CSS selector '$selector'" }
                         continue
                     }
+                    // rules for pointer states apply over time
+                    if (parsed.states.any { it in pointerStates }) {
+                        stateRules.addAll(stateRules(root, parsed, rule.declarations, rule.order))
+                        continue
+                    }
+                    val elements = select(root, parsed)
                     selectorRules.add(SelectorRule(selector, specificity(selector), rule.order, rule.declarations))
                     for (element in elements) {
                         matches.getOrPut(element) { mutableListOf() }

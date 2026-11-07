@@ -250,3 +250,39 @@ fun cssBoxSides(value: String): List<String>? {
         else -> null
     }
 }
+
+/**
+ * [value] with its var() functions replaced by the values of the custom properties that [variables] gives by their
+ * names, like `--accent`, or by their fallbacks. Null when a custom property is not defined and has no fallback, which
+ * makes a declaration invalid at computed-value time, as in CSS.
+ */
+fun substituteCssVariables(value: String, variables: (String) -> String?): String? = substitute(value, variables, 0)
+
+private fun substitute(value: String, variables: (String) -> String?, depth: Int): String? {
+    if (depth > 16) return null
+    val result = StringBuilder()
+    var position = 0
+    while (true) {
+        val start = value.indexOf("var(", position)
+        if (start < 0) break
+        // the function ends at the matching parenthesis
+        var level = 1
+        var end = start + 4
+        while (end < value.length && level > 0) {
+            when (value[end]) {
+                '(' -> level++
+                ')' -> level--
+            }
+            end++
+        }
+        val arguments = splitCss(value.substring(start + 4, end - 1), ',', 2)
+        val name = arguments[0].trim()
+        val replacement = variables(name)
+            ?: arguments.getOrNull(1)?.let { substitute(it.trim(), variables, depth + 1) }
+            ?: return null
+        result.append(value, position, start).append(replacement)
+        position = end
+    }
+    result.append(value, position, value.length)
+    return result.toString()
+}

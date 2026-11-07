@@ -21,6 +21,20 @@ val width = Properties.register(CssProperty("width", false, 0.0) { parseCssPixel
 val values = Properties.values(CssDeclaration("width", "2in"))  // [("width", 192.0)]
 ```
 
+## Selectors
+
+`parseCssSelector` parses a selector of CSS into a `ComplexSelector`: types, ids, classes, attribute selectors,
+pseudo-classes of states, like `:hover`, structural pseudo-classes, like `:first-child` and `:nth-child(2n+1)`,
+`:not()`, `:is()` and `:where()`, and the combinators. A selector matches the nodes of any tree that implements
+`SelectorTree`, and has the `specificity` of CSS.
+
+```kotlin
+val selector = parseCssSelector(".toolbar > button:hover")!!
+val selected = selector.matches(node, tree)
+```
+
+`substituteCssVariables` substitutes the `var()` functions of a value with custom properties.
+
 ## Colors
 
 `parseCssColor` parses CSS colors: named colors, hexadecimal colors and color functions, among them `rgb()`,

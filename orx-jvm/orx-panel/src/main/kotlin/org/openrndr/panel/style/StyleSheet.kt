@@ -3,7 +3,12 @@ package org.openrndr.panel.style
 import org.openrndr.color.ColorRGBa
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.openrndr.color.ConvertibleToColorRGBa
+import org.openrndr.extra.style.ComplexSelector
+import org.openrndr.extra.style.CssDeclaration
 import org.openrndr.extra.style.CssKeyword
+import org.openrndr.extra.style.Specificity
+import org.openrndr.extra.style.parseCssRules
+import org.openrndr.extra.style.parseCssSelectorList
 import org.openrndr.extra.style.CssProperties
 import org.openrndr.extra.style.CssProperty
 import org.openrndr.extra.style.parseCssDeclarations
@@ -36,6 +41,14 @@ data class Property(
 
 /** a value of a property */
 open class PropertyValue
+
+/**
+ * The value of [declaration], which uses var(): it is substituted with the custom properties of the element and parsed
+ * when its style is computed
+ */
+class VariableValue(val declaration: CssDeclaration) {
+    override fun toString() = "VariableValue(${declaration.name}: ${declaration.value})"
+}
 
 sealed class Color : PropertyValue() {
     class RGBa(val color: ColorRGBa) : Color() {
@@ -158,8 +171,8 @@ class PropertyHandler<T>(
     @Suppress("UNCHECKED_CAST")
     operator fun getValue(stylesheet: StyleSheet, property: KProperty<*>): T {
         val value = stylesheet.getProperty(name)?.value
-        // a keyword like inherit is resolved when styles are computed
-        return if (value == null || value is CssKeyword) initial else value as T
+        // keywords like inherit and values with var() are resolved when styles are computed
+        return if (value == null || value is CssKeyword || value is VariableValue) initial else value as T
     }
 
     operator fun setValue(stylesheet: StyleSheet, property: KProperty<*>, value: T?) {
@@ -342,9 +355,14 @@ class StyleSheet(val selector: CompoundSelector = CompoundSelector.DUMMY) {
     val children = mutableListOf<StyleSheet>()
     val properties = HashMap<String, Property>()
 
-    val precedence by lazy {
-        selector.precedence()
-    }
+    /**
+     * The selector of CSS of the sheet, made when the sheet is first matched: [child] and [descendant] relate the
+     * selector to the selector of their parent sheet after the sheet is made
+     */
+    val cssSelector: ComplexSelector by lazy { selector.toCss() }
+
+    /** the specificity of the selector */
+    val specificity: Specificity get() = cssSelector.specificity
 
     fun getProperty(name: String) = properties.get(name)
 
@@ -380,11 +398,22 @@ class StyleSheet(val selector: CompoundSelector = CompoundSelector.DUMMY) {
 
     /**
      * Sets the properties of the CSS [declarations], like `width: 100px; background-color: #333 !important`, with
-     * shorthands like margin, padding, border and transition. Declarations of properties that are not known and values
-     * that are not valid are left out, as in CSS.
+     * shorthands like margin, padding, border and transition, and custom properties like `--accent: #f80` that values
+     * use with var(), like `color: var(--accent)`. Declarations of properties that are not known and values that are
+     * not valid are left out, as in CSS.
      */
     fun css(declarations: String) {
         for (declaration in parseCssDeclarations(declarations)) {
+            val important = declaration.important || settingImportant
+            // custom properties are kept as text, values with var() are resolved when styles are computed
+            if (declaration.name.startsWith("--")) {
+                setProperty(declaration.name, declaration.value, important)
+                continue
+            }
+            if ("var(" in declaration.value) {
+                setProperty(declaration.name.trim().lowercase(), VariableValue(declaration), important)
+                continue
+            }
             val values = panelProperties().values(declaration)
             if (values == null) {
                 logger.warn { "ignored the declaration '${declaration.name}: ${declaration.value}'" }
@@ -689,6 +718,25 @@ fun StyleSheet.and(selector: CompoundSelector, init: StyleSheet.() -> Unit) {
 
 fun StyleSheet.flatten(): List<StyleSheet> {
     return listOf(this) + children.flatMap { it.flatten() }
+}
+
+/**
+ * A style sheet for the CSS selector [selector], like `.toolbar > button:hover`, with the properties that [init] sets
+ */
+fun styleSheet(selector: String, init: StyleSheet.() -> Unit): StyleSheet =
+    styleSheet(CompoundSelector.parse(selector) ?: error("invalid or unsupported selector '$selector'"), init)
+
+/**
+ * The style sheets of the CSS [css]: a sheet for every selector of every rule, with the declarations of the rule, see
+ * [StyleSheet.css]. Rules with selectors that are not valid or not supported are left out, as in CSS; at-rules are
+ * left out.
+ */
+fun styleSheets(css: String): List<StyleSheet> = parseCssRules(css).flatMap { rule ->
+    val selectors = parseCssSelectorList(rule.selectors.joinToString(", "))
+    if (selectors == null) {
+        logger.warn { "ignored the rule for '${rule.selectors.joinToString(", ")}', its selector is not valid or not supported" }
+        emptyList()
+    } else selectors.map { selector -> StyleSheet(CompoundSelector.of(selector)).apply { css(rule.block) } }
 }
 
 @OptIn(ExperimentalContracts::class)

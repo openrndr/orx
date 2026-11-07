@@ -74,7 +74,7 @@ class RedrawTest : PanelTestFixture() {
             b = div { }
         }
         // the div right after a red div is blue
-        val selector = CompoundSelector(Combinator.NEXT_SIBLING to (has class_ "red"), listOf(TypeSelector(ElementType("div"))))
+        val selector = CompoundSelector.parse(".red + div")!!
         val layouter = Layouter().apply {
             styleSheets.addAll((sheets() + StyleSheet(selector).apply { background = Color.RGBa(ColorRGBa.BLUE) }).flatMap { it.flatten() })
         }

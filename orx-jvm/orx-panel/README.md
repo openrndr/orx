@@ -2,6 +2,32 @@
 
 The OPENRNDR UI toolkit. Provides buttons, sliders, text, a color picker and much more. HTML/CSS-like.
 
+## Styles
+
+Elements are styled by style sheets, which select elements like CSS does. Write them with the Kotlin builder or as
+CSS:
+
+```kotlin
+controlManager {
+    styleSheet(has class_ "toolbar") {
+        display = Display.FLEX
+        child(has type "button") { width = 80.px }
+    }
+    css("""
+        .toolbar { --accent: #5ab0ff; gap: 4px; padding: 4px 8px }
+        .toolbar > button:hover { background-color: var(--accent) }
+        .panel :not(.toolbar) button:first-child { border: 1px solid white !important }
+    """)
+    layout { /* ... */ }
+}
+```
+
+Selectors are those of CSS (types, classes, ids, states such as `:hover` and `:focus`, structural pseudo-classes like
+`:nth-child()`, `:not()`, `:is()` and `:where()`, and all combinators), with the specificity of CSS. Properties take
+CSS values and shorthands, `!important`, the keywords `inherit`, `initial` and `unset`, and custom properties with
+`var()`. Inline styles take CSS too: `style = StyleSheet().apply { css("width: 50%; margin: 4px") }`. In CSS, grid
+lines are counted from 1; the Kotlin builder counts grid tracks from 0.
+
 <!-- __demos__ -->
 ## Demos
 ### DemoBinding01

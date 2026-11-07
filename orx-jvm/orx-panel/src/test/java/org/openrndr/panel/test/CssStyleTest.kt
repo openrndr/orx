@@ -107,4 +107,83 @@ class CssStyleTest {
         // a keyword is resolved, the property is not left as a keyword
         assertTrue(child.computedStyle["width"] !is CssKeyword)
     }
+
+    @Test
+    fun `style sheets of CSS select elements by type, class, state and structure`() {
+        lateinit var first: Button
+        lateinit var second: Button
+        lateinit var inner: Div
+        val body = Body(null).apply {
+            div("toolbar") {
+                first = button { }
+                second = button { classes.add(ElementClass("primary")) }
+            }
+            div("panel") { inner = div("inner") { } }
+        }
+        val sheets = styleSheets("""
+            /* a comment */
+            .toolbar > button { background-color: gray; width: 50px }
+            .toolbar > button:hover, .primary { background-color: blue }
+            button.primary { width: 80px }
+            .toolbar button:first-child { height: 10px }
+            .panel :not(.toolbar) { color: red }
+            div::before { color: green }
+            .toolbar > button:nth-child(2n) { border-width: 2px !important }
+            button.primary { border-width: 1px }
+        """)
+        // the rule with a pseudo-element is left out, the selector list gives a sheet per selector
+        assertEquals(8, sheets.size)
+        val layouter = Layouter().apply { styleSheets.addAll(sheets.flatMap { it.flatten() }) }
+        layouter.computeStyles(body)
+        assertEquals(0.5, rgb(first.computedStyle.background).r, 0.01)
+        assertEquals(50.0, px(first.computedStyle.width))
+        assertEquals(10.0, px(first.computedStyle.height))
+        // .toolbar > button is more specific than .primary, button.primary than .toolbar > button
+        assertEquals(0.5, rgb(second.computedStyle.background).r, 0.01)
+        assertEquals(80.0, px(second.computedStyle.width))
+        // the important declaration wins over the more specific one that is not
+        assertEquals(2.0, px(second.computedStyle.borderWidth))
+        assertEquals(1.0, rgb(inner.computedStyle.color).r)
+        // states are pseudo-classes
+        first.pseudoClasses.add(ElementPseudoClass("hover"))
+        layouter.updateStyles(body)
+        assertEquals(1.0, rgb(first.computedStyle.background).b)
+    }
+
+    @Test
+    fun `selectors of the builder and of CSS are the same`() {
+        val built = styleSheet(has type "button") {
+            descendant(has class_ "label" and (has state "hover")) { }
+        }.flatten().last()
+        assertEquals("button .label:hover", built.cssSelector.toString())
+        assertEquals(built.specificity, styleSheet("button .label:hover") { }.specificity)
+        assertEquals(":is(slider, button)", (has type listOf("slider", "button")).toString())
+    }
+
+    @Test
+    fun `custom properties are inherited and used with var()`() {
+        lateinit var child: Div
+        lateinit var other: Div
+        val body = Body(null).apply {
+            div("theme") {
+                child = div("item") { }
+                other = div("other") { }
+            }
+        }
+        val layouter = Layouter().apply {
+            styleSheets.addAll(styleSheets("""
+                .theme { --accent: #0000ff; --gap: 6px; --space: calc(var(--gap) * 2) }
+                .item { background-color: var(--accent); margin: var(--space) var(--gap) }
+                .other { --accent: red; color: var(--accent); width: var(--missing, 30px); height: var(--missing) }
+            """).flatMap { it.flatten() })
+        }
+        layouter.computeStyles(body)
+        assertEquals(1.0, rgb(child.computedStyle.background).b)
+        assertEquals(12.0, px(child.computedStyle.marginTop))
+        assertEquals(6.0, px(child.computedStyle.marginLeft))
+        // a custom property of the element itself, a fallback, and a value without a fallback that is unset
+        assertEquals(1.0, rgb(other.computedStyle.color).r)
+        assertEquals(30.0, px(other.computedStyle.width))
+        assertSame(LinearDimension.Auto, other.computedStyle.height)
+    }
 }
