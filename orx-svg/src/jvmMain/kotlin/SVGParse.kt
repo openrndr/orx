@@ -1,4 +1,5 @@
 package org.openrndr.extra.svg
+import org.openrndr.extra.style.evaluateCssCalc
 import org.openrndr.extra.style.parseCssAngle
 import org.openrndr.extra.style.parseCssColor
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -182,36 +183,7 @@ internal object SVGParse {
      * The value of a CSS calc() function with +, -, * and / and parentheses; [leaf] gives the value of a number with
      * or without a unit. Null when the expression is not valid.
      */
-    fun calc(value: String, leaf: (String) -> Double?): Double? {
-        val tokens = Regex("calc\\(|\\(|\\)|\\*|/|[+-](?=\\s)|[+-]?(?:\\d+\\.?\\d*|\\.\\d+)(?:e[+-]?\\d+)?(?:[a-zA-Z]+|%)?")
-            .findAll(value).map { it.value }.toList()
-        var position = 0
-        fun peek() = tokens.getOrNull(position)
-        fun expression(): Double? {
-            fun factor(): Double? = when (val token = tokens.getOrNull(position++)) {
-                null -> null
-                "calc(", "(" -> expression().takeIf { tokens.getOrNull(position++) == ")" }
-                else -> leaf(token)
-            }
-            fun term(): Double? {
-                var result = factor() ?: return null
-                while (peek() == "*" || peek() == "/") {
-                    val operator = tokens[position++]
-                    val operand = factor() ?: return null
-                    result = if (operator == "*") result * operand else result / operand
-                }
-                return result
-            }
-            var result = term() ?: return null
-            while (peek() == "+" || peek() == "-") {
-                val operator = tokens[position++]
-                val operand = term() ?: return null
-                result = if (operator == "+") result + operand else result - operand
-            }
-            return result
-        }
-        return expression()?.takeIf { position == tokens.size && it.isFinite() }
-    }
+    fun calc(value: String, leaf: (String) -> Double?): Double? = evaluateCssCalc(value, leaf)
 
     fun number(value: String): Numeric {
         if ("calc(" in value) return Numeric.Rational(calc(value.trim()) { it.toDoubleOrNull() } ?: 0.0)

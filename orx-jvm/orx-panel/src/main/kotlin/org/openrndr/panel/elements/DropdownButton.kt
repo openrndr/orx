@@ -210,7 +210,7 @@ class DropdownButton : Element(ElementType("dropdown-button")) {
                 height = LinearDimension.PX(this@SlideOut.height)
                 overflow = Overflow.Scroll
                 zIndex = ZIndex.Value(1000)
-                background = Color.Inherit
+                inherit("background-color")
             }
 
             (parent as DropdownButton).items().forEach {

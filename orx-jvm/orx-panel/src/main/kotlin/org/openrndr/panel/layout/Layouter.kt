@@ -2,6 +2,7 @@ package org.openrndr.panel.layout
 
 import org.openrndr.panel.elements.Element
 import org.openrndr.panel.elements.TextNode
+import org.openrndr.extra.style.CssKeyword
 import org.openrndr.panel.style.*
 import kotlin.math.abs
 import kotlin.math.ceil
@@ -864,7 +865,7 @@ class Layouter {
         layout.zIndex = when (val zIndex = cs.zIndex) {
             is ZIndex.Value -> zIndex.value
             // a sticky element is over the elements next to it
-            is ZIndex.Auto, is ZIndex.Inherit -> (element.parent?.layout?.zIndex ?: 0) + if (cs.position == Position.STICKY) 1 else 0
+            is ZIndex.Auto -> (element.parent?.layout?.zIndex ?: 0) + if (cs.position == Position.STICKY) 1 else 0
         }
 
         arrangeChildren(element)
@@ -1040,17 +1041,26 @@ class Layouter {
 
         element.computedStyle.let { cs ->
 
-            element.parent?.let { p ->
-                cs.properties.forEach { (k, v) ->
-                    if ((v.value as? PropertyValue)?.inherit == true) {
-                        cs.properties[k] = p.computedStyle.getProperty(k) ?: v
-                    }
+            val parent = element.parent?.computedStyle
+            val properties = panelProperties()
+            // the keywords: inherit takes the value of the parent, initial the initial value, unset the value of the
+            // parent for properties that are inherited and the initial value for others
+            for ((name, declared) in cs.properties.toList()) {
+                val keyword = declared.value as? CssKeyword ?: continue
+                val property = properties[name]
+                val inherits = keyword == CssKeyword.INHERIT || (keyword == CssKeyword.UNSET && property?.inherited == true)
+                val inherited = if (inherits) parent?.getProperty(name) else null
+                when {
+                    inherited != null -> cs.properties[name] = inherited.copy(important = declared.important)
+                    property != null -> cs.properties[name] = Property(name, property.initial, declared.important)
+                    else -> cs.properties.remove(name)
                 }
-                PropertyBehaviours.behaviours.forEach { (k, v) ->
-                    if (v.inheritance == PropertyInheritance.INHERIT && k !in cs.properties) {
-                        if (k in p.computedStyle.properties) {
-                            cs.properties[k] = p.computedStyle.getProperty(k)!!
-                        }
+            }
+            // the properties that are inherited and not declared take the values of the parent
+            if (parent != null) {
+                for (property in properties.all) {
+                    if (property.inherited && property.name !in cs.properties) {
+                        parent.getProperty(property.name)?.let { cs.properties[property.name] = it }
                     }
                 }
             }

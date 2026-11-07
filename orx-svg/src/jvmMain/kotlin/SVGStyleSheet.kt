@@ -2,6 +2,10 @@ package org.openrndr.extra.svg
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.jsoup.nodes.Element
+import org.openrndr.extra.style.CssDeclaration
+import org.openrndr.extra.style.parseCssDeclarations
+import org.openrndr.extra.style.parseCssRules
+import org.openrndr.extra.style.splitCss
 
 private val logger = KotlinLogging.logger {}
 
@@ -28,69 +32,14 @@ internal object SVGStyleSheet {
         "d" to setOf("path")
     )
 
-    /** a declaration of [name] with [value] */
-    private class Declaration(val name: String, val value: String, val important: Boolean)
-
     /** the rules of [css], in the order they are given */
-    private fun rules(css: String): List<Rule> {
-        val text = css.replace(Regex("/\\*.*?\\*/", RegexOption.DOT_MATCHES_ALL), "")
-        val rules = mutableListOf<Rule>()
-        var position = 0
-        while (position < text.length) {
-            val open = text.indexOf('{', position)
-            if (open < 0) break
-            val prelude = text.substring(position, open).trim()
-            // the block ends at the matching brace, blocks of at-rules can hold blocks
-            var depth = 1
-            var close = open + 1
-            while (close < text.length && depth > 0) {
-                when (text[close]) {
-                    '{' -> depth++
-                    '}' -> depth--
-                }
-                close++
-            }
-            val block = text.substring(open + 1, (close - 1).coerceAtLeast(open + 1))
-            if (prelude.isNotEmpty() && !prelude.startsWith("@")) {
-                rules.add(Rule(prelude.split(",").map { it.trim() }.filter { it.isNotEmpty() }, block, rules.size))
-            }
-            position = close
-        }
-        return rules
-    }
+    private fun rules(css: String): List<Rule> = parseCssRules(css).map { Rule(it.selectors, it.block, it.order) }
 
     /** [text] split at [separator], except where the separator is in parentheses or quotes */
-    private fun split(text: String, separator: Char, limit: Int = Int.MAX_VALUE): List<String> {
-        val parts = mutableListOf<String>()
-        var depth = 0
-        var quote: Char? = null
-        var start = 0
-        for ((i, c) in text.withIndex()) {
-            when {
-                quote != null -> if (c == quote) quote = null
-                c == '"' || c == '\'' -> quote = c
-                c == '(' -> depth++
-                c == ')' -> depth = (depth - 1).coerceAtLeast(0)
-                c == separator && depth == 0 && parts.size < limit - 1 -> {
-                    parts.add(text.substring(start, i))
-                    start = i + 1
-                }
-            }
-        }
-        parts.add(text.substring(start))
-        return parts
-    }
+    private fun split(text: String, separator: Char, limit: Int = Int.MAX_VALUE): List<String> = splitCss(text, separator, limit)
 
     /** the declarations of a block or a style attribute, with !important removed from their values */
-    private fun parse(block: String): List<Declaration> = split(block, ';').mapNotNull { declaration ->
-        val parts = split(declaration, ':', 2)
-        if (parts.size < 2) return@mapNotNull null
-        val name = parts[0].trim()
-        var value = parts[1].trim()
-        val important = Regex("!\\s*important\\s*$", RegexOption.IGNORE_CASE).find(value)
-        if (important != null) value = value.substring(0, important.range.first).trim()
-        if (name.isEmpty()) null else Declaration(name, value, important != null)
-    }
+    private fun parse(block: String): List<CssDeclaration> = parseCssDeclarations(block)
 
     /**
      * The text of the style elements of the document with [root], CDATA sections included, with the style sheets that

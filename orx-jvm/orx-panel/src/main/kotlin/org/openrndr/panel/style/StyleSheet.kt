@@ -1,7 +1,13 @@
 package org.openrndr.panel.style
 
 import org.openrndr.color.ColorRGBa
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.openrndr.color.ConvertibleToColorRGBa
+import org.openrndr.extra.style.CssKeyword
+import org.openrndr.extra.style.CssProperties
+import org.openrndr.extra.style.CssProperty
+import org.openrndr.extra.style.parseCssDeclarations
+import org.openrndr.extra.style.splitCssWords
 import org.openrndr.extra.style.TimingFunction
 import org.openrndr.panel.style.PropertyInheritance.INHERIT
 import org.openrndr.panel.style.PropertyInheritance.RESET
@@ -10,34 +16,38 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 import kotlin.reflect.KProperty
 
+private val logger = KotlinLogging.logger {}
+
 enum class PropertyInheritance {
     INHERIT,
     RESET
 }
 
+/**
+ * A declaration of a style sheet: the property [name] with [value], a value of the property or a [CssKeyword] like
+ * `inherit`; [important] when it is declared !important, it then wins over declarations that are not
+ */
 @JvmRecord
 data class Property(
     val name: String,
-    val value: Any?
+    val value: Any?,
+    val important: Boolean = false
 )
 
-open class PropertyValue(val inherit: Boolean = false, val important: Boolean = false)
+/** a value of a property */
+open class PropertyValue
 
-sealed class Color(inherit: Boolean = false,  important: Boolean = false) : PropertyValue(inherit, important) {
-    class RGBa(val color: ColorRGBa, important: Boolean = false) : Color(important = important) {
+sealed class Color : PropertyValue() {
+    class RGBa(val color: ColorRGBa) : Color() {
         override fun toString(): String {
             return "RGBa(color=$color)"
         }
     }
 
-    object Inherit : Color(inherit = true)
-
     companion object {
-        val inherit = Inherit
-
-        operator fun invoke(important: Boolean = false, f: Companion.() -> Any): Color {
+        operator fun invoke(f: Companion.() -> Any): Color {
             return when (val r = f()) {
-                is ConvertibleToColorRGBa -> RGBa(r.toRGBa(), important)
+                is ConvertibleToColorRGBa -> RGBa(r.toRGBa())
                 is Color -> r
                 else -> error("Can't resolve Color from '$r'")
             }
@@ -49,14 +59,12 @@ typealias color = Color
 
 class CalculateContext(val elementWidth: Double?, val elementHeight: Double?)
 
-sealed class Cursor(inherit: Boolean = false) : PropertyValue(inherit) {
+sealed class Cursor : PropertyValue() {
     object Default : Cursor()
     object Pointer : Cursor()
     object Text : Cursor()
     object Crosshair : Cursor()
-    object Inherit : Cursor(inherit = true)
     companion object {
-        val inherit = Inherit
         val default = Default
         val pointer = Pointer
         val text = Text
@@ -71,7 +79,7 @@ sealed class Cursor(inherit: Boolean = false) : PropertyValue(inherit) {
     }
 }
 
-sealed class LinearDimension(inherit: Boolean = false) : PropertyValue(inherit) {
+sealed class LinearDimension : PropertyValue() {
     class PX(val value: Double) : LinearDimension() {
         override fun toString(): String {
             return "PX(value=$value)"
@@ -86,13 +94,12 @@ sealed class LinearDimension(inherit: Boolean = false) : PropertyValue(inherit) 
     class MinMax(val min: LinearDimension, val max: LinearDimension) : LinearDimension()
 
     object Auto : LinearDimension()
-    object Inherit : LinearDimension(inherit = true)
 
     fun inPixels(parentLengthInPx: Double): Double {
         return when (this) {
             is PX -> value
             is Percent -> parentLengthInPx * (value / 100.0)
-            Auto, Inherit -> error("unresolvable")
+            Auto -> error("unresolvable")
             else -> TODO()
         }
     }
@@ -100,7 +107,6 @@ sealed class LinearDimension(inherit: Boolean = false) : PropertyValue(inherit) 
     companion object {
         val x = 0.0
         val auto by lazy { Auto }
-        val inherit by lazy { Inherit }
 
         val Number.px: PX
             get() {
@@ -127,28 +133,33 @@ sealed class LinearDimension(inherit: Boolean = false) : PropertyValue(inherit) 
 
 typealias length = LinearDimension.Companion
 
+/**
+ * The properties of panels, by their CSS names, with their CSS shorthands, see [StyleSheet.css]
+ */
+object PanelProperties : CssProperties()
 
-@JvmRecord
-data class PropertyBehaviour(val inheritance: PropertyInheritance, val intitial: Any)
+/**
+ * The properties of panels, all registered: the properties are registered by the delegates of this file, which are
+ * initialized when a function of the file is first called
+ */
+internal fun panelProperties(): CssProperties = PanelProperties
 
-object PropertyBehaviours {
-
-    val behaviours = HashMap<String, PropertyBehaviour>()
-}
-
+/**
+ * A property of panels: [name] is its CSS name, its value is inherited by default when [inheritance] is
+ * [PropertyInheritance.INHERIT], [initial] is its initial value, [parse] reads a value from CSS text
+ */
 class PropertyHandler<T>(
-    val name: String, val inheritance: PropertyInheritance, val initial: T
+    val name: String, val inheritance: PropertyInheritance, val initial: T, parse: (String) -> T?
 ) {
-
     init {
-        PropertyBehaviours.behaviours[name] = PropertyBehaviour(inheritance, initial as Any)
+        PanelProperties.register(CssProperty(name, inheritance == PropertyInheritance.INHERIT, initial, parse))
     }
 
-    @Suppress("USELESS_CAST", "UNCHECKED_CAST")
+    @Suppress("UNCHECKED_CAST")
     operator fun getValue(stylesheet: StyleSheet, property: KProperty<*>): T {
-        val value: T? = stylesheet.getProperty(name)?.value as T?
-        return value ?: PropertyBehaviours.behaviours[name]!!.intitial as T
-
+        val value = stylesheet.getProperty(name)?.value
+        // a keyword like inherit is resolved when styles are computed
+        return if (value == null || value is CssKeyword) initial else value as T
     }
 
     operator fun setValue(stylesheet: StyleSheet, property: KProperty<*>, value: T?) {
@@ -156,7 +167,7 @@ class PropertyHandler<T>(
     }
 }
 
-sealed class Display : PropertyValue(false) {
+sealed class Display : PropertyValue() {
     object INLINE : Display()
     object BLOCK : Display()
     object FLEX : Display()
@@ -169,7 +180,6 @@ enum class Position {
     ABSOLUTE,
     RELATIVE,
     FIXED,
-    INHERIT,
 
     /**
      * In the flow, but kept in view while the element that scrolls it scrolls: at [top] from its top and [left] from its
@@ -178,31 +188,29 @@ enum class Position {
     STICKY
 }
 
-sealed class FlexDirection(inherit: Boolean = false) : PropertyValue(inherit) {
+sealed class FlexDirection : PropertyValue() {
     object Row : FlexDirection()
     object Column : FlexDirection()
     object RowReverse : FlexDirection()
     object ColumnReverse : FlexDirection()
-    object Inherit : FlexDirection(inherit = true)
 }
 
 /**
  * How the items of a flex container are placed across its main axis, inside their line.
  */
-sealed class AlignItems(inherit: Boolean = false) : PropertyValue(inherit) {
+sealed class AlignItems : PropertyValue() {
     object Start : AlignItems()
     object Center : AlignItems()
     object End : AlignItems()
 
     /** items with an auto cross size fill their line */
     object Stretch : AlignItems()
-    object Inherit : AlignItems(inherit = true)
 }
 
 /**
  * How the space left in a line of a flex container is distributed along its main axis.
  */
-sealed class JustifyContent(inherit: Boolean = false) : PropertyValue(inherit) {
+sealed class JustifyContent : PropertyValue() {
     object Start : JustifyContent()
     object Center : JustifyContent()
     object End : JustifyContent()
@@ -215,51 +223,43 @@ sealed class JustifyContent(inherit: Boolean = false) : PropertyValue(inherit) {
 
     /** the space between the items and the edges is equal */
     object SpaceEvenly : JustifyContent()
-    object Inherit : JustifyContent(inherit = true)
 }
 
 /**
  * Whether the items of a flex container wrap onto new lines when they do not fit.
  */
-sealed class FlexWrap(inherit: Boolean = false) : PropertyValue(inherit) {
+sealed class FlexWrap : PropertyValue() {
     object NoWrap : FlexWrap()
     object Wrap : FlexWrap()
-    object Inherit : FlexWrap(inherit = true)
 }
 
-sealed class Overflow(inherit: Boolean = false) : PropertyValue(inherit) {
+sealed class Overflow : PropertyValue() {
     object Visible : Overflow()
     object Hidden : Overflow()
     object Scroll : Overflow()
-    object Inherit : Overflow(inherit = true)
 }
 
 /** how an element scrolls: [Smooth] animates scrolling by the wheel, by pages and into view, [Auto] jumps */
-sealed class ScrollBehavior(inherit: Boolean = false) : PropertyValue(inherit) {
+sealed class ScrollBehavior : PropertyValue() {
     object Auto : ScrollBehavior()
     object Smooth : ScrollBehavior()
-    object Inherit : ScrollBehavior(inherit = true)
 }
 
 /** when scrollbars are shown: [Auto] while scrolling, and fading out after it, or [Always] */
-sealed class ScrollbarVisibility(inherit: Boolean = false) : PropertyValue(inherit) {
+sealed class ScrollbarVisibility : PropertyValue() {
     object Auto : ScrollbarVisibility()
     object Always : ScrollbarVisibility()
-    object Inherit : ScrollbarVisibility(inherit = true)
 }
 
-sealed class ZIndex(inherit: Boolean = false) : PropertyValue(inherit) {
+sealed class ZIndex : PropertyValue() {
     object Auto : ZIndex()
     class Value(val value: Int) : ZIndex()
-    object Inherit : ZIndex(inherit = true)
 }
 
-sealed class FlexGrow(inherit: Boolean = false) : PropertyValue(inherit) {
+sealed class FlexGrow : PropertyValue() {
     class Ratio(val value: Double) : FlexGrow()
-    object Inherit : FlexGrow(inherit = true)
 
     companion object {
-        val inherit = Inherit
         operator fun invoke(f: Companion.() -> Any): FlexGrow {
             return when (val r = f()) {
                 is Number -> Ratio(r.toDouble())
@@ -271,13 +271,11 @@ sealed class FlexGrow(inherit: Boolean = false) : PropertyValue(inherit) {
 }
 typealias flex = FlexGrow
 
-sealed class GridTemplate(inherit: Boolean = false) : PropertyValue(inherit) {
+sealed class GridTemplate : PropertyValue() {
     class LengthList(val value: List<LinearDimension>) : GridTemplate()
-    object Inherit : GridTemplate(inherit = true)
     object None : GridTemplate()
 
     companion object {
-        val inherit = Inherit
         val none = None
         operator fun invoke(f: Companion.() -> Any): GridTemplate {
             return when (val r = f()) {
@@ -292,16 +290,14 @@ sealed class GridTemplate(inherit: Boolean = false) : PropertyValue(inherit) {
 
 typealias gridTemplate = GridTemplate
 
-sealed class GridPopulation(inherit: Boolean = false) : PropertyValue(inherit) {
+sealed class GridPopulation : PropertyValue() {
     class Position(val value: Int) : GridPopulation()
     class Length(val value: Int) : GridPopulation()
     class Span(val value: IntRange) : GridPopulation()
     object Auto : GridPopulation()
-    object Inherit : GridPopulation(inherit = true)
 
     companion object {
         val auto = Auto
-        val inherit = Inherit
         fun length(value: Int) = Length(value)
         val Int.rows: Length get() = length(this)
         val Int.columns: Length get() = length(this)
@@ -318,12 +314,10 @@ sealed class GridPopulation(inherit: Boolean = false) : PropertyValue(inherit) {
 
 typealias gridPopulation = GridPopulation
 
-sealed class TextAlign(inherit: Boolean = false) : PropertyValue(inherit) {
+sealed class TextAlign : PropertyValue() {
     class Value(val value: Double) : TextAlign()
-    object Inherit : TextAlign(inherit = false)
 
     companion object {
-        val inherit = Inherit
         val left = Value(0.0)
         val right = Value(1.0)
         val center = Value(0.5)
@@ -358,20 +352,62 @@ class StyleSheet(val selector: CompoundSelector = CompoundSelector.DUMMY) {
     var version = 0
         private set
 
-    fun setProperty(name: String, value: Any?) {
+    /** true while the properties that are set are important, see [important] */
+    private var settingImportant = false
+
+    /** sets the property [name] to [value], a value of the property or a [CssKeyword] */
+    fun setProperty(name: String, value: Any?, important: Boolean = settingImportant) {
         version++
-        properties[name] = Property(name, value)
+        properties[name] = Property(name, value, important)
     }
+
+    /** the properties that [block] sets are !important: they win over the declarations that are not */
+    fun important(block: StyleSheet.() -> Unit) {
+        val before = settingImportant
+        settingImportant = true
+        try {
+            block()
+        } finally {
+            settingImportant = before
+        }
+    }
+
+    /** the properties [names] take the values of the parent, like the CSS keyword inherit */
+    fun inherit(vararg names: String) = names.forEach { setProperty(it, CssKeyword.INHERIT) }
+
+    /** the properties [names] take their initial values, like the CSS keyword initial */
+    fun initial(vararg names: String) = names.forEach { setProperty(it, CssKeyword.INITIAL) }
+
+    /**
+     * Sets the properties of the CSS [declarations], like `width: 100px; background-color: #333 !important`, with
+     * shorthands like margin, padding, border and transition. Declarations of properties that are not known and values
+     * that are not valid are left out, as in CSS.
+     */
+    fun css(declarations: String) {
+        for (declaration in parseCssDeclarations(declarations)) {
+            val values = panelProperties().values(declaration)
+            if (values == null) {
+                logger.warn { "ignored the declaration '${declaration.name}: ${declaration.value}'" }
+                continue
+            }
+            for ((name, value) in values) setProperty(name, value, declaration.important || settingImportant)
+        }
+    }
+
+    /** sets the property [name] to the CSS [value], see [css] */
+    operator fun set(name: String, value: String) = css("$name: $value")
+
+    /** the value of the property [name] as it is set, null when it is not set */
+    operator fun get(name: String): Any? = properties[name]?.value
 
     fun cascadeOnto(onto: StyleSheet): StyleSheet {
         val cascaded = StyleSheet(dummySelector)
 
         cascaded.properties.putAll(onto.properties)
-        cascaded.properties.putAll(properties)
-
-        // re-apply properties with important flag set
-        val important = onto.properties.filterValues { (it.value as? PropertyValue)?.important == true }
-        cascaded.properties.putAll(important)
+        // declarations that are important are not replaced by declarations that are not
+        for ((name, property) in properties) {
+            if (property.important || cascaded.properties[name]?.important != true) cascaded.properties[name] = property
+        }
         return cascaded
     }
 
@@ -380,113 +416,109 @@ class StyleSheet(val selector: CompoundSelector = CompoundSelector.DUMMY) {
     }
 }
 
-var StyleSheet.width by PropertyHandler<LinearDimension>("width", RESET, LinearDimension.Auto)
-var StyleSheet.height by PropertyHandler<LinearDimension>("height", RESET, LinearDimension.Auto)
+var StyleSheet.width by PropertyHandler<LinearDimension>("width", RESET, LinearDimension.Auto, ::parseLength)
+var StyleSheet.height by PropertyHandler<LinearDimension>("height", RESET, LinearDimension.Auto, ::parseLength)
 
 // a minimum or maximum of auto means no limit
-var StyleSheet.minWidth by PropertyHandler<LinearDimension>("min-width", RESET, LinearDimension.Auto)
-var StyleSheet.maxWidth by PropertyHandler<LinearDimension>("max-width", RESET, LinearDimension.Auto)
-var StyleSheet.minHeight by PropertyHandler<LinearDimension>("min-height", RESET, LinearDimension.Auto)
-var StyleSheet.maxHeight by PropertyHandler<LinearDimension>("max-height", RESET, LinearDimension.Auto)
-var StyleSheet.top by PropertyHandler<LinearDimension>("top", RESET, length { 0 }) // css default is auto
-var StyleSheet.left by PropertyHandler<LinearDimension>("left", RESET, length { 0 }) // css default is auto
+var StyleSheet.minWidth by PropertyHandler<LinearDimension>("min-width", RESET, LinearDimension.Auto, ::parseLength)
+var StyleSheet.maxWidth by PropertyHandler<LinearDimension>("max-width", RESET, LinearDimension.Auto, ::parseLength)
+var StyleSheet.minHeight by PropertyHandler<LinearDimension>("min-height", RESET, LinearDimension.Auto, ::parseLength)
+var StyleSheet.maxHeight by PropertyHandler<LinearDimension>("max-height", RESET, LinearDimension.Auto, ::parseLength)
+var StyleSheet.top by PropertyHandler<LinearDimension>("top", RESET, length { 0 }, ::parseLength) // css default is auto
+var StyleSheet.left by PropertyHandler<LinearDimension>("left", RESET, length { 0 }, ::parseLength) // css default is auto
 
-var StyleSheet.marginTop by PropertyHandler<LinearDimension>("margin-top", RESET, length { 0 })
-var StyleSheet.marginBottom by PropertyHandler<LinearDimension>("margin-bottom", RESET, length { 0 })
-var StyleSheet.marginLeft by PropertyHandler<LinearDimension>("margin-left", RESET, length { 0 })
-var StyleSheet.marginRight by PropertyHandler<LinearDimension>("margin-right", RESET, length { 0 })
-
-
-var StyleSheet.paddingTop by PropertyHandler<LinearDimension>("padding-top", RESET, 0.px)
-var StyleSheet.paddingBottom by PropertyHandler<LinearDimension>("padding-bottom", RESET, 0.px)
-var StyleSheet.paddingLeft by PropertyHandler<LinearDimension>("padding-left", RESET, 0.px)
-var StyleSheet.paddingRight by PropertyHandler<LinearDimension>("padding-right", RESET, 0.px)
+var StyleSheet.marginTop by PropertyHandler<LinearDimension>("margin-top", RESET, length { 0 }, ::parseLength)
+var StyleSheet.marginBottom by PropertyHandler<LinearDimension>("margin-bottom", RESET, length { 0 }, ::parseLength)
+var StyleSheet.marginLeft by PropertyHandler<LinearDimension>("margin-left", RESET, length { 0 }, ::parseLength)
+var StyleSheet.marginRight by PropertyHandler<LinearDimension>("margin-right", RESET, length { 0 }, ::parseLength)
 
 
-var StyleSheet.position by PropertyHandler("position", RESET, Position.STATIC)
-var StyleSheet.display by PropertyHandler<Display>("display", RESET, Display.BLOCK) // css default is inline
+var StyleSheet.paddingTop by PropertyHandler<LinearDimension>("padding-top", RESET, 0.px, ::parseLength)
+var StyleSheet.paddingBottom by PropertyHandler<LinearDimension>("padding-bottom", RESET, 0.px, ::parseLength)
+var StyleSheet.paddingLeft by PropertyHandler<LinearDimension>("padding-left", RESET, 0.px, ::parseLength)
+var StyleSheet.paddingRight by PropertyHandler<LinearDimension>("padding-right", RESET, 0.px, ::parseLength)
 
-var StyleSheet.columnGap by PropertyHandler<LinearDimension>(
-    "column-gap",
-    PropertyInheritance.RESET,
-    LinearDimension.PX(0.0)
-)
-var StyleSheet.rowGap by PropertyHandler<LinearDimension>("row-gap", PropertyInheritance.RESET, LinearDimension.PX(0.0))
 
-var StyleSheet.gridTemplateColumns by PropertyHandler<GridTemplate>("grid-template-columns", RESET, GridTemplate.None)
-var StyleSheet.gridTemplateRows by PropertyHandler<GridTemplate>("grid-template-rows", RESET, GridTemplate.None)
-var StyleSheet.gridColumn by PropertyHandler<GridPopulation>("grid-column", RESET, GridPopulation.Auto)
-var StyleSheet.gridRow by PropertyHandler<GridPopulation>("grid-row", RESET, GridPopulation.Auto)
+var StyleSheet.position by PropertyHandler("position", RESET, Position.STATIC, keywords("static" to Position.STATIC, "relative" to Position.RELATIVE, "absolute" to Position.ABSOLUTE, "fixed" to Position.FIXED, "sticky" to Position.STICKY))
+var StyleSheet.display by PropertyHandler<Display>("display", RESET, Display.BLOCK, keywords("inline" to Display.INLINE, "block" to Display.BLOCK, "flex" to Display.FLEX, "grid" to Display.GRID, "none" to Display.NONE)) // css default is inline
 
-var StyleSheet.flexDirection by PropertyHandler<FlexDirection>("flex-direction", RESET, FlexDirection.Row)
-var StyleSheet.flexGrow by PropertyHandler<FlexGrow>("flex-grow", RESET, FlexGrow.Ratio(0.0))
-var StyleSheet.flexShrink by PropertyHandler<FlexGrow>("flex-shrink", RESET, FlexGrow.Ratio(1.0))
-var StyleSheet.flexWrap by PropertyHandler<FlexWrap>("flex-wrap", RESET, FlexWrap.NoWrap)
-var StyleSheet.alignItems by PropertyHandler<AlignItems>("align-items", RESET, AlignItems.Start) // css default is stretch
-var StyleSheet.justifyContent by PropertyHandler<JustifyContent>("justify-content", RESET, JustifyContent.Start)
+var StyleSheet.columnGap by PropertyHandler<LinearDimension>("column-gap", PropertyInheritance.RESET, LinearDimension.PX(0.0), ::parseLength)
+var StyleSheet.rowGap by PropertyHandler<LinearDimension>("row-gap", PropertyInheritance.RESET, LinearDimension.PX(0.0), ::parseLength)
 
-var StyleSheet.borderWidth by PropertyHandler<LinearDimension>("border-width", RESET, 0.px)
-var StyleSheet.borderColor by PropertyHandler<Color>("border-color", INHERIT, Color.RGBa(ColorRGBa.TRANSPARENT))
+var StyleSheet.gridTemplateColumns by PropertyHandler<GridTemplate>("grid-template-columns", RESET, GridTemplate.None, ::parseGridTemplate)
+var StyleSheet.gridTemplateRows by PropertyHandler<GridTemplate>("grid-template-rows", RESET, GridTemplate.None, ::parseGridTemplate)
+var StyleSheet.gridColumn by PropertyHandler<GridPopulation>("grid-column", RESET, GridPopulation.Auto, ::parseGridPopulation)
+var StyleSheet.gridRow by PropertyHandler<GridPopulation>("grid-row", RESET, GridPopulation.Auto, ::parseGridPopulation)
+
+var StyleSheet.flexDirection by PropertyHandler<FlexDirection>("flex-direction", RESET, FlexDirection.Row, keywords("row" to FlexDirection.Row, "column" to FlexDirection.Column, "row-reverse" to FlexDirection.RowReverse, "column-reverse" to FlexDirection.ColumnReverse))
+var StyleSheet.flexGrow by PropertyHandler<FlexGrow>("flex-grow", RESET, FlexGrow.Ratio(0.0), ::parseFlex)
+var StyleSheet.flexShrink by PropertyHandler<FlexGrow>("flex-shrink", RESET, FlexGrow.Ratio(1.0), ::parseFlex)
+var StyleSheet.flexWrap by PropertyHandler<FlexWrap>("flex-wrap", RESET, FlexWrap.NoWrap, keywords("nowrap" to FlexWrap.NoWrap, "wrap" to FlexWrap.Wrap))
+var StyleSheet.alignItems by PropertyHandler<AlignItems>("align-items", RESET, AlignItems.Start, keywords("start" to AlignItems.Start, "flex-start" to AlignItems.Start, "center" to AlignItems.Center, "end" to AlignItems.End, "flex-end" to AlignItems.End, "stretch" to AlignItems.Stretch)) // css default is stretch
+var StyleSheet.justifyContent by PropertyHandler<JustifyContent>("justify-content", RESET, JustifyContent.Start, keywords("start" to JustifyContent.Start, "flex-start" to JustifyContent.Start, "center" to JustifyContent.Center, "end" to JustifyContent.End, "flex-end" to JustifyContent.End, "space-between" to JustifyContent.SpaceBetween, "space-around" to JustifyContent.SpaceAround, "space-evenly" to JustifyContent.SpaceEvenly))
+
+var StyleSheet.borderWidth by PropertyHandler<LinearDimension>("border-width", RESET, 0.px, ::parseLength)
+var StyleSheet.borderColor by PropertyHandler<Color>("border-color", INHERIT, Color.RGBa(ColorRGBa.TRANSPARENT), ::parseColor)
 
 /** the opacity of the element and its descendants, from 0 for invisible to 1 for opaque */
-var StyleSheet.opacity by PropertyHandler<Double>("opacity", RESET, 1.0)
+var StyleSheet.opacity by PropertyHandler<Double>("opacity", RESET, 1.0, { parseNumber(it, percentage = true)?.coerceIn(0.0, 1.0) })
 
 /**
  * The time in seconds it takes the colors and the opacity of the element to change to new values, for example when
  * it is hovered; 0 changes them at once
  */
-var StyleSheet.transitionDuration by PropertyHandler<Double>("transition-duration", RESET, 0.0)
+var StyleSheet.transitionDuration by PropertyHandler<Double>("transition-duration", RESET, 0.0, ::parseTime)
 
 /** the time in seconds before the colors and the opacity of the element start to change, see [transitionDuration] */
-var StyleSheet.transitionDelay by PropertyHandler<Double>("transition-delay", RESET, 0.0)
+var StyleSheet.transitionDelay by PropertyHandler<Double>("transition-delay", RESET, 0.0, ::parseTime)
 
 /** how the colors and the opacity of the element change over time, see [transitionDuration] */
-var StyleSheet.transitionTimingFunction by PropertyHandler<TimingFunction>("transition-timing-function", RESET, TimingFunction.EASE)
+var StyleSheet.transitionTimingFunction by PropertyHandler<TimingFunction>("transition-timing-function", RESET, TimingFunction.EASE, ::parseTimingFunction)
 
 /**
  * The properties that transition, see [transitionDuration]: of background-color, color, border-color, outline-color
  * and opacity, `all` for all of them
  */
-var StyleSheet.transitionProperty by PropertyHandler<List<String>>("transition-property", RESET, listOf("all"))
+var StyleSheet.transitionProperty by PropertyHandler<List<String>>("transition-property", RESET, listOf("all"), ::parseNames)
 
 /** the radius of the corners of the box, in pixels or as a percentage of its shorter side */
-var StyleSheet.borderRadius by PropertyHandler<LinearDimension>("border-radius", RESET, 0.px)
+var StyleSheet.borderRadius by PropertyHandler<LinearDimension>("border-radius", RESET, 0.px, ::parseLength)
 
 /** the width of the outline drawn around the box, outside its border, for example to show the keyboard focus */
-var StyleSheet.outlineWidth by PropertyHandler<LinearDimension>("outline-width", RESET, 0.px)
+var StyleSheet.outlineWidth by PropertyHandler<LinearDimension>("outline-width", RESET, 0.px, ::parseLength)
 
 /** the color of the outline */
-var StyleSheet.outlineColor by PropertyHandler<Color>("outline-color", RESET, Color.RGBa(ColorRGBa.fromHex("#5ab0ff")))
+var StyleSheet.outlineColor by PropertyHandler<Color>("outline-color", RESET, Color.RGBa(ColorRGBa.fromHex("#5ab0ff")), ::parseColor)
 
 /** the space between the box and its outline */
-var StyleSheet.outlineOffset by PropertyHandler<LinearDimension>("outline-offset", RESET, 1.px)
+var StyleSheet.outlineOffset by PropertyHandler<LinearDimension>("outline-offset", RESET, 1.px, ::parseLength)
 
-var StyleSheet.background by PropertyHandler<Color>("background-color", RESET, Color.RGBa(ColorRGBa.BLACK.opacify(0.0)))
+var StyleSheet.background by PropertyHandler<Color>("background-color", RESET, Color.RGBa(ColorRGBa.BLACK.opacify(0.0)), ::parseColor)
 val StyleSheet.effectiveBackground: ColorRGBa?
     get() = (background as? Color.RGBa)?.color
 
 /** the thickness of the scrollbars of elements that scroll, in pixels; 0 hides them */
-var StyleSheet.scrollbarWidth by PropertyHandler<LinearDimension>("scrollbar-width", INHERIT, 6.px)
+var StyleSheet.scrollbarWidth by PropertyHandler<LinearDimension>("scrollbar-width", INHERIT, 6.px, ::parseLength)
 
 /** the color of the thumbs of scrollbars */
-var StyleSheet.scrollbarColor by PropertyHandler<Color>("scrollbar-color", INHERIT, Color.RGBa(ColorRGBa.WHITE.opacify(0.35)))
+var StyleSheet.scrollbarColor by PropertyHandler<Color>("scrollbar-color", INHERIT, Color.RGBa(ColorRGBa.WHITE.opacify(0.35)), ::parseColor)
 
 /**
  * When scrollbars are shown: [ScrollbarVisibility.Auto] shows them while the element scrolls, while they are hovered
  * and dragged, and fades them out after that; [ScrollbarVisibility.Always] always shows them
  */
-var StyleSheet.scrollbarVisibility by PropertyHandler<ScrollbarVisibility>("scrollbar-visibility", INHERIT, ScrollbarVisibility.Auto)
+var StyleSheet.scrollbarVisibility by PropertyHandler<ScrollbarVisibility>("scrollbar-visibility", INHERIT, ScrollbarVisibility.Auto, keywords("auto" to ScrollbarVisibility.Auto, "always" to ScrollbarVisibility.Always))
 
 /** how the element scrolls its content, smoothly by default */
-var StyleSheet.scrollBehavior by PropertyHandler<ScrollBehavior>("scroll-behavior", RESET, ScrollBehavior.Smooth)
+var StyleSheet.scrollBehavior by PropertyHandler<ScrollBehavior>("scroll-behavior", RESET, ScrollBehavior.Smooth, keywords("auto" to ScrollBehavior.Auto, "smooth" to ScrollBehavior.Smooth))
 
 /** the cursor over scrollbars, and while a scrollbar is dragged */
-var StyleSheet.scrollbarCursor by PropertyHandler<Cursor>("scrollbar-cursor", INHERIT, Cursor.Pointer)
+var StyleSheet.scrollbarCursor by PropertyHandler<Cursor>("scrollbar-cursor", INHERIT, Cursor.Pointer, parseCursor)
 
 /** the color of the tracks of scrollbars */
-var StyleSheet.scrollbarTrackColor by PropertyHandler<Color>("scrollbar-track-color", INHERIT, Color.RGBa(ColorRGBa.TRANSPARENT))
+var StyleSheet.scrollbarTrackColor by PropertyHandler<Color>("scrollbar-track-color", INHERIT, Color.RGBa(ColorRGBa.TRANSPARENT), ::parseColor)
 
-var StyleSheet.color by PropertyHandler<Color>("color", INHERIT, Color.RGBa(ColorRGBa.WHITE))
+var StyleSheet.color by PropertyHandler<Color>("color", INHERIT, Color.RGBa(ColorRGBa.WHITE), ::parseColor)
 val StyleSheet.effectiveColor: ColorRGBa?
     get() = (color as? Color.RGBa)?.color
 
@@ -525,27 +557,27 @@ val StyleSheet.computedTextHorizontalAlign: Double
     get() = (textHorizontalAlign as? TextAlign.Value)?.value ?: 0.0
 
 
-var StyleSheet.fontSize by PropertyHandler<LinearDimension>("font-size", INHERIT, 14.px)
+var StyleSheet.fontSize by PropertyHandler<LinearDimension>("font-size", INHERIT, 14.px, ::parseLength)
 /**
  * The font families, separated by commas, the first that is registered is used: in the font manager of the control
  * manager, then in [org.openrndr.extra.textwriter.Fonts], the fonts of all programs
  */
-var StyleSheet.fontFamily by PropertyHandler("font-family", INHERIT, "default")
+var StyleSheet.fontFamily by PropertyHandler("font-family", INHERIT, "default", { it.trim().takeIf { v -> v.isNotEmpty() } })
 
 /** the weight of the font, from 100 to 900, 400 is regular and 700 bold */
-var StyleSheet.fontWeight by PropertyHandler("font-weight", INHERIT, 400)
+var StyleSheet.fontWeight by PropertyHandler("font-weight", INHERIT, 400, ::parseFontWeight)
 
 /** the style of the font: upright or italic */
 enum class FontStyle { NORMAL, ITALIC }
 
-var StyleSheet.fontStyle by PropertyHandler("font-style", INHERIT, FontStyle.NORMAL)
-var StyleSheet.overflow by PropertyHandler<Overflow>("overflow", RESET, Overflow.Visible)
+var StyleSheet.fontStyle by PropertyHandler("font-style", INHERIT, FontStyle.NORMAL, keywords("normal" to FontStyle.NORMAL, "italic" to FontStyle.ITALIC, "oblique" to FontStyle.ITALIC))
+var StyleSheet.overflow by PropertyHandler<Overflow>("overflow", RESET, Overflow.Visible, parseOverflow)
 
 /** how the content overflows horizontally, as [overflow] when it is not set */
-var StyleSheet.overflowX by PropertyHandler<Overflow>("overflow-x", RESET, Overflow.Visible)
+var StyleSheet.overflowX by PropertyHandler<Overflow>("overflow-x", RESET, Overflow.Visible, parseOverflow)
 
 /** how the content overflows vertically, as [overflow] when it is not set */
-var StyleSheet.overflowY by PropertyHandler<Overflow>("overflow-y", RESET, Overflow.Visible)
+var StyleSheet.overflowY by PropertyHandler<Overflow>("overflow-y", RESET, Overflow.Visible, parseOverflow)
 
 /** the horizontal overflow: [overflowX], or [overflow] when it is not set */
 val StyleSheet.effectiveOverflowX: Overflow
@@ -566,23 +598,64 @@ val StyleSheet.scrollableY: Boolean get() = effectiveOverflowY != Overflow.Visib
  * content is clipped too, but does not scroll
  */
 val StyleSheet.clipsContent: Boolean get() = scrollableX || scrollableY
-var StyleSheet.zIndex by PropertyHandler<ZIndex>("z-index", RESET, ZIndex.Auto)
+var StyleSheet.zIndex by PropertyHandler<ZIndex>("z-index", RESET, ZIndex.Auto, ::parseZIndex)
 
-var StyleSheet.textVerticalAlign by PropertyHandler<TextAlign>(
-    "text-vertical-align", RESET,
-    TextAlign.Value(0.0)
-)
+var StyleSheet.textVerticalAlign by PropertyHandler<TextAlign>("text-vertical-align", RESET, TextAlign.Value(0.0), ::parseTextAlign)
 
-var StyleSheet.textHorizontalAlign by PropertyHandler<TextAlign>(
-    "text-horizontal-align", RESET,
-    TextAlign.Value(0.0)
-)
+var StyleSheet.textHorizontalAlign by PropertyHandler<TextAlign>("text-horizontal-align", RESET, TextAlign.Value(0.0), ::parseTextAlign)
 
+
+// the shorthands of CSS and the CSS names of properties of panels, registered with the properties
+private val shorthands = PanelProperties.apply {
+    val sides = listOf("top", "right", "bottom", "left")
+    shorthand("margin", sides.map { "margin-$it" }, boxShorthand("margin"))
+    shorthand("padding", sides.map { "padding-$it" }, boxShorthand("padding"))
+    shorthand("gap", listOf("row-gap", "column-gap")) { value ->
+        val words = splitCssWords(value)
+        when (words.size) {
+            1 -> listOf("row-gap" to words[0], "column-gap" to words[0])
+            2 -> listOf("row-gap" to words[0], "column-gap" to words[1])
+            else -> null
+        }
+    }
+    shorthand("border", listOf("border-width", "border-color"), lineShorthand("border"))
+    shorthand("outline", listOf("outline-width", "outline-color"), lineShorthand("outline"))
+    shorthand("background", listOf("background-color")) { value -> parseColor(value)?.let { listOf("background-color" to value) } }
+    shorthand("text-align", listOf("text-horizontal-align")) { listOf("text-horizontal-align" to it) }
+    shorthand("vertical-align", listOf("text-vertical-align")) { listOf("text-vertical-align" to it) }
+    // flex: none, auto, or a grow factor and a shrink factor; a basis is not supported
+    shorthand("flex", listOf("flex-grow", "flex-shrink")) { value ->
+        val words = splitCssWords(value)
+        when {
+            value.trim() == "none" -> listOf("flex-grow" to "0", "flex-shrink" to "0")
+            value.trim() == "auto" -> listOf("flex-grow" to "1", "flex-shrink" to "1")
+            words.size in 1..2 && words.all { parseNumber(it) != null } ->
+                listOf("flex-grow" to words[0], "flex-shrink" to (words.getOrNull(1) ?: "1"))
+            else -> null
+        }
+    }
+    // the properties of all parts of a transition, with the timing of the first: the timing of panels is the same
+    // for all properties
+    shorthand("transition", listOf("transition-property", "transition-duration", "transition-delay", "transition-timing-function")) { value ->
+        val parts = org.openrndr.extra.style.splitCssList(value).map { splitCssWords(it.trim()) }
+        if (parts.isEmpty() || parts.any { it.isEmpty() }) return@shorthand null
+        val names = parts.map { words -> words.firstOrNull { parseTime(it) == null && parseTimingFunction(it) == null } ?: "all" }
+        val first = parts.first()
+        val times = first.filter { parseTime(it) != null }
+        val timing = first.firstOrNull { parseTimingFunction(it) != null } ?: "ease"
+        listOf(
+            "transition-property" to names.joinToString(", "),
+            "transition-duration" to (times.getOrNull(0) ?: "0s"),
+            "transition-delay" to (times.getOrNull(1) ?: "0s"),
+            "transition-timing-function" to timing
+        )
+    }
+}
 
 val Number.px: LinearDimension.PX get() = LinearDimension.PX(this.toDouble())
 val Number.percent: LinearDimension.Percent get() = LinearDimension.Percent(this.toDouble())
 
-var StyleSheet.cursor by PropertyHandler<Cursor>("cursor", RESET, Cursor.Default)
+var StyleSheet.cursor by PropertyHandler<Cursor>("cursor", RESET, Cursor.Default, parseCursor)
 fun StyleSheet.margins(all: LinearDimension) {
     marginTop = all
     marginBottom = all
@@ -633,7 +706,7 @@ internal fun sameValue(a: Any?, b: Any?): Boolean {
     if (a === b || a == b) return true
     if (a == null || b == null || a::class != b::class) return false
     return when (a) {
-        is Color.RGBa -> a.color == (b as Color.RGBa).color && a.important == b.important
+        is Color.RGBa -> a.color == (b as Color.RGBa).color
         is LinearDimension.PX -> a.value == (b as LinearDimension.PX).value
         is LinearDimension.Percent -> a.value == (b as LinearDimension.Percent).value
         is LinearDimension.Fraction -> a.value == (b as LinearDimension.Fraction).value

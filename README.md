@@ -58,7 +58,7 @@ To make use of these extensions clone the [OPENRNDR template](https://github.com
 | [`orx-shade-styles`](orx-shade-styles/) | Shader based fills and strokes, including various types of gradient fills. |
 | [`orx-shader-phrases`](orx-shader-phrases/) | Provides a `#pragma import` statement for shaders. |
 | [`orx-shapes`](orx-shapes/) | 2D and 3D shape generators and modifiers. |
-| [`orx-style`](orx-style/) | What style systems share: CSS colors, CSS timing functions and transitions. |
+| [`orx-style`](orx-style/) | What style systems share: CSS syntax and values, CSS colors, timing functions and transitions, and registries of properties. |
 | [`orx-svg`](orx-svg/) | SVG reader and writer library. |
 | [`orx-temporal-blur`](orx-temporal-blur/) | Post-processing temporal-blur video effect. CPU intense, not intended for real-time uses. |
 | [`orx-text-on-contour`](orx-text-on-contour/) | Write texts on contours. |

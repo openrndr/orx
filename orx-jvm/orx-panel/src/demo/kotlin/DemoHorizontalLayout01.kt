@@ -43,7 +43,7 @@ fun main() = application {
                     borderWidth = length { 2 }
 
                     and(has state "hover") {
-                        background = color(true) { ColorRGBa.BLACK }
+                        important { background = color { ColorRGBa.BLACK } }
                         borderColor = color { ColorRGBa.WHITE }
                     }
                 }

@@ -1,8 +1,25 @@
 # orx-style
 
-What style systems share: CSS colors, CSS timing functions and transitions.
+What style systems share: CSS syntax and values, CSS colors, timing functions and transitions, and registries of properties.
 
 Used by `orx-svg` for the styles of SVG documents and by `orx-panel` for the styles of user interfaces.
+
+## CSS syntax
+
+`parseCssRules` reads the rules of a style sheet, `parseCssDeclarations` the declarations of a block or a style
+attribute, with `!important`. `splitCss`, `splitCssList` and `splitCssWords` split values at separators outside of
+parentheses and quotes, `evaluateCssCalc` evaluates `calc()`, `parseCssDimension` and `parseCssPixels` read numbers
+with units, and `CssKeyword` is `inherit`, `initial` or `unset`.
+
+`CssProperties` is a registry of the properties of a style system, `CssProperty`: their names, whether they are
+inherited, their initial values and how values are parsed from text, and their shorthands. `values` gives the values
+of a declaration.
+
+```kotlin
+object Properties : CssProperties()
+val width = Properties.register(CssProperty("width", false, 0.0) { parseCssPixels(it) })
+val values = Properties.values(CssDeclaration("width", "2in"))  // [("width", 192.0)]
+```
 
 ## Colors
 
