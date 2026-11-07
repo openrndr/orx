@@ -6,6 +6,12 @@ plugins {
 tasks.test {
     useJUnitPlatform {
     }
+    // test classes that use the application test fixture open a window, opening more than one window per JVM is
+    // unreliable
+    forkEvery = 1
+    if (org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentOperatingSystem().isMacOsX) {
+        jvmArgs("-XstartOnFirstThread")
+    }
 }
 
 dependencies {
@@ -21,6 +27,9 @@ dependencies {
     implementation(sharedLibs.kotlin.coroutines)
     implementation(sharedLibs.kotlin.reflect)
     testRuntimeOnly(sharedLibs.kotlin.reflect)
+    // a program with fonts, keys and a clipboard for tests that lay out text and type
+    testImplementation(project(":testing"))
+    testRuntimeOnly(openrndr.fontdriver.freetype)
     demoImplementation(openrndr.dialogs)
     demoImplementation(libs.gson)
     demoImplementation(project(":orx-jvm:orx-panel"))

@@ -1,6 +1,10 @@
 package org.openrndr.panel.elements
 
 import kotlinx.coroutines.*
+import org.openrndr.KEY_ARROW_DOWN
+import org.openrndr.KEY_ARROW_LEFT
+import org.openrndr.KEY_ARROW_RIGHT
+import org.openrndr.KEY_ARROW_UP
 import org.openrndr.KeyModifier
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
@@ -68,6 +72,9 @@ open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(E
     internal open var minimumSequenceLength = 1
     var range: ClosedRange<Double> = -1.0..1.0
 
+    override val handlesKeyboardFocus = true
+
+    /** the value that is dragged or changed by the keyboard, counted from 1 */
     private var selectedIndex: Int? = null
     private var valueTooltip: Tooltip? = null
 
@@ -175,6 +182,28 @@ open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(E
                 }
             }
         }
+        // left and right select a value, up and down change it, finer with shift
+        keyboard.pressed.listen { event ->
+            if (baseValue.isEmpty()) return@listen
+            val index = selectedIndex?.coerceIn(1, baseValue.size)
+            val step = (range.endInclusive - range.start) / if (KeyModifier.SHIFT in event.modifiers) 1000.0 else 100.0
+            when (event.key) {
+                KEY_ARROW_LEFT -> selectedIndex = ((index ?: 2) - 1).coerceIn(1, baseValue.size)
+                KEY_ARROW_RIGHT -> selectedIndex = ((index ?: 0) + 1).coerceIn(1, baseValue.size)
+                KEY_ARROW_UP, KEY_ARROW_DOWN -> {
+                    val i = (index ?: 1) - 1
+                    selectedIndex = i + 1
+                    val oldValue = baseValue.map { it }
+                    baseValue[i] = (baseValue[i] + if (event.key == KEY_ARROW_UP) step else -step)
+                        .coerceIn(range.start, range.endInclusive)
+                    baseEvents.valueChanged.trigger(ValueChangedEvent(this, oldValue, baseValue))
+                }
+                else -> return@listen
+            }
+            requestRedraw()
+            event.cancelPropagation()
+        }
+
         mouse.dragged.listen {
             val q = query(it.position)
             selectedIndex?.let { index ->
@@ -223,6 +252,14 @@ open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(E
             // the stroke of the knob stays inside its radius
             drawer.strokeAlignment = StrokeAlignment.INSIDE
             drawer.circle(x, controlArea.height / 2.0 + height, 7.0)
+            // the value that the keyboard changes
+            if (selectedIndex == i + 1 && ElementPseudoClass("focus") in pseudoClasses) {
+                drawer.fill = null
+                drawer.strokeWeight = 2.0
+                drawer.strokeAlignment = StrokeAlignment.CENTER
+                drawer.circle(x, controlArea.height / 2.0 + height, 11.0)
+                drawer.strokeWeight = 7.0
+            }
         }
 
         drawer.isolated {

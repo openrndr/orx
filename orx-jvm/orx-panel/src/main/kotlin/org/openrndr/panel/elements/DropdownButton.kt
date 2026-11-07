@@ -3,7 +3,11 @@ package org.openrndr.panel.elements
 import kotlinx.coroutines.yield
 import org.openrndr.KEY_ARROW_DOWN
 import org.openrndr.KEY_ARROW_UP
+import org.openrndr.KEY_END
 import org.openrndr.KEY_ENTER
+import org.openrndr.KEY_ESCAPE
+import org.openrndr.KEY_HOME
+import org.openrndr.KEY_SPACEBAR
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.events.Event
@@ -54,28 +58,59 @@ class DropdownButton : Element(ElementType("dropdown-button")) {
 
     val events = Events()
 
+    override val handlesKeyboardFocus = true
+
+    /** true when the list of items is open */
+    val isOpen: Boolean get() = children.any { it is SlideOut }
+
+    /** opens the list of items below the button, or above it when it does not fit; the list takes the keys */
+    fun open() {
+        if (isOpen) return
+        val height = min(240.0, items().size * 24.0)
+        val y = if (screenPosition.y < root().layout.screenHeight - height) screenArea.height else screenArea.height - height
+        val so = SlideOut(0.0, y, screenArea.width, height, this, value)
+        append(so)
+        (root() as? Body)?.controlManager?.keyboardInput?.requestFocus(so)
+        requestRedraw()
+    }
+
+    /** closes the list of items, the button takes the keys again */
+    fun closeList(focus: Boolean = true) {
+        children.filterIsInstance<SlideOut>().forEach { it.dispose() }
+        if (focus) (root() as? Body)?.controlManager?.keyboardInput?.requestFocus(this)
+        requestRedraw()
+    }
+
+    /** selects [item] as the value */
+    internal fun select(item: Item) {
+        if (item === value) return
+        value = item
+        events.valueChanged.trigger(ValueChangedEvent(this, item))
+        item.picked()
+        requestRedraw()
+    }
+
     init {
         mouse.pressed.listen {
             it.cancelPropagation()
         }
 
         mouse.clicked.listen {
-            val itemCount = items().size
+            if (isOpen) closeList() else open()
+        }
 
-            if (children.none { it is SlideOut }) {
-                val height = min(240.0, itemCount * 24.0)
-                if (screenPosition.y < root().layout.screenHeight - height) {
-                    val so = SlideOut(0.0, screenArea.height, screenArea.width, height, this, value)
-                    append(so)
-                    (root() as Body).controlManager?.keyboardInput?.requestFocus(so)
-                } else {
-                    val so = SlideOut(0.0, screenArea.height - height, screenArea.width, height, this, value)
-                    append(so)
-                    (root() as Body).controlManager?.keyboardInput?.requestFocus(so)
-                }
-            } else {
-                (children.first { it is SlideOut } as SlideOut?)?.dispose()
+        // enter and space open the list, up and down change the value while it is closed
+        keyboard.pressed.listen {
+            if (isOpen) return@listen
+            val items = items()
+            val index = items.indexOf(value)
+            when (it.key) {
+                KEY_ENTER, KEY_SPACEBAR -> open()
+                KEY_ARROW_DOWN -> items.getOrNull((index + 1).coerceAtMost(items.lastIndex))?.let(::select)
+                KEY_ARROW_UP -> items.getOrNull((index - 1).coerceAtLeast(0))?.let(::select)
+                else -> return@listen
             }
+            it.cancelPropagation()
         }
     }
 
@@ -144,67 +179,46 @@ class DropdownButton : Element(ElementType("dropdown-button")) {
 
             val itemButtons = mutableMapOf<Item, Button>()
 
-            var activeIndex =
-                    if (active != null) {
-                        (parent as DropdownButton).items().indexOf(active)
-                    } else {
-                        -1
-                    }
+            val dropdown = parent as DropdownButton
+
+            /** selects the item at [index] and scrolls its button into view */
+            fun select(index: Int) {
+                val items = dropdown.items()
+                val item = items.getOrNull(index) ?: return
+                dropdown.value?.let { itemButtons[it]?.pseudoClasses?.remove(ElementPseudoClass("selected")) }
+                itemButtons[item]?.pseudoClasses?.add(ElementPseudoClass("selected"))
+                dropdown.select(item)
+                itemButtons[item]?.scrollIntoView()
+                requestRedraw()
+            }
+
+            // the start of the label of an item, typed within a second
+            var typed = ""
+            var typedAt = 0L
 
             keyboard.pressed.listen {
-
-                if (it.key == KEY_ENTER) {
-                    it.cancelPropagation()
-                    dispose()
+                val items = dropdown.items()
+                val index = items.indexOf(dropdown.value)
+                when (it.key) {
+                    KEY_ENTER, KEY_ESCAPE -> dropdown.closeList()
+                    KEY_ARROW_DOWN -> select((index + 1).coerceAtMost(items.lastIndex))
+                    KEY_ARROW_UP -> select((index - 1).coerceAtLeast(0))
+                    KEY_HOME -> select(0)
+                    KEY_END -> select(items.lastIndex)
+                    else -> return@listen
                 }
+                it.cancelPropagation()
+            }
 
-                if (it.key == KEY_ARROW_DOWN) {
-                    activeIndex = (activeIndex + 1).coerceAtMost((parent as DropdownButton).items().size - 1)
-                    it.cancelPropagation()
-                    val newValue = parent.items()[activeIndex]
-
-                    parent.value?.let { item ->
-                        itemButtons[item]?.pseudoClasses?.remove(ElementPseudoClass("selected"))
-                    }
-                    parent.value?.let {
-                        itemButtons[newValue]?.pseudoClasses?.add(ElementPseudoClass("selected"))
-                    }
-
-                    parent.value = newValue
-                    parent.events.valueChanged.trigger(ValueChangedEvent(parent, newValue))
-                    newValue.picked()
-                    requestRedraw()
-
-                    val ypos = 24.0 * activeIndex
-                    if (ypos >= scrollTop + 10 * 24.0) {
-                        scrollTop += 24.0
-                    }
-
-                }
-
-                if (it.key == KEY_ARROW_UP) {
-                    activeIndex = (activeIndex - 1).coerceAtLeast(0)
-
-
-                    val newValue = (parent as DropdownButton).items()[activeIndex]
-
-                    val ypos = 24.0 * activeIndex
-                    if (ypos < scrollTop) {
-                        scrollTop -= 24.0
-                    }
-
-                    parent.value?.let { item ->
-                        itemButtons[item]?.pseudoClasses?.remove(ElementPseudoClass("selected"))
-                    }
-                    parent.value?.let {
-                        itemButtons[newValue]?.pseudoClasses?.add(ElementPseudoClass("selected"))
-                    }
-
-                    parent.value = newValue
-                    parent.events.valueChanged.trigger(ValueChangedEvent(parent, newValue))
-                    newValue.picked()
-                    draw.dirty = true
-                }
+            // typing jumps to the first item that starts with what is typed
+            keyboard.character.listen {
+                val now = System.currentTimeMillis()
+                typed = if (now - typedAt < 1000L) typed + it.character else it.character.toString()
+                typedAt = now
+                val items = dropdown.items()
+                val match = items.indexOfFirst { item -> item.label.startsWith(typed, ignoreCase = true) }
+                if (match >= 0) select(match)
+                it.cancelPropagation()
             }
 
             mouse.scrolled.listen {
@@ -235,10 +249,8 @@ class DropdownButton : Element(ElementType("dropdown-button")) {
                     label = it.label
                     itemButtons[it] = this
                     events.clicked.listen {
-                        parent.value = it.source.data as Item
-                        parent.events.valueChanged.trigger(ValueChangedEvent(parent, it.source.data as Item))
-                        (data as Item).picked()
-                        dispose()
+                        dropdown.select(it.source.data as Item)
+                        dropdown.closeList()
                     }
                 })
             }

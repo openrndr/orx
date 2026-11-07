@@ -21,6 +21,7 @@ import kotlin.reflect.KMutableProperty1
 
 
 class XYPad : Element(ElementType("xy-pad")) {
+    override val handlesKeyboardFocus = true
     var minX = -1.0
     var minY = -1.0
     var maxX = 1.0
@@ -100,6 +101,8 @@ class XYPad : Element(ElementType("xy-pad")) {
 
 
     private fun handleKeyEvent(keyEvent: KeyEvent) {
+        // only the arrow keys, tab moves the focus on
+        if (keyEvent.key !in setOf(KEY_ARROW_LEFT, KEY_ARROW_RIGHT, KEY_ARROW_UP, KEY_ARROW_DOWN)) return
         val keyboardIncrementX = if (KeyModifier.SHIFT in keyEvent.modifiers) {
             (maxX - minX) / 10.0
         } else {
