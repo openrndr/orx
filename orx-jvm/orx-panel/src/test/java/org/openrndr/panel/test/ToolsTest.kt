@@ -18,6 +18,7 @@ import org.openrndr.panel.Commands
 import org.openrndr.panel.ControlManager
 import org.openrndr.panel.Shortcut
 import org.openrndr.panel.elements.*
+import kotlin.math.abs
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -596,5 +597,205 @@ class ToolsTest : PanelTestFixture() {
         assertTrue(spans.any { it.start == 0 && it.end == 4 && it.color == Highlighters.typeColor })
         assertTrue(spans.any { it.color == Highlighters.numberColor })
         assertTrue(spans.any { it.color == Highlighters.commentColor && it.end == 27 })
+    }
+
+    @Test
+    fun `fcurves are edited by keys, cut, broken and sculpted, and stay functions of time`() {
+        lateinit var editor: FCurveEditor
+        val cm = panel {
+            css("fcurve-editor { width: 600px; height: 300px }")
+            layout {
+                editor = fcurveEditor {
+                    value = org.openrndr.extra.fcurve.fcurve("M0 L1,1 L1,0 L1,1 L1,0")
+                }
+            }
+        }
+        cm.frames()
+        val c0 = editor.value
+        assertEquals(4, c0.segments.size)
+        fun at(t: Double, v: Double) = editor.screenPosition(Vector2(t, v))
+        fun drag(from: Vector2, to: Vector2) {
+            cm.move(from); cm.press(from)
+            cm.drag((from + to) / 2.0); cm.drag(to)
+            cm.release(to)
+        }
+        // the key at time 1 is moved up
+        drag(at(1.0, 1.0), at(1.0, 1.5))
+        assertEquals(1.5, editor.value.segments[0].end.y, 1E-6)
+        assertEquals(1.5, editor.value.segments[1].start.y, 1E-6)
+        cm.history.undo()
+        assertEquals(1.0, editor.value.segments[0].end.y, 1E-6)
+
+        // a cut at 0.5 adds a key on the curve
+        editor.tool = FCurveTool.CUT
+        cm.move(at(0.5, 0.5)); cm.press(at(0.5, 0.5)); cm.release(at(0.5, 0.5))
+        assertEquals(5, editor.value.segments.size)
+        assertEquals(0.5, editor.value.segments[1].start.x, 1E-3)
+        assertEquals(0.5, editor.value.value(0.5), 1E-3)
+
+        // breaking at 3 makes a jump
+        editor.tool = FCurveTool.BREAK
+        drag(at(3.0, 1.0), at(3.0, 0.5))
+        val jumped = editor.value
+        val i = jumped.segments.indexOfFirst { abs(it.start.x - 3.0) < 1E-6 }
+        assertEquals(1.0, jumped.segments[i - 1].end.y, 1E-6)
+        assertEquals(0.5, jumped.segments[i].start.y, 1E-3)
+        assertEquals(2, jumped.contours().size)
+
+        // grabbing at 2 lowers the values around it, less to the edges, and nothing outside the brush
+        editor.tool = FCurveTool.GRAB
+        editor.brushRadius = editor.screenPosition(Vector2(1.5, 0.0)).x - editor.screenPosition(Vector2(1.0, 0.0)).x
+        val before = editor.value
+        drag(at(2.0, 0.0), at(2.0, -0.4))
+        val grabbed = editor.value
+        assertEquals(-0.4, grabbed.value(2.0), 1E-2)
+        assertTrue(grabbed.value(2.25) < before.value(2.25) && grabbed.value(2.25) > before.value(2.25) - 0.4)
+        assertEquals(before.value(1.25), grabbed.value(1.25), 1E-6)
+        assertEquals(before.value(2.75), grabbed.value(2.75), 1E-6)
+        fun functionShaped(c: org.openrndr.extra.fcurve.FCurve) = c.segments.all { s ->
+            (0..50).map { s.position(it / 50.0).x }.zipWithNext().all { (a, b) -> b >= a - 1E-9 }
+        }
+        assertTrue(functionShaped(grabbed))
+
+        // smoothing over the jump keeps it
+        editor.tool = FCurveTool.SMOOTH
+        editor.brushStrength = 1.0
+        drag(at(3.0, 0.7), at(3.05, 0.7))
+        val smoothed = editor.value
+        val j = smoothed.segments.indexOfFirst { abs(it.start.x - 3.0) < 1E-6 }
+        assertTrue(abs(smoothed.segments[j - 1].end.y - smoothed.segments[j].start.y) > 0.3)
+        assertTrue(functionShaped(smoothed))
+
+        // the selected keys are removed
+        editor.tool = FCurveTool.SELECT
+        val count = editor.value.segments.size
+        cm.move(at(0.5, 0.5)); cm.press(at(0.5, 0.5)); cm.release(at(0.5, 0.5))
+        cm.keyboardInput.target = editor
+        cm.key(KEY_DELETE)
+        assertEquals(count - 1, editor.value.segments.size)
+        // the whole curve is undone
+        while (cm.history.canUndo) cm.history.undo()
+        assertEquals(c0.segments.map { it.start }, editor.value.segments.map { it.start })
+    }
+
+    @Test
+    fun `a selection of an fcurve is simplified, keeping its jumps and its ends`() {
+        // a sine in 400 short segments, with a jump in the middle
+        val segments = mutableListOf<org.openrndr.shape.Segment2D>()
+        val n = 400
+        fun f(x: Double) = kotlin.math.sin(x * 2.0) + if (x >= 2.0) 1.0 else 0.0
+        fun df(x: Double) = 2.0 * kotlin.math.cos(x * 2.0)
+        for (i in 0 until n) {
+            val x0 = i * 4.0 / n
+            val x1 = (i + 1) * 4.0 / n
+            val h = (x1 - x0) / 3.0
+            val a = Vector2(x0, f(x0))
+            val b = Vector2(x1, if (i == n / 2 - 1) kotlin.math.sin(x1 * 2.0) else f(x1))
+            segments.add(org.openrndr.shape.Segment2D(a, a + Vector2(h, df(x0) * h), b - Vector2(h, df(x1) * h), b))
+        }
+        lateinit var editor: FCurveEditor
+        val cm = panel {
+            css("fcurve-editor { width: 800px; height: 400px }")
+            layout { editor = fcurveEditor { value = org.openrndr.extra.fcurve.FCurve(segments) } }
+        }
+        cm.frames()
+        val original = editor.value
+        assertEquals(2, original.contours().size)
+        // a box over everything selects all keys
+        val a = Vector2(editor.layout.screenX + 50.0, editor.layout.screenY + 25.0)
+        val b = Vector2(editor.layout.screenX + editor.layout.screenWidth - 1.0, editor.layout.screenY + editor.layout.screenHeight - 1.0)
+        cm.move(a); cm.press(a); cm.drag((a + b) / 2.0); cm.drag(b); cm.release(b)
+        assertEquals(n + 1, editor.selection.size)
+        editor.simplifySelection(0.5)
+        val simple = editor.value
+        assertTrue(simple.segments.size < 40, "${simple.segments.size}")
+        // the jump and the ends stay
+        assertEquals(2, simple.contours().size)
+        assertEquals(original.segments.first().start, simple.segments.first().start)
+        assertEquals(original.segments.last().end, simple.segments.last().end)
+        // within half a pixel, in values: the view shows about 3 units in 400 pixels
+        val pixel = 1.0 / editor.zoomY
+        for (i in 0..200) {
+            val x = i * 4.0 / 200
+            if (abs(x - 2.0) < 0.02) continue
+            assertEquals(original.value(x), simple.value(x), pixel * 1.5)
+        }
+        assertTrue(simple.segments.all { s -> (0..50).map { s.position(it / 50.0).x }.zipWithNext().all { (p, q) -> q >= p - 1E-9 } })
+        assertEquals("Simplify curve", cm.history.undoName)
+        cm.history.undo()
+        assertEquals(n, editor.value.segments.size)
+    }
+
+    @Test
+    fun `fcurves are built from nothing with the pen and by drawing, and removed again`() {
+        lateinit var editor: FCurveEditor
+        val cm = panel {
+            css("fcurve-editor { width: 600px; height: 300px }")
+            layout { editor = fcurveEditor { } }
+        }
+        cm.frames()
+        assertTrue(editor.value.segments.isEmpty())
+        editor.viewX = 0.0; editor.viewY = 0.0; editor.zoomX = 100.0; editor.zoomY = 100.0
+        fun at(t: Double, v: Double) = editor.screenPosition(Vector2(t, v))
+        fun click(p: Vector2) { cm.move(p); cm.press(p); cm.release(p) }
+        editor.tool = FCurveTool.PEN
+        // the first key has no segment yet, the second makes one
+        click(at(1.0, 0.0))
+        assertTrue(editor.value.segments.isEmpty())
+        click(at(2.0, 1.0))
+        assertEquals(1, editor.value.segments.size)
+        // after the end and before the start the curve gets longer
+        click(at(3.0, 0.0))
+        click(at(0.5, 0.5))
+        val c = editor.value
+        assertEquals(listOf(0.5, 1.0, 2.0), c.segments.map { it.start.x })
+        assertEquals(3.0, c.end, 1E-9)
+        assertEquals(1.0, c.value(2.0), 1E-9)
+        // a key on the curve takes the value of the pointer
+        click(at(2.5, 0.8))
+        assertEquals(0.8, editor.value.value(2.5), 1E-6)
+        // dragging pulls out the handles of a new key
+        val p = at(4.0, 0.0)
+        cm.move(p); cm.press(p); cm.drag(p + Vector2(20.0, -20.0)); cm.drag(p + Vector2(40.0, -40.0)); cm.release(p + Vector2(40.0, -40.0))
+        val last = editor.value.segments.last()
+        assertTrue(last.cubic.control[1].y < 0.0, "${last.cubic.control[1]}")
+        // constant keys hold their value and jump
+        cm.keyboardInput.target = editor
+        editor.tool = FCurveTool.SELECT
+        click(at(1.0, 0.0))
+        editor.setInterpolation(FCurveEditor.Interpolation.CONSTANT)
+        assertEquals(0.0, editor.value.value(1.9), 1E-9)
+        assertEquals(2, editor.value.contours().size)
+        // the first key takes the first segment with it
+        click(at(0.5, 0.5))
+        cm.key(KEY_DELETE)
+        assertEquals(1.0, editor.value.start, 1E-9)
+        // all keys removed leave an empty curve, which can be drawn again
+        cm.key(0, if (System.getProperty("os.name").lowercase().contains("mac")) KeyModifier.SUPER else KeyModifier.CTRL, name = "a")
+        assertEquals(editor.value.segments.size + 1, editor.selection.size)
+        cm.key(KEY_DELETE)
+        assertTrue(editor.value.segments.isEmpty())
+        editor.tool = FCurveTool.DRAW
+        val from = at(0.0, 0.0)
+        cm.move(from); cm.press(from)
+        for (i in 1..40) cm.drag(at(i * 0.1, kotlin.math.sin(i * 0.1 * 2.0)))
+        cm.release(at(4.0, kotlin.math.sin(8.0)))
+        val drawn = editor.value
+        assertTrue(drawn.segments.isNotEmpty())
+        assertEquals(kotlin.math.sin(2.0), drawn.value(1.0), 0.05)
+        // a stroke over part of the curve replaces that part and joins the curve at its ends
+        val count = drawn.segments.size
+        val a = at(1.0, drawn.value(1.0))
+        cm.move(a); cm.press(a)
+        for (i in 1..10) cm.drag(at(1.0 + i * 0.1, drawn.value(1.0 + i * 0.1) + if (i < 10) 0.5 * kotlin.math.sin(i / 10.0 * kotlin.math.PI) else 0.0))
+        cm.release(at(2.0, drawn.value(2.0)))
+        val redrawn = editor.value
+        assertEquals(1, redrawn.contours().size)
+        assertEquals(drawn.value(0.5), redrawn.value(0.5), 1E-6)
+        assertEquals(drawn.value(3.0), redrawn.value(3.0), 1E-6)
+        assertTrue(redrawn.value(1.5) > drawn.value(1.5) + 0.3)
+        // everything is undone, back to the empty curve
+        while (cm.history.canUndo) cm.history.undo()
+        assertTrue(editor.value.segments.isEmpty())
     }
 }

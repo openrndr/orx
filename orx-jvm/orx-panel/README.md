@@ -85,6 +85,12 @@ by their shape. `virtualList(items, rowHeight) { item, index -> … }` scrolls l
 - `plot { watch("frame ms") { … } }`, `histogram { }` and `scope { }`: live graphs of values, distributions and
   waveforms.
 
+- `fcurveEditor { value = curve }`: edits an `FCurve` of orx-fcurve, also long and complex ones. It zooms horizontally
+  with the wheel and vertically with shift and the wheel; its tools select and move keys and their Bézier handles,
+  cut the curve, break it into jumps and join them, and sculpt it under a brush of a radius with grab, smooth, flatten
+  and noise, and simplify the selection by fitting it again with fewer Bézier segments. Sculpting only moves values and fits the curve again with the distortion of orx-shapes, so the curve stays
+  a function of time, and smoothing keeps the jumps.
+
 Knobs, range sliders, number fields, the editors, color editors, text areas and timelines `bind(::property)` both ways:
 a change in the control sets the property, and a change of the property, by anything, shows in the control.
 

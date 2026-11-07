@@ -27,6 +27,9 @@ dependencies {
     implementation(openrndr.math)
     implementation(sharedLibs.kotlin.coroutines)
     implementation(sharedLibs.kotlin.reflect)
+    // the editor of fcurves, which sculpts them with the distortions of orx-shapes
+    api(project(":orx-fcurve"))
+    implementation(project(":orx-shapes"))
     // the layouts of docks are saved as JSON
     implementation(sharedLibs.kotlin.serialization.json)
     testRuntimeOnly(sharedLibs.kotlin.reflect)
