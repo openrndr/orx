@@ -1,5 +1,9 @@
 package org.openrndr.panel.elements
 
+import org.openrndr.math.Vector2
+import org.openrndr.panel.animateMoveFrom
+import org.openrndr.panel.Edit
+import org.openrndr.panel.editHistory
 import org.openrndr.panel.style.height
 import org.openrndr.panel.style.left
 import org.openrndr.panel.style.position
@@ -22,12 +26,25 @@ class VirtualList<T>(
     /** the items, a change builds the rows again */
     var items: List<T> = items
         set(value) {
+            // the rows of items that stay slide from where they were to where they go
+            if (animateMoves) {
+                moved.clear()
+                for ((i, row) in rows) field.getOrNull(i)?.let { item ->
+                    if (row.layout.screenHeight > 0.0) moved.add(item to Vector2(row.layout.screenX, row.layout.screenY))
+                }
+            }
             field = value
             rows.values.forEach { it.close() }
             rows.clear()
             range = IntRange.EMPTY
             requestLayout()
         }
+
+    /** true when the rows of items that stay slide to their new places when the items change, like when sorted */
+    var animateMoves = true
+
+    /** the items of the rows before the items changed, and where those rows were */
+    private val moved = mutableListOf<Pair<T, Vector2>>()
 
     /** the rows that are built around the rows in view, above and below */
     var overscan = 4
@@ -75,7 +92,11 @@ class VirtualList<T>(
             val from = (event.data as RowDrag).index
             val at = insertion(event.position.y)
             val to = if (at > from) at - 1 else at
-            if (to != from) reordered.trigger(from to to)
+            if (to != from) {
+                reordered.trigger(from to to)
+                // moving a row can be undone, by moving it back
+                editHistory?.record(Edit("Move row", null, { reordered.trigger(to to from) }, { reordered.trigger(from to to) }))
+            }
         }
     }
 
@@ -130,6 +151,16 @@ class VirtualList<T>(
                 child.parent = this
                 children.add(child)
             }
+        }
+        // the rows of the items that were in view before the items changed start where
+        // they were, once they are in the list
+        if (moved.isNotEmpty()) {
+            for (i in wanted) {
+                val item = items[i]
+                val k = moved.indexOfFirst { it.first == item }
+                if (k >= 0) rows[i]?.animateMoveFrom(moved.removeAt(k).second)
+            }
+            moved.clear()
         }
     }
 

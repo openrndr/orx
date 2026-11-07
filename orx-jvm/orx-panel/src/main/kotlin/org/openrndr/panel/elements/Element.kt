@@ -51,6 +51,12 @@ open class Element(val type: ElementType) : AutoCloseable {
     var disposed = false
         private set
 
+    /** an offset of the element from where it is laid out, while it moves there, see [org.openrndr.panel.animateMoveFrom] */
+    var layoutOffset: org.openrndr.math.Vector2 = org.openrndr.math.Vector2.ZERO
+
+    /** the bindings of values of the element, checked every frame, see [org.openrndr.panel.binding.bindValue] */
+    val valueBindings = mutableListOf<org.openrndr.panel.binding.PropertyBinding<*>>()
+
     var scrollTop = 0.0
         set(value) {
             if (value != field) {
@@ -273,6 +279,9 @@ open class Element(val type: ElementType) : AutoCloseable {
         val scrolled = Event<MouseEvent>("element-mouse-scrolled")
         val pressed = Event<MouseEvent>("element-mouse-pressed")
 
+        /** the button that was pressed on the element is released, also after a drag, where it is no click */
+        val released = Event<MouseEvent>("element-mouse-released")
+
         override fun close() {
             clicked.close()
             doubleClicked.close()
@@ -282,6 +291,7 @@ open class Element(val type: ElementType) : AutoCloseable {
             moved.close()
             scrolled.close()
             pressed.close()
+            released.close()
         }
     }
 
@@ -670,6 +680,7 @@ open class Element(val type: ElementType) : AutoCloseable {
 
     override fun close() {
         disposed = true
+        valueBindings.toList().forEach { it.close() }
         classes.close()
         pseudoClasses.close()
         classEvents.close()
@@ -773,6 +784,17 @@ class AttributeProperty(val name: String, val initial: String) {
 val Element.ownTransform: org.openrndr.math.Matrix44?
     get() {
         val t = computedStyle.transform
+        val offset = layoutOffset
+        // an element that moves to where it is laid out, see [org.openrndr.panel.animateMoveFrom]
+        if (offset != org.openrndr.math.Vector2.ZERO) {
+            val own = if (t.functions.isEmpty()) null else run {
+                val size = org.openrndr.math.Vector2(layout.screenWidth, layout.screenHeight)
+                val o = org.openrndr.math.Vector2(layout.screenX, layout.screenY) + computedStyle.transformOrigin * size
+                org.openrndr.math.transforms.transform { translate(o.x, o.y); multiply(t.matrix(size)); translate(-o.x, -o.y) }
+            }
+            val move = org.openrndr.math.transforms.transform { translate(offset.x, offset.y) }
+            return if (own == null) move else move * own
+        }
         if (t.functions.isEmpty()) return null
         val size = org.openrndr.math.Vector2(layout.screenWidth, layout.screenHeight)
         val o = org.openrndr.math.Vector2(layout.screenX, layout.screenY) + computedStyle.transformOrigin * size

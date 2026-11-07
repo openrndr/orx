@@ -133,8 +133,18 @@ class PanelText internal constructor(private val fontManager: FontManager) {
         val (reference, sizeInEm) = reference(face)
         val glyphs = if (text.isEmpty()) emptyList() else
             spaced(typesetLine(reference, text, Vector2.ZERO, TextStyle.Defaults.copy(sizeInEm = sizeInEm)), spacing)
-        val width = (glyphs.lastOrNull()?.penEnd?.x ?: 0.0) + if (glyphs.isEmpty()) 0.0 else spacing
+        // white space at the end has no glyphs, but takes room, like the space that was just typed
+        val trailing = text.length - text.trimEnd().length
+        val width = (glyphs.lastOrNull()?.penEnd?.x ?: 0.0) + (if (glyphs.isEmpty()) 0.0 else spacing) +
+                if (trailing > 0) trailing * (spaceAdvance(face, spacing) + spacing) else 0.0
         ShapedText(text, face, glyphs, width, face.ascent - face.descent, 1)
+    }
+
+    private val spaceAdvances = HashMap<Pair<Face, Double>, Double>()
+
+    /** the advance of a space in [face], which has no glyph */
+    private fun spaceAdvance(face: Face, spacing: Double): Double = spaceAdvances.getOrPut(face to spacing) {
+        line(face, "x x", spacing).width - line(face, "xx", spacing).width - spacing
     }
 
     /**
@@ -151,6 +161,22 @@ class PanelText internal constructor(private val fontManager: FontManager) {
             for (i in text.indices) {
                 result[i] = x
                 x += shaped.glyphs[i].advance!!.x + spacing
+            }
+            result[text.length] = x
+        } else if (shaped.glyphs.size == text.count { !it.isWhitespace() } && shaped.glyphs.all { it.advance != null }) {
+            // white space has no glyphs: a glyph for every other character, the space advance for white space
+            val space = spaceAdvance(shaped.face, spacing) + spacing
+            var x = 0.0
+            var g = 0
+            for (i in text.indices) {
+                if (text[i].isWhitespace()) {
+                    result[i] = x
+                    x += space
+                } else {
+                    val glyph = shaped.glyphs[g++]
+                    result[i] = glyph.position.x - glyph.offset.x
+                    x = glyph.penEnd!!.x + spacing
+                }
             }
             result[text.length] = x
         } else {

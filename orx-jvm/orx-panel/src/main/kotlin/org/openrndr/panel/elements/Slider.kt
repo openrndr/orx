@@ -1,5 +1,6 @@
 package org.openrndr.panel.elements
 
+import org.openrndr.panel.recordEdit
 import org.openrndr.color.ColorRGBa
 
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -118,6 +119,8 @@ class Slider : Element(ElementType("slider")) {
     private var inputIndex = -1
 
     init {
+        // the changes by the user can be undone
+        events.valueChanged.listen { if (it.interactive) recordEdit("Change ${label.ifEmpty { "slider" }}", it.oldValue, it.newValue) { v -> value = v } }
         mouse.pressed.listen {
             val t = (it.position.x - layout.screenX - margin) / (layout.screenWidth - 2.0 * margin)
             interactiveValue = valueAt(t)

@@ -46,7 +46,7 @@ class ContextMenuBuilder internal constructor() {
 
 /** an item of a [ContextMenu], with its shortcut at the right, or the arrow of its submenu */
 class MenuItem internal constructor(
-    label: String, private val action: () -> Unit,
+    val label: String, internal val action: () -> Unit,
     private val shortcut: String? = null, internal val submenu: (ContextMenuBuilder.() -> Unit)? = null
 ) : TextElement(ElementType("menu-item")) {
     init {
@@ -63,6 +63,7 @@ class MenuItem internal constructor(
         }
         mouse.entered.listen {
             val menu = parent as? ContextMenu ?: return@listen
+            menu.highlight(this)
             if (submenu != null) menu.openSubmenu(this) else menu.closeSubmenu()
         }
     }
@@ -134,6 +135,59 @@ class ContextMenu internal constructor(position: Vector2, builder: ContextMenuBu
         submenu = menu
         root().append(menu)
     }
+
+    //<editor-fold desc="the keyboard">
+    /** the items of the menu, without the separators */
+    val items: List<MenuItem> get() = children.filterIsInstance<MenuItem>()
+
+    /** the item that the keyboard is at, `:selected`, null when none is */
+    var highlighted: MenuItem? = null
+        private set
+
+    /** moves the keyboard to [item] */
+    fun highlight(item: MenuItem?) {
+        highlighted?.pseudoClasses?.remove(ElementPseudoClass("selected"))
+        highlighted = item
+        item?.pseudoClasses?.add(ElementPseudoClass("selected"))
+        requestRedraw()
+    }
+
+    /** moves the keyboard [delta] items down, around the ends */
+    internal fun moveHighlight(delta: Int) {
+        val items = items
+        if (items.isEmpty()) return
+        val i = items.indexOf(highlighted)
+        highlight(items[if (i < 0) (if (delta > 0) 0 else items.lastIndex) else Math.floorMod(i + delta, items.size)])
+    }
+
+    /** moves the keyboard to the next item that starts with [c] */
+    internal fun typeAhead(c: Char) {
+        val items = items
+        val i = items.indexOf(highlighted)
+        val next = (1..items.size).map { items[Math.floorMod(i + it, items.size)] }.firstOrNull { it.label.firstOrNull()?.equals(c, ignoreCase = true) == true }
+        if (next != null) highlight(next)
+    }
+
+    /** opens the submenu of the item the keyboard is at, the keyboard at its first item; false when it has none */
+    internal fun enterSubmenu(): Boolean {
+        val item = highlighted?.takeIf { it.submenu != null } ?: return false
+        openSubmenu(item)
+        submenu?.moveHighlight(1)
+        return true
+    }
+
+    /** calls the item the keyboard is at, or opens its submenu */
+    internal fun activate() {
+        val item = highlighted ?: return
+        if (!enterSubmenu()) {
+            dismissAll()
+            item.action()
+        }
+    }
+
+    /** the innermost menu that is open, this or a submenu of it */
+    internal val innermost: ContextMenu get() = submenu?.innermost ?: this
+    //</editor-fold>
 
     /** the element that opened the menu, the item of a submenu or the title in a menu bar */
     internal var opener: Element? = null

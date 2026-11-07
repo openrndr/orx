@@ -1,5 +1,8 @@
 package org.openrndr.panel.elements
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import org.openrndr.ApplicationWindow
 import org.openrndr.Program
 import org.openrndr.WindowConfiguration
@@ -8,6 +11,10 @@ import org.openrndr.events.Event
 import org.openrndr.math.IntVector2
 import org.openrndr.math.Vector2
 import org.openrndr.panel.ControlManager
+import org.openrndr.panel.Edit
+import org.openrndr.panel.animateMoveFrom
+import org.openrndr.panel.editHistory
+import org.openrndr.panel.fadeIn
 import org.openrndr.panel.document.body
 import org.openrndr.panel.document.document
 import org.openrndr.panel.style.*
@@ -104,6 +111,8 @@ class Dock : Div(ElementType("dock")) {
         val group = groupOf(panel) ?: return
         group.selected = group.panels.indexOf(panel)
         rebuild()
+        // the content of the panel fades in
+        panel.content.fadeIn()
     }
 
     private fun place(panel: DockPanel, group: DockNode.Group?, zone: DockZone) {
@@ -154,11 +163,11 @@ class Dock : Div(ElementType("dock")) {
 
     //<editor-fold desc="windows of their own">
     /** takes [panel] out of the dock into a window of its own, at [position] on the screen, next to the window when null */
-    fun float(panel: DockPanel, position: IntVector2? = null) {
+    fun float(panel: DockPanel, position: IntVector2? = null, size: Vector2? = null) {
         val cm = (root() as? Body)?.controlManager ?: return
         if (panel.window != null) return
         val program = cm.program
-        val size = (groupOf(panel)?.let { group -> group.elementSize() } ?: Vector2(320.0, 240.0))
+        val size = size ?: groupOf(panel)?.elementSize() ?: Vector2(320.0, 240.0)
         undock(panel)
         panel.content.parent?.remove(panel.content)
         floating.add(panel)
@@ -227,6 +236,97 @@ class Dock : Div(ElementType("dock")) {
     """
     //</editor-fold>
 
+    //<editor-fold desc="saving and restoring the layout">
+    /** the layout as it is now: the groups and splits, the tabs that show and the windows of panels taken out */
+    fun layout(): DockLayout {
+        fun node(n: DockNode): DockLayoutNode = when (n) {
+            is DockNode.Group -> DockLayoutNode.Group(n.panels.map { it.title }, n.selected)
+            is DockNode.Split -> DockLayoutNode.Split(
+                n.vertical, splitPanes[n]?.position?.takeIf { n.position >= 0.0 } ?: n.position, node(n.first), node(n.second)
+            )
+        }
+        return DockLayout(root?.let(::node), floating.mapNotNull { panel ->
+            panel.window?.let { w ->
+                FloatingPanel(panel.title, w.windowPosition.x, w.windowPosition.y, w.windowSize.x, w.windowSize.y)
+            }
+        })
+    }
+
+    private var pendingFloats: List<FloatingPanel> = emptyList()
+
+    /**
+     * Arranges the panels as [layout] has them, found by their titles; panels that it does not have are added to the
+     * last group, and the panels that it has in windows of their own go there once the dock is in a control manager
+     */
+    fun restore(layout: DockLayout) {
+        val byTitle = panels.associateBy { it.title }
+        val floats = layout.floating.filter { it.title in byTitle }
+        val floatTitles = floats.map { it.title }.toSet()
+        // the panels in windows that the layout has docked are docked, the others stay in their windows
+        for (panel in floating.toList()) if (panel.title !in floatTitles) redock(panel)
+        val used = mutableSetOf<DockPanel>()
+        fun node(n: DockLayoutNode): DockNode? = when (n) {
+            is DockLayoutNode.Group -> n.panels.mapNotNull { byTitle[it] }.filter { it.title !in floatTitles && used.add(it) }
+                .takeIf { it.isNotEmpty() }?.let { DockNode.Group(it.toMutableList(), n.selected.coerceIn(0, it.lastIndex)) }
+            is DockLayoutNode.Split -> {
+                val first = node(n.first)
+                val second = node(n.second)
+                when {
+                    first == null -> second
+                    second == null -> first
+                    else -> DockNode.Split(n.vertical, first, second).also { it.position = n.position }
+                }
+            }
+        }
+        val restored = layout.root?.let(::node)
+        root = restored
+        // panels the layout does not have, and those it has in windows, are docked first
+        for (panel in byTitle.values) if (panel !in used && panel.title !in floatTitles) {
+            val last = root?.groups()?.lastOrNull()
+            if (last == null) root = DockNode.Group(mutableListOf(panel)) else last.panels.add(panel)
+        }
+        pendingFloats = floats.filter { f -> byTitle[f.title]?.window == null }
+        rebuild()
+    }
+
+    /** the file the layout is saved to, see [persist] */
+    private var persistFile: java.io.File? = null
+    private var savedLayout: String? = null
+    private var lastSaveCheck = 0L
+
+    /**
+     * Restores the layout from [file] when it exists, and saves the layout to it whenever it changes, like when a
+     * panel is docked elsewhere, a splitter is dragged, or a window of a panel is moved
+     */
+    fun persist(file: java.io.File) {
+        persistFile = file
+        if (file.exists()) {
+            try {
+                val text = file.readText()
+                restore(dockLayoutJson.decodeFromString(DockLayout.serializer(), text))
+                savedLayout = text
+            } catch (e: Exception) {
+                // a layout that can not be read is replaced by the next one that is saved
+            }
+        }
+    }
+
+    private fun saveIfChanged() {
+        val file = persistFile ?: return
+        val now = System.currentTimeMillis()
+        if (now - lastSaveCheck < 500) return
+        lastSaveCheck = now
+        val text = dockLayoutJson.encodeToString(DockLayout.serializer(), layout())
+        if (text != savedLayout) {
+            savedLayout = text
+            try {
+                file.writeText(text)
+            } catch (e: Exception) {
+            }
+        }
+    }
+    //</editor-fold>
+
     override fun prepare() {
         while (true) {
             val panel = returning.poll() ?: break
@@ -253,6 +353,15 @@ class Dock : Div(ElementType("dock")) {
         }
         place(root)
         if (dirty) build()
+        // the panels that the restored layout has in windows of their own
+        if (pendingFloats.isNotEmpty() && (root() as? Body)?.controlManager != null) {
+            val floats = pendingFloats
+            pendingFloats = emptyList()
+            for (f in floats) panels.firstOrNull { it.title == f.title && it.window == null }?.let { panel ->
+                float(panel, IntVector2(f.x.toInt(), f.y.toInt()), Vector2(f.width, f.height))
+            }
+        }
+        saveIfChanged()
     }
 
     /** the elements of the layout are built again before the next frame */
@@ -277,11 +386,23 @@ class Dock : Div(ElementType("dock")) {
             }
         }
         detach(this)
+        // the groups slide from where they were to where they go
+        val before = mutableMapOf<DockNode.Group, Vector2>()
+        fun positions(e: Element) {
+            if (e is DockGroup && e.layout.screenWidth > 0.0) before[e.group] = Vector2(e.layout.screenX, e.layout.screenY)
+            e.children.forEach(::positions)
+        }
+        positions(this)
         for (child in children.toList()) {
             remove(child)
             child.close()
         }
         root?.let { append(element(it)) }
+        fun animate(e: Element) {
+            if (e is DockGroup) before[e.group]?.let { e.animateMoveFrom(it) }
+            e.children.forEach(::animate)
+        }
+        animate(this)
         invalidateStyle()
         requestLayout()
         requestRedraw()
@@ -298,7 +419,12 @@ class Dock : Div(ElementType("dock")) {
     }
 
     internal fun dropped(drag: PanelDrag, group: DockNode.Group, zone: DockZone) {
-        if (drag.dock === this) dock(drag.panel, group, zone)
+        if (drag.dock !== this) return
+        val before = layout()
+        dock(drag.panel, group, zone)
+        val after = layout()
+        // moving a panel can be undone
+        if (before != after) editHistory?.record(Edit("Move ${drag.panel.title}", null, { restore(before) }, { restore(after) }))
     }
 }
 
@@ -400,3 +526,25 @@ class DockTab internal constructor(val dock: Dock, val panel: DockPanel, selecte
 
 /** a [Dock], [init] adds its panels with [Dock.panel] */
 fun Element.dock(vararg classes: String, init: Dock.() -> Unit): Dock = initElement(classes, Dock(), init)
+
+/** a layout of a [Dock], see [Dock.layout], [Dock.restore] and [Dock.persist] */
+@Serializable
+data class DockLayout(val root: DockLayoutNode? = null, val floating: List<FloatingPanel> = emptyList())
+
+/** a node of a [DockLayout]: a group of panels by their titles, or a split of two nodes */
+@Serializable
+sealed class DockLayoutNode {
+    @Serializable
+    @SerialName("group")
+    data class Group(val panels: List<String>, val selected: Int = 0) : DockLayoutNode()
+
+    @Serializable
+    @SerialName("split")
+    data class Split(val vertical: Boolean, val position: Double, val first: DockLayoutNode, val second: DockLayoutNode) : DockLayoutNode()
+}
+
+/** a panel of a [DockLayout] in a window of its own, at [x], [y] on the screen and [width] by [height] in size */
+@Serializable
+data class FloatingPanel(val title: String, val x: Double, val y: Double, val width: Double, val height: Double)
+
+private val dockLayoutJson = Json { prettyPrint = true; ignoreUnknownKeys = true }

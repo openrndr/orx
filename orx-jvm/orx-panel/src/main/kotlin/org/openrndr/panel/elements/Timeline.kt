@@ -1,5 +1,8 @@
 package org.openrndr.panel.elements
 
+import org.openrndr.panel.editHistory
+import org.openrndr.panel.binding.bindValue
+import org.openrndr.panel.binding.PropertyBinding
 import org.openrndr.KEY_BACKSPACE
 import org.openrndr.KEY_DELETE
 import org.openrndr.KEY_SPACEBAR
@@ -137,8 +140,15 @@ class Timeline : Element(ElementType("timeline")) {
     private fun local(p: Vector2) = p - Vector2(layout.screenX, layout.screenY)
 
     private fun replace(track: Track, old: Keyframe?, new: Keyframe?) {
-        track.keyframes = track.keyframes.filter { it !== old && it != old } + listOfNotNull(new)
+        val before = track.keyframes
+        setKeyframes(track, before.filter { it !== old && it != old } + listOfNotNull(new))
         selected = new?.let { track to it }
+        // the changes of the keyframes can be undone, those of a drag of a keyframe at once
+        editHistory?.record("Change keyframes of ${track.name}", track, before, track.keyframes) { setKeyframes(track, it) }
+    }
+
+    private fun setKeyframes(track: Track, keyframes: List<Keyframe>) {
+        track.keyframes = keyframes
         draw.dirty = true
         applyTracks()
         keyframesChanged.trigger(track)
@@ -167,7 +177,7 @@ class Timeline : Element(ElementType("timeline")) {
             }
             it.cancelPropagation()
         }
-        mouse.clicked.listen { scrubbing = false }
+        mouse.released.listen { scrubbing = false }
         mouse.doubleClicked.listen {
             val p = local(it.position)
             if (p.y < rulerHeight || p.x < lane.x) return@listen
@@ -241,3 +251,7 @@ class Timeline : Element(ElementType("timeline")) {
 }
 
 fun Element.timeline(vararg classes: String, init: Timeline.() -> Unit): Timeline = initElement(classes, Timeline(), init)
+
+/** binds the time of the playhead to [property], both ways, see [bindValue] */
+fun Timeline.bind(property: KMutableProperty0<Double>): PropertyBinding<Double> =
+    bindValue(timeChanged, property, { time }, { time = it })

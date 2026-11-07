@@ -74,6 +74,33 @@ by their shape. `virtualList(items, rowHeight) { item, index -> … }` scrolls l
 - `curveEditor { }`: the cubic Bézier curve of a CSS timing function; `gradientEditor { }`: the stops of a gradient,
   dragged, added by a double click and removed by dragging them off, interpolated in sRGB, linear RGB or OKLab.
 
+- `nodeEditor { add(GraphNode("blur", inputs, outputs), position); connect(a, 0, b, 0) }`: nodes with ports that are
+  wired by dragging from an output to an input, moved, selected with a box and removed with delete; the wheel zooms,
+  the middle button or alt pans.
+- `textArea { highlighter = Highlighters.glsl }`: multi-line text with a selection, words, indentation, the clipboard,
+  scrolling and line numbers, in the colors of a highlighter.
+- `colorEditor { }`: a wheel of the hues and chromas of OKLCH, sliders of lightness, chroma, hue and alpha, a field
+  that takes any CSS color, swatches that the editors share, and `controlManager.pickColor { }`, a pipette that picks a
+  color from the window.
+- `plot { watch("frame ms") { … } }`, `histogram { }` and `scope { }`: live graphs of values, distributions and
+  waveforms.
+
+Knobs, range sliders, number fields, the editors, color editors, text areas and timelines `bind(::property)` both ways:
+a change in the control sets the property, and a change of the property, by anything, shows in the control.
+
+The edits by the user, of the values of controls, keyframes, text, nodes and wires, the order of lists and the places
+of panels in docks, go into `controlManager.history`, undone with mod+z and redone with mod+shift+z. The layout of a
+dock is saved with `dock.layout()`, restored with `dock.restore(layout)`, and kept in a file between runs with
+`dock.persist(file)`.
+
+Menus are used with the keyboard: F10, or alt and the first letter of a menu on Windows and Linux, opens a menu of the
+menu bar; the arrow keys go through the items and the menus, enter calls an item, typing goes to the item that starts
+with the letter, and escape closes the menu.
+
+Rows of lists slide to their new places when the items change, groups of docks when panels are docked elsewhere, tabs
+fade in their pages, and a double click on a splitter moves it to the middle; `element.animateMoveFrom(position)`,
+`element.fadeIn()` and `controlManager.animate(element, duration) { t -> … }` animate other elements.
+
 Rows of a `virtualList` and a `dataTable` with `reorderable = true`, and items of a `treeView` with `draggable = true`
 are moved by dragging them; any element takes part in drag and drop with `dnd.data`, `dnd.accepts` and the events of
 `dnd`, the source is `:dragging` and the target under the pointer `:drag-over`.

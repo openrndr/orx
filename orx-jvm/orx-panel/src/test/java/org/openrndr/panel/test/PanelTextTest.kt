@@ -143,4 +143,19 @@ class PanelTextTest : PanelTestFixture() {
         // sizes share their glyphs: text at another size is the same text scaled
         assertEquals(text.width(style, "radius") * 10.0 / 16.0, text.width(small, "radius"), 0.5)
     }
+
+    @Test
+    fun `spaces move the caret, also at the end`() {
+        val cm = panel { layout { } }
+        val text = cm.text
+        val style = StyleSheet().apply { fontSize = 16.px }
+        val space = text.width(style, "a b") - text.width(style, "ab")
+        assertTrue(space > 2.0, "$space")
+        // a space that is typed at the end
+        assertEquals(text.width(style, "ab") + space, text.width(style, "ab "), 0.5)
+        val carets = text.carets(style, "  float x ")
+        for (i in 1 until carets.size) assertTrue(carets[i] > carets[i - 1], carets.toList().toString())
+        assertEquals(text.width(style, "  float x "), carets.last(), 0.5)
+        assertEquals(text.width(style, "  float"), carets[7], 0.5)
+    }
 }

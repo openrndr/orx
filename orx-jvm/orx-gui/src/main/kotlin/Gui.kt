@@ -352,6 +352,8 @@ open class GUI(
         visible = visible
 
         program.extend(panel ?: error("no panel"))
+        // the GUI has a history of the values of its parameters, the panel records none
+        panel?.history?.enabled = false
         registerCommands()
         // loading the persisted values and building the controls are not changes that can be undone
         history.clear()

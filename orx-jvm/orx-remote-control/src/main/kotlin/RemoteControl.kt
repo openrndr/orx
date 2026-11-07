@@ -6,6 +6,7 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.engine.EmbeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.netty.NettyApplicationEngine
+import io.ktor.server.request.receiveText
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondBytes
 import io.ktor.server.routing.get
@@ -13,6 +14,9 @@ import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
 import kotlinx.coroutines.CompletableDeferred
 import org.openrndr.ApplicationMouse
+import org.openrndr.CharacterEvent
+import org.openrndr.KEY_ENTER
+import org.openrndr.KEY_TAB
 import org.openrndr.ApplicationWindowMouse
 import org.openrndr.Extension
 import org.openrndr.KeyEvent
@@ -53,6 +57,9 @@ import java.util.concurrent.ConcurrentLinkedQueue
  *   key name as used by [org.openrndr.KeyEvent.name] (e.g. `a`, `spacebar`, `arrow-left`).
  *   An optional `modifiers` query parameter takes a comma-separated list of `SHIFT`, `CTRL`,
  *   `ALT`, `SUPER`.
+ * - `POST /keyboard/type?text=<text>` -- type [text], or the body of the request when there is no `text`: a
+ *   character event for every character, like typing on a keyboard does, which is what text inputs take. A line
+ *   break is a press of enter, a tab a press of tab.
  * - `POST /mouse/move?x=<x>&y=<y>` -- move the mouse to an absolute window position; while a button is down
  *   (pressed with `/mouse/button/down`) the move is a drag.
  * - `POST /mouse/button/down?x=<x>&y=<y>&button=<LEFT|RIGHT|CENTER>`,
@@ -109,6 +116,27 @@ class RemoteControl : Extension {
                     screenshotQueue.add(result)
                     program.window.requestDraw()
                     call.respondBytes(result.await(), ContentType.Image.PNG)
+                }
+
+                post("/keyboard/type") {
+                    val text = call.request.queryParameters["text"] ?: call.receiveText()
+                    actionQueue.add {
+                        for (c in text) {
+                            val key = when (c) {
+                                '\n' -> KEY_ENTER to "enter"
+                                '\t' -> KEY_TAB to "tab"
+                                else -> null
+                            }
+                            if (key != null) {
+                                program.keyboard.keyDown.trigger(KeyEvent(KeyEventType.KEY_DOWN, key.first, key.second, emptySet()))
+                                program.keyboard.keyUp.trigger(KeyEvent(KeyEventType.KEY_UP, key.first, key.second, emptySet()))
+                            } else if (c != '\r') {
+                                program.keyboard.character.trigger(CharacterEvent(c, emptySet()))
+                            }
+                        }
+                    }
+                    program.window.requestDraw()
+                    call.respond(HttpStatusCode.OK)
                 }
 
                 post("/keyboard/{action}") {

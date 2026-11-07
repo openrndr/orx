@@ -19,6 +19,8 @@ import kotlin.contracts.contract
 
 private val logger = KotlinLogging.logger {}
 
+private val isMac = System.getProperty("os.name").lowercase().contains("mac")
+
 class ControlManager : Extension {
 
 
@@ -100,13 +102,54 @@ class ControlManager : Extension {
                 checkForManualRedraw()
                 return
             }
-            // escape closes the open context menu
-            if (event.key == KEY_ESCAPE && openMenu?.parent != null) {
-                openMenu?.dismiss()
-                openMenu = null
+            // escape stops picking a color
+            if (event.key == KEY_ESCAPE && pickingColor) {
+                colorPicking.onPick = null
+                cursorPending = true
                 event.cancelPropagation()
-                checkForManualRedraw()
+                window.requestDraw()
                 return
+            }
+            // the keyboard moves through the open menu: up and down through its items, right into a submenu or to the
+            // next menu of a menu bar, left back, enter calls the item, escape closes the innermost menu
+            currentMenu?.let { top ->
+                val menu = top.innermost
+                val bar = (top.opener as? MenuTitle)?.bar
+                val handled = when (event.key) {
+                    KEY_ARROW_DOWN -> { menu.moveHighlight(1); true }
+                    KEY_ARROW_UP -> { menu.moveHighlight(-1); true }
+                    KEY_ARROW_RIGHT -> menu.enterSubmenu() || bar?.step(top, 1) == true
+                    KEY_ARROW_LEFT -> menu.parentMenu?.let { it.closeSubmenu(); true } ?: (bar?.step(top, -1) == true)
+                    KEY_ENTER, KEY_SPACEBAR -> { menu.activate(); true }
+                    KEY_ESCAPE -> {
+                        menu.parentMenu?.closeSubmenu() ?: run { top.dismiss(); openMenu = null }
+                        true
+                    }
+                    else -> false
+                }
+                if (handled) {
+                    event.cancelPropagation()
+                    checkForManualRedraw()
+                    window.requestDraw()
+                    return
+                }
+            }
+            // F10 opens the first menu of the menu bar, and alt with the first letter of its title a menu, but on macOS
+            if (currentMenu == null) {
+                val bar = body?.let { b -> var found: MenuBar? = null; b.visit { if (found == null && this is MenuBar) found = this }; found }
+                val title = when {
+                    bar == null -> null
+                    event.name == "f10" && event.modifiers.isEmpty() -> bar.children.filterIsInstance<MenuTitle>().firstOrNull()
+                    !isMac && event.modifiers == setOf(KeyModifier.ALT) && event.name.length == 1 -> bar.titleFor(event.name[0])
+                    else -> null
+                }
+                if (bar != null && title != null) {
+                    bar.openWithKeyboard(title)
+                    event.cancelPropagation()
+                    checkForManualRedraw()
+                    window.requestDraw()
+                    return
+                }
             }
             target?.let {
                 if (it.isHidden()) {
@@ -170,6 +213,13 @@ class ControlManager : Extension {
         }
 
         fun character(event: CharacterEvent) {
+            // typing in an open menu moves to the next item that starts with the character
+            currentMenu?.let {
+                it.innermost.typeAhead(event.character)
+                event.cancelPropagation()
+                checkForManualRedraw()
+                return
+            }
             if (target?.isHidden() == true) {
                 return
             }
@@ -247,9 +297,16 @@ class ControlManager : Extension {
             checkForManualRedraw()
         }
 
+        /** the element the button was pressed on, which is told when it is released */
+        private var pressTarget: Element? = null
+
         fun click(event: MouseEvent) {
             logger.debug { "click event: $event" }
             dndCandidate = null
+            pressTarget?.let { pressed ->
+                pressTarget = null
+                if (!pressed.disposed) pressed.sendMouse(pressed.mouse.released, event)
+            }
             // a drag and drop ends with a drop on the target under the pointer
             dnd?.let { state ->
                 dnd = null
@@ -305,6 +362,18 @@ class ControlManager : Extension {
 
         fun press(event: MouseEvent) {
             logger.debug { "press event: $event" }
+            history.gesture++
+            pressTarget = null
+            // a press while a color is picked takes the color under the pointer
+            if (pickingColor) {
+                colorPicking.pick()
+                event.cancelPropagation()
+                dragTarget = null
+                clickTarget = null
+                cursorPending = true
+                window.requestDraw()
+                return
+            }
             pressPosition = event.position
             dragging = false
             tooltips.hide()
@@ -383,6 +452,7 @@ class ControlManager : Extension {
                         logger.debug { "propagation cancelled by ${c.first}" }
                         dragTarget = c.first
                         clickTarget = c.first
+                        pressTarget = c.first
                         keyboardInput.target = c.first
                     }
                 }
@@ -555,7 +625,43 @@ class ControlManager : Extension {
      * The commands, with their shortcuts, see [Commands]; mod+k opens the command palette, which searches them, see
      * [commandPalette]
      */
-    val commands = Commands().apply { add("Command palette", "mod+k") { commandPalette() } }
+    internal val animations = Animations()
+
+    /**
+     * Animates [element] for [duration] seconds: [step] is called every frame with the progress from 0 to 1, eased by
+     * [timing]; an animation replaces the one of the same element and [key]
+     */
+    fun animate(
+        element: Element, duration: Double, timing: org.openrndr.extra.style.TimingFunction = org.openrndr.extra.style.TimingFunction.EASE_OUT,
+        key: String = "", step: (Double) -> Unit
+    ) {
+        animations.add(Animation(element, key, duration, timing, step))
+        window.requestDraw()
+    }
+
+    private val colorPicking = ColorPicking(this)
+
+    /** true while a color is picked from the window, see [pickColor] */
+    val pickingColor: Boolean get() = colorPicking.onPick != null
+
+    /**
+     * Picks a color from the window: the color under the pointer is shown next to it, and a click takes it and calls
+     * [onPick] with it; escape cancels
+     */
+    fun pickColor(onPick: (ColorRGBa) -> Unit) {
+        colorPicking.onPick = onPick
+        program.application.cursorType = CursorType.CROSSHAIR_CURSOR
+        window.requestDraw()
+    }
+
+    /** the edits that can be undone and redone, see [History] */
+    val history = History()
+
+    val commands = Commands().apply {
+        add("Command palette", "mod+k") { commandPalette() }
+        add("Undo", "mod+z", "Edit") { history.undo() }
+        add("Redo", "mod+shift+z", "Edit") { history.redo() }
+    }
 
     /** the dialogs that are open, the last on top, see [dialog] */
     private val dialogs = mutableListOf<Dialog>()
@@ -718,6 +824,8 @@ class ControlManager : Extension {
         window = program.window
 
         fontManager.contentScale = contentScale
+        // the first extension, so that it can pick colors from all that is drawn
+        program.extensions.add(0, colorPicking)
         program.mouse.buttonUp.listen { mouseInput.click(it) }
         program.mouse.moved.listen { mouseInput.move(it) }
         program.mouse.scrolled.listen { mouseInput.scroll(it) }
@@ -945,7 +1053,15 @@ class ControlManager : Extension {
             if (toasts.isNotEmpty()) updateToasts(System.nanoTime() / 1E9)
 
             // elements change their children for what is in view
-            body.visit { prepare() }
+            body.visit {
+                prepare()
+                // the values that elements are bound to show in them
+                if (valueBindings.isNotEmpty()) valueBindings.toList().forEach { it.poll() }
+            }
+
+            // the animations of elements go on
+            val frameTime = System.nanoTime() / 1E9
+            animations.step(frameTime)
 
             // CSS files that changed are read again
             if (cssFiles.isNotEmpty()) {
@@ -965,6 +1081,8 @@ class ControlManager : Extension {
             if (fullRedrawPending) document?.layoutDirty = true
             // transitions and animations change the computed styles before the layout
             val laidOut = document?.layout { styleTransitions.apply(body) } ?: false
+            // the elements that moved start where they were
+            animations.afterLayout(frameTime)
             // the subtrees that were laid out, null when everything was
             val laidOutSubtrees = if (laidOut) document?.laidOut else null
             if (laidOut) {
@@ -1051,7 +1169,7 @@ class ControlManager : Extension {
             if (cursorPending) {
                 cursorPending = false
                 val bar = mouseInput.scrollbarDrag ?: mouseInput.scrollbarHover
-                program.application.cursorType = bar?.element?.computedStyle?.scrollbarCursor?.cursorType
+                program.application.cursorType = if (pickingColor) CursorType.CROSSHAIR_CURSOR else bar?.element?.computedStyle?.scrollbarCursor?.cursorType
                     ?: elementAt(body, mousePosition) { true }?.computedStyle?.cursor?.cursorType
                             ?: CursorType.ARROW_CURSOR
             }
@@ -1067,7 +1185,7 @@ class ControlManager : Extension {
             drawCount++
 
             // the next frame continues the fading also when frames are only drawn on request
-            if ((fadingBefore.isNotEmpty() || smooth || styleTransitions.animating.isNotEmpty() || tooltips.waiting) &&
+            if ((fadingBefore.isNotEmpty() || smooth || styleTransitions.animating.isNotEmpty() || tooltips.waiting || animations.active) &&
                 window.presentationMode == PresentationMode.MANUAL
             ) {
                 window.requestDraw()

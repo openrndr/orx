@@ -12,7 +12,7 @@ import org.openrndr.panel.style.px
  */
 class SplitPane(val vertical: Boolean = false) : Div(ElementType("split-pane")) {
     val first = Div().apply { classes.add(ElementClass("split-first")) }
-    val splitter = Div().apply { classes.add(ElementClass("splitter")) }
+    val splitter: Div = object : Div() { override val handlesDoubleClick = true }.apply { classes.add(ElementClass("splitter")) }
     val second = Div().apply { classes.add(ElementClass("split-second")) }
 
     /** the smallest size of a pane, in pixels */
@@ -45,7 +45,20 @@ class SplitPane(val vertical: Boolean = false) : Div(ElementType("split-pane")) 
                 it.cancelPropagation()
             }
         }
-        splitter.mouse.clicked.listen { dragging = false }
+        splitter.mouse.released.listen { dragging = false }
+        // a double click on the splitter puts it in the middle
+        splitter.mouse.doubleClicked.listen {
+            animatePosition((if (vertical) layout.screenHeight else layout.screenWidth) / 2.0)
+            it.cancelPropagation()
+        }
+    }
+
+    /** moves the splitter to [target] over [duration] seconds */
+    fun animatePosition(target: Double, duration: Double = 0.25) {
+        val cm = (root() as? Body)?.controlManager
+        if (cm == null) { position = target; return }
+        val from = position
+        cm.animate(this, duration, key = "split") { t -> position = from + (target - from) * t }
     }
 
     /** builds the first pane */

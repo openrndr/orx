@@ -1,5 +1,6 @@
 package org.openrndr.panel.elements
 
+import org.openrndr.panel.recordEdit
 import org.openrndr.color.ColorRGBa
 
 import org.openrndr.KEY_SPACEBAR
@@ -56,20 +57,28 @@ class Toggle : Element(ElementType("toggle")) {
             it.cancelPropagation()
         }
         mouse.clicked.listen {
-            value = !value
-            draw.dirty = true
-            events.valueChanged.trigger(Toggle.ValueChangedEvent(this, !value, value))
+            toggleByUser()
             it.cancelPropagation()
         }
 
         keyboard.pressed.listen {
             if (it.key == KEY_SPACEBAR) {
-                value = !value
+                toggleByUser()
                 it.cancelPropagation()
-                draw.dirty = true
-                events.valueChanged.trigger(Toggle.ValueChangedEvent(this, !value, value))
             }
         }
+    }
+
+    private fun set(v: Boolean) {
+        value = v
+        draw.dirty = true
+        events.valueChanged.trigger(Toggle.ValueChangedEvent(this, !v, v))
+    }
+
+    // a change by the user can be undone
+    private fun toggleByUser() {
+        set(!value)
+        recordEdit("Toggle ${label.ifEmpty { "toggle" }}", !value, value) { set(it) }
     }
 
     /**

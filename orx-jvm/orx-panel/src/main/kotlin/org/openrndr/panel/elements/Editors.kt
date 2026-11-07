@@ -1,5 +1,9 @@
 package org.openrndr.panel.elements
 
+import org.openrndr.panel.recordEdit
+import kotlin.reflect.KMutableProperty0
+import org.openrndr.panel.binding.bindValue
+import org.openrndr.panel.binding.PropertyBinding
 import org.openrndr.KEY_ARROW_DOWN
 import org.openrndr.KEY_ARROW_LEFT
 import org.openrndr.KEY_ARROW_RIGHT
@@ -83,6 +87,8 @@ class CurveEditor : Element(ElementType("curve-editor")) {
     }
 
     init {
+        // the changes by the user can be undone
+        valueChanged.listen { if (it.interactive) recordEdit("Change ${label.ifEmpty { "curve" }}", it.oldValue, it.newValue) { v -> value = v } }
         mouse.pressed.listen {
             val local = it.position - Vector2(layout.screenX, layout.screenY)
             val d1 = local.distanceTo(toScreen(Vector2(value.x1, value.y1)))
@@ -224,6 +230,8 @@ class GradientEditor : Div(ElementType("gradient-editor")) {
     }
 
     init {
+        // the changes by the user can be undone
+        valueChanged.listen { if (it.interactive) recordEdit("Change gradient", it.oldValue, it.newValue) { v -> value = v } }
         append(bar)
         append(picker)
         picker.color = value[0].color
@@ -316,3 +324,11 @@ class GradientBar internal constructor(private val editor: GradientEditor) : Ele
 fun Element.curveEditor(vararg classes: String, init: CurveEditor.() -> Unit): CurveEditor = initElement(classes, CurveEditor(), init)
 
 fun Element.gradientEditor(vararg classes: String, init: GradientEditor.() -> Unit): GradientEditor = initElement(classes, GradientEditor(), init)
+
+/** binds the curve of the editor to [property], both ways, see [bindValue] */
+fun CurveEditor.bind(property: KMutableProperty0<CubicBezier>): PropertyBinding<CubicBezier> =
+    bindValue(valueChanged, property, { value }, { value = it })
+
+/** binds the stops of the editor to [property], both ways, see [bindValue] */
+fun GradientEditor.bind(property: KMutableProperty0<List<ColorStop>>): PropertyBinding<List<ColorStop>> =
+    bindValue(valueChanged, property, { value }, { value = it })

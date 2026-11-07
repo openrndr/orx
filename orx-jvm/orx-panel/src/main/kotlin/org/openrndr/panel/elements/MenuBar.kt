@@ -48,6 +48,25 @@ class MenuBar : Div(ElementType("menu-bar")) {
         title.pseudoClasses.add(ElementPseudoClass("active"))
     }
 
+    /** opens the menu of [title] with the keyboard at its first item */
+    internal fun openWithKeyboard(title: MenuTitle) {
+        open(title)
+        (root() as? Body)?.controlManager?.currentMenu?.moveHighlight(1)
+    }
+
+    /** opens the menu [delta] titles from that of [menu], around the ends; false when [menu] is not of this bar */
+    internal fun step(menu: ContextMenu, delta: Int): Boolean {
+        val titles = children.filterIsInstance<MenuTitle>()
+        val i = titles.indexOf(menu.opener)
+        if (i < 0) return false
+        openWithKeyboard(titles[Math.floorMod(i + delta, titles.size)])
+        return true
+    }
+
+    /** the title of the menu that starts with [c], null when none does */
+    internal fun titleFor(c: Char): MenuTitle? =
+        children.filterIsInstance<MenuTitle>().firstOrNull { it.title.firstOrNull()?.equals(c, ignoreCase = true) == true }
+
     internal val anyOpen: Boolean
         get() = (root() as? Body)?.controlManager?.currentMenu?.let { m -> children.any { it === m.opener } } == true
 
@@ -58,7 +77,7 @@ class MenuBar : Div(ElementType("menu-bar")) {
 }
 
 /** a title of a [MenuBar] */
-class MenuTitle internal constructor(private val bar: MenuBar, title: String, internal val builder: ContextMenuBuilder.() -> Unit) :
+class MenuTitle internal constructor(internal val bar: MenuBar, val title: String, internal val builder: ContextMenuBuilder.() -> Unit) :
     TextElement(ElementType("menu-title")) {
     init {
         text(title)

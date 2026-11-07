@@ -27,6 +27,8 @@ dependencies {
     implementation(openrndr.math)
     implementation(sharedLibs.kotlin.coroutines)
     implementation(sharedLibs.kotlin.reflect)
+    // the layouts of docks are saved as JSON
+    implementation(sharedLibs.kotlin.serialization.json)
     testRuntimeOnly(sharedLibs.kotlin.reflect)
     // a program with fonts, keys and a clipboard for tests that lay out text and type
     testImplementation(project(":testing"))

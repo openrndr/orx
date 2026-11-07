@@ -7,7 +7,9 @@ import org.openrndr.panel.elements.*
  * Demonstrates the tools of panels: a menu bar whose items are also commands in the command palette (cmd/ctrl+K),
  * panels in a dock that are dragged by their tabs into other groups and out of the window, a knob, a range slider, a
  * logarithmic slider with ticks, number fields that take arithmetic, a curve editor, a gradient editor, a list that is
- * reordered by dragging and a timeline of keyframes that animates the drawing.
+ * reordered by dragging and a timeline of keyframes that animates the drawing. The knobs, the number field and the curve
+ * editor are bound to the values of the drawing both ways, so they follow the timeline; the layout of the dock is kept
+ * between runs, and edits are undone with mod+z.
  */
 fun main() = application {
     configure {
@@ -16,10 +18,7 @@ fun main() = application {
         windowResizable = true
     }
     program {
-        var x = 0.5
-        var radius = 60.0
-        var scale = 1.0
-        var curve = CubicBezier.EASE
+        val scene = Scene()
         lateinit var gradient: GradientEditor
         lateinit var timeline: Timeline
         lateinit var viewport: DockPanel
@@ -35,7 +34,10 @@ fun main() = application {
                 val t = i / (circles - 1.0)
                 fill = gradient.colorAt(t)
                 stroke = null
-                circle(area.x + area.width * (0.15 + 0.7 * x), area.y + area.height * (0.15 + 0.7 * curve.ease(t)), radius * scale * (0.4 + 0.6 * t) * area.height / 600.0)
+                circle(
+                    area.x + area.width * (0.15 + 0.7 * scene.x), area.y + area.height * (0.15 + 0.7 * scene.curve.ease(t)),
+                    scene.radius * scene.scale * (0.4 + 0.6 * t) * area.height / 600.0
+                )
             }
             drawStyle.clip = null
         }
@@ -82,17 +84,15 @@ fun main() = application {
                         }
                         val controls = panel("Controls", DockZone.LEFT, view) {
                             div("knobs") {
-                                knob { label = "radius"; range = 10.0..120.0; default = 60.0; value = radius }
-                                    .valueChanged.listen { radius = it.newValue }
-                                knob { label = "x"; range = 0.0..1.0; default = 0.5; value = x }
-                                    .valueChanged.listen { x = it.newValue }
+                                // bound both ways: the knobs follow the timeline
+                                knob { label = "radius"; range = 10.0..120.0; default = 60.0; bind(scene::radius) }
+                                knob { label = "x"; range = 0.0..1.0; default = 0.5; bind(scene::x) }
                             }
                             slider {
-                                label = "scale"; range = Range(0.1, 10.0); logarithmic = true; ticks = 2; value = scale
-                            }.events.valueChanged.listen { scale = it.newValue }
+                                label = "scale"; range = Range(0.1, 10.0); logarithmic = true; ticks = 2; value = scene.scale
+                            }.events.valueChanged.listen { scene.scale = it.newValue }
                             rangeSlider { label = "range"; range = 0.0..100.0; value = 20.0..80.0; precision = 0 }
-                            numberField { label = "radius (type 2*30, 50%)"; range = 10.0..120.0; value = radius }
-                                .events.valueChanged.listen { radius = it.newValue }
+                            numberField { label = "radius (type 2*30, 50%)"; range = 10.0..120.0; bind(scene::radius) }
                         }
                         panel("Layers", DockZone.CENTER, controls) {
                             virtualList(layers, 28.0) { item, _ -> div("layer") { p { item } } }.apply {
@@ -101,7 +101,7 @@ fun main() = application {
                             }
                         }
                         panel("Editors", DockZone.RIGHT, view) {
-                            curveEditor { label = "positions" }.valueChanged.listen { curve = it.newValue }
+                            curveEditor { label = "positions"; bind(scene::curve) }
                             gradient = gradientEditor {
                                 value = listOf(ColorStop(0.0, ColorRGBa.fromHex("#5ab0ff")), ColorStop(0.5, ColorRGBa.fromHex("#f88379")), ColorStop(1.0, ColorRGBa.fromHex("#ffe08a")))
                             }
@@ -109,18 +109,28 @@ fun main() = application {
                         panel("Timeline", DockZone.BOTTOM, view) {
                             timeline = timeline {
                                 duration = 6.0
-                                track("x", 0.0..1.0, org.openrndr.extra.style.TimingFunction.EASE_IN_OUT, { x }) { x = it }.keyframes =
+                                track("x", scene::x, 0.0..1.0, org.openrndr.extra.style.TimingFunction.EASE_IN_OUT).keyframes =
                                     listOf(Keyframe(0.0, 0.1), Keyframe(3.0, 0.9), Keyframe(6.0, 0.1))
-                                track("radius", 10.0..120.0, current = { radius }) { radius = it }.keyframes = listOf(Keyframe(0.0, 30.0), Keyframe(1.5, 110.0), Keyframe(4.5, 40.0))
-                                track("scale", 0.1..2.0, current = { scale }) { scale = it }
+                                track("radius", scene::radius, 10.0..120.0).keyframes = listOf(Keyframe(0.0, 30.0), Keyframe(1.5, 110.0), Keyframe(4.5, 40.0))
+                                track("scale", scene::scale, 0.1..2.0)
                                 time = 1.0
                             }
                         }
                         select(controls)
+                        // the layout is kept for the next time the demo runs
+                        persist(java.io.File(System.getProperty("java.io.tmpdir"), "DemoComponents02-dock.json"))
                     }
                 }
             }
         }
         extend(cm)
     }
+}
+
+/** the values that the drawing is made of, which the controls and the timeline change */
+private class Scene {
+    var x = 0.5
+    var radius = 60.0
+    var scale = 1.0
+    var curve = CubicBezier.EASE
 }

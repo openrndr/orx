@@ -55,6 +55,16 @@ curl -s -X POST "http://127.0.0.1:9000/keyboard/repeat?name=a"
 curl -s -X POST "http://127.0.0.1:9000/keyboard/down?name=a&modifiers=SHIFT,CTRL"
 ```
 
+### `POST /keyboard/type`
+
+Types `text`, or the body of the request when there is no `text` parameter: a character event for every character,
+which is what text inputs take, where `/keyboard/down` only presses keys. A line break presses enter, a tab presses tab.
+
+```bash
+curl -s -X POST "http://127.0.0.1:9000/keyboard/type?text=hello"
+curl -s -X POST --data-binary $'two\nlines' "http://127.0.0.1:9000/keyboard/type"
+```
+
 ### `POST /mouse/move`
 
 Moves the mouse to an absolute window position, given by `x`/`y`.

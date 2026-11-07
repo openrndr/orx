@@ -1,5 +1,6 @@
 package org.openrndr.panel.elements
 
+import org.openrndr.panel.fadeIn
 import org.openrndr.KEY_ARROW_LEFT
 import org.openrndr.KEY_ARROW_RIGHT
 import org.openrndr.KEY_ENTER
@@ -55,6 +56,8 @@ class Tabs : Div(ElementType("tabs")) {
             if (value == field || value !in pages.indices) return
             field = value
             update()
+            // the page that shows fades in
+            pages[value].fadeIn()
             changed.trigger(TabEvent(this, value))
         }
 

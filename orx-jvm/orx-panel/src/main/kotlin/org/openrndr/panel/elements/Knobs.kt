@@ -1,5 +1,9 @@
 package org.openrndr.panel.elements
 
+import org.openrndr.panel.recordEdit
+import kotlin.reflect.KMutableProperty0
+import org.openrndr.panel.binding.bindValue
+import org.openrndr.panel.binding.PropertyBinding
 import org.openrndr.KEY_ARROW_DOWN
 import org.openrndr.KEY_ARROW_LEFT
 import org.openrndr.KEY_ARROW_RIGHT
@@ -60,6 +64,8 @@ class Knob : Element(ElementType("knob")) {
     private val span get() = range.endInclusive - range.start
 
     init {
+        // the changes by the user can be undone
+        valueChanged.listen { if (it.interactive) recordEdit("Change ${label.ifEmpty { "knob" }}", it.oldValue, it.newValue) { v -> value = v } }
         mouse.pressed.listen { it.cancelPropagation() }
         mouse.dragged.listen {
             val fine = if (KeyModifier.SHIFT in it.modifiers) 0.1 else 1.0
@@ -170,6 +176,8 @@ class RangeSlider : Element(ElementType("range-slider")) {
     }
 
     init {
+        // the changes by the user can be undone
+        valueChanged.listen { if (it.interactive) recordEdit("Change ${label.ifEmpty { "range" }}", it.oldValue, it.newValue) { v -> value = v } }
         mouse.pressed.listen {
             val v = valueAt(it.position.x)
             activeHigh = Math.abs(v - high) < Math.abs(v - low) || (v > high)
@@ -223,3 +231,11 @@ class RangeSlider : Element(ElementType("range-slider")) {
 fun Element.knob(vararg classes: String, init: Knob.() -> Unit): Knob = initElement(classes, Knob(), init)
 
 fun Element.rangeSlider(vararg classes: String, init: RangeSlider.() -> Unit): RangeSlider = initElement(classes, RangeSlider(), init)
+
+/** binds the value of the knob to [property], both ways, see [bindValue] */
+fun Knob.bind(property: KMutableProperty0<Double>): PropertyBinding<Double> =
+    bindValue(valueChanged, property, { value }, { value = it })
+
+/** binds the range of the slider to [property], both ways, see [bindValue] */
+fun RangeSlider.bind(property: KMutableProperty0<ClosedRange<Double>>): PropertyBinding<ClosedRange<Double>> =
+    bindValue(valueChanged, property, { value }, { value = it })

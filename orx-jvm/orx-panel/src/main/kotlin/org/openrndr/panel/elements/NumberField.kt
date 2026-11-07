@@ -1,5 +1,9 @@
 package org.openrndr.panel.elements
 
+import org.openrndr.panel.recordEdit
+import kotlin.reflect.KMutableProperty0
+import org.openrndr.panel.binding.bindValue
+import org.openrndr.panel.binding.PropertyBinding
 import org.openrndr.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
@@ -48,6 +52,13 @@ class NumberField : Element(ElementType("number-field")) {
             }
         }
 
+    // a change by the user can be undone
+    private fun setByUser(v: Double) {
+        val old = value
+        value = v
+        recordEdit("Change $label", old, value) { value = it }
+    }
+
     /** the text that is typed, null when the value is not edited */
     var editing: String? = null
         private set
@@ -63,7 +74,7 @@ class NumberField : Element(ElementType("number-field")) {
 
     /** accepts the typed value when it is a value, a number or arithmetic, see [evaluateInput] */
     fun accept() {
-        editing?.let { evaluateInput(it, value, range) }?.let { value = it }
+        editing?.let { evaluateInput(it, value, range) }?.let { setByUser(it) }
         editing = null
         requestRedraw()
     }
@@ -88,7 +99,7 @@ class NumberField : Element(ElementType("number-field")) {
         mouse.dragged.listen {
             if (editing == null) {
                 val fine = if (KeyModifier.SHIFT in it.modifiers) 0.1 else 1.0
-                value = dragStartValue + (it.position.x - dragStartX) * step * fine
+                setByUser(dragStartValue + (it.position.x - dragStartX) * step * fine)
             }
             it.cancelPropagation()
         }
@@ -156,3 +167,7 @@ class NumberField : Element(ElementType("number-field")) {
 /** adds a [NumberField] */
 fun Element.numberField(vararg classes: String, init: NumberField.() -> Unit): NumberField =
     initElement(classes, NumberField(), init)
+
+/** binds the value of the field to [property], both ways, see [bindValue] */
+fun NumberField.bind(property: KMutableProperty0<Double>): PropertyBinding<Double> =
+    bindValue(events.valueChanged, property, { value }, { value = it })

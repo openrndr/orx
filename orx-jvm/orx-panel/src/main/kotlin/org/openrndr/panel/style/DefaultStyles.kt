@@ -151,7 +151,7 @@ val defaultStylesCss = """
     menu-item {
         padding: 4px 8px; font-size: var(--control-font-size); color: var(--control-text); border-radius: 4px;
     }
-    menu-item:hover { background-color: var(--control-background); color: var(--control-selected-text) }
+    menu-item:hover, menu-item:selected { background-color: var(--control-background); color: var(--control-selected-text) }
 
     /* a ring around the control that the keyboard moved the focus to */
     :focus-visible { outline-width: 2px; outline-color: var(--focus-color) }
@@ -217,6 +217,32 @@ val defaultStylesCss = """
     timeline {
         width: 100%; margin: var(--control-margin) 5px; background-color: var(--control-sunken-background);
         font-size: var(--control-font-size); color: var(--control-text);
+    }
+
+    node-editor {
+        width: 100%; height: 100%; overflow: hidden; background-color: var(--control-sunken-background);
+        font-size: var(--control-font-size); color: var(--control-text);
+    }
+
+    :is(plot, histogram, scope) {
+        width: 100%; height: 120px; margin: var(--control-margin) 5px;
+        background-color: var(--control-sunken-background); font-size: calc(var(--control-font-size) * 12 / 14);
+        color: var(--control-text);
+    }
+
+    color-editor { display: flex; flex-direction: column; width: 100%; margin: var(--control-margin) 0 }
+    color-wheel { width: 100%; height: 180px; margin-bottom: 4px }
+    color-editor > text-input.color-css {
+        width: 100%; height: var(--control-height); margin: var(--control-margin) 5px; padding-left: 8px;
+        font-size: var(--control-font-size); color: var(--control-text); background-color: var(--control-sunken-background)
+    }
+    .color-swatches { display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; width: 100%; margin: 2px 3px }
+    color-swatch { width: 22px; height: 22px; margin: 2px; color: var(--control-text) }
+    .color-swatches > button { width: auto; margin: 2px }
+
+    text-area {
+        width: 100%; height: 200px; margin: var(--control-margin) 5px; overflow: hidden; cursor: text;
+        background-color: var(--control-sunken-background); font-size: var(--control-font-size); color: var(--control-text);
     }
 
     /* docks */

@@ -415,6 +415,11 @@ class StyleSheet(val selector: CompoundSelector = CompoundSelector.DUMMY) {
         properties[name] = Property(name, value, important)
     }
 
+    /** removes the property [name], so that the cascade decides it again */
+    fun removeProperty(name: String) {
+        if (properties.remove(name) != null) version++
+    }
+
     /** the properties that [block] sets are !important: they win over the declarations that are not */
     fun important(block: StyleSheet.() -> Unit) {
         val before = settingImportant
